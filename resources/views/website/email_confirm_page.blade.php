@@ -7,6 +7,6 @@
     <ul>
         <li>... this email address was already verified.</li>
         <li>... this link never existed in the first place.</li>
-        <li>... something really weird is going on and you should <a href="https://twitter.com/kurozoraapp" target="_blank">Tweet us</a>.</li>
+        <li>... something really weird is going on and you should <a href="https://twitter.com/{{ env('APP_TWITTER_HANDLE') }}" target="_blank">Tweet us</a>.</li>
     </ul>
 @endif
