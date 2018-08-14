@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\JSONResult;
+use App\Helpers\KuroMail;
 use App\Session;
 use App\User;
 use Illuminate\Support\Facades\Hash;
 use Validator;
 use Illuminate\Http\Request;
-use App\Helpers\JSONResult;
+
 
 class UserController extends Controller
 {
@@ -37,11 +39,26 @@ class UserController extends Controller
         $rawPassword    = $request->input('password');
 
         // Create the user
-        User::create([
-            'username'  => $username,
-            'email'     => $email,
-            'password'  => Hash::make($rawPassword)
+        $newUser = User::create([
+            'username'              => $username,
+            'email'                 => $email,
+            'password'              => Hash::make($rawPassword),
+            'email_confirmation_id' => str_random(50)
         ]);
+
+        // Send the user an email
+        $emailData = [
+            'username'          => $username,
+            'confirmation_id'   => $newUser->email_confirmation_id,
+            'site_domain'       => env('APP_URL', ''),
+            'static_asset'      => env('APP_ASSET_STATIC', ''),
+        ];
+
+        (new KuroMail())
+            ->setTo($newUser->email)
+            ->setSubject('Your Kurozora account registration')
+            ->setContent(view('email.confirmation_email', $emailData)->render())
+            ->send();
 
         // Show a successful response
         (new JSONResult())->show();
@@ -79,6 +96,10 @@ class UserController extends Controller
         if(!Hash::check($rawPassword, $foundUser->password))
             (new JSONResult())->setError('The entered password does not match.')->show();
 
+        // Check if email is confirmed
+        if(!$foundUser->hasConfirmedEmail())
+            (new JSONResult())->setError('You have not confirmed your email address yet. Please check your email inbox or spam folder.')->show();
+
         // Create a new session
         $newSession = Session::create([
             'user_id'   => $foundUser->id,
@@ -91,5 +112,21 @@ class UserController extends Controller
             'session_secret'    => $newSession->secret,
             'user_id'           => $foundUser->id
         ])->show();
+    }
+
+    // Email confirmation
+    public function confirmEmail($confirmationID, Request $request) {
+        // Try to find a user with this confirmation ID
+        $foundUser = User::where('email_confirmation_id', $confirmationID)->first();
+
+        // No user found
+        if(!$foundUser)
+            return view('website.email_confirm_page', ['success' => false]);
+
+        // Confirm their email and show the page
+        $foundUser->email_confirmation_id = null;
+        $foundUser->save();
+
+        return view('website.email_confirm_page', ['success' => true]);
     }
 }
