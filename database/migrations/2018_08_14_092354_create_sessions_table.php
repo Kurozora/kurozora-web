@@ -20,6 +20,7 @@ class CreateSessionsTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
+            $table->timestamp('expiration_date')->useCurrent = true;
             $table->string('device', 50)->nullable();
             $table->string('secret', 128);
         });

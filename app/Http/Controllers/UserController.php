@@ -102,9 +102,10 @@ class UserController extends Controller
 
         // Create a new session
         $newSession = Session::create([
-            'user_id'   => $foundUser->id,
-            'device'    => $device,
-            'secret'    => str_random(128)
+            'user_id'           => $foundUser->id,
+            'device'            => $device,
+            'secret'            => str_random(128),
+            'expiration_date'   => date('Y-m-d H:i:s', strtotime('90 days'))
         ]);
 
         // Show a successful response
@@ -112,6 +113,45 @@ class UserController extends Controller
             'session_secret'    => $newSession->secret,
             'user_id'           => $foundUser->id
         ])->show();
+    }
+
+    /**
+        /api/v1/logout
+
+        expects:
+        - POST "session_secret": the session secret of the logged in user.
+        - POST "user_id": the user ID of the logged in user.
+    **/
+    public function logout(Request $request) {
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'session_secret'    => 'bail|required|exists:sessions,secret',
+            'user_id'           => 'bail|required|numeric|exists:users,id'
+        ]);
+
+        // Display an error if validation failed
+        if($validator->fails())
+            (new JSONResult())->setError('Failed to log out. Please restart the app.')->show();
+
+        // Fetch the variables and sanitize them
+        $givenSecret    = $request->input('session_secret');
+        $givenUserID    = $request->input('user_id');
+
+        // Find the session
+        $foundSession = Session::where([
+            ['user_id', '=', $givenUserID],
+            ['secret',  '=', $givenSecret]
+        ])->first();
+
+        // Check if any session was found
+        if(!$foundSession)
+            (new JSONResult())->setError('An error occurred. Please reach out to an administrator.')->show();
+
+        // Delete the session
+        $foundSession->delete();
+
+        // Show a successful response
+        (new JSONResult())->show();
     }
 
     // Email confirmation
