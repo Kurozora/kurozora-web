@@ -163,7 +163,7 @@
                         <tr>
                             <td style="word-break:break-word;font-size:0px;padding:0px;" align="center">
                                 <div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
-                                    Kurozora • <a href="https://twitter.com/kurozoraapp" style="color:#1EB0F4;text-decoration:none;" target="_blank">@kurozoraapp</a>
+                                    Kurozora • <a href="https://twitter.com/{{ env('APP_TWITTER_HANDLE') }}" style="color:#1EB0F4;text-decoration:none;" target="_blank">{{ '@' . env('APP_TWITTER_HANDLE') }}</a>
                                 </div>
                             </td>
                         </tr>

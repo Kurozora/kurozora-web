@@ -72,7 +72,7 @@
                 </div>
 
                 <div class="links">
-                    <a href="https://twitter.com/kurozoraapp" target="_blank">@kurzoraapp</a>
+                    <a href="https://twitter.com/{{ env('APP_TWITTER_HANDLE') }}" target="_blank">{{ '@' . env('APP_TWITTER_HANDLE') }}</a>
                 </div>
             </div>
         </div>
