@@ -19,4 +19,8 @@ Route::prefix('/v1')->group(function() {
         Route::post('/login', 'UserController@login');
         Route::post('/logout', 'UserController@logout');
     });
+
+    Route::prefix('/session')->group(function() {
+        Route::post('/validate', 'SessionController@validateSession');
+    });
 });
