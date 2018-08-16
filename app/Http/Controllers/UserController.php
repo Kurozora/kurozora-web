@@ -10,11 +10,10 @@ use Illuminate\Support\Facades\Hash;
 use Validator;
 use Illuminate\Http\Request;
 
-
 class UserController extends Controller
 {
     /**
-        /api/v1/register
+        /api/v1/user/register
 
         expects:
         - POST "username": the username that the user picked.
@@ -65,7 +64,7 @@ class UserController extends Controller
     }
 
     /**
-        /api/v1/login
+        /api/v1/user/login
 
         expects:
         - POST "username": the user's username used to authenticate.
@@ -116,7 +115,7 @@ class UserController extends Controller
     }
 
     /**
-        /api/v1/logout
+        /api/v1/user/logout
 
         expects:
         - POST "session_secret": the session secret of the logged in user.
@@ -133,7 +132,7 @@ class UserController extends Controller
         if($validator->fails())
             (new JSONResult())->setError('Failed to log out. Please restart the app.')->show();
 
-        // Fetch the variables and sanitize them
+        // Fetch the variables
         $givenSecret    = $request->input('session_secret');
         $givenUserID    = $request->input('user_id');
 
