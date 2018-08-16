@@ -192,6 +192,37 @@ class UserController extends Controller
         (new JSONResult())->setData(['sessions' => $returnSessions])->show();
     }
 
+    /**
+        /api/v1/user/delete_session
+
+        expects:
+        - POST "session_secret": the session secret of the logged in user.
+        - POST "user_id": the user ID of the logged in user.
+        - POST "del_session_id": the session ID to delete.
+    **/
+    public function deleteSession(Request $request) {
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'session_secret' => 'bail|required|exists:sessions,secret',
+            'user_id' => 'bail|required|numeric|exists:users,id',
+            'del_session_id' => 'bail|required|numeric|exists:sessions,id'
+        ]);
+
+        // Fetch the variables
+        $givenSecret = $request->input('session_secret');
+        $givenUserID = $request->input('user_id');
+        $delSessionID = $request->input('del_session_id');
+
+        // Check authentication
+        if ($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret))
+            (new JSONResult())->setError('The server rejected your credentials. Please restart the app.')->show();
+
+        // Delete the session
+        Session::destroy($delSessionID);
+
+        (new JSONResult())->show();
+    }
+
     // Email confirmation
     public function confirmEmail($confirmationID, Request $request) {
         // Try to find a user with this confirmation ID
