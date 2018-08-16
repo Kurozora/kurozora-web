@@ -8,10 +8,30 @@ class User extends Model
 {
     protected $fillable = ['username', 'email', 'password', 'email_confirmation_id'];
 
-    /**
-        Checks if this user has confirmed their email address
-    **/
+    // Checks if this user has confirmed their email address
     public function hasConfirmedEmail() {
         return ($this->email_confirmation_id == null);
+    }
+
+    // Checks if a user can authenticate with the given details
+    public static function authenticateSession($userID, $sessionSecret) {
+        // Find the session
+        $foundSession = Session::where([
+            ['user_id', '=', $userID],
+            ['secret',  '=', $sessionSecret]
+        ])->first();
+
+        // Session not found
+        if($foundSession == null)
+            return false;
+
+        // Check if it's expired
+        if($foundSession->isExpired()) {
+            $foundSession->delete();
+            return false;
+        }
+
+        // All valid
+        return true;
     }
 }

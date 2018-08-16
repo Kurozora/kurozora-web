@@ -6,10 +6,29 @@ use Illuminate\Database\Eloquent\Model;
 
 class Session extends Model
 {
-    protected $fillable = ['user_id', 'device', 'secret', 'expiration_date'];
+    protected $fillable = [
+        'user_id',
+        'device',
+        'secret',
+        'expiration_date',
+        'last_validated',
+        'ip'
+    ];
 
     // Checks if the session is expired
     public function isExpired() {
         return (strtotime($this->expiration_date) < time());
+    }
+
+    // Formats the last validated data properly
+    public function formatLastValidated() {
+        if($this->last_validated == null)
+            return 'Unknown date';
+
+        $lastValUnix = strtotime($this->last_validated);
+        $lastValDate = date('j M, Y', $lastValUnix) . ' at ';
+        $lastValDate .= date('H:i', $lastValUnix);
+
+        return $lastValDate;
     }
 }

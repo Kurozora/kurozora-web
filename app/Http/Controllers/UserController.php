@@ -104,7 +104,8 @@ class UserController extends Controller
             'user_id'           => $foundUser->id,
             'device'            => $device,
             'secret'            => str_random(128),
-            'expiration_date'   => date('Y-m-d H:i:s', strtotime('90 days'))
+            'expiration_date'   => date('Y-m-d H:i:s', strtotime('90 days')),
+            'ip'                => $request->ip()
         ]);
 
         // Show a successful response
@@ -151,6 +152,44 @@ class UserController extends Controller
 
         // Show a successful response
         (new JSONResult())->show();
+    }
+
+    /**
+        /api/v1/user/get_sessions
+
+        expects:
+        - POST "session_secret": the session secret of the logged in user.
+        - POST "user_id": the user ID of the logged in user.
+    **/
+    public function getSessions(Request $request) {
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'session_secret'    => 'bail|required|exists:sessions,secret',
+            'user_id'           => 'bail|required|numeric|exists:users,id'
+        ]);
+
+        // Fetch the variables
+        $givenSecret    = $request->input('session_secret');
+        $givenUserID    = $request->input('user_id');
+
+        // Check authentication
+        if($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret))
+            (new JSONResult())->setError('The server rejected your credentials. Please restart the app.')->show();
+
+        // Get the sessions and put them in an array
+        $returnSessions = [];
+        $sessions = Session::where('user_id', '=', $givenUserID)->get();
+
+        foreach($sessions as $session) {
+            $returnSessions[] = [
+                'id'                => $session->id,
+                'device'            => $session->device,
+                'ip'                => $session->ip,
+                'last_validated'    => $session->formatLastValidated()
+            ];
+        }
+
+        (new JSONResult())->setData(['sessions' => $returnSessions])->show();
     }
 
     // Email confirmation
