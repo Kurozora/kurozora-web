@@ -46,7 +46,12 @@ class SessionController extends Controller
             (new JSONResult())->setError('Session is expired.')->show();
             $foundSession->delete();
         }
-        else
+        // Session is perfectly valid
+        else {
+            $foundSession->last_validated = date('Y-m-d H:i:s', time());
+            $foundSession->save();
+
             (new JSONResult())->show();
+        }
     }
 }
