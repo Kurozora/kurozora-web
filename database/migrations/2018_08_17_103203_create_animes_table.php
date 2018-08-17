@@ -1,0 +1,41 @@
+<?php
+
+use App\Anime;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateAnimesTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('animes', function (Blueprint $table) {
+            $table->increments('id');
+            $table->timestamps();
+
+            $table->string('title')->default('Unknown title');
+            $table->string('cached_poster')->nullable();
+            $table->string('cached_poster_thumbnail')->nullable();
+            $table->string('cached_background')->nullable();
+            $table->string('cached_background_thumbnail')->nullable();
+            $table->integer('type')->default(Anime::ANIME_TYPE_UNDEFINED);
+            $table->boolean('nsfw')->default(false);
+            $table->integer('tvdb_id')->nullable();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('animes');
+    }
+}

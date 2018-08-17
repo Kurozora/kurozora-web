@@ -25,4 +25,8 @@ Route::prefix('/v1')->group(function() {
     Route::prefix('/session')->group(function() {
         Route::post('/validate', 'SessionController@validateSession');
     });
+
+    Route::prefix('/anime')->group(function() {
+        Route::get('/explore', 'AnimeController@exploreAnime');
+    });
 });
