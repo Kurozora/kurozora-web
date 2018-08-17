@@ -183,6 +183,7 @@ class UserController extends Controller
         foreach($sessions as $session) {
             $returnSessions[] = [
                 'id'                => $session->id,
+                'secret'            => $session->secret,
                 'device'            => $session->device,
                 'ip'                => $session->ip,
                 'last_validated'    => $session->formatLastValidated()
