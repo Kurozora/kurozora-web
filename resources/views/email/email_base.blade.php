@@ -98,7 +98,7 @@
         </table>
     </div>
     <div style="max-width:640px;margin:0 auto;box-shadow:0px 1px 5px rgba(0,0,0,0.1);border-radius:4px;overflow:hidden">
-        <table style="background-image: url('{{ $static_asset }}/star-bg.jpg'); width: 100%; background-position: bottom;" role="presentation" cellpadding="0" cellspacing="0" align="center" border="0">
+        <table style="background-image: url('{{ $static_asset }}/star_bg_md.jpg'); width: 100%; background-position: bottom;" role="presentation" cellpadding="0" cellspacing="0" align="center" border="0">
             <tbody>
             <tr>
                 <td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;">
