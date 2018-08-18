@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+html {
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-attachment: fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+    font-family: 'Montserrat', sans-serif;
+}
+
+#kurozora-logo {
+	width: 150px;
+	height: 150px;
+}
+
+#kurozora-title {
+	text-align: center;
+	color: rgba(255, 255, 255, 0.85);
+	margin: 0;
+}
+
+.middle-div {
+	display: none;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	padding: 15px;
+	-ms-transform: translateX(-50%) translateY(-50%);
+	-webkit-transform: translate(-50%,-50%);
+	transform: translate(-50%,-50%);
+}

@@ -1,80 +1,28 @@
 <!doctype html>
-<html lang="{{ app()->getLocale() }}">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="{{ app()->getLocale() }}" style="background-image: url({{ asset('img/static/star_bg_lg.jpg') }});">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Kurozora</title>
+		<title>Kurozora App</title>
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+		<!-- jQuery -->
+		<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Raleway', sans-serif;
-                font-weight: 100;
-                height: 100vh;
-                margin: 0;
-            }
+		<!-- Stylesheet -->
+		<link href="{{ asset('css/kurozora-frontpage.css') }}" rel="stylesheet">
+	</head>
+	<body>
+		<div class="middle-div">
+			<img src="{{ asset('img/static/logo_sm.png') }}" id="kurozora-logo" />
+			<h1 id="kurozora-title">Kurozora</h1>
+		</div>
 
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 12px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="flex-center position-ref full-height">
-            <div class="content">
-                <div class="title m-b-md">
-                    Kurozora
-                </div>
-
-                <div class="links">
-                    <a href="https://twitter.com/{{ env('APP_TWITTER_HANDLE') }}" target="_blank">{{ '@' . env('APP_TWITTER_HANDLE') }}</a>
-                </div>
-            </div>
-        </div>
-    </body>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('.middle-div').fadeIn(1000);
+			});
+		</script>
+	</body>
 </html>
