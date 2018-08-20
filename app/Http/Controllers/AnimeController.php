@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Anime;
 use App\Helpers\JSONResult;
+use TVDB;
 
 class AnimeController extends Controller
 {
@@ -45,5 +46,33 @@ class AnimeController extends Controller
             'categories'    => $categoryArray,
             'banners'       => Anime::formatAnimesAsThumbnail($query_banners)
         ])->show();
+    }
+
+    /**
+     * Returns detailed information about an Anime
+     *
+     * @param int $animeID
+     */
+    public function detailsAnime($animeID) {
+        $anime = Anime::find($animeID);
+
+        // The Anime item does not exist
+        if(!$anime)
+            (new JSONResult())->setError('Unable to retrieve the details for the specified anime.')->show();
+
+        // Build the response
+        $returnArr = [
+            'id'                    => $anime->id,
+            'title'                 => $anime->title,
+            'synopsis'              => $anime->getSynopsis(),
+            'runtime'               => $anime->getRuntime(),
+            'poster'                => $anime->getPoster(false),
+            'poster_thumbnail'      => $anime->getPoster(true),
+            'background'            => $anime->getBackground(false),
+            'background_thumbnail'  => $anime->getBackground(true),
+            'nsfw'                  => (bool) $anime->nsfw
+        ];
+
+        (new JSONResult())->setData(['anime' => $returnArr])->show();
     }
 }
