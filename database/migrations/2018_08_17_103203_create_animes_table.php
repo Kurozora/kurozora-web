@@ -28,6 +28,7 @@ class CreateAnimesTable extends Migration
             $table->integer('tvdb_id')->nullable()->unsigned();
             $table->mediumText('synopsis')->nullable();
             $table->tinyInteger('runtime')->nullable()->unsigned();
+            $table->string('watch_rating')->nullable();
         });
     }
 
