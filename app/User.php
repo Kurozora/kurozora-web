@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
+    // User roles
+    const USER_ROLE_NORMAL          = 0;
+    const USER_ROLE_MODERATOR       = 1;
+    const USER_ROLE_ADMINISTRATOR   = 2;
+
     protected $fillable = ['username', 'email', 'password', 'email_confirmation_id'];
 
     // Checks if this user has confirmed their email address

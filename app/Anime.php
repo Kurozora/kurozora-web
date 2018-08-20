@@ -12,6 +12,7 @@ use TVDB;
  */
 class Anime extends Model
 {
+    // Types of Anime
     const ANIME_TYPE_UNDEFINED  = 0;
     const ANIME_TYPE_TV         = 1;
     const ANIME_TYPE_MOVIE      = 2;
