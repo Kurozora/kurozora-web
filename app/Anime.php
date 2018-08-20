@@ -30,12 +30,30 @@ class Anime extends Model
         'tvdb_id'
     ];
 
+    // Reusable TVDB handle
     protected $tvdb_handle = null;
+
+    /**
+     * Retrieves the type of Anime as a string
+     *
+     * @return string
+     */
+    public function getType() {
+        switch($this->type) {
+            case self::ANIME_TYPE_TV:       return 'TV';
+            case self::ANIME_TYPE_MOVIE:    return 'Movie';
+            case self::ANIME_TYPE_SPECIAL:  return 'Special';
+            case self::ANIME_TYPE_OVA:      return 'OVA';
+            case self::ANIME_TYPE_ONA:      return 'ONA';
+        }
+
+        return 'Unknown type';
+    }
 
     /**
      * Retrieves the synopsis for an Anime item
      *
-     * @return mixed|string
+     * @return string
      */
     public function getSynopsis() {
         // Check if we have saved the synopsis
@@ -78,15 +96,44 @@ class Anime extends Model
             // Get the runtime
             $retRuntime = $this->tvdb_handle->getAnimeDetailValue($this->tvdb_id, 'runtime_minutes');
 
-            // Invalid synopsis
+            // Invalid runtime
             if($retRuntime == null) $retRuntime = 0;
 
-            // Save the synopsis
+            // Save the runtime
             $this->runtime = (int) $retRuntime;
             $this->save();
 
             // Return it
             return $this->runtime;
+        }
+    }
+
+    /**
+     * Retrieves the watch rating for an Anime item
+     *
+     * @return string
+     */
+    public function getWatchRating() {
+        // Check if we have saved the watch rating
+        if($this->watch_rating != null)
+            return $this->watch_rating;
+        // Try to retrieve the watch rating from TVDB
+        else {
+            if($this->tvdb_handle == null)
+                $this->tvdb_handle = new TVDB();
+
+            // Get the watch rating
+            $retWatchRating = $this->tvdb_handle->getAnimeDetailValue($this->tvdb_id, 'watch_rating');
+
+            // Invalid watch rating
+            if($retWatchRating == null) $retWatchRating = 'Unknown';
+
+            // Save the watch rating
+            $this->watch_rating = $retWatchRating;
+            $this->save();
+
+            // Return it
+            return $this->watch_rating;
         }
     }
 

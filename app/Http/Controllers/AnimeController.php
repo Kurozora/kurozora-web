@@ -64,8 +64,10 @@ class AnimeController extends Controller
         $returnArr = [
             'id'                    => $anime->id,
             'title'                 => $anime->title,
+            'type'                  => $anime->getType(),
             'synopsis'              => $anime->getSynopsis(),
             'runtime'               => $anime->getRuntime(),
+            'watch_rating'          => $anime->getWatchRating(),
             'poster'                => $anime->getPoster(false),
             'poster_thumbnail'      => $anime->getPoster(true),
             'background'            => $anime->getBackground(false),
