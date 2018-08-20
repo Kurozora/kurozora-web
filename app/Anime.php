@@ -12,6 +12,13 @@ use TVDB;
  */
 class Anime extends Model
 {
+    const ANIME_TYPE_UNDEFINED  = 0;
+    const ANIME_TYPE_TV         = 1;
+    const ANIME_TYPE_MOVIE      = 2;
+    const ANIME_TYPE_SPECIAL    = 3;
+    const ANIME_TYPE_OVA        = 4;
+    const ANIME_TYPE_ONA        = 5;
+
     protected $fillable = [
         'title',
         'cached_poster',
@@ -23,12 +30,65 @@ class Anime extends Model
         'tvdb_id'
     ];
 
-    const ANIME_TYPE_UNDEFINED  = 0;
-    const ANIME_TYPE_TV         = 1;
-    const ANIME_TYPE_MOVIE      = 2;
-    const ANIME_TYPE_SPECIAL    = 3;
-    const ANIME_TYPE_OVA        = 4;
-    const ANIME_TYPE_ONA        = 5;
+    protected $tvdb_handle = null;
+
+    /**
+     * Retrieves the synopsis for an Anime item
+     *
+     * @return mixed|string
+     */
+    public function getSynopsis() {
+        // Check if we have saved the synopsis
+        if($this->synopsis != null)
+            return $this->synopsis;
+        // Try to retrieve the synopsis from TVDB
+        else {
+            if($this->tvdb_handle == null)
+                $this->tvdb_handle = new TVDB();
+
+            // Get the synopsis
+            $retSynopsis = $this->tvdb_handle->getAnimeDetailValue($this->tvdb_id, 'synopsis');
+
+            // Invalid synopsis
+            if($retSynopsis == null) $retSynopsis = 'Unable to retrieve the synopsis...';
+
+            // Save the synopsis
+            $this->synopsis = $retSynopsis;
+            $this->save();
+
+            // Return it
+            return $this->synopsis;
+        }
+    }
+
+    /**
+     * Retrieves the runtime (in minutes) for an Anime item
+     *
+     * @return integer
+     */
+    public function getRuntime() {
+        // Check if we have saved the runtime
+        if($this->runtime != null)
+            return $this->runtime;
+        // Try to retrieve the runtime from TVDB
+        else {
+            if($this->tvdb_handle == null)
+                $this->tvdb_handle = new TVDB();
+
+            // Get the runtime
+            $retRuntime = $this->tvdb_handle->getAnimeDetailValue($this->tvdb_id, 'runtime_minutes');
+
+            // Invalid synopsis
+            if($retRuntime == null) $retRuntime = 0;
+
+            // Save the synopsis
+            $this->runtime = (int) $retRuntime;
+            $this->save();
+
+            // Return it
+            return $this->runtime;
+        }
+    }
 
     /**
      * Retrieves the poster image URL for an Anime item
@@ -48,8 +108,10 @@ class Anime extends Model
             return '';
 
         // Get the poster from TVDB
-        $tvdb = new TVDB();
-        $retrievedPoster = $tvdb->getAnimePoster($this->tvdb_id, $thumbnail);
+        if($this->tvdb_handle == null)
+            $this->tvdb_handle = new TVDB();
+
+        $retrievedPoster = $this->tvdb_handle->getAnimePoster($this->tvdb_id, $thumbnail);
 
         // Cache the poster
         if($thumbnail)
@@ -81,8 +143,10 @@ class Anime extends Model
             return '';
 
         // Get the background from TVDB
-        $tvdb = new TVDB();
-        $retrievedBg = $tvdb->getAnimeBackground($this->tvdb_id, $thumbnail);
+        if($this->tvdb_handle == null)
+            $this->tvdb_handle = new TVDB();
+
+        $retrievedBg = $this->tvdb_handle->getAnimeBackground($this->tvdb_id, $thumbnail);
 
         // Cache the background
         if($thumbnail)

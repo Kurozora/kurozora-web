@@ -1,12 +1,11 @@
 <?php
 
+use App\Helpers\JSONResult;
+
 /**
  * @author Musa Semou <mussesemou99@gmail.com>
  */
 
-/**
-    Class to interact with The TV DB
-**/
 class TVDB {
     // Base TVDB API URL
     const API_URL = 'https://api.thetvdb.com';
@@ -17,9 +16,14 @@ class TVDB {
     // TVDB JWT token
     private $JWTToken = null;
 
+    // Temporarily cached anime details
+    private $cachedAnimeDetails = [];
+
     /**
-        Obtains the JWT token
-    **/
+     * Retrieves the JWT token
+     *
+     * @return null|string
+     */
     public function getToken() {
         if($this->JWTToken != null)
             return $this->JWTToken;
@@ -57,22 +61,35 @@ class TVDB {
     }
 
     /**
-        Returns the URL to an Anime poster, requires its TVDB ID
-    **/
+     * Returns the URL to an Anime poster, requires its TVDB ID
+     *
+     * @param int $tvdbID
+     * @param bool $thumbnail
+     * @return null|string
+     */
     public function getAnimePoster($tvdbID, $thumbnail = false) {
         return $this->getAnimeImage('poster', $tvdbID, $thumbnail);
     }
 
     /**
-        Returns the URL to an Anime poster, requires its TVDB ID
-    **/
+     * Returns the URL to an Anime poster, requires its TVDB ID
+     *
+     * @param int $tvdbID
+     * @param bool $thumbnail
+     * @return null|string
+     */
     public function getAnimeBackground($tvdbID, $thumbnail = false) {
         return $this->getAnimeImage('fanart', $tvdbID, $thumbnail);
     }
 
     /**
-        Gets an Anime image from the TVDB API
-    **/
+     * Gets an Anime image from the TVDB API
+     *
+     * @param string $type
+     * @param int $tvdbID
+     * @param bool $thumbnail
+     * @return null|string
+     */
     private function getAnimeImage($type, $tvdbID, $thumbnail) {
         if($this->getToken() == null)
             return null;
@@ -105,15 +122,80 @@ class TVDB {
             return self::IMG_URL . '/' . $response->data[0]->fileName;
     }
 
-
     /**
-        Sorts a TVDB image array by best score to worst
-    **/
+     * Sorts a TVDB image array by best score to worst
+     *
+     * @param array $imgArray
+     * @return array
+     */
     private static function sortImageArrayByScore($imgArray) {
         usort($imgArray, function($a, $b) {
             return $a->ratingsInfo->average < $b->ratingsInfo->average;
         });
 
         return $imgArray;
+    }
+
+    /**
+     * Retrieves detailed information about an Anime from TVDB
+     *
+     * @param int $tvdbID
+     * @return null
+     */
+    private function getAnimeDetails($tvdbID) {
+        if($this->getToken() == null)
+            return null;
+
+        // Return from the temp cache
+        if(isset($this->cachedAnimeDetails[$tvdbID]))
+            return $this->cachedAnimeDetails[$tvdbID];
+
+        // Make a request to get the details
+        $curl = curl_init(self::API_URL . '/series/' . $tvdbID);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'GET');
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'Authorization: ' . 'Bearer ' . $this->getToken()
+        ]);
+        $result = curl_exec($curl);
+
+        // Try to json decode the result
+        $response = json_decode($result);
+
+        if($response == null || !isset($response->data)) {
+            $this->cachedAnimeDetails[$tvdbID] = null;
+            return null;
+        }
+
+        // Return the details
+        $this->cachedAnimeDetails[$tvdbID] = [
+            'synopsis' => $response->data->overview,
+            'watch_rating' => $response->data->rating,
+            'runtime_minutes' => $response->data->runtime,
+            'imdb_id' => $response->data->imdbId,
+            'genres' => $response->data->genre
+        ];
+
+        return $this->cachedAnimeDetails[$tvdbID];
+    }
+
+    /**
+     * Retrieves a value from the Anime details
+     *
+     * @param $tvdbID
+     * @param $varName
+     * @return null
+     */
+    public function getAnimeDetailValue($tvdbID, $varName) {
+        // Get the details for the Anime item
+        $animeDetails = $this->getAnimeDetails($tvdbID);
+
+        // If the details were not able to be retrieved or the variable does not exist
+        if($animeDetails == null || !isset($animeDetails[$varName]))
+            return null;
+
+        // Return the value
+        return $animeDetails[$varName];
     }
 }

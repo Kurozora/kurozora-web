@@ -25,7 +25,9 @@ class CreateAnimesTable extends Migration
             $table->string('cached_background_thumbnail')->nullable();
             $table->integer('type')->default(Anime::ANIME_TYPE_UNDEFINED);
             $table->boolean('nsfw')->default(false);
-            $table->integer('tvdb_id')->nullable();
+            $table->integer('tvdb_id')->nullable()->unsigned();
+            $table->mediumText('synopsis')->nullable();
+            $table->tinyInteger('runtime')->nullable()->unsigned();
         });
     }
 
