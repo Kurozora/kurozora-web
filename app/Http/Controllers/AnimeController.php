@@ -30,11 +30,24 @@ class AnimeController extends Controller
             ->limit($maxAnimePerCategory)
             ->get();
 
+        // Top episodes this month
+        $query_TETM = Anime::where('nsfw', false)
+            ->orderBy('title', 'asc')
+            ->limit($maxAnimePerCategory)
+            ->get();
+
+        // Newly added Anime
+        $query_NAA = Anime::where('nsfw', false)
+            ->orderBy('title', 'asc')
+            ->limit($maxAnimePerCategory)
+            ->get();
 
         // Add all the categories together
         $categoryArray = [
             Anime::formatAnimesAsCategory('Top Anime of All time', 'normal', $query_TAOAT),
-            Anime::formatAnimesAsCategory('Top New Movies', 'normal', $query_TNM)
+            Anime::formatAnimesAsCategory('Top New Movies', 'normal', $query_TNM),
+            Anime::formatAnimesAsCategory('Top Episodes This Month', 'large', $query_TETM),
+            Anime::formatAnimesAsCategory('Newly Added Anime', 'normal', $query_NAA)
         ];
 
         // Retrieve banner section
