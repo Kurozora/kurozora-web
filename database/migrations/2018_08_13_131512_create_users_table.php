@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('username', 50);
             $table->string('email');
             $table->string('password');
-            $table->tinyInteger('role')->setDefault(User::USER_ROLE_NORMAL);
+            $table->tinyInteger('role')->default(User::USER_ROLE_NORMAL);
             $table->string('avatar_url')->nullable();
             $table->text('biography')->nullable();
             $table->string('email_confirmation_id')->nullable();
