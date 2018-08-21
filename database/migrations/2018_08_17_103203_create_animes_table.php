@@ -31,7 +31,14 @@ class CreateAnimesTable extends Migration
             $table->string('watch_rating')->nullable();
 
             // Flags for fetched data
+            $table->boolean('fetched_poster')->default(false);
+            $table->boolean('fetched_poster_thumbnail')->default(false);
+            $table->boolean('fetched_background')->default(false);
+            $table->boolean('fetched_background_thumbnail')->default(false);
             $table->boolean('fetched_actors')->default(false);
+            $table->boolean('fetched_synopsis')->default(false);
+            $table->boolean('fetched_runtime')->default(false);
+            $table->boolean('fetched_watch_rating')->default(false);
         });
     }
 
