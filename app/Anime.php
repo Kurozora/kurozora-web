@@ -99,11 +99,11 @@ class Anime extends Model
     /**
      * Retrieves the synopsis for an Anime item
      *
-     * @return string
+     * @return null|string
      */
     public function getSynopsis() {
-        // Check if we have saved the synopsis
-        if($this->synopsis != null)
+        // The synopsis was already fetched
+        if($this->fetched_synopsis)
             return $this->synopsis;
         // Try to retrieve the synopsis from TVDB
         else {
@@ -113,11 +113,9 @@ class Anime extends Model
             // Get the synopsis
             $retSynopsis = $this->tvdb_handle->getAnimeDetailValue($this->tvdb_id, 'synopsis');
 
-            // Invalid synopsis
-            if($retSynopsis == null) $retSynopsis = 'Unable to retrieve the synopsis...';
-
             // Save the synopsis
             $this->synopsis = $retSynopsis;
+            $this->fetched_synopsis = true;
             $this->save();
 
             // Return it
@@ -128,11 +126,11 @@ class Anime extends Model
     /**
      * Retrieves the runtime (in minutes) for an Anime item
      *
-     * @return integer
+     * @return null|integer
      */
     public function getRuntime() {
         // Check if we have saved the runtime
-        if($this->runtime !== null)
+        if($this->fetched_runtime)
             return $this->runtime;
         // Try to retrieve the runtime from TVDB
         else {
@@ -142,11 +140,12 @@ class Anime extends Model
             // Get the runtime
             $retRuntime = $this->tvdb_handle->getAnimeDetailValue($this->tvdb_id, 'runtime_minutes');
 
-            // Invalid runtime
-            if($retRuntime == null) $retRuntime = 0;
+            if(is_numeric($retRuntime))
+                $retRuntime = (int) $retRuntime;
 
             // Save the runtime
-            $this->runtime = (int) $retRuntime;
+            $this->runtime = $retRuntime;
+            $this->fetched_runtime = true;
             $this->save();
 
             // Return it
@@ -157,11 +156,11 @@ class Anime extends Model
     /**
      * Retrieves the watch rating for an Anime item
      *
-     * @return string
+     * @return null|string
      */
     public function getWatchRating() {
         // Check if we have saved the watch rating
-        if($this->watch_rating != null)
+        if($this->fetched_watch_rating)
             return $this->watch_rating;
         // Try to retrieve the watch rating from TVDB
         else {
@@ -171,11 +170,9 @@ class Anime extends Model
             // Get the watch rating
             $retWatchRating = $this->tvdb_handle->getAnimeDetailValue($this->tvdb_id, 'watch_rating');
 
-            // Invalid watch rating
-            if($retWatchRating == null) $retWatchRating = 'Unknown';
-
             // Save the watch rating
             $this->watch_rating = $retWatchRating;
+            $this->fetched_watch_rating = true;
             $this->save();
 
             // Return it
@@ -187,33 +184,30 @@ class Anime extends Model
      * Retrieves the poster image URL for an Anime item
      *
      * @param bool $thumbnail
-     * @return string
+     * @return null|string
      */
     public function getPoster($thumbnail = false) {
         // Try to retrieve the poster from the cache
-        if(!$thumbnail && $this->cached_poster != null)
+        if(!$thumbnail && $this->fetched_poster)
             return $this->cached_poster;
-        else if($thumbnail && $this->cached_poster_thumbnail != null)
+        else if($thumbnail && $this->fetched_poster_thumbnail)
             return $this->cached_poster_thumbnail;
 
         // Check if there is a TVDB ID set
-        if($this->tvdb_id == null)
-            return '';
-
-        // Get the poster from TVDB
         if($this->tvdb_handle == null)
             $this->tvdb_handle = new TVDB();
 
         $retrievedPoster = $this->tvdb_handle->getAnimePoster($this->tvdb_id, $thumbnail);
 
-        // Unable to find the poster
-        if($retrievedPoster == null) $retrievedPoster = '0';
-
         // Cache the poster
-        if($thumbnail)
+        if($thumbnail) {
+            $this->fetched_poster_thumbnail = true;
             $this->cached_poster_thumbnail = $retrievedPoster;
-        else
+        }
+        else {
+            $this->fetched_poster = true;
             $this->cached_poster = $retrievedPoster;
+        }
 
         $this->save();
 
@@ -229,14 +223,10 @@ class Anime extends Model
      */
     public function getBackground($thumbnail = false) {
         // Try to retrieve the background from the cache
-        if(!$thumbnail && $this->cached_background != null)
+        if(!$thumbnail && $this->fetched_background)
             return $this->cached_background;
-        else if($thumbnail && $this->cached_background_thumbnail != null)
+        else if($thumbnail && $this->fetched_background_thumbnail)
             return $this->cached_background_thumbnail;
-
-        // Check if there is a TVDB ID set
-        if($this->tvdb_id == null)
-            return '';
 
         // Get the background from TVDB
         if($this->tvdb_handle == null)
@@ -244,14 +234,15 @@ class Anime extends Model
 
         $retrievedBg = $this->tvdb_handle->getAnimeBackground($this->tvdb_id, $thumbnail);
 
-        // Unable to find the BG
-        if($retrievedBg == null) $retrievedBg = '0';
-
         // Cache the background
-        if($thumbnail)
+        if($thumbnail) {
+            $this->fetched_background_thumbnail = true;
             $this->cached_background_thumbnail = $retrievedBg;
-        else
+        }
+        else {
+            $this->fetched_background = true;
             $this->cached_background = $retrievedBg;
+        }
 
         $this->save();
 
