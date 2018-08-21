@@ -198,4 +198,33 @@ class TVDB {
         // Return the value
         return $animeDetails[$varName];
     }
+
+    /**
+     * Fetches the actor data for an Anime item
+     *
+     * @param $tvdbID
+     * @return array|null
+     */
+    public function getAnimeActorData($tvdbID) {
+        if($this->getToken() == null)
+            return null;
+
+        // Make a request to get the details
+        $curl = curl_init(self::API_URL . '/series/' . $tvdbID . '/actors');
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'GET');
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'Authorization: ' . 'Bearer ' . $this->getToken()
+        ]);
+        $result = curl_exec($curl);
+
+        // Try to json decode the result
+        $response = json_decode($result);
+
+        if($response == null || !isset($response->data))
+            return null;
+
+        return $response->data;
+    }
 }

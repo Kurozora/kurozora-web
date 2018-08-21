@@ -29,6 +29,9 @@ class CreateAnimesTable extends Migration
             $table->mediumText('synopsis')->nullable();
             $table->tinyInteger('runtime')->nullable()->unsigned();
             $table->string('watch_rating')->nullable();
+
+            // Flags for fetched data
+            $table->boolean('fetched_actors')->default(false);
         });
     }
 
