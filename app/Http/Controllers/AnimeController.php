@@ -90,4 +90,19 @@ class AnimeController extends Controller
 
         (new JSONResult())->setData(['anime' => $returnArr])->show();
     }
+
+    /**
+     * Returns actor information about an Anime
+     *
+     * @param int $animeID
+     */
+    public function actorsAnime($animeID) {
+        $anime = Anime::find($animeID);
+
+        // The Anime item does not exist
+        if(!$anime)
+            (new JSONResult())->setError('Unable to retrieve actor data for the specified anime.')->show();
+
+        (new JSONResult())->setData(['actors' => $anime->getActors()])->show();
+    }
 }

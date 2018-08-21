@@ -29,5 +29,6 @@ Route::prefix('/v1')->group(function() {
     Route::prefix('/anime')->group(function() {
         Route::get('/explore', 'AnimeController@exploreAnime');
         Route::get('/{id}/details', 'AnimeController@detailsAnime')->where('id', '[0-9]*');
+        Route::get('/{id}/actors', 'AnimeController@actorsAnime')->where('id', '[0-9]*');
     });
 });

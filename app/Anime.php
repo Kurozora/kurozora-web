@@ -35,6 +35,51 @@ class Anime extends Model
     protected $tvdb_handle = null;
 
     /**
+     * Retrieves the actors for an Anime item in an array
+     *
+     * @return array
+     */
+    public function getActors() {
+        // Check if we have saved the actors
+        if($this->fetched_actors) {
+            return Actor::where('anime_id', $this->id)->get();
+        }
+        // Try to retrieve the actors from TVDB
+        else {
+            if ($this->tvdb_handle == null)
+                $this->tvdb_handle = new TVDB();
+
+            // Get the actors
+            $retActors = $this->tvdb_handle->getAnimeActorData($this->tvdb_id);
+
+            $retArray = [];
+
+            // Actors were fetched
+            if($retActors !== null) {
+                // Delete old actors if there were any
+                Actor::where('anime_id', $this->id)->delete();
+
+                // Insert new actors
+                $retArray = [];
+
+                foreach ($retActors as $actor) {
+                    $retArray[] = Actor::create([
+                        'anime_id' => $this->id,
+                        'name' => $actor->name,
+                        'role' => $actor->role,
+                        'image' => $actor->image
+                    ]);
+                }
+            }
+
+            $this->fetched_actors = true;
+            $this->save();
+
+            return $retArray;
+        }
+    }
+
+    /**
      * Retrieves the type of Anime as a string
      *
      * @return string
@@ -87,7 +132,7 @@ class Anime extends Model
      */
     public function getRuntime() {
         // Check if we have saved the runtime
-        if($this->runtime != null)
+        if($this->runtime !== null)
             return $this->runtime;
         // Try to retrieve the runtime from TVDB
         else {
@@ -161,6 +206,9 @@ class Anime extends Model
 
         $retrievedPoster = $this->tvdb_handle->getAnimePoster($this->tvdb_id, $thumbnail);
 
+        // Unable to find the poster
+        if($retrievedPoster == null) $retrievedPoster = '0';
+
         // Cache the poster
         if($thumbnail)
             $this->cached_poster_thumbnail = $retrievedPoster;
@@ -195,6 +243,9 @@ class Anime extends Model
             $this->tvdb_handle = new TVDB();
 
         $retrievedBg = $this->tvdb_handle->getAnimeBackground($this->tvdb_id, $thumbnail);
+
+        // Unable to find the BG
+        if($retrievedBg == null) $retrievedBg = '0';
 
         // Cache the background
         if($thumbnail)
