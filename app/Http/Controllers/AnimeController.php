@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actor;
 use App\Anime;
 use App\Helpers\JSONResult;
 use TVDB;
@@ -103,6 +104,13 @@ class AnimeController extends Controller
         if(!$anime)
             (new JSONResult())->setError('Unable to retrieve actor data for the specified anime.')->show();
 
-        (new JSONResult())->setData(['actors' => $anime->getActors()])->show();
+        // Get the actors
+        $retActors = [];
+        $actors = $anime->getActors();
+
+        foreach($actors as $actor)
+            $retActors[] = Actor::formatForResponse($actor);
+
+        (new JSONResult())->setData(['actors' => $retActors])->show();
     }
 }

@@ -67,7 +67,7 @@ class Anime extends Model
                         'anime_id' => $this->id,
                         'name' => $actor->name,
                         'role' => $actor->role,
-                        'image' => $actor->image
+                        'image' => TVDB::IMG_URL . '/' . $actor->image
                     ]);
                 }
             }
@@ -296,10 +296,12 @@ class Anime extends Model
      */
     public static function formatAnimeAsThumbnail($anime) {
         return [
-            'id'                => $anime->id,
-            'title'             => $anime->title,
-            'poster_url'        => $anime->getPoster(true),
-            'background_url'    => $anime->getBackground(true)
+            'id'                    => $anime->id,
+            'title'                 => $anime->title,
+            'poster'                => $anime->getPoster(false),
+            'poster_thumbnail'      => $anime->getPoster(true),
+            'background'            => $anime->getBackground(false),
+            'background_thumbnail'  => $anime->getBackground(true)
         ];
     }
 }
