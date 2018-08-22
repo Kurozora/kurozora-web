@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Actor;
 use App\Anime;
+use App\AnimeRating;
 use App\Helpers\JSONResult;
-use TVDB;
+use App\User;
+use Validator;
+use Illuminate\Http\Request;
 
 class AnimeController extends Controller
 {
@@ -112,5 +115,61 @@ class AnimeController extends Controller
             $retActors[] = Actor::formatForResponse($actor);
 
         (new JSONResult())->setData(['actors' => $retActors])->show();
+    }
+
+    /**
+     * Adds a rating for an Anime item
+     *
+     * @param $animeID
+     */
+    public function rateAnime(Request $request, $animeID) {
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'session_secret' => 'bail|required|exists:sessions,secret',
+            'user_id' => 'bail|required|numeric|exists:users,id',
+            'rating' => 'bail|required|numeric|between:0.0,5.0'
+        ]);
+
+        // Get the anime
+        $anime = Anime::find($animeID);
+
+        // The Anime item does not exist
+        if(!$anime)
+            (new JSONResult())->setError('The anime you are trying to rate was not found.')->show();
+
+        // Fetch the variables
+        $givenSecret = $request->input('session_secret');
+        $givenUserID = $request->input('user_id');
+        $givenRating = $request->input('rating');
+
+        // Check session
+        if(!User::authenticateSession($givenUserID, $givenSecret))
+            (new JSONResult())->setError('The server rejected your session. Please restart the app.')->show();
+
+        // Check validator
+        if ($validator->fails())
+            (new JSONResult())->setError($validator->errors()->first())->show();
+
+        // Try to modify the rating if it already exists
+        $foundRating = AnimeRating::where([
+            ['anime_id', '=', $anime->id],
+            ['user_id', '=', $givenUserID]
+        ])->first();
+
+        // The rating exists
+        if($foundRating) {
+            $foundRating->rating = $givenRating;
+            $foundRating->save();
+            (new JSONResult())->show();
+        }
+        // Rating needs to be inserted
+        else {
+            AnimeRating::create([
+                'anime_id'  => $anime->id,
+                'user_id'   => $givenUserID,
+                'rating'    => $givenRating
+            ]);
+            (new JSONResult())->show();
+        }
     }
 }
