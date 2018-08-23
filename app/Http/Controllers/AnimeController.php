@@ -120,6 +120,7 @@ class AnimeController extends Controller
     /**
      * Adds a rating for an Anime item
      *
+     * @param Request $request
      * @param $animeID
      */
     public function rateAnime(Request $request, $animeID) {
@@ -127,7 +128,7 @@ class AnimeController extends Controller
         $validator = Validator::make($request->all(), [
             'session_secret' => 'bail|required|exists:sessions,secret',
             'user_id' => 'bail|required|numeric|exists:users,id',
-            'rating' => 'bail|required|numeric|between:0.0,5.0'
+            'rating' => 'bail|required|numeric|between:' . AnimeRating::MIN_RATING_VALUE . ',' . AnimeRating::MAX_RATING_VALUE
         ]);
 
         // Get the anime
@@ -158,18 +159,27 @@ class AnimeController extends Controller
 
         // The rating exists
         if($foundRating) {
-            $foundRating->rating = $givenRating;
-            $foundRating->save();
-            (new JSONResult())->show();
+            // If the given rating is 0, delete the rating
+            if($givenRating <= 0)
+                $foundRating->delete();
+            // Update the current rating
+            else {
+                $foundRating->rating = $givenRating;
+                $foundRating->save();
+            }
         }
         // Rating needs to be inserted
         else {
-            AnimeRating::create([
-                'anime_id'  => $anime->id,
-                'user_id'   => $givenUserID,
-                'rating'    => $givenRating
-            ]);
-            (new JSONResult())->show();
+            // Only insert the rating if it's rated higher than 0
+            if($givenRating > 0) {
+                AnimeRating::create([
+                    'anime_id' => $anime->id,
+                    'user_id' => $givenUserID,
+                    'rating' => $givenRating
+                ]);
+            }
         }
+
+        (new JSONResult())->show();
     }
 }

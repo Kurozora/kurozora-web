@@ -17,10 +17,10 @@ class CreateAnimeRatingsTable extends Migration
             $table->increments('id');
             $table->timestamps();
 
-            $table->integer('anime_id')->unsigned();
+            $table->integer('anime_id')->unsigned()->unique();
             $table->foreign('anime_id')->references('id')->on('animes')->onDelete('cascade');
 
-            $table->integer('user_id')->unsigned();
+            $table->integer('user_id')->unsigned()->unique();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->float('rating');
