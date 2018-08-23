@@ -24,8 +24,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        // Recalculate Anime ratings every 4 hours
+        $schedule->command('ratings:calculate')->cron('0 */4 * * *');
     }
 
     /**
