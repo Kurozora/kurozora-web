@@ -84,6 +84,8 @@ class AnimeController extends Controller
             'id'                    => $anime->id,
             'title'                 => $anime->title,
             'type'                  => $anime->getType(),
+            'average_rating'        => $anime->average_rating,
+            'rating_count'          => $anime->rating_count,
             'synopsis'              => $anime->getSynopsis(),
             'runtime'               => $anime->getRuntime(),
             'watch_rating'          => $anime->getWatchRating(),
