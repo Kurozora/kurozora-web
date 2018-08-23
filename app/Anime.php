@@ -298,6 +298,7 @@ class Anime extends Model
         return [
             'id'                    => $anime->id,
             'title'                 => $anime->title,
+            'average_rating'        => $anime->average_rating,
             'poster'                => $anime->getPoster(false),
             'poster_thumbnail'      => $anime->getPoster(true),
             'background'            => $anime->getBackground(false),

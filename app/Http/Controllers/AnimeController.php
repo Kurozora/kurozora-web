@@ -24,32 +24,34 @@ class AnimeController extends Controller
 
         // Top anime of all time
         $query_TAOAT = Anime::where('nsfw', false)
-            ->orderBy('title', 'asc')
+            ->where('average_rating', '!=', '0')
+            ->orderBy('average_rating', 'DESC')
             ->limit($maxAnimePerCategory)
             ->get();
 
-        // Top new movies
-        $query_TNM = Anime::where('nsfw', false)
-            ->orderBy('title', 'asc')
+        // New movies
+        $query_NM = Anime::where('nsfw', false)
+            ->where('type', '=', Anime::ANIME_TYPE_MOVIE)
+            ->orderBy('created_at', 'DESC')
             ->limit($maxAnimePerCategory)
             ->get();
 
         // Top episodes this month
         $query_TETM = Anime::where('nsfw', false)
-            ->orderBy('title', 'asc')
+            ->orderBy('title', 'ASC')
             ->limit($maxAnimePerCategory)
             ->get();
 
         // Newly added Anime
         $query_NAA = Anime::where('nsfw', false)
-            ->orderBy('title', 'asc')
+            ->orderBy('created_at', 'DESC')
             ->limit($maxAnimePerCategory)
             ->get();
 
         // Add all the categories together
         $categoryArray = [
             Anime::formatAnimesAsCategory('Top Anime of All time', 'normal', $query_TAOAT),
-            Anime::formatAnimesAsCategory('Top New Movies', 'normal', $query_TNM),
+            Anime::formatAnimesAsCategory('New Movies', 'normal', $query_NM),
             Anime::formatAnimesAsCategory('Top Episodes This Month', 'large', $query_TETM),
             Anime::formatAnimesAsCategory('Newly Added Anime', 'normal', $query_NAA)
         ];
