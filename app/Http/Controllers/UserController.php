@@ -6,6 +6,7 @@ use App\Helpers\JSONResult;
 use App\Helpers\KuroMail;
 use App\Session;
 use App\User;
+use App\LoginAttempt;
 use Illuminate\Support\Facades\Hash;
 use Validator;
 use Illuminate\Http\Request;
@@ -83,6 +84,10 @@ class UserController extends Controller
         if($validator->fails())
             (new JSONResult())->setError($validator->errors()->first())->show();
 
+        // Check if the request IP is not banned from logging in
+        if(!LoginAttempt::isIPAllowedToLogin($request->ip()))
+            (new JSONResult())->setError('Oops. You have failed to login too many times. Please grab yourself a snack and try again in a bit.')->show();
+
         // Fetch the variables and sanitize them
         $username       = $request->input('username');
         $rawPassword    = $request->input('password');
@@ -92,8 +97,13 @@ class UserController extends Controller
         $foundUser = User::where('username', $username)->first();
 
         // Compare the passwords
-        if(!Hash::check($rawPassword, $foundUser->password))
+        if(!Hash::check($rawPassword, $foundUser->password)) {
+            // Register the login attempt
+            LoginAttempt::registerFailedLoginAttempt($request->ip());
+
+            // Show error message
             (new JSONResult())->setError('The entered password does not match.')->show();
+        }
 
         // Check if email is confirmed
         if(!$foundUser->hasConfirmedEmail())
