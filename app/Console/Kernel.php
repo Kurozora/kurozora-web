@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\LoginAttempt;
 
 class Kernel extends ConsoleKernel
 {
@@ -26,6 +27,11 @@ class Kernel extends ConsoleKernel
     {
         // Recalculate Anime ratings every 4 hours
         $schedule->command('ratings:calculate')->cron('0 */4 * * *');
+
+        // Truncates login attempts every day
+        $schedule->call(function() {
+        	LoginAttempt::truncate();
+        })->daily();
     }
 
     /**
