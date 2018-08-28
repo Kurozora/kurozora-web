@@ -72,15 +72,39 @@ class AnimeController extends Controller
      *
      * @param int $animeID
      */
-    public function detailsAnime($animeID) {
+    public function detailsAnime(Request $request, $animeID) {
+    	// Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'session_secret'    => 'bail|required|exists:sessions,secret',
+            'user_id'           => 'bail|required|numeric|exists:users,id'
+        ]);
+
+        // Fetch the variables
+        $givenSecret    = $request->input('session_secret');
+        $givenUserID    = $request->input('user_id');
+
+        // Check authentication
+        if($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret))
+            (new JSONResult())->setError('The server rejected your credentials. Please restart the app.')->show();
+
         $anime = Anime::find($animeID);
 
         // The Anime item does not exist
         if(!$anime)
             (new JSONResult())->setError('Unable to retrieve the details for the specified anime.')->show();
 
+        // Get the user rating for this Anime
+        $userRating = 0.0;
+
+        $foundRating = AnimeRating::where([
+        	['user_id' , '=', $givenUserID],
+        	['anime_id' , '=', $anime->id]
+        ])->first();
+
+        if($foundRating) $userRating = $foundRating->rating;
+
         // Build the response
-        $returnArr = [
+        $animeArr = [
             'id'                    => $anime->id,
             'title'                 => $anime->title,
             'type'                  => $anime->getType(),
@@ -96,7 +120,11 @@ class AnimeController extends Controller
             'nsfw'                  => (bool) $anime->nsfw
         ];
 
-        (new JSONResult())->setData(['anime' => $returnArr])->show();
+        $userArr = [
+        	'current_rating'		=> $userRating
+       	];
+
+        (new JSONResult())->setData(['anime' => $animeArr, 'user' => $userArr])->show();
     }
 
     /**
