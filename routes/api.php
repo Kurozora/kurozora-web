@@ -33,4 +33,8 @@ Route::prefix('/v1')->group(function() {
         Route::get('/{id}/actors', 'AnimeController@actorsAnime')->where('id', '[0-9]*');
         Route::post('/{id}/rate', 'AnimeController@rateAnime')->where('id', '[0-9]*');
     });
+
+    Route::prefix('/misc')->group(function() {
+        Route::get('/get_privacy_policy', 'MiscController@getPrivacyPolicy');
+    });
 });
