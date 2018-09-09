@@ -151,6 +151,24 @@ class AnimeController extends Controller
     }
 
     /**
+     * Returns episode information for an Anime
+     *
+     * @param int $animeID
+     */
+    public function episodesAnime($animeID) {
+        $anime = Anime::find($animeID);
+
+        // The Anime item does not exist
+        if(!$anime)
+            (new JSONResult())->setError('Unable to retrieve episode data for the specified anime.')->show();
+
+        // Get the eoisodes
+        $episodes = $anime->getEpisodes();
+
+        (new JSONResult())->setData(['episodes' => $episodes])->show();
+    }
+
+    /**
      * Adds a rating for an Anime item
      *
      * @param Request $request
