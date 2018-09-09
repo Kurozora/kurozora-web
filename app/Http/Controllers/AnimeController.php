@@ -14,8 +14,6 @@ class AnimeController extends Controller
 {
     /**
      * Returns the necessary data for the Anime explore page
-     *
-     * URL: /api/v1/anime/explore
      */
     public function exploreAnime() {
         // Settings for queries
@@ -70,6 +68,9 @@ class AnimeController extends Controller
     /**
      * Returns detailed information about an Anime
      *
+     * URL: /api/v1/anime/{id}/details
+     *
+     * @param Request $request
      * @param int $animeID
      */
     public function detailsAnime(Request $request, $animeID) {
