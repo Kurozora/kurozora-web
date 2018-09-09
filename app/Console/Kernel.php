@@ -28,6 +28,9 @@ class Kernel extends ConsoleKernel
         // Recalculate Anime ratings every 4 hours
         $schedule->command('ratings:calculate')->cron('0 */4 * * *');
 
+        // Delete all expired sessions every day
+        $schedule->command('sessions:delete_expired')->daily();
+
         // Truncates login attempts every day
         $schedule->call(function() {
         	LoginAttempt::truncate();
