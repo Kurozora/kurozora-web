@@ -11,7 +11,7 @@ class MiscController extends Controller
      * Returns the latest privacy policy
      */
     public function getPrivacyPolicy() {
-        $privacyPolicyPath = public_path() . '/privacy_policy.txt';
+        $privacyPolicyPath = 'public/privacy_policy.txt';
 
         // Get the privacy policy text
         $privacyPolicyText = null;

@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DRIVER', 'local'),
+    'default' => 'project',
 
     /*
     |--------------------------------------------------------------------------
@@ -42,6 +42,11 @@ return [
     */
 
     'disks' => [
+
+        'project' => [
+            'driver' => 'local',
+            'root' => base_path()
+        ],
 
         'local' => [
             'driver' => 'local',
