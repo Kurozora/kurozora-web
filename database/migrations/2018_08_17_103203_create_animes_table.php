@@ -38,6 +38,7 @@ class CreateAnimesTable extends Migration
             $table->boolean('fetched_background')->default(false);
             $table->boolean('fetched_background_thumbnail')->default(false);
             $table->boolean('fetched_actors')->default(false);
+            $table->boolean('fetched_episodes')->default(false);
             $table->boolean('fetched_synopsis')->default(false);
             $table->boolean('fetched_runtime')->default(false);
             $table->boolean('fetched_watch_rating')->default(false);
