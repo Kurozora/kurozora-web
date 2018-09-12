@@ -7,6 +7,7 @@ use App\Anime;
 use App\AnimeRating;
 use App\Helpers\JSONResult;
 use App\User;
+use Illuminate\Support\Facades\Artisan;
 use Validator;
 use Illuminate\Http\Request;
 

@@ -16,9 +16,6 @@ class Anime extends Model
     const ANIME_TYPE_UNDEFINED  = 0;
     const ANIME_TYPE_TV         = 1;
     const ANIME_TYPE_MOVIE      = 2;
-    const ANIME_TYPE_SPECIAL    = 3;
-    const ANIME_TYPE_OVA        = 4;
-    const ANIME_TYPE_ONA        = 5;
 
     protected $fillable = [
         'title',
@@ -90,7 +87,7 @@ class Anime extends Model
             return [];
 
         // Check if we already have the base episodes
-        if($this->fetched_episodes) {
+        if($this->fetched_base_episodes) {
             return AnimeEpisode::where('anime_id', '=', $this->id)->get();
         }
         // The episodes still need to be fetched

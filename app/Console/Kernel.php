@@ -2,9 +2,11 @@
 
 namespace App\Console;
 
+use App\Anime;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\LoginAttempt;
+use Illuminate\Support\Facades\Artisan;
 
 class Kernel extends ConsoleKernel
 {
@@ -25,12 +27,28 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        /**********************************************/
+        // Fetch base episodes for an episode every 10 minutes
+        $schedule->call(function() {
+            // Find an Anime where the base episodes have not been fetched
+            $foundItem = Anime::where('fetched_base_episodes', '=', false)->limit(1)->first();
+
+            if($foundItem) {
+                Artisan::call('animes:fetch_base_episodes', [
+                    'id' => $foundItem->id
+                ]);
+            }
+        })->cron('*/10 * * * *');
+
+        /**********************************************/
         // Recalculate Anime ratings every 4 hours
         $schedule->command('ratings:calculate')->cron('0 */4 * * *');
 
+        /**********************************************/
         // Delete all expired sessions every day
         $schedule->command('sessions:delete_expired')->daily();
 
+        /**********************************************/
         // Truncates login attempts every day
         $schedule->call(function() {
         	LoginAttempt::truncate();
