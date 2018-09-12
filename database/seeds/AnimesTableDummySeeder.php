@@ -57,10 +57,7 @@ class AnimesTableDummySeeder extends Seeder
     // Dummy anime types
     const DUMMY_ANIME_TYPES = [
         Anime::ANIME_TYPE_TV,
-        Anime::ANIME_TYPE_MOVIE,
-        Anime::ANIME_TYPE_ONA,
-        Anime::ANIME_TYPE_OVA,
-        Anime::ANIME_TYPE_SPECIAL
+        Anime::ANIME_TYPE_MOVIE
     ];
 
     /**

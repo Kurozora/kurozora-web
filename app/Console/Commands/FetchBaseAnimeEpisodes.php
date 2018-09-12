@@ -51,11 +51,17 @@ class FetchBaseAnimeEpisodes extends Command
             return false;
         }
 
+        if($anime->fetched_base_episodes) {
+            $this->error('The base episodes were already fetched for this Anime.');
+            return false;
+        }
+
         // TVDB handle
         $tvdb = new TVDB();
 
         // Start looping through episode requests
         $resultSet = [true];
+        $totalInsertCount = 0;
         $pageCount = 1;
 
         $this->info('Start retrieving episode data.');
@@ -65,7 +71,7 @@ class FetchBaseAnimeEpisodes extends Command
             $resultSet = $tvdb->getAnimeEpisodeData($anime->tvdb_id, $pageCount);
 
             // Last page
-            if(count($resultSet) < 1) {
+            if($resultSet == null || $resultSet < 1) {
                 $this->info('No more episodes found on page ' . $pageCount);
                 break;
             }
@@ -99,9 +105,16 @@ class FetchBaseAnimeEpisodes extends Command
 
             $this->info($insertCount . '/' . count($resultSet) . ' episodes inserted!');
 
+            $totalInsertCount += $insertCount;
+
             // Ready for the next iteration (page)
             $this->info('');
             $pageCount++;
         }
+
+        $this->info('All done! ' . $totalInsertCount . ' total of episodes inserted.');
+
+        $anime->fetched_base_episodes = true;
+        $anime->save();
     }
 }
