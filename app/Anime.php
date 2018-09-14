@@ -81,14 +81,23 @@ class Anime extends Model
      *
      * @return array
      */
-    public function getEpisodes() {
+    public function getEpisodes($season = null) {
         // Movies don't have episodes
         if($this->type == self::ANIME_TYPE_MOVIE)
             return [];
 
         // Check if we already have the base episodes
         if($this->fetched_base_episodes) {
-            return AnimeEpisode::where('anime_id', '=', $this->id)->get();
+            $whereClauses = [
+                ['anime_id', '=', $this->id]
+            ];
+
+            if($season != null && is_numeric($season))
+                $whereClauses[] = ['season', '=', $season];
+
+            $episodeQuery = AnimeEpisode::where($whereClauses);
+
+            return $episodeQuery->get();
         }
         // The episodes still need to be fetched
         else return [];
