@@ -163,7 +163,7 @@ class AnimeController extends Controller
         if(!$anime)
             (new JSONResult())->setError('Unable to retrieve episode data for the specified anime.')->show();
 
-        // Get the eoisodes
+        // Get the episodes
         $episodes = $anime->getEpisodes();
 
         (new JSONResult())->setData(['episodes' => $episodes])->show();
