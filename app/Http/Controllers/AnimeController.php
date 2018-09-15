@@ -182,7 +182,10 @@ class AnimeController extends Controller
         foreach($episodes as $episode)
             $endEpisodes[] = $episode->formatEpisodeData();
 
-        (new JSONResult())->setData(['episodes' => $endEpisodes])->show();
+        (new JSONResult())->setData([
+            'episode_count' => count($endEpisodes),
+            'episodes'      => $endEpisodes
+        ])->show();
     }
 
     /**
