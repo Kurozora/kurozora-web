@@ -97,17 +97,13 @@ class Anime extends Model
 
             $episodeQuery = AnimeEpisode::where($whereClauses);
 
+            if($season != null && is_numeric($season))
+                $episodeQuery->orderBy('number', 'ASC');
+
             return $episodeQuery->get();
         }
         // The episodes still need to be fetched
         else return [];
-    }
-
-    /**
-     * Retrieves the base episodes for this Anime and stores them
-     */
-    public function getBaseEpisodes() {
-
     }
 
     /**

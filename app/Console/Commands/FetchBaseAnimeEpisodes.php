@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Anime;
 use App\AnimeEpisode;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use TVDB;
 
@@ -92,12 +93,18 @@ class FetchBaseAnimeEpisodes extends Command
                 if($checkFindEpisode)
                     continue;
 
+                $firstAiredValue = null;
+
+                if($episodeResult->firstAired != null)
+                    $firstAiredValue = new Carbon($episodeResult->firstAired);
+
                 AnimeEpisode::create([
-                    'anime_id'  => $anime->id,
-                    'name'      => $episodeResult->episodeName,
-                    'season'    => $episodeResult->airedSeason,
-                    'number'    => $episodeResult->airedEpisodeNumber,
-                    'overview'  => $episodeResult->overview
+                    'anime_id'      => $anime->id,
+                    'name'          => $episodeResult->episodeName,
+                    'season'        => $episodeResult->airedSeason,
+                    'number'        => $episodeResult->airedEpisodeNumber,
+                    'overview'      => $episodeResult->overview,
+                    'first_aired'   => $firstAiredValue
                 ]);
 
                 $insertCount++;
