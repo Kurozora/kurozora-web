@@ -20,6 +20,7 @@ class CreateAnimeEpisodesTable extends Migration
             $table->integer('anime_id')->unsigned();
             $table->foreign('anime_id')->references('id')->on('animes')->onDelete('cascade');
 
+            $table->boolean('verified')->default(false);
             $table->integer('season')->unsigned()->default(1);
             $table->integer('number')->unsigned()->nullable();
             $table->string('name')->nullable();
