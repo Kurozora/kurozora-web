@@ -31,6 +31,8 @@ class CreateAnimesTable extends Migration
             $table->string('watch_rating')->nullable();
             $table->float('average_rating')->default(0.0);
             $table->integer('rating_count')->default(0);
+            $table->integer('episode_count')->default(0);
+            $table->integer('season_count')->default(0);
 
             // Flags for fetched data
             $table->boolean('fetched_poster')->default(false);

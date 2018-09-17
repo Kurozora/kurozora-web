@@ -63,6 +63,7 @@ class FetchBaseAnimeEpisodes extends Command
         // Start looping through episode requests
         $resultSet = [true];
         $totalInsertCount = 0;
+        $highestSeason = 0;
         $pageCount = 1;
 
         $this->info('Start retrieving episode data.');
@@ -93,6 +94,7 @@ class FetchBaseAnimeEpisodes extends Command
                 if($checkFindEpisode)
                     continue;
 
+                // Insert the new episode
                 $firstAiredValue = null;
 
                 if($episodeResult->firstAired != null)
@@ -108,6 +110,10 @@ class FetchBaseAnimeEpisodes extends Command
                 ]);
 
                 $insertCount++;
+
+                // Update the highest season
+                if($episodeResult->airedSeason > $highestSeason)
+                    $highestSeason = $episodeResult->airedSeason;
             }
 
             $this->info($insertCount . '/' . count($resultSet) . ' episodes inserted!');
@@ -121,6 +127,9 @@ class FetchBaseAnimeEpisodes extends Command
 
         $this->info('All done! ' . $totalInsertCount . ' total of episodes inserted.');
 
+        // Update the Anime variables
+        $anime->episode_count = $totalInsertCount;
+        $anime->season_count = $highestSeason;
         $anime->fetched_base_episodes = true;
         $anime->save();
     }
