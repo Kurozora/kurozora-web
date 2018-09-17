@@ -31,7 +31,8 @@ class AnimeEpisode extends Model
             'number'        => $this->number,
             'name'          => $this->name,
             'first_aired'   => $formattedFirstAired,
-            'overview'      => $this->overview
+            'overview'      => $this->overview,
+            'verified'      => (bool) $this->verified
         ];
     }
 }
