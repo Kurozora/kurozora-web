@@ -174,33 +174,40 @@ class UserController extends Controller
     public function getSessions(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'session_secret'    => 'bail|required|exists:sessions,secret',
-            'user_id'           => 'bail|required|numeric|exists:users,id'
+            'session_secret'        => 'bail|required|exists:sessions,secret',
+            'user_id'               => 'bail|required|numeric|exists:users,id'
         ]);
 
         // Fetch the variables
-        $givenSecret    = $request->input('session_secret');
-        $givenUserID    = $request->input('user_id');
+        $givenSecret        = $request->input('session_secret');
+        $givenUserID        = $request->input('user_id');
 
         // Check authentication
         if($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret))
             (new JSONResult())->setError('The server rejected your credentials. Please restart the app.')->show();
 
-        // Get the sessions and put them in an array
-        $returnSessions = [];
-        $sessions = Session::where('user_id', '=', $givenUserID)->get();
+        // Get the other sessions and put them in an array
+        $otherSessions = [];
+        $sessions = Session::where([
+            ['user_id', '=',    $givenUserID],
+            ['secret',  '!=',   $givenSecret]
+        ])->get();
 
-        foreach($sessions as $session) {
-            $returnSessions[] = [
-                'id'                => $session->id,
-                'secret'            => $session->secret,
-                'device'            => $session->device,
-                'ip'                => $session->ip,
-                'last_validated'    => $session->formatLastValidated()
-            ];
-        }
+        foreach($sessions as $session)
+            $otherSessions[] = $session->formatForSessionList();
 
-        (new JSONResult())->setData(['sessions' => $returnSessions])->show();
+        // Get the current session
+        $curSession = Session::where([
+            ['user_id', '=',    $givenUserID],
+            ['secret',  '=',    $givenSecret]
+        ])->first();
+
+        $curSession = $curSession->formatForSessionList();
+
+        (new JSONResult())->setData([
+            'current_session'   => $curSession,
+            'other_sessions'    => $otherSessions
+        ])->show();
     }
 
     /**

@@ -31,4 +31,16 @@ class Session extends Model
 
         return $lastValDate;
     }
+
+    /**
+     * Formats the session for display in the API's list of sessions
+     */
+    public function formatForSessionList() {
+        return [
+            'id'                => $this->id,
+            'device'            => $this->device,
+            'ip'                => $this->ip,
+            'last_validated'    => $this->formatLastValidated()
+        ];
+    }
 }
