@@ -45,7 +45,7 @@ class UserController extends Controller
             !$imgValidator->fails()
         ) {
             // Save the uploaded avatar
-            $uploadedPath = Storage::putFile(User::USER_UPLOADS_PATH, $request->file('profileImage'));
+            $uploadedPath = $request->file('profileImage')->store(User::USER_UPLOADS_PATH);
         }
 
         // Fetch the variables and sanitize them
