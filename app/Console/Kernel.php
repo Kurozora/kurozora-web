@@ -49,6 +49,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('sessions:delete_expired')->daily();
 
         /**********************************************/
+        // Delete all users that did not confirm their email within 24 hrs every day
+        $schedule->command('users:delete_inactive_unconfirmed')->daily();
+
+        /**********************************************/
         // Truncates login attempts every day
         $schedule->call(function() {
         	LoginAttempt::truncate();
