@@ -13,14 +13,13 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    /**
-        /api/v1/user/register
 
-        expects:
-        - POST "username": the username that the user picked.
-        - POST "email": the email address of the registering user.
-        - POST "password": the user's new password.
-    **/
+    /**
+     * Registers a new user
+     *
+     * @param Request $request
+     * @throws \Throwable
+     */
     public function register(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
@@ -65,13 +64,10 @@ class UserController extends Controller
     }
 
     /**
-        /api/v1/user/login
-
-        expects:
-        - POST "username": the user's username used to authenticate.
-        - POST "password": the user's password used to authenticate.
-        - POST "device": the device name used to log in.
-    **/
+     * Logs the user in (create session)
+     *
+     * @param Request $request
+     */
     public function login(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
@@ -126,12 +122,10 @@ class UserController extends Controller
     }
 
     /**
-        /api/v1/user/logout
-
-        expects:
-        - POST "session_secret": the session secret of the logged in user.
-        - POST "user_id": the user ID of the logged in user.
-    **/
+     * Logs the user out (destroys the session)
+     *
+     * @param Request $request
+     */
     public function logout(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
@@ -165,12 +159,52 @@ class UserController extends Controller
     }
 
     /**
-        /api/v1/user/get_sessions
+     * Returns the profile details for a user
+     *
+     * @param Request $request
+     * @param $id
+     */
+    public function profile(Request $request, $id) {
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'session_secret'        => 'bail|required|exists:sessions,secret',
+            'user_id'               => 'bail|required|numeric|exists:users,id'
+        ]);
 
-        expects:
-        - POST "session_secret": the session secret of the logged in user.
-        - POST "user_id": the user ID of the logged in user.
-    **/
+        // Fetch the variables
+        $givenSecret        = $request->input('session_secret');
+        $givenUserID        = $request->input('user_id');
+
+        // Check authentication
+        if($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret))
+            (new JSONResult())->setError(JSONResult::ERROR_SESSION_REJECTED)->show();
+
+        // Check if this user profile exists
+        $profileUser = User::find($id);
+
+        if(!$profileUser)
+            (new JSONResult())->setError('This user does not exist.')->show();
+
+        // Show profile response
+        (new JSONResult())->setData([
+            'profile' => [
+                'username'          => $profileUser->username,
+                'biography'         => $profileUser->biography,
+                'avatar_url'        => $profileUser->avatar,
+                'banner_url'        => $profileUser->banner,
+                'follower_count'    => $profileUser->follower_count,
+                'following_count'   => $profileUser->following_count,
+                'reputation_count'  => $profileUser->reputation_count
+            ]
+        ])->show();
+    }
+
+
+    /**
+     * Returns the current active sessions for a user
+     *
+     * @param Request $request
+     */
     public function getSessions(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
@@ -184,7 +218,7 @@ class UserController extends Controller
 
         // Check authentication
         if($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret))
-            (new JSONResult())->setError('The server rejected your credentials. Please restart the app.')->show();
+            (new JSONResult())->setError(JSONResult::ERROR_SESSION_REJECTED)->show();
 
         // Get the other sessions and put them in an array
         $otherSessions = [];
@@ -211,13 +245,10 @@ class UserController extends Controller
     }
 
     /**
-        /api/v1/user/delete_session
-
-        expects:
-        - POST "session_secret": the session secret of the logged in user.
-        - POST "user_id": the user ID of the logged in user.
-        - POST "del_session_id": the session ID to delete.
-    **/
+     * Deletes a user session
+     *
+     * @param Request $request
+     */
     public function deleteSession(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
@@ -241,7 +272,13 @@ class UserController extends Controller
         (new JSONResult())->show();
     }
 
-    // Email confirmation
+    /**
+     * Email confirmation page
+     *
+     * @param $confirmationID
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function confirmEmail($confirmationID, Request $request) {
         // Try to find a user with this confirmation ID
         $foundUser = User::where('email_confirmation_id', $confirmationID)->first();
