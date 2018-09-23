@@ -8,6 +8,7 @@ use App\Session;
 use App\User;
 use App\LoginAttempt;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Validator;
 use Illuminate\Http\Request;
 
@@ -32,6 +33,21 @@ class UserController extends Controller
         if($validator->fails())
             (new JSONResult())->setError($validator->errors()->first())->show();
 
+        $uploadedPath = null;
+
+        // Check if a valid avatar was uploaded
+        $imgValidator = Validator::make($request->all(), [
+            'profileImage' => 'required|mimes:jpeg,jpg,png|max:1000',
+        ]);
+
+        if( $request->hasFile('profileImage') &&
+            $request->file('profileImage')->isValid() &&
+            !$imgValidator->fails()
+        ) {
+            // Save the uploaded avatar
+            $uploadedPath = Storage::putFile(User::USER_UPLOADS_PATH, $request->file('profileImage'));
+        }
+
         // Fetch the variables and sanitize them
         $username       = $request->input('username');
         $email          = $request->input('email');
@@ -42,7 +58,8 @@ class UserController extends Controller
             'username'              => $username,
             'email'                 => $email,
             'password'              => Hash::make($rawPassword),
-            'email_confirmation_id' => str_random(50)
+            'email_confirmation_id' => str_random(50),
+            'avatar'                => $uploadedPath
         ]);
 
         // Send the user an email
