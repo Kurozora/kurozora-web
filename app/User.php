@@ -28,18 +28,47 @@ class User extends Model
     }
 
     /**
+     * Check whether or not the user has an avatar set
+     *
+     * @return bool
+     */
+    public function hasAvatar() {
+        return ($this->avatar != null);
+    }
+
+    /**
+     * Returns the path to this user's avatar
+     *
+     * @return null|string
+     */
+    public function getAvatarPath() {
+        if(!$this->hasAvatar()) return null;
+        else return self::USER_UPLOADS_PATH . '/' . $this->avatar;
+    }
+
+    /**
+     * Returns the URL to this user's avatar
+     *
+     * @return null|string
+     */
+    public function getURLToAvatar() {
+        if(!$this->hasAvatar()) return null;
+        else return env('APP_URL') . '/' . self::USER_UPLOADS_URL . '/' . $this->avatar;
+    }
+
+    /**
      * Returns the absolute URL to the user's avatar
      */
     public function getAvatarURL() {
         // No avatar uploaded
-        if($this->avatar == null) return null;
+        if(!$this->hasAvatar()) return null;
 
         // Check if the uploaded image is present
-        $avatarPath = self::USER_UPLOADS_PATH . '/' . $this->avatar;
+        $avatarPath = $this->getAvatarPath();
 
         if(Storage::exists($avatarPath))
             // Return the URL to the image
-            return env('APP_URL') . '/' . self::USER_UPLOADS_URL . '/' . $this->avatar;
+            return $this->getURLToAvatar();
         else return null;
     }
 
