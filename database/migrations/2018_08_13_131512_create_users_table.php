@@ -22,9 +22,13 @@ class CreateUsersTable extends Migration
             $table->string('email');
             $table->string('password');
             $table->tinyInteger('role')->default(User::USER_ROLE_NORMAL);
-            $table->string('avatar_url')->nullable();
+            $table->string('avatar')->nullable();
+            $table->string('banner')->nullable();
             $table->text('biography')->nullable();
             $table->string('email_confirmation_id')->nullable();
+            $table->integer('follower_count')->default(0);
+            $table->integer('following_count')->default(0);
+            $table->integer('reputation_count')->default(0);
         });
     }
 

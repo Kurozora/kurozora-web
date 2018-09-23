@@ -10,6 +10,8 @@ namespace App\Helpers;
     Class to generate and show/echo a JSON response
 **/
 class JSONResult {
+    const ERROR_SESSION_REJECTED = 'The server rejected your session. Please restart the app to solve this issue.';
+
     private $success = true;
     private $errorMessage;
     private $data = [];
