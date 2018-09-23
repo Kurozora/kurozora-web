@@ -33,7 +33,7 @@ class UserController extends Controller
         if($validator->fails())
             (new JSONResult())->setError($validator->errors()->first())->show();
 
-        $uploadedPath = null;
+        $fileName = null;
 
         // Check if a valid avatar was uploaded
         $imgValidator = Validator::make($request->all(), [
@@ -45,7 +45,9 @@ class UserController extends Controller
             !$imgValidator->fails()
         ) {
             // Save the uploaded avatar
-            $uploadedPath = $request->file('profileImage')->store(User::USER_UPLOADS_PATH);
+            $fileName = 'avatar_' . str_random('30') . '.' . $request->file('profileImage')->extension();;
+
+            $request->file('profileImage')->storeAs(User::USER_UPLOADS_PATH, $fileName);
         }
 
         // Fetch the variables and sanitize them
@@ -59,7 +61,7 @@ class UserController extends Controller
             'email'                 => $email,
             'password'              => Hash::make($rawPassword),
             'email_confirmation_id' => str_random(50),
-            'avatar'                => $uploadedPath
+            'avatar'                => $fileName
         ]);
 
         // Send the user an email
