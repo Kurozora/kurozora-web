@@ -43,9 +43,11 @@ return [
 
     'disks' => [
 
+        // Default filesystem
         'project' => [
             'driver' => 'local',
-            'root' => base_path()
+            'root' => base_path(),
+            'url' => env('APP_URL'),
         ],
 
         'local' => [

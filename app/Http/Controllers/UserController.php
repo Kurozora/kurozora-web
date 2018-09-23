@@ -37,7 +37,7 @@ class UserController extends Controller
 
         // Check if a valid avatar was uploaded
         $imgValidator = Validator::make($request->all(), [
-            'profileImage' => 'required|mimes:jpeg,jpg,png|max:1000',
+            'profileImage' => 'required|mimes:jpeg,jpg,png|max:700',
         ]);
 
         if( $request->hasFile('profileImage') &&
@@ -209,7 +209,7 @@ class UserController extends Controller
             'profile' => [
                 'username'          => $profileUser->username,
                 'biography'         => $profileUser->biography,
-                'avatar_url'        => $profileUser->avatar,
+                'avatar_url'        => $profileUser->getAvatarURL(),
                 'banner_url'        => $profileUser->banner,
                 'follower_count'    => $profileUser->follower_count,
                 'following_count'   => $profileUser->following_count,
