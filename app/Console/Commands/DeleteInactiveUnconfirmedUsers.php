@@ -41,6 +41,8 @@ class DeleteInactiveUnconfirmedUsers extends Command
     {
         User::where('email_confirmation_id', '!=', null)
             ->whereDate('created_at', '<', Carbon::now()->subHours(24))
+            ->get()
+            ->each
             ->delete();
 
         $this->info('Deleted all inactive unconfirmed users.');
