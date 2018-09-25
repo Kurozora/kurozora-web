@@ -1,7 +1,5 @@
 <?php
 
-use App\Helpers\JSONResult;
-
 /**
  * @author Musa Semou <mussesemou99@gmail.com>
  */
