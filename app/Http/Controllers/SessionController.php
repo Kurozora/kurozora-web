@@ -10,12 +10,10 @@ use Illuminate\Http\Request;
 class SessionController extends Controller
 {
     /**
-        /api/v1/session/validate
-
-        expects:
-        - POST "session_secret": the session secret that needs to be validated.
-        - POST "user_id": the user ID that of the user that created the session.
-    **/
+     * Checks whether or not a session_secret/user_id combination is valid
+     *
+     * @param Request $request
+     */
     public function validateSession(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [

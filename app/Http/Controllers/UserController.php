@@ -136,7 +136,8 @@ class UserController extends Controller
         // Show a successful response
         (new JSONResult())->setData([
             'session_secret'    => $newSession->secret,
-            'user_id'           => $foundUser->id
+            'user_id'           => $foundUser->id,
+            'role'              => $foundUser->role
         ])->show();
     }
 

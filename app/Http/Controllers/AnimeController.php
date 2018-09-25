@@ -68,11 +68,6 @@ class AnimeController extends Controller
 
     /**
      * Returns detailed information about an Anime
-     *
-     * URL: /api/v1/anime/{id}/details
-     *
-     * @param Request $request
-     * @param int $animeID
      */
     public function detailsAnime(Request $request, $animeID) {
     	// Validate the inputs
@@ -134,7 +129,7 @@ class AnimeController extends Controller
     /**
      * Returns actor information about an Anime
      *
-     * @param int $animeID
+     * @param $animeID
      */
     public function actorsAnime($animeID) {
         $anime = Anime::find($animeID);
