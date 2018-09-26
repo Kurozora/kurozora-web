@@ -67,9 +67,7 @@ class UserController extends Controller
         // Send the user an email
         $emailData = [
             'username'          => $username,
-            'confirmation_id'   => $newUser->email_confirmation_id,
-            'site_domain'       => env('APP_URL', ''),
-            'static_asset'      => env('APP_ASSET_STATIC', ''),
+            'confirmation_id'   => $newUser->email_confirmation_id
         ];
 
         (new KuroMail())

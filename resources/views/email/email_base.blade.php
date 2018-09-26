@@ -7,12 +7,6 @@
         #outlook a {
             padding: 0;
         }
-        .ReadMsgBody {
-            width: 100%;
-        }
-        .ExternalClass {
-            width: 100%;
-        }
         .ExternalClass * {
             line-height: 100%;
         }
@@ -80,8 +74,8 @@
                                         <tbody>
                                         <tr>
                                             <td style="width:172px;">
-                                                <a href="{{ $site_domain }}" target="_blank" style="color: #F3D5A9; font-weight: normal; text-decoration: none !important;">
-                                                    <img src="{{ $static_asset }}/email_header_logo.png" alt="Kurozora logo" style="width: 100%; max-width: 180px;" />
+                                                <a href="{{ env('APP_URL', '') }}" target="_blank" style="color: #F3D5A9; font-weight: normal; text-decoration: none !important;">
+                                                    <img src="{{ asset('img/static/email_header_logo.png') }}" alt="Kurozora logo" style="width: 100%; max-width: 180px;" />
                                                 </a>
                                             </td>
                                         </tr>
@@ -98,7 +92,7 @@
         </table>
     </div>
     <div style="max-width:640px;margin:0 auto;box-shadow:0px 1px 5px rgba(0,0,0,0.1);border-radius:4px;overflow:hidden">
-        <table style="background-image: url('{{ $static_asset }}/star_bg_md.jpg'); width: 100%; background-position: bottom;" role="presentation" cellpadding="0" cellspacing="0" align="center" border="0">
+        <table style="background-image: url('{{ asset('img/static/star_bg_md.jpg') }}'); width: 100%; background-position: bottom;" role="presentation" cellpadding="0" cellspacing="0" align="center" border="0">
             <tbody>
             <tr>
                 <td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;">
