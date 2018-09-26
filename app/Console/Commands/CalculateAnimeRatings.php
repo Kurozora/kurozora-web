@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Anime;
+use App\AnimeRating;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -39,12 +40,41 @@ class CalculateAnimeRatings extends Command
      */
     public function handle()
     {
+        // Mean score of all Anime
+        $meanAverageRating = AnimeRating::avg('rating');
+
+        // Start looping through Anime
+        $animes = Anime::all();
+
+        foreach($animes as $anime) {
+            // Total amount of ratings this Anime has
+            $totalRatingCount = AnimeRating::where('anime_id', $anime->id)->count();
+
+            // Check if minimum ratings are acquired
+            if($totalRatingCount >= Anime::MINIMUM_RATINGS_REQUIRED) {
+                $this->info('=============================');
+                $this->info('Calculating for Anime ID ' . $anime->id);
+
+                // Average score for this Anime
+                $basicAverageRating = AnimeRating::where('anime_id', $anime->id)->avg('rating');
+
+                // Calculate the weighted rating
+                $weightedRating = ($totalRatingCount / ($totalRatingCount + Anime::MINIMUM_RATINGS_REQUIRED)) * $basicAverageRating + (Anime::MINIMUM_RATINGS_REQUIRED / ($totalRatingCount + Anime::MINIMUM_RATINGS_REQUIRED)) * $meanAverageRating;
+
+                $this->info('Calculated weighted rating: '. $weightedRating);
+                $this->info('');
+            }
+            // This Anime does not have enough ratings
+            else $this->error('Anime ' . $anime->id . ' does not have enough ratings. (' . $totalRatingCount . '/' . Anime::MINIMUM_RATINGS_REQUIRED . ')');
+        }
+
         // Update the average rating and rating count
-        DB::table('animes')->update(['average_rating' => DB::raw('IFNULL((SELECT AVG(rating) FROM anime_ratings WHERE anime_id = animes.id), 0)')]);
+        /*DB::table('animes')->update(['average_rating' => DB::raw('IFNULL((SELECT AVG(rating) FROM anime_ratings WHERE anime_id = animes.id), 0)')]);
         DB::table('animes')->update(['rating_count' => DB::raw('IFNULL((SELECT COUNT(rating) FROM anime_ratings WHERE anime_id = animes.id), 0)')]);
 
         // Console output
         $aniCount = Anime::count();
         $this->info(sprintf('Updated rating information for %d Anime %s.', $aniCount, str_plural('item', $aniCount)));
+    */
     }
 }

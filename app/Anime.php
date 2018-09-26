@@ -17,6 +17,10 @@ class Anime extends Model
     const ANIME_TYPE_TV         = 1;
     const ANIME_TYPE_MOVIE      = 2;
 
+    // Minimum ratings required to calculate average
+    const MINIMUM_RATINGS_REQUIRED = 30;
+
+    // Fillable columns
     protected $fillable = [
         'title',
         'cached_poster',
