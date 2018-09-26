@@ -33,3 +33,14 @@ html {
 	-webkit-transform: translate(-50%,-50%);
 	transform: translate(-50%,-50%);
 }
+
+.back-safe-link {
+	display: block;
+	color: #fff;
+	text-decoration: underline;
+	text-align: center;
+	font-size: 16px;
+}
+	.back-safe-link:hover {
+		color: #bbb;
+	}
