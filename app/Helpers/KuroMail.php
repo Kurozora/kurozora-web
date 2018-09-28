@@ -10,12 +10,12 @@ use \SendGrid\Mail;
 use \SendGrid\Email;
 use \SendGrid\Content;
 
-/**
-    Class that helps send mail through SendGrid
-**/
 class KuroMail {
-    protected $api_key = 'XXXXX';
+    // Debug mode should be used during testing fase
     const DEBUG = false;
+
+    // Email variables
+    protected $api_key;
 
     protected $fromName = 'Kurozora';
     protected $from = 'no-reply@kurozora.app';
@@ -29,15 +29,19 @@ class KuroMail {
     public $response = null;
 
     /**
-        Get the SG API key
-    **/
+     * KuroMail constructor.
+     */
     public function __construct() {
         $this->api_key = env('SENDGRID_API_KEY', 'ErrorKey');
     }
 
     /**
-        Defines the email address that will send this email
-    **/
+     * Determines where the email will be sent from
+     *
+     * @param $newFromEmail
+     * @param null $newFromName
+     * @return $this
+     */
     public function setFrom($newFromEmail, $newFromName = null) {
         if(filter_var($newFromEmail, FILTER_VALIDATE_EMAIL)) {
             $this->from = $newFromEmail;
@@ -49,8 +53,12 @@ class KuroMail {
     }
 
     /**
-        Defines to who the email will be sent
-    **/
+     * Determines to who the email will be sent
+     *
+     * @param $newToEmail
+     * @param null $newToName
+     * @return $this
+     */
     public function setTo($newToEmail, $newToName = null) {
         if(filter_var($newToEmail, FILTER_VALIDATE_EMAIL)) {
             $this->to = $newToEmail;
@@ -62,24 +70,32 @@ class KuroMail {
     }
 
     /**
-        Sets the subject of the email
-    **/
+     * Sets the subject of the email
+     *
+     * @param $subjectStr
+     * @return $this
+     */
     public function setSubject($subjectStr) {
         $this->subject = $subjectStr;
         return $this;
     }
 
     /**
-        Sets the content of this email
-    **/
+     * Sets the content of the email
+     *
+     * @param $contentStr
+     * @return $this
+     */
     public function setContent($contentStr) {
         $this->content = $contentStr;
         return $this;
     }
 
     /**
-        Sends the email
-    **/
+     * Makes SendGrid request to send the email
+     *
+     * @return $this
+     */
     public function send() {
         if(self::DEBUG) {
             (new JSONResult())

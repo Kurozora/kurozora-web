@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class User extends Model
@@ -17,6 +18,27 @@ class User extends Model
     const USER_ROLE_ADMINISTRATOR   = 2;
 
     protected $fillable = ['username', 'email', 'password', 'email_confirmation_id', 'avatar'];
+
+    /**
+     * Generates a password hash from a raw string
+     *
+     * @param $rawPass
+     * @return string
+     */
+    public static function hashPass($rawPass) {
+        return Hash::make($rawPass);
+    }
+
+    /**
+     * Compares a raw password with a password hash
+     *
+     * @param $rawPass
+     * @param $hash
+     * @return bool
+     */
+    public static function checkPassHash($rawPass, $hash) {
+        return Hash::check($rawPass, $hash);
+    }
 
     /**
      * Checks if this user has confirmed their email address

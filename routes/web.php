@@ -16,3 +16,4 @@ Route::get('/', function () {
 });
 
 Route::get('/confirmation/{confirmation_id}', 'UserController@confirmEmail');
+Route::get('/reset/{reset_token}', 'UserController@resetPasswordPage');

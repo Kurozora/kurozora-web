@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
 use App\Helpers\KuroMail;
+use App\PasswordReset;
 use App\Session;
 use App\User;
 use App\LoginAttempt;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 use Validator;
 use Illuminate\Http\Request;
 
@@ -59,15 +59,16 @@ class UserController extends Controller
         $newUser = User::create([
             'username'              => $username,
             'email'                 => $email,
-            'password'              => Hash::make($rawPassword),
+            'password'              => User::hashPass($rawPassword),
             'email_confirmation_id' => str_random(50),
             'avatar'                => $fileName
         ]);
 
         // Send the user an email
         $emailData = [
+            'title'             => 'Email confirmation',
             'username'          => $username,
-            'confirmation_id'   => $newUser->email_confirmation_id
+            'confirmation_url'  => env('APP_URL', '') . '/confirmation/' . $newUser->email_confirmation_id
         ];
 
         (new KuroMail())
@@ -110,7 +111,7 @@ class UserController extends Controller
         $foundUser = User::where('username', $username)->first();
 
         // Compare the passwords
-        if(!Hash::check($rawPassword, $foundUser->password)) {
+        if(!User::checkPassHash($rawPassword, $foundUser->password)) {
             // Register the login attempt
             LoginAttempt::registerFailedLoginAttempt($request->ip());
 
@@ -217,6 +218,53 @@ class UserController extends Controller
         ])->show();
     }
 
+    /**
+     * Requests a password reset link to be sent to the email address
+     *
+     * @param Request $request
+     */
+    public function resetPassword(Request $request) {
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'email' => 'bail|required|email'
+        ]);
+
+        // Display an error if validation failed
+        if($validator->fails())
+            (new JSONResult())->setError($validator->errors()->first())->show();
+
+        $enteredEmail = $request->input('email');
+
+        // Try to find the user with this email
+        $user = User::where('email', $enteredEmail)->first();
+
+        // There is a user with this email
+        if($user && $user->hasConfirmedEmail()) {
+            $compareTime = Carbon::now()->subHours(PasswordReset::VALID_HOURS);
+
+            // Check if a password reset was requested recently
+            $pReset = PasswordReset::where([
+                ['user_id',     '=',    $user->id],
+                ['created_at',  '>=',   $compareTime]
+            ])->first();
+
+            // No password reset has been requested recently
+            if(!$pReset) {
+                // Create password reset
+                $createdReset = PasswordReset::create([
+                    'user_id'   => $user->id,
+                    'ip'        => $request->ip(),
+                    'token'     => PasswordReset::genToken()
+                ]);
+
+                // Send notification email
+                $createdReset->sendEmailNotification();
+            }
+        }
+
+        // Show successful response
+        (new JSONResult())->show();
+    }
 
     /**
      * Returns the current active sessions for a user
@@ -310,5 +358,54 @@ class UserController extends Controller
         $foundUser->save();
 
         return view('website.email_confirm_page', ['success' => true]);
+    }
+
+    /**
+     * Password reset page
+     *
+     * @param $resetToken
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \Throwable
+     */
+    public function resetPasswordPage($resetToken, Request $request) {
+        // Try to find a reset with this reset token
+        $foundReset = PasswordReset::where('token', $resetToken)->first();
+
+        // No reset found
+        if(!$foundReset)
+            return view('website.password_reset_page', ['success' => false]);
+
+        $user = User::find($foundReset->user_id);
+
+        if($user) {
+            // Reset their password to a temporary one
+            $newPass = PasswordReset::genTempPassword();
+
+            $user->password = User::hashPass($newPass);
+            $user->save();
+
+            // Delete all their sessions
+            Session::where('user_id', $user->id)->delete();
+
+            // Send the user an email with their new password
+            $emailData = [
+                'title'     => 'Your new password',
+                'username'  => $user->username,
+                'newPass'   => $newPass
+            ];
+
+            (new KuroMail())
+                ->setTo($user->email)
+                ->setSubject('Your new password')
+                ->setContent(view('email.password_reset_new_pass', $emailData)->render())
+                ->send();
+
+            // Delete the password reset
+            $foundReset->delete();
+        }
+
+        // Show successful response
+        return view('website.password_reset_page', ['success' => true]);
     }
 }
