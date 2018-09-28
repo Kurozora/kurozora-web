@@ -3,7 +3,8 @@
 @section('content')
     Hey {{ $username or 'Kurozora User' }}, <br><br>
 
-    We have received a password reset request for your account. (IP: <b>{{ $ip }}</b>)<br><br>
+    We have received a password reset request for your account. <br>
+    (IP: <b>{{ $ip }}</b>)<br><br>
 
     Please click the button below to reset your password. If it was not you who requested this password reset, you can ignore this email.
 
