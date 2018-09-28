@@ -39,7 +39,7 @@ class DeleteExpiredSessions extends Command
      */
     public function handle()
     {
-        Session::whereDate('expiration_date', '<', Carbon::now())->delete();
+        Session::where('expiration_date', '<', Carbon::now())->delete();
 
         $this->info('Deleted all expired sessions.');
     }

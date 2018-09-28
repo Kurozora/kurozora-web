@@ -53,6 +53,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('users:delete_inactive_unconfirmed')->daily();
 
         /**********************************************/
+        // Delete all inactive/old password resets every day
+        $schedule->command('password_resets:delete_old')->daily();
+
+        /**********************************************/
         // Truncates login attempts every day
         $schedule->call(function() {
         	LoginAttempt::truncate();

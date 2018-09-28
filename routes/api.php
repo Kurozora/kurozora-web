@@ -18,6 +18,7 @@ Route::prefix('/v1')->group(function() {
         Route::post('/register', 'UserController@register');
         Route::post('/login', 'UserController@login');
         Route::post('/logout', 'UserController@logout');
+        Route::post('/reset_password', 'UserController@resetPassword');
         Route::post('/get_sessions', 'UserController@getSessions');
         Route::post('/delete_session', 'UserController@deleteSession');
         Route::post('/{id}/profile', 'UserController@profile')->where('id', '[0-9]*');

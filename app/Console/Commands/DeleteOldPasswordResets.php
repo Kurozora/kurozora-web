@@ -2,25 +2,25 @@
 
 namespace App\Console\Commands;
 
-use App\User;
+use App\PasswordReset;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
-class DeleteInactiveUnconfirmedUsers extends Command
+class DeleteOldPasswordResets extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'users:delete_inactive_unconfirmed';
+    protected $signature = 'password_resets:delete_old';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Deletes users that have not confirmed their email within 24 hours';
+    protected $description = 'Deletes all old/invalid password resets';
 
     /**
      * Create a new command instance.
@@ -39,14 +39,12 @@ class DeleteInactiveUnconfirmedUsers extends Command
      */
     public function handle()
     {
-        User::where([
-                ['email_confirmation_id',   '!=',   null],
-                ['created_at',              '<',    Carbon::now()->subHours(24)]
-            ])
-            ->get()
-            ->each
-            ->delete();
+        $compareTime = Carbon::now()->subHours(PasswordReset::VALID_HOURS);
 
-        $this->info('Deleted all inactive unconfirmed users.');
+        // Finds all old password resets and deletes them
+        PasswordReset::where('created_at', '<', $compareTime)->delete();
+
+        // Show info message
+        $this->info('Deleted all old password resets.');
     }
 }
