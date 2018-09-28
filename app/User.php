@@ -90,7 +90,7 @@ class User extends Model
 
         if(Storage::exists($avatarPath))
             // Return the URL to the image
-            return $this->getURLToAvatar() . '?h=' . str_random(10);
+            return $this->getURLToAvatar();
         else return null;
     }
 
