@@ -20,6 +20,33 @@ class User extends Model
     protected $fillable = ['username', 'email', 'password', 'email_confirmation_id', 'avatar'];
 
     /**
+     * Returns the amount of followers the user has
+     *
+     * @return int
+     */
+    public function getFollowerCount() {
+        return UserFollow::where('following_user_id', $this->id)->count();
+    }
+
+    /**
+     * Returns the amount of users the user follows
+     *
+     * @return int
+     */
+    public function getFollowingCount() {
+        return UserFollow::where('user_id', $this->id)->count();
+    }
+
+    /**
+     * Returns the total amount of reputation the user has
+     *
+     * @return int
+     */
+    public function getReputationCount() {
+        return 0;
+    }
+
+    /**
      * Generates a password hash from a raw string
      *
      * @param $rawPass

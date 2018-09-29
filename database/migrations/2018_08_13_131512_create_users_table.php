@@ -26,9 +26,6 @@ class CreateUsersTable extends Migration
             $table->string('banner')->nullable();
             $table->text('biography')->nullable();
             $table->string('email_confirmation_id')->nullable();
-            $table->integer('follower_count')->default(0);
-            $table->integer('following_count')->default(0);
-            $table->integer('reputation_count')->default(0);
         });
     }
 
