@@ -40,31 +40,22 @@ class Anime extends Model
      *
      * @return array
      */
-    public function getActors() {
-        // Check if we have saved the actors
-        if($this->fetched_actors) {
-            return Actor::where('anime_id', $this->id)->get();
-        }
-        // Try to retrieve the actors from TVDB
-        else {
+    public function getActors($page, $amountPerPage) {
+        // Check if we have not yet saved the actors
+        if(!$this->fetched_actors) {
             if ($this->tvdb_handle == null)
                 $this->tvdb_handle = new TVDB();
 
             // Get the actors
             $retActors = $this->tvdb_handle->getAnimeActorData($this->tvdb_id);
 
-            $retArray = [];
-
             // Actors were fetched
             if($retActors !== null) {
                 // Delete old actors if there were any
                 Actor::where('anime_id', $this->id)->delete();
 
-                // Insert new actors
-                $retArray = [];
-
                 foreach ($retActors as $actor) {
-                    $retArray[] = Actor::create([
+                    Actor::create([
                         'anime_id' => $this->id,
                         'name' => $actor->name,
                         'role' => $actor->role,
@@ -75,9 +66,21 @@ class Anime extends Model
 
             $this->fetched_actors = true;
             $this->save();
-
-            return $retArray;
         }
+
+        return Actor::where('anime_id', $this->id)
+            ->offset($amountPerPage * $page)
+            ->limit($amountPerPage)
+            ->get();
+    }
+
+    /**
+     * Get the total Actor count of the Anime
+     *
+     * @return int
+     */
+    public function getActorCount() {
+        return Actor::where('anime_id', $this->id)->count();
     }
 
     /**

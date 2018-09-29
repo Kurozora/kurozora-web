@@ -219,6 +219,24 @@ class UserController extends Controller
     }
 
     /**
+     * Make (severe) changes to the User account
+     *
+     * @param Request $request
+     */
+    public function updateAccount(Request $request) {
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'password' => 'bail|required'
+        ]);
+
+        // Display an error if validation failed
+        if($validator->fails())
+            (new JSONResult())->setError($validator->errors()->first())->show();
+
+
+    }
+
+    /**
      * Requests a password reset link to be sent to the email address
      *
      * @param Request $request
