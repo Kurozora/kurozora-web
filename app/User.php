@@ -43,7 +43,11 @@ class User extends Model
      * @return int
      */
     public function getReputationCount() {
-        return 0;
+        $repCount = UserReputation::where('given_user_id', $this->id)->sum('amount');
+
+        if($repCount === null) return 0;
+
+        return (int) $repCount;
     }
 
     /**
