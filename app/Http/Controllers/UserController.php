@@ -211,9 +211,9 @@ class UserController extends Controller
                 'biography'         => $profileUser->biography,
                 'avatar_url'        => $profileUser->getAvatarURL(),
                 'banner_url'        => $profileUser->banner,
-                'follower_count'    => $profileUser->follower_count,
-                'following_count'   => $profileUser->following_count,
-                'reputation_count'  => $profileUser->reputation_count
+                'follower_count'    => $profileUser->getFollowerCount(),
+                'following_count'   => $profileUser->getFollowingCount(),
+                'reputation_count'  => $profileUser->getReputationCount()
             ]
         ])->show();
     }
