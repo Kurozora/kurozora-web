@@ -12,7 +12,14 @@
 */
 
 Route::get('/', function () {
-    return view('website.home');
+    return view('website.home', [
+        'stylesheets' => [
+            asset('css/frontpage.css')
+        ],
+        'scripts' => [
+            asset('js/frontpage.js')
+        ]
+    ]);
 });
 
 Route::get('/confirmation/{confirmation_id}', 'UserController@confirmEmail');

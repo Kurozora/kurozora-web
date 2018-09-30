@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto|Rubik');
+
+/* Body defaults */
+#templated-body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Full screen loader */
+#kuroload {
+    position: fixed;
+    z-index: 999;
+    height: 2em;
+    width: 2em;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+    #kuroload:before {
+        content: '';
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #353A50;
+    }
+
+/* Disables text selection */
+.disable-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Kurozora colours */
+.kurozora-orange { background-color: #FFB10A; }
+.kurozora-orange-text { color: #FFB10A; }
+.kurozora-purple { background-color: #353A50; }
+.kurozora-purple-text { color: #353A50; }
+
+/* Navbar settings */
+.nav-wrapper .brand-logo {
+    display: inline-block;
+    height: 100%;
+}
+
+.nav-wrapper .brand-logo img {
+    margin-left: 2px;
+    height: calc(100% - 4px);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Title of show reel */
+.show-reel-title {
+    font-size: 25px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.8);
+    font-family: 'Rubik', sans-serif;
+}
+
+/* Show reel styling */
+.show-reel .show {
+    position: relative;
+    text-align: center;
+    color: white;
+    -webkit-transition: ease-in-out 0.1s;
+    -moz-transition: ease-in-out 0.1s;
+    -ms-transition: ease-in-out 0.1s;
+    -o-transition: ease-in-out 0.1s;
+    transition: ease-in-out 0.1s;
+}
+    .show-reel .show:hover {
+        cursor: pointer;
+        -webkit-transform: scale(1.05);
+        -moz-transform: scale(1.05);
+        -ms-transform: scale(1.05);
+        -o-transform: scale(1.05);
+        transform: scale(1.05);
+    }
+
+    .show-reel .show .show-poster {
+        width: 100%;
+    }
+
+    .show-reel .show .show-title {
+        text-shadow: 2px 2px 2px #000;
+        color: #fff;
+        position: absolute;
+        bottom: 8px;
+        left: 16px;
+    }
+
+    .show-reel .show .show-rating {
+        border-radius: 5px;
+        background: rgba(0, 0, 0, 0.4);
+        color: #fff;
+        position: absolute;
+        top: 6px;
+        right: 16px;
+    }
