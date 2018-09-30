@@ -1,29 +1,36 @@
-<!doctype html>
-<html lang="{{ app()->getLocale() }}" style="background-image: url({{ asset('img/static/star_bg_lg.jpg') }});">
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="icon" type="text/css" href="{{ asset('img/static/logo_sm.png') }}">
+@extends('website.main_template')
 
-		<title>Kurozora App</title>
+@section('content')
+        <div class="show-reel-carousel">
+            <template id="carouselTemplate">
+                <div class="show">
+                    <span class="show-title">[title]</span>
+                </div>
+            </template>
+        </div>
 
-		<!-- jQuery -->
-		<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <div class="container">
+        {{-- Start display show sections --}}
+        <div class="show-sections">
+            <template id="showSectionTemplate">
+                <div class="show-section">
+                    <h4 class="show-reel-title">[title]</h4>
 
-		<!-- Stylesheet -->
-		<link href="{{ asset('css/kurozora-frontpage.css') }}" rel="stylesheet">
-	</head>
-	<body>
-		<div class="middle-div">
-			<img src="{{ asset('img/static/logo_sm.png') }}" id="kurozora-logo" />
-			<h1 id="kurozora-title">Kurozora</h1>
-		</div>
+                    <div class="show-reel row disable-select">
+                        <template id="showTemplate">
+                            <div class="show col s6 m3 l2">
+                                <img src="https://www.thetvdb.com/banners/_cache/posters/85249-7.jpg" alt="One piece poster" class="show-poster">
+                                <span class="show-title">[title]</span>
+                                <span class="show-rating"><i class="material-icons left">star</i>4.5</span>
+                            </div>
+                        </template>
 
-		<script type="text/javascript">
-			$(document).ready(function() {
-				$('.middle-div').fadeIn(1000);
-			});
-		</script>
-	</body>
-</html>
+                        <template id="noShowsFoundTemplate">
+                            <i class="material-icons left grey-text">error_outline</i> <span class="grey-text">Category is empty</span>
+                        </template>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+@endsection

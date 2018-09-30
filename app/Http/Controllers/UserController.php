@@ -224,16 +224,18 @@ class UserController extends Controller
      * @param Request $request
      */
     public function updateAccount(Request $request) {
+        // @todo FINISH THIS
         // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'password' => 'bail|required'
+        /*$validator = Validator::make($request->all(), [
+            'current_password'  => 'bail|required',
+            'email'             => 'bail|required|email'
         ]);
 
         // Display an error if validation failed
         if($validator->fails())
             (new JSONResult())->setError($validator->errors()->first())->show();
 
-
+        */
     }
 
     /**
