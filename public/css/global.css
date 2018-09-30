@@ -1,34 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto|Rubik');
 
 /* Body defaults */
-#templated-body {
+#templated-body, html {
     margin: 0;
     padding: 0;
+    height: 100%;
     font-family: 'Roboto', sans-serif;
 }
-
-/* Full screen loader */
-#kuroload {
-    position: fixed;
-    z-index: 999;
-    height: 2em;
-    width: 2em;
-    margin: auto;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-}
-    #kuroload:before {
-        content: '';
-        display: block;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: #353A50;
-    }
 
 /* Disables text selection */
 .disable-select {
@@ -41,10 +19,10 @@
 }
 
 /* Kurozora colours */
-.kurozora-orange { background-color: #FFB10A; }
-.kurozora-orange-text { color: #FFB10A; }
-.kurozora-purple { background-color: #353A50; }
-.kurozora-purple-text { color: #353A50; }
+.kurozora-orange { background-color: #FFB10A !important; }
+.kurozora-orange-text { color: #FFB10A !important; }
+.kurozora-purple { background-color: #353A50 !important; }
+.kurozora-purple-text { color: #353A50 !important; }
 
 /* Navbar settings */
 .nav-wrapper .brand-logo {
@@ -118,13 +96,21 @@
     margin: 0 !important;
 }
 
+.wrapper {
+    min-height: 100%;
+    margin-bottom: -64px;
+}
+.footer, .push {
+    height: 64px;
+}
+
 #main-footer {
     color: rgb(180, 185, 194);
     box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 10px 0px;
     background: rgb(51, 53, 59);
     width: 100%;
     line-height: 64px;
-    min-height: 64px;
+    height: 64px;
 }
     #main-footer .copy-text {
         font-weight: bold;

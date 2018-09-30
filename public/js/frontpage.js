@@ -1,6 +1,4 @@
 $(document).ready(function(){
-    kurozora.fullScreenLoader(true);
-
     var MAX_SHOWS_PER_CATEGORY = 6;
 
     // Get data from explore page
@@ -70,7 +68,6 @@ $(document).ready(function(){
                 $('.show-sections').append(newSection);
             });
 
-            kurozora.fullScreenLoader(false);
         }
         // Error
         else console.log(data);
