@@ -18,10 +18,12 @@
 
                     <div class="show-reel row disable-select">
                         <template id="showTemplate">
-                            <div class="show col s6 m3 l2">
-                                <img src="https://www.thetvdb.com/banners/_cache/posters/85249-7.jpg" alt="One piece poster" class="show-poster">
-                                <span class="show-title">[title]</span>
-                                <span class="show-rating"><i class="material-icons left">star</i>4.5</span>
+                            <div class="show-holder col s6 m3 l2">
+                                <div class="show">
+                                    <img src="https://www.thetvdb.com/banners/_cache/posters/85249-7.jpg" alt="One piece poster" class="show-poster">
+                                    <span class="show-title">[title]</span>
+                                    <span class="show-rating"><i class="material-icons left">star</i>4.5</span>
+                                </div>
                             </div>
                         </template>
 

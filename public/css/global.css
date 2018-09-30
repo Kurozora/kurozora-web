@@ -69,6 +69,10 @@
 }
 
 /* Show reel styling */
+.show-reel .show-holder {
+    padding: 10px !important;
+}
+
 .show-reel .show {
     position: relative;
     text-align: center;
