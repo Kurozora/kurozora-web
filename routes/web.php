@@ -22,5 +22,13 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/privacy', function () {
+    return view('website.privacy', [
+        'scripts' => [
+            asset('js/privacy_policy_page.js')
+        ]
+    ]);
+});
+
 Route::get('/confirmation/{confirmation_id}', 'UserController@confirmEmail');
 Route::get('/reset/{reset_token}', 'UserController@resetPasswordPage');

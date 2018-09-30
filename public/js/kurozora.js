@@ -21,6 +21,11 @@ var kurozora = {
         // Explore page
         explore: function(returnFunc) {
             return kurozora.api.makeAPICall('GET', 'anime/explore', {}, returnFunc);
+        },
+
+        // Privacy policy
+        privacy: function(returnFunc) {
+            return kurozora.api.makeAPICall('GET', 'misc/get_privacy_policy', {}, returnFunc);
         }
     },
 
@@ -34,3 +39,8 @@ var kurozora = {
         else $('#kuroload').remove();
     }
 };
+
+$(document).ready(function() {
+    // Initialize sidenav
+    $('.sidenav').sidenav();
+});

@@ -49,6 +49,7 @@
                 <a href="{{ url('/') }}" class="brand-logo">
                     <img src="{{ asset('img/static/logo_sm.png') }}" alt="Kurozora App logo" />
                 </a>
+                <a href="#" data-target="mobile-nav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                 <ul class="right hide-on-med-and-down">
                     <li>
                         <a href="{{ url('/login') }}">
@@ -59,7 +60,35 @@
             </div>
         </nav>
 
+        {{-- Mobile side nav --}}
+        <ul class="sidenav" id="mobile-nav">
+            <li>
+                <a href="{{ url('/login') }}">
+                    <i class="material-icons left">lock_outline</i>Login
+                </a>
+            </li>
+        </ul>
+
         @yield('content')
+
+        {{-- Footer --}}
+        <footer id="main-footer">
+            <div class="container">
+                <div class="row footer-row">
+                    <div class="col s12 m2">
+                        <span class="copy-text">&copy; {{ date('Y') }} Kurozora</span>
+                    </div>
+
+                    <div class="col s12 m10">
+                        <ul class="footer-links">
+                            <li>
+                                <a href="{{ url('/privacy') }}">Privacy</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
 
         {{-- Load Materialize JS --}}
         <script type="text/javascript" src="{{ asset('js/materialize.min.js') }}"></script>
