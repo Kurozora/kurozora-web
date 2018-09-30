@@ -13,6 +13,7 @@
 
 Route::get('/', function () {
     return view('website.home', [
+        'title' => 'Home',
         'stylesheets' => [
             asset('css/frontpage.css')
         ],
@@ -24,9 +25,20 @@ Route::get('/', function () {
 
 Route::get('/privacy', function () {
     return view('website.privacy', [
+        'title' => 'Privacy policy',
         'scripts' => [
             asset('js/privacy_policy_page.js')
         ]
+    ]);
+});
+
+Route::get('/login', function () {
+    return view('website.login', [
+        'title' => 'Login to your account',
+        'scripts' => [
+            asset('js/login.js')
+        ],
+        'hide_footer' => false
     ]);
 });
 

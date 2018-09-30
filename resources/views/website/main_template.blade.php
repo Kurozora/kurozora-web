@@ -69,31 +69,39 @@
             </li>
         </ul>
 
+        <div class="wrapper">
         @yield('content')
+            <div class="push"></div>
+        </div>
 
         {{-- Footer --}}
-        <footer id="main-footer">
-            <div class="container">
-                <div class="row footer-row">
-                    <div class="col s12 m2">
-                        <span class="copy-text">&copy; {{ date('Y') }} Kurozora</span>
-                    </div>
+        @if(!isset($hide_footer) || !$hide_footer)
+            <footer id="main-footer">
+                <div class="container">
+                    <div class="row footer-row">
+                        <div class="col s12 m2">
+                            <span class="copy-text">&copy; {{ date('Y') }} Kurozora</span>
+                        </div>
 
-                    <div class="col s12 m10">
-                        <ul class="footer-links">
-                            <li>
-                                <a href="{{ url('/privacy') }}">Privacy</a>
-                            </li>
-                        </ul>
+                        <div class="col s12 m10">
+                            <ul class="footer-links">
+                                <li>
+                                    <a href="{{ url('/privacy') }}">Privacy</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </footer>
+            </footer>
+        @endif
 
         {{-- Load Materialize JS --}}
         <script type="text/javascript" src="{{ asset('js/materialize.min.js') }}"></script>
 
         {{-- Load Slick carousel JS --}}
         <script type="text/javascript" src="{{ asset('js/slick.min.js') }}"></script>
+
+        {{-- Hidden variables --}}
+        <input type="hidden" id="base-url" value="{{ url('') }}">
     </body>
 </html>
