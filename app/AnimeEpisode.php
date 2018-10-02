@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class AnimeEpisode extends Model
 {
+    // Table name
+    protected $table = 'anime_episode';
+
+    // Fillable columns
     protected $fillable = [
         'anime_id',
         'season',

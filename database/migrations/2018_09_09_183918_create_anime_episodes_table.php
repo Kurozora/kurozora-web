@@ -13,12 +13,12 @@ class CreateAnimeEpisodesTable extends Migration
      */
     public function up()
     {
-        Schema::create('anime_episodes', function (Blueprint $table) {
+        Schema::create('anime_episode', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
             $table->integer('anime_id')->unsigned();
-            $table->foreign('anime_id')->references('id')->on('animes')->onDelete('cascade');
+            $table->foreign('anime_id')->references('id')->on('anime')->onDelete('cascade');
 
             $table->boolean('verified')->default(false);
             $table->integer('season')->unsigned()->default(1);
@@ -36,6 +36,6 @@ class CreateAnimeEpisodesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('anime_episodes');
+        Schema::dropIfExists('anime_episode');
     }
 }

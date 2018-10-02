@@ -13,15 +13,15 @@ class CreateUserReputationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_reputations', function (Blueprint $table) {
+        Schema::create('user_reputation', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
             $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('user')->onDelete('cascade');
 
             $table->integer('given_user_id')->unsigned();
-            $table->foreign('given_user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('given_user_id')->references('id')->on('user')->onDelete('cascade');
 
             $table->integer('amount')->default(0);
         });
@@ -34,6 +34,6 @@ class CreateUserReputationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_reputations');
+        Schema::dropIfExists('user_reputation');
     }
 }

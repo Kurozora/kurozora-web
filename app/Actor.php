@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Actor extends Model
 {
-    protected $table = 'anime_actors';
+    // Table name
+    protected $table = 'anime_actor';
 
+    // Fillable columns
     protected $fillable = [
         'anime_id',
         'name',

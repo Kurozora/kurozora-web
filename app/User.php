@@ -17,6 +17,10 @@ class User extends Model
     const USER_ROLE_MODERATOR       = 1;
     const USER_ROLE_ADMINISTRATOR   = 2;
 
+    // Table name
+    protected $table = 'user';
+
+    // Fillable columns
     protected $fillable = ['username', 'email', 'password', 'email_confirmation_id', 'avatar'];
 
     /**

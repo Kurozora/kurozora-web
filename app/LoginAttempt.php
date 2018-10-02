@@ -12,6 +12,10 @@ class LoginAttempt extends Model
 	// How many failed attempts do we tolerate in the timespan
 	const MAX_FAILED_ATTEMPTS = 3;
 
+    // Table name
+    protected $table = 'user_login_attempt';
+
+	// Fillable columns
     protected $fillable = ['ip'];
 
 	/**

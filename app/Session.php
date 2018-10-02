@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Session extends Model
 {
+    // Table name
+    protected $table = 'user_session';
+
+    // Fillable columns
     protected $fillable = [
         'user_id',
         'device',

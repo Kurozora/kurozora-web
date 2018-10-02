@@ -20,6 +20,9 @@ class Anime extends Model
     // Minimum ratings required to calculate average
     const MINIMUM_RATINGS_REQUIRED = 30;
 
+    // Table name
+    protected $table = 'anime';
+
     // Fillable columns
     protected $fillable = [
         'title',

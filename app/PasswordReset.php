@@ -13,6 +13,9 @@ class PasswordReset extends Model
     // For how many hours is the password reset valid
     const VALID_HOURS = 24;
 
+    // Table name
+    protected $table = 'user_password_reset';
+
     // Fillable columns
     protected $fillable = ['user_id', 'ip', 'token'];
 
