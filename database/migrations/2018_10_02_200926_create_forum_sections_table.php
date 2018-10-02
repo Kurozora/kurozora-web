@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateActorsTable extends Migration
+class CreateForumSectionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,12 @@ class CreateActorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('anime_actor', function (Blueprint $table) {
+        Schema::create('forum_section', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
-            $table->integer('anime_id')->unsigned();
-            $table->foreign('anime_id')->references('id')->on('anime')->onDelete('cascade');
-
             $table->string('name');
-            $table->string('role');
-            $table->string('image');
+            $table->boolean('locked')->default(false);
         });
     }
 
@@ -33,6 +29,6 @@ class CreateActorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('anime_actor');
+        Schema::dropIfExists('forum_section');
     }
 }

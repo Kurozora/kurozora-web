@@ -13,15 +13,15 @@ class CreateAnimeRatingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('anime_ratings', function (Blueprint $table) {
+        Schema::create('anime_rating', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
             $table->integer('anime_id')->unsigned();
-            $table->foreign('anime_id')->references('id')->on('animes')->onDelete('cascade');
+            $table->foreign('anime_id')->references('id')->on('anime')->onDelete('cascade');
 
             $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('user')->onDelete('cascade');
 
             $table->float('rating');
         });
@@ -34,6 +34,6 @@ class CreateAnimeRatingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('anime_ratings');
+        Schema::dropIfExists('anime_rating');
     }
 }

@@ -13,7 +13,7 @@ class CreateLoginAttemptsTable extends Migration
      */
     public function up()
     {
-        Schema::create('login_attempts', function (Blueprint $table) {
+        Schema::create('user_login_attempt', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
@@ -28,6 +28,6 @@ class CreateLoginAttemptsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('login_attempts');
+        Schema::dropIfExists('user_login_attempt');
     }
 }

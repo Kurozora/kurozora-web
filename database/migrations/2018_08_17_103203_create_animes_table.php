@@ -14,7 +14,7 @@ class CreateAnimesTable extends Migration
      */
     public function up()
     {
-        Schema::create('animes', function (Blueprint $table) {
+        Schema::create('anime', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
@@ -54,6 +54,6 @@ class CreateAnimesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('animes');
+        Schema::dropIfExists('anime');
     }
 }
