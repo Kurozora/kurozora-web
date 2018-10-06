@@ -11,4 +11,17 @@ class ForumSection extends Model
 
     // Fillable columns
     protected $fillable = ['name', 'icon', 'locked'];
+
+    /**
+     * Formats the section for a response
+     *
+     * @return array
+     */
+    public function formatForResponse() {
+        return [
+            'id'        => $this->id,
+            'name'      => $this->name,
+            'locked'    => (bool) $this->locked
+        ];
+    }
 }
