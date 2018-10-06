@@ -39,6 +39,10 @@ Route::prefix('/v1')->group(function() {
         Route::post('/{id}/rate', 'AnimeController@rateAnime')->where('id', '[0-9]*');
     });
 
+    Route::prefix('/forum')->group(function() {
+        Route::get('/get_sections', 'ForumController@getSections');
+    });
+
     Route::prefix('/misc')->group(function() {
         Route::get('/get_privacy_policy', 'MiscController@getPrivacyPolicy');
     });
