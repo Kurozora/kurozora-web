@@ -16,7 +16,7 @@ echo -e "${BLACK}[${ORANGE}Kurozora${BLACK}] ${LIME}✔ ${NC}Autoload file dumpe
 
 # Migrate fresh
 echo -e "${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Would you like to run a fresh migration? (y/n): "
-read -p migrateResponse
+read migrateResponse
 
 if [ $migrateResponse == 'y' ]
 then
