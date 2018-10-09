@@ -72,8 +72,8 @@ class AnimeController extends Controller
     public function detailsAnime(Request $request, $animeID) {
     	// Validate the inputs
         $validator = Validator::make($request->all(), [
-            'session_secret'    => 'bail|required|exists:sessions,secret',
-            'user_id'           => 'bail|required|numeric|exists:users,id'
+            'session_secret'    => 'bail|required|exists:user_session,secret',
+            'user_id'           => 'bail|required|numeric|exists:user,id'
         ]);
 
         // Fetch the variables
@@ -212,8 +212,8 @@ class AnimeController extends Controller
     public function rateAnime(Request $request, $animeID) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'session_secret' => 'bail|required|exists:sessions,secret',
-            'user_id' => 'bail|required|numeric|exists:users,id',
+            'session_secret' => 'bail|required|exists:user_session,secret',
+            'user_id' => 'bail|required|numeric|exists:user,id',
             'rating' => 'bail|required|numeric|between:' . AnimeRating::MIN_RATING_VALUE . ',' . AnimeRating::MAX_RATING_VALUE
         ]);
 
