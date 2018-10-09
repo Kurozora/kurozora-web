@@ -15,7 +15,8 @@ composer dump-autoload --quiet
 echo -e "${BLACK}[${ORANGE}Kurozora${BLACK}] ${LIME}✔ ${NC}Autoload file dumped!"
 
 # Migrate fresh
-read -p $"${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Would you like to run a fresh migration? (y/n): " migrateResponse
+echo -e "${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Would you like to run a fresh migration? (y/n): "
+read -p migrateResponse
 
 if [ $migrateResponse == 'y' ]
 then
@@ -23,3 +24,6 @@ then
     php artisan migrate:fresh --seed
     echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${LIME}✔ ${NC}Migrations finished!"
 fi
+
+# Finished
+echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Finished updating."
