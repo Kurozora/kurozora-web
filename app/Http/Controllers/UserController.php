@@ -25,8 +25,8 @@ class UserController extends Controller
     public function register(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'username'  => 'bail|required|min:3|max:50|alpha_dash|unique:users,username',
-            'email'     => 'bail|required|max:255|email|unique:users,email',
+            'username'  => 'bail|required|min:3|max:50|alpha_dash|unique:user,username',
+            'email'     => 'bail|required|max:255|email|unique:user,email',
             'password'  => 'bail|required|min:5|max:255'
         ]);
 
