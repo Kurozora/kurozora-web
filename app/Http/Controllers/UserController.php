@@ -8,6 +8,7 @@ use App\PasswordReset;
 use App\Session;
 use App\User;
 use App\LoginAttempt;
+use App\UserNotification;
 use Carbon\Carbon;
 use Validator;
 use Illuminate\Http\Request;
@@ -89,7 +90,7 @@ class UserController extends Controller
     public function login(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'username'  => 'bail|required|exists:users,username',
+            'username'  => 'bail|required|exists:user,username',
             'password'  => 'bail|required',
             'device'    => 'bail|required|max:50'
         ]);
@@ -124,12 +125,24 @@ class UserController extends Controller
             (new JSONResult())->setError('You have not confirmed your email address yet. Please check your email inbox or spam folder.')->show();
 
         // Create a new session
+        $loginIPAddress = $request->ip();
+
         $newSession = Session::create([
             'user_id'           => $foundUser->id,
             'device'            => $device,
             'secret'            => str_random(128),
             'expiration_date'   => date('Y-m-d H:i:s', strtotime('90 days')),
-            'ip'                => $request->ip()
+            'ip'                => $loginIPAddress
+        ]);
+
+        // Create a new notification
+        UserNotification::create([
+            'user_id'   => $foundUser->id,
+            'type'      => UserNotification::TYPE_NEW_SESSION,
+            'data'      => json_encode([
+                'ip'            => $loginIPAddress,
+                'session_id'    => $newSession->id
+            ])
         ]);
 
         // Show a successful response
@@ -148,8 +161,8 @@ class UserController extends Controller
     public function logout(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'session_secret'    => 'bail|required|exists:sessions,secret',
-            'user_id'           => 'bail|required|numeric|exists:users,id'
+            'session_secret'    => 'bail|required|exists:user_session,secret',
+            'user_id'           => 'bail|required|numeric|exists:user,id'
         ]);
 
         // Display an error if validation failed
@@ -186,8 +199,8 @@ class UserController extends Controller
     public function profile(Request $request, $id) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'session_secret'        => 'bail|required|exists:sessions,secret',
-            'user_id'               => 'bail|required|numeric|exists:users,id'
+            'session_secret'        => 'bail|required|exists:user_session,secret',
+            'user_id'               => 'bail|required|numeric|exists:user,id'
         ]);
 
         // Fetch the variables
@@ -294,8 +307,8 @@ class UserController extends Controller
     public function getSessions(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'session_secret'        => 'bail|required|exists:sessions,secret',
-            'user_id'               => 'bail|required|numeric|exists:users,id'
+            'session_secret'        => 'bail|required|exists:user_session,secret',
+            'user_id'               => 'bail|required|numeric|exists:user,id'
         ]);
 
         // Fetch the variables
@@ -338,9 +351,9 @@ class UserController extends Controller
     public function deleteSession(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'session_secret' => 'bail|required|exists:sessions,secret',
-            'user_id' => 'bail|required|numeric|exists:users,id',
-            'del_session_id' => 'bail|required|numeric|exists:sessions,id'
+            'session_secret' => 'bail|required|exists:user_session,secret',
+            'user_id' => 'bail|required|numeric|exists:user,id',
+            'del_session_id' => 'bail|required|numeric|exists:user_session,id'
         ]);
 
         // Fetch the variables
@@ -427,5 +440,38 @@ class UserController extends Controller
 
         // Show successful response
         return view('website.password_reset_page', ['success' => true]);
+    }
+
+    /**
+     * Returns the notifications for the user
+     *
+     * @param Request $request
+     */
+    public function getNotifications(Request $request) {
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'session_secret'    => 'bail|required|exists:user_session,secret',
+            'user_id'           => 'bail|required|numeric|exists:user,id'
+        ]);
+
+        // Fetch the variables
+        $givenSecret    = $request->input('session_secret');
+        $givenUserID    = $request->input('user_id');
+
+        // Check authentication
+        if($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret))
+            (new JSONResult())->setError('The server rejected your credentials. Please restart the app.')->show();
+
+        // Get their notifications
+        $rawNotifications = UserNotification::where('user_id', $givenUserID)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
+        $notifications = [];
+
+        foreach($rawNotifications as $rawNotification)
+            $notifications[] = $rawNotification->formatForResponse();
+
+        (new JSONResult())->setData(['notifications' => $notifications])->show();
     }
 }

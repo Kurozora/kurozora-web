@@ -22,6 +22,7 @@ Route::prefix('/v1')->group(function() {
         Route::post('/get_sessions', 'UserController@getSessions');
         Route::post('/delete_session', 'UserController@deleteSession');
         Route::post('/update_account', 'UserController@updateAccount');
+        Route::post('/get_notifications', 'UserController@getNotifications');
 
         Route::post('/{id}/profile', 'UserController@profile')->where('id', '[0-9]*');
     });
