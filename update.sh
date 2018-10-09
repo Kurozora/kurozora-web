@@ -15,7 +15,7 @@ composer dump-autoload --quiet
 echo -e "${BLACK}[${ORANGE}Kurozora${BLACK}] ${LIME}✔ ${NC}Autoload file dumped!"
 
 # Migrate fresh
-read -p -e "${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Would you like to run a fresh migration? (y/n): " migrateResponse
+read -pe "${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Would you like to run a fresh migration? (y/n): " migrateResponse
 
 if [ $migrateResponse == 'y' ]
 then
