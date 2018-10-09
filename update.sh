@@ -1,2 +1,2 @@
-say "Updating from repository..."
+echo "Updating from repository..."
 git pull origin master --quiet
