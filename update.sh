@@ -5,6 +5,6 @@ LIME='\033[1;32m'
 NC='\033[0m'
 
 # Git pull
-echo "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Updating source from repository..."
+echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Updating source from repository..."
 git pull origin master --quiet
-echo "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${LIME}✔ ${NC}Source updated!"
+echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${LIME}✔ ${NC}Source updated!"
