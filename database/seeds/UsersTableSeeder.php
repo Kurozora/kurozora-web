@@ -12,10 +12,18 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        // Create Kurozora user
+        // Create Kurozora users
         User::create([
-            'username'              => 'Kurozora',
-            'email'                 => 'kurozoraapp@gmail.com',
+            'username'              => 'Usopp',
+            'email'                 => 'mussesemou99@gmail.com',
+            'password'              => '$2y$10$LFvuPaQpn6kccakk4sRABef223GV0.NJUJ94Xr.TAvswkCKJBisVK',
+            'email_confirmation_id' => null,
+            'role'                  => User::USER_ROLE_ADMINISTRATOR
+        ]);
+
+        User::create([
+            'username'              => 'Kirito',
+            'email'                 => 'casillaskhoren1@gmail.com',
             'password'              => '$2y$10$LFvuPaQpn6kccakk4sRABef223GV0.NJUJ94Xr.TAvswkCKJBisVK',
             'email_confirmation_id' => null,
             'role'                  => User::USER_ROLE_ADMINISTRATOR
