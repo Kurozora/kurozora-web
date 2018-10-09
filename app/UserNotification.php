@@ -59,7 +59,7 @@ class UserNotification extends Model
      * @return string
      */
     public function getTimeString() {
-        return Carbon::createFromTimeStamp(strtotime($this->created_at))->diffForHumans();
+        return $this->created_at->diffForHumans();
     }
 
     /**
