@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use ReflectionClass;
 
@@ -50,6 +51,15 @@ class UserNotification extends Model
                 return 'Error retrieving this notification';
             }
         }
+    }
+
+    /**
+     * Returns how long ago this notification was created
+     *
+     * @return string
+     */
+    public function getTimeString() {
+        return Carbon::createFromTimeStamp(strtotime($this->created_at))->diffForHumans();
     }
 
     /**
@@ -108,12 +118,13 @@ class UserNotification extends Model
      */
     public function formatForResponse() {
         return [
-            'id'        => $this->id,
-            'user_id'   => $this->user_id,
-            'type'      => $this->getTypeString(),
-            'read'      => (bool) $this->read,
-            'data'      => $this->getData(),
-            'string'    => $this->getString()
+            'id'            => $this->id,
+            'user_id'       => $this->user_id,
+            'type'          => $this->getTypeString(),
+            'read'          => (bool) $this->read,
+            'data'          => $this->getData(),
+            'string'        => $this->getString(),
+            'time_string'   => $this->getTimeString()
         ];
     }
 }
