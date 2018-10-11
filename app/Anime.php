@@ -225,31 +225,15 @@ class Anime extends Model
      */
     public function getPoster($thumbnail = false) {
         // Try to retrieve the poster from the cache
-        if(!$thumbnail && $this->fetched_poster)
-            return $this->cached_poster;
-        else if($thumbnail && $this->fetched_poster_thumbnail)
-            return $this->cached_poster_thumbnail;
-
-        // Check if there is a TVDB ID set
-        if($this->tvdb_handle == null)
-            $this->tvdb_handle = new TVDB();
-
-        $retrievedPoster = $this->tvdb_handle->getAnimePoster($this->tvdb_id, $thumbnail);
-
-        // Cache the poster
-        if($thumbnail) {
-            $this->fetched_poster_thumbnail = true;
-            $this->cached_poster_thumbnail = $retrievedPoster;
-        }
-        else {
-            $this->fetched_poster = true;
-            $this->cached_poster = $retrievedPoster;
+        if($this->fetched_images) {
+            if (!$thumbnail)
+                return $this->cached_poster;
+            else
+                return $this->cached_poster_thumbnail;
         }
 
-        $this->save();
-
-        // Return the poster
-        return $retrievedPoster;
+        // Images not fetched yet
+        return null;
     }
 
     /**
@@ -260,31 +244,15 @@ class Anime extends Model
      */
     public function getBackground($thumbnail = false) {
         // Try to retrieve the background from the cache
-        if(!$thumbnail && $this->fetched_background)
-            return $this->cached_background;
-        else if($thumbnail && $this->fetched_background_thumbnail)
-            return $this->cached_background_thumbnail;
-
-        // Get the background from TVDB
-        if($this->tvdb_handle == null)
-            $this->tvdb_handle = new TVDB();
-
-        $retrievedBg = $this->tvdb_handle->getAnimeBackground($this->tvdb_id, $thumbnail);
-
-        // Cache the background
-        if($thumbnail) {
-            $this->fetched_background_thumbnail = true;
-            $this->cached_background_thumbnail = $retrievedBg;
-        }
-        else {
-            $this->fetched_background = true;
-            $this->cached_background = $retrievedBg;
+        if($this->fetched_images) {
+            if (!$thumbnail)
+                return $this->cached_background;
+            else
+                return $this->cached_background_thumbnail;
         }
 
-        $this->save();
-
-        // Return the background
-        return $retrievedBg;
+        // Images not fetched yet
+        return null;
     }
 
     /**
