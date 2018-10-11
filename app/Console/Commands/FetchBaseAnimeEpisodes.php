@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Anime;
 use App\AnimeEpisode;
+use App\AnimeSeason;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use TVDB;
@@ -126,6 +127,24 @@ class FetchBaseAnimeEpisodes extends Command
         }
 
         $this->info('All done! ' . $totalInsertCount . ' total of episodes inserted.');
+
+        // Create the seasons
+        for($i = 0; $i <= $highestSeason; $i++) {
+            // Already exists
+            $checkFindSeason = AnimeSeason::where([
+                ['anime_id', '=', $anime->id],
+                ['number', '=', $i]
+            ])->first();
+
+            if($checkFindSeason)
+                continue;
+
+            // Create the season
+            AnimeSeason::create([
+                'number'    => $i,
+                'anime_id'  => $anime->id
+            ]);
+        }
 
         // Update the Anime variables
         $anime->episode_count = $totalInsertCount;

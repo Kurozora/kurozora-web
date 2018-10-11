@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actor;
 use App\Anime;
 use App\AnimeRating;
+use App\AnimeSeason;
 use App\Helpers\JSONResult;
 use App\User;
 use Illuminate\Support\Facades\Artisan;
@@ -164,6 +165,30 @@ class AnimeController extends Controller
             'total_actors'      => $anime->getActorCount(),
             'actors'            => $retActors
         ])->show();
+    }
+
+    /**
+     * Returns season information for an Anime
+     *
+     * @param Request $request
+     * @param int $animeID
+     */
+    public function seasonsAnime(Request $request, $animeID)
+    {
+        // Get the Anime
+        $anime = Anime::find($animeID);
+
+        // The Anime item does not exist
+        if (!$anime)
+            (new JSONResult())->setError('Unable to retrieve season data for the specified anime.')->show();
+
+        $rawSeasons = AnimeSeason::where('anime_id', $anime->id)->get();
+        $foundSeasons = [];
+
+        foreach($rawSeasons as $rawSeason)
+            $foundSeasons[] = $rawSeason->formatForResponse();
+
+        (new JSONResult())->setData(['seasons' => $foundSeasons])->show();
     }
 
     /**
