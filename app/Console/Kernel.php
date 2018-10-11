@@ -28,16 +28,19 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         /**********************************************/
-        // Fetch base episodes for an episode every 10 minutes
+        // Fetch base data for Anime every 10 mins
         $schedule->call(function() {
             // Find an Anime where the base episodes have not been fetched
             $foundItem = Anime::where('fetched_base_episodes', '=', false)->limit(1)->first();
 
-            if($foundItem) {
-                Artisan::call('animes:fetch_base_episodes', [
-                    'id' => $foundItem->id
-                ]);
-            }
+            if($foundItem)
+                Artisan::call('animes:fetch_base_episodes', ['id' => $foundItem->id]);
+
+            // Find an Anime where the images have not been fetched
+            $foundItem = Anime::where('fetched_images', '=', false)->limit(1)->first();
+
+            if($foundItem)
+                Artisan::call('animes:fetch_images', ['id' => $foundItem->id]);
         })->cron('*/10 * * * *');
 
         /**********************************************/

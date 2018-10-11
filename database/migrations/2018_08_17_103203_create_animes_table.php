@@ -35,12 +35,9 @@ class CreateAnimesTable extends Migration
             $table->integer('season_count')->default(0);
 
             // Flags for fetched data
-            $table->boolean('fetched_poster')->default(false);
-            $table->boolean('fetched_poster_thumbnail')->default(false);
-            $table->boolean('fetched_background')->default(false);
-            $table->boolean('fetched_background_thumbnail')->default(false);
             $table->boolean('fetched_actors')->default(false);
             $table->boolean('fetched_base_episodes')->default(false);
+            $table->boolean('fetched_images')->default(false);
             $table->boolean('fetched_synopsis')->default(false);
             $table->boolean('fetched_runtime')->default(false);
             $table->boolean('fetched_watch_rating')->default(false);
