@@ -101,6 +101,16 @@ class FetchAnimeDetails extends Command
         $this->info('[IMDB ID retrieved]');
         $this->info('');
 
+        // Title
+        $this->info('[Retrieving title]');
+        $title = $tvdb_handle->getAnimeDetailValue($anime->tvdb_id, 'title');
+
+        if($title != null)
+            $anime->title = $title;
+
+        $this->info('[Title retrieved]');
+        $this->info('');
+
         // Save details
         $anime->fetched_details = true;
         $anime->save();
