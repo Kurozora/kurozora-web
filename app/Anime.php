@@ -17,6 +17,10 @@ class Anime extends Model
     const ANIME_TYPE_TV         = 1;
     const ANIME_TYPE_MOVIE      = 2;
 
+    // Status for Anime
+    const ANIME_STATUS_TBA      = "TBA";
+    const ANIME_STATUS_ENDED    = "Ended";
+
     // Minimum ratings required to calculate average
     const MINIMUM_RATINGS_REQUIRED = 30;
 

@@ -175,6 +175,7 @@ class TVDB {
             'slug'              => $response->data->slug,
             'network'           => $response->data->network,
             'title'             => $response->data->seriesName,
+            'status'            => $response->data->status,
             'genres'            => $response->data->genre
         ];
 
