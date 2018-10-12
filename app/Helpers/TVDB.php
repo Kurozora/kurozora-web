@@ -168,11 +168,13 @@ class TVDB {
 
         // Return the details
         $this->cachedAnimeDetails[$tvdbID] = [
-            'synopsis' => $response->data->overview,
-            'watch_rating' => $response->data->rating,
-            'runtime_minutes' => $response->data->runtime,
-            'imdb_id' => $response->data->imdbId,
-            'genres' => $response->data->genre
+            'synopsis'          => $response->data->overview,
+            'watch_rating'      => $response->data->rating,
+            'runtime_minutes'   => $response->data->runtime,
+            'imdb_id'           => $response->data->imdbId,
+            'slug'              => $response->data->slug,
+            'network'           => $response->data->network,
+            'genres'            => $response->data->genre
         ];
 
         return $this->cachedAnimeDetails[$tvdbID];
