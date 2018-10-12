@@ -174,6 +174,7 @@ class TVDB {
             'imdb_id'           => $response->data->imdbId,
             'slug'              => $response->data->slug,
             'network'           => $response->data->network,
+            'title'             => $response->data->seriesName,
             'genres'            => $response->data->genre
         ];
 
