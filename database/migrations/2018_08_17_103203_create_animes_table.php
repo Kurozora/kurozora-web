@@ -19,6 +19,8 @@ class CreateAnimesTable extends Migration
             $table->timestamps();
 
             $table->string('title')->default('Unknown title');
+            $table->string('slug')->nullable();
+            $table->string('network')->nullable();
             $table->string('cached_poster')->nullable();
             $table->string('cached_poster_thumbnail')->nullable();
             $table->string('cached_background')->nullable();
@@ -26,6 +28,7 @@ class CreateAnimesTable extends Migration
             $table->integer('type')->default(Anime::ANIME_TYPE_UNDEFINED);
             $table->boolean('nsfw')->default(false);
             $table->integer('tvdb_id')->nullable()->unsigned();
+            $table->string('imdb_id')->nullable();
             $table->mediumText('synopsis')->nullable();
             $table->tinyInteger('runtime')->nullable()->unsigned();
             $table->string('watch_rating')->nullable();
@@ -38,9 +41,7 @@ class CreateAnimesTable extends Migration
             $table->boolean('fetched_actors')->default(false);
             $table->boolean('fetched_base_episodes')->default(false);
             $table->boolean('fetched_images')->default(false);
-            $table->boolean('fetched_synopsis')->default(false);
-            $table->boolean('fetched_runtime')->default(false);
-            $table->boolean('fetched_watch_rating')->default(false);
+            $table->boolean('fetched_details')->default(false);
         });
     }
 

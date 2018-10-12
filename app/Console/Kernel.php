@@ -41,6 +41,12 @@ class Kernel extends ConsoleKernel
 
             if($foundItem)
                 Artisan::call('animes:fetch_images', ['id' => $foundItem->id]);
+
+            // Find an Anime where the details have not been fetched
+            $foundItem = Anime::where('fetched_details', '=', false)->limit(1)->first();
+
+            if($foundItem)
+                Artisan::call('animes:fetch_details', ['id' => $foundItem->id]);
         })->cron('*/10 * * * *');
 
         /**********************************************/

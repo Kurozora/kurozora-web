@@ -112,8 +112,9 @@ class Anime extends Model
 
             return $episodeQuery->get();
         }
+
         // The episodes still need to be fetched
-        else return [];
+        return [];
     }
 
     /**
@@ -125,9 +126,6 @@ class Anime extends Model
         switch($this->type) {
             case self::ANIME_TYPE_TV:       return 'TV';
             case self::ANIME_TYPE_MOVIE:    return 'Movie';
-            case self::ANIME_TYPE_SPECIAL:  return 'Special';
-            case self::ANIME_TYPE_OVA:      return 'OVA';
-            case self::ANIME_TYPE_ONA:      return 'ONA';
         }
 
         return 'Unknown type';
@@ -140,24 +138,11 @@ class Anime extends Model
      */
     public function getSynopsis() {
         // The synopsis was already fetched
-        if($this->fetched_synopsis)
+        if($this->fetched_details)
             return $this->synopsis;
-        // Try to retrieve the synopsis from TVDB
-        else {
-            if($this->tvdb_handle == null)
-                $this->tvdb_handle = new TVDB();
 
-            // Get the synopsis
-            $retSynopsis = $this->tvdb_handle->getAnimeDetailValue($this->tvdb_id, 'synopsis');
-
-            // Save the synopsis
-            $this->synopsis = $retSynopsis;
-            $this->fetched_synopsis = true;
-            $this->save();
-
-            // Return it
-            return $this->synopsis;
-        }
+        // Synopsis not fetched
+        return null;
     }
 
     /**
@@ -168,26 +153,10 @@ class Anime extends Model
     public function getRuntime() {
         // Check if we have saved the runtime
         if($this->fetched_runtime)
-            return $this->runtime;
-        // Try to retrieve the runtime from TVDB
-        else {
-            if($this->tvdb_handle == null)
-                $this->tvdb_handle = new TVDB();
+            return (int) $this->runtime;
 
-            // Get the runtime
-            $retRuntime = $this->tvdb_handle->getAnimeDetailValue($this->tvdb_id, 'runtime_minutes');
-
-            if(is_numeric($retRuntime))
-                $retRuntime = (int) $retRuntime;
-
-            // Save the runtime
-            $this->runtime = $retRuntime;
-            $this->fetched_runtime = true;
-            $this->save();
-
-            // Return it
-            return $this->runtime;
-        }
+        // Runtime not fetched
+        return null;
     }
 
     /**
@@ -199,22 +168,9 @@ class Anime extends Model
         // Check if we have saved the watch rating
         if($this->fetched_watch_rating)
             return $this->watch_rating;
-        // Try to retrieve the watch rating from TVDB
-        else {
-            if($this->tvdb_handle == null)
-                $this->tvdb_handle = new TVDB();
 
-            // Get the watch rating
-            $retWatchRating = $this->tvdb_handle->getAnimeDetailValue($this->tvdb_id, 'watch_rating');
-
-            // Save the watch rating
-            $this->watch_rating = $retWatchRating;
-            $this->fetched_watch_rating = true;
-            $this->save();
-
-            // Return it
-            return $this->watch_rating;
-        }
+        // Watch rating not fetched
+        return null;
     }
 
     /**
