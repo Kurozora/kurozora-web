@@ -132,48 +132,6 @@ class Anime extends Model
     }
 
     /**
-     * Retrieves the synopsis for an Anime item
-     *
-     * @return null|string
-     */
-    public function getSynopsis() {
-        // The synopsis was already fetched
-        if($this->fetched_details)
-            return $this->synopsis;
-
-        // Synopsis not fetched
-        return null;
-    }
-
-    /**
-     * Retrieves the runtime (in minutes) for an Anime item
-     *
-     * @return null|integer
-     */
-    public function getRuntime() {
-        // Check if we have saved the runtime
-        if($this->fetched_runtime)
-            return (int) $this->runtime;
-
-        // Runtime not fetched
-        return null;
-    }
-
-    /**
-     * Retrieves the watch rating for an Anime item
-     *
-     * @return null|string
-     */
-    public function getWatchRating() {
-        // Check if we have saved the watch rating
-        if($this->fetched_watch_rating)
-            return $this->watch_rating;
-
-        // Watch rating not fetched
-        return null;
-    }
-
-    /**
      * Retrieves the poster image URL for an Anime item
      *
      * @param bool $thumbnail
