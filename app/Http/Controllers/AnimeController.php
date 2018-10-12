@@ -106,6 +106,8 @@ class AnimeController extends Controller
             'id'                    => $anime->id,
             'title'                 => $anime->title,
             'type'                  => $anime->getType(),
+            'imdb_id'               => $anime->imdb_id,
+            'network'               => $anime->network,
             'episodes'              => $anime->episode_count,
             'seasons'               => $anime->season_count,
             'average_rating'        => $anime->average_rating,
