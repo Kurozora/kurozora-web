@@ -111,6 +111,16 @@ class FetchAnimeDetails extends Command
         $this->info('[Title retrieved]');
         $this->info('');
 
+        // Status
+        $this->info('[Retrieving status]');
+        $status = $tvdb_handle->getAnimeDetailValue($anime->tvdb_id, 'status');
+
+        if($status != null)
+            $anime->status = $status;
+
+        $this->info('[Status retrieved]');
+        $this->info('');
+
         // Save details
         $anime->fetched_details = true;
         $anime->save();
