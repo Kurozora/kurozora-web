@@ -28,8 +28,8 @@ class CreateForumPostsTable extends Migration
             $table->foreign('parent_post')->references('id')->on('forum_post')->onDelete('cascade');
 
             $table->string('ip');
-
-            $table->string('title')->nullable()->default('null');
+            $table->integer('score')->default(0);
+            $table->string('title')->nullable()->default(null);
             $table->text('content');
         });
     }

@@ -8,7 +8,6 @@ use App\AnimeRating;
 use App\AnimeSeason;
 use App\Helpers\JSONResult;
 use App\User;
-use Illuminate\Support\Facades\Artisan;
 use Validator;
 use Illuminate\Http\Request;
 

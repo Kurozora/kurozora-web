@@ -43,6 +43,7 @@ Route::prefix('/v1')->group(function() {
 
     Route::prefix('/forum')->group(function() {
         Route::get('/get_sections', 'ForumController@getSections');
+        Route::post('/get_posts', 'ForumController@getPosts');
     });
 
     Route::prefix('/misc')->group(function() {
