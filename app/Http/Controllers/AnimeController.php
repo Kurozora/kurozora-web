@@ -135,35 +135,21 @@ class AnimeController extends Controller
      * @param $animeID
      */
     public function actorsAnime($animeID, Request $request) {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'page' => 'bail|required|numeric'
-        ]);
-
-        if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
-
         $anime = Anime::find($animeID);
 
         // The Anime item does not exist
         if(!$anime)
             (new JSONResult())->setError('Unable to retrieve actor data for the specified anime.')->show();
 
-        // Page
-        $page = (int) $request->input('page');
-        $actorsPerPage = 5;
-
         // Get the actors
         $retActors = [];
-        $actors = $anime->getActors($page, $actorsPerPage);
+        $actors = $anime->getActors();
 
         // Show successful response
         foreach($actors as $actor)
             $retActors[] = Actor::formatForResponse($actor);
 
         (new JSONResult())->setData([
-            'page'              => $page,
-            'actors_per_page'   => $actorsPerPage,
             'total_actors'      => $anime->getActorCount(),
             'actors'            => $retActors
         ])->show();

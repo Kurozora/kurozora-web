@@ -35,7 +35,7 @@ Route::prefix('/v1')->group(function() {
         Route::get('/explore', 'AnimeController@exploreAnime');
 
         Route::post('/{id}/details', 'AnimeController@detailsAnime')->where('id', '[0-9]*');
-        Route::post('/{id}/actors', 'AnimeController@actorsAnime')->where('id', '[0-9]*');
+        Route::get('/{id}/actors', 'AnimeController@actorsAnime')->where('id', '[0-9]*');
         Route::get('/{id}/seasons', 'AnimeController@seasonsAnime')->where('id', '[0-9]*');
         Route::get('/{id}/episodes', 'AnimeController@episodesAnime')->where('id', '[0-9]*');
         Route::post('/{id}/rate', 'AnimeController@rateAnime')->where('id', '[0-9]*');
