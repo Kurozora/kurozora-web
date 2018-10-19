@@ -47,7 +47,7 @@ class Anime extends Model
      *
      * @return array
      */
-    public function getActors($page, $amountPerPage) {
+    public function getActors() {
         // Check if we have not yet saved the actors
         if(!$this->fetched_actors) {
             if ($this->tvdb_handle == null)
@@ -75,10 +75,7 @@ class Anime extends Model
             $this->save();
         }
 
-        return Actor::where('anime_id', $this->id)
-            ->offset($amountPerPage * $page)
-            ->limit($amountPerPage)
-            ->get();
+        return Actor::where('anime_id', $this->id)->get();
     }
 
     /**
