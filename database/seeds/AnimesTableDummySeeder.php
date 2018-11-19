@@ -5,22 +5,8 @@ use Illuminate\Database\Seeder;
 
 class AnimesTableDummySeeder extends Seeder
 {
-    // Dummy TVDB ID's
-    const DUMMY_TVDB_IDS = [
-        79824,
-        81797,
-        75579,
-        85249,
-        74796,
-        339268,
-        244061
-    ];
-
-    // Dummy anime types
-    const DUMMY_ANIME_TYPES = [
-        Anime::ANIME_TYPE_TV,
-        Anime::ANIME_TYPE_MOVIE
-    ];
+    // URL to retrieve Anime from
+    const ANIME_JSON_FILE = 'https://raw.githubusercontent.com/Kurozora/anime/master/anime.json';
 
     /**
      * Run the database seeds.
@@ -29,28 +15,20 @@ class AnimesTableDummySeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker\Factory::create();
+        // Retrieve data from URL
+        $animeJson = file_get_contents(self::ANIME_JSON_FILE);
+        $parsedAnime = json_decode($animeJson);
 
-        // Create 50 random Animes
-        foreach(range(1, 50) as $index) {
-            // Pick a random type
-            $randomType         = array_rand(self::DUMMY_ANIME_TYPES);
-
-            // Pick NSFW or not
-            $nsfw = false;
-
-            if(rand(0, 10) == 0)
-                $nsfw = true;
-
-            // Pick a TVDB ID
-            $randomTVDBID = array_rand(self::DUMMY_TVDB_IDS);
-
-            Anime::create([
-                'title'                         => $faker->sentence(3),
-                'type'                          => self::DUMMY_ANIME_TYPES[$randomType],
-                'nsfw'                          => $nsfw,
-                'tvdb_id'                       => self::DUMMY_TVDB_IDS[$randomTVDBID]
-            ]);
+        if($parsedAnime != null) {
+            // Create 50 random Animes
+            foreach ($parsedAnime->anime as $animeData) {
+                Anime::create([
+                    'title'     => $animeData->title,
+                    'type'      => Anime::ANIME_TYPE_TV,
+                    'nsfw'      => $animeData->nsfw,
+                    'tvdb_id'   => $animeData->tvdb_id
+                ]);
+            }
         }
     }
 }
