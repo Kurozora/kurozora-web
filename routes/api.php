@@ -20,6 +20,7 @@ Route::prefix('/v1')->group(function() {
         Route::post('/logout', 'UserController@logout');
         Route::post('/reset_password', 'UserController@resetPassword');
         Route::post('/get_sessions', 'UserController@getSessions');
+        Route::post('/add_library', 'UserController@addLibrary');
         Route::post('/delete_session', 'UserController@deleteSession');
         Route::post('/update_account', 'UserController@updateAccount');
         Route::post('/get_notifications', 'UserController@getNotifications');
