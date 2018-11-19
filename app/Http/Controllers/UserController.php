@@ -8,6 +8,7 @@ use App\PasswordReset;
 use App\Session;
 use App\User;
 use App\LoginAttempt;
+use App\UserLibrary;
 use App\UserNotification;
 use Carbon\Carbon;
 use Validator;
@@ -341,6 +342,63 @@ class UserController extends Controller
             'current_session'   => $curSession,
             'other_sessions'    => $otherSessions
         ])->show();
+    }
+
+    /**
+     * Adds an Anime to the user's library
+     *
+     * @param Request $request
+     */
+    public function addLibrary(Request $request) {
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'session_secret'    => 'bail|required|exists:user_session,secret',
+            'user_id'           => 'bail|required|numeric|exists:user,id',
+            'anime_id'          => 'bail|required|numeric|exists:anime,id',
+            'status'            => 'bail|required|string'
+        ]);
+
+        // Fetch the variables
+        $givenSecret = $request->input('session_secret');
+        $givenUserID = $request->input('user_id');
+
+        // Check authentication
+        if($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret))
+            (new JSONResult())->setError(JSONResult::ERROR_SESSION_REJECTED)->show();
+
+        $givenAnimeID = $request->input('anime_id');
+        $givenStatus = $request->input('status');
+
+        // Check the status
+        $foundStatus = UserLibrary::getStatusFromString($givenStatus);
+
+        if($foundStatus == null)
+            (new JSONResult())->setError('The given status is not a valid one.')->show();
+
+        // Check if this user already has the Anime in their library
+        $oldLibraryItem = UserLibrary::where([
+            ['user_id',     '=',    $givenUserID],
+            ['anime_id',    '=',    $givenAnimeID]
+        ])->first();
+
+        // The user already had the anime in their library, update the status
+        if($oldLibraryItem != null) {
+            if($oldLibraryItem->status != $foundStatus) {
+                $oldLibraryItem->status = $foundStatus;
+                $oldLibraryItem->save();
+            }
+        }
+        // Add a new library item
+        else {
+            UserLibrary::create([
+                'user_id'   => $givenUserID,
+                'anime_id'  => $givenAnimeID,
+                'status'    => $foundStatus
+            ]);
+        }
+
+        // Successful response
+        (new JSONResult())->show();
     }
 
     /**
