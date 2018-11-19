@@ -30,4 +30,16 @@ class UserLibrary extends Model
             return UserLibrary::STATUS_DROPPED;
         else return null;
     }
+
+    /**
+     * Formats this library item for a response
+     *
+     * @return array
+     */
+    public function formatForResponse() {
+        return [
+            'id'        => $this->id,
+            'anime_id'  => $this->anime_id
+        ];
+    }
 }

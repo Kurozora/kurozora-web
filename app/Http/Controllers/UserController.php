@@ -345,6 +345,51 @@ class UserController extends Controller
     }
 
     /**
+     * Gets the user's library depending on the status
+     *
+     * @param Request $request
+     */
+    public function getLibrary(Request $request) {
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'session_secret'    => 'bail|required|exists:user_session,secret',
+            'user_id'           => 'bail|required|numeric|exists:user,id',
+            'status'            => 'bail|required|string'
+        ]);
+
+        // Fetch the variables
+        $givenSecret = $request->input('session_secret');
+        $givenUserID = $request->input('user_id');
+
+        // Check authentication
+        if($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret))
+            (new JSONResult())->setError(JSONResult::ERROR_SESSION_REJECTED)->show();
+
+        $givenStatus = $request->input('status');
+
+        // Check the status
+        $foundStatus = UserLibrary::getStatusFromString($givenStatus);
+
+        if($foundStatus == null)
+            (new JSONResult())->setError('The given status is not a valid one.')->show();
+
+        // Retrieve the user's library items for that status
+        $rawLibraryItems = UserLibrary::where([
+            ['user_id', '=', $givenUserID],
+            ['status',  '=', $foundStatus]
+        ])->get();
+
+        $libraryItems = [];
+
+        foreach($rawLibraryItems as $rawLibraryItem)
+            $libraryItems[] = $rawLibraryItem->formatForResponse();
+
+        (new JSONResult())->setData([
+            'library' => $libraryItems
+        ])->show();
+    }
+
+    /**
      * Adds an Anime to the user's library
      *
      * @param Request $request
