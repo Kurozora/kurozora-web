@@ -10,6 +10,9 @@ class UserLibrary extends Model
     const STATUS_UNKNOWN    = 0;
     const STATUS_WATCHING   = 1;
     const STATUS_DROPPED    = 2;
+    const STATUS_PLANNING   = 3;
+    const STATUS_COMPLETED  = 4;
+    const STATUS_ON_HOLD    = 5;
 
     // Table name
     protected $table = 'user_library';
@@ -24,11 +27,22 @@ class UserLibrary extends Model
      * @return int|null
      */
     public static function getStatusFromString($statusStr) {
+        // Make the status lowercase (case insensitive)
+        $statusStr = strtolower($statusStr);
+
+        // Find the status
         if($statusStr == 'watching')
             return UserLibrary::STATUS_WATCHING;
         else if($statusStr == 'dropped')
             return UserLibrary::STATUS_DROPPED;
-        else return null;
+        else if($statusStr == 'planning')
+            return UserLibrary::STATUS_PLANNING;
+        else if($statusStr == 'completed')
+            return UserLibrary::STATUS_COMPLETED;
+        else if($statusStr == 'on-hold')
+            return UserLibrary::STATUS_ON_HOLD;
+        else
+            return null;
     }
 
     /**
