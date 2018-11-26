@@ -1,5 +1,6 @@
 <?php
 
+use App\Anime;
 use App\AnimeEpisode;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -19,7 +20,7 @@ class CreateAnimeEpisodesTable extends Migration
             $table->timestamps();
 
             $table->integer('anime_id')->unsigned();
-            $table->foreign('anime_id')->references('id')->on('anime')->onDelete('cascade');
+            $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
 
             $table->boolean('verified')->default(false);
             $table->integer('season')->unsigned()->default(1);
