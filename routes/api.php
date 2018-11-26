@@ -22,6 +22,7 @@ Route::prefix('/v1')->group(function() {
         Route::post('/get_sessions', 'UserController@getSessions');
         Route::post('/get_library', 'UserController@getLibrary');
         Route::post('/add_library', 'UserController@addLibrary');
+        Route::post('/remove_library', 'UserController@removeLibrary');
         Route::post('/delete_session', 'UserController@deleteSession');
         Route::post('/update_account', 'UserController@updateAccount');
         Route::post('/get_notifications', 'UserController@getNotifications');

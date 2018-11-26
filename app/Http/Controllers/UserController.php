@@ -447,6 +447,47 @@ class UserController extends Controller
     }
 
     /**
+     * Removes an Anime from the user's library
+     *
+     * @param Request $request
+     */
+    public function removeLibrary(Request $request) {
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'session_secret'    => 'bail|required|exists:user_session,secret',
+            'user_id'           => 'bail|required|numeric|exists:user,id',
+            'anime_id'          => 'bail|required|numeric|exists:anime,id'
+        ]);
+
+        // Fetch the variables
+        $givenSecret = $request->input('session_secret');
+        $givenUserID = $request->input('user_id');
+
+        // Check authentication
+        if($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret))
+            (new JSONResult())->setError(JSONResult::ERROR_SESSION_REJECTED)->show();
+
+        $givenAnimeID = $request->input('anime_id');
+
+        // Find the Anime in their library
+        $foundAnime = UserLibrary::where([
+            ['user_id',     '=',    $givenUserID],
+            ['anime_id',    '=',    $givenAnimeID]
+        ])->first();
+
+        // Remove this Anime from their library
+        if($foundAnime) {
+            $foundAnime->delete();
+
+            // Successful response
+            (new JSONResult())->show();
+        }
+
+        // Unsuccessful response
+        (new JSONResult())->setError('This item is not in your library.')->show();
+    }
+
+    /**
      * Deletes a user session
      *
      * @param Request $request
