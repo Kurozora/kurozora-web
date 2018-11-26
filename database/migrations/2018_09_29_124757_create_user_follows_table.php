@@ -1,6 +1,7 @@
 <?php
 
 use App\User;
+use App\UserFollow;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -14,7 +15,7 @@ class CreateUserFollowsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_follow', function (Blueprint $table) {
+        Schema::create(UserFollow::TABLE_NAME, function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
@@ -35,6 +36,6 @@ class CreateUserFollowsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_follow');
+        Schema::dropIfExists(UserFollow::TABLE_NAME);
     }
 }
