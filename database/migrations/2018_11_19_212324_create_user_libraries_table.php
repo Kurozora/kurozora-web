@@ -14,7 +14,7 @@ class CreateUserLibrariesTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_library', function (Blueprint $table) {
+        Schema::create(UserLibrary::TABLE_NAME, function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
@@ -35,6 +35,6 @@ class CreateUserLibrariesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_library');
+        Schema::dropIfExists(UserLibrary::TABLE_NAME);
     }
 }

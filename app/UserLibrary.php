@@ -15,7 +15,8 @@ class UserLibrary extends Model
     const STATUS_ON_HOLD    = 5;
 
     // Table name
-    protected $table = 'user_library';
+    const TABLE_NAME = 'user_library';
+    protected $table = self::TABLE_NAME;
 
     // Fillable columns
     protected $fillable = ['user_id', 'anime_id', 'status'];
