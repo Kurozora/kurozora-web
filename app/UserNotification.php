@@ -14,7 +14,8 @@ class UserNotification extends Model
     const TYPE_NEW_SESSION  = 2;
 
     // Table name
-    protected $table = 'user_notification';
+    const TABLE_NAME = 'user_notification';
+    protected $table = self::TABLE_NAME;
 
     // Fillable columns
     protected $fillable = ['user_id', 'type', 'data'];

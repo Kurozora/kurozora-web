@@ -1,6 +1,7 @@
 <?php
 
 use App\User;
+use App\UserReputation;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -14,7 +15,7 @@ class CreateUserReputationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_reputation', function (Blueprint $table) {
+        Schema::create(UserReputation::TABLE_NAME, function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
@@ -35,6 +36,6 @@ class CreateUserReputationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_reputation');
+        Schema::dropIfExists(UserReputation::TABLE_NAME);
     }
 }
