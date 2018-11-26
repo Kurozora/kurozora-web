@@ -1,5 +1,6 @@
 <?php
 
+use App\Anime;
 use App\AnimeRating;
 use App\User;
 use Illuminate\Support\Facades\Schema;
@@ -20,7 +21,7 @@ class CreateAnimeRatingsTable extends Migration
             $table->timestamps();
 
             $table->integer('anime_id')->unsigned();
-            $table->foreign('anime_id')->references('id')->on('anime')->onDelete('cascade');
+            $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
 
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
