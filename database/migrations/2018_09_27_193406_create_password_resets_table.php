@@ -1,6 +1,7 @@
 <?php
 
 use App\PasswordReset;
+use App\User;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -19,7 +20,7 @@ class CreatePasswordResetsTable extends Migration
             $table->timestamps();
 
             $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('user')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
 
             $table->string('ip');
             $table->string('token', PasswordReset::TOKEN_LENGTH);
