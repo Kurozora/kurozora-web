@@ -8,6 +8,7 @@ use App\AnimeRating;
 use App\AnimeSeason;
 use App\Helpers\JSONResult;
 use App\User;
+use App\UserLibrary;
 use Validator;
 use Illuminate\Http\Request;
 
@@ -94,11 +95,21 @@ class AnimeController extends Controller
         $userRating = 0.0;
 
         $foundRating = AnimeRating::where([
-        	['user_id' , '=', $givenUserID],
+        	['user_id' ,  '=', $givenUserID],
         	['anime_id' , '=', $anime->id]
         ])->first();
 
         if($foundRating) $userRating = $foundRating->rating;
+
+        // Get the current library status
+        $currentLibraryStatus = UserLibrary::getStringFromStatus(UserLibrary::STATUS_UNKNOWN);
+
+        $foundLibraryStatus = UserLibrary::where([
+            ['user_id' ,  '=', $givenUserID],
+            ['anime_id' , '=', $anime->id]
+        ])->first();
+
+        if($foundLibraryStatus) $currentLibraryStatus = UserLibrary::getStringFromStatus($foundLibraryStatus->status);
 
         // Build the response
         $animeArr = [
@@ -123,7 +134,8 @@ class AnimeController extends Controller
         ];
 
         $userArr = [
-        	'current_rating'		=> $userRating
+        	'current_rating'	=> $userRating,
+            'library_status'    => $currentLibraryStatus
        	];
 
         (new JSONResult())->setData(['anime' => $animeArr, 'user' => $userArr])->show();

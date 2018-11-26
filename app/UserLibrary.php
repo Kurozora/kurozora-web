@@ -14,6 +14,15 @@ class UserLibrary extends Model
     const STATUS_COMPLETED  = 4;
     const STATUS_ON_HOLD    = 5;
 
+    // Map library status to string
+    const STATUS_MAPPING = [
+        self::STATUS_WATCHING   => 'watching',
+        self::STATUS_DROPPED    => 'dropped',
+        self::STATUS_PLANNING   => 'planning',
+        self::STATUS_COMPLETED  => 'completed',
+        self::STATUS_ON_HOLD    => 'on-hold'
+    ];
+
     // Table name
     const TABLE_NAME = 'user_library';
     protected $table = self::TABLE_NAME;
@@ -32,18 +41,28 @@ class UserLibrary extends Model
         $statusStr = strtolower($statusStr);
 
         // Find the status
-        if($statusStr == 'watching')
-            return UserLibrary::STATUS_WATCHING;
-        else if($statusStr == 'dropped')
-            return UserLibrary::STATUS_DROPPED;
-        else if($statusStr == 'planning')
-            return UserLibrary::STATUS_PLANNING;
-        else if($statusStr == 'completed')
-            return UserLibrary::STATUS_COMPLETED;
-        else if($statusStr == 'on-hold')
-            return UserLibrary::STATUS_ON_HOLD;
-        else
-            return null;
+        foreach(self::STATUS_MAPPING as $status => $string) {
+            if($statusStr == $string)
+                return $status;
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the string of the status, or null if not found
+     *
+     * @param $statusInt
+     * @return string|null
+     */
+    public static function getStringFromStatus($statusInt) {
+        // Find the status
+        foreach(self::STATUS_MAPPING as $status => $string) {
+            if($statusInt == $status)
+                return $string;
+        }
+
+        return null;
     }
 
     /**
