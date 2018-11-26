@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Actor extends Model
 {
     // Table name
-    protected $table = 'anime_actor';
+    const TABLE_NAME = 'anime_actor';
+    protected $table = self::TABLE_NAME;
 
     // Fillable columns
     protected $fillable = [

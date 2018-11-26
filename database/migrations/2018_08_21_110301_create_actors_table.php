@@ -1,5 +1,6 @@
 <?php
 
+use App\Actor;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -13,7 +14,7 @@ class CreateActorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('anime_actor', function (Blueprint $table) {
+        Schema::create(Actor::TABLE_NAME, function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
@@ -33,6 +34,6 @@ class CreateActorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('anime_actor');
+        Schema::dropIfExists(Actor::TABLE_NAME);
     }
 }
