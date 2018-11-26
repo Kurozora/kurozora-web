@@ -18,7 +18,8 @@ class User extends Model
     const USER_ROLE_ADMINISTRATOR   = 2;
 
     // Table name
-    protected $table = 'user';
+    const TABLE_NAME = 'user';
+    protected $table = self::TABLE_NAME;
 
     // Fillable columns
     protected $fillable = ['username', 'email', 'password', 'email_confirmation_id', 'avatar'];

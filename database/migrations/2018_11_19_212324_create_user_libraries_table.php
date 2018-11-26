@@ -1,5 +1,7 @@
 <?php
 
+use App\Anime;
+use App\User;
 use App\UserLibrary;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -19,10 +21,10 @@ class CreateUserLibrariesTable extends Migration
             $table->timestamps();
 
             $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('user')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
 
             $table->integer('anime_id')->unsigned();
-            $table->foreign('anime_id')->references('id')->on('anime')->onDelete('cascade');
+            $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
 
             $table->tinyInteger('status')->default(UserLibrary::STATUS_UNKNOWN);
         });

@@ -1,6 +1,7 @@
 <?php
 
 use App\AnimeRating;
+use App\User;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -22,7 +23,7 @@ class CreateAnimeRatingsTable extends Migration
             $table->foreign('anime_id')->references('id')->on('anime')->onDelete('cascade');
 
             $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('user')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
 
             $table->float('rating');
         });
