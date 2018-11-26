@@ -14,7 +14,8 @@ class PasswordReset extends Model
     const VALID_HOURS = 24;
 
     // Table name
-    protected $table = 'user_password_reset';
+    const TABLE_NAME = 'user_password_reset';
+    protected $table = self::TABLE_NAME;
 
     // Fillable columns
     protected $fillable = ['user_id', 'ip', 'token'];

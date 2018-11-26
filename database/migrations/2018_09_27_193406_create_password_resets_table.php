@@ -14,7 +14,7 @@ class CreatePasswordResetsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_password_reset', function (Blueprint $table) {
+        Schema::create(PasswordReset::TABLE_NAME, function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
@@ -33,6 +33,6 @@ class CreatePasswordResetsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_password_reset');
+        Schema::dropIfExists(PasswordReset::TABLE_NAME);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\LoginAttempt;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -13,7 +14,7 @@ class CreateLoginAttemptsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_login_attempt', function (Blueprint $table) {
+        Schema::create(LoginAttempt::TABLE_NAME, function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
@@ -28,6 +29,6 @@ class CreateLoginAttemptsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_login_attempt');
+        Schema::dropIfExists(LoginAttempt::TABLE_NAME);
     }
 }

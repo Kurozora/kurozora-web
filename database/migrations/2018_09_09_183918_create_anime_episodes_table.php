@@ -1,5 +1,6 @@
 <?php
 
+use App\AnimeEpisode;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -13,7 +14,7 @@ class CreateAnimeEpisodesTable extends Migration
      */
     public function up()
     {
-        Schema::create('anime_episode', function (Blueprint $table) {
+        Schema::create(AnimeEpisode::TABLE_NAME, function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
@@ -36,6 +37,6 @@ class CreateAnimeEpisodesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('anime_episode');
+        Schema::dropIfExists(AnimeEpisode::TABLE_NAME);
     }
 }

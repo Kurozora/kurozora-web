@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class ForumPost extends Model
 {
     // Table name
-    protected $table = 'forum_post';
+    const TABLE_NAME = 'forum_post';
+    protected $table = self::TABLE_NAME;
 
     /**
      * Formats the post for a response

@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Session extends Model
 {
     // Table name
-    protected $table = 'user_session';
+    const TABLE_NAME = 'user_session';
+    protected $table = self::TABLE_NAME;
 
     // Fillable columns
     protected $fillable = [

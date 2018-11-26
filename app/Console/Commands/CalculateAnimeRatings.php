@@ -67,14 +67,5 @@ class CalculateAnimeRatings extends Command
             // This Anime does not have enough ratings
             else $this->error('Anime ' . $anime->id . ' does not have enough ratings. (' . $totalRatingCount . '/' . Anime::MINIMUM_RATINGS_REQUIRED . ')');
         }
-
-        // Update the average rating and rating count
-        /*DB::table('animes')->update(['average_rating' => DB::raw('IFNULL((SELECT AVG(rating) FROM anime_ratings WHERE anime_id = animes.id), 0)')]);
-        DB::table('animes')->update(['rating_count' => DB::raw('IFNULL((SELECT COUNT(rating) FROM anime_ratings WHERE anime_id = animes.id), 0)')]);
-
-        // Console output
-        $aniCount = Anime::count();
-        $this->info(sprintf('Updated rating information for %d Anime %s.', $aniCount, str_plural('item', $aniCount)));
-    */
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Session;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -13,7 +14,7 @@ class CreateSessionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_session', function (Blueprint $table) {
+        Schema::create(Session::TABLE_NAME, function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
@@ -35,6 +36,6 @@ class CreateSessionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_session');
+        Schema::dropIfExists(Session::TABLE_NAME);
     }
 }

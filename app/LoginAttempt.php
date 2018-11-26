@@ -13,7 +13,8 @@ class LoginAttempt extends Model
 	const MAX_FAILED_ATTEMPTS = 3;
 
     // Table name
-    protected $table = 'user_login_attempt';
+    const TABLE_NAME = 'user_login_attempt';
+    protected $table = self::TABLE_NAME;
 
 	// Fillable columns
     protected $fillable = ['ip'];
