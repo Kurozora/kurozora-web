@@ -164,7 +164,7 @@ class UserController extends Controller
     public function logout(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'session_secret'    => 'bail|required|exists:user_session,secret',
+            'session_secret'    => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
             'user_id'           => 'bail|required|numeric|exists:user,id'
         ]);
 
@@ -202,7 +202,7 @@ class UserController extends Controller
     public function profile(Request $request, $id) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'session_secret'        => 'bail|required|exists:user_session,secret',
+            'session_secret'        => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
             'user_id'               => 'bail|required|numeric|exists:user,id'
         ]);
 
@@ -310,7 +310,7 @@ class UserController extends Controller
     public function getSessions(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'session_secret'        => 'bail|required|exists:user_session,secret',
+            'session_secret'        => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
             'user_id'               => 'bail|required|numeric|exists:user,id'
         ]);
 
@@ -354,7 +354,7 @@ class UserController extends Controller
     public function getLibrary(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'session_secret'    => 'bail|required|exists:user_session,secret',
+            'session_secret'    => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
             'user_id'           => 'bail|required|numeric|exists:user,id',
             'status'            => 'bail|required|string'
         ]);
@@ -409,7 +409,7 @@ class UserController extends Controller
     public function addLibrary(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'session_secret'    => 'bail|required|exists:user_session,secret',
+            'session_secret'    => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
             'user_id'           => 'bail|required|numeric|exists:user,id',
             'anime_id'          => 'bail|required|numeric|exists:anime,id',
             'status'            => 'bail|required|string'
@@ -466,7 +466,7 @@ class UserController extends Controller
     public function removeLibrary(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'session_secret'    => 'bail|required|exists:user_session,secret',
+            'session_secret'    => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
             'user_id'           => 'bail|required|numeric|exists:user,id',
             'anime_id'          => 'bail|required|numeric|exists:anime,id'
         ]);
@@ -507,9 +507,9 @@ class UserController extends Controller
     public function deleteSession(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'session_secret' => 'bail|required|exists:user_session,secret',
+            'session_secret' => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
             'user_id' => 'bail|required|numeric|exists:user,id',
-            'del_session_id' => 'bail|required|numeric|exists:user_session,id'
+            'del_session_id' => 'bail|required|numeric|exists:' . Session::TABLE_NAME . ',id'
         ]);
 
         // Fetch the variables
@@ -606,7 +606,7 @@ class UserController extends Controller
     public function getNotifications(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'session_secret'    => 'bail|required|exists:user_session,secret',
+            'session_secret'    => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
             'user_id'           => 'bail|required|numeric|exists:user,id'
         ]);
 

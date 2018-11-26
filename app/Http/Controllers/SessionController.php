@@ -17,7 +17,7 @@ class SessionController extends Controller
     public function validateSession(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'session_secret'    => 'bail|required|exists:user_session,secret',
+            'session_secret'    => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
             'user_id'           => 'bail|required|numeric|exists:user,id'
         ]);
 

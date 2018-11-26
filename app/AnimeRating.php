@@ -11,7 +11,8 @@ class AnimeRating extends Model
     const MAX_RATING_VALUE = 5.00;
 
     // Table name
-    protected $table = 'anime_rating';
+    const TABLE_NAME = 'anime_rating';
+    protected $table = self::TABLE_NAME;
 
     // Fillable columns
     protected $fillable = [

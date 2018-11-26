@@ -30,7 +30,7 @@ class ForumController extends Controller
     public function getPosts(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'section_id'    => 'bail|required|numeric|exists:forum_section,id',
+            'section_id'    => 'bail|required|numeric|exists:' . ForumSection::TABLE_NAME .',id',
             'order'         => 'bail|required|in:top,recent',
             'page'          => 'bail|numeric|min:0'
         ]);

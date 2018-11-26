@@ -1,5 +1,6 @@
 <?php
 
+use App\AnimeRating;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -13,7 +14,7 @@ class CreateAnimeRatingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('anime_rating', function (Blueprint $table) {
+        Schema::create(AnimeRating::TABLE_NAME, function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
@@ -34,6 +35,6 @@ class CreateAnimeRatingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('anime_rating');
+        Schema::dropIfExists(AnimeRating::TABLE_NAME);
     }
 }

@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class ForumSection extends Model
 {
     // Table name
-    protected $table = 'forum_section';
+    const TABLE_NAME = 'forum_section';
+    protected $table = self::TABLE_NAME;
 
     // Fillable columns
     protected $fillable = ['name', 'icon', 'locked'];

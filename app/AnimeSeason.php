@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class AnimeSeason extends Model
 {
     // Table name
-    protected $table = 'anime_season';
+    const TABLE_NAME = 'anime_season';
+    protected $table = self::TABLE_NAME;
 
     // Fillable columns
     protected $fillable = ['anime_id', 'number', 'title'];
