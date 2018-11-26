@@ -6,8 +6,11 @@
 
 namespace App\Helpers;
 
+use App\Providers\AppServiceProvider;
+use Illuminate\Support\Facades\Config;
+
 /**
-    Class to generate and show/echo a JSON response
+    * Class to generate and show/echo a JSON response
 **/
 class JSONResult {
     const ERROR_SESSION_REJECTED = 'The server rejected your session. Please restart the app to solve this issue.';
@@ -39,7 +42,10 @@ class JSONResult {
     public function show($doDie = true) {
         header('Content-Type: application/json');
 
-        $printArr = ['success' => $this->success];
+        $printArr = [
+            'success'       => $this->success,
+            'query_count'   => Config::get(AppServiceProvider::$queryCountConfigKey)
+        ];
 
         if(!$this->success && strlen($this->errorMessage))
             $printArr['error_message'] = $this->errorMessage;
