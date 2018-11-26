@@ -25,7 +25,8 @@ class Anime extends Model
     const MINIMUM_RATINGS_REQUIRED = 30;
 
     // Table name
-    protected $table = 'anime';
+    const TABLE_NAME = 'anime';
+    protected $table = self::TABLE_NAME;
 
     // Fillable columns
     protected $fillable = [

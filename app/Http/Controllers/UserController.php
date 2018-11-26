@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Anime;
 use App\Helpers\JSONResult;
 use App\Helpers\KuroMail;
 use App\PasswordReset;
@@ -11,6 +12,7 @@ use App\LoginAttempt;
 use App\UserLibrary;
 use App\UserNotification;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Validator;
 use Illuminate\Http\Request;
 
@@ -373,20 +375,30 @@ class UserController extends Controller
         if($foundStatus == null)
             (new JSONResult())->setError('The given status is not a valid one.')->show();
 
-        // Retrieve the user's library items for that status
-        $rawLibraryItems = UserLibrary::where([
-            ['user_id', '=', $givenUserID],
-            ['status',  '=', $foundStatus]
-        ])->get();
+        /*
+         * Selects the necessary data from the Anime that are ..
+         * .. in the user's library, that match the given status
+         */
+        $columnsToSelect = [
+            Anime::TABLE_NAME . '.id',
+            Anime::TABLE_NAME . '.title',
+            Anime::TABLE_NAME . '.episode_count',
+            Anime::TABLE_NAME . '.average_rating',
+            Anime::TABLE_NAME . '.cached_poster_thumbnail AS poster_thumbnail',
+            Anime::TABLE_NAME . '.cached_background_thumbnail AS background_thumbnail'
+        ];
 
-        $libraryItems = [];
+        $animeInfo = DB::table(Anime::TABLE_NAME)
+            ->join('user_library', function ($join) {
+                $join->on(Anime::TABLE_NAME . '.id', '=', UserLibrary::TABLE_NAME . '.anime_id');
+            })
+            ->where([
+                [UserLibrary::TABLE_NAME . '.user_id', '=', $givenUserID],
+                [UserLibrary::TABLE_NAME . '.status',  '=', $foundStatus]
+            ])
+            ->get($columnsToSelect);
 
-        foreach($rawLibraryItems as $rawLibraryItem)
-            $libraryItems[] = $rawLibraryItem->formatForResponse();
-
-        (new JSONResult())->setData([
-            'library' => $libraryItems
-        ])->show();
+        (new JSONResult())->setData(['anime' => $animeInfo])->show();
     }
 
     /**
