@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @author Musa Semou <mussesemou99@gmail.com>
- */
-
 namespace App\Helpers;
 
 use \SendGrid\Mail;

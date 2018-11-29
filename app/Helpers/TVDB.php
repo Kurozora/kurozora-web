@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @author Musa Semou <mussesemou99@gmail.com>
- */
-
 class TVDB {
     // Base TVDB API URL
     const API_URL = 'https://api.thetvdb.com';
