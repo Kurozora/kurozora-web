@@ -1,44 +1,50 @@
 <?php
 
-/**
- * @author Musa Semou <mussesemou99@gmail.com>
- */
-
 namespace App\Helpers;
 
 use App\Providers\AppServiceProvider;
 use Illuminate\Support\Facades\Config;
 
-/**
-    * Class to generate and show/echo a JSON response
-**/
 class JSONResult {
+    // Error messages
     const ERROR_SESSION_REJECTED = 'The server rejected your session. Please restart the app to solve this issue.';
 
     private $success = true;
     private $errorMessage;
     private $data = [];
 
+
     /**
-        Sets this JSON result to be an error, with a specified message
-    **/
+     * Sets this JSON result to be an error, with a specified message
+     *
+     * @param string $message
+     * @return $this
+     */
     public function setError($message = '') {
         $this->success = false;
         $this->errorMessage = $message;
         return $this;
     }
 
+
     /**
-        Sets the data for this JSON result. Only to be used when success.
-    **/
+     * Sets the data for this JSON result. Only to be used when success.
+     *
+     * @param $dataArr
+     * @return $this
+     */
     public function setData($dataArr) {
         $this->data = $dataArr;
         return $this;
     }
 
+
     /**
-        Prints out the JSON result to the output feed.
-    **/
+     * Prints out the JSON result to the output feed.
+     *
+     * @param bool $doDie
+     * @return $this
+     */
     public function show($doDie = true) {
         header('Content-Type: application/json');
 
