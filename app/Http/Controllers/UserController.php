@@ -160,7 +160,7 @@ class UserController extends Controller
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'session_secret'    => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
-            'user_id'           => 'bail|required|numeric|exists:user,id'
+            'user_id'           => 'bail|required|numeric|exists:' . User::TABLE_NAME . ',id'
         ]);
 
         // Display an error if validation failed
@@ -198,7 +198,7 @@ class UserController extends Controller
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'session_secret'        => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
-            'user_id'               => 'bail|required|numeric|exists:user,id'
+            'user_id'               => 'bail|required|numeric|exists:' . User::TABLE_NAME . ',id'
         ]);
 
         // Fetch the variables

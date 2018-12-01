@@ -157,6 +157,9 @@ class User extends Model
      * @return bool
      */
     public static function authenticateSession($userID, $sessionSecret) {
+        // Parse to int
+        $userID = (int) $userID;
+
         // Find the session
         $foundSession = Session::where([
             ['user_id', '=', $userID],
