@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -23,6 +24,24 @@ class User extends Model
 
     // Fillable columns
     protected $fillable = ['username', 'email', 'password', 'email_confirmation_id', 'avatar'];
+
+    /**
+     * Returns a list of badges that the user has assigned to them
+     *
+     * @return array
+     */
+    public function getBadges() {
+        $badgeInfo = Badge::
+            join(UserBadge::TABLE_NAME, function ($join) {
+                $join->on(UserBadge::TABLE_NAME . '.badge_id', '=', Badge::TABLE_NAME . '.id');
+            })
+            ->where([
+                [UserBadge::TABLE_NAME . '.user_id', '=', $this->id]
+            ])
+            ->get();
+
+        return $badgeInfo;
+    }
 
     /**
      * Returns the amount of followers the user has

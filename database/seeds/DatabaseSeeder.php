@@ -14,5 +14,6 @@ class DatabaseSeeder extends Seeder
         $this->call(AnimesTableDummySeeder::class);
         $this->call(UsersTableSeeder::class);
         $this->call(ForumSectionSeeder::class);
+        $this->call(BadgeSeeder::class);
     }
 }

@@ -220,6 +220,13 @@ class UserController extends Controller
         if(!$profileUser)
             (new JSONResult())->setError('This user does not exist.')->show();
 
+        // Get their badges
+        $badges = [];
+        $rawBadges = $profileUser->getBadges();
+
+        foreach($rawBadges as $rawBadge)
+            $badges[] = $rawBadge->formatForResponse();
+
         // Show profile response
         (new JSONResult())->setData([
             'profile' => [
@@ -229,7 +236,8 @@ class UserController extends Controller
                 'banner_url'        => $profileUser->banner,
                 'follower_count'    => $profileUser->getFollowerCount(),
                 'following_count'   => $profileUser->getFollowingCount(),
-                'reputation_count'  => $profileUser->getReputationCount()
+                'reputation_count'  => $profileUser->getReputationCount(),
+                'badges'            => $badges
             ]
         ])->show();
     }
@@ -389,7 +397,7 @@ class UserController extends Controller
         ];
 
         $animeInfo = DB::table(Anime::TABLE_NAME)
-            ->join('user_library', function ($join) {
+            ->join(UserLibrary::TABLE_NAME, function ($join) {
                 $join->on(Anime::TABLE_NAME . '.id', '=', UserLibrary::TABLE_NAME . '.anime_id');
             })
             ->where([
