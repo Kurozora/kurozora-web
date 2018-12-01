@@ -13,6 +13,11 @@ class Badge extends Model
     // Fillable columns
     protected $fillable = ['text', 'textColor', 'backgroundColor', 'description'];
 
+    /**
+     * Formats the badge for a JSON response
+     *
+     * @return array
+     */
     public function formatForResponse() {
         return [
             'id'                => $this->id,
