@@ -14,12 +14,13 @@ use App\UserLibrary;
 use App\UserNotification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Pusher\Pusher;
+use Pusher\PusherException;
 use Validator;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-
     /**
      * Registers a new user
      *
@@ -305,6 +306,67 @@ class UserController extends Controller
     }
 
     /**
+     * Matches the given details and checks whether or not the user has
+     * access to a private user channel for Pusher
+     *
+     * @param Request $request
+     * @return string
+     * @throws PusherException
+     */
+    public function authenticateChannel(Request $request) {
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'session_secret'        => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
+            'user_id'               => 'bail|required|numeric|exists:user,id',
+            'channel_name'          => 'bail|required',
+            'socket_id'             => 'bail|required'
+        ]);
+
+        // Fetch the variables
+        $givenSecret    = $request->input('session_secret');
+        $givenUserID    = $request->input('user_id');
+        $givenChannel   = $request->input('channel_name');
+        $givenSocket    = $request->input('socket_id');
+
+        // Check authentication
+        if($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret)) {
+            return abort(403);
+        }
+
+        // Extract the user ID from the channel
+        $regexText = preg_match('/private-user.([0-9]*)/', $givenChannel, $matches);
+
+        // Invalid channel name
+        if(!$regexText || count($matches) < 2) {
+            return abort(403);
+        }
+
+        // Get the user ID in the channel
+        $channelUserID = (int) $matches[1];
+
+        // Check if this is the channel of the authenticated user
+        if($channelUserID != $givenUserID) {
+            return abort(403);
+        }
+
+        // Create pusher instance
+        $pusher = new Pusher(
+            config('broadcasting.connections.pusher.key'),
+            config('broadcasting.connections.pusher.secret'),
+            config('broadcasting.connections.pusher.app_id'),
+            config('broadcasting.connections.pusher.options')
+        );
+
+        // Authenticate
+        try {
+            return $pusher->socket_auth($givenChannel, $givenSocket);
+        }
+        catch(PusherException $p) {
+            return abort(403);
+        }
+    }
+
+    /**
      * Returns the current active sessions for a user
      *
      * @param Request $request
@@ -313,12 +375,12 @@ class UserController extends Controller
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'session_secret'        => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
-            'user_id'               => 'bail|required|numeric|exists:user,id'
+            'user_id'               => 'bail|required|numeric|exists:' . User::TABLE_NAME . ',id'
         ]);
 
         // Fetch the variables
-        $givenSecret        = $request->input('session_secret');
-        $givenUserID        = $request->input('user_id');
+        $givenSecret = $request->input('session_secret');
+        $givenUserID = $request->input('user_id');
 
         // Check authentication
         if($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret))
@@ -357,7 +419,7 @@ class UserController extends Controller
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'session_secret'    => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
-            'user_id'           => 'bail|required|numeric|exists:user,id',
+            'user_id'           => 'bail|required|numeric|exists:' . User::TABLE_NAME . ',id',
             'status'            => 'bail|required|string'
         ]);
 

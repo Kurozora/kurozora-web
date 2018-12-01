@@ -61,6 +61,6 @@ class NewUserSession implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return ['user.' . $this->userID];
+        return ['private-user.' . $this->userID];
     }
 }

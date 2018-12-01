@@ -19,6 +19,7 @@ Route::group(['middleware' => ['kurozora.useragent'], 'prefix' => 'v1'], functio
         Route::post('/delete_session', 'UserController@deleteSession');
         Route::post('/update_account', 'UserController@updateAccount');
         Route::post('/get_notifications', 'UserController@getNotifications');
+        Route::post('/authenticate_channel', 'UserController@authenticateChannel');
 
         Route::post('/{id}/profile', 'UserController@profile')->where('id', '[0-9]*');
     });
