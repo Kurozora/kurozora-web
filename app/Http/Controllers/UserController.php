@@ -335,7 +335,7 @@ class UserController extends Controller
 
         // Check authentication
         if(!User::authenticateSession($givenUserID, $givenSecret)) {
-            return abort(403, 'Unauthorized action.');
+            return abort(403, 'Could not authenticate your session.');
         }
 
         // Extract the user ID from the channel
