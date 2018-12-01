@@ -330,7 +330,7 @@ class UserController extends Controller
 
         // Check authentication
         if($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret)) {
-            return abort(403);
+            return abort(403, 'Unauthorized action.');
         }
 
         // Extract the user ID from the channel
@@ -338,7 +338,7 @@ class UserController extends Controller
 
         // Invalid channel name
         if(!$regexText || count($matches) < 2) {
-            return abort(403);
+            return abort(403, 'Invalid channel.');
         }
 
         // Get the user ID in the channel
@@ -346,7 +346,7 @@ class UserController extends Controller
 
         // Check if this is the channel of the authenticated user
         if($channelUserID != $givenUserID) {
-            return abort(403);
+            return abort(403, 'Not your channel.');
         }
 
         // Create pusher instance
@@ -362,7 +362,7 @@ class UserController extends Controller
             return $pusher->socket_auth($givenChannel, $givenSocket);
         }
         catch(PusherException $p) {
-            return abort(403);
+            return abort(403, 'Pusher failed to authenticate.');
         }
     }
 
