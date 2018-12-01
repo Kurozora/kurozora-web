@@ -317,7 +317,7 @@ class UserController extends Controller
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'session_secret'        => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
-            'user_id'               => 'bail|required|numeric|exists:user,id',
+            'user_id'               => 'bail|required|numeric|exists:' . User::TABLE_NAME . ',id',
             'channel_name'          => 'bail|required',
             'socket_id'             => 'bail|required'
         ]);
@@ -328,8 +328,13 @@ class UserController extends Controller
         $givenChannel   = $request->input('channel_name');
         $givenSocket    = $request->input('socket_id');
 
+        // Check validator
+        if($validator->fails()) {
+            return abort(403, 'Insufficient parameters: ' . $validator->errors()->first());
+        }
+
         // Check authentication
-        if($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret)) {
+        if(!User::authenticateSession($givenUserID, $givenSecret)) {
             return abort(403, 'Unauthorized action.');
         }
 
