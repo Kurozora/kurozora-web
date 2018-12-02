@@ -39,6 +39,8 @@ class Session extends Model
 
     /**
      * Formats the session for display in the API's list of sessions
+     *
+     * @return array
      */
     public function formatForSessionList() {
         return [
