@@ -27,6 +27,8 @@ class ForumController extends Controller
 
     /**
      * Returns the posts of a section
+     *
+     * @param Request $request
      */
     public function getPosts(Request $request) {
         // Validate the inputs
@@ -83,6 +85,11 @@ class ForumController extends Controller
         ])->show();
     }
 
+    /**
+     * Allows the user to submit a new thread
+     *
+     * @param Request $request
+     */
     public function postThread(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
@@ -118,5 +125,44 @@ class ForumController extends Controller
         ]);
 
         (new JSONResult())->setData(['created_post_id' => $newThread->id])->show();
+    }
+
+    /**
+     * Allows the user to submit a reply to a thread
+     *
+     * @param Request $request
+     */
+    public function postReply(Request $request) {
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'thread_id' => 'bail|required|numeric',
+            'content'   => 'bail|required|min:' . ForumPost::MIN_CONTENT_LENGTH
+        ]);
+
+        // Check validator
+        if($validator->fails())
+            (new JSONResult())->setError($validator->errors()->first())->show();
+
+        // Get variables
+        $givenThreadID = (int) $request->input('thread_id');
+        $givenContent = $request->input('content');
+
+        // Check if the user has already posted within the cooldown period
+        if(ForumPost::testCooldown(false, $request->user_id))
+            (new JSONResult())->setError('You can only post a reply once every ' . ForumPost::COOLDOWN_POST_THREAD . ' seconds.')->show();
+
+        // Check if the supplied thread_id is a thread
+        // @TODO
+
+        // Create the thread
+        /*$newThread = ForumPost::create([
+            'section_id'    => $givenSection,
+            'user_id'       => $request->user_id,
+            'ip'            => $request->ip(),
+            'title'         => $givenTitle,
+            'content'       => $givenContent
+        ]);
+
+        (new JSONResult())->setData(['created_post_id' => $newThread->id])->show();*/
     }
 }
