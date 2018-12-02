@@ -25,7 +25,7 @@ return [
     |
     */
 
-    'ios_bundle_id' => 'app.kurozora.anime',
+    'ios_bundle_id' => ['app.kurozora.anime', 'me.musa11971.anime'],
 
     /*
     |--------------------------------------------------------------------------
