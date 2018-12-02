@@ -16,7 +16,7 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Event' => [
             'App\Listeners\EventListener',
         ],
-        'App\Events\NewUserSession' => [
+        'App\Events\NewUserSessionEvent' => [
             'App\Listeners\SendSessionNotification'
         ]
     ];

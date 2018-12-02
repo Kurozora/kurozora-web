@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\NewUserSession;
+use App\Events\NewUserSessionEvent;
 use App\UserNotification;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -23,10 +23,10 @@ class SendSessionNotification
     /**
      * Handle the event.
      *
-     * @param  NewUserSession  $event
+     * @param  NewUserSessionEvent  $event
      * @return void
      */
-    public function handle(NewUserSession $event)
+    public function handle(NewUserSessionEvent $event)
     {
         // Insert a new user notification
         UserNotification::create([
