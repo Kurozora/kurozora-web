@@ -33,12 +33,15 @@ class CheckKurozoraUserAuthentication
         $givenUserID = $request->input('user_id');
 
         // Check authentication
-        if($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret))
+        $sessionAuthenticate = User::authenticateSession($givenUserID, $givenSecret);
+
+        if($validator->fails() || $sessionAuthenticate === false)
             (new JSONResult())->setError(JSONResult::ERROR_SESSION_REJECTED)->show();
 
         // Add to request
         $request->user_id = (int) $givenUserID;
         $request->session_secret = $givenSecret;
+        $request->session_id = $sessionAuthenticate;
 
         return $next($request);
     }
