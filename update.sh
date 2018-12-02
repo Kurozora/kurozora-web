@@ -14,6 +14,11 @@ echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Dumping autoload..."
 composer dump-autoload --quiet
 echo -e "${BLACK}[${ORANGE}Kurozora${BLACK}] ${LIME}✔ ${NC}Autoload file dumped!"
 
+# Clear laravel config cache
+echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Reloading Laravel config cache..."
+php artisan config:cache
+echo -e "${BLACK}[${ORANGE}Kurozora${BLACK}] ${LIME}✔ ${NC}Config cache reloaded!"
+
 # Migrate fresh
 echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Would you like to run a fresh migration? (y/n): "
 read migrateResponse
