@@ -20,17 +20,19 @@ class UserSessionKilledEvent implements ShouldBroadcast
     public $userID;
     public $sessionID;
     public $reason;
+    public $killerID;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($userID, $sessionID, $reason)
+    public function __construct($userID, $sessionID, $reason, $killerID)
     {
         $this->userID = $userID;
         $this->sessionID = $sessionID;
         $this->reason = $reason;
+        $this->killerID = $killerID;
     }
 
     /**
@@ -54,6 +56,7 @@ class UserSessionKilledEvent implements ShouldBroadcast
             'user_id'       => (int) $this->userID,
             'session_id'    => (int) $this->sessionID,
             'reason'        => $this->reason,
+            'killer_id'    => (int) $this->killerID,
         ];
     }
 
