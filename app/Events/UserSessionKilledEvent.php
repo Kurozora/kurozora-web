@@ -10,24 +10,27 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class NewUserSessionEvent implements ShouldBroadcast
+/*
+ * This event is called when a user's session is destroyed/killed
+ */
+class UserSessionKilledEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $userID;
     public $sessionID;
-    public $ipAddress;
+    public $reason;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($userID, $sessionID, $ipAddress)
+    public function __construct($userID, $sessionID, $reason)
     {
         $this->userID = $userID;
         $this->sessionID = $sessionID;
-        $this->ipAddress = $ipAddress;
+        $this->reason = $reason;
     }
 
     /**
@@ -37,7 +40,7 @@ class NewUserSessionEvent implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return 'session.new';
+        return 'session.killed';
     }
 
     /**
@@ -50,7 +53,7 @@ class NewUserSessionEvent implements ShouldBroadcast
         return [
             'user_id'       => (int) $this->userID,
             'session_id'    => (int) $this->sessionID,
-            'ip'            => $this->ipAddress
+            'reason'        => $this->reason,
         ];
     }
 
