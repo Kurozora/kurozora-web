@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Anime;
-use App\Events\NewUserSession;
+use App\Events\NewUserSessionEvent;
 use App\Helpers\JSONResult;
 use App\Helpers\KuroMail;
 use App\PasswordReset;
@@ -142,7 +142,7 @@ class UserController extends Controller
         ]);
 
         // Fire event
-        event(new NewUserSession($foundUser->id, $newSession->id, $loginIPAddress));
+        event(new NewUserSessionEvent($foundUser->id, $newSession->id, $loginIPAddress));
 
         // Show a successful response
         (new JSONResult())->setData([
