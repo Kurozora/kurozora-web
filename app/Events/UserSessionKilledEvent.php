@@ -20,19 +20,19 @@ class UserSessionKilledEvent implements ShouldBroadcast
     public $userID;
     public $sessionID;
     public $reason;
-    public $killerID;
+    public $killerSessionID;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($userID, $sessionID, $reason, $killerID)
+    public function __construct($userID, $sessionID, $reason, $killerSessionID)
     {
         $this->userID = $userID;
         $this->sessionID = $sessionID;
         $this->reason = $reason;
-        $this->killerID = $killerID;
+        $this->killerSessionID = $killerSessionID;
     }
 
     /**
@@ -53,10 +53,10 @@ class UserSessionKilledEvent implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'user_id'       => (int) $this->userID,
-            'session_id'    => (int) $this->sessionID,
-            'reason'        => $this->reason,
-            'killer_id'    => (int) $this->killerID,
+            'user_id'           => (int) $this->userID,
+            'session_id'        => (int) $this->sessionID,
+            'reason'            => $this->reason,
+            'killer_session_id' => (int) $this->killerSessionID,
         ];
     }
 

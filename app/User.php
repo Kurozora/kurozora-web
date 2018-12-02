@@ -177,6 +177,6 @@ class User extends Model
         }
 
         // All valid
-        return true;
+        return $foundSession->id;
     }
 }
