@@ -2,10 +2,8 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
+use App\Session;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -14,20 +12,16 @@ class NewUserSessionEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $userID;
-    public $sessionID;
-    public $ipAddress;
+    public $sessionObj;
 
     /**
      * Create a new event instance.
      *
-     * @return void
+     * @param Session $session
      */
-    public function __construct($userID, $sessionID, $ipAddress)
+    public function __construct(Session $session)
     {
-        $this->userID = $userID;
-        $this->sessionID = $sessionID;
-        $this->ipAddress = $ipAddress;
+        $this->sessionObj = $session;
     }
 
     /**
@@ -47,11 +41,7 @@ class NewUserSessionEvent implements ShouldBroadcast
      */
     public function broadcastWith()
     {
-        return [
-            'user_id'       => (int) $this->userID,
-            'session_id'    => (int) $this->sessionID,
-            'ip'            => $this->ipAddress
-        ];
+        return $this->sessionObj->formatForSessionList();
     }
 
     /**
@@ -61,6 +51,6 @@ class NewUserSessionEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return ['private-user.' . $this->userID];
+        return ['private-user.' . $this->sessionObj->user_id];
     }
 }

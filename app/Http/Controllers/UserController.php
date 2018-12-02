@@ -142,7 +142,7 @@ class UserController extends Controller
         ]);
 
         // Fire event
-        event(new NewUserSessionEvent($foundUser->id, $newSession->id, $loginIPAddress));
+        event(new NewUserSessionEvent($newSession));
 
         // Show a successful response
         (new JSONResult())->setData([

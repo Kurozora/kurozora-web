@@ -30,11 +30,11 @@ class SendSessionNotification
     {
         // Insert a new user notification
         UserNotification::create([
-            'user_id'   => $event->userID,
+            'user_id'   => $event->sessionObj->user_id,
             'type'      => UserNotification::TYPE_NEW_SESSION,
             'data'      => json_encode([
-                'ip'            => $event->ipAddress,
-                'session_id'    => $event->userID
+                'ip'            => $event->sessionObj->ip,
+                'session_id'    => $event->sessionObj->id
             ])
         ]);
     }
