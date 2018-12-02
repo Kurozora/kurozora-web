@@ -170,7 +170,7 @@ class UserController extends Controller
             (new JSONResult())->setError('An error occurred. Please reach out to an administrator.')->show();
 
         // Fire event
-        event(new UserSessionKilledEvent($request->user_id, $foundSession->id, 'Session logged out.'));
+        event(new UserSessionKilledEvent($request->user_id, $foundSession->id, 'Session logged out.', $request->user_id));
 
         // Delete the session
         $foundSession->delete();
@@ -518,7 +518,7 @@ class UserController extends Controller
             (new JSONResult())->setError($validator->errors()->first())->show();
 
         // Fire event
-        event(new UserSessionKilledEvent($request->user_id, $delSessionID, 'Session killed manually by user.'));
+        event(new UserSessionKilledEvent($request->user_id, $delSessionID, 'Session killed manually by user.', $request->user_id));
 
         // Delete the session
         Session::destroy($delSessionID);
