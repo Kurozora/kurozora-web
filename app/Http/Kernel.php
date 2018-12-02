@@ -60,5 +60,6 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'kurozora.useragent' => \App\Http\Middleware\CheckKurozoraUserAgent::class,
+        'kurozora.userauth' => \App\Http\Middleware\CheckKurozoraUserAuthentication::class,
     ];
 }

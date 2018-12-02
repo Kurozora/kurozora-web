@@ -70,22 +70,11 @@ class AnimeController extends Controller
 
     /**
      * Returns detailed information about an Anime
+     *
+     * @param Request $request
+     * @param $animeID
      */
     public function detailsAnime(Request $request, $animeID) {
-    	// Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'session_secret'    => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
-            'user_id'           => 'bail|required|numeric|exists:' . User::TABLE_NAME . ',id'
-        ]);
-
-        // Fetch the variables
-        $givenSecret    = $request->input('session_secret');
-        $givenUserID    = $request->input('user_id');
-
-        // Check authentication
-        if($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret))
-            (new JSONResult())->setError('The server rejected your credentials. Please restart the app.')->show();
-
         $anime = Anime::find($animeID);
 
         // The Anime item does not exist
@@ -96,7 +85,7 @@ class AnimeController extends Controller
         $userRating = 0.0;
 
         $foundRating = AnimeRating::where([
-        	['user_id' ,  '=', $givenUserID],
+        	['user_id' ,  '=', $request->user_id],
         	['anime_id' , '=', $anime->id]
         ])->first();
 
@@ -106,7 +95,7 @@ class AnimeController extends Controller
         $currentLibraryStatus = UserLibrary::getStringFromStatus(UserLibrary::STATUS_UNKNOWN);
 
         $foundLibraryStatus = UserLibrary::where([
-            ['user_id' ,  '=', $givenUserID],
+            ['user_id' ,  '=', $request->user_id],
             ['anime_id' , '=', $anime->id]
         ])->first();
 
@@ -147,7 +136,7 @@ class AnimeController extends Controller
      *
      * @param $animeID
      */
-    public function actorsAnime($animeID, Request $request) {
+    public function actorsAnime($animeID) {
         $anime = Anime::find($animeID);
 
         // The Anime item does not exist
@@ -171,10 +160,9 @@ class AnimeController extends Controller
     /**
      * Returns season information for an Anime
      *
-     * @param Request $request
      * @param int $animeID
      */
-    public function seasonsAnime(Request $request, $animeID)
+    public function seasonsAnime($animeID)
     {
         // Get the Anime
         $anime = Anime::find($animeID);
@@ -238,8 +226,6 @@ class AnimeController extends Controller
     public function rateAnime(Request $request, $animeID) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'session_secret' => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
-            'user_id' => 'bail|required|numeric|exists:' . User::TABLE_NAME . ',id',
             'rating' => 'bail|required|numeric|between:' . AnimeRating::MIN_RATING_VALUE . ',' . AnimeRating::MAX_RATING_VALUE
         ]);
 
@@ -251,13 +237,7 @@ class AnimeController extends Controller
             (new JSONResult())->setError('The anime you are trying to rate was not found.')->show();
 
         // Fetch the variables
-        $givenSecret = $request->input('session_secret');
-        $givenUserID = $request->input('user_id');
         $givenRating = $request->input('rating');
-
-        // Check session
-        if(!User::authenticateSession($givenUserID, $givenSecret))
-            (new JSONResult())->setError('The server rejected your session. Please restart the app.')->show();
 
         // Check validator
         if ($validator->fails())
@@ -266,7 +246,7 @@ class AnimeController extends Controller
         // Try to modify the rating if it already exists
         $foundRating = AnimeRating::where([
             ['anime_id', '=', $anime->id],
-            ['user_id', '=', $givenUserID]
+            ['user_id', '=', $request->user_id]
         ])->first();
 
         // The rating exists
@@ -286,7 +266,7 @@ class AnimeController extends Controller
             if($givenRating > 0) {
                 AnimeRating::create([
                     'anime_id' => $anime->id,
-                    'user_id' => $givenUserID,
+                    'user_id' => $request->user_id,
                     'rating' => $givenRating
                 ]);
             }

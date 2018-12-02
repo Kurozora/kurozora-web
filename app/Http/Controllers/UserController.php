@@ -15,7 +15,6 @@ use App\UserLibrary;
 use App\UserNotification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Pusher\Pusher;
 use Pusher\PusherException;
 use PusherHelper;
 use Validator;
@@ -160,24 +159,10 @@ class UserController extends Controller
      * @param Request $request
      */
     public function logout(Request $request) {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'session_secret'    => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
-            'user_id'           => 'bail|required|numeric|exists:' . User::TABLE_NAME . ',id'
-        ]);
-
-        // Display an error if validation failed
-        if($validator->fails())
-            (new JSONResult())->setError('Failed to log out. Please restart the app.')->show();
-
-        // Fetch the variables
-        $givenSecret    = $request->input('session_secret');
-        $givenUserID    = $request->input('user_id');
-
         // Find the session
         $foundSession = Session::where([
-            ['user_id', '=', $givenUserID],
-            ['secret',  '=', $givenSecret]
+            ['user_id', '=', $request->user_id],
+            ['secret',  '=', $request->session_secret]
         ])->first();
 
         // Check if any session was found
@@ -185,7 +170,7 @@ class UserController extends Controller
             (new JSONResult())->setError('An error occurred. Please reach out to an administrator.')->show();
 
         // Fire event
-        event(new UserSessionKilledEvent($givenUserID, $foundSession->id, 'Session logged out.'));
+        event(new UserSessionKilledEvent($request->user_id, $foundSession->id, 'Session logged out.'));
 
         // Delete the session
         $foundSession->delete();
@@ -201,20 +186,6 @@ class UserController extends Controller
      * @param $id
      */
     public function profile(Request $request, $id) {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'session_secret'        => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
-            'user_id'               => 'bail|required|numeric|exists:' . User::TABLE_NAME . ',id'
-        ]);
-
-        // Fetch the variables
-        $givenSecret        = $request->input('session_secret');
-        $givenUserID        = $request->input('user_id');
-
-        // Check authentication
-        if($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret))
-            (new JSONResult())->setError(JSONResult::ERROR_SESSION_REJECTED)->show();
-
         // Check if this user profile exists
         $profileUser = User::find($id);
 
@@ -322,26 +293,17 @@ class UserController extends Controller
     public function authenticateChannel(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'session_secret'        => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
-            'user_id'               => 'bail|required|numeric|exists:' . User::TABLE_NAME . ',id',
             'channel_name'          => 'bail|required',
             'socket_id'             => 'bail|required'
         ]);
 
         // Fetch the variables
-        $givenSecret    = $request->input('session_secret');
-        $givenUserID    = $request->input('user_id');
         $givenChannel   = $request->input('channel_name');
         $givenSocket    = $request->input('socket_id');
 
         // Check validator
         if($validator->fails()) {
-            return abort(403, 'Insufficient parameters: ' . $validator->errors()->first());
-        }
-
-        // Check authentication
-        if(!User::authenticateSession($givenUserID, $givenSecret)) {
-            return abort(403, 'Could not authenticate your session.');
+            return abort(403, $validator->errors()->first());
         }
 
         // Extract the user ID from the channel
@@ -356,7 +318,7 @@ class UserController extends Controller
         $channelUserID = (int) $matches[1];
 
         // Check if this is the channel of the authenticated user
-        if($channelUserID != $givenUserID) {
+        if($channelUserID != $request->user_id) {
             return abort(403, 'Not your channel.');
         }
 
@@ -378,25 +340,11 @@ class UserController extends Controller
      * @param Request $request
      */
     public function getSessions(Request $request) {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'session_secret'        => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
-            'user_id'               => 'bail|required|numeric|exists:' . User::TABLE_NAME . ',id'
-        ]);
-
-        // Fetch the variables
-        $givenSecret = $request->input('session_secret');
-        $givenUserID = $request->input('user_id');
-
-        // Check authentication
-        if($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret))
-            (new JSONResult())->setError(JSONResult::ERROR_SESSION_REJECTED)->show();
-
         // Get the other sessions and put them in an array
         $otherSessions = [];
         $sessions = Session::where([
-            ['user_id', '=',    $givenUserID],
-            ['secret',  '!=',   $givenSecret]
+            ['user_id', '=',    $request->user_id],
+            ['secret',  '!=',   $request->session_secret]
         ])->get();
 
         foreach($sessions as $session)
@@ -404,8 +352,8 @@ class UserController extends Controller
 
         // Get the current session
         $curSession = Session::where([
-            ['user_id', '=',    $givenUserID],
-            ['secret',  '=',    $givenSecret]
+            ['user_id', '=',    $request->user_id],
+            ['secret',  '=',    $request->session_secret]
         ])->first();
 
         $curSession = $curSession->formatForSessionList();
@@ -424,18 +372,12 @@ class UserController extends Controller
     public function getLibrary(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'session_secret'    => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
-            'user_id'           => 'bail|required|numeric|exists:' . User::TABLE_NAME . ',id',
             'status'            => 'bail|required|string'
         ]);
 
-        // Fetch the variables
-        $givenSecret = $request->input('session_secret');
-        $givenUserID = $request->input('user_id');
-
-        // Check authentication
-        if($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret))
-            (new JSONResult())->setError(JSONResult::ERROR_SESSION_REJECTED)->show();
+        // Check validator
+        if($validator->fails())
+            (new JSONResult())->setError($validator->errors()->first())->show();
 
         $givenStatus = $request->input('status');
 
@@ -463,7 +405,7 @@ class UserController extends Controller
                 $join->on(Anime::TABLE_NAME . '.id', '=', UserLibrary::TABLE_NAME . '.anime_id');
             })
             ->where([
-                [UserLibrary::TABLE_NAME . '.user_id', '=', $givenUserID],
+                [UserLibrary::TABLE_NAME . '.user_id', '=', $request->user_id],
                 [UserLibrary::TABLE_NAME . '.status',  '=', $foundStatus]
             ])
             ->get($columnsToSelect);
@@ -479,19 +421,13 @@ class UserController extends Controller
     public function addLibrary(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'session_secret'    => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
-            'user_id'           => 'bail|required|numeric|exists:user,id',
             'anime_id'          => 'bail|required|numeric|exists:anime,id',
             'status'            => 'bail|required|string'
         ]);
 
-        // Fetch the variables
-        $givenSecret = $request->input('session_secret');
-        $givenUserID = $request->input('user_id');
-
-        // Check authentication
-        if($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret))
-            (new JSONResult())->setError(JSONResult::ERROR_SESSION_REJECTED)->show();
+        // Check validator
+        if($validator->fails())
+            (new JSONResult())->setError($validator->errors()->first())->show();
 
         $givenAnimeID = $request->input('anime_id');
         $givenStatus = $request->input('status');
@@ -504,7 +440,7 @@ class UserController extends Controller
 
         // Check if this user already has the Anime in their library
         $oldLibraryItem = UserLibrary::where([
-            ['user_id',     '=',    $givenUserID],
+            ['user_id',     '=',    $request->user_id],
             ['anime_id',    '=',    $givenAnimeID]
         ])->first();
 
@@ -518,7 +454,7 @@ class UserController extends Controller
         // Add a new library item
         else {
             UserLibrary::create([
-                'user_id'   => $givenUserID,
+                'user_id'   => $request->user_id,
                 'anime_id'  => $givenAnimeID,
                 'status'    => $foundStatus
             ]);
@@ -536,24 +472,18 @@ class UserController extends Controller
     public function removeLibrary(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'session_secret'    => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
-            'user_id'           => 'bail|required|numeric|exists:user,id',
             'anime_id'          => 'bail|required|numeric|exists:anime,id'
         ]);
 
-        // Fetch the variables
-        $givenSecret = $request->input('session_secret');
-        $givenUserID = $request->input('user_id');
-
-        // Check authentication
-        if($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret))
-            (new JSONResult())->setError(JSONResult::ERROR_SESSION_REJECTED)->show();
+        // Check validator
+        if($validator->fails())
+            (new JSONResult())->setError($validator->errors()->first())->show();
 
         $givenAnimeID = $request->input('anime_id');
 
         // Find the Anime in their library
         $foundAnime = UserLibrary::where([
-            ['user_id',     '=',    $givenUserID],
+            ['user_id',     '=',    $request->user_id],
             ['anime_id',    '=',    $givenAnimeID]
         ])->first();
 
@@ -577,22 +507,18 @@ class UserController extends Controller
     public function deleteSession(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'session_secret' => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
-            'user_id' => 'bail|required|numeric|exists:user,id',
             'del_session_id' => 'bail|required|numeric|exists:' . Session::TABLE_NAME . ',id'
         ]);
 
         // Fetch the variables
-        $givenSecret = $request->input('session_secret');
-        $givenUserID = $request->input('user_id');
         $delSessionID = $request->input('del_session_id');
 
-        // Check authentication
-        if ($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret))
-            (new JSONResult())->setError('The server rejected your credentials. Please restart the app.')->show();
+        // Check validator
+        if($validator->fails())
+            (new JSONResult())->setError($validator->errors()->first())->show();
 
         // Fire event
-        event(new UserSessionKilledEvent($givenUserID, $delSessionID, 'Session killed manually by user.'));
+        event(new UserSessionKilledEvent($request->user_id, $delSessionID, 'Session killed manually by user.'));
 
         // Delete the session
         Session::destroy($delSessionID);
@@ -677,22 +603,8 @@ class UserController extends Controller
      * @param Request $request
      */
     public function getNotifications(Request $request) {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'session_secret'    => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
-            'user_id'           => 'bail|required|numeric|exists:user,id'
-        ]);
-
-        // Fetch the variables
-        $givenSecret    = $request->input('session_secret');
-        $givenUserID    = $request->input('user_id');
-
-        // Check authentication
-        if($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret))
-            (new JSONResult())->setError('The server rejected your credentials. Please restart the app.')->show();
-
         // Get their notifications
-        $rawNotifications = UserNotification::where('user_id', $givenUserID)
+        $rawNotifications = UserNotification::where('user_id', $request->user_id)
             ->orderBy('created_at', 'DESC')
             ->get();
 
