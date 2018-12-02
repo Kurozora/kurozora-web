@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Anime;
 use App\Events\NewUserSessionEvent;
+use App\Events\UserSessionKilledEvent;
 use App\Helpers\JSONResult;
 use App\Helpers\KuroMail;
 use App\PasswordReset;
@@ -181,6 +182,9 @@ class UserController extends Controller
         // Check if any session was found
         if(!$foundSession)
             (new JSONResult())->setError('An error occurred. Please reach out to an administrator.')->show();
+
+        // Fire event
+        event(new UserSessionKilledEvent($givenUserID, $foundSession->id, 'Session logged out.'));
 
         // Delete the session
         $foundSession->delete();
@@ -585,6 +589,9 @@ class UserController extends Controller
         // Check authentication
         if ($validator->fails() || !User::authenticateSession($givenUserID, $givenSecret))
             (new JSONResult())->setError('The server rejected your credentials. Please restart the app.')->show();
+
+        // Fire event
+        event(new UserSessionKilledEvent($givenUserID, $delSessionID, 'Session killed manually by user.'));
 
         // Delete the session
         Session::destroy($delSessionID);

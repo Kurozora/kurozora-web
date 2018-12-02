@@ -18,7 +18,8 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\NewUserSessionEvent' => [
             'App\Listeners\SendSessionNotification'
-        ]
+        ],
+        'App\Events\UserSessionKilledEvent' => []
     ];
 
     /**
