@@ -18,11 +18,12 @@ class CheckKurozoraUserAgent
         // Check if the user agent is sufficient
         $userAgent = $request->server('HTTP_USER_AGENT');
 
-        if(!str_contains($userAgent, config('app.ios_bundle_id'))) {
-            return abort(403, 'Unauthorized bearer.');
+        // Loop through bundle IDs
+        foreach(config('app.ios_bundle_id') as $bundleID) {
+            if(str_contains($userAgent, $bundleID))
+                return next($request);
         }
 
-        // Continue with the request
-        return $next($request);
+        return abort(403, 'Unauthorized bearer.');
     }
 }
