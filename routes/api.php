@@ -41,6 +41,7 @@ Route::group(['middleware' => ['kurozora.useragent'], 'prefix' => 'v1'], functio
     Route::prefix('/forum')->group(function() {
         Route::get('/get_sections', 'ForumController@getSections');
         Route::post('/get_posts', 'ForumController@getPosts');
+        Route::post('/post_thread', 'ForumController@postThread')->middleware('kurozora.userauth');
     });
 
     Route::prefix('/misc')->group(function() {
