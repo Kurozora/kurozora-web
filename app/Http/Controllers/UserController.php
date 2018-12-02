@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Pusher\Pusher;
 use Pusher\PusherException;
+use PusherHelper;
 use Validator;
 use Illuminate\Http\Request;
 
@@ -355,20 +356,15 @@ class UserController extends Controller
         }
 
         // Create pusher instance
-        $pusher = new Pusher(
-            config('broadcasting.connections.pusher.key'),
-            config('broadcasting.connections.pusher.secret'),
-            config('broadcasting.connections.pusher.app_id'),
-            config('broadcasting.connections.pusher.options')
-        );
+        $pusher = new PusherHelper();
 
         // Authenticate
-        try {
-            return $pusher->socket_auth($givenChannel, $givenSocket);
-        }
-        catch(PusherException $p) {
+        $authentication = $pusher->socketAuth($givenChannel, $givenSocket);
+
+        if($authentication == null) {
             return abort(403, 'Pusher failed to authenticate.');
         }
+        else return $authentication;
     }
 
     /**
