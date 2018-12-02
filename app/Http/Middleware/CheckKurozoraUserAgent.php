@@ -20,8 +20,9 @@ class CheckKurozoraUserAgent
 
         // Loop through bundle IDs
         foreach(config('app.ios_bundle_id') as $bundleID) {
-            if(str_contains($userAgent, $bundleID))
-                return next($request);
+            if(str_contains($userAgent, $bundleID)) {
+                return $next($request);
+            }
         }
 
         return abort(403, 'Unauthorized bearer.');
