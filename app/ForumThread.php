@@ -19,7 +19,7 @@ class ForumThread extends Model
     const MIN_CONTENT_LENGTH = 5;
 
     // A user can post a thread once every {?} seconds
-    const COOLDOWN_POST_THREAD = 500;
+    const COOLDOWN_POST_THREAD = 60;
 
     /**
      * Returns the amount of replies in this thread

@@ -134,7 +134,7 @@ class ForumController extends Controller
 
         // Check if the user has already posted within the cooldown period
         if(ForumThread::testPostCooldown($request->user_id))
-            (new JSONResult())->setError('You can only post a thread once every ' . ForumThread::COOLDOWN_POST_THREAD . ' seconds.')->show();
+            (new JSONResult())->setError('You can only post a thread once every minute.')->show();
 
         // Create the thread
         $newThread = ForumThread::create([
