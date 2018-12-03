@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ForumReply;
 use App\ForumSectionBan;
 use App\ForumThread;
 use App\ForumSection;
@@ -147,22 +148,22 @@ class ForumController extends Controller
         $givenThreadID = (int) $request->input('thread_id');
         $givenContent = $request->input('content');
 
+        // Check if the given thread is a valid one
+        if(!ForumThread::where('id', $givenThreadID)->where('locked', false)->exists())
+            (new JSONResult())->setError(JSONResult::ERROR_CANNOT_POST_IN_THREAD)->show();
+
         // Check if the user has already posted within the cooldown period
-        if(ForumThread::testCooldown(false, $request->user_id))
-            (new JSONResult())->setError('You can only post a reply once every ' . ForumThread::COOLDOWN_POST_THREAD . ' seconds.')->show();
+        if(ForumReply::testPostCooldown($request->user_id))
+            (new JSONResult())->setError('You can only post a reply once every ' . ForumReply::COOLDOWN_POST_REPLY . ' seconds.')->show();
 
-        // Check if the supplied thread_id is a thread
-        // @TODO
-
-        // Create the thread
-        /*$newThread = ForumPost::create([
-            'section_id'    => $givenSection,
+        // Create the reply
+        $newReply = ForumReply::create([
+            'thread_id'     => $givenThreadID,
             'user_id'       => $request->user_id,
             'ip'            => $request->ip(),
-            'title'         => $givenTitle,
             'content'       => $givenContent
         ]);
 
-        (new JSONResult())->setData(['created_post_id' => $newThread->id])->show();*/
+        (new JSONResult())->setData(['reply_id' => $newReply->id])->show();
     }
 }

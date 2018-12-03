@@ -22,6 +22,15 @@ class ForumThread extends Model
     const COOLDOWN_POST_THREAD = 500;
 
     /**
+     * Returns the amount of replies in this thread
+     *
+     * @return int
+     */
+    public function getReplyCount() {
+        return (int) ForumReply::where('thread_id', $this->id)->count();
+    }
+
+    /**
      * Formats the post for a response
      *
      * @return array
@@ -32,6 +41,7 @@ class ForumThread extends Model
             'user_id'       => $this->user_id,
             'title'         => $this->title,
             'content'       => $this->content,
+            'reply_count'   => $this->getReplyCount()
         ];
     }
 
