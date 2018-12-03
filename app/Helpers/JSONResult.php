@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Config;
 class JSONResult {
     // Error messages
     const ERROR_SESSION_REJECTED = 'The server rejected your session. Please restart the app to solve this issue.';
+    const ERROR_CANNOT_POST_IN_THREAD = 'You cannot post in this thread.';
+
 
     private $success = true;
     private $errorMessage;

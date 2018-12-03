@@ -1,0 +1,44 @@
+<?php
+
+use App\ForumReply;
+use App\ForumThread;
+use App\User;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateForumRepliesTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create(ForumReply::TABLE_NAME, function (Blueprint $table) {
+            $table->increments('id');
+            $table->timestamps();
+            $table->timestamp('edited_at')->nullable()->default(null);
+
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
+
+            $table->integer('thread_id')->unsigned();
+            $table->foreign('thread_id')->references('id')->on(ForumThread::TABLE_NAME)->onDelete('cascade');
+
+            $table->string('ip');
+            $table->text('content');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists(ForumReply::TABLE_NAME);
+    }
+}
