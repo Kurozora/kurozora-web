@@ -15,7 +15,7 @@ class ForumReply extends Model
     protected $fillable = ['user_id', 'thread_id', 'ip', 'content'];
 
     // A user can post a forum reply once every {?} seconds
-    const COOLDOWN_POST_REPLY = 30;
+    const COOLDOWN_POST_REPLY = 10;
 
     /**
      * Checks whether or not the user passes the cooldown check
