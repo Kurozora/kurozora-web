@@ -7,7 +7,9 @@ use App\ForumSectionBan;
 use App\ForumThread;
 use App\ForumSection;
 use App\Helpers\JSONResult;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 class ForumController extends Controller
@@ -48,19 +50,31 @@ class ForumController extends Controller
         if($validator->fails())
             (new JSONResult())->setError($validator->errors()->first())->show();
 
-        // Create where clauses
-        $whereClauses = [
-            ['section_id', '=', $givenSection]
+        // Determine columns to select
+        $columnsToSelect = [
+            ForumThread::TABLE_NAME . '.id AS thread_id',
+            ForumThread::TABLE_NAME . '.title AS title',
+            User::TABLE_NAME . '.username AS username',
+            ForumThread::TABLE_NAME . '.created_at AS creation_date',
+            // Select the reply count via subquery
+            DB::raw('(SELECT COUNT(*) FROM ' . ForumReply::TABLE_NAME . ' WHERE thread_id = ' . ForumThread::TABLE_NAME . '.id) AS reply_count')
         ];
 
-        // Add where clauses
-        $rawThreads = ForumThread::where($whereClauses);
+        // Create query
+        $threadInfo = DB::table(ForumThread::TABLE_NAME)
+            ->select($columnsToSelect)
+            ->join(User::TABLE_NAME, function ($join) {
+                $join->on(ForumThread::TABLE_NAME . '.user_id', '=', User::TABLE_NAME . '.id');
+            })
+            ->where([
+                [ForumThread::TABLE_NAME . '.section_id', '=', $givenSection]
+            ]);
 
         // Add order
         if($givenOrder == 'top')
-            $rawThreads->orderBy('score', 'DESC');
+            $threadInfo->orderBy('score', 'DESC');
         else if($givenOrder == 'recent')
-            $rawThreads->orderBy('created_at', 'DESC');
+            $threadInfo->orderBy('created_at', 'DESC');
 
         // Add page/offset
         $resultsPerPage = 10;
@@ -68,16 +82,22 @@ class ForumController extends Controller
         if($givenPage == null)
             $givenPage = 0;
 
-        $rawThreads->offset($givenPage * $resultsPerPage);
-        $rawThreads->limit($resultsPerPage);
+        $threadInfo->offset($givenPage * $resultsPerPage);
+        $threadInfo->limit($resultsPerPage);
 
         // Get the results
-        $rawThreads = $rawThreads->get();
+        $rawThreads = $threadInfo->get();
 
         $threads = [];
 
         foreach($rawThreads as $rawThread)
-            $threads[] = $rawThread->formatForResponse();
+            $threads[] = [
+                'id'                => $rawThread->thread_id,
+                'title'             => $rawThread->title,
+                'poster_username'   => $rawThread->username,
+                'creation_date'     => $rawThread->creation_date,
+                'reply_count'       => $rawThread->reply_count
+            ];
 
         // Show threads in response
         (new JSONResult())->setData([
