@@ -1,6 +1,6 @@
 <?php
 
-use App\ForumBan;
+use App\ForumSectionBan;
 use App\ForumSection;
 use App\User;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +16,7 @@ class CreateForumBansTable extends Migration
      */
     public function up()
     {
-        Schema::create(ForumBan::TABLE_NAME, function (Blueprint $table) {
+        Schema::create(ForumSectionBan::TABLE_NAME, function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
@@ -35,6 +35,6 @@ class CreateForumBansTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(ForumBan::TABLE_NAME);
+        Schema::dropIfExists(ForumSectionBan::TABLE_NAME);
     }
 }

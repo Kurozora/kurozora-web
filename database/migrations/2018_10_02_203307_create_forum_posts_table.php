@@ -1,6 +1,6 @@
 <?php
 
-use App\ForumPost;
+use App\ForumThread;
 use App\ForumSection;
 use App\User;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +16,7 @@ class CreateForumPostsTable extends Migration
      */
     public function up()
     {
-        Schema::create(ForumPost::TABLE_NAME, function (Blueprint $table) {
+        Schema::create(ForumThread::TABLE_NAME, function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
             $table->timestamp('edited_at')->nullable()->default(null);
@@ -27,13 +27,11 @@ class CreateForumPostsTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
 
-            $table->integer('parent_post')->unsigned()->nullable()->default(null);
-            $table->foreign('parent_post')->references('id')->on(ForumPost::TABLE_NAME)->onDelete('cascade');
-
             $table->string('ip');
             $table->integer('score')->default(0);
             $table->string('title')->nullable()->default(null);
             $table->text('content');
+            $table->boolean('locked')->default(false);
         });
     }
 
@@ -44,6 +42,6 @@ class CreateForumPostsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(ForumPost::TABLE_NAME);
+        Schema::dropIfExists(ForumThread::TABLE_NAME);
     }
 }

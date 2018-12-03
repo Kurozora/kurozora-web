@@ -4,12 +4,11 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use phpDocumentor\Reflection\Types\Boolean;
 
-class ForumPost extends Model
+class ForumThread extends Model
 {
     // Table name
-    const TABLE_NAME = 'forum_post';
+    const TABLE_NAME = 'forum_thread';
     protected $table = self::TABLE_NAME;
 
     // Fillable columns
@@ -19,9 +18,8 @@ class ForumPost extends Model
     const MIN_TITLE_LENGTH = 5;
     const MIN_CONTENT_LENGTH = 5;
 
-    // Cooldowns in seconds
+    // A user can post a thread once every {?} seconds
     const COOLDOWN_POST_THREAD = 500;
-    const COOLDOWN_POST_REPLY = 60;
 
     /**
      * Formats the post for a response
@@ -32,7 +30,6 @@ class ForumPost extends Model
         return [
             'id'            => $this->id,
             'user_id'       => $this->user_id,
-            'parent_post'   => $this->parent_post,
             'title'         => $this->title,
             'content'       => $this->content,
         ];
@@ -44,20 +41,14 @@ class ForumPost extends Model
      * Returns true when the user has posted within the cooldown
      * Returns false when the user is allowed to post
      *
-     * @param Bool $thread
      * @param $userID
      * @return mixed
      */
-    public static function testCooldown(Bool $thread, $userID) {
-        $secondsCooldown = ($thread) ? self::COOLDOWN_POST_THREAD : self::COOLDOWN_POST_REPLY;
+    public static function testPostCooldown($userID) {
+        $secondsCooldown = self::COOLDOWN_POST_THREAD;
 
-        $checkQuery = ForumPost::where('user_id', '=', $userID)
+        $checkQuery = ForumThread::where('user_id', '=', $userID)
             ->where('created_at', '>', Carbon::now()->subSeconds($secondsCooldown));
-
-        if($thread)
-            $checkQuery->where('parent_post', null);
-        else
-            $checkQuery->where('parent_post', '!=', null);
 
         return $checkQuery->exists();
     }

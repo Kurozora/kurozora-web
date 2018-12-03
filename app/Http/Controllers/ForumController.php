@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\ForumBan;
-use App\ForumPost;
+use App\ForumSectionBan;
+use App\ForumThread;
 use App\ForumSection;
 use App\Helpers\JSONResult;
 use Illuminate\Http\Request;
@@ -30,7 +30,7 @@ class ForumController extends Controller
      *
      * @param Request $request
      */
-    public function getPosts(Request $request) {
+    public function getThreads(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'section_id'    => 'bail|required|numeric|exists:' . ForumSection::TABLE_NAME .',id',
@@ -53,13 +53,13 @@ class ForumController extends Controller
         ];
 
         // Add where clauses
-        $rawPosts = ForumPost::where($whereClauses);
+        $rawThreads = ForumThread::where($whereClauses);
 
         // Add order
         if($givenOrder == 'top')
-            $rawPosts->orderBy('score', 'DESC');
+            $rawThreads->orderBy('score', 'DESC');
         else if($givenOrder == 'recent')
-            $rawPosts->orderBy('created_at', 'DESC');
+            $rawThreads->orderBy('created_at', 'DESC');
 
         // Add page/offset
         $resultsPerPage = 10;
@@ -67,21 +67,21 @@ class ForumController extends Controller
         if($givenPage == null)
             $givenPage = 0;
 
-        $rawPosts->offset($givenPage * $resultsPerPage);
-        $rawPosts->limit($resultsPerPage);
+        $rawThreads->offset($givenPage * $resultsPerPage);
+        $rawThreads->limit($resultsPerPage);
 
         // Get the results
-        $rawPosts = $rawPosts->get();
+        $rawThreads = $rawThreads->get();
 
-        $posts = [];
+        $threads = [];
 
-        foreach($rawPosts as $rawPost)
-            $posts[] = $rawPost->formatForResponse();
+        foreach($rawThreads as $rawThread)
+            $threads[] = $rawThread->formatForResponse();
 
-        // Show posts in response
+        // Show threads in response
         (new JSONResult())->setData([
-            'page'  => (int) $givenPage,
-            'posts' => $posts
+            'page'      => (int) $givenPage,
+            'threads'   => $threads
         ])->show();
     }
 
@@ -94,8 +94,8 @@ class ForumController extends Controller
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'section_id'    => 'bail|required|numeric|exists:' . ForumSection::TABLE_NAME .',id',
-            'title'         => 'bail|required|min:' . ForumPost::MIN_TITLE_LENGTH,
-            'content'       => 'bail|required|min:' . ForumPost::MIN_CONTENT_LENGTH
+            'title'         => 'bail|required|min:' . ForumThread::MIN_TITLE_LENGTH,
+            'content'       => 'bail|required|min:' . ForumThread::MIN_CONTENT_LENGTH
         ]);
 
         // Check validator
@@ -108,15 +108,15 @@ class ForumController extends Controller
         $givenContent = $request->input('content');
 
         // Check if the user is banned
-        if(ForumBan::where('section_id', $givenSection)->where('user_id', $request->user_id)->exists())
+        if(ForumSectionBan::where('section_id', $givenSection)->where('user_id', $request->user_id)->exists())
             (new JSONResult())->setError('You are banned from posting in this section.')->show();
 
         // Check if the user has already posted within the cooldown period
-        if(ForumPost::testCooldown(true, $request->user_id))
-            (new JSONResult())->setError('You can only post a thread once every ' . ForumPost::COOLDOWN_POST_THREAD . ' seconds.')->show();
+        if(ForumThread::testPostCooldown($request->user_id))
+            (new JSONResult())->setError('You can only post a thread once every ' . ForumThread::COOLDOWN_POST_THREAD . ' seconds.')->show();
 
         // Create the thread
-        $newThread = ForumPost::create([
+        $newThread = ForumThread::create([
             'section_id'    => $givenSection,
             'user_id'       => $request->user_id,
             'ip'            => $request->ip(),
@@ -124,7 +124,7 @@ class ForumController extends Controller
             'content'       => $givenContent
         ]);
 
-        (new JSONResult())->setData(['created_post_id' => $newThread->id])->show();
+        (new JSONResult())->setData(['thread_id' => $newThread->id])->show();
     }
 
     /**
@@ -136,7 +136,7 @@ class ForumController extends Controller
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'thread_id' => 'bail|required|numeric',
-            'content'   => 'bail|required|min:' . ForumPost::MIN_CONTENT_LENGTH
+            'content'   => 'bail|required|min:' . ForumThread::MIN_CONTENT_LENGTH
         ]);
 
         // Check validator
@@ -148,8 +148,8 @@ class ForumController extends Controller
         $givenContent = $request->input('content');
 
         // Check if the user has already posted within the cooldown period
-        if(ForumPost::testCooldown(false, $request->user_id))
-            (new JSONResult())->setError('You can only post a reply once every ' . ForumPost::COOLDOWN_POST_THREAD . ' seconds.')->show();
+        if(ForumThread::testCooldown(false, $request->user_id))
+            (new JSONResult())->setError('You can only post a reply once every ' . ForumThread::COOLDOWN_POST_THREAD . ' seconds.')->show();
 
         // Check if the supplied thread_id is a thread
         // @TODO
