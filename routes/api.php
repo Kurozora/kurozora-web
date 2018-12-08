@@ -42,6 +42,7 @@ Route::group(['middleware' => ['kurozora.useragent'], 'prefix' => 'v1'], functio
         Route::get('/get_sections', 'ForumController@getSections');
         Route::post('/get_threads', 'ForumController@getThreads');
         Route::post('/get_thread', 'ForumController@getThread');
+        Route::post('/vote_thread', 'ForumController@voteThread')->middleware('kurozora.userauth');
         Route::post('/post_thread', 'ForumController@postThread')->middleware('kurozora.userauth');
         Route::post('/post_reply', 'ForumController@postReply')->middleware('kurozora.userauth');
     });

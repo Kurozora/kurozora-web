@@ -35,7 +35,10 @@ class CheckKurozoraUserAuthentication
         // Check authentication
         $sessionAuthenticate = User::authenticateSession($givenUserID, $givenSecret);
 
-        if($validator->fails() || $sessionAuthenticate === false)
+        if($validator->fails())
+            (new JSONResult())->setError($validator->errors()->first())->show();
+
+        if($sessionAuthenticate === false)
             (new JSONResult())->setError(JSONResult::ERROR_SESSION_REJECTED)->show();
 
         // Add to request
