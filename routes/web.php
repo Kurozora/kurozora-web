@@ -44,11 +44,10 @@ Route::get('/login', function () {
     ]);
 });
 
-Route::get('/admin', function (Request $request) {
-    return view('admin_panel.dashboard', [
-        'user' => $request->user
-    ]);
-})->name('admin_panel.dashboard')->middleware('kurozora.adminpanelauth');
+// Admin panel dashboard
+Route::get('/admin', 'AdminPanelController@dashboardPage')
+    ->name('admin_panel.dashboard')
+    ->middleware('kurozora.adminpanelauth');
 
 // Admin panel login
 Route::get('/admin/login', function () {
@@ -58,7 +57,12 @@ Route::get('/admin/login', function () {
 Route::post('/admin/login', 'AdminPanelController@login');
 
 // Admin panel logout
-Route::get('/admin/logout', 'AdminPanelController@logout');
+Route::get('/admin/logout', 'AdminPanelController@logout')
+    ->middleware('kurozora.adminpanelauth');
+
+// Admin panel user
+Route::get('/admin/users', 'AdminPanelController@usersPage')
+    ->middleware('kurozora.adminpanelauth');
 
 // Confirm email
 Route::get('/confirmation/{confirmation_id}', 'UserController@confirmEmail');
