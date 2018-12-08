@@ -1,13 +1,13 @@
 <?php
 
 use App\ForumThread;
-use App\ForumSection;
+use App\ForumThreadVote;
 use App\User;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateForumPostsTable extends Migration
+class CreateForumThreadVotesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,21 +16,17 @@ class CreateForumPostsTable extends Migration
      */
     public function up()
     {
-        Schema::create(ForumThread::TABLE_NAME, function (Blueprint $table) {
+        Schema::create(ForumThreadVote::TABLE_NAME, function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->timestamp('edited_at')->nullable()->default(null);
 
-            $table->integer('section_id')->unsigned();
-            $table->foreign('section_id')->references('id')->on(ForumSection::TABLE_NAME)->onDelete('cascade');
+            $table->integer('thread_id')->unsigned();
+            $table->foreign('thread_id')->references('id')->on(ForumThread::TABLE_NAME)->onDelete('cascade');
 
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
 
-            $table->string('ip');
-            $table->string('title')->nullable()->default(null);
-            $table->text('content');
-            $table->boolean('locked')->default(false);
+            $table->boolean('positive');
         });
     }
 
@@ -41,6 +37,6 @@ class CreateForumPostsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(ForumThread::TABLE_NAME);
+        Schema::dropIfExists(ForumThreadVote::TABLE_NAME);
     }
 }

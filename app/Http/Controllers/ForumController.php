@@ -6,6 +6,7 @@ use App\ForumReply;
 use App\ForumSectionBan;
 use App\ForumThread;
 use App\ForumSection;
+use App\ForumThreadVote;
 use App\Helpers\JSONResult;
 use App\User;
 use Illuminate\Http\Request;
@@ -54,10 +55,16 @@ class ForumController extends Controller
         $columnsToSelect = [
             ForumThread::TABLE_NAME . '.id AS thread_id',
             ForumThread::TABLE_NAME . '.title AS title',
+            ForumThread::TABLE_NAME . '.content AS content',
+            ForumThread::TABLE_NAME . '.locked AS locked',
             User::TABLE_NAME . '.username AS username',
             ForumThread::TABLE_NAME . '.created_at AS creation_date',
             // Select the reply count via subquery
-            DB::raw('(SELECT COUNT(*) FROM ' . ForumReply::TABLE_NAME . ' WHERE thread_id = ' . ForumThread::TABLE_NAME . '.id) AS reply_count')
+            DB::raw('(SELECT COUNT(*) FROM ' . ForumReply::TABLE_NAME . ' WHERE thread_id = ' . ForumThread::TABLE_NAME . '.id) AS reply_count'),
+            // Select the upvote count via subquery
+            DB::raw('(SELECT COUNT(*) FROM ' . ForumThreadVote::TABLE_NAME . ' WHERE thread_id = ' . ForumThread::TABLE_NAME . '.id AND positive = 1) AS upvote_count'),
+            // Select the downvote count via subquery
+            DB::raw('(SELECT COUNT(*) FROM ' . ForumThreadVote::TABLE_NAME . ' WHERE thread_id = ' . ForumThread::TABLE_NAME . '.id AND positive = 0) AS downvote_count')
         ];
 
         // Create query
@@ -72,7 +79,7 @@ class ForumController extends Controller
 
         // Add order
         if($givenOrder == 'top')
-            $threadInfo->orderBy('score', 'DESC');
+            $threadInfo->orderBy('upvote_count', 'DESC');
         else if($givenOrder == 'recent')
             $threadInfo->orderBy('created_at', 'DESC');
 
@@ -94,9 +101,15 @@ class ForumController extends Controller
             $threads[] = [
                 'id'                => $rawThread->thread_id,
                 'title'             => $rawThread->title,
+                'content_teaser'    =>
+                    substr(strip_tags($rawThread->content), 0, 100) .
+                    ((strlen($rawThread->content) > 100) ? '...' : '')
+                ,
+                'locked'            => (bool) $rawThread->locked,
                 'poster_username'   => $rawThread->username,
                 'creation_date'     => $rawThread->creation_date,
-                'reply_count'       => $rawThread->reply_count
+                'reply_count'       => $rawThread->reply_count,
+                'score'             => ($rawThread->upvote_count - $rawThread->downvote_count)
             ];
 
         // Show threads in response
