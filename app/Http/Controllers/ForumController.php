@@ -119,6 +119,11 @@ class ForumController extends Controller
         ])->show();
     }
 
+    /**
+     * Get thread information
+     *
+     * @param Request $request
+     */
     public function getThread(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
@@ -146,6 +151,53 @@ class ForumController extends Controller
                 'content'           => $thread->content
             ]
         ])->show();
+    }
+
+    /**
+     * Vote for a thread
+     *
+     * @param Request $request
+     */
+    public function voteThread(Request $request) {
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'thread_id' => 'bail|required|numeric|exists:' . ForumThread::TABLE_NAME . ',id',
+            'vote'      => 'bail|required|numeric|min:0|max:1'
+        ]);
+
+        // Check validator
+        if($validator->fails())
+            (new JSONResult())->setError($validator->errors()->first())->show();
+
+        // Get inputs
+        $givenThreadID = $request->input('thread_id');
+        $givenVote = (bool) $request->input('vote');
+
+        // Check if they've voted already
+        $foundVote = ForumThreadVote::where([
+            ['user_id', '=', $request->user_id],
+            ['thread_id', '=', $givenThreadID]
+        ])->first();
+
+        // They haven't voted for this thread yet
+        if($foundVote == null) {
+            // Insert vote
+            ForumThreadVote::create([
+                'user_id'   => $request->user_id,
+                'thread_id' => $givenThreadID,
+                'positive'  => $givenVote
+            ]);
+        }
+        else {
+            // Modify the vote
+            if($foundVote->positive != $givenVote) {
+                $foundVote->positive = $givenVote;
+                $foundVote->save();
+            }
+        }
+
+        // Show successful response
+        (new JSONResult())->show();
     }
 
     /**

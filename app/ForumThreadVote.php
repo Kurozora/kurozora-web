@@ -9,4 +9,7 @@ class ForumThreadVote extends Model
     // Table name
     const TABLE_NAME = 'forum_thread_vote';
     protected $table = self::TABLE_NAME;
+
+    // Fillable columns
+    protected $fillable = ['user_id', 'thread_id', 'positive'];
 }
