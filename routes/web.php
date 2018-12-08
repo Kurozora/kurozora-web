@@ -11,6 +11,8 @@
 |
 */
 
+use Illuminate\Http\Request;
+
 Route::get('/', function () {
     return view('website.home', [
         'title' => 'Home',
@@ -42,5 +44,24 @@ Route::get('/login', function () {
     ]);
 });
 
+Route::get('/admin', function (Request $request) {
+    return view('admin_panel.dashboard', [
+        'user' => $request->user
+    ]);
+})->name('admin_panel.dashboard')->middleware('kurozora.adminpanelauth');
+
+// Admin panel login
+Route::get('/admin/login', function () {
+    return view('admin_panel.login');
+})->name('admin_panel.login')->middleware('kurozora.adminpanelguestsonly');
+
+Route::post('/admin/login', 'AdminPanelController@login');
+
+// Admin panel logout
+Route::get('/admin/logout', 'AdminPanelController@logout');
+
+// Confirm email
 Route::get('/confirmation/{confirmation_id}', 'UserController@confirmEmail');
+
+// Reset password
 Route::get('/reset/{reset_token}', 'UserController@resetPasswordPage');

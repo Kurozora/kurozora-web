@@ -61,5 +61,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'kurozora.useragent' => \App\Http\Middleware\CheckKurozoraUserAgent::class,
         'kurozora.userauth' => \App\Http\Middleware\CheckKurozoraUserAuthentication::class,
+        'kurozora.adminpanelauth' => \App\Http\Middleware\CheckKurozoraAdminPanelAuthentication::class,
+        'kurozora.adminpanelguestsonly' => \App\Http\Middleware\KurozoraAdminPanelGuestsOnly::class,
     ];
 }

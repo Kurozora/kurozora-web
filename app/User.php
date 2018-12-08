@@ -179,4 +179,13 @@ class User extends Model
         // All valid
         return $foundSession->id;
     }
+
+    /**
+     * Checks whether or not the user can use the admin panel
+     *
+     * @return bool
+     */
+    public function canUseAdminPanel() {
+        return ($this->role >= User::USER_ROLE_MODERATOR);
+    }
 }
