@@ -84,6 +84,43 @@ class AdminPanelController extends Controller
     }
 
     /**
+     * Dashboard page
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function dashboardPage(Request $request) {
+        return view('admin_panel.dashboard', [
+            'curUser' => $request->curUser
+        ]);
+    }
+
+    /**
+     * Shows an overview of users
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function usersPage(Request $request) {
+        // Amount of users fetched per page
+        $usersPerPage = 10;
+
+        // Which page are we on
+        $page = 0;
+
+        // Start creating query
+        $userQuery = User::limit($usersPerPage)->offset($usersPerPage * $page);
+
+        $users = $userQuery->get();
+
+        return view('admin_panel.users', [
+            'users'     => $users,
+            'page'      => $page,
+            'curUser'   => $request->curUser
+        ]);
+    }
+
+    /**
      * Redirect to login page with an additional message
      *
      * @param $request

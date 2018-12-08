@@ -40,7 +40,7 @@ class CheckKurozoraAdminPanelAuthentication
         $request->user_id = (int) $sessionUserID;
         $request->session_secret = $sessionSecret;
         $request->session_id = $sessionAuthenticate;
-        $request->user = User::find($request->user_id);
+        $request->curUser = User::find($request->user_id);
 
         return $next($request);
     }
