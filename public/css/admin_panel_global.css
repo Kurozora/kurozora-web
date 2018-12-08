@@ -1,0 +1,20 @@
+/* Wrapper padding from side nav */
+.wrapper {
+    padding-left: 300px;
+}
+
+/* Inline icon for text */
+.inline-icon {
+    vertical-align: bottom;
+    font-size: 18px !important;
+}
+
+/* Kurozora purple */
+.kurozora-purple {
+    background-color: #353A50 !important;
+}
+
+/* Kurozora orange */
+.kurozora-orange {
+    background-color: #FFB10A !important;
+}

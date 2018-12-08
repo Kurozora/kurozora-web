@@ -96,7 +96,7 @@ class UserController extends Controller
     public function login(Request $request) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'username'  => 'bail|required|exists:user,username',
+            'username'  => 'bail|required|exists:' . User::TABLE_NAME . ',username',
             'password'  => 'bail|required',
             'device'    => 'bail|required|max:50'
         ]);
