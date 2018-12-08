@@ -119,6 +119,35 @@ class ForumController extends Controller
         ])->show();
     }
 
+    public function getThread(Request $request) {
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'thread_id'    => 'bail|required|numeric'
+        ]);
+
+        // Check validator
+        if($validator->fails())
+            (new JSONResult())->setError($validator->errors()->first())->show();
+
+        $givenThreadID = $request->input('thread_id');
+
+        // Find the thread
+        $thread = ForumThread::find($givenThreadID);
+
+        // Thread wasn't found
+        if($thread == null)
+            (new JSONResult())->setError('Thread was not found.')->show();
+
+        // Show thread information
+        (new JSONResult())->setData([
+            'thread' => [
+                'id'                => $thread->id,
+                'poster_user_id'    => $thread->user_id,
+                'content'           => $thread->content
+            ]
+        ])->show();
+    }
+
     /**
      * Allows the user to submit a new thread
      *
