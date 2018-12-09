@@ -10,6 +10,7 @@
                     <tr>
                         <th>#</th>
                         <th>username</th>
+                        <th>role</th>
                         <th>registration</th>
                     </tr>
                 </thead>
@@ -18,21 +19,14 @@
                         <tr>
                             <td>{{ $user->id }}</td>
                             <td>{{ $user->username }} @if($user->id == $curUser->id)<span class="red-text">(you)</span>@endif</td>
+                            <td>{{ \App\User::getStringFromRole($user->role) }}</td>
                             <td>{{ $user->created_at }}</td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
 
-            <ul class="pagination center">
-                <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-                <li class="active"><a href="#!">1</a></li>
-                <li class="waves-effect"><a href="#!">2</a></li>
-                <li class="waves-effect"><a href="#!">3</a></li>
-                <li class="waves-effect"><a href="#!">4</a></li>
-                <li class="waves-effect"><a href="#!">5</a></li>
-                <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
-            </ul>
+            {{ $users->links() }}
         </div>
     </div>
 @endsection

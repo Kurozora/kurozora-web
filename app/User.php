@@ -18,12 +18,35 @@ class User extends Model
     const USER_ROLE_MODERATOR       = 1;
     const USER_ROLE_ADMINISTRATOR   = 2;
 
+    // Map user roles to string
+    const ROLE_MAPPING = [
+        self::USER_ROLE_NORMAL          => 'normal',
+        self::USER_ROLE_MODERATOR       => 'moderator',
+        self::USER_ROLE_ADMINISTRATOR   => 'administrator'
+    ];
+
     // Table name
     const TABLE_NAME = 'user';
     protected $table = self::TABLE_NAME;
 
     // Fillable columns
     protected $fillable = ['username', 'email', 'password', 'email_confirmation_id', 'avatar'];
+
+    /**
+     * Returns the name of a role from the integer constant
+     *
+     * @param $roleInt
+     * @return string|null
+     */
+    public static function getStringFromRole($roleInt) {
+        // Find the status
+        foreach(self::ROLE_MAPPING as $role => $string) {
+            if($roleInt == $role)
+                return $string;
+        }
+
+        return null;
+    }
 
     /**
      * Returns a list of badges that the user has assigned to them
