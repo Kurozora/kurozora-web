@@ -105,12 +105,34 @@ class AdminPanelController extends Controller
         // Amount of users fetched per page
         $usersPerPage = 10;
 
+        // How many filters are active
+        $activeFilterCount = 0;
+
         // Start creating query
-        $users = User::paginate($usersPerPage);
+        $users = User::where([]);
+
+        // Role filter was used
+        $roleFilter = $request->input('role');
+
+        if($roleFilter !== null && User::getStringFromRole($roleFilter) !== null) {
+            $users->where('role', $roleFilter);
+            $activeFilterCount++;
+        }
+
+        // Get the users
+        $users = $users->paginate($usersPerPage);
 
         return view('admin_panel.users', [
-            'users'     => $users,
-            'curUser'   => $request->curUser
+            'users'         => $users,
+            'curUser'       => $request->curUser,
+            // Information for making filters
+            'filterData'    => [
+                // Role filter
+                'roles'             => User::ROLE_MAPPING,
+                'selectedRole'      => $roleFilter,
+                // Amount of active filter
+                'activeFilterCount' => $activeFilterCount
+            ]
         ]);
     }
 
