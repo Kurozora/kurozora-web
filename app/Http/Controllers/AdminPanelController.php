@@ -105,17 +105,11 @@ class AdminPanelController extends Controller
         // Amount of users fetched per page
         $usersPerPage = 10;
 
-        // Which page are we on
-        $page = 0;
-
         // Start creating query
-        $userQuery = User::limit($usersPerPage)->offset($usersPerPage * $page);
-
-        $users = $userQuery->get();
+        $users = User::paginate($usersPerPage);
 
         return view('admin_panel.users', [
             'users'     => $users,
-            'page'      => $page,
             'curUser'   => $request->curUser
         ]);
     }

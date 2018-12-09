@@ -14,11 +14,14 @@
     {{-- Materialize CSS --}}
     <link type="text/css" rel="stylesheet" href="{{ asset('css/materialize.min.css') }}" />
 
-    {{-- Admin panel global --}}
+    {{-- Admin panel global CSS --}}
     <link type="text/css" rel="stylesheet" href="{{ asset('css/admin_panel_global.css') }}" />
 
     {{-- Load jQuery --}}
     <script type="text/javascript" src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
+
+    {{-- Global admin panel JS --}}
+    <script type="text/javascript" src="{{ asset('js/admin_panel_global.js') }}"></script>
 
     {{-- Load custom JS per page --}}
     @if(isset($scripts) && is_array($scripts))
@@ -48,7 +51,18 @@
         </a>
     </li>
 </ul>
-<a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+
+{{-- Mobile only --}}
+<nav class="hide-on-large-only kurozora-orange">
+    <div class="nav-wrapper">
+        <a href="{{ url('/admin') }}" class="brand-logo center">Kurozora Admin</a>
+        <ul id="nav-mobile" class="left">
+            <li>
+                <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            </li>
+        </ul>
+    </div>
+</nav>
 @endif
 
 <div class="@if(!isset($hide_sidebar) || !$hide_sidebar) wrapper @endif">
