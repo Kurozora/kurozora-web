@@ -26,7 +26,7 @@
                 </tbody>
             </table>
 
-            {{ $users->links() }}
+            {{ $users->links('admin_panel.pagination') }}
         </div>
     </div>
 @endsection
