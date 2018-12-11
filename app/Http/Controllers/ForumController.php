@@ -58,6 +58,7 @@ class ForumController extends Controller
             ForumThread::TABLE_NAME . '.content AS content',
             ForumThread::TABLE_NAME . '.locked AS locked',
             User::TABLE_NAME . '.username AS username',
+            User::TABLE_NAME . '.id AS user_id',
             ForumThread::TABLE_NAME . '.created_at AS creation_date',
             // Select the reply count via subquery
             DB::raw('(SELECT COUNT(*) FROM ' . ForumReply::TABLE_NAME . ' WHERE thread_id = ' . ForumThread::TABLE_NAME . '.id) AS reply_count'),
@@ -106,6 +107,7 @@ class ForumController extends Controller
                     ((strlen($rawThread->content) > 100) ? '...' : '')
                 ,
                 'locked'            => (bool) $rawThread->locked,
+                'poster_user_id'    => $rawThread->user_id,
                 'poster_username'   => $rawThread->username,
                 'creation_date'     => $rawThread->creation_date,
                 'reply_count'       => $rawThread->reply_count,
@@ -147,7 +149,6 @@ class ForumController extends Controller
         (new JSONResult())->setData([
             'thread' => [
                 'id'                => $thread->id,
-                'poster_user_id'    => $thread->user_id,
                 'content'           => $thread->content
             ]
         ])->show();

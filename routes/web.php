@@ -11,6 +11,7 @@
 |
 */
 
+use App\Helpers\KuroMail;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
