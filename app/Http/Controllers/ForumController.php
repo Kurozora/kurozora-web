@@ -82,7 +82,7 @@ class ForumController extends Controller
         if($givenOrder == 'top')
             $threadInfo->orderBy('upvote_count', 'DESC');
         else if($givenOrder == 'recent')
-            $threadInfo->orderBy('created_at', 'DESC');
+            $threadInfo->orderBy('creation_date', 'DESC');
 
         // Add page/offset
         $resultsPerPage = 10;
