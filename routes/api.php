@@ -6,9 +6,10 @@
 |--------------------------------------------------------------------------
 */
 
-Route::group(['middleware' => ['kurozora.useragent'], 'prefix' => 'v1'], function () {
+Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], function () {
+    Route::post('/users', 'UserController@register');
+
     Route::prefix('/user')->group(function() {
-        Route::post('/register', 'UserController@register');
         Route::post('/login', 'UserController@login');
         Route::post('/logout', 'UserController@logout')->middleware('kurozora.userauth');
         Route::post('/reset_password', 'UserController@resetPassword');

@@ -1,0 +1,127 @@
+{
+  "openapi": "3.0.0",
+  "info":{
+    "description":"This is the documentation for Kurozora API.",
+    "version":"1",
+    "title":"Kurozora API",
+    "termsOfService":"http://swagger.io/terms/",
+    "contact":{
+      "email":"apiteam@swagger.io"
+    },
+    "license":{
+      "name":"Apache 2.0",
+      "url":"http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://kurozora.app/api/v1",
+      "description": "Kurozora LIVE"
+    },
+    {
+      "url": "http://localhost/kurozora-web/public/api/v1",
+      "description": "Kurozora LOCAL"
+    }
+  ],
+  "tags":[
+    {
+      "name":"users",
+      "description":"Everything user related"
+    }
+  ],
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Register a new user",
+        "description": "This endpoint will create a new user based on the given details.",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "The new user's username",
+                    "example": "Kurozora"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "The new user's password"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "The new user's email"
+                  },
+                  "profileImage": {
+                    "type": "file",
+                    "description": "The new user's avatar image"
+                  }
+                },
+                "required": [
+                  "username", "password", "email"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        },
+        "security": [
+          {
+            "petstore_auth": [
+              "write:pets",
+              "read:pets"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "JSONSuccess": {
+        "description": "Successful Kurozora JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "success": true,
+                "query_count": 1
+              }
+            }
+          }
+        }
+      },
+      "JSONError": {
+        "description": "Error Kurozora JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "success": false,
+                "error_message": "Lorem ipsum dolor sit amet",
+                "query_count": 1
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "externalDocs":{
+    "description":"More information on the Kurozora API will follow soon...",
+    "url":"#"
+  }
+}
