@@ -75,15 +75,7 @@
           "400": {
             "$ref": "#/components/responses/JSONError"
           }
-        },
-        "security": [
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ]
+        }
       }
     }
   },
