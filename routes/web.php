@@ -23,13 +23,6 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/api-doc', function() {
-    return view('website.api', [
-        'openapi_json_file' => asset('openapi.json'),
-        'api_logo'          => asset('img/static/logo_xsm.png')
-    ]);
-});
-
 Route::get('/privacy', function () {
     return view('website.privacy', [
         'title' => 'Privacy policy',
