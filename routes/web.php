@@ -11,9 +11,6 @@
 |
 */
 
-use App\Helpers\KuroMail;
-use Illuminate\Http\Request;
-
 Route::get('/', function () {
     return view('website.home', [
         'title' => 'Home',
@@ -23,6 +20,13 @@ Route::get('/', function () {
         'scripts' => [
             asset('js/frontpage.js')
         ]
+    ]);
+});
+
+Route::get('/api-doc', function() {
+    return view('website.api', [
+        'openapi_json_file' => asset('openapi.json'),
+        'api_logo'          => asset('img/static/logo_xsm.png')
     ]);
 });
 

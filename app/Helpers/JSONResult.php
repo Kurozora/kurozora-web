@@ -10,11 +10,9 @@ class JSONResult {
     const ERROR_SESSION_REJECTED = 'The server rejected your session. Please restart the app to solve this issue.';
     const ERROR_CANNOT_POST_IN_THREAD = 'You cannot post in this thread.';
 
-
     private $success = true;
     private $errorMessage;
     private $data = [];
-
 
     /**
      * Sets this JSON result to be an error, with a specified message
@@ -28,7 +26,6 @@ class JSONResult {
         return $this;
     }
 
-
     /**
      * Sets the data for this JSON result. Only to be used when success.
      *
@@ -39,7 +36,6 @@ class JSONResult {
         $this->data = $dataArr;
         return $this;
     }
-
 
     /**
      * Prints out the JSON result to the output feed.
@@ -63,6 +59,11 @@ class JSONResult {
             else
                 $printArr = array_merge($printArr, [$this->data]);
         }
+
+        if($this->success)
+            http_response_code(200);
+        else
+            http_response_code(400);
 
         echo json_encode($printArr);
 
