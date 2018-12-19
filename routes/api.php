@@ -6,6 +6,13 @@
 |--------------------------------------------------------------------------
 */
 
+Route::get('/v1', function() {
+    return view('website.api', [
+        'openapi_json_file' => asset('openapi.json'),
+        'api_logo'          => asset('img/static/logo_xsm.png')
+    ]);
+});
+
 Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], function () {
     Route::post('/users', 'UserController@register');
 
