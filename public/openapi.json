@@ -150,6 +150,49 @@
         }
       }
     },
+    "/users/{userID}/library": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Get an overview of the user's Anime library",
+        "description": "This endpoint will retrieve the list of Anime in a user's library.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the user."
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string",
+              "enum": ["watching", "dropped", "planning", "completed", "on-hold"]
+            },
+            "required": true,
+            "description": "The status to retrieve the library items for."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/sessions": {
       "post": {
         "tags": [
