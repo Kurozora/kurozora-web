@@ -176,13 +176,66 @@
             "in": "query",
             "name": "status",
             "schema": {
-              "type": "string",
-              "enum": ["watching", "dropped", "planning", "completed", "on-hold"]
+              "$ref": "#/components/schemas/KurozoraLibraryStatus"
             },
             "required": true,
             "description": "The status to retrieve the library items for."
           }
         ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Add an Anime to the user's Anime library",
+        "description": "This endpoint will add to the list of Anime in a user's library.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the user."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "anime_id": {
+                    "type": "integer",
+                    "description": "The ID of the Anime to add."
+                  },
+                  "status": {
+                    "type": "string",
+                    "description": "The watch status to assign to the Anime.",
+                    "example": "watching"
+                  }
+                },
+                "required": [
+                  "anime_id", "status"
+                ]
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSONSuccess"
@@ -336,6 +389,12 @@
     }
   },
   "components": {
+    "schemas": {
+      "KurozoraLibraryStatus": {
+        "type": "string",
+        "enum": ["watching", "dropped", "planning", "completed", "on-hold"]
+      }
+    },
     "securitySchemes": {
       "kurozoraBearer": {
         "type": "apiKey",

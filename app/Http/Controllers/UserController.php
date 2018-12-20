@@ -284,7 +284,7 @@ class UserController extends Controller
         $otherSessions = [];
 
         $sessions = Session::where([
-            ['user_id', '=',    $request->user_id],
+            ['user_id', '=',    $userID],
             ['secret',  '!=',   $request->session_secret]
         ])->get();
 
@@ -293,7 +293,7 @@ class UserController extends Controller
 
         // Get the current session
         $curSession = Session::where([
-            ['user_id', '=',    $request->user_id],
+            ['user_id', '=',    $userID],
             ['secret',  '=',    $request->session_secret]
         ])->first();
 
@@ -363,7 +363,11 @@ class UserController extends Controller
      *
      * @param Request $request
      */
-    public function addLibrary(Request $request) {
+    public function addLibrary(Request $request, $userID) {
+        // Check if we can retrieve the sessions of this user
+        if($request->user_id != $userID)
+            (new JSONResult())->setError('You are not permitted to do this.')->show();
+
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'anime_id'          => 'bail|required|numeric|exists:anime,id',
@@ -385,7 +389,7 @@ class UserController extends Controller
 
         // Check if this user already has the Anime in their library
         $oldLibraryItem = UserLibrary::where([
-            ['user_id',     '=',    $request->user_id],
+            ['user_id',     '=',    $userID],
             ['anime_id',    '=',    $givenAnimeID]
         ])->first();
 
@@ -399,7 +403,7 @@ class UserController extends Controller
         // Add a new library item
         else {
             UserLibrary::create([
-                'user_id'   => $request->user_id,
+                'user_id'   => $userID,
                 'anime_id'  => $givenAnimeID,
                 'status'    => $foundStatus
             ]);
