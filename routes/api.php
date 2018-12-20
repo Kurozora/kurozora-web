@@ -6,6 +6,7 @@
 |--------------------------------------------------------------------------
 */
 
+namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/v1', function() {
@@ -17,39 +18,39 @@ Route::get('/v1', function() {
 
 Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], function () {
     Route::prefix('/users')->group(function() {
-        Route::post('/', 'UserController@register');
+        Route::post('/', [UserController::class, 'register']);
 
-        Route::post('/reset-password', 'UserController@resetPassword');
+        Route::post('/reset-password', [UserController::class, 'resetPassword']);
 
-        Route::get('/{userID}/sessions', 'UserController@getSessions')
+        Route::get('/{userID}/sessions', [UserController::class, 'getSessions'])
             ->where('userID', '[0-9]*')
             ->middleware('kurozora.userauth');
 
-        Route::get('/{userID}/library', 'LibraryController@getLibrary')
+        Route::get('/{userID}/library', [LibraryController::class, 'getLibrary'])
             ->where('userID', '[0-9]*')
             ->middleware('kurozora.userauth');
 
-        Route::post('/{userID}/library', 'LibraryController@addLibrary')
+        Route::post('/{userID}/library', [LibraryController::class, 'addLibrary'])
             ->where('userID', '[0-9]*')
             ->middleware('kurozora.userauth');
 
-        Route::post('/{userID}/library/delete', 'LibraryController@delLibrary')
+        Route::post('/{userID}/library/delete', [LibraryController::class, 'delLibrary'])
             ->where('userID', '[0-9]*')
             ->middleware('kurozora.userauth');
     });
 
     Route::prefix('/sessions')->group(function() {
-        Route::post('/', 'SessionController@create');
+        Route::post('/', [SessionController::class, 'create']);
 
-        Route::get('/{sessionID}', 'SessionController@details')
+        Route::get('/{sessionID}', [SessionController::class, 'details'])
             ->where('sessionID', '[0-9]*')
             ->middleware('kurozora.userauth');
 
-        Route::post('/{sessionID}/validate', 'SessionController@validateSession')
+        Route::post('/{sessionID}/validate', [SessionController::class, 'validateSession'])
             ->where('sessionID', '[0-9]*')
             ->middleware('kurozora.userauth');
 
-        Route::post('/{sessionID}/delete', 'SessionController@delete')
+        Route::post('/{sessionID}/delete', [SessionController::class, 'delete'])
             ->where('sessionID', '[0-9]*')
             ->middleware('kurozora.userauth');
     });
