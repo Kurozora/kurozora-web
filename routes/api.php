@@ -22,10 +22,11 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
     Route::prefix('/sessions')->group(function() {
         Route::post('/', 'SessionController@create');
 
-        Route::post('/validate', 'SessionController@validate')
+        Route::get('/{sessionID}', 'SessionController@details')
+            ->where('sessionID', '[0-9]*')
             ->middleware('kurozora.userauth');
 
-        Route::get('/{sessionID}', 'SessionController@details')
+        Route::post('/{sessionID}/validate', 'SessionController@validateSession')
             ->where('sessionID', '[0-9]*')
             ->middleware('kurozora.userauth');
 
