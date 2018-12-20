@@ -180,6 +180,39 @@
           }
         }
       }
+    },
+    "/sessions/{sessionID}/delete": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
+        "tags": [
+          "sessions"
+        ],
+        "summary": "Deletes a session",
+        "description": "This endpoint will delete a session.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sessionID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the session to be deleted."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
     }
   },
   "components": {

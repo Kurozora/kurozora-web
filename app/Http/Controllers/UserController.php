@@ -501,33 +501,6 @@ class UserController extends Controller
     }
 
     /**
-     * Deletes a user session
-     *
-     * @param Request $request
-     */
-    public function deleteSession(Request $request) {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'del_session_id' => 'bail|required|numeric|exists:' . Session::TABLE_NAME . ',id'
-        ]);
-
-        // Fetch the variables
-        $delSessionID = $request->input('del_session_id');
-
-        // Check validator
-        if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
-
-        // Fire event
-        event(new UserSessionKilledEvent($request->user_id, $delSessionID, 'Session killed manually by user.', $request->session_id));
-
-        // Delete the session
-        Session::destroy($delSessionID);
-
-        (new JSONResult())->show();
-    }
-
-    /**
      * Email confirmation page
      *
      * @param $confirmationID
