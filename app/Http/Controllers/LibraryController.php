@@ -18,7 +18,7 @@ class LibraryController extends Controller
      * @param $userID
      */
     public function getLibrary(Request $request, $userID) {
-        // Check if we can retrieve the sessions of this user
+        // Check if we can do this for this user
         if($request->user_id != $userID)
             (new JSONResult())->setError('You are not permitted to view this.')->show();
 
@@ -72,7 +72,7 @@ class LibraryController extends Controller
      * @param $userID
      */
     public function addLibrary(Request $request, $userID) {
-        // Check if we can retrieve the sessions of this user
+        // Check if we can do this for this user
         if($request->user_id != $userID)
             (new JSONResult())->setError('You are not permitted to do this.')->show();
 
@@ -128,7 +128,7 @@ class LibraryController extends Controller
      * @param $userID
      */
     public function delLibrary(Request $request, $userID) {
-        // Check if we can retrieve the sessions of this user
+        // Check if we can do this for this user
         if($request->user_id != $userID)
             (new JSONResult())->setError('You are not permitted to do this.')->show();
 

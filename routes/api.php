@@ -7,6 +7,7 @@
 */
 
 namespace App\Http\Controllers;
+use App\User;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/v1', function() {
@@ -37,6 +38,10 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
         Route::post('/{userID}/library/delete', [LibraryController::class, 'delLibrary'])
             ->where('userID', '[0-9]*')
             ->middleware('kurozora.userauth');
+
+        Route::post('/{userID}/authenticate-channel', [UserController::class, 'authenticateChannel'])
+            ->where('userID', '[0-9]*')
+            ->middleware('kurozora.userauth');
     });
 
     Route::prefix('/sessions')->group(function() {
@@ -60,7 +65,6 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
         Route::post('/delete_session', 'UserController@deleteSession')->middleware('kurozora.userauth');
         Route::post('/update_account', 'UserController@updateAccount');
         Route::post('/get_notifications', 'UserController@getNotifications')->middleware('kurozora.userauth');
-        Route::post('/authenticate_channel', 'UserController@authenticateChannel')->middleware('kurozora.userauth');
 
         Route::post('/{id}/profile', 'UserController@profile')->where('id', '[0-9]*')->middleware('kurozora.userauth');
     });

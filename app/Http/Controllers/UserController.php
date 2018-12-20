@@ -223,10 +223,14 @@ class UserController extends Controller
      * access to a private user channel for Pusher
      *
      * @param Request $request
+     * @param $userID
      * @return string
-     * @throws PusherException
      */
-    public function authenticateChannel(Request $request) {
+    public function authenticateChannel(Request $request, $userID) {
+        // Check if we can do this for this user
+        if($request->user_id != $userID)
+            (new JSONResult())->setError('You are not permitted to do this.')->show();
+
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'channel_name'          => 'bail|required',
@@ -254,7 +258,7 @@ class UserController extends Controller
         $channelUserID = (int) $matches[1];
 
         // Check if this is the channel of the authenticated user
-        if($channelUserID != $request->user_id) {
+        if($channelUserID != $userID) {
             return abort(403, 'Not your channel.');
         }
 
