@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserSessionKilledEvent;
 use App\Helpers\JSONResult;
 use App\Session;
 use App\User;
@@ -34,5 +35,32 @@ class SessionController extends Controller
 
             (new JSONResult())->show();
         }
+    }
+
+    /**
+     * Deletes a session
+     *
+     * @param Request $request
+     */
+    public function deleteSession(Request $request, $sessionID) {
+        // Fetch the variables
+        $delSessionID = $sessionID;
+
+        // Find the session
+        $foundSession = Session::where([
+            ['id'       , '=', $sessionID],
+            ['user_id'  , '=', $request->user_id]
+        ])->first();
+
+        if($foundSession === null)
+            (new JSONResult())->setError('Unable to delete this session.')->show();
+
+        // Fire event
+        event(new UserSessionKilledEvent($request->user_id, $delSessionID, 'Session killed manually by user.', $request->session_id));
+
+        // Delete the session
+        $foundSession->delete();
+
+        (new JSONResult())->show();
     }
 }

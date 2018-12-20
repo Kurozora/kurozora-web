@@ -21,7 +21,12 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
 
     Route::prefix('/sessions')->group(function() {
         Route::post('/', 'UserController@login');
+
         Route::post('/validate', 'SessionController@validateSession')->middleware('kurozora.userauth');
+
+        Route::post('/{sessionID}/delete', 'SessionController@deleteSession')
+            ->where('sessionID', '[0-9]*')
+            ->middleware('kurozora.userauth');
     });
 
     Route::prefix('/user')->group(function() {
