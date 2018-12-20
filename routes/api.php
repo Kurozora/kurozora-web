@@ -42,6 +42,9 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
         Route::post('/{userID}/authenticate-channel', [UserController::class, 'authenticateChannel'])
             ->where('userID', '[0-9]*')
             ->middleware('kurozora.userauth');
+
+        Route::get('/{userID}/profile', [UserController::class, 'profile'])
+            ->where('userID', '[0-9]*');
     });
 
     Route::prefix('/sessions')->group(function() {

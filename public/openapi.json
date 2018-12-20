@@ -352,6 +352,34 @@
         }
       }
     },
+    "/users/{userID}/profile": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "User profile details.",
+        "description": "This endpoint will retrieve the details of a user's profile.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the user."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/sessions": {
       "post": {
         "tags": [
