@@ -83,13 +83,18 @@ class SessionController extends Controller
      * Checks whether or not a session_secret/user_id combination is valid
      *
      * @param Request $request
+     * @param $sessionID
      */
-    public function validate(Request $request) {
+    public function validateSession(Request $request, $sessionID) {
         // Find the session
         $foundSession = Session::where([
             ['user_id', '=', $request->user_id],
-            ['secret',  '=', $request->session_secret]
+            ['id',      '=', $sessionID]
         ])->first();
+
+        // Session does not exist
+        if($foundSession === null)
+            (new JSONResult())->setError('Session was not found.')->show();
 
         // Check if the session is not expired
         if($foundSession->isExpired()) {
