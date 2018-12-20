@@ -310,7 +310,11 @@ class UserController extends Controller
      *
      * @param Request $request
      */
-    public function getLibrary(Request $request) {
+    public function getLibrary(Request $request, $userID) {
+        // Check if we can retrieve the sessions of this user
+        if($request->user_id != $userID)
+            (new JSONResult())->setError('You are not permitted to view this.')->show();
+
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'status'            => 'bail|required|string'

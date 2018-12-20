@@ -22,6 +22,10 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
         Route::get('/{userID}/sessions', 'UserController@getSessions')
             ->where('userID', '[0-9]*')
             ->middleware('kurozora.userauth');
+
+        Route::get('/{userID}/library', 'UserController@getLibrary')
+            ->where('userID', '[0-9]*')
+            ->middleware('kurozora.userauth');
     });
 
     Route::prefix('/sessions')->group(function() {
