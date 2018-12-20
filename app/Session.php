@@ -50,4 +50,18 @@ class Session extends Model
             'last_validated'    => $this->formatLastValidated()
         ];
     }
+
+    /**
+     * Formats the session for display in the details API
+     *
+     * @return array
+     */
+    public function formatForSessionDetails() {
+        return [
+            'id'                => $this->id,
+            'device'            => $this->device,
+            'ip'                => $this->ip,
+            'last_validated'    => $this->formatLastValidated()
+        ];
+    }
 }

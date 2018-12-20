@@ -181,6 +181,39 @@
         }
       }
     },
+    "/sessions/{sessionID}": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
+        "tags": [
+          "sessions"
+        ],
+        "summary": "Gets the details of a session",
+        "description": "This endpoint will retrieve the details of a session.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sessionID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the session to be retrieved."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/sessions/{sessionID}/delete": {
       "post": {
         "security": [

@@ -41,6 +41,7 @@ class SessionController extends Controller
      * Deletes a session
      *
      * @param Request $request
+     * @param $sessionID
      */
     public function deleteSession(Request $request, $sessionID) {
         // Fetch the variables
@@ -62,5 +63,27 @@ class SessionController extends Controller
         $foundSession->delete();
 
         (new JSONResult())->show();
+    }
+
+    /**
+     * Displays session information
+     *
+     * @param Request $request
+     * @param $sessionID
+     */
+    public function getSessionDetails(Request $request, $sessionID) {
+        // Find the session
+        $foundSession = Session::where([
+            ['id'       , '=', $sessionID],
+            ['user_id'  , '=', $request->user_id]
+        ])->first();
+
+        // Session not found
+        if($foundSession === null)
+            (new JSONResult())->setError('The given session does not exist or does not belong to you.')->show();
+
+        (new JSONResult())->setData([
+            'session' => $foundSession->formatForSessionDetails()
+        ])->show();
     }
 }
