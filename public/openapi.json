@@ -663,7 +663,59 @@
           }
         }
       }
-    }
+    },
+    "/anime/{animeID}/rate": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
+        "tags": [
+          "anime"
+        ],
+        "summary": "Rate an Anime.",
+        "description": "This endpoint will allow user's to leave a rating for an Anime.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "rating": {
+                    "type": "float",
+                    "description": "The rating to leave.",
+                    "example": 5.0
+                  }
+                },
+                "required": [
+                  "rating"
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "animeID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the anime."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
   },
   "components": {
     "schemas": {
