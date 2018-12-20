@@ -16,7 +16,12 @@ Route::get('/v1', function() {
 Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], function () {
     Route::prefix('/users')->group(function() {
         Route::post('/', 'UserController@register');
+
         Route::post('/reset-password', 'UserController@resetPassword');
+
+        Route::get('/{userID}/sessions', 'UserController@getSessions')
+            ->where('userID', '[0-9]*')
+            ->middleware('kurozora.userauth');
     });
 
     Route::prefix('/sessions')->group(function() {
@@ -37,7 +42,6 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
 
     Route::prefix('/user')->group(function() {
         Route::post('/logout', 'UserController@logout')->middleware('kurozora.userauth');
-        Route::post('/get_sessions', 'UserController@getSessions')->middleware('kurozora.userauth');
         Route::post('/get_library', 'UserController@getLibrary')->middleware('kurozora.userauth');
         Route::post('/add_library', 'UserController@addLibrary')->middleware('kurozora.userauth');
         Route::post('/remove_library', 'UserController@removeLibrary')->middleware('kurozora.userauth');

@@ -275,9 +275,14 @@ class UserController extends Controller
      *
      * @param Request $request
      */
-    public function getSessions(Request $request) {
+    public function getSessions(Request $request, $userID) {
+        // Check if we can retrieve the sessions of this user
+        if($request->user_id != $userID)
+            (new JSONResult())->setError('You are not permitted to view this.')->show();
+
         // Get the other sessions and put them in an array
         $otherSessions = [];
+
         $sessions = Session::where([
             ['user_id', '=',    $request->user_id],
             ['secret',  '!=',   $request->session_secret]
