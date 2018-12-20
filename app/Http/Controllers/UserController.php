@@ -119,11 +119,11 @@ class UserController extends Controller
      * Returns the profile details for a user
      *
      * @param Request $request
-     * @param $id
+     * @param $userID
      */
-    public function profile(Request $request, $id) {
+    public function profile(Request $request, $userID) {
         // Check if this user profile exists
-        $profileUser = User::find($id);
+        $profileUser = User::find($userID);
 
         if(!$profileUser)
             (new JSONResult())->setError('This user does not exist.')->show();
