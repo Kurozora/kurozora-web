@@ -23,11 +23,11 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
             ->where('userID', '[0-9]*')
             ->middleware('kurozora.userauth');
 
-        Route::get('/{userID}/library', 'UserController@getLibrary')
+        Route::get('/{userID}/library', 'LibraryController@getLibrary')
             ->where('userID', '[0-9]*')
             ->middleware('kurozora.userauth');
 
-        Route::post('/{userID}/library', 'UserController@addLibrary')
+        Route::post('/{userID}/library', 'LibraryController@addLibrary')
             ->where('userID', '[0-9]*')
             ->middleware('kurozora.userauth');
     });
