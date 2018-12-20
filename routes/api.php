@@ -14,12 +14,14 @@ Route::get('/v1', function() {
 });
 
 Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], function () {
-    Route::post('/users', 'UserController@register');
+    Route::prefix('/users')->group(function() {
+        Route::post('/', 'UserController@register');
+        Route::post('/reset-password', 'UserController@resetPassword');
+    });
 
     Route::prefix('/user')->group(function() {
         Route::post('/login', 'UserController@login');
         Route::post('/logout', 'UserController@logout')->middleware('kurozora.userauth');
-        Route::post('/reset_password', 'UserController@resetPassword');
         Route::post('/get_sessions', 'UserController@getSessions')->middleware('kurozora.userauth');
         Route::post('/get_library', 'UserController@getLibrary')->middleware('kurozora.userauth');
         Route::post('/add_library', 'UserController@addLibrary')->middleware('kurozora.userauth');

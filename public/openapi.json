@@ -77,6 +77,41 @@
           }
         }
       }
+    },
+    "/users/reset-password": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Request a password reset for a user",
+        "description": "This endpoint will send an email to the user to reset their password.",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "The new user's email"
+                  }
+                },
+                "required": [
+                  "email"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
     }
   },
   "components": {
