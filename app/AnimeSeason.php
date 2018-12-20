@@ -40,4 +40,29 @@ class AnimeSeason extends Model
             'number'    => $this->number
         ];
     }
+
+    /**
+     * Formats the season for the "season info" response
+     *
+     * @return array
+     */
+    public function formatForInfoResponse() {
+        return [
+            'id'            => $this->id,
+            'title'         => $this->getTitle(),
+            'episode_count' => $this->getEpisodeCount()
+        ];
+    }
+
+    /**
+     * Gets the count of the amount of episodes in this season
+     *
+     * @return int
+     */
+    public function getEpisodeCount() {
+        return AnimeEpisode::where([
+            ['season',      '=', $this->number],
+            ['anime_id',    '=', $this->anime_id]
+        ])->count();
+    }
 }
