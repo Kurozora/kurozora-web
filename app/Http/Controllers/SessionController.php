@@ -16,29 +16,11 @@ class SessionController extends Controller
      * @param Request $request
      */
     public function validateSession(Request $request) {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'session_secret'    => 'bail|required|exists:' . Session::TABLE_NAME . ',secret',
-            'user_id'           => 'bail|required|numeric|exists:' . User::TABLE_NAME . ',id'
-        ]);
-
-        // Display an error if validation failed
-        if($validator->fails())
-            (new JSONResult())->setError('Failed to validate the session. (1)')->show();
-
-        // Fetch the variables
-        $givenSecret    = $request->input('session_secret');
-        $givenUserID    = $request->input('user_id');
-
         // Find the session
         $foundSession = Session::where([
-            ['user_id', '=', $givenUserID],
-            ['secret',  '=', $givenSecret]
+            ['user_id', '=', $request->user_id],
+            ['secret',  '=', $request->session_secret]
         ])->first();
-
-        // Check if any session was found
-        if(!$foundSession)
-            (new JSONResult())->setError('Failed to validate the session. (2)')->show();
 
         // Check if the session is not expired
         if($foundSession->isExpired()) {

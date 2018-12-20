@@ -15,6 +15,7 @@ use App\UserLibrary;
 use App\UserNotification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use KuroAuthToken;
 use Pusher\PusherException;
 use PusherHelper;
 use Validator;
@@ -146,8 +147,8 @@ class UserController extends Controller
 
         // Show a successful response
         (new JSONResult())->setData([
+            'kuro_auth_token'   => KuroAuthToken::generate($foundUser->id, $newSession->secret),
             'session_id'        => $newSession->id,
-            'session_secret'    => $newSession->secret,
             'user_id'           => $foundUser->id,
             'role'              => $foundUser->role
         ])->show();

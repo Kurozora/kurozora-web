@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Helpers\JSONResult;
 use App\User;
 use Closure;
+use KuroAuthToken;
 use Validator;
 
 /*
@@ -22,21 +23,22 @@ class CheckKurozoraUserAuthentication
      */
     public function handle($request, Closure $next)
     {
-        // Validate parameters
-        $validator = Validator::make($request->all(), [
-            'session_secret'    => 'bail|required',
-            'user_id'           => 'bail|required|numeric'
-        ]);
+        // Get kuro auth token from header
+        $givenAuthToken = $request->header('kuro-auth');
+
+        // Read the token
+        $readToken = KuroAuthToken::readToken($givenAuthToken);
+
+        // Unable to read token
+        if($readToken === null)
+            (new JSONResult())->setError('Unable to read authentication token.')->show();
 
         // Fetch the variables
-        $givenSecret = $request->input('session_secret');
-        $givenUserID = $request->input('user_id');
+        $givenSecret = $readToken['session_secret'];
+        $givenUserID = $readToken['user_id'];
 
         // Check authentication
         $sessionAuthenticate = User::authenticateSession($givenUserID, $givenSecret);
-
-        if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
 
         if($sessionAuthenticate === false)
             (new JSONResult())->setError(JSONResult::ERROR_SESSION_REJECTED)->show();
