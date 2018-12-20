@@ -574,6 +574,39 @@
           }
         }
       }
+    },
+    "/anime/{animeID}": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
+        "tags": [
+          "anime"
+        ],
+        "summary": "Anime details.",
+        "description": "This endpoint will retrieve the details of an Anime item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "animeID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the anime."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
     }
   },
   "components": {
