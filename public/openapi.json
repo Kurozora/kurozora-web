@@ -97,7 +97,7 @@
                 "properties": {
                   "email": {
                     "type": "string",
-                    "description": "The new user's email"
+                    "description": "The email of the user to request a password reset."
                   }
                 },
                 "required": [
@@ -282,6 +282,61 @@
                 },
                 "required": [
                   "anime_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/users/{userID}/authenticate-channel": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Authenticate into a private user channel for Pusher.",
+        "description": "This endpoint will authenticate into a private user channel for Pusher.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the user."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "channel_name": {
+                    "type": "string",
+                    "description": "The Pusher channel name to authenticate into."
+                  },
+                  "socket_id": {
+                    "type": "string",
+                    "description": "The socket ID of the client that is trying to authenticate (from Pusher)."
+                  }
+                },
+                "required": [
+                  "channel_name", "socket_id"
                 ]
               }
             }
