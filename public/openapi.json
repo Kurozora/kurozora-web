@@ -91,7 +91,7 @@
         "description": "This endpoint will send an email to the user to reset their password.",
         "requestBody": {
           "content": {
-            "multipart/form-data": {
+            "application/x-www-form-urlencoded": {
               "schema": {
                 "type": "object",
                 "properties": {
@@ -202,7 +202,7 @@
         "description": "This endpoint will create a new session for a user.",
         "requestBody": {
           "content": {
-            "multipart/form-data": {
+            "application/x-www-form-urlencoded": {
               "schema": {
                 "type": "object",
                 "properties": {
