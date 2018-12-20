@@ -27,6 +27,10 @@
     {
       "name":"users",
       "description":"Everything user related"
+    },
+    {
+      "name":"sessions",
+      "description":"Everything session related"
     }
   ],
   "paths": {
@@ -98,6 +102,50 @@
                 },
                 "required": [
                   "email"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/sessions": {
+      "post": {
+        "tags": [
+          "sessions"
+        ],
+        "summary": "Create a new session (login)",
+        "description": "This endpoint will create a new session for a user.",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "The user's username"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "The user's password"
+                  },
+                  "device": {
+                    "type": "string",
+                    "description": "The device name that was used to create the session",
+                    "example": "Swagger API tester"
+                  }
+                },
+                "required": [
+                  "username", "password", "device"
                 ]
               }
             }
