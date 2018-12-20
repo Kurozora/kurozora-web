@@ -246,6 +246,57 @@
         }
       }
     },
+    "/users/{userID}/library/delete": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Remove an Anime from the user's Anime library",
+        "description": "This endpoint will remove from the list of Anime in a user's library.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the user."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "anime_id": {
+                    "type": "integer",
+                    "description": "The ID of the Anime to remove."
+                  }
+                },
+                "required": [
+                  "anime_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/sessions": {
       "post": {
         "tags": [
