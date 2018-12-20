@@ -635,6 +635,34 @@
           }
         }
       }
+    },
+    "/anime/{animeID}/seasons": {
+      "get": {
+        "tags": [
+          "anime"
+        ],
+        "summary": "Anime season information.",
+        "description": "This endpoint will retrieve the seasons of an Anime item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "animeID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the anime."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
     }
   },
   "components": {
