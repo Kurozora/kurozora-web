@@ -186,15 +186,7 @@ class AnimeController extends Controller
      * @param Request $request
      * @param int $animeID
      */
-    public function episodesAnime(Request $request, $animeID) {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'season' => 'bail|required|numeric'
-        ]);
-
-        if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
-
+    public function episodesAnime(Request $request, $animeID, $seasonID) {
         // Get the Anime
         $anime = Anime::find($animeID);
 
@@ -202,10 +194,18 @@ class AnimeController extends Controller
         if(!$anime)
             (new JSONResult())->setError('Unable to retrieve episode data for the specified anime.')->show();
 
-        // Get the episodes
-        $season = $request->input('season');
+        // Get the season
+        $season = AnimeSeason::where([
+            ['anime_id',    '=', $animeID],
+            ['id',          '=', $seasonID]
+        ])->first();
 
-        $episodes = $anime->getEpisodes($season);
+        // The season does not exist
+        if(!$season)
+            (new JSONResult())->setError('The specified season ID does not exist.')->show();
+
+
+        $episodes = $anime->getEpisodes($season->number);
         $endEpisodes = [];
 
         foreach($episodes as $episode)
