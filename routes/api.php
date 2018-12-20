@@ -24,6 +24,10 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
 
         Route::post('/validate', 'SessionController@validateSession')->middleware('kurozora.userauth');
 
+        Route::get('/{sessionID}', 'SessionController@getSessionDetails')
+            ->where('sessionID', '[0-9]*')
+            ->middleware('kurozora.userauth');
+
         Route::post('/{sessionID}/delete', 'SessionController@deleteSession')
             ->where('sessionID', '[0-9]*')
             ->middleware('kurozora.userauth');
