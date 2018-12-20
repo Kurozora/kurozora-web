@@ -350,7 +350,7 @@ class UserController extends Controller
                 $join->on(Anime::TABLE_NAME . '.id', '=', UserLibrary::TABLE_NAME . '.anime_id');
             })
             ->where([
-                [UserLibrary::TABLE_NAME . '.user_id', '=', $request->user_id],
+                [UserLibrary::TABLE_NAME . '.user_id', '=', $userID],
                 [UserLibrary::TABLE_NAME . '.status',  '=', $foundStatus]
             ])
             ->get($columnsToSelect);
