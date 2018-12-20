@@ -19,8 +19,11 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
         Route::post('/reset-password', 'UserController@resetPassword');
     });
 
+    Route::prefix('/sessions')->group(function() {
+        Route::post('/', 'UserController@login');
+    });
+
     Route::prefix('/user')->group(function() {
-        Route::post('/login', 'UserController@login');
         Route::post('/logout', 'UserController@logout')->middleware('kurozora.userauth');
         Route::post('/get_sessions', 'UserController@getSessions')->middleware('kurozora.userauth');
         Route::post('/get_library', 'UserController@getLibrary')->middleware('kurozora.userauth');
