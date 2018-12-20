@@ -274,4 +274,26 @@ class AnimeController extends Controller
 
         (new JSONResult())->show();
     }
+
+    /**
+     * Displays information about a season
+     *
+     * @param $animeID
+     * @param $seasonID
+     */
+    public function seasonInfo($animeID, $seasonID) {
+        // Get the season
+        $season = AnimeSeason::where([
+            'anime_id'  => $animeID,
+            'id'        => $seasonID
+        ])->first();
+
+        // The season does not exist
+        if(!$season)
+            (new JSONResult())->setError('The season does not exist.')->show();
+
+        (new JSONResult())->setData([
+            'season' => $season->formatForInfoResponse()
+        ])->show();
+    }
 }

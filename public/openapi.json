@@ -641,7 +641,7 @@
         "tags": [
           "anime"
         ],
-        "summary": "Anime season information.",
+        "summary": "Anime all seasons information.",
         "description": "This endpoint will retrieve the seasons of an Anime item.",
         "parameters": [
           {
@@ -652,6 +652,44 @@
             },
             "required": true,
             "description": "ID of the anime."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/anime/{animeID}/seasons/{seasonID}": {
+      "get": {
+        "tags": [
+          "anime"
+        ],
+        "summary": "Specific season information.",
+        "description": "This endpoint will retrieve the season information of a specific season.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "animeID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the anime."
+          },
+          {
+            "in": "path",
+            "name": "season",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            },
+            "required": true,
+            "description": "ID of the season."
           }
         ],
         "responses": {
