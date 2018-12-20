@@ -29,6 +29,10 @@
       "description":"Everything user related"
     },
     {
+      "name":"anime",
+      "description":"Everything Anime related"
+    },
+    {
       "name":"sessions",
       "description":"Everything session related"
     }
@@ -380,6 +384,39 @@
         }
       }
     },
+    "/users/{userID}/notifications": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "User's list of notifications.",
+        "description": "This endpoint will retrieve the list of a user's notifications.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the user."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/sessions": {
       "post": {
         "tags": [
@@ -511,6 +548,23 @@
             "description": "ID of the session to be deleted."
           }
         ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/anime": {
+      "get": {
+        "tags": [
+          "anime"
+        ],
+        "summary": "Anime explore.",
+        "description": "This endpoint will retrieve the details to form the Anime explore page.",
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSONSuccess"
