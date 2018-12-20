@@ -45,6 +45,10 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
 
         Route::get('/{userID}/profile', [UserController::class, 'profile'])
             ->where('userID', '[0-9]*');
+
+        Route::get('/{userID}/notifications', [UserController::class, 'getNotifications'])
+            ->where('userID', '[0-9]*')
+            ->middleware('kurozora.userauth');
     });
 
     Route::prefix('/sessions')->group(function() {
@@ -63,17 +67,8 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
             ->middleware('kurozora.userauth');
     });
 
-    Route::prefix('/user')->group(function() {
-        Route::post('/remove_library', 'UserController@removeLibrary')->middleware('kurozora.userauth');
-        Route::post('/delete_session', 'UserController@deleteSession')->middleware('kurozora.userauth');
-        Route::post('/update_account', 'UserController@updateAccount');
-        Route::post('/get_notifications', 'UserController@getNotifications')->middleware('kurozora.userauth');
-
-        Route::post('/{id}/profile', 'UserController@profile')->where('id', '[0-9]*')->middleware('kurozora.userauth');
-    });
-
     Route::prefix('/anime')->group(function() {
-        Route::get('/explore', 'AnimeController@exploreAnime');
+        Route::get('/', [AnimeController::class, 'exploreAnime']);
 
         Route::post('/{id}/details', 'AnimeController@detailsAnime')->where('id', '[0-9]*')->middleware('kurozora.userauth');
         Route::get('/{id}/actors', 'AnimeController@actorsAnime')->where('id', '[0-9]*');

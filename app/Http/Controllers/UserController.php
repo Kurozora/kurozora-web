@@ -151,26 +151,6 @@ class UserController extends Controller
     }
 
     /**
-     * Make (severe) changes to the User account
-     *
-     * @param Request $request
-     */
-    public function updateAccount(Request $request) {
-        // @todo FINISH THIS
-        // Validate the inputs
-        /*$validator = Validator::make($request->all(), [
-            'current_password'  => 'bail|required',
-            'email'             => 'bail|required|email'
-        ]);
-
-        // Display an error if validation failed
-        if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
-
-        */
-    }
-
-    /**
      * Requests a password reset link to be sent to the email address
      *
      * @param Request $request
@@ -385,9 +365,13 @@ class UserController extends Controller
      *
      * @param Request $request
      */
-    public function getNotifications(Request $request) {
+    public function getNotifications(Request $request, $userID) {
+        // Check if we can do this for this user
+        if($request->user_id != $userID)
+            (new JSONResult())->setError('You are not permitted to view this.')->show();
+
         // Get their notifications
-        $rawNotifications = UserNotification::where('user_id', $request->user_id)
+        $rawNotifications = UserNotification::where('user_id', $userID)
             ->orderBy('created_at', 'DESC')
             ->get();
 
