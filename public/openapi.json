@@ -683,7 +683,45 @@
           },
           {
             "in": "path",
-            "name": "season",
+            "name": "seasonID",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            },
+            "required": true,
+            "description": "ID of the season."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/anime/{animeID}/seasons/{seasonID}/episodes": {
+      "get": {
+        "tags": [
+          "anime"
+        ],
+        "summary": "Retrieve season episodes.",
+        "description": "This endpoint will retrieve the episodes in a certain season.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "animeID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the anime."
+          },
+          {
+            "in": "path",
+            "name": "seasonID",
             "schema": {
               "type": "integer",
               "example": 1
