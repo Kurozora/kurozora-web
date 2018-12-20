@@ -306,41 +306,6 @@ class UserController extends Controller
     }
 
     /**
-     * Removes an Anime from the user's library
-     *
-     * @param Request $request
-     */
-    public function removeLibrary(Request $request) {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'anime_id'          => 'bail|required|numeric|exists:anime,id'
-        ]);
-
-        // Check validator
-        if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
-
-        $givenAnimeID = $request->input('anime_id');
-
-        // Find the Anime in their library
-        $foundAnime = UserLibrary::where([
-            ['user_id',     '=',    $request->user_id],
-            ['anime_id',    '=',    $givenAnimeID]
-        ])->first();
-
-        // Remove this Anime from their library
-        if($foundAnime) {
-            $foundAnime->delete();
-
-            // Successful response
-            (new JSONResult())->show();
-        }
-
-        // Unsuccessful response
-        (new JSONResult())->setError('This item is not in your library.')->show();
-    }
-
-    /**
      * Email confirmation page
      *
      * @param $confirmationID

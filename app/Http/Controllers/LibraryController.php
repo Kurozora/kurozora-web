@@ -7,7 +7,7 @@ use App\Helpers\JSONResult;
 use App\UserLibrary;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 class LibraryController extends Controller
 {
@@ -15,6 +15,7 @@ class LibraryController extends Controller
      * Gets the user's library depending on the status
      *
      * @param Request $request
+     * @param $userID
      */
     public function getLibrary(Request $request, $userID) {
         // Check if we can retrieve the sessions of this user
@@ -68,6 +69,7 @@ class LibraryController extends Controller
      * Adds an Anime to the user's library
      *
      * @param Request $request
+     * @param $userID
      */
     public function addLibrary(Request $request, $userID) {
         // Check if we can retrieve the sessions of this user
@@ -117,5 +119,45 @@ class LibraryController extends Controller
 
         // Successful response
         (new JSONResult())->show();
+    }
+
+    /**
+     * Removes an Anime from the user's library
+     *
+     * @param Request $request
+     * @param $userID
+     */
+    public function delLibrary(Request $request, $userID) {
+        // Check if we can retrieve the sessions of this user
+        if($request->user_id != $userID)
+            (new JSONResult())->setError('You are not permitted to do this.')->show();
+
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'anime_id'          => 'bail|required|numeric|exists:anime,id'
+        ]);
+
+        // Check validator
+        if($validator->fails())
+            (new JSONResult())->setError($validator->errors()->first())->show();
+
+        $givenAnimeID = $request->input('anime_id');
+
+        // Find the Anime in their library
+        $foundAnime = UserLibrary::where([
+            ['user_id',     '=',    $userID],
+            ['anime_id',    '=',    $givenAnimeID]
+        ])->first();
+
+        // Remove this Anime from their library
+        if($foundAnime) {
+            $foundAnime->delete();
+
+            // Successful response
+            (new JSONResult())->show();
+        }
+
+        // Unsuccessful response
+        (new JSONResult())->setError('This item is not in your library.')->show();
     }
 }

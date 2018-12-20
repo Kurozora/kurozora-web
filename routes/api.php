@@ -6,6 +6,8 @@
 |--------------------------------------------------------------------------
 */
 
+use Illuminate\Support\Facades\Route;
+
 Route::get('/v1', function() {
     return view('website.api', [
         'openapi_json_file' => asset('openapi.json'),
@@ -30,6 +32,10 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
         Route::post('/{userID}/library', 'LibraryController@addLibrary')
             ->where('userID', '[0-9]*')
             ->middleware('kurozora.userauth');
+
+        Route::post('/{userID}/library/delete', 'LibraryController@delLibrary')
+            ->where('userID', '[0-9]*')
+            ->middleware('kurozora.userauth');
     });
 
     Route::prefix('/sessions')->group(function() {
@@ -49,9 +55,6 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
     });
 
     Route::prefix('/user')->group(function() {
-        Route::post('/logout', 'UserController@logout')->middleware('kurozora.userauth');
-        Route::post('/get_library', 'UserController@getLibrary')->middleware('kurozora.userauth');
-        Route::post('/add_library', 'UserController@addLibrary')->middleware('kurozora.userauth');
         Route::post('/remove_library', 'UserController@removeLibrary')->middleware('kurozora.userauth');
         Route::post('/delete_session', 'UserController@deleteSession')->middleware('kurozora.userauth');
         Route::post('/update_account', 'UserController@updateAccount');
