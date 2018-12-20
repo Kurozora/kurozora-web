@@ -160,9 +160,37 @@
           }
         }
       }
+    },
+    "/sessions/validate": {
+      "post": {
+        "security": [
+          {"kurozoraBearer": []}
+        ],
+        "tags": [
+          "sessions"
+        ],
+        "summary": "Checks if the session is valid",
+        "description": "This endpoint will check if the given session details are valid.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
     }
   },
   "components": {
+    "securitySchemes": {
+      "kurozoraBearer": {
+        "type": "apiKey",
+        "scheme": "bearer",
+        "in": "header",
+        "name": "kuro-auth"
+      }
+    },
     "responses": {
       "JSONSuccess": {
         "description": "Successful Kurozora JSON response",

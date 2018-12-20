@@ -21,6 +21,7 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
 
     Route::prefix('/sessions')->group(function() {
         Route::post('/', 'UserController@login');
+        Route::post('/validate', 'SessionController@validateSession')->middleware('kurozora.userauth');
     });
 
     Route::prefix('/user')->group(function() {
@@ -35,10 +36,6 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
         Route::post('/authenticate_channel', 'UserController@authenticateChannel')->middleware('kurozora.userauth');
 
         Route::post('/{id}/profile', 'UserController@profile')->where('id', '[0-9]*')->middleware('kurozora.userauth');
-    });
-
-    Route::prefix('/session')->group(function() {
-        Route::post('/validate', 'SessionController@validateSession');
     });
 
     Route::prefix('/anime')->group(function() {
