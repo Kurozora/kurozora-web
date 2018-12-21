@@ -39,6 +39,10 @@
     {
       "name":"sessions",
       "description":"Everything session related"
+    },
+    {
+      "name":"misc",
+      "description":"All other endpoints"
     }
   ],
   "paths": {
@@ -978,7 +982,24 @@
           }
         }
       }
-    }
+    },
+    "/privacy-policy": {
+      "get": {
+        "tags": [
+          "misc"
+        ],
+        "summary": "Retrieve latest privacy policy.",
+        "description": "This endpoint will retrieve the latest privacy policy.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
   },
   "components": {
     "schemas": {
