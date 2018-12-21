@@ -840,6 +840,54 @@
           }
         }
       }
+    },
+    "/forum/sections/{sectionID}/threads": {
+      "get": {
+        "tags": [
+          "forum"
+        ],
+        "summary": "Forum section get threads.",
+        "description": "This endpoint will retrieve the threads in a forum section.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sectionID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the forum section."
+          },
+          {
+            "in": "query",
+            "name": "order",
+            "schema": {
+              "type": "string",
+              "example": "recent"
+            },
+            "required": true,
+            "description": "The method of ordering the threads."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "example": "0"
+            },
+            "required": false,
+            "description": "The page to retrieve threads from. (starts at 0)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
     }
   },
   "components": {
