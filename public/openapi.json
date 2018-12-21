@@ -941,6 +941,43 @@
           }
         }
       }
+    },
+    "/forum/sections/{sectionID}/threads/{threadID}": {
+      "get": {
+        "tags": [
+          "forum"
+        ],
+        "summary": "Get thread details.",
+        "description": "This endpoint will retrieve the details for a forum thread.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sectionID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the forum section."
+          },
+          {
+            "in": "path",
+            "name": "threadID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the forum thread."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
     }
   },
   "components": {
