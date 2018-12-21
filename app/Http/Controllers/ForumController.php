@@ -39,7 +39,7 @@ class ForumController extends Controller
         $section = ForumSection::find($sectionID);
 
         if(!$section)
-            (new JSONResult())->setError('The given section could not be found.')->show();
+            (new JSONResult())->setError(JSONResult::ERROR_FORUM_SECTION_NON_EXISTENT)->show();
 
         (new JSONResult())->setData(['section' => $section->formatForDetails()])->show();
     }
@@ -67,7 +67,7 @@ class ForumController extends Controller
 
         // Check if the section exists
         if(!ForumSection::where('id', $sectionID)->exists())
-            (new JSONResult())->setError('The given section does not exist.')->show();
+            (new JSONResult())->setError(JSONResult::ERROR_FORUM_SECTION_NON_EXISTENT)->show();
 
         // Determine columns to select
         $columnsToSelect = [
@@ -223,11 +223,11 @@ class ForumController extends Controller
      * Allows the user to submit a new thread
      *
      * @param Request $request
+     * @param $sectionID
      */
-    public function postThread(Request $request) {
+    public function postThread(Request $request, $sectionID) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'section_id'    => 'bail|required|numeric|exists:' . ForumSection::TABLE_NAME .',id',
             'title'         => 'bail|required|min:' . ForumThread::MIN_TITLE_LENGTH,
             'content'       => 'bail|required|min:' . ForumThread::MIN_CONTENT_LENGTH
         ]);
@@ -236,13 +236,16 @@ class ForumController extends Controller
         if($validator->fails())
             (new JSONResult())->setError($validator->errors()->first())->show();
 
+        // Check if the section exists
+        if(!ForumSection::where('id', $sectionID)->exists())
+            (new JSONResult())->setError(JSONResult::ERROR_FORUM_SECTION_NON_EXISTENT)->show();
+
         // Get variables
-        $givenSection = (int) $request->input('section_id');
         $givenTitle = $request->input('title');
         $givenContent = $request->input('content');
 
         // Check if the user is banned
-        if(ForumSectionBan::where('section_id', $givenSection)->where('user_id', $request->user_id)->exists())
+        if(ForumSectionBan::where('section_id', $sectionID)->where('user_id', $request->user_id)->exists())
             (new JSONResult())->setError('You are banned from posting in this section.')->show();
 
         // Check if the user has already posted within the cooldown period
@@ -251,7 +254,7 @@ class ForumController extends Controller
 
         // Create the thread
         $newThread = ForumThread::create([
-            'section_id'    => $givenSection,
+            'section_id'    => $sectionID,
             'user_id'       => $request->user_id,
             'ip'            => $request->ip(),
             'title'         => $givenTitle,
