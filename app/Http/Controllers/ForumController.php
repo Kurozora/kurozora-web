@@ -48,23 +48,26 @@ class ForumController extends Controller
      * Returns the posts of a section
      *
      * @param Request $request
+     * @param $sectionID
      */
-    public function getThreads(Request $request) {
+    public function getThreads(Request $request, $sectionID) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'section_id'    => 'bail|required|numeric|exists:' . ForumSection::TABLE_NAME .',id',
             'order'         => 'bail|required|in:top,recent',
             'page'          => 'bail|numeric|min:0'
         ]);
 
         // Fetch the variables
-        $givenSection = $request->input('section_id');
         $givenOrder = $request->input('order');
         $givenPage = $request->input('page');
 
         // Check validator
         if($validator->fails())
             (new JSONResult())->setError($validator->errors()->first())->show();
+
+        // Check if the section exists
+        if(!ForumSection::where('id', $sectionID)->exists())
+            (new JSONResult())->setError('The given section does not exist.')->show();
 
         // Determine columns to select
         $columnsToSelect = [
@@ -90,7 +93,7 @@ class ForumController extends Controller
                 $join->on(ForumThread::TABLE_NAME . '.user_id', '=', User::TABLE_NAME . '.id');
             })
             ->where([
-                [ForumThread::TABLE_NAME . '.section_id', '=', $givenSection]
+                [ForumThread::TABLE_NAME . '.section_id', '=', $sectionID]
             ]);
 
         // Add order
