@@ -30,6 +30,21 @@ class ForumController extends Controller
     }
 
     /**
+     * Returns details for a specific section
+     *
+     * @param $sectionID
+     */
+    public function sectionDetails($sectionID) {
+        // Check if the section exists
+        $section = ForumSection::find($sectionID);
+
+        if(!$section)
+            (new JSONResult())->setError('The given section could not be found.')->show();
+
+        (new JSONResult())->setData(['section' => $section->formatForDetails()])->show();
+    }
+
+    /**
      * Returns the posts of a section
      *
      * @param Request $request

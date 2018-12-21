@@ -813,6 +813,34 @@
         }
       }
     },
+    "/forum/sections/{sectionID}": {
+      "get": {
+        "tags": [
+          "forum"
+        ],
+        "summary": "Forum section details.",
+        "description": "This endpoint will retrieve the details for a forum section.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sectionID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the forum section."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    }
   },
   "components": {
     "schemas": {
