@@ -664,7 +664,7 @@
         }
       }
     },
-    "/anime/{animeID}/seasons/{seasonID}": {
+    "/anime/{animeID}/seasons/{seasonNumber}": {
       "get": {
         "tags": [
           "anime"
@@ -683,13 +683,13 @@
           },
           {
             "in": "path",
-            "name": "seasonID",
+            "name": "seasonNumber",
             "schema": {
               "type": "integer",
               "example": 1
             },
             "required": true,
-            "description": "ID of the season."
+            "description": "Number of the season."
           }
         ],
         "responses": {
@@ -702,7 +702,7 @@
         }
       }
     },
-    "/anime/{animeID}/seasons/{seasonID}/episodes": {
+    "/anime/{animeID}/seasons/{seasonNumber}/episodes": {
       "get": {
         "tags": [
           "anime"
@@ -721,13 +721,13 @@
           },
           {
             "in": "path",
-            "name": "seasonID",
+            "name": "seasonNumber",
             "schema": {
               "type": "integer",
               "example": 1
             },
             "required": true,
-            "description": "ID of the season."
+            "description": "Number of the season."
           }
         ],
         "responses": {
@@ -791,7 +791,7 @@
           }
         }
       }
-    },
+    }
   },
   "components": {
     "schemas": {

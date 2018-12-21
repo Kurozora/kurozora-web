@@ -80,13 +80,13 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
         Route::get('/{animeID}/seasons', [AnimeController::class, 'seasonsAnime'])
             ->where('animeID', '[0-9]*');
 
-        Route::get('/{animeID}/seasons/{seasonID}', [AnimeController::class, 'seasonInfo'])
+        Route::get('/{animeID}/seasons/{seasonNum}', [AnimeController::class, 'seasonInfo'])
             ->where('animeID', '[0-9]*')
-            ->where('seasonID', '[0-9]*');
+            ->where('seasonNum', '[0-9]*');
 
-        Route::get('/{animeID}/seasons/{seasonID}/episodes', [AnimeController::class, 'episodesAnime'])
+        Route::get('/{animeID}/seasons/{seasonNum}/episodes', [AnimeController::class, 'episodesAnime'])
             ->where('animeID', '[0-9]*')
-            ->where('seasonID', '[0-9]*');
+            ->where('seasonNum', '[0-9]*');
 
         Route::post('/{animeID}/rate', [AnimeController::class, 'rateAnime'])
             ->where('animeID', '[0-9]*')
