@@ -116,7 +116,5 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
         Route::post('/post_reply', 'ForumController@postReply')->middleware('kurozora.userauth');
     });
 
-    Route::prefix('/misc')->group(function() {
-        Route::get('/get_privacy_policy', 'MiscController@getPrivacyPolicy');
-    });
+    Route::get('/privacy-policy', [MiscController::class, 'getPrivacyPolicy']);
 });
