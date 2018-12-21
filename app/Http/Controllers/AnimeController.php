@@ -186,7 +186,7 @@ class AnimeController extends Controller
      * @param Request $request
      * @param int $animeID
      */
-    public function episodesAnime(Request $request, $animeID, $seasonID) {
+    public function episodesAnime(Request $request, $animeID, $seasonNum) {
         // Get the Anime
         $anime = Anime::find($animeID);
 
@@ -197,13 +197,12 @@ class AnimeController extends Controller
         // Get the season
         $season = AnimeSeason::where([
             ['anime_id',    '=', $animeID],
-            ['id',          '=', $seasonID]
+            ['number',      '=', $seasonNum]
         ])->first();
 
         // The season does not exist
         if(!$season)
-            (new JSONResult())->setError('The specified season ID does not exist.')->show();
-
+            (new JSONResult())->setError('The specified season does not exist.')->show();
 
         $episodes = $anime->getEpisodes($season->number);
         $endEpisodes = [];
@@ -281,11 +280,11 @@ class AnimeController extends Controller
      * @param $animeID
      * @param $seasonID
      */
-    public function seasonInfo($animeID, $seasonID) {
+    public function seasonInfo($animeID, $seasonNum) {
         // Get the season
         $season = AnimeSeason::where([
             'anime_id'  => $animeID,
-            'id'        => $seasonID
+            'number'    => $seasonNum
         ])->first();
 
         // The season does not exist
