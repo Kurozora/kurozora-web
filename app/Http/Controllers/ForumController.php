@@ -11,7 +11,7 @@ use App\Helpers\JSONResult;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 class ForumController extends Controller
 {
@@ -168,11 +168,12 @@ class ForumController extends Controller
      * Vote for a thread
      *
      * @param Request $request
+     * @param $sectionID
+     * @param $threadID
      */
-    public function voteThread(Request $request) {
+    public function voteThread(Request $request, $sectionID, $threadID) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'thread_id' => 'bail|required|numeric|exists:' . ForumThread::TABLE_NAME . ',id',
             'vote'      => 'bail|required|numeric|min:0|max:1'
         ]);
 
@@ -180,14 +181,17 @@ class ForumController extends Controller
         if($validator->fails())
             (new JSONResult())->setError($validator->errors()->first())->show();
 
-        // Get inputs
-        $givenThreadID = $request->input('thread_id');
-        $givenVote = (bool) $request->input('vote');
+        // Get the vote
+        $givenVote = $request->input('vote');
+
+        // Check if the thread exists
+        if(!ForumThread::where('id', $threadID)->where('section_id', $sectionID)->exists())
+            (new JSONResult())->setError(JSONResult::ERROR_FORUM_THREAD_NON_EXISTENT)->show();
 
         // Check if they've voted already
         $foundVote = ForumThreadVote::where([
-            ['user_id', '=', $request->user_id],
-            ['thread_id', '=', $givenThreadID]
+            ['user_id',     '=', $request->user_id],
+            ['thread_id',   '=', $threadID]
         ])->first();
 
         // They haven't voted for this thread yet
@@ -195,7 +199,7 @@ class ForumController extends Controller
             // Insert vote
             ForumThreadVote::create([
                 'user_id'   => $request->user_id,
-                'thread_id' => $givenThreadID,
+                'thread_id' => $threadID,
                 'positive'  => $givenVote
             ]);
         }

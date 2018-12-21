@@ -983,6 +983,68 @@
         }
       }
     },
+    "/forum/sections/{sectionID}/threads/{threadID}/vote": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
+        "tags": [
+          "forum"
+        ],
+        "summary": "Leaves a vote for a thread.",
+        "description": "This endpoint will leave a vote for a thread.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sectionID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the forum section."
+          },
+          {
+            "in": "path",
+            "name": "threadID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the forum thread."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "vote": {
+                    "type": "integer",
+                    "description": "The vote to submit. (0 = downvote, 1 = upvote)",
+                    "minimum": 0,
+                    "maximum": 1
+                  }
+                },
+                "required": [
+                  "vote",
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/privacy-policy": {
       "get": {
         "tags": [
