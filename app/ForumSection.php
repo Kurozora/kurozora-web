@@ -25,4 +25,27 @@ class ForumSection extends Model
             'locked'    => (bool) $this->locked
         ];
     }
+
+    /**
+     * Get the amount of threads in this section
+     *
+     * @return integer
+     */
+    public function getThreadCount() {
+        return ForumThread::where('section_id', $this->id)->count();
+    }
+
+    /**
+     * Formats the section for a details response
+     *
+     * @return array
+     */
+    public function formatForDetails() {
+        return [
+            'id'            => $this->id,
+            'name'          => $this->name,
+            'total_threads' => $this->getThreadCount(),
+            'locked'        => (bool) $this->locked
+        ];
+    }
 }
