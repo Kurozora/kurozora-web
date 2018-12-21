@@ -144,24 +144,16 @@ class ForumController extends Controller
      *
      * @param Request $request
      */
-    public function getThread(Request $request) {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'thread_id'    => 'bail|required|numeric'
-        ]);
-
-        // Check validator
-        if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
-
-        $givenThreadID = $request->input('thread_id');
-
+    public function getThread(Request $request, $sectionID, $threadID) {
         // Find the thread
-        $thread = ForumThread::find($givenThreadID);
+        $thread = ForumThread::where([
+            ['id',          '=', $threadID],
+            ['section_id',  '=', $sectionID]
+        ])->first();
 
         // Thread wasn't found
-        if($thread == null)
-            (new JSONResult())->setError('Thread was not found.')->show();
+        if($thread === null)
+            (new JSONResult())->setError(JSONResult::ERROR_FORUM_THREAD_NON_EXISTENT)->show();
 
         // Show thread information
         (new JSONResult())->setData([
