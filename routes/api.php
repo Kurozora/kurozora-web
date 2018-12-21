@@ -96,7 +96,11 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
     });
 
     Route::prefix('/forum')->group(function() {
-        Route::get('/get_sections', 'ForumController@getSections');
+        Route::get('/sections', [ForumController::class, 'getSections']);
+
+        Route::get('/sections/{sectionID}', [ForumController::class, 'sectionDetails'])
+            ->where('sectionID', '[0-9]*');
+
         Route::post('/get_threads', 'ForumController@getThreads');
         Route::post('/get_thread', 'ForumController@getThread');
         Route::post('/vote_thread', 'ForumController@voteThread')->middleware('kurozora.userauth');

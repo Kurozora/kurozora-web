@@ -33,6 +33,10 @@
       "description":"Everything Anime related"
     },
     {
+      "name":"forum",
+      "description":"Everything forum related"
+    },
+    {
       "name":"sessions",
       "description":"Everything session related"
     }
@@ -791,7 +795,24 @@
           }
         }
       }
-    }
+    },
+    "/forum/sections": {
+      "get": {
+        "tags": [
+          "forum"
+        ],
+        "summary": "Forum sections list.",
+        "description": "This endpoint will retrieve the forum sections.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
   },
   "components": {
     "schemas": {
