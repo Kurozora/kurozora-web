@@ -104,9 +104,12 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
         Route::get('/sections/{sectionID}/threads', [ForumController::class, 'getThreads'])
             ->where('sectionID', '[0-9]*');
 
+        Route::post('/sections/{sectionID}/threads', [ForumController::class, 'postThread'])
+            ->where('sectionID', '[0-9]*')
+            ->middleware('kurozora.userauth');
+
         Route::post('/get_thread', 'ForumController@getThread');
         Route::post('/vote_thread', 'ForumController@voteThread')->middleware('kurozora.userauth');
-        Route::post('/post_thread', 'ForumController@postThread')->middleware('kurozora.userauth');
         Route::post('/post_reply', 'ForumController@postReply')->middleware('kurozora.userauth');
     });
 

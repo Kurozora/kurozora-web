@@ -887,6 +887,59 @@
             "$ref": "#/components/responses/JSONError"
           }
         }
+      },
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
+        "tags": [
+          "forum"
+        ],
+        "summary": "Submit a new thread to a section.",
+        "description": "This endpoint will submit a new thread.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sectionID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the forum section."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "The title of the thread."
+                  },
+                  "content": {
+                    "type": "string",
+                    "description": "Content of the thread."
+                  }
+                },
+                "required": [
+                  "title", "content"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
       }
     }
   },
