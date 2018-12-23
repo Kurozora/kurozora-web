@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\ForumReply;
+use App\ForumReplyVote;
 use App\ForumSectionBan;
 use App\ForumThread;
 use App\ForumSection;
@@ -311,6 +312,20 @@ class ForumController extends Controller
         if(!ForumThread::where('id', $threadID)->where('section_id', $sectionID)->exists())
             (new JSONResult())->setError(JSONResult::ERROR_FORUM_THREAD_NON_EXISTENT)->show();
 
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'order'         => 'bail|required|in:top,recent',
+            'page'          => 'bail|numeric|min:0'
+        ]);
+
+        // Fetch the variables
+        $givenOrder = $request->input('order');
+        $givenPage = $request->input('page');
+
+        // Check validator
+        if($validator->fails())
+            (new JSONResult())->setError($validator->errors()->first())->show();
+
         // Determine columns to select
         $columnsToSelect = [
             ForumReply::TABLE_NAME . '.id AS reply_id',
@@ -318,7 +333,11 @@ class ForumController extends Controller
             User::TABLE_NAME . '.username AS username',
             User::TABLE_NAME . '.id AS user_id',
             User::TABLE_NAME . '.avatar AS user_avatar',
-            ForumReply::TABLE_NAME . '.created_at AS creation_date'
+            ForumReply::TABLE_NAME . '.created_at AS creation_date',
+            // Select the upvote count via subquery
+            DB::raw('(SELECT COUNT(*) FROM ' . ForumReplyVote::TABLE_NAME . ' WHERE reply_id = ' . ForumReply::TABLE_NAME . '.id AND positive = 1) AS upvote_count'),
+            // Select the downvote count via subquery
+            DB::raw('(SELECT COUNT(*) FROM ' . ForumReplyVote::TABLE_NAME . ' WHERE reply_id = ' . ForumReply::TABLE_NAME . '.id AND positive = 0) AS downvote_count')
         ];
 
         // Create query
@@ -330,6 +349,21 @@ class ForumController extends Controller
             ->where([
                 [ForumReply::TABLE_NAME . '.thread_id', '=', $threadID]
             ]);
+
+        // Add order
+        if($givenOrder == 'top')
+            $replyInfo->orderBy('upvote_count', 'DESC');
+        else if($givenOrder == 'recent')
+            $replyInfo->orderBy('creation_date', 'DESC');
+
+        // Add page/offset
+        $resultsPerPage = 10;
+
+        if($givenPage == null)
+            $givenPage = 0;
+
+        $replyInfo->offset($givenPage * $resultsPerPage);
+        $replyInfo->limit($resultsPerPage);
 
         // Get the results
         $rawReplies = $replyInfo->get();
@@ -344,13 +378,15 @@ class ForumController extends Controller
                     'username'  => $rawReply->username,
                     'avatar'    => User::avatarFileToURL($rawReply->user_avatar)
                 ],
+                'score'     => ($rawReply->upvote_count - $rawReply->downvote_count),
                 'content'   => $rawReply->content
             ];
         }
 
         // Show successful response
         (new JSONResult())->setData([
-            'replies' => $displayReplies
+            'page'      => $givenPage,
+            'replies'   => $displayReplies
         ])->show();
     }
 }

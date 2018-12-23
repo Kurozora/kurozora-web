@@ -1070,6 +1070,26 @@
             },
             "required": true,
             "description": "ID of the forum thread."
+          },
+          {
+            "in": "query",
+            "name": "order",
+            "schema": {
+              "type": "string",
+              "example": "top"
+            },
+            "required": false,
+            "description": "The method of ordering the results."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "example": "0"
+            },
+            "required": false,
+            "description": "The page to retrieve threads from. (starts at 0)"
           }
         ],
         "responses": {
