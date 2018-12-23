@@ -16,6 +16,8 @@ echo -e "${BLACK}[${ORANGE}Kurozora${BLACK}] ${LIME}✔ ${NC}Autoload file dumpe
 
 # Clear laravel config cache
 echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Reloading Laravel config cache..."
+php artisan view:clear
+php artisan view:cache
 php artisan config:cache
 echo -e "${BLACK}[${ORANGE}Kurozora${BLACK}] ${LIME}✔ ${NC}Config cache reloaded!"
 

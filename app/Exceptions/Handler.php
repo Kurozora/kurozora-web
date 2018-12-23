@@ -15,7 +15,8 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        //
+        // Page not found exception
+        \Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class
     ];
 
     /**
