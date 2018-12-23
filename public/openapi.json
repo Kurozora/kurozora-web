@@ -1029,12 +1029,49 @@
                   }
                 },
                 "required": [
-                  "vote",
+                  "vote"
                 ]
               }
             }
           }
         },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/forum/sections/{sectionID}/threads/{threadID}/replies": {
+      "get": {
+        "tags": [
+          "forum"
+        ],
+        "summary": "Gets the replies on a thread.",
+        "description": "This endpoint will retrieve the replies on a thread.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sectionID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the forum section."
+          },
+          {
+            "in": "path",
+            "name": "threadID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the forum thread."
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSONSuccess"
@@ -1061,7 +1098,7 @@
           }
         }
       }
-    },
+    }
   },
   "components": {
     "schemas": {

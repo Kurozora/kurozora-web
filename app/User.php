@@ -173,6 +173,24 @@ class User extends Model
     }
 
     /**
+     * Takes a avatar filename and returns the URL to it
+     *
+     * @param $fileName
+     * @return string
+     */
+    public static function avatarFileToURL($fileName) {
+        if($fileName === null)
+            return null;
+
+        $filePath = self::USER_UPLOADS_PATH . '/' . $fileName;
+
+        if(Storage::exists($filePath))
+            // Return the URL to the image
+            return url($filePath);
+        else return null;
+    }
+
+    /**
      * Checks if a user can authenticate with the given details
      *
      * @param $userID
