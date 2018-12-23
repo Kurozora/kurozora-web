@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use TVDB;
 
@@ -62,14 +63,20 @@ class Anime extends Model
                 // Delete old actors if there were any
                 Actor::where('anime_id', $this->id)->delete();
 
+                // Insert the new actors
+                $insertActors = [];
+
                 foreach ($retActors as $actor) {
-                    Actor::create([
-                        'anime_id' => $this->id,
-                        'name' => $actor->name,
-                        'role' => $actor->role,
-                        'image' => TVDB::IMG_URL . '/' . $actor->image
-                    ]);
+                    $insertActors[] = [
+                        'created_at'    => Carbon::now(),
+                        'anime_id'      => $this->id,
+                        'name'          => $actor->name,
+                        'role'          => $actor->role,
+                        'image'         => TVDB::IMG_URL . '/' . $actor->image
+                    ];
                 }
+
+                Actor::insert($insertActors);
             }
 
             $this->fetched_actors = true;

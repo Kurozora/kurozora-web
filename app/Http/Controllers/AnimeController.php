@@ -79,7 +79,7 @@ class AnimeController extends Controller
 
         // The Anime item does not exist
         if(!$anime)
-            (new JSONResult())->setError('Unable to retrieve the details for the specified anime.')->show();
+            (new JSONResult())->setError(JSONResult::ERROR_ANIME_NON_EXISTENT)->show();
 
         // Get the user rating for this Anime
         $userRating = 0.0;
@@ -141,7 +141,7 @@ class AnimeController extends Controller
 
         // The Anime item does not exist
         if(!$anime)
-            (new JSONResult())->setError('Unable to retrieve actor data for the specified anime.')->show();
+            (new JSONResult())->setError(JSONResult::ERROR_ANIME_NON_EXISTENT)->show();
 
         // Get the actors
         $retActors = [];
@@ -233,7 +233,7 @@ class AnimeController extends Controller
 
         // The Anime item does not exist
         if(!$anime)
-            (new JSONResult())->setError('The anime you are trying to rate was not found.')->show();
+            (new JSONResult())->setError(JSONResult::ERROR_ANIME_NON_EXISTENT)->show();
 
         // Fetch the variables
         $givenRating = $request->input('rating');
