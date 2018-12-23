@@ -298,4 +298,59 @@ class ForumController extends Controller
 
         (new JSONResult())->setData(['reply_id' => $newReply->id])->show();
     }
+
+    /**
+     * Vote for a thread
+     *
+     * @param Request $request
+     * @param $sectionID
+     * @param $threadID
+     */
+    public function getReplies(Request $request, $sectionID, $threadID) {
+        // Check if the thread exists
+        if(!ForumThread::where('id', $threadID)->where('section_id', $sectionID)->exists())
+            (new JSONResult())->setError(JSONResult::ERROR_FORUM_THREAD_NON_EXISTENT)->show();
+
+        // Determine columns to select
+        $columnsToSelect = [
+            ForumReply::TABLE_NAME . '.id AS reply_id',
+            ForumReply::TABLE_NAME . '.content AS content',
+            User::TABLE_NAME . '.username AS username',
+            User::TABLE_NAME . '.id AS user_id',
+            User::TABLE_NAME . '.avatar AS user_avatar',
+            ForumReply::TABLE_NAME . '.created_at AS creation_date'
+        ];
+
+        // Create query
+        $replyInfo = DB::table(ForumReply::TABLE_NAME)
+            ->select($columnsToSelect)
+            ->join(User::TABLE_NAME, function ($join) {
+                $join->on(ForumReply::TABLE_NAME . '.user_id', '=', User::TABLE_NAME . '.id');
+            })
+            ->where([
+                [ForumReply::TABLE_NAME . '.thread_id', '=', $threadID]
+            ]);
+
+        // Get the results
+        $rawReplies = $replyInfo->get();
+        $displayReplies = [];
+
+        foreach($rawReplies as $rawReply) {
+            $displayReplies[] = [
+                'id'        => $rawReply->reply_id,
+                'posted_at' => $rawReply->creation_date,
+                'user' => [
+                    'id'        => $rawReply->user_id,
+                    'username'  => $rawReply->username,
+                    'avatar'    => User::avatarFileToURL($rawReply->user_avatar)
+                ],
+                'content'   => $rawReply->content
+            ];
+        }
+
+        // Show successful response
+        (new JSONResult())->setData([
+            'replies' => $displayReplies
+        ])->show();
+    }
 }
