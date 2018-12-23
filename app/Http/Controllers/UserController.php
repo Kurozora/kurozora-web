@@ -2,23 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Anime;
-use App\Events\NewUserSessionEvent;
 use App\Events\UserSessionKilledEvent;
 use App\Helpers\JSONResult;
 use App\Helpers\KuroMail;
 use App\PasswordReset;
 use App\Session;
 use App\User;
-use App\LoginAttempt;
-use App\UserLibrary;
 use App\UserNotification;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
-use KuroAuthToken;
-use Pusher\PusherException;
+use Illuminate\Support\Facades\Validator;
 use PusherHelper;
-use Validator;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -258,6 +251,7 @@ class UserController extends Controller
      * Returns the current active sessions for a user
      *
      * @param Request $request
+     * @param $userID
      */
     public function getSessions(Request $request, $userID) {
         // Check if we can retrieve the sessions of this user
