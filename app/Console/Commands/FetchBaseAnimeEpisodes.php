@@ -36,6 +36,31 @@ class FetchBaseAnimeEpisodes extends Command
     }
 
     /**
+     * Finds or creates an Anime season
+     *
+     * @param $animeID
+     * @param $seasonNumber
+     * @return AnimeSeason
+     */
+    protected function findOrCreateSeason($animeID, $seasonNumber) {
+        // Find the season
+        $checkFindSeason = AnimeSeason::where([
+            ['anime_id',    '=', $animeID],
+            ['number',      '=', $seasonNumber]
+        ])->first();
+
+        // Create the season (it did not exist yet)
+        if(!$checkFindSeason) {
+            $checkFindSeason = AnimeSeason::create([
+                'anime_id'  => $animeID,
+                'number'    => $seasonNumber
+            ]);
+        }
+
+        return $checkFindSeason;
+    }
+
+    /**
      * Execute the console command.
      *
      * @return mixed
@@ -85,11 +110,13 @@ class FetchBaseAnimeEpisodes extends Command
             $insertCount = 0;
 
             foreach($resultSet as $episodeResult) {
-                // Already exists
+                // Get the appropriate season
+                $season = $this->findOrCreateSeason($anime->id, $episodeResult->airedSeason);
+
+                // This episode already exists
                 $checkFindEpisode = AnimeEpisode::where([
-                    ['anime_id', '=', $anime->id],
-                    ['number', '=', $episodeResult->airedEpisodeNumber],
-                    ['season', '=', $episodeResult->airedSeason]
+                    ['number',      '=', $episodeResult->airedEpisodeNumber],
+                    ['season_id',   '=', $season->id]
                 ])->first();
 
                 if($checkFindEpisode)
@@ -102,9 +129,8 @@ class FetchBaseAnimeEpisodes extends Command
                     $firstAiredValue = new Carbon($episodeResult->firstAired);
 
                 AnimeEpisode::create([
-                    'anime_id'      => $anime->id,
                     'name'          => $episodeResult->episodeName,
-                    'season'        => $episodeResult->airedSeason,
+                    'season_id'     => $season->id,
                     'number'        => $episodeResult->airedEpisodeNumber,
                     'overview'      => $episodeResult->overview,
                     'first_aired'   => $firstAiredValue
@@ -127,24 +153,6 @@ class FetchBaseAnimeEpisodes extends Command
         }
 
         $this->info('All done! ' . $totalInsertCount . ' total of episodes inserted.');
-
-        // Create the seasons
-        for($i = 0; $i <= $highestSeason; $i++) {
-            // Already exists
-            $checkFindSeason = AnimeSeason::where([
-                ['anime_id', '=', $anime->id],
-                ['number', '=', $i]
-            ])->first();
-
-            if($checkFindSeason)
-                continue;
-
-            // Create the season
-            AnimeSeason::create([
-                'number'    => $i,
-                'anime_id'  => $anime->id
-            ]);
-        }
 
         // Update the Anime variables
         $anime->episode_count = $totalInsertCount;

@@ -7,10 +7,8 @@ use App\Anime;
 use App\AnimeRating;
 use App\AnimeSeason;
 use App\Helpers\JSONResult;
-use App\Session;
-use App\User;
 use App\UserLibrary;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
 class AnimeController extends Controller
@@ -181,42 +179,6 @@ class AnimeController extends Controller
     }
 
     /**
-     * Returns episode information for an Anime
-     *
-     * @param Request $request
-     * @param int $animeID
-     */
-    public function episodesAnime(Request $request, $animeID, $seasonNum) {
-        // Get the Anime
-        $anime = Anime::find($animeID);
-
-        // The Anime item does not exist
-        if(!$anime)
-            (new JSONResult())->setError('Unable to retrieve episode data for the specified anime.')->show();
-
-        // Get the season
-        $season = AnimeSeason::where([
-            ['anime_id',    '=', $animeID],
-            ['number',      '=', $seasonNum]
-        ])->first();
-
-        // The season does not exist
-        if(!$season)
-            (new JSONResult())->setError('The specified season does not exist.')->show();
-
-        $episodes = $anime->getEpisodes($season->number);
-        $endEpisodes = [];
-
-        foreach($episodes as $episode)
-            $endEpisodes[] = $episode->formatEpisodeData();
-
-        (new JSONResult())->setData([
-            'episode_count' => count($endEpisodes),
-            'episodes'      => $endEpisodes
-        ])->show();
-    }
-
-    /**
      * Adds a rating for an Anime item
      *
      * @param Request $request
@@ -272,27 +234,5 @@ class AnimeController extends Controller
         }
 
         (new JSONResult())->show();
-    }
-
-    /**
-     * Displays information about a season
-     *
-     * @param $animeID
-     * @param $seasonID
-     */
-    public function seasonInfo($animeID, $seasonNum) {
-        // Get the season
-        $season = AnimeSeason::where([
-            'anime_id'  => $animeID,
-            'number'    => $seasonNum
-        ])->first();
-
-        // The season does not exist
-        if(!$season)
-            (new JSONResult())->setError('The season does not exist.')->show();
-
-        (new JSONResult())->setData([
-            'season' => $season->formatForInfoResponse()
-        ])->show();
     }
 }

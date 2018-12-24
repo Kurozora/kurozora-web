@@ -33,6 +33,10 @@
       "description":"Everything Anime related"
     },
     {
+      "name":"anime-seasons",
+      "description":"Everything Anime Seasons related"
+    },
+    {
       "name":"forum",
       "description":"Everything forum related"
     },
@@ -672,82 +676,6 @@
         }
       }
     },
-    "/anime/{animeID}/seasons/{seasonNumber}": {
-      "get": {
-        "tags": [
-          "anime"
-        ],
-        "summary": "Specific season information.",
-        "description": "This endpoint will retrieve the season information of a specific season.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "animeID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the anime."
-          },
-          {
-            "in": "path",
-            "name": "seasonNumber",
-            "schema": {
-              "type": "integer",
-              "example": 1
-            },
-            "required": true,
-            "description": "Number of the season."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/anime/{animeID}/seasons/{seasonNumber}/episodes": {
-      "get": {
-        "tags": [
-          "anime"
-        ],
-        "summary": "Retrieve season episodes.",
-        "description": "This endpoint will retrieve the episodes in a certain season.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "animeID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the anime."
-          },
-          {
-            "in": "path",
-            "name": "seasonNumber",
-            "schema": {
-              "type": "integer",
-              "example": 1
-            },
-            "required": true,
-            "description": "Number of the season."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
     "/anime/{animeID}/rate": {
       "post": {
         "security": [
@@ -1109,6 +1037,64 @@
         ],
         "summary": "Retrieve latest privacy policy.",
         "description": "This endpoint will retrieve the latest privacy policy.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/anime-seasons/{seasonID}": {
+      "get": {
+        "tags": [
+          "anime-seasons"
+        ],
+        "summary": "Specific season information.",
+        "description": "This endpoint will retrieve the season information of a specific season.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "seasonID",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            },
+            "required": true,
+            "description": "ID of the season."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/anime-seasons/{seasonID}/episodes": {
+      "get": {
+        "tags": [
+          "anime-seasons"
+        ],
+        "summary": "Retrieve season episodes.",
+        "description": "This endpoint will retrieve the episodes in a certain season.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "seasonID",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            },
+            "required": true,
+            "description": "ID of the season."
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSONSuccess"

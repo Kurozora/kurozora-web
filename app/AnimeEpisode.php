@@ -13,8 +13,7 @@ class AnimeEpisode extends Model
 
     // Fillable columns
     protected $fillable = [
-        'anime_id',
-        'season',
+        'season_id',
         'number',
         'name',
         'first_aired',
@@ -32,7 +31,6 @@ class AnimeEpisode extends Model
 
         return [
             'id'            => $this->id,
-            'season'        => $this->season,
             'number'        => $this->number,
             'name'          => $this->name,
             'first_aired'   => $formattedFirstAired,

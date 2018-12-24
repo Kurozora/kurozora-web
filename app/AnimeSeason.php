@@ -49,6 +49,7 @@ class AnimeSeason extends Model
     public function formatForInfoResponse() {
         return [
             'id'            => $this->id,
+            'anime_id'      => $this->anime_id,
             'title'         => $this->getTitle(),
             'episode_count' => $this->getEpisodeCount()
         ];
@@ -60,9 +61,15 @@ class AnimeSeason extends Model
      * @return int
      */
     public function getEpisodeCount() {
-        return AnimeEpisode::where([
-            ['season',      '=', $this->number],
-            ['anime_id',    '=', $this->anime_id]
-        ])->count();
+        return AnimeEpisode::where('season_id', $this->id)->count();
+    }
+
+    /**
+     * Gets the episodes for this season
+     *
+     * @return array
+     */
+    public function getEpisodes() {
+        return AnimeEpisode::where('season_id', $this->id)->get();
     }
 }
