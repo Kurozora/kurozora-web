@@ -96,37 +96,6 @@ class Anime extends Model
     }
 
     /**
-     * Retrieves the saved episodes for this Anime
-     *
-     * @return array
-     */
-    public function getEpisodes($season = null) {
-        // Movies don't have episodes
-        if($this->type == self::ANIME_TYPE_MOVIE)
-            return [];
-
-        // Check if we already have the base episodes
-        if($this->fetched_base_episodes) {
-            $whereClauses = [
-                ['anime_id', '=', $this->id]
-            ];
-
-            if($season != null && is_numeric($season))
-                $whereClauses[] = ['season', '=', $season];
-
-            $episodeQuery = AnimeEpisode::where($whereClauses);
-
-            if($season != null && is_numeric($season))
-                $episodeQuery->orderBy('number', 'ASC');
-
-            return $episodeQuery->get();
-        }
-
-        // The episodes still need to be fetched
-        return [];
-    }
-
-    /**
      * Retrieves the type of Anime as a string
      *
      * @return string
