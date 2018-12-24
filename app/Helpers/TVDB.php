@@ -45,8 +45,6 @@ class TVDB {
         // Try to json decode the result
         $response = json_decode($result);
 
-        return $authString;
-
         if($response != null) {
             if(isset($response->token)) {
                 $this->JWTToken = $response->token;
