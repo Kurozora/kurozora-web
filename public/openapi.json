@@ -37,6 +37,10 @@
       "description":"Everything anime seasons related"
     },
     {
+      "name":"anime-episodes",
+      "description":"Everything anime episodes related"
+    },
+    {
       "name":"forum-sections",
       "description":"Everything forum sections related"
     },
@@ -947,6 +951,59 @@
             "description": "ID of the season."
           }
         ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/anime-episodes/{episodeID}/watched": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
+        "tags": [
+          "anime-episodes"
+        ],
+        "summary": "Marks an episode as \"watched\" or \"not watched\".",
+        "description": "This endpoint will updated the watched status for an episode.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "episodeID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the episode."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "watched": {
+                    "type": "integer",
+                    "description": "Mark episode watched or not. (0 = not watched, 1 = watched)",
+                    "minimum": 0,
+                    "maximum": 1
+                  }
+                },
+                "required": [
+                  "watched"
+                ]
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSONSuccess"
