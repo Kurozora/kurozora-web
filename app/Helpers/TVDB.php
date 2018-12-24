@@ -43,7 +43,7 @@ class TVDB {
         // Try to json decode the result
         $response = json_decode($result);
 
-        return $response;
+        return $authString;
 
         if($response != null) {
             if(isset($response->token)) {
