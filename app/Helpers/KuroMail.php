@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Facades\Config;
 use \SendGrid\Mail;
 use \SendGrid\Email;
 use \SendGrid\Content;
@@ -28,7 +29,7 @@ class KuroMail {
      * KuroMail constructor.
      */
     public function __construct() {
-        $this->api_key = env('SENDGRID_API_KEY', 'ErrorKey');
+        $this->api_key = Config::get('mail.sendgrid-api-key');
     }
 
     /**
