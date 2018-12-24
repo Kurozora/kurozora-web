@@ -166,8 +166,10 @@ class ForumSectionController extends Controller
         $givenContent = $request->input('content');
 
         // Check if the user is banned
-        if(ForumSectionBan::where('section_id', $sectionID)->where('user_id', $request->user_id)->exists())
-            (new JSONResult())->setError('You are banned from posting in this section.')->show();
+        $foundBan = ForumSectionBan::getBanInfo($request->user_id, $sectionID);
+
+        if($foundBan !== null)
+            (new JSONResult())->setError($foundBan['message'])->show();
 
         // Check if the user has already posted within the cooldown period
         if(ForumThread::testPostCooldown($request->user_id))
