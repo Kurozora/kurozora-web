@@ -7,6 +7,7 @@
 */
 
 namespace App\Http\Controllers;
+use App\ForumSection;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/v1', function() {
@@ -90,36 +91,36 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
 
         Route::get('/{seasonID}/episodes', [AnimeSeasonController::class, 'episodes'])
             ->where('seasonID', '[0-9]*');
-
     });
 
-    Route::prefix('/forum')->group(function() {
-        Route::get('/sections', [ForumController::class, 'getSections']);
+    Route::prefix('/forum-sections')->group(function() {
+        Route::get('/', [ForumSectionController::class, 'overview']);
 
-        Route::get('/sections/{sectionID}', [ForumController::class, 'sectionDetails'])
+        Route::get('/{sectionID}', [ForumSectionController::class, 'details'])
             ->where('sectionID', '[0-9]*');
 
-        Route::get('/sections/{sectionID}/threads', [ForumController::class, 'getThreads'])
+        Route::get('/{sectionID}/threads', [ForumSectionController::class, 'threads'])
             ->where('sectionID', '[0-9]*');
 
-        Route::post('/sections/{sectionID}/threads', [ForumController::class, 'postThread'])
+        Route::post('/{sectionID}/threads', [ForumSectionController::class, 'postThread'])
             ->where('sectionID', '[0-9]*')
             ->middleware('kurozora.userauth');
+    });
 
-        Route::get('/sections/{sectionID}/threads/{threadID}', [ForumController::class, 'getThread'])
-            ->where('sectionID', '[0-9]*')
+    Route::prefix('/forum-threads')->group(function() {
+        Route::get('/{threadID}', [ForumThreadController::class, 'threadInfo'])
             ->where('threadID', '[0-9]*');
 
-        Route::post('/sections/{sectionID}/threads/{threadID}/vote', [ForumController::class, 'voteThread'])
-            ->where('sectionID', '[0-9]*')
+        Route::post('/{threadID}/vote', [ForumThreadController::class, 'vote'])
             ->where('threadID', '[0-9]*')
             ->middleware('kurozora.userauth');
 
-        Route::get('/sections/{sectionID}/threads/{threadID}/replies', [ForumController::class, 'getReplies'])
-            ->where('sectionID', '[0-9]*')
+        Route::get('/{threadID}/replies', [ForumThreadController::class, 'replies'])
             ->where('threadID', '[0-9]*');
 
-        Route::post('/post_reply', 'ForumController@postReply')->middleware('kurozora.userauth');
+        Route::post('/{threadID}/replies', [ForumThreadController::class, 'postReply'])
+            ->where('threadID', '[0-9]*')
+            ->middleware('kurozora.userauth');
     });
 
     Route::get('/privacy-policy', [MiscController::class, 'getPrivacyPolicy']);
