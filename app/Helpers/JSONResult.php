@@ -11,6 +11,7 @@ class JSONResult {
     const ERROR_CANNOT_POST_IN_THREAD = 'You cannot post in this thread.';
     const ERROR_FORUM_SECTION_NON_EXISTENT = 'The specified forum section is not recognized.';
     const ERROR_FORUM_THREAD_NON_EXISTENT = 'The specified thread was not found.';
+    const ERROR_FORUM_REPLY_NON_EXISTENT = 'The specified reply was not found.';
     const ERROR_ANIME_NON_EXISTENT = 'The specified anime was not found.';
     const ERROR_ANIME_SEASON_NON_EXISTENT = 'The specified season was not found.';
 
