@@ -934,6 +934,11 @@
     },
     "/anime-seasons/{seasonID}/episodes": {
       "get": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
         "tags": [
           "anime-seasons"
         ],
