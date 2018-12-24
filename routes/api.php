@@ -94,6 +94,13 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
             ->where('seasonID', '[0-9]*');
     });
 
+    Route::prefix('/anime-episodes')->group(function() {
+        Route::post('/{episodeID}/watched', [AnimeEpisodeController::class, 'watched'])
+            ->where('episodeID', '[0-9]*')
+            ->middleware('kurozora.userauth');
+
+    });
+
     Route::prefix('/forum-sections')->group(function() {
         Route::get('/', [ForumSectionController::class, 'overview']);
 

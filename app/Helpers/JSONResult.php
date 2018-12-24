@@ -14,6 +14,7 @@ class JSONResult {
     const ERROR_FORUM_REPLY_NON_EXISTENT = 'The specified reply was not found.';
     const ERROR_ANIME_NON_EXISTENT = 'The specified anime was not found.';
     const ERROR_ANIME_SEASON_NON_EXISTENT = 'The specified season was not found.';
+    const ERROR_ANIME_EPISODE_NON_EXISTENT = 'The specified episode was not found.';
 
     private $success = true;
     private $errorMessage;
