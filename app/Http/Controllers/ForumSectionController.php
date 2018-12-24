@@ -69,7 +69,9 @@ class ForumSectionController extends Controller
             (new JSONResult())->setError($validator->errors()->first())->show();
 
         // Check if the section exists
-        if(!ForumSection::where('id', $sectionID)->exists())
+        $section = ForumSection::find($sectionID);
+
+        if(!$section)
             (new JSONResult())->setError(JSONResult::ERROR_FORUM_SECTION_NON_EXISTENT)->show();
 
         // Determine columns to select
@@ -135,8 +137,9 @@ class ForumSectionController extends Controller
 
         // Show threads in response
         (new JSONResult())->setData([
-            'page'      => (int) $givenPage,
-            'threads'   => $threads
+            'page'          => (int) $givenPage,
+            'thread_pages'  => $section->getPageCount(),
+            'threads'       => $threads
         ])->show();
     }
 

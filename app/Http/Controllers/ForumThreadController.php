@@ -222,8 +222,9 @@ class ForumThreadController extends Controller
 
         // Show successful response
         (new JSONResult())->setData([
-            'page'      => $givenPage,
-            'replies'   => $displayReplies
+            'page'          => $givenPage,
+            'reply_pages'   => $thread->getPageCount(),
+            'replies'       => $displayReplies
         ])->show();
     }
 }
