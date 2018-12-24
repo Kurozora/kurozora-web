@@ -30,15 +30,19 @@
     },
     {
       "name":"anime",
-      "description":"Everything Anime related"
+      "description":"Everything anime related"
     },
     {
       "name":"anime-seasons",
-      "description":"Everything Anime Seasons related"
+      "description":"Everything anime seasons related"
     },
     {
-      "name":"forum",
-      "description":"Everything forum related"
+      "name":"forum-sections",
+      "description":"Everything forum sections related"
+    },
+    {
+      "name":"forum-threads",
+      "description": "Everything forum threads related"
     },
     {
       "name":"sessions",
@@ -728,10 +732,10 @@
         }
       }
     },
-    "/forum/sections": {
+    "/forum-sections": {
       "get": {
         "tags": [
-          "forum"
+          "forum-sections"
         ],
         "summary": "Forum sections list.",
         "description": "This endpoint will retrieve the forum sections.",
@@ -745,10 +749,10 @@
         }
       }
     },
-    "/forum/sections/{sectionID}": {
+    "/forum-sections/{sectionID}": {
       "get": {
         "tags": [
-          "forum"
+          "forum-sections"
         ],
         "summary": "Forum section details.",
         "description": "This endpoint will retrieve the details for a forum section.",
@@ -773,10 +777,10 @@
         }
       }
     },
-    "/forum/sections/{sectionID}/threads": {
+    "/forum-sections/{sectionID}/threads": {
       "get": {
         "tags": [
-          "forum"
+          "forum-sections"
         ],
         "summary": "Forum section get threads.",
         "description": "This endpoint will retrieve the threads in a forum section.",
@@ -827,7 +831,7 @@
           }
         ],
         "tags": [
-          "forum"
+          "forum-sections"
         ],
         "summary": "Submit a new thread to a section.",
         "description": "This endpoint will submit a new thread.",
@@ -864,162 +868,6 @@
             }
           }
         },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/forum/sections/{sectionID}/threads/{threadID}": {
-      "get": {
-        "tags": [
-          "forum"
-        ],
-        "summary": "Get thread details.",
-        "description": "This endpoint will retrieve the details for a forum thread.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "sectionID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the forum section."
-          },
-          {
-            "in": "path",
-            "name": "threadID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the forum thread."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/forum/sections/{sectionID}/threads/{threadID}/vote": {
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "forum"
-        ],
-        "summary": "Leaves a vote for a thread.",
-        "description": "This endpoint will leave a vote for a thread.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "sectionID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the forum section."
-          },
-          {
-            "in": "path",
-            "name": "threadID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the forum thread."
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "vote": {
-                    "type": "integer",
-                    "description": "The vote to submit. (0 = downvote, 1 = upvote)",
-                    "minimum": 0,
-                    "maximum": 1
-                  }
-                },
-                "required": [
-                  "vote"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/forum/sections/{sectionID}/threads/{threadID}/replies": {
-      "get": {
-        "tags": [
-          "forum"
-        ],
-        "summary": "Gets the replies on a thread.",
-        "description": "This endpoint will retrieve the replies on a thread.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "sectionID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the forum section."
-          },
-          {
-            "in": "path",
-            "name": "threadID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the forum thread."
-          },
-          {
-            "in": "query",
-            "name": "order",
-            "schema": {
-              "type": "string",
-              "example": "top"
-            },
-            "required": false,
-            "description": "The method of ordering the results."
-          },
-          {
-            "in": "query",
-            "name": "page",
-            "schema": {
-              "type": "string",
-              "example": "0"
-            },
-            "required": false,
-            "description": "The page to retrieve threads from. (starts at 0)"
-          }
-        ],
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSONSuccess"
@@ -1095,6 +943,184 @@
             "description": "ID of the season."
           }
         ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/forum-threads/{threadID}": {
+      "get": {
+        "tags": [
+          "forum-threads"
+        ],
+        "summary": "Get thread details.",
+        "description": "This endpoint will retrieve the details for a forum thread.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "threadID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the forum thread."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/forum-threads/{threadID}/vote": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
+        "tags": [
+          "forum-threads"
+        ],
+        "summary": "Leaves a vote for a thread.",
+        "description": "This endpoint will leave a vote for a thread.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "threadID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the forum thread."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "vote": {
+                    "type": "integer",
+                    "description": "The vote to submit. (0 = downvote, 1 = upvote)",
+                    "minimum": 0,
+                    "maximum": 1
+                  }
+                },
+                "required": [
+                  "vote"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/forum-threads/{threadID}/replies": {
+      "get": {
+        "tags": [
+          "forum-threads"
+        ],
+        "summary": "Gets the replies on a thread.",
+        "description": "This endpoint will retrieve the replies on a thread.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "threadID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the forum thread."
+          },
+          {
+            "in": "query",
+            "name": "order",
+            "schema": {
+              "type": "string",
+              "example": "top"
+            },
+            "required": false,
+            "description": "The method of ordering the results."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "example": "0"
+            },
+            "required": false,
+            "description": "The page to retrieve threads from. (starts at 0)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
+        "tags": [
+          "forum-threads"
+        ],
+        "summary": "Leaves a reply on a thread.",
+        "description": "This endpoint will leave a reply on a thread.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "threadID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the forum thread."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string",
+                    "description": "The content of the reply."
+                  }
+                },
+                "required": [
+                  "content"
+                ]
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSONSuccess"
