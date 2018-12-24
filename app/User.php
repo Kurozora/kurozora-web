@@ -153,7 +153,7 @@ class User extends Model
      */
     public function getURLToAvatar() {
         if(!$this->hasAvatar()) return null;
-        else return env('APP_URL') . '/' . self::USER_UPLOADS_URL . '/' . $this->avatar;
+        else return url('/' . self::USER_UPLOADS_URL . '/' . $this->avatar);
     }
 
     /**
