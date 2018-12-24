@@ -13,6 +13,9 @@ class ForumSection extends Model
     // Fillable columns
     protected $fillable = ['name', 'icon', 'locked'];
 
+    // Amount of threads to display per page
+    const THREADS_PER_PAGE = 10;
+
     /**
      * Formats the section for a response
      *
@@ -36,16 +39,25 @@ class ForumSection extends Model
     }
 
     /**
+     * Get the amount of pages the section has
+     *
+     * @return integer
+     */
+    public function getPageCount() {
+        return ceil($this->getThreadCount() / self::THREADS_PER_PAGE);
+    }
+
+    /**
      * Formats the section for a details response
      *
      * @return array
      */
-    public function formatForDetails() {
+    public function formatForDetailsResponse() {
         return [
             'id'            => $this->id,
             'name'          => $this->name,
-            'total_threads' => $this->getThreadCount(),
-            'locked'        => (bool) $this->locked
+            'locked'        => (bool) $this->locked,
+            'thread_pages'  => $this->getPageCount()
         ];
     }
 }

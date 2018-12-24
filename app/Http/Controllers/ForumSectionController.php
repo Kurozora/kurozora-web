@@ -42,7 +42,9 @@ class ForumSectionController extends Controller
         if(!$section)
             (new JSONResult())->setError(JSONResult::ERROR_FORUM_SECTION_NON_EXISTENT)->show();
 
-        (new JSONResult())->setData(['section' => $section->formatForDetails()])->show();
+        (new JSONResult())->setData([
+            'section' => $section->formatForDetailsResponse()
+        ])->show();
     }
 
     /**
@@ -104,13 +106,11 @@ class ForumSectionController extends Controller
             $threadInfo->orderBy('creation_date', 'DESC');
 
         // Add page/offset
-        $resultsPerPage = 10;
-
         if($givenPage == null)
             $givenPage = 0;
 
-        $threadInfo->offset($givenPage * $resultsPerPage);
-        $threadInfo->limit($resultsPerPage);
+        $threadInfo->offset($givenPage * ForumSection::THREADS_PER_PAGE);
+        $threadInfo->limit(ForumSection::THREADS_PER_PAGE);
 
         // Get the results
         $rawThreads = $threadInfo->get();
