@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Config;
+
 class TVDB {
     // Base TVDB API URL
     const API_URL = 'https://api.thetvdb.com';
@@ -24,9 +26,9 @@ class TVDB {
 
         // Form the authentication string
         $authString = json_encode([
-            'apikey'    => env('TVDB_API_KEY', 'ErrorKey'),
-            'username'  => env('TVDB_USER_NAME', 'ErrorKey'),
-            'userkey'   => env('TVDB_USER_KEY', 'ErrorKey')
+            'apikey'    => Config::get('app.TVDB_API_KEY'),
+            'username'  => Config::get('app.TVDB_USER_NAME'),
+            'userkey'   => Config::get('app.TVDB_USER_KEY')
         ]);
 
         // Get the JWT token from TVDB API
