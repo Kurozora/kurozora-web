@@ -25,6 +25,8 @@ class CreateForumBansTable extends Migration
 
             $table->integer('section_id')->unsigned();
             $table->foreign('section_id')->references('id')->on(ForumSection::TABLE_NAME)->onDelete('cascade');
+
+            $table->string('reason');
         });
     }
 

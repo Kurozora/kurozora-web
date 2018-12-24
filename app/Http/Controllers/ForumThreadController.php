@@ -6,7 +6,6 @@ use App\ForumReply;
 use App\ForumReplyVote;
 use App\ForumSectionBan;
 use App\ForumThread;
-use App\ForumSection;
 use App\ForumThreadVote;
 use App\Helpers\JSONResult;
 use App\User;
@@ -101,6 +100,12 @@ class ForumThreadController extends Controller
         // Thread wasn't found
         if(!$thread)
             (new JSONResult())->setError(JSONResult::ERROR_FORUM_THREAD_NON_EXISTENT)->show();
+
+        // Check if the user is banned
+        $foundBan = ForumSectionBan::getBanInfo($request->user_id, $thread->section_id);
+
+        if($foundBan !== null)
+            (new JSONResult())->setError($foundBan['message'])->show();
 
         // Validate the inputs
         $validator = Validator::make($request->all(), [
