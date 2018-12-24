@@ -124,5 +124,11 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
             ->middleware('kurozora.userauth');
     });
 
+    Route::prefix('/forum-replies')->group(function() {
+        Route::post('/{replyID}/vote', [ForumReplyController::class, 'vote'])
+            ->where('replyID', '[0-9]*')
+            ->middleware('kurozora.userauth');
+    });
+
     Route::get('/privacy-policy', [MiscController::class, 'getPrivacyPolicy']);
 });
