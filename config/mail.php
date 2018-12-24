@@ -120,4 +120,14 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | SendGrid API key
+    |--------------------------------------------------------------------------
+    |
+    | API key used to communicate with SendGrid
+    |
+    */
+
+    'sendgrid-api-key' => env('SENDGRID_API_KEY', 'ErrorKey')
 ];
