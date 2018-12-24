@@ -21,6 +21,9 @@ class ForumThread extends Model
     // A user can post a thread once every {?} seconds
     const COOLDOWN_POST_THREAD = 60;
 
+    // Amount of results to display per thread page
+    const REPLIES_PER_PAGE = 10;
+
     /**
      * Returns the amount of replies in this thread
      *
@@ -31,18 +34,25 @@ class ForumThread extends Model
     }
 
     /**
-     * Formats the post for a response
+     * Formats the thread for a details response
      *
      * @return array
      */
-    public function formatForResponse() {
+    public function formatForDetailsResponse() {
         return [
             'id'            => $this->id,
-            'user_id'       => $this->user_id,
-            'title'         => $this->title,
             'content'       => $this->content,
-            'reply_count'   => $this->getReplyCount()
+            'reply_pages'   => $this->getPageCount()
         ];
+    }
+
+    /**
+     * Get the amount of pages the thread has
+     *
+     * @return integer
+     */
+    public function getPageCount() {
+        return ceil($this->getReplyCount() / self::REPLIES_PER_PAGE);
     }
 
     /**

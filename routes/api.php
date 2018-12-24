@@ -7,9 +7,9 @@
 */
 
 namespace App\Http\Controllers;
-use App\ForumSection;
 use Illuminate\Support\Facades\Route;
 
+// API Swagger documentation page
 Route::get('/v1', function() {
     return view('website.api', [
         'openapi_json_file' => asset('openapi.json'),
@@ -17,6 +17,7 @@ Route::get('/v1', function() {
     ]);
 });
 
+// API Routes
 Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], function () {
     Route::prefix('/users')->group(function() {
         Route::post('/', [UserController::class, 'register']);
