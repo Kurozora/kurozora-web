@@ -31,10 +31,7 @@ class ForumThreadController extends Controller
 
         // Show thread information
         (new JSONResult())->setData([
-            'thread' => [
-                'id'                => $thread->id,
-                'content'           => $thread->content
-            ]
+            'thread' => $thread->formatForDetailsResponse()
         ])->show();
     }
 
@@ -194,14 +191,11 @@ class ForumThreadController extends Controller
         else if($givenOrder == 'recent')
             $replyInfo->orderBy('creation_date', 'DESC');
 
-        // Add page/offset
-        $resultsPerPage = 10;
-
         if($givenPage == null)
             $givenPage = 0;
 
-        $replyInfo->offset($givenPage * $resultsPerPage);
-        $replyInfo->limit($resultsPerPage);
+        $replyInfo->offset($givenPage * ForumThread::REPLIES_PER_PAGE);
+        $replyInfo->limit(ForumThread::REPLIES_PER_PAGE);
 
         // Get the results
         $rawReplies = $replyInfo->get();
