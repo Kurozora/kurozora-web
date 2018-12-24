@@ -69,7 +69,7 @@ class UserController extends Controller
         $emailData = [
             'title'             => 'Email confirmation',
             'username'          => $username,
-            'confirmation_url'  => env('APP_URL', '') . '/confirmation/' . $newUser->email_confirmation_id
+            'confirmation_url'  => url('/confirmation/' . $newUser->email_confirmation_id)
         ];
 
         (new KuroMail())

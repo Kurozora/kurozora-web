@@ -74,7 +74,7 @@
                                         <tbody>
                                         <tr>
                                             <td style="width:172px;">
-                                                <a href="{{ env('APP_URL', '') }}" target="_blank" style="color: #F3D5A9; font-weight: normal; text-decoration: none !important;">
+                                                <a href="{{ url('/') }}" target="_blank" style="color: #F3D5A9; font-weight: normal; text-decoration: none !important;">
                                                     <img src="{{ asset('img/static/email_header_logo.png') }}" alt="Kurozora logo" style="width: 100%; max-width: 180px;" />
                                                 </a>
                                             </td>

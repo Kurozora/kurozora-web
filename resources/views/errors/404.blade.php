@@ -17,7 +17,7 @@
 <body>
 <div class="middle-div">
     <h1 id="kurozora-title">Page not found</h1>
-    <a href="{{ env('APP_URL', '/') }}" class="back-safe-link">Take me back</a>
+    <a href="{{ url('/') }}" class="back-safe-link">Take me back</a>
 </div>
 
 <script type="text/javascript">

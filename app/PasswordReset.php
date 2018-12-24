@@ -56,7 +56,7 @@ class PasswordReset extends Model
             'title' => 'Password reset',
             'username' => $user->username,
             'ip' => $this->ip,
-            'reset_url' => env('APP_URL', '') . '/reset/' . $this->token
+            'reset_url' => url('/reset/' . $this->token)
         ];
 
         // Send the email
