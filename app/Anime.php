@@ -4,6 +4,7 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Nicolaslopezj\Searchable\SearchableTrait;
 use TVDB;
 
 /**
@@ -13,6 +14,20 @@ use TVDB;
  */
 class Anime extends Model
 {
+    use SearchableTrait;
+
+    /**
+     * Searchable rules.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'title' => 10,
+            'synopsis' => 5
+        ]
+    ];
+
     // Types of Anime
     const ANIME_TYPE_UNDEFINED  = 0;
     const ANIME_TYPE_TV         = 1;

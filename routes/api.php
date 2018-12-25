@@ -71,6 +71,8 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
     Route::prefix('/anime')->group(function() {
         Route::get('/', [AnimeController::class, 'exploreAnime']);
 
+        Route::get('/search', [AnimeController::class, 'search']);
+
         Route::get('/{animeID}', [AnimeController::class, 'detailsAnime'])
             ->where('animeID', '[0-9]*')
             ->middleware('kurozora.userauth');
