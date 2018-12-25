@@ -190,6 +190,10 @@ class AnimeController extends Controller
             'rating' => 'bail|required|numeric|between:' . AnimeRating::MIN_RATING_VALUE . ',' . AnimeRating::MAX_RATING_VALUE
         ]);
 
+        // Check validator
+        if ($validator->fails())
+            (new JSONResult())->setError($validator->errors()->first())->show();
+
         // Get the anime
         $anime = Anime::find($animeID);
 
@@ -199,10 +203,6 @@ class AnimeController extends Controller
 
         // Fetch the variables
         $givenRating = $request->input('rating');
-
-        // Check validator
-        if ($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
 
         // Try to modify the rating if it already exists
         $foundRating = AnimeRating::where([
@@ -234,5 +234,43 @@ class AnimeController extends Controller
         }
 
         (new JSONResult())->show();
+    }
+
+    /**
+     * Retrieves Anime search results
+     *
+     * @param Request $request
+     */
+    public function search(Request $request) {
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'query' => 'bail|required|string|min:1'
+        ]);
+
+        // Check validator
+        if($validator->fails())
+            (new JSONResult())->setError($validator->errors()->first())->show();
+
+        $searchQuery = $request->input('query');
+
+        // Search for the Anime
+        $rawSearchResults = Anime::search($searchQuery)->limit(10)->get();
+
+        // Format the results
+        $displayResults = [];
+
+        foreach($rawSearchResults as $anime) {
+            $displayResults[] = [
+                'id'                => $anime->id,
+                'title'             => $anime->title,
+                'average_rating'    => $anime->average_rating,
+                'poster_thumbnail'  => $anime->getPoster(true)
+            ];
+        }
+
+        // Show response
+        (new JSONResult())->setData([
+            'results' => $displayResults
+        ])->show();
     }
 }
