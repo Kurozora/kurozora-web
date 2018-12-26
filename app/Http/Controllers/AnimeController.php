@@ -254,7 +254,7 @@ class AnimeController extends Controller
         $searchQuery = $request->input('query');
 
         // Search for the Anime
-        $rawSearchResults = Anime::search($searchQuery)->limit(10)->get();
+        $rawSearchResults = Anime::search($searchQuery)->limit(Anime::MAX_SEARCH_RESULTS)->get();
 
         // Format the results
         $displayResults = [];
@@ -270,7 +270,8 @@ class AnimeController extends Controller
 
         // Show response
         (new JSONResult())->setData([
-            'results' => $displayResults
+            'max_search_results'    => Anime::MAX_SEARCH_RESULTS,
+            'results'               => $displayResults
         ])->show();
     }
 }

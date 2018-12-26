@@ -376,4 +376,43 @@ class UserController extends Controller
 
         (new JSONResult())->setData(['notifications' => $notifications])->show();
     }
+
+    /**
+     * Retrieves Anime search results
+     *
+     * @param Request $request
+     */
+    public function search(Request $request) {
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'query' => 'bail|required|string|min:1'
+        ]);
+
+        // Check validator
+        if($validator->fails())
+            (new JSONResult())->setError($validator->errors()->first())->show();
+
+        $searchQuery = $request->input('query');
+
+        // Search for the user
+        $rawSearchResults = User::search($searchQuery)->limit(User::MAX_SEARCH_RESULTS)->get();
+
+        // Format the results
+        $displayResults = [];
+
+        foreach($rawSearchResults as $user) {
+            $displayResults[] = [
+                'id'                => $user->id,
+                'username'          => $user->username,
+                'reputation_count'  => $user->getReputationCount(),
+                'avatar'            => $user->getAvatarURL()
+            ];
+        }
+
+        // Show response
+        (new JSONResult())->setData([
+            'max_search_results'    => User::MAX_SEARCH_RESULTS,
+            'results'               => $displayResults
+        ])->show();
+    }
 }

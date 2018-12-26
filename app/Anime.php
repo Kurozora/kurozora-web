@@ -28,6 +28,9 @@ class Anime extends Model
         ]
     ];
 
+    // Maximum amount of returned search results
+    const MAX_SEARCH_RESULTS = 10;
+
     // Types of Anime
     const ANIME_TYPE_UNDEFINED  = 0;
     const ANIME_TYPE_TV         = 1;

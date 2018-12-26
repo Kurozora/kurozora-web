@@ -22,6 +22,8 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
     Route::prefix('/users')->group(function() {
         Route::post('/', [UserController::class, 'register']);
 
+        Route::get('/search', [UserController::class, 'search']);
+
         Route::post('/reset-password', [UserController::class, 'resetPassword']);
 
         Route::get('/{userID}/sessions', [UserController::class, 'getSessions'])
