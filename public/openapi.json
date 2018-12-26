@@ -441,6 +441,34 @@
         }
       }
     },
+    "/users/search": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Searches users.",
+        "description": "This endpoint will retrieve the search results for users.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "The search query."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/sessions": {
       "post": {
         "tags": [

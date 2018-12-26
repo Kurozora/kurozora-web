@@ -6,9 +6,26 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class User extends Model
 {
+    use SearchableTrait;
+
+    /**
+     * Searchable rules.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'username' => 10
+        ]
+    ];
+
+    // Maximum amount of returned search results
+    const MAX_SEARCH_RESULTS = 10;
+
     // Path where user uploads are stored
     const USER_UPLOADS_PATH = 'public/img/user_uploads';
     const USER_UPLOADS_URL  = 'img/user_uploads';
