@@ -1253,6 +1253,34 @@
         }
       }
     },
+    "/forum-threads/search": {
+      "get": {
+        "tags": [
+          "forum-threads"
+        ],
+        "summary": "Searches forum threads.",
+        "description": "This endpoint will retrieve the search results for forum threads.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "The search query."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/forum-replies/{replyID}/vote": {
       "post": {
         "security": [

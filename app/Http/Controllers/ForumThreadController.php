@@ -227,4 +227,46 @@ class ForumThreadController extends Controller
             'replies'       => $displayReplies
         ])->show();
     }
+
+    /**
+     * Retrieves Anime search results
+     *
+     * @param Request $request
+     */
+    public function search(Request $request) {
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'query' => 'bail|required|string|min:1'
+        ]);
+
+        // Check validator
+        if($validator->fails())
+            (new JSONResult())->setError($validator->errors()->first())->show();
+
+        $searchQuery = $request->input('query');
+
+        // Search for the thread
+        $rawSearchResults = ForumThread::search($searchQuery)->limit(ForumThread::MAX_SEARCH_RESULTS)->get();
+
+        // Format the results
+        $displayResults = [];
+
+        foreach($rawSearchResults as $thread) {
+            $displayResults[] = [
+                'id'                => $thread->id,
+                'title'             => $thread->title,
+                'content_teaser'    =>
+                    substr(strip_tags($thread->content), 0, 100) .
+                    ((strlen($thread->content) > 100) ? '...' : '')
+                ,
+                'locked'            => (bool) $thread->locked
+            ];
+        }
+
+        // Show response
+        (new JSONResult())->setData([
+            'max_search_results'    => ForumThread::MAX_SEARCH_RESULTS,
+            'results'               => $displayResults
+        ])->show();
+    }
 }

@@ -4,9 +4,26 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class ForumThread extends Model
 {
+    use SearchableTrait;
+
+    /**
+     * Searchable rules.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'title' => 10
+        ]
+    ];
+
+    // Maximum amount of returned search results
+    const MAX_SEARCH_RESULTS = 10;
+
     // Table name
     const TABLE_NAME = 'forum_thread';
     protected $table = self::TABLE_NAME;

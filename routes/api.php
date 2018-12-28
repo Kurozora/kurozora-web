@@ -120,6 +120,8 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
     });
 
     Route::prefix('/forum-threads')->group(function() {
+        Route::get('/search', [ForumThreadController::class, 'search']);
+
         Route::get('/{threadID}', [ForumThreadController::class, 'threadInfo'])
             ->where('threadID', '[0-9]*');
 
