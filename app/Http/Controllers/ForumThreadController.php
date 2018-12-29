@@ -244,22 +244,11 @@ class ForumThreadController extends Controller
             (new JSONResult())->setError($validator->errors()->first())->show();
 
         $searchQuery = $request->input('query');
-        $resultArr = [];
 
-        // Find the thread by ID if the search query is an ID
-        if(starts_with($searchQuery, 'id:')) {
-            preg_match('/^id:([0-9]+?)$/', $searchQuery, $idMatches);
-
-            if(isset($idMatches[1])) {
-                $foundThread = ForumThread::find($idMatches[1]);
-
-                if($foundThread) $resultArr[] = $foundThread;
-            }
-        }
-        else {
-            // Search for the thread
-            $resultArr = ForumThread::search($searchQuery)->limit(ForumThread::MAX_SEARCH_RESULTS)->get();
-        }
+        // Search for the thread
+        $resultArr = ForumThread::kuroSearch($searchQuery, [
+            'limit' => ForumThread::MAX_SEARCH_RESULTS
+        ]);
 
         // Format the results
         $displayResults = [];

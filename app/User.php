@@ -6,9 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use KuroSearchableModel;
 use Nicolaslopezj\Searchable\SearchableTrait;
 
-class User extends Model
+class User extends KuroSearchableModel
 {
     use SearchableTrait;
 
