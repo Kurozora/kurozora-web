@@ -49,6 +49,9 @@ class User extends Model
     // Fillable columns
     protected $fillable = ['username', 'email', 'password', 'email_confirmation_id', 'avatar'];
 
+    // User biography character limited
+    const BIOGRAPHY_LIMIT = 250;
+
     /**
      * Returns the name of a role from the integer constant
      *

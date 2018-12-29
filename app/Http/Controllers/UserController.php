@@ -415,4 +415,49 @@ class UserController extends Controller
             'results'               => $displayResults
         ])->show();
     }
+
+    /**
+     * Update a user's information
+     *
+     * @param Request $request
+     * @param $userID
+     */
+    public function update(Request $request, $userID) {
+        // Check if we can do this for this user
+        if($request->user_id != $userID)
+            (new JSONResult())->setError('You are not permitted to do this.')->show();
+
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'email'         => 'bail|email',
+            'biography'     => 'bail|max:' . User::BIOGRAPHY_LIMIT,
+            'profileImage'  => 'bail|mimes:jpeg,jpg,png|max:700',
+        ]);
+
+        // Check validator
+        if($validator->fails())
+            (new JSONResult())->setError($validator->errors()->first())->show();
+
+        // Get the user
+        $anyChanges = false;
+        $user = User::find($request->user_id);
+
+        // Update email
+        $newEmail = $request->input('email');
+
+        if($newEmail !== null)
+            $user->email = $newEmail;
+
+        // Update biography
+        $newBio = $request->input('biography');
+
+        if($newBio !== null)
+            $user->biography = $newBio;
+
+        // Save the user
+        $user->save();
+
+        // Successful response
+        (new JSONResult())->show();
+    }
 }

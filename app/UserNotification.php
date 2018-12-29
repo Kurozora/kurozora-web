@@ -55,15 +55,6 @@ class UserNotification extends Model
     }
 
     /**
-     * Returns how long ago this notification was created
-     *
-     * @return string
-     */
-    public function getTimeString() {
-        return $this->created_at->diffForHumans();
-    }
-
-    /**
      * Returns the type of the notification as a string
      *
      * @return string
@@ -125,7 +116,7 @@ class UserNotification extends Model
             'read'          => (bool) $this->read,
             'data'          => $this->getData(),
             'string'        => $this->getString(),
-            'time_string'   => $this->getTimeString()
+            'creation_date' => $this->creation_date
         ];
     }
 }
