@@ -394,14 +394,27 @@ class UserController extends Controller
             (new JSONResult())->setError($validator->errors()->first())->show();
 
         $searchQuery = $request->input('query');
+        $resultArr = [];
 
-        // Search for the user
-        $rawSearchResults = User::search($searchQuery)->limit(User::MAX_SEARCH_RESULTS)->get();
+        // Find the user by ID if the search query is an ID
+        if(starts_with($searchQuery, 'id:')) {
+            preg_match('/^id:([0-9]+?)$/', $searchQuery, $idMatches);
+
+            if(isset($idMatches[1])) {
+                $foundUser = User::find($idMatches[1]);
+
+                if($foundUser) $resultArr[] = $foundUser;
+            }
+        }
+        else {
+            // Search for the users
+            $resultArr = User::search($searchQuery)->limit(User::MAX_SEARCH_RESULTS)->get();
+        }
 
         // Format the results
         $displayResults = [];
 
-        foreach($rawSearchResults as $user) {
+        foreach($resultArr as $user) {
             $displayResults[] = [
                 'id'                => $user->id,
                 'username'          => $user->username,
