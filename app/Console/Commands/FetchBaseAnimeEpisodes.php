@@ -123,7 +123,7 @@ class FetchBaseAnimeEpisodes extends Command
                 // Insert the new episode
                 $firstAiredValue = null;
 
-                if($episodeResult->firstAired != null && strlen($firstAiredValue)) {
+                if($episodeResult->firstAired != null && strlen($episodeResult->firstAired)) {
                     $firstAiredValue = Carbon::parse($episodeResult->firstAired);
                     $firstAiredValue = $firstAiredValue->toDateTimeString();
                 }
