@@ -156,7 +156,7 @@
           "users"
         ],
         "summary": "Updates a user's information",
-        "description": "This endpoint will update a user's information.",
+        "description": "This endpoint will update a user's information.\n<div class=\"kuro-warn\">You should only send the request body parameters that actually need to be changed!</div>",
         "parameters": [
           {
             "in": "path",
