@@ -252,14 +252,27 @@ class AnimeController extends Controller
             (new JSONResult())->setError($validator->errors()->first())->show();
 
         $searchQuery = $request->input('query');
+        $resultArr = [];
 
-        // Search for the Anime
-        $rawSearchResults = Anime::search($searchQuery)->limit(Anime::MAX_SEARCH_RESULTS)->get();
+        // Find the anime by ID if the search query is an ID
+        if(starts_with($searchQuery, 'id:')) {
+            preg_match('/^id:([0-9]+?)$/', $searchQuery, $idMatches);
+
+            if(isset($idMatches[1])) {
+                $foundAnime = Anime::find($idMatches[1]);
+
+                if($foundAnime) $resultArr[] = $foundAnime;
+            }
+        }
+        else {
+            // Search for the Anime
+            $resultArr = Anime::search($searchQuery)->limit(Anime::MAX_SEARCH_RESULTS)->get();
+        }
 
         // Format the results
         $displayResults = [];
 
-        foreach($rawSearchResults as $anime) {
+        foreach($resultArr as $anime) {
             $displayResults[] = [
                 'id'                => $anime->id,
                 'title'             => $anime->title,

@@ -503,7 +503,7 @@
           "users"
         ],
         "summary": "Searches users.",
-        "description": "This endpoint will retrieve the search results for users.",
+        "description": "This endpoint will retrieve the search results for users.\n<div class=\"kuro-tip\">You can prefix your search with \"id:\" to search for a user with a specific ID.</div>",
         "parameters": [
           {
             "in": "query",
@@ -830,7 +830,7 @@
           "anime"
         ],
         "summary": "Searches Anime.",
-        "description": "This endpoint will retrieve the search results for Anime.",
+        "description": "This endpoint will retrieve the search results for Anime.\n<div class=\"kuro-tip\">You can prefix your search with \"id:\" to search for Anime with a specific ID.</div>",
         "parameters": [
           {
             "in": "query",
@@ -1315,7 +1315,7 @@
           "forum-threads"
         ],
         "summary": "Searches forum threads.",
-        "description": "This endpoint will retrieve the search results for forum threads.",
+        "description": "This endpoint will retrieve the search results for forum threads.\n<div class=\"kuro-tip\">You can prefix your search with \"id:\" to search for Anime with a specific ID.</div>",
         "parameters": [
           {
             "in": "query",
