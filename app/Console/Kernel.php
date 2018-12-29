@@ -31,19 +31,19 @@ class Kernel extends ConsoleKernel
         // Fetch base data for Anime every 10 mins
         $schedule->call(function() {
             // Find an Anime where the base episodes have not been fetched
-            $foundItem = Anime::where('fetched_base_episodes', '=', false)->limit(1)->first();
+            $foundItem = Anime::where('fetched_base_episodes', '=', false)->first();
 
             if($foundItem)
                 Artisan::call('animes:fetch_base_episodes', ['id' => $foundItem->id]);
 
             // Find an Anime where the images have not been fetched
-            $foundItem = Anime::where('fetched_images', '=', false)->limit(1)->first();
+            $foundItem = Anime::where('fetched_images', '=', false)->first();
 
             if($foundItem)
                 Artisan::call('animes:fetch_images', ['id' => $foundItem->id]);
 
             // Find an Anime where the details have not been fetched
-            $foundItem = Anime::where('fetched_details', '=', false)->limit(1)->first();
+            $foundItem = Anime::where('fetched_details', '=', false)->first();
 
             if($foundItem)
                 Artisan::call('animes:fetch_details', ['id' => $foundItem->id]);

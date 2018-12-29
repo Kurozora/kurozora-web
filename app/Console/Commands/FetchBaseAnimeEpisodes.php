@@ -99,7 +99,7 @@ class FetchBaseAnimeEpisodes extends Command
             $resultSet = $tvdb->getAnimeEpisodeData($anime->tvdb_id, $pageCount);
 
             // Last page
-            if($resultSet == null || $resultSet < 1) {
+            if($resultSet == null || count($resultSet) < 1) {
                 $this->info('No more episodes found on page ' . $pageCount);
                 break;
             }
@@ -114,27 +114,29 @@ class FetchBaseAnimeEpisodes extends Command
                 $season = $this->findOrCreateSeason($anime->id, $episodeResult->airedSeason);
 
                 // This episode already exists
-                $checkFindEpisode = AnimeEpisode::where([
+                if(AnimeEpisode::where([
                     ['number',      '=', $episodeResult->airedEpisodeNumber],
                     ['season_id',   '=', $season->id]
-                ])->first();
-
-                if($checkFindEpisode)
+                ])->exists())
                     continue;
 
                 // Insert the new episode
                 $firstAiredValue = null;
 
-                if($episodeResult->firstAired != null)
-                    $firstAiredValue = new Carbon($episodeResult->firstAired);
+                if($episodeResult->firstAired != null && strlen($firstAiredValue)) {
+                    $firstAiredValue = Carbon::parse($episodeResult->firstAired);
+                    $firstAiredValue = $firstAiredValue->toDateTimeString();
+                }
 
-                AnimeEpisode::create([
+                $insertData = [
                     'name'          => $episodeResult->episodeName,
                     'season_id'     => $season->id,
                     'number'        => $episodeResult->airedEpisodeNumber,
                     'overview'      => $episodeResult->overview,
                     'first_aired'   => $firstAiredValue
-                ]);
+                ];
+
+                AnimeEpisode::create($insertData);
 
                 $insertCount++;
 

@@ -25,7 +25,7 @@ class CreateAnimeEpisodesTable extends Migration
             $table->boolean('verified')->default(false);
             $table->integer('number')->unsigned()->nullable();
             $table->string('name')->nullable();
-            $table->timestamp('first_aired')->nullable();
+            $table->dateTime('first_aired')->nullable();
             $table->text('overview')->nullable();
         });
     }
