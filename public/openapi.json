@@ -145,6 +145,62 @@
         }
       }
     },
+    "/users/{userID}": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Updates a user's information",
+        "description": "This endpoint will update a user's information.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the user."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "The new email address to set."
+                  },
+                  "biography": {
+                    "type": "string",
+                    "description": "The new biography to set."
+                  },
+                  "profileImage": {
+                    "type": "file",
+                    "description": "The new user's avatar image"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/users/{userID}/sessions": {
       "get": {
         "security": [

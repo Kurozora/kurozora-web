@@ -26,6 +26,10 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
 
         Route::post('/reset-password', [UserController::class, 'resetPassword']);
 
+        Route::post('/{userID}', [UserController::class, 'update'])
+            ->where('userID', '[0-9]*')
+            ->middleware('kurozora.userauth');
+
         Route::get('/{userID}/sessions', [UserController::class, 'getSessions'])
             ->where('userID', '[0-9]*')
             ->middleware('kurozora.userauth');
