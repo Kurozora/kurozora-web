@@ -420,12 +420,12 @@ class UserController extends Controller
     }
 
     /**
-     * Update a user's information
+     * Update a user's profile information
      *
      * @param Request $request
      * @param $userID
      */
-    public function update(Request $request, $userID) {
+    public function updateProfile(Request $request, $userID) {
         // Check if we can do this for this user
         if($request->user_id != $userID)
             (new JSONResult())->setError('You are not permitted to do this.')->show();
@@ -435,24 +435,6 @@ class UserController extends Controller
 
         // Get the user
         $user = User::find($request->user_id);
-
-        // Update email
-        $newEmail = $request->input('email');
-
-        if( $newEmail !== null &&
-            $newEmail !== $user->email
-        ) {
-            // Check if it's a valid email
-            if(!filter_var($newEmail, FILTER_VALIDATE_EMAIL))
-                (new JSONResult())->setError('Your entered an invalid email address.')->show();
-
-            // Check if the email is in use
-            if(User::where('email', $newEmail)->exists())
-                (new JSONResult())->setError('The entered email address is already in use.')->show();
-
-            $user->email = $newEmail;
-            $changedFields[] = 'email address';
-        }
 
         // Update biography
         $newBio = $request->input('biography');
