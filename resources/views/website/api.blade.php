@@ -37,6 +37,17 @@
 
         {{-- Custom style --}}
         <style>
+            .kuro-warn {
+                padding: 10px 5px;
+                background: darkred;
+                color: #ffffff;
+                display: inline-block;
+                font-size: 20px;
+                font-weight: bold;
+                margin: 10px 0;
+                border-radius: 5px;
+            }
+
             .topbar-wrapper img[alt="Swagger UI"], .topbar-wrapper span {
                 visibility: collapse;
             }
