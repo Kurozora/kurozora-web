@@ -10,6 +10,7 @@ use App\Session;
 use App\User;
 use App\UserNotification;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use PusherHelper;
 use Illuminate\Http\Request;
@@ -46,7 +47,7 @@ class UserController extends Controller
             !$imgValidator->fails()
         ) {
             // Save the uploaded avatar
-            $fileName = 'avatar_' . str_random('30') . '.' . $request->file('profileImage')->extension();;
+            $fileName = 'avatar_' . str_random(30) . '.' . $request->file('profileImage')->extension();;
 
             $request->file('profileImage')->storeAs(User::USER_UPLOADS_PATH, $fileName);
         }
@@ -427,18 +428,8 @@ class UserController extends Controller
         if($request->user_id != $userID)
             (new JSONResult())->setError('You are not permitted to do this.')->show();
 
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'email'         => 'bail|email',
-            'profileImage'  => 'bail|mimes:jpeg,jpg,png|max:700',
-        ]);
-
-        // Check validator
-        if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
-
         // Track if anything changed
-        $anyChanges = false;
+        $changedFields = [];
 
         // Get the user
         $user = User::find($request->user_id);
@@ -446,19 +437,76 @@ class UserController extends Controller
         // Update email
         $newEmail = $request->input('email');
 
-        if($newEmail !== null)
+        if( $newEmail !== null &&
+            $newEmail !== $user->email
+        ) {
+            // Check if it's a valid email
+            if(!filter_var($newEmail, FILTER_VALIDATE_EMAIL))
+                (new JSONResult())->setError('Your entered an invalid email address.')->show();
+
+            // Check if the email is in use
+            if(User::where('email', $newEmail)->exists())
+                (new JSONResult())->setError('The entered email address is already in use.')->show();
+
             $user->email = $newEmail;
+            $changedFields[] = 'email address';
+        }
 
         // Update biography
         $newBio = $request->input('biography');
 
-        if($newBio !== null && strlen($newBio) <= User::BIOGRAPHY_LIMIT)
-            $user->biography = $newBio;
+        if( $newBio !== null &&
+            $newBio !== $user->biography
+        ) {
+            // Check if the bio has a correct length
+            if(strlen($newBio) > User::BIOGRAPHY_LIMIT)
+                (new JSONResult())->setError('Your biography contain more than ' . User::BIOGRAPHY_LIMIT . ' characters.')->show();
 
-        // Save the user
-        $user->save();
+            $user->biography = $newBio;
+            $changedFields[] = 'biography';
+        }
+
+        // Update avatar
+        if($request->hasFile('profileImage')) {
+            // Check if the uploaded avatar is valid
+            $imgValidator = Validator::make($request->all(), [
+                'profileImage' => 'required|mimes:jpeg,jpg,png|max:700',
+            ]);
+
+            // Avatar is not valid
+            if(!$request->file('profileImage')->isValid() || $imgValidator->fails())
+                (new JSONResult())->setError('The uploaded avatar is not valid.')->show();
+
+            // Create a name for the new avatar
+            $newAvatarName = 'avatar_' . str_random(30);
+
+            if($user->hasAvatar()) {
+                // Delete the old avatar
+                $avatarPath = $user->getAvatarPath();
+
+                if(Storage::exists($avatarPath))
+                    Storage::delete($avatarPath);
+            }
+
+            // Save the uploaded avatar
+            $fileName = $newAvatarName . '.' . $request->file('profileImage')->extension();
+            $user->avatar = $fileName;
+            $request->file('profileImage')->storeAs(User::USER_UPLOADS_PATH, $fileName);
+
+            $changedFields[] = 'avatar';
+        }
 
         // Successful response
-        (new JSONResult())->show();
+        $displayMessage = 'Your settings were saved. ';
+
+        if(count($changedFields)) {
+            $displayMessage .= 'You have updated your ' . join(', ', $changedFields) . '.';
+            $user->save();
+        }
+        else $displayMessage .= 'No information was updated.';
+
+        (new JSONResult())->setData([
+            'message' => $displayMessage
+        ])->show();
     }
 }
