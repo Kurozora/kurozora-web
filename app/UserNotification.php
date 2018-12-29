@@ -116,7 +116,7 @@ class UserNotification extends Model
             'read'          => (bool) $this->read,
             'data'          => $this->getData(),
             'string'        => $this->getString(),
-            'creation_date' => $this->creation_date
+            'creation_date' => $this->created_at
         ];
     }
 }
