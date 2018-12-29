@@ -430,7 +430,6 @@ class UserController extends Controller
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'email'         => 'bail|email',
-            'biography'     => 'bail|max:' . User::BIOGRAPHY_LIMIT,
             'profileImage'  => 'bail|mimes:jpeg,jpg,png|max:700',
         ]);
 
