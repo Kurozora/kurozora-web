@@ -438,8 +438,10 @@ class UserController extends Controller
         if($validator->fails())
             (new JSONResult())->setError($validator->errors()->first())->show();
 
-        // Get the user
+        // Track if anything changed
         $anyChanges = false;
+
+        // Get the user
         $user = User::find($request->user_id);
 
         // Update email
@@ -451,7 +453,7 @@ class UserController extends Controller
         // Update biography
         $newBio = $request->input('biography');
 
-        if($newBio !== null)
+        if($newBio !== null && strlen($newBio) <= User::BIOGRAPHY_LIMIT)
             $user->biography = $newBio;
 
         // Save the user
