@@ -1,29 +1,6 @@
-<!doctype html>
-<html lang="{{ app()->getLocale() }}" style="background-image: url({{ asset('img/static/star_bg_lg.jpg') }});">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="text/css" href="{{ asset('img/static/logo_sm.png') }}">
+@extends('website.layouts.landing')
 
-    <title>Kurozora App</title>
-
-    <!-- jQuery -->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-
-    <!-- Stylesheet -->
-    <link href="{{ asset('css/kurozora-frontpage.css') }}" rel="stylesheet">
-</head>
-<body>
-<div class="middle-div">
+@section('content')
     <h1 id="kurozora-title">Page not found</h1>
     <a href="{{ url('/') }}" class="back-safe-link">Take me back</a>
-</div>
-
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('.middle-div').fadeIn(1000);
-    });
-</script>
-</body>
-</html>
+@endsection
