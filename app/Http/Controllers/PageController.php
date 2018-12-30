@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Anime;
+use App\ForumThread;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -58,6 +59,30 @@ class PageController extends Controller
                 'username'      => $user->username,
                 'avatar'        => $avatar,
                 'followers'     => $user->getFollowerCount()
+            ]
+        ]);
+    }
+
+    /**
+     * Thread landing page
+     *
+     * @param $threadID
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function thread($threadID) {
+        $thread = ForumThread::find($threadID);
+
+        if(!$thread) abort(404);
+
+        return view('website.thread-page', [
+            'page' => [
+                'title' => $thread->title,
+                'type' => 'website'
+            ],
+            'threadData' => [
+                'id'            => $thread->id,
+                'title'         => $thread->title,
+                'date'          => $thread->created_at->diffForHumans()
             ]
         ]);
     }
