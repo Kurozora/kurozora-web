@@ -6,6 +6,10 @@ Route::get('/', function () {
     return view('website.home');
 });
 
+Route::get('/go-test', function () {
+    return view('website.test');
+});
+
 // Confirm email
 Route::get('/confirmation/{confirmation_id}', 'UserController@confirmEmail');
 
