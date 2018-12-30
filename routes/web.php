@@ -9,6 +9,7 @@ Route::get('/', function () {
 
 Route::get('/anime/{animeID}', [PageController::class, 'anime']);
 Route::get('/profile/{userID}', [PageController::class, 'userProfile']);
+Route::get('/thread/{threadID}', [PageController::class, 'thread']);
 
 // Confirm email
 Route::get('/confirmation/{confirmation_id}', 'UserController@confirmEmail');
