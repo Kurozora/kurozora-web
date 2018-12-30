@@ -21,24 +21,16 @@ class AnimeController extends Controller
         $maxAnimePerCategory    = 10;
         $maxAnimeForBanners     = 5;
 
-        // Top anime of all time
-        $query_TAOAT = Anime::where('nsfw', false)
-            ->where('average_rating', '!=', '0')
-            ->orderBy('average_rating', 'DESC')
-            ->limit($maxAnimePerCategory)
-            ->get();
-
         // New movies
-        $query_NM = Anime::where('nsfw', false)
-            ->where('type', '=', Anime::ANIME_TYPE_MOVIE)
-            ->orderBy('created_at', 'DESC')
+        $query_WINTER = Anime::where('nsfw', false)
             ->limit($maxAnimePerCategory)
+            ->whereIn('tvdb_id', [79911, 272369, 316038, 121891, 123661, 80044])
             ->get();
 
-        // Top episodes this month
-        $query_TETM = Anime::where('nsfw', false)
-            ->orderBy('title', 'ASC')
+        // Randomly chosen
+        $query_RAND = Anime::where('nsfw', false)
             ->limit($maxAnimePerCategory)
+            ->inRandomOrder()
             ->get();
 
         // Newly added Anime
@@ -49,9 +41,8 @@ class AnimeController extends Controller
 
         // Add all the categories together
         $categoryArray = [
-            Anime::formatAnimesAsCategory('Top Anime of All time', 'normal', $query_TAOAT),
-            Anime::formatAnimesAsCategory('New Movies', 'normal', $query_NM),
-            Anime::formatAnimesAsCategory('Top Episodes This Month', 'large', $query_TETM),
+            Anime::formatAnimesAsCategory('Winter Themed', 'normal', $query_WINTER),
+            Anime::formatAnimesAsCategory('Randomly Chosen', 'large', $query_RAND),
             Anime::formatAnimesAsCategory('Newly Added Anime', 'normal', $query_NAA)
         ];
 
