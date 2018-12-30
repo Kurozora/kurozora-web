@@ -17,10 +17,46 @@ html {
 	height: 150px;
 }
 
-#kurozora-title {
+.kurozora-btn {
+	background-color: #f2a248;
+	border: 0;
+	border-radius: 5px;
+	margin: 10px auto;
+	font-size: 15px;
+	font-family: Arial, serif;
+	display: block;
+	padding: 5px 10px;
+	color: #fff;
+	text-transform: uppercase;
+	text-decoration: none;
+	font-weight: bold;
+	text-align: center;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.kurozora-title {
+	font-size: 30px;
 	text-align: center;
 	color: rgba(255, 255, 255, 0.85);
 	margin: 0;
+}
+
+.kurozora-under-title {
+	font-size: 18px;
+	text-align: center;
+	color: lightgray;
+	text-decoration: underline;
+	margin: 0;
+}
+
+.anime-poster {
+	margin: 10px auto 0;
+	width: 150px;
+	height: 225px;
+	-webkit-background-size: cover;
+	background-size: cover;
+	background-position: center;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .middle-div {

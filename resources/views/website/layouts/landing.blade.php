@@ -6,13 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="text/css" href="{{ asset('img/static/logo_sm.png') }}">
 
-    <title>Kurozora App</title>
+    @if(isset($page['title']))
+        <title>{{ $page['title'] }}</title>
+        <meta property="og:title" content="{{ $page['title'] }}" />
+    @else
+        <title>Kurozora App</title>
+    @endif
+
+    @if(isset($page['image']) && $page['image'] !== null)
+        <meta property="og:image" content="{{ $page['image'] }}" />
+    @endif
+
+    @if(isset($page['type']) && $page['type'] !== null)
+        <meta property="og:type" content="{{ $page['type'] }}" />
+    @endif
 
     <!-- jQuery -->
     <script type="text/javascript" src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
 
     <!-- Stylesheet -->
-    <link href="{{ asset('css/kurozora-frontpage.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/kurozora-landing.css') }}" rel="stylesheet">
 </head>
 <body>
     <div class="middle-div">
