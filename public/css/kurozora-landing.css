@@ -63,6 +63,19 @@ html {
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+.user-avatar-preview {
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 50%;
+	margin: 10px auto 0;
+	width: 150px;
+	height: 150px;
+	-webkit-background-size: cover;
+	background-size: cover;
+	background-position: center;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
 .middle-div {
 	display: none;
 	position: absolute;
