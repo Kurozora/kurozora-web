@@ -20,9 +20,10 @@ html {
 .kurozora-btn {
 	background-color: #f2a248;
 	border: 0;
-	border-radius: 5px;
+	width: 200px;
+	border-radius: 500px;
 	margin: 10px auto;
-	font-size: 15px;
+	font-size: 14px;
 	font-family: Arial, serif;
 	display: block;
 	padding: 5px 10px;
@@ -50,13 +51,16 @@ html {
 }
 
 .anime-poster {
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
 	margin: 10px auto 0;
 	width: 150px;
 	height: 225px;
 	-webkit-background-size: cover;
 	background-size: cover;
 	background-position: center;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .middle-div {
