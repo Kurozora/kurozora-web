@@ -29,6 +29,10 @@
       "description":"Everything user related"
     },
     {
+      "name":"user-notifications",
+      "description":"Everything user notification related"
+    },
+    {
       "name":"anime",
       "description":"Everything anime related"
     },
@@ -507,6 +511,72 @@
             },
             "required": false,
             "description": "The search query."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/user-notifications/{notificationID}": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
+        "tags": [
+          "user-notifications"
+        ],
+        "summary": "Gets the details of a notification",
+        "description": "This endpoint will retrieve the details of a notification.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "notificationID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the notification to be retrieved."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/user-notifications/{notificationID}/delete": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
+        "tags": [
+          "user-notifications"
+        ],
+        "summary": "Deletes a notification from the database",
+        "description": "This endpoint will delete a user's notification.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "notificationID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the notification to be deleted."
           }
         ],
         "responses": {

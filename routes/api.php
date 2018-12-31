@@ -7,6 +7,7 @@
 */
 
 namespace App\Http\Controllers;
+use App\UserNotification;
 use Illuminate\Support\Facades\Route;
 
 // API Swagger documentation page
@@ -55,6 +56,16 @@ Route::group([/*'middleware' => ['kurozora.useragent'],*/ 'prefix' => 'v1'], fun
 
         Route::get('/{userID}/notifications', [UserController::class, 'getNotifications'])
             ->where('userID', '[0-9]*')
+            ->middleware('kurozora.userauth');
+    });
+
+    Route::prefix('/user-notifications')->group(function() {
+        Route::get('/{notificationID}', [UserNotificationController::class, 'get'])
+            ->where('notificationID', '[0-9]*')
+            ->middleware('kurozora.userauth');
+
+        Route::post('/{notificationID}/delete', [UserNotificationController::class, 'deleteNotification'])
+            ->where('notificationID', '[0-9]*')
             ->middleware('kurozora.userauth');
     });
 

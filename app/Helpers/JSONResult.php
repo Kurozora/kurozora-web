@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Config;
 
 class JSONResult {
     // Error messages
+    const ERROR_NOT_PERMITTED = 'You are not permitted to do this.';
     const ERROR_SESSION_REJECTED = 'The server rejected your session. Please restart the app to solve this issue.';
     const ERROR_CANNOT_POST_IN_THREAD = 'You cannot post in this thread.';
     const ERROR_FORUM_SECTION_NON_EXISTENT = 'The specified forum section is not recognized.';
@@ -15,6 +16,7 @@ class JSONResult {
     const ERROR_ANIME_NON_EXISTENT = 'The specified anime was not found.';
     const ERROR_ANIME_SEASON_NON_EXISTENT = 'The specified season was not found.';
     const ERROR_ANIME_EPISODE_NON_EXISTENT = 'The specified episode was not found.';
+    const ERROR_NOTIFICATION_EXISTENT = 'The specified notification was not found.';
 
     private $success = true;
     private $errorMessage;
