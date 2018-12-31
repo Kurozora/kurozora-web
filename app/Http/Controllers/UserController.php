@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewUserRegisteredEvent;
 use App\Events\UserSessionKilledEvent;
 use App\Helpers\JSONResult;
 use App\Helpers\KuroMail;
@@ -66,18 +67,8 @@ class UserController extends Controller
             'avatar'                => $fileName
         ]);
 
-        // Send the user an email
-        $emailData = [
-            'title'             => 'Email confirmation',
-            'username'          => $username,
-            'confirmation_url'  => url('/confirmation/' . $newUser->email_confirmation_id)
-        ];
-
-        (new KuroMail())
-            ->setTo($newUser->email)
-            ->setSubject('Your Kurozora account registration')
-            ->setContent(view('email.confirmation_email', $emailData)->render())
-            ->send();
+        // Fire registration event
+        event(new NewUserRegisteredEvent($newUser));
 
         // Show a successful response
         (new JSONResult())->show();
@@ -288,10 +279,9 @@ class UserController extends Controller
      * Email confirmation page
      *
      * @param $confirmationID
-     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function confirmEmail($confirmationID, Request $request) {
+    public function confirmEmail($confirmationID) {
         // Try to find a user with this confirmation ID
         $foundUser = User::where('email_confirmation_id', $confirmationID)->first();
 
@@ -310,11 +300,10 @@ class UserController extends Controller
      * Password reset page
      *
      * @param $resetToken
-     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \Throwable
      */
-    public function resetPasswordPage($resetToken, Request $request) {
+    public function resetPasswordPage($resetToken) {
         // Try to find a reset with this reset token
         $foundReset = PasswordReset::where('token', $resetToken)->first();
 
