@@ -38,34 +38,4 @@ class PasswordReset extends Model
     public static function genTempPassword() {
         return str_random(10);
     }
-
-    /**
-     * Sends an email notification to the user about their password reset
-     *
-     * @return bool
-     * @throws \Throwable
-     */
-    public function sendEmailNotification()
-    {
-        $user = User::find($this->user_id);
-
-        if (!$user) return false;
-
-        // Get data for the email
-        $emailData = [
-            'title' => 'Password reset',
-            'username' => $user->username,
-            'ip' => $this->ip,
-            'reset_url' => url('/reset/' . $this->token)
-        ];
-
-        // Send the email
-        (new KuroMail())
-            ->setTo($user->email)
-            ->setSubject('Reset your password')
-            ->setContent(view('email.password_reset_notification', $emailData)->render())
-            ->send();
-
-        return true;
-    }
 }

@@ -6,6 +6,7 @@ use App\Events\NewUserRegisteredEvent;
 use App\Events\UserSessionKilledEvent;
 use App\Helpers\JSONResult;
 use App\Helpers\KuroMail;
+use App\Jobs\SendPasswordResetMail;
 use App\PasswordReset;
 use App\Session;
 use App\User;
@@ -174,8 +175,8 @@ class UserController extends Controller
                     'token'     => PasswordReset::genToken()
                 ]);
 
-                // Send notification email
-                $createdReset->sendEmailNotification();
+                // Dispatch job to send reset mail
+                SendPasswordResetMail::dispatch($user, $createdReset);
             }
         }
 
