@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Helpers\KuroMail;
+use App\PasswordReset;
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -10,20 +11,23 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class SendEmailConfirmationMail implements ShouldQueue
+class SendPasswordResetMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $user;
+    protected $passwordReset;
 
     /**
      * Create a new job instance.
      *
      * @param User $user
+     * @param PasswordReset $passwordReset
      */
-    public function __construct(User $user)
+    public function __construct(User $user, PasswordReset $passwordReset)
     {
         $this->user = $user;
+        $this->passwordReset = $passwordReset;
     }
 
     /**
@@ -44,20 +48,19 @@ class SendEmailConfirmationMail implements ShouldQueue
      * @throws \Throwable
      */
     protected function send() {
-        // Create email data
+        // Get data for the email
         $emailData = [
-            'title'             => 'Your Kurozora account registration',
-            'username'          => $this->user->username,
-            'confirmation_url'  => url('/confirmation/' . $this->user->email_confirmation_id)
+            'title' => 'Password reset',
+            'username' => $this->user->username,
+            'ip' => $this->passwordReset->ip,
+            'reset_url' => url('/reset/' . $this->passwordReset->token)
         ];
 
-        // Send email
+        // Send the email
         (new KuroMail())
             ->setTo($this->user->email)
-            ->setSubject($emailData['title'])
-            ->setContent(
-                view('email.confirmation_email', $emailData)->render()
-            )
+            ->setSubject('Reset your password')
+            ->setContent(view('email.password_reset_notification', $emailData)->render())
             ->send();
 
         return true;
