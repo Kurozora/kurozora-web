@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use App\Helpers\KuroMail;
+use App\Jobs\SendAdminExceptionMail;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -42,30 +43,8 @@ class Handler extends ExceptionHandler
     public function report(Exception $exception)
     {
         if($this->shouldReport($exception)) {
-            // Send an email to admin(s)
-            $adminEmail = config('app.admin_email');
-
-            if ($adminEmail != null) {
-                // Get date
-                $curDate = Carbon::now();
-                $formattedDate = $curDate->format('d-m-Y H:i');
-
-                // Get exception type
-                $exceptionType = 'LIVE exception';
-
-                if(Config::get('app.debug'))
-                    $exceptionType = 'local exception';
-
-                // Format subject
-                $subject = '[' . $exceptionType . ':' . $formattedDate . '] ' . get_class($exception);
-
-                // Send the mail
-                (new KuroMail())
-                    ->setTo($adminEmail)
-                    ->setSubject($subject)
-                    ->setContent(view('email.admin_exception_email', ['exception' => $exception])->render())
-                    ->send();
-            }
+            // Dispatch job to send admin email
+            SendAdminExceptionMail::dispatch($exception);
         }
 
         parent::report($exception);
