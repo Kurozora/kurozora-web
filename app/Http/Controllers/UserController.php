@@ -6,6 +6,7 @@ use App\Events\NewUserRegisteredEvent;
 use App\Events\UserSessionKilledEvent;
 use App\Helpers\JSONResult;
 use App\Helpers\KuroMail;
+use App\Jobs\FailingJob;
 use App\Jobs\SendPasswordResetMail;
 use App\PasswordReset;
 use App\Session;

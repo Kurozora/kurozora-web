@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Helpers\KuroMail;
 use App\User;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -15,6 +16,8 @@ class SendEmailConfirmationMail implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $user;
+
+    public $tries = 1;
 
     /**
      * Create a new job instance.
@@ -61,5 +64,14 @@ class SendEmailConfirmationMail implements ShouldQueue
             ->send();
 
         return true;
+    }
+
+    /**
+     * Called when the job fails
+     *
+     * @param Exception $exception
+     */
+    public function failed(Exception $exception) {
+        SendAdminJobFailureMail::dispatch(self::class, $exception);
     }
 }
