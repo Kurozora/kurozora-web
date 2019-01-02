@@ -16,7 +16,10 @@ class SendAdminExceptionMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $exception;
+    protected $exceptionDump;
+    protected $exceptionClass;
+
+    public $tries = 1;
 
     /**
      * Create a new job instance.
@@ -25,7 +28,8 @@ class SendAdminExceptionMail implements ShouldQueue
      */
     public function __construct(Exception $exception)
     {
-        $this->exception = $exception;
+        $this->exceptionDump = $exception->getMessage();
+        $this->exceptionClass = get_class($exception);
     }
 
     /**
@@ -63,13 +67,13 @@ class SendAdminExceptionMail implements ShouldQueue
             $exceptionType = 'local exception';
 
         // Format subject
-        $subject = '[' . $exceptionType . ':' . $formattedDate . '] ' . get_class($this->exception);
+        $subject = '[' . $exceptionType . ':' . $formattedDate . '] ' . $this->exceptionClass;
 
         // Send the mail
         (new KuroMail())
             ->setTo($adminEmail)
             ->setSubject($subject)
-            ->setContent(view('email.admin_exception_email', ['exception' => $this->exception])->render())
+            ->setContent(view('email.admin_exception_email', ['exception' => $this->exceptionDump])->render())
             ->send();
 
         return true;
