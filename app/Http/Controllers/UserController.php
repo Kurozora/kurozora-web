@@ -27,8 +27,6 @@ class UserController extends Controller
      * @throws \Throwable
      */
     public function register(Request $request) {
-        throw new \Exception('Rip my message');
-
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'username'  => 'bail|required|min:3|max:50|alpha_dash|unique:user,username',
