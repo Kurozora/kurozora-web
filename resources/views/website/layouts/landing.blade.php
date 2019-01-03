@@ -21,6 +21,10 @@
         <meta property="og:type" content="{{ $page['type'] }}" />
     @endif
 
+    @if(isset($page['no_index']) && $page['no_index'])
+        <meta name="robots" content="noindex,nofollow" />
+    @endif
+
     <!-- jQuery -->
     <script type="text/javascript" src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
 

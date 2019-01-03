@@ -1,19 +1,9 @@
-<html>
-    <head>
-        <meta name="robots" content="noindex,nofollow" />
-    </head>
-    <body>
-        @if ($success)
-            <h1>You have successfully confirmed your email address.</h1>
-        @else
-            Oops! We were unable to confirm your email address. <br><br>
+@extends('website.layouts.landing')
 
-            This could mean:
-            <ul>
-                <li>... this email address was already verified.</li>
-                <li>... this link never existed in the first place.</li>
-                <li>... something really weird is going on and you should <a href="https://twitter.com/{{ env('APP_TWITTER_HANDLE') }}" target="_blank">Tweet us</a>.</li>
-            </ul>
-        @endif
-    </body>
-</html>
+@section('content')
+    @if ($success)
+        <h1 class="kurozora-title">You have successfully confirmed your email address.</h1>
+    @else
+        <h1 class="kurozora-title">Oops! We were unable to confirm your email address.</h1>
+    @endif
+@endsection
