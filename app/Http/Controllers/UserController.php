@@ -359,6 +359,7 @@ class UserController extends Controller
      * Returns the notifications for the user
      *
      * @param Request $request
+     * @param $userID
      */
     public function getNotifications(Request $request, $userID) {
         // Check if we can do this for this user
@@ -434,7 +435,7 @@ class UserController extends Controller
         $changedFields = [];
 
         // Get the user
-        $user = User::find($request->user_id);
+        $user = ($request->authUser)();
 
         // Update biography
         $newBio = $request->input('biography');
