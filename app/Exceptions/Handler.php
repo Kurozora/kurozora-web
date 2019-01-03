@@ -2,12 +2,9 @@
 
 namespace App\Exceptions;
 
-use App\Helpers\KuroMail;
 use App\Jobs\SendAdminExceptionMail;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Support\Facades\Config;
 
 class Handler extends ExceptionHandler
 {

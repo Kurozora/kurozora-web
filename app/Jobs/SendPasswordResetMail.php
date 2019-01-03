@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Helpers\KuroMail;
 use App\PasswordReset;
 use App\User;
-use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;

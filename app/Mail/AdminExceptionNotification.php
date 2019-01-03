@@ -1,0 +1,63 @@
+<?php
+
+namespace App\Mail;
+
+use Carbon\Carbon;
+use Illuminate\Bus\Queueable;
+use Illuminate\Mail\Mailable;
+use Illuminate\Queue\SerializesModels;
+
+class AdminExceptionNotification extends Mailable
+{
+    use Queueable, SerializesModels;
+
+    protected $exceptionDump;
+    protected $exceptionClass;
+
+    /**
+     * Create a new message instance.
+     *
+     * @param $exceptionDump
+     * @param $exceptionClass
+     */
+    public function __construct($exceptionDump, $exceptionClass)
+    {
+        $this->exceptionDump = $exceptionDump;
+        $this->exceptionClass = $exceptionClass;
+    }
+
+    /**
+     * Build the message.
+     *
+     * @return $this
+     */
+    public function build()
+    {
+        return $this
+            ->subject($this->makeSubject())
+            ->view('email.admin_exception_email')
+            ->with([
+                'exception' => $this->exceptionDump
+            ]);
+    }
+
+    /**
+     * Creates the subject for the exception email
+     *
+     * @return string
+     */
+    protected function makeSubject() {
+        // Get date
+        $curDate = Carbon::now();
+        $formattedDate = $curDate->format('d-m-Y H:i');
+
+        // Get exception type
+        $exceptionType = 'LIVE exception';
+
+        if(config('app.debug'))
+            $exceptionType = 'local exception';
+
+        // Return the subject
+        return '[' . $exceptionType . ':' . $formattedDate . '] ' . $this->exceptionClass;
+    }
+}
