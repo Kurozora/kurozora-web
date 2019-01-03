@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Mail\ResetPassword;
-use App\PasswordReset;
+use App\Mail\SendNewPassword;
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -12,49 +12,36 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Mail;
 
-class SendPasswordResetMail implements ShouldQueue
+class SendNewPasswordMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $user;
-    protected $passwordReset;
-
     public $tries = 1;
+
+    protected $user;
+    protected $newPassword;
 
     /**
      * Create a new job instance.
      *
      * @param User $user
-     * @param PasswordReset $passwordReset
+     * @param string $newPassword
      */
-    public function __construct(User $user, PasswordReset $passwordReset)
+    public function __construct(User $user, $newPassword)
     {
         $this->user = $user;
-        $this->passwordReset = $passwordReset;
+        $this->newPassword = $newPassword;
     }
 
     /**
      * Execute the job.
      *
      * @return void
-     * @throws \Throwable
      */
     public function handle()
     {
-        $this->send();
-    }
-
-    /**
-     * Sends the mail
-     *
-     * @return bool
-     * @throws \Throwable
-     */
-    protected function send() {
         // Send the mail
         Mail::to($this->user->email)
-            ->send(new ResetPassword($this->user, $this->passwordReset));
-
-        return true;
+            ->send(new SendNewPassword($this->user, $this->newPassword));
     }
 }
