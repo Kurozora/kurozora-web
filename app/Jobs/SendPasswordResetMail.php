@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Helpers\KuroMail;
+use App\Mail\ResetPassword;
 use App\PasswordReset;
 use App\User;
 use Illuminate\Bus\Queueable;
@@ -10,6 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Mail;
 
 class SendPasswordResetMail implements ShouldQueue
 {
@@ -50,20 +52,9 @@ class SendPasswordResetMail implements ShouldQueue
      * @throws \Throwable
      */
     protected function send() {
-        // Get data for the email
-        $emailData = [
-            'title' => 'Password reset',
-            'username' => $this->user->username,
-            'ip' => $this->passwordReset->ip,
-            'reset_url' => url('/reset/' . $this->passwordReset->token)
-        ];
-
-        // Send the email
-        (new KuroMail())
-            ->setTo($this->user->email)
-            ->setSubject('Reset your password')
-            ->setContent(view('email.password_reset_notification', $emailData)->render())
-            ->send();
+        // Send the mail
+        Mail::to($this->user->email)
+            ->send(new ResetPassword($this->user, $this->passwordReset));
 
         return true;
     }
