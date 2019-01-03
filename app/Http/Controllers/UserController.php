@@ -289,13 +289,23 @@ class UserController extends Controller
 
         // No user found
         if(!$foundUser)
-            return view('website.email_confirm_page', ['success' => false]);
+            return view('website.email_confirm_page', [
+                'success' => false,
+                'page' => [
+                    'no_index' => true
+                ]
+            ]);
 
         // Confirm their email and show the page
         $foundUser->email_confirmation_id = null;
         $foundUser->save();
 
-        return view('website.email_confirm_page', ['success' => true]);
+        return view('website.email_confirm_page', [
+            'success' => true,
+            'page' => [
+                'no_index' => true
+            ]
+        ]);
     }
 
     /**
@@ -311,7 +321,12 @@ class UserController extends Controller
 
         // No reset found
         if(!$foundReset)
-            return view('website.password_reset_page', ['success' => false]);
+            return view('website.password_reset_page', [
+                'success' => false,
+                'page' => [
+                    'no_index' => true
+                ]
+            ]);
 
         $user = User::find($foundReset->user_id);
 
@@ -343,7 +358,12 @@ class UserController extends Controller
         }
 
         // Show successful response
-        return view('website.password_reset_page', ['success' => true]);
+        return view('website.password_reset_page', [
+            'success' => true,
+            'page' => [
+                'no_index' => true
+            ]
+        ]);
     }
 
     /**
