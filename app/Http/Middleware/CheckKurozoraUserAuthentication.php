@@ -48,6 +48,16 @@ class CheckKurozoraUserAuthentication
         $request->session_secret = $givenSecret;
         $request->session_id = $sessionAuthenticate;
 
+        // This closure function gives the ability to retrieve
+        // .. the User model performing the current request
+        $request->authUser = function() use($request) {
+
+            if(!isset($request->foundUser))
+                $request->foundUser = User::find($request->user_id);
+
+            return $request->foundUser;
+        };
+
         return $next($request);
     }
 }
