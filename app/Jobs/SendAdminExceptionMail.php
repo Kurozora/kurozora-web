@@ -2,15 +2,14 @@
 
 namespace App\Jobs;
 
-use App\Helpers\KuroMail;
-use Carbon\Carbon;
+use App\Mail\AdminExceptionNotification;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Mail;
 
 class SendAdminExceptionMail implements ShouldQueue
 {
@@ -56,25 +55,9 @@ class SendAdminExceptionMail implements ShouldQueue
         if($adminEmail === null)
             return false;
 
-        // Get date
-        $curDate = Carbon::now();
-        $formattedDate = $curDate->format('d-m-Y H:i');
-
-        // Get exception type
-        $exceptionType = 'LIVE exception';
-
-        if(Config::get('app.debug'))
-            $exceptionType = 'local exception';
-
-        // Format subject
-        $subject = '[' . $exceptionType . ':' . $formattedDate . '] ' . $this->exceptionClass;
-
         // Send the mail
-        (new KuroMail())
-            ->setTo($adminEmail)
-            ->setSubject($subject)
-            ->setContent(view('email.admin_exception_email', ['exception' => $this->exceptionDump])->render())
-            ->send();
+        Mail::to($adminEmail)
+            ->send(new AdminExceptionNotification($this->exceptionDump, $this->exceptionClass));
 
         return true;
     }
