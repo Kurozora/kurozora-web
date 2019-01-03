@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Events\NewUserRegisteredEvent;
 use App\Events\UserSessionKilledEvent;
 use App\Helpers\JSONResult;
-use App\Helpers\KuroMail;
-use App\Jobs\FailingJob;
 use App\Jobs\SendNewPasswordMail;
 use App\Jobs\SendPasswordResetMail;
 use App\PasswordReset;
