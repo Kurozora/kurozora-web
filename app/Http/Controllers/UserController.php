@@ -7,6 +7,7 @@ use App\Events\UserSessionKilledEvent;
 use App\Helpers\JSONResult;
 use App\Helpers\KuroMail;
 use App\Jobs\FailingJob;
+use App\Jobs\SendNewPasswordMail;
 use App\Jobs\SendPasswordResetMail;
 use App\PasswordReset;
 use App\Session;
@@ -339,6 +340,9 @@ class UserController extends Controller
 
             // Delete all their sessions
             Session::where('user_id', $user->id)->delete();
+
+            // Dispatch job to send them the new password
+            SendNewPasswordMail::dispatch($user, $newPass);
 
             // Send the user an email with their new password
             $emailData = [
