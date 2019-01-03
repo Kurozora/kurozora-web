@@ -344,19 +344,6 @@ class UserController extends Controller
             // Dispatch job to send them the new password
             SendNewPasswordMail::dispatch($user, $newPass);
 
-            // Send the user an email with their new password
-            $emailData = [
-                'title'     => 'Your new password',
-                'username'  => $user->username,
-                'newPass'   => $newPass
-            ];
-
-            (new KuroMail())
-                ->setTo($user->email)
-                ->setSubject('Your new password')
-                ->setContent(view('email.password_reset_new_pass', $emailData)->render())
-                ->send();
-
             // Delete the password reset
             $foundReset->delete();
         }
