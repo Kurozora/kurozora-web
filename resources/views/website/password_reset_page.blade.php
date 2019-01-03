@@ -1,20 +1,10 @@
-<html>
-    <head>
-        <meta name="robots" content="noindex,nofollow" />
-    </head>
-    <body>
-        @if ($success)
-            <h1>Your password has been reset.</h1>
-            <p>We have sent you an email with your new password.</p>
-        @else
-            Oops! We were unable to reset your password. <br><br>
+@extends('website.layouts.landing')
 
-            This could mean:
-            <ul>
-                <li>... this link has already been used.</li>
-                <li>... this link never existed in the first place.</li>
-                <li>... something really weird is going on and you should <a href="https://twitter.com/{{ env('APP_TWITTER_HANDLE') }}" target="_blank">Tweet us</a>.</li>
-            </ul>
-        @endif
-    </body>
-</html>
+@section('content')
+    @if ($success)
+        <h1 class="kurozora-title">Your password has been reset.</h1>
+        <h2 class="kurozora-under-title">We have sent you an email with your new password.</h2>
+    @else
+        <h1 class="kurozora-title">Oops! We were unable to reset your password.</h1>
+    @endif
+@endsection
