@@ -16,7 +16,7 @@ class UserPolicy
      * @param User $model
      * @return bool
      */
-    public function update(User $user, User $model) {
+    public function update_profile(User $user, User $model) {
         return $user->id === $model->id;
     }
 }
