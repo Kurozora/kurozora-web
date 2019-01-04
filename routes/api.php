@@ -31,17 +31,17 @@ Route::group(['prefix' => 'v1'], function () {
             ->middleware('kurozora.userauth')
             ->middleware('can:get_sessions,user');
 
-        Route::get('/{userID}/library', [LibraryController::class, 'getLibrary'])
-            ->where('userID', '[0-9]*')
-            ->middleware('kurozora.userauth');
+        Route::get('/{user}/library', [LibraryController::class, 'getLibrary'])
+            ->middleware('kurozora.userauth')
+            ->middleware('can:get_library,user');
 
-        Route::post('/{userID}/library', [LibraryController::class, 'addLibrary'])
-            ->where('userID', '[0-9]*')
-            ->middleware('kurozora.userauth');
+        Route::post('/{user}/library', [LibraryController::class, 'addLibrary'])
+            ->middleware('kurozora.userauth')
+            ->middleware('can:add_to_library,user');
 
-        Route::post('/{userID}/library/delete', [LibraryController::class, 'delLibrary'])
-            ->where('userID', '[0-9]*')
-            ->middleware('kurozora.userauth');
+        Route::post('/{user}/library/delete', [LibraryController::class, 'delLibrary'])
+            ->middleware('kurozora.userauth')
+            ->middleware('can:del_from_library,user');
 
         Route::post('/{user}/authenticate-channel', [UserController::class, 'authenticateChannel'])
             ->middleware('kurozora.userauth')
