@@ -1,8 +1,11 @@
 <?php
 
-use Illuminate\Database\Eloquent\Model;
 
-class KuroSearchableModel extends Model {
+use Nicolaslopezj\Searchable\SearchableTrait;
+
+trait KuroSearchTrait {
+    use SearchableTrait;
+
     /**
      * Custom Kurozora search function with added features
      *

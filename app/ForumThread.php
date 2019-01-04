@@ -4,12 +4,11 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use KuroSearchableModel;
-use Nicolaslopezj\Searchable\SearchableTrait;
+use KuroSearchTrait;
 
-class ForumThread extends KuroSearchableModel
+class ForumThread extends Model
 {
-    use SearchableTrait;
+    use KuroSearchTrait;
 
     /**
      * Searchable rules.
