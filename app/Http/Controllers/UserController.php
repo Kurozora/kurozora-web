@@ -12,6 +12,8 @@ use App\Session;
 use App\User;
 use App\UserNotification;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use PusherHelper;
@@ -427,15 +429,16 @@ class UserController extends Controller
      * @param $userID
      */
     public function updateProfile(Request $request, $userID) {
+        // Get the users
+        $authUser = Auth::user();
+        $user = User::find($userID);
+
         // Check if we can do this for this user
-        if($request->user_id != $userID)
-            (new JSONResult())->setError('You are not permitted to do this.')->show();
+        if($authUser->cant('update', $user))
+            (new JSONResult())->setError(JSONResult::ERROR_NOT_PERMITTED)->show();
 
         // Track if anything changed
         $changedFields = [];
-
-        // Get the user
-        $user = ($request->authUser)();
 
         // Update biography
         $newBio = $request->input('biography');

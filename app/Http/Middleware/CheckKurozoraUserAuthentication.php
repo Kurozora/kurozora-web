@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Helpers\JSONResult;
 use App\User;
 use Closure;
+use Illuminate\Support\Facades\Auth;
 use KuroAuthToken;
 use Validator;
 
@@ -57,6 +58,9 @@ class CheckKurozoraUserAuthentication
 
             return $request->foundUser;
         };
+
+        // Log the user in
+        Auth::loginUsingId($request->user_id);
 
         return $next($request);
     }

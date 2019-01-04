@@ -2,16 +2,15 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use KuroSearchableModel;
-use Nicolaslopezj\Searchable\SearchableTrait;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use KuroSearchTrait;
 
-class User extends KuroSearchableModel
+class User extends Authenticatable
 {
-    use SearchableTrait;
+    use Authorizable, KuroSearchTrait;
 
     /**
      * Searchable rules.

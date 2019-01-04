@@ -4,7 +4,7 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use KuroSearchableModel;
+use KuroSearchTrait;
 use Nicolaslopezj\Searchable\SearchableTrait;
 use TVDB;
 
@@ -13,9 +13,9 @@ use TVDB;
  *
  * @package App
  */
-class Anime extends KuroSearchableModel
+class Anime extends Model
 {
-    use SearchableTrait;
+    use KuroSearchTrait;
 
     /**
      * Searchable rules.
