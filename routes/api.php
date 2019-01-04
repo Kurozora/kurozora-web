@@ -27,9 +27,9 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::post('/reset-password', [UserController::class, 'resetPassword']);
 
-        Route::get('/{userID}/sessions', [UserController::class, 'getSessions'])
-            ->where('userID', '[0-9]*')
-            ->middleware('kurozora.userauth');
+        Route::get('/{user}/sessions', [UserController::class, 'getSessions'])
+            ->middleware('kurozora.userauth')
+            ->middleware('can:get_sessions,user');
 
         Route::get('/{userID}/library', [LibraryController::class, 'getLibrary'])
             ->where('userID', '[0-9]*')
@@ -43,30 +43,29 @@ Route::group(['prefix' => 'v1'], function () {
             ->where('userID', '[0-9]*')
             ->middleware('kurozora.userauth');
 
-        Route::post('/{userID}/authenticate-channel', [UserController::class, 'authenticateChannel'])
-            ->where('userID', '[0-9]*')
-            ->middleware('kurozora.userauth');
+        Route::post('/{user}/authenticate-channel', [UserController::class, 'authenticateChannel'])
+            ->middleware('kurozora.userauth')
+            ->middleware('can:authenticate_pusher_channel,user');
 
-        Route::get('/{userID}/profile', [UserController::class, 'profile'])
-            ->where('userID', '[0-9]*');
+        Route::get('/{user}/profile', [UserController::class, 'profile']);
 
         Route::post('/{user}/profile', [UserController::class, 'updateProfile'])
             ->middleware('kurozora.userauth')
             ->middleware('can:update_profile,user');
 
-        Route::get('/{userID}/notifications', [UserController::class, 'getNotifications'])
-            ->where('userID', '[0-9]*')
-            ->middleware('kurozora.userauth');
+        Route::get('/{user}/notifications', [UserController::class, 'getNotifications'])
+            ->middleware('kurozora.userauth')
+            ->middleware('can:get_notifications,user');
     });
 
     Route::prefix('/user-notifications')->group(function() {
-        Route::get('/{notificationID}', [UserNotificationController::class, 'get'])
-            ->where('notificationID', '[0-9]*')
-            ->middleware('kurozora.userauth');
+        Route::get('/{notification}', [UserNotificationController::class, 'getNotification'])
+            ->middleware('kurozora.userauth')
+            ->middleware('can:get_notification,notification');
 
-        Route::post('/{notificationID}/delete', [UserNotificationController::class, 'deleteNotification'])
-            ->where('notificationID', '[0-9]*')
-            ->middleware('kurozora.userauth');
+        Route::post('/{notification}/delete', [UserNotificationController::class, 'delete'])
+            ->middleware('kurozora.userauth')
+            ->middleware('can:del_notification,notification');
     });
 
     Route::prefix('/sessions')->group(function() {
