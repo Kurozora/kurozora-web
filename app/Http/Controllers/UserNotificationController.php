@@ -4,27 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
 use App\UserNotification;
-use Illuminate\Http\Request;
 
 class UserNotificationController extends Controller
 {
     /**
      * Retrieves details for a specific notification
      *
-     * @param Request $request
-     * @param $notificationID
+     * @param UserNotification $notification
+     * @throws \ReflectionException
      */
-    public function get(Request $request, $notificationID) {
-        // Find the notification
-        $notification = UserNotification::find($notificationID);
-
-        if(!$notification)
-            (new JSONResult())->setError(JSONResult::ERROR_NOTIFICATION_EXISTENT)->show();
-
-        // Check if this is the user's notification
-        if($notification->user_id !== $request->user_id)
-            (new JSONResult())->setError(JSONResult::ERROR_NOT_PERMITTED)->show();
-
+    public function getNotification(UserNotification $notification) {
         (new JSONResult())->setData([
             'notification' => $notification->formatForResponse()
         ])->show();
@@ -33,20 +22,10 @@ class UserNotificationController extends Controller
     /**
      * Deletes a user's notification
      *
-     * @param Request $request
-     * @param $notificationID
+     * @param UserNotification $notification
+     * @throws \Exception
      */
-    public function deleteNotification(Request $request, $notificationID) {
-        // Find the notification
-        $notification = UserNotification::find($notificationID);
-
-        if(!$notification)
-            (new JSONResult())->setError(JSONResult::ERROR_NOTIFICATION_EXISTENT)->show();
-
-        // Check if this is the user's notification
-        if($notification->user_id !== $request->user_id)
-            (new JSONResult())->setError(JSONResult::ERROR_NOT_PERMITTED)->show();
-
+    public function delete(UserNotification $notification) {
         // Delete the notification
         $notification->delete();
 

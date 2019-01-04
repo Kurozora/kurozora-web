@@ -12,8 +12,6 @@ use App\Session;
 use App\User;
 use App\UserNotification;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use PusherHelper;
@@ -106,19 +104,12 @@ class UserController extends Controller
     /**
      * Returns the profile details for a user
      *
-     * @param Request $request
-     * @param $userID
+     * @param User $user
      */
-    public function profile(Request $request, $userID) {
-        // Check if this user profile exists
-        $profileUser = User::find($userID);
-
-        if(!$profileUser)
-            (new JSONResult())->setError('This user does not exist.')->show();
-
+    public function profile(User $user) {
         // Get their badges
         $badges = [];
-        $rawBadges = $profileUser->getBadges();
+        $rawBadges = $user->getBadges();
 
         foreach($rawBadges as $rawBadge)
             $badges[] = $rawBadge->formatForResponse();
@@ -126,13 +117,13 @@ class UserController extends Controller
         // Show profile response
         (new JSONResult())->setData([
             'profile' => [
-                'username'          => $profileUser->username,
-                'biography'         => $profileUser->biography,
-                'avatar_url'        => $profileUser->getAvatarURL(),
-                'banner_url'        => $profileUser->banner,
-                'follower_count'    => $profileUser->getFollowerCount(),
-                'following_count'   => $profileUser->getFollowingCount(),
-                'reputation_count'  => $profileUser->getReputationCount(),
+                'username'          => $user->username,
+                'biography'         => $user->biography,
+                'avatar_url'        => $user->getAvatarURL(),
+                'banner_url'        => $user->banner,
+                'follower_count'    => $user->getFollowerCount(),
+                'following_count'   => $user->getFollowingCount(),
+                'reputation_count'  => $user->getReputationCount(),
                 'badges'            => $badges
             ]
         ])->show();
@@ -191,14 +182,10 @@ class UserController extends Controller
      * access to a private user channel for Pusher
      *
      * @param Request $request
-     * @param $userID
+     * @param User $user
      * @return string
      */
-    public function authenticateChannel(Request $request, $userID) {
-        // Check if we can do this for this user
-        if($request->user_id != $userID)
-            (new JSONResult())->setError('You are not permitted to do this.')->show();
-
+    public function authenticateChannel(Request $request, User $user) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'channel_name'          => 'bail|required',
@@ -226,8 +213,8 @@ class UserController extends Controller
         $channelUserID = (int) $matches[1];
 
         // Check if this is the channel of the authenticated user
-        if($channelUserID != $userID) {
-            return abort(403, 'Not your channel.');
+        if($channelUserID != $user->id) {
+            return abort(403, 'Not the appropriate channel.');
         }
 
         // Create pusher instance
@@ -246,18 +233,14 @@ class UserController extends Controller
      * Returns the current active sessions for a user
      *
      * @param Request $request
-     * @param $userID
+     * @param User $user
      */
-    public function getSessions(Request $request, $userID) {
-        // Check if we can retrieve the sessions of this user
-        if($request->user_id != $userID)
-            (new JSONResult())->setError('You are not permitted to view this.')->show();
-
+    public function getSessions(Request $request, User $user) {
         // Get the other sessions and put them in an array
         $otherSessions = [];
 
         $sessions = Session::where([
-            ['user_id', '=',    $userID],
+            ['user_id', '=',    $user->id],
             ['secret',  '!=',   $request->session_secret]
         ])->get();
 
@@ -266,7 +249,7 @@ class UserController extends Controller
 
         // Get the current session
         $curSession = Session::where([
-            ['user_id', '=',    $userID],
+            ['user_id', '=',    $user->id],
             ['secret',  '=',    $request->session_secret]
         ])->first();
 
@@ -361,15 +344,11 @@ class UserController extends Controller
      * Returns the notifications for the user
      *
      * @param Request $request
-     * @param $userID
+     * @param User $user
      */
-    public function getNotifications(Request $request, $userID) {
-        // Check if we can do this for this user
-        if($request->user_id != $userID)
-            (new JSONResult())->setError('You are not permitted to view this.')->show();
-
+    public function getNotifications(Request $request, User $user) {
         // Get their notifications
-        $rawNotifications = UserNotification::where('user_id', $userID)
+        $rawNotifications = UserNotification::where('user_id', $user->id)
             ->orderBy('created_at', 'DESC')
             ->get();
 
