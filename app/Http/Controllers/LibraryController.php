@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Anime;
 use App\Helpers\JSONResult;
+use App\User;
 use App\UserLibrary;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,13 +16,9 @@ class LibraryController extends Controller
      * Gets the user's library depending on the status
      *
      * @param Request $request
-     * @param $userID
+     * @param User $user
      */
-    public function getLibrary(Request $request, $userID) {
-        // Check if we can do this for this user
-        if($request->user_id != $userID)
-            (new JSONResult())->setError('You are not permitted to view this.')->show();
-
+    public function getLibrary(Request $request, User $user) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'status'            => 'bail|required|string'
@@ -57,7 +54,7 @@ class LibraryController extends Controller
                 $join->on(Anime::TABLE_NAME . '.id', '=', UserLibrary::TABLE_NAME . '.anime_id');
             })
             ->where([
-                [UserLibrary::TABLE_NAME . '.user_id', '=', $userID],
+                [UserLibrary::TABLE_NAME . '.user_id', '=', $user->id],
                 [UserLibrary::TABLE_NAME . '.status',  '=', $foundStatus]
             ])
             ->get($columnsToSelect);
@@ -69,13 +66,9 @@ class LibraryController extends Controller
      * Adds an Anime to the user's library
      *
      * @param Request $request
-     * @param $userID
+     * @param User $user
      */
-    public function addLibrary(Request $request, $userID) {
-        // Check if we can do this for this user
-        if($request->user_id != $userID)
-            (new JSONResult())->setError('You are not permitted to do this.')->show();
-
+    public function addLibrary(Request $request, User $user) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'anime_id'          => 'bail|required|numeric|exists:anime,id',
@@ -97,7 +90,7 @@ class LibraryController extends Controller
 
         // Check if this user already has the Anime in their library
         $oldLibraryItem = UserLibrary::where([
-            ['user_id',     '=',    $userID],
+            ['user_id',     '=',    $user->id],
             ['anime_id',    '=',    $givenAnimeID]
         ])->first();
 
@@ -111,7 +104,7 @@ class LibraryController extends Controller
         // Add a new library item
         else {
             UserLibrary::create([
-                'user_id'   => $userID,
+                'user_id'   => $user->id,
                 'anime_id'  => $givenAnimeID,
                 'status'    => $foundStatus
             ]);
@@ -125,13 +118,9 @@ class LibraryController extends Controller
      * Removes an Anime from the user's library
      *
      * @param Request $request
-     * @param $userID
+     * @param User $user
      */
-    public function delLibrary(Request $request, $userID) {
-        // Check if we can do this for this user
-        if($request->user_id != $userID)
-            (new JSONResult())->setError('You are not permitted to do this.')->show();
-
+    public function delLibrary(Request $request, User $user) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'anime_id'          => 'bail|required|numeric|exists:anime,id'
@@ -145,7 +134,7 @@ class LibraryController extends Controller
 
         // Find the Anime in their library
         $foundAnime = UserLibrary::where([
-            ['user_id',     '=',    $userID],
+            ['user_id',     '=',    $user->id],
             ['anime_id',    '=',    $givenAnimeID]
         ])->first();
 

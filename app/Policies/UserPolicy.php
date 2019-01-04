@@ -52,4 +52,37 @@ class UserPolicy
     public function get_notifications(User $user, User $model) {
         return $user->id === $model->id;
     }
+
+    /**
+     * Determine whether the user can get another user's library
+     *
+     * @param User $user
+     * @param User $model
+     * @return bool
+     */
+    public function get_library(User $user, User $model) {
+        return $user->id === $model->id;
+    }
+
+    /**
+     * Determine whether the user can add to another user's library
+     *
+     * @param User $user
+     * @param User $model
+     * @return bool
+     */
+    public function add_to_library(User $user, User $model) {
+        return $user->id === $model->id;
+    }
+
+    /**
+     * Determine whether the user can delete from another user's library
+     *
+     * @param User $user
+     * @param User $model
+     * @return bool
+     */
+    public function del_from_library(User $user, User $model) {
+        return $user->id === $model->id;
+    }
 }
