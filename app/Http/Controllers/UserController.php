@@ -426,17 +426,9 @@ class UserController extends Controller
      * Update a user's profile information
      *
      * @param Request $request
-     * @param $userID
+     * @param User $user
      */
-    public function updateProfile(Request $request, $userID) {
-        // Get the users
-        $authUser = Auth::user();
-        $user = User::find($userID);
-
-        // Check if we can do this for this user
-        if($authUser->cant('update', $user))
-            (new JSONResult())->setError(JSONResult::ERROR_NOT_PERMITTED)->show();
-
+    public function updateProfile(Request $request, User $user) {
         // Track if anything changed
         $changedFields = [];
 

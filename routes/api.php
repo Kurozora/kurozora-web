@@ -50,9 +50,9 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('/{userID}/profile', [UserController::class, 'profile'])
             ->where('userID', '[0-9]*');
 
-        Route::post('/{userID}/profile', [UserController::class, 'updateProfile'])
-            ->where('userID', '[0-9]*')
-            ->middleware('kurozora.userauth');
+        Route::post('/{user}/profile', [UserController::class, 'updateProfile'])
+            ->middleware('kurozora.userauth')
+            ->middleware('can:update_profile,user');
 
         Route::get('/{userID}/notifications', [UserController::class, 'getNotifications'])
             ->where('userID', '[0-9]*')
