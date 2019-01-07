@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Helpers\JSONResult;
 use App\Jobs\SendAdminExceptionMail;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -17,7 +18,9 @@ class Handler extends ExceptionHandler
         // Page not found exception
         \Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class,
         // PHP artisan command not found exception
-        \Symfony\Component\Console\Exception\CommandNotFoundException::class
+        \Symfony\Component\Console\Exception\CommandNotFoundException::class,
+        // Access denied exception
+        \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException::class,
     ];
 
     /**
@@ -56,6 +59,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if($exception instanceof \Illuminate\Auth\Access\AuthorizationException) {
+            (new JSONResult())->setError(JSONResult::ERROR_NOT_PERMITTED, 9028123)->show();
+        }
+
         return parent::render($request, $exception);
     }
 }

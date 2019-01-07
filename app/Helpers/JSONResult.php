@@ -20,17 +20,20 @@ class JSONResult {
 
     private $success = true;
     private $errorMessage;
+    private $errorCode;
     private $data = [];
 
     /**
      * Sets this JSON result to be an error, with a specified message
      *
      * @param string $message
+     * @param int $errorCode
      * @return $this
      */
-    public function setError($message = '') {
+    public function setError($message = '', $errorCode = 0) {
         $this->success = false;
         $this->errorMessage = $message;
+        $this->errorCode = $errorCode;
         return $this;
     }
 
@@ -59,8 +62,10 @@ class JSONResult {
             'query_count'   => Config::get(AppServiceProvider::$queryCountConfigKey)
         ];
 
-        if(!$this->success && strlen($this->errorMessage))
+        if(!$this->success && strlen($this->errorMessage)) {
             $printArr['error_message'] = $this->errorMessage;
+            $printArr['error_code'] = $this->errorCode;
+        }
         else {
             if(is_array($this->data))
                 $printArr = array_merge($printArr, $this->data);
