@@ -10,6 +10,8 @@ class UserNotificationPolicy
 {
     use HandlesAuthorization;
 
+    const MODEL = UserNotification::class;
+
     /**
      * Determine whether the user can get the details of a notification
      *

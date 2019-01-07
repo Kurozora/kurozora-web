@@ -31,6 +31,10 @@ Route::group(['prefix' => 'v1'], function () {
             ->middleware('kurozora.userauth')
             ->middleware('can:get_sessions,user');
 
+        Route::post('/{user}/follow', [UserController::class, 'follow'])
+            ->middleware('kurozora.userauth')
+            ->middleware('can:follow,user');
+
         Route::get('/{user}/library', [LibraryController::class, 'getLibrary'])
             ->middleware('kurozora.userauth')
             ->middleware('can:get_library,user');

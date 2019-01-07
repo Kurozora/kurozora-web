@@ -9,6 +9,8 @@ class UserPolicy
 {
     use HandlesAuthorization;
 
+    const MODEL = UserPolicy::class;
+
     /**
      * Determine whether the user can update the other user's profile
      *
@@ -84,5 +86,16 @@ class UserPolicy
      */
     public function del_from_library(User $user, User $model) {
         return $user->id === $model->id;
+    }
+
+    /**
+     * Determine whether the user can follow another user
+     *
+     * @param User $user
+     * @param User $model
+     * @return bool
+     */
+    public function follow(User $user, User $model) {
+        return $user->id !== $model->id;
     }
 }

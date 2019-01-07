@@ -10,9 +10,9 @@
         "fzaninotto/faker": "^1.8",
         "laravel/framework": "5.6.*",
         "laravel/tinker": "^1.0",
-        "sendgrid/sendgrid": "^6.2",
         "nicolaslopezj/searchable": "1.*",
-        "pusher/pusher-php-server": "^3.0"
+        "pusher/pusher-php-server": "^3.0",
+        "sendgrid/sendgrid": "^6.2"
     },
     "require-dev": {
         "filp/whoops": "^2.0",
