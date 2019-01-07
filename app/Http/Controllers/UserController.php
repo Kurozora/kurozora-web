@@ -10,8 +10,10 @@ use App\Jobs\SendPasswordResetMail;
 use App\PasswordReset;
 use App\Session;
 use App\User;
+use App\UserFollow;
 use App\UserNotification;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use PusherHelper;
@@ -467,5 +469,53 @@ class UserController extends Controller
         (new JSONResult())->setData([
             'message' => $displayMessage
         ])->show();
+    }
+
+    /**
+     * Follows a user
+     *
+     * @param User $user
+     */
+    public function follow(Request $request, User $user) {
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'follow' => 'bail|required|integer|min:0|max:1'
+        ]);
+
+        // Check validator
+        if($validator->fails())
+            (new JSONResult())->setError($validator->errors()->first())->show();
+
+        $authUser = Auth::user();
+
+        $follow = (bool) $request->input('follow');
+
+        // Follow the user
+        if($follow) {
+            // Already following this user
+            if($authUser->isFollowing($user))
+                (new JSONResult())->setError('You are already following this user.')->show();
+
+            // Create follow
+            UserFollow::create([
+                'user_id'           => $authUser->id,
+                'following_user_id' => $user->id
+            ]);
+        }
+        // Unfollow the user
+        else {
+            // Not following this user
+            if(!$authUser->isFollowing($user))
+                (new JSONResult())->setError('You are not following this user.')->show();
+
+            // Delete follow
+            UserFollow::where([
+                'user_id'           => $authUser->id,
+                'following_user_id' => $user->id
+            ])->delete();
+        }
+
+        // Successful response
+        (new JSONResult())->show();
     }
 }

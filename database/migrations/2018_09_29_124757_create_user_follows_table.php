@@ -24,8 +24,6 @@ class CreateUserFollowsTable extends Migration
 
             $table->integer('following_user_id')->unsigned();
             $table->foreign('following_user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
-
-            $table->boolean('notifications')->default(false);
         });
     }
 

@@ -242,11 +242,16 @@ class User extends Authenticatable
     }
 
     /**
-     * Checks whether or not the user can use the admin panel
+     * Checks whether the user is following another us
      *
+     * @param User $user
      * @return bool
      */
-    public function canUseAdminPanel() {
-        return ($this->role >= User::USER_ROLE_MODERATOR);
+    public function isFollowing(User $user) {
+        return UserFollow::where('user_id', $this->id)
+            ->where('following_user_id', $user->id)
+            ->exists();
     }
+
+
 }

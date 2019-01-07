@@ -523,6 +523,58 @@
         }
       }
     },
+    "/users/{userID}/follow": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Follow or unfollow another user",
+        "description": "This endpoint will follow or unfollow another user.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the user."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "follow": {
+                    "type": "integer",
+                    "description": "0: unfollow, 1: follow.",
+                    "enum": [0, 1]
+                  }
+                },
+                "required": [
+                  "follow"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/user-notifications/{notificationID}": {
       "get": {
         "security": [

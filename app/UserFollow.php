@@ -11,5 +11,5 @@ class UserFollow extends Model
     protected $table = self::TABLE_NAME;
 
     // Fillable columns
-    protected $fillable = ['user_id', 'following_user_id', 'notifications'];
+    protected $fillable = ['user_id', 'following_user_id'];
 }
