@@ -17,19 +17,12 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $policies = [
-        User::class             => UserPolicy::class,
-        UserNotification::class => UserNotificationPolicy::class,
-        Session::class          => SessionPolicy::class,
-    ];
+    protected $policies = [];
 
     /**
      * Register any authentication / authorization services.
      *
      * @return void
      */
-    public function boot()
-    {
-        $this->registerPolicies();
-    }
+    public function boot() { }
 }

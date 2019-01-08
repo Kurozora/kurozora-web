@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5ccfa575e603ec47af808764d2b3903b",
+    "content-hash": "b87ff1ce432c793e546c24e4e41c8e7a",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -867,6 +867,51 @@
                 "psr-3"
             ],
             "time": "2018-11-05T09:00:11+00:00"
+        },
+        {
+            "name": "musa11971/laravel-autopolicy",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/musa11971/laravel-autopolicy.git",
+                "reference": "550b9494da84ae2465f7cbf40192d97d3b433d13"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/musa11971/laravel-autopolicy/zipball/550b9494da84ae2465f7cbf40192d97d3b433d13",
+                "reference": "550b9494da84ae2465f7cbf40192d97d3b433d13",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": "^7.1.3"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "musa11971\\autopolicy\\AutoPolicyProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "musa11971\\autopolicy\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "musa11971",
+                    "email": "mussesemou99@gmail.com"
+                }
+            ],
+            "description": "Package that automatically loads your Laravel policies for you.",
+            "time": "2019-01-06T21:31:36+00:00"
         },
         {
             "name": "nesbot/carbon",
