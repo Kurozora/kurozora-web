@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Anime;
 use Illuminate\Console\Command;
-use TVDB;
+use musa11971\TVDB\TVDB;
 
 class FetchAnimeDetails extends Command
 {
@@ -36,6 +36,8 @@ class FetchAnimeDetails extends Command
      * Execute the console command.
      *
      * @return mixed
+     * @throws \musa11971\TVDB\Exceptions\TVDBNotFoundException
+     * @throws \musa11971\TVDB\Exceptions\TVDBUnauthorizedException
      */
     public function handle()
     {
@@ -59,65 +61,53 @@ class FetchAnimeDetails extends Command
         $this->info('Start retrieving anime details...');
         $this->info('');
 
-        $tvdb_handle = new TVDB();
+        $details = TVDB::getSeries($anime->tvdb_id);
 
         // Synopsis
         $this->info('[Retrieving synopsis]');
-        $anime->synopsis = $tvdb_handle->getAnimeDetailValue($anime->tvdb_id, 'synopsis');
+        $anime->synopsis = $details->synopsis;
         $this->info('[Synopsis retrieved]');
         $this->info('');
 
         // Watch rating
         $this->info('[Retrieving watch rating]');
-        $anime->watch_rating = $tvdb_handle->getAnimeDetailValue($anime->tvdb_id, 'watch_rating');
+        $anime->watch_rating = 'TBA';
         $this->info('[Watch rating retrieved]');
         $this->info('');
 
         // Slug
         $this->info('[Retrieving slug]');
-        $anime->slug = $tvdb_handle->getAnimeDetailValue($anime->tvdb_id, 'slug');
+        $anime->slug = $details->slug;
         $this->info('[Slug retrieved]');
         $this->info('');
 
         // Runtime
         $this->info('[Retrieving runtime]');
-        $retRuntime = $tvdb_handle->getAnimeDetailValue($anime->tvdb_id, 'runtime_minutes');
-
-        if(is_numeric($retRuntime))
-            $anime->runtime = (int) $retRuntime;
-
+        $anime->runtime = 0;
         $this->info('[Runtime retrieved]');
         $this->info('');
 
         // Network
         $this->info('[Retrieving network]');
-        $anime->network = $tvdb_handle->getAnimeDetailValue($anime->tvdb_id, 'network');
+        $anime->network = $details->network['name'];
         $this->info('[Network retrieved]');
         $this->info('');
 
         // IMDB ID
         $this->info('[Retrieving IMDB ID]');
-        $anime->imdb_id = $tvdb_handle->getAnimeDetailValue($anime->tvdb_id, 'imdb_id');
+        $anime->imdb_id = $details->imdbId;
         $this->info('[IMDB ID retrieved]');
         $this->info('');
 
         // Title
         $this->info('[Retrieving title]');
-        $title = $tvdb_handle->getAnimeDetailValue($anime->tvdb_id, 'title');
-
-        if($title != null)
-            $anime->title = $title;
-
+        $anime->title = $details->title;
         $this->info('[Title retrieved]');
         $this->info('');
 
         // Status
         $this->info('[Retrieving status]');
-        $status = $tvdb_handle->getAnimeDetailValue($anime->tvdb_id, 'status');
-
-        if($status != null)
-            $anime->status = $status;
-
+        $anime->status = $details->status;
         $this->info('[Status retrieved]');
         $this->info('');
 

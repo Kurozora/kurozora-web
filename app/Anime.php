@@ -5,8 +5,7 @@ namespace App;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use KuroSearchTrait;
-use Nicolaslopezj\Searchable\SearchableTrait;
-use TVDB;
+use musa11971\TVDB\TVDB;
 
 /**
  * Class Anime
@@ -60,43 +59,36 @@ class Anime extends Model
         'tvdb_id'
     ];
 
-    // Reusable TVDB handle
-    protected $tvdb_handle = null;
-
     /**
      * Retrieves the actors for an Anime item in an array
      *
      * @return array
+     * @throws \musa11971\TVDB\Exceptions\TVDBNotFoundException
+     * @throws \musa11971\TVDB\Exceptions\TVDBUnauthorizedException
      */
     public function getActors() {
         // Check if we have not yet saved the actors
         if(!$this->fetched_actors) {
-            if ($this->tvdb_handle == null)
-                $this->tvdb_handle = new TVDB();
-
             // Get the actors
-            $retActors = $this->tvdb_handle->getAnimeActorData($this->tvdb_id);
+            $retActors = TVDB::getSeriesActors($this->tvdb_id);
 
-            // Actors were fetched
-            if($retActors !== null) {
-                // Delete old actors if there were any
-                Actor::where('anime_id', $this->id)->delete();
+            // Delete old actors if there were any
+            Actor::where('anime_id', $this->id)->delete();
 
-                // Insert the new actors
-                $insertActors = [];
+            // Insert the new actors
+            $insertActors = [];
 
-                foreach ($retActors as $actor) {
-                    $insertActors[] = [
-                        'created_at'    => Carbon::now(),
-                        'anime_id'      => $this->id,
-                        'name'          => $actor->name,
-                        'role'          => $actor->role,
-                        'image'         => TVDB::IMG_URL . '/' . $actor->image
-                    ];
-                }
-
-                Actor::insert($insertActors);
+            foreach ($retActors as $actor) {
+                $insertActors[] = [
+                    'created_at'    => Carbon::now(),
+                    'anime_id'      => $this->id,
+                    'name'          => $actor->name,
+                    'role'          => $actor->role,
+                    'image'         => $actor->imageURL
+                ];
             }
+
+            Actor::insert($insertActors);
 
             $this->fetched_actors = true;
             $this->save();

@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Anime;
 use Illuminate\Console\Command;
-use TVDB;
+use musa11971\TVDB\TVDB;
 
 class FetchAnimeImages extends Command
 {
@@ -36,6 +36,8 @@ class FetchAnimeImages extends Command
      * Execute the console command.
      *
      * @return mixed
+     * @throws \musa11971\TVDB\Exceptions\TVDBNotFoundException
+     * @throws \musa11971\TVDB\Exceptions\TVDBUnauthorizedException
      */
     public function handle()
     {
@@ -59,19 +61,33 @@ class FetchAnimeImages extends Command
         $this->info('Start retrieving image data...');
         $this->info('');
 
-        $tvdb_handle = new TVDB();
-
         // Retrieve posters
         $this->info('[Retrieving posters]');
-        $anime->cached_poster = $tvdb_handle->getAnimePoster($anime->tvdb_id, false);
-        $anime->cached_poster_thumbnail = $tvdb_handle->getAnimePoster($anime->tvdb_id, true);
+        $posterData = TVDB::getSeriesImages($anime->tvdb_id, TVDB::IMAGE_TYPE_POSTER);
+
+        if(count($posterData)) {
+            $anime->cached_poster = $posterData[0]['image'];
+            $anime->cached_poster_thumbnail = $posterData[0]['image_thumb'];
+        }
+        else {
+            $anime->cached_poster = null;
+            $anime->cached_poster_thumbnail = null;
+        }
         $this->info('[Posters retrieved]');
         $this->info('');
 
         // Retrieve backgrounds
         $this->info('[Retrieving backgrounds]');
-        $anime->cached_background = $tvdb_handle->getAnimeBackground($anime->tvdb_id, false);
-        $anime->cached_background_thumbnail = $tvdb_handle->getAnimeBackground($anime->tvdb_id, true);
+        $backgroundData = TVDB::getSeriesImages($anime->tvdb_id, TVDB::IMAGE_TYPE_FANART);
+
+        if(count($backgroundData)) {
+            $anime->cached_background = $backgroundData[0]['image'];
+            $anime->cached_background_thumbnail = $backgroundData[0]['image_thumb'];
+        }
+        else {
+            $anime->cached_background = null;
+            $anime->cached_background_thumbnail = null;
+        }
         $this->info('[Backgrounds retrieved]');
         $this->info('');
 
