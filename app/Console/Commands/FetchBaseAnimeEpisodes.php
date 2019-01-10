@@ -7,6 +7,7 @@ use App\AnimeEpisode;
 use App\AnimeSeason;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use musa11971\TVDB\Exceptions\TVDBNotFoundException;
 use musa11971\TVDB\TVDB;
 
 class FetchBaseAnimeEpisodes extends Command
@@ -69,7 +70,16 @@ class FetchBaseAnimeEpisodes extends Command
 
         do {
             $this->info('Checking page ' . $page);
-            $resultSet = TVDB::getSeriesEpisodes($anime->tvdb_id, $page);
+
+            try {
+                $resultSet = TVDB::getSeriesEpisodes($anime->tvdb_id, $page);
+            }
+            catch(TVDBNotFoundException $e) {
+                $this->info('No more episodes found on page ' . $page);
+                $anime->fetched_base_episodes = true;
+                $anime->save();
+                die;
+            }
 
             $this->info('Found ' . count($resultSet) . ' episodes on page ' . $page);
 
@@ -96,7 +106,8 @@ class FetchBaseAnimeEpisodes extends Command
                     'season_id'     => $season->id,
                     'number'        => $episodeResult->number,
                     'overview'      => $episodeResult->synopsis,
-                    'first_aired'   => $episodeResult->firstAired
+                    'first_aired'   => $episodeResult->firstAired,
+                    'image'         => $episodeResult->image
                 ];
 
                 AnimeEpisode::create($insertData);
