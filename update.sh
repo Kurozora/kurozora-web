@@ -4,6 +4,9 @@ BLACK='\033[0;30m'
 LIME='\033[1;32m'
 NC='\033[0m'
 
+# Run down
+#. down.sh
+
 # Git pull
 echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Updating source from repository..."
 git checkout . --quiet
@@ -40,3 +43,6 @@ fi
 
 # Finished
 echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Finished updating."
+
+# Run up
+#. up.sh

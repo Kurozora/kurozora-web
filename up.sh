@@ -1,0 +1,1 @@
+exec -a KurozoraQueue php artisan queue:work
