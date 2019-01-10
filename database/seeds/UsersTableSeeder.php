@@ -28,5 +28,8 @@ class UsersTableSeeder extends Seeder
             'email_confirmation_id' => null,
             'role'                  => User::USER_ROLE_ADMINISTRATOR
         ]);
+
+        // 50 fake users
+        factory(User::class, 50)->create();
     }
 }

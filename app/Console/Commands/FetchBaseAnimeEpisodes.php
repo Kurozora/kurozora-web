@@ -40,7 +40,6 @@ class FetchBaseAnimeEpisodes extends Command
      * Execute the console command.
      *
      * @return mixed
-     * @throws \musa11971\TVDB\Exceptions\TVDBNotFoundException
      * @throws \musa11971\TVDB\Exceptions\TVDBUnauthorizedException
      */
     public function handle()
