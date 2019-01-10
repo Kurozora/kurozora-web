@@ -12,8 +12,7 @@
         "laravel/tinker": "^1.0",
         "musa11971/laravel-autopolicy": "^1.0",
         "nicolaslopezj/searchable": "1.*",
-        "pusher/pusher-php-server": "^3.0",
-        "sendgrid/sendgrid": "^6.2"
+        "pusher/pusher-php-server": "^3.0"
     },
     "require-dev": {
         "filp/whoops": "^2.0",
