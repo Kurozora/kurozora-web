@@ -36,34 +36,11 @@ class FetchBaseAnimeEpisodes extends Command
     }
 
     /**
-     * Finds or creates an Anime season
-     *
-     * @param $animeID
-     * @param $seasonNumber
-     * @return AnimeSeason
-     */
-    protected function findOrCreateSeason($animeID, $seasonNumber) {
-        // Find the season
-        $checkFindSeason = AnimeSeason::where([
-            ['anime_id',    '=', $animeID],
-            ['number',      '=', $seasonNumber]
-        ])->first();
-
-        // Create the season (it did not exist yet)
-        if(!$checkFindSeason) {
-            $checkFindSeason = AnimeSeason::create([
-                'anime_id'  => $animeID,
-                'number'    => $seasonNumber
-            ]);
-        }
-
-        return $checkFindSeason;
-    }
-
-    /**
      * Execute the console command.
      *
      * @return mixed
+     * @throws \musa11971\TVDB\Exceptions\TVDBNotFoundException
+     * @throws \musa11971\TVDB\Exceptions\TVDBUnauthorizedException
      */
     public function handle()
     {
@@ -101,7 +78,10 @@ class FetchBaseAnimeEpisodes extends Command
 
             foreach($resultSet as $episodeResult) {
                 // Get the appropriate season
-                $season = $this->findOrCreateSeason($anime->id, $episodeResult->season);
+                $season = AnimeSeason::firstOrCreate(
+                    ['anime_id' => $anime->id],
+                    ['number' => $episodeResult->season]
+                );
 
                 // This episode already exists
                 if(AnimeEpisode::where([
