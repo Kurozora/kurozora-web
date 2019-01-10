@@ -1,6 +1,5 @@
 <?php
 
-
 use Nicolaslopezj\Searchable\SearchableTrait;
 
 trait KuroSearchTrait {

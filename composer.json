@@ -13,7 +13,8 @@
         "musa11971/laravel-autopolicy": "^1.0",
         "musa11971/laravel-tvdb": "^1.0",
         "nicolaslopezj/searchable": "1.*",
-        "pusher/pusher-php-server": "^3.0"
+        "pusher/pusher-php-server": "^3.0",
+        "ext-json": "*"
     },
     "require-dev": {
         "filp/whoops": "^2.0",
