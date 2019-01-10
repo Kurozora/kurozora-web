@@ -6,8 +6,14 @@ NC='\033[0m'
 
 # Git pull
 echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Updating source from repository..."
+git checkout . --quiet
 git pull origin master --quiet
 echo -e "${BLACK}[${ORANGE}Kurozora${BLACK}] ${LIME}✔ ${NC}Source updated!"
+
+# Composer install
+echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Composer install..."
+composer install --quiet
+echo -e "${BLACK}[${ORANGE}Kurozora${BLACK}] ${LIME}✔ ${NC}Composer dependencies installed/updated!"
 
 # Composer dump autoload
 echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Dumping autoload..."
