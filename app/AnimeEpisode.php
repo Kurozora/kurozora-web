@@ -11,12 +11,6 @@ class AnimeEpisode extends Model
     const TABLE_NAME = 'anime_episode';
     protected $table = self::TABLE_NAME;
 
-    // Fillable columns
-    protected $fillable = [
-        'season_id',
-        'number',
-        'name',
-        'first_aired',
-        'overview'
-    ];
+    // Make all columns fillable
+    protected $guarded = [];
 }
