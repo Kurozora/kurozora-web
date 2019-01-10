@@ -7,5 +7,5 @@ LIME='\033[1;32m'
 NC='\033[0m'
 
 # Kills Laravel queue background process
-pkill -f KurozoraQueue
-echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${LIME}✔ ${NC}Laravel queue worker stopped!"
+kill $(ps aux | grep '[p]hp artisan queue:work' | awk '{print $2}')
+echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${LIME}✔ ${NC}Laravel queue workers stopped!"
