@@ -59,8 +59,13 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        // Custom render for unauthorized
         if($exception instanceof \Illuminate\Auth\Access\AuthorizationException) {
             (new JSONResult())->setError(JSONResult::ERROR_NOT_PERMITTED, 9028123)->show();
+        }
+        // Custom render for maintenance mode
+        else if($exception instanceof \Illuminate\Foundation\Http\Exceptions\MaintenanceModeException) {
+            (new JSONResult())->setError($exception->getMessage(), 17281627)->show();
         }
 
         return parent::render($request, $exception);
