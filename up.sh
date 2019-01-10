@@ -1,1 +1,1 @@
-exec -a KurozoraQueue php artisan queue:work
+(trap "" SIGINT; exec -a KurozoraQueue php artisan queue:work &)
