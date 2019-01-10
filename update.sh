@@ -7,7 +7,7 @@ LIME='\033[1;32m'
 NC='\033[0m'
 
 # Run down
-#. down.sh
+. down.sh
 
 # Git pull
 echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Updating source from repository..."
@@ -47,4 +47,4 @@ fi
 echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Finished updating."
 
 # Run up
-#. up.sh
+. up.sh
