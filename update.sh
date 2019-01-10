@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Colours
 ORANGE='\033[0;33m'
 BLACK='\033[0;30m'
