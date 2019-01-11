@@ -138,15 +138,12 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::get('/{thread}', [ForumThreadController::class, 'threadInfo']);
 
-        Route::post('/{threadID}/vote', [ForumThreadController::class, 'vote'])
-            ->where('threadID', '[0-9]*')
+        Route::post('/{thread}/vote', [ForumThreadController::class, 'vote'])
             ->middleware('kurozora.userauth');
 
-        Route::get('/{threadID}/replies', [ForumThreadController::class, 'replies'])
-            ->where('threadID', '[0-9]*');
+        Route::get('/{thread}/replies', [ForumThreadController::class, 'replies']);
 
-        Route::post('/{threadID}/replies', [ForumThreadController::class, 'postReply'])
-            ->where('threadID', '[0-9]*')
+        Route::post('/{thread}/replies', [ForumThreadController::class, 'postReply'])
             ->middleware('kurozora.userauth');
     });
 
