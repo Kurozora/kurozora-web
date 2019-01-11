@@ -18,19 +18,52 @@ class ForumThreadController extends Controller
     /**
      * Get thread information
      *
-     * @param $threadID
+     * @param ForumThread $thread
      */
-    public function threadInfo($threadID) {
-        // Find the thread
-        $thread = ForumThread::find($threadID);
+    public function threadInfo(ForumThread $thread) {
+        // Determine columns to select
+        $columnsToSelect = [
+            ForumThread::TABLE_NAME . '.id AS id',
+            ForumThread::TABLE_NAME . '.title AS title',
+            ForumThread::TABLE_NAME . '.content AS content',
+            ForumThread::TABLE_NAME . '.locked AS locked',
+            User::TABLE_NAME . '.username AS username',
+            User::TABLE_NAME . '.id AS user_id',
+            ForumThread::TABLE_NAME . '.created_at AS creation_date',
+            // Select the reply count via subquery
+            DB::raw('(SELECT COUNT(*) FROM ' . ForumReply::TABLE_NAME . ' WHERE thread_id = ' . ForumThread::TABLE_NAME . '.id) AS reply_count'),
+            // Select the upvote count via subquery
+            DB::raw('(SELECT COUNT(*) FROM ' . ForumThreadVote::TABLE_NAME . ' WHERE thread_id = ' . ForumThread::TABLE_NAME . '.id AND positive = 1) AS upvote_count'),
+            // Select the downvote count via subquery
+            DB::raw('(SELECT COUNT(*) FROM ' . ForumThreadVote::TABLE_NAME . ' WHERE thread_id = ' . ForumThread::TABLE_NAME . '.id AND positive = 0) AS downvote_count')
+        ];
 
-        // Thread wasn't found
-        if(!$thread)
-            (new JSONResult())->setError(JSONResult::ERROR_FORUM_THREAD_NON_EXISTENT)->show();
+        // Create query
+        $threadInfo = DB::table(ForumThread::TABLE_NAME)
+            ->select($columnsToSelect)
+            ->join(User::TABLE_NAME, function ($join) {
+                $join->on(ForumThread::TABLE_NAME . '.user_id', '=', User::TABLE_NAME . '.id');
+            })
+            ->where([
+                [ForumThread::TABLE_NAME . '.id', '=', $thread->id]
+            ])
+            ->first();
 
         // Show thread information
         (new JSONResult())->setData([
-            'thread' => $thread->formatForDetailsResponse()
+            'thread' => [
+                'id' => $threadInfo->id,
+                'title' => $threadInfo->title,
+                'content' => $threadInfo->content,
+                'locked' => (bool) $threadInfo->locked,
+                'creation_date' => $threadInfo->creation_date,
+                'reply_count' => $threadInfo->reply_count,
+                'score' => ($threadInfo->upvote_count - $threadInfo->downvote_count),
+                'user' => [
+                    'id' => $threadInfo->user_id,
+                    'username' => $threadInfo->username
+                ]
+            ]
         ])->show();
     }
 

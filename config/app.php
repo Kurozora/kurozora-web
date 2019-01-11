@@ -28,18 +28,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | iOS app bundle ID
-    |--------------------------------------------------------------------------
-    |
-    | This bundle ID is used in the middleware that checks whether or not the
-    | user agent is permitted to access a route.
-    |
-    */
-
-    'ios_bundle_id' => ['app.kurozora.anime', 'me.musa11971.anime'],
-
-    /*
-    |--------------------------------------------------------------------------
     | iOS app protocol
     |--------------------------------------------------------------------------
     |
