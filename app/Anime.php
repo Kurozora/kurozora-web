@@ -102,15 +102,6 @@ class Anime extends Model
     }
 
     /**
-     * Get the total Actor count of the Anime
-     *
-     * @return int
-     */
-    public function getActorCount() {
-        return Actor::where('anime_id', $this->id)->count();
-    }
-
-    /**
      * Retrieves the type of Anime as a string
      *
      * @return string

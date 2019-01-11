@@ -130,25 +130,18 @@ class AnimeController extends Controller
     /**
      * Returns actor information about an Anime
      *
-     * @param $animeID
+     * @param Anime $anime
+     * @throws \musa11971\TVDB\Exceptions\TVDBNotFoundException
+     * @throws \musa11971\TVDB\Exceptions\TVDBUnauthorizedException
      */
-    public function actorsAnime($animeID) {
-        $anime = Anime::find($animeID);
-
-        // The Anime item does not exist
-        if(!$anime)
-            (new JSONResult())->setError(JSONResult::ERROR_ANIME_NON_EXISTENT)->show();
-
+    public function actorsAnime(Anime $anime) {
         // Get the actors
-        $retActors = [];
-        $actors = $anime->getActors();
-
-        // Show successful response
-        foreach($actors as $actor)
-            $retActors[] = Actor::formatForResponse($actor);
+        $retActors = $anime->getActors()->map(function($actor) {
+            return Actor::formatForResponse($actor);
+        });
 
         (new JSONResult())->setData([
-            'total_actors'      => $anime->getActorCount(),
+            'total_actors'      => count($retActors),
             'actors'            => $retActors
         ])->show();
     }
