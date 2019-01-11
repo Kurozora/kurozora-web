@@ -67,37 +67,8 @@ class Anime extends Model
      * Retrieves the actors for an Anime item in an array
      *
      * @return array
-     * @throws \musa11971\TVDB\Exceptions\TVDBNotFoundException
-     * @throws \musa11971\TVDB\Exceptions\TVDBUnauthorizedException
      */
     public function getActors() {
-        // Check if we have not yet saved the actors
-        if(!$this->fetched_actors) {
-            // Get the actors
-            $retActors = TVDB::getSeriesActors($this->tvdb_id);
-
-            // Delete old actors if there were any
-            Actor::where('anime_id', $this->id)->delete();
-
-            // Insert the new actors
-            $insertActors = [];
-
-            foreach ($retActors as $actor) {
-                $insertActors[] = [
-                    'created_at'    => Carbon::now(),
-                    'anime_id'      => $this->id,
-                    'name'          => $actor->name,
-                    'role'          => $actor->role,
-                    'image'         => $actor->imageURL
-                ];
-            }
-
-            Actor::insert($insertActors);
-
-            $this->fetched_actors = true;
-            $this->save();
-        }
-
         return Actor::where('anime_id', $this->id)->get();
     }
 
