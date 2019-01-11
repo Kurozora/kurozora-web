@@ -43,6 +43,10 @@ class Anime extends Model
     // Minimum ratings required to calculate average
     const MINIMUM_RATINGS_REQUIRED = 30;
 
+    // Cache Anime explore page response
+    const CACHE_KEY_EXPLORE = 'anime-explore';
+    const CACHE_KEY_EXPLORE_MINUTES = 120;
+
     // Table name
     const TABLE_NAME = 'anime';
     protected $table = self::TABLE_NAME;

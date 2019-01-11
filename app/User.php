@@ -51,11 +51,11 @@ class User extends Authenticatable
     const CACHE_KEY_FOLLOWER_COUNT = 'user-followers-%i';
     const CACHE_KEY_FOLLOWER_COUNT_MINUTES = 10;
 
-    // Cache user's follower count
+    // Cache user's following count
     const CACHE_KEY_FOLLOWING_COUNT = 'user-following-%i';
     const CACHE_KEY_FOLLOWING_COUNT_MINUTES = 10;
 
-    // Cache user's follower count
+    // Cache user's reputation count
     const CACHE_KEY_REPUTATION_COUNT = 'user-reputation-%i';
     const CACHE_KEY_REPUTATION_COUNT_MINUTES = 10;
 

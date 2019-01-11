@@ -59,7 +59,7 @@ class JSONResult {
 
         $printArr = [
             'success'       => $this->success,
-            'query_count'   => Config::get(AppServiceProvider::$queryCountConfigKey)
+            'query_count'   => (int) Config::get(AppServiceProvider::$queryCountConfigKey)
         ];
 
         if(!$this->success && strlen($this->errorMessage)) {

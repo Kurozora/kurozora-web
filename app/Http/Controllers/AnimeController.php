@@ -8,6 +8,7 @@ use App\AnimeRating;
 use App\AnimeSeason;
 use App\Helpers\JSONResult;
 use App\UserLibrary;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
@@ -17,44 +18,50 @@ class AnimeController extends Controller
      * Returns the necessary data for the Anime explore page
      */
     public function exploreAnime() {
-        // Settings for queries
-        $maxAnimePerCategory    = 10;
-        $maxAnimeForBanners     = 5;
+        // Retrieve or save cached result
+        $explorePage = Cache::remember(Anime::CACHE_KEY_EXPLORE, Anime::CACHE_KEY_EXPLORE_MINUTES, function () {
+            // Settings for queries
+            $maxAnimePerCategory = 10;
+            $maxAnimeForBanners = 5;
 
-        // New movies
-        $query_WINTER = Anime::where('nsfw', false)
-            ->limit($maxAnimePerCategory)
-            ->whereIn('tvdb_id', [79911, 272369, 316038, 121891, 123661, 80044])
-            ->get();
+            // New movies
+            $query_WINTER = Anime::where('nsfw', false)
+                ->limit($maxAnimePerCategory)
+                ->whereIn('tvdb_id', [79911, 272369, 316038, 121891, 123661, 80044])
+                ->get();
 
-        // Randomly chosen
-        $query_RAND = Anime::where('nsfw', false)
-            ->limit($maxAnimePerCategory)
-            ->inRandomOrder()
-            ->get();
+            // Randomly chosen
+            $query_RAND = Anime::where('nsfw', false)
+                ->limit($maxAnimePerCategory)
+                ->inRandomOrder()
+                ->get();
 
-        // Newly added Anime
-        $query_NAA = Anime::where('nsfw', false)
-            ->orderBy('created_at', 'DESC')
-            ->limit($maxAnimePerCategory)
-            ->get();
+            // Newly added Anime
+            $query_NAA = Anime::where('nsfw', false)
+                ->orderBy('created_at', 'DESC')
+                ->limit($maxAnimePerCategory)
+                ->get();
 
-        // Add all the categories together
-        $categoryArray = [
-            Anime::formatAnimesAsCategory('Winter Themed', 'normal', $query_WINTER),
-            Anime::formatAnimesAsCategory('Randomly Chosen', 'large', $query_RAND),
-            Anime::formatAnimesAsCategory('Newly Added Anime', 'normal', $query_NAA)
-        ];
+            // Add all the categories together
+            $categoryArray = [
+                Anime::formatAnimesAsCategory('Winter Themed', 'normal', $query_WINTER),
+                Anime::formatAnimesAsCategory('Randomly Chosen', 'large', $query_RAND),
+                Anime::formatAnimesAsCategory('Newly Added Anime', 'normal', $query_NAA)
+            ];
 
-        // Retrieve banner section
-        $query_banners = Anime::where('nsfw', false)
-                        ->limit($maxAnimeForBanners)
-                        ->get();
+            // Retrieve banner section
+            $query_banners = Anime::where('nsfw', false)
+                ->limit($maxAnimeForBanners)
+                ->get();
 
-        (new JSONResult())->setData([
-            'categories'    => $categoryArray,
-            'banners'       => Anime::formatAnimesAsThumbnail($query_banners)
-        ])->show();
+            return [
+                'categories'    => $categoryArray,
+                'banners'       => Anime::formatAnimesAsThumbnail($query_banners)
+            ];
+        });
+
+        // Return the response
+        (new JSONResult())->setData($explorePage)->show();
     }
 
     /**
