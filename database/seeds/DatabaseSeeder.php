@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
         $this->call(BadgeSeeder::class);
         $this->call(ForumThreadSeeder::class);
         $this->call(ForumReplySeeder::class);
+        $this->call(GenreSeeder::class);
     }
 }
