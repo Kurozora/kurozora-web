@@ -114,8 +114,7 @@ Route::group(['prefix' => 'v1'], function () {
     });
 
     Route::prefix('/anime-episodes')->group(function() {
-        Route::post('/{episodeID}/watched', [AnimeEpisodeController::class, 'watched'])
-            ->where('episodeID', '[0-9]*')
+        Route::post('/{episode}/watched', [AnimeEpisodeController::class, 'watched'])
             ->middleware('kurozora.userauth');
     });
 

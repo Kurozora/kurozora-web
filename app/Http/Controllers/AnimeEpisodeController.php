@@ -13,16 +13,10 @@ class AnimeEpisodeController extends Controller
     /**
      * Marks an episode as watched or not watched
      *
-     * @param $episodeID
+     * @param Request $request
+     * @param AnimeEpisode $episode
      */
-    public function watched(Request $request, $episodeID) {
-        // Get the episode
-        $episode = AnimeEpisode::find($episodeID);
-
-        // Episode does not exist
-        if(!$episode)
-            (new JSONResult())->setError(JSONResult::ERROR_ANIME_EPISODE_NON_EXISTENT)->show();
-
+    public function watched(Request $request, AnimeEpisode $episode) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'watched' => 'bail|required|numeric|min:0|max:1'
