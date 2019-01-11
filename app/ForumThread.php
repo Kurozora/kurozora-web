@@ -42,6 +42,15 @@ class ForumThread extends Model
     const REPLIES_PER_PAGE = 10;
 
     /**
+     * Retrieve the replies for the thread
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function replies() {
+        return $this->hasMany(ForumReply::class, 'forum_thread');
+    }
+
+    /**
      * Returns the amount of replies in this thread
      *
      * @return int
