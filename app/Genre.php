@@ -34,4 +34,18 @@ class Genre extends Model
             'nsfw'  => (bool) $this->nsfw
         ];
     }
+
+    /**
+     * Formats the genre for the details response
+     *
+     * @return array
+     */
+    public function formatForDetailsResponse() {
+        return [
+            'id'            => $this->id,
+            'name'          => $this->name,
+            'description'   => $this->description,
+            'nsfw'          => (bool) $this->nsfw
+        ];
+    }
 }

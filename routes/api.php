@@ -119,6 +119,8 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::prefix('/genres')->group(function() {
         Route::get('/', [GenreController::class, 'overview']);
+
+        Route::get('/{genre}', [GenreController::class, 'details']);
     });
 
     Route::prefix('/forum-sections')->group(function() {

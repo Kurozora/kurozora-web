@@ -20,4 +20,16 @@ class GenreController extends Controller
         // Show genres in response
         (new JSONResult())->setData(['genres' => $allGenres])->show();
     }
+
+    /**
+     * Shows genre details
+     *
+     * @param Genre $genre
+     */
+    public function details(Genre $genre) {
+        // Show genre details
+        (new JSONResult())->setData([
+            'genre' => $genre->formatForDetailsResponse()
+        ])->show();
+    }
 }
