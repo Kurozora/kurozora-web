@@ -11,7 +11,7 @@ class Genre extends Model
     protected $table = self::TABLE_NAME;
 
     // Fillable columns
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'nsfw', 'description'];
 
     /**
      * Formats the genre for the Anime response

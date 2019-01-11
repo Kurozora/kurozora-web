@@ -20,7 +20,7 @@ class AnimesTableDummySeeder extends Seeder
         $parsedAnime = json_decode($animeJson);
 
         if($parsedAnime != null) {
-            // Create 50 random Animes
+            // Create the Anime
             foreach ($parsedAnime->anime as $animeData) {
                 Anime::create([
                     'title'     => $animeData->title,
