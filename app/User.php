@@ -44,19 +44,19 @@ class User extends Authenticatable
     ];
 
     // Cache user's badges
-    const CACHE_KEY_BADGES = 'user-badges-%i';
+    const CACHE_KEY_BADGES = 'user-badges-%d';
     const CACHE_KEY_BADGES_MINUTES = 120;
 
     // Cache user's follower count
-    const CACHE_KEY_FOLLOWER_COUNT = 'user-followers-%i';
+    const CACHE_KEY_FOLLOWER_COUNT = 'user-followers-%d';
     const CACHE_KEY_FOLLOWER_COUNT_MINUTES = 10;
 
     // Cache user's following count
-    const CACHE_KEY_FOLLOWING_COUNT = 'user-following-%i';
+    const CACHE_KEY_FOLLOWING_COUNT = 'user-following-%d';
     const CACHE_KEY_FOLLOWING_COUNT_MINUTES = 10;
 
     // Cache user's reputation count
-    const CACHE_KEY_REPUTATION_COUNT = 'user-reputation-%i';
+    const CACHE_KEY_REPUTATION_COUNT = 'user-reputation-%d';
     const CACHE_KEY_REPUTATION_COUNT_MINUTES = 10;
 
     // Table name
