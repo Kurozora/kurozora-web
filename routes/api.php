@@ -136,8 +136,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::prefix('/forum-threads')->group(function() {
         Route::get('/search', [ForumThreadController::class, 'search']);
 
-        Route::get('/{threadID}', [ForumThreadController::class, 'threadInfo'])
-            ->where('threadID', '[0-9]*');
+        Route::get('/{thread}', [ForumThreadController::class, 'threadInfo']);
 
         Route::post('/{threadID}/vote', [ForumThreadController::class, 'vote'])
             ->where('threadID', '[0-9]*')
