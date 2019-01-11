@@ -97,8 +97,7 @@ Route::group(['prefix' => 'v1'], function () {
             ->where('animeID', '[0-9]*')
             ->middleware('kurozora.userauth');
 
-        Route::get('/{animeID}/actors', [AnimeController::class, 'actorsAnime'])
-            ->where('animeID', '[0-9]*');
+        Route::get('/{anime}/actors', [AnimeController::class, 'actorsAnime']);
 
         Route::get('/{animeID}/seasons', [AnimeController::class, 'seasonsAnime'])
             ->where('animeID', '[0-9]*');
