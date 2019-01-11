@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Anime;
 use Illuminate\Console\Command;
+use musa11971\TVDB\Exceptions\TVDBNotFoundException;
 use musa11971\TVDB\TVDB;
 
 class FetchAnimeImages extends Command
@@ -63,9 +64,15 @@ class FetchAnimeImages extends Command
 
         // Retrieve posters
         $this->info('[Retrieving posters]');
-        $posterData = TVDB::getSeriesImages($anime->tvdb_id, TVDB::IMAGE_TYPE_POSTER);
 
-        if(count($posterData)) {
+        try {
+            $posterData = TVDB::getSeriesImages($anime->tvdb_id, TVDB::IMAGE_TYPE_POSTER);
+        }
+        catch(TVDBNotFoundException $e) {
+            $this->info('[Posters not found]');
+        }
+
+        if(isset($posterData) && count($posterData)) {
             $anime->cached_poster = $posterData[0]['image'];
             $anime->cached_poster_thumbnail = $posterData[0]['image_thumb'];
         }
@@ -78,9 +85,15 @@ class FetchAnimeImages extends Command
 
         // Retrieve backgrounds
         $this->info('[Retrieving backgrounds]');
-        $backgroundData = TVDB::getSeriesImages($anime->tvdb_id, TVDB::IMAGE_TYPE_FANART);
 
-        if(count($backgroundData)) {
+        try {
+            $backgroundData = TVDB::getSeriesImages($anime->tvdb_id, TVDB::IMAGE_TYPE_FANART);
+        }
+        catch(TVDBNotFoundException $e) {
+            $this->info('[Backgrounds not found]');
+        }
+
+        if(isset($backgroundData) && count($backgroundData)) {
             $anime->cached_background = $backgroundData[0]['image'];
             $anime->cached_background_thumbnail = $backgroundData[0]['image_thumb'];
         }
