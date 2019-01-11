@@ -110,6 +110,15 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the user's followers
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function followers() {
+        return $this->hasMany(UserFollow::class, 'following_user_id');
+    }
+
+    /**
      * Returns the amount of followers the user has
      *
      * @return int
@@ -120,10 +129,19 @@ class User extends Authenticatable
 
         // Retrieve or save cached result
         $followerCount = Cache::remember($cacheKey, self::CACHE_KEY_FOLLOWER_COUNT_MINUTES, function () {
-            return UserFollow::where('following_user_id', $this->id)->count();
+            return $this->followers()->count();
         });
 
         return $followerCount;
+    }
+
+    /**
+     * Get the user's following users
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function following() {
+        return $this->hasMany(UserFollow::class, 'user_id');
     }
 
     /**
@@ -137,7 +155,7 @@ class User extends Authenticatable
 
         // Retrieve or save cached result
         $followingCount = Cache::remember($cacheKey, self::CACHE_KEY_FOLLOWING_COUNT_MINUTES, function () {
-            return UserFollow::where('user_id', $this->id)->count();
+            return $this->following()->count();
         });
 
         return $followingCount;
