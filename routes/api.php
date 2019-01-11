@@ -122,14 +122,11 @@ Route::group(['prefix' => 'v1'], function () {
     Route::prefix('/forum-sections')->group(function() {
         Route::get('/', [ForumSectionController::class, 'overview']);
 
-        Route::get('/{sectionID}', [ForumSectionController::class, 'details'])
-            ->where('sectionID', '[0-9]*');
+        Route::get('/{section}', [ForumSectionController::class, 'details']);
 
-        Route::get('/{sectionID}/threads', [ForumSectionController::class, 'threads'])
-            ->where('sectionID', '[0-9]*');
+        Route::get('/{section}/threads', [ForumSectionController::class, 'threads']);
 
-        Route::post('/{sectionID}/threads', [ForumSectionController::class, 'postThread'])
-            ->where('sectionID', '[0-9]*')
+        Route::post('/{section}/threads', [ForumSectionController::class, 'postThread'])
             ->middleware('kurozora.userauth');
     });
 

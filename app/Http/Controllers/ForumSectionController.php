@@ -32,16 +32,9 @@ class ForumSectionController extends Controller
     /**
      * Gets the information of a section
      *
-     * @param $sectionID
+     * @param ForumSection $section
      */
-    public function details($sectionID) {
-        // Get the section
-        $section = ForumSection::find($sectionID);
-
-        // Check if the section exists
-        if(!$section)
-            (new JSONResult())->setError(JSONResult::ERROR_FORUM_SECTION_NON_EXISTENT)->show();
-
+    public function details(ForumSection $section) {
         (new JSONResult())->setData([
             'section' => $section->formatForDetailsResponse()
         ])->show();
@@ -51,9 +44,9 @@ class ForumSectionController extends Controller
      * Returns the threads of a section
      *
      * @param Request $request
-     * @param $sectionID
+     * @param ForumSection $section
      */
-    public function threads(Request $request, $sectionID) {
+    public function threads(Request $request, ForumSection $section) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'order'         => 'bail|required|in:top,recent',
@@ -67,12 +60,6 @@ class ForumSectionController extends Controller
         // Check validator
         if($validator->fails())
             (new JSONResult())->setError($validator->errors()->first())->show();
-
-        // Check if the section exists
-        $section = ForumSection::find($sectionID);
-
-        if(!$section)
-            (new JSONResult())->setError(JSONResult::ERROR_FORUM_SECTION_NON_EXISTENT)->show();
 
         // Determine columns to select
         $columnsToSelect = [
@@ -98,7 +85,7 @@ class ForumSectionController extends Controller
                 $join->on(ForumThread::TABLE_NAME . '.user_id', '=', User::TABLE_NAME . '.id');
             })
             ->where([
-                [ForumThread::TABLE_NAME . '.section_id', '=', $sectionID]
+                [ForumThread::TABLE_NAME . '.section_id', '=', $section->id]
             ]);
 
         // Add order
@@ -147,9 +134,9 @@ class ForumSectionController extends Controller
      * Allows the user to submit a new thread
      *
      * @param Request $request
-     * @param $sectionID
+     * @param ForumSection $section
      */
-    public function postThread(Request $request, $sectionID) {
+    public function postThread(Request $request, ForumSection $section) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'title'         => 'bail|required|min:' . ForumThread::MIN_TITLE_LENGTH,
@@ -160,16 +147,12 @@ class ForumSectionController extends Controller
         if($validator->fails())
             (new JSONResult())->setError($validator->errors()->first())->show();
 
-        // Check if the section exists
-        if(!ForumSection::where('id', $sectionID)->exists())
-            (new JSONResult())->setError(JSONResult::ERROR_FORUM_SECTION_NON_EXISTENT)->show();
-
         // Get variables
         $givenTitle = $request->input('title');
         $givenContent = $request->input('content');
 
         // Check if the user is banned
-        $foundBan = ForumSectionBan::getBanInfo($request->user_id, $sectionID);
+        $foundBan = ForumSectionBan::getBanInfo($request->user_id, $section->id);
 
         if($foundBan !== null)
             (new JSONResult())->setError($foundBan['message'])->show();
@@ -180,7 +163,7 @@ class ForumSectionController extends Controller
 
         // Create the thread
         $newThread = ForumThread::create([
-            'section_id'    => $sectionID,
+            'section_id'    => $section->id,
             'user_id'       => $request->user_id,
             'ip'            => $request->ip(),
             'title'         => $givenTitle,
