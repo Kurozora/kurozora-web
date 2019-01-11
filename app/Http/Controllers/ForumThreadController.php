@@ -71,16 +71,9 @@ class ForumThreadController extends Controller
      * Vote for a thread
      *
      * @param Request $request
-     * @param $threadID
+     * @param ForumThread $thread
      */
-    public function vote(Request $request, $threadID) {
-        // Find the thread
-        $thread = ForumThread::find($threadID);
-
-        // Thread wasn't found
-        if(!$thread)
-            (new JSONResult())->setError(JSONResult::ERROR_FORUM_THREAD_NON_EXISTENT)->show();
-
+    public function vote(Request $request, ForumThread $thread) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'vote'      => 'bail|required|numeric|min:0|max:1'
@@ -96,7 +89,7 @@ class ForumThreadController extends Controller
         // Check if they've voted already
         $foundVote = ForumThreadVote::where([
             ['user_id',     '=', $request->user_id],
-            ['thread_id',   '=', $threadID]
+            ['thread_id',   '=', $thread->id]
         ])->first();
 
         // They haven't voted for this thread yet
@@ -104,7 +97,7 @@ class ForumThreadController extends Controller
             // Insert vote
             ForumThreadVote::create([
                 'user_id'   => $request->user_id,
-                'thread_id' => $threadID,
+                'thread_id' => $thread->id,
                 'positive'  => $givenVote
             ]);
         }
@@ -124,16 +117,9 @@ class ForumThreadController extends Controller
      * Allows the user to submit a reply to a thread
      *
      * @param Request $request
-     * @param $threadID
+     * @param ForumThread $thread
      */
-    public function postReply(Request $request, $threadID) {
-        // Find the thread
-        $thread = ForumThread::find($threadID);
-
-        // Thread wasn't found
-        if(!$thread)
-            (new JSONResult())->setError(JSONResult::ERROR_FORUM_THREAD_NON_EXISTENT)->show();
-
+    public function postReply(Request $request, ForumThread $thread) {
         // Check if the user is banned
         $foundBan = ForumSectionBan::getBanInfo($request->user_id, $thread->section_id);
 
@@ -175,16 +161,9 @@ class ForumThreadController extends Controller
      * Vote for a thread
      *
      * @param Request $request
-     * @param $threadID
+     * @param ForumThread $thread
      */
-    public function replies(Request $request, $threadID) {
-        // Find the thread
-        $thread = ForumThread::find($threadID);
-
-        // Thread wasn't found
-        if(!$thread)
-            (new JSONResult())->setError(JSONResult::ERROR_FORUM_THREAD_NON_EXISTENT)->show();
-
+    public function replies(Request $request, ForumThread $thread) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'order'         => 'bail|required|in:top,recent',
@@ -220,7 +199,7 @@ class ForumThreadController extends Controller
                 $join->on(ForumReply::TABLE_NAME . '.user_id', '=', User::TABLE_NAME . '.id');
             })
             ->where([
-                [ForumReply::TABLE_NAME . '.thread_id', '=', $threadID]
+                [ForumReply::TABLE_NAME . '.thread_id', '=', $thread->id]
             ]);
 
         // Add order
