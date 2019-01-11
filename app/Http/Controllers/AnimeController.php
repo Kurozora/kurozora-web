@@ -68,15 +68,9 @@ class AnimeController extends Controller
      * Returns detailed information about an Anime
      *
      * @param Request $request
-     * @param $animeID
+     * @param Anime $anime
      */
-    public function detailsAnime(Request $request, $animeID) {
-        $anime = Anime::find($animeID);
-
-        // The Anime item does not exist
-        if(!$anime)
-            (new JSONResult())->setError(JSONResult::ERROR_ANIME_NON_EXISTENT)->show();
-
+    public function detailsAnime(Request $request, Anime $anime) {
         // Get the user rating for this Anime
         $userRating = 0.0;
 
@@ -149,22 +143,14 @@ class AnimeController extends Controller
     /**
      * Returns season information for an Anime
      *
-     * @param int $animeID
+     * @param Anime $anime
      */
-    public function seasonsAnime($animeID)
+    public function seasonsAnime(Anime $anime)
     {
-        // Get the Anime
-        $anime = Anime::find($animeID);
-
-        // The Anime item does not exist
-        if (!$anime)
-            (new JSONResult())->setError('Unable to retrieve season data for the specified anime.')->show();
-
-        $rawSeasons = AnimeSeason::where('anime_id', $anime->id)->get();
-        $foundSeasons = [];
-
-        foreach($rawSeasons as $rawSeason)
-            $foundSeasons[] = $rawSeason->formatForResponse();
+        // Get the actors
+        $foundSeasons = $anime->getSeasons()->map(function($season) {
+            return $season->formatForResponse();
+        });
 
         (new JSONResult())->setData(['seasons' => $foundSeasons])->show();
     }
@@ -173,9 +159,9 @@ class AnimeController extends Controller
      * Adds a rating for an Anime item
      *
      * @param Request $request
-     * @param $animeID
+     * @param Anime $anime
      */
-    public function rateAnime(Request $request, $animeID) {
+    public function rateAnime(Request $request, Anime $anime) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'rating' => 'bail|required|numeric|between:' . AnimeRating::MIN_RATING_VALUE . ',' . AnimeRating::MAX_RATING_VALUE
@@ -184,13 +170,6 @@ class AnimeController extends Controller
         // Check validator
         if ($validator->fails())
             (new JSONResult())->setError($validator->errors()->first())->show();
-
-        // Get the anime
-        $anime = Anime::find($animeID);
-
-        // The Anime item does not exist
-        if(!$anime)
-            (new JSONResult())->setError(JSONResult::ERROR_ANIME_NON_EXISTENT)->show();
 
         // Fetch the variables
         $givenRating = $request->input('rating');

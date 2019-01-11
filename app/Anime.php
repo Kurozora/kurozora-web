@@ -102,6 +102,15 @@ class Anime extends Model
     }
 
     /**
+     * Returns this anime's seasons
+     *
+     * @return mixed
+     */
+    public function getSeasons() {
+        return AnimeSeason::where('anime_id', $this->id)->get();
+    }
+
+    /**
      * Retrieves the type of Anime as a string
      *
      * @return string
