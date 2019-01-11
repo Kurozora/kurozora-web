@@ -93,17 +93,14 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::get('/search', [AnimeController::class, 'search']);
 
-        Route::get('/{animeID}', [AnimeController::class, 'detailsAnime'])
-            ->where('animeID', '[0-9]*')
+        Route::get('/{anime}', [AnimeController::class, 'detailsAnime'])
             ->middleware('kurozora.userauth');
 
         Route::get('/{anime}/actors', [AnimeController::class, 'actorsAnime']);
 
-        Route::get('/{animeID}/seasons', [AnimeController::class, 'seasonsAnime'])
-            ->where('animeID', '[0-9]*');
+        Route::get('/{anime}/seasons', [AnimeController::class, 'seasonsAnime']);
 
-        Route::post('/{animeID}/rate', [AnimeController::class, 'rateAnime'])
-            ->where('animeID', '[0-9]*')
+        Route::post('/{anime}/rate', [AnimeController::class, 'rateAnime'])
             ->middleware('kurozora.userauth');
     });
 
