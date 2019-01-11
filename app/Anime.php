@@ -48,9 +48,13 @@ class Anime extends Model
     const CACHE_KEY_EXPLORE = 'anime-explore';
     const CACHE_KEY_EXPLORE_MINUTES = 120;
 
-    // Cache Anime explore page response
+    // Cache Anime actors
     const CACHE_KEY_ACTORS = 'anime-actors-%d';
     const CACHE_KEY_ACTORS_MINUTES = 120;
+
+    // Cache Anime seasons
+    const CACHE_KEY_SEASONS = 'anime-seasons-%d';
+    const CACHE_KEY_SEASONS_MINUTES = 120;
 
     // Table name
     const TABLE_NAME = 'anime';
@@ -91,7 +95,15 @@ class Anime extends Model
      * @return mixed
      */
     public function getSeasons() {
-        return AnimeSeason::where('anime_id', $this->id)->get();
+        // Find location of cached data
+        $cacheKey = sprintf(self::CACHE_KEY_SEASONS, $this->id);
+
+        // Retrieve or save cached result
+        $seasonsInfo = Cache::remember($cacheKey, self::CACHE_KEY_SEASONS_MINUTES, function () {
+            return AnimeSeason::where('anime_id', $this->id)->get();
+        });
+
+        return $seasonsInfo;
     }
 
     /**
