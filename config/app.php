@@ -50,19 +50,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | TVDB information
-    |--------------------------------------------------------------------------
-    |
-    | Information used for the TVDB API
-    |
-    */
-
-    'TVDB_API_KEY' => env('TVDB_API_KEY', 'ErrorKey'),
-    'TVDB_USER_NAME' => env('TVDB_USER_NAME', 'ErrorKey'),
-    'TVDB_USER_KEY' => env('TVDB_USER_KEY', 'ErrorKey'),
-
-    /*
-    |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------
     |
