@@ -109,6 +109,9 @@ class UserController extends Controller
      * @param User $user
      */
     public function profile(User $user) {
+        // Get the current user
+        $currentUser = Auth::user();
+
         // Get their badges
         $badges = [];
         $rawBadges = $user->getBadges();
@@ -127,7 +130,8 @@ class UserController extends Controller
                 'following_count'   => $user->getFollowingCount(),
                 'reputation_count'  => $user->getReputationCount(),
                 'badges'            => $badges
-            ]
+            ],
+            'currently_following' => $currentUser->isFollowing($user)
         ])->show();
     }
 
