@@ -386,6 +386,11 @@
     },
     "/users/{userID}/profile": {
       "get": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
         "tags": [
           "users"
         ],

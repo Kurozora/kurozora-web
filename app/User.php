@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -42,6 +43,22 @@ class User extends Authenticatable
         self::USER_ROLE_ADMINISTRATOR   => 'administrator'
     ];
 
+    // Cache user's badges
+    const CACHE_KEY_BADGES = 'user-badges-%i';
+    const CACHE_KEY_BADGES_MINUTES = 120;
+
+    // Cache user's follower count
+    const CACHE_KEY_FOLLOWER_COUNT = 'user-followers-%i';
+    const CACHE_KEY_FOLLOWER_COUNT_MINUTES = 10;
+
+    // Cache user's follower count
+    const CACHE_KEY_FOLLOWING_COUNT = 'user-following-%i';
+    const CACHE_KEY_FOLLOWING_COUNT_MINUTES = 10;
+
+    // Cache user's follower count
+    const CACHE_KEY_REPUTATION_COUNT = 'user-reputation-%i';
+    const CACHE_KEY_REPUTATION_COUNT_MINUTES = 10;
+
     // Table name
     const TABLE_NAME = 'user';
     protected $table = self::TABLE_NAME;
@@ -74,14 +91,20 @@ class User extends Authenticatable
      * @return array
      */
     public function getBadges() {
-        $badgeInfo = Badge::
-            join(UserBadge::TABLE_NAME, function ($join) {
-                $join->on(UserBadge::TABLE_NAME . '.badge_id', '=', Badge::TABLE_NAME . '.id');
-            })
-            ->where([
-                [UserBadge::TABLE_NAME . '.user_id', '=', $this->id]
-            ])
-            ->get();
+        // Find location of cached data
+        $cacheKey = sprintf(self::CACHE_KEY_BADGES, $this->id);
+
+        // Retrieve or save cached result
+        $badgeInfo = Cache::remember($cacheKey, self::CACHE_KEY_BADGES_MINUTES, function () {
+            return Badge::
+                join(UserBadge::TABLE_NAME, function ($join) {
+                    $join->on(UserBadge::TABLE_NAME . '.badge_id', '=', Badge::TABLE_NAME . '.id');
+                })
+                ->where([
+                    [UserBadge::TABLE_NAME . '.user_id', '=', $this->id]
+                ])
+                ->get();
+        });
 
         return $badgeInfo;
     }
@@ -92,7 +115,15 @@ class User extends Authenticatable
      * @return int
      */
     public function getFollowerCount() {
-        return UserFollow::where('following_user_id', $this->id)->count();
+        // Find location of cached data
+        $cacheKey = sprintf(self::CACHE_KEY_FOLLOWER_COUNT, $this->id);
+
+        // Retrieve or save cached result
+        $followerCount = Cache::remember($cacheKey, self::CACHE_KEY_FOLLOWER_COUNT_MINUTES, function () {
+            return UserFollow::where('following_user_id', $this->id)->count();
+        });
+
+        return $followerCount;
     }
 
     /**
@@ -101,7 +132,15 @@ class User extends Authenticatable
      * @return int
      */
     public function getFollowingCount() {
-        return UserFollow::where('user_id', $this->id)->count();
+        // Find location of cached data
+        $cacheKey = sprintf(self::CACHE_KEY_FOLLOWING_COUNT, $this->id);
+
+        // Retrieve or save cached result
+        $followingCount = Cache::remember($cacheKey, self::CACHE_KEY_FOLLOWING_COUNT_MINUTES, function () {
+            return UserFollow::where('user_id', $this->id)->count();
+        });
+
+        return $followingCount;
     }
 
     /**
@@ -110,9 +149,16 @@ class User extends Authenticatable
      * @return int
      */
     public function getReputationCount() {
-        $repCount = UserReputation::where('given_user_id', $this->id)->sum('amount');
+        // Find location of cached data
+        $cacheKey = sprintf(self::CACHE_KEY_REPUTATION_COUNT, $this->id);
 
-        if($repCount === null) return 0;
+        // Retrieve or save cached result
+        $repCount = Cache::remember($cacheKey, self::CACHE_KEY_REPUTATION_COUNT_MINUTES, function () {
+            $foundRep = UserReputation::where('given_user_id', $this->id)->sum('amount');
+
+            if($foundRep === null) return 0;
+            return (int) $foundRep;
+        });
 
         return (int) $repCount;
     }
