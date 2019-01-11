@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Anime;
+use App\AnimeGenre;
+use App\Genre;
 use Illuminate\Console\Command;
 use musa11971\TVDB\TVDB;
 
@@ -109,6 +111,25 @@ class FetchAnimeDetails extends Command
         $this->info('[Retrieving status]');
         $anime->status = $details->status;
         $this->info('[Status retrieved]');
+        $this->info('');
+
+        // Genres
+        $this->info('[Retrieving genres]');
+
+        foreach($details->genres as $genre) {
+            // Get the appropriate genre
+            $foundGenre = Genre::firstOrCreate(
+                ['name' => $genre]
+            );
+
+            // Assign to this anime
+            AnimeGenre::create([
+                'anime_id' => $anime->id,
+                'genre_id' => $foundGenre->id
+            ]);
+        }
+
+        $this->info('[Genres retrieved]');
         $this->info('');
 
         // Save details
