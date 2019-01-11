@@ -48,7 +48,7 @@ class CalculateAnimeRatings extends Command
 
         foreach($animes as $anime) {
             // Total amount of ratings this Anime has
-            $totalRatingCount = AnimeRating::where('anime_id', $anime->id)->count();
+            $totalRatingCount = $anime->ratings()->count();
 
             // Check if minimum ratings are acquired
             if($totalRatingCount >= Anime::MINIMUM_RATINGS_REQUIRED) {
@@ -56,7 +56,7 @@ class CalculateAnimeRatings extends Command
                 $this->info('Calculating for Anime ID ' . $anime->id);
 
                 // Average score for this Anime
-                $basicAverageRating = AnimeRating::where('anime_id', $anime->id)->avg('rating');
+                $basicAverageRating = $anime->ratings()->avg('rating');
 
                 // Calculate the weighted rating
                 $weightedRating = ($totalRatingCount / ($totalRatingCount + Anime::MINIMUM_RATINGS_REQUIRED)) * $basicAverageRating + (Anime::MINIMUM_RATINGS_REQUIRED / ($totalRatingCount + Anime::MINIMUM_RATINGS_REQUIRED)) * $meanAverageRating;
