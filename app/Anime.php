@@ -56,6 +56,10 @@ class Anime extends Model
     const CACHE_KEY_SEASONS = 'anime-seasons-%d';
     const CACHE_KEY_SEASONS_MINUTES = 120;
 
+    // Cache Anime genres
+    const CACHE_KEY_GENRES = 'anime-genres-%d';
+    const CACHE_KEY_GENRES_MINUTES = 120;
+
     // Table name
     const TABLE_NAME = 'anime';
     protected $table = self::TABLE_NAME;
@@ -131,6 +135,30 @@ class Anime extends Model
         });
 
         return $seasonsInfo;
+    }
+
+    /**
+     * Returns this anime's genres
+     *
+     * @return mixed
+     */
+    public function getGenres() {
+        // Find location of cached data
+        $cacheKey = sprintf(self::CACHE_KEY_GENRES, $this->id);
+
+        // Retrieve or save cached result
+        $genresInfo = Cache::remember($cacheKey, self::CACHE_KEY_GENRES_MINUTES, function () {
+            return Genre::
+                join(AnimeGenre::TABLE_NAME, function ($join) {
+                    $join->on(AnimeGenre::TABLE_NAME . '.genre_id', '=', Genre::TABLE_NAME . '.id');
+                })
+                ->where([
+                    [AnimeGenre::TABLE_NAME . '.anime_id', '=', $this->id]
+                ])
+                ->get();
+        });
+
+        return $genresInfo;
     }
 
     /**

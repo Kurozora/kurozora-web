@@ -45,6 +45,10 @@
       "description":"Everything anime episodes related"
     },
     {
+      "name":"genres",
+      "description":"Everything genre related"
+    },
+    {
       "name":"forum-sections",
       "description":"Everything forum sections related"
     },
@@ -1247,6 +1251,23 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/genres": {
+      "get": {
+        "tags": [
+          "genres"
+        ],
+        "summary": "Genres list.",
+        "description": "This endpoint will retrieve the genres.",
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSONSuccess"
