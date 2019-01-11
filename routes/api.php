@@ -7,6 +7,7 @@
 */
 
 namespace App\Http\Controllers;
+use App\Genre;
 use Illuminate\Support\Facades\Route;
 
 // API Swagger documentation page
@@ -114,6 +115,10 @@ Route::group(['prefix' => 'v1'], function () {
     Route::prefix('/anime-episodes')->group(function() {
         Route::post('/{episode}/watched', [AnimeEpisodeController::class, 'watched'])
             ->middleware('kurozora.userauth');
+    });
+
+    Route::prefix('/genres')->group(function() {
+        Route::get('/', [GenreController::class, 'overview']);
     });
 
     Route::prefix('/forum-sections')->group(function() {

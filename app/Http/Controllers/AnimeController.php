@@ -91,6 +91,11 @@ class AnimeController extends Controller
 
         if($foundLibraryStatus) $currentLibraryStatus = UserLibrary::getStringFromStatus($foundLibraryStatus->status);
 
+        // Get the genres
+        $genres = $anime->getGenres()->map(function($genre) {
+            return $genre->formatForAnimeResponse();
+        });
+
         // Build the response
         $animeArr = [
             'id'                    => $anime->id,
@@ -110,7 +115,8 @@ class AnimeController extends Controller
             'poster_thumbnail'      => $anime->getPoster(true),
             'background'            => $anime->getBackground(false),
             'background_thumbnail'  => $anime->getBackground(true),
-            'nsfw'                  => (bool) $anime->nsfw
+            'nsfw'                  => (bool) $anime->nsfw,
+            'genres'                => $genres
         ];
 
         $userArr = [
