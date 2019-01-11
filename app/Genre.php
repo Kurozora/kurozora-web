@@ -10,6 +10,9 @@ class Genre extends Model
     const TABLE_NAME = 'genre';
     protected $table = self::TABLE_NAME;
 
+    // Fillable columns
+    protected $fillable = ['name'];
+
     /**
      * Formats the genre for the Anime response
      *
