@@ -15,16 +15,9 @@ class AnimeSeasonController extends Controller
     /**
      * Returns the information for a season
      *
-     * @param $seasonID
+     * @param AnimeSeason $season
      */
-    public function details($seasonID) {
-        // Get the season
-        $season = AnimeSeason::find($seasonID);
-
-        // The season does not exist
-        if(!$season)
-            (new JSONResult())->setError(JSONResult::ERROR_ANIME_SEASON_NON_EXISTENT)->show();
-
+    public function details(AnimeSeason $season) {
         (new JSONResult())->setData([
             'season' => $season->formatForInfoResponse()
         ])->show();
@@ -33,16 +26,10 @@ class AnimeSeasonController extends Controller
     /**
      * Returns the episodes for a season
      *
-     * @param $seasonID
+     * @param Request $request
+     * @param AnimeSeason $season
      */
-    public function episodes(Request $request, $seasonID) {
-        // Get the season
-        $season = AnimeSeason::find($seasonID);
-
-        // The season does not exist
-        if(!$seasonID)
-            (new JSONResult())->setError(JSONResult::ERROR_ANIME_SEASON_NON_EXISTENT)->show();
-
+    public function episodes(Request $request, AnimeSeason $season) {
         // Determine columns to select
         $columnsToSelect = [
             AnimeEpisode::TABLE_NAME . '.id AS episode_id',
@@ -59,7 +46,7 @@ class AnimeSeasonController extends Controller
         $episodeInfo = DB::table(AnimeEpisode::TABLE_NAME)
             ->select($columnsToSelect)
             ->where([
-                [AnimeEpisode::TABLE_NAME . '.season_id', '=', $seasonID]
+                [AnimeEpisode::TABLE_NAME . '.season_id', '=', $season->id]
             ])
             ->orderBy('number', 'ASC');
 

@@ -105,11 +105,9 @@ Route::group(['prefix' => 'v1'], function () {
     });
 
     Route::prefix('/anime-seasons')->group(function() {
-        Route::get('/{seasonID}', [AnimeSeasonController::class, 'details'])
-            ->where('seasonID', '[0-9]*');
+        Route::get('/{season}', [AnimeSeasonController::class, 'details']);
 
-        Route::get('/{seasonID}/episodes', [AnimeSeasonController::class, 'episodes'])
-            ->where('seasonID', '[0-9]*')
+        Route::get('/{season}/episodes', [AnimeSeasonController::class, 'episodes'])
             ->middleware('kurozora.userauth');
     });
 
