@@ -4,6 +4,7 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use KuroSearchTrait;
 use musa11971\TVDB\TVDB;
 
@@ -47,6 +48,10 @@ class Anime extends Model
     const CACHE_KEY_EXPLORE = 'anime-explore';
     const CACHE_KEY_EXPLORE_MINUTES = 120;
 
+    // Cache Anime explore page response
+    const CACHE_KEY_ACTORS = 'anime-actors-%d';
+    const CACHE_KEY_ACTORS_MINUTES = 120;
+
     // Table name
     const TABLE_NAME = 'anime';
     protected $table = self::TABLE_NAME;
@@ -69,7 +74,15 @@ class Anime extends Model
      * @return array
      */
     public function getActors() {
-        return Actor::where('anime_id', $this->id)->get();
+        // Find location of cached data
+        $cacheKey = sprintf(self::CACHE_KEY_ACTORS, $this->id);
+
+        // Retrieve or save cached result
+        $actorsInfo = Cache::remember($cacheKey, self::CACHE_KEY_ACTORS_MINUTES, function () {
+            return Actor::where('anime_id', $this->id)->get();
+        });
+
+        return $actorsInfo;
     }
 
     /**
