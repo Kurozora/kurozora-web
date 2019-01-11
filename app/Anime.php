@@ -73,6 +73,24 @@ class Anime extends Model
     ];
 
     /**
+     * Get the Anime's ratings
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function ratings() {
+        return $this->hasMany(AnimeRating::class, 'anime_id');
+    }
+
+    /**
+     * Get the Anime's actors
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function actors() {
+        return $this->hasMany(Actor::class, 'anime_id');
+    }
+
+    /**
      * Retrieves the actors for an Anime item in an array
      *
      * @return array
@@ -83,10 +101,19 @@ class Anime extends Model
 
         // Retrieve or save cached result
         $actorsInfo = Cache::remember($cacheKey, self::CACHE_KEY_ACTORS_MINUTES, function () {
-            return Actor::where('anime_id', $this->id)->get();
+            return $this->actors()->get();
         });
 
         return $actorsInfo;
+    }
+
+    /**
+     * Get the Anime's seasons
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function seasons() {
+        return $this->hasMany(Actor::class, 'anime_id');
     }
 
     /**
@@ -100,7 +127,7 @@ class Anime extends Model
 
         // Retrieve or save cached result
         $seasonsInfo = Cache::remember($cacheKey, self::CACHE_KEY_SEASONS_MINUTES, function () {
-            return AnimeSeason::where('anime_id', $this->id)->get();
+            return $this->seasons()->get();
         });
 
         return $seasonsInfo;
