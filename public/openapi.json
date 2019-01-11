@@ -1278,6 +1278,34 @@
         }
       }
     },
+    "/genres/{genreID}": {
+      "get": {
+        "tags": [
+          "genres"
+        ],
+        "summary": "Get genre details.",
+        "description": "This endpoint will retrieve the details for a genre.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "genreID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the genre."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/forum-threads/{threadID}": {
       "get": {
         "tags": [
