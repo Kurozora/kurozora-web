@@ -16,14 +16,7 @@ class ForumReplyController extends Controller
      * @param Request $request
      * @param $replyID
      */
-    public function vote(Request $request, $replyID) {
-        // Get the reply
-        $reply = ForumReply::find($replyID);
-
-        // Reply does not exist
-        if(!$reply)
-            (new JSONResult())->setError(JSONResult::ERROR_FORUM_REPLY_NON_EXISTENT)->show();
-
+    public function vote(Request $request, ForumReply $reply) {
         // User tried to vote for their own reply
         if($reply->user_id == $request->user_id)
             (new JSONResult())->setError('You can not vote for your own replies.')->show();

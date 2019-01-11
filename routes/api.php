@@ -148,8 +148,7 @@ Route::group(['prefix' => 'v1'], function () {
     });
 
     Route::prefix('/forum-replies')->group(function() {
-        Route::post('/{replyID}/vote', [ForumReplyController::class, 'vote'])
-            ->where('replyID', '[0-9]*')
+        Route::post('/{reply}/vote', [ForumReplyController::class, 'vote'])
             ->middleware('kurozora.userauth');
     });
 
