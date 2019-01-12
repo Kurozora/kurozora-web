@@ -121,7 +121,7 @@ class UserController extends Controller
 
         // Show profile response
         (new JSONResult())->setData([
-            'profile' => [
+            'user' => [
                 'username'          => $user->username,
                 'biography'         => $user->biography,
                 'avatar_url'        => $user->getAvatarURL(),
