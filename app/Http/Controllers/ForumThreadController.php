@@ -9,6 +9,7 @@ use App\ForumThread;
 use App\ForumThreadVote;
 use App\Helpers\JSONResult;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -21,47 +22,21 @@ class ForumThreadController extends Controller
      * @param ForumThread $thread
      */
     public function threadInfo(ForumThread $thread) {
-        // Determine columns to select
-        $columnsToSelect = [
-            ForumThread::TABLE_NAME . '.id AS id',
-            ForumThread::TABLE_NAME . '.title AS title',
-            ForumThread::TABLE_NAME . '.content AS content',
-            ForumThread::TABLE_NAME . '.locked AS locked',
-            User::TABLE_NAME . '.username AS username',
-            User::TABLE_NAME . '.id AS user_id',
-            ForumThread::TABLE_NAME . '.created_at AS creation_date',
-            // Select the reply count via subquery
-            DB::raw('(SELECT COUNT(*) FROM ' . ForumReply::TABLE_NAME . ' WHERE thread_id = ' . ForumThread::TABLE_NAME . '.id) AS reply_count'),
-            // Select the upvote count via subquery
-            DB::raw('(SELECT COUNT(*) FROM ' . ForumThreadVote::TABLE_NAME . ' WHERE thread_id = ' . ForumThread::TABLE_NAME . '.id AND positive = 1) AS upvote_count'),
-            // Select the downvote count via subquery
-            DB::raw('(SELECT COUNT(*) FROM ' . ForumThreadVote::TABLE_NAME . ' WHERE thread_id = ' . ForumThread::TABLE_NAME . '.id AND positive = 0) AS downvote_count')
-        ];
-
-        // Create query
-        $threadInfo = DB::table(ForumThread::TABLE_NAME)
-            ->select($columnsToSelect)
-            ->join(User::TABLE_NAME, function ($join) {
-                $join->on(ForumThread::TABLE_NAME . '.user_id', '=', User::TABLE_NAME . '.id');
-            })
-            ->where([
-                [ForumThread::TABLE_NAME . '.id', '=', $thread->id]
-            ])
-            ->first();
+        $thread->load('user', 'votes', 'replies');
 
         // Show thread information
         (new JSONResult())->setData([
             'thread' => [
-                'id' => $threadInfo->id,
-                'title' => $threadInfo->title,
-                'content' => $threadInfo->content,
-                'locked' => (bool) $threadInfo->locked,
-                'creation_date' => $threadInfo->creation_date,
-                'reply_count' => $threadInfo->reply_count,
-                'score' => ($threadInfo->upvote_count - $threadInfo->downvote_count),
+                'id' => $thread->id,
+                'title' => $thread->title,
+                'content' => $thread->content,
+                'locked' => (bool) $thread->locked,
+                'creation_date' => $thread->created_at->format('Y-m-d H:i:s'),
+                'reply_count' => $thread->replies->count(),
+                'score' => $thread->getScore(),
                 'user' => [
-                    'id' => $threadInfo->user_id,
-                    'username' => $threadInfo->username
+                    'id' => $thread->user->id,
+                    'username' => $thread->user->username
                 ]
             ]
         ])->show();
