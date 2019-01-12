@@ -138,6 +138,15 @@ class Anime extends Model
     }
 
     /**
+     * The genres of this Anime
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function genres() {
+        return $this->belongsToMany(Genre::class, AnimeGenre::TABLE_NAME, 'anime_id', 'id');
+    }
+
+    /**
      * Returns this anime's genres
      *
      * @return mixed
@@ -148,14 +157,7 @@ class Anime extends Model
 
         // Retrieve or save cached result
         $genresInfo = Cache::remember($cacheKey, self::CACHE_KEY_GENRES_MINUTES, function () {
-            return Genre::
-                join(AnimeGenre::TABLE_NAME, function ($join) {
-                    $join->on(AnimeGenre::TABLE_NAME . '.genre_id', '=', Genre::TABLE_NAME . '.id');
-                })
-                ->where([
-                    [AnimeGenre::TABLE_NAME . '.anime_id', '=', $this->id]
-                ])
-                ->get();
+            return $this->genres();
         });
 
         return $genresInfo;
