@@ -2,11 +2,9 @@
 
 namespace App;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use KuroSearchTrait;
-use musa11971\TVDB\TVDB;
 
 /**
  * Class Anime
@@ -82,7 +80,7 @@ class Anime extends Model
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function ratings() {
-        return $this->hasMany(AnimeRating::class, 'anime_id');
+        return $this->hasMany(AnimeRating::class, 'anime_id', 'id');
     }
 
     /**
@@ -91,7 +89,7 @@ class Anime extends Model
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function actors() {
-        return $this->hasMany(Actor::class, 'anime_id');
+        return $this->hasMany(Actor::class, 'anime_id', 'id');
     }
 
     /**
@@ -157,7 +155,7 @@ class Anime extends Model
 
         // Retrieve or save cached result
         $genresInfo = Cache::remember($cacheKey, self::CACHE_KEY_GENRES_MINUTES, function () {
-            return $this->genres();
+            return $this->genres;
         });
 
         return $genresInfo;
@@ -260,6 +258,10 @@ class Anime extends Model
      * @return array
      */
     public static function formatAnimeAsThumbnail($anime) {
+        $genres = $anime->getGenres()->map(function($genre) {
+            return $genre->formatForAnimeResponse();
+        });
+
         return [
             'id'                    => $anime->id,
             'title'                 => $anime->title,
@@ -267,7 +269,8 @@ class Anime extends Model
             'poster'                => $anime->getPoster(false),
             'poster_thumbnail'      => $anime->getPoster(true),
             'background'            => $anime->getBackground(false),
-            'background_thumbnail'  => $anime->getBackground(true)
+            'background_thumbnail'  => $anime->getBackground(true),
+            'genres'                => $genres
         ];
     }
 }
