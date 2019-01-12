@@ -42,12 +42,39 @@ class ForumThread extends Model
     const REPLIES_PER_PAGE = 10;
 
     /**
+     * Get the user associated with the thread
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function user() {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
+    /**
+     * Get the votes for the thread
+     */
+    public function votes() {
+        return $this->hasMany(ForumThreadVote::class, 'thread_id', 'id');
+    }
+
+    /**
+     * Returns the score of the thread
+     *
+     * @return int
+     */
+    public function getScore() {
+        return (
+            $this->votes->where('positive', 1)->count() - $this->votes->where('positive', 0)->count()
+        );
+    }
+
+    /**
      * Retrieve the replies for the thread
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function replies() {
-        return $this->hasMany(ForumReply::class, 'forum_thread');
+        return $this->hasMany(ForumReply::class, 'thread_id', 'id');
     }
 
     /**
