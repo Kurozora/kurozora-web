@@ -73,12 +73,12 @@ class AnimeController extends Controller
         // Get the user rating for this Anime
         $userRating = 0.0;
 
-        $foundRating = AnimeRating::where([
-        	['user_id' ,  '=', $request->user_id],
-        	['anime_id' , '=', $anime->id]
-        ])->first();
+        $foundRating = $anime->ratings()
+            ->where('user_id', $request->user_id)
+            ->first();
 
-        if($foundRating) $userRating = $foundRating->rating;
+        if($foundRating)
+            $userRating = $foundRating->rating;
 
         // Get the current library status
         $currentLibraryStatus = UserLibrary::getStringFromStatus(UserLibrary::STATUS_UNKNOWN);
