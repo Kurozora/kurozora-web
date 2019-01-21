@@ -4,9 +4,13 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Cog\Contracts\Love\Likeable\Models\Likeable as LikeableContract;
+use Cog\Laravel\Love\Likeable\Models\Traits\Likeable;
 
-class ForumReply extends Model
+class ForumReply extends Model implements LikeableContract
 {
+    use Likeable;
+
     // Table name
     const TABLE_NAME = 'forum_reply';
     protected $table = self::TABLE_NAME;
@@ -16,6 +20,15 @@ class ForumReply extends Model
 
     // A user can post a forum reply once every {?} seconds
     const COOLDOWN_POST_REPLY = 10;
+
+    /**
+     * Get the user associated with the reply
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function user() {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
 
     /**
      * Checks whether or not the user passes the cooldown check

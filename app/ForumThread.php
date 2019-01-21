@@ -30,8 +30,8 @@ class ForumThread extends Model implements LikeableContract
     const TABLE_NAME = 'forum_thread';
     protected $table = self::TABLE_NAME;
 
-    // Fillable columns
-    protected $fillable = ['section_id', 'user_id', 'ip', 'title', 'content'];
+    // Remove column guards
+    protected $guarded = [];
 
     // Minimum lengths
     const MIN_TITLE_LENGTH = 5;
@@ -50,15 +50,6 @@ class ForumThread extends Model implements LikeableContract
      */
     public function user() {
         return $this->hasOne(User::class, 'id', 'user_id');
-    }
-
-    /**
-     * Returns the score of the thread
-     *
-     * @return int
-     */
-    public function getScore() {
-        return ($this->likesDiffDislikesCount);
     }
 
     /**

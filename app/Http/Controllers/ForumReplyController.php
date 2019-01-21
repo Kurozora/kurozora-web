@@ -6,6 +6,7 @@ use App\ForumReply;
 use App\ForumReplyVote;
 use App\Helpers\JSONResult;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ForumReplyController extends Controller
@@ -14,13 +15,9 @@ class ForumReplyController extends Controller
      * Leaves a vote for a reply
      *
      * @param Request $request
-     * @param $replyID
+     * @param ForumReply $reply
      */
     public function vote(Request $request, ForumReply $reply) {
-        // User tried to vote for their own reply
-        if($reply->user_id == $request->user_id)
-            (new JSONResult())->setError('You can not vote for your own replies.')->show();
-
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'vote'      => 'bail|required|numeric|min:0|max:1'
@@ -30,33 +27,21 @@ class ForumReplyController extends Controller
         if($validator->fails())
             (new JSONResult())->setError($validator->errors()->first())->show();
 
+        // Get the user
+        $user = Auth::user();
+
         // Get the vote
-        $givenVote = $request->input('vote');
+        $votePositive = $request->input('vote');
 
-        // Check if they've voted already
-        $foundVote = ForumReplyVote::where([
-            ['user_id',     '=', $request->user_id],
-            ['reply_id',    '=', $reply->id]
-        ])->first();
-
-        // They haven't voted for this reply yet
-        if($foundVote == null) {
-            // Insert vote
-            ForumReplyVote::create([
-                'user_id'   => $request->user_id,
-                'reply_id'  => $reply->id,
-                'positive'  => $givenVote
-            ]);
-        }
-        else {
-            // Modify the vote
-            if($foundVote->positive != $givenVote) {
-                $foundVote->positive = $givenVote;
-                $foundVote->save();
-            }
-        }
+        // Perform the action
+        if($votePositive)
+            $user->toggleLike($reply);
+        else
+            $user->toggleDislike($reply);
 
         // Show successful response
-        (new JSONResult())->show();
+        (new JSONResult())->setData([
+            'action' => $user->likeAction($reply)
+        ])->show();
     }
 }
