@@ -4,7 +4,6 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
-use KuroSearchTrait;
 
 /**
  * Class Anime
@@ -13,7 +12,7 @@ use KuroSearchTrait;
  */
 class Anime extends Model
 {
-    use KuroSearchTrait;
+    use \KuroSearchTrait;
 
     /**
      * Searchable rules.
