@@ -22,3 +22,6 @@ Homestead.json
 
 # PHPStorm
 .idea
+
+# DS Store
+.DS_Store
