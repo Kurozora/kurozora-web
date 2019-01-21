@@ -61,72 +61,40 @@ class ForumSectionController extends Controller
         if($validator->fails())
             (new JSONResult())->setError($validator->errors()->first())->show();
 
-        // Determine columns to select
-        $columnsToSelect = [
-            ForumThread::TABLE_NAME . '.id AS thread_id',
-            ForumThread::TABLE_NAME . '.title AS title',
-            ForumThread::TABLE_NAME . '.content AS content',
-            ForumThread::TABLE_NAME . '.locked AS locked',
-            User::TABLE_NAME . '.username AS username',
-            User::TABLE_NAME . '.id AS user_id',
-            ForumThread::TABLE_NAME . '.created_at AS creation_date',
-            // Select the reply count via subquery
-            DB::raw('(SELECT COUNT(*) FROM ' . ForumReply::TABLE_NAME . ' WHERE thread_id = ' . ForumThread::TABLE_NAME . '.id) AS reply_count'),
-            // Select the upvote count via subquery
-            DB::raw('(SELECT COUNT(*) FROM ' . ForumThreadVote::TABLE_NAME . ' WHERE thread_id = ' . ForumThread::TABLE_NAME . '.id AND positive = 1) AS upvote_count'),
-            // Select the downvote count via subquery
-            DB::raw('(SELECT COUNT(*) FROM ' . ForumThreadVote::TABLE_NAME . ' WHERE thread_id = ' . ForumThread::TABLE_NAME . '.id AND positive = 0) AS downvote_count')
-        ];
+        // Get the threads
+        $threads = $section->threads();
 
-        // Create query
-        $threadInfo = DB::table(ForumThread::TABLE_NAME)
-            ->select($columnsToSelect)
-            ->join(User::TABLE_NAME, function ($join) {
-                $join->on(ForumThread::TABLE_NAME . '.user_id', '=', User::TABLE_NAME . '.id');
-            })
-            ->where([
-                [ForumThread::TABLE_NAME . '.section_id', '=', $section->id]
-            ]);
+        if($givenOrder == 'recent')
+            $threads = $threads->orderBy('created_at', 'DESC');
+        else if($givenOrder == 'top')
+            $threads = $threads->orderByLikesCount();
 
-        // Add order
-        if($givenOrder == 'top')
-            $threadInfo->orderBy('upvote_count', 'DESC');
-        else if($givenOrder == 'recent')
-            $threadInfo->orderBy('creation_date', 'DESC');
+        $threads = $threads->paginate(ForumSection::THREADS_PER_PAGE);
 
-        // Add page/offset
-        if($givenPage == null)
-            $givenPage = 0;
+        // Format the threads
+        $displayThreads = [];
 
-        $threadInfo->offset($givenPage * ForumSection::THREADS_PER_PAGE);
-        $threadInfo->limit(ForumSection::THREADS_PER_PAGE);
-
-        // Get the results
-        $rawThreads = $threadInfo->get();
-
-        $threads = [];
-
-        foreach($rawThreads as $rawThread)
-            $threads[] = [
-                'id'                => $rawThread->thread_id,
-                'title'             => $rawThread->title,
+        foreach($threads as $thread)
+            $displayThreads[] = [
+                'id'                => $thread->id,
+                'title'             => $thread->title,
                 'content_teaser'    =>
-                    substr(strip_tags($rawThread->content), 0, 100) .
-                    ((strlen($rawThread->content) > 100) ? '...' : '')
+                    substr(strip_tags($thread->content), 0, 100) .
+                    ((strlen($thread->content) > 100) ? '...' : '')
                 ,
-                'locked'            => (bool) $rawThread->locked,
-                'poster_user_id'    => $rawThread->user_id,
-                'poster_username'   => $rawThread->username,
-                'creation_date'     => $rawThread->creation_date,
-                'reply_count'       => $rawThread->reply_count,
-                'score'             => ($rawThread->upvote_count - $rawThread->downvote_count)
+                'locked'            => (bool) $thread->locked,
+                'poster_user_id'    => $thread->user->id,
+                'poster_username'   => $thread->user->username,
+                'creation_date'     => $thread->created_at->format('Y-m-d H:i:s'),
+                'reply_count'       => $thread->replies->count(),
+                'score'             => $thread->likesDiffDislikesCount
             ];
 
         // Show threads in response
         (new JSONResult())->setData([
             'page'          => (int) $givenPage,
             'thread_pages'  => $section->getPageCount(),
-            'threads'       => $threads
+            'threads'       => $displayThreads
         ])->show();
     }
 

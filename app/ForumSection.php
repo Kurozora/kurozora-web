@@ -17,6 +17,15 @@ class ForumSection extends Model
     const THREADS_PER_PAGE = 10;
 
     /**
+     * Retrieve the threads for the section
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function threads() {
+        return $this->hasMany(ForumThread::class, 'section_id', 'id');
+    }
+
+    /**
      * Formats the section for a response
      *
      * @return array

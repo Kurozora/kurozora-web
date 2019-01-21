@@ -62,15 +62,6 @@ class ForumThread extends Model implements LikeableContract
     }
 
     /**
-     * Returns the amount of replies in this thread
-     *
-     * @return int
-     */
-    public function getReplyCount() {
-        return (int) ForumReply::where('thread_id', $this->id)->count();
-    }
-
-    /**
      * Formats the thread for a details response
      *
      * @return array
@@ -89,7 +80,7 @@ class ForumThread extends Model implements LikeableContract
      * @return integer
      */
     public function getPageCount() {
-        return ceil($this->getReplyCount() / self::REPLIES_PER_PAGE);
+        return ceil($this->replies->count() / self::REPLIES_PER_PAGE);
     }
 
     /**
