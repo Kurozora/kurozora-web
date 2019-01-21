@@ -26,11 +26,12 @@ composer dump-autoload --quiet
 echo -e "${BLACK}[${ORANGE}Kurozora${BLACK}] ${LIME}✔ ${NC}Autoload file dumped!"
 
 # Clear laravel config cache
-echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Reloading Laravel config cache..."
+echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Reloading Laravel cache..."
 php artisan view:clear
 php artisan view:cache
 php artisan config:cache
-echo -e "${BLACK}[${ORANGE}Kurozora${BLACK}] ${LIME}✔ ${NC}Config cache reloaded!"
+php artisan cache:clear
+echo -e "${BLACK}[${ORANGE}Kurozora${BLACK}] ${LIME}✔ ${NC}Cache reloaded!"
 
 # Migrate fresh
 echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Would you like to run a fresh migration? (y/n): "
