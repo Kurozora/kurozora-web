@@ -7,11 +7,10 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use KuroSearchTrait;
 
 class User extends Authenticatable
 {
-    use Authorizable, KuroSearchTrait;
+    use Authorizable, \KuroSearchTrait;
 
     /**
      * Searchable rules.
