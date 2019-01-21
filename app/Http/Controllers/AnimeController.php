@@ -130,8 +130,6 @@ class AnimeController extends Controller
      * Returns actor information about an Anime
      *
      * @param Anime $anime
-     * @throws \musa11971\TVDB\Exceptions\TVDBNotFoundException
-     * @throws \musa11971\TVDB\Exceptions\TVDBUnauthorizedException
      */
     public function actorsAnime(Anime $anime) {
         // Get the actors
