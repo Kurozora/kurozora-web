@@ -106,7 +106,7 @@ class Anime extends Model
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function seasons() {
-        return $this->hasMany(Actor::class, 'anime_id');
+        return $this->hasMany(AnimeSeason::class, 'anime_id');
     }
 
     /**
