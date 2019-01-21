@@ -3,16 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\ForumReply;
-use App\ForumReplyVote;
 use App\ForumSectionBan;
 use App\ForumThread;
-use App\ForumThreadVote;
 use App\Helpers\JSONResult;
-use App\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ForumThreadController extends Controller
@@ -34,7 +29,7 @@ class ForumThreadController extends Controller
                 'locked' => (bool) $thread->locked,
                 'creation_date' => $thread->created_at->format('Y-m-d H:i:s'),
                 'reply_count' => $thread->replies->count(),
-                'score' => $thread->getScore(),
+                'score' => $thread->likesDiffDislikesCount,
                 'user' => [
                     'id' => $thread->user->id,
                     'username' => $thread->user->username
@@ -142,57 +137,30 @@ class ForumThreadController extends Controller
         if($validator->fails())
             (new JSONResult())->setError($validator->errors()->first())->show();
 
-        // Determine columns to select
-        $columnsToSelect = [
-            ForumReply::TABLE_NAME . '.id AS reply_id',
-            ForumReply::TABLE_NAME . '.content AS content',
-            User::TABLE_NAME . '.username AS username',
-            User::TABLE_NAME . '.id AS user_id',
-            User::TABLE_NAME . '.avatar AS user_avatar',
-            ForumReply::TABLE_NAME . '.created_at AS creation_date',
-            // Select the upvote count via subquery
-            DB::raw('(SELECT COUNT(*) FROM ' . ForumReplyVote::TABLE_NAME . ' WHERE reply_id = ' . ForumReply::TABLE_NAME . '.id AND positive = 1) AS upvote_count'),
-            // Select the downvote count via subquery
-            DB::raw('(SELECT COUNT(*) FROM ' . ForumReplyVote::TABLE_NAME . ' WHERE reply_id = ' . ForumReply::TABLE_NAME . '.id AND positive = 0) AS downvote_count')
-        ];
+        // Get the replies
+        $replies = $thread->replies();
 
-        // Create query
-        $replyInfo = DB::table(ForumReply::TABLE_NAME)
-            ->select($columnsToSelect)
-            ->join(User::TABLE_NAME, function ($join) {
-                $join->on(ForumReply::TABLE_NAME . '.user_id', '=', User::TABLE_NAME . '.id');
-            })
-            ->where([
-                [ForumReply::TABLE_NAME . '.thread_id', '=', $thread->id]
-            ]);
+        if($givenOrder == 'recent')
+            $replies = $replies->orderBy('created_at', 'DESC');
+        else if($givenOrder == 'top')
+            $replies = $replies->orderByLikesCount();
 
-        // Add order
-        if($givenOrder == 'top')
-            $replyInfo->orderBy('upvote_count', 'DESC');
-        else if($givenOrder == 'recent')
-            $replyInfo->orderBy('creation_date', 'DESC');
+        $replies = $replies->paginate(ForumThread::REPLIES_PER_PAGE);
 
-        if($givenPage == null)
-            $givenPage = 0;
-
-        $replyInfo->offset($givenPage * ForumThread::REPLIES_PER_PAGE);
-        $replyInfo->limit(ForumThread::REPLIES_PER_PAGE);
-
-        // Get the results
-        $rawReplies = $replyInfo->get();
+        // Format the replies
         $displayReplies = [];
 
-        foreach($rawReplies as $rawReply) {
+        foreach($replies as $reply) {
             $displayReplies[] = [
-                'id'        => $rawReply->reply_id,
-                'posted_at' => $rawReply->creation_date,
+                'id'        => $reply->id,
+                'posted_at' => $reply->created_at->format('Y-m-d H:i:s'),
                 'user' => [
-                    'id'        => $rawReply->user_id,
-                    'username'  => $rawReply->username,
-                    'avatar'    => User::avatarFileToURL($rawReply->user_avatar)
+                    'id'        => $reply->user->id,
+                    'username'  => $reply->user->username,
+                    'avatar'    => $reply->user->getAvatarURL()
                 ],
-                'score'     => ($rawReply->upvote_count - $rawReply->downvote_count),
-                'content'   => $rawReply->content
+                'score'     => $reply->likesDiffDislikesCount,
+                'content'   => $reply->content
             ];
         }
 
