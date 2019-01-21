@@ -73,7 +73,7 @@ class FetchAnimeDetails extends Command
 
         // Watch rating
         $this->info('[Retrieving watch rating]');
-        $anime->watch_rating = 'TBA';
+        $anime->watch_rating = $details->watchRating;
         $this->info('[Watch rating retrieved]');
         $this->info('');
 
@@ -85,7 +85,7 @@ class FetchAnimeDetails extends Command
 
         // Runtime
         $this->info('[Retrieving runtime]');
-        $anime->runtime = 0;
+        $anime->runtime = $details->runtime;
         $this->info('[Runtime retrieved]');
         $this->info('');
 

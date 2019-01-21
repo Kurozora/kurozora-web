@@ -136,7 +136,7 @@ class AnimeController extends Controller
     public function actorsAnime(Anime $anime) {
         // Get the actors
         $retActors = $anime->getActors()->map(function($actor) {
-            return Actor::formatForResponse($actor);
+            return $actor->formatForResponse();
         });
 
         (new JSONResult())->setData([

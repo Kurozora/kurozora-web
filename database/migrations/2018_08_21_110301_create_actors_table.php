@@ -23,8 +23,8 @@ class CreateActorsTable extends Migration
             $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
 
             $table->string('name');
-            $table->string('role');
-            $table->string('image');
+            $table->string('role')->nullable();
+            $table->string('image')->nullable();
         });
     }
 

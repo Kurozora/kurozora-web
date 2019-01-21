@@ -62,17 +62,8 @@ class Anime extends Model
     const TABLE_NAME = 'anime';
     protected $table = self::TABLE_NAME;
 
-    // Fillable columns
-    protected $fillable = [
-        'title',
-        'cached_poster',
-        'cached_poster_thumbnail',
-        'cached_background',
-        'cached_background_thumbnail',
-        'type',
-        'nsfw',
-        'tvdb_id'
-    ];
+    // Remove column guards
+    protected $guarded = [];
 
     /**
      * Get the Anime's ratings

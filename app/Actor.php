@@ -10,24 +10,19 @@ class Actor extends Model
     const TABLE_NAME = 'anime_actor';
     protected $table = self::TABLE_NAME;
 
-    // Fillable columns
-    protected $fillable = [
-        'anime_id',
-        'name',
-        'role',
-        'image'
-    ];
+    // Remove column guards
+    protected $guarded = [];
 
     /**
      * Formats the actor with the minimal data needed for a response
      *
      * @return array
      */
-    public static function formatForResponse($actor) {
+    public function formatForResponse() {
         return [
-            'name'  => $actor->name,
-            'role'  => $actor->role,
-            'image' => $actor->image
+            'name'  => $this->name,
+            'role'  => $this->role,
+            'image' => $this->image
         ];
     }
 }

@@ -506,11 +506,6 @@
     },
     "/users/search": {
       "get": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
         "tags": [
           "users"
         ],
