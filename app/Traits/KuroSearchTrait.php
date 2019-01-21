@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Traits;
+
 use Nicolaslopezj\Searchable\SearchableTrait;
 
 trait KuroSearchTrait {

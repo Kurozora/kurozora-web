@@ -12,6 +12,7 @@ $factory->define(ForumThread::class, function (Faker $faker) {
         'user_id'       => (User::inRandomOrder()->limit(1)->first())->id,
         'ip'            => $faker->ipv4,
         'title'         => $faker->sentence(3),
-        'content'       => $faker->paragraph(2)
+        'content'       => $faker->paragraph(2),
+        'locked'        => $faker->boolean()
      ];
 });
