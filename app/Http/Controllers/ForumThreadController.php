@@ -11,6 +11,7 @@ use App\Helpers\JSONResult;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -22,7 +23,7 @@ class ForumThreadController extends Controller
      * @param ForumThread $thread
      */
     public function threadInfo(ForumThread $thread) {
-        $thread->load('user', 'votes', 'replies');
+        $thread->load('user', 'replies');
 
         // Show thread information
         (new JSONResult())->setData([
@@ -58,34 +59,22 @@ class ForumThreadController extends Controller
         if($validator->fails())
             (new JSONResult())->setError($validator->errors()->first())->show();
 
+        // Get the user
+        $user = Auth::user();
+
         // Get the vote
-        $givenVote = $request->input('vote');
+        $votePositive = $request->input('vote');
 
-        // Check if they've voted already
-        $foundVote = ForumThreadVote::where([
-            ['user_id',     '=', $request->user_id],
-            ['thread_id',   '=', $thread->id]
-        ])->first();
-
-        // They haven't voted for this thread yet
-        if($foundVote == null) {
-            // Insert vote
-            ForumThreadVote::create([
-                'user_id'   => $request->user_id,
-                'thread_id' => $thread->id,
-                'positive'  => $givenVote
-            ]);
-        }
-        else {
-            // Modify the vote
-            if($foundVote->positive != $givenVote) {
-                $foundVote->positive = $givenVote;
-                $foundVote->save();
-            }
-        }
+        // Perform the action
+        if($votePositive)
+            $user->toggleLike($thread);
+        else
+            $user->toggleDislike($thread);
 
         // Show successful response
-        (new JSONResult())->show();
+        (new JSONResult())->setData([
+            'action' => $user->likeAction($thread)
+        ])->show();
     }
 
     /**

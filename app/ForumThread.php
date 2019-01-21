@@ -5,10 +5,12 @@ namespace App;
 use App\Traits\KuroSearchTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Cog\Contracts\Love\Likeable\Models\Likeable as LikeableContract;
+use Cog\Laravel\Love\Likeable\Models\Traits\Likeable;
 
-class ForumThread extends Model
+class ForumThread extends Model implements LikeableContract
 {
-    use KuroSearchTrait;
+    use KuroSearchTrait, Likeable;
 
     /**
      * Searchable rules.
@@ -51,21 +53,12 @@ class ForumThread extends Model
     }
 
     /**
-     * Get the votes for the thread
-     */
-    public function votes() {
-        return $this->hasMany(ForumThreadVote::class, 'thread_id', 'id');
-    }
-
-    /**
      * Returns the score of the thread
      *
      * @return int
      */
     public function getScore() {
-        return (
-            $this->votes->where('positive', 1)->count() - $this->votes->where('positive', 0)->count()
-        );
+        return ($this->likesDiffDislikesCount);
     }
 
     /**
