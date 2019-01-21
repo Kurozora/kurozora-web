@@ -3,15 +3,18 @@
 namespace App;
 
 use App\Traits\KuroSearchTrait;
+use App\Traits\LikeActionTrait;
+use Cog\Contracts\Love\Liker\Models\Liker as LikerContract;
+use Cog\Laravel\Love\Liker\Models\Traits\Liker;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements LikerContract
 {
-    use Authorizable, KuroSearchTrait;
+    use Authorizable, KuroSearchTrait, Liker, LikeActionTrait;
 
     /**
      * Searchable rules.
