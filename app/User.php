@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\KuroSearchTrait;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
@@ -10,7 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Authorizable, \KuroSearchTrait;
+    use Authorizable, KuroSearchTrait;
 
     /**
      * Searchable rules.

@@ -2,12 +2,13 @@
 
 namespace App;
 
+use App\Traits\KuroSearchTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class ForumThread extends Model
 {
-    use \KuroSearchTrait;
+    use KuroSearchTrait;
 
     /**
      * Searchable rules.
