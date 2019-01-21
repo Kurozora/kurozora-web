@@ -9,6 +9,7 @@ trait KuroSearchTrait {
      * Custom Kurozora search function with added features
      *
      * @param $query
+     * @param array $options
      * @return mixed
      */
     public static function kuroSearch($query, $options = []) {
