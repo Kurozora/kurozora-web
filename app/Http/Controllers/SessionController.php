@@ -72,10 +72,12 @@ class SessionController extends Controller
 
         // Show a successful response
         (new JSONResult())->setData([
-            'kuro_auth_token'   => KuroAuthToken::generate($foundUser->id, $newSession->secret),
-            'session_id'        => $newSession->id,
-            'user_id'           => $foundUser->id,
-            'role'              => $foundUser->role
+            'user' => [
+                'id'                => $foundUser->id,
+                'kuro_auth_token'   => KuroAuthToken::generate($foundUser->id, $newSession->secret),
+                'session_id'        => $newSession->id,
+                'role'              => $foundUser->role
+            ]
         ])->show();
     }
 
