@@ -1517,8 +1517,8 @@
         "tags": [
           "forum-threads"
         ],
-        "summary": "Lock or unlock a thread.",
-        "description": "This endpoint will lock or unlock a thread.",
+        "summary": "[MOD+] Lock or unlock a thread.",
+        "description": "<span class=\"kuro-tip\">MOD+</span> This endpoint will lock or unlock a thread.",
         "parameters": [
           {
             "in": "path",
