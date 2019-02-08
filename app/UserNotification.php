@@ -2,11 +2,9 @@
 
 namespace App;
 
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use ReflectionClass;
 
-class UserNotification extends Model
+class UserNotification extends KModel
 {
     // Types of notification
     const TYPE_UNKNOWN      = 0;
@@ -16,9 +14,6 @@ class UserNotification extends Model
     // Table name
     const TABLE_NAME = 'user_notification';
     protected $table = self::TABLE_NAME;
-
-    // Fillable columns
-    protected $fillable = ['user_id', 'type', 'data'];
 
     /**
      * Returns the string/text for this notification

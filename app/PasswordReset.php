@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class PasswordReset extends Model
+class PasswordReset extends KModel
 {
     // The length of a reset token
     const TOKEN_LENGTH = 30;
@@ -15,9 +13,6 @@ class PasswordReset extends Model
     // Table name
     const TABLE_NAME = 'user_password_reset';
     protected $table = self::TABLE_NAME;
-
-    // Fillable columns
-    protected $fillable = ['user_id', 'ip', 'token'];
 
     /**
      * Returns a token to use with password reset links

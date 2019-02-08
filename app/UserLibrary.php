@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class UserLibrary extends Model
+class UserLibrary extends KModel
 {
     // Status of user library
     const STATUS_UNKNOWN    = 0;
@@ -26,9 +24,6 @@ class UserLibrary extends Model
     // Table name
     const TABLE_NAME = 'user_library';
     protected $table = self::TABLE_NAME;
-
-    // Fillable columns
-    protected $fillable = ['user_id', 'anime_id', 'status'];
 
     /**
      * Returns the integer of the status, or null if not found

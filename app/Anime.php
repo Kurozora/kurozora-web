@@ -3,7 +3,6 @@
 namespace App;
 
 use App\Traits\KuroSearchTrait;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -11,7 +10,7 @@ use Illuminate\Support\Facades\Cache;
  *
  * @package App
  */
-class Anime extends Model
+class Anime extends KModel
 {
     use KuroSearchTrait;
 
@@ -52,9 +51,6 @@ class Anime extends Model
     // Table name
     const TABLE_NAME = 'anime';
     protected $table = self::TABLE_NAME;
-
-    // Remove column guards
-    protected $guarded = [];
 
     /**
      * Get the Anime's ratings

@@ -2,16 +2,11 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class ForumSection extends Model
+class ForumSection extends KModel
 {
     // Table name
     const TABLE_NAME = 'forum_section';
     protected $table = self::TABLE_NAME;
-
-    // Fillable columns
-    protected $fillable = ['name', 'icon', 'locked'];
 
     // Amount of threads to display per page
     const THREADS_PER_PAGE = 10;

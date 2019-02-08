@@ -3,9 +3,8 @@
 namespace App;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 
-class ForumSectionBan extends Model
+class ForumSectionBan extends KModel
 {
     // Table name
     const TABLE_NAME = 'forum_section_ban';

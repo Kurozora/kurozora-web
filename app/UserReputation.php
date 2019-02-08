@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class UserReputation extends Model
+class UserReputation extends KModel
 {
     // Table name
     const TABLE_NAME = 'user_reputation';
