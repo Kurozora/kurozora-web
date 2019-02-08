@@ -2,16 +2,11 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class AnimeSeason extends Model
+class AnimeSeason extends KModel
 {
     // Table name
     const TABLE_NAME = 'anime_season';
     protected $table = self::TABLE_NAME;
-
-    // Fillable columns
-    protected $fillable = ['anime_id', 'number', 'title'];
 
     /**
      * Returns the title of the Season

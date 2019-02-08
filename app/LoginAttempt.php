@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class LoginAttempt extends Model
+class LoginAttempt extends KModel
 {
 	// How far back should we check for login attempts (minutes)
 	const CHECK_TIMESPAN = 5;
@@ -15,9 +13,6 @@ class LoginAttempt extends Model
     // Table name
     const TABLE_NAME = 'user_login_attempt';
     protected $table = self::TABLE_NAME;
-
-	// Fillable columns
-    protected $fillable = ['ip'];
 
 	/**
      * Checks if the given IP is allowed to login (in terms of login requests)

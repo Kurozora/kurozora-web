@@ -2,16 +2,11 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Actor extends Model
+class Actor extends KModel
 {
     // Table name
     const TABLE_NAME = 'anime_actor';
     protected $table = self::TABLE_NAME;
-
-    // Remove column guards
-    protected $guarded = [];
 
     /**
      * Formats the actor with the minimal data needed for a response

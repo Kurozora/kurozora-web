@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Cog\Contracts\Love\Likeable\Models\Likeable as LikeableContract;
 use Cog\Laravel\Love\Likeable\Models\Traits\Likeable;
 
-class ForumThread extends Model implements LikeableContract
+class ForumThread extends KModel implements LikeableContract
 {
     use KuroSearchTrait, Likeable;
 
@@ -29,9 +29,6 @@ class ForumThread extends Model implements LikeableContract
     // Table name
     const TABLE_NAME = 'forum_thread';
     protected $table = self::TABLE_NAME;
-
-    // Remove column guards
-    protected $guarded = [];
 
     // Minimum lengths
     const MIN_TITLE_LENGTH = 5;

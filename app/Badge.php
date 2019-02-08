@@ -2,16 +2,11 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Badge extends Model
+class Badge extends KModel
 {
     // Table name
     const TABLE_NAME = 'badge';
     protected $table = self::TABLE_NAME;
-
-    // Fillable columns
-    protected $fillable = ['text', 'textColor', 'backgroundColor', 'description'];
 
     /**
      * Formats the badge for a JSON response

@@ -2,23 +2,12 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 
-class Session extends Model
+class Session extends KModel
 {
     // Table name
     const TABLE_NAME = 'user_session';
     protected $table = self::TABLE_NAME;
-
-    // Fillable columns
-    protected $fillable = [
-        'user_id',
-        'device',
-        'secret',
-        'expiration_date',
-        'last_validated',
-        'ip'
-    ];
 
     // Checks if the session is expired
     public function isExpired() {

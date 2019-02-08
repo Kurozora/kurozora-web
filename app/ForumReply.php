@@ -3,20 +3,16 @@
 namespace App;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Cog\Contracts\Love\Likeable\Models\Likeable as LikeableContract;
 use Cog\Laravel\Love\Likeable\Models\Traits\Likeable;
 
-class ForumReply extends Model implements LikeableContract
+class ForumReply extends KModel implements LikeableContract
 {
     use Likeable;
 
     // Table name
     const TABLE_NAME = 'forum_reply';
     protected $table = self::TABLE_NAME;
-
-    // Fillable columns
-    protected $fillable = ['user_id', 'thread_id', 'ip', 'content'];
 
     // A user can post a forum reply once every {?} seconds
     const COOLDOWN_POST_REPLY = 10;

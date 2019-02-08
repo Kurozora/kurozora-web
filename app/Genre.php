@@ -4,14 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Genre extends Model
+class Genre extends KModel
 {
     // Table name
     const TABLE_NAME = 'genre';
     protected $table = self::TABLE_NAME;
-
-    // Fillable columns
-    protected $fillable = ['name', 'nsfw', 'description'];
 
     /**
      * Formats the genre for the Anime response
