@@ -7,6 +7,7 @@ use App\Anime;
 use App\AnimeRating;
 use App\Enums\AnimeStatus;
 use App\Enums\AnimeType;
+use App\Events\AnimeViewed;
 use App\Helpers\JSONResult;
 use App\UserLibrary;
 use Illuminate\Support\Facades\Cache;
@@ -125,7 +126,14 @@ class AnimeController extends Controller
             'library_status'    => $currentLibraryStatus
        	];
 
-        (new JSONResult())->setData(['anime' => $animeArr, 'user' => $userArr])->show();
+        // Call the AnimeViewed event
+        AnimeViewed::dispatch($anime);
+
+        // Show the Anime details response
+        (new JSONResult())->setData([
+            'anime' => $animeArr,
+            'user' => $userArr
+        ])->show();
     }
 
     /**
