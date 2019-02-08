@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserRole;
 use App\User;
 use Illuminate\Database\Seeder;
 
@@ -18,7 +19,7 @@ class UsersTableSeeder extends Seeder
             'email'                 => 'mussesemou99@gmail.com',
             'password'              => '$2y$10$LFvuPaQpn6kccakk4sRABef223GV0.NJUJ94Xr.TAvswkCKJBisVK',
             'email_confirmation_id' => null,
-            'role'                  => User::USER_ROLE_ADMINISTRATOR
+            'role'                  => UserRole::Administrator
         ]);
 
         User::create([
@@ -26,7 +27,7 @@ class UsersTableSeeder extends Seeder
             'email'                 => 'casillaskhoren1@gmail.com',
             'password'              => '$2y$10$LFvuPaQpn6kccakk4sRABef223GV0.NJUJ94Xr.TAvswkCKJBisVK',
             'email_confirmation_id' => null,
-            'role'                  => User::USER_ROLE_ADMINISTRATOR
+            'role'                  => UserRole::Administrator
         ]);
 
         // 50 fake users

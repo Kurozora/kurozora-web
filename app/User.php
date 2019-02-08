@@ -34,18 +34,6 @@ class User extends Authenticatable implements LikerContract
     const USER_UPLOADS_PATH = 'public/img/user_uploads';
     const USER_UPLOADS_URL  = 'img/user_uploads';
 
-    // User roles
-    const USER_ROLE_NORMAL          = 0;
-    const USER_ROLE_MODERATOR       = 1;
-    const USER_ROLE_ADMINISTRATOR   = 2;
-
-    // Map user roles to string
-    const ROLE_MAPPING = [
-        self::USER_ROLE_NORMAL          => 'normal',
-        self::USER_ROLE_MODERATOR       => 'moderator',
-        self::USER_ROLE_ADMINISTRATOR   => 'administrator'
-    ];
-
     // Cache user's badges
     const CACHE_KEY_BADGES = 'user-badges-%d';
     const CACHE_KEY_BADGES_MINUTES = 120;
@@ -66,27 +54,11 @@ class User extends Authenticatable implements LikerContract
     const TABLE_NAME = 'user';
     protected $table = self::TABLE_NAME;
 
-    // Fillable columns
-    protected $fillable = ['username', 'email', 'password', 'email_confirmation_id', 'avatar'];
+    // Remove column guards
+    protected $guarded = [];
 
     // User biography character limited
     const BIOGRAPHY_LIMIT = 250;
-
-    /**
-     * Returns the name of a role from the integer constant
-     *
-     * @param $roleInt
-     * @return string|null
-     */
-    public static function getStringFromRole($roleInt) {
-        // Find the status
-        foreach(self::ROLE_MAPPING as $role => $string) {
-            if($roleInt == $role)
-                return $string;
-        }
-
-        return null;
-    }
 
     /**
      * Returns a list of badges that the user has assigned to them
