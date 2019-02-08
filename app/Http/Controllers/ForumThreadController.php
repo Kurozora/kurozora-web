@@ -215,4 +215,34 @@ class ForumThreadController extends Controller
             'results'               => $displayResults
         ])->show();
     }
+
+    /**
+     * Lock or unlock a thread
+     *
+     * @param Request $request
+     * @param ForumThread $thread
+     */
+    function lock(Request $request, ForumThread $thread) {
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'lock' => 'bail|required|numeric|min:0|max:1'
+        ]);
+
+        // Check validator
+        if($validator->fails())
+            (new JSONResult())->setError($validator->errors()->first())->show();
+
+        // Lock or unlock the thread
+        $doLock = (bool) $request->input('lock');
+
+        // If the action is different that the current lock state
+        if($thread->locked != $doLock) {
+            $thread->locked = $doLock;
+            $thread->save();
+        }
+
+        (new JSONResult())->setData([
+            'locked' => (bool) $thread->locked
+        ])->show();
+    }
 }

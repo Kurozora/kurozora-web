@@ -1507,6 +1507,59 @@
         }
       }
     },
+    "/forum-threads/{threadID}/lock": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
+        "tags": [
+          "forum-threads"
+        ],
+        "summary": "Lock or unlock a thread.",
+        "description": "This endpoint will lock or unlock a thread.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "threadID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the forum thread."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "lock": {
+                    "type": "integer",
+                    "description": "Lock or unlock. (0 = unlock, 1 = lock)",
+                    "minimum": 0,
+                    "maximum": 1
+                  }
+                },
+                "required": [
+                  "lock"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/forum-replies/{replyID}/vote": {
       "post": {
         "security": [

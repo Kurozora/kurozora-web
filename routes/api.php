@@ -146,6 +146,10 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::post('/{thread}/replies', [ForumThreadController::class, 'postReply'])
             ->middleware('kurozora.userauth');
+
+        Route::post('/{thread}/lock', [ForumThreadController::class, 'lock'])
+            ->middleware('kurozora.userauth')
+            ->middleware('can:lock_thread,thread');
     });
 
     Route::prefix('/forum-replies')->group(function() {
