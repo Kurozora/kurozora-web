@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Anime;
 use App\AnimeGenre;
+use App\Enums\AnimeStatus;
 use App\Genre;
 use Illuminate\Console\Command;
 use musa11971\TVDB\TVDB;
@@ -109,7 +110,7 @@ class FetchAnimeDetails extends Command
 
         // Status
         $this->info('[Retrieving status]');
-        $anime->status = $details->status;
+        $anime->status = (AnimeStatus::hasKey($details->status)) ? AnimeStatus::getValue($details->status) : AnimeStatus::TBA;
         $this->info('[Status retrieved]');
         $this->info('');
 

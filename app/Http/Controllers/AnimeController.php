@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Actor;
 use App\Anime;
 use App\AnimeRating;
+use App\Enums\AnimeStatus;
+use App\Enums\AnimeType;
 use App\Helpers\JSONResult;
 use App\UserLibrary;
 use Illuminate\Support\Facades\Cache;
@@ -99,10 +101,10 @@ class AnimeController extends Controller
         $animeArr = [
             'id'                    => $anime->id,
             'title'                 => $anime->title,
-            'type'                  => $anime->getType(),
+            'type'                  => AnimeType::getDescription($anime->type),
             'imdb_id'               => $anime->imdb_id,
             'network'               => $anime->network,
-            'status'                => $anime->status,
+            'status'                => AnimeStatus::getDescription($anime->status),
             'episodes'              => $anime->episode_count,
             'seasons'               => $anime->season_count,
             'average_rating'        => $anime->average_rating,

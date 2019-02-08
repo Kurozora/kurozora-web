@@ -21,6 +21,8 @@ class Handler extends ExceptionHandler
         \Symfony\Component\Console\Exception\CommandNotFoundException::class,
         // Access denied exception
         \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException::class,
+        // Missing arguments exception
+        \Symfony\Component\Console\Exception\RuntimeException::class,
     ];
 
     /**

@@ -4,8 +4,70 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6e39b6c0934d403507724decb48bc0ad",
+    "content-hash": "9b7bc0279c58204726871450537a250f",
     "packages": [
+        {
+            "name": "bensampo/laravel-enum",
+            "version": "1.16.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/BenSampo/laravel-enum.git",
+                "reference": "6ca73f67fb70fa957dee4523843b7ad383755674"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/BenSampo/laravel-enum/zipball/6ca73f67fb70fa957dee4523843b7ad383755674",
+                "reference": "6ca73f67fb70fa957dee4523843b7ad383755674",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "~5.4",
+                "php": "~7.1"
+            },
+            "require-dev": {
+                "laravel/framework": "5.7.*",
+                "orchestra/testbench": "3.7.*",
+                "phpunit/phpunit": "7.3.*",
+                "squizlabs/php_codesniffer": "^2.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "BenSampo\\Enum\\EnumServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "BenSampo\\Enum\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ben Sampson",
+                    "homepage": "https://sampo.co.uk",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Simple, extensible and powerful enumeration implementation for Laravel.",
+            "homepage": "https://github.com/bensampo/laravel-enum",
+            "keywords": [
+                "bensampo",
+                "enum",
+                "laravel",
+                "package",
+                "validation"
+            ],
+            "time": "2018-10-19T17:07:29+00:00"
+        },
         {
             "name": "cybercog/laravel-love",
             "version": "5.2.0",

@@ -1,6 +1,7 @@
 <?php
 
 use App\Anime;
+use App\Enums\AnimeType;
 use Illuminate\Database\Seeder;
 
 class AnimesTableDummySeeder extends Seeder
@@ -24,7 +25,7 @@ class AnimesTableDummySeeder extends Seeder
             foreach ($parsedAnime->anime as $animeData) {
                 Anime::create([
                     'title'     => $animeData->title,
-                    'type'      => Anime::ANIME_TYPE_TV,
+                    'type'      => AnimeType::TV,
                     'nsfw'      => $animeData->nsfw,
                     'tvdb_id'   => $animeData->tvdb_id
                 ]);
