@@ -32,20 +32,10 @@ class Anime extends KModel
     // Minimum ratings required to calculate average
     const MINIMUM_RATINGS_REQUIRED = 30;
 
-    // Cache Anime explore page response
-    const CACHE_KEY_EXPLORE = 'anime-explore';
+    // How long to cache certain responses
     const CACHE_KEY_EXPLORE_MINUTES = 120;
-
-    // Cache Anime actors
-    const CACHE_KEY_ACTORS = 'anime-actors-%d';
     const CACHE_KEY_ACTORS_MINUTES = 120;
-
-    // Cache Anime seasons
-    const CACHE_KEY_SEASONS = 'anime-seasons-%d';
     const CACHE_KEY_SEASONS_MINUTES = 120;
-
-    // Cache Anime genres
-    const CACHE_KEY_GENRES = 'anime-genres-%d';
     const CACHE_KEY_GENRES_MINUTES = 120;
 
     // Table name
@@ -77,7 +67,7 @@ class Anime extends KModel
      */
     public function getActors() {
         // Find location of cached data
-        $cacheKey = sprintf(self::CACHE_KEY_ACTORS, $this->id);
+        $cacheKey = self::cacheKey(['name' => 'actors', 'id' => $this->id]);
 
         // Retrieve or save cached result
         $actorsInfo = Cache::remember($cacheKey, self::CACHE_KEY_ACTORS_MINUTES, function () {
@@ -103,7 +93,7 @@ class Anime extends KModel
      */
     public function getSeasons() {
         // Find location of cached data
-        $cacheKey = sprintf(self::CACHE_KEY_SEASONS, $this->id);
+        $cacheKey = self::cacheKey(['name' => 'seasons', 'id' => $this->id]);
 
         // Retrieve or save cached result
         $seasonsInfo = Cache::remember($cacheKey, self::CACHE_KEY_SEASONS_MINUTES, function () {
@@ -129,7 +119,7 @@ class Anime extends KModel
      */
     public function getGenres() {
         // Find location of cached data
-        $cacheKey = sprintf(self::CACHE_KEY_GENRES, $this->id);
+        $cacheKey = self::cacheKey(['name' => 'genres', 'id' => $this->id]);
 
         // Retrieve or save cached result
         $genresInfo = Cache::remember($cacheKey, self::CACHE_KEY_GENRES_MINUTES, function () {
