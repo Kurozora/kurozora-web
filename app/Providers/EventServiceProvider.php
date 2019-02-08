@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -13,13 +12,22 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\Event' => [
-            'App\Listeners\EventListener',
+        \App\Events\Event::class => [
+            \App\Listeners\EventListener::class,
         ],
-        'App\Events\NewUserSessionEvent' => [
-            'App\Listeners\SendSessionNotification'
+
+        \App\Events\NewUserSessionEvent::class => [
+            \App\Listeners\SendSessionNotification::class,
         ],
-        'App\Events\UserSessionKilledEvent' => []
+
+        \App\Events\UserSessionKilledEvent::class => [],
+
+        \App\Events\AnimeViewed::class => [
+            \App\Listeners\FetchAnimeDetails::class,
+            \App\Listeners\FetchBaseAnimeEpisodes::class,
+            \App\Listeners\FetchAnimeImages::class,
+            \App\Listeners\FetchAnimeActors::class,
+        ],
     ];
 
     /**
@@ -30,7 +38,5 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-
-        //
     }
 }
