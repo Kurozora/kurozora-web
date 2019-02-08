@@ -30,15 +30,6 @@ class Anime extends Model
     // Maximum amount of returned search results
     const MAX_SEARCH_RESULTS = 10;
 
-    // Types of Anime
-    const ANIME_TYPE_UNDEFINED  = 0;
-    const ANIME_TYPE_TV         = 1;
-    const ANIME_TYPE_MOVIE      = 2;
-
-    // Status for Anime
-    const ANIME_STATUS_TBA      = "TBA";
-    const ANIME_STATUS_ENDED    = "Ended";
-
     // Minimum ratings required to calculate average
     const MINIMUM_RATINGS_REQUIRED = 30;
 
@@ -150,20 +141,6 @@ class Anime extends Model
         });
 
         return $genresInfo;
-    }
-
-    /**
-     * Retrieves the type of Anime as a string
-     *
-     * @return string
-     */
-    public function getType() {
-        switch($this->type) {
-            case self::ANIME_TYPE_TV:       return 'TV';
-            case self::ANIME_TYPE_MOVIE:    return 'Movie';
-        }
-
-        return 'Unknown type';
     }
 
     /**

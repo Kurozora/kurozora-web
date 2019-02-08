@@ -19,7 +19,7 @@
       "description": "Kurozora LIVE"
     },
     {
-      "url": "http://localhost/kurozora-web/public/api/v1",
+      "url": "http://kurozora-web.test/api/v1",
       "description": "Kurozora LOCAL"
     }
   ],

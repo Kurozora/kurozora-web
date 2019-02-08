@@ -1,6 +1,8 @@
 <?php
 
 use App\Anime;
+use App\Enums\AnimeStatus;
+use App\Enums\AnimeType;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -21,12 +23,12 @@ class CreateAnimesTable extends Migration
             $table->string('title')->default('Unknown title');
             $table->string('slug')->nullable();
             $table->string('network')->nullable();
-            $table->string('status')->default(Anime::ANIME_STATUS_TBA);
+            $table->integer('status')->default(AnimeStatus::TBA);
             $table->string('cached_poster')->nullable();
             $table->string('cached_poster_thumbnail')->nullable();
             $table->string('cached_background')->nullable();
             $table->string('cached_background_thumbnail')->nullable();
-            $table->integer('type')->default(Anime::ANIME_TYPE_UNDEFINED);
+            $table->integer('type')->default(AnimeType::Undefined);
             $table->boolean('nsfw')->default(false);
             $table->integer('tvdb_id')->nullable()->unsigned();
             $table->string('imdb_id')->nullable();

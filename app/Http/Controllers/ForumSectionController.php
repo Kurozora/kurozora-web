@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\ForumReply;
 use App\ForumSection;
 use App\ForumSectionBan;
 use App\ForumThread;
-use App\ForumThreadVote;
 use App\Helpers\JSONResult;
-use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ForumSectionController extends Controller
