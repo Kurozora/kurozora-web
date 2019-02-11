@@ -4,10 +4,12 @@ namespace App;
 
 use App\Traits\KuroSearchTrait;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Cog\Contracts\Love\Likeable\Models\Likeable as LikeableContract;
 use Cog\Laravel\Love\Likeable\Models\Traits\Likeable;
 
+/**
+ * @property int locked
+ */
 class ForumThread extends KModel implements LikeableContract
 {
     use KuroSearchTrait, Likeable;
