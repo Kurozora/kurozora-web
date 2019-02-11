@@ -242,7 +242,9 @@ class ForumThreadController extends Controller
         }
 
         (new JSONResult())->setData([
-            'locked' => (bool) $thread->locked
+            'thread' => [
+                'locked' => (bool) $thread->locked
+            ]
         ])->show();
     }
 }
