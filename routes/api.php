@@ -156,6 +156,8 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::prefix('/themes')->group(function() {
         Route::get('/', [AppThemeController::class, 'overview']);
+
+        Route::get('/{theme}/download', [AppThemeController::class, 'download']);
     });
 
     Route::get('/privacy-policy', [MiscController::class, 'getPrivacyPolicy']);

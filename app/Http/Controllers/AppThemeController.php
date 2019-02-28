@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AppTheme;
 use App\Helpers\JSONResult;
+use Illuminate\Support\Facades\Response;
 
 class AppThemeController extends Controller
 {
@@ -20,5 +21,22 @@ class AppThemeController extends Controller
         (new JSONResult())->setData([
             'themes' => $formattedThemes
         ])->show();
+    }
+
+    function download(AppTheme $theme) {
+        // Name for the theme file
+        $fileName = 'theme-' . $theme->id . '.plist';
+
+        $content = $theme->pList();
+
+        // Headers to return for the download
+        $headers = [
+            'Content-type'          => 'application/x-plist',
+            'Content-Disposition'   => sprintf('attachment; filename="%s"', $fileName),
+            'Content-Length'        => strlen($content)
+        ];
+
+        // Return the file
+        return Response::make($content, 200, $headers);
     }
 }
