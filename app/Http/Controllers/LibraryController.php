@@ -5,37 +5,26 @@ namespace App\Http\Controllers;
 use App\Anime;
 use App\Enums\UserLibraryStatus;
 use App\Helpers\JSONResult;
+use App\Http\Requests\AddToLibrary;
+use App\Http\Requests\DeleteFromLibrary;
+use App\Http\Requests\GetLibrary;
 use App\User;
 use App\UserLibrary;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 
 class LibraryController extends Controller
 {
     /**
      * Gets the user's library depending on the status
      *
-     * @param Request $request
+     * @param GetLibrary $request
      * @param User $user
      */
-    public function getLibrary(Request $request, User $user) {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'status'            => 'bail|required|string'
-        ]);
+    public function getLibrary(GetLibrary $request, User $user) {
+        $data = $request->validated();
 
-        // Check validator
-        if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
-
-        $givenStatus = $request->input('status');
-
-        // Check if the status is valid
-        if(!UserLibraryStatus::hasKey($givenStatus))
-            (new JSONResult())->setError(UserLibraryStatus::error())->show();
-
-        $foundStatus = UserLibraryStatus::getValue($givenStatus);
+        // Get the status
+        $foundStatus = UserLibraryStatus::getValue($data['status']);
 
         /*
          * Selects the necessary data from the Anime that are ..
@@ -66,28 +55,16 @@ class LibraryController extends Controller
     /**
      * Adds an Anime to the user's library
      *
-     * @param Request $request
+     * @param AddToLibrary $request
      * @param User $user
      */
-    public function addLibrary(Request $request, User $user) {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'anime_id'          => 'bail|required|numeric|exists:anime,id',
-            'status'            => 'bail|required|string'
-        ]);
+    public function addLibrary(AddToLibrary $request, User $user) {
+        $data = $request->validated();
 
-        // Check validator
-        if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
+        $givenAnimeID = $data['anime_id'];
 
-        $givenAnimeID = $request->input('anime_id');
-        $givenStatus = $request->input('status');
-
-        // Check if the status is valid
-        if(!UserLibraryStatus::hasKey($givenStatus))
-            (new JSONResult())->setError(UserLibraryStatus::error())->show();
-
-        $foundStatus = UserLibraryStatus::getValue($givenStatus);
+        // Get the status
+        $foundStatus = UserLibraryStatus::getValue($data['status']);
 
         // Check if this user already has the Anime in their library
         $oldLibraryItem = UserLibrary::where([
@@ -118,25 +95,16 @@ class LibraryController extends Controller
     /**
      * Removes an Anime from the user's library
      *
-     * @param Request $request
+     * @param DeleteFromLibrary $request
      * @param User $user
      */
-    public function delLibrary(Request $request, User $user) {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'anime_id'          => 'bail|required|numeric|exists:anime,id'
-        ]);
-
-        // Check validator
-        if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
-
-        $givenAnimeID = $request->input('anime_id');
+    public function delLibrary(DeleteFromLibrary $request, User $user) {
+        $data = $request->validated();
 
         // Find the Anime in their library
         $foundAnime = UserLibrary::where([
             ['user_id',     '=',    $user->id],
-            ['anime_id',    '=',    $givenAnimeID]
+            ['anime_id',    '=',    $data['anime_id']]
         ])->first();
 
         // Remove this Anime from their library
