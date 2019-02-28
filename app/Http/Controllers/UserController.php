@@ -6,6 +6,7 @@ use App\Events\NewUserRegisteredEvent;
 use App\Events\UserSessionKilledEvent;
 use App\Helpers\JSONResult;
 use App\Http\Requests\Registration;
+use App\Http\Requests\ResetPassword;
 use App\Jobs\SendNewPasswordMail;
 use App\Jobs\SendPasswordResetMail;
 use App\PasswordReset;
@@ -125,22 +126,13 @@ class UserController extends Controller
     /**
      * Requests a password reset link to be sent to the email address
      *
-     * @param Request $request
+     * @param ResetPassword $request
      */
-    public function resetPassword(Request $request) {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'email' => 'bail|required|email'
-        ]);
-
-        // Display an error if validation failed
-        if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
-
-        $enteredEmail = $request->input('email');
+    public function resetPassword(ResetPassword $request) {
+        $data = $request->validated();
 
         // Try to find the user with this email
-        $user = User::where('email', $enteredEmail)->first();
+        $user = User::where('email', $data['email'])->first();
 
         // There is a user with this email
         if($user && $user->hasConfirmedEmail()) {
