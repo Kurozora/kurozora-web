@@ -1618,7 +1618,7 @@
     "schemas": {
       "KurozoraLibraryStatus": {
         "type": "string",
-        "enum": ["watching", "dropped", "planning", "completed", "on-hold"]
+        "enum": ["Watching", "Dropped", "Planning", "Completed", "OnHold"]
       }
     },
     "securitySchemes": {

@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+/**
+ * @property mixed id
+ */
 class User extends Authenticatable implements LikerContract
 {
     use Authorizable, KuroSearchTrait, Liker, LikeActionTrait;

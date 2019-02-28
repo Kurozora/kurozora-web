@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Anime;
+use App\Enums\UserLibraryStatus;
 use App\Helpers\JSONResult;
 use App\User;
 use App\UserLibrary;
@@ -30,11 +31,11 @@ class LibraryController extends Controller
 
         $givenStatus = $request->input('status');
 
-        // Check the status
-        $foundStatus = UserLibrary::getStatusFromString($givenStatus);
+        // Check if the status is valid
+        if(!UserLibraryStatus::hasKey($givenStatus))
+            (new JSONResult())->setError(UserLibraryStatus::error())->show();
 
-        if($foundStatus == null)
-            (new JSONResult())->setError('The given status is not a valid one.')->show();
+        $foundStatus = UserLibraryStatus::getValue($givenStatus);
 
         /*
          * Selects the necessary data from the Anime that are ..
@@ -82,11 +83,11 @@ class LibraryController extends Controller
         $givenAnimeID = $request->input('anime_id');
         $givenStatus = $request->input('status');
 
-        // Check the status
-        $foundStatus = UserLibrary::getStatusFromString($givenStatus);
+        // Check if the status is valid
+        if(!UserLibraryStatus::hasKey($givenStatus))
+            (new JSONResult())->setError(UserLibraryStatus::error())->show();
 
-        if($foundStatus == null)
-            (new JSONResult())->setError('The given status is not a valid one.')->show();
+        $foundStatus = UserLibraryStatus::getValue($givenStatus);
 
         // Check if this user already has the Anime in their library
         $oldLibraryItem = UserLibrary::where([

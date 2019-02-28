@@ -26,7 +26,7 @@ class CreateUserLibrariesTable extends Migration
             $table->integer('anime_id')->unsigned();
             $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
 
-            $table->tinyInteger('status')->default(UserLibrary::STATUS_UNKNOWN);
+            $table->tinyInteger('status')->nullable()->default(null);
         });
     }
 
