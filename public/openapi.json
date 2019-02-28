@@ -65,6 +65,10 @@
       "description":"Everything session related"
     },
     {
+      "name":"themes",
+      "description":"Everything theme related"
+    },
+    {
       "name":"misc",
       "description":"All other endpoints"
     }
@@ -1603,6 +1607,23 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/themes": {
+      "get": {
+        "tags": [
+          "themes"
+        ],
+        "summary": "Retrieve an overview of themes.",
+        "description": "This endpoint will retrieve an overview of themes.",
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSONSuccess"
