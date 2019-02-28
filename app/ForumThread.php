@@ -32,10 +32,6 @@ class ForumThread extends KModel implements LikeableContract
     const TABLE_NAME = 'forum_thread';
     protected $table = self::TABLE_NAME;
 
-    // Minimum lengths
-    const MIN_TITLE_LENGTH = 5;
-    const MIN_CONTENT_LENGTH = 5;
-
     // A user can post a thread once every {?} seconds
     const COOLDOWN_POST_THREAD = 60;
 

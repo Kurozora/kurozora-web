@@ -14,6 +14,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * @property mixed id
+ * @property array|string|null biography
+ * @property string avatar
  */
 class User extends Authenticatable implements LikerContract
 {

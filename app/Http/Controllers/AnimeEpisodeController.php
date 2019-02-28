@@ -6,6 +6,7 @@ use App\AnimeEpisode;
 use App\Helpers\JSONResult;
 use App\UserWatchedEpisode;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class AnimeEpisodeController extends Controller
@@ -31,14 +32,14 @@ class AnimeEpisodeController extends Controller
 
         // Find if the user has watched the episode
         $foundWatched = UserWatchedEpisode::where([
-            ['user_id',     '=', $request->user_id],
+            ['user_id',     '=', Auth::id()],
             ['episode_id',  '=', $episode->id]
         ])->first();
 
         // User wants to mark as "watched" and hasn't already watched it
         if($watchedBool && !$foundWatched) {
             UserWatchedEpisode::create([
-                'user_id'       => $request->user_id,
+                'user_id'       => Auth::id(),
                 'episode_id'    => $episode->id
             ]);
         }

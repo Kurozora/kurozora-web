@@ -80,14 +80,14 @@ class ForumThreadController extends Controller
      */
     public function postReply(Request $request, ForumThread $thread) {
         // Check if the user is banned
-        $foundBan = ForumSectionBan::getBanInfo($request->user_id, $thread->section_id);
+        $foundBan = ForumSectionBan::getBanInfo(Auth::id(), $thread->section_id);
 
         if($foundBan !== null)
             (new JSONResult())->setError($foundBan['message'])->show();
 
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'content'   => 'bail|required|min:' . ForumThread::MIN_CONTENT_LENGTH
+            'content'   => 'bail|required|min:1'
         ]);
 
         // Check validator
@@ -102,13 +102,13 @@ class ForumThreadController extends Controller
             (new JSONResult())->setError(JSONResult::ERROR_CANNOT_POST_IN_THREAD)->show();
 
         // Check if the user has already posted within the cooldown period
-        if(ForumReply::testPostCooldown($request->user_id))
+        if(ForumReply::testPostCooldown(Auth::id()))
             (new JSONResult())->setError('You can only post a reply once every ' . ForumReply::COOLDOWN_POST_REPLY . ' seconds.')->show();
 
         // Create the reply
         $newReply = ForumReply::create([
             'thread_id'     => $thread->id,
-            'user_id'       => $request->user_id,
+            'user_id'       => Auth::id(),
             'ip'            => $request->ip(),
             'content'       => $givenContent
         ]);

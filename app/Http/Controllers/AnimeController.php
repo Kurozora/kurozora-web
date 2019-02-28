@@ -7,9 +7,12 @@ use App\Anime;
 use App\AnimeRating;
 use App\Enums\AnimeStatus;
 use App\Enums\AnimeType;
+use App\Enums\UserLibraryStatus;
 use App\Events\AnimeViewed;
 use App\Helpers\JSONResult;
+use App\User;
 use App\UserLibrary;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -77,21 +80,22 @@ class AnimeController extends Controller
         $userRating = 0.0;
 
         $foundRating = $anime->ratings()
-            ->where('user_id', $request->user_id)
+            ->where('user_id', Auth::id())
             ->first();
 
         if($foundRating)
             $userRating = $foundRating->rating;
 
         // Get the current library status
-        $currentLibraryStatus = UserLibrary::getStringFromStatus(UserLibrary::STATUS_UNKNOWN);
+        $currentLibraryStatus = null;
 
         $foundLibraryStatus = UserLibrary::where([
-            ['user_id' ,  '=', $request->user_id],
+            ['user_id' ,  '=', Auth::id()],
             ['anime_id' , '=', $anime->id]
         ])->first();
 
-        if($foundLibraryStatus) $currentLibraryStatus = UserLibrary::getStringFromStatus($foundLibraryStatus->status);
+        if($foundLibraryStatus)
+            $currentLibraryStatus = UserLibraryStatus::getDescription($foundLibraryStatus->status);
 
         // Get the genres
         $genres = $anime->getGenres()->map(function($genre) {
@@ -190,7 +194,7 @@ class AnimeController extends Controller
         // Try to modify the rating if it already exists
         $foundRating = AnimeRating::where([
             ['anime_id', '=', $anime->id],
-            ['user_id', '=', $request->user_id]
+            ['user_id', '=', Auth::id()]
         ])->first();
 
         // The rating exists
@@ -209,9 +213,9 @@ class AnimeController extends Controller
             // Only insert the rating if it's rated higher than 0
             if($givenRating > 0) {
                 AnimeRating::create([
-                    'anime_id' => $anime->id,
-                    'user_id' => $request->user_id,
-                    'rating' => $givenRating
+                    'anime_id'  => $anime->id,
+                    'user_id'   => Auth::id(),
+                    'rating'    => $givenRating
                 ]);
             }
         }
