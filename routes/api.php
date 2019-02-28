@@ -36,16 +36,13 @@ Route::group(['prefix' => 'v1'], function () {
             ->middleware('can:follow,user');
 
         Route::get('/{user}/library', [LibraryController::class, 'getLibrary'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:get_library,user');
+            ->middleware('kurozora.userauth');
 
         Route::post('/{user}/library', [LibraryController::class, 'addLibrary'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:add_to_library,user');
+            ->middleware('kurozora.userauth');
 
         Route::post('/{user}/library/delete', [LibraryController::class, 'delLibrary'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:del_from_library,user');
+            ->middleware('kurozora.userauth');
 
         Route::post('/{user}/authenticate-channel', [UserController::class, 'authenticateChannel'])
             ->middleware('kurozora.userauth')
