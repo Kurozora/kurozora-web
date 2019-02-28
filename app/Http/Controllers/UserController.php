@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\NewUserRegisteredEvent;
 use App\Events\UserSessionKilledEvent;
 use App\Helpers\JSONResult;
+use App\Http\Requests\Registration;
 use App\Jobs\SendNewPasswordMail;
 use App\Jobs\SendPasswordResetMail;
 use App\PasswordReset;
@@ -24,20 +25,11 @@ class UserController extends Controller
     /**
      * Registers a new user
      *
-     * @param Request $request
+     * @param Registration $request
      * @throws \Throwable
      */
-    public function register(Request $request) {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'username'  => 'bail|required|min:3|max:50|alpha_dash|unique:user,username',
-            'email'     => 'bail|required|max:255|email|unique:user,email',
-            'password'  => 'bail|required|min:5|max:255'
-        ]);
-
-        // Display an error if validation failed
-        if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
+    public function register(Registration $request) {
+        $data = $request->validated();
 
         $fileName = null;
 
@@ -56,16 +48,11 @@ class UserController extends Controller
             $request->file('profileImage')->storeAs(User::USER_UPLOADS_PATH, $fileName);
         }
 
-        // Fetch the variables and sanitize them
-        $username       = $request->input('username');
-        $email          = $request->input('email');
-        $rawPassword    = $request->input('password');
-
         // Create the user
         $newUser = User::create([
-            'username'              => $username,
-            'email'                 => $email,
-            'password'              => User::hashPass($rawPassword),
+            'username'              => $data['username'],
+            'email'                 => $data['email'],
+            'password'              => User::hashPass($data['password']),
             'email_confirmation_id' => str_random(50),
             'avatar'                => $fileName
         ]);
