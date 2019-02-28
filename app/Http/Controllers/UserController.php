@@ -73,8 +73,8 @@ class UserController extends Controller
     public function logout(Request $request) {
         // Find the session
         $foundSession = Session::where([
-            ['user_id', '=', $request->user_id],
-            ['secret',  '=', $request->session_secret]
+            ['user_id', '=', Auth::id()],
+            ['secret',  '=', $request['session_secret']]
         ])->first();
 
         // Check if any session was found
@@ -82,7 +82,7 @@ class UserController extends Controller
             (new JSONResult())->setError('An error occurred. Please reach out to an administrator.')->show();
 
         // Fire event
-        event(new UserSessionKilledEvent($request->user_id, $foundSession->id, 'Session logged out.', $request->session_id));
+        event(new UserSessionKilledEvent(Auth::id(), $foundSession->id, 'Session logged out.', $request['session_id']));
 
         // Delete the session
         $foundSession->delete();
@@ -226,7 +226,7 @@ class UserController extends Controller
 
         $sessions = Session::where([
             ['user_id', '=',    $user->id],
-            ['secret',  '!=',   $request->session_secret]
+            ['secret',  '!=',   $request['session_secret']]
         ])->get();
 
         foreach($sessions as $session)
@@ -235,7 +235,7 @@ class UserController extends Controller
         // Get the current session
         $curSession = Session::where([
             ['user_id', '=',    $user->id],
-            ['secret',  '=',    $request->session_secret]
+            ['secret',  '=',    $request['session_secret']]
         ])->first();
 
         $curSession = $curSession->formatForSessionList();

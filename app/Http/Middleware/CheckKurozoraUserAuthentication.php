@@ -45,22 +45,12 @@ class CheckKurozoraUserAuthentication
             (new JSONResult())->setError(JSONResult::ERROR_SESSION_REJECTED)->show();
 
         // Add to request
-        $request->user_id = (int) $givenUserID;
-        $request->session_secret = $givenSecret;
-        $request->session_id = $sessionAuthenticate;
-
-        // This closure function gives the ability to retrieve
-        // .. the User model performing the current request
-        $request->authUser = function() use($request) {
-
-            if(!isset($request->foundUser))
-                $request->foundUser = User::find($request->user_id);
-
-            return $request->foundUser;
-        };
+        $request->request->add(['user_id' => (int) $givenUserID]);
+        $request->request->add(['session_secret' => $givenSecret]);
+        $request->request->add(['session_id' => $sessionAuthenticate]);
 
         // Log the user in
-        Auth::loginUsingId($request->user_id);
+        Auth::loginUsingId($request['user_id']);
 
         return $next($request);
     }

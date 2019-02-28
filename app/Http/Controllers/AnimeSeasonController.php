@@ -8,6 +8,7 @@ use App\Helpers\JSONResult;
 use App\UserWatchedEpisode;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AnimeSeasonController extends Controller
@@ -39,7 +40,7 @@ class AnimeSeasonController extends Controller
             AnimeEpisode::TABLE_NAME . '.overview AS overview',
             AnimeEpisode::TABLE_NAME . '.verified AS verified',
             // Select the user's "watched" status via subquery
-            DB::raw('(SELECT COUNT(*) FROM ' . UserWatchedEpisode::TABLE_NAME . ' WHERE episode_id = ' . AnimeEpisode::TABLE_NAME . '.id AND user_id = ' . $request->user_id . ' LIMIT 1) AS watched')
+            DB::raw('(SELECT COUNT(*) FROM ' . UserWatchedEpisode::TABLE_NAME . ' WHERE episode_id = ' . AnimeEpisode::TABLE_NAME . '.id AND user_id = ' . Auth::id() . ' LIMIT 1) AS watched')
         ];
 
         // Get the episodes

@@ -3,6 +3,10 @@
 namespace App;
 
 
+/**
+ * @property false|string last_validated
+ * @property mixed id
+ */
 class Session extends KModel
 {
     // Table name

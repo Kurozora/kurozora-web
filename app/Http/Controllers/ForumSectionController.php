@@ -6,7 +6,9 @@ use App\ForumSection;
 use App\ForumSectionBan;
 use App\ForumThread;
 use App\Helpers\JSONResult;
+use App\Http\Requests\PostThread;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ForumSectionController extends Controller
@@ -97,41 +99,29 @@ class ForumSectionController extends Controller
     /**
      * Allows the user to submit a new thread
      *
-     * @param Request $request
+     * @param PostThread $request
      * @param ForumSection $section
      */
-    public function postThread(Request $request, ForumSection $section) {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'title'         => 'bail|required|min:' . ForumThread::MIN_TITLE_LENGTH,
-            'content'       => 'bail|required|min:' . ForumThread::MIN_CONTENT_LENGTH
-        ]);
-
-        // Check validator
-        if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
-
-        // Get variables
-        $givenTitle = $request->input('title');
-        $givenContent = $request->input('content');
+    public function postThread(PostThread $request, ForumSection $section) {
+        $data = $request->validated();
 
         // Check if the user is banned
-        $foundBan = ForumSectionBan::getBanInfo($request->user_id, $section->id);
+        $foundBan = ForumSectionBan::getBanInfo(Auth::id(), $section->id);
 
         if($foundBan !== null)
             (new JSONResult())->setError($foundBan['message'])->show();
 
         // Check if the user has already posted within the cooldown period
-        if(ForumThread::testPostCooldown($request->user_id))
+        if(ForumThread::testPostCooldown(Auth::id()))
             (new JSONResult())->setError('You can only post a thread once every minute.')->show();
 
         // Create the thread
         $newThread = ForumThread::create([
             'section_id'    => $section->id,
-            'user_id'       => $request->user_id,
+            'user_id'       => Auth::id(),
             'ip'            => $request->ip(),
-            'title'         => $givenTitle,
-            'content'       => $givenContent
+            'title'         => $data['title'],
+            'content'       => $data['content']
         ]);
 
         (new JSONResult())->setData(['thread_id' => $newThread->id])->show();

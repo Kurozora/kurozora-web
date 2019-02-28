@@ -86,6 +86,6 @@ class ValidateEmail implements Rule
         else if($this->errorType == 'exists')
             return trans('validation.unique');
 
-        return 'The email is invalid.';
+        return 'The :attribute is invalid.';
     }
 }

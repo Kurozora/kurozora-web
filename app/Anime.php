@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 /**
  * Class Anime
  *
+ * @property mixed id
  * @package App
  */
 class Anime extends KModel

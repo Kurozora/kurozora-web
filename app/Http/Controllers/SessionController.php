@@ -8,6 +8,7 @@ use App\Helpers\JSONResult;
 use App\LoginAttempt;
 use App\Session;
 use App\User;
+use Illuminate\Support\Facades\Auth;
 use KuroAuthToken;
 use Validator;
 use Illuminate\Http\Request;
@@ -111,7 +112,7 @@ class SessionController extends Controller
      */
     public function delete(Request $request, Session $session) {
         // Fire event
-        event(new UserSessionKilledEvent($request->user_id, $session->id, 'Session killed manually by user.', $request->session_id));
+        event(new UserSessionKilledEvent(Auth::id(), $session->id, 'Session killed manually by user.', $request['session_id']));
 
         // Delete the session
         $session->delete();
