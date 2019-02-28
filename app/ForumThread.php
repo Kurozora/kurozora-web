@@ -9,6 +9,13 @@ use Cog\Laravel\Love\Likeable\Models\Traits\Likeable;
 
 /**
  * @property int locked
+ * @property mixed likesDiffDislikesCount
+ * @property mixed replies
+ * @property mixed content
+ * @property mixed title
+ * @property mixed id
+ * @property mixed user
+ * @property mixed created_at
  */
 class ForumThread extends KModel implements LikeableContract
 {

@@ -154,5 +154,9 @@ Route::group(['prefix' => 'v1'], function () {
             ->middleware('kurozora.userauth');
     });
 
+    Route::prefix('/themes')->group(function() {
+        Route::get('/', [AppThemeController::class, 'overview']);
+    });
+
     Route::get('/privacy-policy', [MiscController::class, 'getPrivacyPolicy']);
 });

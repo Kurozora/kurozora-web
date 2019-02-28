@@ -11,12 +11,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(AnimesTableDummySeeder::class);
-        $this->call(UsersTableSeeder::class);
-        $this->call(ForumSectionSeeder::class);
-        $this->call(BadgeSeeder::class);
-        $this->call(ForumThreadSeeder::class);
-        $this->call(ForumReplySeeder::class);
-        $this->call(GenreSeeder::class);
+        $this->call([
+            AnimesTableDummySeeder::class,
+            UsersTableSeeder::class,
+            ForumSectionSeeder::class,
+            BadgeSeeder::class,
+            ForumThreadSeeder::class,
+            ForumReplySeeder::class,
+            GenreSeeder::class,
+            AppThemeSeeder::class,
+        ]);
     }
 }
