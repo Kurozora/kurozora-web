@@ -13,6 +13,22 @@ class ValidateEmail implements Rule
     protected $errorType;
 
     /**
+     * Whether or not it should be checked if the email is taken by a user
+     *
+     * @var bool
+     */
+    protected $checkUnique;
+
+    /**
+     * ValidateEmail constructor.
+     *
+     * @param bool $checkUnique
+     */
+    function __construct($checkUnique = true) {
+        $this->checkUnique = $checkUnique;
+    }
+
+    /**
      * Determine if the validation rule passes.
      *
      * @param  string  $attribute
@@ -46,9 +62,11 @@ class ValidateEmail implements Rule
         }
 
         // Check if username taken
-        if(User::where('email', $value)->exists()) {
-            $this->errorType = 'exists';
-            return false;
+        if($this->checkUnique) {
+            if (User::where('email', $value)->exists()) {
+                $this->errorType = 'exists';
+                return false;
+            }
         }
 
         return true;

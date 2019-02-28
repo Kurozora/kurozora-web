@@ -3,10 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Rules\ValidateEmail;
-use App\Rules\ValidatePassword;
-use App\Rules\ValidateUsername;
 
-class Registration extends KuroFormRequest
+class ResetPassword extends KuroFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,9 +24,7 @@ class Registration extends KuroFormRequest
     public function rules()
     {
         return [
-            'username'  => ['bail', 'required', new ValidateUsername],
-            'password'  => ['bail', 'required', new ValidatePassword],
-            'email'     => ['bail', 'required', new ValidateEmail(true)],
+            'email' => ['bail', 'required', new ValidateEmail(false)],
         ];
     }
 }
