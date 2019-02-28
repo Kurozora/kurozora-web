@@ -4,6 +4,7 @@ namespace App;
 
 use App\Enums\iOSUIKit;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\View;
 
 /**
  * @property mixed id
@@ -28,8 +29,9 @@ class AppTheme extends Model
      */
     function formatForOverview() {
         return [
-            'id'    => $this->id,
-            'name'  => $this->name
+            'id'            => $this->id,
+            'name'          => $this->name,
+            'download_link' => route('themes.download', ['theme' => $this->id])
         ];
     }
 
@@ -39,26 +41,15 @@ class AppTheme extends Model
      * @return string
      */
     function pList() {
-        return '<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>UIStatusBarStyle</key>
-	<string>' . $this->statusbar_style . '</string>
-	<key>Global</key>
-	<dict>
-		<key>backgroundColor</key>
-		<string>' . $this->background_color . '</string>
-		<key>textColor</key>
-		<string>' . $this->text_color . '</string>
-		<key>tintColor</key>
-		<string>' . $this->tint_color . '</string>
-		<key>barTintColor</key>
-		<string>' . $this->bar_tint_color . '</string>
-		<key>barTitleTextColor</key>
-		<string>' . $this->bar_title_text_color . '</string>
-	</dict>
-</dict>
-</plist>';
+        $view = View::make('plist.ios-theme', [
+            'statusbar_style'       => $this->statusbar_style,
+            'background_color'      => $this->background_color,
+            'text_color'            => $this->text_color,
+            'tint_color'            => $this->tint_color,
+            'bar_tint_color'        => $this->bar_tint_color,
+            'bar_title_text_color'  => $this->bar_title_text_color,
+        ]);
+
+        return $view->render();
     }
 }
