@@ -23,6 +23,12 @@ class AppThemeController extends Controller
         ])->show();
     }
 
+    /**
+     * Serves the plist file to be downloaded
+     *
+     * @param AppTheme $theme
+     * @return \Illuminate\Http\Response
+     */
     function download(AppTheme $theme) {
         // Name for the theme file
         $fileName = 'theme-' . $theme->id . '.plist';
