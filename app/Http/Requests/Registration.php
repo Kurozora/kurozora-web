@@ -26,9 +26,9 @@ class Registration extends KuroFormRequest
     public function rules()
     {
         return [
-            'username'  => new ValidateUsername,
-            'password'  => new ValidatePassword,
-            'email'     => new ValidateEmail,
+            'username'  => ['bail', 'required', new ValidateUsername],
+            'password'  => ['bail', 'required', new ValidatePassword],
+            'email'     => ['bail', 'required', new ValidateEmail],
         ];
     }
 }

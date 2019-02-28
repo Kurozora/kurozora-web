@@ -29,7 +29,7 @@ class DeleteFromLibrary extends KuroFormRequest
     public function rules()
     {
         return [
-            'anime_id'  => new ValidateAnimeID
+            'anime_id'  => ['bail', 'required', new ValidateAnimeID],
         ];
     }
 }

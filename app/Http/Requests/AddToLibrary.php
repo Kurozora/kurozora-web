@@ -29,8 +29,8 @@ class AddToLibrary extends KuroFormRequest
     public function rules()
     {
         return [
-            'anime_id'  => new ValidateAnimeID,
-            'status'    => new ValidateLibraryStatus
+            'anime_id'  => ['bail', 'required', new ValidateAnimeID],
+            'status'    => ['bail', 'required', new ValidateLibraryStatus],
         ];
     }
 }

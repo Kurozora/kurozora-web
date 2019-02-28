@@ -29,7 +29,7 @@ class GetLibrary extends KuroFormRequest
     public function rules()
     {
         return [
-            'status'    => new ValidateLibraryStatus
+            'status'    => ['bail', 'required', new ValidateLibraryStatus],
         ];
     }
 }
