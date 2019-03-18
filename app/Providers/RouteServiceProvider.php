@@ -17,6 +17,13 @@ class RouteServiceProvider extends ServiceProvider
     protected $namespace = 'App\Http\Controllers';
 
     /**
+     * Namespace applied to web routes
+     *
+     * @var string
+     */
+    protected $webNamespace = 'App\Http\Controllers\WebControllers';
+
+    /**
      * Define your route model bindings, pattern filters, etc.
      *
      * @return void
@@ -39,7 +46,7 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
-        //
+        $this->mapThemeRoutes();
     }
 
     /**
@@ -69,5 +76,19 @@ class RouteServiceProvider extends ServiceProvider
              ->middleware('api')
              ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
+    }
+
+    /**
+     * Define the "theme" routes for the application.
+     *
+     * These routes are relevant to the Kurozora theming.
+     *
+     * @return void
+     */
+    protected function mapThemeRoutes()
+    {
+        Route::middleware('web')
+            ->namespace($this->webNamespace)
+            ->group(base_path('routes/theme.php'));
     }
 }

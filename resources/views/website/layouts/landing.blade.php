@@ -25,10 +25,10 @@
         <meta name="robots" content="noindex,nofollow" />
     @endif
 
-    <!-- jQuery -->
+    {{-- jQuery --}}
     <script type="text/javascript" src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
 
-    <!-- Stylesheet -->
+    {{-- Landing stylesheet --}}
     <link href="{{ asset('css/kurozora-landing.css') }}" rel="stylesheet">
 </head>
 <body>

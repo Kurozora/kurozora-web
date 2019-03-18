@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('website.home');
-});
+})->name('home');
 
 Route::get('/anime/{animeID}', [PageController::class, 'anime']);
 Route::get('/profile/{userID}', [PageController::class, 'userProfile']);

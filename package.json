@@ -18,5 +18,9 @@
         "lodash": "^4.17.4",
         "popper.js": "^1.12",
         "vue": "^2.5.7"
+    },
+    "dependencies": {
+        "@jaames/iro": "^4.2.0",
+        "bulma": "^0.7.4"
     }
 }

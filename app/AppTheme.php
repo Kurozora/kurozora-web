@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Enums\iOSUIKit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\View;
 
