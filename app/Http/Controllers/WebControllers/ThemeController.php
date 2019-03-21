@@ -26,7 +26,7 @@ class ThemeController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     function create() {
-        return view('website.themes.create');
+        return view('website.themes.create', ['title' => 'Create']);
     }
 
 }
