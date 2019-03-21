@@ -95,7 +95,7 @@ module.exports = g;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(2);
-module.exports = __webpack_require__(9);
+module.exports = __webpack_require__(16);
 
 
 /***/ }),
@@ -104,12 +104,12 @@ module.exports = __webpack_require__(9);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_ThemeRoller__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_ThemeRoller__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_ThemeRoller___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_ThemeRoller__);
 
 
 // Require vue
-window.Vue = __webpack_require__(3);
+window.Vue = __webpack_require__(12);
 
 // Vue instance
 var app = new Vue({
@@ -121,6 +121,2595 @@ var app = new Vue({
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(4)
+}
+var normalizeComponent = __webpack_require__(9)
+/* script */
+var __vue_script__ = __webpack_require__(10)
+/* template */
+var __vue_template__ = __webpack_require__(11)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-3a6a7b10"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/ThemeRoller.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3a6a7b10", Component.options)
+  } else {
+    hotAPI.reload("data-v-3a6a7b10", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(5);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(7)("1e784620", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3a6a7b10\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ThemeRoller.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3a6a7b10\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ThemeRoller.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(6)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n#iphoneX[data-v-3a6a7b10] {\n    max-width: 100%;\n    display: block;\n    margin: 0 auto;\n}\n#color-picker-container[data-v-3a6a7b10] {\n    display: block;\n    margin: 0 auto;\n}\n.eyedropper[data-v-3a6a7b10]:hover {\n    cursor: pointer;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+  Modified by Evan You @yyx990803
+*/
+
+var hasDocument = typeof document !== 'undefined'
+
+if (typeof DEBUG !== 'undefined' && DEBUG) {
+  if (!hasDocument) {
+    throw new Error(
+    'vue-style-loader cannot be used in a non-browser environment. ' +
+    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
+  ) }
+}
+
+var listToStyles = __webpack_require__(8)
+
+/*
+type StyleObject = {
+  id: number;
+  parts: Array<StyleObjectPart>
+}
+
+type StyleObjectPart = {
+  css: string;
+  media: string;
+  sourceMap: ?string
+}
+*/
+
+var stylesInDom = {/*
+  [id: number]: {
+    id: number,
+    refs: number,
+    parts: Array<(obj?: StyleObjectPart) => void>
+  }
+*/}
+
+var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
+var singletonElement = null
+var singletonCounter = 0
+var isProduction = false
+var noop = function () {}
+var options = null
+var ssrIdKey = 'data-vue-ssr-id'
+
+// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+// tags it will allow on a page
+var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
+
+module.exports = function (parentId, list, _isProduction, _options) {
+  isProduction = _isProduction
+
+  options = _options || {}
+
+  var styles = listToStyles(parentId, list)
+  addStylesToDom(styles)
+
+  return function update (newList) {
+    var mayRemove = []
+    for (var i = 0; i < styles.length; i++) {
+      var item = styles[i]
+      var domStyle = stylesInDom[item.id]
+      domStyle.refs--
+      mayRemove.push(domStyle)
+    }
+    if (newList) {
+      styles = listToStyles(parentId, newList)
+      addStylesToDom(styles)
+    } else {
+      styles = []
+    }
+    for (var i = 0; i < mayRemove.length; i++) {
+      var domStyle = mayRemove[i]
+      if (domStyle.refs === 0) {
+        for (var j = 0; j < domStyle.parts.length; j++) {
+          domStyle.parts[j]()
+        }
+        delete stylesInDom[domStyle.id]
+      }
+    }
+  }
+}
+
+function addStylesToDom (styles /* Array<StyleObject> */) {
+  for (var i = 0; i < styles.length; i++) {
+    var item = styles[i]
+    var domStyle = stylesInDom[item.id]
+    if (domStyle) {
+      domStyle.refs++
+      for (var j = 0; j < domStyle.parts.length; j++) {
+        domStyle.parts[j](item.parts[j])
+      }
+      for (; j < item.parts.length; j++) {
+        domStyle.parts.push(addStyle(item.parts[j]))
+      }
+      if (domStyle.parts.length > item.parts.length) {
+        domStyle.parts.length = item.parts.length
+      }
+    } else {
+      var parts = []
+      for (var j = 0; j < item.parts.length; j++) {
+        parts.push(addStyle(item.parts[j]))
+      }
+      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
+    }
+  }
+}
+
+function createStyleElement () {
+  var styleElement = document.createElement('style')
+  styleElement.type = 'text/css'
+  head.appendChild(styleElement)
+  return styleElement
+}
+
+function addStyle (obj /* StyleObjectPart */) {
+  var update, remove
+  var styleElement = document.querySelector('style[' + ssrIdKey + '~="' + obj.id + '"]')
+
+  if (styleElement) {
+    if (isProduction) {
+      // has SSR styles and in production mode.
+      // simply do nothing.
+      return noop
+    } else {
+      // has SSR styles but in dev mode.
+      // for some reason Chrome can't handle source map in server-rendered
+      // style tags - source maps in <style> only works if the style tag is
+      // created and inserted dynamically. So we remove the server rendered
+      // styles and inject new ones.
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  if (isOldIE) {
+    // use singleton mode for IE9.
+    var styleIndex = singletonCounter++
+    styleElement = singletonElement || (singletonElement = createStyleElement())
+    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
+    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
+  } else {
+    // use multi-style-tag mode in all other cases
+    styleElement = createStyleElement()
+    update = applyToTag.bind(null, styleElement)
+    remove = function () {
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  update(obj)
+
+  return function updateStyle (newObj /* StyleObjectPart */) {
+    if (newObj) {
+      if (newObj.css === obj.css &&
+          newObj.media === obj.media &&
+          newObj.sourceMap === obj.sourceMap) {
+        return
+      }
+      update(obj = newObj)
+    } else {
+      remove()
+    }
+  }
+}
+
+var replaceText = (function () {
+  var textStore = []
+
+  return function (index, replacement) {
+    textStore[index] = replacement
+    return textStore.filter(Boolean).join('\n')
+  }
+})()
+
+function applyToSingletonTag (styleElement, index, remove, obj) {
+  var css = remove ? '' : obj.css
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = replaceText(index, css)
+  } else {
+    var cssNode = document.createTextNode(css)
+    var childNodes = styleElement.childNodes
+    if (childNodes[index]) styleElement.removeChild(childNodes[index])
+    if (childNodes.length) {
+      styleElement.insertBefore(cssNode, childNodes[index])
+    } else {
+      styleElement.appendChild(cssNode)
+    }
+  }
+}
+
+function applyToTag (styleElement, obj) {
+  var css = obj.css
+  var media = obj.media
+  var sourceMap = obj.sourceMap
+
+  if (media) {
+    styleElement.setAttribute('media', media)
+  }
+  if (options.ssrId) {
+    styleElement.setAttribute(ssrIdKey, obj.id)
+  }
+
+  if (sourceMap) {
+    // https://developer.chrome.com/devtools/docs/javascript-debugging
+    // this makes source maps inside style tags work properly in Chrome
+    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
+    // http://stackoverflow.com/a/26603875
+    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
+  }
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild)
+    }
+    styleElement.appendChild(document.createTextNode(css))
+  }
+}
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports) {
+
+/**
+ * Translates the list format produced by css-loader into something
+ * easier to manipulate.
+ */
+module.exports = function listToStyles (parentId, list) {
+  var styles = []
+  var newStyles = {}
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i]
+    var id = item[0]
+    var css = item[1]
+    var media = item[2]
+    var sourceMap = item[3]
+    var part = {
+      id: parentId + ':' + i,
+      css: css,
+      media: media,
+      sourceMap: sourceMap
+    }
+    if (!newStyles[id]) {
+      styles.push(newStyles[id] = { id: id, parts: [part] })
+    } else {
+      newStyles[id].parts.push(part)
+    }
+  }
+  return styles
+}
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports) {
+
+/* globals __VUE_SSR_CONTEXT__ */
+
+// IMPORTANT: Do NOT use ES2015 features in this file.
+// This module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle.
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  functionalTemplate,
+  injectStyles,
+  scopeId,
+  moduleIdentifier /* server only */
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+    options._compiled = true
+  }
+
+  // functional template
+  if (functionalTemplate) {
+    options.functional = true
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  var hook
+  if (moduleIdentifier) { // server build
+    hook = function (context) {
+      // 2.3 injection
+      context =
+        context || // cached call
+        (this.$vnode && this.$vnode.ssrContext) || // stateful
+        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
+      // 2.2 with runInNewContext: true
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__
+      }
+      // inject component styles
+      if (injectStyles) {
+        injectStyles.call(this, context)
+      }
+      // register component module identifier for async chunk inferrence
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier)
+      }
+    }
+    // used by ssr in case component is cached and beforeCreate
+    // never gets called
+    options._ssrRegister = hook
+  } else if (injectStyles) {
+    hook = injectStyles
+  }
+
+  if (hook) {
+    var functional = options.functional
+    var existing = functional
+      ? options.render
+      : options.beforeCreate
+
+    if (!functional) {
+      // inject component registration as beforeCreate hook
+      options.beforeCreate = existing
+        ? [].concat(existing, hook)
+        : [hook]
+    } else {
+      // for template-only hot-reload because in that case the render fn doesn't
+      // go through the normalizer
+      options._injectStyles = hook
+      // register for functioal component in vue file
+      options.render = function renderWithStyleInjection (h, context) {
+        hook.call(context)
+        return existing(h, context)
+      }
+    }
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['submit_url'],
+
+    data: function data() {
+        return {
+            colorPicker: null,
+            selectingFor: null,
+
+            colors: {
+                backgroundColor: '#353a50',
+                contentTextColor: '#B7B9C1',
+                barTitleTextColor: '#ffffff',
+                forumsTitleTextColor: '#ffffff',
+                tintColor: '#FF9300',
+                barTintColor: '#2a2e43',
+                statusBarStyle: '#ffffff'
+            }
+        };
+    },
+
+
+    computed: {
+        getSelectedColor: function getSelectedColor() {
+            return this.colorPicker.color.hexString;
+        }
+    },
+
+    created: function created() {
+        // Initialize the colorpicker
+        this.colorPicker = new iro.ColorPicker('#color-picker-container', {
+            width: 300,
+            color: '#f00'
+        });
+
+        // Warning before exiting page
+        window.onbeforeunload = function () {
+            return 'Are you sure you want to leave? Your creation will not be saved.';
+        };
+    },
+
+
+    methods: {
+        // Opens the colorpicker for a component
+        selectColorFor: function selectColorFor(component) {
+            this.selectingFor = component;
+
+            // Set the picked color in the picker
+            this.colorPicker.color.hexString = this.colors[this.selectingFor];
+
+            // Show the picker
+            $('#colorModal').addClass('is-active');
+        },
+
+
+        // Saves the selected color in the colorpicker
+        saveSelectedColor: function saveSelectedColor() {
+            // Write the new color
+            var newColor = this.colorPicker.color.hexString;
+
+            this.colors[this.selectingFor] = newColor;
+
+            // Close the picker
+            this.closeColorPicker();
+        },
+
+
+        // Closes the color picker
+        closeColorPicker: function closeColorPicker() {
+            $('#colorModal').removeClass('is-active');
+        },
+
+
+        // Updates the colorpicker with the value from the input
+        updateColorFromInput: function updateColorFromInput() {
+            this.colorPicker.color.hexString = $('#colorInput').val();
+        },
+
+
+        // Switches the style of status bar color
+        switchStatusBarStyle: function switchStatusBarStyle() {
+            if (this.colors.statusBarStyle === '#ffffff') {
+                this.colors.statusBarStyle = '#000000';
+            } else {
+                this.colors.statusBarStyle = '#ffffff';
+            }
+        },
+
+
+        // Called when the user submits the theme
+        submit: function submit() {
+            alert('Ok');
+        }
+    }
+});
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c(
+      "svg",
+      {
+        attrs: {
+          id: "iphoneX",
+          width: "469px",
+          height: "921px",
+          viewBox: "0 0 469 921",
+          version: "1.1",
+          xmlns: "http://www.w3.org/2000/svg",
+          "xmlns:xlink": "http://www.w3.org/1999/xlink"
+        }
+      },
+      [
+        _c("defs", [
+          _c("rect", {
+            attrs: {
+              id: "path-1",
+              x: "0.598360656",
+              y: "0",
+              width: "407",
+              height: "843",
+              rx: "50"
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "filter",
+            {
+              attrs: {
+                x: "-25.1%",
+                y: "-6.2%",
+                width: "150.1%",
+                height: "124.2%",
+                filterUnits: "objectBoundingBox",
+                id: "filter-3"
+              }
+            },
+            [
+              _c("feGaussianBlur", {
+                attrs: {
+                  stdDeviation: "15",
+                  in: "SourceAlpha",
+                  result: "shadowBlurInner1"
+                }
+              }),
+              _vm._v(" "),
+              _c("feOffset", {
+                attrs: {
+                  dx: "0",
+                  dy: "-18",
+                  in: "shadowBlurInner1",
+                  result: "shadowOffsetInner1"
+                }
+              }),
+              _vm._v(" "),
+              _c("feComposite", {
+                attrs: {
+                  in: "shadowOffsetInner1",
+                  in2: "SourceAlpha",
+                  operator: "arithmetic",
+                  k2: "-1",
+                  k3: "1",
+                  result: "shadowInnerInner1"
+                }
+              }),
+              _vm._v(" "),
+              _c("feColorMatrix", {
+                attrs: {
+                  values: "0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.12 0",
+                  type: "matrix",
+                  in: "shadowInnerInner1"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("rect", {
+            attrs: {
+              id: "path-4",
+              x: "17.5983607",
+              y: "19",
+              width: "371",
+              height: "807",
+              rx: "30"
+            }
+          }),
+          _vm._v(" "),
+          _c("rect", {
+            attrs: { id: "path-6", x: "0", y: "0", width: "376", height: "49" }
+          }),
+          _vm._v(" "),
+          _c(
+            "filter",
+            {
+              attrs: {
+                x: "-0.1%",
+                y: "-1.5%",
+                width: "100.1%",
+                height: "102.0%",
+                filterUnits: "objectBoundingBox",
+                id: "filter-7"
+              }
+            },
+            [
+              _c("feOffset", {
+                attrs: {
+                  dx: "0",
+                  dy: "-0.5",
+                  in: "SourceAlpha",
+                  result: "shadowOffsetOuter1"
+                }
+              }),
+              _vm._v(" "),
+              _c("feComposite", {
+                attrs: {
+                  in: "shadowOffsetOuter1",
+                  in2: "SourceAlpha",
+                  operator: "out",
+                  result: "shadowOffsetOuter1"
+                }
+              }),
+              _vm._v(" "),
+              _c("feColorMatrix", {
+                attrs: {
+                  values: "0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.15 0",
+                  type: "matrix",
+                  in: "shadowOffsetOuter1"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("rect", {
+            attrs: { id: "path-8", x: "0", y: "0", width: "376", height: "88" }
+          }),
+          _vm._v(" "),
+          _c(
+            "filter",
+            {
+              attrs: {
+                x: "-0.1%",
+                y: "-0.3%",
+                width: "100.1%",
+                height: "101.1%",
+                filterUnits: "objectBoundingBox",
+                id: "filter-9"
+              }
+            },
+            [
+              _c("feOffset", {
+                attrs: {
+                  dx: "0",
+                  dy: "0.5",
+                  in: "SourceAlpha",
+                  result: "shadowOffsetOuter1"
+                }
+              }),
+              _vm._v(" "),
+              _c("feComposite", {
+                attrs: {
+                  in: "shadowOffsetOuter1",
+                  in2: "SourceAlpha",
+                  operator: "out",
+                  result: "shadowOffsetOuter1"
+                }
+              }),
+              _vm._v(" "),
+              _c("feColorMatrix", {
+                attrs: {
+                  values: "0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.16 0",
+                  type: "matrix",
+                  in: "shadowOffsetOuter1"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("rect", {
+            attrs: { id: "path-10", x: "0", y: "0", width: "376", height: "50" }
+          }),
+          _vm._v(" "),
+          _c(
+            "filter",
+            {
+              attrs: {
+                x: "-0.1%",
+                y: "-1.5%",
+                width: "100.1%",
+                height: "102.0%",
+                filterUnits: "objectBoundingBox",
+                id: "filter-11"
+              }
+            },
+            [
+              _c("feOffset", {
+                attrs: {
+                  dx: "0",
+                  dy: "-0.5",
+                  in: "SourceAlpha",
+                  result: "shadowOffsetOuter1"
+                }
+              }),
+              _vm._v(" "),
+              _c("feComposite", {
+                attrs: {
+                  in: "shadowOffsetOuter1",
+                  in2: "SourceAlpha",
+                  operator: "out",
+                  result: "shadowOffsetOuter1"
+                }
+              }),
+              _vm._v(" "),
+              _c("feColorMatrix", {
+                attrs: {
+                  values: "0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.15 0",
+                  type: "matrix",
+                  in: "shadowOffsetOuter1"
+                }
+              })
+            ],
+            1
+          )
+        ]),
+        _vm._v(" "),
+        _c(
+          "g",
+          {
+            attrs: {
+              id: "Page-1",
+              stroke: "none",
+              "stroke-width": "1",
+              fill: "none",
+              "fill-rule": "evenodd"
+            }
+          },
+          [
+            _c(
+              "g",
+              {
+                attrs: {
+                  id: "Artboard",
+                  transform: "translate(0.000000, -21.000000)"
+                }
+              },
+              [
+                _c(
+                  "g",
+                  {
+                    attrs: {
+                      id: "dark",
+                      transform: "translate(31.401639, 48.000000)"
+                    }
+                  },
+                  [
+                    _c("g", { attrs: { id: "base" } }, [
+                      _c("use", {
+                        attrs: {
+                          fill: "black",
+                          "fill-opacity": "1",
+                          filter: "url(#filter-2)",
+                          "xlink:href": "#path-1"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("use", {
+                        attrs: {
+                          fill: "#070707",
+                          "fill-rule": "evenodd",
+                          "xlink:href": "#path-1"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("use", {
+                        attrs: {
+                          fill: "black",
+                          "fill-opacity": "1",
+                          filter: "url(#filter-3)",
+                          "xlink:href": "#path-1"
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("mask", { attrs: { id: "mask-5", fill: "white" } }, [
+                      _c("use", { attrs: { "xlink:href": "#path-4" } })
+                    ]),
+                    _vm._v(" "),
+                    _c("use", {
+                      attrs: {
+                        id: "background",
+                        fill: "#1D1D1D",
+                        "xlink:href": "#path-4"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "g",
+                      { attrs: { id: "iPhone-X", mask: "url(#mask-5)" } },
+                      [
+                        _c(
+                          "g",
+                          {
+                            attrs: {
+                              transform: "translate(15.598361, 14.000000)"
+                            }
+                          },
+                          [
+                            _c("rect", {
+                              attrs: {
+                                id: "Rectangle",
+                                fill: _vm.colors.backgroundColor,
+                                "fill-rule": "evenodd",
+                                x: "0",
+                                y: "0",
+                                width: "376",
+                                height: "812"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "g",
+                              {
+                                staticClass: "eyedropper",
+                                attrs: {
+                                  transform: "translate(200, 400)",
+                                  stroke: "none",
+                                  "stroke-width": "1",
+                                  fill: "none",
+                                  "fill-rule": "evenodd"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    _vm.selectColorFor("backgroundColor")
+                                  }
+                                }
+                              },
+                              [
+                                _c("circle", {
+                                  attrs: {
+                                    id: "Oval",
+                                    fill: "#445CD3",
+                                    cx: "10",
+                                    cy: "10",
+                                    r: "10"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("path", {
+                                  attrs: {
+                                    d:
+                                      "M13.948,7.552 C13.607,7.852 13.5715,8.371 13.8715,8.714 L13.252,9.2555 L10.544,6.1565 L11.1635,5.6155 C11.463,5.9575 11.9825,5.992 12.3235,5.6925 L13.9465,4.3045 C14.1815,4.101 14.4705,4 14.759,4 C15.449,4 16,4.564 16,5.2355 C16,5.6005 15.839,5.932 15.573,6.1645 L13.948,7.552 Z M10.4765,9.5 L9.2265,9.5 L11.0075,7.9385 L10.465,7.3185 L6.7955,10.512 C6.201,11.0285 6.6115,11.4275 6.1215,12.1095 C6.055,12.2025 6.0165,12.2955 6.006,12.3845 C5.973,12.6545 6.1685,12.882 6.4145,12.9125 C6.5115,12.924 6.6195,12.905 6.7225,12.844 C7.4975,12.388 7.8115,12.9025 8.4205,12.3705 L12.0905,9.1785 L11.55,8.558 L10.4765,9.5 Z M5.9235,13.25 C5.656,14.2765 5,14.4175 5,15.092 C5,15.5935 5.417,16 5.9235,16 C6.43,16 6.8405,15.5935 6.8405,15.092 C6.8405,14.4175 6.191,14.2765 5.9235,13.25 Z",
+                                    id: "Shape",
+                                    fill: "#FFFFFF",
+                                    "fill-rule": "nonzero"
+                                  }
+                                })
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "g",
+                              {
+                                attrs: {
+                                  id: "Forum-Cell",
+                                  "stroke-width": "1",
+                                  fill: "none",
+                                  "fill-rule": "evenodd",
+                                  transform: "translate(1.000000, 137.000000)"
+                                }
+                              },
+                              [
+                                _c("rect", {
+                                  attrs: {
+                                    id: "Rectangle",
+                                    x: "0",
+                                    y: "0",
+                                    width: "375",
+                                    height: "96"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("path", {
+                                  attrs: {
+                                    d: "M15,95.5 L361,95.5",
+                                    id: "Line",
+                                    stroke: "#979797",
+                                    "stroke-width": "0.5",
+                                    "stroke-linecap": "square"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "text",
+                                  {
+                                    attrs: {
+                                      id: "",
+                                      "font-size": "20",
+                                      "font-weight": "normal",
+                                      "letter-spacing": "0.583194435",
+                                      fill: "#FFFFFF",
+                                      "fill-opacity": "0.64"
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "tspan",
+                                      {
+                                        staticClass: "fas",
+                                        attrs: { x: "339", y: "89" }
+                                      },
+                                      [_vm._v("")]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "text",
+                                  {
+                                    attrs: {
+                                      id: "",
+                                      "font-size": "20",
+                                      "font-weight": "normal",
+                                      "letter-spacing": "0.583194435",
+                                      fill: "#FFFFFF",
+                                      "fill-opacity": "0.64"
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "tspan",
+                                      {
+                                        staticClass: "fas",
+                                        attrs: { x: "307", y: "89" }
+                                      },
+                                      [_vm._v("")]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "text",
+                                  {
+                                    attrs: {
+                                      id: "",
+                                      "font-size": "22",
+                                      "font-weight": "normal",
+                                      "letter-spacing": "0.641513944",
+                                      fill: "#FFFFFF",
+                                      "fill-opacity": "0.64"
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "tspan",
+                                      {
+                                        staticClass: "fas",
+                                        attrs: { x: "272", y: "90" }
+                                      },
+                                      [_vm._v("")]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "text",
+                                  {
+                                    attrs: {
+                                      id: "-2.2K-·--3K-·--10",
+                                      "font-size": "13",
+                                      "font-weight": "normal",
+                                      "letter-spacing": "0.266",
+                                      fill: "#FFFFFF",
+                                      "fill-opacity": "0.5"
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "tspan",
+                                      {
+                                        staticClass: "fas",
+                                        attrs: { x: "15", y: "84" }
+                                      },
+                                      [_vm._v(" 2.2K ")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "tspan",
+                                      {
+                                        staticClass: "fas",
+                                        attrs: { x: "72.6826875", y: "84" }
+                                      },
+                                      [_vm._v("  3K ")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "tspan",
+                                      {
+                                        staticClass: "fas",
+                                        attrs: { x: "125.579844", y: "84" }
+                                      },
+                                      [_vm._v("  10hrs")]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "text",
+                                  {
+                                    attrs: {
+                                      id: "Commodi-a-quisquam-v",
+                                      "font-family": "ArialMT, Arial",
+                                      "font-size": "15",
+                                      "font-weight": "normal",
+                                      "letter-spacing": "0.323000014",
+                                      fill: _vm.colors.forumsTitleTextColor
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "tspan",
+                                      { attrs: { x: "31", y: "24" } },
+                                      [
+                                        _vm._v(
+                                          "Commodi a quisquam voluptatem repellendus."
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "g",
+                                  {
+                                    staticClass: "eyedropper",
+                                    attrs: {
+                                      transform: "translate(340, 10)",
+                                      stroke: "none",
+                                      "stroke-width": "1",
+                                      fill: "none",
+                                      "fill-rule": "evenodd"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        _vm.selectColorFor(
+                                          "forumsTitleTextColor"
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("circle", {
+                                      attrs: {
+                                        id: "Oval",
+                                        fill: "#445CD3",
+                                        cx: "10",
+                                        cy: "10",
+                                        r: "10"
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M13.948,7.552 C13.607,7.852 13.5715,8.371 13.8715,8.714 L13.252,9.2555 L10.544,6.1565 L11.1635,5.6155 C11.463,5.9575 11.9825,5.992 12.3235,5.6925 L13.9465,4.3045 C14.1815,4.101 14.4705,4 14.759,4 C15.449,4 16,4.564 16,5.2355 C16,5.6005 15.839,5.932 15.573,6.1645 L13.948,7.552 Z M10.4765,9.5 L9.2265,9.5 L11.0075,7.9385 L10.465,7.3185 L6.7955,10.512 C6.201,11.0285 6.6115,11.4275 6.1215,12.1095 C6.055,12.2025 6.0165,12.2955 6.006,12.3845 C5.973,12.6545 6.1685,12.882 6.4145,12.9125 C6.5115,12.924 6.6195,12.905 6.7225,12.844 C7.4975,12.388 7.8115,12.9025 8.4205,12.3705 L12.0905,9.1785 L11.55,8.558 L10.4765,9.5 Z M5.9235,13.25 C5.656,14.2765 5,14.4175 5,15.092 C5,15.5935 5.417,16 5.9235,16 C6.43,16 6.8405,15.5935 6.8405,15.092 C6.8405,14.4175 6.191,14.2765 5.9235,13.25 Z",
+                                        id: "Shape",
+                                        fill: "#FFFFFF",
+                                        "fill-rule": "nonzero"
+                                      }
+                                    })
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "text",
+                                  {
+                                    attrs: {
+                                      id: "Totam-corporis-asper",
+                                      "font-family": "ArialMT, Arial",
+                                      "font-size": "12",
+                                      "font-weight": "normal",
+                                      "letter-spacing": "0.349916697",
+                                      fill: _vm.colors.contentTextColor
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "tspan",
+                                      { attrs: { x: "31", y: "43" } },
+                                      [
+                                        _vm._v(
+                                          "Totam corporis aspernatur aut temporibus autem maxime."
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "tspan",
+                                      { attrs: { x: "31", y: "57" } },
+                                      [
+                                        _vm._v(
+                                          "Consequatur reprehendrit non et cupiditate i…"
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "g",
+                                  {
+                                    staticClass: "eyedropper",
+                                    attrs: {
+                                      transform: "translate(280, 45)",
+                                      stroke: "none",
+                                      "stroke-width": "1",
+                                      fill: "none",
+                                      "fill-rule": "evenodd"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        _vm.selectColorFor("contentTextColor")
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("circle", {
+                                      attrs: {
+                                        id: "Oval",
+                                        fill: "#445CD3",
+                                        cx: "10",
+                                        cy: "10",
+                                        r: "10"
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M13.948,7.552 C13.607,7.852 13.5715,8.371 13.8715,8.714 L13.252,9.2555 L10.544,6.1565 L11.1635,5.6155 C11.463,5.9575 11.9825,5.992 12.3235,5.6925 L13.9465,4.3045 C14.1815,4.101 14.4705,4 14.759,4 C15.449,4 16,4.564 16,5.2355 C16,5.6005 15.839,5.932 15.573,6.1645 L13.948,7.552 Z M10.4765,9.5 L9.2265,9.5 L11.0075,7.9385 L10.465,7.3185 L6.7955,10.512 C6.201,11.0285 6.6115,11.4275 6.1215,12.1095 C6.055,12.2025 6.0165,12.2955 6.006,12.3845 C5.973,12.6545 6.1685,12.882 6.4145,12.9125 C6.5115,12.924 6.6195,12.905 6.7225,12.844 C7.4975,12.388 7.8115,12.9025 8.4205,12.3705 L12.0905,9.1785 L11.55,8.558 L10.4765,9.5 Z M5.9235,13.25 C5.656,14.2765 5,14.4175 5,15.092 C5,15.5935 5.417,16 5.9235,16 C6.43,16 6.8405,15.5935 6.8405,15.092 C6.8405,14.4175 6.191,14.2765 5.9235,13.25 Z",
+                                        id: "Shape",
+                                        fill: "#FFFFFF",
+                                        "fill-rule": "nonzero"
+                                      }
+                                    })
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "text",
+                                  {
+                                    attrs: {
+                                      id: "",
+                                      "font-size": "14",
+                                      "font-weight": "normal",
+                                      "letter-spacing": "0.266000032",
+                                      fill: _vm.colors.forumsTitleTextColor
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "tspan",
+                                      {
+                                        staticClass: "fas",
+                                        attrs: { x: "15", y: "24" }
+                                      },
+                                      [_vm._v("")]
+                                    )
+                                  ]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "g",
+                              {
+                                attrs: {
+                                  id: "Group",
+                                  "stroke-width": "1",
+                                  fill: "none",
+                                  "fill-rule": "evenodd",
+                                  transform: "translate(0.000000, 88.000000)"
+                                }
+                              },
+                              [
+                                _c("g", { attrs: { id: "background" } }, [
+                                  _c("use", {
+                                    attrs: {
+                                      fill: "black",
+                                      "fill-opacity": "1",
+                                      filter: "url(#filter-7)",
+                                      "xlink:href": "#path-6"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("use", {
+                                    attrs: {
+                                      "fill-opacity": "0.72",
+                                      fill: _vm.colors.barTintColor,
+                                      "fill-rule": "evenodd",
+                                      "xlink:href": "#path-6"
+                                    }
+                                  })
+                                ]),
+                                _vm._v(" "),
+                                _c("rect", {
+                                  attrs: {
+                                    id: "Rectangle",
+                                    fill: _vm.colors.tintColor,
+                                    x: "16",
+                                    y: "43",
+                                    width: "48",
+                                    height: "2",
+                                    rx: "1"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "text",
+                                  {
+                                    attrs: {
+                                      id: "Anime",
+                                      "font-family": "ArialMT, Arial",
+                                      "font-size": "17",
+                                      "font-weight": "normal",
+                                      "line-spacing": "25",
+                                      "letter-spacing": "0.323000014",
+                                      fill: _vm.colors.tintColor
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "tspan",
+                                      { attrs: { x: "16", y: "23" } },
+                                      [_vm._v("Anime")]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "text",
+                                  {
+                                    attrs: {
+                                      id: "Real-Life",
+                                      "font-family": "ArialMT, Arial",
+                                      "font-size": "17",
+                                      "font-weight": "normal",
+                                      "line-spacing": "25",
+                                      "letter-spacing": "0.323000014",
+                                      fill: _vm.colors.tintColor,
+                                      "fill-opacity": "0.5"
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "tspan",
+                                      { attrs: { x: "90", y: "23" } },
+                                      [_vm._v("Real Life")]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "text",
+                                  {
+                                    attrs: {
+                                      id: "Memes",
+                                      "font-family": "ArialMT, Arial",
+                                      "font-size": "17",
+                                      "font-weight": "normal",
+                                      "line-spacing": "25",
+                                      "letter-spacing": "0.323000014",
+                                      fill: _vm.colors.tintColor,
+                                      "fill-opacity": "0.5"
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "tspan",
+                                      { attrs: { x: "181", y: "23" } },
+                                      [_vm._v("Memes")]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "text",
+                                  {
+                                    attrs: {
+                                      id: "Art-Showcase",
+                                      "font-family": "ArialMT, Arial",
+                                      "font-size": "17",
+                                      "font-weight": "normal",
+                                      "line-spacing": "25",
+                                      "letter-spacing": "0.323000014",
+                                      fill: _vm.colors.tintColor,
+                                      "fill-opacity": "0.5"
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "tspan",
+                                      { attrs: { x: "259", y: "23" } },
+                                      [_vm._v("Art Showcase")]
+                                    )
+                                  ]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "g",
+                              {
+                                attrs: {
+                                  id:
+                                    "Bars-/-Navigation-Bar-/-iPhone---Compact-/-Dark---Default",
+                                  fill: "none"
+                                }
+                              },
+                              [
+                                _c("g", { attrs: { id: "Background" } }, [
+                                  _c("use", {
+                                    attrs: {
+                                      fill: "black",
+                                      "fill-opacity": "1",
+                                      filter: "url(#filter-9)",
+                                      "xlink:href": "#path-8"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("use", {
+                                    attrs: {
+                                      "fill-opacity": "0.72",
+                                      fill: _vm.colors.barTintColor,
+                                      "fill-rule": "evenodd",
+                                      "xlink:href": "#path-8"
+                                    }
+                                  })
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "g",
+                                  {
+                                    attrs: {
+                                      id:
+                                        "Bars-/-Navigation-Bar-/-x-/-Right-Combinations-/-Dark---Bar-Button-Item",
+                                      transform:
+                                        "translate(206.549333, 44.000000)",
+                                      fill: _vm.colors.tintColor,
+                                      "fill-rule": "evenodd"
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "g",
+                                      {
+                                        attrs: {
+                                          id:
+                                            "Glyphs-/-Bar-Button-/-Search-/-Dark",
+                                          transform:
+                                            "translate(130.000000, 8.000000)"
+                                        }
+                                      },
+                                      [
+                                        _c("path", {
+                                          attrs: {
+                                            d:
+                                              "M6.0148,12.0972 C6.0148,10.7142 6.4848,9.4392 7.2668,8.4162 C8.2608,7.1152 9.7628,6.2212 11.4768,6.0462 C11.6808,6.0252 11.8878,6.0152 12.0978,6.0152 C13.0488,6.0152 13.9468,6.2402 14.7498,6.6312 C16.7778,7.6182 18.1828,9.6942 18.1828,12.0982 C18.1828,15.4532 15.4528,18.1832 12.0988,18.1832 C10.4278,18.1832 8.9118,17.5062 7.8118,16.4102 C7.8078,16.4062 7.8028,16.4042 7.7988,16.3982 C7.7918,16.3922 7.7868,16.3862 7.7808,16.3792 C6.6908,15.2792 6.0148,13.7652 6.0148,12.0972 L6.0148,12.0972 Z M22.9718,21.5392 L17.7788,16.3442 C17.8868,16.1992 17.9918,16.0502 18.0888,15.8972 C18.7878,14.7982 19.1988,13.4972 19.1988,12.0982 C19.1988,8.1782 16.0198,5.0002 12.0988,5.0002 C9.6848,5.0002 7.5568,6.2072 6.2738,8.0482 C5.4728,9.1972 4.9998,10.5922 4.9998,12.0972 C4.9998,16.0202 8.1798,19.1972 12.0978,19.1972 C13.6928,19.1972 15.1598,18.6662 16.3438,17.7782 L21.5388,22.9722 L22.9718,21.5392 Z",
+                                            id: "search"
+                                          }
+                                        })
+                                      ]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "text",
+                                  {
+                                    attrs: {
+                                      id: "Title",
+                                      "font-size": "17",
+                                      "font-weight": "500",
+                                      "line-spacing": "22",
+                                      "letter-spacing": "-0.409999996",
+                                      fill: _vm.colors.barTitleTextColor
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "tspan",
+                                      { attrs: { x: "157.919453", y: "71" } },
+                                      [_vm._v("Forums")]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "g",
+                                  {
+                                    staticClass: "eyedropper",
+                                    attrs: {
+                                      transform: "translate(215, 60)",
+                                      stroke: "none",
+                                      "stroke-width": "1",
+                                      fill: "none",
+                                      "fill-rule": "evenodd"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        _vm.selectColorFor("barTitleTextColor")
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("circle", {
+                                      attrs: {
+                                        id: "Oval",
+                                        fill: "#445CD3",
+                                        cx: "10",
+                                        cy: "10",
+                                        r: "10"
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M13.948,7.552 C13.607,7.852 13.5715,8.371 13.8715,8.714 L13.252,9.2555 L10.544,6.1565 L11.1635,5.6155 C11.463,5.9575 11.9825,5.992 12.3235,5.6925 L13.9465,4.3045 C14.1815,4.101 14.4705,4 14.759,4 C15.449,4 16,4.564 16,5.2355 C16,5.6005 15.839,5.932 15.573,6.1645 L13.948,7.552 Z M10.4765,9.5 L9.2265,9.5 L11.0075,7.9385 L10.465,7.3185 L6.7955,10.512 C6.201,11.0285 6.6115,11.4275 6.1215,12.1095 C6.055,12.2025 6.0165,12.2955 6.006,12.3845 C5.973,12.6545 6.1685,12.882 6.4145,12.9125 C6.5115,12.924 6.6195,12.905 6.7225,12.844 C7.4975,12.388 7.8115,12.9025 8.4205,12.3705 L12.0905,9.1785 L11.55,8.558 L10.4765,9.5 Z M5.9235,13.25 C5.656,14.2765 5,14.4175 5,15.092 C5,15.5935 5.417,16 5.9235,16 C6.43,16 6.8405,15.5935 6.8405,15.092 C6.8405,14.4175 6.191,14.2765 5.9235,13.25 Z",
+                                        id: "Shape",
+                                        fill: "#FFFFFF",
+                                        "fill-rule": "nonzero"
+                                      }
+                                    })
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "g",
+                                  {
+                                    staticClass: "eyedropper",
+                                    attrs: {
+                                      transform: "translate(265, 60)",
+                                      stroke: "none",
+                                      "stroke-width": "1",
+                                      fill: "none",
+                                      "fill-rule": "evenodd"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        _vm.selectColorFor("barTintColor")
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("circle", {
+                                      attrs: {
+                                        id: "Oval",
+                                        fill: "#445CD3",
+                                        cx: "10",
+                                        cy: "10",
+                                        r: "10"
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M13.948,7.552 C13.607,7.852 13.5715,8.371 13.8715,8.714 L13.252,9.2555 L10.544,6.1565 L11.1635,5.6155 C11.463,5.9575 11.9825,5.992 12.3235,5.6925 L13.9465,4.3045 C14.1815,4.101 14.4705,4 14.759,4 C15.449,4 16,4.564 16,5.2355 C16,5.6005 15.839,5.932 15.573,6.1645 L13.948,7.552 Z M10.4765,9.5 L9.2265,9.5 L11.0075,7.9385 L10.465,7.3185 L6.7955,10.512 C6.201,11.0285 6.6115,11.4275 6.1215,12.1095 C6.055,12.2025 6.0165,12.2955 6.006,12.3845 C5.973,12.6545 6.1685,12.882 6.4145,12.9125 C6.5115,12.924 6.6195,12.905 6.7225,12.844 C7.4975,12.388 7.8115,12.9025 8.4205,12.3705 L12.0905,9.1785 L11.55,8.558 L10.4765,9.5 Z M5.9235,13.25 C5.656,14.2765 5,14.4175 5,15.092 C5,15.5935 5.417,16 5.9235,16 C6.43,16 6.8405,15.5935 6.8405,15.092 C6.8405,14.4175 6.191,14.2765 5.9235,13.25 Z",
+                                        id: "Shape",
+                                        fill: "#FFFFFF",
+                                        "fill-rule": "nonzero"
+                                      }
+                                    })
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "g",
+                                  {
+                                    attrs: {
+                                      id:
+                                        "Bars-/-Navigation-Bar-/-x-/-Left-Combinations-/-Dark---Back-Button",
+                                      transform:
+                                        "translate(0.000000, 44.000000)",
+                                      fill: _vm.colors.tintColor
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "text",
+                                      {
+                                        attrs: {
+                                          id: "Label",
+                                          "font-size": "17",
+                                          "font-weight": "normal",
+                                          "line-spacing": "22",
+                                          "letter-spacing": "-0.408"
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "tspan",
+                                          { attrs: { x: "27", y: "26" } },
+                                          [_vm._v("Kurozora")]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M18.0371349,31.5826673 L8.79215185,22.4458042 C8.40261605,22.0611888 8.40261605,21.4398102 8.79215185,21.0541958 L18.0371349,11.9173327 C18.5994648,11.3608891 19.5143745,11.3608891 20.0777032,11.9173327 C20.6400331,12.4737762 20.6400331,13.3768731 20.0777032,13.9333167 L12.1691276,21.7504995 L20.0777032,29.5656843 C20.6400331,30.1231269 20.6400331,31.0262238 20.0777032,31.5826673 C19.5143745,32.1391109 18.5994648,32.1391109 18.0371349,31.5826673",
+                                        id: "Chevron",
+                                        "fill-rule": "evenodd"
+                                      }
+                                    })
+                                  ]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "g",
+                              {
+                                attrs: {
+                                  id:
+                                    "Bars-/-Tab-Bar-/-Compact-/-Dark---5-Tabs",
+                                  fill: "none",
+                                  transform: "translate(0.000000, 762.000000)"
+                                }
+                              },
+                              [
+                                _c("g", { attrs: { id: "Background" } }, [
+                                  _c("use", {
+                                    attrs: {
+                                      fill: "black",
+                                      "fill-opacity": "1",
+                                      filter: "url(#filter-11)",
+                                      "xlink:href": "#path-10"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("use", {
+                                    attrs: {
+                                      "fill-opacity": "0.72",
+                                      fill: _vm.colors.barTintColor,
+                                      "fill-rule": "evenodd",
+                                      "xlink:href": "#path-10"
+                                    }
+                                  })
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "g",
+                                  {
+                                    attrs: {
+                                      id:
+                                        "Bars-/-Tab-Bar-/-x-/-Tab-Button-/-Inactive",
+                                      transform:
+                                        "translate(310.200000, 0.000000)",
+                                      fill: "#8E8E93"
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "text",
+                                      {
+                                        attrs: {
+                                          id: "Label",
+                                          "font-size": "10",
+                                          "font-weight": "400",
+                                          "letter-spacing": "-0.2411765"
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "tspan",
+                                          {
+                                            attrs: { x: "13.2191178", y: "44" }
+                                          },
+                                          [_vm._v("Profile")]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "g",
+                                      {
+                                        attrs: {
+                                          id:
+                                            "Glyphs-/-Tab-Bar-/-Favorite-/-Disabled",
+                                          transform:
+                                            "translate(4.000000, 4.000000)",
+                                          "fill-rule": "evenodd"
+                                        }
+                                      },
+                                      [
+                                        _c("path", {
+                                          attrs: {
+                                            d:
+                                              "M24,2.125 C24.4415,2.125 24.883,2.374 25.0465,2.8715 L27.4805,10.281 C27.6265,10.7255 28.0495,11.027 28.527,11.027 L36.4295,11.027 C37.491,11.027 37.936,12.354 37.08,12.969 L30.6665,17.578 C30.285,17.8515 30.126,18.333 30.2705,18.7735 L32.7155,26.216 C32.9635,26.97 32.3505,27.625 31.665,27.625 C31.4485,27.625 31.2245,27.5595 31.0185,27.4115 L24.6505,22.8355 C24.457,22.6965 24.2285,22.627 24,22.627 C23.7715,22.627 23.543,22.6965 23.3495,22.8355 L16.9815,27.4115 C16.7755,27.5595 16.5515,27.625 16.335,27.625 C15.6495,27.625 15.0365,26.97 15.2845,26.216 L17.7295,18.7735 C17.874,18.333 17.715,17.8515 17.3335,17.578 L10.92,12.969 C10.064,12.354 10.509,11.027 11.5705,11.027 L19.473,11.027 C19.9505,11.027 20.3735,10.7255 20.5195,10.281 L22.9535,2.8715 C23.117,2.374 23.5585,2.125 24,2.125 Z",
+                                            id: "Combined-Shape"
+                                          }
+                                        })
+                                      ]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "g",
+                                  {
+                                    attrs: {
+                                      id:
+                                        "Bars-/-Tab-Bar-/-x-/-Tab-Button-/-Inactive",
+                                      transform:
+                                        "translate(236.175000, 0.000000)",
+                                      fill: "#8E8E93"
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "text",
+                                      {
+                                        attrs: {
+                                          id: "Label",
+                                          "font-size": "10",
+                                          "font-weight": "400",
+                                          "letter-spacing": "-0.2411765"
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "tspan",
+                                          {
+                                            attrs: { x: "-1.17942306", y: "44" }
+                                          },
+                                          [_vm._v("Notifications")]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "g",
+                                      {
+                                        attrs: {
+                                          id:
+                                            "Glyphs-/-Tab-Bar-/-Favorite-/-Disabled",
+                                          transform:
+                                            "translate(4.000000, 4.000000)",
+                                          "fill-rule": "evenodd"
+                                        }
+                                      },
+                                      [
+                                        _c("path", {
+                                          attrs: {
+                                            d:
+                                              "M24,2.125 C24.4415,2.125 24.883,2.374 25.0465,2.8715 L27.4805,10.281 C27.6265,10.7255 28.0495,11.027 28.527,11.027 L36.4295,11.027 C37.491,11.027 37.936,12.354 37.08,12.969 L30.6665,17.578 C30.285,17.8515 30.126,18.333 30.2705,18.7735 L32.7155,26.216 C32.9635,26.97 32.3505,27.625 31.665,27.625 C31.4485,27.625 31.2245,27.5595 31.0185,27.4115 L24.6505,22.8355 C24.457,22.6965 24.2285,22.627 24,22.627 C23.7715,22.627 23.543,22.6965 23.3495,22.8355 L16.9815,27.4115 C16.7755,27.5595 16.5515,27.625 16.335,27.625 C15.6495,27.625 15.0365,26.97 15.2845,26.216 L17.7295,18.7735 C17.874,18.333 17.715,17.8515 17.3335,17.578 L10.92,12.969 C10.064,12.354 10.509,11.027 11.5705,11.027 L19.473,11.027 C19.9505,11.027 20.3735,10.7255 20.5195,10.281 L22.9535,2.8715 C23.117,2.374 23.5585,2.125 24,2.125 Z",
+                                            id: "Combined-Shape"
+                                          }
+                                        })
+                                      ]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "g",
+                                  {
+                                    attrs: {
+                                      id:
+                                        "Bars-/-Tab-Bar-/-x-/-Tab-Button-/-On-Dark---Active",
+                                      transform:
+                                        "translate(159.800000, 0.000000)",
+                                      fill: _vm.colors.tintColor
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "text",
+                                      {
+                                        attrs: {
+                                          id: "Label",
+                                          "font-size": "10",
+                                          "font-weight": "400",
+                                          "letter-spacing": "-0.2411765"
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "tspan",
+                                          {
+                                            attrs: { x: "10.6571233", y: "44" }
+                                          },
+                                          [_vm._v("Forums")]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "g",
+                                      {
+                                        attrs: {
+                                          id:
+                                            "Glyphs-/-Tab-Bar-/-Favorite-/-Dark",
+                                          transform:
+                                            "translate(4.000000, 4.000000)",
+                                          "fill-rule": "evenodd"
+                                        }
+                                      },
+                                      [
+                                        _c("path", {
+                                          attrs: {
+                                            d:
+                                              "M24,2.125 C24.4415,2.125 24.883,2.374 25.0465,2.8715 L27.4805,10.281 C27.6265,10.7255 28.0495,11.027 28.527,11.027 L36.4295,11.027 C37.491,11.027 37.936,12.354 37.08,12.969 L30.6665,17.578 C30.285,17.8515 30.126,18.333 30.2705,18.7735 L32.7155,26.216 C32.9635,26.97 32.3505,27.625 31.665,27.625 C31.4485,27.625 31.2245,27.5595 31.0185,27.4115 L24.6505,22.8355 C24.457,22.6965 24.2285,22.627 24,22.627 C23.7715,22.627 23.543,22.6965 23.3495,22.8355 L16.9815,27.4115 C16.7755,27.5595 16.5515,27.625 16.335,27.625 C15.6495,27.625 15.0365,26.97 15.2845,26.216 L17.7295,18.7735 C17.874,18.333 17.715,17.8515 17.3335,17.578 L10.92,12.969 C10.064,12.354 10.509,11.027 11.5705,11.027 L19.473,11.027 C19.9505,11.027 20.3735,10.7255 20.5195,10.281 L22.9535,2.8715 C23.117,2.374 23.5585,2.125 24,2.125 Z",
+                                            id: "Combined-Shape"
+                                          }
+                                        })
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "g",
+                                      {
+                                        staticClass: "eyedropper",
+                                        attrs: {
+                                          transform: "translate(40, 0)",
+                                          stroke: "none",
+                                          "stroke-width": "1",
+                                          fill: "none",
+                                          "fill-rule": "evenodd"
+                                        },
+                                        on: {
+                                          click: function($event) {
+                                            _vm.selectColorFor("tintColor")
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c("circle", {
+                                          attrs: {
+                                            id: "Oval",
+                                            fill: "#445CD3",
+                                            cx: "10",
+                                            cy: "10",
+                                            r: "10"
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _c("path", {
+                                          attrs: {
+                                            d:
+                                              "M13.948,7.552 C13.607,7.852 13.5715,8.371 13.8715,8.714 L13.252,9.2555 L10.544,6.1565 L11.1635,5.6155 C11.463,5.9575 11.9825,5.992 12.3235,5.6925 L13.9465,4.3045 C14.1815,4.101 14.4705,4 14.759,4 C15.449,4 16,4.564 16,5.2355 C16,5.6005 15.839,5.932 15.573,6.1645 L13.948,7.552 Z M10.4765,9.5 L9.2265,9.5 L11.0075,7.9385 L10.465,7.3185 L6.7955,10.512 C6.201,11.0285 6.6115,11.4275 6.1215,12.1095 C6.055,12.2025 6.0165,12.2955 6.006,12.3845 C5.973,12.6545 6.1685,12.882 6.4145,12.9125 C6.5115,12.924 6.6195,12.905 6.7225,12.844 C7.4975,12.388 7.8115,12.9025 8.4205,12.3705 L12.0905,9.1785 L11.55,8.558 L10.4765,9.5 Z M5.9235,13.25 C5.656,14.2765 5,14.4175 5,15.092 C5,15.5935 5.417,16 5.9235,16 C6.43,16 6.8405,15.5935 6.8405,15.092 C6.8405,14.4175 6.191,14.2765 5.9235,13.25 Z",
+                                            id: "Shape",
+                                            fill: "#FFFFFF",
+                                            "fill-rule": "nonzero"
+                                          }
+                                        })
+                                      ]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "g",
+                                  {
+                                    attrs: {
+                                      id:
+                                        "Bars-/-Tab-Bar-/-x-/-Tab-Button-/-Inactive",
+                                      transform:
+                                        "translate(84.600000, 0.000000)",
+                                      fill: "#8E8E93"
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "text",
+                                      {
+                                        attrs: {
+                                          id: "Label",
+                                          "font-size": "10",
+                                          "font-weight": "400",
+                                          "letter-spacing": "-0.2411765"
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "tspan",
+                                          {
+                                            attrs: { x: "11.8763443", y: "44" }
+                                          },
+                                          [_vm._v("Library")]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "g",
+                                      {
+                                        attrs: {
+                                          id:
+                                            "Glyphs-/-Tab-Bar-/-Favorite-/-Disabled",
+                                          transform:
+                                            "translate(4.000000, 4.000000)",
+                                          "fill-rule": "evenodd"
+                                        }
+                                      },
+                                      [
+                                        _c("path", {
+                                          attrs: {
+                                            d:
+                                              "M24,2.125 C24.4415,2.125 24.883,2.374 25.0465,2.8715 L27.4805,10.281 C27.6265,10.7255 28.0495,11.027 28.527,11.027 L36.4295,11.027 C37.491,11.027 37.936,12.354 37.08,12.969 L30.6665,17.578 C30.285,17.8515 30.126,18.333 30.2705,18.7735 L32.7155,26.216 C32.9635,26.97 32.3505,27.625 31.665,27.625 C31.4485,27.625 31.2245,27.5595 31.0185,27.4115 L24.6505,22.8355 C24.457,22.6965 24.2285,22.627 24,22.627 C23.7715,22.627 23.543,22.6965 23.3495,22.8355 L16.9815,27.4115 C16.7755,27.5595 16.5515,27.625 16.335,27.625 C15.6495,27.625 15.0365,26.97 15.2845,26.216 L17.7295,18.7735 C17.874,18.333 17.715,17.8515 17.3335,17.578 L10.92,12.969 C10.064,12.354 10.509,11.027 11.5705,11.027 L19.473,11.027 C19.9505,11.027 20.3735,10.7255 20.5195,10.281 L22.9535,2.8715 C23.117,2.374 23.5585,2.125 24,2.125 Z",
+                                            id: "Combined-Shape"
+                                          }
+                                        })
+                                      ]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "g",
+                                  {
+                                    attrs: {
+                                      id:
+                                        "Bars-/-Tab-Bar-/-x-/-Tab-Button-/-Inactive",
+                                      transform:
+                                        "translate(9.400000, 0.000000)",
+                                      fill: "#8E8E93"
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "text",
+                                      {
+                                        attrs: {
+                                          id: "Label",
+                                          "font-size": "10",
+                                          "font-weight": "400",
+                                          "letter-spacing": "-0.2411765"
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "tspan",
+                                          {
+                                            attrs: { x: "14.329521", y: "44" }
+                                          },
+                                          [_vm._v("Home")]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "g",
+                                      {
+                                        attrs: {
+                                          id:
+                                            "Glyphs-/-Tab-Bar-/-Favorite-/-Disabled",
+                                          transform:
+                                            "translate(4.000000, 4.000000)",
+                                          "fill-rule": "evenodd"
+                                        }
+                                      },
+                                      [
+                                        _c("path", {
+                                          attrs: {
+                                            d:
+                                              "M24,2.125 C24.4415,2.125 24.883,2.374 25.0465,2.8715 L27.4805,10.281 C27.6265,10.7255 28.0495,11.027 28.527,11.027 L36.4295,11.027 C37.491,11.027 37.936,12.354 37.08,12.969 L30.6665,17.578 C30.285,17.8515 30.126,18.333 30.2705,18.7735 L32.7155,26.216 C32.9635,26.97 32.3505,27.625 31.665,27.625 C31.4485,27.625 31.2245,27.5595 31.0185,27.4115 L24.6505,22.8355 C24.457,22.6965 24.2285,22.627 24,22.627 C23.7715,22.627 23.543,22.6965 23.3495,22.8355 L16.9815,27.4115 C16.7755,27.5595 16.5515,27.625 16.335,27.625 C15.6495,27.625 15.0365,26.97 15.2845,26.216 L17.7295,18.7735 C17.874,18.333 17.715,17.8515 17.3335,17.578 L10.92,12.969 C10.064,12.354 10.509,11.027 11.5705,11.027 L19.473,11.027 C19.9505,11.027 20.3735,10.7255 20.5195,10.281 L22.9535,2.8715 C23.117,2.374 23.5585,2.125 24,2.125 Z",
+                                            id: "Combined-Shape"
+                                          }
+                                        })
+                                      ]
+                                    )
+                                  ]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "g",
+                              {
+                                attrs: {
+                                  id: "Bars-/-Status-Bar-/-iPhone-/-On-Dark",
+                                  fill: "none",
+                                  transform: "translate(1.000000, 0.000000)"
+                                }
+                              },
+                              [
+                                _c(
+                                  "g",
+                                  {
+                                    attrs: {
+                                      id: "Battery",
+                                      "stroke-width": "1",
+                                      "fill-rule": "evenodd",
+                                      transform:
+                                        "translate(336.000000, 17.000000)"
+                                    }
+                                  },
+                                  [
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M3.7518137,0.833333333 C2.74354052,0.833333333 2.34483914,0.910326123 1.9333052,1.13041688 C1.58587152,1.31622645 1.31619311,1.58590485 1.13038355,1.93333853 C0.910292789,2.34487247 0.8333,2.74357386 0.8333,3.75184704 L0.8333,8.24815296 C0.8333,9.25642614 0.910292789,9.65512753 1.13038355,10.0666615 C1.31619311,10.4140951 1.58587152,10.6837736 1.9333052,10.8695831 C2.34483914,11.0896739 2.74354052,11.1666667 3.7518137,11.1666667 L18.9147863,11.1666667 C19.9230595,11.1666667 20.3217609,11.0896739 20.7332948,10.8695831 C21.0807285,10.6837736 21.3504069,10.4140951 21.5362165,10.0666615 C21.7563072,9.65512753 21.8333,9.25642614 21.8333,8.24815296 L21.8333,3.75184704 C21.8333,2.74357386 21.7563072,2.34487247 21.5362165,1.93333853 C21.3504069,1.58590485 21.0807285,1.31622645 20.7332948,1.13041688 C20.3217609,0.910326123 19.9230595,0.833333333 18.9147863,0.833333333 L3.7518137,0.833333333 Z",
+                                        id: "Border",
+                                        fill: _vm.colors.statusBarStyle,
+                                        opacity: "0.35"
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M23.3333,4 L23.3333,8 C24.1380311,7.66122348 24.661338,6.87313328 24.661338,6 C24.661338,5.12686672 24.1380311,4.33877652 23.3333,4",
+                                        id: "Cap",
+                                        fill: _vm.colors.statusBarStyle,
+                                        "fill-rule": "nonzero",
+                                        opacity: "0.4"
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M4.04255685,2.33333333 L18.6240431,2.33333333 C19.218389,2.33333333 19.4339132,2.39521708 19.6511971,2.51142181 C19.8684811,2.62762654 20.0390068,2.79815226 20.1552115,3.01543622 C20.2714163,3.23272018 20.3333,3.44824434 20.3333,4.04259018 L20.3333,7.95740982 C20.3333,8.55175566 20.2714163,8.76727982 20.1552115,8.98456378 C20.0390068,9.20184774 19.8684811,9.37237346 19.6511971,9.48857819 C19.4339132,9.60478292 19.218389,9.66666667 18.6240431,9.66666667 L4.04255685,9.66666667 C3.44821101,9.66666667 3.23268684,9.60478292 3.01540288,9.48857819 C2.79811893,9.37237346 2.62759321,9.20184774 2.51138847,8.98456378 C2.39518374,8.76727982 2.3333,8.55175566 2.3333,7.95740982 L2.3333,4.04259018 C2.3333,3.44824434 2.39518374,3.23272018 2.51138847,3.01543622 C2.62759321,2.79815226 2.79811893,2.62762654 3.01540288,2.51142181 C3.23268684,2.39521708 3.44821101,2.33333333 4.04255685,2.33333333 Z",
+                                        id: "Capacity",
+                                        fill: _vm.colors.statusBarStyle,
+                                        "fill-rule": "nonzero"
+                                      }
+                                    })
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c("path", {
+                                  attrs: {
+                                    d:
+                                      "M323.667069,19.6151501 C325.891802,19.6152475 328.031463,20.4693583 329.643817,22.0009506 C329.765231,22.1191953 329.959299,22.1177037 330.078879,21.9976068 L331.23949,20.8272772 C331.300039,20.7663644 331.333797,20.6838545 331.333294,20.5980054 C331.332792,20.5121564 331.29807,20.4300466 331.236813,20.3698455 C327.0049,16.3176151 320.328569,16.3176151 316.096657,20.3698455 C316.035354,20.4300019 316.000572,20.5120868 316.000007,20.5979359 C315.999442,20.6837851 316.03314,20.7663201 316.093645,20.8272772 L317.254591,21.9976068 C317.374094,22.117885 317.568312,22.1193777 317.689653,22.0009506 C319.302212,20.4692577 321.442119,19.6151445 323.667069,19.6151501 L323.667069,19.6151501 Z M323.667069,23.4227339 C324.889415,23.4226591 326.068141,23.8766124 326.97421,24.6963869 C327.09676,24.8127317 327.289808,24.8102093 327.409272,24.6907025 L328.568544,23.5203729 C328.629594,23.4589857 328.663468,23.3757088 328.662588,23.2891732 C328.661707,23.2026376 328.626146,23.120066 328.563859,23.0599317 C325.804697,20.4955232 321.531784,20.4955232 318.772622,23.0599317 C318.710297,23.1200652 318.674737,23.2026782 318.67392,23.2892418 C318.673102,23.3758053 318.707094,23.4590744 318.768272,23.5203729 L319.92721,24.6907025 C320.046673,24.8102093 320.239722,24.8127317 320.362272,24.6963869 C321.267742,23.877154 322.445531,23.4232396 323.667069,23.4227339 L323.667069,23.4227339 Z M325.894921,26.2158092 C325.956921,26.1550129 325.991064,26.0713489 325.989291,25.9845705 C325.987517,25.897792 325.949983,25.8155907 325.885551,25.7573743 C324.604891,24.6751031 322.729248,24.6751031 321.448588,25.7573743 C321.384111,25.8155439 321.346516,25.8977193 321.344679,25.9844982 C321.342841,26.0712771 321.376925,26.1549675 321.438883,26.2158092 L323.444518,28.2378044 C323.503302,28.2972294 323.583446,28.3306727 323.667069,28.3306727 C323.750693,28.3306727 323.830837,28.2972294 323.88962,28.2378044 L325.894921,26.2158092 Z",
+                                    id: "Wifi",
+                                    fill: _vm.colors.statusBarStyle,
+                                    "fill-rule": "nonzero"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("path", {
+                                  attrs: {
+                                    d:
+                                      "M295,24.3333337 L296,24.3333337 C296.552285,24.3333337 297,24.7810489 297,25.3333337 L297,27.3333337 C297,27.8856184 296.552285,28.3333337 296,28.3333337 L295,28.3333337 C294.447715,28.3333337 294,27.8856184 294,27.3333337 L294,25.3333337 C294,24.7810489 294.447715,24.3333337 295,24.3333337 L295,24.3333337 Z M299.666667,22.3333337 L300.666667,22.3333337 C301.218951,22.3333337 301.666667,22.7810489 301.666667,23.3333337 L301.666667,27.3333337 C301.666667,27.8856184 301.218951,28.3333337 300.666667,28.3333337 L299.666667,28.3333337 C299.114382,28.3333337 298.666667,27.8856184 298.666667,27.3333337 L298.666667,23.3333337 C298.666667,22.7810489 299.114382,22.3333337 299.666667,22.3333337 Z M304.333333,20.0000003 L305.333333,20.0000003 C305.885618,20.0000003 306.333333,20.4477156 306.333333,21.0000003 L306.333333,27.3333337 C306.333333,27.8856184 305.885618,28.3333337 305.333333,28.3333337 L304.333333,28.3333337 C303.781049,28.3333337 303.333333,27.8856184 303.333333,27.3333337 L303.333333,21.0000003 C303.333333,20.4477156 303.781049,20.0000003 304.333333,20.0000003 Z M309,17.666667 L310,17.666667 C310.552285,17.666667 311,18.1143823 311,18.666667 L311,27.3333337 C311,27.8856184 310.552285,28.3333337 310,28.3333337 L309,28.3333337 C308.447715,28.3333337 308,27.8856184 308,27.3333337 L308,18.666667 C308,18.1143823 308.447715,17.666667 309,17.666667 L309,17.666667 Z",
+                                    id: "Cellular-Connection",
+                                    fill: _vm.colors.statusBarStyle,
+                                    "fill-rule": "nonzero"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "g",
+                                  {
+                                    attrs: {
+                                      id:
+                                        "Bars-/-Status-Bar-/-iPhone-/-x-/-Time---On-Dark",
+                                      transform:
+                                        "translate(21.000000, 9.000000)",
+                                      fill: _vm.colors.statusBarStyle,
+                                      "font-size": "15",
+                                      "font-weight": "500",
+                                      "letter-spacing": "-0.3"
+                                    }
+                                  },
+                                  [
+                                    _c("text", { attrs: { id: "Time" } }, [
+                                      _c(
+                                        "tspan",
+                                        {
+                                          attrs: {
+                                            x: "11.4867188",
+                                            y: "19.3299999"
+                                          }
+                                        },
+                                        [_vm._v("9:41")]
+                                      )
+                                    ])
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "g",
+                                  {
+                                    staticClass: "eyedropper",
+                                    attrs: {
+                                      transform: "translate(10, 15)",
+                                      stroke: "none",
+                                      "stroke-width": "1",
+                                      fill: "none",
+                                      "fill-rule": "evenodd"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        _vm.switchStatusBarStyle()
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("circle", {
+                                      attrs: {
+                                        id: "Oval",
+                                        fill: "#445CD3",
+                                        cx: "10",
+                                        cy: "10",
+                                        r: "10"
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("path", {
+                                      attrs: {
+                                        d:
+                                          "M13.948,7.552 C13.607,7.852 13.5715,8.371 13.8715,8.714 L13.252,9.2555 L10.544,6.1565 L11.1635,5.6155 C11.463,5.9575 11.9825,5.992 12.3235,5.6925 L13.9465,4.3045 C14.1815,4.101 14.4705,4 14.759,4 C15.449,4 16,4.564 16,5.2355 C16,5.6005 15.839,5.932 15.573,6.1645 L13.948,7.552 Z M10.4765,9.5 L9.2265,9.5 L11.0075,7.9385 L10.465,7.3185 L6.7955,10.512 C6.201,11.0285 6.6115,11.4275 6.1215,12.1095 C6.055,12.2025 6.0165,12.2955 6.006,12.3845 C5.973,12.6545 6.1685,12.882 6.4145,12.9125 C6.5115,12.924 6.6195,12.905 6.7225,12.844 C7.4975,12.388 7.8115,12.9025 8.4205,12.3705 L12.0905,9.1785 L11.55,8.558 L10.4765,9.5 Z M5.9235,13.25 C5.656,14.2765 5,14.4175 5,15.092 C5,15.5935 5.417,16 5.9235,16 C6.43,16 6.8405,15.5935 6.8405,15.092 C6.8405,14.4175 6.191,14.2765 5.9235,13.25 Z",
+                                        id: "Shape",
+                                        fill: "#FFFFFF",
+                                        "fill-rule": "nonzero"
+                                      }
+                                    })
+                                  ]
+                                )
+                              ]
+                            )
+                          ]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M103.598361,16 L302.598361,16 L302.598361,16 C302.598361,32.5685425 289.166903,46 272.598361,46 L133.598361,46 C117.029818,46 103.598361,32.5685425 103.598361,16 L103.598361,16 Z",
+                        id: "bar",
+                        fill: "#070707"
+                      }
+                    })
+                  ]
+                )
+              ]
+            )
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "modal", attrs: { id: "colorModal" } }, [
+      _c("div", { staticClass: "modal-background" }),
+      _vm._v(" "),
+      _c("div", { staticClass: "modal-content" }, [
+        _c("div", { staticClass: "box" }, [
+          _c("div", { attrs: { id: "color-picker-container" } }),
+          _vm._v(" "),
+          _c("hr"),
+          _vm._v(" "),
+          _c("div", { staticClass: "columns" }, [
+            _c("div", { staticClass: "column is-two-thirds" }, [
+              _c("div", { staticClass: "field is-horizontal" }, [
+                _vm._m(0),
+                _vm._v(" "),
+                _c("div", { staticClass: "field-body" }, [
+                  _c("div", { staticClass: "field" }, [
+                    _c("p", { staticClass: "control" }, [
+                      _c("input", {
+                        staticClass: "input is-rounded",
+                        attrs: { type: "text", id: "colorInput" },
+                        domProps: { value: _vm.getSelectedColor },
+                        on: { change: _vm.updateColorFromInput }
+                      })
+                    ])
+                  ])
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "column is-one-third" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "button is-success is-fullwidth",
+                  on: { click: _vm.saveSelectedColor }
+                },
+                [_vm._v("Save")]
+              )
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("button", {
+        staticClass: "modal-close is-large",
+        attrs: { "aria-label": "close" },
+        on: { click: _vm.closeColorPicker }
+      })
+    ]),
+    _vm._v(" "),
+    _c(
+      "form",
+      {
+        attrs: {
+          method: "POST",
+          action: _vm.submit_url,
+          id: "submit-theme-form"
+        }
+      },
+      _vm._l(_vm.colors, function(value, propertyName) {
+        return _c("input", {
+          attrs: { type: "hidden", name: propertyName },
+          domProps: { value: value }
+        })
+      })
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "field-label is-normal" }, [
+      _c("label", { staticClass: "label" }, [_vm._v("Hex")])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-3a6a7b10", module.exports)
+  }
+}
+
+/***/ }),
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11083,10 +13672,10 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(4).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(13).setImmediate))
 
 /***/ }),
-/* 4 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
@@ -11142,7 +13731,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(5);
+__webpack_require__(14);
 // On some exotic environments, it's not clear which object `setimmediate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -11156,7 +13745,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 5 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -11346,10 +13935,10 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(15)))
 
 /***/ }),
-/* 6 */
+/* 15 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -11539,2404 +14128,10 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(15)
-}
-var normalizeComponent = __webpack_require__(8)
-/* script */
-var __vue_script__ = __webpack_require__(19)
-/* template */
-var __vue_template__ = __webpack_require__(20)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = "data-v-3a6a7b10"
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources/js/components/ThemeRoller.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3a6a7b10", Component.options)
-  } else {
-    hotAPI.reload("data-v-3a6a7b10", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-/* globals __VUE_SSR_CONTEXT__ */
-
-// IMPORTANT: Do NOT use ES2015 features in this file.
-// This module is a runtime utility for cleaner component module output and will
-// be included in the final webpack user bundle.
-
-module.exports = function normalizeComponent (
-  rawScriptExports,
-  compiledTemplate,
-  functionalTemplate,
-  injectStyles,
-  scopeId,
-  moduleIdentifier /* server only */
-) {
-  var esModule
-  var scriptExports = rawScriptExports = rawScriptExports || {}
-
-  // ES6 modules interop
-  var type = typeof rawScriptExports.default
-  if (type === 'object' || type === 'function') {
-    esModule = rawScriptExports
-    scriptExports = rawScriptExports.default
-  }
-
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (compiledTemplate) {
-    options.render = compiledTemplate.render
-    options.staticRenderFns = compiledTemplate.staticRenderFns
-    options._compiled = true
-  }
-
-  // functional template
-  if (functionalTemplate) {
-    options.functional = true
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = scopeId
-  }
-
-  var hook
-  if (moduleIdentifier) { // server build
-    hook = function (context) {
-      // 2.3 injection
-      context =
-        context || // cached call
-        (this.$vnode && this.$vnode.ssrContext) || // stateful
-        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
-      // 2.2 with runInNewContext: true
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__
-      }
-      // inject component styles
-      if (injectStyles) {
-        injectStyles.call(this, context)
-      }
-      // register component module identifier for async chunk inferrence
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier)
-      }
-    }
-    // used by ssr in case component is cached and beforeCreate
-    // never gets called
-    options._ssrRegister = hook
-  } else if (injectStyles) {
-    hook = injectStyles
-  }
-
-  if (hook) {
-    var functional = options.functional
-    var existing = functional
-      ? options.render
-      : options.beforeCreate
-
-    if (!functional) {
-      // inject component registration as beforeCreate hook
-      options.beforeCreate = existing
-        ? [].concat(existing, hook)
-        : [hook]
-    } else {
-      // for template-only hot-reload because in that case the render fn doesn't
-      // go through the normalizer
-      options._injectStyles = hook
-      // register for functioal component in vue file
-      options.render = function renderWithStyleInjection (h, context) {
-        hook.call(context)
-        return existing(h, context)
-      }
-    }
-  }
-
-  return {
-    esModule: esModule,
-    exports: scriptExports,
-    options: options
-  }
-}
-
-
-/***/ }),
-/* 9 */
+/* 16 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 10 */,
-/* 11 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		return this.map(function (item) {
-			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
-				return "@media " + item[2] + "{" + content + "}";
-			} else {
-				return content;
-			}
-		}).join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-function cssWithMappingToString(item, useSourceMap) {
-	var content = item[1] || '';
-	var cssMapping = item[3];
-	if (!cssMapping) {
-		return content;
-	}
-
-	if (useSourceMap && typeof btoa === 'function') {
-		var sourceMapping = toComment(cssMapping);
-		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
-		});
-
-		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-	}
-
-	return [content].join('\n');
-}
-
-// Adapted from convert-source-map (MIT)
-function toComment(sourceMap) {
-	// eslint-disable-next-line no-undef
-	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
-
-	return '/*# ' + data + ' */';
-}
-
-
-/***/ }),
-/* 12 */,
-/* 13 */,
-/* 14 */,
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(16);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(17)("1e784620", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3a6a7b10\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ThemeRoller.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3a6a7b10\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ThemeRoller.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(11)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n#iphoneX[data-v-3a6a7b10] {\n    display: block;\n    margin: 0 auto;\n}\n#color-picker-container[data-v-3a6a7b10] {\n    display: block;\n    margin: 0 auto;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
-  MIT License http://www.opensource.org/licenses/mit-license.php
-  Author Tobias Koppers @sokra
-  Modified by Evan You @yyx990803
-*/
-
-var hasDocument = typeof document !== 'undefined'
-
-if (typeof DEBUG !== 'undefined' && DEBUG) {
-  if (!hasDocument) {
-    throw new Error(
-    'vue-style-loader cannot be used in a non-browser environment. ' +
-    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
-  ) }
-}
-
-var listToStyles = __webpack_require__(18)
-
-/*
-type StyleObject = {
-  id: number;
-  parts: Array<StyleObjectPart>
-}
-
-type StyleObjectPart = {
-  css: string;
-  media: string;
-  sourceMap: ?string
-}
-*/
-
-var stylesInDom = {/*
-  [id: number]: {
-    id: number,
-    refs: number,
-    parts: Array<(obj?: StyleObjectPart) => void>
-  }
-*/}
-
-var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
-var singletonElement = null
-var singletonCounter = 0
-var isProduction = false
-var noop = function () {}
-var options = null
-var ssrIdKey = 'data-vue-ssr-id'
-
-// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-// tags it will allow on a page
-var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
-
-module.exports = function (parentId, list, _isProduction, _options) {
-  isProduction = _isProduction
-
-  options = _options || {}
-
-  var styles = listToStyles(parentId, list)
-  addStylesToDom(styles)
-
-  return function update (newList) {
-    var mayRemove = []
-    for (var i = 0; i < styles.length; i++) {
-      var item = styles[i]
-      var domStyle = stylesInDom[item.id]
-      domStyle.refs--
-      mayRemove.push(domStyle)
-    }
-    if (newList) {
-      styles = listToStyles(parentId, newList)
-      addStylesToDom(styles)
-    } else {
-      styles = []
-    }
-    for (var i = 0; i < mayRemove.length; i++) {
-      var domStyle = mayRemove[i]
-      if (domStyle.refs === 0) {
-        for (var j = 0; j < domStyle.parts.length; j++) {
-          domStyle.parts[j]()
-        }
-        delete stylesInDom[domStyle.id]
-      }
-    }
-  }
-}
-
-function addStylesToDom (styles /* Array<StyleObject> */) {
-  for (var i = 0; i < styles.length; i++) {
-    var item = styles[i]
-    var domStyle = stylesInDom[item.id]
-    if (domStyle) {
-      domStyle.refs++
-      for (var j = 0; j < domStyle.parts.length; j++) {
-        domStyle.parts[j](item.parts[j])
-      }
-      for (; j < item.parts.length; j++) {
-        domStyle.parts.push(addStyle(item.parts[j]))
-      }
-      if (domStyle.parts.length > item.parts.length) {
-        domStyle.parts.length = item.parts.length
-      }
-    } else {
-      var parts = []
-      for (var j = 0; j < item.parts.length; j++) {
-        parts.push(addStyle(item.parts[j]))
-      }
-      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
-    }
-  }
-}
-
-function createStyleElement () {
-  var styleElement = document.createElement('style')
-  styleElement.type = 'text/css'
-  head.appendChild(styleElement)
-  return styleElement
-}
-
-function addStyle (obj /* StyleObjectPart */) {
-  var update, remove
-  var styleElement = document.querySelector('style[' + ssrIdKey + '~="' + obj.id + '"]')
-
-  if (styleElement) {
-    if (isProduction) {
-      // has SSR styles and in production mode.
-      // simply do nothing.
-      return noop
-    } else {
-      // has SSR styles but in dev mode.
-      // for some reason Chrome can't handle source map in server-rendered
-      // style tags - source maps in <style> only works if the style tag is
-      // created and inserted dynamically. So we remove the server rendered
-      // styles and inject new ones.
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  if (isOldIE) {
-    // use singleton mode for IE9.
-    var styleIndex = singletonCounter++
-    styleElement = singletonElement || (singletonElement = createStyleElement())
-    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
-    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
-  } else {
-    // use multi-style-tag mode in all other cases
-    styleElement = createStyleElement()
-    update = applyToTag.bind(null, styleElement)
-    remove = function () {
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  update(obj)
-
-  return function updateStyle (newObj /* StyleObjectPart */) {
-    if (newObj) {
-      if (newObj.css === obj.css &&
-          newObj.media === obj.media &&
-          newObj.sourceMap === obj.sourceMap) {
-        return
-      }
-      update(obj = newObj)
-    } else {
-      remove()
-    }
-  }
-}
-
-var replaceText = (function () {
-  var textStore = []
-
-  return function (index, replacement) {
-    textStore[index] = replacement
-    return textStore.filter(Boolean).join('\n')
-  }
-})()
-
-function applyToSingletonTag (styleElement, index, remove, obj) {
-  var css = remove ? '' : obj.css
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = replaceText(index, css)
-  } else {
-    var cssNode = document.createTextNode(css)
-    var childNodes = styleElement.childNodes
-    if (childNodes[index]) styleElement.removeChild(childNodes[index])
-    if (childNodes.length) {
-      styleElement.insertBefore(cssNode, childNodes[index])
-    } else {
-      styleElement.appendChild(cssNode)
-    }
-  }
-}
-
-function applyToTag (styleElement, obj) {
-  var css = obj.css
-  var media = obj.media
-  var sourceMap = obj.sourceMap
-
-  if (media) {
-    styleElement.setAttribute('media', media)
-  }
-  if (options.ssrId) {
-    styleElement.setAttribute(ssrIdKey, obj.id)
-  }
-
-  if (sourceMap) {
-    // https://developer.chrome.com/devtools/docs/javascript-debugging
-    // this makes source maps inside style tags work properly in Chrome
-    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
-    // http://stackoverflow.com/a/26603875
-    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
-  }
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = css
-  } else {
-    while (styleElement.firstChild) {
-      styleElement.removeChild(styleElement.firstChild)
-    }
-    styleElement.appendChild(document.createTextNode(css))
-  }
-}
-
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports) {
-
-/**
- * Translates the list format produced by css-loader into something
- * easier to manipulate.
- */
-module.exports = function listToStyles (parentId, list) {
-  var styles = []
-  var newStyles = {}
-  for (var i = 0; i < list.length; i++) {
-    var item = list[i]
-    var id = item[0]
-    var css = item[1]
-    var media = item[2]
-    var sourceMap = item[3]
-    var part = {
-      id: parentId + ':' + i,
-      css: css,
-      media: media,
-      sourceMap: sourceMap
-    }
-    if (!newStyles[id]) {
-      styles.push(newStyles[id] = { id: id, parts: [part] })
-    } else {
-      newStyles[id].parts.push(part)
-    }
-  }
-  return styles
-}
-
-
-/***/ }),
-/* 19 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    data: function data() {
-        return {
-            colorPicker: null,
-            selectingFor: null,
-
-            colors: {
-                button: '#ff0000',
-                background: '#353a50',
-                contentTextColor: '#B7B9C1',
-                barTitleTextColor: '#ffffff',
-                forumsTitleTextColor: '#ffffff',
-                tintColor: '#FF9300',
-                barTintColor: '#FF9300'
-            }
-        };
-    },
-
-
-    computed: {
-        getSelectedColor: function getSelectedColor() {
-            return this.colorPicker.color.hexString;
-        }
-    },
-
-    created: function created() {
-        // Initialize the colorpicker
-        this.colorPicker = new iro.ColorPicker('#color-picker-container', {
-            width: 300,
-            color: '#f00'
-        });
-    },
-
-
-    methods: {
-        // Opens the colorpicker for a component
-        selectColorFor: function selectColorFor(component) {
-            this.selectingFor = component;
-
-            // Set the picked color in the picker
-            this.colorPicker.color.hexString = this.colors[this.selectingFor];
-
-            // Show the picker
-            $('#colorModal').addClass('is-active');
-        },
-
-
-        // Saves the selected color in the colorpicker
-        saveSelectedColor: function saveSelectedColor() {
-            // Write the new color
-            var newColor = this.colorPicker.color.hexString;
-
-            this.colors[this.selectingFor] = newColor;
-
-            // Close the picker
-            this.closeColorPicker();
-        },
-
-
-        // Closes the color picker
-        closeColorPicker: function closeColorPicker() {
-            $('#colorModal').removeClass('is-active');
-        },
-
-
-        // Updates the colorpicker with the value from the input
-        updateColorFromInput: function updateColorFromInput() {
-            this.colorPicker.color.hexString = $('#colorInput').val();
-        }
-    }
-});
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "svg",
-      {
-        attrs: {
-          id: "iphoneX",
-          width: "469px",
-          height: "921px",
-          viewBox: "0 0 469 921",
-          version: "1.1",
-          xmlns: "http://www.w3.org/2000/svg",
-          "xmlns:xlink": "http://www.w3.org/1999/xlink"
-        }
-      },
-      [
-        _c("defs", [
-          _c("rect", {
-            attrs: {
-              id: "path-1",
-              x: "0.598360656",
-              y: "0",
-              width: "407",
-              height: "843",
-              rx: "50"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "filter",
-            {
-              attrs: {
-                x: "-34.9%",
-                y: "-10.9%",
-                width: "169.8%",
-                height: "133.7%",
-                filterUnits: "objectBoundingBox",
-                id: "filter-2"
-              }
-            },
-            [
-              _c("feOffset", {
-                attrs: {
-                  dx: "0",
-                  dy: "50",
-                  in: "SourceAlpha",
-                  result: "shadowOffsetOuter1"
-                }
-              }),
-              _vm._v(" "),
-              _c("feGaussianBlur", {
-                attrs: {
-                  stdDeviation: "39",
-                  in: "shadowOffsetOuter1",
-                  result: "shadowBlurOuter1"
-                }
-              }),
-              _vm._v(" "),
-              _c("feColorMatrix", {
-                attrs: {
-                  values: "0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.4 0",
-                  type: "matrix",
-                  in: "shadowBlurOuter1",
-                  result: "shadowMatrixOuter1"
-                }
-              }),
-              _vm._v(" "),
-              _c("feOffset", {
-                attrs: {
-                  dx: "0",
-                  dy: "8",
-                  in: "SourceAlpha",
-                  result: "shadowOffsetOuter2"
-                }
-              }),
-              _vm._v(" "),
-              _c("feGaussianBlur", {
-                attrs: {
-                  stdDeviation: "14",
-                  in: "shadowOffsetOuter2",
-                  result: "shadowBlurOuter2"
-                }
-              }),
-              _vm._v(" "),
-              _c("feColorMatrix", {
-                attrs: {
-                  values: "0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.34 0",
-                  type: "matrix",
-                  in: "shadowBlurOuter2",
-                  result: "shadowMatrixOuter2"
-                }
-              }),
-              _vm._v(" "),
-              _c(
-                "feMerge",
-                [
-                  _c("feMergeNode", { attrs: { in: "shadowMatrixOuter1" } }),
-                  _vm._v(" "),
-                  _c("feMergeNode", { attrs: { in: "shadowMatrixOuter2" } })
-                ],
-                1
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "filter",
-            {
-              attrs: {
-                x: "-25.1%",
-                y: "-6.2%",
-                width: "150.1%",
-                height: "124.2%",
-                filterUnits: "objectBoundingBox",
-                id: "filter-3"
-              }
-            },
-            [
-              _c("feGaussianBlur", {
-                attrs: {
-                  stdDeviation: "15",
-                  in: "SourceAlpha",
-                  result: "shadowBlurInner1"
-                }
-              }),
-              _vm._v(" "),
-              _c("feOffset", {
-                attrs: {
-                  dx: "0",
-                  dy: "-18",
-                  in: "shadowBlurInner1",
-                  result: "shadowOffsetInner1"
-                }
-              }),
-              _vm._v(" "),
-              _c("feComposite", {
-                attrs: {
-                  in: "shadowOffsetInner1",
-                  in2: "SourceAlpha",
-                  operator: "arithmetic",
-                  k2: "-1",
-                  k3: "1",
-                  result: "shadowInnerInner1"
-                }
-              }),
-              _vm._v(" "),
-              _c("feColorMatrix", {
-                attrs: {
-                  values: "0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.12 0",
-                  type: "matrix",
-                  in: "shadowInnerInner1"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c("rect", {
-            attrs: {
-              id: "path-4",
-              x: "17.5983607",
-              y: "19",
-              width: "371",
-              height: "807",
-              rx: "30"
-            }
-          }),
-          _vm._v(" "),
-          _c("rect", {
-            attrs: { id: "path-6", x: "0", y: "0", width: "376", height: "49" }
-          }),
-          _vm._v(" "),
-          _c(
-            "filter",
-            {
-              attrs: {
-                x: "-0.1%",
-                y: "-1.5%",
-                width: "100.1%",
-                height: "102.0%",
-                filterUnits: "objectBoundingBox",
-                id: "filter-7"
-              }
-            },
-            [
-              _c("feOffset", {
-                attrs: {
-                  dx: "0",
-                  dy: "-0.5",
-                  in: "SourceAlpha",
-                  result: "shadowOffsetOuter1"
-                }
-              }),
-              _vm._v(" "),
-              _c("feComposite", {
-                attrs: {
-                  in: "shadowOffsetOuter1",
-                  in2: "SourceAlpha",
-                  operator: "out",
-                  result: "shadowOffsetOuter1"
-                }
-              }),
-              _vm._v(" "),
-              _c("feColorMatrix", {
-                attrs: {
-                  values: "0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.15 0",
-                  type: "matrix",
-                  in: "shadowOffsetOuter1"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c("rect", {
-            attrs: { id: "path-8", x: "0", y: "0", width: "376", height: "88" }
-          }),
-          _vm._v(" "),
-          _c(
-            "filter",
-            {
-              attrs: {
-                x: "-0.1%",
-                y: "-0.3%",
-                width: "100.1%",
-                height: "101.1%",
-                filterUnits: "objectBoundingBox",
-                id: "filter-9"
-              }
-            },
-            [
-              _c("feOffset", {
-                attrs: {
-                  dx: "0",
-                  dy: "0.5",
-                  in: "SourceAlpha",
-                  result: "shadowOffsetOuter1"
-                }
-              }),
-              _vm._v(" "),
-              _c("feComposite", {
-                attrs: {
-                  in: "shadowOffsetOuter1",
-                  in2: "SourceAlpha",
-                  operator: "out",
-                  result: "shadowOffsetOuter1"
-                }
-              }),
-              _vm._v(" "),
-              _c("feColorMatrix", {
-                attrs: {
-                  values: "0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.16 0",
-                  type: "matrix",
-                  in: "shadowOffsetOuter1"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c("rect", {
-            attrs: { id: "path-10", x: "0", y: "0", width: "376", height: "50" }
-          }),
-          _vm._v(" "),
-          _c(
-            "filter",
-            {
-              attrs: {
-                x: "-0.1%",
-                y: "-1.5%",
-                width: "100.1%",
-                height: "102.0%",
-                filterUnits: "objectBoundingBox",
-                id: "filter-11"
-              }
-            },
-            [
-              _c("feOffset", {
-                attrs: {
-                  dx: "0",
-                  dy: "-0.5",
-                  in: "SourceAlpha",
-                  result: "shadowOffsetOuter1"
-                }
-              }),
-              _vm._v(" "),
-              _c("feComposite", {
-                attrs: {
-                  in: "shadowOffsetOuter1",
-                  in2: "SourceAlpha",
-                  operator: "out",
-                  result: "shadowOffsetOuter1"
-                }
-              }),
-              _vm._v(" "),
-              _c("feColorMatrix", {
-                attrs: {
-                  values: "0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.15 0",
-                  type: "matrix",
-                  in: "shadowOffsetOuter1"
-                }
-              })
-            ],
-            1
-          )
-        ]),
-        _vm._v(" "),
-        _c(
-          "g",
-          {
-            attrs: {
-              id: "Page-1",
-              stroke: "none",
-              "stroke-width": "1",
-              fill: "none",
-              "fill-rule": "evenodd"
-            }
-          },
-          [
-            _c(
-              "g",
-              {
-                attrs: {
-                  id: "Artboard",
-                  transform: "translate(0.000000, -21.000000)"
-                }
-              },
-              [
-                _c(
-                  "g",
-                  {
-                    attrs: {
-                      id: "dark",
-                      transform: "translate(31.401639, 48.000000)"
-                    }
-                  },
-                  [
-                    _c("g", { attrs: { id: "base" } }, [
-                      _c("use", {
-                        attrs: {
-                          fill: "black",
-                          "fill-opacity": "1",
-                          filter: "url(#filter-2)",
-                          "xlink:href": "#path-1"
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("use", {
-                        attrs: {
-                          fill: "#070707",
-                          "fill-rule": "evenodd",
-                          "xlink:href": "#path-1"
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("use", {
-                        attrs: {
-                          fill: "black",
-                          "fill-opacity": "1",
-                          filter: "url(#filter-3)",
-                          "xlink:href": "#path-1"
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("mask", { attrs: { id: "mask-5", fill: "white" } }, [
-                      _c("use", { attrs: { "xlink:href": "#path-4" } })
-                    ]),
-                    _vm._v(" "),
-                    _c("use", {
-                      attrs: {
-                        id: "background",
-                        fill: "#1D1D1D",
-                        "xlink:href": "#path-4"
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c(
-                      "g",
-                      { attrs: { id: "iPhone-X", mask: "url(#mask-5)" } },
-                      [
-                        _c(
-                          "g",
-                          {
-                            attrs: {
-                              transform: "translate(15.598361, 14.000000)"
-                            }
-                          },
-                          [
-                            _c("rect", {
-                              attrs: {
-                                id: "Rectangle",
-                                fill: _vm.colors.background,
-                                "fill-rule": "evenodd",
-                                x: "0",
-                                y: "0",
-                                width: "376",
-                                height: "812"
-                              },
-                              on: {
-                                click: function($event) {
-                                  _vm.selectColorFor("background")
-                                }
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c(
-                              "g",
-                              {
-                                attrs: {
-                                  id: "Forum-Cell",
-                                  "stroke-width": "1",
-                                  fill: "none",
-                                  "fill-rule": "evenodd",
-                                  transform: "translate(1.000000, 137.000000)"
-                                }
-                              },
-                              [
-                                _c("rect", {
-                                  attrs: {
-                                    id: "Rectangle",
-                                    x: "0",
-                                    y: "0",
-                                    width: "375",
-                                    height: "96"
-                                  }
-                                }),
-                                _vm._v(" "),
-                                _c("path", {
-                                  attrs: {
-                                    d: "M15,95.5 L361,95.5",
-                                    id: "Line",
-                                    stroke: "#979797",
-                                    "stroke-width": "0.5",
-                                    "stroke-linecap": "square"
-                                  }
-                                }),
-                                _vm._v(" "),
-                                _c(
-                                  "text",
-                                  {
-                                    attrs: {
-                                      id: "",
-                                      "font-family":
-                                        "FontAwesome5ProRegular, Font Awesome 5 Pro",
-                                      "font-size": "20",
-                                      "font-weight": "normal",
-                                      "letter-spacing": "0.583194435",
-                                      fill: "#FFFFFF",
-                                      "fill-opacity": "0.64"
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "tspan",
-                                      { attrs: { x: "339", y: "89" } },
-                                      [_vm._v("")]
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "text",
-                                  {
-                                    attrs: {
-                                      id: "",
-                                      "font-family":
-                                        "FontAwesome5ProRegular, Font Awesome 5 Pro",
-                                      "font-size": "20",
-                                      "font-weight": "normal",
-                                      "letter-spacing": "0.583194435",
-                                      fill: "#FFFFFF",
-                                      "fill-opacity": "0.64"
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "tspan",
-                                      { attrs: { x: "307", y: "89" } },
-                                      [_vm._v("")]
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "text",
-                                  {
-                                    attrs: {
-                                      id: "",
-                                      "font-family":
-                                        "FontAwesome5ProRegular, Font Awesome 5 Pro",
-                                      "font-size": "22",
-                                      "font-weight": "normal",
-                                      "letter-spacing": "0.641513944",
-                                      fill: "#FFFFFF",
-                                      "fill-opacity": "0.64"
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "tspan",
-                                      { attrs: { x: "272", y: "90" } },
-                                      [_vm._v("")]
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "text",
-                                  {
-                                    attrs: {
-                                      id: "-2.2K-·--3K-·--10",
-                                      "font-family":
-                                        "FontAwesome5ProRegular, Font Awesome 5 Pro",
-                                      "font-size": "13",
-                                      "font-weight": "normal",
-                                      "letter-spacing": "0.266",
-                                      fill: "#FFFFFF",
-                                      "fill-opacity": "0.5"
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "tspan",
-                                      { attrs: { x: "15", y: "84" } },
-                                      [_vm._v(" 2.2K ")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "tspan",
-                                      {
-                                        attrs: {
-                                          x: "68.3034062",
-                                          y: "84",
-                                          "font-family":
-                                            "LucidaGrande, Lucida Grande"
-                                        }
-                                      },
-                                      [_vm._v("·")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "tspan",
-                                      { attrs: { x: "72.6826875", y: "84" } },
-                                      [_vm._v("  3K ")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "tspan",
-                                      {
-                                        attrs: {
-                                          x: "121.200563",
-                                          y: "84",
-                                          "font-family":
-                                            "LucidaGrande, Lucida Grande"
-                                        }
-                                      },
-                                      [_vm._v("·")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "tspan",
-                                      { attrs: { x: "125.579844", y: "84" } },
-                                      [_vm._v("  10hrs")]
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "text",
-                                  {
-                                    attrs: {
-                                      id: "Commodi-a-quisquam-v",
-                                      "font-family": "ArialMT, Arial",
-                                      "font-size": "15",
-                                      "font-weight": "normal",
-                                      "letter-spacing": "0.323000014",
-                                      fill: _vm.colors.forumsTitleTextColor
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        _vm.selectColorFor(
-                                          "forumsTitleTextColor"
-                                        )
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "tspan",
-                                      { attrs: { x: "31", y: "24" } },
-                                      [
-                                        _vm._v(
-                                          "Commodi a quisquam voluptatem repellendus."
-                                        )
-                                      ]
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "text",
-                                  {
-                                    attrs: {
-                                      id: "Totam-corporis-asper",
-                                      "font-family": "ArialMT, Arial",
-                                      "font-size": "12",
-                                      "font-weight": "normal",
-                                      "letter-spacing": "0.349916697",
-                                      fill: _vm.colors.contentTextColor
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        _vm.selectColorFor("contentTextColor")
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "tspan",
-                                      { attrs: { x: "31", y: "43" } },
-                                      [
-                                        _vm._v(
-                                          "Totam corporis aspernatur aut temporibus autem maxime."
-                                        )
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "tspan",
-                                      { attrs: { x: "31", y: "57" } },
-                                      [
-                                        _vm._v(
-                                          "Consequatur reprehendrit non et cupiditate i…"
-                                        )
-                                      ]
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "text",
-                                  {
-                                    attrs: {
-                                      id: "",
-                                      "font-family":
-                                        "FontAwesome5ProRegular, Font Awesome 5 Pro",
-                                      "font-size": "14",
-                                      "font-weight": "normal",
-                                      "letter-spacing": "0.266000032",
-                                      fill: "#FFFFFF"
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "tspan",
-                                      { attrs: { x: "15", y: "24" } },
-                                      [_vm._v("")]
-                                    )
-                                  ]
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "g",
-                              {
-                                attrs: {
-                                  id: "Group",
-                                  "stroke-width": "1",
-                                  fill: "none",
-                                  "fill-rule": "evenodd",
-                                  transform: "translate(0.000000, 88.000000)"
-                                }
-                              },
-                              [
-                                _c("g", { attrs: { id: "background" } }, [
-                                  _c("use", {
-                                    attrs: {
-                                      fill: "black",
-                                      "fill-opacity": "1",
-                                      filter: "url(#filter-7)",
-                                      "xlink:href": "#path-6"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("use", {
-                                    attrs: {
-                                      "fill-opacity": "0.72",
-                                      fill: "#212121",
-                                      "fill-rule": "evenodd",
-                                      "xlink:href": "#path-6"
-                                    }
-                                  })
-                                ]),
-                                _vm._v(" "),
-                                _c("rect", {
-                                  attrs: {
-                                    id: "Rectangle",
-                                    fill: _vm.colors.tintColor,
-                                    x: "16",
-                                    y: "43",
-                                    width: "48",
-                                    height: "2",
-                                    rx: "1"
-                                  }
-                                }),
-                                _vm._v(" "),
-                                _c(
-                                  "text",
-                                  {
-                                    attrs: {
-                                      id: "Anime",
-                                      "font-family": "ArialMT, Arial",
-                                      "font-size": "17",
-                                      "font-weight": "normal",
-                                      "line-spacing": "25",
-                                      "letter-spacing": "0.323000014",
-                                      fill: _vm.colors.tintColor
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        _vm.selectColorFor("tintColor")
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "tspan",
-                                      { attrs: { x: "16", y: "23" } },
-                                      [_vm._v("Anime")]
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "text",
-                                  {
-                                    attrs: {
-                                      id: "Real-Life",
-                                      "font-family": "ArialMT, Arial",
-                                      "font-size": "17",
-                                      "font-weight": "normal",
-                                      "line-spacing": "25",
-                                      "letter-spacing": "0.323000014",
-                                      fill: _vm.colors.tintColor,
-                                      "fill-opacity": "0.5"
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        _vm.selectColorFor("tintColor")
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "tspan",
-                                      { attrs: { x: "90", y: "23" } },
-                                      [_vm._v("Real Life")]
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "text",
-                                  {
-                                    attrs: {
-                                      id: "Memes",
-                                      "font-family": "ArialMT, Arial",
-                                      "font-size": "17",
-                                      "font-weight": "normal",
-                                      "line-spacing": "25",
-                                      "letter-spacing": "0.323000014",
-                                      fill: _vm.colors.tintColor,
-                                      "fill-opacity": "0.5"
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        _vm.selectColorFor("tintColor")
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "tspan",
-                                      { attrs: { x: "181", y: "23" } },
-                                      [_vm._v("Memes")]
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "text",
-                                  {
-                                    attrs: {
-                                      id: "Art-Showcase",
-                                      "font-family": "ArialMT, Arial",
-                                      "font-size": "17",
-                                      "font-weight": "normal",
-                                      "line-spacing": "25",
-                                      "letter-spacing": "0.323000014",
-                                      fill: _vm.colors.tintColor,
-                                      "fill-opacity": "0.5"
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        _vm.selectColorFor("tintColor")
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "tspan",
-                                      { attrs: { x: "259", y: "23" } },
-                                      [_vm._v("Art Showcase")]
-                                    )
-                                  ]
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "g",
-                              {
-                                attrs: {
-                                  id:
-                                    "Bars-/-Navigation-Bar-/-iPhone---Compact-/-Dark---Default",
-                                  fill: "none"
-                                }
-                              },
-                              [
-                                _c("g", { attrs: { id: "Background" } }, [
-                                  _c("use", {
-                                    attrs: {
-                                      fill: "black",
-                                      "fill-opacity": "1",
-                                      filter: "url(#filter-9)",
-                                      "xlink:href": "#path-8"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("use", {
-                                    attrs: {
-                                      "fill-opacity": "0.72",
-                                      fill: "#212121",
-                                      "fill-rule": "evenodd",
-                                      "xlink:href": "#path-8"
-                                    }
-                                  })
-                                ]),
-                                _vm._v(" "),
-                                _c(
-                                  "g",
-                                  {
-                                    attrs: {
-                                      id:
-                                        "Bars-/-Navigation-Bar-/-x-/-Right-Combinations-/-Dark---Bar-Button-Item",
-                                      transform:
-                                        "translate(206.549333, 44.000000)",
-                                      fill: _vm.colors.tintColor,
-                                      "fill-rule": "evenodd"
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "g",
-                                      {
-                                        attrs: {
-                                          id:
-                                            "Glyphs-/-Bar-Button-/-Search-/-Dark",
-                                          transform:
-                                            "translate(130.000000, 8.000000)"
-                                        }
-                                      },
-                                      [
-                                        _c("path", {
-                                          attrs: {
-                                            d:
-                                              "M6.0148,12.0972 C6.0148,10.7142 6.4848,9.4392 7.2668,8.4162 C8.2608,7.1152 9.7628,6.2212 11.4768,6.0462 C11.6808,6.0252 11.8878,6.0152 12.0978,6.0152 C13.0488,6.0152 13.9468,6.2402 14.7498,6.6312 C16.7778,7.6182 18.1828,9.6942 18.1828,12.0982 C18.1828,15.4532 15.4528,18.1832 12.0988,18.1832 C10.4278,18.1832 8.9118,17.5062 7.8118,16.4102 C7.8078,16.4062 7.8028,16.4042 7.7988,16.3982 C7.7918,16.3922 7.7868,16.3862 7.7808,16.3792 C6.6908,15.2792 6.0148,13.7652 6.0148,12.0972 L6.0148,12.0972 Z M22.9718,21.5392 L17.7788,16.3442 C17.8868,16.1992 17.9918,16.0502 18.0888,15.8972 C18.7878,14.7982 19.1988,13.4972 19.1988,12.0982 C19.1988,8.1782 16.0198,5.0002 12.0988,5.0002 C9.6848,5.0002 7.5568,6.2072 6.2738,8.0482 C5.4728,9.1972 4.9998,10.5922 4.9998,12.0972 C4.9998,16.0202 8.1798,19.1972 12.0978,19.1972 C13.6928,19.1972 15.1598,18.6662 16.3438,17.7782 L21.5388,22.9722 L22.9718,21.5392 Z",
-                                            id: "search"
-                                          }
-                                        })
-                                      ]
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "text",
-                                  {
-                                    attrs: {
-                                      id: "Title",
-                                      "font-size": "17",
-                                      "font-weight": "500",
-                                      "line-spacing": "22",
-                                      "letter-spacing": "-0.409999996",
-                                      fill: _vm.colors.barTitleTextColor
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        _vm.selectColorFor("barTitleTextColor")
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "tspan",
-                                      { attrs: { x: "157.919453", y: "71" } },
-                                      [_vm._v("Forums")]
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "g",
-                                  {
-                                    attrs: {
-                                      id:
-                                        "Bars-/-Navigation-Bar-/-x-/-Left-Combinations-/-Dark---Back-Button",
-                                      transform:
-                                        "translate(0.000000, 44.000000)",
-                                      fill: _vm.colors.tintColor
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        _vm.selectColorFor("tintColor")
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "text",
-                                      {
-                                        attrs: {
-                                          id: "Label",
-                                          "font-size": "17",
-                                          "font-weight": "normal",
-                                          "line-spacing": "22",
-                                          "letter-spacing": "-0.408"
-                                        }
-                                      },
-                                      [
-                                        _c(
-                                          "tspan",
-                                          { attrs: { x: "27", y: "26" } },
-                                          [_vm._v("Kurozora")]
-                                        )
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c("path", {
-                                      attrs: {
-                                        d:
-                                          "M18.0371349,31.5826673 L8.79215185,22.4458042 C8.40261605,22.0611888 8.40261605,21.4398102 8.79215185,21.0541958 L18.0371349,11.9173327 C18.5994648,11.3608891 19.5143745,11.3608891 20.0777032,11.9173327 C20.6400331,12.4737762 20.6400331,13.3768731 20.0777032,13.9333167 L12.1691276,21.7504995 L20.0777032,29.5656843 C20.6400331,30.1231269 20.6400331,31.0262238 20.0777032,31.5826673 C19.5143745,32.1391109 18.5994648,32.1391109 18.0371349,31.5826673",
-                                        id: "Chevron",
-                                        "fill-rule": "evenodd"
-                                      }
-                                    })
-                                  ]
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "g",
-                              {
-                                attrs: {
-                                  id:
-                                    "Bars-/-Tab-Bar-/-Compact-/-Dark---5-Tabs",
-                                  fill: "none",
-                                  transform: "translate(0.000000, 762.000000)"
-                                }
-                              },
-                              [
-                                _c("g", { attrs: { id: "Background" } }, [
-                                  _c("use", {
-                                    attrs: {
-                                      fill: "black",
-                                      "fill-opacity": "1",
-                                      filter: "url(#filter-11)",
-                                      "xlink:href": "#path-10"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("use", {
-                                    attrs: {
-                                      "fill-opacity": "0.72",
-                                      fill: "#212121",
-                                      "fill-rule": "evenodd",
-                                      "xlink:href": "#path-10"
-                                    }
-                                  })
-                                ]),
-                                _vm._v(" "),
-                                _c(
-                                  "g",
-                                  {
-                                    attrs: {
-                                      id:
-                                        "Bars-/-Tab-Bar-/-x-/-Tab-Button-/-Inactive",
-                                      transform:
-                                        "translate(310.200000, 0.000000)",
-                                      fill: "#8E8E93"
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "text",
-                                      {
-                                        attrs: {
-                                          id: "Label",
-                                          "font-family":
-                                            "SFProText-Medium, SF Pro Text",
-                                          "font-size": "10",
-                                          "font-weight": "400",
-                                          "letter-spacing": "-0.2411765"
-                                        }
-                                      },
-                                      [
-                                        _c(
-                                          "tspan",
-                                          {
-                                            attrs: { x: "13.2191178", y: "44" }
-                                          },
-                                          [_vm._v("Profile")]
-                                        )
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "g",
-                                      {
-                                        attrs: {
-                                          id:
-                                            "Glyphs-/-Tab-Bar-/-Favorite-/-Disabled",
-                                          transform:
-                                            "translate(4.000000, 4.000000)",
-                                          "fill-rule": "evenodd"
-                                        }
-                                      },
-                                      [
-                                        _c("path", {
-                                          attrs: {
-                                            d:
-                                              "M24,2.125 C24.4415,2.125 24.883,2.374 25.0465,2.8715 L27.4805,10.281 C27.6265,10.7255 28.0495,11.027 28.527,11.027 L36.4295,11.027 C37.491,11.027 37.936,12.354 37.08,12.969 L30.6665,17.578 C30.285,17.8515 30.126,18.333 30.2705,18.7735 L32.7155,26.216 C32.9635,26.97 32.3505,27.625 31.665,27.625 C31.4485,27.625 31.2245,27.5595 31.0185,27.4115 L24.6505,22.8355 C24.457,22.6965 24.2285,22.627 24,22.627 C23.7715,22.627 23.543,22.6965 23.3495,22.8355 L16.9815,27.4115 C16.7755,27.5595 16.5515,27.625 16.335,27.625 C15.6495,27.625 15.0365,26.97 15.2845,26.216 L17.7295,18.7735 C17.874,18.333 17.715,17.8515 17.3335,17.578 L10.92,12.969 C10.064,12.354 10.509,11.027 11.5705,11.027 L19.473,11.027 C19.9505,11.027 20.3735,10.7255 20.5195,10.281 L22.9535,2.8715 C23.117,2.374 23.5585,2.125 24,2.125 Z",
-                                            id: "Combined-Shape"
-                                          }
-                                        })
-                                      ]
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "g",
-                                  {
-                                    attrs: {
-                                      id:
-                                        "Bars-/-Tab-Bar-/-x-/-Tab-Button-/-Inactive",
-                                      transform:
-                                        "translate(236.175000, 0.000000)",
-                                      fill: "#8E8E93"
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "text",
-                                      {
-                                        attrs: {
-                                          id: "Label",
-                                          "font-family":
-                                            "SFProText-Medium, SF Pro Text",
-                                          "font-size": "10",
-                                          "font-weight": "400",
-                                          "letter-spacing": "-0.2411765"
-                                        }
-                                      },
-                                      [
-                                        _c(
-                                          "tspan",
-                                          {
-                                            attrs: { x: "-1.17942306", y: "44" }
-                                          },
-                                          [_vm._v("Notifications")]
-                                        )
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "g",
-                                      {
-                                        attrs: {
-                                          id:
-                                            "Glyphs-/-Tab-Bar-/-Favorite-/-Disabled",
-                                          transform:
-                                            "translate(4.000000, 4.000000)",
-                                          "fill-rule": "evenodd"
-                                        }
-                                      },
-                                      [
-                                        _c("path", {
-                                          attrs: {
-                                            d:
-                                              "M24,2.125 C24.4415,2.125 24.883,2.374 25.0465,2.8715 L27.4805,10.281 C27.6265,10.7255 28.0495,11.027 28.527,11.027 L36.4295,11.027 C37.491,11.027 37.936,12.354 37.08,12.969 L30.6665,17.578 C30.285,17.8515 30.126,18.333 30.2705,18.7735 L32.7155,26.216 C32.9635,26.97 32.3505,27.625 31.665,27.625 C31.4485,27.625 31.2245,27.5595 31.0185,27.4115 L24.6505,22.8355 C24.457,22.6965 24.2285,22.627 24,22.627 C23.7715,22.627 23.543,22.6965 23.3495,22.8355 L16.9815,27.4115 C16.7755,27.5595 16.5515,27.625 16.335,27.625 C15.6495,27.625 15.0365,26.97 15.2845,26.216 L17.7295,18.7735 C17.874,18.333 17.715,17.8515 17.3335,17.578 L10.92,12.969 C10.064,12.354 10.509,11.027 11.5705,11.027 L19.473,11.027 C19.9505,11.027 20.3735,10.7255 20.5195,10.281 L22.9535,2.8715 C23.117,2.374 23.5585,2.125 24,2.125 Z",
-                                            id: "Combined-Shape"
-                                          }
-                                        })
-                                      ]
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "g",
-                                  {
-                                    attrs: {
-                                      id:
-                                        "Bars-/-Tab-Bar-/-x-/-Tab-Button-/-On-Dark---Active",
-                                      transform:
-                                        "translate(159.800000, 0.000000)",
-                                      fill: _vm.colors.barTintColor
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        _vm.selectColorFor("barTintColor")
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "text",
-                                      {
-                                        attrs: {
-                                          id: "Label",
-                                          "font-family":
-                                            "SFProText-Medium, SF Pro Text",
-                                          "font-size": "10",
-                                          "font-weight": "400",
-                                          "letter-spacing": "-0.2411765"
-                                        }
-                                      },
-                                      [
-                                        _c(
-                                          "tspan",
-                                          {
-                                            attrs: { x: "10.6571233", y: "44" }
-                                          },
-                                          [_vm._v("Forums")]
-                                        )
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "g",
-                                      {
-                                        attrs: {
-                                          id:
-                                            "Glyphs-/-Tab-Bar-/-Favorite-/-Dark",
-                                          transform:
-                                            "translate(4.000000, 4.000000)",
-                                          "fill-rule": "evenodd"
-                                        }
-                                      },
-                                      [
-                                        _c("path", {
-                                          attrs: {
-                                            d:
-                                              "M24,2.125 C24.4415,2.125 24.883,2.374 25.0465,2.8715 L27.4805,10.281 C27.6265,10.7255 28.0495,11.027 28.527,11.027 L36.4295,11.027 C37.491,11.027 37.936,12.354 37.08,12.969 L30.6665,17.578 C30.285,17.8515 30.126,18.333 30.2705,18.7735 L32.7155,26.216 C32.9635,26.97 32.3505,27.625 31.665,27.625 C31.4485,27.625 31.2245,27.5595 31.0185,27.4115 L24.6505,22.8355 C24.457,22.6965 24.2285,22.627 24,22.627 C23.7715,22.627 23.543,22.6965 23.3495,22.8355 L16.9815,27.4115 C16.7755,27.5595 16.5515,27.625 16.335,27.625 C15.6495,27.625 15.0365,26.97 15.2845,26.216 L17.7295,18.7735 C17.874,18.333 17.715,17.8515 17.3335,17.578 L10.92,12.969 C10.064,12.354 10.509,11.027 11.5705,11.027 L19.473,11.027 C19.9505,11.027 20.3735,10.7255 20.5195,10.281 L22.9535,2.8715 C23.117,2.374 23.5585,2.125 24,2.125 Z",
-                                            id: "Combined-Shape"
-                                          }
-                                        })
-                                      ]
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "g",
-                                  {
-                                    attrs: {
-                                      id:
-                                        "Bars-/-Tab-Bar-/-x-/-Tab-Button-/-Inactive",
-                                      transform:
-                                        "translate(84.600000, 0.000000)",
-                                      fill: "#8E8E93"
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "text",
-                                      {
-                                        attrs: {
-                                          id: "Label",
-                                          "font-family":
-                                            "SFProText-Medium, SF Pro Text",
-                                          "font-size": "10",
-                                          "font-weight": "400",
-                                          "letter-spacing": "-0.2411765"
-                                        }
-                                      },
-                                      [
-                                        _c(
-                                          "tspan",
-                                          {
-                                            attrs: { x: "11.8763443", y: "44" }
-                                          },
-                                          [_vm._v("Library")]
-                                        )
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "g",
-                                      {
-                                        attrs: {
-                                          id:
-                                            "Glyphs-/-Tab-Bar-/-Favorite-/-Disabled",
-                                          transform:
-                                            "translate(4.000000, 4.000000)",
-                                          "fill-rule": "evenodd"
-                                        }
-                                      },
-                                      [
-                                        _c("path", {
-                                          attrs: {
-                                            d:
-                                              "M24,2.125 C24.4415,2.125 24.883,2.374 25.0465,2.8715 L27.4805,10.281 C27.6265,10.7255 28.0495,11.027 28.527,11.027 L36.4295,11.027 C37.491,11.027 37.936,12.354 37.08,12.969 L30.6665,17.578 C30.285,17.8515 30.126,18.333 30.2705,18.7735 L32.7155,26.216 C32.9635,26.97 32.3505,27.625 31.665,27.625 C31.4485,27.625 31.2245,27.5595 31.0185,27.4115 L24.6505,22.8355 C24.457,22.6965 24.2285,22.627 24,22.627 C23.7715,22.627 23.543,22.6965 23.3495,22.8355 L16.9815,27.4115 C16.7755,27.5595 16.5515,27.625 16.335,27.625 C15.6495,27.625 15.0365,26.97 15.2845,26.216 L17.7295,18.7735 C17.874,18.333 17.715,17.8515 17.3335,17.578 L10.92,12.969 C10.064,12.354 10.509,11.027 11.5705,11.027 L19.473,11.027 C19.9505,11.027 20.3735,10.7255 20.5195,10.281 L22.9535,2.8715 C23.117,2.374 23.5585,2.125 24,2.125 Z",
-                                            id: "Combined-Shape"
-                                          }
-                                        })
-                                      ]
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "g",
-                                  {
-                                    attrs: {
-                                      id:
-                                        "Bars-/-Tab-Bar-/-x-/-Tab-Button-/-Inactive",
-                                      transform:
-                                        "translate(9.400000, 0.000000)",
-                                      fill: "#8E8E93"
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "text",
-                                      {
-                                        attrs: {
-                                          id: "Label",
-                                          "font-family":
-                                            "SFProText-Medium, SF Pro Text",
-                                          "font-size": "10",
-                                          "font-weight": "400",
-                                          "letter-spacing": "-0.2411765"
-                                        }
-                                      },
-                                      [
-                                        _c(
-                                          "tspan",
-                                          {
-                                            attrs: { x: "14.329521", y: "44" }
-                                          },
-                                          [_vm._v("Home")]
-                                        )
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "g",
-                                      {
-                                        attrs: {
-                                          id:
-                                            "Glyphs-/-Tab-Bar-/-Favorite-/-Disabled",
-                                          transform:
-                                            "translate(4.000000, 4.000000)",
-                                          "fill-rule": "evenodd"
-                                        }
-                                      },
-                                      [
-                                        _c("path", {
-                                          attrs: {
-                                            d:
-                                              "M24,2.125 C24.4415,2.125 24.883,2.374 25.0465,2.8715 L27.4805,10.281 C27.6265,10.7255 28.0495,11.027 28.527,11.027 L36.4295,11.027 C37.491,11.027 37.936,12.354 37.08,12.969 L30.6665,17.578 C30.285,17.8515 30.126,18.333 30.2705,18.7735 L32.7155,26.216 C32.9635,26.97 32.3505,27.625 31.665,27.625 C31.4485,27.625 31.2245,27.5595 31.0185,27.4115 L24.6505,22.8355 C24.457,22.6965 24.2285,22.627 24,22.627 C23.7715,22.627 23.543,22.6965 23.3495,22.8355 L16.9815,27.4115 C16.7755,27.5595 16.5515,27.625 16.335,27.625 C15.6495,27.625 15.0365,26.97 15.2845,26.216 L17.7295,18.7735 C17.874,18.333 17.715,17.8515 17.3335,17.578 L10.92,12.969 C10.064,12.354 10.509,11.027 11.5705,11.027 L19.473,11.027 C19.9505,11.027 20.3735,10.7255 20.5195,10.281 L22.9535,2.8715 C23.117,2.374 23.5585,2.125 24,2.125 Z",
-                                            id: "Combined-Shape"
-                                          }
-                                        })
-                                      ]
-                                    )
-                                  ]
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "g",
-                              {
-                                attrs: {
-                                  id: "Bars-/-Status-Bar-/-iPhone-/-On-Dark",
-                                  fill: "none",
-                                  transform: "translate(1.000000, 0.000000)"
-                                }
-                              },
-                              [
-                                _c(
-                                  "g",
-                                  {
-                                    attrs: {
-                                      id: "Battery",
-                                      "stroke-width": "1",
-                                      "fill-rule": "evenodd",
-                                      transform:
-                                        "translate(336.000000, 17.000000)"
-                                    }
-                                  },
-                                  [
-                                    _c("path", {
-                                      attrs: {
-                                        d:
-                                          "M3.7518137,0.833333333 C2.74354052,0.833333333 2.34483914,0.910326123 1.9333052,1.13041688 C1.58587152,1.31622645 1.31619311,1.58590485 1.13038355,1.93333853 C0.910292789,2.34487247 0.8333,2.74357386 0.8333,3.75184704 L0.8333,8.24815296 C0.8333,9.25642614 0.910292789,9.65512753 1.13038355,10.0666615 C1.31619311,10.4140951 1.58587152,10.6837736 1.9333052,10.8695831 C2.34483914,11.0896739 2.74354052,11.1666667 3.7518137,11.1666667 L18.9147863,11.1666667 C19.9230595,11.1666667 20.3217609,11.0896739 20.7332948,10.8695831 C21.0807285,10.6837736 21.3504069,10.4140951 21.5362165,10.0666615 C21.7563072,9.65512753 21.8333,9.25642614 21.8333,8.24815296 L21.8333,3.75184704 C21.8333,2.74357386 21.7563072,2.34487247 21.5362165,1.93333853 C21.3504069,1.58590485 21.0807285,1.31622645 20.7332948,1.13041688 C20.3217609,0.910326123 19.9230595,0.833333333 18.9147863,0.833333333 L3.7518137,0.833333333 Z",
-                                        id: "Border",
-                                        stroke: "#FFFFFF",
-                                        opacity: "0.35"
-                                      }
-                                    }),
-                                    _vm._v(" "),
-                                    _c("path", {
-                                      attrs: {
-                                        d:
-                                          "M23.3333,4 L23.3333,8 C24.1380311,7.66122348 24.661338,6.87313328 24.661338,6 C24.661338,5.12686672 24.1380311,4.33877652 23.3333,4",
-                                        id: "Cap",
-                                        fill: "#FFFFFF",
-                                        "fill-rule": "nonzero",
-                                        opacity: "0.4"
-                                      }
-                                    }),
-                                    _vm._v(" "),
-                                    _c("path", {
-                                      attrs: {
-                                        d:
-                                          "M4.04255685,2.33333333 L18.6240431,2.33333333 C19.218389,2.33333333 19.4339132,2.39521708 19.6511971,2.51142181 C19.8684811,2.62762654 20.0390068,2.79815226 20.1552115,3.01543622 C20.2714163,3.23272018 20.3333,3.44824434 20.3333,4.04259018 L20.3333,7.95740982 C20.3333,8.55175566 20.2714163,8.76727982 20.1552115,8.98456378 C20.0390068,9.20184774 19.8684811,9.37237346 19.6511971,9.48857819 C19.4339132,9.60478292 19.218389,9.66666667 18.6240431,9.66666667 L4.04255685,9.66666667 C3.44821101,9.66666667 3.23268684,9.60478292 3.01540288,9.48857819 C2.79811893,9.37237346 2.62759321,9.20184774 2.51138847,8.98456378 C2.39518374,8.76727982 2.3333,8.55175566 2.3333,7.95740982 L2.3333,4.04259018 C2.3333,3.44824434 2.39518374,3.23272018 2.51138847,3.01543622 C2.62759321,2.79815226 2.79811893,2.62762654 3.01540288,2.51142181 C3.23268684,2.39521708 3.44821101,2.33333333 4.04255685,2.33333333 Z",
-                                        id: "Capacity",
-                                        fill: "#FFFFFF",
-                                        "fill-rule": "nonzero"
-                                      }
-                                    })
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c("path", {
-                                  attrs: {
-                                    d:
-                                      "M323.667069,19.6151501 C325.891802,19.6152475 328.031463,20.4693583 329.643817,22.0009506 C329.765231,22.1191953 329.959299,22.1177037 330.078879,21.9976068 L331.23949,20.8272772 C331.300039,20.7663644 331.333797,20.6838545 331.333294,20.5980054 C331.332792,20.5121564 331.29807,20.4300466 331.236813,20.3698455 C327.0049,16.3176151 320.328569,16.3176151 316.096657,20.3698455 C316.035354,20.4300019 316.000572,20.5120868 316.000007,20.5979359 C315.999442,20.6837851 316.03314,20.7663201 316.093645,20.8272772 L317.254591,21.9976068 C317.374094,22.117885 317.568312,22.1193777 317.689653,22.0009506 C319.302212,20.4692577 321.442119,19.6151445 323.667069,19.6151501 L323.667069,19.6151501 Z M323.667069,23.4227339 C324.889415,23.4226591 326.068141,23.8766124 326.97421,24.6963869 C327.09676,24.8127317 327.289808,24.8102093 327.409272,24.6907025 L328.568544,23.5203729 C328.629594,23.4589857 328.663468,23.3757088 328.662588,23.2891732 C328.661707,23.2026376 328.626146,23.120066 328.563859,23.0599317 C325.804697,20.4955232 321.531784,20.4955232 318.772622,23.0599317 C318.710297,23.1200652 318.674737,23.2026782 318.67392,23.2892418 C318.673102,23.3758053 318.707094,23.4590744 318.768272,23.5203729 L319.92721,24.6907025 C320.046673,24.8102093 320.239722,24.8127317 320.362272,24.6963869 C321.267742,23.877154 322.445531,23.4232396 323.667069,23.4227339 L323.667069,23.4227339 Z M325.894921,26.2158092 C325.956921,26.1550129 325.991064,26.0713489 325.989291,25.9845705 C325.987517,25.897792 325.949983,25.8155907 325.885551,25.7573743 C324.604891,24.6751031 322.729248,24.6751031 321.448588,25.7573743 C321.384111,25.8155439 321.346516,25.8977193 321.344679,25.9844982 C321.342841,26.0712771 321.376925,26.1549675 321.438883,26.2158092 L323.444518,28.2378044 C323.503302,28.2972294 323.583446,28.3306727 323.667069,28.3306727 C323.750693,28.3306727 323.830837,28.2972294 323.88962,28.2378044 L325.894921,26.2158092 Z",
-                                    id: "Wifi",
-                                    fill: "#FFFFFF",
-                                    "fill-rule": "nonzero"
-                                  }
-                                }),
-                                _vm._v(" "),
-                                _c("path", {
-                                  attrs: {
-                                    d:
-                                      "M295,24.3333337 L296,24.3333337 C296.552285,24.3333337 297,24.7810489 297,25.3333337 L297,27.3333337 C297,27.8856184 296.552285,28.3333337 296,28.3333337 L295,28.3333337 C294.447715,28.3333337 294,27.8856184 294,27.3333337 L294,25.3333337 C294,24.7810489 294.447715,24.3333337 295,24.3333337 L295,24.3333337 Z M299.666667,22.3333337 L300.666667,22.3333337 C301.218951,22.3333337 301.666667,22.7810489 301.666667,23.3333337 L301.666667,27.3333337 C301.666667,27.8856184 301.218951,28.3333337 300.666667,28.3333337 L299.666667,28.3333337 C299.114382,28.3333337 298.666667,27.8856184 298.666667,27.3333337 L298.666667,23.3333337 C298.666667,22.7810489 299.114382,22.3333337 299.666667,22.3333337 Z M304.333333,20.0000003 L305.333333,20.0000003 C305.885618,20.0000003 306.333333,20.4477156 306.333333,21.0000003 L306.333333,27.3333337 C306.333333,27.8856184 305.885618,28.3333337 305.333333,28.3333337 L304.333333,28.3333337 C303.781049,28.3333337 303.333333,27.8856184 303.333333,27.3333337 L303.333333,21.0000003 C303.333333,20.4477156 303.781049,20.0000003 304.333333,20.0000003 Z M309,17.666667 L310,17.666667 C310.552285,17.666667 311,18.1143823 311,18.666667 L311,27.3333337 C311,27.8856184 310.552285,28.3333337 310,28.3333337 L309,28.3333337 C308.447715,28.3333337 308,27.8856184 308,27.3333337 L308,18.666667 C308,18.1143823 308.447715,17.666667 309,17.666667 L309,17.666667 Z",
-                                    id: "Cellular-Connection",
-                                    fill: "#FFFFFF",
-                                    "fill-rule": "nonzero"
-                                  }
-                                }),
-                                _vm._v(" "),
-                                _c(
-                                  "g",
-                                  {
-                                    attrs: {
-                                      id:
-                                        "Bars-/-Status-Bar-/-iPhone-/-x-/-Time---On-Dark",
-                                      transform:
-                                        "translate(21.000000, 9.000000)",
-                                      fill: "#FFFFFF",
-                                      "font-family":
-                                        "SFProText-Semibold, SF Pro Text",
-                                      "font-size": "15",
-                                      "font-weight": "500",
-                                      "letter-spacing": "-0.3"
-                                    }
-                                  },
-                                  [
-                                    _c("text", { attrs: { id: "Time" } }, [
-                                      _c(
-                                        "tspan",
-                                        {
-                                          attrs: {
-                                            x: "11.4867188",
-                                            y: "19.3299999"
-                                          }
-                                        },
-                                        [_vm._v("9:41")]
-                                      )
-                                    ])
-                                  ]
-                                )
-                              ]
-                            )
-                          ]
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c("path", {
-                      attrs: {
-                        d:
-                          "M103.598361,16 L302.598361,16 L302.598361,16 C302.598361,32.5685425 289.166903,46 272.598361,46 L133.598361,46 C117.029818,46 103.598361,32.5685425 103.598361,16 L103.598361,16 Z",
-                        id: "bar",
-                        fill: "#070707"
-                      }
-                    })
-                  ]
-                )
-              ]
-            )
-          ]
-        )
-      ]
-    ),
-    _vm._v(" "),
-    _c(
-      "button",
-      {
-        staticClass: "button is-large",
-        style: { backgroundColor: _vm.colors.button },
-        on: {
-          click: function($event) {
-            _vm.selectColorFor("button")
-          }
-        }
-      },
-      [_vm._v("Select col")]
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "modal", attrs: { id: "colorModal" } }, [
-      _c("div", { staticClass: "modal-background" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "modal-content" }, [
-        _c("div", { staticClass: "box" }, [
-          _c("div", { attrs: { id: "color-picker-container" } }),
-          _vm._v(" "),
-          _c("hr"),
-          _vm._v(" "),
-          _c("div", { staticClass: "columns" }, [
-            _c("div", { staticClass: "column is-two-thirds" }, [
-              _c("div", { staticClass: "field is-horizontal" }, [
-                _vm._m(0),
-                _vm._v(" "),
-                _c("div", { staticClass: "field-body" }, [
-                  _c("div", { staticClass: "field" }, [
-                    _c("p", { staticClass: "control" }, [
-                      _c("input", {
-                        staticClass: "input is-rounded",
-                        attrs: { type: "text", id: "colorInput" },
-                        domProps: { value: _vm.getSelectedColor },
-                        on: { change: _vm.updateColorFromInput }
-                      })
-                    ])
-                  ])
-                ])
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "column is-one-third" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "button is-success is-fullwidth",
-                  on: { click: _vm.saveSelectedColor }
-                },
-                [_vm._v("Save")]
-              )
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("button", {
-        staticClass: "modal-close is-large",
-        attrs: { "aria-label": "close" },
-        on: { click: _vm.closeColorPicker }
-      })
-    ])
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "field-label is-normal" }, [
-      _c("label", { staticClass: "label" }, [_vm._v("Hex")])
-    ])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-3a6a7b10", module.exports)
-  }
-}
 
 /***/ })
 /******/ ]);

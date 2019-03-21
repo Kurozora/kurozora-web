@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ app()->getLocale() }}" style="background-image: url({{ asset('img/static/star_bg_lg.jpg') }});">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,7 +13,7 @@
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
 </head>
-<body>
+<body style="background-image: url({{ asset('img/static/star_bg_lg.jpg') }}); background-position: center center; background-attachment: fixed; background-size: cover;">
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="themesNavbar">
@@ -36,7 +36,10 @@
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
-                        <a class="button is-primary" href="{{ route('themes.create') }}">
+                        <a class="button is-primary"
+                           href="{{ (\Illuminate\Support\Facades\Route::currentRouteName() !== 'themes.create') ? route('themes.create') : '#' }}"
+                            {{ (\Illuminate\Support\Facades\Route::currentRouteName() == 'themes.create') ? 'disabled' : '' }}
+                        >
                             <strong>Create your own</strong>
                         </a>
                     </div>
