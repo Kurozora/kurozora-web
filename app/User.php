@@ -41,19 +41,19 @@ class User extends Authenticatable implements LikerContract
 
     // Cache user's badges
     const CACHE_KEY_BADGES = 'user-badges-%d';
-    const CACHE_KEY_BADGES_MINUTES = 120;
+    const CACHE_KEY_BADGES_SECONDS = 120 * 60;
 
     // Cache user's follower count
     const CACHE_KEY_FOLLOWER_COUNT = 'user-followers-%d';
-    const CACHE_KEY_FOLLOWER_COUNT_MINUTES = 10;
+    const CACHE_KEY_FOLLOWER_COUNT_SECONDS = 10 * 60;
 
     // Cache user's following count
     const CACHE_KEY_FOLLOWING_COUNT = 'user-following-%d';
-    const CACHE_KEY_FOLLOWING_COUNT_MINUTES = 10;
+    const CACHE_KEY_FOLLOWING_COUNT_SECONDS = 10 * 60;
 
     // Cache user's reputation count
     const CACHE_KEY_REPUTATION_COUNT = 'user-reputation-%d';
-    const CACHE_KEY_REPUTATION_COUNT_MINUTES = 10;
+    const CACHE_KEY_REPUTATION_COUNT_SECONDS = 10 * 60;
 
     // Table name
     const TABLE_NAME = 'user';
@@ -75,7 +75,7 @@ class User extends Authenticatable implements LikerContract
         $cacheKey = sprintf(self::CACHE_KEY_BADGES, $this->id);
 
         // Retrieve or save cached result
-        $badgeInfo = Cache::remember($cacheKey, self::CACHE_KEY_BADGES_MINUTES, function () {
+        $badgeInfo = Cache::remember($cacheKey, self::CACHE_KEY_BADGES_SECONDS, function () {
             return Badge::
                 join(UserBadge::TABLE_NAME, function ($join) {
                     $join->on(UserBadge::TABLE_NAME . '.badge_id', '=', Badge::TABLE_NAME . '.id');
@@ -108,7 +108,7 @@ class User extends Authenticatable implements LikerContract
         $cacheKey = sprintf(self::CACHE_KEY_FOLLOWER_COUNT, $this->id);
 
         // Retrieve or save cached result
-        $followerCount = Cache::remember($cacheKey, self::CACHE_KEY_FOLLOWER_COUNT_MINUTES, function () {
+        $followerCount = Cache::remember($cacheKey, self::CACHE_KEY_FOLLOWER_COUNT_SECONDS, function () {
             return $this->followers()->count();
         });
 
@@ -134,7 +134,7 @@ class User extends Authenticatable implements LikerContract
         $cacheKey = sprintf(self::CACHE_KEY_FOLLOWING_COUNT, $this->id);
 
         // Retrieve or save cached result
-        $followingCount = Cache::remember($cacheKey, self::CACHE_KEY_FOLLOWING_COUNT_MINUTES, function () {
+        $followingCount = Cache::remember($cacheKey, self::CACHE_KEY_FOLLOWING_COUNT_SECONDS, function () {
             return $this->following()->count();
         });
 
@@ -151,7 +151,7 @@ class User extends Authenticatable implements LikerContract
         $cacheKey = sprintf(self::CACHE_KEY_REPUTATION_COUNT, $this->id);
 
         // Retrieve or save cached result
-        $repCount = Cache::remember($cacheKey, self::CACHE_KEY_REPUTATION_COUNT_MINUTES, function () {
+        $repCount = Cache::remember($cacheKey, self::CACHE_KEY_REPUTATION_COUNT_SECONDS, function () {
             $foundRep = UserReputation::where('given_user_id', $this->id)->sum('amount');
 
             if($foundRep === null) return 0;

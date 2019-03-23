@@ -18,6 +18,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use PusherHelper;
 use Illuminate\Http\Request;
 
@@ -44,7 +45,7 @@ class UserController extends Controller
             !$imgValidator->fails()
         ) {
             // Save the uploaded avatar
-            $fileName = 'avatar_' . str_random(30) . '.' . $request->file('profileImage')->extension();;
+            $fileName = 'avatar_' . Str::random(30) . '.' . $request->file('profileImage')->extension();;
 
             $request->file('profileImage')->storeAs(User::USER_UPLOADS_PATH, $fileName);
         }
@@ -54,7 +55,7 @@ class UserController extends Controller
             'username'              => $data['username'],
             'email'                 => $data['email'],
             'password'              => User::hashPass($data['password']),
-            'email_confirmation_id' => str_random(50),
+            'email_confirmation_id' => Str::random(50),
             'avatar'                => $fileName
         ]);
 
@@ -422,7 +423,7 @@ class UserController extends Controller
                 (new JSONResult())->setError('The uploaded avatar is not valid.')->show();
 
             // Create a name for the new avatar
-            $newAvatarName = 'avatar_' . str_random(30);
+            $newAvatarName = 'avatar_' . Str::random(30);
 
             if($user->hasAvatar()) {
                 // Delete the old avatar
@@ -457,6 +458,7 @@ class UserController extends Controller
     /**
      * Follows a user
      *
+     * @param Request $request
      * @param User $user
      */
     public function follow(Request $request, User $user) {

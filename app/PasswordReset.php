@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Illuminate\Support\Str;
+
 class PasswordReset extends KModel
 {
     // The length of a reset token
@@ -21,7 +23,7 @@ class PasswordReset extends KModel
      */
     public static function genToken()
     {
-        return str_random(self::TOKEN_LENGTH);
+        return Str::random(self::TOKEN_LENGTH);
     }
 
     /**
@@ -30,6 +32,6 @@ class PasswordReset extends KModel
      * @return string
      */
     public static function genTempPassword() {
-        return str_random(10);
+        return Str::random(10);
     }
 }
