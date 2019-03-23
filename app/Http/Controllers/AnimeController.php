@@ -24,7 +24,7 @@ class AnimeController extends Controller
      */
     public function exploreAnime() {
         // Retrieve or save cached result
-        $explorePage = Cache::remember(Anime::cacheKey(['name' => 'explore']), Anime::CACHE_KEY_EXPLORE_MINUTES, function () {
+        $explorePage = Cache::remember(Anime::cacheKey(['name' => 'explore']), Anime::CACHE_KEY_EXPLORE_SECONDS, function () {
             // Settings for queries
             $maxAnimePerCategory = 10;
             $maxAnimeForBanners = 5;

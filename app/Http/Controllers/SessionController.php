@@ -9,6 +9,7 @@ use App\LoginAttempt;
 use App\Session;
 use App\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use KuroAuthToken;
 use Validator;
 use Illuminate\Http\Request;
@@ -63,7 +64,7 @@ class SessionController extends Controller
         $newSession = Session::create([
             'user_id'           => $foundUser->id,
             'device'            => $device,
-            'secret'            => str_random(128),
+            'secret'            => Str::random(128),
             'expiration_date'   => date('Y-m-d H:i:s', strtotime('90 days')),
             'ip'                => $loginIPAddress
         ]);

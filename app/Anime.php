@@ -34,10 +34,10 @@ class Anime extends KModel
     const MINIMUM_RATINGS_REQUIRED = 30;
 
     // How long to cache certain responses
-    const CACHE_KEY_EXPLORE_MINUTES = 120;
-    const CACHE_KEY_ACTORS_MINUTES = 120;
-    const CACHE_KEY_SEASONS_MINUTES = 120;
-    const CACHE_KEY_GENRES_MINUTES = 120;
+    const CACHE_KEY_EXPLORE_SECONDS = 120 * 60;
+    const CACHE_KEY_ACTORS_SECONDS = 120 * 60;
+    const CACHE_KEY_SEASONS_SECONDS = 120 * 60;
+    const CACHE_KEY_GENRES_SECONDS = 120 * 60;
 
     // Table name
     const TABLE_NAME = 'anime';
@@ -71,7 +71,7 @@ class Anime extends KModel
         $cacheKey = self::cacheKey(['name' => 'actors', 'id' => $this->id]);
 
         // Retrieve or save cached result
-        $actorsInfo = Cache::remember($cacheKey, self::CACHE_KEY_ACTORS_MINUTES, function () {
+        $actorsInfo = Cache::remember($cacheKey, self::CACHE_KEY_ACTORS_SECONDS, function () {
             return $this->actors()->get();
         });
 
@@ -97,7 +97,7 @@ class Anime extends KModel
         $cacheKey = self::cacheKey(['name' => 'seasons', 'id' => $this->id]);
 
         // Retrieve or save cached result
-        $seasonsInfo = Cache::remember($cacheKey, self::CACHE_KEY_SEASONS_MINUTES, function () {
+        $seasonsInfo = Cache::remember($cacheKey, self::CACHE_KEY_SEASONS_SECONDS, function () {
             return $this->seasons()->get();
         });
 
@@ -123,7 +123,7 @@ class Anime extends KModel
         $cacheKey = self::cacheKey(['name' => 'genres', 'id' => $this->id]);
 
         // Retrieve or save cached result
-        $genresInfo = Cache::remember($cacheKey, self::CACHE_KEY_GENRES_MINUTES, function () {
+        $genresInfo = Cache::remember($cacheKey, self::CACHE_KEY_GENRES_SECONDS, function () {
             return $this->genres;
         });
 

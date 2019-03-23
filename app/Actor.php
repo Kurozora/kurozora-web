@@ -2,6 +2,11 @@
 
 namespace App;
 
+/**
+ * @property mixed name
+ * @property mixed role
+ * @property mixed image
+ */
 class Actor extends KModel
 {
     // Table name
