@@ -1,8 +1,7 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
-    "license": "MIT",
+    "name": "musa11971/kurozora-web",
+    "description": "Kurozora web application.",
+    "keywords": [],
     "type": "project",
     "require": {
         "php": "^7.1.3",
