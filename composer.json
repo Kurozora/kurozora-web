@@ -11,7 +11,7 @@
         "cybercog/laravel-love": "^5.2",
         "fideloper/proxy": "^4.0",
         "fzaninotto/faker": "^1.8",
-        "laravel/framework": "5.6.*",
+        "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
         "musa11971/laravel-autopolicy": "^1.0",
         "musa11971/laravel-tvdb": "^1.0",
