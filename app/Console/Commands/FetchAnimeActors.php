@@ -6,6 +6,7 @@ use App\Actor;
 use App\Anime;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use musa11971\TVDB\Exceptions\TVDBNotFoundException;
 use musa11971\TVDB\TVDB;
 
 class FetchAnimeActors extends Command
@@ -64,7 +65,16 @@ class FetchAnimeActors extends Command
         $this->info('');
 
         // Get the actors
-        $retActors = TVDB::getSeriesActors($anime->tvdb_id);
+        $retActors = [];
+
+        try {
+            $retActors = TVDB::getSeriesActors($anime->tvdb_id);
+        }
+        // Actors could not be found on TVDB
+        catch(TVDBNotFoundException $e) {
+            $this->error('Ran into "TVDBNotFoundException", actors will be set to none.');
+            $retActors = [];
+        }
 
         // Delete old actors if there were any
         Actor::where('anime_id', $anime->id)->delete();
