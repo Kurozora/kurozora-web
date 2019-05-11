@@ -11,16 +11,6 @@ use Illuminate\Support\Facades\Broadcast;
 class SendSessionNotification
 {
     /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Handle the event.
      *
      * @param  NewUserSessionEvent  $event
