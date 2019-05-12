@@ -3,11 +3,10 @@
 namespace App\Nova;
 
 use Chaseconey\ExternalImage\ExternalImage;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Anime extends Resource
 {
@@ -48,7 +47,24 @@ class Anime extends Resource
             ExternalImage::make('Poster', 'cached_poster_thumbnail'),
 
             Text::make('Title')->sortable(),
+
+            HasMany::make('Seasons'),
         ];
+    }
+
+    /**
+     * Get the value that should be displayed to represent the resource.
+     *
+     * @return string
+     */
+    public function title()
+    {
+        $animeName = $this->title;
+
+        if(!is_string($animeName) || !strlen($animeName))
+            $animeName = 'No Anime title';
+
+        return $animeName . ' (ID: ' . $this->id . ')';
     }
 
     /**

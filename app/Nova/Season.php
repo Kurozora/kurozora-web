@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
@@ -47,6 +48,8 @@ class Season extends Resource
             Text::make('Season Title', 'title'),
 
             HasMany::make('Episodes'),
+
+            BelongsTo::make('Anime'),
         ];
     }
 
