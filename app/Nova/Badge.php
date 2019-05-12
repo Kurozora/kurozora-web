@@ -2,37 +2,29 @@
 
 namespace App\Nova;
 
-use App\Badge;
-use App\Enums\UserRole;
-use App\Rules\ValidateEmail;
-use App\Rules\ValidatePassword;
-use Chaseconey\ExternalImage\ExternalImage;
-use Laravel\Nova\Fields\Avatar;
-use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\MorphMany;
-use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Gravatar;
-use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Timothyasp\Color\Color;
 
-class User extends Resource
+class Badge extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\User';
+    public static $model = 'App\Badge';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'username';
+    public static $title = 'text';
 
     /**
      * The columns that should be searched.
@@ -40,7 +32,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'username', 'email',
+        'id', 'text'
     ];
 
     /**
@@ -54,29 +46,18 @@ class User extends Resource
         return [
             ID::make()->sortable(),
 
-            Text::make('Name', 'username')
-                ->sortable()
-                ->rules('required', 'max:255'),
+            Text::make('Badge Text', 'text'),
 
-            Text::make('Email')
-                ->sortable()
-                ->rules('required', new ValidateEmail(false)),
+            Color::make('Text Color', 'textColor')
+                ->rules('required'),
 
-            Password::make('Password')
-                ->onlyOnForms()
-                ->rules(new ValidatePassword(false)),
+            Color::make('Background Color', 'backgroundColor')
+                ->rules('required'),
 
-            Select::make('Role')->options([
-                UserRole::Normal        => UserRole::getDescription(UserRole::Normal),
-                UserRole::Moderator     => UserRole::getDescription(UserRole::Moderator),
-                UserRole::Administrator => UserRole::getDescription(UserRole::Administrator),
-            ])
-                ->rules('required')
-                ->displayUsingLabels(),
+            Textarea::make('Description'),
 
-            Textarea::make('Biography'),
-
-            HasMany::make('Badges'),
+            BelongsToMany::make('Users')
+                ->searchable(),
         ];
     }
 
@@ -122,15 +103,5 @@ class User extends Resource
     public function actions(Request $request)
     {
         return [];
-    }
-
-    /**
-     * Determine if the given resource is authorizable.
-     *
-     * @return bool
-     */
-    public static function authorizable()
-    {
-        return false;
     }
 }

@@ -2,11 +2,26 @@
 
 namespace App;
 
+/**
+ * @property mixed number
+ * @property mixed title
+ * @property mixed anime_id
+ * @property mixed id
+ */
 class AnimeSeason extends KModel
 {
     // Table name
     const TABLE_NAME = 'anime_season';
     protected $table = self::TABLE_NAME;
+
+    /**
+     * Returns the episodes associated with the season
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    function episodes() {
+        return $this->hasMany(AnimeEpisode::class, 'season_id');
+    }
 
     /**
      * Returns the title of the Season

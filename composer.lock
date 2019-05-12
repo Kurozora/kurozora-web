@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2e90f3e508d9fa871ab51682d906b126",
+    "content-hash": "b92b128f3c4351eae0502047ce5175bc",
     "packages": [
         {
             "name": "bensampo/laravel-enum",
@@ -3311,6 +3311,49 @@
             "description": "CssToInlineStyles is a class that enables you to convert HTML-pages/files into HTML-pages/files with inline styles. This is very useful when you're sending emails.",
             "homepage": "https://github.com/tijsverkoyen/CssToInlineStyles",
             "time": "2017-11-27T11:13:29+00:00"
+        },
+        {
+            "name": "timothyasp/nova-color-field",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/timothyasp/nova-color-field.git",
+                "reference": "b7df196fcf2b78daff06fbafe553fdeed4e0d2d8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/timothyasp/nova-color-field/zipball/b7df196fcf2b78daff06fbafe553fdeed4e0d2d8",
+                "reference": "b7df196fcf2b78daff06fbafe553fdeed4e0d2d8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Timothyasp\\Color\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Timothyasp\\Color\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova Color Picker field.",
+            "keywords": [
+                "color picker",
+                "field",
+                "laravel",
+                "nova"
+            ],
+            "time": "2018-11-12T04:54:15+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
