@@ -75,6 +75,15 @@ class User extends Authenticatable implements LikerContract
     }
 
     /**
+     * Returns the associated sessions for the user
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    function sessions() {
+        return $this->hasMany(Session::class);
+    }
+
+    /**
      * Returns a list of badges that the user has assigned to them
      *
      * @return array

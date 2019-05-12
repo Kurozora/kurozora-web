@@ -2,22 +2,22 @@
 
 namespace App\Nova;
 
-use App\Nova\Actions\FetchAnimeImages;
-use Chaseconey\ExternalImage\ExternalImage;
 use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Anime extends Resource
+class Genre extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\Anime';
+    public static $model = 'App\Genre';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -32,7 +32,7 @@ class Anime extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'title'
+        'id', 'name'
     ];
 
     /**
@@ -46,14 +46,16 @@ class Anime extends Resource
         return [
             ID::make()->sortable(),
 
-            ExternalImage::make('Poster', 'cached_poster_thumbnail'),
+            Text::make('Genre Name', 'name')
+                ->rules('required')
+                ->sortable(),
 
-            Text::make('Title')->sortable(),
+            Boolean::make('NSFW', 'nsfw')
+                ->rules('required')
+                ->sortable(),
 
-            BelongsToMany::make('Genres')
+            BelongsToMany::make('Animes')
                 ->searchable(),
-
-            HasMany::make('Seasons'),
         ];
     }
 
@@ -64,12 +66,12 @@ class Anime extends Resource
      */
     public function title()
     {
-        $animeName = $this->title;
+        $genreName = $this->name;
 
-        if(!is_string($animeName) || !strlen($animeName))
-            $animeName = 'No Anime title';
+        if(!is_string($genreName) || !strlen($genreName))
+            $genreName = 'No genre title';
 
-        return $animeName . ' (ID: ' . $this->id . ')';
+        return $genreName . ' (ID: ' . $this->id . ')';
     }
 
     /**
@@ -113,8 +115,6 @@ class Anime extends Resource
      */
     public function actions(Request $request)
     {
-        return [
-            new FetchAnimeImages
-        ];
+        return [];
     }
 }
