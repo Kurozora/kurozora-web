@@ -66,6 +66,15 @@ class User extends Authenticatable implements LikerContract
     const BIOGRAPHY_LIMIT = 250;
 
     /**
+     * Returns the associated badges for the user
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    function badges() {
+        return $this->belongsToMany(Badge::class, UserBadge::class, 'user_id', 'badge_id');
+    }
+
+    /**
      * Returns a list of badges that the user has assigned to them
      *
      * @return array

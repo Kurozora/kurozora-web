@@ -12,6 +12,22 @@ class ValidatePassword implements Rule
     protected $errorType;
 
     /**
+     * Whether or not it is required
+     *
+     * @var bool
+     */
+    protected $required;
+
+    /**
+     * ValidatePassword constructor.
+     *
+     * @param bool $required
+     */
+    function __construct($required = true) {
+        $this->required = $required;
+    }
+
+    /**
      * Determine if the validation rule passes.
      *
      * @param  string  $attribute
@@ -23,7 +39,9 @@ class ValidatePassword implements Rule
         // Empty string does not pass
         if(!is_string($value) || !strlen($value)) {
             $this->errorType = 'length';
-            return false;
+
+            if($this->required) return false;
+            else return true;
         }
 
         // Check minimum length
