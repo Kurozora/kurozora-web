@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->string('avatar')->nullable();
             $table->string('banner')->nullable();
             $table->text('biography')->nullable();
+            $table->rememberToken();
             $table->string('email_confirmation_id')->nullable();
         });
     }
