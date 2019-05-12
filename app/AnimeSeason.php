@@ -24,6 +24,15 @@ class AnimeSeason extends KModel
     }
 
     /**
+     * Returns the Anime that owns the season
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    function anime() {
+        return $this->belongsTo(Anime::class);
+    }
+
+    /**
      * Returns the title of the Season
      *
      * @return string
