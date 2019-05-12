@@ -2,22 +2,20 @@
 
 namespace App\Nova;
 
-use App\Nova\Actions\FetchAnimeImages;
-use Chaseconey\ExternalImage\ExternalImage;
-use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Anime extends Resource
+class Session extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\Anime';
+    public static $model = 'App\Session';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -32,7 +30,7 @@ class Anime extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'title'
+        'id', 'device'
     ];
 
     /**
@@ -46,30 +44,17 @@ class Anime extends Resource
         return [
             ID::make()->sortable(),
 
-            ExternalImage::make('Poster', 'cached_poster_thumbnail'),
+            Text::make('Device')
+                ->rules('required')
+                ->sortable(),
 
-            Text::make('Title')->sortable(),
+            Text::make('IP Address', 'ip')
+                ->rules('required')
+                ->onlyOnDetail(),
 
-            BelongsToMany::make('Genres')
+            BelongsTo::make('User')
                 ->searchable(),
-
-            HasMany::make('Seasons'),
         ];
-    }
-
-    /**
-     * Get the value that should be displayed to represent the resource.
-     *
-     * @return string
-     */
-    public function title()
-    {
-        $animeName = $this->title;
-
-        if(!is_string($animeName) || !strlen($animeName))
-            $animeName = 'No Anime title';
-
-        return $animeName . ' (ID: ' . $this->id . ')';
     }
 
     /**
@@ -113,8 +98,16 @@ class Anime extends Resource
      */
     public function actions(Request $request)
     {
-        return [
-            new FetchAnimeImages
-        ];
+        return [];
+    }
+
+    /**
+     * Determine if the given resource is authorizable.
+     *
+     * @return bool
+     */
+    public static function authorizable()
+    {
+        return false;
     }
 }

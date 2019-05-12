@@ -77,6 +77,8 @@ class User extends Resource
             Textarea::make('Biography'),
 
             HasMany::make('Badges'),
+
+            HasMany::make('Sessions'),
         ];
     }
 

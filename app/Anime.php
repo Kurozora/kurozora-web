@@ -110,7 +110,7 @@ class Anime extends KModel
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function genres() {
-        return $this->belongsToMany(Genre::class, AnimeGenre::TABLE_NAME, 'anime_id', 'id');
+        return $this->belongsToMany(Genre::class, AnimeGenre::TABLE_NAME, 'anime_id', 'genre_id');
     }
 
     /**

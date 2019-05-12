@@ -13,6 +13,15 @@ class Session extends KModel
     const TABLE_NAME = 'user_session';
     protected $table = self::TABLE_NAME;
 
+    /**
+     * Returns the user that owns the session.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    function user() {
+        return $this->belongsTo(User::class);
+    }
+
     // Checks if the session is expired
     public function isExpired() {
         return (strtotime($this->expiration_date) < time());
