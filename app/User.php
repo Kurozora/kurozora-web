@@ -84,6 +84,15 @@ class User extends Authenticatable implements LikerContract
     }
 
     /**
+     * Returns the associated threads for the user
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    function threads() {
+        return $this->hasMany(ForumThread::class);
+    }
+
+    /**
      * Returns a list of badges that the user has assigned to them
      *
      * @return array

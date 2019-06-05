@@ -27,6 +27,12 @@ class CreateSessionsTable extends Migration
             $table->string('ip')->nullable();
             $table->string('device', 50)->nullable();
             $table->string('secret', 128);
+
+            $table->string('city')->nullable();
+            $table->string('region')->nullable();
+            $table->string('country')->nullable();
+            $table->float('latitude')->nullable();
+            $table->float('longitude')->nullable();
         });
     }
 
