@@ -6,6 +6,14 @@ namespace App;
 /**
  * @property false|string last_validated
  * @property mixed id
+ * @property string ip
+ * @property string city
+ * @property string region
+ * @property string country
+ * @property float latitude
+ * @property float longitude
+ * @property mixed device
+ * @property mixed expiration_date
  */
 class Session extends KModel
 {
@@ -49,7 +57,14 @@ class Session extends KModel
             'id'                => $this->id,
             'device'            => $this->device,
             'ip'                => $this->ip,
-            'last_validated'    => $this->formatLastValidated()
+            'last_validated'    => $this->formatLastValidated(),
+            'location'          => [
+                'city'      => $this->city,
+                'region'    => $this->region,
+                'country'   => $this->country,
+                'latitude'  => $this->latitude,
+                'longitude' => $this->longitude,
+            ]
         ];
     }
 
@@ -63,7 +78,14 @@ class Session extends KModel
             'id'                => $this->id,
             'device'            => $this->device,
             'ip'                => $this->ip,
-            'last_validated'    => $this->formatLastValidated()
+            'last_validated'    => $this->formatLastValidated(),
+            'location'          => [
+                'city'      => $this->city,
+                'region'    => $this->region,
+                'country'   => $this->country,
+                'latitude'  => $this->latitude,
+                'longitude' => $this->longitude,
+            ]
         ];
     }
 }

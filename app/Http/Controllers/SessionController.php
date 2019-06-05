@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\NewUserSessionEvent;
 use App\Events\UserSessionKilledEvent;
 use App\Helpers\JSONResult;
+use App\Jobs\FetchSessionLocation;
 use App\LoginAttempt;
 use App\Session;
 use App\User;
@@ -68,6 +69,9 @@ class SessionController extends Controller
             'expiration_date'   => date('Y-m-d H:i:s', strtotime('90 days')),
             'ip'                => $loginIPAddress
         ]);
+
+        // Dispatch job to retrieve location
+        dispatch(new FetchSessionLocation($newSession));
 
         // Fire event
         event(new NewUserSessionEvent($newSession));
