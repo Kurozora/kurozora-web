@@ -1,4 +1,4 @@
-We want to ensure that you have a pleasant on our platform. If you decide to register an account with us, we will have to store some data to keep track of your account and your details. Your privacy is very important to us, so we will always process your personal data with the utmost care.
+We want to ensure that you have a pleasant time on our platform. If you decide to register an account with us, we will have to store some data to keep track of your account and your details. Your privacy is very important to us, so we will always process your personal data with the utmost care.
 
 ___________________
 
@@ -33,6 +33,15 @@ Next to your account data, we also store data related to your logged in sessions
 - the IP address of the authenticated client
 - authentication data and session expiry date
 - etc.
+
+We may use a third party provider, "IP Info" (https://ipinfo.io/), to resolve your IP address to a geographical location. This information may consist of:
+- approximate city
+- approximate region
+- country
+- approximate coordinates (latitude/longitude)
+
+The geographical locations are stored on our servers and bound to an individual login session.
+We have picked "IP Info" with care, but what they do with your IP address is beyond our control. You can read their privacy policy here: https://ipinfo.io/privacy-policy.
 
 We also keep track of IP addresses that have made failed login attempts. We do this to temporarily "block" IP addresses from logging in once they have done this too many times.
 
