@@ -2,30 +2,27 @@
 
 namespace App\Nova;
 
-use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Textarea;
-use Laravel\Nova\Fields\Trix;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Thread extends Resource
+class ForumSection extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\ForumThread';
+    public static $model = 'App\ForumSection';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'title';
+    public static $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -33,7 +30,7 @@ class Thread extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'title'
+        'id', 'name'
     ];
 
     /**
@@ -47,29 +44,12 @@ class Thread extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('User')
-                ->sortable()
-                ->searchable(),
-
-            BelongsTo::make('Forum Section')
-                ->sortable()
-                ->searchable(),
-
-            Text::make('Title')
+            Text::make('Section Name', 'name')
                 ->rules('required', 'max:255')
                 ->sortable(),
 
-            Textarea::make('Content')
-                ->rules('required')
-                ->hideFromIndex(),
-
-            Text::make('Posted from IP address', 'ip')
-                ->rules('required', 'max:255')
-                ->sortable()
-                ->hideFromIndex(),
-
-            Boolean::make('Thread is locked', 'locked')
-                ->sortable()
+            Boolean::make('Section is locked', 'locked')
+                ->sortable(),
         ];
     }
 
@@ -80,7 +60,7 @@ class Thread extends Resource
      */
     public function title()
     {
-        return 'Title: "' . $this->title . '" (ID: ' . $this->id . ')';
+        return $this->name . ' (ID: ' . $this->id . ')';
     }
 
     /**
@@ -89,7 +69,7 @@ class Thread extends Resource
      * @return string
      */
     public static function label() {
-        return 'Forum Threads';
+        return 'Forum Sections';
     }
 
     /**
@@ -134,15 +114,5 @@ class Thread extends Resource
     public function actions(Request $request)
     {
         return [];
-    }
-
-    /**
-     * Determine if the given resource is authorizable.
-     *
-     * @return bool
-     */
-    public static function authorizable()
-    {
-        return false;
     }
 }

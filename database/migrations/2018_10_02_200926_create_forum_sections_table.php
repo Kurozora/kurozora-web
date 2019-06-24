@@ -16,10 +16,11 @@ class CreateForumSectionsTable extends Migration
     {
         Schema::create(ForumSection::TABLE_NAME, function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
 
             $table->string('name');
             $table->boolean('locked')->default(false);
+
+            $table->timestamps();
         });
     }
 
