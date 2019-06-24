@@ -6,6 +6,7 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -45,11 +46,19 @@ class Season extends Resource
         return [
             ID::make()->sortable(),
 
-            Text::make('Season Title', 'title'),
+            BelongsTo::make('Anime')
+                ->searchable()
+                ->sortable(),
+
+            Text::make('Season Title', 'title')
+                ->sortable(),
+
+            Number::make('Season Number', 'number')
+                ->rules('required', 'min:0')
+                ->hideFromIndex()
+                ->help('You should use season number <strong>0</strong> for "Specials".'),
 
             HasMany::make('Episodes'),
-
-            BelongsTo::make('Anime'),
         ];
     }
 
