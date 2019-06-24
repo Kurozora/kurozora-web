@@ -5,6 +5,7 @@ namespace App\Nova;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -44,16 +45,40 @@ class Session extends Resource
         return [
             ID::make()->sortable(),
 
+            BelongsTo::make('User')
+                ->searchable(),
+
             Text::make('Device')
-                ->rules('required')
+                ->rules('required', 'max:50')
                 ->sortable(),
 
             Text::make('IP Address', 'ip')
-                ->rules('required')
-                ->onlyOnDetail(),
+                ->rules('required', 'max:255')
+                ->hideFromIndex(),
 
-            BelongsTo::make('User')
-                ->searchable(),
+            Text::make('Secret Token', 'secret')
+                ->rules('required', 'max:128')
+                ->hideFromIndex(),
+
+            Text::make('City')
+                ->rules('max:255')
+                ->hideFromIndex(),
+
+            Text::make('Region')
+                ->rules('max:255')
+                ->hideFromIndex(),
+
+            Text::make('Country')
+                ->rules('max:255')
+                ->hideFromIndex(),
+
+            Number::make('Latitude (coordinates)', 'latitude')
+                ->step(0.001)
+                ->hideFromIndex(),
+
+            Number::make('Longitude (coordinates)', 'longitude')
+                ->step(0.001)
+                ->hideFromIndex(),
         ];
     }
 
