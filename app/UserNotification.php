@@ -12,7 +12,7 @@ class UserNotification extends KModel
     const TYPE_NEW_SESSION  = 2;
 
     // Table name
-    const TABLE_NAME = 'user_notification';
+    const TABLE_NAME = 'user_notifications';
     protected $table = self::TABLE_NAME;
 
     /**

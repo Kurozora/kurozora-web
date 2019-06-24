@@ -40,7 +40,7 @@ class Anime extends KModel
     const CACHE_KEY_GENRES_SECONDS = 120 * 60;
 
     // Table name
-    const TABLE_NAME = 'anime';
+    const TABLE_NAME = 'animes';
     protected $table = self::TABLE_NAME;
 
     /**

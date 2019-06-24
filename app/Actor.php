@@ -10,7 +10,7 @@ namespace App;
 class Actor extends KModel
 {
     // Table name
-    const TABLE_NAME = 'anime_actor';
+    const TABLE_NAME = 'actors';
     protected $table = self::TABLE_NAME;
 
     /**

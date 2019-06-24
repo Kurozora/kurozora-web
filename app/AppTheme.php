@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\View;
 class AppTheme extends Model
 {
     // Table name
-    const TABLE_NAME = 'theme';
+    const TABLE_NAME = 'app_themes';
     protected $table = self::TABLE_NAME;
 
     /**

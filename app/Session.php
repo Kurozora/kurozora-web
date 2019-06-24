@@ -18,7 +18,7 @@ namespace App;
 class Session extends KModel
 {
     // Table name
-    const TABLE_NAME = 'user_session';
+    const TABLE_NAME = 'sessions';
     protected $table = self::TABLE_NAME;
 
     /**

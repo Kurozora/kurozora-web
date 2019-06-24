@@ -7,7 +7,7 @@ use Carbon\Carbon;
 class ForumSectionBan extends KModel
 {
     // Table name
-    const TABLE_NAME = 'forum_section_ban';
+    const TABLE_NAME = 'forum_section_bans';
     protected $table = self::TABLE_NAME;
 
     /**

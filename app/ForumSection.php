@@ -5,7 +5,7 @@ namespace App;
 class ForumSection extends KModel
 {
     // Table name
-    const TABLE_NAME = 'forum_section';
+    const TABLE_NAME = 'forum_sections';
     protected $table = self::TABLE_NAME;
 
     // Amount of threads to display per page

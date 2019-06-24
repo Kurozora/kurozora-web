@@ -9,6 +9,6 @@ class AnimeRating extends KModel
     const MAX_RATING_VALUE = 5.00;
 
     // Table name
-    const TABLE_NAME = 'anime_rating';
+    const TABLE_NAME = 'anime_ratings';
     protected $table = self::TABLE_NAME;
 }

@@ -13,7 +13,7 @@ class PasswordReset extends KModel
     const VALID_HOURS = 24;
 
     // Table name
-    const TABLE_NAME = 'user_password_reset';
+    const TABLE_NAME = 'password_resets';
     protected $table = self::TABLE_NAME;
 
     /**

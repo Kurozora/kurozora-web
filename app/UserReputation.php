@@ -5,6 +5,6 @@ namespace App;
 class UserReputation extends KModel
 {
     // Table name
-    const TABLE_NAME = 'user_reputation';
+    const TABLE_NAME = 'user_reputations';
     protected $table = self::TABLE_NAME;
 }

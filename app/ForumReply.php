@@ -11,7 +11,7 @@ class ForumReply extends KModel implements LikeableContract
     use Likeable;
 
     // Table name
-    const TABLE_NAME = 'forum_reply';
+    const TABLE_NAME = 'forum_replies';
     protected $table = self::TABLE_NAME;
 
     // A user can post a forum reply once every {?} seconds
