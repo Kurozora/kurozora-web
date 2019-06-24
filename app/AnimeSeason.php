@@ -11,7 +11,7 @@ namespace App;
 class AnimeSeason extends KModel
 {
     // Table name
-    const TABLE_NAME = 'anime_season';
+    const TABLE_NAME = 'anime_seasons';
     protected $table = self::TABLE_NAME;
 
     /**

@@ -11,7 +11,7 @@ namespace App;
 class Genre extends KModel
 {
     // Table name
-    const TABLE_NAME = 'genre';
+    const TABLE_NAME = 'genres';
     protected $table = self::TABLE_NAME;
 
     /**

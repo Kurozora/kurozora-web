@@ -12,7 +12,7 @@ namespace App;
 class Badge extends KModel
 {
     // Table name
-    const TABLE_NAME = 'badge';
+    const TABLE_NAME = 'badges';
     protected $table = self::TABLE_NAME;
 
     /**

@@ -36,7 +36,7 @@ class ForumThread extends KModel implements LikeableContract
     const MAX_SEARCH_RESULTS = 10;
 
     // Table name
-    const TABLE_NAME = 'forum_thread';
+    const TABLE_NAME = 'forum_threads';
     protected $table = self::TABLE_NAME;
 
     // A user can post a thread once every {?} seconds

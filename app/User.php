@@ -56,7 +56,7 @@ class User extends Authenticatable implements LikerContract
     const CACHE_KEY_REPUTATION_COUNT_SECONDS = 10 * 60;
 
     // Table name
-    const TABLE_NAME = 'user';
+    const TABLE_NAME = 'users';
     protected $table = self::TABLE_NAME;
 
     // Remove column guards
