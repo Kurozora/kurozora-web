@@ -9,6 +9,15 @@ class AnimeEpisode extends KModel
     protected $table = self::TABLE_NAME;
 
     /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = [
+        'first_aired',
+    ];
+
+    /**
      * Returns the season this episode belongs to
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

@@ -67,7 +67,7 @@ class Anime extends Resource
 
             Textarea::make('Synopsis')
                 ->onlyOnForms()
-                ->help('A short description about the Anime.'),
+                ->help('A short description of the Anime.'),
 
             Heading::make('Meta information')
                 ->onlyOnForms(),

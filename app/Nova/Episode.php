@@ -3,9 +3,11 @@
 namespace App\Nova;
 
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Episode extends Resource
@@ -44,11 +46,30 @@ class Episode extends Resource
         return [
             ID::make()->sortable(),
 
-            Text::make('Episode Title', 'name'),
-
             BelongsTo::make('Season')
-                ->searchable(),
+                ->searchable()
+                ->sortable(),
+
+            Text::make('Episode Title', 'name')
+                ->rules('required', 'max:255'),
+
+            DateTime::make('First Aired At', 'first_aired')
+                ->sortable(),
+
+            Textarea::make('Overview')
+                ->hideFromIndex()
+                ->help('A short description of the Episode.'),
         ];
+    }
+
+    /**
+     * Get the value that should be displayed to represent the resource.
+     *
+     * @return string
+     */
+    public function title()
+    {
+        return $this->name . ' (ID: ' . $this->id . ')';
     }
 
     /**
