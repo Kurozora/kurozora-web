@@ -151,6 +151,15 @@ class Anime extends Resource
     }
 
     /**
+     * Returns the user-friendly display name of the resource.
+     *
+     * @return string
+     */
+    public static function label() {
+        return 'Anime';
+    }
+
+    /**
      * Get the cards available for the request.
      *
      * @param  \Illuminate\Http\Request  $request

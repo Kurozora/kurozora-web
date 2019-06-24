@@ -46,12 +46,21 @@ class ForumThread extends KModel implements LikeableContract
     const REPLIES_PER_PAGE = 10;
 
     /**
+     * Get the section the thread was posted in.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function forum_section() {
+        return $this->belongsTo(ForumSection::class, 'section_id', 'id');
+    }
+
+    /**
      * Get the user associated with the thread
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user() {
-        return $this->hasOne(User::class, 'id', 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     /**
