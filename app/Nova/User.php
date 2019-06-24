@@ -7,7 +7,9 @@ use App\Enums\UserRole;
 use App\Rules\ValidateEmail;
 use App\Rules\ValidatePassword;
 use Chaseconey\ExternalImage\ExternalImage;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Laravel\Nova\Fields\Avatar;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
@@ -78,7 +80,8 @@ class User extends Resource
 
             HasMany::make('Threads'),
 
-            HasMany::make('Badges'),
+            BelongsToMany::make('Badges')
+                ->searchable(),
 
             HasMany::make('Sessions'),
         ];
