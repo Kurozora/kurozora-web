@@ -3,29 +3,26 @@
 namespace App\Nova;
 
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
-use Laravel\Nova\Fields\Trix;
 
-class Thread extends Resource
+class ForumReply extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\ForumThread';
+    public static $model = 'App\ForumReply';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'title';
+    public static $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -33,7 +30,7 @@ class Thread extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'title'
+        'id',
     ];
 
     /**
@@ -48,28 +45,22 @@ class Thread extends Resource
             ID::make()->sortable(),
 
             BelongsTo::make('User')
-                ->sortable()
-                ->searchable(),
-
-            BelongsTo::make('Forum Section')
-                ->sortable()
-                ->searchable(),
-
-            Text::make('Title')
-                ->rules('required', 'max:255')
+                ->rules('required')
+                ->searchable()
                 ->sortable(),
 
-            Textarea::make('Content')
+            BelongsTo::make('Forum Thread', 'forum_thread')
+                ->rules('required')
+                ->searchable()
+                ->sortable(),
+
+            Text::make('Replied from IP address', 'ip')
+                ->rules('required', 'max:255')
+                ->help('The IP address that the reply was posted from.'),
+
+            Textarea::make('Reply Content', 'content')
                 ->rules('required')
                 ->hideFromIndex(),
-
-            Text::make('Posted from IP address', 'ip')
-                ->rules('required', 'max:255')
-                ->sortable()
-                ->hideFromIndex(),
-
-            Boolean::make('Thread is locked', 'locked')
-                ->sortable()
         ];
     }
 
@@ -80,7 +71,7 @@ class Thread extends Resource
      */
     public function title()
     {
-        return 'Title: "' . $this->title . '" (ID: ' . $this->id . ')';
+        return $this->name . 'Forum reply ID: ' . $this->id;
     }
 
     /**
@@ -89,7 +80,7 @@ class Thread extends Resource
      * @return string
      */
     public static function label() {
-        return 'Forum Threads';
+        return 'Forum Replies';
     }
 
     /**
@@ -134,15 +125,5 @@ class Thread extends Resource
     public function actions(Request $request)
     {
         return [];
-    }
-
-    /**
-     * Determine if the given resource is authorizable.
-     *
-     * @return bool
-     */
-    public static function authorizable()
-    {
-        return false;
     }
 }
