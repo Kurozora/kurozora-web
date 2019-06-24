@@ -16,7 +16,7 @@ class ForumSection extends KModel
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function threads() {
+    public function forum_threads() {
         return $this->hasMany(ForumThread::class, 'section_id', 'id');
     }
 
