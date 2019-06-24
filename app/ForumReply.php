@@ -18,6 +18,15 @@ class ForumReply extends KModel implements LikeableContract
     const COOLDOWN_POST_REPLY = 10;
 
     /**
+     * Returns the thread the reply was posted in.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    function forum_thread() {
+        return $this->belongsTo(ForumThread::class, 'thread_id', 'id');
+    }
+
+    /**
      * Get the user associated with the reply
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
