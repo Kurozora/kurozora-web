@@ -73,7 +73,7 @@ class User extends Resource
 
             Textarea::make('Biography'),
 
-            HasMany::make('ForumThreads'),
+            HasMany::make('Forum Threads', 'threads'),
 
             BelongsToMany::make('Badges')
                 ->searchable(),
