@@ -88,6 +88,7 @@ class Anime extends Resource
                 ->help('For series: The average runtime in minutes of a single episode.<br />For movies: The amount of minutes the movie takes.'),
 
             Boolean::make('NSFW')
+                ->sortable()
                 ->help('NSFW: Not Safe For Work (not suitable for watchers under the age of 18).'),
 
             Text::make('Watch rating', 'watch_rating')

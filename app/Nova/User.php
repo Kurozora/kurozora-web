@@ -2,21 +2,15 @@
 
 namespace App\Nova;
 
-use App\Badge;
 use App\Enums\UserRole;
 use App\Rules\ValidateEmail;
 use App\Rules\ValidatePassword;
-use Chaseconey\ExternalImage\ExternalImage;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\MorphMany;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Textarea;
 
@@ -74,6 +68,7 @@ class User extends Resource
                 UserRole::Administrator => UserRole::getDescription(UserRole::Administrator),
             ])
                 ->rules('required')
+                ->sortable()
                 ->displayUsingLabels(),
 
             Textarea::make('Biography'),
