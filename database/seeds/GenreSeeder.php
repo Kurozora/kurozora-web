@@ -26,6 +26,8 @@ class GenreSeeder extends Seeder
                     'name'          => $genre->name,
                     'description'   => $genre->description,
                     'nsfw'          => $genre->nsfw,
+                    'symbol'        => $genre->symbol,
+                    'color'         => $genre->color
                 ]);
             }
         }

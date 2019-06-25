@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Genre;
 use App\Helpers\JSONResult;
+use App\Http\Resources\GenreResource;
 
 class GenreController extends Controller
 {
@@ -13,7 +14,7 @@ class GenreController extends Controller
     public function overview() {
         // Get all genres and format them
         $allGenres = Genre::get()->map(function($genre) {
-            return $genre->formatForOverviewResponse();
+            return GenreResource::make($genre);
         });
 
         // Show genres in response
@@ -28,7 +29,7 @@ class GenreController extends Controller
     public function details(Genre $genre) {
         // Show genre details
         (new JSONResult())->setData([
-            'genre' => $genre->formatForDetailsResponse()
+            'genre' => GenreResource::make($genre)
         ])->show();
     }
 }

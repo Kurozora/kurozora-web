@@ -20,6 +20,8 @@ Route::get('/v1', function() {
 
 // API Routes
 Route::group(['prefix' => 'v1'], function () {
+    Route::get('/explore', [ExplorePageController::class, 'explore']);
+
     Route::prefix('/users')->group(function() {
         Route::post('/', [UserController::class, 'register']);
 
@@ -87,8 +89,6 @@ Route::group(['prefix' => 'v1'], function () {
     });
 
     Route::prefix('/anime')->group(function() {
-        Route::get('/', [AnimeController::class, 'exploreAnime']);
-
         Route::get('/search', [AnimeController::class, 'search']);
 
         Route::get('/{anime}', [AnimeController::class, 'detailsAnime'])

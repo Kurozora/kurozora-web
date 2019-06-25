@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Http\Resources\GenreResource;
 use App\Traits\KuroSearchTrait;
 use Illuminate\Support\Facades\Cache;
 
@@ -166,66 +167,5 @@ class Anime extends KModel
 
         // Images not fetched yet
         return null;
-    }
-
-    /**
-     * Formats an array of Anime items as a category
-     *
-     * @param string $categoryTitle
-     * @param string $type
-     * @param Anime[] $animeArray
-     * @return array
-     */
-    public static function formatAnimesAsCategory($categoryTitle, $type, $animeArray) {
-        $retArr = [
-            'title' => $categoryTitle,
-            'type'  => $type,
-            'shows' => []
-        ];
-
-        // Add all Anime items to the shows array
-        foreach($animeArray as $anime)
-            $retArr['shows'][] = self::formatAnimeAsThumbnail($anime);
-
-        // Return the category
-        return $retArr;
-    }
-
-    /**
-     * Formats a list of Anime items into an array of thumbnail data
-     *
-     * @param Anime[] $animeArray
-     * @return array
-     */
-    public static function formatAnimesAsThumbnail($animeArray) {
-        $retArr = [];
-
-        foreach($animeArray as $anime)
-            $retArr[] = self::formatAnimeAsThumbnail($anime);
-
-        return $retArr;
-    }
-
-    /**
-     * Returns minimal data of an Anime item to display it as a thumbnail
-     *
-     * @param Anime $anime
-     * @return array
-     */
-    public static function formatAnimeAsThumbnail($anime) {
-        $genres = $anime->getGenres()->map(function($genre) {
-            return $genre->formatForAnimeResponse();
-        });
-
-        return [
-            'id'                    => $anime->id,
-            'title'                 => $anime->title,
-            'average_rating'        => $anime->average_rating,
-            'poster'                => $anime->getPoster(false),
-            'poster_thumbnail'      => $anime->getPoster(true),
-            'background'            => $anime->getBackground(false),
-            'background_thumbnail'  => $anime->getBackground(true),
-            'genres'                => $genres
-        ];
     }
 }

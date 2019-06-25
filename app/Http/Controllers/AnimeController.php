@@ -10,6 +10,7 @@ use App\Enums\AnimeType;
 use App\Enums\UserLibraryStatus;
 use App\Events\AnimeViewed;
 use App\Helpers\JSONResult;
+use App\Http\Resources\GenreResource;
 use App\User;
 use App\UserLibrary;
 use Illuminate\Support\Facades\Auth;
@@ -19,56 +20,6 @@ use Illuminate\Http\Request;
 
 class AnimeController extends Controller
 {
-    /**
-     * Returns the necessary data for the Anime explore page
-     */
-    public function exploreAnime() {
-        // Retrieve or save cached result
-        $explorePage = Cache::remember(Anime::cacheKey(['name' => 'explore']), Anime::CACHE_KEY_EXPLORE_SECONDS, function () {
-            // Settings for queries
-            $maxAnimePerCategory = 10;
-            $maxAnimeForBanners = 5;
-
-            // New movies
-            $query_WINTER = Anime::where('nsfw', false)
-                ->limit($maxAnimePerCategory)
-                ->whereIn('tvdb_id', [79911, 272369, 316038, 121891, 123661, 80044])
-                ->get();
-
-            // Randomly chosen
-            $query_RAND = Anime::where('nsfw', false)
-                ->limit($maxAnimePerCategory)
-                ->inRandomOrder()
-                ->get();
-
-            // Newly added Anime
-            $query_NAA = Anime::where('nsfw', false)
-                ->orderBy('created_at', 'DESC')
-                ->limit($maxAnimePerCategory)
-                ->get();
-
-            // Add all the categories together
-            $categoryArray = [
-                Anime::formatAnimesAsCategory('Winter Themed', 'normal', $query_WINTER),
-                Anime::formatAnimesAsCategory('Randomly Chosen', 'large', $query_RAND),
-                Anime::formatAnimesAsCategory('Newly Added Anime', 'normal', $query_NAA)
-            ];
-
-            // Retrieve banner section
-            $query_banners = Anime::where('nsfw', false)
-                ->limit($maxAnimeForBanners)
-                ->get();
-
-            return [
-                'categories'    => $categoryArray,
-                'banners'       => Anime::formatAnimesAsThumbnail($query_banners)
-            ];
-        });
-
-        // Return the response
-        (new JSONResult())->setData($explorePage)->show();
-    }
-
     /**
      * Returns detailed information about an Anime
      *
@@ -99,7 +50,7 @@ class AnimeController extends Controller
 
         // Get the genres
         $genres = $anime->getGenres()->map(function($genre) {
-            return $genre->formatForAnimeResponse();
+            return GenreResource::make($genre);
         });
 
         // Build the response

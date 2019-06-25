@@ -2,23 +2,21 @@
 
 namespace App\Nova;
 
+use App\Enums\ExplorePageCategoryTypes;
 use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
-use Timothyasp\Color\Color;
 
-class Genre extends Resource
+class ExplorePageCategory extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\Genre';
+    public static $model = 'App\ExplorePageCategory';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -33,7 +31,7 @@ class Genre extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name'
+        'id', 'title'
     ];
 
     /**
@@ -47,22 +45,30 @@ class Genre extends Resource
         return [
             ID::make()->sortable(),
 
-            Text::make('Genre Name', 'name')
+            Text::make('Title')
+                ->rules('required', 'max:255')
+                ->sortable()
+                ->help('Please fill in a title, even if it is not displayed on the explore page.'),
+
+            Select::make('Type')->options([
+                ExplorePageCategoryTypes::Shows     => 'Shows',
+                ExplorePageCategoryTypes::Genres    => 'Genres'
+            ])
                 ->rules('required')
                 ->sortable(),
 
-            Text::make('Symbol image URL', 'symbol')
-                ->rules('max:255')
-                ->hideFromIndex(),
-
-            Color::make('Genre Color', 'color')
-                ->rules('required'),
-
-            Boolean::make('NSFW', 'nsfw')
+            Select::make('Size')->options([
+                'small'     => 'Small',
+                'medium'    => 'Medium',
+                'large'     => 'Large',
+            ])
                 ->rules('required')
                 ->sortable(),
 
             BelongsToMany::make('Animes')
+                ->searchable(),
+
+            BelongsToMany::make('Genres')
                 ->searchable(),
         ];
     }
@@ -74,12 +80,16 @@ class Genre extends Resource
      */
     public function title()
     {
-        $genreName = $this->name;
+        return $this->title . ' (ID: ' . $this->id . ')';
+    }
 
-        if(!is_string($genreName) || !strlen($genreName))
-            $genreName = 'No genre title';
-
-        return $genreName . ' (ID: ' . $this->id . ')';
+    /**
+     * Returns the user-friendly display name of the resource.
+     *
+     * @return string
+     */
+    public static function label() {
+        return 'Explore Page Cat.';
     }
 
     /**
@@ -90,7 +100,8 @@ class Genre extends Resource
      */
     public function cards(Request $request)
     {
-        return [];
+        return [
+        ];
     }
 
     /**
