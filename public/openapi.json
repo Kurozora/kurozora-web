@@ -25,6 +25,10 @@
   ],
   "tags":[
     {
+      "name":"explore",
+      "description":"Everything explore page related"
+    },
+    {
       "name":"users",
       "description":"Everything user related"
     },
@@ -74,6 +78,21 @@
     }
   ],
   "paths": {
+    "/explore": {
+      "get": {
+        "tags": ["explore"],
+        "summary": "Explore page.",
+        "description": "This endpoint will retrieve the details to for the explore page.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/users": {
       "post": {
         "tags": [
@@ -785,23 +804,6 @@
             "description": "ID of the session to be deleted."
           }
         ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/anime": {
-      "get": {
-        "tags": [
-          "anime"
-        ],
-        "summary": "Anime explore.",
-        "description": "This endpoint will retrieve the details to form the Anime explore page.",
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSONSuccess"

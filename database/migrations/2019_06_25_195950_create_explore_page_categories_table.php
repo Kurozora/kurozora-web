@@ -1,11 +1,11 @@
 <?php
 
-use App\Genre;
+use App\ExplorePageCategory;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGenresTable extends Migration
+class CreateExplorePageCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,15 +14,13 @@ class CreateGenresTable extends Migration
      */
     public function up()
     {
-        Schema::create(Genre::TABLE_NAME, function (Blueprint $table) {
+        Schema::create(ExplorePageCategory::TABLE_NAME, function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
-            $table->string('name');
-            $table->string('symbol')->nullable();
-            $table->string('color')->default('#ffffff');
-            $table->text('description')->nullable();
-            $table->boolean('nsfw')->default(false);
+            $table->string('title');
+            $table->string('type');
+            $table->string('size');
         });
     }
 
@@ -33,6 +31,6 @@ class CreateGenresTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(Genre::TABLE_NAME);
+        Schema::dropIfExists(ExplorePageCategory::TABLE_NAME);
     }
 }
