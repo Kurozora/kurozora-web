@@ -21,19 +21,6 @@ class ForumSection extends KModel
     }
 
     /**
-     * Formats the section for a response
-     *
-     * @return array
-     */
-    public function formatForResponse() {
-        return [
-            'id'        => $this->id,
-            'name'      => $this->name,
-            'locked'    => (bool) $this->locked
-        ];
-    }
-
-    /**
      * Get the amount of threads in this section
      *
      * @return integer
@@ -49,19 +36,5 @@ class ForumSection extends KModel
      */
     public function getPageCount() {
         return ceil($this->getThreadCount() / self::THREADS_PER_PAGE);
-    }
-
-    /**
-     * Formats the section for a details response
-     *
-     * @return array
-     */
-    public function formatForDetailsResponse() {
-        return [
-            'id'            => $this->id,
-            'name'          => $this->name,
-            'locked'        => (bool) $this->locked,
-            'thread_pages'  => $this->getPageCount()
-        ];
     }
 }

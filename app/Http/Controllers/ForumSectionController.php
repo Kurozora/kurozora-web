@@ -7,6 +7,7 @@ use App\ForumSectionBan;
 use App\ForumThread;
 use App\Helpers\JSONResult;
 use App\Http\Requests\PostThread;
+use App\Http\Resources\ForumSectionResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -17,14 +18,11 @@ class ForumSectionController extends Controller
      * Generates an overview of forum sections
      */
     public function overview() {
-        $rawSections = ForumSection::all();
+        $sections = ForumSection::all();
 
-        $sections = [];
-
-        foreach($rawSections as $rawSection)
-            $sections[] = $rawSection->formatForResponse();
-
-        (new JSONResult())->setData(['sections' => $sections])->show();
+        (new JSONResult())->setData([
+            'sections' => ForumSectionResource::collection($sections)
+        ])->show();
     }
 
     /**
@@ -34,7 +32,7 @@ class ForumSectionController extends Controller
      */
     public function details(ForumSection $section) {
         (new JSONResult())->setData([
-            'section' => $section->formatForDetailsResponse()
+            'section' => ForumSectionResource::make($section)
         ])->show();
     }
 
