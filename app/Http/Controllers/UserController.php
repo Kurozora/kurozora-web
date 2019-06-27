@@ -7,6 +7,7 @@ use App\Events\UserSessionKilledEvent;
 use App\Helpers\JSONResult;
 use App\Http\Requests\Registration;
 use App\Http\Requests\ResetPassword;
+use App\Http\Resources\SessionResource;
 use App\Http\Resources\UserNotificationResource;
 use App\Jobs\SendNewPasswordMail;
 use App\Jobs\SendPasswordResetMail;
@@ -223,16 +224,11 @@ class UserController extends Controller
      * @param User $user
      */
     public function getSessions(Request $request, User $user) {
-        // Get the other sessions and put them in an array
-        $otherSessions = [];
-
-        $sessions = Session::where([
+        // Get the other sessions
+        $otherSessions = Session::where([
             ['user_id', '=',    $user->id],
             ['secret',  '!=',   $request['session_secret']]
         ])->get();
-
-        foreach($sessions as $session)
-            $otherSessions[] = $session->formatForSessionList();
 
         // Get the current session
         $curSession = Session::where([
@@ -240,11 +236,9 @@ class UserController extends Controller
             ['secret',  '=',    $request['session_secret']]
         ])->first();
 
-        $curSession = $curSession->formatForSessionList();
-
         (new JSONResult())->setData([
-            'current_session'   => $curSession,
-            'other_sessions'    => $otherSessions
+            'current_session'   => SessionResource::make($curSession),
+            'other_sessions'    => SessionResource::collection($otherSessions)
         ])->show();
     }
 

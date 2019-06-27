@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\NewUserSessionEvent;
 use App\Events\UserSessionKilledEvent;
 use App\Helpers\JSONResult;
+use App\Http\Resources\SessionResource;
 use App\Jobs\FetchSessionLocation;
 use App\LoginAttempt;
 use App\Session;
@@ -132,7 +133,7 @@ class SessionController extends Controller
      */
     public function details(Session $session) {
         (new JSONResult())->setData([
-            'session' => $session->formatForSessionDetails()
+            'session' => SessionResource::make($session)
         ])->show();
     }
 }
