@@ -21,7 +21,7 @@ class MiscController extends Controller
 
         // Create the privacy policy file if it does not exist yet
         if(!Storage::exists($privacyPolicyPath))
-            Storage::put($privacyPolicyPath, 'Empty');
+            Storage::put($privacyPolicyPath, 'Privacy Policy is empty. Please inform an administrator.');
 
         // Get the last update date
         $lastUpdateUnix = Storage::lastModified($privacyPolicyPath);
