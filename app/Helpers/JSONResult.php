@@ -20,36 +20,6 @@ class JSONResult {
     const ERROR_ANIME_EPISODE_NON_EXISTENT = 'The specified episode was not found.';
     const ERROR_NOTIFICATION_EXISTENT = 'The specified notification was not found.';
 
-    private $success = true;
-    private $errorMessage;
-    private $errorCode;
-    private $data = [];
-
-    /**
-     * Sets this JSON result to be an error, with a specified message
-     *
-     * @param string $message
-     * @param int $errorCode
-     * @return $this
-     */
-    public function setError($message = '', $errorCode = 0) {
-        $this->success = false;
-        $this->errorMessage = $message;
-        $this->errorCode = $errorCode;
-        return $this;
-    }
-
-    /**
-     * Sets the data for this JSON result. Only to be used when success.
-     *
-     * @param $dataArr
-     * @return $this
-     */
-    public function setData($dataArr) {
-        $this->data = $dataArr;
-        return $this;
-    }
-
     /**
      * Returns an error response to the client.
      *
@@ -90,42 +60,5 @@ class JSONResult {
             'query_count'   => (int) Config::get(AppServiceProvider::$queryCountConfigKey),
             'version'       => Config::get('app.version')
         ];
-    }
-
-    /**
-     * !DEPRECATED! Prints out the JSON result to the output feed.
-     *
-     * @param bool $doDie
-     * @return $this
-     */
-    public function show($doDie = true) {
-        header('Content-Type: application/json');
-
-        $printArr = [
-            'success'       => $this->success,
-            'query_count'   => (int) Config::get(AppServiceProvider::$queryCountConfigKey),
-            'version'       => config('app.version')
-        ];
-
-        if(!$this->success && strlen($this->errorMessage)) {
-            $printArr['error_message'] = $this->errorMessage;
-            $printArr['error_code'] = $this->errorCode;
-        }
-        else {
-            if(is_array($this->data))
-                $printArr = array_merge($printArr, $this->data);
-            else
-                $printArr = array_merge($printArr, [$this->data]);
-        }
-
-        if($this->success)
-            http_response_code(200);
-        else
-            http_response_code(400);
-
-        echo json_encode($printArr);
-
-        if($doDie) die;
-        else return $this;
     }
 }

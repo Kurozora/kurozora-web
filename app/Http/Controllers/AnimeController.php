@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Actor;
 use App\Anime;
 use App\AnimeRating;
 use App\Enums\AnimeStatus;
@@ -13,10 +12,9 @@ use App\Helpers\JSONResult;
 use App\Http\Resources\ActorResource;
 use App\Http\Resources\AnimeSeasonResource;
 use App\Http\Resources\GenreResource;
-use App\User;
 use App\UserLibrary;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
@@ -25,10 +23,10 @@ class AnimeController extends Controller
     /**
      * Returns detailed information about an Anime
      *
-     * @param Request $request
      * @param Anime $anime
+     * @return JsonResponse
      */
-    public function detailsAnime(Request $request, Anime $anime) {
+    public function detailsAnime(Anime $anime) {
         // Get the user rating for this Anime
         $userRating = 0.0;
 
@@ -87,40 +85,42 @@ class AnimeController extends Controller
         AnimeViewed::dispatch($anime);
 
         // Show the Anime details response
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'anime' => $animeArr,
             'user' => $userArr
-        ])->show();
+        ]);
     }
 
     /**
      * Returns actor information about an Anime
      *
      * @param Anime $anime
+     * @return JsonResponse
      */
     public function actorsAnime(Anime $anime) {
         // Get the actors
         $actors = $anime->getActors();
 
-        (new JSONResult())->setData([
-            'total_actors'      => count($actors),
-            'actors'            => ActorResource::collection($actors)
-        ])->show();
+        return JSONResult::success([
+            'total_actors'  => count($actors),
+            'actors'        => ActorResource::collection($actors)
+        ]);
     }
 
     /**
      * Returns season information for an Anime
      *
      * @param Anime $anime
+     * @return JsonResponse
      */
     public function seasonsAnime(Anime $anime)
     {
         // Get the seasons
         $seasons = $anime->getSeasons();
 
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'seasons' => AnimeSeasonResource::collection($seasons)
-        ])->show();
+        ]);
     }
 
     /**
@@ -128,6 +128,7 @@ class AnimeController extends Controller
      *
      * @param Request $request
      * @param Anime $anime
+     * @return JsonResponse
      */
     public function rateAnime(Request $request, Anime $anime) {
         // Validate the inputs
@@ -137,7 +138,7 @@ class AnimeController extends Controller
 
         // Check validator
         if ($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
+            return JSONResult::error($validator->errors()->first());
 
         // Fetch the variables
         $givenRating = $request->input('rating');
@@ -171,13 +172,14 @@ class AnimeController extends Controller
             }
         }
 
-        (new JSONResult())->show();
+        return JSONResult::success();
     }
 
     /**
      * Retrieves Anime search results
      *
      * @param Request $request
+     * @return JsonResponse
      */
     public function search(Request $request) {
         // Validate the inputs
@@ -187,7 +189,7 @@ class AnimeController extends Controller
 
         // Check validator
         if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
+            return JSONResult::error($validator->errors()->first());
 
         $searchQuery = $request->input('query');
 
@@ -208,10 +210,9 @@ class AnimeController extends Controller
             ];
         }
 
-        // Show response
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'max_search_results'    => Anime::MAX_SEARCH_RESULTS,
             'results'               => $displayResults
-        ])->show();
+        ]);
     }
 }
