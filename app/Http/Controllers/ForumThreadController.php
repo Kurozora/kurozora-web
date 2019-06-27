@@ -6,6 +6,7 @@ use App\ForumReply;
 use App\ForumSectionBan;
 use App\ForumThread;
 use App\Helpers\JSONResult;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -16,26 +17,27 @@ class ForumThreadController extends Controller
      * Get thread information
      *
      * @param ForumThread $thread
+     * @return JsonResponse
      */
     public function threadInfo(ForumThread $thread) {
         $thread->load('user', 'replies');
 
         // Show thread information
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'thread' => [
-                'id' => $thread->id,
-                'title' => $thread->title,
-                'content' => $thread->content,
-                'locked' => (bool) $thread->locked,
+                'id'            => $thread->id,
+                'title'         => $thread->title,
+                'content'       => $thread->content,
+                'locked'        => (bool) $thread->locked,
                 'creation_date' => $thread->created_at->format('Y-m-d H:i:s'),
-                'reply_count' => $thread->replies->count(),
-                'score' => $thread->likesDiffDislikesCount,
-                'user' => [
-                    'id' => $thread->user->id,
-                    'username' => $thread->user->username
+                'reply_count'   => $thread->replies->count(),
+                'score'         => $thread->likesDiffDislikesCount,
+                'user'          => [
+                    'id'        => $thread->user->id,
+                    'username'  => $thread->user->username
                 ]
             ]
-        ])->show();
+        ]);
     }
 
     /**
@@ -43,6 +45,7 @@ class ForumThreadController extends Controller
      *
      * @param Request $request
      * @param ForumThread $thread
+     * @return JsonResponse
      */
     public function vote(Request $request, ForumThread $thread) {
         // Validate the inputs
@@ -52,7 +55,7 @@ class ForumThreadController extends Controller
 
         // Check validator
         if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
+            return JSONResult::error(($validator->errors()->first()));
 
         // Get the user
         $user = Auth::user();
@@ -67,9 +70,9 @@ class ForumThreadController extends Controller
             $user->toggleDislike($thread);
 
         // Show successful response
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'action' => $user->likeAction($thread)
-        ])->show();
+        ]);
     }
 
     /**
@@ -77,13 +80,14 @@ class ForumThreadController extends Controller
      *
      * @param Request $request
      * @param ForumThread $thread
+     * @return JsonResponse
      */
     public function postReply(Request $request, ForumThread $thread) {
         // Check if the user is banned
         $foundBan = ForumSectionBan::getBanInfo(Auth::id(), $thread->section_id);
 
         if($foundBan !== null)
-            (new JSONResult())->setError($foundBan['message'])->show();
+            return JSONResult::error($foundBan['message']);
 
         // Validate the inputs
         $validator = Validator::make($request->all(), [
@@ -92,18 +96,18 @@ class ForumThreadController extends Controller
 
         // Check validator
         if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
+            return JSONResult::error($validator->errors()->first());
 
         // Get variables
         $givenContent = $request->input('content');
 
         // Check if the thread is not locked
         if($thread->locked)
-            (new JSONResult())->setError(JSONResult::ERROR_CANNOT_POST_IN_THREAD)->show();
+            return JSONResult::error(JSONResult::ERROR_CANNOT_POST_IN_THREAD);
 
         // Check if the user has already posted within the cooldown period
         if(ForumReply::testPostCooldown(Auth::id()))
-            (new JSONResult())->setError('You can only post a reply once every ' . ForumReply::COOLDOWN_POST_REPLY . ' seconds.')->show();
+            return JSONResult::error('You can only post a reply once every ' . ForumReply::COOLDOWN_POST_REPLY . ' seconds.');
 
         // Create the reply
         $newReply = ForumReply::create([
@@ -113,14 +117,17 @@ class ForumThreadController extends Controller
             'content'       => $givenContent
         ]);
 
-        (new JSONResult())->setData(['reply_id' => $newReply->id])->show();
+        return JSONResult::success([
+            'reply_id' => $newReply->id
+        ]);
     }
 
     /**
-     * Vote for a thread
+     * Vote for a thread.
      *
      * @param Request $request
      * @param ForumThread $thread
+     * @return JsonResponse
      */
     public function replies(Request $request, ForumThread $thread) {
         // Validate the inputs
@@ -135,7 +142,7 @@ class ForumThreadController extends Controller
 
         // Check validator
         if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
+            return JSONResult::error($validator->errors()->first());
 
         // Get the replies
         $replies = $thread->replies();
@@ -165,17 +172,18 @@ class ForumThreadController extends Controller
         }
 
         // Show successful response
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'page'          => $givenPage,
             'reply_pages'   => $thread->getPageCount(),
             'replies'       => $displayReplies
-        ])->show();
+        ]);
     }
 
     /**
      * Retrieves Anime search results
      *
      * @param Request $request
+     * @return JsonResponse
      */
     public function search(Request $request) {
         // Validate the inputs
@@ -185,7 +193,7 @@ class ForumThreadController extends Controller
 
         // Check validator
         if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
+            return JSONResult::error($validator->errors()->first());
 
         $searchQuery = $request->input('query');
 
@@ -210,10 +218,10 @@ class ForumThreadController extends Controller
         }
 
         // Show response
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'max_search_results'    => ForumThread::MAX_SEARCH_RESULTS,
             'results'               => $displayResults
-        ])->show();
+        ]);
     }
 
     /**
@@ -221,6 +229,7 @@ class ForumThreadController extends Controller
      *
      * @param Request $request
      * @param ForumThread $thread
+     * @return JsonResponse
      */
     function lock(Request $request, ForumThread $thread) {
         // Validate the inputs
@@ -230,7 +239,7 @@ class ForumThreadController extends Controller
 
         // Check validator
         if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
+            return JSONResult::error($validator->errors()->first());
 
         // Lock or unlock the thread
         $doLock = (bool) $request->input('lock');
@@ -241,10 +250,10 @@ class ForumThreadController extends Controller
             $thread->save();
         }
 
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'thread' => [
                 'locked' => (bool) $thread->locked
             ]
-        ])->show();
+        ]);
     }
 }
