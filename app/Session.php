@@ -46,46 +46,4 @@ class Session extends KModel
 
         return $lastValDate;
     }
-
-    /**
-     * Formats the session for display in the API's list of sessions
-     *
-     * @return array
-     */
-    public function formatForSessionList() {
-        return [
-            'id'                => $this->id,
-            'device'            => $this->device,
-            'ip'                => $this->ip,
-            'last_validated'    => $this->formatLastValidated(),
-            'location'          => [
-                'city'      => $this->city,
-                'region'    => $this->region,
-                'country'   => $this->country,
-                'latitude'  => $this->latitude,
-                'longitude' => $this->longitude,
-            ]
-        ];
-    }
-
-    /**
-     * Formats the session for display in the details API
-     *
-     * @return array
-     */
-    public function formatForSessionDetails() {
-        return [
-            'id'                => $this->id,
-            'device'            => $this->device,
-            'ip'                => $this->ip,
-            'last_validated'    => $this->formatLastValidated(),
-            'location'          => [
-                'city'      => $this->city,
-                'region'    => $this->region,
-                'country'   => $this->country,
-                'latitude'  => $this->latitude,
-                'longitude' => $this->longitude,
-            ]
-        ];
-    }
 }
