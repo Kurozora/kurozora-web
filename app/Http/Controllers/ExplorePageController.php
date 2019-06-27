@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\ExplorePageCategory;
 use App\Helpers\JSONResult;
 use App\Http\Resources\ExplorePageCategoryResource;
+use Illuminate\Http\JsonResponse;
 
 class ExplorePageController extends Controller
 {
@@ -13,14 +14,16 @@ class ExplorePageController extends Controller
 
     /**
      * Returns the necessary data for the Anime explore page
+     *
+     * @return JsonResponse
      */
     function explore() {
         // Retrieve the categories
         $categories = ExplorePageCategory::all();
 
         // Return the response
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'categories' => ExplorePageCategoryResource::collection(($categories))
-        ])->show();
+        ]);
     }
 }
