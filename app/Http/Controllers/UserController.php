@@ -7,6 +7,7 @@ use App\Events\UserSessionKilledEvent;
 use App\Helpers\JSONResult;
 use App\Http\Requests\Registration;
 use App\Http\Requests\ResetPassword;
+use App\Http\Resources\BadgeResource;
 use App\Http\Resources\SessionResource;
 use App\Http\Resources\UserNotificationResource;
 use App\Jobs\SendNewPasswordMail;
@@ -104,11 +105,7 @@ class UserController extends Controller
         $currentUser = Auth::user();
 
         // Get their badges
-        $badges = [];
-        $rawBadges = $user->getBadges();
-
-        foreach($rawBadges as $rawBadge)
-            $badges[] = $rawBadge->formatForResponse();
+        $badges = $user->getBadges();
 
         // Show profile response
         (new JSONResult())->setData([
@@ -120,7 +117,7 @@ class UserController extends Controller
                 'follower_count'    => $user->getFollowerCount(),
                 'following_count'   => $user->getFollowingCount(),
                 'reputation_count'  => $user->getReputationCount(),
-                'badges'            => $badges
+                'badges'            => BadgeResource::collection($badges)
             ],
             'currently_following' => $currentUser->isFollowing($user)
         ])->show();
