@@ -96,22 +96,4 @@ class UserNotification extends KModel
 
         return null;
     }
-
-    /**
-     * Formats the notification for a response
-     *
-     * @return array
-     * @throws \ReflectionException
-     */
-    public function formatForResponse() {
-        return [
-            'id'            => $this->id,
-            'user_id'       => $this->user_id,
-            'type'          => $this->getTypeString(),
-            'read'          => (bool) $this->read,
-            'data'          => $this->getData(),
-            'string'        => $this->getString(),
-            'creation_date' => (string) $this->created_at
-        ];
-    }
 }

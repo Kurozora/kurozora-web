@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
+use App\Http\Resources\UserNotificationResource;
 use App\UserNotification;
 
 class UserNotificationController extends Controller
@@ -15,7 +16,7 @@ class UserNotificationController extends Controller
      */
     public function getNotification(UserNotification $notification) {
         (new JSONResult())->setData([
-            'notification' => $notification->formatForResponse()
+            'notification' => UserNotificationResource::make($notification)
         ])->show();
     }
 
