@@ -6,6 +6,7 @@ use App\Helpers\JSONResult;
 use App\Jobs\SendAdminExceptionMail;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Swift_TransportException;
 
 class Handler extends ExceptionHandler
 {
@@ -23,6 +24,8 @@ class Handler extends ExceptionHandler
         \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException::class,
         // Missing arguments exception
         \Symfony\Component\Console\Exception\RuntimeException::class,
+        // Swift Mailer too many mails exception
+        Swift_TransportException::class
     ];
 
     /**
