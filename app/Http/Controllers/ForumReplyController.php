@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\ForumReply;
-use App\ForumReplyVote;
 use App\Helpers\JSONResult;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -12,10 +12,11 @@ use Illuminate\Support\Facades\Validator;
 class ForumReplyController extends Controller
 {
     /**
-     * Leaves a vote for a reply
+     * Leaves a vote for a reply.
      *
      * @param Request $request
      * @param ForumReply $reply
+     * @return JsonResponse
      */
     public function vote(Request $request, ForumReply $reply) {
         // Validate the inputs
@@ -25,7 +26,7 @@ class ForumReplyController extends Controller
 
         // Check validator
         if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
+            return JSONResult::error($validator->errors()->first());
 
         // Get the user
         $user = Auth::user();
@@ -40,8 +41,8 @@ class ForumReplyController extends Controller
             $user->toggleDislike($reply);
 
         // Show successful response
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'action' => $user->likeAction($reply)
-        ])->show();
+        ]);
     }
 }
