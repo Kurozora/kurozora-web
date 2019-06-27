@@ -18,6 +18,7 @@ use App\User;
 use App\UserFollow;
 use App\UserNotification;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -31,6 +32,7 @@ class UserController extends Controller
      * Registers a new user
      *
      * @param Registration $request
+     * @return JsonResponse
      * @throws \Throwable
      */
     public function register(Registration $request) {
@@ -66,13 +68,14 @@ class UserController extends Controller
         event(new NewUserRegisteredEvent($newUser));
 
         // Show a successful response
-        (new JSONResult())->show();
+        return JSONResult::success();
     }
 
     /**
      * Logs the user out (destroys the session)
      *
      * @param Request $request
+     * @return JsonResponse
      */
     public function logout(Request $request) {
         // Find the session
@@ -83,7 +86,7 @@ class UserController extends Controller
 
         // Check if any session was found
         if(!$foundSession)
-            (new JSONResult())->setError('An error occurred. Please reach out to an administrator.')->show();
+            return JSONResult::error('An error occurred. Please reach out to an administrator.');
 
         // Fire event
         event(new UserSessionKilledEvent(Auth::id(), $foundSession->id, 'Session logged out.', $request['session_id']));
@@ -92,13 +95,14 @@ class UserController extends Controller
         $foundSession->delete();
 
         // Show a successful response
-        (new JSONResult())->show();
+        return JSONResult::success();
     }
 
     /**
      * Returns the profile details for a user
      *
      * @param User $user
+     * @return JsonResponse
      */
     public function profile(User $user) {
         // Get the current user
@@ -108,7 +112,7 @@ class UserController extends Controller
         $badges = $user->getBadges();
 
         // Show profile response
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'user' => [
                 'username'          => $user->username,
                 'biography'         => $user->biography,
@@ -120,13 +124,14 @@ class UserController extends Controller
                 'badges'            => BadgeResource::collection($badges)
             ],
             'currently_following' => $currentUser->isFollowing($user)
-        ])->show();
+        ]);
     }
 
     /**
      * Requests a password reset link to be sent to the email address
      *
      * @param ResetPassword $request
+     * @return JsonResponse
      */
     public function resetPassword(ResetPassword $request) {
         $data = $request->validated();
@@ -159,7 +164,7 @@ class UserController extends Controller
         }
 
         // Show successful response
-        (new JSONResult())->show();
+        return JSONResult::success();
     }
 
     /**
@@ -219,6 +224,7 @@ class UserController extends Controller
      *
      * @param Request $request
      * @param User $user
+     * @return JsonResponse
      */
     public function getSessions(Request $request, User $user) {
         // Get the other sessions
@@ -233,10 +239,10 @@ class UserController extends Controller
             ['secret',  '=',    $request['session_secret']]
         ])->first();
 
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'current_session'   => SessionResource::make($curSession),
             'other_sessions'    => SessionResource::collection($otherSessions)
-        ])->show();
+        ]);
     }
 
     /**
@@ -322,6 +328,7 @@ class UserController extends Controller
      * Returns the notifications for the user
      *
      * @param User $user
+     * @return JsonResponse
      */
     public function getNotifications(User $user) {
         // Get their notifications
@@ -329,15 +336,16 @@ class UserController extends Controller
             ->orderBy('created_at', 'DESC')
             ->get();
 
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'notifications' => UserNotificationResource::collection($notifications)
-        ])->show();
+        ]);
     }
 
     /**
      * Retrieves Anime search results
      *
      * @param Request $request
+     * @return JsonResponse
      */
     public function search(Request $request) {
         // Validate the inputs
@@ -347,7 +355,7 @@ class UserController extends Controller
 
         // Check validator
         if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
+            return JSONResult::error($validator->errors()->first());
 
         $searchQuery = $request->input('query');
 
@@ -369,10 +377,10 @@ class UserController extends Controller
         }
 
         // Show response
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'max_search_results'    => User::MAX_SEARCH_RESULTS,
             'results'               => $displayResults
-        ])->show();
+        ]);
     }
 
     /**
@@ -380,6 +388,7 @@ class UserController extends Controller
      *
      * @param Request $request
      * @param User $user
+     * @return JsonResponse
      */
     public function updateProfile(Request $request, User $user) {
         // Track if anything changed
@@ -393,7 +402,7 @@ class UserController extends Controller
         ) {
             // Check if the bio has a correct length
             if(strlen($newBio) > User::BIOGRAPHY_LIMIT)
-                (new JSONResult())->setError('Your biography contain more than ' . User::BIOGRAPHY_LIMIT . ' characters.')->show();
+                return JSONResult::success('Your biography contain more than ' . User::BIOGRAPHY_LIMIT . ' characters.');
 
             $user->biography = $newBio;
             $changedFields[] = 'biography';
@@ -408,7 +417,7 @@ class UserController extends Controller
 
             // Avatar is not valid
             if(!$request->file('profileImage')->isValid() || $imgValidator->fails())
-                (new JSONResult())->setError('The uploaded avatar is not valid.')->show();
+                return JSONResult::error('The uploaded avatar is not valid.');
 
             // Create a name for the new avatar
             $newAvatarName = 'avatar_' . Str::random(30);
@@ -438,16 +447,17 @@ class UserController extends Controller
         }
         else $displayMessage .= 'No information was updated.';
 
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'message' => $displayMessage
-        ])->show();
+        ]);
     }
 
     /**
-     * Follows a user
+     * Follows a user.
      *
      * @param Request $request
      * @param User $user
+     * @return JsonResponse
      */
     public function follow(Request $request, User $user) {
         // Validate the inputs
@@ -457,7 +467,7 @@ class UserController extends Controller
 
         // Check validator
         if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
+            return JSONResult::error($validator->errors()->first());
 
         $authUser = Auth::user();
 
@@ -467,7 +477,7 @@ class UserController extends Controller
         if($follow) {
             // Already following this user
             if($authUser->isFollowing($user))
-                (new JSONResult())->setError('You are already following this user.')->show();
+                return JSONResult::error('You are already following this user.');
 
             // Create follow
             UserFollow::create([
@@ -479,7 +489,7 @@ class UserController extends Controller
         else {
             // Not following this user
             if(!$authUser->isFollowing($user))
-                (new JSONResult())->setError('You are not following this user.')->show();
+                return JSONResult::error('You are not following this user.');
 
             // Delete follow
             UserFollow::where([
@@ -489,6 +499,6 @@ class UserController extends Controller
         }
 
         // Successful response
-        (new JSONResult())->show();
+        return JSONResult::success();
     }
 }
