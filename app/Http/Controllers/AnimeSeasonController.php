@@ -8,6 +8,7 @@ use App\Helpers\JSONResult;
 use App\Http\Resources\AnimeSeasonResource;
 use App\UserWatchedEpisode;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -18,17 +19,19 @@ class AnimeSeasonController extends Controller
      * Returns the information for a season
      *
      * @param AnimeSeason $season
+     * @return JsonResponse
      */
     public function details(AnimeSeason $season) {
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'season' => AnimeSeasonResource::make($season)
-        ])->show();
+        ]);
     }
 
     /**
      * Returns the episodes for a season
      *
      * @param AnimeSeason $season
+     * @return JsonResponse
      * @throws \Exception
      */
     public function episodes(AnimeSeason $season) {
@@ -75,9 +78,9 @@ class AnimeSeasonController extends Controller
         }
 
         // Show the response
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'season'        => AnimeSeasonResource::make($season),
             'episodes'      => $endEpisodes
-        ])->show();
+        ]);
     }
 }

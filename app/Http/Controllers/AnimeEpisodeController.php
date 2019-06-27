@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\AnimeEpisode;
 use App\Helpers\JSONResult;
 use App\UserWatchedEpisode;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -16,7 +17,7 @@ class AnimeEpisodeController extends Controller
      *
      * @param Request $request
      * @param AnimeEpisode $episode
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function watched(Request $request, AnimeEpisode $episode) {
         // Validate the inputs
