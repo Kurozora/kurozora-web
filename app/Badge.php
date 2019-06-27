@@ -23,19 +23,4 @@ class Badge extends KModel
     function users() {
         return $this->belongsToMany(User::class, UserBadge::TABLE_NAME, 'badge_id', 'user_id');
     }
-
-    /**
-     * Formats the badge for a JSON response
-     *
-     * @return array
-     */
-    public function formatForResponse() {
-        return [
-            'id'                => $this->id,
-            'text'              => $this->text,
-            'textColor'         => $this->textColor,
-            'backgroundColor'   => $this->backgroundColor,
-            'description'       => $this->description
-        ];
-    }
 }
