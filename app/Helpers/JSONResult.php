@@ -43,7 +43,7 @@ class JSONResult {
      * @return JsonResponse
      */
     static function success($data = []) {
-        if(is_array($data)) $data = [$data];
+        if(!is_array($data)) $data = [$data];
 
         $endResponse = array_merge(self::getDefaultResponseArray(true), $data);
 
