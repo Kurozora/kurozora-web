@@ -32,7 +32,7 @@ class CheckKurozoraUserAuthentication
 
         // Unable to read token
         if($readToken === null)
-            (new JSONResult())->setError('Unable to read authentication token.')->show();
+            return JSONResult::error('Unable to read authentication token.');
 
         // Fetch the variables
         $givenSecret = $readToken['session_secret'];
@@ -42,7 +42,7 @@ class CheckKurozoraUserAuthentication
         $sessionAuthenticate = User::authenticateSession($givenUserID, $givenSecret);
 
         if($sessionAuthenticate === false)
-            (new JSONResult())->setError(JSONResult::ERROR_SESSION_REJECTED)->show();
+            return JSONResult::error(JSONResult::ERROR_SESSION_REJECTED);
 
         // Add to request
         $request->request->add(['user_id' => (int) $givenUserID]);
