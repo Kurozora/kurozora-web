@@ -50,8 +50,6 @@ class FetchSessionLocation implements ShouldQueue
 
         // Save the session
         $this->session->save();
-
-        print_r($this->session->formatForSessionDetails());
     }
 
     /**
