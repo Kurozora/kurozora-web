@@ -8,6 +8,7 @@ use App\ForumThread;
 use App\Helpers\JSONResult;
 use App\Http\Requests\PostThread;
 use App\Http\Resources\ForumSectionResource;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -15,25 +16,28 @@ use Illuminate\Support\Facades\Validator;
 class ForumSectionController extends Controller
 {
     /**
-     * Generates an overview of forum sections
+     * Generates an overview of forum sections.
+     *
+     * @return JsonResponse
      */
     public function overview() {
         $sections = ForumSection::all();
 
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'sections' => ForumSectionResource::collection($sections)
-        ])->show();
+        ]);
     }
 
     /**
      * Gets the information of a section
      *
      * @param ForumSection $section
+     * @return JsonResponse
      */
     public function details(ForumSection $section) {
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'section' => ForumSectionResource::make($section)
-        ])->show();
+        ]);
     }
 
     /**
@@ -41,6 +45,7 @@ class ForumSectionController extends Controller
      *
      * @param Request $request
      * @param ForumSection $section
+     * @return JsonResponse
      */
     public function threads(Request $request, ForumSection $section) {
         // Validate the inputs
@@ -55,7 +60,7 @@ class ForumSectionController extends Controller
 
         // Check validator
         if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
+            return JSONResult::error($validator->errors()->first());
 
         // Get the threads
         $threads = $section->threads();
@@ -87,11 +92,11 @@ class ForumSectionController extends Controller
             ];
 
         // Show threads in response
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'page'          => (int) $givenPage,
             'thread_pages'  => $section->getPageCount(),
             'threads'       => $displayThreads
-        ])->show();
+        ]);
     }
 
     /**
@@ -99,6 +104,7 @@ class ForumSectionController extends Controller
      *
      * @param PostThread $request
      * @param ForumSection $section
+     * @return JsonResponse
      */
     public function postThread(PostThread $request, ForumSection $section) {
         $data = $request->validated();
@@ -107,11 +113,11 @@ class ForumSectionController extends Controller
         $foundBan = ForumSectionBan::getBanInfo(Auth::id(), $section->id);
 
         if($foundBan !== null)
-            (new JSONResult())->setError($foundBan['message'])->show();
+            return JSONResult::error($foundBan['message']);
 
         // Check if the user has already posted within the cooldown period
         if(ForumThread::testPostCooldown(Auth::id()))
-            (new JSONResult())->setError('You can only post a thread once every minute.')->show();
+            return JSONResult::error('You can only post a thread once every minute.');
 
         // Create the thread
         $newThread = ForumThread::create([
@@ -122,6 +128,8 @@ class ForumSectionController extends Controller
             'content'       => $data['content']
         ]);
 
-        (new JSONResult())->setData(['thread_id' => $newThread->id])->show();
+        return JSONResult::success([
+            'thread_id' => $newThread->id
+        ]);
     }
 }
