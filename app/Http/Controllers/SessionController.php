@@ -10,6 +10,7 @@ use App\Jobs\FetchSessionLocation;
 use App\LoginAttempt;
 use App\Session;
 use App\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use KuroAuthToken;
@@ -22,6 +23,7 @@ class SessionController extends Controller
      * Creates a new session
      *
      * @param Request $request
+     * @return JsonResponse
      */
     public function create(Request $request) {
         // Validate the inputs
@@ -33,11 +35,11 @@ class SessionController extends Controller
 
         // Display an error if validation failed
         if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
+            return JSONResult::error($validator->errors()->first());
 
         // Check if the request IP is not banned from logging in
         if(!LoginAttempt::isIPAllowedToLogin($request->ip()))
-            (new JSONResult())->setError('Oops. You have failed to login too many times. Please grab yourself a snack and try again in a bit.')->show();
+            return JSONResult::error('Oops. You have failed to login too many times. Please grab yourself a snack and try again in a bit.');
 
         // Fetch the variables and sanitize them
         $username       = $request->input('username');
@@ -53,12 +55,12 @@ class SessionController extends Controller
             LoginAttempt::registerFailedLoginAttempt($request->ip());
 
             // Show error message
-            (new JSONResult())->setError('The entered password does not match.')->show();
+            return JSONResult::error('The entered password does not match.');
         }
 
         // Check if email is confirmed
         if(!$foundUser->hasConfirmedEmail())
-            (new JSONResult())->setError('You have not confirmed your email address yet. Please check your email inbox or spam folder.')->show();
+            return JSONResult::error('You have not confirmed your email address yet. Please check your email inbox or spam folder.');
 
         // Create a new session
         $loginIPAddress = $request->ip();
@@ -78,34 +80,35 @@ class SessionController extends Controller
         event(new NewUserSessionEvent($newSession));
 
         // Show a successful response
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'user' => [
                 'id'                => $foundUser->id,
                 'kuro_auth_token'   => KuroAuthToken::generate($foundUser->id, $newSession->secret),
                 'session_id'        => $newSession->id,
                 'role'              => $foundUser->role
             ]
-        ])->show();
+        ]);
     }
 
     /**
      * Checks whether or not a session_secret/user_id combination is valid
      *
      * @param Session $session
+     * @return JsonResponse
      * @throws \Exception
      */
     public function validateSession(Session $session) {
         // Check if the session is not expired
         if($session->isExpired()) {
-            (new JSONResult())->setError('Session is expired.')->show();
             $session->delete();
+            return JSONResult::error('Session is expired.');
         }
         // Session is perfectly valid
         else {
             $session->last_validated = date('Y-m-d H:i:s', time());
             $session->save();
 
-            (new JSONResult())->show();
+            return JSONResult::success();
         }
     }
 
@@ -114,6 +117,7 @@ class SessionController extends Controller
      *
      * @param Request $request
      * @param Session $session
+     * @return JsonResponse
      * @throws \Exception
      */
     public function delete(Request $request, Session $session) {
@@ -123,17 +127,18 @@ class SessionController extends Controller
         // Delete the session
         $session->delete();
 
-        (new JSONResult())->show();
+        return JSONResult::success();
     }
 
     /**
      * Displays session information
      *
      * @param Session $session
+     * @return JsonResponse
      */
     public function details(Session $session) {
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'session' => SessionResource::make($session)
-        ])->show();
+        ]);
     }
 }
