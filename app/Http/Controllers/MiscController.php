@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
 
 class MiscController extends Controller
 {
     /**
-     * Returns the latest privacy policy
+     * Returns the latest privacy policy.
+     *
+     * @return JsonResponse
      */
     public function getPrivacyPolicy() {
         $privacyPolicyPath = 'public/privacy_policy.txt';
@@ -25,11 +28,11 @@ class MiscController extends Controller
         $lastUpdateStr = date('j M, Y', $lastUpdateUnix) . ' at ';
         $lastUpdateStr .= date('H:i', $lastUpdateUnix);
 
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'privacy_policy' => [
                 'text'          => Storage::get($privacyPolicyPath),
                 'last_update'   => $lastUpdateStr
             ]
-        ])->show();
+        ]);
     }
 }
