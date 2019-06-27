@@ -16,6 +16,7 @@ class AnimeEpisodeController extends Controller
      *
      * @param Request $request
      * @param AnimeEpisode $episode
+     * @return \Illuminate\Http\JsonResponse
      */
     public function watched(Request $request, AnimeEpisode $episode) {
         // Validate the inputs
@@ -25,7 +26,7 @@ class AnimeEpisodeController extends Controller
 
         // Check validator
         if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
+            return JSONResult::error($validator->errors()->first());
 
         // Fetch the variables
         $watchedBool = (bool) $request->input('watched');
@@ -48,8 +49,8 @@ class AnimeEpisodeController extends Controller
             $foundWatched->delete();
         }
 
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'watched' => $watchedBool
-        ])->show();
+        ]);
     }
 }
