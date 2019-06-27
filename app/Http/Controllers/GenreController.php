@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Genre;
 use App\Helpers\JSONResult;
 use App\Http\Resources\GenreResource;
+use Illuminate\Http\JsonResponse;
 
 class GenreController extends Controller
 {
     /**
-     * Generate an overview of genres
+     * Generate an overview of genres.
+     *
+     * @return JsonResponse
      */
     public function overview() {
         // Get all genres and format them
@@ -18,18 +21,19 @@ class GenreController extends Controller
         });
 
         // Show genres in response
-        (new JSONResult())->setData(['genres' => $allGenres])->show();
+        return JSONResult::success(['genres' => $allGenres]);
     }
 
     /**
      * Shows genre details
      *
      * @param Genre $genre
+     * @return JsonResponse
      */
     public function details(Genre $genre) {
         // Show genre details
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'genre' => GenreResource::make($genre)
-        ])->show();
+        ]);
     }
 }
