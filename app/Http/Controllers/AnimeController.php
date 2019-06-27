@@ -10,6 +10,7 @@ use App\Enums\AnimeType;
 use App\Enums\UserLibraryStatus;
 use App\Events\AnimeViewed;
 use App\Helpers\JSONResult;
+use App\Http\Resources\ActorResource;
 use App\Http\Resources\AnimeSeasonResource;
 use App\Http\Resources\GenreResource;
 use App\User;
@@ -99,13 +100,11 @@ class AnimeController extends Controller
      */
     public function actorsAnime(Anime $anime) {
         // Get the actors
-        $retActors = $anime->getActors()->map(function($actor) {
-            return $actor->formatForResponse();
-        });
+        $actors = $anime->getActors();
 
         (new JSONResult())->setData([
-            'total_actors'      => count($retActors),
-            'actors'            => $retActors
+            'total_actors'      => count($actors),
+            'actors'            => ActorResource::collection($actors)
         ])->show();
     }
 
