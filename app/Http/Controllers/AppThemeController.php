@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AppTheme;
 use App\Helpers\JSONResult;
+use App\Http\Resources\AppThemeResource;
 use Illuminate\Support\Facades\Response;
 
 class AppThemeController extends Controller
@@ -14,12 +15,8 @@ class AppThemeController extends Controller
     function overview() {
         $themes = AppTheme::all();
 
-        $formattedThemes = $themes->map(function(AppTheme $theme) {
-            return $theme->formatForOverview();
-        });
-
         (new JSONResult())->setData([
-            'themes' => $formattedThemes
+            'themes' => AppThemeResource::collection($themes)
         ])->show();
     }
 
