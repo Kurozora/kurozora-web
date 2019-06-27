@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\View;
 
 /**
@@ -15,24 +14,11 @@ use Illuminate\Support\Facades\View;
  * @property mixed bar_title_text_color
  * @property mixed statusbar_style
  */
-class AppTheme extends Model
+class AppTheme extends KModel
 {
     // Table name
     const TABLE_NAME = 'app_themes';
     protected $table = self::TABLE_NAME;
-
-    /**
-     * Formats the theme for the overview
-     *
-     * @return array
-     */
-    function formatForOverview() {
-        return [
-            'id'            => $this->id,
-            'name'          => $this->name,
-            'download_link' => route('themes.download', ['theme' => $this->id])
-        ];
-    }
 
     /**
      * Generates the plist string for the theme
