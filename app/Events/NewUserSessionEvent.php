@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Http\Resources\SessionResource;
 use App\Session;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -41,7 +42,7 @@ class NewUserSessionEvent implements ShouldBroadcast
      */
     public function broadcastWith()
     {
-        return $this->sessionObj->formatForSessionList();
+        return SessionResource::make($this->sessionObj);
     }
 
     /**

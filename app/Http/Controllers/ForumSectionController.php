@@ -63,7 +63,7 @@ class ForumSectionController extends Controller
             return JSONResult::error($validator->errors()->first());
 
         // Get the threads
-        $threads = $section->threads();
+        $threads = $section->forum_threads();
 
         if($givenOrder == 'recent')
             $threads = $threads->orderBy('created_at', 'DESC');
