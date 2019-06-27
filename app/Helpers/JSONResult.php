@@ -3,7 +3,9 @@
 namespace App\Helpers;
 
 use App\Providers\AppServiceProvider;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Response;
 
 class JSONResult {
     // Error messages
@@ -49,7 +51,49 @@ class JSONResult {
     }
 
     /**
-     * Prints out the JSON result to the output feed.
+     * Returns an error response to the client.
+     *
+     * @param string $message
+     * @param int $errorCode
+     * @return JsonResponse
+     */
+    static function error($message = 'Something went wrong with your request.', $errorCode = 0) {
+        $endResponse = array_merge(self::getDefaultResponseArray(false), [
+            'error_message' => $message,
+            'error_code'    => $errorCode
+        ]);
+
+        return Response::json($endResponse, 400);
+    }
+
+    /**
+     * Returns a successful response to the client.
+     *
+     * @param array $data
+     * @return JsonResponse
+     */
+    static function success($data = []) {
+        $endResponse = array_merge(self::getDefaultResponseArray(true), $data);
+
+        return Response::json($endResponse, 200);
+    }
+
+    /**
+     * Returns the default array that will be included in every JSON response.
+     *
+     * @param $isSuccess
+     * @return array
+     */
+    private static function getDefaultResponseArray($isSuccess) {
+        return [
+            'success'       => (bool) $isSuccess,
+            'query_count'   => (int) Config::get(AppServiceProvider::$queryCountConfigKey),
+            'version'       => Config::get('app.version')
+        ];
+    }
+
+    /**
+     * !DEPRECATED! Prints out the JSON result to the output feed.
      *
      * @param bool $doDie
      * @return $this
