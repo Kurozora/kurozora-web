@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\AnimeEpisode;
 use App\AnimeSeason;
 use App\Helpers\JSONResult;
+use App\Http\Resources\AnimeSeasonResource;
 use App\UserWatchedEpisode;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -20,17 +21,17 @@ class AnimeSeasonController extends Controller
      */
     public function details(AnimeSeason $season) {
         (new JSONResult())->setData([
-            'season' => $season->formatForInfoResponse()
+            'season' => AnimeSeasonResource::make($season)
         ])->show();
     }
 
     /**
      * Returns the episodes for a season
      *
-     * @param Request $request
      * @param AnimeSeason $season
+     * @throws \Exception
      */
-    public function episodes(Request $request, AnimeSeason $season) {
+    public function episodes(AnimeSeason $season) {
         // Determine columns to select
         $columnsToSelect = [
             AnimeEpisode::TABLE_NAME . '.id AS episode_id',
@@ -75,7 +76,7 @@ class AnimeSeasonController extends Controller
 
         // Show the response
         (new JSONResult())->setData([
-            'season'        => $season->formatForInfoResponse(),
+            'season'        => AnimeSeasonResource::make($season),
             'episodes'      => $endEpisodes
         ])->show();
     }

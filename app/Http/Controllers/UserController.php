@@ -7,6 +7,7 @@ use App\Events\UserSessionKilledEvent;
 use App\Helpers\JSONResult;
 use App\Http\Requests\Registration;
 use App\Http\Requests\ResetPassword;
+use App\Http\Resources\UserNotificationResource;
 use App\Jobs\SendNewPasswordMail;
 use App\Jobs\SendPasswordResetMail;
 use App\PasswordReset;
@@ -329,21 +330,17 @@ class UserController extends Controller
     /**
      * Returns the notifications for the user
      *
-     * @param Request $request
      * @param User $user
      */
-    public function getNotifications(Request $request, User $user) {
+    public function getNotifications(User $user) {
         // Get their notifications
-        $rawNotifications = UserNotification::where('user_id', $user->id)
+        $notifications = UserNotification::where('user_id', $user->id)
             ->orderBy('created_at', 'DESC')
             ->get();
 
-        $notifications = [];
-
-        foreach($rawNotifications as $rawNotification)
-            $notifications[] = $rawNotification->formatForResponse();
-
-        (new JSONResult())->setData(['notifications' => $notifications])->show();
+        (new JSONResult())->setData([
+            'notifications' => UserNotificationResource::collection($notifications)
+        ])->show();
     }
 
     /**
