@@ -60,17 +60,17 @@ class Handler extends ExceptionHandler
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
     public function render($request, Exception $exception)
     {
         // Custom render for unauthorized
         if($exception instanceof \Illuminate\Auth\Access\AuthorizationException) {
-            (new JSONResult())->setError(JSONResult::ERROR_NOT_PERMITTED, 9028123)->show();
+            return JSONResult::error(JSONResult::ERROR_NOT_PERMITTED, 9028123);
         }
         // Custom render for maintenance mode
         else if($exception instanceof \Illuminate\Foundation\Http\Exceptions\MaintenanceModeException) {
-            (new JSONResult())->setError($exception->getMessage(), 17281627)->show();
+            return JSONResult::error($exception->getMessage(), 17281627);
         }
 
         return parent::render($request, $exception);
