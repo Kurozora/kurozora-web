@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\JSONResult;
 use App\Http\Resources\UserNotificationResource;
 use App\UserNotification;
+use Illuminate\Http\JsonResponse;
 
 class UserNotificationController extends Controller
 {
@@ -12,24 +13,26 @@ class UserNotificationController extends Controller
      * Retrieves details for a specific notification
      *
      * @param UserNotification $notification
+     * @return JsonResponse
      * @throws \ReflectionException
      */
     public function getNotification(UserNotification $notification) {
-        (new JSONResult())->setData([
+        return JSONResult::success([
             'notification' => UserNotificationResource::make($notification)
-        ])->show();
+        ]);
     }
 
     /**
      * Deletes a user's notification
      *
      * @param UserNotification $notification
+     * @return JsonResponse
      * @throws \Exception
      */
     public function delete(UserNotification $notification) {
         // Delete the notification
         $notification->delete();
 
-        (new JSONResult())->show();
+        return JSONResult::success();
     }
 }
