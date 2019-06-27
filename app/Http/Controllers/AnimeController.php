@@ -10,6 +10,7 @@ use App\Enums\AnimeType;
 use App\Enums\UserLibraryStatus;
 use App\Events\AnimeViewed;
 use App\Helpers\JSONResult;
+use App\Http\Resources\AnimeSeasonResource;
 use App\Http\Resources\GenreResource;
 use App\User;
 use App\UserLibrary;
@@ -115,12 +116,12 @@ class AnimeController extends Controller
      */
     public function seasonsAnime(Anime $anime)
     {
-        // Get the actors
-        $foundSeasons = $anime->getSeasons()->map(function($season) {
-            return $season->formatForResponse();
-        });
+        // Get the seasons
+        $seasons = $anime->getSeasons();
 
-        (new JSONResult())->setData(['seasons' => $foundSeasons])->show();
+        (new JSONResult())->setData([
+            'seasons' => AnimeSeasonResource::collection($seasons)
+        ])->show();
     }
 
     /**
