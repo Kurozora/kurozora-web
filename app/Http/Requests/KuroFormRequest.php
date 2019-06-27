@@ -11,10 +11,11 @@ class KuroFormRequest extends FormRequest
      * Formats the validation errors properly
      *
      * @param $validator
+     * @return \Illuminate\Http\JsonResponse
      */
     public function withValidator($validator)
     {
         if($validator->fails())
-            (new JSONResult())->setError($validator->errors()->first())->show();
+            return JSONResult::error($validator->errors()->first());
     }
 }
