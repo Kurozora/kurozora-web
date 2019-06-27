@@ -17,6 +17,7 @@ class SendAdminExceptionMail implements ShouldQueue
 
     protected $exceptionDump;
     protected $exceptionClass;
+    protected $exceptionLine;
 
     public $tries = 1;
 
@@ -29,6 +30,7 @@ class SendAdminExceptionMail implements ShouldQueue
     {
         $this->exceptionDump = $exception->getMessage();
         $this->exceptionClass = get_class($exception);
+        $this->exceptionLine = $exception->getLine();
     }
 
     /**
@@ -57,7 +59,7 @@ class SendAdminExceptionMail implements ShouldQueue
 
         // Send the mail
         Mail::to($adminEmail)
-            ->send(new AdminExceptionNotification($this->exceptionDump, $this->exceptionClass));
+            ->send(new AdminExceptionNotification($this->exceptionDump, $this->exceptionClass, $this->exceptionLine));
 
         return true;
     }
