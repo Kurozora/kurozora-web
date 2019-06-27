@@ -101,6 +101,7 @@ class SessionController extends Controller
         // Check if the session is not expired
         if($session->isExpired()) {
             $session->delete();
+
             return JSONResult::error('Session is expired.');
         }
         // Session is perfectly valid
