@@ -10,6 +10,7 @@ use App\Http\Requests\DeleteFromLibrary;
 use App\Http\Requests\GetLibrary;
 use App\User;
 use App\UserLibrary;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
 class LibraryController extends Controller
@@ -19,6 +20,7 @@ class LibraryController extends Controller
      *
      * @param GetLibrary $request
      * @param User $user
+     * @return JsonResponse
      */
     public function getLibrary(GetLibrary $request, User $user) {
         $data = $request->validated();
@@ -49,7 +51,7 @@ class LibraryController extends Controller
             ])
             ->get($columnsToSelect);
 
-        (new JSONResult())->setData(['anime' => $animeInfo])->show();
+        return JSONResult::success(['anime' => $animeInfo]);
     }
 
     /**
@@ -57,6 +59,7 @@ class LibraryController extends Controller
      *
      * @param AddToLibrary $request
      * @param User $user
+     * @return JsonResponse
      */
     public function addLibrary(AddToLibrary $request, User $user) {
         $data = $request->validated();
@@ -89,7 +92,7 @@ class LibraryController extends Controller
         }
 
         // Successful response
-        (new JSONResult())->show();
+        return JSONResult::success();
     }
 
     /**
@@ -97,6 +100,7 @@ class LibraryController extends Controller
      *
      * @param DeleteFromLibrary $request
      * @param User $user
+     * @return JsonResponse
      */
     public function delLibrary(DeleteFromLibrary $request, User $user) {
         $data = $request->validated();
@@ -112,10 +116,10 @@ class LibraryController extends Controller
             $foundAnime->delete();
 
             // Successful response
-            (new JSONResult())->show();
+            return JSONResult::success();
         }
 
         // Unsuccessful response
-        (new JSONResult())->setError('This item is not in your library.')->show();
+        return JSONResult::error('This item is not in your library.');
     }
 }
