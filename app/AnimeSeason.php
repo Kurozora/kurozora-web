@@ -48,33 +48,6 @@ class AnimeSeason extends KModel
     }
 
     /**
-     * Formats the seasons for a response
-     *
-     * @return array
-     */
-    public function formatForResponse() {
-        return [
-            'id'        => $this->id,
-            'title'     => $this->getTitle(),
-            'number'    => $this->number
-        ];
-    }
-
-    /**
-     * Formats the season for the "season info" response
-     *
-     * @return array
-     */
-    public function formatForInfoResponse() {
-        return [
-            'id'            => $this->id,
-            'anime_id'      => $this->anime_id,
-            'title'         => $this->getTitle(),
-            'episode_count' => $this->getEpisodeCount()
-        ];
-    }
-
-    /**
      * Gets the count of the amount of episodes in this season
      *
      * @return int
