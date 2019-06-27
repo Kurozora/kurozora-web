@@ -14,18 +14,22 @@ class AdminExceptionNotification extends Mailable
     protected $exceptionDump;
     protected $exceptionClass;
     protected $exceptionLine;
+    protected $exceptionFile;
 
     /**
      * Create a new message instance.
      *
      * @param $exceptionDump
      * @param $exceptionClass
+     * @param $exceptionLine
+     * @param $exceptionFile
      */
-    public function __construct($exceptionDump, $exceptionClass, $exceptionLine)
+    public function __construct($exceptionDump, $exceptionClass, $exceptionLine, $exceptionFile)
     {
         $this->exceptionDump = $exceptionDump;
         $this->exceptionClass = $exceptionClass;
         $this->exceptionLine = $exceptionLine;
+        $this->exceptionFile = $exceptionFile;
     }
 
     /**
@@ -60,6 +64,6 @@ class AdminExceptionNotification extends Mailable
             $exceptionType = 'local exception';
 
         // Return the subject
-        return '[' . $exceptionType . ':' . $formattedDate . '] "' . $this->exceptionClass . '" on line ' . $this->exceptionLine;
+        return '[' . $exceptionType . ':' . $formattedDate . '] "' . $this->exceptionClass . '" on line ' . $this->exceptionLine . ' @ ' . $this->exceptionFile;
     }
 }
