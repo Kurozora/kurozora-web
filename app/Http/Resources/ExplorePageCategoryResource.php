@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Anime;
 use App\Enums\ExplorePageCategoryTypes;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -47,6 +48,12 @@ class ExplorePageCategoryResource extends JsonResource
             case ExplorePageCategoryTypes::Shows: {
                 return [
                     'shows' => AnimeResource::collection($this->animes)
+                ];
+            }
+
+            case ExplorePageCategoryTypes::MostPopularShows: {
+                return [
+                    'shows' => AnimeResource::collection(Anime::mostPopular(10)->get())
                 ];
             }
         }

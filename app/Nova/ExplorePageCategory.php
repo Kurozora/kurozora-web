@@ -8,6 +8,7 @@ use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
+use NovaConditionalFields\Condition;
 
 class ExplorePageCategory extends Resource
 {
@@ -51,8 +52,9 @@ class ExplorePageCategory extends Resource
                 ->help('Please fill in a title, even if it is not displayed on the explore page.'),
 
             Select::make('Type')->options([
-                ExplorePageCategoryTypes::Shows     => 'Shows',
-                ExplorePageCategoryTypes::Genres    => 'Genres'
+                ExplorePageCategoryTypes::Shows             => '(manual) Selected shows',
+                ExplorePageCategoryTypes::MostPopularShows  => '(automatic) Most Popular shows',
+                ExplorePageCategoryTypes::Genres            => '(manual) Selected genres',
             ])
                 ->rules('required')
                 ->sortable(),
