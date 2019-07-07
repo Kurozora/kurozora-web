@@ -8,4 +8,5 @@ final class ExplorePageCategoryTypes extends Enum
 {
     const Shows = "shows";
     const Genres = "genres";
+    const MostPopularShows = "most-popular-shows";
 }

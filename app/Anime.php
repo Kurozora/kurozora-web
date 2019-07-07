@@ -2,14 +2,19 @@
 
 namespace App;
 
-use App\Http\Resources\GenreResource;
 use App\Traits\KuroSearchTrait;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class Anime
  *
- * @property mixed id
+ * @property integer id
+ * @property bool fetched_images
+ * @property string|null cached_background_thumbnail
+ * @property string|null cached_background
+ * @property string|null cached_poster
+ * @property string|null cached_poster_thumbnail
  * @package App
  */
 class Anime extends KModel
@@ -167,5 +172,29 @@ class Anime extends KModel
 
         // Images not fetched yet
         return null;
+    }
+
+    /**
+     * Returns Eloquent query of the most popular Anime.
+     *
+     * @param int $limit
+     * @return mixed
+     */
+    public static function mostPopular($limit = 10) {
+        // Find the Anime that is most added to user libraries
+        $mostAdded = DB::table(UserLibrary::TABLE_NAME)
+            ->select('anime_id', DB::raw('count(*) as total'))
+            ->groupBy('anime_id')
+            ->orderBy('total', 'DESC')
+            ->limit($limit)
+            ->get();
+
+        // Only keep the IDs of the most added Anime
+        $mostAddedIDs = $mostAdded->map(function($item) {
+            return $item->anime_id;
+        });
+
+        // Return the Eloquent query (.. so that it can be extended)
+        return Anime::whereIn('id', $mostAddedIDs);
     }
 }
