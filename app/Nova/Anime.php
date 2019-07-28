@@ -2,6 +2,8 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\FetchAnimeActors;
+use App\Nova\Actions\FetchAnimeDetails;
 use App\Nova\Actions\FetchAnimeImages;
 use Chaseconey\ExternalImage\ExternalImage;
 use Laravel\Nova\Fields\BelongsToMany;
@@ -141,6 +143,8 @@ class Anime extends Resource
                 ->searchable(),
 
             HasMany::make('Seasons'),
+
+            HasMany::make('Actors'),
         ];
     }
 
@@ -210,7 +214,9 @@ class Anime extends Resource
     public function actions(Request $request)
     {
         return [
-            new FetchAnimeImages
+            new FetchAnimeImages,
+            new FetchAnimeDetails,
+            new FetchAnimeActors
         ];
     }
 }
