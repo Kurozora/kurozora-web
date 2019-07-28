@@ -60,6 +60,14 @@ class Anime extends Resource
                 ->rules('required')
                 ->sortable(),
 
+            Text::make('Tagline')
+                ->rules('max:255')
+                ->hideFromIndex(),
+
+            Text::make('Video URL', 'video_url')
+                ->rules('max:255')
+                ->hideFromIndex(),
+
             Text::make('Slug')
                 ->rules('required')
                 ->onlyOnForms()
