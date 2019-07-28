@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
@@ -20,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
     {
         /*
          * This snippet logs the amount of executed queries per request ..
-         * .. to the config
+         * .. to the config.
          */
         DB::listen(function ($query) {
             $currentConfigValue = Config::get(self::$queryCountConfigKey);
@@ -30,6 +31,11 @@ class AppServiceProvider extends ServiceProvider
             }
             else Config::set(self::$queryCountConfigKey, $currentConfigValue + 1);
         });
+
+        /*
+         * This line sends the app version to Bugsnag.
+         */
+        Bugsnag::setAppVersion(Config::get('app.version'));
     }
 
     /**
