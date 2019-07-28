@@ -6,6 +6,7 @@ use App\Enums\ExplorePageCategoryTypes;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use NovaConditionalFields\Condition;
@@ -50,6 +51,11 @@ class ExplorePageCategory extends Resource
                 ->rules('required', 'max:255')
                 ->sortable()
                 ->help('Please fill in a title, even if it is not displayed on the explore page.'),
+
+            Number::make('Position/order', 'position')
+                ->rules('required', 'numeric', 'min:1', 'max:100')
+                ->sortable()
+                ->help('This will determine the position on the explore page. Enter a number ranging from <strong>1 to 100</strong>. Lower numbers will display first.'),
 
             Select::make('Type')->options([
                 ExplorePageCategoryTypes::Shows             => '(manual) Selected shows',

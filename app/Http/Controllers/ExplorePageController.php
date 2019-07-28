@@ -19,7 +19,7 @@ class ExplorePageController extends Controller
      */
     function explore() {
         // Retrieve the categories
-        $categories = ExplorePageCategory::all();
+        $categories = ExplorePageCategory::orderBy('position')->get();
 
         // Return the response
         return JSONResult::success([
