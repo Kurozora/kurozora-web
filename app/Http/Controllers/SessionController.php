@@ -30,7 +30,7 @@ class SessionController extends Controller
         $validator = Validator::make($request->all(), [
             'username'  => 'bail|required|exists:' . User::TABLE_NAME . ',username',
             'password'  => 'bail|required',
-            'device'    => 'bail|required|max:50'
+            'device'    => 'bail|required|max:255'
         ]);
 
         // Display an error if validation failed
