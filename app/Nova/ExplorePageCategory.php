@@ -69,6 +69,7 @@ class ExplorePageCategory extends Resource
                 'small'     => 'Small',
                 'medium'    => 'Medium',
                 'large'     => 'Large',
+                'video'     => 'Video (for shows only)'
             ])
                 ->rules('required')
                 ->sortable(),

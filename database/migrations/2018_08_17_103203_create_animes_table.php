@@ -21,6 +21,8 @@ class CreateAnimesTable extends Migration
             $table->timestamps();
 
             $table->string('title')->default('Unknown title');
+            $table->string('tagline')->nullable();
+            $table->string('video_url')->nullable();
             $table->string('slug')->nullable();
             $table->string('network')->nullable();
             $table->integer('status')->default(AnimeStatus::TBA);
