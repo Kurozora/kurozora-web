@@ -18,10 +18,11 @@ class ExplorePageCategoryResource extends JsonResource
     {
         // Create the base response
         $baseResponse = [
-            'id'    => $this->id,
-            'title' => $this->title,
-            'type'  => $this->type,
-            'size'  => $this->size
+            'id'        => $this->id,
+            'title'     => $this->title,
+            'position'  => $this->position,
+            'type'      => $this->type,
+            'size'      => $this->size
         ];
 
         // Add specific data per type

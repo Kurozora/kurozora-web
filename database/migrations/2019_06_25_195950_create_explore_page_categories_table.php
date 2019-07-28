@@ -21,6 +21,7 @@ class CreateExplorePageCategoriesTable extends Migration
             $table->string('title');
             $table->string('type');
             $table->string('size');
+            $table->smallInteger('position');
         });
     }
 
