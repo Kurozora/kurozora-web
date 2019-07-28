@@ -25,7 +25,7 @@ class CreateSessionsTable extends Migration
             $table->timestamp('expiration_date')->useCurrent = true;
             $table->timestamp('last_validated')->useCurrent = true;
             $table->string('ip')->nullable();
-            $table->string('device', 50)->nullable();
+            $table->string('device')->nullable();
             $table->string('secret', 128);
 
             $table->string('city')->nullable();
