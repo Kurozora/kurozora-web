@@ -673,6 +673,54 @@
         }
       }
     },
+    "/user-notifications/update": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
+        "tags": [
+          "user-notifications"
+        ],
+        "summary": "Update a single, multiple or all notifications' status",
+        "description": "This endpoint will update the status of a single, multiple or all notifications.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "notification": {
+                    "type": "string",
+                    "description": "\"1\" to update notification ID 1, \"1,2,7\" to update notifications with ID 1, 2 and 7. \"all\" to update all of the user's notifications."
+                  },
+                  "status": {
+                    "type": "string",
+                    "description": "The desired status for the notification(s).",
+                    "enum": [
+                      "read",
+                      "unread"
+                    ]
+                  }
+                },
+                "required": [
+                  "notification", "status"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/sessions": {
       "post": {
         "tags": [

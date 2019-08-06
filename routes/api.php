@@ -70,6 +70,9 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('/{notification}/delete', [UserNotificationController::class, 'delete'])
             ->middleware('kurozora.userauth')
             ->middleware('can:del_notification,notification');
+
+        Route::post('/update', [UserNotificationController::class, 'update'])
+            ->middleware('kurozora.userauth');
     });
 
     Route::prefix('/sessions')->group(function() {
