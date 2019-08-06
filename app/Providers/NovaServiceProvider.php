@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Anaseqal\NovaSidebarIcons\NovaSidebarIcons;
 use App\Enums\UserRole;
 use App\Nova\Metrics\NewUsers;
 use Laravel\Nova\Nova;
@@ -67,7 +68,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     public function tools()
     {
-        return [];
+        return [
+            new NovaSidebarIcons
+        ];
     }
 
     /**

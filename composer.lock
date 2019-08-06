@@ -4,8 +4,49 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2b0af1d6c53d17015b9ca09eb720d9c6",
+    "content-hash": "923c600735b7e8a81ca7a8973772d6dd",
     "packages": [
+        {
+            "name": "anaseqal/nova-sidebar-icons",
+            "version": "0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/anaseqal/nova-sidebar-icons.git",
+                "reference": "1a18053b5df0484565144c25cbb9aaeb3e175b90"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/anaseqal/nova-sidebar-icons/zipball/1a18053b5df0484565144c25cbb9aaeb3e175b90",
+                "reference": "1a18053b5df0484565144c25cbb9aaeb3e175b90",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Anaseqal\\NovaSidebarIcons\\ToolServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Anaseqal\\NovaSidebarIcons\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova tool.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "time": "2019-04-27T18:47:11+00:00"
+        },
         {
             "name": "bensampo/laravel-enum",
             "version": "v1.21.2",
