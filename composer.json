@@ -6,6 +6,7 @@
     "require": {
         "php": "^7.1.3",
         "ext-json": "*",
+        "anaseqal/nova-sidebar-icons": "^0.0.2",
         "bensampo/laravel-enum": "^1.16",
         "bugsnag/bugsnag-laravel": "^2.0",
         "chaseconey/nova-external-image": "^0.0.3",
