@@ -16,6 +16,15 @@ class UserNotification extends KModel
     protected $table = self::TABLE_NAME;
 
     /**
+     * Returns the user the notification belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    function user() {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
      * Returns the string/text for this notification
      *
      * @return string

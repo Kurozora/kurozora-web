@@ -3,32 +3,28 @@
 namespace App\Nova;
 
 use App\Enums\UserRole;
-use App\Rules\ValidateEmail;
-use App\Rules\ValidatePassword;
-use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Password;
-use Laravel\Nova\Fields\Textarea;
 
-class User extends Resource
+class UserNotification extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\\User';
+    public static $model = 'App\UserNotification';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'username';
+    public static $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -36,7 +32,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'username', 'email',
+        'id'
     ];
 
     /**
@@ -50,48 +46,45 @@ class User extends Resource
         return [
             ID::make()->sortable(),
 
-            Text::make('Name', 'username')
+            BelongsTo::make('User')
                 ->sortable()
-                ->rules('required', 'max:255'),
+                ->searchable(),
 
-            Text::make('Email')
-                ->sortable()
-                ->rules('required', new ValidateEmail(false)),
-
-            Password::make('Password')
-                ->onlyOnForms()
-                ->rules(new ValidatePassword(false)),
-
-            Select::make('Role')->options([
-                UserRole::Normal        => UserRole::getDescription(UserRole::Normal),
-                UserRole::Moderator     => UserRole::getDescription(UserRole::Moderator),
-                UserRole::Administrator => UserRole::getDescription(UserRole::Administrator),
+            Select::make('Type')->options([
+                \App\UserNotification::TYPE_UNKNOWN         => 'Unknown',
+                \App\UserNotification::TYPE_NEW_FOLLOWER    => 'New Follower',
+                \App\UserNotification::TYPE_NEW_SESSION     => 'New Session',
             ])
                 ->rules('required')
                 ->sortable()
                 ->displayUsingLabels(),
 
-            Textarea::make('Biography'),
+            Boolean::make('Is Read', 'read')
+                ->rules('required')
+                ->sortable(),
 
-            HasMany::make('Forum Threads', 'threads'),
-
-            HasMany::make('User Notifications', 'notifications'),
-
-            BelongsToMany::make('Badges')
-                ->searchable(),
-
-            HasMany::make('Sessions'),
+            Text::make('Data')
+                ->hideFromIndex()
         ];
     }
 
     /**
-     * Get the value that should be displayed to represent the resource.
+     * Returns the user-friendly display name of the resource.
      *
      * @return string
      */
-    public function title()
+    public static function label() {
+        return 'User Notifications';
+    }
+
+    /**
+     * Determine if the given resource is authorizable.
+     *
+     * @return bool
+     */
+    public static function authorizable()
     {
-        return $this->username . ' (ID: ' . $this->id . ')';
+        return false;
     }
 
     /**
@@ -136,15 +129,5 @@ class User extends Resource
     public function actions(Request $request)
     {
         return [];
-    }
-
-    /**
-     * Determine if the given resource is authorizable.
-     *
-     * @return bool
-     */
-    public static function authorizable()
-    {
-        return false;
     }
 }

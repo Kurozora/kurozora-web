@@ -93,6 +93,15 @@ class User extends Authenticatable implements LikerContract
     }
 
     /**
+     * Returns the associated notifications for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    function notifications() {
+        return $this->hasMany(UserNotification::class);
+    }
+
+    /**
      * Returns a list of badges that the user has assigned to them
      *
      * @return array
