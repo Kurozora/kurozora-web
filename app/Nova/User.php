@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use App\Enums\UserRole;
+use App\Nova\Lenses\UnconfirmedUsers;
 use App\Rules\ValidateEmail;
 use App\Rules\ValidatePassword;
 use Laravel\Nova\Fields\BelongsToMany;
@@ -131,7 +132,9 @@ class User extends Resource
      */
     public function lenses(Request $request)
     {
-        return [];
+        return [
+            new UnconfirmedUsers
+        ];
     }
 
     /**
