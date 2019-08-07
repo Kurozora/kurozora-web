@@ -695,17 +695,15 @@
                     "type": "string",
                     "description": "\"1\" to update notification ID 1, \"1,2,7\" to update notifications with ID 1, 2 and 7. \"all\" to update all of the user's notifications."
                   },
-                  "status": {
-                    "type": "string",
-                    "description": "The desired status for the notification(s).",
-                    "enum": [
-                      "read",
-                      "unread"
-                    ]
+                  "read": {
+                    "type": "integer",
+                    "description": "Mark notification(s) as read or unread. (0 = unread, 1 = read)",
+                    "minimum": 0,
+                    "maximum": 1
                   }
                 },
                 "required": [
-                  "notification", "status"
+                  "notification", "read"
                 ]
               }
             }

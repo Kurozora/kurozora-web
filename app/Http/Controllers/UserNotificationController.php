@@ -45,11 +45,11 @@ class UserNotificationController extends Controller
      */
     public function update(UpdateUserNotifications $request) {
         /*
-         * Transfers the "status" parameter to a boolean
+         * Transfers the "read" parameter to a boolean
          * true = read
          * false = unread
          */
-        $readBoolean = $request->get('status') == 'read' ? true : false;
+        $readBoolean = (bool) $request->input('read');
 
         // Get the notification(s) the user is targeting to update
         $targetedNotification = $request->get('notification');

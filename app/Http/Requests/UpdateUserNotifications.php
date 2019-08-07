@@ -15,7 +15,7 @@ class UpdateUserNotifications extends KuroFormRequest
     {
         return [
             'notification'  => ['bail', 'required', 'string'],
-            'status'        => ['bail', 'required', 'string', 'in:read,unread'],
+            'read'          => ['bail', 'required', 'numeric', 'min:0', 'max:1'],
         ];
     }
 }
