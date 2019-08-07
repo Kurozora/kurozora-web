@@ -80,6 +80,8 @@ class UserNotificationController extends Controller
             ]);
         }
 
-        return JSONResult::success();
+        return JSONResult::success([
+            'read' => $readBoolean
+        ]);
     }
 }
