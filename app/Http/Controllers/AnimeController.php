@@ -10,6 +10,7 @@ use App\Enums\UserLibraryStatus;
 use App\Events\AnimeViewed;
 use App\Helpers\JSONResult;
 use App\Http\Resources\ActorResource;
+use App\Http\Resources\AnimeResource;
 use App\Http\Resources\AnimeSeasonResource;
 use App\Http\Resources\GenreResource;
 use App\UserLibrary;
@@ -53,29 +54,6 @@ class AnimeController extends Controller
             return GenreResource::make($genre);
         });
 
-        // Build the response
-        $animeArr = [
-            'id'                    => $anime->id,
-            'title'                 => $anime->title,
-            'type'                  => AnimeType::getDescription($anime->type),
-            'imdb_id'               => $anime->imdb_id,
-            'network'               => $anime->network,
-            'status'                => AnimeStatus::getDescription($anime->status),
-            'episodes'              => $anime->episode_count,
-            'seasons'               => $anime->season_count,
-            'average_rating'        => $anime->average_rating,
-            'rating_count'          => $anime->rating_count,
-            'synopsis'              => $anime->synopsis,
-            'runtime'               => $anime->runtime,
-            'watch_rating'          => $anime->watch_rating,
-            'poster'                => $anime->getPoster(false),
-            'poster_thumbnail'      => $anime->getPoster(true),
-            'background'            => $anime->getBackground(false),
-            'background_thumbnail'  => $anime->getBackground(true),
-            'nsfw'                  => (bool) $anime->nsfw,
-            'genres'                => $genres
-        ];
-
         $userArr = [
         	'current_rating'	=> $userRating,
             'library_status'    => $currentLibraryStatus
@@ -86,7 +64,7 @@ class AnimeController extends Controller
 
         // Show the Anime details response
         return JSONResult::success([
-            'anime' => $animeArr,
+            'anime' => AnimeResource::make($anime),
             'user' => $userArr
         ]);
     }
