@@ -78,6 +78,21 @@
     }
   ],
   "paths": {
+    "/info": {
+      "get": {
+        "tags": ["misc"],
+        "summary": "API info.",
+        "description": "Plain API JSON response.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/explore": {
       "get": {
         "tags": ["explore"],

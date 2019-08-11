@@ -59,8 +59,10 @@ class JSONResult {
     private static function getDefaultResponseArray($isSuccess) {
         return [
             'success'       => (bool) $isSuccess,
-            'query_count'   => (int) Config::get(AppServiceProvider::$queryCountConfigKey),
-            'version'       => Config::get('app.version')
+            'meta'          => [
+                'version' => Config::get('app.version'),
+                'query_count'   => (int) Config::get(AppServiceProvider::$queryCountConfigKey),
+            ]
         ];
     }
 }
