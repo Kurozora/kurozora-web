@@ -1,5 +1,5 @@
 <head>
-    <title>{{ $title or 'Home' }} | Kurozora</title>
+    <title>{{ $title ?? 'Home' }} | Kurozora</title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
@@ -96,7 +96,7 @@
             <tbody>
             <tr>
                 <td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:57px;">
-                    <div style="cursor:auto;color:white;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">{{ $title or 'Home' }}</div>
+                    <div style="cursor:auto;color:white;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:36px;font-weight:600;line-height:36px;text-align:center;">{{ $title ?? 'Home' }}</div>
                 </td>
             </tr>
             </tbody>

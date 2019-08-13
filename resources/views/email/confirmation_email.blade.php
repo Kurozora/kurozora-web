@@ -1,7 +1,7 @@
 @extends('email.email_base')
 
 @section('content')
-    Hey, {{ $username or 'Kurozora User' }}! <br><br>
+    Hey, {{ $username ?? 'Kurozora User' }}! <br><br>
 
     Your Kurozora account was successfully created. However, you'll first have to confirm your email address prior to signing in. <br><br>
 
