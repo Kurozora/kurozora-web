@@ -1451,6 +1451,11 @@
     },
     "/forum-threads/{threadID}/replies": {
       "get": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
         "tags": [
           "forum-threads"
         ],
