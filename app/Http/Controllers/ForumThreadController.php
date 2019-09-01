@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\ForumReply;
 use App\ForumSectionBan;
 use App\ForumThread;
+use App\Helpers\CollectionLikeChecker;
 use App\Helpers\JSONResult;
+use App\Http\Resources\ForumReplyResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -152,30 +154,26 @@ class ForumThreadController extends Controller
         else if($givenOrder == 'top')
             $replies = $replies->orderByLikesCount();
 
+        // Paginate the replies
         $replies = $replies->paginate(ForumThread::REPLIES_PER_PAGE);
 
+        // Instantiate a CollectionLikeChecker to get the current liked status for the user
+        $likeChecker = CollectionLikeChecker::retrieve($request->user()->id, $replies);
+
         // Format the replies
-        $displayReplies = [];
+        $formattedReplies = [];
 
         foreach($replies as $reply) {
-            $displayReplies[] = [
-                'id'        => $reply->id,
-                'posted_at' => $reply->created_at->format('Y-m-d H:i:s'),
-                'user' => [
-                    'id'        => $reply->user->id,
-                    'username'  => $reply->user->username,
-                    'avatar'    => $reply->user->getAvatarURL()
-                ],
-                'score'     => $reply->likesDiffDislikesCount,
-                'content'   => $reply->content
-            ];
+            $formattedReplies[] = array_merge(ForumReplyResource::make($reply)->toArray($request), [
+                'current_like_action' => $likeChecker->getCurrentLikeAction($reply)
+            ]);
         }
 
         // Show successful response
         return JSONResult::success([
             'page'          => $givenPage,
             'reply_pages'   => $thread->getPageCount(),
-            'replies'       => $displayReplies
+            'replies'       => $formattedReplies
         ]);
     }
 
