@@ -402,7 +402,7 @@ class UserController extends Controller
         ) {
             // Check if the bio has a correct length
             if(strlen($newBio) > User::BIOGRAPHY_LIMIT)
-                return JSONResult::success('Your biography contain more than ' . User::BIOGRAPHY_LIMIT . ' characters.');
+                return JSONResult::success('Your biography contains more than ' . User::BIOGRAPHY_LIMIT . ' characters.');
 
             $user->biography = $newBio;
             $changedFields[] = 'biography';
