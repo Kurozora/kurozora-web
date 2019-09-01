@@ -50,6 +50,15 @@ html {
 	margin: 0;
 }
 
+.kurozora-paragraph {
+	color: #fff;
+	background: rgba(0, 0, 0, 0.5);
+	border-radius: 5px;
+	max-height: 500px;
+	padding: 5px 10px;
+	overflow-y: scroll;
+}
+
 .anime-poster {
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
