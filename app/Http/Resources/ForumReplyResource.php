@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class ForumReplyResource extends JsonResource
 {
@@ -14,7 +15,7 @@ class ForumReplyResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $resource = [
             'id'        => $this->id,
             'posted_at' => $this->created_at->format('Y-m-d H:i:s'),
             'poster' => [
@@ -24,6 +25,26 @@ class ForumReplyResource extends JsonResource
             ],
             'score'     => $this->likesDiffDislikesCount,
             'content'   => $this->content
+        ];
+
+        if(Auth::check())
+            $resource = array_merge($resource, $this->getUserSpecificDetails());
+
+        return $resource;
+    }
+
+    /**
+     * Returns the user specific details for the resource.
+     *
+     * @return array
+     */
+    protected function getUserSpecificDetails() {
+        $user = Auth::user();
+
+        return [
+            'current_user' => [
+                'like_action' => $user->likeAction($this->resource)
+            ]
         ];
     }
 }

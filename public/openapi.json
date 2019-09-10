@@ -1471,6 +1471,7 @@
     "/forum-threads/{threadID}/replies": {
       "get": {
         "security": [
+          {},
           {
             "kurozoraBearer": []
           }
@@ -1478,7 +1479,7 @@
         "tags": [
           "forum-threads"
         ],
-        "summary": "Gets the replies on a thread.",
+        "summary": "(optional authentication) Gets the replies on a thread.",
         "description": "This endpoint will retrieve the replies on a thread.",
         "parameters": [
           {
