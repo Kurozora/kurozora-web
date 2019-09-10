@@ -158,23 +158,11 @@ class ForumThreadController extends Controller
         // Paginate the replies
         $replies = $replies->paginate(ForumThread::REPLIES_PER_PAGE);
 
-        // Instantiate a CollectionLikeChecker to get the current liked status for the user
-        $likeChecker = CollectionLikeChecker::retrieve($request->user()->id, $replies);
-
-        // Format the replies
-        $formattedReplies = [];
-
-        foreach($replies as $reply) {
-            $formattedReplies[] = array_merge(ForumReplyResource::make($reply)->toArray($request), [
-                'current_like_action' => $likeChecker->getCurrentLikeAction($reply)
-            ]);
-        }
-
         // Show successful response
         return JSONResult::success([
             'page'          => $givenPage,
             'reply_pages'   => $thread->getPageCount(),
-            'replies'       => $formattedReplies
+            'replies'       => ForumReplyResource::collection($replies)
         ]);
     }
 

@@ -149,7 +149,7 @@ Route::group(['prefix' => 'v1'], function () {
             ->middleware('kurozora.userauth');
 
         Route::get('/{thread}/replies', [ForumThreadController::class, 'replies'])
-            ->middleware('kurozora.userauth');
+            ->middleware('kurozora.userauth:optional');
 
         Route::post('/{thread}/replies', [ForumThreadController::class, 'postReply'])
             ->middleware('kurozora.userauth');
