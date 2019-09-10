@@ -104,7 +104,7 @@ class FetchAnimeDetails extends Command
 
         // Title
         $this->info('[Retrieving title]');
-        $anime->title = $details->title;
+        $anime->title = ($details->title !== null) ? $details->title : $anime->title;
         $this->info('[Title retrieved]');
         $this->info('');
 
