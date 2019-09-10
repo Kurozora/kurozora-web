@@ -22,7 +22,8 @@ Route::get('/v1', function() {
 Route::group(['prefix' => 'v1'], function () {
     Route::get('/info', [APIController::class, 'info']);
 
-    Route::get('/explore', [ExplorePageController::class, 'explore']);
+    Route::get('/explore', [ExplorePageController::class, 'explore'])
+        ->middleware('kurozora.userauth:optional');
 
     Route::prefix('/users')->group(function() {
         Route::post('/', [UserController::class, 'register']);
