@@ -4,7 +4,10 @@ namespace App\Http\Resources;
 
 use App\Enums\AnimeStatus;
 use App\Enums\AnimeType;
+use App\Enums\UserLibraryStatus;
+use App\UserLibrary;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class AnimeResource extends JsonResource
 {
@@ -16,7 +19,7 @@ class AnimeResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $resource = [
             'id'                    => $this->id,
             'title'                 => $this->title,
             'type'                  => AnimeType::getDescription($this->type),
@@ -38,6 +41,47 @@ class AnimeResource extends JsonResource
             'background_thumbnail'  => $this->getBackground(true),
             'nsfw'                  => (bool) $this->nsfw,
             'genres'                => GenreResource::collection($this->genres)
+        ];
+
+        if(Auth::check())
+            $resource = array_merge($resource, $this->getUserSpecificDetails());
+
+        return $resource;
+    }
+
+    /**
+     * Returns the user specific details for the resource.
+     *
+     * @return array
+     */
+    protected function getUserSpecificDetails() {
+        // Get the user rating for this Anime
+        $userRating = null;
+
+        $foundRating = $this->ratings()
+            ->where('user_id', Auth::id())
+            ->first();
+
+        if($foundRating)
+            $userRating = $foundRating->rating;
+
+        // Get the current library status
+        $currentLibraryStatus = null;
+
+        $foundLibraryStatus = UserLibrary::where([
+            ['user_id' ,  '=', Auth::id()],
+            ['anime_id' , '=', $this->id]
+        ])->first();
+
+        if($foundLibraryStatus)
+            $currentLibraryStatus = UserLibraryStatus::getDescription($foundLibraryStatus->status);
+
+        // Return the array
+        return [
+            'current_user' => [
+                'given_rating'      => $userRating,
+                'library_status'    => $currentLibraryStatus
+            ]
         ];
     }
 }

@@ -96,7 +96,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::prefix('/anime')->group(function() {
         Route::get('/search', [AnimeController::class, 'search']);
 
-        Route::get('/{anime}', [AnimeController::class, 'detailsAnime'])
+        Route::get('/{anime}', [AnimeController::class, 'view'])
             ->middleware('kurozora.userauth');
 
         Route::get('/{anime}/actors', [AnimeController::class, 'actorsAnime']);

@@ -22,50 +22,18 @@ use Illuminate\Http\Request;
 class AnimeController extends Controller
 {
     /**
-     * Returns detailed information about an Anime
+     * Returns detailed information about an Anime.
      *
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function detailsAnime(Anime $anime) {
-        // Get the user rating for this Anime
-        $userRating = 0.0;
-
-        $foundRating = $anime->ratings()
-            ->where('user_id', Auth::id())
-            ->first();
-
-        if($foundRating)
-            $userRating = $foundRating->rating;
-
-        // Get the current library status
-        $currentLibraryStatus = null;
-
-        $foundLibraryStatus = UserLibrary::where([
-            ['user_id' ,  '=', Auth::id()],
-            ['anime_id' , '=', $anime->id]
-        ])->first();
-
-        if($foundLibraryStatus)
-            $currentLibraryStatus = UserLibraryStatus::getDescription($foundLibraryStatus->status);
-
-        // Get the genres
-        $genres = $anime->getGenres()->map(function($genre) {
-            return GenreResource::make($genre);
-        });
-
-        $userArr = [
-        	'current_rating'	=> $userRating,
-            'library_status'    => $currentLibraryStatus
-       	];
-
+    public function view(Anime $anime) {
         // Call the AnimeViewed event
         AnimeViewed::dispatch($anime);
 
         // Show the Anime details response
         return JSONResult::success([
-            'anime' => AnimeResource::make($anime),
-            'user' => $userArr
+            'anime' => AnimeResource::make($anime)
         ]);
     }
 
