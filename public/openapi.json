@@ -1113,7 +1113,7 @@
         "tags": [
           "forum-sections"
         ],
-        "summary": "Forum section get threads.",
+        "summary": "(optional authentication) Forum section get threads.",
         "description": "This endpoint will retrieve the threads in a forum section.",
         "parameters": [
           {
@@ -1572,10 +1572,16 @@
     },
     "/forum-threads/search": {
       "get": {
+        "security": [
+          {},
+          {
+            "kurozoraBearer": []
+          }
+        ],
         "tags": [
           "forum-threads"
         ],
-        "summary": "Searches forum threads.",
+        "summary": "(optional authentication) Searches forum threads.",
         "description": "This endpoint will retrieve the search results for forum threads.\n<div class=\"kuro-tip\">You can prefix your search with \"id:\" to search for Anime with a specific ID.</div>",
         "parameters": [
           {
