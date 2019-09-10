@@ -8,6 +8,7 @@ use App\ForumThread;
 use App\Helpers\CollectionLikeChecker;
 use App\Helpers\JSONResult;
 use App\Http\Resources\ForumReplyResource;
+use App\Http\Resources\ForumThreadResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -196,29 +197,14 @@ class ForumThreadController extends Controller
         $searchQuery = $request->input('query');
 
         // Search for the thread
-        $resultArr = ForumThread::kuroSearch($searchQuery, [
+        $threads = ForumThread::kuroSearch($searchQuery, [
             'limit' => ForumThread::MAX_SEARCH_RESULTS
         ]);
-
-        // Format the results
-        $displayResults = [];
-
-        foreach($resultArr as $thread) {
-            $displayResults[] = [
-                'id'                => $thread->id,
-                'title'             => $thread->title,
-                'content_teaser'    =>
-                    substr(strip_tags($thread->content), 0, 100) .
-                    ((strlen($thread->content) > 100) ? '...' : '')
-                ,
-                'locked'            => (bool) $thread->locked
-            ];
-        }
 
         // Show response
         return JSONResult::success([
             'max_search_results'    => ForumThread::MAX_SEARCH_RESULTS,
-            'results'               => $displayResults
+            'results'               => ForumThreadResource::collection($threads)
         ]);
     }
 

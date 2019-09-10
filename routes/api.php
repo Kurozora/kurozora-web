@@ -140,7 +140,8 @@ Route::group(['prefix' => 'v1'], function () {
     });
 
     Route::prefix('/forum-threads')->group(function() {
-        Route::get('/search', [ForumThreadController::class, 'search']);
+        Route::get('/search', [ForumThreadController::class, 'search'])
+            ->middleware('kurozora.userauth:optional');
 
         Route::get('/{thread}', [ForumThreadController::class, 'threadInfo']);
 
