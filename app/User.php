@@ -66,6 +66,16 @@ class User extends Authenticatable implements LikerContract
     const BIOGRAPHY_LIMIT = 250;
 
     /**
+     * Returns the Anime items in the user's library.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    function libraryAnime() {
+        return $this->belongsToMany(Anime::class, UserLibrary::class, 'user_id', 'anime_id')
+            ->withPivot('status');;
+    }
+
+    /**
      * Returns the associated badges for the user
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
