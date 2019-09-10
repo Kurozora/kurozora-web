@@ -8,9 +8,11 @@ use App\Helpers\JSONResult;
 use App\Http\Requests\AddToLibrary;
 use App\Http\Requests\DeleteFromLibrary;
 use App\Http\Requests\GetLibrary;
+use App\Http\Resources\AnimeResource;
 use App\User;
 use App\UserLibrary;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class LibraryController extends Controller
@@ -28,30 +30,12 @@ class LibraryController extends Controller
         // Get the status
         $foundStatus = UserLibraryStatus::getValue($data['status']);
 
-        /*
-         * Selects the necessary data from the Anime that are ..
-         * .. in the user's library, that match the given status
-         */
-        $columnsToSelect = [
-            Anime::TABLE_NAME . '.id',
-            Anime::TABLE_NAME . '.title',
-            Anime::TABLE_NAME . '.episode_count',
-            Anime::TABLE_NAME . '.average_rating',
-            Anime::TABLE_NAME . '.cached_poster_thumbnail AS poster_thumbnail',
-            Anime::TABLE_NAME . '.cached_background_thumbnail AS background_thumbnail'
-        ];
+        // Retrieve the Anime from the user's library with the correct status
+        $anime = $user->libraryAnime()->wherePivot('status', $foundStatus)->get();
 
-        $animeInfo = DB::table(Anime::TABLE_NAME)
-            ->join(UserLibrary::TABLE_NAME, function ($join) {
-                $join->on(Anime::TABLE_NAME . '.id', '=', UserLibrary::TABLE_NAME . '.anime_id');
-            })
-            ->where([
-                [UserLibrary::TABLE_NAME . '.user_id', '=', $user->id],
-                [UserLibrary::TABLE_NAME . '.status',  '=', $foundStatus]
-            ])
-            ->get($columnsToSelect);
-
-        return JSONResult::success(['anime' => $animeInfo]);
+        return JSONResult::success([
+            'anime' => AnimeResource::collection($anime)
+        ]);
     }
 
     /**
