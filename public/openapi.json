@@ -878,6 +878,7 @@
     "/anime/{animeID}": {
       "get": {
         "security": [
+          {},
           {
             "kurozoraBearer": []
           }
@@ -885,7 +886,7 @@
         "tags": [
           "anime"
         ],
-        "summary": "Anime details.",
+        "summary": "(optional authentication) Anime details.",
         "description": "This endpoint will retrieve the details of an Anime item.",
         "parameters": [
           {
@@ -1018,10 +1019,16 @@
     },
     "/anime/search": {
       "get": {
+        "security": [
+          {},
+          {
+            "kurozoraBearer": []
+          }
+        ],
         "tags": [
           "anime"
         ],
-        "summary": "Searches Anime.",
+        "summary": "(optional authentication) Searches Anime.",
         "description": "This endpoint will retrieve the search results for Anime.\n<div class=\"kuro-tip\">You can prefix your search with \"id:\" to search for Anime with a specific ID.</div>",
         "parameters": [
           {
