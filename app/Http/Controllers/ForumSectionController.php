@@ -8,6 +8,7 @@ use App\ForumThread;
 use App\Helpers\JSONResult;
 use App\Http\Requests\PostThread;
 use App\Http\Resources\ForumSectionResource;
+use App\Http\Resources\ForumThreadResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,7 +42,7 @@ class ForumSectionController extends Controller
     }
 
     /**
-     * Returns the threads of a section
+     * Returns the threads of a section.
      *
      * @param Request $request
      * @param ForumSection $section
@@ -72,30 +73,11 @@ class ForumSectionController extends Controller
 
         $threads = $threads->paginate(ForumSection::THREADS_PER_PAGE);
 
-        // Format the threads
-        $displayThreads = [];
-
-        foreach($threads as $thread)
-            $displayThreads[] = [
-                'id'                => $thread->id,
-                'title'             => $thread->title,
-                'content_teaser'    =>
-                    substr(strip_tags($thread->content), 0, 100) .
-                    ((strlen($thread->content) > 100) ? '...' : '')
-                ,
-                'locked'            => (bool) $thread->locked,
-                'poster_user_id'    => $thread->user->id,
-                'poster_username'   => $thread->user->username,
-                'creation_date'     => $thread->created_at->format('Y-m-d H:i:s'),
-                'reply_count'       => $thread->replies->count(),
-                'score'             => $thread->likesDiffDislikesCount
-            ];
-
         // Show threads in response
         return JSONResult::success([
             'page'          => (int) $givenPage,
             'thread_pages'  => $section->getPageCount(),
-            'threads'       => $displayThreads
+            'threads'       => ForumThreadResource::collection($threads)
         ]);
     }
 
