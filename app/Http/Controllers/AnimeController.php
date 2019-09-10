@@ -38,7 +38,7 @@ class AnimeController extends Controller
     }
 
     /**
-     * Returns actor information about an Anime
+     * Returns actor information about an Anime.
      *
      * @param Anime $anime
      * @return JsonResponse
@@ -59,8 +59,7 @@ class AnimeController extends Controller
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function seasonsAnime(Anime $anime)
-    {
+    public function seasonsAnime(Anime $anime) {
         // Get the seasons
         $seasons = $anime->getSeasons();
 
@@ -145,20 +144,21 @@ class AnimeController extends Controller
         ]);
 
         // Format the results
-        $displayResults = [];
-
-        foreach($resultArr as $anime) {
-            $displayResults[] = [
-                'id'                => $anime->id,
-                'title'             => $anime->title,
-                'average_rating'    => $anime->average_rating,
-                'poster_thumbnail'  => $anime->getPoster(true)
-            ];
-        }
+//        $displayResults = [];
+//
+//        foreach($resultArr as $anime) {
+//            $displayResults[] = [
+//                'id'                => $anime->id,
+//                'title'             => $anime->title,
+//                'average_rating'    => $anime->average_rating,
+//                'poster_thumbnail'  => $anime->getPoster(true)
+//            ];
+//        }
 
         return JSONResult::success([
             'max_search_results'    => Anime::MAX_SEARCH_RESULTS,
-            'results'               => $displayResults
+//            'results'               => $displayResults
+            'results'               => AnimeResource::collection($resultArr)
         ]);
     }
 }

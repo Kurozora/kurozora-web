@@ -94,10 +94,11 @@ Route::group(['prefix' => 'v1'], function () {
     });
 
     Route::prefix('/anime')->group(function() {
-        Route::get('/search', [AnimeController::class, 'search']);
+        Route::get('/search', [AnimeController::class, 'search'])
+            ->middleware('kurozora.userauth:optional');
 
         Route::get('/{anime}', [AnimeController::class, 'view'])
-            ->middleware('kurozora.userauth');
+            ->middleware('kurozora.userauth:optional');
 
         Route::get('/{anime}/actors', [AnimeController::class, 'actorsAnime']);
 

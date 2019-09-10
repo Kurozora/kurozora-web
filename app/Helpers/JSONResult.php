@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Providers\AppServiceProvider;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 
@@ -60,8 +61,10 @@ class JSONResult {
         return [
             'success'       => (bool) $isSuccess,
             'meta'          => [
-                'version' => Config::get('app.version'),
-                'query_count'   => (int) Config::get(AppServiceProvider::$queryCountConfigKey),
+                'version'                   => Config::get('app.version'),
+                'query_count'               => (int) Config::get(AppServiceProvider::$queryCountConfigKey),
+                'is_user_authenticated'     => Auth::check(),
+                'authenticated_user_id'     => Auth::id()
             ]
         ];
     }
