@@ -1104,6 +1104,12 @@
     },
     "/forum-sections/{sectionID}/threads": {
       "get": {
+        "security": [
+          {},
+          {
+            "kurozoraBearer": []
+          }
+        ],
         "tags": [
           "forum-sections"
         ],

@@ -132,7 +132,8 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::get('/{section}', [ForumSectionController::class, 'details']);
 
-        Route::get('/{section}/threads', [ForumSectionController::class, 'threads']);
+        Route::get('/{section}/threads', [ForumSectionController::class, 'threads'])
+            ->middleware('kurozora.userauth:optional');
 
         Route::post('/{section}/threads', [ForumSectionController::class, 'postThread'])
             ->middleware('kurozora.userauth');
