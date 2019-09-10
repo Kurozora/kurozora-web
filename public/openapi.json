@@ -95,8 +95,14 @@
     },
     "/explore": {
       "get": {
+        "security": [
+          {},
+          {
+            "kurozoraBearer": []
+          }
+        ],
         "tags": ["explore"],
-        "summary": "Explore page.",
+        "summary": "(optional authentication) Explore page.",
         "description": "This endpoint will retrieve the details to for the explore page.",
         "responses": {
           "200": {
