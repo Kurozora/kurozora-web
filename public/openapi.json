@@ -661,6 +661,39 @@
         }
       }
     },
+    "/users/{userID}/following": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the user."
+          }
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Retrieve the user's list of following users.",
+        "description": "This endpoint will retrieve the user's list of following users.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/user-notifications/{notificationID}": {
       "get": {
         "security": [
