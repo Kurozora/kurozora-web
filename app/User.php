@@ -162,12 +162,12 @@ class User extends Authenticatable implements LikerContract
     }
 
     /**
-     * Get the user's following users
+     * Get the user's following users.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function following() {
-        return $this->hasMany(UserFollow::class, 'user_id');
+        return $this->belongsToMany(User::class, UserFollow::class, 'user_id', 'following_user_id');
     }
 
     /**

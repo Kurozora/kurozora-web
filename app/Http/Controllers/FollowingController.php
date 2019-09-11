@@ -58,7 +58,7 @@ class FollowingController extends Controller
     }
 
     /**
-     * Returns a list of a user's followers.
+     * Returns a list of the user's followers.
      *
      * @param User $user
      * @return JsonResponse
@@ -66,6 +66,18 @@ class FollowingController extends Controller
     function getFollowers(User $user) {
         return JSONResult::success([
             'followers' => UserResourceSmall::collection($user->followers)
+        ]);
+    }
+
+    /**
+     * Returns a list of the user's following.
+     *
+     * @param User $user
+     * @return JsonResponse
+     */
+    function getFollowing(User $user) {
+        return JSONResult::success([
+            'following' => UserResourceSmall::collection($user->following)
         ]);
     }
 }
