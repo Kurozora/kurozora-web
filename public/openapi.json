@@ -1226,10 +1226,10 @@
             "name": "page",
             "schema": {
               "type": "string",
-              "example": "0"
+              "example": "1"
             },
             "required": false,
-            "description": "The page to retrieve threads from. (starts at 0)"
+            "description": "The page to retrieve threads from. (starts at 1)"
           }
         ],
         "responses": {

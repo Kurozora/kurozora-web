@@ -73,28 +73,6 @@ class ForumThread extends KModel implements LikeableContract
     }
 
     /**
-     * Formats the thread for a details response
-     *
-     * @return array
-     */
-    public function formatForDetailsResponse() {
-        return [
-            'id'            => $this->id,
-            'content'       => $this->content,
-            'reply_pages'   => $this->getPageCount()
-        ];
-    }
-
-    /**
-     * Get the amount of pages the thread has
-     *
-     * @return integer
-     */
-    public function getPageCount() {
-        return ceil($this->replies->count() / self::REPLIES_PER_PAGE);
-    }
-
-    /**
      * Checks whether or not the user passes the cooldown check
      *
      * Returns true when the user has posted within the cooldown

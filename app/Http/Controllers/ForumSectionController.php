@@ -51,13 +51,11 @@ class ForumSectionController extends Controller
     public function threads(Request $request, ForumSection $section) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'order'         => 'bail|required|in:top,recent',
-            'page'          => 'bail|numeric|min:0'
+            'order'         => 'bail|required|in:top,recent'
         ]);
 
         // Fetch the variables
         $givenOrder = $request->input('order');
-        $givenPage = $request->input('page');
 
         // Check validator
         if($validator->fails())
@@ -75,8 +73,8 @@ class ForumSectionController extends Controller
 
         // Show threads in response
         return JSONResult::success([
-            'page'          => (int) $givenPage,
-            'thread_pages'  => $section->getPageCount(),
+            'page'          => $threads->currentPage(),
+            'last_page'     => $threads->lastPage(),
             'threads'       => ForumThreadResource::collection($threads)
         ]);
     }

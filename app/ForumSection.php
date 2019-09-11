@@ -28,13 +28,4 @@ class ForumSection extends KModel
     public function getThreadCount() {
         return ForumThread::where('section_id', $this->id)->count();
     }
-
-    /**
-     * Get the amount of pages the section has
-     *
-     * @return integer
-     */
-    public function getPageCount() {
-        return ceil($this->getThreadCount() / self::THREADS_PER_PAGE);
-    }
 }

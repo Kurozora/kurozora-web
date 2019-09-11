@@ -135,13 +135,11 @@ class ForumThreadController extends Controller
     public function replies(Request $request, ForumThread $thread) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'order'         => 'bail|required|in:top,recent',
-            'page'          => 'bail|numeric|min:0'
+            'order'         => 'bail|required|in:top,recent'
         ]);
 
         // Fetch the variables
         $givenOrder = $request->input('order');
-        $givenPage = $request->input('page');
 
         // Check validator
         if($validator->fails())
@@ -160,8 +158,8 @@ class ForumThreadController extends Controller
 
         // Show successful response
         return JSONResult::success([
-            'page'          => $givenPage,
-            'reply_pages'   => $thread->getPageCount(),
+            'page'          => $replies->currentPage(),
+            'last_page'     => $replies->lastPage(),
             'replies'       => ForumReplyResource::collection($replies)
         ]);
     }
