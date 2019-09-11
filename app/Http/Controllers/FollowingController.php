@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Validator;
 
 class FollowingController extends Controller
 {
+    const AMOUNT_OF_FOLLOWERS_PER_PAGE = 10;
+
     /**
      * Follows a user.
      *
@@ -60,12 +62,18 @@ class FollowingController extends Controller
     /**
      * Returns a list of the user's followers.
      *
+     * @param Request $request
      * @param User $user
      * @return JsonResponse
      */
-    function getFollowers(User $user) {
+    function getFollowers(Request $request, User $user) {
+        // Get the followers
+        $followers = $user->followers()->paginate(self::AMOUNT_OF_FOLLOWERS_PER_PAGE);
+
         return JSONResult::success([
-            'followers' => UserResourceSmall::collection($user->followers)
+            'page'      => $followers->currentPage(),
+            'last_page' => $followers->lastPage(),
+            'followers' => UserResourceSmall::collection($followers)
         ]);
     }
 
@@ -76,8 +84,13 @@ class FollowingController extends Controller
      * @return JsonResponse
      */
     function getFollowing(User $user) {
+        // Get the following
+        $following = $user->following()->paginate(self::AMOUNT_OF_FOLLOWERS_PER_PAGE);
+
         return JSONResult::success([
-            'following' => UserResourceSmall::collection($user->following)
+            'page'      => $following->currentPage(),
+            'last_page' => $following->lastPage(),
+            'following' => UserResourceSmall::collection($following)
         ]);
     }
 }

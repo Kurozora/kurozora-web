@@ -306,7 +306,7 @@
                   "status": {
                     "type": "string",
                     "description": "The watch status to assign to the Anime.",
-                    "example": "watching"
+                    "example": "Watching"
                   }
                 },
                 "required": [
@@ -644,6 +644,16 @@
             },
             "required": true,
             "description": "ID of the user."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+                "type": "string",
+                "example": "1"
+            },
+            "required": false,
+            "description": "The page to retrieve followers from. (starts at 1)"
           }
         ],
         "tags": [
@@ -677,6 +687,16 @@
             },
             "required": true,
             "description": "ID of the user."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+                "type": "string",
+                "example": "1"
+            },
+            "required": false,
+            "description": "The page to retrieve followers from. (starts at 1)"
           }
         ],
         "tags": [
