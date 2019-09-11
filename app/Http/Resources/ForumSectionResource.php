@@ -17,8 +17,7 @@ class ForumSectionResource extends JsonResource
         return [
             'id'            => $this->id,
             'name'          => $this->name,
-            'locked'        => (bool) $this->locked,
-            'thread_pages'  => $this->getPageCount()
+            'locked'        => (bool) $this->locked
         ];
     }
 }
