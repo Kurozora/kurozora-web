@@ -30,6 +30,18 @@ class UsersTableSeeder extends Seeder
             'role'                  => UserRole::Administrator
         ]);
 
+        /*
+         * Apple test account
+         *
+         * password: KurozoraLovesApple4Ever!
+         */
+        User::create([
+            'username'              => 'JohnAppleseed',
+            'email'                 => 'john.appleseed@apple.com',
+            'password'              => '$2y$10$/aVrkVAq4LT6FEEw3dNwguaM77MzoHB4.IpVoVxLLEKI4jyHuITii',
+            'email_confirmation_id' => null
+        ]);
+
         // 50 fake users
         factory(User::class, 50)->create();
     }
