@@ -3,11 +3,10 @@
 namespace App\Http\Requests;
 
 use App\Rules\ValidateAvatarImage;
-use App\Rules\ValidateEmail;
-use App\Rules\ValidatePassword;
-use App\Rules\ValidateUsername;
+use App\Rules\ValidateBannerImage;
+use App\Rules\ValidateUserBiography;
 
-class Registration extends KuroFormRequest
+class UpdateProfile extends KuroFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,10 +26,9 @@ class Registration extends KuroFormRequest
     public function rules()
     {
         return [
-            'username'      => ['bail', 'required', new ValidateUsername],
-            'password'      => ['bail', 'required', new ValidatePassword],
-            'email'         => ['bail', 'required', new ValidateEmail(true)],
             'profileImage'  => ['bail', new ValidateAvatarImage],
+            'bannerImage'   => ['bail', new ValidateBannerImage],
+            'biography'     => ['bail', new ValidateUserBiography]
         ];
     }
 }

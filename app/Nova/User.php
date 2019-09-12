@@ -6,6 +6,7 @@ use App\Enums\UserRole;
 use App\Nova\Lenses\UnconfirmedUsers;
 use App\Rules\ValidateEmail;
 use App\Rules\ValidatePassword;
+use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
@@ -57,6 +58,13 @@ class User extends Resource
     {
         return [
             ID::make()->sortable(),
+
+            Images::make('Avatar', 'avatar'),
+//                ->conversionOnIndexView('thumb'),
+
+            Images::make('Banner image', 'banner')
+                ->hideFromIndex(),
+//                ->conversionOnIndexView('thumb'),
 
             Text::make('Name', 'username')
                 ->sortable()

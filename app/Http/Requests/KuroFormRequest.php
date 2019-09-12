@@ -17,6 +17,6 @@ class KuroFormRequest extends FormRequest
     {
         // Return our custom JSON result when an error occurs
         if($validator->fails())
-            return JSONResult::error($validator->errors()->first())->send();
+            return JSONResult::error($validator->errors()->first(), 567)->send();
     }
 }

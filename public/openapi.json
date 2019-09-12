@@ -499,6 +499,10 @@
                   "profileImage": {
                     "type": "file",
                     "description": "The new user's avatar image"
+                  },
+                  "bannerImage": {
+                    "type": "file",
+                    "description": "The new user's banner image"
                   }
                 }
               }

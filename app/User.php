@@ -4,6 +4,7 @@ namespace App;
 
 use App\Traits\KuroSearchTrait;
 use App\Traits\LikeActionTrait;
+use App\Traits\MediaLibraryExtensionTrait;
 use Cog\Contracts\Love\Liker\Models\Liker as LikerContract;
 use Cog\Laravel\Love\Liker\Models\Traits\Liker;
 use Illuminate\Foundation\Auth\Access\Authorizable;
@@ -11,15 +12,17 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 
 /**
  * @property mixed id
  * @property array|string|null biography
  * @property string avatar
  */
-class User extends Authenticatable implements LikerContract
+class User extends Authenticatable implements LikerContract, HasMedia
 {
-    use Authorizable, KuroSearchTrait, Liker, LikeActionTrait;
+    use Authorizable, KuroSearchTrait, Liker, LikeActionTrait, HasMediaTrait, MediaLibraryExtensionTrait;
 
     /**
      * Searchable rules.
@@ -34,10 +37,6 @@ class User extends Authenticatable implements LikerContract
 
     // Maximum amount of returned search results
     const MAX_SEARCH_RESULTS = 10;
-
-    // Path where user uploads are stored
-    const USER_UPLOADS_PATH = 'public/img/user_uploads';
-    const USER_UPLOADS_URL  = 'img/user_uploads';
 
     // Cache user's badges
     const CACHE_KEY_BADGES = 'user-badges-%d';
@@ -64,6 +63,18 @@ class User extends Authenticatable implements LikerContract
 
     // User biography character limited
     const BIOGRAPHY_LIMIT = 250;
+
+    /**
+     * Registers the media collections for the model.
+     */
+    public function registerMediaCollections()
+    {
+        $this->addMediaCollection('avatar')
+            ->singleFile();
+
+        $this->addMediaCollection('banner')
+            ->singleFile();
+    }
 
     /**
      * Returns the Anime items in the user's library.
@@ -238,69 +249,6 @@ class User extends Authenticatable implements LikerContract
     }
 
     /**
-     * Check whether or not the user has an avatar set
-     *
-     * @return bool
-     */
-    public function hasAvatar() {
-        return ($this->avatar != null);
-    }
-
-    /**
-     * Returns the path to this user's avatar
-     *
-     * @return null|string
-     */
-    public function getAvatarPath() {
-        if(!$this->hasAvatar()) return null;
-        else return self::USER_UPLOADS_PATH . '/' . $this->avatar;
-    }
-
-    /**
-     * Returns the URL to this user's avatar
-     *
-     * @return null|string
-     */
-    public function getURLToAvatar() {
-        if(!$this->hasAvatar()) return null;
-        else return url('/' . self::USER_UPLOADS_URL . '/' . $this->avatar);
-    }
-
-    /**
-     * Returns the absolute URL to the user's avatar
-     */
-    public function getAvatarURL() {
-        // No avatar uploaded
-        if(!$this->hasAvatar()) return null;
-
-        // Check if the uploaded image is present
-        $avatarPath = $this->getAvatarPath();
-
-        if(Storage::exists($avatarPath))
-            // Return the URL to the image
-            return $this->getURLToAvatar();
-        else return null;
-    }
-
-    /**
-     * Takes a avatar filename and returns the URL to it
-     *
-     * @param $fileName
-     * @return string
-     */
-    public static function avatarFileToURL($fileName) {
-        if($fileName === null)
-            return null;
-
-        $filePath = self::USER_UPLOADS_PATH . '/' . $fileName;
-
-        if(Storage::exists($filePath))
-            // Return the URL to the image
-            return url($filePath);
-        else return null;
-    }
-
-    /**
      * Checks if a user can authenticate with the given details
      *
      * @param $userID
@@ -330,18 +278,4 @@ class User extends Authenticatable implements LikerContract
         // All valid
         return $foundSession->id;
     }
-
-    /**
-     * Checks whether the user is following another us
-     *
-     * @param User $user
-     * @return bool
-     */
-    public function isFollowing(User $user) {
-        return UserFollow::where('user_id', $this->id)
-            ->where('following_user_id', $user->id)
-            ->exists();
-    }
-
-
 }
