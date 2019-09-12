@@ -23,8 +23,6 @@ class CreateUsersTable extends Migration
             $table->string('email');
             $table->string('password');
             $table->tinyInteger('role')->default(UserRole::Normal);
-            $table->string('avatar')->nullable();
-            $table->string('banner')->nullable();
             $table->text('biography')->nullable();
             $table->rememberToken();
             $table->string('email_confirmation_id')->nullable();

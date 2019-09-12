@@ -2,75 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\NewUserRegisteredEvent;
 use App\Events\UserSessionKilledEvent;
 use App\Helpers\JSONResult;
-use App\Http\Requests\Registration;
 use App\Http\Requests\ResetPassword;
-use App\Http\Resources\BadgeResource;
+use App\Http\Requests\UpdateProfile;
 use App\Http\Resources\SessionResource;
 use App\Http\Resources\UserNotificationResource;
+use App\Http\Resources\UserResourceLarge;
 use App\Jobs\SendNewPasswordMail;
 use App\Jobs\SendPasswordResetMail;
 use App\PasswordReset;
 use App\Session;
 use App\User;
-use App\UserFollow;
 use App\UserNotification;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use PusherHelper;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    /**
-     * Registers a new user
-     *
-     * @param Registration $request
-     * @return JsonResponse
-     * @throws \Throwable
-     */
-    public function register(Registration $request) {
-        $data = $request->validated();
-
-        $fileName = null;
-
-        // Check if a valid avatar was uploaded
-        $imgValidator = Validator::make($request->all(), [
-            'profileImage' => 'required|mimes:jpeg,jpg,png|max:700',
-        ]);
-
-        if( $request->hasFile('profileImage') &&
-            $request->file('profileImage')->isValid() &&
-            !$imgValidator->fails()
-        ) {
-            // Save the uploaded avatar
-            $fileName = 'avatar_' . Str::random(30) . '.' . $request->file('profileImage')->extension();;
-
-            $request->file('profileImage')->storeAs(User::USER_UPLOADS_PATH, $fileName);
-        }
-
-        // Create the user
-        $newUser = User::create([
-            'username'              => $data['username'],
-            'email'                 => $data['email'],
-            'password'              => User::hashPass($data['password']),
-            'email_confirmation_id' => Str::random(50),
-            'avatar'                => $fileName
-        ]);
-
-        // Fire registration event
-        event(new NewUserRegisteredEvent($newUser));
-
-        // Show a successful response
-        return JSONResult::success();
-    }
-
     /**
      * Logs the user out (destroys the session)
      *
@@ -105,25 +58,9 @@ class UserController extends Controller
      * @return JsonResponse
      */
     public function profile(User $user) {
-        // Get the current user
-        $currentUser = Auth::user();
-
-        // Get their badges
-        $badges = $user->getBadges();
-
         // Show profile response
         return JSONResult::success([
-            'user' => [
-                'username'          => $user->username,
-                'biography'         => $user->biography,
-                'avatar_url'        => $user->getAvatarURL(),
-                'banner_url'        => $user->banner,
-                'follower_count'    => $user->getFollowerCount(),
-                'following_count'   => $user->getFollowingCount(),
-                'reputation_count'  => $user->getReputationCount(),
-                'badges'            => BadgeResource::collection($badges)
-            ],
-            'currently_following' => $currentUser->isFollowing($user)
+            'user' => UserResourceLarge::make($user)
         ]);
     }
 
@@ -390,7 +327,7 @@ class UserController extends Controller
      * @param User $user
      * @return JsonResponse
      */
-    public function updateProfile(Request $request, User $user) {
+    public function updateProfile(UpdateProfile $request, User $user) {
         // Track if anything changed
         $changedFields = [];
 
@@ -400,42 +337,30 @@ class UserController extends Controller
         if( $newBio !== null &&
             $newBio !== $user->biography
         ) {
-            // Check if the bio has a correct length
-            if(strlen($newBio) > User::BIOGRAPHY_LIMIT)
-                return JSONResult::success('Your biography contains more than ' . User::BIOGRAPHY_LIMIT . ' characters.');
-
             $user->biography = $newBio;
             $changedFields[] = 'biography';
         }
 
         // Update avatar
-        if($request->hasFile('profileImage')) {
-            // Check if the uploaded avatar is valid
-            $imgValidator = Validator::make($request->all(), [
-                'profileImage' => 'required|mimes:jpeg,jpg,png|max:700',
-            ]);
-
-            // Avatar is not valid
-            if(!$request->file('profileImage')->isValid() || $imgValidator->fails())
-                return JSONResult::error('The uploaded avatar is not valid.');
-
-            // Create a name for the new avatar
-            $newAvatarName = 'avatar_' . Str::random(30);
-
-            if($user->hasAvatar()) {
-                // Delete the old avatar
-                $avatarPath = $user->getAvatarPath();
-
-                if(Storage::exists($avatarPath))
-                    Storage::delete($avatarPath);
-            }
+        if($request->hasFile('profileImage') && $request->file('profileImage')->isValid()) {
+            // Remove previous avatar
+            $user->clearMediaCollection('avatar');
 
             // Save the uploaded avatar
-            $fileName = $newAvatarName . '.' . $request->file('profileImage')->extension();
-            $user->avatar = $fileName;
-            $request->file('profileImage')->storeAs(User::USER_UPLOADS_PATH, $fileName);
+            $user->addMediaFromRequest('profileImage')->toMediaCollection('avatar');
 
             $changedFields[] = 'avatar';
+        }
+
+        // Update banner
+        if($request->hasFile('bannerImage') && $request->file('bannerImage')->isValid()) {
+            // Remove previous banner
+            $user->clearMediaCollection('banner');
+
+            // Save the uploaded banner
+            $user->addMediaFromRequest('bannerImage')->toMediaCollection('banner');
+
+            $changedFields[] = 'banner image';
         }
 
         // Successful response

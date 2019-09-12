@@ -36,10 +36,12 @@ class FollowingController extends Controller
 
         $follow = (bool) $request->input('follow');
 
+        $isAlreadyFollowing = $user->followers()->where('user_id', $authUser->id)->exists();
+
         // Follow the user
         if($follow) {
             // Already following this user
-            if($authUser->isFollowing($user))
+            if($isAlreadyFollowing)
                 return JSONResult::error('You are already following this user.');
 
             // Follow the user
@@ -48,7 +50,7 @@ class FollowingController extends Controller
         // Unfollow the user
         else {
             // Not following this user
-            if(!$authUser->isFollowing($user))
+            if(!$isAlreadyFollowing)
                 return JSONResult::error('You are not following this user.');
 
             // Delete follow

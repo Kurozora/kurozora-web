@@ -26,7 +26,7 @@ Route::group(['prefix' => 'v1'], function () {
         ->middleware('kurozora.userauth:optional');
 
     Route::prefix('/users')->group(function() {
-        Route::post('/', [UserController::class, 'register']);
+        Route::post('/', [RegistrationController::class, 'register']);
 
         Route::get('/search', [UserController::class, 'search']);
 
