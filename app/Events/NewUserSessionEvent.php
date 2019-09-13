@@ -42,7 +42,7 @@ class NewUserSessionEvent implements ShouldBroadcast
      */
     public function broadcastWith()
     {
-        return (array) SessionResource::make($this->sessionObj);
+        return SessionResource::make($this->sessionObj);
     }
 
     /**
