@@ -61,7 +61,7 @@ Route::group(['prefix' => 'v1'], function () {
             ->middleware('can:authenticate_pusher_channel,user');
 
         Route::get('/{user}/profile', [UserController::class, 'profile'])
-            ->middleware('kurozora.userauth');
+            ->middleware('kurozora.userauth:optional');
 
         Route::post('/{user}/profile', [UserController::class, 'updateProfile'])
             ->middleware('kurozora.userauth')
