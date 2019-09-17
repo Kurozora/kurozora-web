@@ -8,6 +8,7 @@ use App\Helpers\JSONResult;
 use App\Http\Requests\AddToLibrary;
 use App\Http\Requests\DeleteFromLibrary;
 use App\Http\Requests\GetLibrary;
+use App\Http\Requests\MALImport;
 use App\Http\Resources\AnimeResource;
 use App\User;
 use App\UserLibrary;
@@ -105,5 +106,25 @@ class LibraryController extends Controller
 
         // Unsuccessful response
         return JSONResult::error('This item is not in your library.');
+    }
+
+    /**
+     * Allows the user to upload a MAL export file to be imported.
+     *
+     * @param MALImport $request
+     * @param User $user
+     * @return JsonResponse
+     */
+    function malImport(MALImport $request, User $user) {
+        if(!$user->canDoMALImport())
+            return JSONResult::error('Oops! You can only perform a MAL import every ' . User::MAL_IMPORT_COOLDOWN_DAYS . ' day(s).', 491812);
+
+        // Update last MAL import date for user
+        $user->last_mal_import_at = now();
+        $user->save();
+
+        return JSONResult::success([
+            ''
+        ]);
     }
 }

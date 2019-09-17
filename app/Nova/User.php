@@ -8,6 +8,7 @@ use App\Rules\ValidateEmail;
 use App\Rules\ValidatePassword;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
@@ -88,6 +89,10 @@ class User extends Resource
                 ->displayUsingLabels(),
 
             Textarea::make('Biography'),
+
+            Date::make('Last MAL Import date', 'last_mal_import_at')
+                ->help('The date at which the user last imported a MAL export file. The cooldown is <strong>' . \App\User::MAL_IMPORT_COOLDOWN_DAYS . '</strong> day(s).')
+                ->hideFromIndex(),
 
             HasMany::make('Forum Threads', 'threads'),
 

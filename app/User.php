@@ -19,6 +19,7 @@ use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
  * @property mixed id
  * @property array|string|null biography
  * @property string avatar
+ * @property mixed last_mal_import_at
  */
 class User extends Authenticatable implements LikerContract, HasMedia
 {
@@ -61,8 +62,16 @@ class User extends Authenticatable implements LikerContract, HasMedia
     // Remove column guards
     protected $guarded = [];
 
+    // Date casts
+    protected $dates = [
+        'last_mal_import_at'
+    ];
+
     // User biography character limited
     const BIOGRAPHY_LIMIT = 250;
+
+    // Cooldown in days for performing a MAL import
+    const MAL_IMPORT_COOLDOWN_DAYS = 7;
 
     /**
      * Registers the media collections for the model.
@@ -277,5 +286,20 @@ class User extends Authenticatable implements LikerContract, HasMedia
 
         // All valid
         return $foundSession->id;
+    }
+
+    /**
+     * Checks the cooldown whether the user can do a MAL import.
+     *
+     * @return bool
+     */
+    function canDoMALImport() {
+        if(!$this->last_mal_import_at)
+            return true;
+
+        if($this->last_mal_import_at > now()->subDays(self::MAL_IMPORT_COOLDOWN_DAYS))
+            return false;
+
+        return true;
     }
 }
