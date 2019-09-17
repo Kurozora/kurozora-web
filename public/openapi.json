@@ -435,6 +435,7 @@
     "/users/{userID}/profile": {
       "get": {
         "security": [
+          {},
           {
             "kurozoraBearer": []
           }
@@ -442,7 +443,7 @@
         "tags": [
           "users"
         ],
-        "summary": "User profile details.",
+        "summary": "(optional authentication) User profile details.",
         "description": "This endpoint will retrieve the details of a user's profile.",
         "parameters": [
           {
@@ -554,10 +555,16 @@
     },
     "/users/search": {
       "get": {
+        "security": [
+          {},
+          {
+              "kurozoraBearer": []
+          }
+        ],
         "tags": [
           "users"
         ],
-        "summary": "Searches users.",
+        "summary": "(optional authentication) Searches users.",
         "description": "This endpoint will retrieve the search results for users.\n<div class=\"kuro-tip\">You can prefix your search with \"id:\" to search for a user with a specific ID.</div>",
         "parameters": [
           {
