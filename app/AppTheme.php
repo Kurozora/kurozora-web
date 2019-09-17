@@ -27,12 +27,7 @@ class AppTheme extends KModel
      */
     function pList() {
         $view = View::make('plist.ios-theme', [
-            'statusbar_style'       => $this->statusbar_style,
-            'background_color'      => $this->background_color,
-            'text_color'            => $this->text_color,
-            'tint_color'            => $this->tint_color,
-            'bar_tint_color'        => $this->bar_tint_color,
-            'bar_title_text_color'  => $this->bar_title_text_color,
+            'theme'       => $this
         ]);
 
         return $view->render();
