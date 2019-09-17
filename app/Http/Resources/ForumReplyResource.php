@@ -21,7 +21,7 @@ class ForumReplyResource extends JsonResource
             'poster' => [
                 'id'        => $this->user->id,
                 'username'  => $this->user->username,
-                'avatar'    => $this->user->getAvatarURL()
+                'avatar'    => $this->user->getFirstMediaFullUrl('avatar')
             ],
             'score'     => $this->likesDiffDislikesCount,
             'content'   => $this->content
