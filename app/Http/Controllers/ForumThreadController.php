@@ -23,23 +23,8 @@ class ForumThreadController extends Controller
      * @return JsonResponse
      */
     public function threadInfo(ForumThread $thread) {
-        $thread->load('user', 'replies');
-
-        // Show thread information
         return JSONResult::success([
-            'thread' => [
-                'id'            => $thread->id,
-                'title'         => $thread->title,
-                'content'       => $thread->content,
-                'locked'        => (bool) $thread->locked,
-                'creation_date' => $thread->created_at->format('Y-m-d H:i:s'),
-                'reply_count'   => $thread->replies->count(),
-                'score'         => $thread->likesDiffDislikesCount,
-                'user'          => [
-                    'id'        => $thread->user->id,
-                    'username'  => $thread->user->username
-                ]
-            ]
+            'thread' => ForumThreadResource::make($thread)
         ]);
     }
 
