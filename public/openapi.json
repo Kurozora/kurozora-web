@@ -1486,10 +1486,16 @@
     },
     "/forum-threads/{threadID}": {
       "get": {
+        "security": [
+          {},
+          {
+              "kurozoraBearer": []
+          }
+        ],
         "tags": [
           "forum-threads"
         ],
-        "summary": "Get thread details.",
+        "summary": "(optional authentication) Get thread details.",
         "description": "This endpoint will retrieve the details for a forum thread.",
         "parameters": [
           {

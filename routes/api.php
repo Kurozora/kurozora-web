@@ -150,7 +150,8 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('/search', [ForumThreadController::class, 'search'])
             ->middleware('kurozora.userauth:optional');
 
-        Route::get('/{thread}', [ForumThreadController::class, 'threadInfo']);
+        Route::get('/{thread}', [ForumThreadController::class, 'threadInfo'])
+            ->middleware('kurozora.userauth:optional');
 
         Route::post('/{thread}/vote', [ForumThreadController::class, 'vote'])
             ->middleware('kurozora.userauth');
