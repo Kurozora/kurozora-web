@@ -89,6 +89,17 @@ class UserPolicy
     }
 
     /**
+     * Determine whether the user can perform a MAL import
+     *
+     * @param User $user
+     * @param User $model
+     * @return bool
+     */
+    public function mal_import(User $user, User $model) {
+        return $user->id === $model->id;
+    }
+
+    /**
      * Determine whether the user can follow another user
      *
      * @param User $user

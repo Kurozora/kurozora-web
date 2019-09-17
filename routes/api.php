@@ -56,6 +56,9 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('/{user}/library/delete', [LibraryController::class, 'delLibrary'])
             ->middleware('kurozora.userauth');
 
+        Route::post('/{user}/library/mal-import', [LibraryController::class, 'malImport'])
+            ->middleware('kurozora.userauth');
+
         Route::post('/{user}/authenticate-channel', [UserController::class, 'authenticateChannel'])
             ->middleware('kurozora.userauth')
             ->middleware('can:authenticate_pusher_channel,user');
