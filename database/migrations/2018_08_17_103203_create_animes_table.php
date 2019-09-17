@@ -33,6 +33,7 @@ class CreateAnimesTable extends Migration
             $table->integer('type')->default(AnimeType::Undefined);
             $table->boolean('nsfw')->default(false);
             $table->integer('tvdb_id')->nullable()->unsigned();
+            $table->integer('mal_id')->nullable()->unsigned();
             $table->string('imdb_id')->nullable();
             $table->mediumText('synopsis')->nullable();
             $table->tinyInteger('runtime')->nullable()->unsigned();
