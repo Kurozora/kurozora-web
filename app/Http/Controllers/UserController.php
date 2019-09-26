@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateProfile;
 use App\Http\Resources\SessionResource;
 use App\Http\Resources\UserNotificationResource;
 use App\Http\Resources\UserResourceLarge;
+use App\Http\Resources\UserResourceSmall;
 use App\Jobs\SendNewPasswordMail;
 use App\Jobs\SendPasswordResetMail;
 use App\PasswordReset;
@@ -297,26 +298,14 @@ class UserController extends Controller
         $searchQuery = $request->input('query');
 
         // Search for the users
-        $resultArr = User::kuroSearch($searchQuery, [
+        $users = User::kuroSearch($searchQuery, [
             'limit' => User::MAX_SEARCH_RESULTS
         ]);
-
-        // Format the results
-        $displayResults = [];
-
-        foreach($resultArr as $user) {
-            $displayResults[] = [
-                'id'                => $user->id,
-                'username'          => $user->username,
-                'reputation_count'  => $user->getReputationCount(),
-                'avatar'            => $user->getAvatarURL()
-            ];
-        }
 
         // Show response
         return JSONResult::success([
             'max_search_results'    => User::MAX_SEARCH_RESULTS,
-            'results'               => $displayResults
+            'results'               => UserResourceSmall::collection($users)
         ]);
     }
 
