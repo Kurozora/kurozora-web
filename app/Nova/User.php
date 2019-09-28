@@ -91,7 +91,7 @@ class User extends Resource
             Textarea::make('Biography'),
 
             Date::make('Last MAL Import date', 'last_mal_import_at')
-                ->help('The date at which the user last imported a MAL export file. The cooldown is <strong>' . \App\User::MAL_IMPORT_COOLDOWN_DAYS . '</strong> day(s).')
+                ->help('The date at which the user last imported a MAL export file. The cooldown is <strong>' . config('mal-import.cooldown_in_days') . '</strong> day(s).')
                 ->hideFromIndex(),
 
             HasMany::make('Forum Threads', 'threads'),

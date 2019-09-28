@@ -20,6 +20,10 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\SendSessionNotification::class,
         ],
 
+        \App\Events\MALImportFinished::class => [
+            \App\Listeners\SendMALImportNotification::class,
+        ],
+
         \App\Events\UserSessionKilledEvent::class => [],
 
         \App\Events\AnimeViewed::class => [

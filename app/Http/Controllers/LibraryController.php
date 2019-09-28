@@ -10,11 +10,14 @@ use App\Http\Requests\DeleteFromLibrary;
 use App\Http\Requests\GetLibrary;
 use App\Http\Requests\MALImport;
 use App\Http\Resources\AnimeResource;
+use App\Jobs\ProcessMALImport;
 use App\User;
 use App\UserLibrary;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class LibraryController extends Controller
 {
@@ -116,15 +119,23 @@ class LibraryController extends Controller
      * @return JsonResponse
      */
     function malImport(MALImport $request, User $user) {
+        $data = $request->validated();
+
         if(!$user->canDoMALImport())
-            return JSONResult::error('Oops! You can only perform a MAL import every ' . User::MAL_IMPORT_COOLDOWN_DAYS . ' day(s).', 491812);
+            return JSONResult::error('Oops! You can only perform a MAL import every ' . config('mal-import.cooldown_in_days') . ' day(s).', 491812);
+
+        // Read XML file
+        $xmlContent = File::get($data['file']->getRealPath());
+
+        // Dispatch job
+        dispatch(new ProcessMALImport($user, $xmlContent, $data['behavior']));
 
         // Update last MAL import date for user
         $user->last_mal_import_at = now();
         $user->save();
 
         return JSONResult::success([
-            ''
+            'message' => 'Your MAL import request has been submitted. You will be notified once it has been processed!'
         ]);
     }
 }

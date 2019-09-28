@@ -338,6 +338,25 @@
         ],
         "summary": "Import a MAL export file into the user's library",
         "description": "This endpoint will import a MAL export file into the user's library.",
+        "requestBody": {
+              "content": {
+                  "multipart/form-data": {
+                      "schema": {
+                          "type": "object",
+                          "properties": {
+                              "file": {
+                                  "type": "file",
+                                  "description": "The MAL export file"
+                              },
+                              "behavior": {
+                                "$ref": "#/components/schemas/MALImportBehavior",
+                                "description": "The behavior to use while processing the import request."
+                              }
+                          }
+                      }
+                  }
+              }
+        },
         "parameters": [
           {
             "in": "path",
@@ -1870,6 +1889,10 @@
       "KurozoraLibraryStatus": {
         "type": "string",
         "enum": ["Watching", "Dropped", "Planning", "Completed", "OnHold"]
+      },
+      "MALImportBehavior": {
+            "type": "string",
+            "enum": ["overwrite"]
       }
     },
     "securitySchemes": {
