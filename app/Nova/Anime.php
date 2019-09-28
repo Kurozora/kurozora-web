@@ -38,7 +38,7 @@ class Anime extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'title', 'tvdb_id'
+        'id', 'title', 'tvdb_id', 'mal_id'
     ];
 
     /**
@@ -95,6 +95,10 @@ class Anime extends Resource
 
             Number::make('TVDB ID', 'tvdb_id')
                 ->help('The ID of the Anime as noted on The TVDB.'),
+
+            Number::make('MAL ID', 'mal_id')
+                ->hideFromIndex()
+                ->help('The ID of the Anime as noted on MyAnimeList.'),
 
             Text::make('IMDB ID', 'imdb_id')
                 ->onlyOnForms()

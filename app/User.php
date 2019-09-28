@@ -70,9 +70,6 @@ class User extends Authenticatable implements LikerContract, HasMedia
     // User biography character limited
     const BIOGRAPHY_LIMIT = 250;
 
-    // Cooldown in days for performing a MAL import
-    const MAL_IMPORT_COOLDOWN_DAYS = 7;
-
     /**
      * Registers the media collections for the model.
      */
@@ -297,7 +294,7 @@ class User extends Authenticatable implements LikerContract, HasMedia
         if(!$this->last_mal_import_at)
             return true;
 
-        if($this->last_mal_import_at > now()->subDays(self::MAL_IMPORT_COOLDOWN_DAYS))
+        if($this->last_mal_import_at > now()->subDays(config('mal-import.cooldown_in_days')))
             return false;
 
         return true;

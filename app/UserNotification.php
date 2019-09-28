@@ -7,9 +7,10 @@ use ReflectionClass;
 class UserNotification extends KModel
 {
     // Types of notification
-    const TYPE_UNKNOWN      = 0;
-    const TYPE_NEW_FOLLOWER = 1;
-    const TYPE_NEW_SESSION  = 2;
+    const TYPE_UNKNOWN              = 0;
+    const TYPE_NEW_FOLLOWER         = 1;
+    const TYPE_NEW_SESSION          = 2;
+    const TYPE_MAL_IMPORT_UPDATE    = 3;
 
     // Table name
     const TABLE_NAME = 'user_notifications';
@@ -50,6 +51,12 @@ class UserNotification extends KModel
                     (($sessionIP != null) ? ' (IP: ' . $sessionIP . ')' : null);
 
                 break;
+            }
+            // MAL import update notification
+            case self::TYPE_MAL_IMPORT_UPDATE: {
+                return 'Your "MyAnimeList" import request has been processed. ' .
+                    '(' . $this->getDataVariable('successful_count') . ' successful, ' .
+                    $this->getDataVariable('failure_count') . ' failed imports)';
             }
             // Unknown type of notification
             default: {
