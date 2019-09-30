@@ -55,6 +55,14 @@ class AppTheme extends Resource
             Text::make('Name')->sortable()
                 ->rules('required'),
 
+            Text::make('Download link', function () {
+                return '
+                    <a href="' . route('themes.download', ['theme' => $this->id]) . '" target="_blank" class="btn btn-default btn-primary">Download</a>
+                ';
+            })
+                ->asHtml()
+                ->readonly(),
+
             Heading::make('Global')
                 ->hideFromIndex(),
 
