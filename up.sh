@@ -10,7 +10,7 @@ NC='\033[0m'
 php artisan up
 
 # Starts Laravel queue background process
-(trap "" SIGINT; exec -a KurozoraQueue nohup php artisan queue:work &>/dev/null &)
+(trap "" SIGINT; exec -a KurozoraQueue nohup php artisan queue:work --timeout=3600 &>/dev/null &)
 echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${LIME}✔ ${NC}Laravel queue worker started!"
 
 # Done updating
