@@ -24,10 +24,10 @@ return [
     | This option controls the maximum allowed file size for a MAL export file
     | in kilobytes.
     |
-    | Default: 1000
+    | Default: 5000
     |
     */
 
-    'max_xml_file_size' => 1000
+    'max_xml_file_size' => 5000
 
 ];
