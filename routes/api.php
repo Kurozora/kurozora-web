@@ -7,7 +7,6 @@
 */
 
 namespace App\Http\Controllers;
-use App\Genre;
 use Illuminate\Support\Facades\Route;
 
 // API Swagger documentation page

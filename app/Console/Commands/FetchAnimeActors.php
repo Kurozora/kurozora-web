@@ -54,6 +54,11 @@ class FetchAnimeActors extends Command
             return false;
         }
 
+        if($anime->tvdb_id === null) {
+            $this->error('The Anime does not have a connected TVDB ID.');
+            return false;
+        }
+
         if($anime->fetched_actors) {
             $this->error('The actors were already fetched for this Anime.');
             return false;
