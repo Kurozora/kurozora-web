@@ -27,7 +27,8 @@ class AnimesTableDummySeeder extends Seeder
                     'title'     => $animeData->title,
                     'type'      => AnimeType::TV,
                     'nsfw'      => $animeData->nsfw,
-                    'tvdb_id'   => $animeData->tvdb_id
+                    'tvdb_id'   => $animeData->tvdb_id,
+                    'mal_id'    => $animeData->mal_id
                 ]);
             }
         }

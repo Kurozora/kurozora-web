@@ -53,6 +53,11 @@ class FetchAnimeImages extends Command
             return false;
         }
 
+        if($anime->tvdb_id === null) {
+            $this->error('The Anime does not have a connected TVDB ID.');
+            return false;
+        }
+
         if($anime->fetched_images) {
             $this->error('The images were already fetched for this Anime.');
             return false;

@@ -16,7 +16,7 @@ class FetchBaseAnimeEpisodes implements ShouldQueue
      */
     public function shouldQueue($event)
     {
-        return !$event->anime->fetched_base_episodes;
+        return !$event->anime->fetched_base_episodes && $event->anime->tvdb_id !== null;
     }
 
     /**

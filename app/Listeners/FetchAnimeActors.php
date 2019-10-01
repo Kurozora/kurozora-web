@@ -16,7 +16,7 @@ class FetchAnimeActors implements ShouldQueue
      */
     public function shouldQueue($event)
     {
-        return !$event->anime->fetched_actors;
+        return !$event->anime->fetched_actors && $event->anime->tvdb_id !== null;
     }
 
     /**

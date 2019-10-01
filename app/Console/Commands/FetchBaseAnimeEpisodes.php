@@ -55,6 +55,11 @@ class FetchBaseAnimeEpisodes extends Command
             return false;
         }
 
+        if($anime->tvdb_id === null) {
+            $this->error('The Anime does not have a connected TVDB ID.');
+            return false;
+        }
+
         if($anime->fetched_base_episodes) {
             $this->error('The base episodes were already fetched for this Anime.');
             return false;
