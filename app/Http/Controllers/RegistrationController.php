@@ -21,15 +21,12 @@ class RegistrationController extends Controller
     public function register(Registration $request) {
         $data = $request->validated();
 
-        $fileName = null;
-
         // Create the user
         $newUser = User::create([
             'username'              => $data['username'],
             'email'                 => $data['email'],
             'password'              => User::hashPass($data['password']),
-            'email_confirmation_id' => Str::random(50),
-            'avatar'                => $fileName
+            'email_confirmation_id' => Str::random(50)
         ]);
 
         if( $request->hasFile('profileImage') &&
