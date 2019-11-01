@@ -162,6 +162,45 @@
         }
       }
     },
+    "/users/register-siwa": {
+          "post": {
+              "tags": [
+                  "users"
+              ],
+              "summary": "Register a new user (sign in with Apple)",
+              "description": "This endpoint will create a new user using Sign in with Apple.",
+              "requestBody": {
+                  "content": {
+                      "multipart/form-data": {
+                          "schema": {
+                              "type": "object",
+                              "properties": {
+                                  "email": {
+                                      "type": "string",
+                                      "description": "The new user's email"
+                                  },
+                                  "siwa_id": {
+                                      "type": "string",
+                                      "description": "The new user's SIWA ID"
+                                  }
+                              },
+                              "required": [
+                                  "email", "siwa_id"
+                              ]
+                          }
+                      }
+                  }
+              },
+              "responses": {
+                  "200": {
+                      "$ref": "#/components/responses/JSONSuccess"
+                  },
+                  "400": {
+                      "$ref": "#/components/responses/JSONError"
+                  }
+              }
+          }
+    },
     "/users/reset-password": {
       "post": {
         "tags": [
