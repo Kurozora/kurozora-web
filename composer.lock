@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "67b5c59e8c76e1269b20b07c222f8f45",
+    "content-hash": "95ab52e9d69cc2149555c27912f4385f",
     "packages": [
         {
             "name": "anaseqal/nova-sidebar-icons",
@@ -1385,6 +1385,47 @@
             "time": "2018-09-29T18:48:56+00:00"
         },
         {
+            "name": "laraning/nova-time-field",
+            "version": "v0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laraning/nova-time-field.git",
+                "reference": "d1d7e081725395674c3f35425bfa8a74d27985d3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laraning/nova-time-field/zipball/d1d7e081725395674c3f35425bfa8a74d27985d3",
+                "reference": "d1d7e081725395674c3f35425bfa8a74d27985d3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Laraning\\NovaTimeField\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laraning\\NovaTimeField\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova field.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "time": "2019-09-05T17:55:41+00:00"
+        },
+        {
             "name": "laravel/framework",
             "version": "v5.8.35",
             "source": {
@@ -1538,8 +1579,7 @@
             "dist": {
                 "type": "path",
                 "url": "./nova",
-                "reference": "44b2d572e7dfff707439ada0b0e9c0c608a88ae9",
-                "shasum": null
+                "reference": "44b2d572e7dfff707439ada0b0e9c0c608a88ae9"
             },
             "require": {
                 "cakephp/chronos": "^1.0",

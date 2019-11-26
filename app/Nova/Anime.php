@@ -6,13 +6,16 @@ use App\Nova\Actions\FetchAnimeActors;
 use App\Nova\Actions\FetchAnimeDetails;
 use App\Nova\Actions\FetchAnimeImages;
 use Chaseconey\ExternalImage\ExternalImage;
+use Laraning\NovaTimeField\TimeField as Time;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 
@@ -94,6 +97,7 @@ class Anime extends Resource
                 ->help('The network that airs the Anime.'),
 
             Number::make('TVDB ID', 'tvdb_id')
+	            ->sortable()
                 ->help('The ID of the Anime as noted on The TVDB.'),
 
             Number::make('MAL ID', 'mal_id')
@@ -115,6 +119,41 @@ class Anime extends Resource
             Text::make('Watch rating', 'watch_rating')
                 ->onlyOnForms()
                 ->help('for example: TV-PG.'),
+
+            Heading::make('Schedule')
+	            ->onlyOnForms(),
+
+            Select::make('Air status', 'status')
+	            ->options([
+	            	0 => 'TBA',
+		            1 => 'Ended',
+		            2 => 'Continuing'
+	            	])
+	            ->onlyOnForms()
+	            ->help('For example: Ended'),
+
+            Date::make('First air date', 'first_aired')
+	            ->format('DD-MM-YYYY')
+	            ->onlyOnForms()
+                ->help('The date on which the show first aired. For example: 2015-12-03'),
+
+            Time::make('Air time', 'air_time')
+	            ->withTwelveHourTime()
+	            ->onlyOnForms()
+	            ->help('The exact time the show airs at. For example: 1:30 PM (13:30)'),
+
+            Select::make('Air day', 'air_day')
+	            ->options([
+                    0 => 'Sunday',
+	            	1 => 'Monday',
+		            2 => 'Tuesday',
+		            3 => 'Wednesday',
+		            4 => 'Thursday',
+		            5 => 'Friday',
+		            6 => 'Saturday'
+	                      ])
+	            ->onlyOnForms()
+	            ->help('The day of the week the show airs at. For example: Thursday'),
 
             Heading::make('Images')
                 ->onlyOnForms(),

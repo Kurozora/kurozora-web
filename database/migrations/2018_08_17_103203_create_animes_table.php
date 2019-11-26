@@ -42,6 +42,9 @@ class CreateAnimesTable extends Migration
             $table->integer('rating_count')->default(0);
             $table->integer('episode_count')->default(0);
             $table->integer('season_count')->default(0);
+	        $table->date('first_aired')->nullable();
+	        $table->time('air_time')->nullable();
+	        $table->integer('air_day')->nullable()->unsigned();
 
             // Flags for fetched data
             $table->boolean('fetched_actors')->default(false);
