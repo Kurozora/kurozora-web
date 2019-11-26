@@ -129,17 +129,18 @@ class Anime extends Resource
 		            1 => 'Ended',
 		            2 => 'Continuing'
 	            	])
-	            ->onlyOnForms()
+	            ->displayUsingLabels()
+	            ->hideFromIndex()
 	            ->help('For example: Ended'),
 
             Date::make('First air date', 'first_aired')
 	            ->format('DD-MM-YYYY')
-	            ->onlyOnForms()
+	            ->hideFromIndex()
                 ->help('The date on which the show first aired. For example: 2015-12-03'),
 
             Time::make('Air time', 'air_time')
 	            ->withTwelveHourTime()
-	            ->onlyOnForms()
+	            ->hideFromIndex()
 	            ->help('The exact time the show airs at. For example: 1:30 PM (13:30)'),
 
             Select::make('Air day', 'air_day')
@@ -152,7 +153,8 @@ class Anime extends Resource
 		            5 => 'Friday',
 		            6 => 'Saturday'
 	                      ])
-	            ->onlyOnForms()
+	            ->displayUsingLabels()
+	            ->hideFromIndex()
 	            ->help('The day of the week the show airs at. For example: Thursday'),
 
             Heading::make('Images')
