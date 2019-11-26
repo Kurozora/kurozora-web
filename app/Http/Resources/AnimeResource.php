@@ -40,7 +40,10 @@ class AnimeResource extends JsonResource
             'background'            => $this->getBackground(false),
             'background_thumbnail'  => $this->getBackground(true),
             'nsfw'                  => (bool) $this->nsfw,
-            'genres'                => GenreResource::collection($this->genres)
+            'genres'                => GenreResource::collection($this->genres),
+            'first_aired'           => $this->first_aired,
+	        'air_time'              => $this->air_time,
+	        'air_day'               => $this->air_day
         ];
 
         if(Auth::check())
