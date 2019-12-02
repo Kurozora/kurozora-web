@@ -23,17 +23,6 @@ class UserPolicy
     }
 
     /**
-     * Determine whether the user can authenticate into another user's Pusher channel
-     *
-     * @param User $user
-     * @param User $model
-     * @return bool
-     */
-    public function authenticate_pusher_channel(User $user, User $model) {
-        return $user->id === $model->id;
-    }
-
-    /**
      * Determine whether the user can get another user's sessions
      *
      * @param User $user

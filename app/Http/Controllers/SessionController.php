@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Events\NewUserSessionEvent;
-use App\Events\UserSessionKilledEvent;
 use App\Helpers\JSONResult;
 use App\Http\Resources\SessionResource;
 use App\Jobs\FetchSessionLocation;
@@ -122,9 +121,6 @@ class SessionController extends Controller
      * @throws \Exception
      */
     public function delete(Request $request, Session $session) {
-        // Fire event
-        event(new UserSessionKilledEvent(Auth::id(), $session->id, 'Session killed manually by user.', $request['session_id']));
-
         // Delete the session
         $session->delete();
 
