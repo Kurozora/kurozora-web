@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\UserSessionKilledEvent;
 use App\Helpers\JSONResult;
 use App\Http\Requests\ResetPassword;
 use App\Http\Requests\UpdateProfile;
@@ -20,7 +19,6 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use PusherHelper;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -41,9 +39,6 @@ class UserController extends Controller
         // Check if any session was found
         if(!$foundSession)
             return JSONResult::error('An error occurred. Please reach out to an administrator.');
-
-        // Fire event
-        event(new UserSessionKilledEvent(Auth::id(), $foundSession->id, 'Session logged out.', $request['session_id']));
 
         // Delete the session
         $foundSession->delete();
@@ -103,58 +98,6 @@ class UserController extends Controller
 
         // Show successful response
         return JSONResult::success();
-    }
-
-    /**
-     * Matches the given details and checks whether or not the user has
-     * access to a private user channel for Pusher
-     *
-     * @param Request $request
-     * @param User $user
-     * @return string
-     */
-    public function authenticateChannel(Request $request, User $user) {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'channel_name'          => 'bail|required',
-            'socket_id'             => 'bail|required'
-        ]);
-
-        // Fetch the variables
-        $givenChannel   = $request->input('channel_name');
-        $givenSocket    = $request->input('socket_id');
-
-        // Check validator
-        if($validator->fails()) {
-            return abort(403, $validator->errors()->first());
-        }
-
-        // Extract the user ID from the channel
-        $regexText = preg_match('/private-user.([0-9]*)/', $givenChannel, $matches);
-
-        // Invalid channel name
-        if(!$regexText || count($matches) < 2) {
-            return abort(403, 'Invalid channel.');
-        }
-
-        // Get the user ID in the channel
-        $channelUserID = (int) $matches[1];
-
-        // Check if this is the channel of the authenticated user
-        if($channelUserID != $user->id) {
-            return abort(403, 'Not the appropriate channel.');
-        }
-
-        // Create pusher instance
-        $pusher = new PusherHelper();
-
-        // Authenticate
-        $authentication = $pusher->socketAuth($givenChannel, $givenSocket);
-
-        if($authentication == null) {
-            return abort(403, 'Pusher failed to authenticate.');
-        }
-        else return $authentication;
     }
 
     /**

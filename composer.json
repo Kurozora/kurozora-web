@@ -22,7 +22,6 @@
         "musa11971/laravel-autopolicy": "^1.0",
         "musa11971/laravel-tvdb": "^1.0",
         "nicolaslopezj/searchable": "1.*",
-        "pusher/pusher-php-server": "^3.0",
         "spatie/laravel-medialibrary": "^7.0.0",
         "timothyasp/nova-color-field": "^1.0"
     },

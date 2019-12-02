@@ -6,12 +6,10 @@ use App\Http\Resources\SessionResource;
 use App\Session;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class NewUserSessionEvent implements ShouldBroadcast
+class NewUserSessionEvent
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, SerializesModels;
 
     public $sessionObj;
 
@@ -23,35 +21,5 @@ class NewUserSessionEvent implements ShouldBroadcast
     public function __construct(Session $session)
     {
         $this->sessionObj = $session;
-    }
-
-    /**
-     * The event's broadcast name.
-     *
-     * @return string
-     */
-    public function broadcastAs()
-    {
-        return 'session.new';
-    }
-
-    /**
-     * Get the data to broadcast.
-     *
-     * @return array
-     */
-    public function broadcastWith()
-    {
-        return SessionResource::make($this->sessionObj)->toArray(request());
-    }
-
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
-     */
-    public function broadcastOn()
-    {
-        return ['private-user.' . $this->sessionObj->user_id];
     }
 }
