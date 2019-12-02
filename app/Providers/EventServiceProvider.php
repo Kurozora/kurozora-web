@@ -24,8 +24,6 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\SendMALImportNotification::class,
         ],
 
-        \App\Events\UserSessionKilledEvent::class => [],
-
         \App\Events\AnimeViewed::class => [
             \App\Listeners\FetchAnimeDetails::class,
             \App\Listeners\FetchBaseAnimeEpisodes::class,
