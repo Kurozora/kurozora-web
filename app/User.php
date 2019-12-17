@@ -89,7 +89,16 @@ class User extends Authenticatable implements LikerContract, HasMedia
      */
     function libraryAnime() {
         return $this->belongsToMany(Anime::class, UserLibrary::class, 'user_id', 'anime_id')
-            ->withPivot('status');;
+            ->withPivot('status');
+    }
+
+    /**
+     * Returns the watched Episode items.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    function watchedAnimeEpisodes() {
+        return $this->belongsToMany(AnimeEpisode::class, UserWatchedEpisode::class, 'user_id', 'episode_id');
     }
 
     /**
