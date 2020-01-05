@@ -32,9 +32,12 @@ class CreateAnimesTable extends Migration
             $table->string('cached_background_thumbnail')->nullable();
             $table->integer('type')->default(AnimeType::Undefined);
             $table->boolean('nsfw')->default(false);
-            $table->integer('tvdb_id')->nullable()->unsigned();
-            $table->integer('mal_id')->nullable()->unsigned();
+            $table->integer('anidb_id')->nullable()->unsigned();
+            $table->integer('anilist_id')->nullable()->unsigned();
             $table->string('imdb_id')->nullable();
+            $table->integer('kitsu_id')->nullable()->unsigned();
+            $table->integer('mal_id')->nullable()->unsigned();
+            $table->integer('tvdb_id')->nullable()->unsigned();
             $table->mediumText('synopsis')->nullable();
             $table->tinyInteger('runtime')->nullable()->unsigned();
             $table->string('watch_rating')->nullable();

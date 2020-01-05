@@ -60,13 +60,40 @@ class Anime extends Resource
     public function fields(Request $request)
     {
         return [
-            ID::make()->sortable(),
-
-            Heading::make('Basic information')
+            Heading::make('Identification')
                 ->onlyOnForms(),
+
+            ID::make()->sortable(),
 
             ExternalImage::make('Thumbnail', 'cached_poster_thumbnail')
                 ->onlyOnIndex(),
+
+            Number::make('AniDB', 'anidb_id')
+                ->hideFromIndex()
+                ->help('The ID of the Anime as noted on AniDB.'),
+
+            Number::make('AniList', 'anilist_id')
+                ->hideFromIndex()
+                ->help('The ID of the Anime as noted on AniList.'),
+
+            Number::make('Kitsu', 'kitsu_id')
+                ->hideFromIndex()
+                ->help('The ID of the Anime as noted on Kitsu.'),
+
+            Text::make('IMDB ID', 'imdb_id')
+                ->onlyOnForms()
+                ->help('The ID of the Anime as noted on IMDB.'),
+
+            Number::make('MAL ID', 'mal_id')
+                ->hideFromIndex()
+                ->help('The ID of the Anime as noted on MyAnimeList.'),
+
+            Number::make('TVDB ID', 'tvdb_id')
+                ->sortable()
+                ->help('The ID of the Anime as noted on The TVDB.'),
+
+            Heading::make('Basic information')
+                ->onlyOnForms(),
 
             Text::make('Title')
                 ->rules('required')
@@ -95,18 +122,6 @@ class Anime extends Resource
             Text::make('Network')
                 ->onlyOnForms()
                 ->help('The network that airs the Anime.'),
-
-            Number::make('TVDB ID', 'tvdb_id')
-	            ->sortable()
-                ->help('The ID of the Anime as noted on The TVDB.'),
-
-            Number::make('MAL ID', 'mal_id')
-                ->hideFromIndex()
-                ->help('The ID of the Anime as noted on MyAnimeList.'),
-
-            Text::make('IMDB ID', 'imdb_id')
-                ->onlyOnForms()
-                ->help('The ID of the Anime as noted on IMDB.'),
 
             Number::make('Runtime in minutes', 'runtime')
                 ->onlyOnForms()
