@@ -20,18 +20,14 @@ class AnimesTableDummySeeder extends Seeder
      */
     public function run()
     {
-        $animeJson = null;
+        $animeJSON = null;
         if(!Storage::exists(self::ANIME_JSON_PATH)) {
-            // Retrieve data from URL
-            $animeJson = file_get_contents(self::ANIME_JSON_FILE);
-
-            // Store data locally
-            Storage::put(self::ANIME_JSON_PATH, $animeJson);
+            $animeJSON = self::storeJSON();
         } else {
-            $animeJson = Storage::get(self::ANIME_JSON_PATH);
+            $animeJSON = Storage::get(self::ANIME_JSON_PATH);
         }
 
-        $parsedAnime = json_decode($animeJson);
+        $parsedAnime = json_decode($animeJSON);
 
         if($parsedAnime != null) {
             // Create the Anime
@@ -45,5 +41,20 @@ class AnimesTableDummySeeder extends Seeder
                 ]);
             }
         }
+    }
+
+    /**
+     * Store and return the stored json.
+     *
+     * @return false|string
+     */
+    static function storeJSON() {
+        // Retrieve data from URL
+        $animeJSON = file_get_contents(self::ANIME_JSON_FILE);
+
+        // Store data locally
+        Storage::put(self::ANIME_JSON_PATH, $animeJSON);
+
+        return $animeJSON;
     }
 }
