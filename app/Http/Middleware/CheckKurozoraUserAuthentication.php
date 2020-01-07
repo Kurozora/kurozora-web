@@ -4,11 +4,9 @@ namespace App\Http\Middleware;
 
 use App\Helpers\JSONResult;
 use App\User;
-use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 use KuroAuthToken;
-use Validator;
 
 /*
  * This middleware checks the Kurozora user's authentication details before
@@ -53,13 +51,6 @@ class CheckKurozoraUserAuthentication
             $request->request->add(['user_id' => (int)$givenUserID]);
             $request->request->add(['session_secret' => $givenSecret]);
             $request->request->add(['session_id' => $sessionAuthenticate]);
-
-            // Add the user to bugsnag reporting
-            Bugsnag::registerCallback(function ($report) use ($request) {
-                $report->setUser([
-                    'id' => $request['user_id']
-                ]);
-            });
 
             // Log the user in
             Auth::loginUsingId($request['user_id']);
