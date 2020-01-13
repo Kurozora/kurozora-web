@@ -2,25 +2,27 @@
 
 namespace Laravel\Nova\Tests\Controller;
 
-use Laravel\Nova\Nova;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Nova\Actions\ActionEvent;
 use Laravel\Nova\ResourceToolElement;
+use Laravel\Nova\Tests\Fixtures\Boolean;
+use Laravel\Nova\Tests\Fixtures\DeniedActionPolicy;
 use Laravel\Nova\Tests\Fixtures\Post;
 use Laravel\Nova\Tests\Fixtures\Role;
 use Laravel\Nova\Tests\Fixtures\User;
-use Laravel\Nova\Tests\IntegrationTest;
 use Laravel\Nova\Tests\Fixtures\UserPolicy;
+use Laravel\Nova\Tests\IntegrationTest;
 
 class ResourceShowTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->authenticate();
     }
 
-    public function tearDown() : void
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -43,7 +45,7 @@ class ResourceShowTest extends IntegrationTest
         $this->assertTrue($response->original['resource']['authorizedToDelete']);
         $this->assertTrue($response->original['resource']['softDeletes']);
 
-        $this->assertEquals('Primary', $response->original['panels'][0]->name);
+        $this->assertEquals('User Resource Details', $response->original['panels'][0]->name);
     }
 
     public function test_can_show_resource_with_null_relation()
@@ -146,7 +148,7 @@ class ResourceShowTest extends IntegrationTest
         $fields = $response->original['resource']['fields'];
 
         // Default panel assignment...
-        $this->assertEquals('PanelResource Details', collect($fields)->where('attribute', 'email')->first()->panel);
+        $this->assertEquals('Panel Resource Details', collect($fields)->where('attribute', 'email')->first()->panel);
 
         // Includes / Excludes...
         $this->assertNotNull(collect($fields)->where('attribute', 'include')->first());
@@ -156,9 +158,9 @@ class ResourceShowTest extends IntegrationTest
         $panels = $response->original['panels'];
 
         $this->assertEquals(3, count($panels));
-        $this->assertEquals('Basics', $panels[0]->name);
-        $this->assertEquals('Extra', $panels[1]->name);
-        $this->assertEquals('PanelResource Details', $panels[2]->name);
+        $this->assertEquals('Panel Resource Details', $panels[0]->name);
+        $this->assertEquals('Basics', $panels[1]->name);
+        $this->assertEquals('Extra', $panels[2]->name);
     }
 
     public function test_resource_with_no_panels_still_gets_default_panel()
@@ -171,11 +173,12 @@ class ResourceShowTest extends IntegrationTest
         $response->assertStatus(200);
 
         $fields = $response->original['resource']['fields'];
-        $this->assertEquals('RoleResource Details', collect($fields)->where('attribute', 'id')->first()->panel);
+
+        $this->assertEquals('Role Resource Details', collect($fields)->where('attribute', 'id')->first()->panel);
 
         $panels = $response->original['panels'];
         $this->assertEquals(1, count($panels));
-        $this->assertEquals('RoleResource Details', $panels[0]->name);
+        $this->assertEquals('Role Resource Details', $panels[0]->name);
     }
 
     public function test_resource_tool_component_name()
@@ -198,5 +201,35 @@ class ResourceShowTest extends IntegrationTest
 
         $this->assertNotEmpty($panel);
         $this->assertEquals('panel', $panel->component);
+    }
+
+    public function test_actions_field_is_added()
+    {
+        $boolean = Boolean::create();
+
+        $response = $this->withExceptionHandling()
+                         ->getJson('/nova-api/booleans/'.$boolean->id);
+
+        $response->assertStatus(200);
+
+        $fields = $response->original['resource']['fields'];
+
+        $this->assertCount(3, $fields);
+    }
+
+    public function test_actions_are_hidden_when_policy_forbids()
+    {
+        $boolean = Boolean::create();
+
+        Gate::policy(ActionEvent::class, DeniedActionPolicy::class);
+
+        $response = $this->withExceptionHandling()
+            ->getJson('/nova-api/booleans/'.$boolean->id);
+
+        $response->assertStatus(200);
+
+        $fields = $response->original['resource']['fields'];
+
+        $this->assertCount(2, $fields);
     }
 }

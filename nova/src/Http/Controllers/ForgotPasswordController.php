@@ -2,11 +2,12 @@
 
 namespace Laravel\Nova\Http\Controllers;
 
-use Illuminate\Routing\Controller;
 use Illuminate\Auth\Notifications\ResetPassword;
-use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Password;
 
 class ForgotPasswordController extends Controller
 {
@@ -31,7 +32,7 @@ class ForgotPasswordController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware('nova.guest');
 
         ResetPassword::toMailUsing(function ($notifiable, $token) {
             return (new MailMessage)
@@ -50,5 +51,15 @@ class ForgotPasswordController extends Controller
     public function showLinkRequestForm()
     {
         return view('nova::auth.passwords.email');
+    }
+
+    /**
+     * Get the broker to be used during password reset.
+     *
+     * @return \Illuminate\Contracts\Auth\PasswordBroker
+     */
+    public function broker()
+    {
+        return Password::broker(config('nova.passwords'));
     }
 }

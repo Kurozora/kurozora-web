@@ -1,1 +1,7 @@
-# Laravel Nova [![Codeship Status for laravel/nova](https://app.codeship.com/projects/13355b10-dee5-0136-e5d0-624c91d99884/status?branch=master)](https://app.codeship.com/projects/318213)
+# Laravel Nova
+
+- [Website](https://nova.laravel.com)
+- [Documentation](https://nova.laravel.com/docs)
+    - [Installation](https://nova.laravel.com/docs/2.0/installation.html)
+    - [Updating Nova](https://nova.laravel.com/docs/2.0/installation.html#updating-nova)
+- [Nova Packages](https://novapackages.com)

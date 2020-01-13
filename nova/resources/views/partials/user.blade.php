@@ -1,4 +1,4 @@
-<dropdown-trigger class="h-9 flex items-center" slot-scope="{toggle}" :handle-click="toggle">
+<dropdown-trigger class="h-9 flex items-center">
     @isset($user->email)
         <img
             src="https://secure.gravatar.com/avatar/{{ md5($user->email) }}?size=512"

@@ -2,34 +2,33 @@
 
 namespace Laravel\Nova\Tests\Controller;
 
-use Laravel\Nova\Actions\Action;
+use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Actions\ActionEvent;
+use Laravel\Nova\Tests\Fixtures\FailingPivotAction;
+use Laravel\Nova\Tests\Fixtures\NoopAction;
+use Laravel\Nova\Tests\Fixtures\NoopActionWithPivotHandle;
+use Laravel\Nova\Tests\Fixtures\QueuedAction;
+use Laravel\Nova\Tests\Fixtures\QueuedUpdateStatusAction;
 use Laravel\Nova\Tests\Fixtures\Role;
+use Laravel\Nova\Tests\Fixtures\RoleAssignment;
+use Laravel\Nova\Tests\Fixtures\RolePolicy;
+use Laravel\Nova\Tests\Fixtures\UpdateStatusAction;
 use Laravel\Nova\Tests\Fixtures\User;
 use Laravel\Nova\Tests\IntegrationTest;
-use Laravel\Nova\Tests\Fixtures\NoopAction;
-use Laravel\Nova\Tests\Fixtures\RolePolicy;
-use Laravel\Nova\Tests\Fixtures\QueuedAction;
-use Laravel\Nova\Tests\Fixtures\RoleAssignment;
-use Illuminate\Database\Eloquent\Relations\Pivot;
-use Laravel\Nova\Tests\Fixtures\FailingPivotAction;
-use Laravel\Nova\Tests\Fixtures\UpdateStatusAction;
-use Illuminate\Database\Eloquent\Relations\Relation;
-use Laravel\Nova\Tests\Fixtures\QueuedResourceAction;
-use Laravel\Nova\Tests\Fixtures\QueuedUpdateStatusAction;
-use Laravel\Nova\Tests\Fixtures\NoopActionWithPivotHandle;
 
 class PivotActionControllerTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->authenticate();
     }
 
-    public function tearDown() : void
+    public function tearDown(): void
     {
         unset($_SERVER['queuedAction.applied']);
         unset($_SERVER['queuedAction.appliedFields']);

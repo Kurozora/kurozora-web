@@ -2,9 +2,9 @@
 
 namespace Laravel\Nova\Tests\Fixtures;
 
-use Laravel\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Resource;
 
 class GroupedUserResource extends Resource
 {

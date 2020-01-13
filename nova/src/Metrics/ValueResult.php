@@ -42,11 +42,25 @@ class ValueResult implements JsonSerializable
     public $suffix;
 
     /**
+     * Whether to run inflection on the suffix.
+     *
+     * @var bool
+     */
+    public $suffixInflection = true;
+
+    /**
      * The metric value formatting.
      *
      * @var string
      */
     public $format;
+
+    /**
+     * Determines whether a value of 0 counts as "No Current Data".
+     *
+     * @var bool
+     */
+    public $zeroResult = false;
 
     /**
      * Create a new value result instance.
@@ -123,6 +137,18 @@ class ValueResult implements JsonSerializable
     }
 
     /**
+     * Don't apply suffix inflections.
+     *
+     * @return $this
+     */
+    public function withoutSuffixInflection()
+    {
+        $this->suffixInflection = false;
+
+        return $this;
+    }
+
+    /**
      * Set the metric value formatting.
      *
      * @param  string  $format
@@ -131,6 +157,19 @@ class ValueResult implements JsonSerializable
     public function format($format)
     {
         $this->format = $format;
+
+        return $this;
+    }
+
+    /**
+     * Sets the zeroResult value.
+     *
+     * @param  bool  $zeroResult
+     * @return $this
+     */
+    public function allowZeroResult($zeroResult = true)
+    {
+        $this->zeroResult = $zeroResult;
 
         return $this;
     }
@@ -148,7 +187,9 @@ class ValueResult implements JsonSerializable
             'previousLabel' => $this->previousLabel,
             'prefix' => $this->prefix,
             'suffix' => $this->suffix,
+            'suffixInflection' => $this->suffixInflection,
             'format' => $this->format,
+            'zeroResult' => $this->zeroResult,
         ];
     }
 }

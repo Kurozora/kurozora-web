@@ -1,47 +1,50 @@
-<template>
-    <div v-on-clickaway="close" class="dropdown relative">
-        <slot :toggle="toggle" />
-
-        <transition name="fade"> <slot v-if="visible" name="menu" /> </transition>
-    </div>
-</template>
-
 <script>
-import { mixin as clickaway } from 'vue-clickaway'
-import composedPath from '@/polyfills/composedPath'
-
 export default {
-    props: {
-        classWhitelist: [Array, String],
+  props: {
+    offset: {
+      type: [Number, String],
+      default: 3,
     },
 
-    mixins: [clickaway],
-
-    data: () => ({ visible: false }),
-
-    methods: {
-        toggle() {
-            this.visible = !this.visible
-        },
-
-        close(event) {
-            let classArray = Array.isArray(this.classWhitelist)
-                ? this.classWhitelist
-                : [this.classWhitelist]
-
-            if (_.filter(classArray, className => pathIncludesClass(event, className)).length > 0) {
-                return
-            }
-
-            this.visible = false
-        },
+    trigger: {
+      default: 'click',
+      validator: val => ['click', 'hover'].includes(val),
     },
-}
 
-function pathIncludesClass(event, className) {
-    return composedPath(event)
-        .filter(el => el !== document && el !== window)
-        .reduce((acc, e) => acc.concat([...e.classList]), [])
-        .includes(className)
+    placement: {
+      type: String,
+      default: 'bottom-start',
+    },
+
+    boundary: {
+      type: String,
+      default: 'viewPort',
+    },
+  },
+
+  render(h) {
+    return (
+      <v-popover
+        trigger={this.trigger}
+        offset={this.offset}
+        placement={this.placement}
+        boundariesElement={this.boundary}
+        popoverClass="tooltip"
+        popoverBaseClass=""
+        popoverWrapperClass=""
+        popoverArrowClass=""
+        popoverInnerClass=""
+      >
+        <button
+          type="button"
+          staticClass="rounded active:outline-none active:shadow-outline focus:outline-none focus:shadow-outline"
+        >
+          {this.$slots.default}
+        </button>
+
+        <template slot="popover">{this.$slots.menu}</template>
+      </v-popover>
+    )
+  },
 }
 </script>

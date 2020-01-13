@@ -2,11 +2,11 @@
 
 namespace Laravel\Nova\Http\Controllers;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Laravel\Nova\Actions\ActionEvent;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Nova\Actions\ActionEvent;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class AttachedResourceUpdateController extends Controller
@@ -36,9 +36,9 @@ class AttachedResourceUpdateController extends Controller
 
             [$pivot, $callbacks] = $resource::fillPivot($request, $model, $pivot);
 
-            $pivot->save();
-
             ActionEvent::forAttachedResourceUpdate($request, $model, $pivot)->save();
+
+            $pivot->save();
 
             collect($callbacks)->each->__invoke();
         });

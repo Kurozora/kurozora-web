@@ -2,8 +2,8 @@
 
 namespace Laravel\Nova\Http\Requests;
 
-use Laravel\Nova\MemoizesMethods;
 use Illuminate\Foundation\Http\FormRequest;
+use Laravel\Nova\MemoizesMethods;
 
 class NovaRequest extends FormRequest
 {

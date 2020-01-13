@@ -15,12 +15,13 @@ class CreationFieldController extends Controller
      */
     public function index(NovaRequest $request)
     {
-        $resource = $request->resource();
+        $resourceClass = $request->resource();
 
-        $resource::authorizeToCreate($request);
+        $resourceClass::authorizeToCreate($request);
 
-        return response()->json(
-            $request->newResource()->creationFields($request)->values()->all()
-        );
+        return response()->json([
+            'fields' => $request->newResource()->creationFieldsWithinPanels($request),
+            'panels' => $request->newResource()->availablePanelsForCreate($request),
+        ]);
     }
 }

@@ -2,10 +2,10 @@
 
 namespace Laravel\Nova\Tests\Fixtures;
 
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Actions\Action;
 use Illuminate\Support\Collection;
+use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
+use Laravel\Nova\Fields\Text;
 
 class RequiredFieldAction extends Action
 {

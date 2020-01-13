@@ -2,9 +2,9 @@
 
 namespace Laravel\Nova\Metrics;
 
+use Cake\Chronos\Chronos;
 use DateTime;
 use DateTimeZone;
-use Cake\Chronos\Chronos;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Expression;
 

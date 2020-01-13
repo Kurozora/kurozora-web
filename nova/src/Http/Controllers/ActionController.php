@@ -3,8 +3,8 @@
 namespace Laravel\Nova\Http\Controllers;
 
 use Illuminate\Routing\Controller;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Http\Requests\ActionRequest;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 class ActionController extends Controller
 {

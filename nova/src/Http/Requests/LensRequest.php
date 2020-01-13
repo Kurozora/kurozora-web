@@ -9,6 +9,13 @@ class LensRequest extends NovaRequest
     use DecodesFilters, InteractsWithLenses;
 
     /**
+     * Whether to include the table order prefix.
+     *
+     * @var bool
+     */
+    protected $tableOrderPrefix = true;
+
+    /**
      * Apply the specified filters to the given query.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
@@ -46,12 +53,24 @@ class LensRequest extends NovaRequest
 
         if ($this->lens()->resolveFields($this)->findFieldByAttribute($this->orderBy)) {
             return $query->orderBy(
-                $query->getModel()->getTable().'.'.$this->orderBy,
+                ($this->tableOrderPrefix ? $query->getModel()->getTable().'.' : '').$this->orderBy,
                 $this->orderByDirection === 'asc' ? 'asc' : 'desc'
             );
         }
 
         return $query;
+    }
+
+    /**
+     * Disable prepending of the table order.
+     *
+     * @return $this
+     */
+    public function withoutTableOrderPrefix()
+    {
+        $this->tableOrderPrefix = false;
+
+        return $this;
     }
 
     /**

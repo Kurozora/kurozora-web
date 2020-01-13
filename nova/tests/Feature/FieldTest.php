@@ -2,22 +2,25 @@
 
 namespace Laravel\Nova\Tests\Feature;
 
-use stdClass;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Trix;
-use Laravel\Nova\Fields\Select;
-use Laravel\Nova\Fields\Password;
-use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Tests\IntegrationTest;
+use Laravel\Nova\Fields\Password;
+use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Fields\Trix;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Tests\Fixtures\File;
+use Laravel\Nova\Tests\Fixtures\FileResource;
 use Laravel\Nova\Tests\Fixtures\UserResource;
+use Laravel\Nova\Tests\IntegrationTest;
+use stdClass;
 
 class FieldTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
     }
@@ -45,13 +48,24 @@ class FieldTest extends IntegrationTest
 
     public function test_fields_can_have_custom_resolver_callback()
     {
-        $field = Text::make('Name')->resolveUsing(function ($value) {
+        $field = Text::make('Name')->resolveUsing(function ($value, $model, $attribute) {
             return strtoupper($value);
         });
 
         $field->resolve((object) ['name' => 'Taylor'], 'name');
 
         $this->assertEquals('TAYLOR', $field->value);
+    }
+
+    public function test_fields_can_have_custom_resolver_callback_even_if_field_is_missing()
+    {
+        $field = Text::make('Name')->resolveUsing(function ($value, $model, $attribute) {
+            return strtoupper('default');
+        });
+
+        $field->resolve((object) ['name' => 'Taylor'], 'email');
+
+        $this->assertEquals('DEFAULT', $field->value);
     }
 
     public function test_computed_fields_resolve()
@@ -215,6 +229,34 @@ class FieldTest extends IntegrationTest
         $this->assertFalse($field->isReadonly(NovaRequest::create('/', 'get')));
     }
 
+    public function test_can_set_field_to_readonly_on_create_requests()
+    {
+        $request = NovaRequest::create('/nova-api/users', 'POST', [
+            'editing' => true,
+            'editMode' => 'create',
+        ]);
+
+        $field = Text::make('Name')->readonly(function ($request) {
+            return $request->isCreateOrAttachRequest();
+        });
+
+        $this->assertTrue($field->isReadonly($request));
+    }
+
+    public function test_can_set_field_to_readonly_on_update_requests()
+    {
+        $request = NovaRequest::create('/nova-api/users/1', 'PUT', [
+            'editing' => true,
+            'editMode' => 'update',
+        ]);
+
+        $field = Text::make('Name')->readonly(function ($request) {
+            return $request->isUpdateOrUpdateAttachedRequest();
+        });
+
+        $this->assertTrue($field->isReadonly($request));
+    }
+
     public function test_collision_of_request_properties()
     {
         $request = new NovaRequest([], [
@@ -238,5 +280,86 @@ class FieldTest extends IntegrationTest
 
         $this->assertObjectNotHasAttribute('query', $model);
         $this->assertEquals('resource', $model->resource);
+    }
+
+    public function test_fields_are_not_required_by_default()
+    {
+        $request = NovaRequest::create('/nova-api/users/creation-fields', 'GET');
+
+        $field = Text::make('Name');
+
+        $this->assertFalse($field->isRequired($request));
+    }
+
+    public function test_can_mark_a_field_as_required_for_create_if_in_validation()
+    {
+        $request = NovaRequest::create('/nova-api/users/creation-fields', 'GET', [
+            'editing' => true,
+            'editMode' => 'create',
+        ]);
+
+        $field = Text::make('Name')->rules('required');
+
+        $this->assertTrue($field->isRequired($request));
+    }
+
+    public function test_can_mark_a_field_as_required_for_update_if_in_validation()
+    {
+        $request = NovaRequest::create('/nova-api/users/update-fields', 'GET', [
+            'editing' => true,
+            'editMode' => 'update',
+        ]);
+
+        $field = Text::make('Name')->rules('required');
+
+        $this->assertTrue($field->isRequired($request));
+    }
+
+    public function test_can_mark_a_field_as_required_using_callback()
+    {
+        $request = NovaRequest::create('/nova-api/users', 'GET');
+
+        $field = Text::make('Name')->required();
+
+        $this->assertTrue($field->isRequired($request));
+
+        $field = Text::make('Name')->required(function () {
+            return false;
+        });
+
+        $this->assertFalse($field->isRequired($request));
+    }
+
+    public function test_resolve_only_cover_field()
+    {
+        $request = NovaRequest::create('/nova-api/files', 'GET');
+
+        $_SERVER['nova.fileResource.additionalField'] = function () {
+            return Text::make('Text', function () {
+                throw new \Exception('This field should not be resolved.');
+            });
+        };
+
+        $_SERVER['nova.fileResource.imageField'] = function () {
+            return Avatar::make('Avatar', 'avatar', null);
+        };
+
+        $url = (new FileResource(new File(['avatar' => 'avatars/avatar.jpg'])))->resolveAvatarUrl($request);
+
+        $this->assertEquals('/storage/avatars/avatar.jpg', $url);
+
+        unset($_SERVER['nova.fileResource.additionalField'], $_SERVER['nova.fileResource.imageField']);
+    }
+
+    public function test_can_mark_a_field_as_stacked_using_boolean()
+    {
+        $field = Text::make('Avatar');
+        $field->stacked(true);
+
+        $this->assertTrue($field->stacked);
+
+        $field->stacked(false);
+
+        $this->assertFalse($field->stacked);
     }
 }

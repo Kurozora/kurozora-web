@@ -2,8 +2,8 @@
 
 namespace Laravel\Nova;
 
-use JsonSerializable;
 use Illuminate\Http\Request;
+use JsonSerializable;
 
 abstract class Element implements JsonSerializable
 {

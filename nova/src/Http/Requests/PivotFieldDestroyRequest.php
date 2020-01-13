@@ -2,8 +2,8 @@
 
 namespace Laravel\Nova\Http\Requests;
 
-use Laravel\Nova\Nova;
 use Laravel\Nova\Fields\File;
+use Laravel\Nova\Nova;
 
 class PivotFieldDestroyRequest extends NovaRequest
 {

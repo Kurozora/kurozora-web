@@ -25,7 +25,11 @@ class SqliteTrendDateExpression extends TrendDateExpression
             case 'month':
                 return "strftime('%Y-%m', datetime({$this->wrap($this->column)}, {$interval}))";
             case 'week':
-                return "strftime('%Y-%W', datetime({$this->wrap($this->column)}, {$interval}))";
+                return "strftime('%Y-', datetime({$this->wrap($this->column)}, {$interval})) ||
+                        (
+                            strftime('%W', datetime({$this->wrap($this->column)}, {$interval})) +
+                            (1 - strftime('%W', strftime('%Y', datetime({$this->wrap($this->column)}, {$interval})) || '-01-04'))
+                        )";
             case 'day':
                 return "strftime('%Y-%m-%d', datetime({$this->wrap($this->column)}, {$interval}))";
             case 'hour':

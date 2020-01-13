@@ -41,6 +41,20 @@ class Textarea extends Field
     }
 
     /**
+     * Resolve the field's value for display.
+     *
+     * @param  mixed  $resource
+     * @param  string|null  $attribute
+     * @return void
+     */
+    public function resolveForDisplay($resource, $attribute = null)
+    {
+        parent::resolveForDisplay($resource, $attribute);
+
+        return $this->value = e($this->value);
+    }
+
+    /**
      * Prepare the element for JSON serialization.
      *
      * @return array

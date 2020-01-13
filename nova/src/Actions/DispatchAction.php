@@ -2,11 +2,12 @@
 
 namespace Laravel\Nova\Actions;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Queue;
 use Laravel\Nova\Fields\ActionFields;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Laravel\Nova\Http\Requests\ActionRequest;
+use Laravel\Nova\Nova;
 
 class DispatchAction
 {
@@ -37,12 +38,12 @@ class DispatchAction
 
         return Transaction::run(function ($batchId) use ($fields, $request, $action, $method, $models) {
             if (! $action->withoutActionEvents) {
-                ActionEvent::createForModels($request, $action, $batchId, $models);
+                Nova::actionEvent()->createForModels($request, $action, $batchId, $models);
             }
 
             return $action->withBatchId($batchId)->{$method}($fields, $models);
         }, function ($batchId) {
-            ActionEvent::markBatchAsFinished($batchId);
+            Nova::actionEvent()->markBatchAsFinished($batchId);
         });
     }
 
@@ -59,7 +60,7 @@ class DispatchAction
     {
         return Transaction::run(function ($batchId) use ($request, $action, $method, $models) {
             if (! $action->withoutActionEvents) {
-                ActionEvent::createForModels($request, $action, $batchId, $models, 'waiting');
+                Nova::actionEvent()->createForModels($request, $action, $batchId, $models, 'waiting');
             }
 
             Queue::connection(static::connection($action))->pushOn(

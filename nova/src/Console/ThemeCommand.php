@@ -2,11 +2,11 @@
 
 namespace Laravel\Nova\Console;
 
-use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use Symfony\Component\Process\Process;
+use Illuminate\Support\Str;
 use Laravel\Nova\Console\Concerns\AcceptsNameAndVendor;
+use Symfony\Component\Process\Process;
 
 class ThemeCommand extends Command
 {
@@ -37,15 +37,13 @@ class ThemeCommand extends Command
             return;
         }
 
-        (new Filesystem)->copyDirectory(
-            __DIR__.'/theme-stubs',
-            $this->themePath()
-        );
+        (new Filesystem)->copyDirectory(__DIR__.'/theme-stubs', $this->themePath());
 
         // ThemeServiceProvider.php replacements...
         $this->replace('{{ namespace }}', $this->themeNamespace(), $this->themePath().'/src/ThemeServiceProvider.stub');
         $this->replace('{{ component }}', $this->themeName(), $this->themePath().'/src/ThemeServiceProvider.stub');
         $this->replace('{{ name }}', $this->themeName(), $this->themePath().'/src/ThemeServiceProvider.stub');
+        $this->replace('{{ vendor }}', $this->argument('name'), $this->themePath().'/src/ThemeServiceProvider.stub');
 
         // Theme composer.json replacements...
         $this->replace('{{ name }}', $this->argument('name'), $this->themePath().'/composer.json');
@@ -119,7 +117,7 @@ class ThemeCommand extends Command
      */
     protected function composerUpdate()
     {
-        $this->runCommand('composer update', getcwd());
+        $this->executeCommand('composer update', getcwd());
     }
 
     /**
@@ -129,7 +127,7 @@ class ThemeCommand extends Command
      * @param  string  $path
      * @return void
      */
-    protected function runCommand($command, $path)
+    protected function executeCommand($command, $path)
     {
         $process = (new Process($command, $path))->setTimeout(null);
 

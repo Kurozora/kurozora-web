@@ -2,11 +2,11 @@
 
 namespace Laravel\Nova\Http\Controllers;
 
-use Laravel\Nova\DeleteField;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Laravel\Nova\Actions\ActionEvent;
 use Laravel\Nova\Contracts\Deletable;
+use Laravel\Nova\DeleteField;
 use Laravel\Nova\Http\Requests\DetachResourceRequest;
 
 class ResourceDetachController extends Controller

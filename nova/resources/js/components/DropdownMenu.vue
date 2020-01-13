@@ -1,38 +1,37 @@
 <template>
-    <div class="dropdown-menu absolute z-50 select-none" :class="menuClasses">
-        <div
-            :style="styles"
-            class="z-40 overflow-hidden bg-white border border-60 shadow rounded-lg"
-        >
-            <slot />
-        </div>
-    </div>
+  <div
+    ref="menu"
+    :style="styles"
+    class="select-none overflow-hidden bg-white border border-60 shadow rounded-lg"
+  >
+    <slot />
+  </div>
 </template>
 
 <script>
 export default {
-    props: {
-        direction: {
-            type: String,
-            default: 'ltr',
-            validator: value => ['ltr', 'rtl'].indexOf(value) != -1,
-        },
-        width: {
-            default: 120,
-        },
+  props: {
+    width: {
+      default: 120,
     },
-    computed: {
-        menuClasses() {
-            return [this.direction == 'ltr' ? 'dropdown-menu-left' : 'dropdown-menu-right']
-        },
-        arrowClasses() {
-            return [this.direction == 'ltr' ? 'dropdown-arrow-left' : 'dropdown-arrow-right']
-        },
-        styles() {
-            return {
-                width: `${this.width}px`,
-            }
-        },
+  },
+
+  mounted() {
+    // If we recieve a click event from an anchor or button element, let's make sure
+    // and close the dropdown's menu so it doesn't stay visible if we toggle a modal.
+    this.$refs.menu.addEventListener('click', event => {
+      if (event.target.tagName != 'A' && event.target.tagName != 'BUTTON')
+        return
+      Nova.$emit('close-dropdowns')
+    })
+  },
+
+  computed: {
+    styles() {
+      return {
+        width: `${this.width}px`,
+      }
     },
+  },
 }
 </script>

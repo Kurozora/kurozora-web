@@ -3,16 +3,16 @@
 namespace Laravel\Nova\Tests\Feature;
 
 use Illuminate\Support\Collection;
-use Laravel\Nova\Tests\Fixtures\Post;
-use Laravel\Nova\Tests\Fixtures\User;
-use Laravel\Nova\Tests\IntegrationTest;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Tests\Fixtures\Post;
 use Laravel\Nova\Tests\Fixtures\PostResource;
+use Laravel\Nova\Tests\Fixtures\User;
 use Laravel\Nova\Tests\Fixtures\UserResource;
+use Laravel\Nova\Tests\IntegrationTest;
 
 class ResourceFieldTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
     }

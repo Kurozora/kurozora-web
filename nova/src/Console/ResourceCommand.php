@@ -2,8 +2,8 @@
 
 namespace Laravel\Nova\Console;
 
-use Illuminate\Support\Str;
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputOption;
 
 class ResourceCommand extends GeneratorCommand
@@ -28,6 +28,26 @@ class ResourceCommand extends GeneratorCommand
      * @var string
      */
     protected $type = 'Resource';
+
+    /**
+     * A list of resource names which are protected.
+     *
+     * @var array
+     */
+    protected $protectedNames = [
+        'card',
+        'cards',
+        'dashboard',
+        'dashboards',
+        'metric',
+        'metrics',
+        'script',
+        'scripts',
+        'search',
+        'searches',
+        'style',
+        'styles',
+    ];
 
     /**
      * Execute the console command.
@@ -59,6 +79,12 @@ class ResourceCommand extends GeneratorCommand
             $this->laravel->getNamespace(), '\\',
         ])) {
             $model = $this->laravel->getNamespace().$model;
+        }
+
+        $resourceName = $this->argument('name');
+
+        if (in_array(strtolower($resourceName), $this->protectedNames)) {
+            $this->warn("You *must* override the uriKey method for your {$resourceName} resource.");
         }
 
         return str_replace(

@@ -3,8 +3,8 @@
 namespace Laravel\Nova\Tests\Fixtures;
 
 use Closure;
-use Laravel\Nova\Actions\Action;
 use Illuminate\Support\Collection;
+use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
 
 class NoopActionWithoutActionable extends Action

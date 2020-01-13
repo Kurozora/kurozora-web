@@ -1,13 +1,12 @@
 @extends('nova::layout')
 
 @section('content')
-    <div>
-        <loading ref="loading"></loading>
+    <loading ref="loading"></loading>
 
-        <transition name="fade" mode="out-in">
-            <router-view :key="$route.name + ($route.params.resourceName || '')"></router-view>
-        </transition>
+    <fade-transition>
+        <router-view :key="$route.name + ($route.params.resourceName || '')"></router-view>
+    </fade-transition>
 
-        <portal-target name="modals" multiple></portal-target>
-    </div>
+    <portal-target name="modals" transition="fade-transition"></portal-target>
+    <portal-target name="dropdowns" transition="fade-transition"></portal-target>
 @endsection

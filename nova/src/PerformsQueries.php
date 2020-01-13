@@ -65,7 +65,8 @@ trait PerformsQueries
 
             $canSearchPrimaryKey = is_numeric($search) &&
                                    in_array($query->getModel()->getKeyType(), ['int', 'integer']) &&
-                                   ($connectionType != 'pgsql' || $search <= 2147483647);
+                                   ($connectionType != 'pgsql' || $search <= PHP_INT_MAX) &&
+                                   in_array($query->getModel()->getKeyName(), static::$search);
 
             if ($canSearchPrimaryKey) {
                 $query->orWhere($query->getModel()->getQualifiedKeyName(), $search);
@@ -140,7 +141,7 @@ trait PerformsQueries
     protected static function applyOrderings($query, array $orderings)
     {
         if (empty($orderings)) {
-            return empty($query->orders)
+            return empty($query->getQuery()->orders)
                         ? $query->latest($query->getModel()->getQualifiedKeyName())
                         : $query;
         }

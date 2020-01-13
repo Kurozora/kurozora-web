@@ -4,13 +4,13 @@ namespace Laravel\Nova\Tests\Feature;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Fluent;
-use Laravel\Nova\Tests\IntegrationTest;
-use Laravel\Nova\Tests\Fixtures\UserResource;
 use Laravel\Nova\Tests\Fixtures\RelationshipGuesserResource;
+use Laravel\Nova\Tests\Fixtures\UserResource;
+use Laravel\Nova\Tests\IntegrationTest;
 
 class ResourceRelationshipGuesserTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
     }

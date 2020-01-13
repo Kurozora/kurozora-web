@@ -2,14 +2,14 @@
 
 namespace Laravel\Nova\Tests\Feature;
 
-use Laravel\Nova\Nova;
-use Laravel\Nova\Tool;
 use Illuminate\Http\Request;
+use Laravel\Nova\Nova;
 use Laravel\Nova\Tests\IntegrationTest;
+use Laravel\Nova\Tool;
 
 class ToolTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
     }

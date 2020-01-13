@@ -2,10 +2,10 @@
 
 namespace Laravel\Nova;
 
+use Illuminate\Contracts\Http\Kernel as HttpKernel;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Nova\Http\Middleware\ServeNova;
-use Illuminate\Contracts\Http\Kernel as HttpKernel;
 
 /**
  * The primary purpose of this service provider is to push the ServeNova

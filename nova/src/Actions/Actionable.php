@@ -2,6 +2,8 @@
 
 namespace Laravel\Nova\Actions;
 
+use Laravel\Nova\Nova;
+
 trait Actionable
 {
     /**
@@ -9,6 +11,6 @@ trait Actionable
      */
     public function actions()
     {
-        return $this->morphMany(ActionEvent::class, 'actionable');
+        return $this->morphMany(Nova::actionEvent(), 'actionable');
     }
 }

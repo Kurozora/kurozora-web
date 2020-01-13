@@ -1,9 +1,9 @@
 <template>
-    <div class="flex w-full justify-end items-center" />
+  <div class="flex w-full justify-end items-center" />
 </template>
 
 <script>
 export default {
-    props: ['resource', 'resourceName', 'resourceId'],
+  props: ['resource', 'resourceName', 'resourceId'],
 }
 </script>

@@ -10,7 +10,7 @@ trait SearchControllerTests
     public function test_can_retrieve_search_results_for_all_searchable_resources()
     {
         $user = factory(User::class)->create();
-        $post = factory(Post::class)->create();
+        $post = factory(Post::class)->create(['user_id' => $user->id]);
 
         $response = $this->withExceptionHandling()
                         ->getJson('/nova-api/search?search=1');
@@ -20,14 +20,14 @@ trait SearchControllerTests
         $original = $response->original;
 
         $this->assertEquals('posts', $original[1]['resourceName']);
-        $this->assertEquals('PostResources', $original[1]['resourceTitle']);
+        $this->assertEquals('Post Resources', $original[1]['resourceTitle']);
         $this->assertEquals($post->id, $original[1]['title']);
         $this->assertEquals($user->id, $original[1]['resourceId']);
         $this->assertEquals('http://localhost/nova/resources/posts/'.$post->id, $original[1]['url']);
         $this->assertNull($original[1]['avatar']);
 
         $this->assertEquals('users', $original[2]['resourceName']);
-        $this->assertEquals('UserResources', $original[2]['resourceTitle']);
+        $this->assertEquals('User Resources', $original[2]['resourceTitle']);
         $this->assertEquals($user->id, $original[2]['title']);
         $this->assertEquals($user->id, $original[2]['resourceId']);
         $this->assertEquals('http://localhost/nova/resources/users/'.$user->id, $original[2]['url']);

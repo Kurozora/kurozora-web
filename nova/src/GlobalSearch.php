@@ -55,6 +55,8 @@ class GlobalSearch
                     'resourceId' => $model->getKey(),
                     'url' => url(Nova::path().'/resources/'.$resource::uriKey().'/'.$model->getKey()),
                     'avatar' => $instance->resolveAvatarUrl($this->request),
+                    'rounded' => $instance->resolveIfAvatarShouldBeRounded($this->request),
+                    'linksTo' => $instance->globalSearchLink($this->request),
                 ];
             }
         }
@@ -77,7 +79,7 @@ class GlobalSearch
                 $this->request->search
             );
 
-            if (count($models = $query->limit(5)->get()) > 0) {
+            if (count($models = $query->limit($resource::$globalSearchResults)->get()) > 0) {
                 $results[$resource] = $models;
             }
         }

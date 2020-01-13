@@ -2,10 +2,10 @@
 
 namespace Laravel\Nova\Http\Controllers;
 
-use Laravel\Nova\DeleteField;
-use Laravel\Nova\Fields\File;
 use Illuminate\Routing\Controller;
 use Laravel\Nova\Actions\ActionEvent;
+use Laravel\Nova\DeleteField;
+use Laravel\Nova\Fields\File;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class FieldDestroyController extends Controller

@@ -1,10 +1,11 @@
 <?php
 
+use Illuminate\Http\Middleware\CheckResponseForModifications;
 use Illuminate\Support\Facades\Route;
 
 // Scripts & Styles...
-Route::get('/scripts/{script}', 'ScriptController@show');
-Route::get('/styles/{style}', 'StyleController@show');
+Route::get('/scripts/{script}', 'ScriptController@show')->middleware(CheckResponseForModifications::class);
+Route::get('/styles/{style}', 'StyleController@show')->middleware(CheckResponseForModifications::class);
 
 // Global Search...
 Route::get('/search', 'SearchController@index');
@@ -21,6 +22,9 @@ Route::get('/{resource}/{resourceId}/update-pivot-fields/{relatedResource}/{rela
 Route::get('/{resource}/{resourceId}/download/{field}', 'FieldDownloadController@show');
 Route::delete('/{resource}/{resourceId}/field/{field}', 'FieldDestroyController@handle');
 Route::delete('/{resource}/{resourceId}/{relatedResource}/{relatedResourceId}/field/{field}', 'PivotFieldDestroyController@handle');
+
+// Dashboards...
+Route::get('/dashboards/{dashboard}', 'DashboardCardController@index');
 
 // Actions...
 Route::get('/{resource}/actions', 'ActionController@index');

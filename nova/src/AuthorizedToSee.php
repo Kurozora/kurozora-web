@@ -8,14 +8,14 @@ use Illuminate\Http\Request;
 trait AuthorizedToSee
 {
     /**
-     * The callback used to authorize viewing the filter.
+     * The callback used to authorize viewing the filter or action.
      *
      * @var \Closure|null
      */
     public $seeCallback;
 
     /**
-     * Determine if the filter should be available for the given request.
+     * Determine if the filter or action should be available for the given request.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return bool
@@ -26,7 +26,7 @@ trait AuthorizedToSee
     }
 
     /**
-     * Set the callback to be run to authorize viewing the filter.
+     * Set the callback to be run to authorize viewing the filter or action.
      *
      * @param  \Closure  $callback
      * @return $this

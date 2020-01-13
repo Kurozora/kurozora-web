@@ -6,10 +6,21 @@
 import Vue from 'vue'
 import Nova from './Nova'
 import './plugins'
+import Localization from '@/mixins/Localization'
+import ThemingClasses from '@/mixins/ThemingClasses'
 
 Vue.config.productionTip = false
 
-Vue.mixin(require('./base'))
+Vue.mixin(Localization)
+
+/**
+ * If configured, register a global mixin to add theming-friendly CSS
+ * classnames to Nova's built-in Vue components. This allows the user
+ * to fully customize Nova's theme to their project's branding.
+ */
+if (window.config.themingClasses) {
+  Vue.mixin(ThemingClasses)
+}
 
 /**
  * Next, we'll setup some of Nova's Vue components that need to be global
@@ -25,7 +36,7 @@ import './components'
  * and hand this router to the Vue instance. Then Nova is all ready!
  */
 ;(function() {
-    this.CreateNova = function(config) {
-        return new Nova(config)
-    }
+  this.CreateNova = function(config) {
+    return new Nova(config)
+  }
 }.call(window))

@@ -3,8 +3,8 @@
 namespace Laravel\Nova\Tests\Feature;
 
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Tests\IntegrationTest;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Tests\IntegrationTest;
 
 class NullableTest extends IntegrationTest
 {

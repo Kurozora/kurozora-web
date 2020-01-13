@@ -1,9 +1,9 @@
 <template>
-    <span />
+  <span />
 </template>
 
 <script>
 export default {
-    props: ['field', 'viaResource', 'viaResourceId', 'resourceName'],
+  props: ['field', 'viaResource', 'viaResourceId', 'resourceName'],
 }
 </script>

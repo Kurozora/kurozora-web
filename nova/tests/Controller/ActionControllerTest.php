@@ -2,39 +2,40 @@
 
 namespace Laravel\Nova\Tests\Controller;
 
-use Laravel\Nova\Actions\Action;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Actions\ActionEvent;
-use Laravel\Nova\Tests\Fixtures\Post;
-use Laravel\Nova\Tests\Fixtures\User;
-use Laravel\Nova\Tests\IntegrationTest;
-use Laravel\Nova\Tests\Fixtures\Comment;
-use Laravel\Nova\Tests\Fixtures\IdFilter;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Laravel\Nova\Tests\Fixtures\NoopAction;
-use Laravel\Nova\Tests\Fixtures\UserPolicy;
-use Laravel\Nova\Tests\Fixtures\EmptyAction;
-use Laravel\Nova\Tests\Fixtures\QueuedAction;
-use Laravel\Nova\Tests\Fixtures\UserResource;
-use Laravel\Nova\Tests\Fixtures\FailingAction;
-use Laravel\Nova\Tests\Fixtures\RedirectAction;
-use Laravel\Nova\Tests\Fixtures\ExceptionAction;
-use Laravel\Nova\Tests\Fixtures\UnrunnableAction;
+use Laravel\Nova\Tests\Fixtures\Comment;
 use Laravel\Nova\Tests\Fixtures\DestructiveAction;
+use Laravel\Nova\Tests\Fixtures\EmptyAction;
+use Laravel\Nova\Tests\Fixtures\ExceptionAction;
+use Laravel\Nova\Tests\Fixtures\FailingAction;
 use Laravel\Nova\Tests\Fixtures\HandleResultAction;
-use Laravel\Nova\Tests\Fixtures\UnauthorizedAction;
-use Laravel\Nova\Tests\Fixtures\UpdateStatusAction;
-use Illuminate\Database\Eloquent\Relations\Relation;
+use Laravel\Nova\Tests\Fixtures\IdFilter;
+use Laravel\Nova\Tests\Fixtures\NoopAction;
+use Laravel\Nova\Tests\Fixtures\NoopActionWithoutActionable;
 use Laravel\Nova\Tests\Fixtures\OpensInNewTabAction;
-use Laravel\Nova\Tests\Fixtures\RequiredFieldAction;
+use Laravel\Nova\Tests\Fixtures\Post;
+use Laravel\Nova\Tests\Fixtures\QueuedAction;
 use Laravel\Nova\Tests\Fixtures\QueuedResourceAction;
 use Laravel\Nova\Tests\Fixtures\QueuedUpdateStatusAction;
-use Laravel\Nova\Tests\Fixtures\NoopActionWithoutActionable;
+use Laravel\Nova\Tests\Fixtures\RedirectAction;
+use Laravel\Nova\Tests\Fixtures\RequiredFieldAction;
+use Laravel\Nova\Tests\Fixtures\UnauthorizedAction;
+use Laravel\Nova\Tests\Fixtures\UnrunnableAction;
+use Laravel\Nova\Tests\Fixtures\UnrunnableDestructiveAction;
+use Laravel\Nova\Tests\Fixtures\UpdateStatusAction;
+use Laravel\Nova\Tests\Fixtures\User;
+use Laravel\Nova\Tests\Fixtures\UserPolicy;
+use Laravel\Nova\Tests\Fixtures\UserResource;
+use Laravel\Nova\Tests\IntegrationTest;
 
 class ActionControllerTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -43,7 +44,7 @@ class ActionControllerTest extends IntegrationTest
         Action::$chunkCount = 200;
     }
 
-    public function tearDown() : void
+    public function tearDown(): void
     {
         unset($_SERVER['queuedAction.applied']);
         unset($_SERVER['queuedAction.appliedFields']);
@@ -192,6 +193,22 @@ class ActionControllerTest extends IntegrationTest
 
         $response->assertStatus(200);
         $this->assertEmpty(UnrunnableAction::$applied);
+        $this->assertCount(0, ActionEvent::all());
+    }
+
+    public function test_action_cant_be_applied_if_not_authorized_to_run_destructive_action()
+    {
+        $user = factory(User::class)->create();
+
+        $response = $this->withExceptionHandling()
+                        ->post('/nova-api/users/action?action='.(new UnrunnableDestructiveAction)->uriKey(), [
+                            'resources' => $user->id,
+                            'test' => 'Taylor Otwell',
+                            'callback' => '',
+                        ]);
+
+        $response->assertStatus(200);
+        $this->assertEmpty(UnrunnableDestructiveAction::$applied);
         $this->assertCount(0, ActionEvent::all());
     }
 
@@ -406,11 +423,39 @@ class ActionControllerTest extends IntegrationTest
 
         $response->assertStatus(200);
 
-        $this->assertEquals($user->id, $_SERVER['queuedAction.applied'][0][0]->id);
-        $this->assertEquals($user2->id, $_SERVER['queuedAction.applied'][0][1]->id);
+        $this->assertEquals($user2->id, $_SERVER['queuedAction.applied'][0][0]->id);
+        $this->assertEquals($user->id, $_SERVER['queuedAction.applied'][0][1]->id);
         $this->assertEquals('Taylor Otwell', $_SERVER['queuedAction.appliedFields'][0]->test);
 
         $this->assertCount(2, ActionEvent::all());
+        $this->assertEquals('finished', ActionEvent::first()->status);
+    }
+
+    public function test_queued_actions_can_be_serialized_when_have_callbacks()
+    {
+        config(['queue.default' => 'sync']);
+
+        $user = factory(User::class)->create();
+        $user2 = factory(User::class)->create();
+
+        $_SERVER['nova.user.actionCallbacks'] = true;
+
+        $response = $this->withExceptionHandling()
+                         ->post('/nova-api/users/action?action='.(new QueuedAction)->uriKey(), [
+                             'resources' => implode(',', [$user->id, $user2->id]),
+                             'test' => 'Taylor Otwell',
+                             'callback' => '',
+                         ]);
+
+        unset($_SERVER['nova.user.actionCallbacks']);
+
+        $response->assertStatus(200);
+
+        $this->assertCount(1, $_SERVER['queuedAction.applied'][0]);
+        $this->assertEquals($user->id, $_SERVER['queuedAction.applied'][0][1]->id);
+        $this->assertEquals('Taylor Otwell', $_SERVER['queuedAction.appliedFields'][0]->test);
+
+        $this->assertCount(1, ActionEvent::all());
         $this->assertEquals('finished', ActionEvent::first()->status);
     }
 
@@ -449,8 +494,8 @@ class ActionControllerTest extends IntegrationTest
                         ]);
 
         $response->assertStatus(200);
-        $this->assertEquals($user->id, $_SERVER['queuedAction.applied'][0][0]->id);
-        $this->assertEquals($user2->id, $_SERVER['queuedAction.applied'][0][1]->id);
+        $this->assertEquals($user2->id, $_SERVER['queuedAction.applied'][0][0]->id);
+        $this->assertEquals($user->id, $_SERVER['queuedAction.applied'][0][1]->id);
         $this->assertCount(2, ActionEvent::all());
     }
 

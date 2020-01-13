@@ -2,9 +2,9 @@
 
 namespace Laravel\Nova\Trix;
 
-use Laravel\Nova\Fields\Trix;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Nova\Fields\Trix;
 
 class PendingAttachment extends Model
 {
@@ -44,12 +44,14 @@ class PendingAttachment extends Model
      */
     public function persist(Trix $field, $model)
     {
+        $disk = $field->getStorageDisk();
+
         Attachment::create([
             'attachable_type' => get_class($model),
             'attachable_id' => $model->getKey(),
             'attachment' => $this->attachment,
-            'disk' => $field->disk,
-            'url' => Storage::disk($field->disk)->url($this->attachment),
+            'disk' => $disk,
+            'url' => Storage::disk($disk)->url($this->attachment),
         ]);
 
         $this->delete();

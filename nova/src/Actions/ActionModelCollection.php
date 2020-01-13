@@ -2,8 +2,8 @@
 
 namespace Laravel\Nova\Actions;
 
-use Laravel\Nova\Http\Requests\ActionRequest;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Laravel\Nova\Http\Requests\ActionRequest;
 
 class ActionModelCollection extends EloquentCollection
 {

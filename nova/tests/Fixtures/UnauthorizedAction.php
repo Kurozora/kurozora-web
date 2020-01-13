@@ -2,8 +2,8 @@
 
 namespace Laravel\Nova\Tests\Fixtures;
 
-use Laravel\Nova\Actions\Action;
 use Illuminate\Support\Collection;
+use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
 
 class UnauthorizedAction extends Action

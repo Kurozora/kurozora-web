@@ -15,6 +15,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Laravel\Nova\Tests\Fixtures\Role::class, function (Faker $faker) {
     return [
+        'created_by_id' => factory(Laravel\Nova\Tests\Fixtures\User::class),
         'name' => $faker->name,
     ];
 });

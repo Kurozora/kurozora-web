@@ -2,10 +2,10 @@
 
 namespace Laravel\Nova\Tests\Fixtures;
 
-use Laravel\Nova\Actions\Action;
 use Illuminate\Support\Collection;
-use Laravel\Nova\Fields\ActionFields;
+use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Actions\DestructiveAction as BaseDestructiveAction;
+use Laravel\Nova\Fields\ActionFields;
 
 class DestructiveAction extends BaseDestructiveAction
 {

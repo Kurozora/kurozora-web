@@ -27,6 +27,7 @@ class Place extends Text
              ->city('city')
              ->state('state')
              ->postalCode('postal_code')
+             ->suburb('suburb')
              ->country('country')
              ->latitude('latitude')
              ->longitude('longitude');
@@ -113,6 +114,17 @@ class Place extends Text
     }
 
     /**
+     * Specify the field that contains the suburb.
+     *
+     * @param  string  $field
+     * @return $this
+     */
+    public function suburb($field)
+    {
+        return $this->withMeta([__FUNCTION__ => $field]);
+    }
+
+    /**
      * Specify the field that contains the country.
      *
      * @param  string  $field
@@ -132,6 +144,17 @@ class Place extends Text
     public function latitude($field)
     {
         return $this->withMeta([__FUNCTION__ => $field]);
+    }
+
+    /**
+     * Specify the language that places.js should use.
+     *
+     * @param  string  $language
+     * @return $this
+     */
+    public function language($language)
+    {
+        return $this->withMeta([__FUNCTION__ => $language]);
     }
 
     /**

@@ -3,17 +3,17 @@
 namespace Laravel\Nova;
 
 use ArrayAccess;
-use JsonSerializable;
-use Illuminate\Support\Str;
-use Laravel\Nova\Fields\ID;
-use Illuminate\Http\Request;
-use Laravel\Scout\Searchable;
-use Illuminate\Support\Collection;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Illuminate\Contracts\Routing\UrlRoutable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Http\Resources\DelegatesToResource;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
+use Illuminate\Http\Resources\DelegatesToResource;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+use JsonSerializable;
+use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Scout\Searchable;
 
 abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
 {
@@ -79,6 +79,27 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     public static $globallySearchable = true;
 
     /**
+     * The number of results to display in the global search.
+     *
+     * @var int
+     */
+    public static $globalSearchResults = 5;
+
+    /**
+     * Where should the global search link to?
+     *
+     * @var string
+     */
+    public static $globalSearchLink = 'detail';
+
+    /**
+     * The per-page options used the resource index.
+     *
+     * @var array
+     */
+    public static $perPageOptions = [25, 50, 100];
+
+    /**
      * The number of resources to show per page via relationships.
      *
      * @var int
@@ -91,6 +112,13 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
      * @var array
      */
     public static $softDeletes = [];
+
+    /**
+     * Indicates whether Nova should check for modifications between viewing and updating a resource.
+     *
+     * @var bool
+     */
+    public static $trafficCop = true;
 
     /**
      * The default displayable pivot class name.
@@ -176,6 +204,18 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     }
 
     /**
+     * Detetermine whether the global search links will take the user to the detail page.
+     *
+     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
+     *
+     * @return string
+     */
+    public function globalSearchLink(NovaRequest $request)
+    {
+        return static::$globalSearchLink;
+    }
+
+    /**
      * Determine if this resource uses Laravel Scout.
      *
      * @return bool
@@ -204,7 +244,7 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
      */
     public static function label()
     {
-        return Str::plural(class_basename(get_called_class()));
+        return Str::plural(Str::title(Str::snake(class_basename(get_called_class()), ' ')));
     }
 
     /**
@@ -271,6 +311,27 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     }
 
     /**
+     * The pagination per-page options configured for this resource.
+     *
+     * @return array
+     */
+    public static function perPageOptions()
+    {
+        return static::$perPageOptions;
+    }
+
+    /**
+     * Indicates whether Nova should check for modifications between viewing and updating a resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return  bool
+     */
+    public static function trafficCop(Request $request)
+    {
+        return static::$trafficCop;
+    }
+
+    /**
      * Filter and authorize the given values.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
@@ -294,7 +355,9 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     public function serializeForIndex(NovaRequest $request, $fields = null)
     {
         return array_merge($this->serializeWithId($fields ?: $this->indexFields($request)), [
+            'actions' => $this->availableActions($request),
             'authorizedToView' => $this->authorizedToView($request),
+            'authorizedToCreate' => $this->authorizedToCreate($request),
             'authorizedToUpdate' => $this->authorizedToUpdateForSerialization($request),
             'authorizedToDelete' => $this->authorizedToDeleteForSerialization($request),
             'authorizedToRestore' => static::softDeletes() && $this->authorizedToRestore($request),
@@ -312,7 +375,8 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
      */
     public function serializeForDetail(NovaRequest $request)
     {
-        return array_merge($this->serializeWithId($this->detailFields($request)), [
+        return array_merge($this->serializeWithId($this->detailFieldsWithinPanels($request)), [
+            'authorizedToCreate' => $this->authorizedToCreate($request),
             'authorizedToUpdate' => $this->authorizedToUpdate($request),
             'authorizedToDelete' => $this->authorizedToDelete($request),
             'authorizedToRestore' => static::softDeletes() && $this->authorizedToRestore($request),
@@ -391,5 +455,29 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
             'id' => $fields->whereInstanceOf(ID::class)->first() ?: ID::forModel($this->resource),
             'fields' => $fields->all(),
         ];
+    }
+
+    /**
+     * Return the location to redirect the user after creation.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param  \Laravel\Nova\Resource  $resource
+     * @return string
+     */
+    public static function redirectAfterCreate(NovaRequest $request, $resource)
+    {
+        return '/resources/'.static::uriKey().'/'.$resource->getKey();
+    }
+
+    /**
+     * Return the location to redirect the user after update.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param  \Laravel\Nova\Resource  $resource
+     * @return string
+     */
+    public static function redirectAfterUpdate(NovaRequest $request, $resource)
+    {
+        return '/resources/'.static::uriKey().'/'.$resource->getKey();
     }
 }

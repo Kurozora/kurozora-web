@@ -2,14 +2,14 @@
 
 namespace Laravel\Nova\Tests\Controller;
 
-use Laravel\Nova\Tests\IntegrationTest;
-use Laravel\Nova\Tests\Fixtures\IdFilter;
-use Laravel\Nova\Tests\Fixtures\CreateDateFilter;
 use Laravel\Nova\Tests\Fixtures\AdditionalOptionsFilter;
+use Laravel\Nova\Tests\Fixtures\CreateDateFilter;
+use Laravel\Nova\Tests\Fixtures\IdFilter;
+use Laravel\Nova\Tests\IntegrationTest;
 
 class FilterControllerTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -3,8 +3,8 @@
 namespace Laravel\Nova\Http\Controllers;
 
 use Illuminate\Routing\Controller;
-use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class AttachableController extends Controller
@@ -38,7 +38,7 @@ class AttachableController extends Controller
                         })
                         ->map(function ($resource) use ($request, $field) {
                             return $field->formatAttachableResource($request, $resource);
-                        })->sortBy('display')->values(),
+                        })->sortBy('display', SORT_NATURAL | SORT_FLAG_CASE)->values(),
             'withTrashed' => $withTrashed,
             'softDeletes' => $associatedResource::softDeletes(),
         ];

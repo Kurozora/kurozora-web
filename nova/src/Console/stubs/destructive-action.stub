@@ -3,12 +3,12 @@
 namespace DummyNamespace;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Collection;
-use Laravel\Nova\Fields\ActionFields;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
-use Laravel\Nova\Actions\DestructiveAction;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
+use Laravel\Nova\Actions\DestructiveAction;
+use Laravel\Nova\Fields\ActionFields;
 
 class DummyClass extends DestructiveAction
 {

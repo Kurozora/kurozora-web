@@ -2,12 +2,12 @@
 
 namespace Laravel\Nova\Http\Controllers;
 
-use Laravel\Nova\Nova;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Foundation\Validation\ValidatesRequests;
+use Laravel\Nova\Nova;
 
 class LoginController extends Controller
 {

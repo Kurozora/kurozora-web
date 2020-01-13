@@ -2,11 +2,14 @@
 
 namespace Laravel\Nova\Metrics;
 
-use InvalidArgumentException;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Traits\Macroable;
+use InvalidArgumentException;
 
 class TrendDateExpressionFactory
 {
+    use Macroable;
+
     /**
      * Create a new trend expression instance.
      *
@@ -18,7 +21,13 @@ class TrendDateExpressionFactory
      */
     public static function make(Builder $query, $column, $unit, $timezone)
     {
-        switch ($query->getConnection()->getDriverName()) {
+        $driver = $query->getConnection()->getDriverName();
+
+        if (static::hasMacro($driver)) {
+            return static::$driver($query, $column, $unit, $timezone);
+        }
+
+        switch ($driver) {
             case 'sqlite':
                 return new SqliteTrendDateExpression($query, $column, $unit, $timezone);
             case 'mysql':
@@ -26,6 +35,8 @@ class TrendDateExpressionFactory
                 return new MySqlTrendDateExpression($query, $column, $unit, $timezone);
             case 'pgsql':
                 return new PostgresTrendDateExpression($query, $column, $unit, $timezone);
+            case 'sqlsrv':
+                return new SqlSrvTrendDateExpression($query, $column, $unit, $timezone);
             default:
                 throw new InvalidArgumentException('Trend metric helpers are not supported for this database.');
         }

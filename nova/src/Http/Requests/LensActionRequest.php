@@ -2,8 +2,8 @@
 
 namespace Laravel\Nova\Http\Requests;
 
-use LogicException;
 use Illuminate\Database\Eloquent\Builder;
+use LogicException;
 
 class LensActionRequest extends ActionRequest
 {

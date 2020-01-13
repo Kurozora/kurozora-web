@@ -2,8 +2,8 @@
 
 namespace Laravel\Nova\Tests\Fixtures;
 
-use Laravel\Nova\Resource;
 use Illuminate\Http\Request;
+use Laravel\Nova\Resource;
 
 class ForbiddenUserResource extends Resource
 {

@@ -2,11 +2,13 @@
 
 namespace Laravel\Nova\Http\Controllers;
 
-use Laravel\Nova\Nova;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Password;
+use Laravel\Nova\Nova;
 
 class ResetPasswordController extends Controller
 {
@@ -31,7 +33,7 @@ class ResetPasswordController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware('nova.guest:'.config('nova.guard'));
     }
 
     /**
@@ -58,5 +60,25 @@ class ResetPasswordController extends Controller
     public function redirectPath()
     {
         return Nova::path();
+    }
+
+    /**
+     * Get the broker to be used during password reset.
+     *
+     * @return \Illuminate\Contracts\Auth\PasswordBroker
+     */
+    public function broker()
+    {
+        return Password::broker(config('nova.passwords'));
+    }
+
+    /**
+     * Get the guard to be used during password reset.
+     *
+     * @return \Illuminate\Contracts\Auth\StatefulGuard
+     */
+    protected function guard()
+    {
+        return Auth::guard(config('nova.guard'));
     }
 }

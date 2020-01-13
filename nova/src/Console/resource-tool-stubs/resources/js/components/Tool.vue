@@ -1,13 +1,13 @@
 <template>
-    <div>{{ title }}</div>
+  <div>{{ title }}</div>
 </template>
 
 <script>
 export default {
-    props: ['resourceName', 'resourceId', 'field'],
+  props: ['resourceName', 'resourceId', 'panel'],
 
-    mounted() {
-        //
-    },
+  mounted() {
+    //
+  },
 }
 </script>

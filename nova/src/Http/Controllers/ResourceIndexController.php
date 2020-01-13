@@ -25,6 +25,7 @@ class ResourceIndexController extends Controller
             'prev_page_url' => $paginator->previousPageUrl(),
             'next_page_url' => $paginator->nextPageUrl(),
             'per_page' => $paginator->perPage(),
+            'per_page_options' => $resource::perPageOptions(),
             'softDeletes' => $resource::softDeletes(),
         ]);
     }
@@ -41,7 +42,7 @@ class ResourceIndexController extends Controller
         return $request->toQuery()->simplePaginate(
             $request->viaRelationship()
                         ? $resource::$perPageViaRelationship
-                        : ($request->perPage ?? 25)
+                        : ($request->perPage ?? $resource::perPageOptions()[0])
         );
     }
 }

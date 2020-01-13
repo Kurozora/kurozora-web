@@ -2,8 +2,8 @@
 
 namespace Laravel\Nova\Fields;
 
-use Illuminate\Support\Fluent;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Fluent;
 
 class ResolvedFields extends Fluent
 {
