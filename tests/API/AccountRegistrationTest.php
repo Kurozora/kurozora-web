@@ -4,6 +4,7 @@ namespace Tests\API;
 
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class AccountRegistrationTest extends TestCase
@@ -84,5 +85,46 @@ class AccountRegistrationTest extends TestCase
 
         // Double check that there is just 1 account
         $this->assertEquals(User::count(), 1);
+    }
+
+    /**
+     * Test if an account cannot be registered with a long password.
+     *
+     * @return void
+     * @test
+     */
+    function an_account_cannot_be_registered_with_a_long_password()
+    {
+        // Generate a password with size of 256
+        $longPassword = Str::random(256);
+
+        // Attempt to register the account
+        $this->json('POST', '/api/v1/users', [
+            'username'  => 'UniqueUsername',
+            'password'  => $longPassword,
+            'email'     => 'tester@kurozora.app'
+        ])->assertUnsuccessfulAPIResponse();
+
+        // Double check that the account was not created
+        $this->assertEquals(User::count(), 0);
+    }
+
+    /**
+     * Test if an account cannot be registered with a short password.
+     *
+     * @return void
+     * @test
+     */
+    function an_account_cannot_be_registered_with_a_short_password()
+    {
+        // Attempt to register the account
+        $this->json('POST', '/api/v1/users', [
+            'username'  => 'UniqueUsername',
+            'password'  => 'hi',
+            'email'     => 'tester@kurozora.app'
+        ])->assertUnsuccessfulAPIResponse();
+
+        // Double check that the account was not created
+        $this->assertEquals(User::count(), 0);
     }
 }
