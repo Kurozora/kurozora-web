@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\ValidateAnimeID;
 use App\Rules\ValidateLibraryStatus;
 use App\User;
+use Illuminate\Foundation\Http\FormRequest;
 
-class GetLibrary extends KuroFormRequest
+class GetLibrary extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

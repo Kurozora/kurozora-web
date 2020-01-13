@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Rules\ValidateEmail;
+use Illuminate\Foundation\Http\FormRequest;
 
-class SIWARegistration extends KuroFormRequest
+class SIWARegistration extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
