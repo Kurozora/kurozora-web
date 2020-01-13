@@ -25,3 +25,6 @@ Homestead.json
 
 # DS Store
 .DS_Store
+
+# PHPUnit result cache
+.phpunit.result.cache
