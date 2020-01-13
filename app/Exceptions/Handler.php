@@ -6,6 +6,7 @@ use App\Helpers\JSONResult;
 use App\Jobs\SendAdminExceptionMail;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 use Swift_TransportException;
 
 class Handler extends ExceptionHandler
@@ -74,5 +75,17 @@ class Handler extends ExceptionHandler
         }
 
         return parent::render($request, $exception);
+    }
+
+    /**
+     * Convert a validation exception into a JSON response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Validation\ValidationException  $exception
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function invalidJson($request, ValidationException $exception)
+    {
+        return JSONResult::error($exception->validator->errors()->first(), 567);
     }
 }

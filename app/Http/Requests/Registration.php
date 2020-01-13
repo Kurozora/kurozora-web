@@ -6,8 +6,9 @@ use App\Rules\ValidateAvatarImage;
 use App\Rules\ValidateEmail;
 use App\Rules\ValidatePassword;
 use App\Rules\ValidateUsername;
+use Illuminate\Foundation\Http\FormRequest;
 
-class Registration extends KuroFormRequest
+class Registration extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
