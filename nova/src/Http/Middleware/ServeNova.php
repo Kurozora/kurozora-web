@@ -2,9 +2,9 @@
 
 namespace Laravel\Nova\Http\Middleware;
 
+use Laravel\Nova\Events\NovaServiceProviderRegistered;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaServiceProvider;
-use Laravel\Nova\Events\NovaServiceProviderRegistered;
 
 class ServeNova
 {

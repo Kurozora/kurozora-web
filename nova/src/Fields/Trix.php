@@ -2,17 +2,18 @@
 
 namespace Laravel\Nova\Fields;
 
-use Laravel\Nova\Trix\DetachAttachment;
-use Laravel\Nova\Trix\DeleteAttachments;
-use Laravel\Nova\Trix\PendingAttachment;
-use Laravel\Nova\Http\Requests\NovaRequest;
-use Laravel\Nova\Trix\StorePendingAttachment;
-use Laravel\Nova\Trix\DiscardPendingAttachments;
 use Laravel\Nova\Contracts\Deletable as DeletableContract;
+use Laravel\Nova\Contracts\Storable as StorableContract;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Trix\DeleteAttachments;
+use Laravel\Nova\Trix\DetachAttachment;
+use Laravel\Nova\Trix\DiscardPendingAttachments;
+use Laravel\Nova\Trix\PendingAttachment;
+use Laravel\Nova\Trix\StorePendingAttachment;
 
-class Trix extends Field implements DeletableContract
+class Trix extends Field implements StorableContract, DeletableContract
 {
-    use Deletable, Expandable;
+    use Storable, Deletable, Expandable;
 
     /**
      * The field's component.
@@ -36,13 +37,6 @@ class Trix extends Field implements DeletableContract
     public $withFiles = false;
 
     /**
-     * The disk that should be used to store files.
-     *
-     * @var string
-     */
-    public $disk = 'public';
-
-    /**
      * The callback that should be executed to store file attachments.
      *
      * @var callable
@@ -62,19 +56,6 @@ class Trix extends Field implements DeletableContract
      * @var callable
      */
     public $discardCallback;
-
-    /**
-     * The disk that should be used to store attachments.
-     *
-     * @param  string  $disk
-     * @return $this
-     */
-    public function disk($disk)
-    {
-        $this->disk = $disk;
-
-        return $this;
-    }
 
     /**
      * Specify the callback that should be used to store file attachments.
@@ -140,13 +121,14 @@ class Trix extends Field implements DeletableContract
      * Specify that file uploads should not be allowed.
      *
      * @param  string  $disk
+     * @param  string  $path
      * @return $this
      */
-    public function withFiles($disk = null)
+    public function withFiles($disk = null, $path = '/')
     {
         $this->withFiles = true;
 
-        $this->disk($disk);
+        $this->disk($disk)->path($path);
 
         $this->attach(new StorePendingAttachment($this))
              ->detach(new DetachAttachment($this))
@@ -164,19 +146,30 @@ class Trix extends Field implements DeletableContract
      * @param  string  $requestAttribute
      * @param  object  $model
      * @param  string  $attribute
-     * @return void
+     * @return void|\Closure
      */
     protected function fillAttribute(NovaRequest $request, $requestAttribute, $model, $attribute)
     {
-        parent::fillAttribute($request, $requestAttribute, $model, $attribute);
+        $callbacks = [];
+
+        $maybeCallback = parent::fillAttribute($request, $requestAttribute, $model, $attribute);
+        if (is_callable($maybeCallback)) {
+            $callbacks[] = $maybeCallback;
+        }
 
         if ($request->{$this->attribute.'DraftId'} && $this->withFiles) {
-            return function () use ($request, $model, $attribute) {
+            $callbacks[] = function () use ($request, $model, $attribute) {
                 PendingAttachment::persistDraft(
                     $request->{$this->attribute.'DraftId'},
                     $this,
                     $model
                 );
+            };
+        }
+
+        if (count($callbacks)) {
+            return function () use ($callbacks) {
+                collect($callbacks)->each->__invoke();
             };
         }
     }

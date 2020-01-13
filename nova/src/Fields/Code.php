@@ -82,7 +82,7 @@ class Code extends Field
     {
         $this->json = true;
 
-        $this->jsonOptions = $options ?? JSON_PRETTY_PRINT;
+        $this->jsonOptions = $options ?? JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE;
 
         return $this->options(['mode' => 'application/json']);
     }

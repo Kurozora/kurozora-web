@@ -20,7 +20,7 @@ class DetachResourceRequest extends DeletionRequest
 
         $this->toSelectedResourceQuery()->when(! $this->forAllMatchingResources(), function ($query) {
             $query->whereKey($this->resources);
-        })->latest($this->model()->getKeyName())->chunk($count, function ($models) use ($callback, $parentResource) {
+        })->latest($this->model()->getQualifiedKeyName())->chunkById($count, function ($models) use ($callback, $parentResource) {
             $models = $this->detachableModels($models, $parentResource);
 
             if ($models->isNotEmpty()) {

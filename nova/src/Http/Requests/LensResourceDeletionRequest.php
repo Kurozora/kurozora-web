@@ -3,8 +3,8 @@
 namespace Laravel\Nova\Http\Requests;
 
 use Closure;
-use LogicException;
 use Illuminate\Database\Eloquent\Builder;
+use LogicException;
 
 class LensResourceDeletionRequest extends NovaRequest
 {

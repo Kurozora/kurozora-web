@@ -2,9 +2,9 @@
 
 namespace Laravel\Nova\Http\Controllers;
 
-use Laravel\Nova\DeleteField;
 use Illuminate\Routing\Controller;
 use Laravel\Nova\Actions\ActionEvent;
+use Laravel\Nova\DeleteField;
 use Laravel\Nova\Http\Requests\PivotFieldDestroyRequest;
 
 class PivotFieldDestroyController extends Controller

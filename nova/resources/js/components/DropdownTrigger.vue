@@ -1,55 +1,42 @@
 <template>
-    <a
-        @click="handleClick"
-        class="dropdown-trigger h-dropdown-trigger flex items-center cursor-pointer select-none"
-    >
-        <slot />
+  <div
+    class="dropdown-trigger h-dropdown-trigger flex items-center cursor-pointer select-none"
+  >
+    <slot />
 
-        <svg
-            v-if="showArrow"
-            class="ml-2"
-            width="10px"
-            height="6px"
-            viewBox="0 0 10 6"
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-        >
-            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                <g
-                    id="04-user"
-                    transform="translate(-385.000000, -573.000000)"
-                    :fill="activeIconColor"
-                    fill-rule="nonzero"
-                >
-                    <path
-                        d="M393.292893,573.292893 C393.683418,572.902369 394.316582,572.902369 394.707107,573.292893 C395.097631,573.683418 395.097631,574.316582 394.707107,574.707107 L390.707107,578.707107 C390.316582,579.097631 389.683418,579.097631 389.292893,578.707107 L385.292893,574.707107 C384.902369,574.316582 384.902369,573.683418 385.292893,573.292893 C385.683418,572.902369 386.316582,572.902369 386.707107,573.292893 L390,576.585786 L393.292893,573.292893 Z"
-                        id="Path-2-Copy"
-                    />
-                </g>
-            </g>
-        </svg>
-    </a>
+    <svg
+      v-if="showArrow"
+      class="ml-2"
+      xmlns="http://www.w3.org/2000/svg"
+      width="10"
+      height="6"
+      viewBox="0 0 10 6"
+    >
+      <path
+        :fill="activeIconColor"
+        d="M8.292893.292893c.390525-.390524 1.023689-.390524 1.414214 0 .390524.390525.390524 1.023689 0 1.414214l-4 4c-.390525.390524-1.023689.390524-1.414214 0l-4-4c-.390524-.390525-.390524-1.023689 0-1.414214.390525-.390524 1.023689-.390524 1.414214 0L5 3.585786 8.292893.292893z"
+      />
+    </svg>
+  </div>
 </template>
 
 <script>
 export default {
-    props: {
-        handleClick: Function,
-        active: {
-            type: Boolean,
-            default: false,
-        },
-        showArrow: {
-            type: Boolean,
-            default: true,
-        },
+  props: {
+    active: {
+      type: Boolean,
+      default: false,
     },
+    showArrow: {
+      type: Boolean,
+      default: true,
+    },
+  },
 
-    computed: {
-        activeIconColor() {
-            return this.active ? 'var(--white)' : 'var(--90)'
-        },
+  computed: {
+    activeIconColor() {
+      return this.active ? 'var(--white)' : 'var(--90)'
     },
+  },
 }
 </script>

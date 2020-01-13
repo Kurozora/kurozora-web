@@ -27,6 +27,7 @@ class UserGrowth extends Value
     {
         return [
             30 => '30 Days',
+            'TODAY' => 'Today',
             'MTD' => 'Month To Date',
             'QTD' => 'Quarter To Date',
             'YTD' => 'Year To Date',

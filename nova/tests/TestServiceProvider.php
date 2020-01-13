@@ -2,8 +2,8 @@
 
 namespace Laravel\Nova\Tests;
 
-use Laravel\Nova\Nova;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Nova\Nova;
 
 class TestServiceProvider extends ServiceProvider
 {

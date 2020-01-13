@@ -2,10 +2,10 @@
 
 namespace Laravel\Nova\Tests\Fixtures;
 
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -49,6 +49,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the first of the profiles that belong to the user.
+     */
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
+    }
+
+    /**
      * Get all of the posts that belong to the user.
      */
     public function posts()
@@ -64,6 +72,15 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id')
                             ->withPivot('id', 'admin', 'photo', 'restricted')
                             ->using(RoleAssignment::class);
+    }
+
+    /**
+     * Related users with each other via email.
+     */
+    public function relatedUsers()
+    {
+        return $this->belongsToMany(self::class, 'user_emails_xref', 'email_to', 'email_from', 'email', 'email')
+            ->using(UserEmailRelationship::class);
     }
 
     /**

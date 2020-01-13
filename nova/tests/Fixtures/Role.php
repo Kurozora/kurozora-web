@@ -7,6 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     /**
+     * Get the user that created the role.
+     */
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
      * Get the users that the role belongs to.
      */
     public function users()

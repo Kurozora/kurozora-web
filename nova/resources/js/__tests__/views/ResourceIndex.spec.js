@@ -21,46 +21,46 @@ const renderer = createRenderer()
 // global.Nova = new Nova()
 
 describe('Index.vue', () => {
-    it('renders', () => {
-        const wrapper = shallowMount(Index, {
-            stubs: ['loading-view', 'cards'],
-            propsData: {
-                resourceName: 'posts',
-            },
-        })
-        renderer.renderToString(wrapper.vm, (err, str) => {
-            if (err) throw new Error(err)
-            expect(str).toMatchSnapshot()
-        })
+  it('renders', () => {
+    const wrapper = shallowMount(Index, {
+      stubs: ['loading-view', 'cards'],
+      propsData: {
+        resourceName: 'posts',
+      },
+    })
+    renderer.renderToString(wrapper.vm, (err, str) => {
+      if (err) throw new Error(err)
+      expect(str).toMatchSnapshot()
+    })
+  })
+
+  it('renders after loading', () => {
+    const wrapper = shallowMount(Index, {
+      stubs: ['loading-view', 'cards'],
+      propsData: {
+        resourceName: 'posts',
+      },
     })
 
-    it('renders after loading', () => {
-        const wrapper = shallowMount(Index, {
-            stubs: ['loading-view', 'cards'],
-            propsData: {
-                resourceName: 'posts',
-            },
-        })
+    expect(wrapper.vm.initialLoading).toEqual(false)
+  })
 
-        expect(wrapper.vm.initialLoading).toEqual(false)
+  it('should show its cards', () => {
+    const $route = { params: { resourceName: 'posts' } }
+    const wrapper = shallowMount(Index, {
+      stubs: ['loading-view', 'cards'],
+      mocks: {
+        $route,
+      },
+      propsData: {
+        resourceName: 'posts',
+      },
     })
 
-    it('should show its cards', () => {
-        const $route = { params: { resourceName: 'posts' } }
-        const wrapper = shallowMount(Index, {
-            stubs: ['loading-view', 'cards'],
-            mocks: {
-                $route,
-            },
-            propsData: {
-                resourceName: 'posts',
-            },
-        })
+    // wrapper.setData({
+    //     cards: [{}],
+    // })
 
-        // wrapper.setData({
-        //     cards: [{}],
-        // })
-
-        expect(wrapper.vm.shouldShowCards).toEqual(true)
-    })
+    expect(wrapper.vm.shouldShowCards).toEqual(true)
+  })
 })

@@ -3,6 +3,8 @@
 namespace Laravel\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 trait ResolvesActions
@@ -65,7 +67,8 @@ trait ResolvesActions
     {
         $field = $this->availableFields($request)->first(function ($field) use ($request) {
             return isset($field->resourceName) &&
-                   $field->resourceName == $request->viaResource;
+                   $field->resourceName == $request->viaResource &&
+                   ($field instanceof BelongsToMany || $field instanceof MorphToMany);
         });
 
         if ($field && isset($field->actionsCallback)) {

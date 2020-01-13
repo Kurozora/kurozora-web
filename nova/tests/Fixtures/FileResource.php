@@ -2,10 +2,11 @@
 
 namespace Laravel\Nova\Tests\Fixtures;
 
-use Laravel\Nova\Resource;
-use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\MissingValue;
+use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Image;
+use Laravel\Nova\Resource;
 
 class FileResource extends Resource
 {
@@ -37,6 +38,10 @@ class FileResource extends Resource
             $field = $_SERVER['nova.fileResource.imageField']($request);
         }
 
+        if (isset($_SERVER['nova.fileResource.additionalField'])) {
+            $additionalField = $_SERVER['nova.fileResource.additionalField']($request);
+        }
+
         return [
             ID::make('ID', 'id'),
 
@@ -47,6 +52,8 @@ class FileResource extends Resource
 
                 return $_SERVER['__nova.fileDelete'] ?? null;
             })->prunable(),
+
+            $additionalField ?? new MissingValue(),
         ];
     }
 

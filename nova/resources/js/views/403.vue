@@ -1,3 +1,3 @@
 <template>
-    <error-403 />
+  <error-403 />
 </template>

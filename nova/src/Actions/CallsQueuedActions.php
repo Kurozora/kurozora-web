@@ -2,8 +2,8 @@
 
 namespace Laravel\Nova\Actions;
 
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 trait CallsQueuedActions
 {

@@ -50,6 +50,30 @@ trait InteractsWithRelatedResources
     }
 
     /**
+     * Find the parent resource model instance for the request.
+     *
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
+    public function findRelatedModel()
+    {
+        return once(function () {
+            return Nova::modelInstanceForKey($this->relatedResource)
+                ->newQueryWithoutScopes()
+                ->find($this->input($this->relatedResource));
+        });
+    }
+
+    /**
+     * Find the parent resource model instance for the request or abort.
+     *
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
+    public function findRelatedModelOrFail()
+    {
+        return $this->findRelatedModel() ?: abort(404);
+    }
+
+    /**
      * Get the displayable pivot model name for a "via relationship" request.
      *
      * @return string
@@ -72,13 +96,35 @@ trait InteractsWithRelatedResources
     }
 
     /**
-     * Get a new instance of hte "via" resource being requested.
+     * Get a new instance of the "via" resource being requested.
      *
      * @return \Laravel\Nova\Resource
      */
     public function newViaResource()
     {
         $resource = $this->viaResource();
+
+        return new $resource($resource::newModel());
+    }
+
+    /**
+     * Get the class name of the "related" resource being requested.
+     *
+     * @return string
+     */
+    public function relatedResource()
+    {
+        return Nova::resourceForKey($this->relatedResource);
+    }
+
+    /**
+     * Get a new instance of the "related" resource being requested.
+     *
+     * @return \Laravel\Nova\Resource
+     */
+    public function newRelatedResource()
+    {
+        $resource = $this->relatedResource();
 
         return new $resource($resource::newModel());
     }

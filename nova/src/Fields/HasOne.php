@@ -4,8 +4,9 @@ namespace Laravel\Nova\Fields;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Contracts\ListableField;
+use Laravel\Nova\Contracts\RelatableField;
 
-class HasOne extends Field implements ListableField
+class HasOne extends Field implements ListableField, RelatableField
 {
     /**
      * The field's component.
@@ -59,6 +60,7 @@ class HasOne extends Field implements ListableField
         $this->resourceClass = $resource;
         $this->resourceName = $resource::uriKey();
         $this->hasOneRelationship = $this->attribute;
+        $this->singularLabel = $resource::singularLabel();
     }
 
     /**
@@ -89,7 +91,7 @@ class HasOne extends Field implements ListableField
     /**
      * Set the displayable singular label of the resource.
      *
-     * @return string
+     * @return $this
      */
     public function singularLabel($singularLabel)
     {
@@ -99,17 +101,17 @@ class HasOne extends Field implements ListableField
     }
 
     /**
-     * Get additional meta information to merge with the field payload.
+     * Prepare the field for JSON serialization.
      *
      * @return array
      */
-    public function meta()
+    public function jsonSerialize()
     {
         return array_merge([
             'resourceName' => $this->resourceName,
             'hasOneRelationship' => $this->hasOneRelationship,
             'listable' => true,
-            'singularLabel' => $this->name,
-        ], $this->meta);
+            'singularLabel' => $this->singularLabel,
+        ], parent::jsonSerialize());
     }
 }

@@ -2,10 +2,11 @@
 
 namespace Laravel\Nova\Http\Controllers;
 
-use Laravel\Nova\Nova;
-use Illuminate\Support\Arr;
+use DateTime;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Arr;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Nova;
 
 class StyleController extends Controller
 {
@@ -25,7 +26,10 @@ class StyleController extends Controller
 
         return response(
             file_get_contents($path),
-            200, ['Content-Type' => 'text/css']
-        );
+            200,
+            [
+                'Content-Type' => 'text/css',
+            ]
+        )->setLastModified(DateTime::createFromFormat('U', filemtime($path)));
     }
 }

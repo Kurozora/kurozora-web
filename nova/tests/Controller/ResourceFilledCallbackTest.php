@@ -2,13 +2,13 @@
 
 namespace Laravel\Nova\Tests\Controller;
 
+use Laravel\Nova\Tests\Fixtures\Address;
 use Laravel\Nova\Tests\Fixtures\User;
 use Laravel\Nova\Tests\IntegrationTest;
-use Laravel\Nova\Tests\Fixtures\Address;
 
 class ResourceFilledCallbackTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 

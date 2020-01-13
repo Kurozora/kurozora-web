@@ -2,8 +2,8 @@
 
 namespace Laravel\Nova\Tests\Fixtures;
 
-use Laravel\Nova\Actions\Actionable;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Nova\Actions\Actionable;
 
 class Boolean extends Model
 {

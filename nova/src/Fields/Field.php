@@ -3,11 +3,11 @@
 namespace Laravel\Nova\Fields;
 
 use Closure;
-use JsonSerializable;
-use Illuminate\Support\Str;
-use Laravel\Nova\Contracts\Resolvable;
-use Illuminate\Support\Traits\Macroable;
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Support\Str;
+use Illuminate\Support\Traits\Macroable;
+use JsonSerializable;
+use Laravel\Nova\Contracts\Resolvable;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 abstract class Field extends FieldElement implements JsonSerializable, Resolvable
@@ -120,6 +120,13 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
     public $textAlign = 'left';
 
     /**
+     * Indicates if the field label and form element should sit on top of each other.
+     *
+     * @var bool
+     */
+    public $stacked = false;
+
+    /**
      * The custom components registered for fields.
      *
      * @var array
@@ -132,6 +139,13 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
      * @var Closure
      */
     public $readonlyCallback;
+
+    /**
+     * The callback used to determine if the field is required.
+     *
+     * @var Closure
+     */
+    public $requiredCallback;
 
     /**
      * Create a new field.
@@ -167,6 +181,20 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
     }
 
     /**
+     * Stack the label above the field.
+     *
+     * @param bool $stack
+     *
+     * @return $this
+     */
+    public function stacked($stack = true)
+    {
+        $this->stacked = $stack;
+
+        return $this;
+    }
+
+    /**
      * Resolve the field's value for display.
      *
      * @param  mixed  $resource
@@ -184,11 +212,9 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
         if (! $this->displayCallback) {
             $this->resolve($resource, $attribute);
         } elseif (is_callable($this->displayCallback)) {
-            $value = data_get($resource, str_replace('->', '.', $attribute), $placeholder = new \stdClass());
-
-            if ($value !== $placeholder) {
-                $this->value = call_user_func($this->displayCallback, $value);
-            }
+            tap($this->resolveAttribute($resource, $attribute), function ($value) use ($resource, $attribute) {
+                $this->value = call_user_func($this->displayCallback, $value, $resource, $attribute);
+            });
         }
     }
 
@@ -212,11 +238,9 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
         if (! $this->resolveCallback) {
             $this->value = $this->resolveAttribute($resource, $attribute);
         } elseif (is_callable($this->resolveCallback)) {
-            $value = data_get($resource, str_replace('->', '.', $attribute), $placeholder = new \stdClass());
-
-            if ($value !== $placeholder) {
-                $this->value = call_user_func($this->resolveCallback, $value, $resource);
-            }
+            tap($this->resolveAttribute($resource, $attribute), function ($value) use ($resource, $attribute) {
+                $this->value = call_user_func($this->resolveCallback, $value, $resource, $attribute);
+            });
         }
     }
 
@@ -233,7 +257,7 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
     }
 
     /**
-     * Define the callback that should be used to resolve the field's value.
+     * Define the callback that should be used to display the field's value.
      *
      * @param  callable  $displayCallback
      * @return $this
@@ -479,10 +503,27 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
     }
 
     /**
+     * Return the sortable uri key for the field.
+     *
+     * @return string
+     */
+    public function sortableUriKey()
+    {
+        $request = app(NovaRequest::class);
+
+        switch (get_class($this)) {
+            case BelongsTo::class:
+                return $this->getRelationForeignKeyName($request->newResource()->resource->{$this->attribute}());
+            default:
+                return $this->attribute;
+        }
+    }
+
+    /**
      * Indicate that the field should be nullable.
      *
-     * @param  bool $nullable
-     * @param  array|Closure $values
+     * @param  bool  $nullable
+     * @param  array|Closure  $values
      * @return $this
      */
     public function nullable($nullable = true, $values = null)
@@ -499,7 +540,7 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
     /**
      * Specify nullable values.
      *
-     * @param  array|Closure $values
+     * @param  array|Closure  $values
      * @return $this
      */
     public function nullValues($values)
@@ -546,9 +587,9 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
     }
 
     /**
-     * Set the callback used to determin if the field is readonly.
+     * Set the callback used to determine if the field is readonly.
      *
-     * @param Closure|bool $callback
+     * @param  Closure|bool  $callback
      * @return $this
      */
     public function readonly($callback = true)
@@ -561,7 +602,7 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
     /**
      * Determine if the field is readonly.
      *
-     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return bool
      */
     public function isReadonly(NovaRequest $request)
@@ -590,6 +631,58 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
     }
 
     /**
+     * Set the text alignment of the field.
+     *
+     * @param  string  $alignment
+     * @return $this
+     */
+    public function textAlign($alignment)
+    {
+        $this->textAlign = $alignment;
+
+        return $this;
+    }
+
+    /**
+     * Set the callback used to determine if the field is required.
+     *
+     * @param  Closure|bool  $callback
+     * @return $this
+     */
+    public function required($callback = true)
+    {
+        $this->requiredCallback = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Determine if the field is required.
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @return bool
+     */
+    public function isRequired(NovaRequest $request)
+    {
+        return with($this->requiredCallback, function ($callback) use ($request) {
+            if ($callback === true || (is_callable($callback) && call_user_func($callback, $request))) {
+                return true;
+            }
+
+            if (! empty($this->attribute) && is_null($callback)) {
+                if ($request->isCreateOrAttachRequest()) {
+                    return in_array('required', $this->getCreationRules($request)[$this->attribute]);
+                }
+
+                if ($request->isUpdateOrUpdateAttachedRequest()) {
+                    return in_array('required', $this->getUpdateRules($request)[$this->attribute]);
+                }
+            }
+
+            return false;
+        });
+    }
+
+    /**
      * Prepare the field for JSON serialization.
      *
      * @return array
@@ -607,7 +700,10 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
             'sortable' => $this->sortable,
             'nullable' => $this->nullable,
             'readonly' => $this->isReadonly(app(NovaRequest::class)),
+            'required' => $this->isRequired(app(NovaRequest::class)),
             'textAlign' => $this->textAlign,
+            'sortableUriKey' => $this->sortableUriKey(),
+            'stacked' => $this->stacked,
         ], $this->meta());
     }
 }

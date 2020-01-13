@@ -2,8 +2,8 @@
 
 namespace Laravel\Nova\Filters;
 
-use Illuminate\Http\Request;
 use Illuminate\Container\Container;
+use Illuminate\Http\Request;
 
 abstract class BooleanFilter extends Filter
 {

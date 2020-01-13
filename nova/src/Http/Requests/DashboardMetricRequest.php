@@ -2,8 +2,8 @@
 
 namespace Laravel\Nova\Http\Requests;
 
-use Laravel\Nova\Nova;
 use Laravel\Nova\Metrics\Metric;
+use Laravel\Nova\Nova;
 
 class DashboardMetricRequest extends NovaRequest
 {
@@ -26,6 +26,6 @@ class DashboardMetricRequest extends NovaRequest
      */
     public function availableMetrics()
     {
-        return Nova::availableDashboardCards($this)->whereInstanceOf(Metric::class);
+        return Nova::allAvailableDashboardCards($this)->whereInstanceOf(Metric::class);
     }
 }

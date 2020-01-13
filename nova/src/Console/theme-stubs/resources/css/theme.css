@@ -18,5 +18,9 @@
     to(#3c4655)
   );
 
-  background-image: linear-gradient(0deg, rgb(254, 1, 129, 1), rgb(100, 5, 113));
+  background-image: linear-gradient(
+    0deg,
+    rgb(254, 1, 129, 1),
+    rgb(100, 5, 113)
+  );
 }

@@ -2,10 +2,10 @@
 
 namespace Laravel\Nova\Tests\Fixtures;
 
-use Laravel\Nova\Resource;
-use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\File;
+use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Resource;
 
 class SoftDeletingFileResource extends Resource
 {

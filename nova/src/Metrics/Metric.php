@@ -3,20 +3,29 @@
 namespace Laravel\Nova\Metrics;
 
 use DateInterval;
-use Laravel\Nova\Card;
-use Laravel\Nova\Nova;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
+use Laravel\Nova\Card;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Nova;
 
 abstract class Metric extends Card
 {
+    use HasHelpText;
+
     /**
      * The displayable name of the metric.
      *
      * @var string
      */
     public $name;
+
+    /**
+     * Indicates whether the metric should be refreshed when actions run.
+     *
+     * @var bool
+     */
+    public $refreshWhenActionRuns = false;
 
     /**
      * Calculate the metric's value.
@@ -54,11 +63,12 @@ abstract class Metric extends Card
     protected function getCacheKey(NovaRequest $request)
     {
         return sprintf(
-            'nova.metric.%s.%s.%s.%s',
+            'nova.metric.%s.%s.%s.%s.%s',
             $this->uriKey(),
             $request->input('range', 'no-range'),
             $request->input('timezone', 'no-timezone'),
-            $request->input('twelveHourTime', 'no-12-hour-time')
+            $request->input('twelveHourTime', 'no-12-hour-time'),
+            $this->onlyOnDetail ? $request->findModelOrFail()->getKey() : 'no-resource-id'
         );
     }
 
@@ -89,7 +99,19 @@ abstract class Metric extends Card
      */
     public function uriKey()
     {
-        return Str::slug($this->name());
+        return Str::slug($this->name(), '-', null);
+    }
+
+    /**
+     * Set whether the metric should refresh when actions are run.
+     *
+     * @param  bool  $value
+     */
+    public function refreshWhenActionRuns($value = true)
+    {
+        $this->refreshWhenActionRuns = $value;
+
+        return $this;
     }
 
     /**
@@ -103,6 +125,9 @@ abstract class Metric extends Card
             'class' => get_class($this),
             'name' => $this->name(),
             'uriKey' => $this->uriKey(),
+            'helpWidth' => $this->getHelpWidth(),
+            'helpText' => $this->getHelpText(),
+            'refreshWhenActionRuns' => $this->refreshWhenActionRuns,
         ]);
     }
 }

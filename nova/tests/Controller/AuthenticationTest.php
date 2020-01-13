@@ -2,15 +2,14 @@
 
 namespace Laravel\Nova\Tests\Controller;
 
-use Laravel\Nova\Nova;
-use Laravel\Nova\Tool;
 use Illuminate\Support\Facades\DB;
+use Laravel\Nova\Nova;
 use Laravel\Nova\Tests\Fixtures\User;
 use Laravel\Nova\Tests\IntegrationTest;
 
 class AuthenticationTest extends IntegrationTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
     }
@@ -42,13 +41,13 @@ class AuthenticationTest extends IntegrationTest
 
         $user = factory(User::class)->create([
             'email' => 'taylor@laravel.com',
-            'password' => bcrypt('secret'),
+            'password' => bcrypt('password'),
         ]);
 
         $response = $this->withExceptionHandling()
                         ->post('/nova/login', [
                             'email' => 'taylor@laravel.com',
-                            'password' => 'secret',
+                            'password' => 'password',
                         ]);
 
         $response->assertStatus(302);
@@ -74,7 +73,7 @@ class AuthenticationTest extends IntegrationTest
     //     // Request Password Reset Link...
     //     $user = factory(User::class)->create([
     //         'email' => 'taylor@laravel.com',
-    //         'password' => bcrypt('secret'),
+    //         'password' => bcrypt('password'),
     //     ]);
 
     //     $response = $this->withExceptionHandling()

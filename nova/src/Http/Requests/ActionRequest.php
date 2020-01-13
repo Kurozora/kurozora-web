@@ -3,10 +3,10 @@
 namespace Laravel\Nova\Http\Requests;
 
 use Closure;
-use Illuminate\Support\Fluent;
 use Illuminate\Http\UploadedFile;
-use Laravel\Nova\Fields\ActionFields;
+use Illuminate\Support\Fluent;
 use Laravel\Nova\Actions\ActionModelCollection;
+use Laravel\Nova\Fields\ActionFields;
 
 class ActionRequest extends NovaRequest
 {

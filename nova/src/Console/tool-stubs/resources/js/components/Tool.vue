@@ -2,7 +2,10 @@
     <div>
         <heading class="mb-6">{{ title }}</heading>
 
-        <card class="bg-90 flex flex-col items-center justify-center" style="min-height: 300px">
+        <card
+            class="bg-90 flex flex-col items-center justify-center"
+            style="min-height: 300px"
+        >
             <svg
                 class="spin fill-80 mb-6"
                 width="69"
@@ -16,14 +19,15 @@
                 />
             </svg>
 
-            <h1 class="text-white text-4xl text-90 font-light mb-6">We're in a black hole.</h1>
+            <h1 class="text-white text-4xl text-90 font-light mb-6">
+                We're in a black hole.
+            </h1>
 
             <p class="text-white-50% text-lg">
                 You can edit this tool's component at:
-                <code
-                    class="ml-1 border border-80 text-sm font-mono text-white bg-black rounded px-2 py-1"
-                    >/nova-components/{{ class }}/resources/js/components/Tool.vue</code
-                >
+                <code class="ml-1 border border-80 text-sm font-mono text-white bg-black rounded px-2 py-1">
+                    /nova-components/{{ class }}/resources/js/components/Tool.vue
+                </code>
             </p>
         </card>
     </div>

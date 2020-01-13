@@ -3,8 +3,8 @@
 namespace Laravel\Nova\Tests\Fixtures;
 
 use Laravel\Nova\Actions\Action;
-use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Actions\ActionModelCollection;
+use Laravel\Nova\Fields\ActionFields;
 
 class HandleResultAction extends Action
 {

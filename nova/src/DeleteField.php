@@ -2,6 +2,7 @@
 
 namespace Laravel\Nova;
 
+use Laravel\Nova\Contracts\Storable;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class DeleteField
@@ -16,13 +17,16 @@ class DeleteField
      */
     public static function forRequest(NovaRequest $request, $field, $model)
     {
-        $result = call_user_func(
-            $field->deleteCallback,
+        $arguments = [
             $request,
             $model,
-            $field->getStorageDisk(),
-            $field->getStoragePath()
-        );
+        ];
+
+        if ($field instanceof Storable) {
+            array_push($arguments, $field->getStorageDisk(), $field->getStoragePath());
+        }
+
+        $result = call_user_func_array($field->deleteCallback, $arguments);
 
         if ($result === true) {
             return $model;
