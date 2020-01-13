@@ -4,8 +4,9 @@ namespace App\Http\Requests;
 
 use App\Rules\ValidateThreadContent;
 use App\Rules\ValidateThreadTitle;
+use Illuminate\Foundation\Http\FormRequest;
 
-class PostThread extends KuroFormRequest
+class PostThread extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

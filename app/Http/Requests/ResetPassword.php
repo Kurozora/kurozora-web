@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Rules\ValidateEmail;
+use Illuminate\Foundation\Http\FormRequest;
 
-class ResetPassword extends KuroFormRequest
+class ResetPassword extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

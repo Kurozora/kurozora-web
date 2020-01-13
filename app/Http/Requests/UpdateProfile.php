@@ -5,8 +5,9 @@ namespace App\Http\Requests;
 use App\Rules\ValidateAvatarImage;
 use App\Rules\ValidateBannerImage;
 use App\Rules\ValidateUserBiography;
+use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateProfile extends KuroFormRequest
+class UpdateProfile extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
