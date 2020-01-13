@@ -3,6 +3,7 @@
 use App\Anime;
 use App\Enums\AnimeType;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 
 class AnimesTableDummySeeder extends Seeder
@@ -20,28 +21,41 @@ class AnimesTableDummySeeder extends Seeder
      */
     public function run()
     {
+        // Get the anime JSON
         $animeJSON = null;
+
         if(!Storage::exists(self::ANIME_JSON_PATH)) {
             $animeJSON = self::storeJSON();
         } else {
             $animeJSON = Storage::get(self::ANIME_JSON_PATH);
         }
 
+        // Parse the JSON
         $parsedAnime = json_decode($animeJSON);
 
         if($parsedAnime != null) {
-            // Create the Anime
-            foreach ($parsedAnime->anime as $animeData) {
+            // Loop through all anime
+            foreach ($parsedAnime->anime as $index => $animeData) {
+                // Respect the maximum if the app is being test
+                if (App::environment('testing')) {
+                    $count = $index + 1;
+
+                    // Break out of the loop if the max has been reached
+                    if($count >= env('MAX_ANIME_TO_SEED', 10))
+                        break;
+                }
+
+                // Create the anime
                 Anime::create([
-                    'title'     => $animeData->title,
-                    'type'      => AnimeType::TV,
-                    'nsfw'      => $animeData->nsfw,
-                    'anidb_id'   => $animeData->anidb_id,
-                    'anilist_id'   => $animeData->anilist_id,
-                    'kitsu_id'   => $animeData->kitsu_id,
-                    'mal_id'    => $animeData->mal_id,
-                    'tvdb_id'   => $animeData->tvdb_id,
-                    'slug'   => $animeData->slug
+                    'title'         => $animeData->title,
+                    'type'          => AnimeType::TV,
+                    'nsfw'          => $animeData->nsfw,
+                    'anidb_id'      => $animeData->anidb_id,
+                    'anilist_id'    => $animeData->anilist_id,
+                    'kitsu_id'      => $animeData->kitsu_id,
+                    'mal_id'        => $animeData->mal_id,
+                    'tvdb_id'       => $animeData->tvdb_id,
+                    'slug'          => $animeData->slug
                 ]);
             }
         }
