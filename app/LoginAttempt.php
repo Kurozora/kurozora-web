@@ -21,11 +21,9 @@ class LoginAttempt extends KModel
      * @return bool
      */
     public static function isIPAllowedToLogin($ip) {
-    	$minimumUnixTime = time() - (self::CHECK_TIMESPAN * 60);
-
     	$attemptCount = LoginAttempt::where([
     		['ip', '=', $ip],
-    		['created_at', '>=', date('Y-m-d H:i:s', $minimumUnixTime)]
+    		['created_at', '>=', now()->subMinutes(self::CHECK_TIMESPAN)]
     	])->count();
 
     	return ($attemptCount < self::MAX_FAILED_ATTEMPTS);
