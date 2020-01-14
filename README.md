@@ -6,7 +6,7 @@
 
 ## About Kurozora
 
-**[Kurozora](https://kurozora.app/) is your go-to platform for tracking, sharing and discovering Anime and much more!.** `kurozora-web` is the server side behind Kurozora. It is designed to be:
+**[Kurozora](https://kurozora.app/) is your go-to platform for tracking, sharing and discovering Anime and much more!** `kurozora-web` is the server side behind Kurozora. It is designed to be:
 
 * **💨 Fast.** No clutter, no bloat, no complex dependencies. The Kurozora API is built with Laravel, one of the [fastest](http://www.phpbenchmarks.com/en/benchmark/laravel/5.8) PHP frameworks.
 
