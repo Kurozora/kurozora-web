@@ -4,6 +4,7 @@ namespace Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Foundation\Testing\TestResponse;
+use Tests\API\Traits\ProvidesTestUser;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -32,5 +33,21 @@ abstract class TestCase extends BaseTestCase
                     'success' => false
                 ]);
         });
+    }
+
+    /**
+     * Boot the testing helper traits.
+     *
+     * @return array
+     */
+    protected function setUpTraits()
+    {
+        $uses = parent::setUpTraits();
+
+        if (isset($uses[ProvidesTestUser::class])) {
+            $this->initializeTestUser();
+        }
+
+        return $uses;
     }
 }

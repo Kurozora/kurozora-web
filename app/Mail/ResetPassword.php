@@ -41,7 +41,7 @@ class ResetPassword extends Mailable
                 'title'     => 'Password reset',
                 'username'  => $this->user->username,
                 'ip'        => $this->passwordReset->ip,
-                'reset_url' => url('/reset/' . $this->passwordReset->token)
+                'reset_url' => route('reset-password', ['token' => $this->passwordReset->token])
             ]);
     }
 }
