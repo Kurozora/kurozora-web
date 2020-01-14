@@ -21,6 +21,7 @@ use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
  * @property string avatar
  * @property mixed last_mal_import_at
  * @property string username
+ * @property string email
  */
 class User extends Authenticatable implements LikerContract, HasMedia
 {

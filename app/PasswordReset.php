@@ -2,8 +2,12 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 
+/**
+ * @property Carbon created_at
+ */
 class PasswordReset extends KModel
 {
     // The length of a reset token
