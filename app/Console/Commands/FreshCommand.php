@@ -41,14 +41,9 @@ class FreshCommand extends BaseFreshCommand
      * @return void
      */
     protected function runRedownload() {
-        $pathToAnimeJSON = AnimesTableDummySeeder::ANIME_JSON_PATH;
-
-        // Delete file if it exists.
-        if (Storage::exists($pathToAnimeJSON))
-            Storage::delete($pathToAnimeJSON);
-
-        // Re-download the file.
-        AnimesTableDummySeeder::storeJSON();
+        $this->info('Downloading anime JSON...');
+        AnimesTableDummySeeder::downloadJSON();
+        $this->info('Anime JSON downloaded.');
     }
 
     protected function getOptions()
