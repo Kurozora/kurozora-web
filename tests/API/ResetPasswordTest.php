@@ -6,6 +6,7 @@ use App\Mail\ResetPassword;
 use App\PasswordReset;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Tests\API\Traits\ProvidesTestUser;
 use Tests\TestCase;
 
@@ -100,10 +101,8 @@ class ResetPasswordTest extends TestCase
     function password_reset_can_only_be_requested_once_per_24_hours() {
         // Create a password reset from 23 hours ago
         /** @var PasswordReset $oldPasswordReset */
-        $oldPasswordReset = PasswordReset::create([
+        $oldPasswordReset = factory(PasswordReset::class)->create([
             'user_id'       => $this->user->id,
-            'ip'            => 'FACTORY IS NEEDED HERE',
-            'token'         => PasswordReset::genToken(),
             'created_at'    => now()->subHours(23)
         ]);
 
@@ -119,11 +118,8 @@ class ResetPasswordTest extends TestCase
         $oldPasswordReset->delete();
 
         // Create a password reset from 25 hours ago
-        /** @var PasswordReset $oldPasswordReset */
-        PasswordReset::create([
+        factory(PasswordReset::class)->create([
             'user_id'       => $this->user->id,
-            'ip'            => 'FACTORY IS NEEDED HERE',
-            'token'         => PasswordReset::genToken(),
             'created_at'    => now()->subHours(25)
         ]);
 
@@ -134,5 +130,28 @@ class ResetPasswordTest extends TestCase
 
         // Check that there are now two password resets
         $this->assertEquals(PasswordReset::where('user_id', $this->user->id)->count(), 2);
+    }
+
+    /**
+     * Test if the password reset email contains a link to reset.
+     *
+     * @return void
+     * @test
+     * @throws \ReflectionException
+     */
+    function password_reset_email_contains_link() {
+        $passwordReset = factory(PasswordReset::class)->create([
+            'user_id'       => $this->user->id,
+            'created_at'    => now()->subHours(25)
+        ]);
+
+        // Create the email
+        $email = new ResetPassword($this->user, $passwordReset);
+
+        // Check that the link is in the email
+        $this->assertStringContainsString(
+            route('reset-password', ['token' => $passwordReset->token]),
+            $email->render()
+        );
     }
 }

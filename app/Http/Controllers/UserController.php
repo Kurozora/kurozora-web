@@ -85,10 +85,9 @@ class UserController extends Controller
             // No password reset has been requested recently
             if(!$pReset) {
                 // Create password reset
-                $createdReset = PasswordReset::create([
+                $createdReset = factory(PasswordReset::class)->create([
                     'user_id'   => $user->id,
-                    'ip'        => $request->ip(),
-                    'token'     => PasswordReset::genToken()
+                    'ip'        => $request->ip()
                 ]);
 
                 // Dispatch job to send reset mail
@@ -160,13 +159,13 @@ class UserController extends Controller
     /**
      * Password reset page
      *
-     * @param $resetToken
+     * @param string $token
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \Throwable
      */
-    public function resetPasswordPage($resetToken) {
+    public function resetPasswordPage($token) {
         // Try to find a reset with this reset token
-        $foundReset = PasswordReset::where('token', $resetToken)->first();
+        $foundReset = PasswordReset::where('token', $token)->first();
 
         // No reset found
         if(!$foundReset)

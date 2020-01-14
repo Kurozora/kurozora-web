@@ -21,4 +21,5 @@ Route::get('/thread/{threadID}', [PageController::class, 'thread']);
 Route::get('/confirmation/{confirmation_id}', [UserController::class, 'confirmEmail']);
 
 // Reset password
-Route::get('/reset/{reset_token}', [UserController::class, 'resetPasswordPage']);
+Route::get('/reset/{token}', [UserController::class, 'resetPasswordPage'])
+    ->name('reset-password');
