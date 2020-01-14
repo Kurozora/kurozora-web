@@ -6,7 +6,6 @@ use App\Mail\ResetPassword;
 use App\PasswordReset;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
 use Tests\API\Traits\ProvidesTestUser;
 use Tests\TestCase;
 
@@ -20,7 +19,8 @@ class ResetPasswordTest extends TestCase
      * @return void
      * @test
      */
-    function password_reset_cannot_be_requested_with_an_invalid_email_address_format() {
+    function password_reset_cannot_be_requested_with_an_invalid_email_address_format()
+    {
         $this->json('POST', '/api/v1/users/reset-password', [
             'email' => 'not_an_email'
         ])->assertUnsuccessfulAPIResponse();
@@ -32,7 +32,8 @@ class ResetPasswordTest extends TestCase
      * @return void
      * @test
      */
-    function password_request_can_be_requested_with_known_email_address() {
+    function password_request_can_be_requested_with_known_email_address()
+    {
         $this->json('POST', '/api/v1/users/reset-password', [
             'email' => $this->user->email
         ])->assertSuccessfulAPIResponse();
@@ -44,7 +45,8 @@ class ResetPasswordTest extends TestCase
      * @return void
      * @test
      */
-    function password_reset_email_is_sent_to_known_email_address() {
+    function password_reset_email_is_sent_to_known_email_address()
+    {
         Mail::fake();
 
         // Attempt to request password reset
@@ -66,7 +68,8 @@ class ResetPasswordTest extends TestCase
      * @return void
      * @test
      */
-    function password_request_can_be_requested_with_unknown_email_address() {
+    function password_request_can_be_requested_with_unknown_email_address()
+    {
         $this->json('POST', '/api/v1/users/reset-password', [
             'email' => 'unknown@example.com'
         ])->assertSuccessfulAPIResponse();
@@ -78,7 +81,8 @@ class ResetPasswordTest extends TestCase
      * @return void
      * @test
      */
-    function password_reset_email_is_not_sent_to_unknown_email_address() {
+    function password_reset_email_is_not_sent_to_unknown_email_address()
+    {
         Mail::fake();
 
         // Attempt to request password reset
@@ -98,7 +102,8 @@ class ResetPasswordTest extends TestCase
      * @throws \Exception
      * @test
      */
-    function password_reset_can_only_be_requested_once_per_24_hours() {
+    function password_reset_can_only_be_requested_once_per_24_hours()
+    {
         // Create a password reset from 23 hours ago
         /** @var PasswordReset $oldPasswordReset */
         $oldPasswordReset = factory(PasswordReset::class)->create([
@@ -139,7 +144,8 @@ class ResetPasswordTest extends TestCase
      * @test
      * @throws \ReflectionException
      */
-    function password_reset_email_contains_link() {
+    function password_reset_email_contains_link()
+    {
         $passwordReset = factory(PasswordReset::class)->create([
             'user_id'       => $this->user->id,
             'created_at'    => now()->subHours(25)
