@@ -2,246 +2,137 @@
 
 namespace Tests\API;
 
-use App\User;
+use App\Mail\ResetPassword;
+use App\PasswordReset;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use Tests\API\Traits\ProvidesTestUser;
 use Tests\TestCase;
 
-class AccountRegistrationTest extends TestCase
+class ResetPasswordTest extends TestCase
 {
-    use DatabaseMigrations;
+    use DatabaseMigrations, ProvidesTestUser;
 
     /**
-     * Test if an account can be registered.
+     * Test if a password reset cannot be requested with an invalid email format.
      *
      * @return void
      * @test
      */
-    function an_account_can_be_registered()
-    {
-        $this->json('POST', '/api/v1/users', [
-            'username'  => 'KurozoraTester',
-            'password'  => 'StrongPassword909@!',
-            'email'     => 'tester@kurozora.app'
+    function password_reset_cannot_be_requested_with_an_invalid_email_address_format() {
+        $this->json('POST', '/api/v1/users/reset-password', [
+            'email' => 'not_an_email'
+        ])->assertUnsuccessfulAPIResponse();
+    }
+
+    /**
+     * Test if a password reset can be requested with a known (registered) email address.
+     *
+     * @return void
+     * @test
+     */
+    function password_request_can_be_requested_with_known_email_address() {
+        $this->json('POST', '/api/v1/users/reset-password', [
+            'email' => $this->user->email
+        ])->assertSuccessfulAPIResponse();
+    }
+
+    /**
+     * Test if the password reset email is sent to a known email address.
+     *
+     * @return void
+     * @test
+     */
+    function password_reset_email_is_sent_to_known_email_address() {
+        Mail::fake();
+
+        // Attempt to request password reset
+        $this->json('POST', '/api/v1/users/reset-password', [
+            'email' => $this->user->email
         ])->assertSuccessfulAPIResponse();
 
-        // Double check that the account was created
-        $this->assertEquals(User::count(), 1);
+        Mail::assertSent(ResetPassword::class, function ($mail) {
+            return $mail->hasTo($this->user->email);
+        });
     }
 
     /**
-     * Test if an account can be registered with an avatar.
+     * Test if a password reset can be requested with an unknown email.
+     *
+     * This needs to work like this, because otherwise we would give away ..
+     * .. which emails are registered and which are not.
      *
      * @return void
      * @test
      */
-    function an_account_can_be_registered_with_an_avatar()
-    {
-        // Create fake storage
-        Storage::fake('avatars');
+    function password_request_can_be_requested_with_unknown_email_address() {
+        $this->json('POST', '/api/v1/users/reset-password', [
+            'email' => 'unknown@example.com'
+        ])->assertSuccessfulAPIResponse();
+    }
 
-        // Create fake 100kb image
-        $image = UploadedFile::fake()->image('avatar.jpg', 250, 250)->size(100);
+    /**
+     * Test if the password reset email is not sent to an unknown email address.
+     *
+     * @return void
+     * @test
+     */
+    function password_reset_email_is_not_sent_to_unknown_email_address() {
+        Mail::fake();
 
-        // Attempt to register the user
-        $this->json('POST', '/api/v1/users', [
-            'username'      => 'KurozoraTester',
-            'password'      => 'StrongPassword909@!',
-            'email'         => 'tester@kurozora.app',
-            'profileImage'  => $image
+        // Attempt to request password reset
+        $this->json('POST', '/api/v1/users/reset-password', [
+            'email' => 'unknown@example.com'
         ])->assertSuccessfulAPIResponse();
 
-        $user = User::first();
-
-        // Double check that the account was created
-        $this->assertEquals(User::count(), 1);
-
-        // Assert that the avatar was uploaded properly
-        $avatar = $user->getMedia('avatar');
-
-        $this->assertCount(1, $avatar);
-        $this->assertFileExists($avatar->first()->getPath());
-
-        // Delete the media
-        $user->clearMediaCollection('avatar');
+        Mail::assertNotSent(ResetPassword::class, function ($mail) {
+            return $mail->hasTo($this->user->email);
+        });
     }
 
     /**
-     * Test if an account cannot be registered with a large avatar.
+     * Test if the password reset can only be requested once per 24 hours.
      *
      * @return void
+     * @throws \Exception
      * @test
      */
-    function an_account_cannot_be_registered_with_a_large_avatar()
-    {
-        // Create fake storage
-        Storage::fake('avatars');
+    function password_reset_can_only_be_requested_once_per_24_hours() {
+        // Create a password reset from 23 hours ago
+        /** @var PasswordReset $oldPasswordReset */
+        $oldPasswordReset = PasswordReset::create([
+            'user_id'       => $this->user->id,
+            'ip'            => 'FACTORY IS NEEDED HERE',
+            'token'         => PasswordReset::genToken(),
+            'created_at'    => now()->subHours(23)
+        ]);
 
-        // Create fake 1.2mb image
-        $image = UploadedFile::fake()->image('avatar.jpg', 250, 250)->size(1200);
-
-        // Attempt to register the user
-        $this->json('POST', '/api/v1/users', [
-            'username'      => 'KurozoraTester',
-            'password'      => 'StrongPassword909@!',
-            'email'         => 'tester@kurozora.app',
-            'profileImage'  => $image
-        ])->assertUnsuccessfulAPIResponse();
-
-        // Double check that the account was not created
-        $this->assertEquals(User::count(), 0);
-    }
-
-    /**
-     * Test if an account cannot be registered with a PDF as avatar.
-     *
-     * @return void
-     * @test
-     */
-    function an_account_cannot_be_registered_with_a_pdf_as_avatar()
-    {
-        // Create fake storage
-        Storage::fake('avatars');
-
-        // Create fake 100kb pdf
-        $pdfFile = UploadedFile::fake()->create('document.pdf', 100);
-
-        // Attempt to register the user
-        $this->json('POST', '/api/v1/users', [
-            'username'      => 'KurozoraTester',
-            'password'      => 'StrongPassword909@!',
-            'email'         => 'tester@kurozora.app',
-            'profileImage'  => $pdfFile
-        ])->assertUnsuccessfulAPIResponse();
-
-        // Double check that the account was not created
-        $this->assertEquals(User::count(), 0);
-    }
-
-    /**
-     * Test if an account cannot be registered with a gif as avatar.
-     *
-     * @return void
-     * @test
-     */
-    function an_account_cannot_be_registered_with_a_gif_as_avatar()
-    {
-        // Create fake storage
-        Storage::fake('avatars');
-
-        // Create fake 100kb gif
-        $image = UploadedFile::fake()->image('avatar.gif', 250, 250)->size(100);
-
-        // Attempt to register the user
-        $this->json('POST', '/api/v1/users', [
-            'username'      => 'KurozoraTester',
-            'password'      => 'StrongPassword909@!',
-            'email'         => 'tester@kurozora.app',
-            'profileImage'  => $image
-        ])->assertUnsuccessfulAPIResponse();
-
-        // Double check that the account was not created
-        $this->assertEquals(User::count(), 0);
-    }
-
-    /**
-     * Test if an account cannot be registered when the username is already in use.
-     *
-     * @return void
-     * @test
-     */
-    function an_account_cannot_be_registered_with_a_username_that_is_already_in_use()
-    {
-        // Create the first account
-        $this->json('POST', '/api/v1/users', [
-            'username'  => 'KurozoraTester',
-            'password'  => 'StrongPassword909@!',
-            'email'     => 'tester@kurozora.app'
+        // Attempt to request a new password reset
+        $this->json('POST', '/api/v1/users/reset-password', [
+            'email' => $this->user->email
         ])->assertSuccessfulAPIResponse();
 
-        // Double check that the account was created
-        $this->assertEquals(User::count(), 1);
+        // Check that there is still just one password reset
+        $this->assertEquals(PasswordReset::where('user_id', $this->user->id)->count(), 1);
 
-        // Attempt to create the second account
-        $this->json('POST', '/api/v1/users', [
-            'username'  => 'KurozoraTester',
-            'password'  => 'StrongPassword909@!',
-            'email'     => 'unique@kurozora.app'
-        ])->assertUnsuccessfulAPIResponse();
+        // Delete the previous password reset
+        $oldPasswordReset->delete();
 
-        // Double check that there is just 1 account
-        $this->assertEquals(User::count(), 1);
-    }
+        // Create a password reset from 25 hours ago
+        /** @var PasswordReset $oldPasswordReset */
+        PasswordReset::create([
+            'user_id'       => $this->user->id,
+            'ip'            => 'FACTORY IS NEEDED HERE',
+            'token'         => PasswordReset::genToken(),
+            'created_at'    => now()->subHours(25)
+        ]);
 
-    /**
-     * Test if an account cannot be registered when the email is already in use.
-     *
-     * @return void
-     * @test
-     */
-    function an_account_cannot_be_registered_with_an_email_that_is_already_in_use()
-    {
-        // Create the first account
-        $this->json('POST', '/api/v1/users', [
-            'username'  => 'KurozoraTester',
-            'password'  => 'StrongPassword909@!',
-            'email'     => 'tester@kurozora.app'
+        // Attempt to request a new password reset
+        $this->json('POST', '/api/v1/users/reset-password', [
+            'email' => $this->user->email
         ])->assertSuccessfulAPIResponse();
 
-        // Double check that the account was created
-        $this->assertEquals(User::count(), 1);
-
-        // Attempt to create the second account
-        $this->json('POST', '/api/v1/users', [
-            'username'  => 'UniqueUsername',
-            'password'  => 'StrongPassword909@!',
-            'email'     => 'tester@kurozora.app'
-        ])->assertUnsuccessfulAPIResponse();
-
-        // Double check that there is just 1 account
-        $this->assertEquals(User::count(), 1);
-    }
-
-    /**
-     * Test if an account cannot be registered with a long password.
-     *
-     * @return void
-     * @test
-     */
-    function an_account_cannot_be_registered_with_a_long_password()
-    {
-        // Generate a password with size of 256
-        $longPassword = Str::random(256);
-
-        // Attempt to register the account
-        $this->json('POST', '/api/v1/users', [
-            'username'  => 'UniqueUsername',
-            'password'  => $longPassword,
-            'email'     => 'tester@kurozora.app'
-        ])->assertUnsuccessfulAPIResponse();
-
-        // Double check that the account was not created
-        $this->assertEquals(User::count(), 0);
-    }
-
-    /**
-     * Test if an account cannot be registered with a short password.
-     *
-     * @return void
-     * @test
-     */
-    function an_account_cannot_be_registered_with_a_short_password()
-    {
-        // Attempt to register the account
-        $this->json('POST', '/api/v1/users', [
-            'username'  => 'UniqueUsername',
-            'password'  => 'hi',
-            'email'     => 'tester@kurozora.app'
-        ])->assertUnsuccessfulAPIResponse();
-
-        // Double check that the account was not created
-        $this->assertEquals(User::count(), 0);
+        // Check that there are now two password resets
+        $this->assertEquals(PasswordReset::where('user_id', $this->user->id)->count(), 2);
     }
 }
