@@ -25,8 +25,11 @@ class AnimesTableDummySeeder extends Seeder
         $animeJSON = null;
 
         if(!Storage::exists(self::ANIME_JSON_PATH)) {
-            $animeJSON = self::storeJSON();
+            $this->command->info('Downloading anime JSON...');
+            $animeJSON = self::downloadJSON();
+            $this->command->info('Anime JSON downloaded.');
         } else {
+            $this->command->info('Using downloaded anime JSON.');
             $animeJSON = Storage::get(self::ANIME_JSON_PATH);
         }
 
@@ -34,12 +37,14 @@ class AnimesTableDummySeeder extends Seeder
         $parsedAnime = json_decode($animeJSON);
 
         if($parsedAnime != null) {
+            $total = count($parsedAnime->anime);
+            $this->command->info('Start importing ' . $total . ' anime...');
+
             // Loop through all anime
             foreach ($parsedAnime->anime as $index => $animeData) {
+                $count = $index + 1;
                 // Respect the maximum if the app is being test
                 if (App::environment('testing')) {
-                    $count = $index + 1;
-
                     // Break out of the loop if the max has been reached
                     if($count >= env('MAX_ANIME_TO_SEED', 10))
                         break;
@@ -57,8 +62,17 @@ class AnimesTableDummySeeder extends Seeder
                     'tvdb_id'       => $animeData->tvdb_id,
                     'slug'          => $animeData->slug
                 ]);
+
+                // Print progress every 100 anime and at the last anime
+                if($count % 100 == 0 || $count == $total)
+                    $this->command->info($count . '/' . $total . ' anime imported.');
             }
         }
+        else {
+            $this->command->info('No anime parsed.');
+        }
+
+        $this->command->info('Finished importing anime.');
     }
 
     /**
@@ -66,8 +80,14 @@ class AnimesTableDummySeeder extends Seeder
      *
      * @return false|string
      */
-    static function storeJSON() {
-        // Retrieve data from URL
+    static function downloadJSON() {
+        $pathToAnimeJSON = AnimesTableDummySeeder::ANIME_JSON_PATH;
+
+        // Delete file if it exists
+        if (Storage::exists($pathToAnimeJSON))
+            Storage::delete($pathToAnimeJSON);
+
+        // Download the file
         $animeJSON = file_get_contents(self::ANIME_JSON_FILE);
 
         // Store data locally
