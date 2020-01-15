@@ -2,8 +2,11 @@
 
 namespace Tests;
 
+use App\Session;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Foundation\Testing\TestResponse;
+use Illuminate\Support\Str;
+use KuroAuthToken;
 use Tests\API\Traits\ProvidesTestUser;
 
 abstract class TestCase extends BaseTestCase
@@ -18,6 +21,8 @@ abstract class TestCase extends BaseTestCase
     function setUp(): void
     {
         parent::setUp();
+
+        $testCase = $this;
 
         // API response macro's
         TestResponse::macro('assertSuccessfulAPIResponse', function() {
@@ -49,5 +54,32 @@ abstract class TestCase extends BaseTestCase
         }
 
         return $uses;
+    }
+
+    /**
+     * API auth header
+     *
+     * This function will create a session for the user, and attach
+     * .. the auth token to the request.
+     *
+     * @return $this
+     */
+    protected function auth() {
+        if(!isset($this->user))
+            $this->fail('Used "authHeader", but no user present.');
+
+        // Create a session
+        $session = Session::create([
+            'user_id'           => $this->user->id,
+            'device'            => 'PHPUnit Test Suite',
+            'secret'            => Str::random(128),
+            'expiration_date'   => date('Y-m-d H:i:s', strtotime('90 days')),
+            'ip'                => 'FACTORY NEEDED HERE'
+        ]);
+
+        // Attach the auth header
+        $this->withHeader('kuro-auth', KuroAuthToken::generate($this->user->id, $session->secret));
+
+        return $this;
     }
 }
