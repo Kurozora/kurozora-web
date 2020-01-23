@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 
@@ -25,7 +26,13 @@ use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
  */
 class User extends Authenticatable implements LikerContract, HasMedia
 {
-    use Authorizable, KuroSearchTrait, Liker, LikeActionTrait, HasMediaTrait, MediaLibraryExtensionTrait;
+    use Authorizable,
+        KuroSearchTrait,
+        Liker,
+        LikeActionTrait,
+        HasMediaTrait,
+        MediaLibraryExtensionTrait,
+        LogsActivity;
 
     /**
      * Searchable rules.
