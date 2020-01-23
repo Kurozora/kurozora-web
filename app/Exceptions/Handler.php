@@ -3,7 +3,6 @@
 namespace App\Exceptions;
 
 use App\Helpers\JSONResult;
-use App\Jobs\SendAdminExceptionMail;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
@@ -48,20 +47,16 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
-        if($this->shouldReport($exception)) {
-            // Dispatch job to send admin email
-            SendAdminExceptionMail::dispatch($exception);
-        }
-
         parent::report($exception);
     }
 
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param \Exception $exception
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws Exception
      */
     public function render($request, Exception $exception)
     {

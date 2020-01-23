@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Enums\UserRole;
 use App\ForumThread;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -21,6 +20,6 @@ class ForumThreadPolicy
      * @return bool
      */
     function lock_thread(User $user, ForumThread $thread) {
-        return $user->role >= UserRole::Moderator;
+        return $user->hasRole('admin');
     }
 }

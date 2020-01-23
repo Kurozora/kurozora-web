@@ -2,7 +2,7 @@
 
 namespace App\Nova;
 
-use App\Enums\UserRole;
+use App\Nova\Filters\UserRole;
 use App\Nova\Lenses\UnconfirmedUsers;
 use App\Rules\ValidateEmail;
 use App\Rules\ValidatePassword;
@@ -12,10 +12,11 @@ use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Textarea;
+use Vyuldashev\NovaPermission\PermissionBooleanGroup;
+use Vyuldashev\NovaPermission\RoleBooleanGroup;
 
 class User extends Resource
 {
@@ -79,20 +80,21 @@ class User extends Resource
                 ->onlyOnForms()
                 ->rules(new ValidatePassword(false)),
 
-            Select::make('Role')->options([
-                UserRole::Normal        => UserRole::getDescription(UserRole::Normal),
-                UserRole::Moderator     => UserRole::getDescription(UserRole::Moderator),
-                UserRole::Administrator => UserRole::getDescription(UserRole::Administrator),
-            ])
-                ->rules('required')
-                ->sortable()
-                ->displayUsingLabels(),
-
             Textarea::make('Biography'),
 
             Date::make('Last MAL Import date', 'last_mal_import_at')
                 ->help('The date at which the user last imported a MAL export file. The cooldown is <strong>' . config('mal-import.cooldown_in_days') . '</strong> day(s).')
                 ->hideFromIndex(),
+
+            // Roles and permissions
+            RoleBooleanGroup::make('Roles')->hideFromIndex(),
+            PermissionBooleanGroup::make('Permissions')->hideFromIndex(),
+
+            // Display roles on index
+            Text::make('Roles', function() { return $this->displayRolesForIndex(); })
+                ->asHtml()
+                ->readonly()
+                ->onlyOnIndex(),
 
             HasMany::make('Forum Threads', 'threads'),
 
@@ -134,7 +136,9 @@ class User extends Resource
      */
     public function filters(Request $request)
     {
-        return [];
+        return [
+            new UserRole
+        ];
     }
 
     /**
@@ -181,4 +185,28 @@ class User extends Resource
             <path fill="var(--sidebar-icon)" d="M12 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm9 11a1 1 0 0 1-2 0v-2a3 3 0 0 0-3-3H8a3 3 0 0 0-3 3v2a1 1 0 0 1-2 0v-2a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v2z"/>
         </svg>
     ';
+
+    /**
+     * Renders all the user's roles for the index view.
+     *
+     * @return string
+     */
+    private function displayRolesForIndex() {
+        // Get the role names of the user
+        /** @var \App\User $user */
+        $user = $this->resource;
+
+        $roles = $user->getRoleNames();
+
+        // Return null when there are no roles to properly render an "empty" cell
+        if($roles->isEmpty()) return null;
+
+        // Join all roles together and create the string
+        $roleString = '';
+
+        foreach($roles as $role)
+            $roleString .= '<span class="py-1 px-2 mr-1 inline-block rounded align-middle" style="background-color: #465161; color: #fff;">' . $role . '</span>';
+
+        return $roleString;
+    }
 }

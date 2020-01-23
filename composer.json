@@ -22,7 +22,9 @@
         "nicolaslopezj/searchable": "1.*",
         "spatie/laravel-activitylog": "^3.9",
         "spatie/laravel-medialibrary": "^7.0.0",
-        "timothyasp/nova-color-field": "^1.0"
+        "spatie/laravel-permission": "^3.6",
+        "timothyasp/nova-color-field": "^1.0",
+        "vyuldashev/nova-permission": "^2.5"
     },
     "repositories": [
         {

@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\UserRole;
 use App\User;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -23,7 +22,6 @@ class CreateUsersTable extends Migration
             $table->string('username', 50);
             $table->string('email');
             $table->string('password')->nullable();
-            $table->tinyInteger('role')->default(UserRole::Normal);
             $table->text('biography')->nullable();
             $table->rememberToken();
             $table->string('email_confirmation_id')->nullable();
