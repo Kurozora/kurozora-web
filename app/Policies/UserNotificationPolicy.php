@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Enums\UserRole;
 use App\User;
 use App\UserNotification;
 use Illuminate\Auth\Access\HandlesAuthorization;
