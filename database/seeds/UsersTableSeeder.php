@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\UserRole;
 use App\User;
 use Illuminate\Database\Seeder;
 
@@ -13,22 +12,26 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        // Create Kurozora users
-        User::create([
+        // Create Kurozora admins
+        /** @var User[] $admins */
+        $admins = [];
+
+        $admins[] = User::create([
             'username'              => 'Usopp',
             'email'                 => 'mussesemou99@gmail.com',
             'password'              => '$2y$10$LFvuPaQpn6kccakk4sRABef223GV0.NJUJ94Xr.TAvswkCKJBisVK',
-            'email_confirmation_id' => null,
-            'role'                  => UserRole::Administrator
+            'email_confirmation_id' => null
         ]);
 
-        User::create([
+        $admins[] = User::create([
             'username'              => 'Kirito',
             'email'                 => 'casillaskhoren1@gmail.com',
             'password'              => '$2y$10$LFvuPaQpn6kccakk4sRABef223GV0.NJUJ94Xr.TAvswkCKJBisVK',
-            'email_confirmation_id' => null,
-            'role'                  => UserRole::Administrator
+            'email_confirmation_id' => null
         ]);
+
+        foreach($admins as $admin)
+            $admin->assignRole('admin');
 
         /*
          * Apple test account

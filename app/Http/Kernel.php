@@ -56,11 +56,8 @@ class Kernel extends HttpKernel
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'kurozora.useragent' => \App\Http\Middleware\CheckKurozoraUserAgent::class,
-        'kurozora.userauth' => \App\Http\Middleware\CheckKurozoraUserAuthentication::class,
-        'kurozora.role' => \App\Http\Middleware\CheckKurozoraUserRole::class
+        'kurozora.userauth' => \App\Http\Middleware\CheckKurozoraUserAuthentication::class
     ];
 }
