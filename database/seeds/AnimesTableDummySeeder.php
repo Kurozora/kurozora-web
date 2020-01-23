@@ -43,10 +43,10 @@ class AnimesTableDummySeeder extends Seeder
             // Loop through all anime
             foreach ($parsedAnime->anime as $index => $animeData) {
                 $count = $index + 1;
-                // Respect the maximum if the app is being test
-                if (App::environment('testing')) {
+                // Respect the maximum amount
+                if(env('MAX_ANIME_TO_SEED', null) != null) {
                     // Break out of the loop if the max has been reached
-                    if($count >= env('MAX_ANIME_TO_SEED', 10))
+                    if($count >= env('MAX_ANIME_TO_SEED'))
                         break;
                 }
 
