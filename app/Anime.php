@@ -5,6 +5,7 @@ namespace App;
 use App\Traits\KuroSearchTrait;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * Class Anime
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\DB;
  */
 class Anime extends KModel
 {
-    use KuroSearchTrait;
+    use KuroSearchTrait, LogsActivity;
 
     /**
      * Searchable rules.
