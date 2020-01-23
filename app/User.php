@@ -10,11 +10,11 @@ use Cog\Laravel\Love\Liker\Models\Traits\Liker;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
  * @property mixed id
@@ -32,7 +32,8 @@ class User extends Authenticatable implements LikerContract, HasMedia
         LikeActionTrait,
         HasMediaTrait,
         MediaLibraryExtensionTrait,
-        LogsActivity;
+        LogsActivity,
+        HasRoles;
 
     /**
      * Searchable rules.
