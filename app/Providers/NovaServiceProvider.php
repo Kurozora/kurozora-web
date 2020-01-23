@@ -4,9 +4,9 @@ namespace App\Providers;
 
 use Anaseqal\NovaSidebarIcons\NovaSidebarIcons;
 use App\Enums\UserRole;
+use App\Nova\Metrics\ActivityLogCount;
 use App\Nova\Metrics\NewUsers;
 use Laravel\Nova\Nova;
-use Laravel\Nova\Cards\Help;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\NovaApplicationServiceProvider;
 
@@ -58,6 +58,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         return [
             new NewUsers,
+            new ActivityLogCount
         ];
     }
 
