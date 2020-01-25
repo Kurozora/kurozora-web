@@ -5,6 +5,7 @@ namespace App\Nova;
 use App\Nova\Actions\FetchAnimeActors;
 use App\Nova\Actions\FetchAnimeDetails;
 use App\Nova\Actions\FetchAnimeImages;
+use App\Nova\Lenses\UnmoderatedAnime;
 use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Support\Str;
 use Laraning\NovaTimeField\TimeField as Time;
@@ -286,7 +287,9 @@ class Anime extends Resource
      */
     public function lenses(Request $request)
     {
-        return [];
+        return [
+            new UnmoderatedAnime
+        ];
     }
 
     /**
