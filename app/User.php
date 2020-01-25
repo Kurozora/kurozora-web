@@ -93,6 +93,16 @@ class User extends Authenticatable implements LikerContract, HasMedia
     }
 
     /**
+     * Returns the Anime that the user is moderating.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    function moderatingAnime() {
+        return $this->belongsToMany(Anime::class, AnimeModerator::class, 'user_id', 'anime_id')
+            ->withPivot('created_at');
+    }
+
+    /**
      * Returns the Anime items in the user's library.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

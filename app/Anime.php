@@ -60,6 +60,16 @@ class Anime extends KModel
     protected $table = self::TABLE_NAME;
 
     /**
+     * Returns the moderators of this Anime.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function moderators() {
+        return $this->belongsToMany(User::class, AnimeModerator::TABLE_NAME, 'anime_id', 'user_id')
+            ->withPivot('created_at');
+    }
+
+    /**
      * Get the Anime's ratings
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

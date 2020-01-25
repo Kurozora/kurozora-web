@@ -9,6 +9,7 @@ use App\Rules\ValidatePassword;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
@@ -99,6 +100,15 @@ class User extends Resource
             HasMany::make('Forum Threads', 'threads'),
 
             HasMany::make('User Notifications', 'notifications'),
+
+            BelongsToMany::make('Moderating Anime', 'moderatingAnime', Anime::class)
+                ->fields(function() {
+                    return [
+                        DateTime::make('Moderating since', 'created_at')
+                            ->rules('required')
+                    ];
+                })
+                ->searchable(),
 
             BelongsToMany::make('Badges')
                 ->searchable(),
