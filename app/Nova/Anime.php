@@ -6,10 +6,12 @@ use App\Nova\Actions\FetchAnimeActors;
 use App\Nova\Actions\FetchAnimeDetails;
 use App\Nova\Actions\FetchAnimeImages;
 use Chaseconey\ExternalImage\ExternalImage;
+use Illuminate\Support\Str;
 use Laraning\NovaTimeField\TimeField as Time;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
@@ -131,6 +133,12 @@ class Anime extends Resource
                 ->sortable()
                 ->help('NSFW: Not Safe For Work (not suitable for watchers under the age of 18).'),
 
+            // Display moderation indicator on index
+            Text::make('Moderated by', function() { return $this->displayModIndicatorForIndex(); })
+                ->asHtml()
+                ->readonly()
+                ->onlyOnIndex(),
+
             Text::make('Watch rating', 'watch_rating')
                 ->onlyOnForms()
                 ->help('for example: TV-PG.'),
@@ -205,6 +213,15 @@ class Anime extends Resource
             Boolean::make('Details Fetched?', 'fetched_details')
                 ->onlyOnForms()
                 ->help('Whether or not the details (information_ were retrieved from TVDB.<br />Untick and the system will do so once the Anime gets visited the next time.'),
+
+            BelongsToMany::make('Moderators', 'moderators', User::class)
+                ->fields(function() {
+                    return [
+                        DateTime::make('Moderating since', 'created_at')
+                            ->rules('required')
+                    ];
+                })
+                ->searchable(),
 
             BelongsToMany::make('Genres')
                 ->searchable(),
@@ -285,5 +302,23 @@ class Anime extends Resource
             new FetchAnimeDetails,
             new FetchAnimeActors
         ];
+    }
+
+    /**
+     * Returns an indication of whether the Anime is moderated.
+     *
+     * @return string|null
+     */
+    private function displayModIndicatorForIndex()
+    {
+        // Get the anime and moderator count
+        /** @var \App\Anime $anime */
+        $anime = $this->resource;
+        $modCount = $anime->moderators->count();
+
+        // Return null when there are no mods to properly format the empty value
+        if($modCount <= 0) return null;
+
+        return '<span class="py-1 px-2 mr-1 inline-block rounded align-middle" style="background-color: #465161; color: #fff;">' . $modCount . ' ' . Str::plural('mod', $modCount) . '</span>';
     }
 }
