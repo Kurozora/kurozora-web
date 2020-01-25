@@ -65,7 +65,8 @@ class Anime extends KModel
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function moderators() {
-        return $this->belongsToMany(User::class, AnimeModerator::TABLE_NAME, 'anime_id', 'user_id');
+        return $this->belongsToMany(User::class, AnimeModerator::TABLE_NAME, 'anime_id', 'user_id')
+            ->withPivot('created_at');
     }
 
     /**

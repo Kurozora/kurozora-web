@@ -11,6 +11,16 @@ class AnimeModerator extends Pivot
     protected $table = self::TABLE_NAME;
 
     /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = [
+        'created_at',
+        'updated_at'
+    ];
+
+    /**
      * Indicates if the IDs are auto-incrementing.
      *
      * @var bool
