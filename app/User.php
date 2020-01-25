@@ -107,7 +107,7 @@ class User extends Authenticatable implements LikerContract, HasMedia
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    function libraryAnime() {
+    function library() {
         return $this->belongsToMany(Anime::class, UserLibrary::class, 'user_id', 'anime_id')
             ->withPivot('status');
     }
