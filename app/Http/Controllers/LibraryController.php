@@ -12,11 +12,7 @@ use App\Http\Requests\MALImport;
 use App\Http\Resources\AnimeResource;
 use App\Jobs\ProcessMALImport;
 use App\User;
-use App\UserLibrary;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
 class LibraryController extends Controller
@@ -35,7 +31,7 @@ class LibraryController extends Controller
         $foundStatus = UserLibraryStatus::getValue($data['status']);
 
         // Retrieve the Anime from the user's library with the correct status
-        $anime = $user->libraryAnime()->wherePivot('status', $foundStatus)->get();
+        $anime = $user->library()->wherePivot('status', $foundStatus)->get();
 
         return JSONResult::success([
             'anime' => AnimeResource::collection($anime)
@@ -52,32 +48,18 @@ class LibraryController extends Controller
     public function addLibrary(AddToLibrary $request, User $user) {
         $data = $request->validated();
 
-        $givenAnimeID = $data['anime_id'];
+        // Get the Anime
+        /** @var Anime $anime */
+        $anime = Anime::find($data['anime_id']);
 
         // Get the status
         $foundStatus = UserLibraryStatus::getValue($data['status']);
 
-        // Check if this user already has the Anime in their library
-        $oldLibraryItem = UserLibrary::where([
-            ['user_id',     '=',    $user->id],
-            ['anime_id',    '=',    $givenAnimeID]
-        ])->first();
+        // Detach the current entry (if there is one)
+        $user->library()->detach($anime);
 
-        // The user already had the anime in their library, update the status
-        if($oldLibraryItem != null) {
-            if($oldLibraryItem->status != $foundStatus) {
-                $oldLibraryItem->status = $foundStatus;
-                $oldLibraryItem->save();
-            }
-        }
-        // Add a new library item
-        else {
-            UserLibrary::create([
-                'user_id'   => $user->id,
-                'anime_id'  => $givenAnimeID,
-                'status'    => $foundStatus
-            ]);
-        }
+        // Add a new library entry
+        $user->library()->attach($anime, ['status' => $foundStatus]);
 
         // Successful response
         return JSONResult::success();
@@ -93,21 +75,14 @@ class LibraryController extends Controller
     public function delLibrary(DeleteFromLibrary $request, User $user) {
         $data = $request->validated();
 
-        // Find the Anime in their library
-        $foundAnime = UserLibrary::where([
-            ['user_id',     '=',    $user->id],
-            ['anime_id',    '=',    $data['anime_id']]
-        ])->first();
+        // Remove this Anime from their library if it can be found
+        if($user->library()->where('anime_id', $data['anime_id'])->count()) {
+            $user->library()->detach($data['anime_id']);
 
-        // Remove this Anime from their library
-        if($foundAnime) {
-            $foundAnime->delete();
-
-            // Successful response
             return JSONResult::success();
         }
 
-        // Unsuccessful response
+        // The item could not be found
         return JSONResult::error('This item is not in your library.');
     }
 

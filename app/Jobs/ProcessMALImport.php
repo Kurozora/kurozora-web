@@ -50,7 +50,7 @@ class ProcessMALImport implements ShouldQueue
     {
         // Wipe current library if behavior is set to overwrite
         if($this->behavior === 'overwrite') {
-            UserLibrary::where('user_id', $this->user->id)->delete();
+            $this->user->library()->detach();
         }
 
         // Create XML object
@@ -91,11 +91,7 @@ class ProcessMALImport implements ShouldQueue
             }
 
             // Add the anime to their library
-            UserLibrary::create([
-                'user_id'   => $this->user->id,
-                'anime_id'  => $animeMatch->id,
-                'status'    => $status
-            ]);
+            $this->user->library()->attach($animeMatch, ['status' => $status]);
 
             $this->registerSuccess($animeMatch->id, $malID, $status);
         }
