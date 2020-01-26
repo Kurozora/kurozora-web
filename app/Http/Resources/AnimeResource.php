@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Enums\AnimeStatus;
 use App\Enums\AnimeType;
 use App\Enums\UserLibraryStatus;
+use App\User;
 use App\UserLibrary;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
@@ -62,26 +63,25 @@ class AnimeResource extends JsonResource
      * @return array
      */
     protected function getUserSpecificDetails() {
+        /** @var User $user */
+        $user = Auth::user();
+
         // Get the user rating for this Anime
         $userRating = null;
 
         $foundRating = $this->ratings()
-            ->where('user_id', Auth::id())
+            ->where('user_id', $user->id)
             ->first();
 
         if($foundRating)
             $userRating = $foundRating->rating;
 
         // Get the current library status
+        $libraryEntry = $user->library()->where('anime_id', $this->id)->first();
         $currentLibraryStatus = null;
 
-        $foundLibraryStatus = UserLibrary::where([
-            ['user_id' ,  '=', Auth::id()],
-            ['anime_id' , '=', $this->id]
-        ])->first();
-
-        if($foundLibraryStatus)
-            $currentLibraryStatus = UserLibraryStatus::getDescription($foundLibraryStatus->status);
+        if($libraryEntry)
+            $currentLibraryStatus = UserLibraryStatus::getDescription($libraryEntry->pivot->status);
 
         // Return the array
         return [
