@@ -2,9 +2,10 @@
 
 namespace Tests\API;
 
+use App\Http\Resources\UserResourceSmall;
 use App\User;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Http\Request;
 use Tests\API\Traits\ProvidesTestUser;
 use Tests\TestCase;
 
@@ -123,5 +124,61 @@ class FollowTest extends TestCase
 
         // Check that the other user is now being followed by one person
         $this->assertEquals($anotherUser->followers()->count(), 0);
+    }
+
+    /**
+     * Test if a user can get their list of followers.
+     *
+     * @return void
+     * @test
+     */
+    function a_user_can_get_their_followers_list()
+    {
+        // Add a follower
+        /** @var User $anotherUser */
+        $anotherUser = factory(User::class)->create();
+
+        $this->user->followers()->attach($anotherUser);
+
+        // Request the list of followers
+        $response = $this->auth()->json('GET', '/api/v1/users/' . $this->user->id . '/followers');
+
+        // Check that the response is successful
+        $response->assertSuccessfulAPIResponse();
+
+        // Check that the response contains the follower
+        $response->assertJson([
+            'followers' => [
+                UserResourceSmall::make($anotherUser)->toArray(),
+            ]
+        ]);
+    }
+
+    /**
+     * Test if a user can get their list of following.
+     *
+     * @return void
+     * @test
+     */
+    function a_user_can_get_their_following_list()
+    {
+        // Add a user to the following list
+        /** @var User $anotherUser */
+        $anotherUser = factory(User::class)->create();
+
+        $this->user->following()->attach($anotherUser);
+
+        // Request the list of following
+        $response = $this->auth()->json('GET', '/api/v1/users/' . $this->user->id . '/following');
+
+        // Check that the response is successful
+        $response->assertSuccessfulAPIResponse();
+
+        // Check that the response contains the user
+        $response->assertJson([
+            'following' => [
+                UserResourceSmall::make($anotherUser)->toArray(),
+            ]
+        ]);
     }
 }
