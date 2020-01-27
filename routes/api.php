@@ -72,16 +72,16 @@ Route::group(['prefix' => 'v1'], function () {
             ->middleware('can:get_notifications,user');
     });
 
-    Route::prefix('/user-notifications')->group(function() {
-        Route::get('/{notification}', [UserNotificationController::class, 'getNotification'])
+    Route::prefix('/notifications')->group(function() {
+        Route::get('/{notification}', [NotificationController::class, 'getNotification'])
             ->middleware('kurozora.userauth')
             ->middleware('can:get_notification,notification');
 
-        Route::post('/{notification}/delete', [UserNotificationController::class, 'delete'])
+        Route::post('/{notification}/delete', [NotificationController::class, 'delete'])
             ->middleware('kurozora.userauth')
             ->middleware('can:del_notification,notification');
 
-        Route::post('/update', [UserNotificationController::class, 'update'])
+        Route::post('/update', [NotificationController::class, 'update'])
             ->middleware('kurozora.userauth');
     });
 

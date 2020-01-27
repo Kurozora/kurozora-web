@@ -4,9 +4,8 @@ namespace App\Jobs;
 
 use App\Anime;
 use App\Enums\UserLibraryStatus;
-use App\Events\MALImportFinished;
+use App\Notifications\MALImportFinished;
 use App\User;
-use App\UserLibrary;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -65,8 +64,8 @@ class ProcessMALImport implements ShouldQueue
             $this->handleXMLFileAnime($anime['series_animedb_id'], $anime['my_status']);
         }
 
-        // Dispatch event
-        event(new MALImportFinished($this->user, $this->results, $this->behavior));
+        // Notify the user that the MAL import was finished
+        $this->user->notify(new MALImportFinished($this->results, $this->behavior));
     }
 
     /**

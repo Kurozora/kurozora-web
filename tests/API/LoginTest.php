@@ -96,4 +96,22 @@ class LoginTest extends TestCase
             'device'    => 'PHPUnit Test Suite'
         ])->assertSuccessfulAPIResponse();
     }
+
+    /**
+     * Test if a user receives a notification when someone logs into their account.
+     *
+     * @return void
+     * @test
+     */
+    function a_user_receives_a_notification_when_someone_logs_into_their_account()
+    {
+        $this->json('POST', '/api/v1/sessions', [
+            'username'  => $this->user->username,
+            'password'  => $this->userPassword,
+            'device'    => 'PHPUnit Test Suite'
+        ])->assertSuccessfulAPIResponse();
+
+        // Check whether the user now has one notification
+        $this->assertEquals(1, $this->user->notifications()->count());
+    }
 }

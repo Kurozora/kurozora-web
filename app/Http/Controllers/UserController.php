@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Helpers\JSONResult;
 use App\Http\Requests\ResetPassword;
 use App\Http\Requests\UpdateProfile;
+use App\Http\Resources\NotificationResource;
 use App\Http\Resources\SessionResource;
-use App\Http\Resources\UserNotificationResource;
 use App\Http\Resources\UserResourceLarge;
 use App\Http\Resources\UserResourceSmall;
 use App\Jobs\SendNewPasswordMail;
@@ -14,7 +14,6 @@ use App\Jobs\SendPasswordResetMail;
 use App\PasswordReset;
 use App\Session;
 use App\User;
-use App\UserNotification;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -211,13 +210,8 @@ class UserController extends Controller
      * @return JsonResponse
      */
     public function getNotifications(User $user) {
-        // Get their notifications
-        $notifications = UserNotification::where('user_id', $user->id)
-            ->orderBy('created_at', 'DESC')
-            ->get();
-
         return JSONResult::success([
-            'notifications' => UserNotificationResource::collection($notifications)
+            'notifications' => NotificationResource::collection($user->notifications)
         ]);
     }
 

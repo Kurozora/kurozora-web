@@ -10,8 +10,6 @@ class SessionPolicy
 {
     use HandlesAuthorization;
 
-    const MODEL = Session::class;
-
     /**
      * Determine whether the user can get the details of a session
      *
