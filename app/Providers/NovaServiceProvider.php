@@ -6,6 +6,7 @@ use Anaseqal\NovaSidebarIcons\NovaSidebarIcons;
 use App\Nova\Metrics\ActivityLogCount;
 use App\Nova\Metrics\AnimeNSFWChart;
 use App\Nova\Metrics\NewUsers;
+use Laravel\Nova\Actions\ActionEvent;
 use Laravel\Nova\Nova;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\NovaApplicationServiceProvider;
@@ -98,6 +99,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     public function register()
     {
-        //
+        // Disable action events
+        ActionEvent::saving(function ($actionEvent) {
+            return false;
+        });
     }
 }

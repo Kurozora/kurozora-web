@@ -13,6 +13,7 @@ use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\MorphMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Textarea;
@@ -99,7 +100,7 @@ class User extends Resource
 
             HasMany::make('Forum Threads', 'threads'),
 
-            HasMany::make('User Notifications', 'notifications'),
+            MorphMany::make('Notifications'),
 
             BelongsToMany::make('Moderating Anime', 'moderatingAnime', Anime::class)
                 ->fields(function() {

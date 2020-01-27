@@ -9,8 +9,6 @@ class UserPolicy
 {
     use HandlesAuthorization;
 
-    const MODEL = User::class;
-
     /**
      * Determine whether the user can update the other user's profile
      *

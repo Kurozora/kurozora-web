@@ -12,6 +12,7 @@
         "chaseconey/nova-external-image": "^0.0.3",
         "cybercog/laravel-love": "^5.2",
         "ebess/advanced-nova-media-library": "^2.9",
+        "facade/ignition": "^1.16",
         "fideloper/proxy": "^4.0",
         "fzaninotto/faker": "^1.8",
         "laraning/nova-time-field": "^0.2.0",
@@ -33,7 +34,6 @@
         }
     ],
     "require-dev": {
-        "filp/whoops": "^2.0",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^2.0",
         "phpunit/phpunit": "^8.0"

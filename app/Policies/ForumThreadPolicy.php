@@ -10,8 +10,6 @@ class ForumThreadPolicy
 {
     use HandlesAuthorization;
 
-    const MODEL = ForumThread::class;
-
     /**
      * Determine whether the user can lock a thread
      *

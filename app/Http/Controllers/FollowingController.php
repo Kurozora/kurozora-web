@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
 use App\Http\Resources\UserResourceSmall;
+use App\Notifications\NewFollower;
 use App\User;
 use App\UserFollow;
 use Illuminate\Http\JsonResponse;
@@ -32,6 +33,7 @@ class FollowingController extends Controller
         if($validator->fails())
             return JSONResult::error($validator->errors()->first());
 
+        /** @var User $authUser */
         $authUser = Auth::user();
 
         $follow = (bool) $request->input('follow');
@@ -46,6 +48,8 @@ class FollowingController extends Controller
 
             // Follow the user
             $user->followers()->attach($authUser);
+
+            $user->notify(new NewFollower($authUser));
         }
         // Unfollow the user
         else {
