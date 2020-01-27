@@ -181,4 +181,23 @@ class FollowTest extends TestCase
             ]
         ]);
     }
+
+    /**
+     * Test if a user receives a notification when someone follows them.
+     *
+     * @return void
+     * @test
+     */
+    function a_user_receives_a_notification_when_someone_follows_them()
+    {
+        /** @var User $anotherUser */
+        $anotherUser = factory(User::class)->create();
+
+        $this->auth()->json('POST', '/api/v1/users/' . $anotherUser->id . '/follow', [
+            'follow' => 1
+        ])->assertSuccessfulAPIResponse();
+
+        // Check that the other user now has a notification
+        $this->assertEquals(1, $anotherUser->notifications()->count());
+    }
 }

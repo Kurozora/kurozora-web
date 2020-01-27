@@ -33,7 +33,7 @@
       "description":"Everything user related"
     },
     {
-      "name":"user-notifications",
+      "name":"notifications",
       "description":"Everything user notification related"
     },
     {
@@ -761,7 +761,7 @@
         }
       }
     },
-    "/user-notifications/{notificationID}": {
+    "/notifications/{notificationUUID}": {
       "get": {
         "security": [
           {
@@ -769,19 +769,19 @@
           }
         ],
         "tags": [
-          "user-notifications"
+          "notifications"
         ],
         "summary": "Gets the details of a notification",
         "description": "This endpoint will retrieve the details of a notification.",
         "parameters": [
           {
             "in": "path",
-            "name": "notificationID",
+            "name": "notificationUUID",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
             "required": true,
-            "description": "ID of the notification to be retrieved."
+            "description": "UUID of the notification to be retrieved."
           }
         ],
         "responses": {
@@ -794,7 +794,7 @@
         }
       }
     },
-    "/user-notifications/{notificationID}/delete": {
+    "/notifications/{notificationUUID}/delete": {
       "post": {
         "security": [
           {
@@ -802,19 +802,19 @@
           }
         ],
         "tags": [
-          "user-notifications"
+          "notifications"
         ],
         "summary": "Deletes a notification from the database",
         "description": "This endpoint will delete a user's notification.",
         "parameters": [
           {
             "in": "path",
-            "name": "notificationID",
+            "name": "notificationUUID",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
             "required": true,
-            "description": "ID of the notification to be deleted."
+            "description": "UUID of the notification to be deleted."
           }
         ],
         "responses": {
@@ -827,7 +827,7 @@
         }
       }
     },
-    "/user-notifications/update": {
+    "/notifications/update": {
       "post": {
         "security": [
           {
@@ -835,7 +835,7 @@
           }
         ],
         "tags": [
-          "user-notifications"
+          "notifications"
         ],
         "summary": "Update a single, multiple or all notifications' status",
         "description": "This endpoint will update the status of a single, multiple or all notifications.",
@@ -847,7 +847,7 @@
                 "properties": {
                   "notification": {
                     "type": "string",
-                    "description": "\"1\" to update notification ID 1, \"1,2,7\" to update notifications with ID 1, 2 and 7. \"all\" to update all of the user's notifications."
+                    "description": "\"[uuid]\" to update a single notification, \"[uuid],[uuid],[uuid]\" to update multiple notifications. \"all\" to update all of the user's notifications."
                   },
                   "read": {
                     "type": "integer",

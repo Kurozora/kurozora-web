@@ -8,6 +8,7 @@ use App\Traits\MediaLibraryExtensionTrait;
 use Cog\Contracts\Love\Liker\Models\Liker as LikerContract;
 use Cog\Laravel\Love\Liker\Models\Traits\Liker;
 use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -26,7 +27,8 @@ use Spatie\Permission\Traits\HasRoles;
  */
 class User extends Authenticatable implements LikerContract, HasMedia
 {
-    use Authorizable,
+    use Notifiable,
+        Authorizable,
         KuroSearchTrait,
         Liker,
         LikeActionTrait,
@@ -146,15 +148,6 @@ class User extends Authenticatable implements LikerContract, HasMedia
      */
     function threads() {
         return $this->hasMany(ForumThread::class);
-    }
-
-    /**
-     * Returns the associated notifications for the user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    function notifications() {
-        return $this->hasMany(UserNotification::class);
     }
 
     /**
