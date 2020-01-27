@@ -16,7 +16,7 @@ class NotificationResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request = null)
     {
         /** @var DatabaseNotification $notification */
         $notification = $this->resource;
