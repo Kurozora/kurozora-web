@@ -219,6 +219,85 @@ class NotificationTest extends TestCase
     }
 
     /**
+     * Test if a user can mark all their notifications as read.
+     *
+     * @return void
+     * @test
+     */
+    function a_user_can_mark_all_their_notifications_as_read()
+    {
+        // Add 20 notifications to the user
+        $this->addNotificationsToUser($this->user, 20);
+
+        // Get all of the user's notifications
+        $notifications = $this->user->notifications()->get();
+
+        // Create the string of IDs separated by comma
+        $notificationIDs = '';
+
+        foreach($notifications as $notification) {
+            if(strlen($notificationIDs)) $notificationIDs .= ',';
+            $notificationIDs .= $notification->id;
+        }
+
+        // Send request to notification update endpoint
+        $response = $this->auth()->json('POST', '/api/v1/notifications/update', [
+            'notification'  => $notificationIDs,
+            'read'          => 1
+        ]);
+
+        // Check whether the response is successful
+        $response->assertSuccessfulAPIResponse();
+
+        // Check whether all the notifications are now read
+        $notifications = $this->user->notifications()->get();
+
+        foreach($notifications as $notification)
+            $this->assertNotNull($notification->read_at);
+    }
+
+    /**
+     * Test if a user can mark all their notifications as unread.
+     *
+     * @return void
+     * @test
+     */
+    function a_user_can_mark_all_their_notifications_as_unread()
+    {
+        // Add 20 notifications to the user
+        $this->addNotificationsToUser($this->user, 20);
+
+        // Mark all of the notifications as read
+        $this->user->notifications()->update(['read_at' => now()]);
+
+        // Get all of the user's notifications
+        $notifications = $this->user->notifications()->get();
+
+        // Create the string of IDs separated by comma
+        $notificationIDs = '';
+
+        foreach($notifications as $notification) {
+            if(strlen($notificationIDs)) $notificationIDs .= ',';
+            $notificationIDs .= $notification->id;
+        }
+
+        // Send request to notification update endpoint
+        $response = $this->auth()->json('POST', '/api/v1/notifications/update', [
+            'notification'  => $notificationIDs,
+            'read'          => 0
+        ]);
+
+        // Check whether the response is successful
+        $response->assertSuccessfulAPIResponse();
+
+        // Check whether all the notifications are now unread
+        $notifications = $this->user->notifications()->get();
+
+        foreach($notifications as $notification)
+            $this->assertNull($notification->read_at);
+    }
+
+    /**
      * Test if a user can mark multiple notifications as read.
      *
      * @return void
