@@ -16,14 +16,6 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\EventListener::class,
         ],
 
-        \App\Events\NewUserSessionEvent::class => [
-            \App\Listeners\SendSessionNotification::class,
-        ],
-
-        \App\Events\MALImportFinished::class => [
-            \App\Listeners\SendMALImportNotification::class,
-        ],
-
         \App\Events\AnimeViewed::class => [
             \App\Listeners\FetchAnimeDetails::class,
             \App\Listeners\FetchBaseAnimeEpisodes::class,

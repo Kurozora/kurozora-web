@@ -7,6 +7,7 @@ use App\Helpers\JSONResult;
 use App\Http\Resources\SessionResource;
 use App\Jobs\FetchSessionLocation;
 use App\LoginAttempt;
+use App\Notifications\NewSession;
 use App\Session;
 use App\User;
 use Illuminate\Http\JsonResponse;
@@ -46,10 +47,11 @@ class SessionController extends Controller
         $device         = $request->input('device');
 
         // Find the user
-        $foundUser = User::where('username', $username)->first();
+        /** @var User $user */
+        $user = User::where('username', $username)->first();
 
         // Compare the passwords
-        if(!User::checkPassHash($rawPassword, $foundUser->password)) {
+        if(!User::checkPassHash($rawPassword, $user->password)) {
             // Register the login attempt
             LoginAttempt::registerFailedLoginAttempt($request->ip());
 
@@ -58,33 +60,33 @@ class SessionController extends Controller
         }
 
         // Check if email is confirmed
-        if(!$foundUser->hasConfirmedEmail())
+        if(!$user->hasConfirmedEmail())
             return JSONResult::error('You have not confirmed your email address yet. Please check your email inbox or spam folder.');
 
         // Create a new session
-        $loginIPAddress = $request->ip();
+        $ip = $request->ip();
 
-        $newSession = Session::create([
-            'user_id'           => $foundUser->id,
+        $session = Session::create([
+            'user_id'           => $user->id,
             'device'            => $device,
             'secret'            => Str::random(128),
             'expiration_date'   => date('Y-m-d H:i:s', strtotime('90 days')),
-            'ip'                => $loginIPAddress
+            'ip'                => $ip
         ]);
 
         // Dispatch job to retrieve location
-        dispatch(new FetchSessionLocation($newSession));
+        dispatch(new FetchSessionLocation($session));
 
-        // Fire event
-        event(new NewUserSessionEvent($newSession));
+        // Send notification
+        $user->notify(new NewSession($ip, $session));
 
         // Show a successful response
         return JSONResult::success([
             'user' => [
-                'id'                => $foundUser->id,
-                'kuro_auth_token'   => KuroAuthToken::generate($foundUser->id, $newSession->secret),
-                'session_id'        => $newSession->id,
-                'role'              => $foundUser->role
+                'id'                => $user->id,
+                'kuro_auth_token'   => KuroAuthToken::generate($user->id, $session->secret),
+                'session_id'        => $session->id,
+                'role'              => null // @TODO fix this with new role system
             ]
         ]);
     }

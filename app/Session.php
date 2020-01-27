@@ -5,7 +5,7 @@ namespace App;
 
 /**
  * @property false|string last_validated
- * @property mixed id
+ * @property int id
  * @property string ip
  * @property string city
  * @property string region

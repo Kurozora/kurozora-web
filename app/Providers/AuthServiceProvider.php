@@ -2,13 +2,16 @@
 
 namespace App\Providers;
 
+use App\ForumThread;
+use App\Policies\DatabaseNotificationPolicy;
+use App\Policies\ForumThreadPolicy;
 use App\Policies\SessionPolicy;
-use App\Policies\UserNotificationPolicy;
 use App\Policies\UserPolicy;
 use App\Session;
 use App\User;
-use App\UserNotification;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -17,12 +20,24 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $policies = [];
+    protected $policies = [
+        DatabaseNotification::class => DatabaseNotificationPolicy::class,
+        User::class                 => UserPolicy::class,
+        Session::class              => SessionPolicy::class,
+        ForumThread::class          => ForumThreadPolicy::class
+    ];
 
     /**
      * Register any authentication / authorization services.
      *
      * @return void
      */
-    public function boot() { }
+    public function boot() {
+        $this->registerPolicies();
+
+        // Register the super-admin permission
+        Gate::before(function ($user, $ability) {
+            return $user->hasPermissionTo('*') ? true : null;
+        });
+    }
 }

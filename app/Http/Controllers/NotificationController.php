@@ -4,33 +4,32 @@ namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
 use App\Http\Requests\UpdateUserNotifications;
-use App\Http\Resources\UserNotificationResource;
-use App\UserNotification;
+use App\Http\Resources\NotificationResource;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Notifications\DatabaseNotification;
 
-class UserNotificationController extends Controller
+class NotificationController extends Controller
 {
     /**
      * Retrieves details for a specific notification
      *
-     * @param UserNotification $notification
+     * @param DatabaseNotification $notification
      * @return JsonResponse
-     * @throws \ReflectionException
      */
-    public function getNotification(UserNotification $notification) {
+    public function getNotification(DatabaseNotification $notification) {
         return JSONResult::success([
-            'notification' => UserNotificationResource::make($notification)
+            'notification' => NotificationResource::make($notification)
         ]);
     }
 
     /**
      * Deletes a user's notification
      *
-     * @param UserNotification $notification
+     * @param DatabaseNotification $notification
      * @return JsonResponse
      * @throws \Exception
      */
-    public function delete(UserNotification $notification) {
+    public function delete(DatabaseNotification $notification) {
         // Delete the notification
         $notification->delete();
 
@@ -45,22 +44,18 @@ class UserNotificationController extends Controller
      */
     public function update(UpdateUserNotifications $request) {
         /*
-         * Transfers the "read" parameter to a boolean
-         * true = read
-         * false = unread
+         * TODO:
+         * This does NOT yet check whether or not the user is allowed to update the notification.
          */
-        $readBoolean = (bool) $request->input('read');
+        $markAsRead = (bool) $request->input('read');
 
         // Get the notification(s) the user is targeting to update
         $targetedNotification = $request->get('notification');
 
         // User wants to update all of their notifications
-        if($targetedNotification == 'all') {
-            $request->user()->notifications()->update([
-                'read' => $readBoolean
-            ]);
-        }
-        else {
+        $notificationQuery = $request->user()->notifications();
+
+        if($targetedNotification != 'all') {
             // Explode the string. This leaves an array of IDs
             $notificationIDs = explode(',', $targetedNotification);
 
@@ -68,20 +63,18 @@ class UserNotificationController extends Controller
             if(!count($notificationIDs))
                 return JSONResult::error('No notifications were specified.');
 
-            // Loop through the array and make sure every item is a number (ID)
-            foreach($notificationIDs as $notificationID) {
-                if(!is_numeric($notificationID))
-                    return JSONResult::error('Only a set of IDs is allowed.');
-            }
-
             // Update the notifications
-            $request->user()->notifications()->whereIn('id', $notificationIDs)->update([
-                'read' => $readBoolean
-            ]);
+            $notificationQuery->whereIn('id', $notificationIDs);
         }
 
+        // Update the notifications
+        $amountUpdated = $notificationQuery->update([
+            'read_at' => $markAsRead ? now() : null
+        ]);
+
         return JSONResult::success([
-            'read' => $readBoolean
+            'read'              => $markAsRead,
+            'amount_updated'    => $amountUpdated
         ]);
     }
 }
