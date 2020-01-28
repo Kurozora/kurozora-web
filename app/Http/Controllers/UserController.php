@@ -248,42 +248,53 @@ class UserController extends Controller
     /**
      * Update a user's profile information
      *
-     * @param Request $request
+     * @param UpdateProfile $request
      * @param User $user
      * @return JsonResponse
+     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\DiskDoesNotExist
+     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist
+     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig
      */
     public function updateProfile(UpdateProfile $request, User $user) {
+        $data = $request->validated();
+
         // Track if anything changed
         $changedFields = [];
 
         // Update biography
-        $newBio = $request->input('biography');
+        if($request->has('biography')) {
+            $newBiography = $data['biography'];
 
-        if( $newBio !== null &&
-            $newBio !== $user->biography
-        ) {
-            $user->biography = $newBio;
-            $changedFields[] = 'biography';
+            if($newBiography !== $user->biography) {
+                $user->biography = $newBiography;
+                $changedFields[] = 'biography';
+            }
         }
 
         // Update avatar
-        if($request->hasFile('profileImage') && $request->file('profileImage')->isValid()) {
+        if($request->has('profileImage')) {
             // Remove previous avatar
             $user->clearMediaCollection('avatar');
 
-            // Save the uploaded avatar
-            $user->addMediaFromRequest('profileImage')->toMediaCollection('avatar');
+            // Upload a new avatar, if one was uploaded
+            if($request->hasFile('profileImage') && $request->file('profileImage')->isValid())
+            {
+                $user->addMediaFromRequest('profileImage')->toMediaCollection('avatar');
+            }
 
             $changedFields[] = 'avatar';
         }
 
         // Update banner
-        if($request->hasFile('bannerImage') && $request->file('bannerImage')->isValid()) {
+        if($request->has('bannerImage')) {
             // Remove previous banner
             $user->clearMediaCollection('banner');
 
-            // Save the uploaded banner
-            $user->addMediaFromRequest('bannerImage')->toMediaCollection('banner');
+            // Save the uploaded banner, if one was uploaded
+            if($request->hasFile('bannerImage') && $request->file('bannerImage')->isValid())
+            {
+                $user->addMediaFromRequest('bannerImage')->toMediaCollection('banner');
+            }
 
             $changedFields[] = 'banner image';
         }
