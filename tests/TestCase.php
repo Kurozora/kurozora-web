@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Support\Str;
 use KuroAuthToken;
 use Tests\API\Traits\ProvidesTestUser;
+use Tests\API\Traits\RunsSeeders;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -21,8 +22,6 @@ abstract class TestCase extends BaseTestCase
     function setUp(): void
     {
         parent::setUp();
-
-        $testCase = $this;
 
         // API response macro's
         TestResponse::macro('assertSuccessfulAPIResponse', function() {
@@ -51,6 +50,9 @@ abstract class TestCase extends BaseTestCase
 
         if (isset($uses[ProvidesTestUser::class])) {
             $this->initializeTestUser();
+        }
+        if (isset($uses[RunsSeeders::class])) {
+            $this->seedDatabase();
         }
 
         return $uses;
