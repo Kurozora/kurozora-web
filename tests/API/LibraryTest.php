@@ -324,6 +324,59 @@ class LibraryTest extends TestCase
     }
 
     /**
+     * Test if a user can delete anime from their library.
+     *
+     * @return void
+     * @test
+     */
+    function a_user_can_delete_anime_from_their_library()
+    {
+        // Add an anime to the list
+        $this->user->library()->attach(1, ['status' => UserLibraryStatus::Watching]);
+
+        // Send the request
+        $response = $this->auth()->json('POST', '/api/v1/users/' . $this->user->id . '/library/delete', [
+            'anime_id' => 1
+        ]);
+
+        // Check whether the response was successful
+        $response->assertSuccessfulAPIResponse();
+
+        // Check that the user now has no anime in their library
+        $count = $this->user->library()->count();
+
+        $this->assertEquals(0, $count);
+    }
+
+    /**
+     * Test if a user cannot delete anime from another user's library.
+     *
+     * @return void
+     * @test
+     */
+    function a_user_cannot_delete_anime_from_another_users_library()
+    {
+        /** @var User $anotherUser */
+        $anotherUser = factory(User::class)->create();
+
+        // Add an anime to the list
+        $anotherUser->library()->attach(1, ['status' => UserLibraryStatus::Watching]);
+
+        // Send the request
+        $response = $this->auth()->json('POST', '/api/v1/users/' . $anotherUser->id . '/library/delete', [
+            'anime_id' => 1
+        ]);
+
+        // Check whether the response was unsuccessful
+        $response->assertUnsuccessfulAPIResponse();
+
+        // Check that the user still has the anime in their library
+        $count = $anotherUser->library()->count();
+
+        $this->assertEquals(1, $count);
+    }
+
+    /**
      * Sends an API request to add anime to a user's library.
      *
      * @param $userID
