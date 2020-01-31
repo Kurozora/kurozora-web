@@ -216,12 +216,14 @@ class Anime extends Resource
                 ->help('Whether or not the details (information_ were retrieved from TVDB.<br />Untick and the system will do so once the Anime gets visited the next time.'),
 
             BelongsToMany::make('Moderators', 'moderators', User::class)
-                ->fields(function() {
-                    return [
-                        DateTime::make('Moderating since', 'created_at')
-                            ->rules('required')
-                    ];
-                })
+// @TODO
+// This has been commented out, because it conflicts with the favoriteAnime relationship.
+//                ->fields(function() {
+//                    return [
+//                        DateTime::make('Moderating since', 'created_at')
+//                            ->rules('required')
+//                    ];
+//                })
                 ->searchable(),
 
             BelongsToMany::make('Genres')

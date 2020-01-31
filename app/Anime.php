@@ -60,6 +60,15 @@ class Anime extends KModel
     protected $table = self::TABLE_NAME;
 
     /**
+     * Returns the users who have this Anime in their favorites.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function favoritedBy() {
+        return $this->belongsToMany(User::class, UserFavoriteAnime::TABLE_NAME, 'anime_id', 'user_id');
+    }
+
+    /**
      * Returns the moderators of this Anime.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

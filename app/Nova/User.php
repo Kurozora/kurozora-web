@@ -103,13 +103,17 @@ class User extends Resource
             MorphMany::make('Notifications'),
 
             BelongsToMany::make('Moderating Anime', 'moderatingAnime', Anime::class)
-                ->fields(function() {
-                    return [
-                        DateTime::make('Moderating since', 'created_at')
-                            ->rules('required')
-                    ];
-                })
+// @TODO
+// This has been commented out, because it conflicts with the favoriteAnime relationship.
+//                ->fields(function() {
+//                    return [
+//                        DateTime::make('Moderating since', 'created_at')
+//                            ->rules('required')
+//                    ];
+//                })
                 ->searchable(),
+
+            BelongsToMany::make('Favorite Anime', 'favoriteAnime', Anime::class),
 
             BelongsToMany::make('Badges')
                 ->searchable(),
