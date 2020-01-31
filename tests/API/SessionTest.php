@@ -2,202 +2,215 @@
 
 namespace Tests\API;
 
-use App\Http\Resources\UserResourceSmall;
+use App\Http\Resources\SessionResource;
+use App\Session;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Http\Request;
 use Tests\API\Traits\ProvidesTestUser;
 use Tests\TestCase;
 
-class FollowTest extends TestCase
+class SessionTest extends TestCase
 {
     use DatabaseMigrations, ProvidesTestUser;
 
     /**
-     * Test if a user can follow another user.
+     * Test if a user can get a list of their sessions.
      *
      * @return void
      * @test
      */
-    function a_user_can_follow_another_user()
+    function a_user_can_get_a_list_of_their_sessions()
     {
-        /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
+        // Create some sessions for the user
+        factory(Session::class, 20)->create(['user_id' => $this->user->id]);
 
-        $this->auth()->json('POST', '/api/v1/users/' . $anotherUser->id . '/follow', [
-            'follow' => 1
-        ])->assertSuccessfulAPIResponse();
+        // Send the request
+        $response = $this->auth()->json('GET', '/api/v1/users/' . $this->user->id . '/sessions');
 
-        // Check that the user is now following one person
-        $this->assertEquals($this->user->following()->count(), 1);
-
-        // Check that the other user is now being followed by one person
-        $this->assertEquals($anotherUser->followers()->count(), 1);
-    }
-
-    /**
-     * Test if a user can unfollow another user.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_can_unfollow_another_user()
-    {
-        /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
-
-        // Add the other user to our following list
-        $this->user->following()->attach($anotherUser);
-
-        // Send the unfollow API request
-        $this->auth()->json('POST', '/api/v1/users/' . $anotherUser->id . '/follow', [
-            'follow' => 0
-        ])->assertSuccessfulAPIResponse();
-
-        // Check that the user is now following no-one
-        $this->assertEquals($this->user->following()->count(), 0);
-
-        // Check that the other user is now being followed by no-one
-        $this->assertEquals($anotherUser->followers()->count(), 0);
-    }
-
-    /**
-     * Test if a user cannot follow a non-existing user.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_cannot_follow_an_invalid_user()
-    {
-        $this->auth()->json('POST', '/api/v1/users/' . 99999 . '/follow', [
-            'follow' => 1
-        ])->assertNotFound();
-
-        // Check that the user is still following no-one
-        $this->assertEquals($this->user->following()->count(), 0);
-    }
-
-    /**
-     * Test if a user cannot follow a user they already follow.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_cannot_follow_a_user_they_already_follow()
-    {
-        /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
-
-        // Add the other user to our following list
-        $this->user->following()->attach($anotherUser);
-
-        // Send the follow API request
-        $this->auth()->json('POST', '/api/v1/users/' . $anotherUser->id . '/follow', [
-            'follow' => 1
-        ])->assertUnsuccessfulAPIResponse();
-
-        // Check that the user is now following one person
-        $this->assertEquals($this->user->following()->count(), 1);
-
-        // Check that the other user is now being followed by one person
-        $this->assertEquals($anotherUser->followers()->count(), 1);
-    }
-
-    /**
-     * Test if a user cannot unfollow a user they do not follow.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_cannot_unfollow_a_user_they_do_not_follow()
-    {
-        /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
-
-        // Send the unfollow API request
-        $this->auth()->json('POST', '/api/v1/users/' . $anotherUser->id . '/follow', [
-            'follow' => 0
-        ])->assertUnsuccessfulAPIResponse();
-
-        // Check that the user is now following one person
-        $this->assertEquals($this->user->following()->count(), 0);
-
-        // Check that the other user is now being followed by one person
-        $this->assertEquals($anotherUser->followers()->count(), 0);
-    }
-
-    /**
-     * Test if a user can get their list of followers.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_can_get_their_followers_list()
-    {
-        // Add a follower
-        /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
-
-        $this->user->followers()->attach($anotherUser);
-
-        // Request the list of followers
-        $response = $this->auth()->json('GET', '/api/v1/users/' . $this->user->id . '/followers');
-
-        // Check that the response is successful
+        // Check whether the request was successful
         $response->assertSuccessfulAPIResponse();
 
-        // Check that the response contains the follower
+        // Check whether the response contains the current sessions
+        $response->assertJson(['current_session' => []]);
+
+        // Check whether the response contains the sessions
+        $this->assertCount(20, $response->json()['other_sessions']);
+    }
+
+    /**
+     * Test if a user cannot get another user's list of sessions.
+     *
+     * @return void
+     * @test
+     */
+    function a_user_cannot_get_another_users_list_of_sessions()
+    {
+        /** @var User $anotherUser */
+        $anotherUser = factory(User::class)->create();
+
+        // Send the request
+        $response = $this->auth()->json('GET', '/api/v1/users/' . $anotherUser->id . '/sessions');
+
+        // Check whether the request was unsuccessful
+        $response->assertUnsuccessfulAPIResponse();
+    }
+
+    /**
+     * Test if a user can get the details of their session.
+     *
+     * @return void
+     * @test
+     */
+    function a_user_can_get_the_details_of_their_session()
+    {
+        // Create a session for the user
+        /** @var Session $session */
+        $session = factory(Session::class)->create(['user_id' => $this->user->id]);
+
+        // Send the request
+        $response = $this->auth()->json('GET', '/api/v1/sessions/' . $session->id);
+
+        // Check whether the request was successful
+        $response->assertSuccessfulAPIResponse();
+
+        // Check whether the response contains the sessions
         $response->assertJson([
-            'followers' => [
-                UserResourceSmall::make($anotherUser)->toArray(),
-            ]
+            'session' => SessionResource::make($session)->toArray()
         ]);
     }
 
     /**
-     * Test if a user can get their list of following.
+     * Test if a user cannot get the details of another user's session.
      *
      * @return void
      * @test
      */
-    function a_user_can_get_their_following_list()
+    function a_user_cannot_get_the_details_of_another_users_session()
     {
-        // Add a user to the following list
+        // Create a session for the user
         /** @var User $anotherUser */
         $anotherUser = factory(User::class)->create();
 
-        $this->user->following()->attach($anotherUser);
+        /** @var Session $session */
+        $session = factory(Session::class)->create(['user_id' => $anotherUser->id]);
 
-        // Request the list of following
-        $response = $this->auth()->json('GET', '/api/v1/users/' . $this->user->id . '/following');
+        // Send the request
+        $response = $this->auth()->json('GET', '/api/v1/sessions/' . $session->id);
 
-        // Check that the response is successful
-        $response->assertSuccessfulAPIResponse();
-
-        // Check that the response contains the user
-        $response->assertJson([
-            'following' => [
-                UserResourceSmall::make($anotherUser)->toArray(),
-            ]
-        ]);
+        // Check whether the request was unsuccessful
+        $response->assertUnsuccessfulAPIResponse();
     }
 
     /**
-     * Test if a user receives a notification when someone follows them.
+     * Test if a user can validate their session.
      *
      * @return void
      * @test
      */
-    function a_user_receives_a_notification_when_someone_follows_them()
+    function a_user_can_validate_their_session()
     {
+        // Create a session for the user
+        /** @var Session $session */
+        $session = factory(Session::class)->create(['user_id' => $this->user->id]);
+
+        // Send the request
+        $response = $this->auth()->json('POST', '/api/v1/sessions/' . $session->id . '/validate');
+
+        // Check whether the response was successful
+        $response->assertSuccessfulAPIResponse();
+    }
+
+    /**
+     * Test if an expired session is deleted when validated by the user.
+     *
+     * @return void
+     * @test
+     */
+    function an_expired_session_is_deleted_when_validated_by_the_user()
+    {
+        // Create a session for the user that expired a minute ago
+        /** @var Session $session */
+        $session = factory(Session::class)->create([
+            'user_id'           => $this->user->id,
+            'expiration_date'   => now()->subMinute()
+        ]);
+
+        // Send the request
+        $response = $this->auth()->json('POST', '/api/v1/sessions/' . $session->id . '/validate');
+
+        // Check whether the response was unsuccessful
+        $response->assertUnsuccessfulAPIResponse();
+
+        // Check whether the session was deleted
+        $this->assertNull(Session::find($session->id));
+    }
+
+    /**
+     * Test if a user cannot validate another user's session.
+     *
+     * @return void
+     * @test
+     */
+    function a_user_cannot_validate_another_users_session()
+    {
+        // Create a session for the user
         /** @var User $anotherUser */
         $anotherUser = factory(User::class)->create();
 
-        $this->auth()->json('POST', '/api/v1/users/' . $anotherUser->id . '/follow', [
-            'follow' => 1
-        ])->assertSuccessfulAPIResponse();
+        /** @var Session $session */
+        $session = factory(Session::class)->create(['user_id' => $anotherUser->id]);
 
-        // Check that the other user now has a notification
-        $this->assertEquals(1, $anotherUser->notifications()->count());
+        // Send the request
+        $response = $this->auth()->json('POST', '/api/v1/sessions/' . $session->id . '/validate');
+
+        // Check whether the response was unsuccessful
+        $response->assertUnsuccessfulAPIResponse();
+    }
+
+    /**
+     * Test if a user can delete their session.
+     *
+     * @return void
+     * @test
+     */
+    function a_user_can_delete_their_session()
+    {
+        // Create a session for the user
+        /** @var Session $session */
+        $session = factory(Session::class)->create(['user_id' => $this->user->id]);
+
+        // Send the request
+        $response = $this->auth()->json('POST', '/api/v1/sessions/' . $session->id . '/delete');
+
+        // Check whether the response was successful
+        $response->assertSuccessfulAPIResponse();
+
+        // Check whether the session was deleted
+        $this->assertNull(Session::find($session->id));
+    }
+
+    /**
+     * Test if a user cannot delete another user's session.
+     *
+     * @return void
+     * @test
+     */
+    function a_user_cannot_delete_another_users_session()
+    {
+        // Create a session for the user
+        /** @var User $anotherUser */
+        $anotherUser = factory(User::class)->create();
+
+        /** @var Session $session */
+        $session = factory(Session::class)->create(['user_id' => $anotherUser->id]);
+
+        // Send the request
+        $response = $this->auth()->json('POST', '/api/v1/sessions/' . $session->id . '/delete');
+
+        // Check whether the response was unsuccessful
+        $response->assertUnsuccessfulAPIResponse();
+
+        // Check whether the session still exists
+        $this->assertNotNull(Session::find($session->id));
     }
 }
