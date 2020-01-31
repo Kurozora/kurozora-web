@@ -23,30 +23,6 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     /**
-     * Logs the user out (destroys the session)
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function logout(Request $request) {
-        // Find the session
-        $foundSession = Session::where([
-            ['user_id', '=', Auth::id()],
-            ['secret',  '=', $request['session_secret']]
-        ])->first();
-
-        // Check if any session was found
-        if(!$foundSession)
-            return JSONResult::error('An error occurred. Please reach out to an administrator.');
-
-        // Delete the session
-        $foundSession->delete();
-
-        // Show a successful response
-        return JSONResult::success();
-    }
-
-    /**
      * Returns the profile details for a user
      *
      * @param User $user
