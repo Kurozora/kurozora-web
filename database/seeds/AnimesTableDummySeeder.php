@@ -51,7 +51,7 @@ class AnimesTableDummySeeder extends Seeder
                 }
 
                 // Create the anime
-                Anime::create([
+                factory(Anime::class)->create([
                     'title'         => $animeData->title,
                     'type'          => AnimeType::TV,
                     'nsfw'          => $animeData->nsfw,
