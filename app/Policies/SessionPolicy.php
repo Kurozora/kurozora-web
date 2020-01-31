@@ -18,7 +18,7 @@ class SessionPolicy
      * @return bool
      */
     public function get_session(User $user, Session $session) {
-        return $user->id === $session->user_id;
+        return $user->id === (int) $session->user_id;
     }
 
     /**
@@ -29,7 +29,7 @@ class SessionPolicy
      * @return bool
      */
     public function validate_session(User $user, Session $session) {
-        return $user->id === $session->user_id;
+        return $user->id === (int) $session->user_id;
     }
 
     /**
@@ -40,6 +40,6 @@ class SessionPolicy
      * @return bool
      */
     public function delete_session(User $user, Session $session) {
-        return $user->id === $session->user_id;
+        return $user->id === (int) $session->user_id;
     }
 }
