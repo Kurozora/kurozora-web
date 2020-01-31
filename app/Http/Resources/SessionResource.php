@@ -12,7 +12,7 @@ class SessionResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request = null)
     {
         return [
             'id'                => $this->id,
