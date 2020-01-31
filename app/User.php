@@ -95,6 +95,15 @@ class User extends Authenticatable implements LikerContract, HasMedia
     }
 
     /**
+     * Returns the Anime that the user has added to their favorites.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    function favoriteAnime() {
+        return $this->belongsToMany(Anime::class, UserFavoriteAnime::class, 'user_id', 'anime_id');
+    }
+
+    /**
      * Returns the Anime that the user is moderating.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

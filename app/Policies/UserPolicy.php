@@ -10,7 +10,30 @@ class UserPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can update the other user's profile
+     * Determine whether the user can get to another user's anime favorites.
+     *
+     * @param User $user
+     * @param User $model
+     * @return bool
+     */
+    public function get_anime_favorites(User $user, User $model) {
+        return true;
+        // return $user->id === $model->id;
+    }
+
+    /**
+     * Determine whether the user can add to another user's anime favorites.
+     *
+     * @param User $user
+     * @param User $model
+     * @return bool
+     */
+    public function add_to_anime_favorites(User $user, User $model) {
+        return $user->id === $model->id;
+    }
+
+    /**
+     * Determine whether the user can update the other user's profile.
      *
      * @param User $user
      * @param User $model
@@ -21,7 +44,7 @@ class UserPolicy
     }
 
     /**
-     * Determine whether the user can get another user's sessions
+     * Determine whether the user can get another user's sessions.
      *
      * @param User $user
      * @param User $model
@@ -32,7 +55,7 @@ class UserPolicy
     }
 
     /**
-     * Determine whether the user can get another user's notifications
+     * Determine whether the user can get another user's notifications.
      *
      * @param User $user
      * @param User $model
@@ -43,7 +66,7 @@ class UserPolicy
     }
 
     /**
-     * Determine whether the user can get another user's library
+     * Determine whether the user can get another user's library.
      *
      * @param User $user
      * @param User $model
@@ -54,7 +77,7 @@ class UserPolicy
     }
 
     /**
-     * Determine whether the user can add to another user's library
+     * Determine whether the user can add to another user's library.
      *
      * @param User $user
      * @param User $model
@@ -65,7 +88,7 @@ class UserPolicy
     }
 
     /**
-     * Determine whether the user can delete from another user's library
+     * Determine whether the user can delete from another user's library.
      *
      * @param User $user
      * @param User $model
@@ -76,7 +99,7 @@ class UserPolicy
     }
 
     /**
-     * Determine whether the user can perform a MAL import
+     * Determine whether the user can perform a MAL import.
      *
      * @param User $user
      * @param User $model
@@ -87,7 +110,7 @@ class UserPolicy
     }
 
     /**
-     * Determine whether the user can follow another user
+     * Determine whether the user can follow another user.
      *
      * @param User $user
      * @param User $model
