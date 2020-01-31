@@ -1,1926 +1,2130 @@
 {
-  "openapi": "3.0.0",
-  "info":{
-    "description":"This is the documentation for Kurozora API.",
-    "version":"1",
-    "title":"Kurozora API",
-    "termsOfService":"http://swagger.io/terms/",
-    "contact":{
-      "email":"kurozoraapp@gmail.com"
-    },
-    "license":{
-      "name":"Apache 2.0",
-      "url":"http://www.apache.org/licenses/LICENSE-2.0.html"
-    }
-  },
-  "servers": [
-    {
-      "url": "https://kurozora.app/api/v1",
-      "description": "Kurozora LIVE"
-    },
-    {
-      "url": "http://kurozora-web.test/api/v1",
-      "description": "Kurozora LOCAL"
-    }
-  ],
-  "tags":[
-    {
-      "name":"explore",
-      "description":"Everything explore page related"
-    },
-    {
-      "name":"users",
-      "description":"Everything user related"
-    },
-    {
-      "name":"notifications",
-      "description":"Everything user notification related"
-    },
-    {
-      "name":"anime",
-      "description":"Everything anime related"
-    },
-    {
-      "name":"anime-seasons",
-      "description":"Everything anime seasons related"
-    },
-    {
-      "name":"anime-episodes",
-      "description":"Everything anime episodes related"
-    },
-    {
-      "name":"genres",
-      "description":"Everything genre related"
-    },
-    {
-      "name":"forum-sections",
-      "description":"Everything forum sections related"
-    },
-    {
-      "name":"forum-threads",
-      "description": "Everything forum threads related"
-    },
-    {
-      "name":"forum-replies",
-      "description": "Everything forum replies related"
-    },
-    {
-      "name":"sessions",
-      "description":"Everything session related"
-    },
-    {
-      "name":"themes",
-      "description":"Everything theme related"
-    },
-    {
-      "name":"misc",
-      "description":"All other endpoints"
-    }
-  ],
-  "paths": {
-    "/info": {
-      "get": {
-        "tags": ["misc"],
-        "summary": "API info.",
-        "description": "Plain API JSON response.",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/explore": {
-      "get": {
-        "security": [
-          {},
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": ["explore"],
-        "summary": "(optional authentication) Explore page.",
-        "description": "This endpoint will retrieve the details to for the explore page.",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users": {
-      "post": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Register a new user",
-        "description": "This endpoint will create a new user based on the given details.",
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "username": {
-                    "type": "string",
-                    "description": "The new user's username",
-                    "example": "Kurozora"
-                  },
-                  "password": {
-                    "type": "string",
-                    "description": "The new user's password"
-                  },
-                  "email": {
-                    "type": "string",
-                    "description": "The new user's email"
-                  },
-                  "profileImage": {
-                    "type": "file",
-                    "description": "The new user's avatar image"
-                  }
-                },
-                "required": [
-                  "username", "password", "email"
-                ]
-              }
-            }
-          }
+    "openapi":"3.0.0",
+    "info":{
+        "description":"This is the documentation for Kurozora API.",
+        "version":"1",
+        "title":"Kurozora API",
+        "termsOfService":"http://swagger.io/terms/",
+        "contact":{
+            "email":"kurozoraapp@gmail.com"
         },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
+        "license":{
+            "name":"Apache 2.0",
+            "url":"http://www.apache.org/licenses/LICENSE-2.0.html"
         }
-      }
     },
-    "/users/register-siwa": {
-          "post": {
-              "tags": [
-                  "users"
-              ],
-              "summary": "Register a new user (sign in with Apple)",
-              "description": "This endpoint will create a new user using Sign in with Apple.",
-              "requestBody": {
-                  "content": {
-                      "multipart/form-data": {
-                          "schema": {
-                              "type": "object",
-                              "properties": {
-                                  "email": {
-                                      "type": "string",
-                                      "description": "The new user's email"
-                                  },
-                                  "siwa_id": {
-                                      "type": "string",
-                                      "description": "The new user's SIWA ID"
-                                  }
-                              },
-                              "required": [
-                                  "email", "siwa_id"
-                              ]
-                          }
-                      }
-                  }
-              },
-              "responses": {
-                  "200": {
-                      "$ref": "#/components/responses/JSONSuccess"
-                  },
-                  "400": {
-                      "$ref": "#/components/responses/JSONError"
-                  }
-              }
-          }
-    },
-    "/users/reset-password": {
-      "post": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Request a password reset for a user",
-        "description": "This endpoint will send an email to the user to reset their password.",
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "description": "The email of the user to request a password reset."
-                  }
-                },
-                "required": [
-                  "email"
-                ]
-              }
-            }
-          }
+    "servers":[
+        {
+            "url":"https://kurozora.app/api/v1",
+            "description":"Kurozora LIVE"
         },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
+        {
+            "url":"http://kurozora-web.test/api/v1",
+            "description":"Kurozora LOCAL"
         }
-      }
-    },
-    "/users/{userID}/sessions": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "summary": "Get a list of the user's sessions",
-        "description": "This endpoint will retrieve a list of sessions for the user.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/library": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "summary": "Get an overview of the user's Anime library",
-        "description": "This endpoint will retrieve the list of Anime in a user's library.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          },
-          {
-            "in": "query",
-            "name": "status",
-            "schema": {
-              "$ref": "#/components/schemas/KurozoraLibraryStatus"
-            },
-            "required": true,
-            "description": "The status to retrieve the library items for."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      },
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "summary": "Add an Anime to the user's Anime library",
-        "description": "This endpoint will add to the list of Anime in a user's library.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "anime_id": {
-                    "type": "integer",
-                    "description": "The ID of the Anime to add."
-                  },
-                  "status": {
-                    "type": "string",
-                    "description": "The watch status to assign to the Anime.",
-                    "example": "Watching"
-                  }
-                },
-                "required": [
-                  "anime_id", "status"
-                ]
-              }
-            }
-          }
+    ],
+    "tags":[
+        {
+            "name":"explore",
+            "description":"Everything explore page related"
         },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/library/mal-import": {
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "summary": "Import a MAL export file into the user's library",
-        "description": "This endpoint will import a MAL export file into the user's library.",
-        "requestBody": {
-              "content": {
-                  "multipart/form-data": {
-                      "schema": {
-                          "type": "object",
-                          "properties": {
-                              "file": {
-                                  "type": "file",
-                                  "description": "The MAL export file"
-                              },
-                              "behavior": {
-                                "$ref": "#/components/schemas/MALImportBehavior",
-                                "description": "The behavior to use while processing the import request."
-                              }
-                          }
-                      }
-                  }
-              }
+        {
+            "name":"users",
+            "description":"Everything user related"
         },
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
+        {
+            "name":"notifications",
+            "description":"Everything user notification related"
+        },
+        {
+            "name":"anime",
+            "description":"Everything anime related"
+        },
+        {
+            "name":"anime-seasons",
+            "description":"Everything anime seasons related"
+        },
+        {
+            "name":"anime-episodes",
+            "description":"Everything anime episodes related"
+        },
+        {
+            "name":"genres",
+            "description":"Everything genre related"
+        },
+        {
+            "name":"forum-sections",
+            "description":"Everything forum sections related"
+        },
+        {
+            "name":"forum-threads",
+            "description":"Everything forum threads related"
+        },
+        {
+            "name":"forum-replies",
+            "description":"Everything forum replies related"
+        },
+        {
+            "name":"sessions",
+            "description":"Everything session related"
+        },
+        {
+            "name":"themes",
+            "description":"Everything theme related"
+        },
+        {
+            "name":"misc",
+            "description":"All other endpoints"
         }
-      }
-    },
-      "/users/{userID}/library/delete": {
-          "post": {
-              "security": [
-                  {
-                      "kurozoraBearer": []
-                  }
-              ],
-              "tags": [
-                  "users"
-              ],
-              "summary": "Remove an Anime from the user's Anime library",
-              "description": "This endpoint will remove from the list of Anime in a user's library.",
-              "parameters": [
-                  {
-                      "in": "path",
-                      "name": "userID",
-                      "schema": {
-                          "type": "integer"
-                      },
-                      "required": true,
-                      "description": "ID of the user."
-                  }
-              ],
-              "requestBody": {
-                  "content": {
-                      "application/x-www-form-urlencoded": {
-                          "schema": {
-                              "type": "object",
-                              "properties": {
-                                  "anime_id": {
-                                      "type": "integer",
-                                      "description": "The ID of the Anime to remove."
-                                  }
-                              },
-                              "required": [
-                                  "anime_id"
-                              ]
-                          }
-                      }
-                  }
-              },
-              "responses": {
-                  "200": {
-                      "$ref": "#/components/responses/JSONSuccess"
-                  },
-                  "400": {
-                      "$ref": "#/components/responses/JSONError"
-                  }
-              }
-          }
-      },
-    "/users/{userID}/profile": {
-      "get": {
-        "security": [
-          {},
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "summary": "(optional authentication) User profile details.",
-        "description": "This endpoint will retrieve the details of a user's profile.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      },
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "summary": "Updates a user's profile information",
-        "description": "This endpoint will update a user's profile information.\n<div class=\"kuro-warn\">You should only send the request body parameters that actually need to be changed!</div>",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "biography": {
-                    "type": "string",
-                    "description": "The new biography to set."
-                  },
-                  "profileImage": {
-                    "type": "file",
-                    "description": "The new user's avatar image"
-                  },
-                  "bannerImage": {
-                    "type": "file",
-                    "description": "The new user's banner image"
-                  }
+    ],
+    "paths":{
+        "/info":{
+            "get":{
+                "tags":[
+                    "misc"
+                ],
+                "summary":"API info.",
+                "description":"Plain API JSON response.",
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
                 }
-              }
             }
-          }
         },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/notifications": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "summary": "User's list of notifications.",
-        "description": "This endpoint will retrieve the list of a user's notifications.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/search": {
-      "get": {
-        "security": [
-          {},
-          {
-              "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "summary": "(optional authentication) Searches users.",
-        "description": "This endpoint will retrieve the search results for users.\n<div class=\"kuro-tip\">You can prefix your search with \"id:\" to search for a user with a specific ID.</div>",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "The search query."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/follow": {
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "summary": "Follow or unfollow another user",
-        "description": "This endpoint will follow or unfollow another user.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "follow": {
-                    "type": "integer",
-                    "description": "0: unfollow, 1: follow.",
-                    "enum": [0, 1]
-                  }
+        "/explore":{
+            "get":{
+                "security":[
+                    {
+
+                    },
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "explore"
+                ],
+                "summary":"(optional authentication) Explore page.",
+                "description":"This endpoint will retrieve the details to for the explore page.",
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/users":{
+            "post":{
+                "tags":[
+                    "users"
+                ],
+                "summary":"Register a new user",
+                "description":"This endpoint will create a new user based on the given details.",
+                "requestBody":{
+                    "content":{
+                        "multipart/form-data":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "username":{
+                                        "type":"string",
+                                        "description":"The new user's username",
+                                        "example":"Kurozora"
+                                    },
+                                    "password":{
+                                        "type":"string",
+                                        "description":"The new user's password"
+                                    },
+                                    "email":{
+                                        "type":"string",
+                                        "description":"The new user's email"
+                                    },
+                                    "profileImage":{
+                                        "type":"file",
+                                        "description":"The new user's avatar image"
+                                    }
+                                },
+                                "required":[
+                                    "username",
+                                    "password",
+                                    "email"
+                                ]
+                            }
+                        }
+                    }
                 },
-                "required": [
-                  "follow"
-                ]
-              }
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
             }
-          }
         },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/followers": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          },
-          {
-            "in": "query",
-            "name": "page",
-            "schema": {
-                "type": "string",
-                "example": "1"
-            },
-            "required": false,
-            "description": "The page to retrieve followers from. (starts at 1)"
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "summary": "Retrieve the user's list of followers.",
-        "description": "This endpoint will retrieve the user's list of followers.",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/following": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          },
-          {
-            "in": "query",
-            "name": "page",
-            "schema": {
-                "type": "string",
-                "example": "1"
-            },
-            "required": false,
-            "description": "The page to retrieve followers from. (starts at 1)"
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "summary": "Retrieve the user's list of following users.",
-        "description": "This endpoint will retrieve the user's list of following users.",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/notifications/{notificationUUID}": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "notifications"
-        ],
-        "summary": "Gets the details of a notification",
-        "description": "This endpoint will retrieve the details of a notification.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "notificationUUID",
-            "schema": {
-              "type": "string"
-            },
-            "required": true,
-            "description": "UUID of the notification to be retrieved."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/notifications/{notificationUUID}/delete": {
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "notifications"
-        ],
-        "summary": "Deletes a notification from the database",
-        "description": "This endpoint will delete a user's notification.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "notificationUUID",
-            "schema": {
-              "type": "string"
-            },
-            "required": true,
-            "description": "UUID of the notification to be deleted."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/notifications/update": {
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "notifications"
-        ],
-        "summary": "Update a single, multiple or all notifications' status",
-        "description": "This endpoint will update the status of a single, multiple or all notifications.",
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "notification": {
-                    "type": "string",
-                    "description": "\"[uuid]\" to update a single notification, \"[uuid],[uuid],[uuid]\" to update multiple notifications. \"all\" to update all of the user's notifications."
-                  },
-                  "read": {
-                    "type": "integer",
-                    "description": "Mark notification(s) as read or unread. (0 = unread, 1 = read)",
-                    "minimum": 0,
-                    "maximum": 1
-                  }
+        "/users/register-siwa":{
+            "post":{
+                "tags":[
+                    "users"
+                ],
+                "summary":"Register a new user (sign in with Apple)",
+                "description":"This endpoint will create a new user using Sign in with Apple.",
+                "requestBody":{
+                    "content":{
+                        "multipart/form-data":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "email":{
+                                        "type":"string",
+                                        "description":"The new user's email"
+                                    },
+                                    "siwa_id":{
+                                        "type":"string",
+                                        "description":"The new user's SIWA ID"
+                                    }
+                                },
+                                "required":[
+                                    "email",
+                                    "siwa_id"
+                                ]
+                            }
+                        }
+                    }
                 },
-                "required": [
-                  "notification", "read"
-                ]
-              }
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
             }
-          }
         },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/sessions": {
-      "post": {
-        "tags": [
-          "sessions"
-        ],
-        "summary": "Create a new session (login)",
-        "description": "This endpoint will create a new session for a user.",
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "username": {
-                    "type": "string",
-                    "description": "The user's username"
-                  },
-                  "password": {
-                    "type": "string",
-                    "description": "The user's password"
-                  },
-                  "device": {
-                    "type": "string",
-                    "description": "The device name that was used to create the session",
-                    "example": "Swagger API tester"
-                  }
+        "/users/reset-password":{
+            "post":{
+                "tags":[
+                    "users"
+                ],
+                "summary":"Request a password reset for a user",
+                "description":"This endpoint will send an email to the user to reset their password.",
+                "requestBody":{
+                    "content":{
+                        "application/x-www-form-urlencoded":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "email":{
+                                        "type":"string",
+                                        "description":"The email of the user to request a password reset."
+                                    }
+                                },
+                                "required":[
+                                    "email"
+                                ]
+                            }
+                        }
+                    }
                 },
-                "required": [
-                  "username", "password", "device"
-                ]
-              }
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
             }
-          }
         },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/sessions/{sessionID}": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "sessions"
-        ],
-        "summary": "Gets the details of a session",
-        "description": "This endpoint will retrieve the details of a session.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "sessionID",
-            "schema": {
-              "type": "integer"
+        "/users/{userID}/sessions":{
+            "get":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "users"
+                ],
+                "summary":"Get a list of the user's sessions",
+                "description":"This endpoint will retrieve a list of sessions for the user.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"userID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the user."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/users/{userID}/library":{
+            "get":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "users"
+                ],
+                "summary":"Get an overview of the user's Anime library",
+                "description":"This endpoint will retrieve the list of Anime in a user's library.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"userID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the user."
+                    },
+                    {
+                        "in":"query",
+                        "name":"status",
+                        "schema":{
+                            "$ref":"#/components/schemas/KurozoraLibraryStatus"
+                        },
+                        "required":true,
+                        "description":"The status to retrieve the library items for."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
             },
-            "required": true,
-            "description": "ID of the session to be retrieved."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/sessions/{sessionID}/validate": {
-      "post": {
-        "security": [
-          {"kurozoraBearer": []}
-        ],
-        "tags": [
-          "sessions"
-        ],
-        "summary": "Checks if the session is valid",
-        "description": "This endpoint will check if the given session details are valid.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "sessionID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the session to be deleted."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/sessions/{sessionID}/delete": {
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "sessions"
-        ],
-        "summary": "Deletes a session",
-        "description": "This endpoint will delete a session.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "sessionID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the session to be deleted."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/anime/{animeID}": {
-      "get": {
-        "security": [
-          {},
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "anime"
-        ],
-        "summary": "(optional authentication) Anime details.",
-        "description": "This endpoint will retrieve the details of an Anime item.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "animeID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the anime."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/anime/{animeID}/actors": {
-      "get": {
-        "tags": [
-          "anime"
-        ],
-        "summary": "Anime actor information.",
-        "description": "This endpoint will retrieve the actors of an Anime item.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "animeID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the anime."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/anime/{animeID}/seasons": {
-      "get": {
-        "tags": [
-          "anime"
-        ],
-        "summary": "Anime all seasons information.",
-        "description": "This endpoint will retrieve the seasons of an Anime item.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "animeID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the anime."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/anime/{animeID}/rate": {
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "anime"
-        ],
-        "summary": "Rate an Anime.",
-        "description": "This endpoint will allow user's to leave a rating for an Anime.",
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "rating": {
-                    "type": "float",
-                    "description": "The rating to leave.",
-                    "example": 5.0
-                  }
+            "post":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "users"
+                ],
+                "summary":"Add an Anime to the user's Anime library",
+                "description":"This endpoint will add to the list of Anime in a user's library.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"userID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the user."
+                    }
+                ],
+                "requestBody":{
+                    "content":{
+                        "application/x-www-form-urlencoded":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "anime_id":{
+                                        "type":"integer",
+                                        "description":"The ID of the Anime to add."
+                                    },
+                                    "status":{
+                                        "type":"string",
+                                        "description":"The watch status to assign to the Anime.",
+                                        "example":"Watching"
+                                    }
+                                },
+                                "required":[
+                                    "anime_id",
+                                    "status"
+                                ]
+                            }
+                        }
+                    }
                 },
-                "required": [
-                  "rating"
-                ]
-              }
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
             }
-          }
         },
-        "parameters": [
-          {
-            "in": "path",
-            "name": "animeID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the anime."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/anime/search": {
-      "get": {
-        "security": [
-          {},
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "anime"
-        ],
-        "summary": "(optional authentication) Searches Anime.",
-        "description": "This endpoint will retrieve the search results for Anime.\n<div class=\"kuro-tip\">You can prefix your search with \"id:\" to search for Anime with a specific ID.</div>",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "The search query."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/forum-sections": {
-      "get": {
-        "tags": [
-          "forum-sections"
-        ],
-        "summary": "Forum sections list.",
-        "description": "This endpoint will retrieve the forum sections.",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/forum-sections/{sectionID}": {
-      "get": {
-        "tags": [
-          "forum-sections"
-        ],
-        "summary": "Forum section details.",
-        "description": "This endpoint will retrieve the details for a forum section.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "sectionID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the forum section."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/forum-sections/{sectionID}/threads": {
-      "get": {
-        "security": [
-          {},
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "forum-sections"
-        ],
-        "summary": "(optional authentication) Forum section get threads.",
-        "description": "This endpoint will retrieve the threads in a forum section.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "sectionID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the forum section."
-          },
-          {
-            "in": "query",
-            "name": "order",
-            "schema": {
-              "type": "string",
-              "example": "recent"
-            },
-            "required": true,
-            "description": "The method of ordering the threads."
-          },
-          {
-            "in": "query",
-            "name": "page",
-            "schema": {
-              "type": "string",
-              "example": "1"
-            },
-            "required": false,
-            "description": "The page to retrieve threads from. (starts at 1)"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      },
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "forum-sections"
-        ],
-        "summary": "Submit a new thread to a section.",
-        "description": "This endpoint will submit a new thread.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "sectionID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the forum section."
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "title": {
-                    "type": "string",
-                    "description": "The title of the thread."
-                  },
-                  "content": {
-                    "type": "string",
-                    "description": "Content of the thread."
-                  }
+        "/users/{userID}/library/delete":{
+            "post":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "users"
+                ],
+                "summary":"Remove an Anime from the user's Anime library",
+                "description":"This endpoint will remove from the list of Anime in a user's library.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"userID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the user."
+                    }
+                ],
+                "requestBody":{
+                    "content":{
+                        "application/x-www-form-urlencoded":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "anime_id":{
+                                        "type":"integer",
+                                        "description":"The ID of the Anime to remove."
+                                    }
+                                },
+                                "required":[
+                                    "anime_id"
+                                ]
+                            }
+                        }
+                    }
                 },
-                "required": [
-                  "title", "content"
-                ]
-              }
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
             }
-          }
         },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/privacy-policy": {
-      "get": {
-        "tags": [
-          "misc"
-        ],
-        "summary": "Retrieve latest privacy policy.",
-        "description": "This endpoint will retrieve the latest privacy policy.",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/anime-seasons/{seasonID}": {
-      "get": {
-        "tags": [
-          "anime-seasons"
-        ],
-        "summary": "Specific season information.",
-        "description": "This endpoint will retrieve the season information of a specific season.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "seasonID",
-            "schema": {
-              "type": "integer",
-              "example": 1
-            },
-            "required": true,
-            "description": "ID of the season."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/anime-seasons/{seasonID}/episodes": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "anime-seasons"
-        ],
-        "summary": "Retrieve season episodes.",
-        "description": "This endpoint will retrieve the episodes in a certain season.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "seasonID",
-            "schema": {
-              "type": "integer",
-              "example": 1
-            },
-            "required": true,
-            "description": "ID of the season."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/anime-episodes/{episodeID}/watched": {
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "anime-episodes"
-        ],
-        "summary": "Marks an episode as \"watched\" or \"not watched\".",
-        "description": "This endpoint will updated the watched status for an episode.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "episodeID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the episode."
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "watched": {
-                    "type": "integer",
-                    "description": "Mark episode watched or not. (0 = not watched, 1 = watched)",
-                    "minimum": 0,
-                    "maximum": 1
-                  }
+        "/users/{userID}/library/mal-import":{
+            "post":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "users"
+                ],
+                "summary":"Import a MAL export file into the user's library",
+                "description":"This endpoint will import a MAL export file into the user's library.",
+                "requestBody":{
+                    "content":{
+                        "multipart/form-data":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "file":{
+                                        "type":"file",
+                                        "description":"The MAL export file"
+                                    },
+                                    "behavior":{
+                                        "$ref":"#/components/schemas/MALImportBehavior",
+                                        "description":"The behavior to use while processing the import request."
+                                    }
+                                }
+                            }
+                        }
+                    }
                 },
-                "required": [
-                  "watched"
-                ]
-              }
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"userID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the user."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
             }
-          }
         },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/genres": {
-      "get": {
-        "tags": [
-          "genres"
-        ],
-        "summary": "Genres list.",
-        "description": "This endpoint will retrieve the genres.",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/genres/{genreID}": {
-      "get": {
-        "tags": [
-          "genres"
-        ],
-        "summary": "Get genre details.",
-        "description": "This endpoint will retrieve the details for a genre.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "genreID",
-            "schema": {
-              "type": "integer"
+        "/users/{userID}/favorite-anime":{
+            "get":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "users"
+                ],
+                "summary":"Get an overview of the user's favorite Anime",
+                "description":"This endpoint will retrieve the list of Anime in the user's favorites list.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"userID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the user."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
             },
-            "required": true,
-            "description": "ID of the genre."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/forum-threads/{threadID}": {
-      "get": {
-        "security": [
-          {},
-          {
-              "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "forum-threads"
-        ],
-        "summary": "(optional authentication) Get thread details.",
-        "description": "This endpoint will retrieve the details for a forum thread.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "threadID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the forum thread."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/forum-threads/{threadID}/vote": {
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "forum-threads"
-        ],
-        "summary": "Leaves a vote for a thread.",
-        "description": "This endpoint will leave a vote for a thread.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "threadID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the forum thread."
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "vote": {
-                    "type": "integer",
-                    "description": "The vote to submit. (0 = downvote, 1 = upvote)",
-                    "minimum": 0,
-                    "maximum": 1
-                  }
+            "post":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "users"
+                ],
+                "summary":"Add or remove an Anime to the user's Anime favorites",
+                "description":"This endpoint will add or remove to the list of Anime in a user's favorites.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"userID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the user."
+                    }
+                ],
+                "requestBody":{
+                    "content":{
+                        "application/x-www-form-urlencoded":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "anime_id":{
+                                        "type":"integer",
+                                        "description":"The ID of the Anime to add."
+                                    },
+                                    "is_favorite":{
+                                        "type":"integer",
+                                        "description":"0: remove, 1: add.",
+                                        "enum":[
+                                            0,
+                                            1
+                                        ]
+                                    }
+                                },
+                                "required":[
+                                    "anime_id",
+                                    "is_favorite"
+                                ]
+                            }
+                        }
+                    }
                 },
-                "required": [
-                  "vote"
-                ]
-              }
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
             }
-          }
         },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/forum-threads/{threadID}/replies": {
-      "get": {
-        "security": [
-          {},
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "forum-threads"
-        ],
-        "summary": "(optional authentication) Gets the replies on a thread.",
-        "description": "This endpoint will retrieve the replies on a thread.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "threadID",
-            "schema": {
-              "type": "integer"
+        "/users/{userID}/profile":{
+            "get":{
+                "security":[
+                    {
+
+                    },
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "users"
+                ],
+                "summary":"(optional authentication) User profile details.",
+                "description":"This endpoint will retrieve the details of a user's profile.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"userID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the user."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
             },
-            "required": true,
-            "description": "ID of the forum thread."
-          },
-          {
-            "in": "query",
-            "name": "order",
-            "schema": {
-              "type": "string",
-              "example": "top"
-            },
-            "required": false,
-            "description": "The method of ordering the results."
-          },
-          {
-            "in": "query",
-            "name": "page",
-            "schema": {
-              "type": "string",
-              "example": "1"
-            },
-            "required": false,
-            "description": "The page to retrieve threads from. (starts at 1)"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      },
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "forum-threads"
-        ],
-        "summary": "Leaves a reply on a thread.",
-        "description": "This endpoint will leave a reply on a thread.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "threadID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the forum thread."
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "content": {
-                    "type": "string",
-                    "description": "The content of the reply."
-                  }
+            "post":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "users"
+                ],
+                "summary":"Updates a user's profile information",
+                "description":"This endpoint will update a user's profile information.\n<div class=\"kuro-warn\">You should only send the request body parameters that actually need to be changed!</div>",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"userID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the user."
+                    }
+                ],
+                "requestBody":{
+                    "content":{
+                        "multipart/form-data":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "biography":{
+                                        "type":"string",
+                                        "description":"The new biography to set."
+                                    },
+                                    "profileImage":{
+                                        "type":"file",
+                                        "description":"The new user's avatar image"
+                                    },
+                                    "bannerImage":{
+                                        "type":"file",
+                                        "description":"The new user's banner image"
+                                    }
+                                }
+                            }
+                        }
+                    }
                 },
-                "required": [
-                  "content"
-                ]
-              }
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
             }
-          }
         },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/forum-threads/search": {
-      "get": {
-        "security": [
-          {},
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "forum-threads"
-        ],
-        "summary": "(optional authentication) Searches forum threads.",
-        "description": "This endpoint will retrieve the search results for forum threads.\n<div class=\"kuro-tip\">You can prefix your search with \"id:\" to search for Anime with a specific ID.</div>",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "The search query."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/forum-threads/{threadID}/lock": {
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "forum-threads"
-        ],
-        "summary": "[MOD+] Lock or unlock a thread.",
-        "description": "<span class=\"kuro-tip\">MOD+</span> This endpoint will lock or unlock a thread.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "threadID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the forum thread."
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "lock": {
-                    "type": "integer",
-                    "description": "Lock or unlock. (0 = unlock, 1 = lock)",
-                    "minimum": 0,
-                    "maximum": 1
-                  }
+        "/users/{userID}/notifications":{
+            "get":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "users"
+                ],
+                "summary":"User's list of notifications.",
+                "description":"This endpoint will retrieve the list of a user's notifications.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"userID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the user."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/users/search":{
+            "get":{
+                "security":[
+                    {
+
+                    },
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "users"
+                ],
+                "summary":"(optional authentication) Searches users.",
+                "description":"This endpoint will retrieve the search results for users.\n<div class=\"kuro-tip\">You can prefix your search with \"id:\" to search for a user with a specific ID.</div>",
+                "parameters":[
+                    {
+                        "in":"query",
+                        "name":"query",
+                        "schema":{
+                            "type":"string"
+                        },
+                        "required":false,
+                        "description":"The search query."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/users/{userID}/follow":{
+            "post":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "users"
+                ],
+                "summary":"Follow or unfollow another user",
+                "description":"This endpoint will follow or unfollow another user.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"userID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the user."
+                    }
+                ],
+                "requestBody":{
+                    "content":{
+                        "application/x-www-form-urlencoded":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "follow":{
+                                        "type":"integer",
+                                        "description":"0: unfollow, 1: follow.",
+                                        "enum":[
+                                            0,
+                                            1
+                                        ]
+                                    }
+                                },
+                                "required":[
+                                    "follow"
+                                ]
+                            }
+                        }
+                    }
                 },
-                "required": [
-                  "lock"
-                ]
-              }
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
             }
-          }
         },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/forum-replies/{replyID}/vote": {
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": []
-          }
-        ],
-        "tags": [
-          "forum-replies"
-        ],
-        "summary": "Leaves a vote for a forum reply.",
-        "description": "This endpoint will leave a vote for a forum reply.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "replyID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the forum reply."
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "vote": {
-                    "type": "integer",
-                    "description": "The vote to submit. (0 = downvote, 1 = upvote)",
-                    "minimum": 0,
-                    "maximum": 1
-                  }
+        "/users/{userID}/followers":{
+            "get":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"userID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the user."
+                    },
+                    {
+                        "in":"query",
+                        "name":"page",
+                        "schema":{
+                            "type":"string",
+                            "example":"1"
+                        },
+                        "required":false,
+                        "description":"The page to retrieve followers from. (starts at 1)"
+                    }
+                ],
+                "tags":[
+                    "users"
+                ],
+                "summary":"Retrieve the user's list of followers.",
+                "description":"This endpoint will retrieve the user's list of followers.",
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/users/{userID}/following":{
+            "get":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"userID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the user."
+                    },
+                    {
+                        "in":"query",
+                        "name":"page",
+                        "schema":{
+                            "type":"string",
+                            "example":"1"
+                        },
+                        "required":false,
+                        "description":"The page to retrieve followers from. (starts at 1)"
+                    }
+                ],
+                "tags":[
+                    "users"
+                ],
+                "summary":"Retrieve the user's list of following users.",
+                "description":"This endpoint will retrieve the user's list of following users.",
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/notifications/{notificationUUID}":{
+            "get":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "notifications"
+                ],
+                "summary":"Gets the details of a notification",
+                "description":"This endpoint will retrieve the details of a notification.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"notificationUUID",
+                        "schema":{
+                            "type":"string"
+                        },
+                        "required":true,
+                        "description":"UUID of the notification to be retrieved."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/notifications/{notificationUUID}/delete":{
+            "post":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "notifications"
+                ],
+                "summary":"Deletes a notification from the database",
+                "description":"This endpoint will delete a user's notification.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"notificationUUID",
+                        "schema":{
+                            "type":"string"
+                        },
+                        "required":true,
+                        "description":"UUID of the notification to be deleted."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/notifications/update":{
+            "post":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "notifications"
+                ],
+                "summary":"Update a single, multiple or all notifications' status",
+                "description":"This endpoint will update the status of a single, multiple or all notifications.",
+                "requestBody":{
+                    "content":{
+                        "application/x-www-form-urlencoded":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "notification":{
+                                        "type":"string",
+                                        "description":"\"[uuid]\" to update a single notification, \"[uuid],[uuid],[uuid]\" to update multiple notifications. \"all\" to update all of the user's notifications."
+                                    },
+                                    "read":{
+                                        "type":"integer",
+                                        "description":"Mark notification(s) as read or unread. (0 = unread, 1 = read)",
+                                        "minimum":0,
+                                        "maximum":1
+                                    }
+                                },
+                                "required":[
+                                    "notification",
+                                    "read"
+                                ]
+                            }
+                        }
+                    }
                 },
-                "required": [
-                  "vote"
-                ]
-              }
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
             }
-          }
         },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
+        "/sessions":{
+            "post":{
+                "tags":[
+                    "sessions"
+                ],
+                "summary":"Create a new session (login)",
+                "description":"This endpoint will create a new session for a user.",
+                "requestBody":{
+                    "content":{
+                        "application/x-www-form-urlencoded":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "username":{
+                                        "type":"string",
+                                        "description":"The user's username"
+                                    },
+                                    "password":{
+                                        "type":"string",
+                                        "description":"The user's password"
+                                    },
+                                    "device":{
+                                        "type":"string",
+                                        "description":"The device name that was used to create the session",
+                                        "example":"Swagger API tester"
+                                    }
+                                },
+                                "required":[
+                                    "username",
+                                    "password",
+                                    "device"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/sessions/{sessionID}":{
+            "get":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "sessions"
+                ],
+                "summary":"Gets the details of a session",
+                "description":"This endpoint will retrieve the details of a session.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"sessionID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the session to be retrieved."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/sessions/{sessionID}/validate":{
+            "post":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "sessions"
+                ],
+                "summary":"Checks if the session is valid",
+                "description":"This endpoint will check if the given session details are valid.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"sessionID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the session to be deleted."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/sessions/{sessionID}/delete":{
+            "post":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "sessions"
+                ],
+                "summary":"Deletes a session",
+                "description":"This endpoint will delete a session.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"sessionID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the session to be deleted."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/anime/{animeID}":{
+            "get":{
+                "security":[
+                    {
+
+                    },
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "anime"
+                ],
+                "summary":"(optional authentication) Anime details.",
+                "description":"This endpoint will retrieve the details of an Anime item.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"animeID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the anime."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/anime/{animeID}/actors":{
+            "get":{
+                "tags":[
+                    "anime"
+                ],
+                "summary":"Anime actor information.",
+                "description":"This endpoint will retrieve the actors of an Anime item.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"animeID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the anime."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/anime/{animeID}/seasons":{
+            "get":{
+                "tags":[
+                    "anime"
+                ],
+                "summary":"Anime all seasons information.",
+                "description":"This endpoint will retrieve the seasons of an Anime item.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"animeID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the anime."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/anime/{animeID}/rate":{
+            "post":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "anime"
+                ],
+                "summary":"Rate an Anime.",
+                "description":"This endpoint will allow user's to leave a rating for an Anime.",
+                "requestBody":{
+                    "content":{
+                        "application/x-www-form-urlencoded":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "rating":{
+                                        "type":"float",
+                                        "description":"The rating to leave.",
+                                        "example":5.0
+                                    }
+                                },
+                                "required":[
+                                    "rating"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"animeID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the anime."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/anime/search":{
+            "get":{
+                "security":[
+                    {
+
+                    },
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "anime"
+                ],
+                "summary":"(optional authentication) Searches Anime.",
+                "description":"This endpoint will retrieve the search results for Anime.\n<div class=\"kuro-tip\">You can prefix your search with \"id:\" to search for Anime with a specific ID.</div>",
+                "parameters":[
+                    {
+                        "in":"query",
+                        "name":"query",
+                        "schema":{
+                            "type":"string"
+                        },
+                        "required":false,
+                        "description":"The search query."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/forum-sections":{
+            "get":{
+                "tags":[
+                    "forum-sections"
+                ],
+                "summary":"Forum sections list.",
+                "description":"This endpoint will retrieve the forum sections.",
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/forum-sections/{sectionID}":{
+            "get":{
+                "tags":[
+                    "forum-sections"
+                ],
+                "summary":"Forum section details.",
+                "description":"This endpoint will retrieve the details for a forum section.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"sectionID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the forum section."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/forum-sections/{sectionID}/threads":{
+            "get":{
+                "security":[
+                    {
+
+                    },
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "forum-sections"
+                ],
+                "summary":"(optional authentication) Forum section get threads.",
+                "description":"This endpoint will retrieve the threads in a forum section.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"sectionID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the forum section."
+                    },
+                    {
+                        "in":"query",
+                        "name":"order",
+                        "schema":{
+                            "type":"string",
+                            "example":"recent"
+                        },
+                        "required":true,
+                        "description":"The method of ordering the threads."
+                    },
+                    {
+                        "in":"query",
+                        "name":"page",
+                        "schema":{
+                            "type":"string",
+                            "example":"1"
+                        },
+                        "required":false,
+                        "description":"The page to retrieve threads from. (starts at 1)"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            },
+            "post":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "forum-sections"
+                ],
+                "summary":"Submit a new thread to a section.",
+                "description":"This endpoint will submit a new thread.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"sectionID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the forum section."
+                    }
+                ],
+                "requestBody":{
+                    "content":{
+                        "application/x-www-form-urlencoded":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "title":{
+                                        "type":"string",
+                                        "description":"The title of the thread."
+                                    },
+                                    "content":{
+                                        "type":"string",
+                                        "description":"Content of the thread."
+                                    }
+                                },
+                                "required":[
+                                    "title",
+                                    "content"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/privacy-policy":{
+            "get":{
+                "tags":[
+                    "misc"
+                ],
+                "summary":"Retrieve latest privacy policy.",
+                "description":"This endpoint will retrieve the latest privacy policy.",
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/anime-seasons/{seasonID}":{
+            "get":{
+                "tags":[
+                    "anime-seasons"
+                ],
+                "summary":"Specific season information.",
+                "description":"This endpoint will retrieve the season information of a specific season.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"seasonID",
+                        "schema":{
+                            "type":"integer",
+                            "example":1
+                        },
+                        "required":true,
+                        "description":"ID of the season."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/anime-seasons/{seasonID}/episodes":{
+            "get":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "anime-seasons"
+                ],
+                "summary":"Retrieve season episodes.",
+                "description":"This endpoint will retrieve the episodes in a certain season.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"seasonID",
+                        "schema":{
+                            "type":"integer",
+                            "example":1
+                        },
+                        "required":true,
+                        "description":"ID of the season."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/anime-episodes/{episodeID}/watched":{
+            "post":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "anime-episodes"
+                ],
+                "summary":"Marks an episode as \"watched\" or \"not watched\".",
+                "description":"This endpoint will updated the watched status for an episode.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"episodeID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the episode."
+                    }
+                ],
+                "requestBody":{
+                    "content":{
+                        "application/x-www-form-urlencoded":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "watched":{
+                                        "type":"integer",
+                                        "description":"Mark episode watched or not. (0 = not watched, 1 = watched)",
+                                        "minimum":0,
+                                        "maximum":1
+                                    }
+                                },
+                                "required":[
+                                    "watched"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/genres":{
+            "get":{
+                "tags":[
+                    "genres"
+                ],
+                "summary":"Genres list.",
+                "description":"This endpoint will retrieve the genres.",
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/genres/{genreID}":{
+            "get":{
+                "tags":[
+                    "genres"
+                ],
+                "summary":"Get genre details.",
+                "description":"This endpoint will retrieve the details for a genre.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"genreID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the genre."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/forum-threads/{threadID}":{
+            "get":{
+                "security":[
+                    {
+
+                    },
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "forum-threads"
+                ],
+                "summary":"(optional authentication) Get thread details.",
+                "description":"This endpoint will retrieve the details for a forum thread.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"threadID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the forum thread."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/forum-threads/{threadID}/vote":{
+            "post":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "forum-threads"
+                ],
+                "summary":"Leaves a vote for a thread.",
+                "description":"This endpoint will leave a vote for a thread.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"threadID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the forum thread."
+                    }
+                ],
+                "requestBody":{
+                    "content":{
+                        "application/x-www-form-urlencoded":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "vote":{
+                                        "type":"integer",
+                                        "description":"The vote to submit. (0 = downvote, 1 = upvote)",
+                                        "minimum":0,
+                                        "maximum":1
+                                    }
+                                },
+                                "required":[
+                                    "vote"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/forum-threads/{threadID}/replies":{
+            "get":{
+                "security":[
+                    {
+
+                    },
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "forum-threads"
+                ],
+                "summary":"(optional authentication) Gets the replies on a thread.",
+                "description":"This endpoint will retrieve the replies on a thread.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"threadID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the forum thread."
+                    },
+                    {
+                        "in":"query",
+                        "name":"order",
+                        "schema":{
+                            "type":"string",
+                            "example":"top"
+                        },
+                        "required":false,
+                        "description":"The method of ordering the results."
+                    },
+                    {
+                        "in":"query",
+                        "name":"page",
+                        "schema":{
+                            "type":"string",
+                            "example":"1"
+                        },
+                        "required":false,
+                        "description":"The page to retrieve threads from. (starts at 1)"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            },
+            "post":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "forum-threads"
+                ],
+                "summary":"Leaves a reply on a thread.",
+                "description":"This endpoint will leave a reply on a thread.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"threadID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the forum thread."
+                    }
+                ],
+                "requestBody":{
+                    "content":{
+                        "application/x-www-form-urlencoded":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "content":{
+                                        "type":"string",
+                                        "description":"The content of the reply."
+                                    }
+                                },
+                                "required":[
+                                    "content"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/forum-threads/search":{
+            "get":{
+                "security":[
+                    {
+
+                    },
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "forum-threads"
+                ],
+                "summary":"(optional authentication) Searches forum threads.",
+                "description":"This endpoint will retrieve the search results for forum threads.\n<div class=\"kuro-tip\">You can prefix your search with \"id:\" to search for Anime with a specific ID.</div>",
+                "parameters":[
+                    {
+                        "in":"query",
+                        "name":"query",
+                        "schema":{
+                            "type":"string"
+                        },
+                        "required":false,
+                        "description":"The search query."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/forum-threads/{threadID}/lock":{
+            "post":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "forum-threads"
+                ],
+                "summary":"[MOD+] Lock or unlock a thread.",
+                "description":"<span class=\"kuro-tip\">MOD+</span> This endpoint will lock or unlock a thread.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"threadID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the forum thread."
+                    }
+                ],
+                "requestBody":{
+                    "content":{
+                        "application/x-www-form-urlencoded":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "lock":{
+                                        "type":"integer",
+                                        "description":"Lock or unlock. (0 = unlock, 1 = lock)",
+                                        "minimum":0,
+                                        "maximum":1
+                                    }
+                                },
+                                "required":[
+                                    "lock"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/forum-replies/{replyID}/vote":{
+            "post":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "forum-replies"
+                ],
+                "summary":"Leaves a vote for a forum reply.",
+                "description":"This endpoint will leave a vote for a forum reply.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"replyID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the forum reply."
+                    }
+                ],
+                "requestBody":{
+                    "content":{
+                        "application/x-www-form-urlencoded":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "vote":{
+                                        "type":"integer",
+                                        "description":"The vote to submit. (0 = downvote, 1 = upvote)",
+                                        "minimum":0,
+                                        "maximum":1
+                                    }
+                                },
+                                "required":[
+                                    "vote"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/themes":{
+            "get":{
+                "tags":[
+                    "themes"
+                ],
+                "summary":"Retrieve an overview of themes.",
+                "description":"This endpoint will retrieve an overview of themes.",
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
         }
-      }
     },
-    "/themes": {
-      "get": {
-        "tags": [
-          "themes"
-        ],
-        "summary": "Retrieve an overview of themes.",
-        "description": "This endpoint will retrieve an overview of themes.",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
+    "components":{
+        "schemas":{
+            "KurozoraLibraryStatus":{
+                "type":"string",
+                "enum":[
+                    "Watching",
+                    "Dropped",
+                    "Planning",
+                    "Completed",
+                    "OnHold"
+                ]
+            },
+            "MALImportBehavior":{
+                "type":"string",
+                "enum":[
+                    "overwrite"
+                ]
+            }
+        },
+        "securitySchemes":{
+            "kurozoraBearer":{
+                "type":"apiKey",
+                "scheme":"bearer",
+                "in":"header",
+                "name":"kuro-auth"
+            }
+        },
+        "responses":{
+            "JSONSuccess":{
+                "description":"Successful Kurozora JSON response",
+                "content":{
+                    "application/json":{
+                        "schema":{
+                            "type":"object",
+                            "example":{
+                                "success":true,
+                                "query_count":1
+                            }
+                        }
+                    }
+                }
+            },
+            "JSONError":{
+                "description":"Error Kurozora JSON response",
+                "content":{
+                    "application/json":{
+                        "schema":{
+                            "type":"object",
+                            "example":{
+                                "success":false,
+                                "error_message":"Lorem ipsum dolor sit amet",
+                                "query_count":1
+                            }
+                        }
+                    }
+                }
+            }
         }
-      }
+    },
+    "externalDocs":{
+        "description":"More information on the Kurozora API will follow soon...",
+        "url":"#"
     }
-  },
-  "components": {
-    "schemas": {
-      "KurozoraLibraryStatus": {
-        "type": "string",
-        "enum": ["Watching", "Dropped", "Planning", "Completed", "OnHold"]
-      },
-      "MALImportBehavior": {
-            "type": "string",
-            "enum": ["overwrite"]
-      }
-    },
-    "securitySchemes": {
-      "kurozoraBearer": {
-        "type": "apiKey",
-        "scheme": "bearer",
-        "in": "header",
-        "name": "kuro-auth"
-      }
-    },
-    "responses": {
-      "JSONSuccess": {
-        "description": "Successful Kurozora JSON response",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "example": {
-                "success": true,
-                "query_count": 1
-              }
-            }
-          }
-        }
-      },
-      "JSONError": {
-        "description": "Error Kurozora JSON response",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "example": {
-                "success": false,
-                "error_message": "Lorem ipsum dolor sit amet",
-                "query_count": 1
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "externalDocs":{
-    "description":"More information on the Kurozora API will follow soon...",
-    "url":"#"
-  }
 }

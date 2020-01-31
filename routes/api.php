@@ -60,6 +60,12 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('/{user}/library/mal-import', [LibraryController::class, 'malImport'])
             ->middleware('kurozora.userauth');
 
+        Route::get('/{user}/favorite-anime', [FavoriteAnimeController::class, 'getFavorites'])
+            ->middleware('kurozora.userauth');
+
+        Route::post('/{user}/favorite-anime', [FavoriteAnimeController::class, 'addFavorite'])
+            ->middleware('kurozora.userauth');
+
         Route::get('/{user}/profile', [UserController::class, 'profile'])
             ->middleware('kurozora.userauth:optional');
 
