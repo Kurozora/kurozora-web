@@ -71,12 +71,10 @@ abstract class TestCase extends BaseTestCase
             $this->fail('Used "authHeader", but no user present.');
 
         // Create a session
-        $session = Session::create([
+        $session = factory(Session::class)->create([
             'user_id'           => $this->user->id,
             'device'            => 'PHPUnit Test Suite',
-            'secret'            => Str::random(128),
-            'expiration_date'   => date('Y-m-d H:i:s', strtotime('90 days')),
-            'ip'                => 'FACTORY NEEDED HERE'
+            'ip'                => '127.0.0.1'
         ]);
 
         // Attach the auth header
