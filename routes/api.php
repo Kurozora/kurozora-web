@@ -1,189 +1,34 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-*/
-
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\Route;
 
-// API Swagger documentation page
-Route::get('/v1', function() {
-    return view('website.api', [
-        'openapi_json_file' => asset('openapi.json'),
-        'api_logo'          => asset('img/static/logo_xsm.png')
-    ]);
-});
-
-// API Routes
 Route::group(['prefix' => 'v1'], function () {
+    // Swagger documentation
+    Route::get('/', function() {
+        return view('website.api', [
+            'openapi_json_file' => asset('openapi.json'),
+            'api_logo'          => asset('img/static/logo_xsm.png')
+        ]);
+    });
+
     Route::get('/info', [APIController::class, 'info']);
 
     Route::get('/explore', [ExplorePageController::class, 'explore'])
         ->middleware('kurozora.userauth:optional');
 
-    Route::prefix('/users')->group(function() {
-        Route::post('/', [RegistrationController::class, 'register']);
-
-        Route::post('/register-siwa', [SignInWithAppleController::class, 'register']);
-
-        Route::get('/search', [UserController::class, 'search'])
-            ->middleware('kurozora.userauth:optional');
-
-        Route::post('/reset-password', [UserController::class, 'resetPassword']);
-
-        Route::get('/{user}/sessions', [UserController::class, 'getSessions'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:get_sessions,user');
-
-        Route::post('/{user}/follow', [FollowingController::class, 'followUser'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:follow,user');
-
-        Route::get('/{user}/followers', [FollowingController::class, 'getFollowers'])
-            ->middleware('kurozora.userauth');
-
-        Route::get('/{user}/following', [FollowingController::class, 'getFollowing'])
-            ->middleware('kurozora.userauth');
-
-        Route::get('/{user}/library', [LibraryController::class, 'getLibrary'])
-            ->middleware('kurozora.userauth');
-
-        Route::post('/{user}/library', [LibraryController::class, 'addLibrary'])
-            ->middleware('kurozora.userauth');
-
-        Route::post('/{user}/library/delete', [LibraryController::class, 'delLibrary'])
-            ->middleware('kurozora.userauth');
-
-        Route::post('/{user}/library/mal-import', [LibraryController::class, 'malImport'])
-            ->middleware('kurozora.userauth');
-
-        Route::get('/{user}/favorite-anime', [FavoriteAnimeController::class, 'getFavorites'])
-            ->middleware('kurozora.userauth');
-
-        Route::post('/{user}/favorite-anime', [FavoriteAnimeController::class, 'addFavorite'])
-            ->middleware('kurozora.userauth');
-
-        Route::get('/{user}/profile', [UserController::class, 'profile'])
-            ->middleware('kurozora.userauth:optional');
-
-        Route::post('/{user}/profile', [UserController::class, 'updateProfile'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:update_profile,user');
-
-        Route::get('/{user}/notifications', [UserController::class, 'getNotifications'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:get_notifications,user');
-    });
-
-    Route::prefix('/notifications')->group(function() {
-        Route::get('/{notification}', [NotificationController::class, 'getNotification'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:get_notification,notification');
-
-        Route::post('/{notification}/delete', [NotificationController::class, 'delete'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:del_notification,notification');
-
-        Route::post('/update', [NotificationController::class, 'update'])
-            ->middleware('kurozora.userauth');
-    });
-
-    Route::prefix('/sessions')->group(function() {
-        Route::post('/', [SessionController::class, 'create']);
-
-        Route::get('/{session}', [SessionController::class, 'details'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:get_session,session');
-
-        Route::post('/{session}/validate', [SessionController::class, 'validateSession'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:validate_session,session');
-
-        Route::post('/{session}/delete', [SessionController::class, 'delete'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:delete_session,session');
-    });
-
-    Route::prefix('/anime')->group(function() {
-        Route::get('/search', [AnimeController::class, 'search'])
-            ->middleware('kurozora.userauth:optional');
-
-        Route::get('/{anime}', [AnimeController::class, 'view'])
-            ->middleware('kurozora.userauth:optional');
-
-        Route::get('/{anime}/actors', [AnimeController::class, 'actorsAnime']);
-
-        Route::get('/{anime}/seasons', [AnimeController::class, 'seasonsAnime']);
-
-        Route::post('/{anime}/rate', [AnimeController::class, 'rateAnime'])
-            ->middleware('kurozora.userauth');
-    });
-
-    Route::prefix('/anime-seasons')->group(function() {
-        Route::get('/{season}', [AnimeSeasonController::class, 'details']);
-
-        Route::get('/{season}/episodes', [AnimeSeasonController::class, 'episodes'])
-            ->middleware('kurozora.userauth:optional');
-    });
-
-    Route::prefix('/anime-episodes')->group(function() {
-        Route::post('/{episode}/watched', [AnimeEpisodeController::class, 'watched'])
-            ->middleware('kurozora.userauth');
-    });
-
-    Route::prefix('/genres')->group(function() {
-        Route::get('/', [GenreController::class, 'overview']);
-
-        Route::get('/{genre}', [GenreController::class, 'details']);
-    });
-
-    Route::prefix('/forum-sections')->group(function() {
-        Route::get('/', [ForumSectionController::class, 'overview']);
-
-        Route::get('/{section}', [ForumSectionController::class, 'details']);
-
-        Route::get('/{section}/threads', [ForumSectionController::class, 'threads'])
-            ->middleware('kurozora.userauth:optional');
-
-        Route::post('/{section}/threads', [ForumSectionController::class, 'postThread'])
-            ->middleware('kurozora.userauth');
-    });
-
-    Route::prefix('/forum-threads')->group(function() {
-        Route::get('/search', [ForumThreadController::class, 'search'])
-            ->middleware('kurozora.userauth:optional');
-
-        Route::get('/{thread}', [ForumThreadController::class, 'threadInfo'])
-            ->middleware('kurozora.userauth:optional');
-
-        Route::post('/{thread}/vote', [ForumThreadController::class, 'vote'])
-            ->middleware('kurozora.userauth');
-
-        Route::get('/{thread}/replies', [ForumThreadController::class, 'replies'])
-            ->middleware('kurozora.userauth:optional');
-
-        Route::post('/{thread}/replies', [ForumThreadController::class, 'postReply'])
-            ->middleware('kurozora.userauth');
-
-        Route::post('/{thread}/lock', [ForumThreadController::class, 'lock'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:lock_thread,thread');
-    });
-
-    Route::prefix('/forum-replies')->group(function() {
-        Route::post('/{reply}/vote', [ForumReplyController::class, 'vote'])
-            ->middleware('kurozora.userauth');
-    });
-
-    Route::prefix('/themes')->group(function() {
-        Route::get('/', [AppThemeController::class, 'overview']);
-
-        Route::get('/{theme}/download', [AppThemeController::class, 'download'])
-            ->name('themes.download');
-    });
-
     Route::get('/privacy-policy', [MiscController::class, 'getPrivacyPolicy']);
+
+    require 'API/Users.php';
+    require 'API/Notifications.php';
+    require 'API/Sessions.php';
+    require 'API/Anime.php';
+    require 'API/Anime-Seasons.php';
+    require 'API/Anime-Episodes.php';
+    require 'API/Genres.php';
+    require 'API/Forum-Sections.php';
+    require 'API/Forum-Threads.php';
+    require 'API/Forum-Replies.php';
+    require 'API/Themes.php';
 });
