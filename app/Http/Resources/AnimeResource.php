@@ -87,7 +87,8 @@ class AnimeResource extends JsonResource
         return [
             'current_user' => [
                 'given_rating'      => $userRating,
-                'library_status'    => $currentLibraryStatus
+                'library_status'    => $currentLibraryStatus,
+                'is_favorite'       => $user->favoriteAnime()->wherePivot('anime_id', $this->id)->exists()
             ]
         ];
     }

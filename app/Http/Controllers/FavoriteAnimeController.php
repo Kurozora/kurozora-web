@@ -25,7 +25,7 @@ class FavoriteAnimeController extends Controller
         if($data['is_favorite'])
             $user->favoriteAnime()->attach($data['anime_id']);
 
-        return JSONResult::success(['is_favorite' => $data['is_favorite']]);
+        return JSONResult::success(['is_favorite' => (bool) $data['is_favorite']]);
     }
 
     /**
