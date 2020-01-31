@@ -2,16 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\WebControllers\APIDocumentationController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'v1'], function () {
-    // Swagger documentation
-    Route::get('/', function() {
-        return view('website.api', [
-            'openapi_json_file' => asset('openapi.json'),
-            'api_logo'          => asset('img/static/logo_xsm.png')
-        ]);
-    });
+    Route::get('/', [APIDocumentationController::class, 'render']);
 
     Route::get('/info', [APIController::class, 'info']);
 
