@@ -138,21 +138,8 @@ class AnimeController extends Controller
             'limit' => Anime::MAX_SEARCH_RESULTS
         ]);
 
-        // Format the results
-//        $displayResults = [];
-//
-//        foreach($resultArr as $anime) {
-//            $displayResults[] = [
-//                'id'                => $anime->id,
-//                'title'             => $anime->title,
-//                'average_rating'    => $anime->average_rating,
-//                'poster_thumbnail'  => $anime->getPoster(true)
-//            ];
-//        }
-
         return JSONResult::success([
             'max_search_results'    => Anime::MAX_SEARCH_RESULTS,
-//            'results'               => $displayResults
             'results'               => AnimeResource::collection($resultArr)
         ]);
     }
