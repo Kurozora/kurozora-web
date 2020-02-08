@@ -19,6 +19,7 @@
         "laravel/framework": "^6.0",
         "laravel/nova": "*",
         "laravel/tinker": "^1.0",
+        "musa11971/laravel-sort-request": "^1.0",
         "musa11971/laravel-tvdb": "^1.0",
         "nicolaslopezj/searchable": "1.*",
         "spatie/laravel-activitylog": "^3.9",
@@ -36,7 +37,8 @@
     "require-dev": {
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^2.0",
-        "phpunit/phpunit": "^8.0"
+        "phpunit/phpunit": "^8.0",
+        "spatie/phpunit-snapshot-assertions": "^3.1"
     },
     "autoload": {
         "files": [
