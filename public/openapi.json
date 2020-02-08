@@ -314,6 +314,15 @@
                         },
                         "required":true,
                         "description":"The status to retrieve the library items for."
+                    },
+                    {
+                        "in":"query",
+                        "name":"sort",
+                        "schema":{
+                            "$ref":"#/components/schemas/KurozoraLibraryStatus"
+                        },
+                        "required":true,
+                        "description":"Available sorting options: title(asc/desc), age(newest/oldest), rating(worst/best), my-rating(worst/best)"
                     }
                 ],
                 "responses":{

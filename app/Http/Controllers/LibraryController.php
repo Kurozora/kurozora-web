@@ -31,7 +31,10 @@ class LibraryController extends Controller
         $foundStatus = UserLibraryStatus::getValue($data['status']);
 
         // Retrieve the Anime from the user's library with the correct status
-        $anime = $user->library()->wherePivot('status', $foundStatus)->get();
+        $anime = $user->library()
+            ->sortViaRequest($request)
+            ->wherePivot('status', $foundStatus)
+            ->get();
 
         return JSONResult::success([
             'anime' => AnimeResource::collection($anime)
