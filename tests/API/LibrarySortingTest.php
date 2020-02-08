@@ -3,391 +3,159 @@
 namespace Tests\API;
 
 use App\Anime;
+use App\AnimeRating;
 use App\Enums\UserLibraryStatus;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Auth;
 use Tests\API\Traits\ProvidesTestUser;
-use Tests\API\Traits\RunsSeeders;
 use Tests\TestCase;
 
-class LibraryTest extends TestCase
+class LibrarySortingTest extends TestCase
 {
-    use DatabaseMigrations, ProvidesTestUser, RunsSeeders;
+    use DatabaseMigrations, ProvidesTestUser;
 
     /**
-     * Test if a user can get the Watching anime in their library.
+     * Test if a user can sort their library based on title.
      *
      * @return void
      * @test
      */
-    function a_user_can_get_the_Watching_anime_in_their_library()
+    function a_user_can_sort_their_library_based_on_title()
     {
-        // Add an anime to the list
-        $this->user->library()->attach(1, ['status' => UserLibraryStatus::Watching]);
+        $this->addTestingAnimeToLibrary($this->user);
 
-        // Send the request
+        // Send the request and sort by title ascending
         $response = $this->auth()->json('GET', '/api/v1/users/' . $this->user->id . '/library', [
-            'status' => 'Watching'
+            'status'    => 'Watching',
+            'sort'      => 'title(asc)'
         ]);
 
-        // Check whether the response was successful
-        $response->assertSuccessfulAPIResponse();
+        $this->assertMatchesJsonSnapshot($response->json());
 
-        // Assert that there is one anime in the list
-        $this->assertCount(1, $response->json()['anime']);
-    }
-
-    /**
-     * Test if a user can get the Dropped anime in their library.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_can_get_the_Dropped_anime_in_their_library()
-    {
-        // Add an anime to the list
-        $this->user->library()->attach(1, ['status' => UserLibraryStatus::Dropped]);
-
-        // Send the request
+        // Send the request and sort by title descending
         $response = $this->auth()->json('GET', '/api/v1/users/' . $this->user->id . '/library', [
-            'status' => 'Dropped'
+            'status'    => 'Watching',
+            'sort'      => 'title(desc)'
         ]);
 
-        // Check whether the response was successful
-        $response->assertSuccessfulAPIResponse();
-
-        // Assert that there is one anime in the list
-        $this->assertCount(1, $response->json()['anime']);
+        $this->assertMatchesJsonSnapshot($response->json());
     }
 
     /**
-     * Test if a user can get the Planning anime in their library.
+     * Test if a user can sort their library based on age.
      *
      * @return void
      * @test
      */
-    function a_user_can_get_the_Planning_anime_in_their_library()
+    function a_user_can_sort_their_library_based_on_age()
     {
-        // Add an anime to the list
-        $this->user->library()->attach(1, ['status' => UserLibraryStatus::Planning]);
+        $this->addTestingAnimeToLibrary($this->user);
 
-        // Send the request
+        // Send the request and sort by age newest
         $response = $this->auth()->json('GET', '/api/v1/users/' . $this->user->id . '/library', [
-            'status' => 'Planning'
+            'status'    => 'Watching',
+            'sort'      => 'age(newest)'
         ]);
 
-        // Check whether the response was successful
-        $response->assertSuccessfulAPIResponse();
+        $this->assertMatchesJsonSnapshot($response->json());
 
-        // Assert that there is one anime in the list
-        $this->assertCount(1, $response->json()['anime']);
-    }
-
-    /**
-     * Test if a user can get the Completed anime in their library.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_can_get_the_Completed_anime_in_their_library()
-    {
-        // Add an anime to the list
-        $this->user->library()->attach(1, ['status' => UserLibraryStatus::Completed]);
-
-        // Send the request
+        // Send the request and sort by age oldest
         $response = $this->auth()->json('GET', '/api/v1/users/' . $this->user->id . '/library', [
-            'status' => 'Completed'
+            'status'    => 'Watching',
+            'sort'      => 'age(oldest)'
         ]);
 
-        // Check whether the response was successful
-        $response->assertSuccessfulAPIResponse();
-
-        // Assert that there is one anime in the list
-        $this->assertCount(1, $response->json()['anime']);
+        $this->assertMatchesJsonSnapshot($response->json());
     }
 
     /**
-     * Test if a user can get the OnHold anime in their library.
+     * Test if a user can sort their library based on rating.
      *
      * @return void
      * @test
      */
-    function a_user_can_get_the_OnHold_anime_in_their_library()
+    function a_user_can_sort_their_library_based_on_rating()
     {
-        // Add an anime to the list
-        $this->user->library()->attach(1, ['status' => UserLibraryStatus::OnHold]);
+        $this->addTestingAnimeToLibrary($this->user);
 
-        // Send the request
+        // Send the request and sort by rating best
         $response = $this->auth()->json('GET', '/api/v1/users/' . $this->user->id . '/library', [
-            'status' => 'OnHold'
+            'status'    => 'Watching',
+            'sort'      => 'rating(best)'
         ]);
 
-        // Check whether the response was successful
-        $response->assertSuccessfulAPIResponse();
+        $this->assertMatchesJsonSnapshot($response->json());
 
-        // Assert that there is one anime in the list
-        $this->assertCount(1, $response->json()['anime']);
-    }
-
-    /**
-     * Test if a user cannot get the anime in their library with an invalid status.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_cannot_get_the_anime_in_their_library_with_an_invalid_status()
-    {
-        // Send the request
+        // Send the request and sort by rating worst
         $response = $this->auth()->json('GET', '/api/v1/users/' . $this->user->id . '/library', [
-            'status' => 'Invalid Status'
+            'status'    => 'Watching',
+            'sort'      => 'rating(worst)'
         ]);
 
-        // Check whether the response was unsuccessful
-        $response->assertUnsuccessfulAPIResponse();
+        $this->assertMatchesJsonSnapshot($response->json());
     }
 
     /**
-     * Test if a user cannot get the anime of another user's library.
+     * Test if a user can sort their library based on their own giving rating.
      *
      * @return void
      * @test
      */
-    function a_user_cannot_get_the_anime_of_another_users_library()
+    function a_user_can_sort_their_library_based_on_their_own_given_rating()
     {
-        /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
+        $this->addTestingAnimeToLibrary($this->user);
 
-        // Send the request
-        $response = $this->auth()->json('GET', '/api/v1/users/' . $anotherUser->id . '/library', [
-            'status' => 'Watching'
+        // Send the request and sort by my rating best
+        $response = $this->auth()->json('GET', '/api/v1/users/' . $this->user->id . '/library', [
+            'status'    => 'Watching',
+            'sort'      => 'my-rating(best)'
         ]);
 
-        // Check whether the response was unsuccessful
-        $response->assertUnsuccessfulAPIResponse();
-    }
+        $this->assertMatchesJsonSnapshot($response->json());
 
-    /**
-     * Test if a user can add anime to their library (Watching).
-     *
-     * @return void
-     * @test
-     */
-    function a_user_can_add_anime_to_their_library_with_status_Watching()
-    {
-        // Send request to add first anime to library
-        $anime = Anime::first();
-
-        $response = $this->addAnimeToLibraryAPIRequest($this->user->id, $anime->id, 'Watching');
-
-        // Check whether the response was successful
-        $response->assertSuccessfulAPIResponse();
-
-        // Check that the user now has 1 anime in their Watching list
-        $count = $this->user->library()
-            ->wherePivot('status', UserLibraryStatus::Watching)
-            ->count();
-
-        $this->assertEquals(1, $count);
-    }
-
-    /**
-     * Test if a user can add anime to their library (Dropped).
-     *
-     * @return void
-     * @test
-     */
-    function a_user_can_add_anime_to_their_library_with_status_Dropped()
-    {
-        // Send request to add first anime to library
-        $anime = Anime::first();
-
-        $response = $this->addAnimeToLibraryAPIRequest($this->user->id, $anime->id, 'Dropped');
-
-        // Check whether the response was successful
-        $response->assertSuccessfulAPIResponse();
-
-        // Check that the user now has 1 anime in their Dropped list
-        $count = $this->user->library()
-            ->wherePivot('status', UserLibraryStatus::Dropped)
-            ->count();
-
-        $this->assertEquals(1, $count);
-    }
-
-    /**
-     * Test if a user can add anime to their library (Planning).
-     *
-     * @return void
-     * @test
-     */
-    function a_user_can_add_anime_to_their_library_with_status_Planning()
-    {
-        // Send request to add first anime to library
-        $anime = Anime::first();
-
-        $response = $this->addAnimeToLibraryAPIRequest($this->user->id, $anime->id, 'Planning');
-
-        // Check whether the response was successful
-        $response->assertSuccessfulAPIResponse();
-
-        // Check that the user now has 1 anime in their Planning list
-        $count = $this->user->library()
-            ->wherePivot('status', UserLibraryStatus::Planning)
-            ->count();
-
-        $this->assertEquals(1, $count);
-    }
-
-    /**
-     * Test if a user can add anime to their library (Completed).
-     *
-     * @return void
-     * @test
-     */
-    function a_user_can_add_anime_to_their_library_with_status_Completed()
-    {
-        // Send request to add first anime to library
-        $anime = Anime::first();
-
-        $response = $this->addAnimeToLibraryAPIRequest($this->user->id, $anime->id, 'Completed');
-
-        // Check whether the response was successful
-        $response->assertSuccessfulAPIResponse();
-
-        // Check that the user now has 1 anime in their Completed list
-        $count = $this->user->library()
-            ->wherePivot('status', UserLibraryStatus::Completed)
-            ->count();
-
-        $this->assertEquals(1, $count);
-    }
-
-    /**
-     * Test if a user can add anime to their library (OnHold).
-     *
-     * @return void
-     * @test
-     */
-    function a_user_can_add_anime_to_their_library_with_status_OnHold()
-    {
-        // Send request to add first anime to library
-        $anime = Anime::first();
-
-        $response = $this->addAnimeToLibraryAPIRequest($this->user->id, $anime->id, 'OnHold');
-
-        // Check whether the response was successful
-        $response->assertSuccessfulAPIResponse();
-
-        // Check that the user now has 1 anime in their OnHold list
-        $count = $this->user->library()
-            ->wherePivot('status', UserLibraryStatus::OnHold)
-            ->count();
-
-        $this->assertEquals(1, $count);
-    }
-
-    /**
-     * Test if a user cannot add anime to their library with an invalid status.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_cannot_add_anime_to_their_library_with_an_invalid_status()
-    {
-        // Send request to add first anime to library
-        $anime = Anime::first();
-
-        $response = $this->addAnimeToLibraryAPIRequest($this->user->id, $anime->id, 'Invalid Status');
-
-        // Check whether the response was unsuccessful
-        $response->assertUnsuccessfulAPIResponse();
-    }
-
-    /**
-     * Test if a user cannot add anime to another user's library.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_cannot_add_anime_to_another_users_library()
-    {
-        /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
-
-        // Send request to add first anime to library
-        $anime = Anime::first();
-
-        $response = $this->addAnimeToLibraryAPIRequest($anotherUser->id, $anime->id, 'Watching');
-
-        // Check whether the response was unsuccessful
-        $response->assertUnsuccessfulAPIResponse();
-    }
-
-    /**
-     * Test if a user can delete anime from their library.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_can_delete_anime_from_their_library()
-    {
-        // Add an anime to the list
-        $this->user->library()->attach(1, ['status' => UserLibraryStatus::Watching]);
-
-        // Send the request
-        $response = $this->auth()->json('POST', '/api/v1/users/' . $this->user->id . '/library/delete', [
-            'anime_id' => 1
+        // Send the request and sort by my rating worst
+        $response = $this->auth()->json('GET', '/api/v1/users/' . $this->user->id . '/library', [
+            'status'    => 'Watching',
+            'sort'      => 'my-rating(worst)'
         ]);
 
-        // Check whether the response was successful
-        $response->assertSuccessfulAPIResponse();
-
-        // Check that the user now has no anime in their library
-        $count = $this->user->library()->count();
-
-        $this->assertEquals(0, $count);
+        $this->assertMatchesJsonSnapshot($response->json());
     }
 
     /**
-     * Test if a user cannot delete anime from another user's library.
+     * Adds the testing Anime to the user's library.
      *
-     * @return void
-     * @test
+     * @param User $user
      */
-    function a_user_cannot_delete_anime_from_another_users_library()
+    private function addTestingAnimeToLibrary(User $user)
     {
-        /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
+        // Add the first Anime
+        $anime = Anime::create([
+            'title'             => 'Awesome Show',
+            'created_at'        => now(),
+            'average_rating'    => 2.0
+        ]);
+        $user->library()->attach($anime->id, ['status' => UserLibraryStatus::Watching]);
 
-        // Add an anime to the list
-        $anotherUser->library()->attach(1, ['status' => UserLibraryStatus::Watching]);
-
-        // Send the request
-        $response = $this->auth()->json('POST', '/api/v1/users/' . $anotherUser->id . '/library/delete', [
-            'anime_id' => 1
+        AnimeRating::create([
+            'anime_id'  => $anime->id,
+            'user_id'   => $user->id,
+            'rating'    => 3.0
         ]);
 
-        // Check whether the response was unsuccessful
-        $response->assertUnsuccessfulAPIResponse();
+        // Add the second Anime
+        $anime = Anime::create([
+            'title'             => 'Be a good person!',
+            'created_at'        => now()->subDay(),
+            'average_rating'    => 4.0
+        ]);
+        $user->library()->attach($anime->id, ['status' => UserLibraryStatus::Watching]);
 
-        // Check that the user still has the anime in their library
-        $count = $anotherUser->library()->count();
-
-        $this->assertEquals(1, $count);
-    }
-
-    /**
-     * Sends an API request to add anime to a user's library.
-     *
-     * @param $userID
-     * @param $animeID
-     * @param $status
-     * @return \Illuminate\Foundation\Testing\TestResponse
-     */
-    private function addAnimeToLibraryAPIRequest($userID, $animeID, $status) {
-        return $this->auth()->json('POST', '/api/v1/users/' . $userID . '/library', [
-            'anime_id'  => $animeID,
-            'status'    => $status
+        AnimeRating::create([
+            'anime_id'  => $anime->id,
+            'user_id'   => $user->id,
+            'rating'    => 1.2
         ]);
     }
 }
