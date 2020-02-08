@@ -5,14 +5,14 @@ namespace Tests;
 use App\Session;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Foundation\Testing\TestResponse;
-use Illuminate\Support\Str;
 use KuroAuthToken;
+use Spatie\Snapshots\MatchesSnapshots;
 use Tests\API\Traits\ProvidesTestUser;
 use Tests\API\Traits\RunsSeeders;
 
 abstract class TestCase extends BaseTestCase
 {
-    use CreatesApplication;
+    use CreatesApplication, MatchesSnapshots;
 
     /**
      * Set up the test.
