@@ -319,9 +319,9 @@
                         "in":"query",
                         "name":"sort",
                         "schema":{
-                            "$ref":"#/components/schemas/KurozoraLibraryStatus"
+                            "type":"string"
                         },
-                        "required":true,
+                        "required":false,
                         "description":"Available sorting options: title(asc/desc), age(newest/oldest), rating(worst/best), my-rating(worst/best)"
                     }
                 ],
