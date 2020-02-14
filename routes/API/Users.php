@@ -23,10 +23,10 @@ Route::prefix('/users')->group(function() {
         ->middleware('can:follow,user');
 
     Route::get('/{user}/followers', [FollowingController::class, 'getFollowers'])
-        ->middleware('kurozora.userauth');
+        ->middleware('kurozora.userauth:optional');
 
     Route::get('/{user}/following', [FollowingController::class, 'getFollowing'])
-        ->middleware('kurozora.userauth');
+        ->middleware('kurozora.userauth:optional');
 
     Route::get('/{user}/library', [LibraryController::class, 'getLibrary'])
         ->middleware('kurozora.userauth');
