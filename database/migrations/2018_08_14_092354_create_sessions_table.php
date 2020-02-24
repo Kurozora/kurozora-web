@@ -1,5 +1,6 @@
 <?php
 
+use App\Rules\ValidateAPNDeviceToken;
 use App\Session;
 use App\User;
 use Illuminate\Support\Facades\Schema;
@@ -26,6 +27,7 @@ class CreateSessionsTable extends Migration
             $table->timestamp('last_validated')->useCurrent = true;
             $table->string('ip')->nullable();
             $table->string('device')->nullable();
+            $table->string('apn_device_token', ValidateAPNDeviceToken::TOKEN_LENGTH)->nullable()->unique();
             $table->string('secret', 128);
 
             $table->string('city')->nullable();

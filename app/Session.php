@@ -4,7 +4,6 @@ namespace App;
 
 
 /**
- * @property false|string last_validated
  * @property int id
  * @property string ip
  * @property string city
@@ -12,8 +11,9 @@ namespace App;
  * @property string country
  * @property float latitude
  * @property float longitude
- * @property mixed device
- * @property mixed expiration_date
+ * @property string|null device
+ * @property string|null apn_device_token
+ * @property int user_id
  */
 class Session extends KModel
 {
