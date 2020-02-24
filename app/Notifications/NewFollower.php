@@ -2,10 +2,13 @@
 
 namespace App\Notifications;
 
+use App\Http\Resources\NotificationResource;
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\Apn\ApnChannel;
+use NotificationChannels\Apn\ApnMessage;
 
 class NewFollower extends Notification implements ShouldQueue
 {
@@ -32,7 +35,7 @@ class NewFollower extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database', ApnChannel::class];
     }
 
     /**
@@ -47,5 +50,19 @@ class NewFollower extends Notification implements ShouldQueue
             'user_id'   => $this->follower->id,
             'username'  => $this->follower->username
         ];
+    }
+
+    /**
+     * Get the APN representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return ApnMessage
+     */
+    public function toApn($notifiable)
+    {
+        return ApnMessage::create()
+            ->badge(0)
+            ->title('New follower')
+            ->body($this->follower->username . ' has started following you.');
     }
 }

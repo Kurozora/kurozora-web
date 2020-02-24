@@ -13,6 +13,7 @@ $factory->define(Session::class, function (Faker $faker) {
         'last_validated'    => now(),
         'ip'                => $faker->ipv4,
         'device'            => 'Faker Factory',
+        'apn_device_token'  => Str::random(64),
         'secret'            => Str::random(128),
         'city'              => $faker->city,
         'region'            => $faker->state,
