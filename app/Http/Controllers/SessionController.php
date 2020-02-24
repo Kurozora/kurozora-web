@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\NewUserSessionEvent;
 use App\Helpers\JSONResult;
+use App\Http\Requests\CreateSessionRequest;
+use App\Http\Requests\UpdateSessionRequest;
 use App\Http\Resources\SessionResource;
 use App\Jobs\FetchSessionLocation;
 use App\LoginAttempt;
@@ -11,32 +12,20 @@ use App\Notifications\NewSession;
 use App\Session;
 use App\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use KuroAuthToken;
-use Validator;
 use Illuminate\Http\Request;
 
 class SessionController extends Controller
 {
     /**
-     * Creates a new session
+     * Creates a new session for a user.
      *
-     * @param Request $request
+     * @param CreateSessionRequest $request
      * @return JsonResponse
      */
-    public function create(Request $request) {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'username'  => 'bail|required|exists:' . User::TABLE_NAME . ',username',
-            'password'  => 'bail|required',
-            'device'    => 'bail|required|max:255'
-        ]);
-
-        // Display an error if validation failed
-        if($validator->fails())
-            return JSONResult::error($validator->errors()->first());
-
+    public function create(CreateSessionRequest $request)
+    {
         // Check if the request IP is not banned from logging in
         if(!LoginAttempt::isIPAllowedToLogin($request->ip()))
             return JSONResult::error('Oops. You have failed to login too many times. Please grab yourself a snack and try again in a bit.');
@@ -45,6 +34,7 @@ class SessionController extends Controller
         $username       = $request->input('username');
         $rawPassword    = $request->input('password');
         $device         = $request->input('device');
+        $apnToken       = $request->input('apn_device_token');
 
         // Find the user
         /** @var User $user */
@@ -71,7 +61,8 @@ class SessionController extends Controller
             'device'            => $device,
             'secret'            => Str::random(128),
             'expiration_date'   => date('Y-m-d H:i:s', strtotime('90 days')),
-            'ip'                => $ip
+            'ip'                => $ip,
+            'apn_device_token'  => $apnToken
         ]);
 
         // Dispatch job to retrieve location
@@ -85,9 +76,42 @@ class SessionController extends Controller
             'user' => [
                 'id'                => $user->id,
                 'kuro_auth_token'   => KuroAuthToken::generate($user->id, $session->secret),
-                'session_id'        => $session->id,
-                'role'              => null // @TODO fix this with new role system
+                'session_id'        => $session->id
             ]
+        ]);
+    }
+
+    /**
+     * Updates a session's information.
+     *
+     * @param UpdateSessionRequest $request
+     * @param Session $session
+     * @return JsonResponse
+     */
+    function update(UpdateSessionRequest $request, Session $session)
+    {
+        $data = $request->validated();
+
+        // Track if anything changed
+        $changedFields = [];
+
+        // Update APN device token
+        if($request->has('apn_device_token')) {
+            $session->apn_device_token = $data['apn_device_token'];
+            $changedFields[] = 'APN device token';
+        }
+
+        // Successful response
+        $displayMessage = 'Session update successful. ';
+
+        if(count($changedFields)) {
+            $displayMessage .= 'You have updated: ' . join(', ', $changedFields) . '.';
+            $session->save();
+        }
+        else $displayMessage .= 'No information was updated.';
+
+        return JSONResult::success([
+            'message' => $displayMessage
         ]);
     }
 
@@ -122,7 +146,8 @@ class SessionController extends Controller
      * @return JsonResponse
      * @throws \Exception
      */
-    public function delete(Request $request, Session $session) {
+    public function delete(Request $request, Session $session)
+    {
         // Delete the session
         $session->delete();
 
@@ -135,7 +160,8 @@ class SessionController extends Controller
      * @param Session $session
      * @return JsonResponse
      */
-    public function details(Session $session) {
+    public function details(Session $session)
+    {
         return JSONResult::success([
             'session' => SessionResource::make($session)
         ]);

@@ -3,9 +3,11 @@
 namespace Tests\API;
 
 use App\Http\Resources\SessionResource;
+use App\Rules\ValidateAPNDeviceToken;
 use App\Session;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Str;
 use Tests\API\Traits\ProvidesTestUser;
 use Tests\TestCase;
 
@@ -212,5 +214,50 @@ class SessionTest extends TestCase
 
         // Check whether the session still exists
         $this->assertNotNull(Session::find($session->id));
+    }
+
+    /** @test */
+    function a_user_can_update_the_apn_device_token_of_their_session()
+    {
+        // Create a session for the user
+        /** @var Session $session */
+        $session = factory(Session::class)->create(['user_id' => $this->user->id]);
+
+        // Create a new token
+        $newToken = Str::random(64);
+
+        // Send the request
+        $response = $this->auth()->json('POST', '/api/v1/sessions/' . $session->id . '/update', [
+            'apn_device_token' => $newToken
+        ]);
+
+        // Check whether the request was successful
+        $response->assertSuccessfulAPIResponse();
+
+        // Check whether the token was updated
+        $session->refresh();
+        $this->assertSame($newToken, $session->apn_device_token);
+    }
+
+    /** @test */
+    function a_user_cannot_update_the_apn_device_token_of_another_users_session()
+    {
+        // Create a session for the user
+        /** @var User $anotherUser */
+        $anotherUser = factory(User::class)->create();
+
+        /** @var Session $session */
+        $session = factory(Session::class)->create(['user_id' => $anotherUser->id]);
+
+        // Create a new token
+        $newToken = Str::random(64);
+
+        // Send the request
+        $response = $this->auth()->json('POST', '/api/v1/sessions/' . $session->id . '/update', [
+            'apn_device_token' => $newToken
+        ]);
+
+        // Check whether the request was unsuccessful
+        $response->assertUnsuccessfulAPIResponse();
     }
 }

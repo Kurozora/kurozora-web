@@ -11,6 +11,10 @@ Route::prefix('/sessions')->group(function() {
         ->middleware('kurozora.userauth')
         ->middleware('can:get_session,session');
 
+    Route::post('/{session}/update', [SessionController::class, 'update'])
+        ->middleware('kurozora.userauth')
+        ->middleware('can:update_session,session');
+
     Route::post('/{session}/validate', [SessionController::class, 'validateSession'])
         ->middleware('kurozora.userauth')
         ->middleware('can:validate_session,session');
