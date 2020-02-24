@@ -1052,6 +1052,11 @@
                                         "type":"string",
                                         "description":"The device name that was used to create the session",
                                         "example":"Swagger API tester"
+                                    },
+                                    "apn_device_token":{
+                                        "type":"string",
+                                        "description":"The user's APN device token.",
+                                        "example":"8dc624bce359a17068e28f113f1919c88c729e5a2341cb9e58306efef63bae92"
                                     }
                                 },
                                 "required":[
@@ -1108,6 +1113,56 @@
                 }
             }
         },
+        "/sessions/{sessionID}/update":{
+            "post":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "sessions"
+                ],
+                "summary":"Updates the information of a session",
+                "description":"This endpoint will update the information of a sessions.",
+                "requestBody": {
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "apn_device_token": {
+                                        "type": "string",
+                                        "description": "The new APN device token for the session."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"sessionID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the session to be updated."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
         "/sessions/{sessionID}/validate":{
             "post":{
                 "security":[
@@ -1130,7 +1185,7 @@
                             "type":"integer"
                         },
                         "required":true,
-                        "description":"ID of the session to be deleted."
+                        "description":"ID of the session to be validated."
                     }
                 ],
                 "responses":{

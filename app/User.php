@@ -330,4 +330,17 @@ class User extends Authenticatable implements LikerContract, HasMedia
 
         return true;
     }
+
+    /**
+     * Returns the APN token(s) for the user.
+     *
+     * @return string|array
+     */
+    public function routeNotificationForApn()
+    {
+        return $this->sessions()
+            ->whereNotNull('apn_device_token')
+            ->pluck('apn_device_token')
+            ->toArray();
+    }
 }

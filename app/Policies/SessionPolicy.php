@@ -22,6 +22,17 @@ class SessionPolicy
     }
 
     /**
+     * Determine whether the user can update a session
+     *
+     * @param User $user
+     * @param Session $session
+     * @return bool
+     */
+    public function update_session(User $user, Session $session) {
+        return $user->id === (int) $session->user_id;
+    }
+
+    /**
      * Determine whether the user can validate a session
      *
      * @param User $user
