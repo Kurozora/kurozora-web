@@ -4,28 +4,38 @@ namespace App\Rules;
 
 use App\User;
 use Illuminate\Contracts\Validation\Rule;
+use InvalidArgumentException;
 
 class ValidateEmail implements Rule
 {
     const MINIMUM_EMAIL_LENGTH = 5;
     const MAXIMUM_EMAIL_LENGTH = 255;
 
-    protected $errorType;
+    /**
+     * Options for email validation.
+     *
+     * Available options:
+     * - `must-be-taken`: if set to true, the email must be in use.
+     * - `must-be-available`: if set to true, the email must be in available for use.
+     *
+     * @var array $options
+     */
+    protected $options;
+
+    /** @var string $error */
+    protected $error = 'The :attribute is invalid';
 
     /**
-     * Whether or not it should be checked if the email is taken by a user
-     *
-     * @var bool
+     * @param array $options
      */
-    protected $checkUnique;
+    function __construct($options = [])
+    {
+        // The `must-be-taken` and `must-be-available` options cannot be used simultaneously
+        if(isset($options['must-be-taken']) && isset($options['must-be-available']))
+            throw new InvalidArgumentException('The `must-be-taken` and `must-be-available` options cannot be used simultaneously.');
 
-    /**
-     * ValidateEmail constructor.
-     *
-     * @param bool $checkUnique
-     */
-    function __construct($checkUnique = true) {
-        $this->checkUnique = $checkUnique;
+        // Set the options
+        $this->options = $options;
     }
 
     /**
@@ -38,35 +48,31 @@ class ValidateEmail implements Rule
     public function passes($attribute, $value)
     {
         // Empty string does not pass
-        if(!is_string($value) || !strlen($value)) {
-            $this->errorType = 'length';
-            return false;
-        }
+        if(!is_string($value) || !strlen($value))
+            return $this->fail(trans('validation.min', ['min' => self::MINIMUM_EMAIL_LENGTH]));
 
         // Check minimum length
-        if(strlen($value) < self::MINIMUM_EMAIL_LENGTH) {
-            $this->errorType = 'length';
-            return false;
-        }
+        if(strlen($value) < self::MINIMUM_EMAIL_LENGTH)
+            return $this->fail(trans('validation.min', ['min' => self::MINIMUM_EMAIL_LENGTH]));
 
         // Check maximum length
-        if(strlen($value) > self::MAXIMUM_EMAIL_LENGTH) {
-            $this->errorType = 'length';
-            return false;
-        }
+        if(strlen($value) > self::MAXIMUM_EMAIL_LENGTH)
+            return $this->fail(trans('validation.max', ['max' => self::MINIMUM_EMAIL_LENGTH]));
 
         // Check if valid email format
-        if(!filter_var($value, FILTER_VALIDATE_EMAIL)) {
-            $this->errorType = 'not-email';
-            return false;
+        if(!filter_var($value, FILTER_VALIDATE_EMAIL))
+            return $this->fail(trans('validation.email'));
+
+        // (option) The email must be taken
+        if($this->option('must-be-taken', false) === true) {
+            if (!User::where('email', $value)->exists())
+                return $this->fail(trans('validation.exists'));
         }
 
-        // Check if username taken
-        if($this->checkUnique) {
-            if (User::where('email', $value)->exists()) {
-                $this->errorType = 'exists';
-                return false;
-            }
+        // (option) The email must be available
+        if($this->option('must-be-available', false) === true) {
+            if (User::where('email', $value)->exists())
+                return $this->fail(trans('validation.unique'));
         }
 
         return true;
@@ -79,13 +85,33 @@ class ValidateEmail implements Rule
      */
     public function message()
     {
-        if($this->errorType == 'length')
-            return trans('validation.between.string', ['min' => self::MINIMUM_EMAIL_LENGTH, 'max' => self::MAXIMUM_EMAIL_LENGTH]);
-        else if($this->errorType == 'not-email')
-            return trans('validation.email');
-        else if($this->errorType == 'exists')
-            return trans('validation.unique');
+        return $this->error;
+    }
 
-        return 'The :attribute is invalid.';
+    /**
+     * Fails the validator and sets the error.
+     *
+     * @param string $error
+     * @return bool
+     */
+    private function fail($error)
+    {
+        $this->error = $error;
+        return false;
+    }
+
+    /**
+     * Gets the value of an option or returns the default ..
+     * .. value if the option is not set.
+     *
+     * @param string $option
+     * @param mixed $default
+     * @return mixed
+     */
+    private function option($option, $default)
+    {
+        if(isset($this->options[$option]))
+            return $this->options[$option];
+        else return $default;
     }
 }

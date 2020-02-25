@@ -15,7 +15,7 @@ class SIWARegistration extends FormRequest
     public function rules()
     {
         return [
-            'email'     => ['bail', 'required', new ValidateEmail(true)],
+            'email'     => ['bail', 'required', new ValidateEmail(['must-be-available' => true])],
             'siwa_id'   => ['bail', 'required', 'string', 'min:1', 'max:200']
         ];
     }
