@@ -76,7 +76,7 @@ class User extends Resource
 
             Text::make('Email')
                 ->sortable()
-                ->rules('required', new ValidateEmail(false)),
+                ->rules('required', new ValidateEmail),
 
             Password::make('Password')
                 ->onlyOnForms()

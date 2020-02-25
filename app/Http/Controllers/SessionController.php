@@ -31,14 +31,14 @@ class SessionController extends Controller
             return JSONResult::error('Oops. You have failed to login too many times. Please grab yourself a snack and try again in a bit.');
 
         // Fetch the variables and sanitize them
-        $username       = $request->input('username');
+        $email          = $request->input('email');
         $rawPassword    = $request->input('password');
         $device         = $request->input('device');
         $apnToken       = $request->input('apn_device_token');
 
         // Find the user
         /** @var User $user */
-        $user = User::where('username', $username)->first();
+        $user = User::where('email', $email)->first();
 
         // Compare the passwords
         if(!User::checkPassHash($rawPassword, $user->password)) {
