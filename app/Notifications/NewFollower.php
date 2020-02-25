@@ -47,8 +47,9 @@ class NewFollower extends Notification implements ShouldQueue
     public function toDatabase($notifiable)
     {
         return [
-            'user_id'   => $this->follower->id,
-            'username'  => $this->follower->username
+            'user_id'       => $this->follower->id,
+            'username'      => $this->follower->username,
+            'avatar_url'    => $this->follower->getFirstMediaFullUrl('avatar')
         ];
     }
 
@@ -61,7 +62,6 @@ class NewFollower extends Notification implements ShouldQueue
     public function toApn($notifiable)
     {
         return ApnMessage::create()
-            ->badge(0)
             ->title('New follower')
             ->body($this->follower->username . ' has started following you.');
     }
