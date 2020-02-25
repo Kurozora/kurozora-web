@@ -25,7 +25,7 @@ class ResetPassword extends FormRequest
     public function rules()
     {
         return [
-            'email' => ['bail', 'required', new ValidateEmail(['must-be-taken' => true])],
+            'email' => ['bail', 'required', new ValidateEmail],
         ];
     }
 }
