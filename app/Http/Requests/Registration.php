@@ -20,7 +20,7 @@ class Registration extends FormRequest
         return [
             'username'      => ['bail', 'required', new ValidateUsername],
             'password'      => ['bail', 'required', new ValidatePassword],
-            'email'         => ['bail', 'required', new ValidateEmail(true)],
+            'email'         => ['bail', 'required', new ValidateEmail(['must-be-available' => true])],
             'profileImage'  => ['bail', new ValidateAvatarImage],
         ];
     }
