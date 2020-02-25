@@ -22,7 +22,7 @@ class LoginTest extends TestCase
     function a_user_can_login()
     {
         $this->json('POST', '/api/v1/sessions', [
-            'username'  => $this->user->username,
+            'email'     => $this->user->email,
             'password'  => $this->userPassword,
             'device'    => 'PHPUnit Test Suite'
         ])->assertSuccessfulAPIResponse();
@@ -40,7 +40,7 @@ class LoginTest extends TestCase
     function a_user_can_login_with_apn_device_token()
     {
         $this->json('POST', '/api/v1/sessions', [
-            'username'          => $this->user->username,
+            'email'             => $this->user->email,
             'password'          => $this->userPassword,
             'device'            => 'PHPUnit Test Suite',
             'apn_device_token'  => Str::random(64)
@@ -59,7 +59,7 @@ class LoginTest extends TestCase
     function a_user_cannot_login_with_an_invalid_apn_device_token()
     {
         $this->json('POST', '/api/v1/sessions', [
-            'username'          => $this->user->username,
+            'email'             => $this->user->email,
             'password'          => $this->userPassword,
             'device'            => 'PHPUnit Test Suite',
             'apn_device_token'  => 'invalid token'
@@ -75,7 +75,7 @@ class LoginTest extends TestCase
     function a_user_cannot_login_with_an_incorrect_password()
     {
         $this->json('POST', '/api/v1/sessions', [
-            'username'  => $this->user->username,
+            'email'     => $this->user->email,
             'password'  => $this->userPassword . 'invalid',
             'device'    => 'PHPUnit Test Suite'
         ])->assertUnsuccessfulAPIResponse();
@@ -85,15 +85,15 @@ class LoginTest extends TestCase
     }
 
     /**
-     * Test if a user cannot login with an unknown username.
+     * Test if a user cannot login with an unknown email.
      *
      * @return void
      * @test
      */
-    function a_user_cannot_login_with_an_unknown_username()
+    function a_user_cannot_login_with_an_unknown_email()
     {
         $this->json('POST', '/api/v1/sessions', [
-            'username'  => 'UnknownUser',
+            'email'     => 'invalidemail@example.com',
             'password'  => $this->userPassword,
             'device'    => 'PHPUnit Test Suite'
         ])->assertUnsuccessfulAPIResponse();
@@ -110,14 +110,14 @@ class LoginTest extends TestCase
         // Make 3 login attempts with wrong password
         for($i = 0; $i < 3; $i++)
             $this->json('POST', '/api/v1/sessions', [
-                'username'  => $this->user->username,
+                'email'     => $this->user->email,
                 'password'  => $this->userPassword . 'invalid',
                 'device'    => 'PHPUnit Test Suite'
             ])->assertUnsuccessfulAPIResponse();
 
         // 4th attempt with correct password should fail
         $this->json('POST', '/api/v1/sessions', [
-            'username'  => $this->user->username,
+            'email'     => $this->user->email,
             'password'  => $this->userPassword,
             'device'    => 'PHPUnit Test Suite'
         ])->assertUnsuccessfulAPIResponse();
@@ -127,7 +127,7 @@ class LoginTest extends TestCase
 
         // Should now be able to login, because cooldown is over
         $this->json('POST', '/api/v1/sessions', [
-            'username'  => $this->user->username,
+            'email'     => $this->user->email,
             'password'  => $this->userPassword,
             'device'    => 'PHPUnit Test Suite'
         ])->assertSuccessfulAPIResponse();
@@ -142,7 +142,7 @@ class LoginTest extends TestCase
     function a_user_receives_a_notification_when_someone_logs_into_their_account()
     {
         $this->json('POST', '/api/v1/sessions', [
-            'username'  => $this->user->username,
+            'email'     => $this->user->email,
             'password'  => $this->userPassword,
             'device'    => 'PHPUnit Test Suite'
         ])->assertSuccessfulAPIResponse();

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Rules\ValidateAPNDeviceToken;
+use App\Rules\ValidateEmail;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -16,7 +17,7 @@ class CreateSessionRequest extends FormRequest
     public function rules()
     {
         return [
-            'username'          => ['bail', 'required', 'exists:'. User::TABLE_NAME . ',username'],
+            'email'             => ['bail', 'required', new ValidateEmail(['must-be-taken' => true])],
             'password'          => ['bail', 'required'],
             'device'            => ['bail', 'required', 'max:255'],
             'apn_device_token'  => ['bail', new ValidateAPNDeviceToken]
