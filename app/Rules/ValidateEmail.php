@@ -4,6 +4,7 @@ namespace App\Rules;
 
 use App\User;
 use Illuminate\Contracts\Validation\Rule;
+use InvalidArgumentException;
 
 class ValidateEmail implements Rule
 {
@@ -29,6 +30,11 @@ class ValidateEmail implements Rule
      */
     function __construct($options = [])
     {
+        // The `must-be-taken` and `must-be-available` options cannot be used simultaneously
+        if(isset($options['must-be-taken']) && isset($options['must-be-available']))
+            throw new InvalidArgumentException('The `must-be-taken` and `must-be-available` options cannot be used simultaneously.');
+
+        // Set the options
         $this->options = $options;
     }
 
