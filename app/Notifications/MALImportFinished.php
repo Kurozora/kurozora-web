@@ -2,9 +2,12 @@
 
 namespace App\Notifications;
 
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\Apn\ApnChannel;
+use NotificationChannels\Apn\ApnMessage;
 
 class MALImportFinished extends Notification implements ShouldQueue
 {
@@ -36,7 +39,7 @@ class MALImportFinished extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database', ApnChannel::class];
     }
 
     /**
@@ -52,5 +55,19 @@ class MALImportFinished extends Notification implements ShouldQueue
             'failure_count'     => count($this->results['failure']),
             'behavior'          => $this->behavior
         ];
+    }
+
+    /**
+     * Get the APN representation of the notification.
+     *
+     * @param  User  $notifiable
+     * @return ApnMessage
+     */
+    public function toApn($notifiable)
+    {
+        return ApnMessage::create()
+            ->title('🤩 MAL Import finished')
+            ->badge($notifiable->unreadNotifications()->count())
+            ->body('Your MAL import was processed, come check it out!');
     }
 }
