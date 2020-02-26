@@ -6,6 +6,7 @@ use App\Helpers\JSONResult;
 use App\Http\Requests\CreateSessionRequest;
 use App\Http\Requests\UpdateSessionRequest;
 use App\Http\Resources\SessionResource;
+use App\Http\Resources\UserResourceSmall;
 use App\Jobs\FetchSessionLocation;
 use App\LoginAttempt;
 use App\Notifications\NewSession;
@@ -74,9 +75,9 @@ class SessionController extends Controller
         // Show a successful response
         return JSONResult::success([
             'user' => [
-                'id'                => $user->id,
                 'kuro_auth_token'   => KuroAuthToken::generate($user->id, $session->secret),
-                'session_id'        => $session->id
+                'user'              => UserResourceSmall::make($user),
+                'session'           => SessionResource::make($session)
             ]
         ]);
     }
