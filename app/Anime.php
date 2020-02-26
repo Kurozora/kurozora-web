@@ -7,17 +7,6 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-/**
- * Class Anime
- *
- * @property integer id
- * @property bool fetched_images
- * @property string|null cached_background_thumbnail
- * @property string|null cached_background
- * @property string|null cached_poster
- * @property string|null cached_poster_thumbnail
- * @package App
- */
 class Anime extends KModel
 {
     use KuroSearchTrait, LogsActivity;

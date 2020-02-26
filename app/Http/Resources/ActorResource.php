@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Actor;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ActorResource extends JsonResource
@@ -14,11 +15,14 @@ class ActorResource extends JsonResource
      */
     public function toArray($request)
     {
+        /** @var Actor $actor */
+        $actor = $this->resource;
+
         return [
-            'id'    => $this->id,
-            'name'  => $this->name,
-            'role'  => $this->role,
-            'image' => $this->image
+            'id'    => $actor->id,
+            'name'  => $actor->name,
+            'role'  => $actor->role,
+            'image' => $actor->image
         ];
     }
 }

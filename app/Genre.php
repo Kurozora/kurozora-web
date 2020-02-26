@@ -2,12 +2,6 @@
 
 namespace App;
 
-/**
- * @property mixed id
- * @property mixed name
- * @property mixed nsfw
- * @property mixed description
- */
 class Genre extends KModel
 {
     // Table name

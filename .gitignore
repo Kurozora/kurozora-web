@@ -28,3 +28,8 @@ Homestead.json
 
 # PHPUnit result cache
 .phpunit.result.cache
+
+# laravel-ide-helper files. https://github.com/barryvdh/laravel-ide-helper
+.phpstorm.meta.php
+_ide_helper_models.php
+_ide_helper.php

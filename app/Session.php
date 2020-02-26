@@ -2,19 +2,6 @@
 
 namespace App;
 
-
-/**
- * @property int id
- * @property string ip
- * @property string city
- * @property string region
- * @property string country
- * @property float latitude
- * @property float longitude
- * @property string|null device
- * @property string|null apn_device_token
- * @property int user_id
- */
 class Session extends KModel
 {
     // Table name
