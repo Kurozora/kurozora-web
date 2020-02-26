@@ -1040,9 +1040,9 @@
                             "schema":{
                                 "type":"object",
                                 "properties":{
-                                    "username":{
+                                    "email":{
                                         "type":"string",
-                                        "description":"The user's username"
+                                        "description":"The user's email address"
                                     },
                                     "password":{
                                         "type":"string",
@@ -1060,7 +1060,7 @@
                                     }
                                 },
                                 "required":[
-                                    "username",
+                                    "email",
                                     "password",
                                     "device"
                                 ]
