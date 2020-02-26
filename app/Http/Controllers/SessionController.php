@@ -35,7 +35,6 @@ class SessionController extends Controller
         $email          = $request->input('email');
         $rawPassword    = $request->input('password');
         $device         = $request->input('device');
-        $apnToken       = $request->input('apn_device_token');
 
         // Find the user
         /** @var User $user */
@@ -62,8 +61,7 @@ class SessionController extends Controller
             'device'            => $device,
             'secret'            => Str::random(128),
             'expiration_date'   => date('Y-m-d H:i:s', strtotime('90 days')),
-            'ip'                => $ip,
-            'apn_device_token'  => $apnToken
+            'ip'                => $ip
         ]);
 
         // Dispatch job to retrieve location
