@@ -181,7 +181,7 @@
                 "description":"This endpoint will create a new user using Sign in with Apple.",
                 "requestBody":{
                     "content":{
-                        "multipart/form-data":{
+                        "application/x-www-form-urlencoded":{
                             "schema":{
                                 "type":"object",
                                 "properties":{
