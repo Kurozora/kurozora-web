@@ -32,41 +32,6 @@ class LoginTest extends TestCase
     }
 
     /**
-     * Test if a user can login with an APN device token.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_can_login_with_apn_device_token()
-    {
-        $this->json('POST', '/api/v1/sessions', [
-            'email'             => $this->user->email,
-            'password'          => $this->userPassword,
-            'device'            => 'PHPUnit Test Suite',
-            'apn_device_token'  => Str::random(64)
-        ])->assertSuccessfulAPIResponse();
-
-        // Check whether a session was created for the user
-        $this->assertEquals($this->user->sessions()->count(), 1);
-    }
-
-    /**
-     * Test if a user cannot login with an invalid APN device token.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_cannot_login_with_an_invalid_apn_device_token()
-    {
-        $this->json('POST', '/api/v1/sessions', [
-            'email'             => $this->user->email,
-            'password'          => $this->userPassword,
-            'device'            => 'PHPUnit Test Suite',
-            'apn_device_token'  => 'invalid token'
-        ])->assertUnsuccessfulAPIResponse();
-    }
-
-    /**
      * Test if a user cannot login with an incorrect password.
      *
      * @return void
