@@ -74,11 +74,9 @@ class SessionController extends Controller
 
         // Show a successful response
         return JSONResult::success([
-            'user' => [
-                'kuro_auth_token'   => KuroAuthToken::generate($user->id, $session->secret),
-                'user'              => UserResourceSmall::make($user),
-                'session'           => SessionResource::make($session)
-            ]
+            'kuro_auth_token'   => KuroAuthToken::generate($user->id, $session->secret),
+            'user'              => UserResourceSmall::make($user),
+            'session'           => SessionResource::make($session)
         ]);
     }
 
