@@ -19,8 +19,7 @@ class CreateSessionRequest extends FormRequest
         return [
             'email'             => ['bail', 'required', new ValidateEmail(['must-be-taken' => true])],
             'password'          => ['bail', 'required'],
-            'device'            => ['bail', 'required', 'max:255'],
-            'apn_device_token'  => ['bail', new ValidateAPNDeviceToken]
+            'device'            => ['bail', 'required', 'max:255']
         ];
     }
 }

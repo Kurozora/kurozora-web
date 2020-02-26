@@ -1052,11 +1052,6 @@
                                         "type":"string",
                                         "description":"The device name that was used to create the session",
                                         "example":"Swagger API tester"
-                                    },
-                                    "apn_device_token":{
-                                        "type":"string",
-                                        "description":"The user's APN device token.",
-                                        "example":"8dc624bce359a17068e28f113f1919c88c729e5a2341cb9e58306efef63bae92"
                                     }
                                 },
                                 "required":[
