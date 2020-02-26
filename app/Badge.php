@@ -2,13 +2,6 @@
 
 namespace App;
 
-/**
- * @property mixed id
- * @property mixed text
- * @property mixed backgroundColor
- * @property mixed textColor
- * @property mixed description
- */
 class Badge extends KModel
 {
     // Table name

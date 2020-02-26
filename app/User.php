@@ -17,14 +17,6 @@ use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\Permission\Traits\HasRoles;
 
-/**
- * @property mixed id
- * @property array|string|null biography
- * @property string avatar
- * @property mixed last_mal_import_at
- * @property string username
- * @property string email
- */
 class User extends Authenticatable implements LikerContract, HasMedia
 {
     use Notifiable,

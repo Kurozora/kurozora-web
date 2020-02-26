@@ -2,12 +2,6 @@
 
 namespace App;
 
-/**
- * @property mixed number
- * @property mixed title
- * @property mixed anime_id
- * @property mixed id
- */
 class AnimeSeason extends KModel
 {
     // Table name
