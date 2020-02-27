@@ -11,6 +11,7 @@ use App\Http\Resources\UserResourceLarge;
 use App\Http\Resources\UserResourceSmall;
 use App\Jobs\SendNewPasswordMail;
 use App\Jobs\SendPasswordResetMail;
+use App\Nova\Resource;
 use App\PasswordReset;
 use App\Session;
 use App\User;
@@ -285,7 +286,8 @@ class UserController extends Controller
         else $displayMessage .= 'No information was updated.';
 
         return JSONResult::success([
-            'message' => $displayMessage
+            'message' => $displayMessage,
+            'user' => UserResourceLarge::make($user)
         ]);
     }
 }
