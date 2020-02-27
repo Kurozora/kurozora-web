@@ -285,7 +285,8 @@ class UserController extends Controller
         else $displayMessage .= 'No information was updated.';
 
         return JSONResult::success([
-            'message' => $displayMessage
+            'message' => $displayMessage,
+            'user' => UserResourceLarge::make($user)
         ]);
     }
 }
