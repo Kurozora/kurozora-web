@@ -29,17 +29,6 @@ class User extends Authenticatable implements LikerContract, HasMedia
         LogsActivity,
         HasRoles;
 
-    /**
-     * Searchable rules.
-     *
-     * @var array
-     */
-    protected $searchable = [
-        'columns' => [
-            'username' => 10
-        ]
-    ];
-
     // Maximum amount of returned search results
     const MAX_SEARCH_RESULTS = 10;
 
@@ -66,9 +55,33 @@ class User extends Authenticatable implements LikerContract, HasMedia
     // Remove column guards
     protected $guarded = [];
 
-    // Date casts
+    /**
+     * The attributes that should be cast to dates.
+     *
+     * @var array
+     */
     protected $dates = [
         'last_mal_import_at'
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'username_change_available' => 'boolean',
+    ];
+
+    /**
+     * Searchable rules.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'username' => 10
+        ]
     ];
 
     // User biography character limited

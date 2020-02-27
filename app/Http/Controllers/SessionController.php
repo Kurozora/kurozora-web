@@ -7,6 +7,7 @@ use App\Http\Requests\CreateSessionRequest;
 use App\Http\Requests\UpdateSessionRequest;
 use App\Http\Resources\SessionResource;
 use App\Http\Resources\UserResourceSmall;
+use App\Http\Responses\LoginResponse;
 use App\Jobs\FetchSessionLocation;
 use App\LoginAttempt;
 use App\Notifications\NewSession;
@@ -14,7 +15,7 @@ use App\Session;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
-use KuroAuthToken;
+use App\Helpers\KuroAuthToken;
 use Illuminate\Http\Request;
 
 class SessionController extends Controller
@@ -70,12 +71,7 @@ class SessionController extends Controller
         // Send notification
         $user->notify(new NewSession($ip, $session));
 
-        // Show a successful response
-        return JSONResult::success([
-            'kuro_auth_token'   => KuroAuthToken::generate($user->id, $session->secret),
-            'user'              => UserResourceSmall::make($user),
-            'session'           => SessionResource::make($session)
-        ]);
+        return LoginResponse::make($user, $session);
     }
 
     /**

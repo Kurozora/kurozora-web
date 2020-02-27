@@ -5,7 +5,7 @@ namespace Tests;
 use App\Session;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Foundation\Testing\TestResponse;
-use KuroAuthToken;
+use App\Helpers\KuroAuthToken;
 use Spatie\Snapshots\MatchesSnapshots;
 use Tests\API\Traits\ProvidesTestUser;
 use Tests\API\Traits\RunsSeeders;
