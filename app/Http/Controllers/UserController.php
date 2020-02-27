@@ -11,7 +11,6 @@ use App\Http\Resources\UserResourceLarge;
 use App\Http\Resources\UserResourceSmall;
 use App\Jobs\SendNewPasswordMail;
 use App\Jobs\SendPasswordResetMail;
-use App\Nova\Resource;
 use App\PasswordReset;
 use App\Session;
 use App\User;
