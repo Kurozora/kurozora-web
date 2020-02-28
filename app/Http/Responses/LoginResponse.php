@@ -22,8 +22,7 @@ class LoginResponse
     {
         return JSONResult::success([
             'kuro_auth_token'           => KuroAuthToken::generate($user->id, $session->secret),
-            'username_change_available' => $user->username_change_available,
-            'user'                      => UserResourceSmall::make($user),
+            'user'                      => UserResourceSmall::make($user)->includePrivateDetails(),
             'session'                   => SessionResource::make($session)
         ]);
     }

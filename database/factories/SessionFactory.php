@@ -9,11 +9,10 @@ use Illuminate\Support\Str;
 $factory->define(Session::class, function (Faker $faker) {
     return [
         'user_id'           => factory(\App\User::class)->create()->id,
-        'expiration_date'   => now()->addDays(90),
-        'last_validated'    => now(),
+        'expires_at'        => now()->addDays(90),
+        'last_validated_at' => now(),
         'ip'                => $faker->ipv4,
-        'device'            => 'Faker Factory',
-        'apn_device_token'  => Str::random(64),
+        'apn_device_token'  => null,
         'secret'            => Str::random(128),
         'city'              => $faker->city,
         'region'            => $faker->state,

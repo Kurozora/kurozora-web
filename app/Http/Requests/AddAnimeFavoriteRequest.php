@@ -16,7 +16,7 @@ class AddAnimeFavoriteRequest extends FormRequest
     public function authorize()
     {
         // Check if the user can add to this user's favorites
-        $user = User::find($this->route('user'))->first();
+        $user = $this->route('user');
 
         return $this->user()->can('add_to_anime_favorites', $user);
     }

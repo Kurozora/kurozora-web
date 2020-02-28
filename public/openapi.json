@@ -192,11 +192,94 @@
                                     "siwa_id":{
                                         "type":"string",
                                         "description":"The new user's SIWA ID"
+                                    },
+                                    "platform":{
+                                        "type":"string",
+                                        "description":"The platform that was used to create the session",
+                                        "example":"iOS"
+                                    },
+                                    "platform_version":{
+                                        "type":"string",
+                                        "description":"The platform version that was used to create the session",
+                                        "example":"13.4"
+                                    },
+                                    "device_vendor":{
+                                        "type":"string",
+                                        "description":"The device vendor that was used to create the session",
+                                        "example":"Apple"
+                                    },
+                                    "device_model":{
+                                        "type":"string",
+                                        "description":"The device model that was used to create the session",
+                                        "example":"iPhone 11 Pro Max"
                                     }
                                 },
                                 "required":[
                                     "email",
-                                    "siwa_id"
+                                    "siwa_id",
+                                    "platform",
+                                    "platform_version",
+                                    "device_vendor",
+                                    "device_model"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/users/login-siwa":{
+            "post":{
+                "tags":[
+                    "users"
+                ],
+                "summary":"Log a user in via SIWA (sign in with Apple)",
+                "description":"This endpoint will log a user in using Sign in with Apple.",
+                "requestBody":{
+                    "content":{
+                        "application/x-www-form-urlencoded":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "identity_token":{
+                                        "type":"string",
+                                        "description":"The identity token (JWT) as provided by Apple"
+                                    },
+                                    "platform":{
+                                        "type":"string",
+                                        "description":"The platform that was used to create the session",
+                                        "example":"iOS"
+                                    },
+                                    "platform_version":{
+                                        "type":"string",
+                                        "description":"The platform version that was used to create the session",
+                                        "example":"13.4"
+                                    },
+                                    "device_vendor":{
+                                        "type":"string",
+                                        "description":"The device vendor that was used to create the session",
+                                        "example":"Apple"
+                                    },
+                                    "device_model":{
+                                        "type":"string",
+                                        "description":"The device model that was used to create the session",
+                                        "example":"iPhone 11 Pro Max"
+                                    }
+                                },
+                                "required":[
+                                    "identity_token",
+                                    "platform",
+                                    "platform_version",
+                                    "device_vendor",
+                                    "device_model"
                                 ]
                             }
                         }
@@ -1048,16 +1131,34 @@
                                         "type":"string",
                                         "description":"The user's password"
                                     },
-                                    "device":{
+                                    "platform":{
                                         "type":"string",
-                                        "description":"The device name that was used to create the session",
-                                        "example":"Swagger API tester"
+                                        "description":"The platform that was used to create the session",
+                                        "example":"iOS"
+                                    },
+                                    "platform_version":{
+                                        "type":"string",
+                                        "description":"The platform version that was used to create the session",
+                                        "example":"13.4"
+                                    },
+                                    "device_vendor":{
+                                        "type":"string",
+                                        "description":"The device vendor that was used to create the session",
+                                        "example":"Apple"
+                                    },
+                                    "device_model":{
+                                        "type":"string",
+                                        "description":"The device model that was used to create the session",
+                                        "example":"iPhone 11 Pro Max"
                                     }
                                 },
                                 "required":[
                                     "email",
                                     "password",
-                                    "device"
+                                    "platform",
+                                    "platform_version",
+                                    "device_vendor",
+                                    "device_model"
                                 ]
                             }
                         }

@@ -2,16 +2,21 @@
 
 namespace App;
 
+use App\Helpers\OptionsBag;
+use App\Jobs\FetchSessionLocation;
+use App\Notifications\NewSession;
 use App\Traits\KuroSearchTrait;
 use App\Traits\LikeActionTrait;
 use App\Traits\MediaLibraryExtensionTrait;
 use Cog\Contracts\Love\Liker\Models\Liker as LikerContract;
 use Cog\Laravel\Love\Liker\Models\Traits\Liker;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
@@ -88,6 +93,24 @@ class User extends Authenticatable implements LikerContract, HasMedia
     const BIOGRAPHY_LIMIT = 250;
 
     /**
+     * Finds the user with the given SIWA details.
+     * e.g. User::findSIWA($id, $email);
+     *
+     * @param Builder $query
+     * @param string $siwaID
+     * @param string $email
+     * @return User|null
+     */
+    public function scopeFindSIWA($query, $siwaID, $email)
+    {
+        /** @var User $user */
+        $user = $query->where('email', $email)
+            ->where('siwa_id', $siwaID);
+
+        return $user;
+    }
+
+    /**
      * Registers the media collections for the model.
      */
     public function registerMediaCollections()
@@ -153,6 +176,59 @@ class User extends Authenticatable implements LikerContract, HasMedia
      */
     function sessions() {
         return $this->hasMany(Session::class);
+    }
+
+    /**
+     * Creates a new session for the user.
+     *
+     * Available options:
+     * - `ip`: the IP address used to create the session, request IP is used by default.
+     * - `platform`: the user's platform, null by default.
+     * - `platform_version`: version of the user's platform, null by default.
+     * - `device_vendor`: vendor of the user's device, null by default.
+     * - `device_model`: model of the user's device, null by default.
+     * - `retrieve_location`: should a job be dispatched to fetch location details, true by default.
+     * - `notify`: should the user be notified of the new session, true by default.
+     *
+     * @param array $options
+     * @return Session
+     */
+    function createSession($options = [])
+    {
+        $options = new OptionsBag($options);
+
+        // Determine the IP address to use
+        $ip = $options->get('ip');
+
+        if($ip === null) $ip = request()->ip();
+
+        /** @var Session $session */
+        $session = $this->sessions()->create([
+            'user_id'           => $this->id,
+            'secret'            => Str::random(128),
+            'expires_at'        => now()->addDays(10),
+            'last_validated_at' => now(),
+            'ip'                => $ip,
+
+            // Platform information
+            'platform'          => $options->get('platform'),
+            'platform_version'  => $options->get('platform_version'),
+            'device_vendor'     => $options->get('device_vendor'),
+            'device_model'      => $options->get('device_model'),
+
+        ]);
+
+        // Dispatch job to retrieve location
+        if($options->get('retrieve_location', true)) {
+            dispatch(new FetchSessionLocation($session));
+        }
+
+        // Send notification
+        if($options->get('notify', true)) {
+            $this->notify(new NewSession($session->ip, $session));
+        }
+
+        return $session;
     }
 
     /**
