@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Rules\ValidateEmail;
+use App\Session;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SIWARegistration extends FormRequest
@@ -14,9 +15,9 @@ class SIWARegistration extends FormRequest
      */
     public function rules()
     {
-        return [
+        return array_merge([
             'email'     => ['bail', 'required', new ValidateEmail(['must-be-available' => true])],
             'siwa_id'   => ['bail', 'required', 'string', 'min:1', 'max:200']
-        ];
+        ], Session::platformRules());
     }
 }

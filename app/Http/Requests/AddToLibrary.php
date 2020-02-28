@@ -17,9 +17,9 @@ class AddToLibrary extends FormRequest
     public function authorize()
     {
         // Check if the user can add to this library
-        $user = User::find($this->route('user'))->first();
+        $user = $this->route('user');
 
-        return $user && $this->user()->can('add_to_library', $user);
+        return $this->user()->can('add_to_library', $user);
     }
 
     /**

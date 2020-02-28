@@ -2,11 +2,19 @@
 
 namespace App\Http\Resources;
 
+use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
 class UserResourceSmall extends JsonResource
 {
+    /**
+     * Whether or not to include private details in the resource.
+     *
+     * @var bool $includePrivateDetails
+     */
+    private $includePrivateDetails = false;
+
     /**
      * Transform the resource into an array.
      *
@@ -15,19 +23,25 @@ class UserResourceSmall extends JsonResource
      */
     public function toArray($request = null)
     {
+        /** @var User $user */
+        $user = $this->resource;
+
         $resource = [
-            'id'                => $this->id,
-            'username'          => $this->username,
-            'biography'         => $this->biography,
-            'avatar_url'        => $this->getFirstMediaFullUrl('avatar'),
-            'banner_url'        => $this->getFirstMediaFullUrl('banner'),
-            'follower_count'    => $this->getFollowerCount(),
-            'following_count'   => $this->getFollowingCount(),
-            'reputation_count'  => $this->getReputationCount()
+            'id'                => $user->id,
+            'username'          => $user->username,
+            'biography'         => $user->biography,
+            'avatar_url'        => $user->getFirstMediaFullUrl('avatar'),
+            'banner_url'        => $user->getFirstMediaFullUrl('banner'),
+            'follower_count'    => $user->getFollowerCount(),
+            'following_count'   => $user->getFollowingCount(),
+            'reputation_count'  => $user->getReputationCount()
         ];
 
         if(Auth::check())
             $resource = array_merge($resource, $this->getUserSpecificDetails());
+
+        if($this->includePrivateDetails)
+            $resource = array_merge($resource, $this->getPrivateDetails());
 
         return $resource;
     }
@@ -37,7 +51,8 @@ class UserResourceSmall extends JsonResource
      *
      * @return array
      */
-    protected function getUserSpecificDetails() {
+    protected function getUserSpecificDetails()
+    {
         $user = Auth::user();
 
         return [
@@ -45,5 +60,33 @@ class UserResourceSmall extends JsonResource
                 'following' => $this->resource->followers()->where('user_id', $user->id)->exists()
             ]
         ];
+    }
+
+    /**
+     * Returns private information of the resource.
+     *
+     * @return array
+     */
+    protected function getPrivateDetails()
+    {
+        /** @var User $user */
+        $user = $this->resource;
+
+        return [
+            'private' => [
+                'username_change_available' => $user->username_change_available,
+            ]
+        ];
+    }
+
+    /**
+     * Enables including private details in the resource.
+     *
+     * @return $this
+     */
+    function includePrivateDetails()
+    {
+        $this->includePrivateDetails = true;
+        return $this;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\AppleAuthKeys;
 use App\Helpers\JSONResult;
 use App\Http\Requests\SIWALoginRequest;
 use App\Http\Requests\SIWARegistration;
@@ -9,6 +10,7 @@ use App\Http\Responses\LoginResponse;
 use App\Session;
 use App\User;
 use CoderCat\JWKToPEM\JWKConverter;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use musa11971\JWTDecoder\JWTDecoder;
 
@@ -31,12 +33,12 @@ class SignInWithAppleController extends Controller
             'username_change_available' => true
         ]);
 
-        // Create a temporary session
-        $session = Session::create([
-            'user_id'           => $user->id,
-            'secret'            => Str::random(128),
-            'expiration_date'   => date('Y-m-d H:i:s', strtotime('10 days')),
-            'ip'                => $request->ip()
+        // Create a session for the user
+        $session = $user->createSession([
+            'platform'          => $data['platform'],
+            'platform_version'  => $data['platform_version'],
+            'device_vendor'     => $data['device_vendor'],
+            'device_model'      => $data['device_model'],
         ]);
 
         return LoginResponse::make($user, $session);
@@ -52,27 +54,14 @@ class SignInWithAppleController extends Controller
     {
         $data = $request->validated();
 
-        // Request apple keys
-        $jwk = json_decode(file_get_contents('https://appleid.apple.com/auth/keys'));
+        // Get Apple's public keys
+        $keys = AppleAuthKeys::get();
 
-        // Convert apple keys to PEM
-        $jwkConverter = new JWKConverter();
-
-        $keys = [];
-        foreach($jwk->keys as $appleKey) {
-            try {
-                $keys[] = $jwkConverter->toPem((array) $appleKey);
-            }
-            catch(\Exception $e) {
-                print_r($appleKey);
-                die;
-            }
-        }
-
+        // If there are no keys, show an error
         if(!count($keys))
             return JSONResult::error('Sorry, "Sign in with Apple" is not available at this moment!', 340056);
 
-        // Decode the JWT
+        // Attempt to decode the JWT
         $payload = null;
 
         try {
@@ -83,27 +72,22 @@ class SignInWithAppleController extends Controller
         }
         catch(\Exception $e)
         {
-            return JSONResult::error('Your credentials could not be verified.', 220028);
+            return JSONResult::error('Your credentials are invalid.', 220028);
         }
 
         // Find the user
         /** @var User $user */
-        $user = User::where('email', $payload->get('email'))
-            ->where('siwa_id', $payload->get('sub'))
-            ->first();
+        $user = User::findSIWA($payload->get('sub'), $payload->get('email'))->first();
 
         if(!$user)
             return JSONResult::error('Your account could not be located in the database.', 273782);
 
-        // Create a session
-        $ip = $request->ip();
-
-        $session = Session::create([
-            'user_id'           => $user->id,
-            'device'            => 'SIWA TEMP DEVICE',
-            'secret'            => Str::random(128),
-            'expiration_date'   => date('Y-m-d H:i:s', strtotime('90 days')),
-            'ip'                => $ip
+        // Create a session for the user
+        $session = $user->createSession([
+            'platform'          => $data['platform'],
+            'platform_version'  => $data['platform_version'],
+            'device_vendor'     => $data['device_vendor'],
+            'device_model'      => $data['device_model'],
         ]);
 
         return LoginResponse::make($user, $session);

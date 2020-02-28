@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Session;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SIWALoginRequest extends FormRequest
@@ -13,8 +14,8 @@ class SIWALoginRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        return array_merge([
             'identity_token' => ['required', 'string']
-        ];
+        ], Session::platformRules());
     }
 }

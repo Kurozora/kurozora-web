@@ -2,6 +2,7 @@
 
 namespace App\Rules;
 
+use App\Helpers\OptionsBag;
 use App\User;
 use Illuminate\Contracts\Validation\Rule;
 use InvalidArgumentException;
@@ -11,21 +12,17 @@ class ValidateEmail implements Rule
     const MINIMUM_EMAIL_LENGTH = 5;
     const MAXIMUM_EMAIL_LENGTH = 255;
 
-    /**
-     * Options for email validation.
-     *
-     * Available options:
-     * - `must-be-taken`: if set to true, the email must be in use.
-     * - `must-be-available`: if set to true, the email must be in available for use.
-     *
-     * @var array $options
-     */
+    /** @var OptionsBag $options */
     protected $options;
 
     /** @var string $error */
     protected $error = 'The :attribute is invalid';
 
     /**
+     * Available options:
+     * - `must-be-taken`: if set to true, the email must be in use.
+     * - `must-be-available`: if set to true, the email must be in available for use.
+     *
      * @param array $options
      */
     function __construct($options = [])
@@ -35,7 +32,7 @@ class ValidateEmail implements Rule
             throw new InvalidArgumentException('The `must-be-taken` and `must-be-available` options cannot be used simultaneously.');
 
         // Set the options
-        $this->options = $options;
+        $this->options = new OptionsBag($options);
     }
 
     /**
@@ -64,13 +61,13 @@ class ValidateEmail implements Rule
             return $this->fail(trans('validation.email'));
 
         // (option) The email must be taken
-        if($this->option('must-be-taken', false) === true) {
+        if($this->options->get('must-be-taken', false) === true) {
             if (!User::where('email', $value)->exists())
                 return $this->fail(trans('validation.exists'));
         }
 
         // (option) The email must be available
-        if($this->option('must-be-available', false) === true) {
+        if($this->options->get('must-be-available', false) === true) {
             if (User::where('email', $value)->exists())
                 return $this->fail(trans('validation.unique'));
         }
@@ -98,20 +95,5 @@ class ValidateEmail implements Rule
     {
         $this->error = $error;
         return false;
-    }
-
-    /**
-     * Gets the value of an option or returns the default ..
-     * .. value if the option is not set.
-     *
-     * @param string $option
-     * @param mixed $default
-     * @return mixed
-     */
-    private function option($option, $default)
-    {
-        if(isset($this->options[$option]))
-            return $this->options[$option];
-        else return $default;
     }
 }
