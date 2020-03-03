@@ -15,9 +15,9 @@ class MALImport extends FormRequest
      */
     public function authorize()
     {
-        $user = User::find($this->route('user'))->first();
+        $user = $this->route('user');
 
-        return $user && $this->user()->can('mal_import', $user);
+        return $this->user()->can('mal_import', $user);
     }
 
     /**

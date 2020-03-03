@@ -22,9 +22,12 @@ class LoginTest extends TestCase
     function a_user_can_login()
     {
         $this->json('POST', '/api/v1/sessions', [
-            'email'     => $this->user->email,
-            'password'  => $this->userPassword,
-            'device'    => 'PHPUnit Test Suite'
+            'email'             => $this->user->email,
+            'password'          => $this->userPassword,
+            'platform'          => 'iOS',
+            'platform_version'  => '13.4',
+            'device_vendor'     => 'Apple',
+            'device_model'      => 'iPhone 11 Pro Max'
         ])->assertSuccessfulAPIResponse();
 
         // Check whether a session was created for the user
@@ -42,7 +45,10 @@ class LoginTest extends TestCase
         $this->json('POST', '/api/v1/sessions', [
             'email'     => $this->user->email,
             'password'  => $this->userPassword . 'invalid',
-            'device'    => 'PHPUnit Test Suite'
+            'platform'          => 'iOS',
+            'platform_version'  => '13.4',
+            'device_vendor'     => 'Apple',
+            'device_model'      => 'iPhone 11 Pro Max'
         ])->assertUnsuccessfulAPIResponse();
 
         // Check that no session was created
@@ -60,7 +66,10 @@ class LoginTest extends TestCase
         $this->json('POST', '/api/v1/sessions', [
             'email'     => 'invalidemail@example.com',
             'password'  => $this->userPassword,
-            'device'    => 'PHPUnit Test Suite'
+            'platform'          => 'iOS',
+            'platform_version'  => '13.4',
+            'device_vendor'     => 'Apple',
+            'device_model'      => 'iPhone 11 Pro Max'
         ])->assertUnsuccessfulAPIResponse();
     }
 
@@ -77,14 +86,20 @@ class LoginTest extends TestCase
             $this->json('POST', '/api/v1/sessions', [
                 'email'     => $this->user->email,
                 'password'  => $this->userPassword . 'invalid',
-                'device'    => 'PHPUnit Test Suite'
+                'platform'          => 'iOS',
+                'platform_version'  => '13.4',
+                'device_vendor'     => 'Apple',
+                'device_model'      => 'iPhone 11 Pro Max'
             ])->assertUnsuccessfulAPIResponse();
 
         // 4th attempt with correct password should fail
         $this->json('POST', '/api/v1/sessions', [
             'email'     => $this->user->email,
             'password'  => $this->userPassword,
-            'device'    => 'PHPUnit Test Suite'
+            'platform'          => 'iOS',
+            'platform_version'  => '13.4',
+            'device_vendor'     => 'Apple',
+            'device_model'      => 'iPhone 11 Pro Max'
         ])->assertUnsuccessfulAPIResponse();
 
         // Time travel to the future
@@ -94,7 +109,10 @@ class LoginTest extends TestCase
         $this->json('POST', '/api/v1/sessions', [
             'email'     => $this->user->email,
             'password'  => $this->userPassword,
-            'device'    => 'PHPUnit Test Suite'
+            'platform'          => 'iOS',
+            'platform_version'  => '13.4',
+            'device_vendor'     => 'Apple',
+            'device_model'      => 'iPhone 11 Pro Max'
         ])->assertSuccessfulAPIResponse();
     }
 
@@ -109,7 +127,10 @@ class LoginTest extends TestCase
         $this->json('POST', '/api/v1/sessions', [
             'email'     => $this->user->email,
             'password'  => $this->userPassword,
-            'device'    => 'PHPUnit Test Suite'
+            'platform'          => 'iOS',
+            'platform_version'  => '13.4',
+            'device_vendor'     => 'Apple',
+            'device_model'      => 'iPhone 11 Pro Max'
         ])->assertSuccessfulAPIResponse();
 
         // Check whether the user now has one notification

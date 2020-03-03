@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Helpers;
+
 class KuroAuthToken {
     const VALIDITY_REGEX = '/^[0-9]+:[^:]+$/';
 

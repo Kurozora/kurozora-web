@@ -22,9 +22,9 @@ class GetLibrary extends FormRequest
     public function authorize()
     {
         // Check if the user can get this library
-        $user = User::find($this->route('user'))->first();
+        $user = $this->route('user');
 
-        return $user && $this->user()->can('get_library', $user);
+        return $this->user()->can('get_library', $user);
     }
 
     /**
