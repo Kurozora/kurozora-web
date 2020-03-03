@@ -66,6 +66,17 @@ class UserPolicy
     }
 
     /**
+     * Determine whether the user can search in another user's library.
+     *
+     * @param User $user
+     * @param User $model
+     * @return bool
+     */
+    public function search_library(User $user, User $model) {
+        return $user->id === $model->id;
+    }
+
+    /**
      * Determine whether the user can get another user's library.
      *
      * @param User $user

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\ForumReply;
 use App\ForumSectionBan;
 use App\ForumThread;
-use App\Helpers\CollectionLikeChecker;
 use App\Helpers\JSONResult;
 use App\Http\Resources\ForumReplyResource;
 use App\Http\Resources\ForumThreadResource;
@@ -150,7 +149,7 @@ class ForumThreadController extends Controller
     }
 
     /**
-     * Retrieves Anime search results
+     * Retrieves ForumThread search results
      *
      * @param Request $request
      * @return JsonResponse
