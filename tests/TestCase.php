@@ -5,7 +5,7 @@ namespace Tests;
 use App\Session;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Foundation\Testing\TestResponse;
-use KuroAuthToken;
+use App\Helpers\KuroAuthToken;
 use Spatie\Snapshots\MatchesSnapshots;
 use Tests\API\Traits\ProvidesTestUser;
 use Tests\API\Traits\RunsSeeders;
@@ -71,11 +71,7 @@ abstract class TestCase extends BaseTestCase
             $this->fail('Used "authHeader", but no user present.');
 
         // Create a session
-        $session = factory(Session::class)->create([
-            'user_id'           => $this->user->id,
-            'device'            => 'PHPUnit Test Suite',
-            'ip'                => '127.0.0.1'
-        ]);
+        $session = $this->user->createSession();
 
         // Attach the auth header
         $this->withHeader('kuro-auth', KuroAuthToken::generate($this->user->id, $session->secret));

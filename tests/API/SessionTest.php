@@ -134,7 +134,7 @@ class SessionTest extends TestCase
         /** @var Session $session */
         $session = factory(Session::class)->create([
             'user_id'           => $this->user->id,
-            'expiration_date'   => now()->subMinute()
+            'expires_at'        => now()->subMinute()
         ]);
 
         // Send the request

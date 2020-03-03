@@ -1,6 +1,7 @@
 <?php
 
 use App\Rules\ValidateAPNDeviceToken;
+use App\Rules\ValidatePlatformVersion;
 use App\Session;
 use App\User;
 use Illuminate\Support\Facades\Schema;
@@ -23,13 +24,19 @@ class CreateSessionsTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
 
-            $table->timestamp('expiration_date')->useCurrent = true;
-            $table->timestamp('last_validated')->useCurrent = true;
-            $table->string('ip')->nullable();
-            $table->string('device')->nullable();
+            $table->timestamp('expires_at')->useCurrent = true;
+            $table->timestamp('last_validated_at')->useCurrent = true;
             $table->string('apn_device_token', ValidateAPNDeviceToken::TOKEN_LENGTH)->nullable()->unique();
             $table->string('secret', 128);
 
+            // Platform information
+            $table->string('platform')->nullable();
+            $table->string('platform_version', ValidatePlatformVersion::MAX_VERSION_LENGTH)->nullable();
+            $table->string('device_vendor')->nullable();
+            $table->string('device_model')->nullable();
+
+            // Location information
+            $table->string('ip')->nullable();
             $table->string('city')->nullable();
             $table->string('region')->nullable();
             $table->string('country')->nullable();

@@ -7,6 +7,7 @@ use App\Http\Requests\CreateSessionRequest;
 use App\Http\Requests\UpdateSessionRequest;
 use App\Http\Resources\SessionResource;
 use App\Http\Resources\UserResourceSmall;
+use App\Http\Responses\LoginResponse;
 use App\Jobs\FetchSessionLocation;
 use App\LoginAttempt;
 use App\Notifications\NewSession;
@@ -14,7 +15,7 @@ use App\Session;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
-use KuroAuthToken;
+use App\Helpers\KuroAuthToken;
 use Illuminate\Http\Request;
 
 class SessionController extends Controller
@@ -27,21 +28,18 @@ class SessionController extends Controller
      */
     public function create(CreateSessionRequest $request)
     {
+        $data = $request->validated();
+
         // Check if the request IP is not banned from logging in
         if(!LoginAttempt::isIPAllowedToLogin($request->ip()))
             return JSONResult::error('Oops. You have failed to login too many times. Please grab yourself a snack and try again in a bit.');
 
-        // Fetch the variables and sanitize them
-        $email          = $request->input('email');
-        $rawPassword    = $request->input('password');
-        $device         = $request->input('device');
-
         // Find the user
         /** @var User $user */
-        $user = User::where('email', $email)->first();
+        $user = User::where('email', $data['email'])->first();
 
         // Compare the passwords
-        if(!User::checkPassHash($rawPassword, $user->password)) {
+        if(!User::checkPassHash($data['password'], $user->password)) {
             // Register the login attempt
             LoginAttempt::registerFailedLoginAttempt($request->ip());
 
@@ -54,28 +52,14 @@ class SessionController extends Controller
             return JSONResult::error('You have not confirmed your email address yet. Please check your email inbox or spam folder.');
 
         // Create a new session
-        $ip = $request->ip();
-
-        $session = Session::create([
-            'user_id'           => $user->id,
-            'device'            => $device,
-            'secret'            => Str::random(128),
-            'expiration_date'   => date('Y-m-d H:i:s', strtotime('90 days')),
-            'ip'                => $ip
+        $session = $user->createSession([
+            'platform'          => $data['platform'],
+            'platform_version'  => $data['platform_version'],
+            'device_vendor'     => $data['device_vendor'],
+            'device_model'      => $data['device_model'],
         ]);
 
-        // Dispatch job to retrieve location
-        dispatch(new FetchSessionLocation($session));
-
-        // Send notification
-        $user->notify(new NewSession($ip, $session));
-
-        // Show a successful response
-        return JSONResult::success([
-            'kuro_auth_token'   => KuroAuthToken::generate($user->id, $session->secret),
-            'user'              => UserResourceSmall::make($user),
-            'session'           => SessionResource::make($session)
-        ]);
+        return LoginResponse::make($user, $session);
     }
 
     /**
@@ -119,7 +103,8 @@ class SessionController extends Controller
      * @return JsonResponse
      * @throws \Exception
      */
-    public function validateSession(Session $session) {
+    public function validateSession(Session $session)
+    {
         // Check if the session is not expired
         if($session->isExpired()) {
             $session->delete();
@@ -128,7 +113,7 @@ class SessionController extends Controller
         }
         // Session is perfectly valid
         else {
-            $session->last_validated = date('Y-m-d H:i:s', time());
+            $session->last_validated_at = now();
             $session->save();
 
             return JSONResult::success();

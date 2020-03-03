@@ -6,7 +6,7 @@ use App\Helpers\JSONResult;
 use App\User;
 use Closure;
 use Illuminate\Support\Facades\Auth;
-use KuroAuthToken;
+use App\Helpers\KuroAuthToken;
 
 /*
  * This middleware checks the Kurozora user's authentication details before

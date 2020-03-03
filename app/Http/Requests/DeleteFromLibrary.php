@@ -16,9 +16,9 @@ class DeleteFromLibrary extends FormRequest
     public function authorize()
     {
         // Check if the user can delete from this library
-        $user = User::find($this->route('user'))->first();
+        $user = $this->route('user');
 
-        return $user && $this->user()->can('del_from_library', $user);
+        return $this->user()->can('del_from_library', $user);
     }
 
     /**

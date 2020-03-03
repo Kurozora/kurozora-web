@@ -15,7 +15,7 @@ class GetAnimeFavoritesRequest extends FormRequest
     public function authorize()
     {
         // Check if the user can get this user's favorites
-        $user = User::find($this->route('user'))->first();
+        $user = $this->route('user');
 
         return $this->user()->can('get_anime_favorites', $user);
     }
