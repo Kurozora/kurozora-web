@@ -40,7 +40,7 @@ class Session extends KModel
      */
     public function isExpired()
     {
-        return $this->expires_at < now();
+        return $this->expires_at <= now();
     }
 
     /**

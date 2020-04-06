@@ -97,30 +97,6 @@ class SessionController extends Controller
     }
 
     /**
-     * Checks whether or not a session_secret/user_id combination is valid
-     *
-     * @param Session $session
-     * @return JsonResponse
-     * @throws \Exception
-     */
-    public function validateSession(Session $session)
-    {
-        // Check if the session is not expired
-        if($session->isExpired()) {
-            $session->delete();
-
-            return JSONResult::error('Session is expired.');
-        }
-        // Session is perfectly valid
-        else {
-            $session->last_validated_at = now();
-            $session->save();
-
-            return JSONResult::success();
-        }
-    }
-
-    /**
      * Deletes a session
      *
      * @param Request $request
