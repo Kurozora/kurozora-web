@@ -2,28 +2,105 @@
 
 namespace App\Http\Controllers;
 
+use App\Anime;
+use App\Enums\ExplorePageCategoryTypes;
 use App\ExplorePageCategory;
+use App\Genre;
 use App\Helpers\JSONResult;
+use App\Http\Requests\GetExplorePageRequest;
 use App\Http\Resources\ExplorePageCategoryResource;
 use Illuminate\Http\JsonResponse;
 
 class ExplorePageController extends Controller
 {
-    // Cache key to remember the explore page response in
-    const CACHE_KEY = 'explore-page';
-
     /**
-     * Returns the necessary data for the Anime explore page
+     * Returns the necessary data for the Anime explore page.
      *
+     * @param GetExplorePageRequest $request
      * @return JsonResponse
      */
-    function explore() {
-        // Retrieve the categories
-        $categories = ExplorePageCategory::orderBy('position')->get();
+    function explore(GetExplorePageRequest $request)
+    {
+        // Get explore page for a specific genre
+        if($request->has('genre_id')) {
+            $genre = Genre::find($request->input('genre_id'));
 
-        // Return the response
+            $categories = $this->getCategoriesForGenre($genre);
+        }
+        // Get global explore page
+        else {
+            $categories = ExplorePageCategory::orderBy('position')->get();
+        }
+
         return JSONResult::success([
             'categories' => ExplorePageCategoryResource::collection(($categories))
         ]);
+    }
+
+    /**
+     * Generates fixed explore page categories for a specific genre.
+     *
+     * @param Genre $genre
+     * @return ExplorePageCategory[]
+     */
+    private function getCategoriesForGenre($genre)
+    {
+        $categories = [];
+
+        $categories[] = $this->getFeaturedShowsCategoryForGenre($genre, 1);
+        $categories[] = $this->getShowsWeLoveCategoryForGenre($genre, 2);
+
+        return $categories;
+    }
+
+    /**
+     * Returns the EPC for featured shows for a specific genre.
+     *
+     * @param Genre $genre
+     * @param int $position
+     * @return ExplorePageCategory
+     */
+    private function getFeaturedShowsCategoryForGenre($genre, $position)
+    {
+        $category = ExplorePageCategory::make([
+            'title'     => 'Featured ' . $genre->name . ' Shows',
+            'position'  => $position,
+            'type'      => ExplorePageCategoryTypes::Shows,
+            'size'      => 'medium'
+        ]);
+
+        $popularShows = $genre->animes()->mostPopular(10)->get();
+
+        foreach($popularShows as $popularShow)
+            $category->animes->add($popularShow);
+
+        return $category;
+    }
+
+    /**
+     * Returns the EPC for shows we love of a specific genre.
+     *
+     * @param Genre $genre
+     * @param int $position
+     * @return ExplorePageCategory
+     */
+    private function getShowsWeLoveCategoryForGenre($genre, $position)
+    {
+        $category = ExplorePageCategory::make([
+            'title'     => $genre->name . ' Shows We Love',
+            'position'  => $position,
+            'type'      => ExplorePageCategoryTypes::Shows,
+            'size'      => 'medium'
+        ]);
+
+        $randomShows = $genre->animes()
+            ->inRandomOrder()
+            ->limit(10)
+            ->get();
+
+        foreach($randomShows as $randomShow)
+            $category->animes->add($randomShow);
+
+        return $category;
     }
 }
