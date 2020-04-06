@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Enums\UserActivityStatus;
 use App\Helpers\OptionsBag;
 use App\Jobs\FetchSessionLocation;
 use App\Notifications\NewSession;
@@ -91,6 +92,33 @@ class User extends Authenticatable implements LikerContract, HasMedia
 
     // User biography character limited
     const BIOGRAPHY_LIMIT = 250;
+
+    /**
+     * Returns the user's activity status based on their sessions.
+     *
+     * @return UserActivityStatus
+     */
+    public function getActivityStatus()
+    {
+        /** @var Session $session */
+        $session = $this->sessions()
+            ->orderBy('last_validated_at', 'desc')
+            ->first();
+
+        if($session === null)
+            return UserActivityStatus::Offline();
+
+        // Seen within the last 5 minutes
+        if($session->last_validated_at >= now()->subMinutes(5)) {
+            return UserActivityStatus::Online();
+        }
+        // Seen within the last 15 minutes
+        else if($session->last_validated_at >= now()->subMinutes(15)) {
+            return UserActivityStatus::SeenRecently();
+        }
+
+        return UserActivityStatus::Offline();
+    }
 
     /**
      * Finds the user with the given SIWA details.
