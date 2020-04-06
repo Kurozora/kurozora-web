@@ -12,6 +12,9 @@ class Session extends KModel
     const TABLE_NAME = 'sessions';
     protected $table = self::TABLE_NAME;
 
+    // How many days sessions are valid for by default
+    const VALID_FOR_DAYS = 10;
+
     /**
      * The attributes that should be mutated to dates.
      *
