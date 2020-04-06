@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class ExplorePageCategory extends Model
+class ExplorePageCategory extends KModel
 {
     // Table name
     const TABLE_NAME = 'explore_page_categories';
