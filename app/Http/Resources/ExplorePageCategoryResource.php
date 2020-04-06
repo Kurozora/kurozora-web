@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Anime;
 use App\Enums\ExplorePageCategoryTypes;
+use App\ExplorePageCategory;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ExplorePageCategoryResource extends JsonResource
@@ -16,39 +17,40 @@ class ExplorePageCategoryResource extends JsonResource
      */
     public function toArray($request)
     {
-        // Create the base response
+        /** @var ExplorePageCategory $category */
+        $category = $this->resource;
+
         $baseResponse = [
-            'id'        => $this->id,
-            'title'     => $this->title,
-            'position'  => $this->position,
-            'type'      => $this->type,
-            'size'      => $this->size
+            'title'     => $category->title,
+            'position'  => $category->position,
+            'type'      => $category->type,
+            'size'      => $category->size
         ];
 
         // Add specific data per type
-        $endResponse = array_merge($baseResponse, $this->getTypeSpecificData());
-
-        return $endResponse;
+        return array_merge($baseResponse, $this->getTypeSpecificData($category));
     }
 
     /**
      * Returns specific data that should be added depending on the type of
      * .. category.
      *
+     * @param ExplorePageCategory $category
      * @return array
      */
-    private function getTypeSpecificData() {
+    private function getTypeSpecificData(ExplorePageCategory $category)
+    {
         // Genres category
-        switch($this->type) {
+        switch($category->type) {
             case ExplorePageCategoryTypes::Genres: {
                 return [
-                    'genres' => GenreResource::collection($this->genres)
+                    'genres' => GenreResource::collection($category->genres)
                 ];
             }
 
             case ExplorePageCategoryTypes::Shows: {
                 return [
-                    'shows' => AnimeResource::collection($this->animes)
+                    'shows' => AnimeResource::collection($category->animes)
                 ];
             }
 
