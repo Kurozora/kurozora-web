@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Traits\KuroSearchTrait;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -193,12 +194,15 @@ class Anime extends KModel
     }
 
     /**
-     * Returns Eloquent query of the most popular Anime.
+     * Eloquent builder scope that limits the query to ..
+     * .. the most popular shows.
      *
+     * @param Builder $query
      * @param int $limit
-     * @return mixed
+     * @return Builder
      */
-    public static function mostPopular($limit = 10) {
+    public function scopeMostPopular($query, $limit = 10)
+    {
         // Find the Anime that is most added to user libraries
         $mostAdded = DB::table(UserLibrary::TABLE_NAME)
             ->select('anime_id', DB::raw('count(*) as total'))
@@ -212,7 +216,6 @@ class Anime extends KModel
             return $item->anime_id;
         });
 
-        // Return the Eloquent query (.. so that it can be extended)
-        return Anime::whereIn('id', $mostAddedIDs);
+        return $query->whereIn(self::TABLE_NAME . '.id', $mostAddedIDs);
     }
 }

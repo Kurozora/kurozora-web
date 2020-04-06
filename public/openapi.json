@@ -112,6 +112,17 @@
                 ],
                 "summary":"(optional authentication) Explore page.",
                 "description":"This endpoint will retrieve the details to for the explore page.",
+                "parameters":[
+                    {
+                        "in":"query",
+                        "name":"genre_id",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":false,
+                        "description":"ID of the genre to filter on."
+                    }
+                ],
                 "responses":{
                     "200":{
                         "$ref":"#/components/responses/JSONSuccess"
