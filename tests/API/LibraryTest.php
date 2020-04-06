@@ -377,6 +377,60 @@ class LibraryTest extends TestCase
     }
 
     /**
+     * Test if a user can search in own library.
+     *
+     * @return void
+     * @test
+     */
+    function a_user_can_search_in_own_library()
+    {
+        // Add an anime to the user's list
+        $shows = factory(Anime::class, 20)->create();
+
+        /** @var Anime $show */
+        foreach ($shows as $show)
+            $this->user->library()->attach($show->id, ['status' => UserLibraryStatus::Watching]);
+
+        // Send the request
+        $response = $this->auth()->json('GET', '/api/v1/users/' . $this->user->id . '/library/search', [
+            'query' => $shows->first()->title
+        ]);
+
+        // Check whether the response was successful
+        $response->assertSuccessfulAPIResponse();
+
+        // Check whether the result count is greater than zero
+        $this->assertGreaterThan(0, count($response->json('results')));
+    }
+
+    /**
+     * Test if a user cannot search in another user's library.
+     *
+     * @return void
+     * @test
+     */
+    function a_user_cannot_search_in_another_users_library()
+    {
+        // Add an anime to another user's list
+        $shows = factory(Anime::class, 20)->create();
+
+        /** @var User $anotherUser */
+        $anotherUser = factory(User::class)->create();
+
+        /** @var Anime $show */
+        foreach ($shows as $show)
+            $anotherUser->library()->attach($show->id, ['status' => UserLibraryStatus::Watching]);
+
+        // Send the request
+        $response = $this->auth()->json('GET', '/api/v1/users/' . $anotherUser->id . '/library/search', [
+            'query' => $shows->first()->title
+        ]);
+
+        // Check whether the response was unsuccessful
+        $response->assertUnsuccessfulAPIResponse();
+    }
+
+    /**
      * Sends an API request to add anime to a user's library.
      *
      * @param $userID

@@ -192,7 +192,7 @@ class UserController extends Controller
     }
 
     /**
-     * Retrieves Anime search results
+     * Retrieves User search results
      *
      * @param Request $request
      * @return JsonResponse
