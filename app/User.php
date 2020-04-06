@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Enums\UserActivityStatus;
 use App\Helpers\OptionsBag;
 use App\Jobs\FetchSessionLocation;
 use App\Notifications\NewSession;
@@ -91,6 +92,33 @@ class User extends Authenticatable implements LikerContract, HasMedia
 
     // User biography character limited
     const BIOGRAPHY_LIMIT = 250;
+
+    /**
+     * Returns the user's activity status based on their sessions.
+     *
+     * @return UserActivityStatus
+     */
+    public function getActivityStatus()
+    {
+        /** @var Session $session */
+        $session = $this->sessions()
+            ->orderBy('last_validated_at', 'desc')
+            ->first();
+
+        if($session === null)
+            return UserActivityStatus::Offline();
+
+        // Seen within the last 5 minutes
+        if($session->last_validated_at >= now()->subMinutes(5)) {
+            return UserActivityStatus::Online();
+        }
+        // Seen within the last 15 minutes
+        else if($session->last_validated_at >= now()->subMinutes(15)) {
+            return UserActivityStatus::SeenRecently();
+        }
+
+        return UserActivityStatus::Offline();
+    }
 
     /**
      * Finds the user with the given SIWA details.
@@ -206,7 +234,7 @@ class User extends Authenticatable implements LikerContract, HasMedia
         $session = $this->sessions()->create([
             'user_id'           => $this->id,
             'secret'            => Str::random(128),
-            'expires_at'        => now()->addDays(10),
+            'expires_at'        => now()->addDays(Session::VALID_FOR_DAYS),
             'last_validated_at' => now(),
             'ip'                => $ip,
 
@@ -364,37 +392,6 @@ class User extends Authenticatable implements LikerContract, HasMedia
      */
     public function hasConfirmedEmail() {
         return ($this->email_confirmation_id == null);
-    }
-
-    /**
-     * Checks if a user can authenticate with the given details
-     *
-     * @param $userID
-     * @param $sessionSecret
-     * @return bool
-     */
-    public static function authenticateSession($userID, $sessionSecret) {
-        // Parse to int
-        $userID = (int) $userID;
-
-        // Find the session
-        $foundSession = Session::where([
-            ['user_id', '=', $userID],
-            ['secret',  '=', $sessionSecret]
-        ])->first();
-
-        // Session not found
-        if($foundSession == null)
-            return false;
-
-        // Check if it's expired
-        if($foundSession->isExpired()) {
-            $foundSession->delete();
-            return false;
-        }
-
-        // All valid
-        return $foundSession->id;
     }
 
     /**

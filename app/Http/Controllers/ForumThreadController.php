@@ -91,7 +91,7 @@ class ForumThreadController extends Controller
 
         // Check if the thread is not locked
         if($thread->locked)
-            return JSONResult::error(JSONResult::ERROR_CANNOT_POST_IN_THREAD);
+            return JSONResult::error('You cannot post in this thread.');
 
         // Check if the user has already posted within the cooldown period
         if(ForumReply::testPostCooldown(Auth::id()))

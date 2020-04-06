@@ -1259,41 +1259,6 @@
                 }
             }
         },
-        "/sessions/{sessionID}/validate":{
-            "post":{
-                "security":[
-                    {
-                        "kurozoraBearer":[
-
-                        ]
-                    }
-                ],
-                "tags":[
-                    "sessions"
-                ],
-                "summary":"Checks if the session is valid",
-                "description":"This endpoint will check if the given session details are valid.",
-                "parameters":[
-                    {
-                        "in":"path",
-                        "name":"sessionID",
-                        "schema":{
-                            "type":"integer"
-                        },
-                        "required":true,
-                        "description":"ID of the session to be validated."
-                    }
-                ],
-                "responses":{
-                    "200":{
-                        "$ref":"#/components/responses/JSONSuccess"
-                    },
-                    "400":{
-                        "$ref":"#/components/responses/JSONError"
-                    }
-                }
-            }
-        },
         "/sessions/{sessionID}/delete":{
             "post":{
                 "security":[

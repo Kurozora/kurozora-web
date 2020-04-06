@@ -29,6 +29,7 @@ class UserResourceSmall extends JsonResource
         $resource = [
             'id'                => $user->id,
             'username'          => $user->username,
+            'activity_status'   => $user->getActivityStatus()->description,
             'biography'         => $user->biography,
             'avatar_url'        => $user->getFirstMediaFullUrl('avatar'),
             'banner_url'        => $user->getFirstMediaFullUrl('banner'),

@@ -4,7 +4,9 @@ namespace App\Exceptions;
 
 use App\Helpers\JSONResult;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Foundation\Http\Exceptions\MaintenanceModeException;
 use Illuminate\Validation\ValidationException;
 use Swift_TransportException;
 
@@ -61,12 +63,16 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         // Custom render for unauthorized
-        if($exception instanceof \Illuminate\Auth\Access\AuthorizationException) {
-            return JSONResult::error(JSONResult::ERROR_NOT_PERMITTED, 9028123);
+        if($exception instanceof AuthorizationException) {
+            return JSONResult::error('You are not permitted to do this.', [
+                'error_code' => 9028123
+            ]);
         }
         // Custom render for maintenance mode
-        else if($exception instanceof \Illuminate\Foundation\Http\Exceptions\MaintenanceModeException) {
-            return JSONResult::error($exception->getMessage(), 17281627);
+        else if($exception instanceof MaintenanceModeException) {
+            return JSONResult::error($exception->getMessage(), [
+                'error_code' => 17281627
+            ]);
         }
 
         return parent::render($request, $exception);
@@ -81,6 +87,8 @@ class Handler extends ExceptionHandler
      */
     protected function invalidJson($request, ValidationException $exception)
     {
-        return JSONResult::error($exception->validator->errors()->first(), 567);
+        return JSONResult::error($exception->validator->errors()->first(), [
+            'error_code' => 567
+        ]);
     }
 }

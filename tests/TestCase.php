@@ -66,7 +66,8 @@ abstract class TestCase extends BaseTestCase
      *
      * @return $this
      */
-    protected function auth() {
+    protected function auth()
+    {
         if(!isset($this->user))
             $this->fail('Used "authHeader", but no user present.');
 
