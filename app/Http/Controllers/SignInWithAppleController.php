@@ -59,7 +59,9 @@ class SignInWithAppleController extends Controller
 
         // If there are no keys, show an error
         if(!count($keys))
-            return JSONResult::error('Sorry, "Sign in with Apple" is not available at this moment!', 340056);
+            return JSONResult::error('Sorry, "Sign in with Apple" is not available at this moment!', [
+                'error_code' => 340056
+            ]);
 
         // Attempt to decode the JWT
         $payload = null;
@@ -72,7 +74,9 @@ class SignInWithAppleController extends Controller
         }
         catch(\Exception $e)
         {
-            return JSONResult::error('Your credentials are invalid.', 220028);
+            return JSONResult::error('Your credentials are invalid.', [
+                'error_code' => 220028
+            ]);
         }
 
         // Find the user
@@ -80,7 +84,9 @@ class SignInWithAppleController extends Controller
         $user = User::findSIWA($payload->get('sub'), $payload->get('email'))->first();
 
         if(!$user)
-            return JSONResult::error('Your account could not be located in the database.', 273782);
+            return JSONResult::error('Your account could not be located in the database.', [
+                'error_code' => 273782
+            ]);
 
         // Create a session for the user
         $session = $user->createSession([

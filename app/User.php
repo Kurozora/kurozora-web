@@ -367,37 +367,6 @@ class User extends Authenticatable implements LikerContract, HasMedia
     }
 
     /**
-     * Checks if a user can authenticate with the given details
-     *
-     * @param $userID
-     * @param $sessionSecret
-     * @return bool
-     */
-    public static function authenticateSession($userID, $sessionSecret) {
-        // Parse to int
-        $userID = (int) $userID;
-
-        // Find the session
-        $foundSession = Session::where([
-            ['user_id', '=', $userID],
-            ['secret',  '=', $sessionSecret]
-        ])->first();
-
-        // Session not found
-        if($foundSession == null)
-            return false;
-
-        // Check if it's expired
-        if($foundSession->isExpired()) {
-            $foundSession->delete();
-            return false;
-        }
-
-        // All valid
-        return $foundSession->id;
-    }
-
-    /**
      * Checks the cooldown whether the user can do a MAL import.
      *
      * @return bool
