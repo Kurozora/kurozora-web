@@ -13,7 +13,10 @@ use App\Http\Resources\AnimeResource;
 use App\Jobs\ProcessMALImport;
 use App\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 
 class LibraryController extends Controller
 {
@@ -114,6 +117,36 @@ class LibraryController extends Controller
 
         return JSONResult::success([
             'message' => 'Your MAL import request has been submitted. You will be notified once it has been processed!'
+        ]);
+    }
+
+    /**
+     * Retrieves user library search results
+     *
+     * @param Request $request
+     * @param User $user
+     * @return JsonResponse
+     */
+    public function search(Request $request, User $user) {
+        // Validate the inputs
+        $validator = Validator::make($request->all(), [
+            'query' => 'bail|required|string|min:1'
+        ]);
+
+        // Check validator
+        if($validator->fails())
+            return JSONResult::error($validator->errors()->first());
+
+        $searchQuery = $request->input('query');
+
+        // Search for the anime
+        $library = $user->library()
+            ->search($searchQuery)->limit(Anime::MAX_SEARCH_RESULTS)->get();
+
+        // Show response
+        return JSONResult::success([
+            'max_search_results'    => Anime::MAX_SEARCH_RESULTS,
+            'results'               => AnimeResource::collection($library)
         ]);
     }
 }

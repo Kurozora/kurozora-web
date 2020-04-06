@@ -36,6 +36,10 @@ Route::prefix('/users')->group(function() {
     Route::post('/{user}/library', [LibraryController::class, 'addLibrary'])
         ->middleware('kurozora.userauth');
 
+    Route::get('/{user}/library/search', [LibraryController::class, 'search'])
+        ->middleware('kurozora.userauth')
+        ->middleware('can:search_library,user');
+
     Route::post('/{user}/library/delete', [LibraryController::class, 'delLibrary'])
         ->middleware('kurozora.userauth');
 
