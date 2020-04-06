@@ -8,26 +8,28 @@ class KuroAuthToken {
     /**
      * Generates a Kuro Auth Token based on the given details
      *
-     * @param $userID
-     * @param $sessionSecret
+     * @param int $userID
+     * @param string $sessionSecret
      * @return string
      */
-    public static function generate($userID, $sessionSecret) {
-        return base64_encode ($userID . ':' . $sessionSecret);
+    public static function generate($userID, $sessionSecret)
+    {
+        return base64_encode($userID . ':' . $sessionSecret);
     }
 
     /**
-     * Checks if a given token is valid
+     * Checks if an auth token has a valid format.
      *
-     * @param $tokenString
+     * @param string $token
      * @return bool
      */
-    private static function isValidTokenString($tokenString) {
-        if($tokenString === null)
+    private static function tokenHasValidFormat($token)
+    {
+        if($token === null)
             return false;
 
         // Decode the token
-        $decoded = base64_decode($tokenString);
+        $decoded = base64_decode($token);
 
         // Could not decode token
         if($decoded === false)
@@ -41,24 +43,25 @@ class KuroAuthToken {
     }
 
     /**
-     * Reads a token and returns the variables
+     * Reads an auth token and returns the parts.
      *
-     * @param $tokenString
+     * @param string $token
      * @return array|null
      */
-    public static function readToken($tokenString) {
+    public static function readToken($token)
+    {
         // Token is not of valid structure
-        if(!self::isValidTokenString($tokenString))
+        if(!self::tokenHasValidFormat($token))
             return null;
 
         // Decode the token
-        $decoded = base64_decode($tokenString);
+        $decoded = base64_decode($token);
 
         // Explode token
         $exploded = explode(':', $decoded);
 
         return [
-            'user_id'           => $exploded[0],
+            'user_id'           => (int) $exploded[0],
             'session_secret'    => $exploded[1]
         ];
     }

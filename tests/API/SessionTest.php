@@ -104,25 +104,6 @@ class SessionTest extends TestCase
     }
 
     /**
-     * Test if a user can validate their session.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_can_validate_their_session()
-    {
-        // Create a session for the user
-        /** @var Session $session */
-        $session = factory(Session::class)->create(['user_id' => $this->user->id]);
-
-        // Send the request
-        $response = $this->auth()->json('POST', '/api/v1/sessions/' . $session->id . '/validate');
-
-        // Check whether the response was successful
-        $response->assertSuccessfulAPIResponse();
-    }
-
-    /**
      * Test if an expired session is deleted when validated by the user.
      *
      * @return void
