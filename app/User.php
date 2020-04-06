@@ -206,7 +206,7 @@ class User extends Authenticatable implements LikerContract, HasMedia
         $session = $this->sessions()->create([
             'user_id'           => $this->id,
             'secret'            => Str::random(128),
-            'expires_at'        => now()->addDays(10),
+            'expires_at'        => now()->addDays(Session::VALID_FOR_DAYS),
             'last_validated_at' => now(),
             'ip'                => $ip,
 

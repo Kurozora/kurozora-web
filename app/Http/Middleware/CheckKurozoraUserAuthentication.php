@@ -85,6 +85,9 @@ class CheckKurozoraUserAuthentication
             return $this->sessionExpiredResponse();
         }
 
+        // Update the session's fields if necessary
+        $this->updateSession($session);
+
         // Log the user in
         $request->request->add([
             'user_id'           => (int) $userID,
@@ -95,6 +98,25 @@ class CheckKurozoraUserAuthentication
         Auth::loginUsingId($request['user_id']);
 
         return $next($request);
+    }
+
+    /**
+     * Updates the session's fields if necessary.
+     *
+     * @param Session $session
+     */
+    private function updateSession($session)
+    {
+        // Extend the session's lifetime when at least 1 day has passed
+        if($session->expires_at->startOfDay() < now()->addDays(Session::VALID_FOR_DAYS)->startOfDay())
+        {
+            $session->expires_at = now()->addDays(Session::VALID_FOR_DAYS);
+        }
+
+        // Update the last validated date
+        $session->last_validated_at = now();
+
+        $session->save();
     }
 
     /**

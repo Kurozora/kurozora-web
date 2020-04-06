@@ -5,6 +5,8 @@ namespace Tests\Unit\Middleware;
 use App\Helpers\JSONResult;
 use App\Helpers\KuroAuthToken;
 use App\Http\Middleware\CheckKurozoraUserAuthentication;
+use App\Session;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -78,6 +80,28 @@ class CheckKurozoraUserAuthenticationTest extends TestCase
         $response = $this->get('/auth-required');
 
         $response->assertStatus(401);
+    }
+
+    /** @test */
+    function session_lifetime_is_extended_when_passing_through_the_middleware()
+    {
+        Carbon::setTestNow();
+
+        // Create a session and subtract a day from its expiry
+        $session = $this->user->createSession();
+        $session->expires_at = now()->addDays(Session::VALID_FOR_DAYS)->subDay();
+        $session->save();
+
+        // Attach the auth header
+        $this->withHeader('kuro-auth', KuroAuthToken::generate($this->user->id, $session->secret));
+
+        // Perform request
+        $this->get('/auth-required');
+
+        // Check whether the expiry was extended
+        $session->refresh();
+
+        $this->assertEquals(now()->addDays(Session::VALID_FOR_DAYS)->startOfDay(), $session->expires_at->startOfDay());
     }
 
     /**
