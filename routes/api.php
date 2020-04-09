@@ -26,4 +26,5 @@ Route::group(['prefix' => 'v1'], function () {
     require 'API/Forum-Threads.php';
     require 'API/Forum-Replies.php';
     require 'API/Themes.php';
+    require 'API/Feed.php';
 });
