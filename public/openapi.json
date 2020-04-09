@@ -53,6 +53,10 @@
             "description":"Everything genre related"
         },
         {
+            "name":"feed",
+            "description":"Everything feed related"
+        },
+        {
             "name":"forum-sections",
             "description":"Everything forum sections related"
         },
@@ -1531,6 +1535,55 @@
                     },
                     "400":{
                         "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/feed/personal": {
+            "get": {
+                "security": [
+                    {
+                        "kurozoraBearer": [
+                        ]
+                    }
+                ],
+                "tags": [
+                    "feed"
+                ],
+                "summary": "Get the user's personal feed",
+                "description": "This endpoint will retrieve the user's personal feed.",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/JSONSuccess"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/feed/global": {
+            "get": {
+                "security": [
+                    {
+
+                    },
+                    {
+                        "kurozoraBearer": [
+                        ]
+                    }
+                ],
+                "tags": [
+                    "feed"
+                ],
+                "summary": "(optional authentication) Get the global feed",
+                "description": "This endpoint will retrieve the global feed.",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/JSONSuccess"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/JSONError"
                     }
                 }
             }
