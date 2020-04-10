@@ -24,7 +24,7 @@ os: linux
 #   may cause associated deployments to fail.
 files:
   - source: /
-    destination: /var/www
+    destination: /var/www/html
 # For deployments to Amazon Linux, Ubuntu Server, or RHEL instances,
 #   you can specify a "permissions"
 #   section here that describes special permissions to apply to the files
@@ -35,7 +35,7 @@ files:
 #   then remove the
 #   "permissions" section altogether. A blank or incomplete "permissions"
 #   section may cause associated deployments to fail.
-permissions:
-  - object: /var/www
-    owner: root
-    group: www-data
+#permissions:
+#  - object: /var/www
+#    owner: root
+#    group: www-data
