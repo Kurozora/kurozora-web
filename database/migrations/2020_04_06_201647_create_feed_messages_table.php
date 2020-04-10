@@ -15,7 +15,7 @@ class CreateFeedMessagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('feed_messages', function (Blueprint $table) {
+        Schema::create(FeedMessage::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
 
@@ -25,7 +25,7 @@ class CreateFeedMessagesTable extends Migration
             $table->bigInteger('parent_feed_message_id')->unsigned()->nullable();
             $table->foreign('parent_feed_message_id')->references('id')->on(FeedMessage::TABLE_NAME)->onDelete('cascade');
 
-            $table->string('body', 240);
+            $table->string('body', FeedMessage::MAX_BODY_LENGTH);
         });
     }
 
@@ -36,6 +36,6 @@ class CreateFeedMessagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('feed_messages');
+        Schema::dropIfExists(FeedMessage::TABLE_NAME);
     }
 }
