@@ -9,9 +9,12 @@ mkdir -p /var/www/html/storage/framework/sessions
 mkdir -p /var/www/html/storage/framework/views
 mkdir -p /var/www/html/storage/framework/cache
 
-# Install dependencies
+# Install Composer dependencies
 export COMPOSER_ALLOW_SUPERUSER=1
 composer install -d /var/www/html/
+
+# Symlink .env configuration
+ln -s ~/.env /var/www/html/.env
 
 # Migrate all tables
 php /var/www/html/artisan migrate
