@@ -1539,6 +1539,52 @@
                 }
             }
         },
+        "/feed": {
+            "post":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "feed"
+                ],
+                "summary":"Creates a new message on the feed.",
+                "description":"This endpoint will create a new message on the feed.",
+                "requestBody":{
+                    "content":{
+                        "application/x-www-form-urlencoded":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "body":{
+                                        "type":"string",
+                                        "description":"Text in the feed message."
+                                    },
+                                    "in_reply_to":{
+                                        "type":"integer",
+                                        "description":"ID of the feed message the user is replying to."
+                                    }
+                                },
+                                "required":[
+                                    "body"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
         "/feed/personal": {
             "get": {
                 "security": [

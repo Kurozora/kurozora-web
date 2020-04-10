@@ -10,6 +10,19 @@ class FeedMessage extends KModel
     const TABLE_NAME = 'feed_messages';
     protected $table = self::TABLE_NAME;
 
+    // Text limit on body
+    const MAX_BODY_LENGTH = 240;
+
+    /**
+     * Returns whether the feed message is a reply.
+     *
+     * @return bool
+     */
+    function isReply()
+    {
+        return $this->parent_feed_message_id !== null;
+    }
+
     /**
      * Returns the user that posted the feed message.
      *
