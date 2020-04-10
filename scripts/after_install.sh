@@ -11,7 +11,7 @@ mkdir -p /var/www/html/storage/framework/cache
 
 # Install Composer dependencies
 export COMPOSER_ALLOW_SUPERUSER=1
-composer install -d /var/www/html/
+composer install -d /var/www/html/ --optimize-autoloader --no-dev
 
 # Symlink .env configuration
 ln -s ~/.env /var/www/html/.env
