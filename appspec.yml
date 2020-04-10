@@ -6,36 +6,15 @@
 #   "AWS CodeDeploy User Guide" at
 #   http://docs.aws.amazon.com/codedeploy/latest/userguide/app-spec-ref.html
 version: 0.0
-# Specify "os: linux" if this revision targets Amazon Linux,
-#   Red Hat Enterprise Linux (RHEL), or Ubuntu Server
-#   instances.
-# Specify "os: windows" if this revision targets Windows Server instances.
-# (You cannot specify both "os: linux" and "os: windows".)
+
 os: linux
-# os: windows
-# During the Install deployment lifecycle event (which occurs between the
-#   BeforeInstall and AfterInstall events), copy the specified files
-#   in "source" starting from the root of the revision's file bundle
-#   to "destination" on the Amazon EC2 instance.
-# Specify multiple "source" and "destination" pairs if you want to copy
-#   from multiple sources or to multiple destinations.
-# If you are not copying any files to the Amazon EC2 instance, then remove the
-#   "files" section altogether. A blank or incomplete "files" section
-#   may cause associated deployments to fail.
+
 files:
   - source: /
     destination: /var/www/html
-# For deployments to Amazon Linux, Ubuntu Server, or RHEL instances,
-#   you can specify a "permissions"
-#   section here that describes special permissions to apply to the files
-#   in the "files" section as they are being copied over to
-#   the Amazon EC2 instance.
-#   For more information, see the documentation.
-# If you are deploying to Windows Server instances,
-#   then remove the
-#   "permissions" section altogether. A blank or incomplete "permissions"
-#   section may cause associated deployments to fail.
-#permissions:
-#  - object: /var/www
-#    owner: root
-#    group: www-data
+
+hooks:
+  BeforeInstall:
+    - location: scripts/before_install.sh
+      timeout: 300
+      runas: root
