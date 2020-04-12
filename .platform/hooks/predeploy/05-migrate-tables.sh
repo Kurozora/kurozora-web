@@ -1,3 +1,3 @@
 #!/bin/bash
 
-php /var/www/html/artisan migrate
+php artisan migrate
