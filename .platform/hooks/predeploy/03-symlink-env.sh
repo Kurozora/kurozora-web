@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # Symlink .env configuration
-ln -s ~/.env ./.env
+ln -s ~/.env .env
