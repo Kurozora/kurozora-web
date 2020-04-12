@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Clear any previous cached views
-php /var/www/html/artisan config:clear
-php /var/www/html/artisan cache:clear
-php /var/www/html/artisan view:clear
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
 
 # Optimize the application
-php /var/www/html/artisan config:cache
-php /var/www/html/artisan optimize
+php artisan config:cache
+php artisan optimize
