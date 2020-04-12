@@ -1,11 +1,5 @@
 #!/bin/bash
 
-# Create folders
-mkdir -p bootstrap/cache
-mkdir -p storage/framework/sessions
-mkdir -p storage/framework/views
-mkdir -p storage/framework/cache
-
 # Set nginx as owner of the application
 chown -R nginx:nginx .
 
