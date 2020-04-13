@@ -8,6 +8,7 @@
         "ext-json": "*",
         "ext-simplexml": "*",
         "anaseqal/nova-sidebar-icons": "^0.0.2",
+        "aws/aws-sdk-php": "^3.134",
         "bensampo/laravel-enum": "^1.29",
         "chaseconey/nova-external-image": "^0.0.3",
         "codercat/jwk-to-pem": "^0.0.3",
