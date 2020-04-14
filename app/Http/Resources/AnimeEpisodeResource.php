@@ -2,19 +2,21 @@
 
 namespace App\Http\Resources;
 
+use App\AnimeSeason;
+use App\Enums\WatchStatus;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
 class AnimeEpisodeResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return array
-     * @throws \Exception
-     */
+	/**
+	 * Transform the resource into an array.
+	 *
+	 * @param \Illuminate\Http\Request $request
+	 *
+	 * @return array
+	 */
     public function toArray($request)
     {
         $firstAiredUnix = Carbon::parse($this->first_aired);
@@ -24,9 +26,9 @@ class AnimeEpisodeResource extends JsonResource
             'id'            => $this->id,
             'number'        => $this->number,
             'name'          => $this->name,
-            'first_aired'   => $formattedFirstAired,
+            'first_aired'    => $formattedFirstAired,
             'overview'      => $this->overview,
-            'verified'      => (bool) $this->verified
+            'verified'       => (bool) $this->verified
         ];
 
         if(Auth::check())
@@ -42,11 +44,17 @@ class AnimeEpisodeResource extends JsonResource
      */
     protected function getUserSpecificDetails() {
         $user = Auth::user();
+        $season = AnimeSeason::where('id', $this->season_id)->first();
+	    $anime = $season->anime()->first();
+
+        $watchStatus = WatchStatus::DISABLED();
+        if($user->isTracking($anime))
+	        $watchStatus = WatchStatus::init($user->watchedAnimeEpisodes()->where('episode_id', $this->id)->exists());
 
         // Return the array
         return [
             'current_user' => [
-                'watched'    => $user->watchedAnimeEpisodes()->where('episode_id', $this->id)->exists()
+                'watched' => $watchStatus->value
             ]
         ];
     }
