@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Foundation\Testing\TestResponse;
 use App\Helpers\KuroAuthToken;
 use Spatie\Snapshots\MatchesSnapshots;
+use Tests\API\Traits\ProvidesTestAnime;
 use Tests\API\Traits\ProvidesTestUser;
 use Tests\API\Traits\RunsSeeders;
 
@@ -51,6 +52,9 @@ abstract class TestCase extends BaseTestCase
         if (isset($uses[ProvidesTestUser::class])) {
             $this->initializeTestUser();
         }
+	    if (isset($uses[ProvidesTestAnime::class])) {
+		    $this->initializeTestAnime();
+	    }
         if (isset($uses[RunsSeeders::class])) {
             $this->seedDatabase();
         }
