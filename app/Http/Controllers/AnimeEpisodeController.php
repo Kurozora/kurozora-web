@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\AnimeEpisode;
 use App\Enums\WatchStatus;
 use App\Helpers\JSONResult;
+use App\Rules\ValidateAnimeInLibrary;
 use App\UserWatchedEpisode;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -25,7 +26,13 @@ class AnimeEpisodeController extends Controller
     public function watched(Request $request, AnimeEpisode $episode) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'watched' => 'bail|required|numeric|in:-1,1'
+            'watched' => [
+            	'bail',
+	            'required',
+	            'numeric',
+	            'in:-1,1',
+	            new ValidateAnimeInLibrary(Auth::user(), $episode)
+		    ]
         ]);
 
         // Check validator
