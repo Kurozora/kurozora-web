@@ -51,9 +51,9 @@ abstract class TestCase extends BaseTestCase
         if (isset($uses[ProvidesTestUser::class])) {
             $this->initializeTestUser();
         }
-	    if (isset($uses[ProvidesTestAnime::class])) {
-		    $this->initializeTestAnime();
-	    }
+        if (isset($uses[ProvidesTestAnime::class])) {
+            $this->initializeTestAnime();
+        }
         if (isset($uses[RunsSeeders::class])) {
             $this->seedDatabase();
         }
