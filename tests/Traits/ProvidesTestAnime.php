@@ -8,13 +8,13 @@ use App\AnimeSeason;
 
 trait ProvidesTestAnime {
     /** @var Anime $anime */
-	public Anime $anime;
+    public $anime;
 
 	/** @var AnimeSeason $season */
-	public AnimeSeason $season;
+    public $season;
 
 	/** @var AnimeEpisode $episode */
-	public AnimeEpisode $episode;
+    public $episode;
 
     /**
      * Creates the test episode to be used in tests.
@@ -22,10 +22,12 @@ trait ProvidesTestAnime {
      * @return void
      */
     protected function initializeTestAnime() {
-    	$this->anime = factory(Anime::class)->create();
-    	$this->season = factory(AnimeSeason::class)->create([
-    		'anime_id' => $this->anime->id
-	    ]);
+        $this->anime = factory(Anime::class)->create();
+
+        $this->season = factory(AnimeSeason::class)->create([
+            'anime_id' => $this->anime->id
+        ]);
+
         $this->episode = factory(AnimeEpisode::class)->create([
             'season_id'  => $this->season->id,
         ]);
