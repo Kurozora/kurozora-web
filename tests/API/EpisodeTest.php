@@ -25,6 +25,7 @@ class EpisodeTest extends TestCase
             'watched' => 1
         ])->assertUnsuccessfulAPIResponse();
 
+        // Check whether the episode is not watched
         $this->assertEpisodeWatched(false, $this->episode);
     }
 
@@ -40,6 +41,7 @@ class EpisodeTest extends TestCase
             'watched' => -1
         ])->assertUnsuccessfulAPIResponse();
 
+        // Check whether the episode is not watched
         $this->assertEpisodeWatched(false, $this->episode);
     }
 
@@ -51,15 +53,10 @@ class EpisodeTest extends TestCase
      */
     function an_episode_can_be_watched_if_anime_in_library()
     {
-        // Add anime to library.
-        $response = $this->auth()->json('POST', '/api/v1/users/' . $this->user->id . '/library', [
-            'anime_id' => $this->anime->id,
-            'status' => UserLibraryStatus::getDescription(UserLibraryStatus::Watching)
-        ]);
+        // Add the Anime to the library
+        $this->user->library()->attach($this->anime, ['status' => UserLibraryStatus::Watching]);
 
-        $response->assertSuccessfulAPIResponse();
-
-        // Mark episode as watched.
+        // Mark episode as watched
         $response = $this->auth()->json('POST', '/api/v1/anime-episodes/' . $this->episode->id . '/watched', [
             'watched' => 1
         ]);
@@ -67,6 +64,7 @@ class EpisodeTest extends TestCase
         // Check whether the request was successful
         $response->assertSuccessfulAPIResponse();
 
+        // Check whether the episode is watched
         $this->assertEpisodeWatched(true, $this->episode);
     }
 
@@ -78,13 +76,8 @@ class EpisodeTest extends TestCase
      */
     function an_episode_can_be_unwatched_if_anime_in_library()
     {
-        // Add anime to library.
-        $response = $this->auth()->json('POST', '/api/v1/users/' . $this->user->id . '/library', [
-            'anime_id' => $this->anime->id,
-            'status' => UserLibraryStatus::getDescription(UserLibraryStatus::Watching)
-        ]);
-
-        $response->assertSuccessfulAPIResponse();
+        // Add the Anime to the library
+        $this->user->library()->attach($this->anime, ['status' => UserLibraryStatus::Watching]);
 
         // Mark episode as unwatched.
         $response = $this->auth()->json('POST', '/api/v1/anime-episodes/' . $this->episode->id . '/watched', [
@@ -94,6 +87,7 @@ class EpisodeTest extends TestCase
         // Check whether the request was successful
         $response->assertSuccessfulAPIResponse();
 
+        // Check whether the episode is watched
         $this->assertEpisodeWatched(false, $this->episode);
     }
 
