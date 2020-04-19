@@ -4,8 +4,8 @@ namespace Tests\API;
 
 use App\Enums\UserLibraryStatus;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Tests\API\Traits\ProvidesTestAnime;
-use Tests\API\Traits\ProvidesTestUser;
+use Tests\Traits\ProvidesTestAnime;
+use Tests\Traits\ProvidesTestUser;
 use Tests\TestCase;
 
 class EpisodeTest extends TestCase

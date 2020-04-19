@@ -6,7 +6,7 @@ use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Tests\API\Traits\ProvidesTestUser;
+use Tests\Traits\ProvidesTestUser;
 use Tests\TestCase;
 
 class UpdateProfileTest extends TestCase

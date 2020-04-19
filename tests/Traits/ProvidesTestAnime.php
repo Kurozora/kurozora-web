@@ -1,12 +1,13 @@
 <?php
 
-namespace Tests\API\Traits;
+namespace Tests\Traits;
 
 use App\Anime;
 use App\AnimeEpisode;
 use App\AnimeSeason;
 
-trait ProvidesTestAnime {
+trait ProvidesTestAnime
+{
     /** @var Anime $anime */
     public $anime;
 
@@ -17,11 +18,12 @@ trait ProvidesTestAnime {
     public $episode;
 
     /**
-     * Creates the test episode to be used in tests.
+     * Creates the test Anime data to be used in tests.
      *
      * @return void
      */
-    protected function initializeTestAnime() {
+    protected function initializeTestAnime()
+    {
         $this->anime = factory(Anime::class)->create();
 
         $this->season = factory(AnimeSeason::class)->create([
