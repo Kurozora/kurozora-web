@@ -167,7 +167,7 @@ class User extends Authenticatable implements LikerContract, HasMedia
 	 * @return bool
 	 */
     function isTracking(Anime $anime) {
-    	return $this->library()->where("anime_id", $anime->id)->exists();
+    	return $this->library()->where('anime_id', $anime->id)->exists();
     }
 
     /**

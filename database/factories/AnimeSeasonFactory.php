@@ -10,8 +10,8 @@ $factory->define(AnimeSeason::class, function (Faker $faker) {
 	static $number = 1;
 
     return [
-        "anime_id"     => factory(Anime::class)->create()->id,
-        "number"       => $number++,
-        "title"        => $faker->title
+        'anime_id'     => factory(Anime::class)->create()->id,
+        'number'       => $number++,
+        'title'        => $faker->title
     ];
 });

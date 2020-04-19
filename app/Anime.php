@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Traits\KuroSearchTrait;
+use Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -192,6 +193,15 @@ class Anime extends KModel
         // Images not fetched yet
         return null;
     }
+
+	/**
+	 * Returns a boolean indicating whether the authenticated user has the anime in their library.
+	 *
+	 * @return bool
+	 */
+	function isInLibrary() {
+		return Auth::user()->library()->where('anime_id', $this->id)->exists();
+	}
 
     /**
      * Eloquent builder scope that limits the query to ..
