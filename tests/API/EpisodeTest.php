@@ -21,7 +21,7 @@ class EpisodeTest extends TestCase
      */
     function an_episode_can_not_be_watched_if_anime_not_in_library()
     {
-         $this->auth()->json('POST', '/api/v1/anime-episodes/' . $this->episode->id . '/watched', [
+        $this->auth()->json('POST', '/api/v1/anime-episodes/' . $this->episode->id . '/watched', [
             'watched' => 1
         ])->assertUnsuccessfulAPIResponse();
 
