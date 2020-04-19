@@ -159,15 +159,16 @@ class User extends Authenticatable implements LikerContract, HasMedia
         return $this->belongsToMany(Anime::class, UserFavoriteAnime::class, 'user_id', 'anime_id');
     }
 
-	/**
-	 * Returns a boolean indicating whether the user has the given anime in their library.
-	 *
-	 * @param \App\Anime $anime The anime to be searched for in the user's library.
-	 *
-	 * @return bool
-	 */
-    function isTracking(Anime $anime) {
-    	return $this->library()->where("anime_id", $anime->id)->exists();
+    /**
+     * Returns a boolean indicating whether the user has the given anime in their library.
+     *
+     * @param \App\Anime $anime The anime to be searched for in the user's library.
+     *
+     * @return bool
+     */
+    function isTracking(Anime $anime)
+    {
+        return $this->library()->where('anime_id', $anime->id)->exists();
     }
 
     /**
