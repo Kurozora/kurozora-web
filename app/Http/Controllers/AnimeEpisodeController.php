@@ -33,13 +33,13 @@ class AnimeEpisodeController extends Controller
         ])->first();
 
         // User wants to mark as "watched" and hasn't already watched it
-        if ($watchedInt == WatchStatus::WATCHED()->value && !$foundWatched) {
+        if ($watchedInt == WatchStatus::Watched()->value && !$foundWatched) {
             UserWatchedEpisode::create([
                 'user_id' => Auth::id(),
                 'episode_id' => $episode->id
             ]);
         } // User wants to mark as "not watched" and has already watched it
-        else if ($watchedInt == WatchStatus::NOT_WATCHED()->value && $foundWatched) {
+        else if ($watchedInt == WatchStatus::NotWatched()->value && $foundWatched) {
             $foundWatched->delete();
         }
 

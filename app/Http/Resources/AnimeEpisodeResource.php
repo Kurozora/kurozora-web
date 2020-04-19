@@ -47,7 +47,7 @@ class AnimeEpisodeResource extends JsonResource
         $season = AnimeSeason::where('id', $this->season_id)->first();
 	    $anime = $season->anime()->first();
 
-        $watchStatus = WatchStatus::DISABLED();
+        $watchStatus = WatchStatus::Disabled();
         if($user->isTracking($anime))
 	        $watchStatus = WatchStatus::init($user->watchedAnimeEpisodes()->where('episode_id', $this->id)->exists());
 
