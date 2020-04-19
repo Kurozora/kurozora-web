@@ -1,10 +1,11 @@
 <?php
 
-namespace Tests\API\Traits;
+namespace Tests\Traits;
 
 use App\User;
 
-trait ProvidesTestUser {
+trait ProvidesTestUser
+{
     /** @var User $user */
     public $user;
 
@@ -15,7 +16,8 @@ trait ProvidesTestUser {
      *
      * @return void
      */
-    protected function initializeTestUser() {
+    protected function initializeTestUser()
+    {
         $this->user = factory(User::class)->create([
             'username'  => 'KurozoraTester',
             'email'     => 'tester@kurozora.app',

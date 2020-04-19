@@ -5,7 +5,7 @@ namespace Tests\API;
 use App\Anime;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Tests\API\Traits\ProvidesTestUser;
+use Tests\Traits\ProvidesTestUser;
 use Tests\TestCase;
 
 class FavoriteAnimeTest extends TestCase
