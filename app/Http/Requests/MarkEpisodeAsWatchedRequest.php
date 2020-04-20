@@ -14,7 +14,7 @@ class MarkEpisodeAsWatchedRequest extends FormRequest
      */
     public function authorize()
     {
-        $episode = AnimeEpisode::find($this->route('episode'));
+        $episode = $this->route('episode');
 
         return $this->user()->can('mark_as_watched', $episode);
     }
