@@ -1,16 +1,18 @@
 <?php
 
-namespace Tests\API\Traits;
+namespace Tests\Traits;
 
 use Illuminate\Support\Facades\Artisan;
 
-trait RunsSeeders {
+trait RunsSeeders
+{
     /**
      * Seeds the database to be used in tests.
      *
      * @return void
      */
-    protected function seedDatabase() {
+    protected function seedDatabase()
+    {
         Artisan::call('db:seed');
     }
 }

@@ -6,7 +6,7 @@ use App\Mail\ResetPassword;
 use App\PasswordReset;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Mail;
-use Tests\API\Traits\ProvidesTestUser;
+use Tests\Traits\ProvidesTestUser;
 use Tests\TestCase;
 
 class ResetPasswordTest extends TestCase
