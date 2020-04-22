@@ -8,7 +8,8 @@ use Faker\Generator as Faker;
 
 $factory->define(FeedMessage::class, function (Faker $faker) {
     return [
-        'user_id'   => factory(User::class)->create()->id,
-        'body'      => $faker->sentence
+        'user_id'                   => factory(User::class)->create()->id,
+        'parent_feed_message_id'    => null,
+        'body'                      => $faker->sentence
     ];
 });
