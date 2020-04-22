@@ -1,10 +1,11 @@
 <?php
 
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
+
 use App\ForumSection;
 use App\ForumThread;
 use App\User;
 use Faker\Generator as Faker;
-
 
 $factory->define(ForumThread::class, function (Faker $faker) {
     return [

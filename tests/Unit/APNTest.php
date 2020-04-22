@@ -4,7 +4,7 @@ namespace Tests\Unit;
 
 use App\Session;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Tests\API\Traits\ProvidesTestUser;
+use Tests\Traits\ProvidesTestUser;
 use Tests\TestCase;
 
 class APNTest extends TestCase

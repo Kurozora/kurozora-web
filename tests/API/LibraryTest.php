@@ -6,8 +6,8 @@ use App\Anime;
 use App\Enums\UserLibraryStatus;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Tests\API\Traits\ProvidesTestUser;
-use Tests\API\Traits\RunsSeeders;
+use Tests\Traits\ProvidesTestUser;
+use Tests\Traits\RunsSeeders;
 use Tests\TestCase;
 
 class LibraryTest extends TestCase
