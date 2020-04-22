@@ -205,6 +205,18 @@ class User extends Authenticatable implements LikerContract, HasMedia
     }
 
     /**
+     * Returns a boolean indicating whether the user has watched the given episode.
+     *
+     * @param AnimeEpisode $episode
+     *
+     * @return bool
+     */
+    function hasWatched(AnimeEpisode $episode)
+    {
+        return $this->watchedAnimeEpisodes()->where('episode_id', $episode->id)->exists();
+    }
+
+    /**
      * Returns the associated badges for the user
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

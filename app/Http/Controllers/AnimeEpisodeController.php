@@ -23,28 +23,24 @@ class AnimeEpisodeController extends Controller
      */
     public function watched(MarkEpisodeAsWatchedRequest $request, AnimeEpisode $episode)
     {
-        // Fetch the variables
-        $watchedInt = (int) $request->input('watched');
+        $user = Auth::user();
+        $watched = (int) $request->input('watched');
 
         // Find if the user has watched the episode
-        $foundWatched = UserWatchedEpisode::where([
-            ['user_id', '=', Auth::id()],
-            ['episode_id', '=', $episode->id]
-        ])->first();
+        $alreadyWatched = $user->hasWatched($episode);
 
-        // User wants to mark as "watched" and hasn't already watched it
-        if ($watchedInt == WatchStatus::Watched()->value && !$foundWatched) {
-            UserWatchedEpisode::create([
-                'user_id' => Auth::id(),
-                'episode_id' => $episode->id
-            ]);
-        } // User wants to mark as "not watched" and has already watched it
-        else if ($watchedInt == WatchStatus::NotWatched()->value && $foundWatched) {
-            $foundWatched->delete();
+        // Attach or detach the watched episode
+        if ($watched == WatchStatus::Watched && !$alreadyWatched)
+        {
+            $user->watchedAnimeEpisodes()->attach($episode);
+        }
+        else if ($watched == WatchStatus::NotWatched && $alreadyWatched)
+        {
+            $user->watchedAnimeEpisodes()->detach($episode);
         }
 
         return JSONResult::success([
-            'watched' => $watchedInt
+            'watched' => $watched
         ]);
     }
 }
