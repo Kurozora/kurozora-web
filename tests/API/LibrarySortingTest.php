@@ -7,8 +7,7 @@ use App\AnimeRating;
 use App\Enums\UserLibraryStatus;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Auth;
-use Tests\API\Traits\ProvidesTestUser;
+use Tests\Traits\ProvidesTestUser;
 use Tests\TestCase;
 
 class LibrarySortingTest extends TestCase

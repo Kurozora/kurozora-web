@@ -155,8 +155,21 @@ class User extends Authenticatable implements LikerContract, HasMedia
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    function favoriteAnime() {
+    function favoriteAnime()
+    {
         return $this->belongsToMany(Anime::class, UserFavoriteAnime::class, 'user_id', 'anime_id');
+    }
+
+    /**
+     * Returns a boolean indicating whether the user has the given anime in their library.
+     *
+     * @param \App\Anime $anime The anime to be searched for in the user's library.
+     *
+     * @return bool
+     */
+    function isTracking(Anime $anime)
+    {
+        return $this->library()->where('anime_id', $anime->id)->exists();
     }
 
     /**
@@ -164,7 +177,8 @@ class User extends Authenticatable implements LikerContract, HasMedia
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    function moderatingAnime() {
+    function moderatingAnime()
+    {
         return $this->belongsToMany(Anime::class, AnimeModerator::class, 'user_id', 'anime_id')
             ->withPivot('created_at');
     }
@@ -174,7 +188,8 @@ class User extends Authenticatable implements LikerContract, HasMedia
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    function library() {
+    function library()
+    {
         return $this->belongsToMany(Anime::class, UserLibrary::class, 'user_id', 'anime_id')
             ->withPivot('status');
     }
@@ -184,8 +199,21 @@ class User extends Authenticatable implements LikerContract, HasMedia
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    function watchedAnimeEpisodes() {
+    function watchedAnimeEpisodes()
+    {
         return $this->belongsToMany(AnimeEpisode::class, UserWatchedEpisode::class, 'user_id', 'episode_id');
+    }
+
+    /**
+     * Returns a boolean indicating whether the user has watched the given episode.
+     *
+     * @param AnimeEpisode $episode
+     *
+     * @return bool
+     */
+    function hasWatched(AnimeEpisode $episode)
+    {
+        return $this->watchedAnimeEpisodes()->where('episode_id', $episode->id)->exists();
     }
 
     /**
@@ -193,7 +221,8 @@ class User extends Authenticatable implements LikerContract, HasMedia
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    function badges() {
+    function badges()
+    {
         return $this->belongsToMany(Badge::class, UserBadge::class, 'user_id', 'badge_id');
     }
 
@@ -202,7 +231,8 @@ class User extends Authenticatable implements LikerContract, HasMedia
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    function sessions() {
+    function sessions()
+    {
         return $this->hasMany(Session::class);
     }
 
@@ -264,7 +294,8 @@ class User extends Authenticatable implements LikerContract, HasMedia
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    function threads() {
+    function threads()
+    {
         return $this->hasMany(ForumThread::class);
     }
 
@@ -273,7 +304,8 @@ class User extends Authenticatable implements LikerContract, HasMedia
      *
      * @return array
      */
-    public function getBadges() {
+    public function getBadges()
+    {
         // Find location of cached data
         $cacheKey = sprintf(self::CACHE_KEY_BADGES, $this->id);
 
@@ -297,7 +329,8 @@ class User extends Authenticatable implements LikerContract, HasMedia
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function followers() {
+    public function followers()
+    {
         return $this->belongsToMany(User::class, UserFollow::class, 'following_user_id', 'user_id');
     }
 
@@ -306,7 +339,8 @@ class User extends Authenticatable implements LikerContract, HasMedia
      *
      * @return int
      */
-    public function getFollowerCount() {
+    public function getFollowerCount()
+    {
         // Find location of cached data
         $cacheKey = sprintf(self::CACHE_KEY_FOLLOWER_COUNT, $this->id);
 
@@ -323,7 +357,8 @@ class User extends Authenticatable implements LikerContract, HasMedia
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function following() {
+    public function following()
+    {
         return $this->belongsToMany(User::class, UserFollow::class, 'user_id', 'following_user_id');
     }
 
@@ -349,7 +384,8 @@ class User extends Authenticatable implements LikerContract, HasMedia
      *
      * @return int
      */
-    public function getReputationCount() {
+    public function getReputationCount()
+    {
         // Find location of cached data
         $cacheKey = sprintf(self::CACHE_KEY_REPUTATION_COUNT, $this->id);
 
@@ -370,7 +406,8 @@ class User extends Authenticatable implements LikerContract, HasMedia
      * @param $rawPass
      * @return string
      */
-    public static function hashPass($rawPass) {
+    public static function hashPass($rawPass)
+    {
         return Hash::make($rawPass);
     }
 
@@ -381,7 +418,8 @@ class User extends Authenticatable implements LikerContract, HasMedia
      * @param $hash
      * @return bool
      */
-    public static function checkPassHash($rawPass, $hash) {
+    public static function checkPassHash($rawPass, $hash)
+    {
         return Hash::check($rawPass, $hash);
     }
 
@@ -390,7 +428,8 @@ class User extends Authenticatable implements LikerContract, HasMedia
      *
      * @return bool
      */
-    public function hasConfirmedEmail() {
+    public function hasConfirmedEmail()
+    {
         return ($this->email_confirmation_id == null);
     }
 
@@ -399,7 +438,8 @@ class User extends Authenticatable implements LikerContract, HasMedia
      *
      * @return bool
      */
-    function canDoMALImport() {
+    function canDoMALImport()
+    {
         if(!$this->last_mal_import_at)
             return true;
 

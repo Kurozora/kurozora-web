@@ -3,12 +3,11 @@
 namespace Tests\API;
 
 use App\Http\Resources\SessionResource;
-use App\Rules\ValidateAPNDeviceToken;
 use App\Session;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Str;
-use Tests\API\Traits\ProvidesTestUser;
+use Tests\Traits\ProvidesTestUser;
 use Tests\TestCase;
 
 class SessionTest extends TestCase
