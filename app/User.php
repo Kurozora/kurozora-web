@@ -94,6 +94,16 @@ class User extends Authenticatable implements LikerContract, HasMedia
     const BIOGRAPHY_LIMIT = 250;
 
     /**
+     * Returns the associated feed messages for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    function feedMessages()
+    {
+        return $this->hasMany(FeedMessage::class);
+    }
+
+    /**
      * Returns the user's activity status based on their sessions.
      *
      * @return UserActivityStatus
