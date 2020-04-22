@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\AnimeEpisode;
 use App\ForumThread;
+use App\Policies\AnimeEpisodePolicy;
 use App\Policies\DatabaseNotificationPolicy;
 use App\Policies\ForumThreadPolicy;
 use App\Policies\SessionPolicy;
@@ -25,7 +27,8 @@ class AuthServiceProvider extends ServiceProvider
         DatabaseNotification::class => DatabaseNotificationPolicy::class,
         User::class                 => UserPolicy::class,
         Session::class              => SessionPolicy::class,
-        ForumThread::class          => ForumThreadPolicy::class
+        ForumThread::class          => ForumThreadPolicy::class,
+        AnimeEpisode::class         => AnimeEpisodePolicy::class
     ];
 
     /**

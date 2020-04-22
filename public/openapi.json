@@ -622,13 +622,13 @@
                         "description":"ID of the user."
                     },
                     {
-                        "in": "query",
-                        "name": "query",
-                        "schema": {
-                            "type": "string"
+                        "in":"query",
+                        "name":"query",
+                        "schema":{
+                            "type":"string"
                         },
-                        "required": false,
-                        "description": "The search query."
+                        "required":false,
+                        "description":"The search query."
                     }
                 ],
                 "responses":{
@@ -1282,15 +1282,15 @@
                 ],
                 "summary":"Updates the information of a session",
                 "description":"This endpoint will update the information of a sessions.",
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "apn_device_token": {
-                                        "type": "string",
-                                        "description": "The new APN device token for the session."
+                "requestBody":{
+                    "content":{
+                        "application/x-www-form-urlencoded":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "apn_device_token":{
+                                        "type":"string",
+                                        "description":"The new APN device token for the session."
                                     }
                                 }
                             }
@@ -1907,10 +1907,8 @@
                                 "type":"object",
                                 "properties":{
                                     "watched":{
-                                        "type":"integer",
-                                        "description":"Mark episode watched or not. (0 = not watched, 1 = watched)",
-                                        "minimum":0,
-                                        "maximum":1
+                                        "$ref":"#/components/schemas/EpisodeWatchStatus",
+                                        "description":"Mark episode watched or not. (-1 = not watched, 1 = watched)"
                                     }
                                 },
                                 "required":[
@@ -2046,8 +2044,8 @@
                                 "properties":{
                                     "vote":{
                                         "type":"integer",
-                                        "description":"The vote to submit. (0 = downvote, 1 = upvote)",
-                                        "minimum":0,
+                                        "description":"The vote to submit. (-1 = downvote, 0 = novote, 1 = upvote)",
+                                        "minimum":-1,
                                         "maximum":1
                                     }
                                 },
@@ -2345,6 +2343,14 @@
     },
     "components":{
         "schemas":{
+            "EpisodeWatchStatus":{
+                "type":"integer",
+                "enum":[
+                    -1,
+                    1
+                ],
+                "description":"The set of available watch status types. -1 = not watched, 1 = watched"
+            },
             "KurozoraLibraryStatus":{
                 "type":"string",
                 "enum":[
@@ -2353,13 +2359,15 @@
                     "Planning",
                     "Completed",
                     "OnHold"
-                ]
+                ],
+                "description":"The set of available library status types."
             },
             "MALImportBehavior":{
                 "type":"string",
                 "enum":[
                     "overwrite"
-                ]
+                ],
+                "description":"The set of available MAL import behavior types."
             }
         },
         "securitySchemes":{

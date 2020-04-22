@@ -2,11 +2,9 @@
 
 namespace Tests\API;
 
-use App\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Str;
-use Tests\API\Traits\ProvidesTestUser;
+use Tests\Traits\ProvidesTestUser;
 use Tests\TestCase;
 
 class LoginTest extends TestCase

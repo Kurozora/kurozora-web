@@ -49,16 +49,16 @@
         },
         {
             "name": "bensampo/laravel-enum",
-            "version": "v1.36",
+            "version": "v1.37.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenSampo/laravel-enum.git",
-                "reference": "4d8a4578572e020a615fadb9572fd0764dcde949"
+                "reference": "25cd11ab85ca0b9b8bc2eb969c0f1cddd9e175c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenSampo/laravel-enum/zipball/4d8a4578572e020a615fadb9572fd0764dcde949",
-                "reference": "4d8a4578572e020a615fadb9572fd0764dcde949",
+                "url": "https://api.github.com/repos/BenSampo/laravel-enum/zipball/25cd11ab85ca0b9b8bc2eb969c0f1cddd9e175c4",
+                "reference": "25cd11ab85ca0b9b8bc2eb969c0f1cddd9e175c4",
                 "shasum": ""
             },
             "require": {
@@ -116,7 +116,7 @@
                 "package",
                 "validation"
             ],
-            "time": "2020-03-22T22:17:05+00:00"
+            "time": "2020-04-11T14:18:49+00:00"
         },
         {
             "name": "cakephp/chronos",
@@ -1922,16 +1922,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v6.18.3",
+            "version": "v6.18.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "4e48acfaba87f08320a2764d36c3b6a4a4112ccf"
+                "reference": "4ef5f9612c2694c915f53f0cec3e4081e9bfc778"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/4e48acfaba87f08320a2764d36c3b6a4a4112ccf",
-                "reference": "4e48acfaba87f08320a2764d36c3b6a4a4112ccf",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/4ef5f9612c2694c915f53f0cec3e4081e9bfc778",
+                "reference": "4ef5f9612c2694c915f53f0cec3e4081e9bfc778",
                 "shasum": ""
             },
             "require": {
@@ -2064,7 +2064,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2020-03-24T16:37:50+00:00"
+            "time": "2020-04-08T15:51:23+00:00"
         },
         {
             "name": "laravel/nova",
@@ -2072,8 +2072,7 @@
             "dist": {
                 "type": "path",
                 "url": "./nova",
-                "reference": "67cd49e072362dc380e7b5c9a474b68a3401ded7",
-                "shasum": null
+                "reference": "67cd49e072362dc380e7b5c9a474b68a3401ded7"
             },
             "require": {
                 "cakephp/chronos": "^1.0",
@@ -2912,16 +2911,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.3.0",
+            "version": "v4.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "9a9981c347c5c49d6dfe5cf826bb882b824080dc"
+                "reference": "bd43ec7152eaaab3bd8c6d0aa95ceeb1df8ee120"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/9a9981c347c5c49d6dfe5cf826bb882b824080dc",
-                "reference": "9a9981c347c5c49d6dfe5cf826bb882b824080dc",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/bd43ec7152eaaab3bd8c6d0aa95ceeb1df8ee120",
+                "reference": "bd43ec7152eaaab3bd8c6d0aa95ceeb1df8ee120",
                 "shasum": ""
             },
             "require": {
@@ -2960,7 +2959,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2019-11-08T13:50:10+00:00"
+            "time": "2020-04-10T16:34:50+00:00"
         },
         {
             "name": "opis/closure",
@@ -5932,16 +5931,16 @@
         },
         {
             "name": "vlucas/phpdotenv",
-            "version": "v3.6.2",
+            "version": "v3.6.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vlucas/phpdotenv.git",
-                "reference": "786a947e57086cf236cefdee80784634224b99fa"
+                "reference": "1b3103013797f04521c6cae5560f604649484066"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/786a947e57086cf236cefdee80784634224b99fa",
-                "reference": "786a947e57086cf236cefdee80784634224b99fa",
+                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/1b3103013797f04521c6cae5560f604649484066",
+                "reference": "1b3103013797f04521c6cae5560f604649484066",
                 "shasum": ""
             },
             "require": {
@@ -5991,7 +5990,7 @@
                 "env",
                 "environment"
             ],
-            "time": "2020-03-27T23:36:02+00:00"
+            "time": "2020-04-12T15:18:03+00:00"
         },
         {
             "name": "vyuldashev/nova-permission",
@@ -6523,16 +6522,16 @@
         },
         {
             "name": "composer/ca-bundle",
-            "version": "1.2.6",
+            "version": "1.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "47fe531de31fca4a1b997f87308e7d7804348f7e"
+                "reference": "95c63ab2117a72f48f5a55da9740a3273d45b7fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/47fe531de31fca4a1b997f87308e7d7804348f7e",
-                "reference": "47fe531de31fca4a1b997f87308e7d7804348f7e",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/95c63ab2117a72f48f5a55da9740a3273d45b7fd",
+                "reference": "95c63ab2117a72f48f5a55da9740a3273d45b7fd",
                 "shasum": ""
             },
             "require": {
@@ -6575,20 +6574,20 @@
                 "ssl",
                 "tls"
             ],
-            "time": "2020-01-13T10:02:55+00:00"
+            "time": "2020-04-08T08:27:21+00:00"
         },
         {
             "name": "composer/composer",
-            "version": "1.10.1",
+            "version": "1.10.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "b912a45da3e2b22f5cb5a23e441b697a295ba011"
+                "reference": "7a4d5b6aa30d2118af27c04f5e897b57156ccfa9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/b912a45da3e2b22f5cb5a23e441b697a295ba011",
-                "reference": "b912a45da3e2b22f5cb5a23e441b697a295ba011",
+                "url": "https://api.github.com/repos/composer/composer/zipball/7a4d5b6aa30d2118af27c04f5e897b57156ccfa9",
+                "reference": "7a4d5b6aa30d2118af27c04f5e897b57156ccfa9",
                 "shasum": ""
             },
             "require": {
@@ -6655,7 +6654,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2020-03-13T19:34:27+00:00"
+            "time": "2020-04-10T09:44:22+00:00"
         },
         {
             "name": "composer/semver",

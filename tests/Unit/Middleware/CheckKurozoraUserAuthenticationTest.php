@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Tests\API\Traits\ProvidesTestUser;
+use Tests\Traits\ProvidesTestUser;
 use Tests\TestCase;
 
 class CheckKurozoraUserAuthenticationTest extends TestCase

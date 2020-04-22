@@ -1,5 +1,7 @@
 <?php
 
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
+
 use App\AppTheme;
 use Faker\Generator as Faker;
 
