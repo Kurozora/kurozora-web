@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
+use App\Helpers\KuroAuthToken;
 use App\Http\Requests\ResetPassword;
 use App\Http\Requests\UpdateProfile;
 use App\Http\Resources\NotificationResource;
@@ -16,7 +17,6 @@ use App\Session;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
@@ -32,6 +32,30 @@ class UserController extends Controller
         // Show profile response
         return JSONResult::success([
             'user' => UserResourceLarge::make($user)
+        ]);
+    }
+
+    /**
+     * Returns the profile details for the current user
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return JsonResponse
+     */
+    public function me(Request $request) {
+        // Get data from kuro auth
+        $tokenData = KuroAuthToken::readToken($request->header('kuro-auth'));
+
+        // Get current user
+        $user = User::find($tokenData['user_id'])->first();
+
+        // Get current session
+        $session = Session::where('secret', $tokenData['session_secret'])->first();
+
+        // Show profile response
+        return JSONResult::success([
+            'user'      => UserResourceSmall::make($user)->includePrivateDetails(),
+            'session'   => SessionResource::make($session)
         ]);
     }
 
