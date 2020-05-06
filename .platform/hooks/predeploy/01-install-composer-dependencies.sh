@@ -2,4 +2,4 @@
 
 # Install Composer dependencies
 export COMPOSER_ALLOW_SUPERUSER=1
-composer install --optimize-autoloader --no-dev
+/usr/local/bin/composer install --optimize-autoloader --no-dev
