@@ -30,6 +30,6 @@ final class WatchStatus extends Enum
 	 * @return \App\Enums\WatchStatus
 	 */
 	static function init($bool): self {
-		return $bool ? self::WATCHED() : self::NOT_WATCHED();
+		return $bool ? self::Watched() : self::NotWatched();
 	}
 }
