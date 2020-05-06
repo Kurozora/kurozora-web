@@ -11,6 +11,9 @@ Route::prefix('/users')->group(function() {
 
     Route::post('/login-siwa', [SignInWithAppleController::class, 'login']);
 
+    Route::get('/me', [UserController::class, 'me'])
+        ->middleware('kurozora.userauth');
+
     Route::get('/search', [UserController::class, 'search'])
         ->middleware('kurozora.userauth:optional');
 
