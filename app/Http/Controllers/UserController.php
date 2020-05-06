@@ -9,6 +9,7 @@ use App\Http\Resources\NotificationResource;
 use App\Http\Resources\SessionResource;
 use App\Http\Resources\UserResourceLarge;
 use App\Http\Resources\UserResourceSmall;
+use App\Http\Responses\LoginResponse;
 use App\Jobs\SendNewPasswordMail;
 use App\Jobs\SendPasswordResetMail;
 use App\PasswordReset;
@@ -33,6 +34,24 @@ class UserController extends Controller
         return JSONResult::success([
             'user' => UserResourceLarge::make($user)
         ]);
+    }
+
+    /**
+     * Returns the profile details for the current user
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return JsonResponse
+     */
+    public function me(Request $request) {
+        // Get authenticated user
+        $user = Auth::user();
+
+        // Get current session
+        $session = Session::find($request->session_id);
+
+        // Show profile response
+        return LoginResponse::make($user, $session);
     }
 
     /**

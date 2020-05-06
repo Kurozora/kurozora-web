@@ -826,6 +826,33 @@
                 }
             }
         },
+        "/users/me":{
+            "get":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "users"
+                ],
+                "summary":"User profile details.",
+                "description":"This endpoint will retrieve the details of the current user's profile.",
+                "parameters":[
+
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
         "/users/{userID}/notifications":{
             "get":{
                 "security":[
