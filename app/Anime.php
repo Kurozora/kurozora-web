@@ -30,7 +30,8 @@ class Anime extends KModel
 	 * @var array
 	 */
     protected $casts = [
-	    'first_aired' => 'date'
+	    'first_aired' => 'date',
+        'last_aired' => 'date'
     ];
 
     // Maximum amount of returned search results
