@@ -26,9 +26,9 @@ class AnimeEpisodeResource extends JsonResource
             'id'            => $this->id,
             'number'        => $this->number,
             'name'          => $this->name,
-            'first_aired'    => $formattedFirstAired,
+            'first_aired'   => $formattedFirstAired,
             'overview'      => $this->overview,
-            'verified'       => (bool) $this->verified
+            'verified'      => (bool) $this->verified
         ];
 
         if(Auth::check())

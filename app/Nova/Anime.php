@@ -162,6 +162,11 @@ class Anime extends Resource
 	            ->hideFromIndex()
                 ->help('The date on which the show first aired. For example: 2015-12-03'),
 
+            Date::make('Last air date', 'last_aired')
+                ->format('DD-MM-YYYY')
+                ->hideFromIndex()
+                ->help('The date on which the show last aired. For example: 2016-03-08'),
+
             Time::make('Air time', 'air_time')
 	            ->withTwelveHourTime()
 	            ->hideFromIndex()
@@ -176,7 +181,7 @@ class Anime extends Resource
 		            4 => 'Thursday',
 		            5 => 'Friday',
 		            6 => 'Saturday'
-	                      ])
+                ])
 	            ->displayUsingLabels()
 	            ->hideFromIndex()
 	            ->help('The day of the week the show airs at. For example: Thursday'),
