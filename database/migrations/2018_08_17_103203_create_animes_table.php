@@ -46,6 +46,7 @@ class CreateAnimesTable extends Migration
             $table->integer('episode_count')->default(0);
             $table->integer('season_count')->default(0);
 	        $table->date('first_aired')->nullable();
+            $table->date('last_aired')->nullable();
 	        $table->time('air_time')->nullable();
 	        $table->integer('air_day')->nullable()->unsigned();
 
