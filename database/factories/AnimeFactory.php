@@ -5,11 +5,17 @@
 use App\Anime;
 use App\Enums\AnimeStatus;
 use App\Enums\AnimeType;
+use App\Enums\DayOfWeek;
 use Faker\Generator as Faker;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 
 $factory->define(Anime::class, function (Faker $faker) {
     $title = $faker->sentence;
+    $totalEpisodesArray = [10, 12, 24];
+    $totalEpisodes = $totalEpisodesArray[array_rand($totalEpisodesArray)];
+    $firstAired = Carbon::parse($faker->dateTime)->toDate();
+    $lastAired = Carbon::parse($firstAired)->addWeeks($totalEpisodes)->toDate();
 
     return [
         'title'         => $title,
@@ -28,8 +34,9 @@ $factory->define(Anime::class, function (Faker $faker) {
         'mal_id'        => null,
         'tvdb_id'       => null,
         'slug'          => Str::slug($title),
-        'first_aired'   => $faker->dateTime,
-        'air_time'      => null,
-        'air_day'       => null
+        'first_aired'   => $firstAired,
+        'last_aired'    => $lastAired,
+        'air_time'      => $faker->time('H:i'),
+        'air_day'       => DayOfWeek::getRandomValue()
     ];
 });

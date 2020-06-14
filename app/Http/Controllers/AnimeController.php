@@ -67,8 +67,10 @@ class AnimeController extends Controller
      * Adds a rating for an Anime item
      *
      * @param Request $request
-     * @param Anime $anime
+     * @param Anime   $anime
+     *
      * @return JsonResponse
+     * @throws \Exception
      */
     public function rateAnime(Request $request, Anime $anime) {
         // Validate the inputs

@@ -3,7 +3,6 @@
 use App\Anime;
 use App\Enums\AnimeType;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 
 class AnimesTableDummySeeder extends Seeder
@@ -18,6 +17,7 @@ class AnimesTableDummySeeder extends Seeder
      * Run the database seeds.
      *
      * @return void
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function run()
     {
