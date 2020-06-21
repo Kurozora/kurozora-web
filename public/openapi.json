@@ -69,6 +69,10 @@
             "description":"Everything session related"
         },
         {
+            "name":"studios",
+            "description":"Everything studio related"
+        },
+        {
             "name":"themes",
             "description":"Everything theme related"
         },
@@ -2241,6 +2245,51 @@
                         }
                     }
                 },
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/studios":{
+            "get":{
+                "tags":[
+                    "studios"
+                ],
+                "summary":"Studios list.",
+                "description":"This endpoint will retrieve the studios.",
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/studios/{studioID}":{
+            "get":{
+                "tags":[
+                    "studios"
+                ],
+                "summary":"Get studio details.",
+                "description":"This endpoint will retrieve the details for a studio.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"studioID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the studio."
+                    }
+                ],
                 "responses":{
                     "200":{
                         "$ref":"#/components/responses/JSONSuccess"
