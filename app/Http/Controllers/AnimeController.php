@@ -73,6 +73,9 @@ class AnimeController extends Controller
      * @throws \Exception
      */
     public function rateAnime(Request $request, Anime $anime) {
+        if (!Auth::user()->isTracking($anime))
+            return JSONResult::error('Please add '.$anime->title.' to your library first.');
+
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'rating' => 'bail|required|numeric|between:' . AnimeRating::MIN_RATING_VALUE . ',' . AnimeRating::MAX_RATING_VALUE
