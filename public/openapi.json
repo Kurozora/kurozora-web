@@ -2257,10 +2257,20 @@
         },
         "/studios":{
             "get":{
+                "security":[
+                    {
+
+                    },
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
                 "tags":[
                     "studios"
                 ],
-                "summary":"Studios list.",
+                "summary":"(Optional authentication) Studios list.",
                 "description":"This endpoint will retrieve the studios.",
                 "parameters":[
                     {
@@ -2296,10 +2306,20 @@
         },
         "/studios/{studioID}":{
             "get":{
+                "security":[
+                    {
+
+                    },
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
                 "tags":[
                     "studios"
                 ],
-                "summary":"Get studio details.",
+                "summary":"(Optional authentication) Get studio details.",
                 "description":"This endpoint will retrieve the details for a studio.",
                 "parameters":[
                     {
