@@ -2262,6 +2262,28 @@
                 ],
                 "summary":"Studios list.",
                 "description":"This endpoint will retrieve the studios.",
+                "parameters":[
+                    {
+                        "in":"query",
+                        "name":"anime",
+                        "schema":{
+                            "type":"integer",
+                            "minimum":0,
+                            "maximum":1
+                        },
+                        "required":false,
+                        "description":"Whether anime data should be included. (0 = false, 1 = true)"
+                    },
+                    {
+                        "in":"query",
+                        "name":"limit",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":false,
+                        "description":"Number of anime data to include. Leave empty for all data."
+                    }
+                ],
                 "responses":{
                     "200":{
                         "$ref":"#/components/responses/JSONSuccess"
@@ -2288,6 +2310,26 @@
                         },
                         "required":true,
                         "description":"ID of the studio."
+                    },
+                    {
+                        "in":"query",
+                        "name":"anime",
+                        "schema":{
+                            "type":"integer",
+                            "minimum":0,
+                            "maximum":1
+                        },
+                        "required":false,
+                        "description":"Whether anime data should be included. (0 = false, 1 = true)"
+                    },
+                    {
+                        "in":"query",
+                        "name":"limit",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":false,
+                        "description":"Number of anime data to include. Leave empty for all data."
                     }
                 ],
                 "responses":{

@@ -14,13 +14,13 @@ class StudioResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            'id'            => $this->id,
-            'name'          => $this->name,
-            'logo'          => $this->logo,
-            'about'         => $this->about,
-            'founded'       => $this->founded,
-            'website_url'   => $this->website_url
-        ];
+        $anime = (bool) $request->input('anime');
+        $limit = $request->input('limit');
+        $resource = StudioResourceSmall::make($this)->toArray($request);
+
+        if ($anime)
+            $resource = array_merge($resource, ['anime' => AnimeResource::collection($this->anime->take($limit))]);
+
+        return $resource;
     }
 }

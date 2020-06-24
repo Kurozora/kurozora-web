@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GetStudio;
 use App\Studio;
 use App\Helpers\JSONResult;
 use App\Http\Resources\StudioResource;
@@ -12,9 +13,11 @@ class StudioController extends Controller
     /**
      * Generate an overview of studios.
      *
+     * @param \App\Http\Requests\GetStudio $request
+     *
      * @return JsonResponse
      */
-    public function overview() {
+    public function overview(GetStudio $request) {
         // Get all studios and format them
         $allStudios = Studio::get()->map(function($studio) {
             return StudioResource::make($studio);
@@ -27,11 +30,12 @@ class StudioController extends Controller
     /**
      * Shows studio details
      *
-     * @param Studio $studio
+     * @param \App\Http\Requests\GetStudio $request
+     * @param Studio                       $studio
      *
      * @return JsonResponse
      */
-    public function details(Studio $studio) {
+    public function details(GetStudio $request, Studio $studio) {
         // Show studio details
         return JSONResult::success([
             'studio' => StudioResource::make($studio)
