@@ -75,7 +75,7 @@ class Anime extends KModel
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function studio() {
-        return $this->belongsTo(Studio::class, 'studio_id', 'id');
+        return $this->belongsTo(Studio::class);
     }
 
     /**
