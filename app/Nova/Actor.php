@@ -7,7 +7,6 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Actor extends Resource
 {
@@ -31,7 +30,7 @@ class Actor extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'role'
+        'id', 'first_name', 'last_name', 'occupation',
     ];
 
     /**
@@ -54,11 +53,15 @@ class Actor extends Resource
 
             ExternalImage::make('Image'),
 
-            Text::make('Actor name', 'name')
+            Text::make('First name')
                 ->rules('required', 'max:255')
                 ->sortable(),
 
-            Text::make('Actor role', 'role')
+            Text::make('Last name')
+                ->rules('required', 'max:255')
+                ->sortable(),
+
+            Text::make('Occupation')
                 ->rules('max:255')
                 ->sortable(),
 
