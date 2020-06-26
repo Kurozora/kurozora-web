@@ -19,10 +19,11 @@ class ActorResource extends JsonResource
         $actor = $this->resource;
 
         return [
-            'id'    => $actor->id,
-            'name'  => $actor->name,
-            'role'  => $actor->role,
-            'image' => $actor->image
+            'id'            => $actor->id,
+            'first_name'    => $actor->first_name,
+            'last_name'     => $actor->last_name,
+            'occupation'    => $actor->occupation,
+            'image'         => $actor->image
         ];
     }
 }
