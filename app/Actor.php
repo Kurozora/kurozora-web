@@ -24,6 +24,15 @@ class Actor extends KModel
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     function anime() {
-        return $this->belongsTo(Anime::class);
+        return $this->belongsToMany(Anime::class, ActorAnimeCharacter::TABLE_NAME);
+    }
+
+    /**
+     * Returns the characters the actor belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    function characters() {
+        return $this->belongsToMany(Character::class, ActorAnimeCharacter::TABLE_NAME);
     }
 }

@@ -220,15 +220,24 @@ class Anime extends Resource
                 ->onlyOnForms()
                 ->help('Whether or not the details (information_ were retrieved from TVDB.<br />Untick and the system will do so once the Anime gets visited the next time.'),
 
-            BelongsToMany::make('Moderators', 'moderators', User::class)
-// @TODO
-// This has been commented out, because it conflicts with the favoriteAnime relationship.
-//                ->fields(function() {
-//                    return [
-//                        DateTime::make('Moderating since', 'created_at')
-//                            ->rules('required')
-//                    ];
-//                })
+            BelongsToMany::make('Actors')
+                ->fields(function() {
+                    return [
+                        Select::make('Character', 'character_id')
+                            ->options(\App\Character::pluck('name', 'id')->toArray())
+                            ->rules('required', 'numeric')
+                    ];
+                })
+                ->searchable(),
+
+            BelongsToMany::make('Characters')
+                ->fields(function() {
+                    return [
+                        Select::make('Actor', 'actor_id')
+                            ->options(\App\Actor::all()->pluck('full_name', 'id')->toArray())
+                            ->rules('required', 'numeric')
+                    ];
+                })
                 ->searchable(),
 
             BelongsToMany::make('Genres')
@@ -236,7 +245,16 @@ class Anime extends Resource
 
             HasMany::make('Seasons'),
 
-            HasMany::make('Actors'),
+            BelongsToMany::make('Moderators', 'moderators', User::class)
+                // @TODO
+                // This has been commented out, because it conflicts with the favoriteAnime relationship.
+                //                ->fields(function() {
+                //                    return [
+                //                        DateTime::make('Moderating since', 'created_at')
+                //                            ->rules('required')
+                //                    ];
+                //                })
+                ->searchable(),
         ];
     }
 

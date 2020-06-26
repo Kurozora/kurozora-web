@@ -45,6 +45,7 @@ class Anime extends KModel
     const CACHE_KEY_ACTORS_SECONDS = 120 * 60;
     const CACHE_KEY_SEASONS_SECONDS = 120 * 60;
     const CACHE_KEY_GENRES_SECONDS = 120 * 60;
+    const CACHE_KEY_CHARACTERS_SECONDS = 120 * 60;
 
     // Table name
     const TABLE_NAME = 'animes';
@@ -81,10 +82,10 @@ class Anime extends KModel
     /**
      * Get the Anime's actors
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function actors() {
-        return $this->hasMany(Actor::class, 'anime_id', 'id');
+        return $this->belongsToMany(Actor::class,  ActorAnimeCharacter::TABLE_NAME);
     }
 
     /**
@@ -102,6 +103,32 @@ class Anime extends KModel
         });
 
         return $actorsInfo;
+    }
+
+    /**
+     * Get the anime's characters
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    function characters() {
+        return $this->belongsToMany(Character::class, ActorAnimeCharacter::TABLE_NAME);
+    }
+
+    /**
+     * Returns this anime's characters
+     *
+     * @return mixed
+     */
+    public function getCharacters() {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'characters', 'id' => $this->id]);
+
+        // Retrieve or save cached result
+        $charactersInfo = Cache::remember($cacheKey, self::CACHE_KEY_CHARACTERS_SECONDS, function () {
+            return $this->characters;
+        });
+
+        return $charactersInfo;
     }
 
     /**
