@@ -137,23 +137,6 @@ class Character extends Resource
                 ->sortable(),
 
             BelongsToMany::make('Actors')
-                ->fields(function() {
-                    return [
-                        Select::make('Anime', 'anime_id')
-                            ->options(\App\Anime::pluck('title', 'id')->toArray())
-                            ->rules('required', 'numeric')
-                    ];
-                })
-                ->searchable(),
-
-            BelongsToMany::make('Anime')
-                ->fields(function() {
-                    return [
-                        Select::make('Actor', 'actor_id')
-                            ->options(\App\Actor::all()->pluck('full_name', 'id')->toArray())
-                            ->rules('required', 'numeric')
-                    ];
-                })
                 ->searchable(),
         ];
     }

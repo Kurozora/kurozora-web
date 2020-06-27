@@ -43,8 +43,7 @@ class AnimeController extends Controller
         $actors = $anime->getActors();
 
         return JSONResult::success([
-            'total_actors'  => count($actors),
-            'actors'        => ActorResource::collection($actors)
+            'actors'    => ActorResource::collection($actors)
         ]);
     }
 
