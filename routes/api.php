@@ -21,6 +21,7 @@ Route::group(['prefix' => 'v1'], function () {
     require 'API/Anime.php';
     require 'API/Anime-Seasons.php';
     require 'API/Anime-Episodes.php';
+    require 'API/Characters.php';
     require 'API/Genres.php';
     require 'API/Forum-Sections.php';
     require 'API/Forum-Threads.php';
