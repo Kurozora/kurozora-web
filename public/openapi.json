@@ -49,6 +49,10 @@
             "description":"Everything anime episodes related"
         },
         {
+            "name":"characters",
+            "description":"Everything character related"
+        },
+        {
             "name":"genres",
             "description":"Everything genre related"
         },
@@ -1846,6 +1850,51 @@
                         }
                     }
                 },
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/characters":{
+            "get":{
+                "tags":[
+                    "characters"
+                ],
+                "summary":"Characters list.",
+                "description":"This endpoint will retrieve the characters.",
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/characters/{characterID}":{
+            "get":{
+                "tags":[
+                    "characters"
+                ],
+                "summary":"Get character details.",
+                "description":"This endpoint will retrieve the details for a character.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"characterID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the character."
+                    }
+                ],
                 "responses":{
                     "200":{
                         "$ref":"#/components/responses/JSONSuccess"

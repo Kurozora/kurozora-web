@@ -79,6 +79,7 @@ class Character extends Resource
                     'Alive' => 'Alive',
                     'Deceased' => 'Deceased'
                 ])
+                ->nullable(true)
                 ->sortable(),
 
             Text::make('Blood Type')
@@ -132,6 +133,7 @@ class Character extends Resource
             Select::make('Astrological Sign')
                 ->options(AstrologicalSign::toSelectArray())
                 ->displayUsingLabels()
+                ->nullable(true)
                 ->sortable(),
 
             BelongsToMany::make('Actors')
