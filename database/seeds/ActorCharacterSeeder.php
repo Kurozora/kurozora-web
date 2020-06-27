@@ -1,9 +1,9 @@
 <?php
 
-use App\ActorAnimeCharacter;
+use App\ActorCharacter;
 use Illuminate\Database\Seeder;
 
-class ActorAnimeCharacterSeeder extends Seeder
+class ActorCharacterSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,6 +12,6 @@ class ActorAnimeCharacterSeeder extends Seeder
      */
     public function run()
     {
-        factory(ActorAnimeCharacter::class, 10)->create();
+        factory(ActorCharacter::class, 10)->create();
     }
 }

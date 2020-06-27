@@ -6,7 +6,6 @@ use Chaseconey\ExternalImage\ExternalImage;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 
 class Actor extends Resource
@@ -66,24 +65,7 @@ class Actor extends Resource
                 ->rules('max:255')
                 ->sortable(),
 
-            BelongsToMany::make('Anime')
-                ->fields(function() {
-                    return [
-                        Select::make('Character', 'character_id')
-                            ->options(\App\Character::pluck('name', 'id')->toArray())
-                            ->rules('required', 'numeric')
-                    ];
-                })
-                ->searchable(),
-
             BelongsToMany::make('Characters')
-                ->fields(function() {
-                    return [
-                        Select::make('Anime', 'anime_id')
-                            ->options(\App\Anime::pluck('title', 'id')->toArray())
-                            ->rules('required', 'numeric')
-                    ];
-                })
                 ->searchable(),
         ];
     }

@@ -23,7 +23,7 @@ class CreateAnimeModeratorsTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
 
-            $table->integer('anime_id')->unsigned();
+            $table->unsignedBigInteger('anime_id');
             $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
         });
     }
