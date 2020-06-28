@@ -18,6 +18,7 @@ Route::group(['prefix' => 'v1'], function () {
     require 'API/Users.php';
     require 'API/Notifications.php';
     require 'API/Sessions.php';
+    require 'API/Actors.php';
     require 'API/Anime.php';
     require 'API/Anime-Seasons.php';
     require 'API/Anime-Episodes.php';
