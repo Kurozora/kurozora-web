@@ -49,6 +49,10 @@
             "description":"Everything anime episodes related"
         },
         {
+            "name":"actors",
+            "description":"Everything actor related"
+        },
+        {
             "name":"characters",
             "description":"Everything character related"
         },
@@ -1788,6 +1792,51 @@
                 ],
                 "summary":"Retrieve latest privacy policy.",
                 "description":"This endpoint will retrieve the latest privacy policy.",
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/actors":{
+            "get":{
+                "tags":[
+                    "actors"
+                ],
+                "summary":"Actors list.",
+                "description":"This endpoint will retrieve the actors.",
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/actors/{actorID}":{
+            "get":{
+                "tags":[
+                    "actors"
+                ],
+                "summary":"Get actor details.",
+                "description":"This endpoint will retrieve the details for a actor.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"actorID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the actor."
+                    }
+                ],
                 "responses":{
                     "200":{
                         "$ref":"#/components/responses/JSONSuccess"
