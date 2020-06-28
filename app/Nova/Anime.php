@@ -220,6 +220,10 @@ class Anime extends Resource
                 ->onlyOnForms()
                 ->help('Whether or not the details (information_ were retrieved from TVDB.<br />Untick and the system will do so once the Anime gets visited the next time.'),
 
+            HasMany::make('Actors'),
+
+            HasMany::make('Characters'),
+
             BelongsToMany::make('Actor Characters')
                 ->searchable(),
 

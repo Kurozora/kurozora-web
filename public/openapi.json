@@ -1446,6 +1446,34 @@
                 }
             }
         },
+        "/anime/{animeID}/characters":{
+            "get":{
+                "tags":[
+                    "anime"
+                ],
+                "summary":"Anime character information.",
+                "description":"This endpoint will retrieve the characters of an Anime item.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"animeID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the anime."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
         "/anime/{animeID}/seasons":{
             "get":{
                 "tags":[
