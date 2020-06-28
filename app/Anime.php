@@ -142,7 +142,7 @@ class Anime extends KModel
     }
 
     /**
-     * Retrieves the actor characters for an Anime item in an array
+     * Retrieves the actor-characters for an Anime item in an array
      *
      * @return array
      */
