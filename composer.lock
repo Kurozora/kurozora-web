@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c1b37645f357ce50ff30c6afcade864d",
+    "content-hash": "ef8ea3843fdc9364b796aa1d29b591f9",
     "packages": [
         {
             "name": "anaseqal/nova-sidebar-icons",
@@ -2126,7 +2126,10 @@
             "keywords": [
                 "admin",
                 "laravel"
-            ]
+            ],
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "laravel/tinker",
@@ -4406,6 +4409,49 @@
                 "url"
             ],
             "time": "2018-08-16T15:44:20+00:00"
+        },
+        {
+            "name": "staudenmeir/eloquent-has-many-deep",
+            "version": "v1.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/staudenmeir/eloquent-has-many-deep.git",
+                "reference": "c87e8fb03071666d656e136c43b40a58d02950c8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/staudenmeir/eloquent-has-many-deep/zipball/c87e8fb03071666d656e136c43b40a58d02950c8",
+                "reference": "c87e8fb03071666d656e136c43b40a58d02950c8",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^6.0",
+                "php": "^7.2"
+            },
+            "require-dev": {
+                "illuminate/pagination": "^6.0",
+                "laravel/homestead": "^9.0",
+                "phpunit/phpunit": "^8.0",
+                "staudenmeir/eloquent-eager-limit": "^1.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Staudenmeir\\EloquentHasManyDeep\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonas Staudenmeir",
+                    "email": "mail@jonas-staudenmeir.de"
+                }
+            ],
+            "description": "Laravel Eloquent HasManyThrough relationship with unlimited levels",
+            "time": "2019-09-21T19:48:04+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -8785,5 +8831,6 @@
         "ext-json": "*",
         "ext-simplexml": "*"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }
