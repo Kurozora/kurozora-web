@@ -1483,7 +1483,7 @@
                 "tags":[
                     "anime"
                 ],
-                "summary":"Anime actor-characters information.",
+                "summary":"Anime actor-character information.",
                 "description":"This endpoint will retrieve the actor-characters of an Anime item.",
                 "parameters":[
                     {

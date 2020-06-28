@@ -3,6 +3,8 @@
 use App\ActorCharacter;
 use App\ActorCharacterAnime;
 use App\Anime;
+use App\Enums\CharacterRole;
+use App\Enums\PersonRole;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -22,6 +24,8 @@ class CreateActorCharacterAnimeTable extends Migration
 
             $table->unsignedBigInteger('actor_character_id');
             $table->unsignedBigInteger('anime_id');
+            $table->unsignedTinyInteger('actor_role')->default(PersonRole::VoiceActor);
+            $table->unsignedTinyInteger('character_role')->default(CharacterRole::TertiaryCharacter);
         });
 
         Schema::table(ActorCharacterAnime::TABLE_NAME, function(Blueprint $table) {
