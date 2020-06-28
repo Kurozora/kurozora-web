@@ -2,20 +2,19 @@
 
 namespace App\Nova;
 
-use Chaseconey\ExternalImage\ExternalImage;
-use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\ID;
 
-class Actor extends Resource
+class ActorCharacter extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\Actor';
+    public static $model = 'App\ActorCharacter';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -30,7 +29,7 @@ class Actor extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'first_name', 'last_name', 'occupation',
+        'id',
     ];
 
     /**
@@ -38,7 +37,7 @@ class Actor extends Resource
      *
      * @var string
      */
-    public static $group = 'Anime';
+    public static $group = 'Anime Pivot';
 
     /**
      * Get the fields displayed by the resource.
@@ -51,22 +50,16 @@ class Actor extends Resource
         return [
             ID::make()->sortable(),
 
-            ExternalImage::make('Image'),
-
-            Text::make('First name')
-                ->rules('required', 'max:255')
+            BelongsTo::make('Actor')
+                ->searchable()
                 ->sortable(),
 
-            Text::make('Last name')
-                ->rules('required', 'max:255')
+            BelongsTo::make('Character')
+                ->searchable()
                 ->sortable(),
 
-            Text::make('Occupation')
-                ->rules('max:255')
+            HasMany::make('Anime')
                 ->sortable(),
-
-            BelongsToMany::make('Characters')
-                ->searchable(),
         ];
     }
 
@@ -77,7 +70,13 @@ class Actor extends Resource
      */
     public function title()
     {
-        return $this->full_name . ' (ID: ' . $this->id . ')';
+        /** @var \App\ActorCharacter $actor */
+        $actorCharacter = $this->resource;
+
+        $actorName = $actorCharacter->actor->full_name;
+        $characterName = $actorCharacter->character->name;
+
+        return $actorName . ' as ' . $characterName . ' (ID: ' . $actorCharacter->id . ')';
     }
 
     /**
@@ -123,15 +122,4 @@ class Actor extends Resource
     {
         return [];
     }
-
-    /**
-     * The icon of the resource.
-     *
-     * @var string
-     */
-    public static $icon = '
-        <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path fill="var(--sidebar-icon)" d="M12 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm9 11a1 1 0 0 1-2 0v-2a3 3 0 0 0-3-3H8a3 3 0 0 0-3 3v2a1 1 0 0 1-2 0v-2a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v2z"/>
-        </svg>
-    ';
 }

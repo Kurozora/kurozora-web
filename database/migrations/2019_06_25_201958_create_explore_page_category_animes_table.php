@@ -22,7 +22,7 @@ class CreateExplorePageCategoryAnimesTable extends Migration
             $table->integer('explore_page_category_id')->unsigned();
             $table->foreign('explore_page_category_id')->references('id')->on(ExplorePageCategory::TABLE_NAME)->onDelete('cascade');
 
-            $table->integer('anime_id')->unsigned();
+            $table->unsignedBigInteger('anime_id');
             $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
         });
     }

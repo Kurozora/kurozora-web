@@ -1,13 +1,13 @@
 <?php
 
+use App\ActorCharacter;
+use App\ActorCharacterAnime;
 use App\Anime;
-use App\AnimeModerator;
-use App\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAnimeModeratorsTable extends Migration
+class CreateActorCharacterAnimeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,14 +16,17 @@ class CreateAnimeModeratorsTable extends Migration
      */
     public function up()
     {
-        Schema::create(AnimeModerator::TABLE_NAME, function (Blueprint $table) {
+        Schema::create(ActorCharacterAnime::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
 
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
-
+            $table->unsignedBigInteger('actor_character_id');
             $table->unsignedBigInteger('anime_id');
+        });
+
+        Schema::table(ActorCharacterAnime::TABLE_NAME, function(Blueprint $table) {
+            $table->unique(['actor_character_id', 'anime_id']);
+            $table->foreign('actor_character_id')->references('id')->on(ActorCharacter::TABLE_NAME)->onDelete('cascade');
             $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
         });
     }
@@ -35,6 +38,6 @@ class CreateAnimeModeratorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(AnimeModerator::TABLE_NAME);
+        Schema::dropIfExists(ActorCharacterAnime::TABLE_NAME);
     }
 }

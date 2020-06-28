@@ -1,7 +1,6 @@
 <?php
 
 use App\Actor;
-use App\Anime;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -16,14 +15,12 @@ class CreateActorsTable extends Migration
     public function up()
     {
         Schema::create(Actor::TABLE_NAME, function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->timestamps();
 
-            $table->integer('anime_id')->unsigned();
-            $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
-
-            $table->string('name');
-            $table->string('role')->nullable();
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('occupation')->nullable();
             $table->string('image')->nullable();
         });
     }

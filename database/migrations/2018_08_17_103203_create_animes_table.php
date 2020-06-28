@@ -17,7 +17,7 @@ class CreateAnimesTable extends Migration
     public function up()
     {
         Schema::create(Anime::TABLE_NAME, function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->timestamps();
 
             $table->string('title')->default('Unknown title');
