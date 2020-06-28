@@ -80,55 +80,29 @@ class Anime extends KModel
     }
 
     /**
-     * Get the Anime's actors
+     * Get the Anime's actor characters
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function actors() {
-        return $this->belongsToMany(Actor::class,  ActorAnimeCharacter::TABLE_NAME);
+    public function actor_characters() {
+        return $this->belongsToMany(ActorCharacter::class, ActorCharacterAnime::TABLE_NAME, 'anime_id', 'actor_character_id');
     }
 
     /**
-     * Retrieves the actors for an Anime item in an array
+     * Retrieves the actor characters for an Anime item in an array
      *
      * @return array
      */
-    public function getActors() {
+    public function getActorCharacters() {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'actors', 'id' => $this->id]);
+        $cacheKey = self::cacheKey(['name' => 'actor_characters', 'id' => $this->id]);
 
         // Retrieve or save cached result
         $actorsInfo = Cache::remember($cacheKey, self::CACHE_KEY_ACTORS_SECONDS, function () {
-            return $this->actors()->get();
+            return $this->actor_characters()->get();
         });
 
         return $actorsInfo;
-    }
-
-    /**
-     * Get the anime's characters
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    function characters() {
-        return $this->belongsToMany(Character::class, ActorAnimeCharacter::TABLE_NAME);
-    }
-
-    /**
-     * Returns this anime's characters
-     *
-     * @return mixed
-     */
-    public function getCharacters() {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'characters', 'id' => $this->id]);
-
-        // Retrieve or save cached result
-        $charactersInfo = Cache::remember($cacheKey, self::CACHE_KEY_CHARACTERS_SECONDS, function () {
-            return $this->characters;
-        });
-
-        return $charactersInfo;
     }
 
     /**

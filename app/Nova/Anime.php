@@ -220,24 +220,7 @@ class Anime extends Resource
                 ->onlyOnForms()
                 ->help('Whether or not the details (information_ were retrieved from TVDB.<br />Untick and the system will do so once the Anime gets visited the next time.'),
 
-            BelongsToMany::make('Actors')
-                ->fields(function() {
-                    return [
-                        Select::make('Character', 'character_id')
-                            ->options(\App\Character::pluck('name', 'id')->toArray())
-                            ->rules('required', 'numeric')
-                    ];
-                })
-                ->searchable(),
-
-            BelongsToMany::make('Characters')
-                ->fields(function() {
-                    return [
-                        Select::make('Actor', 'actor_id')
-                            ->options(\App\Actor::all()->pluck('full_name', 'id')->toArray())
-                            ->rules('required', 'numeric')
-                    ];
-                })
+            BelongsToMany::make('Actor Characters')
                 ->searchable(),
 
             BelongsToMany::make('Genres')
