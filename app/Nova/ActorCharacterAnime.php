@@ -2,9 +2,11 @@
 
 namespace App\Nova;
 
+use App\Enums\CastRole;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Select;
 
 class ActorCharacterAnime extends Resource
 {
@@ -57,6 +59,12 @@ class ActorCharacterAnime extends Resource
                 ->searchable()
                 ->sortable(),
 
+            Select::make('Cast Role')
+                ->options(CastRole::toSelectArray())
+                ->displayUsingLabels()
+                ->rules('required')
+                ->help('If you\'re not sure what role the character has, choose "Supporting character".')
+                ->sortable(),
         ];
     }
 

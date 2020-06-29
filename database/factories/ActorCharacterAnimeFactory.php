@@ -5,15 +5,13 @@
 use App\ActorCharacter;
 use App\ActorCharacterAnime;
 use App\Anime;
-use App\Enums\CharacterRole;
-use App\Enums\PersonRole;
+use App\Enums\CastRole;
 use Faker\Generator as Faker;
 
 $factory->define(ActorCharacterAnime::class, function (Faker $faker) {
     return [
         'actor_character_id'    => factory(ActorCharacter::class)->create()->id,
         'anime_id'              => factory(Anime::class)->create()->id,
-        'actor_role'            => array_rand(PersonRole::getValues()),
-        'character_role'        => array_rand(CharacterRole::getValues()),
+        'cast_role'             => array_rand(CastRole::getValues()),
     ];
 });
