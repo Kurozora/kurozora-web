@@ -2,23 +2,13 @@
 
 namespace Tests\API;
 
-use App\Actor;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
+use Tests\Traits\ProvidesTestAnime;
 
 class ActorsTest extends TestCase
 {
-    use DatabaseMigrations;
-
-    /** @var Actor $actor */
-    protected $actor;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->actor = factory(Actor::class)->create();
-    }
+    use DatabaseMigrations, ProvidesTestAnime;
 
     /**
      * A user can view all actors.
@@ -33,7 +23,7 @@ class ActorsTest extends TestCase
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
 
-        // Check whether the studios array is not empty
+        // Check whether the actors array is not empty
         $this->assertTrue(count($response->json()['actors']) > 0);
     }
 
@@ -50,7 +40,7 @@ class ActorsTest extends TestCase
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
 
-        // Check whether the studio id in the response is the desired studio's id
+        // Check whether the actor id in the response is the desired actor's id
         $this->assertEquals($response->json()['actor']['id'], $this->actor->id);
     }
 }
