@@ -6,7 +6,7 @@ use App\Anime;
 use App\AnimeRating;
 use App\Events\AnimeViewed;
 use App\Helpers\JSONResult;
-use App\Http\Resources\ActorCharacterResource;
+use App\Http\Resources\ActorCharacterAnimeResource;
 use App\Http\Resources\ActorResource;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\AnimeSeasonResource;
@@ -65,17 +65,17 @@ class AnimeController extends Controller
     }
 
     /**
-     * Returns actor-character information about an Anime.
+     * Returns actor-character-anime information about an Anime.
      *
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function actorCharactersAnime(Anime $anime) {
-        // Get the actor-characters
-        $actorCharacters = $anime->getActorCharacters();
+    public function actorCharacterAnime(Anime $anime) {
+        // Get the actor-character-anime
+        $actorCharacterAnime = $anime->getActorCharacterAnime();
 
         return JSONResult::success([
-            'cast'    => ActorCharacterResource::collection($actorCharacters)
+            'cast'    => ActorCharacterAnimeResource::collection($actorCharacterAnime)
         ]);
     }
 

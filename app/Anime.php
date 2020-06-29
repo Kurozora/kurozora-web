@@ -151,11 +151,37 @@ class Anime extends KModel
         $cacheKey = self::cacheKey(['name' => 'actor_characters', 'id' => $this->id]);
 
         // Retrieve or save cached result
-        $actorsInfo = Cache::remember($cacheKey, self::CACHE_KEY_ACTOR_CHARACTERS_SECONDS, function () {
+        $actorCharactersInfo = Cache::remember($cacheKey, self::CACHE_KEY_ACTOR_CHARACTERS_SECONDS, function () {
             return $this->actor_characters()->get();
         });
 
-        return $actorsInfo;
+        return $actorCharactersInfo;
+    }
+
+    /**
+     * Get the Anime's actor-character-anime
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function actor_character_anime() {
+        return $this->hasMany(ActorCharacterAnime::class);
+    }
+
+    /**
+     * Retrieves the actor-characters-anime for an Anime item in an array
+     *
+     * @return array
+     */
+    public function getActorCharacterAnime() {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'actor_character_anime', 'id' => $this->id]);
+
+        // Retrieve or save cached result
+        $actorCharacterAnimeInfo = Cache::remember($cacheKey, self::CACHE_KEY_ACTOR_CHARACTERS_SECONDS, function () {
+            return $this->actor_character_anime()->get();
+        });
+
+        return $actorCharacterAnimeInfo;
     }
 
     /**
