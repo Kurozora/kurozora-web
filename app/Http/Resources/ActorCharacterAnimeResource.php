@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources;
 
-use App\ActorCharacter;
+use App\ActorCharacterAnime;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ActorCharacterResource extends JsonResource
+class ActorCharacterAnimeResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,12 +15,14 @@ class ActorCharacterResource extends JsonResource
      */
     public function toArray($request)
     {
-        /** @var ActorCharacter $actorCharacter */
-        $actorCharacter = $this->resource;
+        /** @var ActorCharacterAnime $actorCharacterAnime */
+        $actorCharacterAnime = $this->resource;
+        $actorCharacter = $actorCharacterAnime->actor_character;
 
         return [
             'actor'         => ActorResource::make($actorCharacter->actor),
             'character'     => CharacterResource::make($actorCharacter->character),
+            'cast_role'     => $actorCharacterAnime->cast_role
         ];
     }
 }
