@@ -37,6 +37,7 @@ $factory->define(Anime::class, function (Faker $faker) {
         'first_aired'   => $firstAired,
         'last_aired'    => $lastAired,
         'air_time'      => $faker->time('H:i'),
-        'air_day'       => DayOfWeek::getRandomValue()
+        'air_day'       => DayOfWeek::getRandomValue(),
+        'copyright'     => $faker->randomElement(['© ', '℗ ', '® ']) . $faker->year . ' ' . $faker->company
     ];
 });
