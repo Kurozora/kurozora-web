@@ -43,7 +43,7 @@ class Anime extends KModel
     // How long to cache certain responses
     const CACHE_KEY_EXPLORE_SECONDS = 120 * 60;
     const CACHE_KEY_ACTORS_SECONDS = 120 * 60;
-    const CACHE_KEY_RELATED_ANIME_SECONDS = 120 * 60;
+    const CACHE_KEY_RELATIONS_SECONDS = 120 * 60;
     const CACHE_KEY_SEASONS_SECONDS = 120 * 60;
     const CACHE_KEY_GENRES_SECONDS = 120 * 60;
 
@@ -160,13 +160,10 @@ class Anime extends KModel
     /**
      * The related anime of this Anime
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function related_anime() {
-        $animeRelation = $this->belongsToMany(Anime::class, AnimeRelations::class, 'related_anime_id', 'anime_id');
-        if($animeRelation->count())
-            return $animeRelation;
-        return $this->belongsToMany(Anime::class, AnimeRelations::class, 'anime_id', 'related_anime_id');
+    public function anime_relations() {
+        return $this->hasMany(AnimeRelations::class, 'anime_id', 'id');
     }
 
     /**
@@ -174,16 +171,16 @@ class Anime extends KModel
      *
      * @return mixed
      */
-    public function getRelatedAnime() {
+    public function getAnimeRelations() {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'related_anime', 'id' => $this->id]);
+        $cacheKey = self::cacheKey(['name' => 'anime_relations', 'id' => $this->id]);
 
         // Retrieve or save cached result
-        $relatedAnimeInfo = Cache::remember($cacheKey, self::CACHE_KEY_RELATED_ANIME_SECONDS, function () {
-            return $this->related_anime;
+        $relationsInfo = Cache::remember($cacheKey, self::CACHE_KEY_RELATIONS_SECONDS, function () {
+            return $this->anime_relations;
         });
 
-        return $relatedAnimeInfo;
+        return $relationsInfo;
     }
 
     /**

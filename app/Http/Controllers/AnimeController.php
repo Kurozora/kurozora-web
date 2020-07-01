@@ -7,6 +7,7 @@ use App\AnimeRating;
 use App\Events\AnimeViewed;
 use App\Helpers\JSONResult;
 use App\Http\Resources\ActorResource;
+use App\Http\Resources\AnimeRelationsResource;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\AnimeSeasonResource;
 use Illuminate\Http\JsonResponse;
@@ -56,12 +57,10 @@ class AnimeController extends Controller
      */
     public function relationsAnime(Anime $anime) {
         // Get the actors
-        $relations = $anime->getRelatedAnime();
+        $relations = $anime->getAnimeRelations();
 
         return JSONResult::success([
-            'related' => [
-                'shows' => AnimeResource::collection($relations)
-            ]
+            'related' =>    AnimeRelationsResource::collection($relations)
         ]);
     }
 

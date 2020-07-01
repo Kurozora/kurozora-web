@@ -2,11 +2,13 @@
 
 namespace App\Nova;
 
+use App\Enums\AnimeRelationType;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Select;
 
-class AnimeRelations extends Resource
+class AnimeRelation extends Resource
 {
     /**
      * The model the resource corresponds to.
@@ -50,11 +52,27 @@ class AnimeRelations extends Resource
             ID::make()->sortable(),
 
             BelongsTo::make('Anime')
+                ->searchable()
                 ->sortable(),
 
             BelongsTo::make('Anime', 'related_anime')
+                ->searchable()
+                ->sortable(),
+
+            Select::make('Type')
+                ->options(AnimeRelationType::toSelectArray())
+                ->displayUsingLabels()
                 ->sortable(),
         ];
+    }
+
+    /**
+     * Returns the user-friendly display name of the resource.
+     *
+     * @return string
+     */
+    public static function label() {
+        return 'Relations';
     }
 
     /**
