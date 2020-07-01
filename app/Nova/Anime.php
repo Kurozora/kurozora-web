@@ -234,6 +234,9 @@ class Anime extends Resource
             BelongsToMany::make('Genres')
                 ->searchable(),
 
+            BelongsToMany::make('Anime', 'related_anime')
+                ->searchable(),
+
             HasMany::make('Seasons'),
 
             HasMany::make('Actors'),
