@@ -157,6 +157,35 @@ class Anime extends KModel
     }
 
     /**
+     * The related anime of this Anime
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function related_anime() {
+        $animeRelation = $this->belongsToMany(Anime::class, AnimeRelations::class, 'related_anime_id', 'anime_id');
+        if($animeRelation->count())
+            return $animeRelation;
+        return $this->belongsToMany(Anime::class, AnimeRelations::class, 'anime_id', 'related_anime_id');
+    }
+
+    /**
+     * Returns this anime's related anime
+     *
+     * @return mixed
+     */
+    public function getRelatedAnime() {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'related_anime', 'id' => $this->id]);
+
+        // Retrieve or save cached result
+        $animeInfo = Cache::remember($cacheKey, self::CACHE_KEY_GENRES_SECONDS, function () {
+            return $this->related_anime;
+        });
+
+        return $animeInfo;
+    }
+
+    /**
      * Retrieves the poster image URL for an Anime item
      *
      * @param bool $thumbnail
