@@ -25,7 +25,7 @@ class AnimeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the characters array is not empty
-        $this->assertTrue(count($response->json()['related']['shows']) > 0);
+        $this->assertTrue(count($response->json()['related'][0]['show']) > 0);
     }
 
     /**
@@ -42,6 +42,6 @@ class AnimeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the characters array is not empty
-        $this->assertTrue(count($response->json()['related']['shows'][0]['current_user']) > 0);
+        $this->assertTrue(count($response->json()['related'][0]['show']['current_user']) > 0);
     }
 }
