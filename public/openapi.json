@@ -1442,6 +1442,41 @@
                 }
             }
         },
+        "/anime/{animeID}/relations":{
+            "get":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "anime"
+                ],
+                "summary":"Anime all relations information.",
+                "description":"This endpoint will retrieve the relations of an Anime item.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"animeID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the anime."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
         "/anime/{animeID}/seasons":{
             "get":{
                 "tags":[
