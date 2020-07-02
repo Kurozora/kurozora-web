@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Enums\AnimeSource;
 use App\Nova\Actions\FetchAnimeActors;
 use App\Nova\Actions\FetchAnimeDetails;
 use App\Nova\Actions\FetchAnimeImages;
@@ -129,6 +130,13 @@ class Anime extends Resource
             Number::make('Runtime in minutes', 'runtime')
                 ->onlyOnForms()
                 ->help('For series: The average runtime in minutes of a single episode.<br />For movies: The amount of minutes the movie takes.'),
+
+            Select::make('Source')
+                ->options(AnimeSource::toSelectArray())
+                ->displayUsingLabels()
+                ->sortable()
+                ->rules('required')
+                ->help('The adaptation source of the anime. For example `Manga`, `Game` or `Original` if not adapted from other sources. If no source is available, especially for older anime, then choose `Unknown`.'),
 
             Boolean::make('NSFW')
                 ->sortable()

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\AnimeSource;
 use App\Enums\AnimeStatus;
 use App\Enums\AnimeType;
 use App\Enums\UserLibraryStatus;
@@ -24,6 +25,7 @@ class AnimeResource extends JsonResource
             'id'                    => $this->id,
             'title'                 => $this->title,
             'type'                  => AnimeType::getDescription($this->type),
+            'source'                => AnimeSource::getDescription($this->source),
             'anidb_id'              => $this->anidb_id,
             'anilist_id'            => $this->anilist_id,
             'kitsu_id'              => $this->kitsu_id,
