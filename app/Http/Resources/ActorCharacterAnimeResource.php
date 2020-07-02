@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\ActorCharacterAnime;
+use App\Enums\CastRole;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ActorCharacterAnimeResource extends JsonResource
@@ -22,7 +23,7 @@ class ActorCharacterAnimeResource extends JsonResource
         return [
             'actor'         => ActorResource::make($actorCharacter->actor),
             'character'     => CharacterResource::make($actorCharacter->character),
-            'cast_role'     => $actorCharacterAnime->cast_role
+            'cast_role'     => CastRole::getDescription($actorCharacterAnime->cast_role)
         ];
     }
 }
