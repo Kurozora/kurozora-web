@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\AstrologicalSign;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CharacterResource extends JsonResource
@@ -33,7 +34,7 @@ class CharacterResource extends JsonResource
             'age'               => $character->age,
             'birth_day'         => $character->birth_day,
             'birth_month'       => $character->birth_month,
-            'astrological_sign' => $character->astrological_sign
+            'astrological_sign' => AstrologicalSign::getDescription($character->astrological_sign)
         ];
     }
 }

@@ -32,4 +32,30 @@ final class AstrologicalSign extends Enum
     const Capricorn     = 9;
     const Aquarius      = 10;
     const Pisces        = 11;
+
+    protected static $signsEmoji = [
+        '♈️',
+        '♉️',
+        '♊️',
+        '♋️',
+        '♌️',
+        '♍️',
+        '♎️',
+        '♏️',
+        '♐️',
+        '♑️',
+        '♒️',
+        '♓️'
+    ];
+
+    /**
+     * Get the description for an enum value
+     *
+     * @param  mixed  $value
+     * @return string
+     */
+    public static function getDescription($value): string
+    {
+        return parent::getDescription($value) . ' ' . self::$signsEmoji[$value];
+    }
 }
