@@ -1,6 +1,7 @@
 <?php
 
 use App\Anime;
+use App\Enums\AnimeSource;
 use App\Enums\AnimeStatus;
 use App\Enums\AnimeType;
 use Illuminate\Support\Facades\Schema;
@@ -31,6 +32,7 @@ class CreateAnimesTable extends Migration
             $table->string('cached_background')->nullable();
             $table->string('cached_background_thumbnail')->nullable();
             $table->integer('type')->default(AnimeType::Undefined);
+            $table->integer('source')->default(AnimeSource::Unknown);
             $table->boolean('nsfw')->default(false);
             $table->integer('anidb_id')->nullable()->unsigned();
             $table->integer('anilist_id')->nullable()->unsigned();
