@@ -38,4 +38,18 @@ final class AnimeSource extends Enum
     const CardGame      = 12;
     const Music         = 13;
     const Radio         = 14;
+
+    /**
+     * Get the description for an enum value
+     *
+     * @param  mixed  $value
+     * @return string
+     */
+    public static function getDescription($value): string
+    {
+        if ($value == self::FourKomaManga)
+            return "4-Koma Manga";
+
+        return parent::getDescription($value);
+    }
 }
