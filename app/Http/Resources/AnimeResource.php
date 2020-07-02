@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Enums\AnimeStatus;
 use App\Enums\AnimeType;
 use App\Enums\UserLibraryStatus;
+use App\Enums\WatchRating;
 use App\User;
 use App\UserLibrary;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -37,7 +38,7 @@ class AnimeResource extends JsonResource
             'rating_count'          => $this->rating_count,
             'synopsis'              => $this->synopsis,
             'runtime'               => $this->runtime,
-            'watch_rating'          => $this->watch_rating,
+            'watch_rating'          => WatchRating::getDescription($this->watch_rating),
             'tagline'               => $this->tagline,
             'video_url'             => $this->video_url,
             'poster'                => $this->getPoster(false),

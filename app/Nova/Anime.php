@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Enums\WatchRating;
 use App\Nova\Actions\FetchAnimeActors;
 use App\Nova\Actions\FetchAnimeDetails;
 use App\Nova\Actions\FetchAnimeImages;
@@ -140,9 +141,12 @@ class Anime extends Resource
                 ->readonly()
                 ->onlyOnIndex(),
 
-            Text::make('Watch rating', 'watch_rating')
-                ->onlyOnForms()
-                ->help('for example: TV-PG.'),
+            Select::make('Watch rating')
+                ->options(WatchRating::toSelectArray())
+                ->displayUsingLabels()
+                ->nullable()
+                ->hideFromIndex()
+                ->help('Use `TV-Y7 (FV)` if the show exhibits more \'fantasy violence\', and/or is generally more intense or combative than other shows.'),
 
             Heading::make('Schedule')
 	            ->onlyOnForms(),
