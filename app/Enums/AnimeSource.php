@@ -48,7 +48,7 @@ final class AnimeSource extends Enum
     public static function getDescription($value): string
     {
         if ($value == self::FourKomaManga)
-            return "4-Koma Manga";
+            return '4-Koma Manga';
 
         return parent::getDescription($value);
     }
