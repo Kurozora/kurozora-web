@@ -19,6 +19,7 @@ use BenSampo\Enum\Enum;
  * @method static AnimeSource Game()
  * @method static AnimeSource CardGame()
  * @method static AnimeSource Music()
+ * @method static AnimeSource Radio()
  */
 final class AnimeSource extends Enum
 {
@@ -36,4 +37,5 @@ final class AnimeSource extends Enum
     const Game          = 11;
     const CardGame      = 12;
     const Music         = 13;
+    const Radio         = 14;
 }
