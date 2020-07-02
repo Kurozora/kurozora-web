@@ -32,4 +32,18 @@ final class AnimeRelationType extends Enum
     const Adaptation            = 9;
     const Character             = 10;
     const Other                 = 11;
+
+    /**
+     * Get the description for an enum value
+     *
+     * @param  mixed  $value
+     * @return string
+     */
+    public static function getDescription($value): string
+    {
+        if($value == self::SpinOff)
+            return 'Spin-Off';
+
+        return parent::getDescription($value);
+    }
 }
