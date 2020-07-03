@@ -42,11 +42,12 @@ class AnimeSeason extends KModel
     }
 
     /**
-     * Gets the count of the amount of episodes in this season
+     * Gets the first aired date of the first aired episode in this season.
      *
      * @return string|null
      */
-    public function getFirstAired() {
+    public function getFirstAired()
+    {
         $firstEpisode = $this->episodes->firstWhere('number', 1);
 
         if($firstEpisode == null)
