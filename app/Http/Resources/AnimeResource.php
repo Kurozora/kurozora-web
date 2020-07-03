@@ -49,7 +49,8 @@ class AnimeResource extends JsonResource
             'first_aired'           => $this->first_aired,
             'last_aired'            => $this->last_aired,
 	        'air_time'              => $this->air_time,
-	        'air_day'               => $this->air_day
+	        'air_day'               => $this->air_day,
+            'copyright'             => $this->copyright
         ];
 
         if(Auth::check())

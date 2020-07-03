@@ -49,6 +49,7 @@ class CreateAnimesTable extends Migration
             $table->date('last_aired')->nullable();
 	        $table->time('air_time')->nullable();
 	        $table->integer('air_day')->nullable()->unsigned();
+            $table->string('copyright')->nullable();
 
             // Flags for fetched data
             $table->boolean('fetched_actors')->default(false);

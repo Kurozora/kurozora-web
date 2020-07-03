@@ -201,6 +201,13 @@ class Anime extends Resource
             ExternalImage::make('Banner Thumbnail image URL', 'cached_background_thumbnail')
                 ->onlyOnForms(),
 
+            Heading::make('Legal')
+                ->onlyOnForms(),
+
+            Text::make('Copyright')
+                ->hideFromIndex()
+                ->help('For example: © 2020 Kurozora B.V.'),
+
             Heading::make('Flags')
                 ->onlyOnForms(),
 
