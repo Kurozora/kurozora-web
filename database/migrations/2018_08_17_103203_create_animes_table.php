@@ -30,7 +30,7 @@ class CreateAnimesTable extends Migration
             $table->string('cached_poster_thumbnail')->nullable();
             $table->string('cached_background')->nullable();
             $table->string('cached_background_thumbnail')->nullable();
-            $table->integer('type')->default(AnimeType::Undefined);
+            $table->integer('type')->default(AnimeType::Unknown);
             $table->boolean('nsfw')->default(false);
             $table->integer('anidb_id')->nullable()->unsigned();
             $table->integer('anilist_id')->nullable()->unsigned();
