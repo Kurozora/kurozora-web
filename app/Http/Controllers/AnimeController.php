@@ -72,9 +72,10 @@ class AnimeController extends Controller
      * @return JsonResponse
      * @throws \Exception
      */
-    public function rateAnime(Request $request, Anime $anime) {
+    public function rateAnime(Request $request, Anime $anime)
+    {
         if (!Auth::user()->isTracking($anime))
-            return JSONResult::error('Please add '.$anime->title.' to your library first.');
+            return JSONResult::error('Please add ' . $anime->title . ' to your library first.');
 
         // Validate the inputs
         $validator = Validator::make($request->all(), [
