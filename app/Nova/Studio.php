@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
@@ -51,21 +52,22 @@ class Studio extends Resource
         return [
             ID::make()->sortable(),
 
-            Text::make('Studio Name', 'name')
+            Text::make('Name')
                 ->rules('required')
                 ->sortable(),
 
-            Text::make('Log URL', 'logo')
+            Text::make('Logo URL')
                 ->rules('max:255')
                 ->hideFromIndex(),
 
             Textarea::make('About')
                 ->help('A description of the studio.'),
 
-            Text::make('Founded on', 'founded')
+            Date::make('Founded')
+                ->format('YYYY-MM-DD')
                 ->help('The date on which the studio was founded. For example: 2015-12-03'),
 
-            Text::make('Website URL', 'website_url')
+            Text::make('Website URL')
                 ->rules('max:255')
                 ->help('The URL to the official website of the studio.')
                 ->hideFromIndex(),

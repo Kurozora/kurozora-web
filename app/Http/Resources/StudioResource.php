@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Studio;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class StudioResource extends JsonResource
@@ -14,12 +15,15 @@ class StudioResource extends JsonResource
      */
     public function toArray($request)
     {
+        /** @var Studio $studio */
+        $studio = $this->resource;
+
         $anime = (bool) $request->input('anime');
         $limit = $request->input('limit');
         $resource = StudioResourceSmall::make($this)->toArray($request);
 
         if ($anime)
-            $resource = array_merge($resource, ['anime' => AnimeResource::collection($this->anime->take($limit))]);
+            $resource = array_merge($resource, ['anime' => AnimeResource::collection($studio->anime->take($limit))]);
 
         return $resource;
     }

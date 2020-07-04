@@ -17,7 +17,7 @@ class CreateStudioTable extends Migration
         Schema::create(Studio::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->unique();
-            $table->string('logo')->nullable();
+            $table->string('logo_url')->nullable();
             $table->mediumText('about')->nullable();
             $table->date('founded')->nullable();
             $table->string('website_url')->nullable();
