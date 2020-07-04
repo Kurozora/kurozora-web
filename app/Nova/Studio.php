@@ -2,12 +2,14 @@
 
 namespace App\Nova;
 
+use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
+use League\CommonMark\Inline\Renderer\ImageRenderer;
 
 class Studio extends Resource
 {
@@ -51,6 +53,8 @@ class Studio extends Resource
     {
         return [
             ID::make()->sortable(),
+
+            ExternalImage::make('Logo URL'),
 
             Text::make('Name')
                 ->rules('required')
