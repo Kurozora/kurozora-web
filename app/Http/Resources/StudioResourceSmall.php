@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Studio;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class StudioResourceSmall extends JsonResource
@@ -14,13 +15,16 @@ class StudioResourceSmall extends JsonResource
      */
     public function toArray($request)
     {
+        /** @var Studio $studio */
+        $studio = $this->resource;
+
         return [
-            'id'            => $this->id,
-            'name'          => $this->name,
-            'logo'          => $this->logo,
-            'about'         => $this->about,
-            'founded'       => $this->founded,
-            'website_url'   => $this->website_url
+            'id'            => $studio->id,
+            'name'          => $studio->name,
+            'logo_url'      => $studio->logo_url,
+            'about'         => $studio->about,
+            'founded'       => $studio->founded->format('Y-m-d'),
+            'website_url'   => $studio->website_url
         ];
     }
 }
