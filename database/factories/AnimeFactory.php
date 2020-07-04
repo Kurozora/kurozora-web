@@ -7,6 +7,7 @@ use App\Enums\AnimeSource;
 use App\Enums\AnimeStatus;
 use App\Enums\AnimeType;
 use App\Enums\DayOfWeek;
+use App\Enums\WatchRating;
 use Faker\Generator as Faker;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -25,7 +26,7 @@ $factory->define(Anime::class, function (Faker $faker) {
         'network'       => null,
         'synopsis'      => $faker->paragraph,
         'runtime'       => 25,
-        'watch_rating'  => $faker->randomElement(['G', 'PG', 'PG-13', 'R', 'NC-17']),
+        'watch_rating'  => WatchRating::getRandomValue(),
         'status'        => AnimeStatus::getRandomValue(),
         'type'          => AnimeType::getRandomValue(),
         'source'        => AnimeSource::getRandomValue(),
@@ -39,6 +40,7 @@ $factory->define(Anime::class, function (Faker $faker) {
         'first_aired'   => $firstAired,
         'last_aired'    => $lastAired,
         'air_time'      => $faker->time('H:i'),
-        'air_day'       => DayOfWeek::getRandomValue()
+        'air_day'       => DayOfWeek::getRandomValue(),
+        'copyright'     => $faker->randomElement(['© ', '℗ ', '® ']) . $faker->year . ' ' . $faker->company
     ];
 });

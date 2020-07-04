@@ -6,6 +6,7 @@ use App\Enums\AnimeSource;
 use App\Enums\AnimeStatus;
 use App\Enums\AnimeType;
 use App\Enums\UserLibraryStatus;
+use App\Enums\WatchRating;
 use App\User;
 use App\UserLibrary;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -39,7 +40,7 @@ class AnimeResource extends JsonResource
             'rating_count'          => $this->rating_count,
             'synopsis'              => $this->synopsis,
             'runtime'               => $this->runtime,
-            'watch_rating'          => $this->watch_rating,
+            'watch_rating'          => WatchRating::getDescription($this->watch_rating),
             'tagline'               => $this->tagline,
             'video_url'             => $this->video_url,
             'poster'                => $this->getPoster(false),
@@ -51,7 +52,8 @@ class AnimeResource extends JsonResource
             'first_aired'           => $this->first_aired,
             'last_aired'            => $this->last_aired,
 	        'air_time'              => $this->air_time,
-	        'air_day'               => $this->air_day
+	        'air_day'               => $this->air_day,
+            'copyright'             => $this->copyright
         ];
 
         if(Auth::check())

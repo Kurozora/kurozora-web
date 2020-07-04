@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use App\Enums\AnimeSource;
+use App\Enums\WatchRating;
 use App\Nova\Actions\FetchAnimeActors;
 use App\Nova\Actions\FetchAnimeDetails;
 use App\Nova\Actions\FetchAnimeImages;
@@ -148,9 +149,12 @@ class Anime extends Resource
                 ->readonly()
                 ->onlyOnIndex(),
 
-            Text::make('Watch rating', 'watch_rating')
-                ->onlyOnForms()
-                ->help('for example: TV-PG.'),
+            Select::make('Watch rating')
+                ->options(WatchRating::toSelectArray())
+                ->displayUsingLabels()
+                ->nullable()
+                ->hideFromIndex()
+                ->help('Use `TV-Y7 (FV)` if the show exhibits more \'fantasy violence\', and/or is generally more intense or combative than other shows.'),
 
             Heading::make('Schedule')
 	            ->onlyOnForms(),
@@ -208,6 +212,13 @@ class Anime extends Resource
 
             ExternalImage::make('Banner Thumbnail image URL', 'cached_background_thumbnail')
                 ->onlyOnForms(),
+
+            Heading::make('Legal')
+                ->onlyOnForms(),
+
+            Text::make('Copyright')
+                ->hideFromIndex()
+                ->help('For example: © 2020 Kurozora B.V.'),
 
             Heading::make('Flags')
                 ->onlyOnForms(),
@@ -339,4 +350,15 @@ class Anime extends Resource
 
         return '<span class="py-1 px-2 mr-1 inline-block rounded align-middle" style="background-color: #465161; color: #fff;">' . $modCount . ' ' . Str::plural('mod', $modCount) . '</span>';
     }
+
+    /**
+     * The icon of the resource.
+     *
+     * @var string
+     */
+    public static $icon = '
+        <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+            <path fill="var(--sidebar-icon)" d="M528 464H112a16 16 0 0 0-16 16v16a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16v-16a16 16 0 0 0-16-16zM592 0H48A48 48 0 0 0 0 48v320a48 48 0 0 0 48 48h544a48 48 0 0 0 48-48V48a48 48 0 0 0-48-48zm0 368H48V48h544z"/>
+        </svg>
+    ';
 }
