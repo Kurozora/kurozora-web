@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use Laraning\NovaTimeField\TimeField as Time;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
@@ -155,11 +156,13 @@ class Anime extends Resource
 	            ->hideFromIndex()
 	            ->help('For example: Ended'),
 
-            Text::make('First air date', 'first_aired')
+            Date::make('First aired')
+                ->format('DD-MM-YYYY')
 	            ->hideFromIndex()
                 ->help('The date on which the show first aired. For example: 2015-12-03'),
 
-            Text::make('Last air date', 'last_aired')
+            Date::make('Last aired')
+                ->format('DD-MM-YYYY')
                 ->hideFromIndex()
                 ->help('The date on which the show last aired. For example: 2016-03-08'),
 

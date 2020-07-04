@@ -24,6 +24,16 @@ class Anime extends KModel
         ]
     ];
 
+    /**
+     * Casts rules.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'first_aired' => 'date',
+        'last_aired' => 'date'
+    ];
+
     // Maximum amount of returned search results
     const MAX_SEARCH_RESULTS = 10;
 
