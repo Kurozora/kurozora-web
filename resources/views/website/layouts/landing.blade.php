@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ app()->getLocale() }}" style="background-image: url({{ asset('img/static/star_bg_lg.jpg') }});">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -32,14 +32,8 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-    <div class="middle-div">
-        @yield('content')
-    </div>
+    @yield('content')
 
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('.middle-div').fadeIn(1000);
-        });
-    </script>
+    @yield('script')
 </body>
 </html>
