@@ -1,6 +1,56 @@
-// Bulma
-@import '../../node_modules/bulma/bulma';
+// Tailwind CSS
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-.white-text {
+html {
+  background-size: cover;
+  -webkit-background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  font-family: -apple-system, "SF Pro Text", "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+}
+
+.kurozora-btn {
+  background-color: #FF9300;
+  border: 0;
+  width: 200px;
+  border-radius: 500px;
+  margin: 10px auto;
+  font-size: 14px;
+  display: block;
+  padding: 5px 10px;
   color: #fff;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.anime-poster {
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  margin: 10px auto 0;
+  width: 150px;
+  height: 225px;
+  -webkit-background-size: cover;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.user-avatar-preview {
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 50%;
+  margin: 10px auto 0;
+  width: 150px;
+  height: 150px;
+  -webkit-background-size: cover;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
