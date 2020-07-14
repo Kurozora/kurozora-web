@@ -29,7 +29,7 @@
     <script type="text/javascript" src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
 
     {{-- Landing stylesheet --}}
-    <link href="{{ asset('css/kurozora-landing.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
     <div class="middle-div">
