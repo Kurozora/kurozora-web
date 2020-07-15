@@ -1,5 +1,56 @@
 // Tailwind CSS
 @tailwind base;
+body {
+  @apply leading-snug
+         tracking-tight;
+}
+
+a {
+  @apply text-orange;
+}
+a:hover {
+  @apply underline;
+}
+
+h1 {
+  @apply text-4xl;
+}
+h2 {
+  @apply text-2xl;
+}
+h3 {
+  @apply text-xl;
+}
+h4 {
+  @apply text-lg;
+}
+h5 {
+  @apply text-base;
+}
+h6 {
+  @apply text-sm;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @apply font-semibold
+         mb-2;
+}
+
+li {
+  @apply mb-1;
+}
+
+p {
+  @apply mb-4;
+}
+p + h1, ul + h1, ol + h1,
+p + h2, ul + h2, ol + h2,
+p + h3, ul + h3, ol + h3,
+p + h4, ul + h4, ol + h4,
+p + h5, ul + h5, ol + h5,
+p + h6, ul + h6, ol + h6 {
+  @apply mt-6;
+}
 @tailwind components;
 @tailwind utilities;
 
@@ -9,7 +60,23 @@ html {
   background-repeat: no-repeat;
   background-position: center;
   background-attachment: fixed;
-  font-family: -apple-system, "SF Pro Text", "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+  font-family: -apple-system, "SF Pro Text","SF Pro Icons","Helvetica Neue","Helvetica","Arial",sans-serif;
+}
+
+body {
+  color: #333333;
+  quotes: "“" "”";
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #111111;
+}
+
+ul, menu, dir {
+  list-style: disc;
+}
+ul, ol {
+  margin: 1em 0 1em 1.11111em;
 }
 
 .kurozora-btn {

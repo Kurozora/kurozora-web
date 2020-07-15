@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\WebControllers\PrivacyPageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -10,7 +9,7 @@ Route::get('/', function () {
 })->name('home');
 
 // Privacy page
-Route::get('/privacy', [PrivacyPageController::class, 'show']);
+require 'Web/Legal.php';
 
 // Landing pages
 Route::get('/anime/{animeID}', [PageController::class, 'anime']);
