@@ -1,4 +1,4 @@
-@extends('website.layouts.landing')
+@extends('website.layouts.app')
 
 @section('content')
     <div class="container mx-auto px-12">
