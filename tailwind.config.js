@@ -15,7 +15,10 @@ module.exports = {
     },
     theme: {
         extend: {},
+        colors: {
+            orange: '#FF9300',
         },
+    },
     variants: {},
     plugins: [
         require('tailwindcss-plugins/pagination')
