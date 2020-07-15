@@ -1,8 +1,22 @@
 // Tailwind CSS
 @tailwind base;
+html {
+  @apply bg-center
+  bg-cover
+  bg-fixed
+  bg-no-repeat
+  h-full;
+}
+
 body {
-  @apply leading-snug
-         tracking-tight;
+  @apply h-full
+  leading-snug
+  tracking-tight;
+}
+
+footer {
+  @apply bg-black
+  bg-opacity-25;
 }
 
 a {
@@ -33,8 +47,8 @@ h6 {
 
 h1, h2, h3, h4, h5, h6 {
   @apply font-semibold
-         mb-2
-         text-gray-900;
+  mb-2
+  text-gray-900;
 }
 
 li {
@@ -52,15 +66,46 @@ p + h5, ul + h5, ol + h5,
 p + h6, ul + h6, ol + h6 {
   @apply mt-6;
 }
+
+ul, menu, dir {
+  @apply list-disc;
+}
+
+.kurozora-btn {
+  @apply bg-orange-500
+  border-0
+  border-none
+  cursor-pointer
+  font-bold
+  no-underline
+  px-4
+  py-1
+  rounded-full
+  shadow-lg
+  text-center
+  text-white
+  uppercase;
+}
+
+.kurozora-btn:hover {
+  @apply bg-orange-400
+  no-underline;
+}
+
+.anime-poster {
+  @apply bg-center
+  bg-cover
+  bg-no-repeat
+  border-2
+  border-gray-100
+  border-opacity-25
+  rounded-lg
+  shadow-lg;
+}
 @tailwind components;
 @tailwind utilities;
 
 html {
-  background-size: cover;
-  -webkit-background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-attachment: fixed;
   font-family: -apple-system, "SF Pro Text","SF Pro Icons","Helvetica Neue","Helvetica","Arial",sans-serif;
 }
 
@@ -69,41 +114,20 @@ body {
   quotes: "“" "”";
 }
 
-ul, menu, dir {
-  list-style: disc;
-}
-ul, ol {
-  margin: 1em 0 1em 1.11111em;
+footer {
+  -webkit-backdrop-filter: blur(17px);
+  backdrop-filter: blur(17px);
 }
 
-.kurozora-btn {
-  background-color: #FF9300;
-  border: 0;
-  width: 200px;
-  border-radius: 500px;
-  margin: 10px auto;
-  font-size: 14px;
-  display: block;
-  padding: 5px 10px;
-  color: #fff;
-  text-transform: uppercase;
-  text-decoration: none;
-  font-weight: bold;
-  text-align: center;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+ul, ol {
+  margin: 1em 0 1em 1.1em;
 }
 
 .anime-poster {
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
   margin: 10px auto 0;
-  width: 150px;
-  height: 225px;
-  -webkit-background-size: cover;
-  background-size: cover;
-  background-position: center;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  width: 180px;
+  height: 268px;
+  background-size: 180px 268px; // ratio 45:67
 }
 
 .user-avatar-preview {

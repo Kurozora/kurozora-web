@@ -593,9 +593,25 @@ video {
   height: auto;
 }
 
+html {
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  height: 100%;
+}
+
 body {
+  height: 100%;
   line-height: 1.375;
   letter-spacing: -0.025em;
+}
+
+footer {
+  --bg-opacity: 1;
+  background-color: #000;
+  background-color: rgba(0, 0, 0, var(--bg-opacity));
+  --bg-opacity: 0.25;
 }
 
 a {
@@ -655,6 +671,52 @@ p + h4, ul + h4, ol + h4,
 p + h5, ul + h5, ol + h5,
 p + h6, ul + h6, ol + h6 {
   margin-top: 1.5rem;
+}
+
+ul, menu, dir {
+  list-style-type: disc;
+}
+
+.kurozora-btn {
+  --bg-opacity: 1;
+  background-color: #FF9300;
+  background-color: rgba(255, 147, 0, var(--bg-opacity));
+  border-width: 0;
+  border-style: none;
+  cursor: pointer;
+  font-weight: 700;
+  text-decoration: none;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  border-radius: 9999px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  --text-opacity: 1;
+  color: #fff;
+  color: rgba(255, 255, 255, var(--text-opacity));
+  text-transform: uppercase;
+}
+
+.kurozora-btn:hover {
+  --bg-opacity: 1;
+  background-color: #F6AD55;
+  background-color: rgba(246, 173, 85, var(--bg-opacity));
+  text-decoration: none;
+}
+
+.anime-poster {
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-width: 2px;
+  --border-opacity: 1;
+  border-color: #f7fafc;
+  border-color: rgba(247, 250, 252, var(--border-opacity));
+  --border-opacity: 0.25;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .container{
@@ -17989,11 +18051,6 @@ p + h6, ul + h6, ol + h6 {
 }
 
 html {
-  background-size: cover;
-  -webkit-background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-attachment: fixed;
   font-family: -apple-system, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 }
 
@@ -18002,39 +18059,20 @@ body {
   quotes: "\201C" "\201D";
 }
 
-ul, menu, dir {
-  list-style: disc;
+footer {
+  -webkit-backdrop-filter: blur(17px);
+  backdrop-filter: blur(17px);
 }
 
 ul, ol {
-  margin: 1em 0 1em 1.11111em;
-}
-
-.kurozora-btn {
-  background-color: #FF9300;
-  border: 0;
-  width: 200px;
-  border-radius: 500px;
-  margin: 10px auto;
-  font-size: 14px;
-  display: block;
-  padding: 5px 10px;
-  color: #fff;
-  text-transform: uppercase;
-  text-decoration: none;
-  font-weight: bold;
-  text-align: center;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  margin: 1em 0 1em 1.1em;
 }
 
 .anime-poster {
-  border-radius: 10px;
   margin: 10px auto 0;
-  width: 150px;
-  height: 225px;
-  background-size: cover;
-  background-position: center;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  width: 180px;
+  height: 268px;
+  background-size: 180px 268px;
 }
 
 .user-avatar-preview {
