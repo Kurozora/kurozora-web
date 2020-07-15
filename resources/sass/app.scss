@@ -6,7 +6,7 @@ body {
 }
 
 a {
-  @apply text-orange;
+  @apply text-orange-500;
 }
 a:hover {
   @apply underline;
@@ -33,7 +33,8 @@ h6 {
 
 h1, h2, h3, h4, h5, h6 {
   @apply font-semibold
-         mb-2;
+         mb-2
+         text-gray-900;
 }
 
 li {
@@ -66,10 +67,6 @@ html {
 body {
   color: #333333;
   quotes: "“" "”";
-}
-
-h1, h2, h3, h4, h5, h6 {
-  color: #111111;
 }
 
 ul, menu, dir {
