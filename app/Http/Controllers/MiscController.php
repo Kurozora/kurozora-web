@@ -17,7 +17,7 @@ class MiscController extends Controller
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function getPrivacyPolicy() {
-        $privacyPolicyPath = 'public/privacy_policy.md';
+        $privacyPolicyPath = 'resources/static/privacy_policy.md';
 
         // Get the privacy policy text
         $privacyPolicyText = null;
