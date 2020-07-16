@@ -102,6 +102,17 @@ ul, menu, dir {
   rounded-lg
   shadow-lg;
 }
+
+.user-avatar {
+  @apply bg-center
+  bg-cover
+  bg-no-repeat
+  border-2
+  border-gray-100
+  border-opacity-25
+  rounded-full
+  shadow-lg;
+}
 @tailwind components;
 @tailwind utilities;
 
@@ -130,15 +141,9 @@ ul, ol {
   background-size: 180px 268px; // ratio 45:67
 }
 
-.user-avatar-preview {
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 50%;
+.user-avatar {
   margin: 10px auto 0;
   width: 150px;
   height: 150px;
-  -webkit-background-size: cover;
-  background-size: cover;
-  background-position: center;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  background-size: 150px 150px;
 }
