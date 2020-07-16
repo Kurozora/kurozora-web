@@ -719,6 +719,19 @@ ul, menu, dir {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
+.user-avatar {
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-width: 2px;
+  --border-opacity: 1;
+  border-color: #f7fafc;
+  border-color: rgba(247, 250, 252, var(--border-opacity));
+  --border-opacity: 0.25;
+  border-radius: 9999px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
 .container{
   width: 100%;
 }
@@ -18075,14 +18088,11 @@ ul, ol {
   background-size: 180px 268px;
 }
 
-.user-avatar-preview {
-  border-radius: 50%;
+.user-avatar {
   margin: 10px auto 0;
   width: 150px;
   height: 150px;
-  background-size: cover;
-  background-position: center;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  background-size: 150px 150px;
 }
 
 @media (min-width: 640px){
