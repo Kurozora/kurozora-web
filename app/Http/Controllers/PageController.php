@@ -48,6 +48,9 @@ class PageController extends Controller
 
         $avatar = $user->getFirstMediaUrl('avatar');
 
+        if (!$avatar)
+            $avatar = null;
+
         return view('website.user-profile-page', [
             'page' => [
                 'title' => $user->username . ' on Kurozora',

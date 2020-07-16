@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="flex flex-col items-center justify-center h-screen">
-        <div class="anime-poster" style="background-image: url('{{ $animeData['poster'] ?? asset('img/static/placeholders/placeholder_poster.jpg') }}')"></div>
+        <div class="anime-poster" style="background-image: url('{{ $animeData['poster'] ?? asset('img/static/placeholders/anime_poster.jpg') }}')"></div>
 
         <h1 class="text-white">{{ $animeData['title'] }}</h1>
 
