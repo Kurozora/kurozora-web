@@ -51,7 +51,7 @@ class ForumSectionController extends Controller
     public function threads(Request $request, ForumSection $section) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'order'         => 'bail|required|in:top,recent'
+            'order'     => 'bail|required|in:top,recent'
         ]);
 
         // Fetch the variables
@@ -71,11 +71,13 @@ class ForumSectionController extends Controller
 
         $threads = $threads->paginate(ForumSection::THREADS_PER_PAGE);
 
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $threads->nextPageUrl());
+
         // Show threads in response
         return JSONResult::success([
-            'page'          => $threads->currentPage(),
-            'last_page'     => $threads->lastPage(),
-            'threads'       => ForumThreadResource::collection($threads)
+            'threads'   => ForumThreadResource::collection($threads),
+            'next'      => $nextPageURL
         ]);
     }
 
