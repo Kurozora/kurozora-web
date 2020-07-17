@@ -146,7 +146,7 @@ class ForumThreadController extends Controller
         // Show successful response
         return JSONResult::success([
             'replies'   => ForumReplyResource::collection($replies),
-            'next'      => $nextPageURL
+            'next'      => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 

@@ -77,7 +77,7 @@ class ForumSectionController extends Controller
         // Show threads in response
         return JSONResult::success([
             'threads'   => ForumThreadResource::collection($threads),
-            'next'      => $nextPageURL
+            'next'      => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 

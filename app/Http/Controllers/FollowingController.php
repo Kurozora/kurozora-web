@@ -79,7 +79,7 @@ class FollowingController extends Controller
 
         return JSONResult::success([
             'followers' => UserResourceSmall::collection($followers),
-            'next'      => $nextPageURL
+            'next'      => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 
@@ -99,7 +99,7 @@ class FollowingController extends Controller
 
         return JSONResult::success([
             'following' => UserResourceSmall::collection($following),
-            'next'      => $nextPageURL
+            'next'      => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 }
