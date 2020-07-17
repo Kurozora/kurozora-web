@@ -9,7 +9,7 @@ class ForumSection extends KModel
     protected $table = self::TABLE_NAME;
 
     // Amount of threads to display per page
-    const THREADS_PER_PAGE = 10;
+    const THREADS_PER_PAGE = 25;
 
     /**
      * Retrieve the threads for the section
