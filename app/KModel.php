@@ -28,6 +28,9 @@ class KModel extends Model
         // Add an ID
         if(isset($options['id'])) $key .= '-' . $options['id'];
 
+        // Add a limit
+        if(isset($options['limit'])) $key .= '-' . $options['limit'];
+
         return $key;
     }
 }
