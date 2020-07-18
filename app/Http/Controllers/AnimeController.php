@@ -31,7 +31,7 @@ class AnimeController extends Controller
 
         // Show the Anime details response
         return JSONResult::success([
-            'anime' => AnimeResource::make($anime)
+            'data' => AnimeResource::collection([$anime])
         ]);
     }
 
@@ -46,7 +46,7 @@ class AnimeController extends Controller
         $actors = $anime->getActors();
 
         return JSONResult::success([
-            'actors'    => ActorResource::collection($actors)
+            'data'    => ActorResource::collection($actors)
         ]);
     }
 
@@ -106,7 +106,7 @@ class AnimeController extends Controller
         $seasons = $anime->getSeasons();
 
         return JSONResult::success([
-            'seasons' => AnimeSeasonResource::collection($seasons)
+            'data' => AnimeSeasonResource::collection($seasons)
         ]);
     }
 
