@@ -1402,6 +1402,15 @@
                         },
                         "required":true,
                         "description":"ID of the anime."
+                    },
+                    {
+                        "in":"query",
+                        "name":"include",
+                        "schema":{
+                            "type":"[string]"
+                        },
+                        "required":false,
+                        "description":"The relations to include separated by ','. (seasons,actors)"
                     }
                 ],
                 "responses":{
