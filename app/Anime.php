@@ -40,6 +40,9 @@ class Anime extends KModel
     // Minimum ratings required to calculate average
     const MINIMUM_RATINGS_REQUIRED = 30;
 
+    // Maximum relationship fetch limit
+    const MAXIMUM_RELATIONSHIP_LIMIT = 10;
+
     // How long to cache certain responses
     const CACHE_KEY_EXPLORE_SECONDS = 120 * 60;
     const CACHE_KEY_ACTORS_SECONDS = 120 * 60;
@@ -90,15 +93,16 @@ class Anime extends KModel
     /**
      * Retrieves the actors for an Anime item in an array
      *
-     * @return array
+     * @param int|null $limit
+     * @return mixed
      */
-    public function getActors() {
+    public function getActors(int $limit = null) {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'actors', 'id' => $this->id]);
+        $cacheKey = self::cacheKey(['name' => 'actors', 'id' => $this->id, 'limit' => $limit]);
 
         // Retrieve or save cached result
-        $actorsInfo = Cache::remember($cacheKey, self::CACHE_KEY_ACTORS_SECONDS, function () {
-            return $this->actors()->get();
+        $actorsInfo = Cache::remember($cacheKey, self::CACHE_KEY_ACTORS_SECONDS, function () use ($limit) {
+            return $this->actors()->limit($limit)->get();
         });
 
         return $actorsInfo;
@@ -116,15 +120,16 @@ class Anime extends KModel
     /**
      * Returns this anime's seasons
      *
+     * @param int|null $limit
      * @return mixed
      */
-    public function getSeasons() {
+    public function getSeasons(int $limit = null) {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'seasons', 'id' => $this->id]);
+        $cacheKey = self::cacheKey(['name' => 'seasons', 'id' => $this->id, 'limit' => $limit]);
 
         // Retrieve or save cached result
-        $seasonsInfo = Cache::remember($cacheKey, self::CACHE_KEY_SEASONS_SECONDS, function () {
-            return $this->seasons()->get();
+        $seasonsInfo = Cache::remember($cacheKey, self::CACHE_KEY_SEASONS_SECONDS, function () use ($limit) {
+            return $this->seasons()->limit($limit)->get();
         });
 
         return $seasonsInfo;
