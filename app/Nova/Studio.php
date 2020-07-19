@@ -76,8 +76,23 @@ class Studio extends Resource
                 ->help('The URL to the official website of the studio.')
                 ->hideFromIndex(),
 
-            HasMany::make('Anime'),
+            HasMany::make('Anime Studio', 'anime'),
         ];
+    }
+
+    /**
+     * Get the value that should be displayed to represent the resource.
+     *
+     * @return string
+     */
+    public function title()
+    {
+        $studioName = $this->name;
+
+        if(!is_string($studioName) || !strlen($studioName))
+            $studioName = 'No Studio name';
+
+        return $studioName . ' (ID: ' . $this->id . ')';
     }
 
     /**

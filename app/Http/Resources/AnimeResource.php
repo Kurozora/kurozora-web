@@ -30,7 +30,7 @@ class AnimeResource extends JsonResource
             'imdb_id'               => $this->imdb_id,
             'mal_id'                => $this->mal_id,
             'network'               => $this->network,
-            'studio'                => StudioResourceSmall::make($this->studio),
+            'studio'                => StudioResourceSmall::collection($this->studios),
             'status'                => AnimeStatus::getDescription($this->status),
             'episodes'              => $this->episode_count,
             'seasons'               => $this->season_count,

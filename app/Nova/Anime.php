@@ -138,10 +138,7 @@ class Anime extends Resource
             Heading::make('Production')
                 ->onlyOnForms(),
 
-            BelongsTo::make('Studio')
-                ->display('name')
-                ->sortable()
-                ->searchable(),
+            HasMany::make('Anime Studio', 'studios'),
 
             Text::make('Network')
                 ->onlyOnForms()

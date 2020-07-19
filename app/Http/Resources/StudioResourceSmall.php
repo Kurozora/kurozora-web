@@ -18,12 +18,16 @@ class StudioResourceSmall extends JsonResource
         /** @var Studio $studio */
         $studio = $this->resource;
 
+        $founded = $studio->founded;
+        if ($founded)
+            $founded = $studio->founded->format('Y-m-d');
+
         return [
             'id'            => $studio->id,
             'name'          => $studio->name,
             'logo_url'      => $studio->logo_url,
             'about'         => $studio->about,
-            'founded'       => $studio->founded->format('Y-m-d'),
+            'founded'       => $founded,
             'website_url'   => $studio->website_url
         ];
     }
