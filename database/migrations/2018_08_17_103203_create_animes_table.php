@@ -25,7 +25,6 @@ class CreateAnimesTable extends Migration
             $table->string('video_url')->nullable();
             $table->string('slug')->nullable();
             $table->string('network')->nullable();
-            $table->unsignedBigInteger('studio_id')->nullable();
             $table->integer('status')->default(AnimeStatus::TBA);
             $table->string('cached_poster')->nullable();
             $table->string('cached_poster_thumbnail')->nullable();
@@ -57,11 +56,6 @@ class CreateAnimesTable extends Migration
             $table->boolean('fetched_base_episodes')->default(false);
             $table->boolean('fetched_images')->default(false);
             $table->boolean('fetched_details')->default(false);
-        });
-
-        Schema::table(Anime::TABLE_NAME, function(Blueprint $table) {
-            // Set foreign key constraints
-            $table->foreign('studio_id')->references('id')->on('studios')->onDelete('set null');
         });
     }
 

@@ -24,6 +24,6 @@ class Studio extends KModel
      */
     public function anime()
     {
-        return $this->hasMany(Anime::class);
+        return $this->hasMany(AnimeStudio::class);
     }
 }
