@@ -26,7 +26,7 @@ class CreateAnimesTable extends Migration
             $table->string('slug')->nullable();
             $table->string('network')->nullable();
             $table->integer('status')->default(AnimeStatus::TBA);
-             $table->integer('type')->default(AnimeType::Unknown);
+            $table->integer('type')->default(AnimeType::Unknown);
             $table->boolean('nsfw')->default(false);
             $table->integer('anidb_id')->nullable()->unsigned();
             $table->integer('anilist_id')->nullable()->unsigned();

@@ -227,10 +227,10 @@ class Anime extends Resource
 //                })
                 ->searchable(),
 
+            HasMany::make('Anime Images'),
+
             BelongsToMany::make('Genres')
                 ->searchable(),
-
-            HasMany::make('Anime Images'),
 
             HasMany::make('Seasons'),
 
