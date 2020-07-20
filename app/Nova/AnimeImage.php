@@ -59,33 +59,42 @@ class AnimeImage extends Resource
                 ->searchable(),
 
             ExternalImage::make('URL', 'url')
-                ->height(600)
-                ->rules('required'),
+                ->radius(5)
+                ->rules('required')
+                ->help('The URL to request the image asset.'),
 
             Select::make('Type')
                 ->options(AnimeImageType::toSelectArray())
                 ->displayUsingLabels()
-                ->rules('required'),
+                ->rules('required')
+                ->help('The type of the image asset.'),
 
             Heading::make('Colors'),
 
-            Color::make('Background Color'),
+            Color::make('Background Color')
+                ->help('The average background color of the image.'),
 
-            Color::make('Text Color 1'),
+            Color::make('Text Color 1')
+                ->help('The primary text color that may be used if the background color is displayed.'),
 
-            Color::make('Text Color 2'),
+            Color::make('Text Color 2')
+                ->help('The secondary text color that may be used if the background color is displayed.'),
 
-            Color::make('Text Color 3'),
+            Color::make('Text Color 3')
+                ->help('The tertiary text color that may be used if the background color is displayed.'),
 
-            Color::make('Text Color 4'),
+            Color::make('Text Color 4')
+                ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
 
             Heading::make('Dimensions'),
 
             Number::make('Width')
-                ->rules('required'),
+                ->rules('required')
+                ->help('The maximum width available for the image.'),
 
             Number::make('Height')
-                ->rules('required'),
+                ->rules('required')
+                ->help('The maximum height available for the image.'),
         ];
     }
 
