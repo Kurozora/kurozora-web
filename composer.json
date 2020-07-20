@@ -9,7 +9,7 @@
         "ext-simplexml": "*",
         "anaseqal/nova-sidebar-icons": "^0.0.2",
         "bensampo/laravel-enum": "^1.29",
-        "chaseconey/nova-external-image": "^0.0.3",
+        "chaseconey/nova-external-image": "^0.2",
         "codercat/jwk-to-pem": "^0.0.3",
         "cybercog/laravel-love": "^5.2",
         "ebess/advanced-nova-media-library": "^2.9",

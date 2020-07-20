@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c1b37645f357ce50ff30c6afcade864d",
+    "content-hash": "31b097b04e9ebe1aea3233e5f8c6e7d5",
     "packages": [
         {
             "name": "anaseqal/nova-sidebar-icons",
@@ -176,16 +176,16 @@
         },
         {
             "name": "chaseconey/nova-external-image",
-            "version": "0.0.3",
+            "version": "0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/chaseconey/nova-external-image.git",
-                "reference": "f99e5a2565b3ba031f94620a8280fb4f18dc0648"
+                "reference": "f7543a7067cfb28b82c52b7947c1c4caa074a1f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chaseconey/nova-external-image/zipball/f99e5a2565b3ba031f94620a8280fb4f18dc0648",
-                "reference": "f99e5a2565b3ba031f94620a8280fb4f18dc0648",
+                "url": "https://api.github.com/repos/chaseconey/nova-external-image/zipball/f7543a7067cfb28b82c52b7947c1c4caa074a1f0",
+                "reference": "f7543a7067cfb28b82c52b7947c1c4caa074a1f0",
                 "shasum": ""
             },
             "require": {
@@ -213,7 +213,7 @@
                 "laravel",
                 "nova"
             ],
-            "time": "2018-10-10T02:16:52+00:00"
+            "time": "2020-05-10T04:50:26+00:00"
         },
         {
             "name": "codercat/jwk-to-pem",
@@ -2126,7 +2126,10 @@
             "keywords": [
                 "admin",
                 "laravel"
-            ]
+            ],
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "laravel/tinker",
@@ -8785,5 +8788,6 @@
         "ext-json": "*",
         "ext-simplexml": "*"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Enums\AnimeImageType;
 use App\Traits\KuroSearchTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
@@ -76,6 +77,33 @@ class Anime extends KModel
      */
     public function ratings() {
         return $this->hasMany(AnimeRating::class, 'anime_id', 'id');
+    }
+
+    /**
+     * Get the Anime's images
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function anime_images() {
+        return $this->hasMany(AnimeImages::class);
+    }
+
+    /**
+     * Get the Anime's poster
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function poster() {
+        return $this->hasMany(AnimeImages::class, 'anime_id', 'id')->firstWhere('type', '=', AnimeImageType::Poster);
+    }
+
+    /**
+     * Get the Anime's banner
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function banner() {
+        return $this->hasMany(AnimeImages::class, 'anime_id', 'id')->firstWhere('type', '=', AnimeImageType::Banner);
     }
 
     /**
