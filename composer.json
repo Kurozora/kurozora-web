@@ -25,6 +25,7 @@
         "musa11971/laravel-tvdb": "^1.0",
         "musa11971/php-jwt-decoder": "^1.0",
         "nicolaslopezj/searchable": "1.*",
+        "nikkanetiya/laravel-color-palette": "dev-larave-6-7",
         "spatie/laravel-activitylog": "^3.9",
         "spatie/laravel-medialibrary": "^7.0.0",
         "spatie/laravel-permission": "^3.6",
@@ -35,6 +36,10 @@
         {
             "type": "path",
             "url": "./nova"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/pmayet/laravel-color-palette/"
         }
     ],
     "require-dev": {

@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use App\Enums\AnimeImageType;
+use App\Nova\Actions\GenerateColorsFromImage;
 use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
@@ -148,7 +149,9 @@ class AnimeImage extends Resource
      */
     public function actions(Request $request)
     {
-        return [];
+        return [
+            new GenerateColorsFromImage()
+        ];
     }
 
     /**

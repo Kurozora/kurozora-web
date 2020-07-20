@@ -10,6 +10,11 @@ class AnimeImages extends Model
     const TABLE_NAME = 'anime_images';
     protected $table = self::TABLE_NAME;
 
+    /**
+     * Get the Anime belonging to the image
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function anime() {
         return $this->belongsTo(Anime::class);
     }
