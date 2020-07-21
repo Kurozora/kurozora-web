@@ -19,9 +19,9 @@ class CreateAnimeImagesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedInteger('anime_id');
             $table->integer('type');
-            $table->integer('height');
-            $table->integer('width');
             $table->string('url');
+            $table->integer('height')->nullable();
+            $table->integer('width')->nullable();
             $table->string('background_color')->nullable();
             $table->string('text_color_1')->nullable();
             $table->string('text_color_2')->nullable();
