@@ -59,27 +59,7 @@ class GenerateColorsFromImage extends Command
         $this->info('Start generating anime image colors...');
 
         // Set new data
-        $colors = ColorPalette::getPalette($animeImage->url, 5, 1, null);
-
-        for($i = 0; $i < count($colors); $i++) {
-            switch ($i) {
-                case 0:
-                    $animeImage->background_color = $colors[$i];
-                    break;
-                case 1:
-                    $animeImage->text_color_1 = $colors[$i];
-                    break;
-                case 2:
-                    $animeImage->text_color_2 = $colors[$i];
-                    break;
-                case 3:
-                    $animeImage->text_color_3 = $colors[$i];
-                    break;
-                case 4:
-                    $animeImage->text_color_4 = $colors[$i];
-                    break;
-            }
-        }
+        AnimeImages::generateColorsFor($animeImage);
 
         // Save changes
         $animeImage->save();
