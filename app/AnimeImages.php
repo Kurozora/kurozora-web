@@ -22,6 +22,9 @@ class AnimeImages extends Model
 
         static::saving(function(AnimeImages $animeImage) {
             if(!$animeImage->background_color || $animeImage->isDirty('url')) {
+                if ($animeImage->isDirty('url'))
+                    static::generateDimensionsFor($animeImage);
+
                 static::generateColorsFor($animeImage);
             }
 
@@ -65,5 +68,17 @@ class AnimeImages extends Model
                     break;
             }
         }
+    }
+
+    /**
+     * Generate dimensions for the given AnimeImage object.
+     *
+     * @param AnimeImages $animeImage
+     */
+    static function generateDimensionsFor(AnimeImages $animeImage) {
+        list($width, $height) = getimagesize($animeImage->url);
+
+        $animeImage->width = $width;
+        $animeImage->height = $height;
     }
 }

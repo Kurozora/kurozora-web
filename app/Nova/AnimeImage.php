@@ -70,7 +70,7 @@ class AnimeImage extends Resource
                 ->rules('required')
                 ->help('The type of the image asset.'),
 
-            Heading::make('Colors'),
+            Heading::make('Colors (automatically generated if empty)'),
 
             Color::make('Background Color')
                 ->help('The average background color of the image.'),
@@ -87,14 +87,12 @@ class AnimeImage extends Resource
             Color::make('Text Color 4')
                 ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
 
-            Heading::make('Dimensions'),
+            Heading::make('Dimensions (automatically generated if empty)'),
 
             Number::make('Width')
-                ->rules('required')
                 ->help('The maximum width available for the image.'),
 
             Number::make('Height')
-                ->rules('required')
                 ->help('The maximum height available for the image.'),
         ];
     }
