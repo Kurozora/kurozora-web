@@ -1,6 +1,7 @@
 <?php
 
 use App\Anime;
+use App\Enums\AnimeSource;
 use App\Enums\AnimeStatus;
 use App\Enums\AnimeType;
 use Illuminate\Support\Facades\Schema;
@@ -31,6 +32,7 @@ class CreateAnimesTable extends Migration
             $table->string('cached_background')->nullable();
             $table->string('cached_background_thumbnail')->nullable();
             $table->integer('type')->default(AnimeType::Unknown);
+            $table->integer('source')->default(AnimeSource::Unknown);
             $table->boolean('nsfw')->default(false);
             $table->integer('anidb_id')->nullable()->unsigned();
             $table->integer('anilist_id')->nullable()->unsigned();
@@ -45,10 +47,10 @@ class CreateAnimesTable extends Migration
             $table->integer('rating_count')->default(0);
             $table->integer('episode_count')->default(0);
             $table->integer('season_count')->default(0);
-	        $table->date('first_aired')->nullable();
+            $table->date('first_aired')->nullable();
             $table->date('last_aired')->nullable();
-	        $table->time('air_time')->nullable();
-	        $table->integer('air_day')->nullable()->unsigned();
+            $table->time('air_time')->nullable();
+            $table->integer('air_day')->nullable()->unsigned();
             $table->string('copyright')->nullable();
 
             // Flags for fetched data

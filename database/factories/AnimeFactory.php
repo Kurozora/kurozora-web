@@ -3,6 +3,7 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use App\Anime;
+use App\Enums\AnimeSource;
 use App\Enums\AnimeStatus;
 use App\Enums\AnimeType;
 use App\Enums\DayOfWeek;
@@ -28,6 +29,7 @@ $factory->define(Anime::class, function (Faker $faker) {
         'watch_rating'  => WatchRating::getRandomValue(),
         'status'        => AnimeStatus::getRandomValue(),
         'type'          => AnimeType::getRandomValue(),
+        'source'        => AnimeSource::getRandomValue(),
         'nsfw'          => $faker->boolean,
         'anidb_id'      => null,
         'anilist_id'    => null,
