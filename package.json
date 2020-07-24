@@ -23,7 +23,7 @@
     },
     "dependencies": {
         "@jaames/iro": "^4.5.3",
-        "tailwindcss": "^1.4.6",
+        "tailwindcss": "^1.5.2",
         "tailwindcss-plugins": "^0.3.0"
     }
 }
