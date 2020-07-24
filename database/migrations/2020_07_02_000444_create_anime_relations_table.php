@@ -17,11 +17,10 @@ class CreateAnimeRelationsTable extends Migration
     {
         Schema::create(AnimeRelations::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamps();
-
-            $table->unsignedInteger('anime_id');
-            $table->unsignedInteger('related_anime_id');
+            $table->unsignedBigInteger('anime_id');
+            $table->unsignedBigInteger('related_anime_id');
             $table->integer('type');
+            $table->timestamps();
         });
 
         Schema::table(AnimeRelations::TABLE_NAME, function (Blueprint $table) {

@@ -16,7 +16,7 @@ class CreateAnimeStudioTable extends Migration
     {
         Schema::create(AnimeStudio::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('anime_id');
+            $table->unsignedBigInteger('anime_id');
             $table->unsignedBigInteger('studio_id');
             $table->timestamps();
         });
