@@ -17,6 +17,9 @@ Route::prefix('/anime')->group(function() {
 
     Route::get('/{anime}/cast', [AnimeController::class, 'actorCharacterAnime']);
 
+    Route::get('/{anime}/relations', [AnimeController::class, 'relationsAnime'])
+        ->middleware('kurozora.userauth:optional');
+
     Route::get('/{anime}/seasons', [AnimeController::class, 'seasonsAnime']);
 
     Route::post('/{anime}/rate', [AnimeController::class, 'rateAnime'])

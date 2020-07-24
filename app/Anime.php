@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Enums\AnimeImageType;
 use App\Traits\KuroSearchTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
@@ -24,13 +25,13 @@ class Anime extends KModel
         ]
     ];
 
-	/**
-	 * Casts rules.
-	 *
-	 * @var array
-	 */
+    /**
+     * Casts rules.
+     *
+     * @var array
+     */
     protected $casts = [
-	    'first_aired' => 'date',
+        'first_aired' => 'date',
         'last_aired' => 'date'
     ];
 
@@ -45,8 +46,10 @@ class Anime extends KModel
     const CACHE_KEY_ACTOR_CHARACTERS_SECONDS = 120 * 60;
     const CACHE_KEY_ACTORS_SECONDS = 120 * 60;
     const CACHE_KEY_CHARACTERS_SECONDS = 120 * 60;
+    const CACHE_KEY_RELATIONS_SECONDS = 120 * 60;
     const CACHE_KEY_SEASONS_SECONDS = 120 * 60;
     const CACHE_KEY_GENRES_SECONDS = 120 * 60;
+    const CACHE_KEY_STUDIOS_SECONDS = 120 * 60;
 
     // Table name
     const TABLE_NAME = 'animes';
@@ -72,12 +75,65 @@ class Anime extends KModel
     }
 
     /**
+     * Get the Anime's studios
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function studios() {
+        return $this->hasMany(AnimeStudio::class);
+    }
+
+    /**
+     * Retrieves the studios for an Anime item in an array
+     *
+     * @return array
+     */
+    public function getStudios() {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'studios', 'id' => $this->id]);
+
+        // Retrieve or save cached result
+        $studiosInfo = Cache::remember($cacheKey, self::CACHE_KEY_STUDIOS_SECONDS, function () {
+            return $this->studios()->get();
+        });
+
+        return $studiosInfo;
+    }
+
+    /**
      * Get the Anime's ratings
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function ratings() {
         return $this->hasMany(AnimeRating::class, 'anime_id', 'id');
+    }
+
+    /**
+     * Get the Anime's images
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function anime_images() {
+        return $this->hasMany(AnimeImages::class);
+    }
+
+    /**
+     * Get the Anime's poster
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function poster() {
+        return $this->hasMany(AnimeImages::class, 'anime_id', 'id')->firstWhere('type', '=', AnimeImageType::Poster);
+    }
+
+    /**
+     * Get the Anime's banner
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function banner() {
+        return $this->hasMany(AnimeImages::class, 'anime_id', 'id')->firstWhere('type', '=', AnimeImageType::Banner);
     }
 
     /**
@@ -234,6 +290,32 @@ class Anime extends KModel
         });
 
         return $genresInfo;
+    }
+
+    /**
+     * The related anime of this Anime
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function anime_relations() {
+        return $this->hasMany(AnimeRelations::class, 'anime_id', 'id');
+    }
+
+    /**
+     * Returns this anime's related anime
+     *
+     * @return mixed
+     */
+    public function getAnimeRelations() {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'anime_relations', 'id' => $this->id]);
+
+        // Retrieve or save cached result
+        $relationsInfo = Cache::remember($cacheKey, self::CACHE_KEY_RELATIONS_SECONDS, function () {
+            return $this->anime_relations;
+        });
+
+        return $relationsInfo;
     }
 
     /**

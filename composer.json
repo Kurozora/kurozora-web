@@ -9,7 +9,7 @@
         "ext-simplexml": "*",
         "anaseqal/nova-sidebar-icons": "^0.0.2",
         "bensampo/laravel-enum": "^1.29",
-        "chaseconey/nova-external-image": "^0.0.3",
+        "chaseconey/nova-external-image": "^0.2",
         "codercat/jwk-to-pem": "^0.0.3",
         "cybercog/laravel-love": "^5.2",
         "ebess/advanced-nova-media-library": "^2.9",
@@ -25,6 +25,7 @@
         "musa11971/laravel-tvdb": "^1.0",
         "musa11971/php-jwt-decoder": "^1.0",
         "nicolaslopezj/searchable": "1.*",
+        "nikkanetiya/laravel-color-palette": "dev-larave-6-7",
         "spatie/laravel-activitylog": "^3.9",
         "spatie/laravel-medialibrary": "^7.0.0",
         "spatie/laravel-permission": "^3.6",
@@ -36,6 +37,10 @@
         {
             "type": "path",
             "url": "./nova"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/pmayet/laravel-color-palette/"
         }
     ],
     "require-dev": {

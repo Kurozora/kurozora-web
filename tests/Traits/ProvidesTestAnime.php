@@ -7,6 +7,7 @@ use App\ActorCharacter;
 use App\ActorCharacterAnime;
 use App\Anime;
 use App\AnimeEpisode;
+use App\AnimeRelations;
 use App\AnimeSeason;
 use App\Character;
 
@@ -14,6 +15,9 @@ trait ProvidesTestAnime
 {
     /** @var Anime $anime */
     public $anime;
+
+    /** @var Anime $relatedAnime */
+    public $relatedAnime;
 
 	/** @var AnimeSeason $season */
     public $season;
@@ -39,6 +43,8 @@ trait ProvidesTestAnime
     {
         $this->anime = factory(Anime::class)->create();
 
+        $this->relatedAnime = factory(Anime::class)->create();
+
         $this->season = factory(AnimeSeason::class)->create([
             'anime_id' => $this->anime->id
         ]);
@@ -59,6 +65,11 @@ trait ProvidesTestAnime
         factory(ActorCharacterAnime::class)->create([
             'actor_character_id' => $this->actorCharacter->id,
             'anime_id' => $this->anime->id
+        ]);
+
+        factory(AnimeRelations::class)->create([
+            'anime_id'          => $this->anime->id,
+            'related_anime_id'  => $this->relatedAnime->id
         ]);
     }
 }

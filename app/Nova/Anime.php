@@ -2,6 +2,8 @@
 
 namespace App\Nova;
 
+use App\Enums\AnimeSource;
+use App\Enums\WatchRating;
 use App\Nova\Actions\FetchAnimeActors;
 use App\Nova\Actions\FetchAnimeDetails;
 use App\Nova\Actions\FetchAnimeImages;
@@ -9,10 +11,10 @@ use App\Nova\Lenses\UnmoderatedAnime;
 use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Support\Str;
 use Laraning\NovaTimeField\TimeField as Time;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
-use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
@@ -122,17 +124,33 @@ class Anime extends Resource
             Heading::make('Meta information')
                 ->onlyOnForms(),
 
-            Text::make('Network')
-                ->onlyOnForms()
-                ->help('The network that airs the Anime.'),
-
             Number::make('Runtime in minutes', 'runtime')
                 ->onlyOnForms()
                 ->help('For series: The average runtime in minutes of a single episode.<br />For movies: The amount of minutes the movie takes.'),
 
+            Select::make('Source')
+                ->options(AnimeSource::toSelectArray())
+                ->displayUsingLabels()
+                ->sortable()
+                ->rules('required')
+                ->help('The adaptation source of the anime. For example `Manga`, `Game` or `Original` if not adapted from other sources. If no source is available, especially for older anime, then choose `Unknown`.'),
+
             Boolean::make('NSFW')
                 ->sortable()
                 ->help('NSFW: Not Safe For Work (not suitable for watchers under the age of 18).'),
+
+            Text::make('Watch rating', 'watch_rating')
+                ->onlyOnForms()
+                ->help('for example: TV-PG.'),
+
+            Heading::make('Production')
+                ->onlyOnForms(),
+
+            HasMany::make('Anime Studio', 'studios'),
+
+            Text::make('Network')
+                ->onlyOnForms()
+                ->help('The network that airs the Anime.'),
 
             // Display moderation indicator on index
             Text::make('Moderated by', function() { return $this->displayModIndicatorForIndex(); })
@@ -140,9 +158,12 @@ class Anime extends Resource
                 ->readonly()
                 ->onlyOnIndex(),
 
-            Text::make('Watch rating', 'watch_rating')
-                ->onlyOnForms()
-                ->help('for example: TV-PG.'),
+            Select::make('Watch rating')
+                ->options(WatchRating::toSelectArray())
+                ->displayUsingLabels()
+                ->nullable()
+                ->hideFromIndex()
+                ->help('Use `TV-Y7 (FV)` if the show exhibits more \'fantasy violence\', and/or is generally more intense or combative than other shows.'),
 
             Heading::make('Schedule')
 	            ->onlyOnForms(),
@@ -157,12 +178,12 @@ class Anime extends Resource
 	            ->hideFromIndex()
 	            ->help('For example: Ended'),
 
-            Date::make('First air date', 'first_aired')
-	            ->format('DD-MM-YYYY')
+            Date::make('First aired')
+                ->format('DD-MM-YYYY')
 	            ->hideFromIndex()
                 ->help('The date on which the show first aired. For example: 2015-12-03'),
 
-            Date::make('Last air date', 'last_aired')
+            Date::make('Last aired')
                 ->format('DD-MM-YYYY')
                 ->hideFromIndex()
                 ->help('The date on which the show last aired. For example: 2016-03-08'),
@@ -186,20 +207,12 @@ class Anime extends Resource
 	            ->hideFromIndex()
 	            ->help('The day of the week the show airs at. For example: Thursday'),
 
-            Heading::make('Images')
+            Heading::make('Legal')
                 ->onlyOnForms(),
 
-            ExternalImage::make('Poster image URL', 'cached_poster')
-                ->onlyOnForms(),
-
-            ExternalImage::make('Poster Thumbnail image URL', 'cached_poster_thumbnail')
-                ->onlyOnForms(),
-
-            ExternalImage::make('Banner image URL', 'cached_background')
-                ->onlyOnForms(),
-
-            ExternalImage::make('Banner Thumbnail image URL', 'cached_background_thumbnail')
-                ->onlyOnForms(),
+            Text::make('Copyright')
+                ->hideFromIndex()
+                ->help('For example: © 2020 Kurozora B.V.'),
 
             Heading::make('Flags')
                 ->onlyOnForms(),
@@ -227,8 +240,12 @@ class Anime extends Resource
 
             HasMany::make('Characters'),
 
+            HasMany::make('Anime Images'),
+
             BelongsToMany::make('Genres')
                 ->searchable(),
+
+            HasMany::make('Anime Relations'),
 
             HasMany::make('Seasons'),
 
@@ -336,4 +353,15 @@ class Anime extends Resource
 
         return '<span class="py-1 px-2 mr-1 inline-block rounded align-middle" style="background-color: #465161; color: #fff;">' . $modCount . ' ' . Str::plural('mod', $modCount) . '</span>';
     }
+
+    /**
+     * The icon of the resource.
+     *
+     * @var string
+     */
+    public static $icon = '
+        <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+            <path fill="var(--sidebar-icon)" d="M528 464H112a16 16 0 0 0-16 16v16a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16v-16a16 16 0 0 0-16-16zM592 0H48A48 48 0 0 0 0 48v320a48 48 0 0 0 48 48h544a48 48 0 0 0 48-48V48a48 48 0 0 0-48-48zm0 368H48V48h544z"/>
+        </svg>
+    ';
 }

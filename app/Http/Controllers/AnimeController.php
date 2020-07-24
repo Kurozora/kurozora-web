@@ -8,6 +8,7 @@ use App\Events\AnimeViewed;
 use App\Helpers\JSONResult;
 use App\Http\Resources\ActorCharacterAnimeResource;
 use App\Http\Resources\ActorResource;
+use App\Http\Resources\AnimeRelationsResource;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\AnimeSeasonResource;
 use App\Http\Resources\CharacterResource;
@@ -80,6 +81,21 @@ class AnimeController extends Controller
     }
 
     /**
+     * Returns relations information about an Anime.
+     *
+     * @param Anime $anime
+     * @return JsonResponse
+     */
+    public function relationsAnime(Anime $anime) {
+        // Get the actors
+        $relations = $anime->getAnimeRelations();
+
+        return JSONResult::success([
+            'related' =>    AnimeRelationsResource::collection($relations)
+        ]);
+    }
+
+    /**
      * Returns season information for an Anime
      *
      * @param Anime $anime
@@ -103,7 +119,11 @@ class AnimeController extends Controller
      * @return JsonResponse
      * @throws \Exception
      */
-    public function rateAnime(Request $request, Anime $anime) {
+    public function rateAnime(Request $request, Anime $anime)
+    {
+        if (!Auth::user()->isTracking($anime))
+            return JSONResult::error('Please add ' . $anime->title . ' to your library first.');
+
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'rating' => 'bail|required|numeric|between:' . AnimeRating::MIN_RATING_VALUE . ',' . AnimeRating::MAX_RATING_VALUE
