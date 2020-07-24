@@ -77,6 +77,10 @@
             "description":"Everything session related"
         },
         {
+            "name":"studios",
+            "description":"Everything studio related"
+        },
+        {
             "name":"themes",
             "description":"Everything theme related"
         },
@@ -1506,6 +1510,41 @@
                 }
             }
         },
+        "/anime/{animeID}/relations":{
+            "get":{
+                "security":[
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "anime"
+                ],
+                "summary":"Anime all relations information.",
+                "description":"This endpoint will retrieve the relations of an Anime item.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"animeID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the anime."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
         "/anime/{animeID}/seasons":{
             "get":{
                 "tags":[
@@ -2395,6 +2434,113 @@
                         }
                     }
                 },
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/studios":{
+            "get":{
+                "security":[
+                    {
+
+                    },
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "studios"
+                ],
+                "summary":"(Optional authentication) Studios list.",
+                "description":"This endpoint will retrieve the studios.",
+                "parameters":[
+                    {
+                        "in":"query",
+                        "name":"anime",
+                        "schema":{
+                            "type":"integer",
+                            "minimum":0,
+                            "maximum":1
+                        },
+                        "required":false,
+                        "description":"Whether anime data should be included. (0 = false, 1 = true)"
+                    },
+                    {
+                        "in":"query",
+                        "name":"limit",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":false,
+                        "description":"Number of anime data to include. Leave empty for all data."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/studios/{studioID}":{
+            "get":{
+                "security":[
+                    {
+
+                    },
+                    {
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "studios"
+                ],
+                "summary":"(Optional authentication) Get studio details.",
+                "description":"This endpoint will retrieve the details for a studio.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"studioID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the studio."
+                    },
+                    {
+                        "in":"query",
+                        "name":"anime",
+                        "schema":{
+                            "type":"integer",
+                            "minimum":0,
+                            "maximum":1
+                        },
+                        "required":false,
+                        "description":"Whether anime data should be included. (0 = false, 1 = true)"
+                    },
+                    {
+                        "in":"query",
+                        "name":"limit",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":false,
+                        "description":"Number of anime data to include. Leave empty for all data."
+                    }
+                ],
                 "responses":{
                     "200":{
                         "$ref":"#/components/responses/JSONSuccess"

@@ -2,22 +2,23 @@
 
 namespace App\Nova;
 
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\DateTime;
-use Laravel\Nova\Fields\ID;
+use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
-use Laravel\Nova\Http\Requests\NovaRequest;
+use League\CommonMark\Inline\Renderer\ImageRenderer;
 
-class Episode extends Resource
+class Studio extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'App\AnimeEpisode';
+    public static $model = 'App\Studio';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -53,19 +54,29 @@ class Episode extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('Season')
-                ->searchable()
+            ExternalImage::make('Logo URL'),
+
+            Text::make('Name')
+                ->rules('required')
                 ->sortable(),
 
-            Text::make('Episode Title', 'name')
-                ->rules('required', 'max:255'),
+            Text::make('Logo URL')
+                ->rules('max:255')
+                ->hideFromIndex(),
 
-            DateTime::make('First Aired At', 'first_aired')
-                ->sortable(),
+            Textarea::make('About')
+                ->help('A description of the studio.'),
 
-            Textarea::make('Overview')
-                ->hideFromIndex()
-                ->help('A short description of the Episode.'),
+            Date::make('Founded')
+                ->format('YYYY-MM-DD')
+                ->help('The date on which the studio was founded. For example: 2015-12-03'),
+
+            Text::make('Website URL')
+                ->rules('max:255')
+                ->help('The URL to the official website of the studio.')
+                ->hideFromIndex(),
+
+            HasMany::make('Anime Studio', 'anime'),
         ];
     }
 
@@ -76,7 +87,12 @@ class Episode extends Resource
      */
     public function title()
     {
-        return $this->name . ' (ID: ' . $this->id . ')';
+        $studioName = $this->name;
+
+        if(!is_string($studioName) || !strlen($studioName))
+            $studioName = 'No Studio name';
+
+        return $studioName . ' (ID: ' . $this->id . ')';
     }
 
     /**
@@ -129,8 +145,8 @@ class Episode extends Resource
      * @var string
      */
     public static $icon = '
-        <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-            <path fill="var(--sidebar-icon)" d="M488 64h-8v20c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12V64H96v20c0 6.6-5.4 12-12 12H44c-6.6 0-12-5.4-12-12V64h-8C10.7 64 0 74.7 0 88v336c0 13.3 10.7 24 24 24h8v-20c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v20h320v-20c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v20h8c13.3 0 24-10.7 24-24V88c0-13.3-10.7-24-24-24zM96 372c0 6.6-5.4 12-12 12H44c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40zm0-96c0 6.6-5.4 12-12 12H44c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40zm0-96c0 6.6-5.4 12-12 12H44c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40zm288 208c0 6.6-5.4 12-12 12H140c-6.6 0-12-5.4-12-12v-96c0-6.6 5.4-12 12-12h232c6.6 0 12 5.4 12 12v96zm0-168c0 6.6-5.4 12-12 12H140c-6.6 0-12-5.4-12-12v-96c0-6.6 5.4-12 12-12h232c6.6 0 12 5.4 12 12v96zm96 152c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40zm0-96c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40zm0-96c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40z"/>
+        <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path fill="var(--sidebar-icon)" d="M128 148v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12zm140 12h40c6.6 0 12-5.4 12-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12zm-128 96h40c6.6 0 12-5.4 12-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12zm128 0h40c6.6 0 12-5.4 12-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12zm-76 84v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm76 12h40c6.6 0 12-5.4 12-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12zm180 124v36H0v-36c0-6.6 5.4-12 12-12h19.5V24c0-13.3 10.7-24 24-24h337c13.3 0 24 10.7 24 24v440H436c6.6 0 12 5.4 12 12zM79.5 463H192v-67c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v67h112.5V49L80 48l-.5 415z"/>
         </svg>
     ';
 }

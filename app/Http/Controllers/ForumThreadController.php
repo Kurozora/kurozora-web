@@ -140,11 +140,13 @@ class ForumThreadController extends Controller
         // Paginate the replies
         $replies = $replies->paginate(ForumThread::REPLIES_PER_PAGE);
 
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $replies->nextPageUrl());
+
         // Show successful response
         return JSONResult::success([
-            'page'          => $replies->currentPage(),
-            'last_page'     => $replies->lastPage(),
-            'replies'       => ForumReplyResource::collection($replies)
+            'replies'   => ForumReplyResource::collection($replies),
+            'next'      => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 

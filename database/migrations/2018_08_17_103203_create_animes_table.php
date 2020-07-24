@@ -1,6 +1,7 @@
 <?php
 
 use App\Anime;
+use App\Enums\AnimeSource;
 use App\Enums\AnimeStatus;
 use App\Enums\AnimeType;
 use Illuminate\Support\Facades\Schema;
@@ -26,11 +27,8 @@ class CreateAnimesTable extends Migration
             $table->string('slug')->nullable();
             $table->string('network')->nullable();
             $table->integer('status')->default(AnimeStatus::TBA);
-            $table->string('cached_poster')->nullable();
-            $table->string('cached_poster_thumbnail')->nullable();
-            $table->string('cached_background')->nullable();
-            $table->string('cached_background_thumbnail')->nullable();
-            $table->integer('type')->default(AnimeType::Undefined);
+            $table->integer('type')->default(AnimeType::Unknown);
+            $table->integer('source')->default(AnimeSource::Unknown);
             $table->boolean('nsfw')->default(false);
             $table->integer('anidb_id')->nullable()->unsigned();
             $table->integer('anilist_id')->nullable()->unsigned();
@@ -40,15 +38,16 @@ class CreateAnimesTable extends Migration
             $table->integer('tvdb_id')->nullable()->unsigned();
             $table->mediumText('synopsis')->nullable();
             $table->tinyInteger('runtime')->nullable()->unsigned();
-            $table->string('watch_rating')->nullable();
+            $table->integer('watch_rating')->nullable();
             $table->float('average_rating')->default(0.0);
             $table->integer('rating_count')->default(0);
             $table->integer('episode_count')->default(0);
             $table->integer('season_count')->default(0);
-	        $table->date('first_aired')->nullable();
+            $table->date('first_aired')->nullable();
             $table->date('last_aired')->nullable();
-	        $table->time('air_time')->nullable();
-	        $table->integer('air_day')->nullable()->unsigned();
+            $table->time('air_time')->nullable();
+            $table->integer('air_day')->nullable()->unsigned();
+            $table->string('copyright')->nullable();
 
             // Flags for fetched data
             $table->boolean('fetched_actors')->default(false);

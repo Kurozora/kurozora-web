@@ -2,11 +2,12 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\AnimeSource;
 use App\Enums\AnimeStatus;
 use App\Enums\AnimeType;
 use App\Enums\UserLibraryStatus;
+use App\Enums\WatchRating;
 use App\User;
-use App\UserLibrary;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,12 +25,14 @@ class AnimeResource extends JsonResource
             'id'                    => $this->id,
             'title'                 => $this->title,
             'type'                  => AnimeType::getDescription($this->type),
+            'source'                => AnimeSource::getDescription($this->source),
             'anidb_id'              => $this->anidb_id,
             'anilist_id'            => $this->anilist_id,
             'kitsu_id'              => $this->kitsu_id,
             'imdb_id'               => $this->imdb_id,
             'mal_id'                => $this->mal_id,
             'network'               => $this->network,
+            'studio'                => StudioResourceSmall::collection($this->studios),
             'status'                => AnimeStatus::getDescription($this->status),
             'episodes'              => $this->episode_count,
             'seasons'               => $this->season_count,
@@ -37,19 +40,18 @@ class AnimeResource extends JsonResource
             'rating_count'          => $this->rating_count,
             'synopsis'              => $this->synopsis,
             'runtime'               => $this->runtime,
-            'watch_rating'          => $this->watch_rating,
+            'watch_rating'          => WatchRating::getDescription($this->watch_rating),
             'tagline'               => $this->tagline,
             'video_url'             => $this->video_url,
-            'poster'                => $this->getPoster(false),
-            'poster_thumbnail'      => $this->getPoster(true),
-            'background'            => $this->getBackground(false),
-            'background_thumbnail'  => $this->getBackground(true),
+            'poster'                => AnimeImageResource::make($this->poster()),
+            'background'            => AnimeImageResource::make($this->banner()),
             'nsfw'                  => (bool) $this->nsfw,
             'genres'                => GenreResource::collection($this->genres),
-            'first_aired'           => $this->first_aired,
-            'last_aired'            => $this->last_aired,
+            'first_aired'           => $this->first_aired->format('Y-m-d'),
+            'last_aired'            => $this->last_aired->format('Y-m-d'),
 	        'air_time'              => $this->air_time,
-	        'air_day'               => $this->air_day
+	        'air_day'               => $this->air_day,
+            'copyright'             => $this->copyright
         ];
 
         if(Auth::check())
