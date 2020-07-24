@@ -12,6 +12,23 @@ class AnimeTest extends TestCase
     use DatabaseMigrations, ProvidesTestUser, ProvidesTestAnime;
 
     /**
+     * A user can view the cast of an anime.
+     *
+     * @return void
+     * @test
+     */
+     public function a_user_can_view_the_cast_of_an_anime()
+     {
+        $response = $this->json('GET', '/api/v1/anime/' . $this->anime->id . '/cast', []);
+
+        // Check whether the response was successful
+        $response->assertSuccessfulAPIResponse();
+
+        // Check whether the cast array is not empty
+        $this->assertTrue(count($response->json()['cast']) > 0);
+    }
+
+    /**
      * A user can view the related anime of an anime.
      *
      * @return void
@@ -24,7 +41,7 @@ class AnimeTest extends TestCase
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
 
-        // Check whether the characters array is not empty
+        // Check whether the related array is not empty
         $this->assertTrue(count($response->json()['related'][0]['show']) > 0);
     }
 
@@ -41,7 +58,7 @@ class AnimeTest extends TestCase
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
 
-        // Check whether the characters array is not empty
+        // Check whether the current_user array is not empty
         $this->assertTrue(count($response->json()['related'][0]['show']['current_user']) > 0);
     }
 }

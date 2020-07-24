@@ -9,11 +9,21 @@ class Actor extends KModel
     protected $table = self::TABLE_NAME;
 
     /**
-     * Returns the Anime the actor belongs to.
+     * Returns the full name of the actor.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return string
      */
-    function anime() {
-        return $this->belongsTo(Anime::class);
+    public function getFullNameAttribute()
+    {
+        return $this->last_name . ', ' . $this->first_name;
+    }
+
+    /**
+     * Returns the characters the actor belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    function characters() {
+        return $this->belongsToMany(Character::class);
     }
 }

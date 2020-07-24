@@ -6,10 +6,12 @@ use App\Anime;
 use App\AnimeRating;
 use App\Events\AnimeViewed;
 use App\Helpers\JSONResult;
+use App\Http\Resources\ActorCharacterAnimeResource;
 use App\Http\Resources\ActorResource;
 use App\Http\Resources\AnimeRelationsResource;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\AnimeSeasonResource;
+use App\Http\Resources\CharacterResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -44,8 +46,37 @@ class AnimeController extends Controller
         $actors = $anime->getActors();
 
         return JSONResult::success([
-            'total_actors'  => count($actors),
-            'actors'        => ActorResource::collection($actors)
+            'actors'    => ActorResource::collection($actors)
+        ]);
+    }
+
+    /**
+     * Returns character information about an Anime.
+     *
+     * @param Anime $anime
+     * @return JsonResponse
+     */
+    public function charactersAnime(Anime $anime) {
+        // Get the actors
+        $actors = $anime->getCharacters();
+
+        return JSONResult::success([
+            'characters'    => CharacterResource::collection($actors)
+        ]);
+    }
+
+    /**
+     * Returns actor-character-anime information about an Anime.
+     *
+     * @param Anime $anime
+     * @return JsonResponse
+     */
+    public function actorCharacterAnime(Anime $anime) {
+        // Get the actor-character-anime
+        $actorCharacterAnime = $anime->getActorCharacterAnime();
+
+        return JSONResult::success([
+            'cast'    => ActorCharacterAnimeResource::collection($actorCharacterAnime)
         ]);
     }
 

@@ -13,6 +13,10 @@ Route::prefix('/anime')->group(function() {
 
     Route::get('/{anime}/actors', [AnimeController::class, 'actorsAnime']);
 
+    Route::get('/{anime}/characters', [AnimeController::class, 'charactersAnime']);
+
+    Route::get('/{anime}/cast', [AnimeController::class, 'actorCharacterAnime']);
+
     Route::get('/{anime}/relations', [AnimeController::class, 'relationsAnime'])
         ->middleware('kurozora.userauth:optional');
 

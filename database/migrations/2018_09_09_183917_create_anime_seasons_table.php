@@ -19,7 +19,7 @@ class CreateAnimeSeasonsTable extends Migration
             $table->increments('id');
             $table->timestamps();
 
-            $table->integer('anime_id')->unsigned();
+            $table->unsignedBigInteger('anime_id');
             $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
 
             $table->integer('number');

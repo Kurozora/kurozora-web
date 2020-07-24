@@ -17,7 +17,7 @@ class CreateAnimeImagesTable extends Migration
     {
         Schema::create(AnimeImages::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('anime_id');
+            $table->unsignedBigInteger('anime_id');
             $table->integer('type');
             $table->string('url');
             $table->integer('height')->nullable();
