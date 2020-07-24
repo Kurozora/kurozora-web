@@ -11,6 +11,7 @@ use App\Nova\Lenses\UnmoderatedAnime;
 use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Support\Str;
 use Laraning\NovaTimeField\TimeField as Time;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
@@ -123,10 +124,6 @@ class Anime extends Resource
             Heading::make('Meta information')
                 ->onlyOnForms(),
 
-            Text::make('Network')
-                ->onlyOnForms()
-                ->help('The network that airs the Anime.'),
-
             Number::make('Runtime in minutes', 'runtime')
                 ->onlyOnForms()
                 ->help('For series: The average runtime in minutes of a single episode.<br />For movies: The amount of minutes the movie takes.'),
@@ -141,6 +138,19 @@ class Anime extends Resource
             Boolean::make('NSFW')
                 ->sortable()
                 ->help('NSFW: Not Safe For Work (not suitable for watchers under the age of 18).'),
+
+            Text::make('Watch rating', 'watch_rating')
+                ->onlyOnForms()
+                ->help('for example: TV-PG.'),
+
+            Heading::make('Production')
+                ->onlyOnForms(),
+
+            HasMany::make('Anime Studio', 'studios'),
+
+            Text::make('Network')
+                ->onlyOnForms()
+                ->help('The network that airs the Anime.'),
 
             // Display moderation indicator on index
             Text::make('Moderated by', function() { return $this->displayModIndicatorForIndex(); })

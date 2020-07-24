@@ -46,6 +46,7 @@ class Anime extends KModel
     const CACHE_KEY_RELATIONS_SECONDS = 120 * 60;
     const CACHE_KEY_SEASONS_SECONDS = 120 * 60;
     const CACHE_KEY_GENRES_SECONDS = 120 * 60;
+    const CACHE_KEY_STUDIOS_SECONDS = 120 * 60;
 
     // Table name
     const TABLE_NAME = 'animes';
@@ -68,6 +69,32 @@ class Anime extends KModel
     public function moderators() {
         return $this->belongsToMany(User::class, AnimeModerator::TABLE_NAME, 'anime_id', 'user_id')
             ->withPivot('created_at');
+    }
+
+    /**
+     * Get the Anime's studios
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function studios() {
+        return $this->hasMany(AnimeStudio::class);
+    }
+
+    /**
+     * Retrieves the studios for an Anime item in an array
+     *
+     * @return array
+     */
+    public function getStudios() {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'studios', 'id' => $this->id]);
+
+        // Retrieve or save cached result
+        $studiosInfo = Cache::remember($cacheKey, self::CACHE_KEY_STUDIOS_SECONDS, function () {
+            return $this->studios()->get();
+        });
+
+        return $studiosInfo;
     }
 
     /**
