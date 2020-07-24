@@ -33,7 +33,7 @@ class ForumThread extends KModel implements LikeableContract
     const COOLDOWN_POST_THREAD = 60;
 
     // Amount of results to display per thread page
-    const REPLIES_PER_PAGE = 10;
+    const REPLIES_PER_PAGE = 25;
 
     /**
      * Get the section the thread was posted in.

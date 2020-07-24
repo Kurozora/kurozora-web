@@ -14,8 +14,6 @@ use Illuminate\Support\Facades\Validator;
 
 class FollowingController extends Controller
 {
-    const AMOUNT_OF_FOLLOWERS_PER_PAGE = 10;
-
     /**
      * Follows a user.
      *
@@ -74,29 +72,34 @@ class FollowingController extends Controller
      */
     function getFollowers(Request $request, User $user) {
         // Get the followers
-        $followers = $user->followers()->paginate(self::AMOUNT_OF_FOLLOWERS_PER_PAGE);
+        $followers = $user->followers()->paginate(UserFollow::AMOUNT_OF_FOLLOWERS_PER_PAGE);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $followers->nextPageUrl());
 
         return JSONResult::success([
-            'page'      => $followers->currentPage(),
-            'last_page' => $followers->lastPage(),
-            'followers' => UserResourceSmall::collection($followers)
+            'followers' => UserResourceSmall::collection($followers),
+            'next'      => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 
     /**
      * Returns a list of the user's following.
      *
+     * @param Request $request
      * @param User $user
      * @return JsonResponse
      */
-    function getFollowing(User $user) {
+    function getFollowing(Request $request, User $user) {
         // Get the following
-        $following = $user->following()->paginate(self::AMOUNT_OF_FOLLOWERS_PER_PAGE);
+        $following = $user->following()->paginate(UserFollow::AMOUNT_OF_FOLLOWERS_PER_PAGE);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $following->nextPageUrl());
 
         return JSONResult::success([
-            'page'      => $following->currentPage(),
-            'last_page' => $following->lastPage(),
-            'following' => UserResourceSmall::collection($following)
+            'following' => UserResourceSmall::collection($following),
+            'next'      => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 }
