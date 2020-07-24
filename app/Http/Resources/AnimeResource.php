@@ -47,8 +47,8 @@ class AnimeResource extends JsonResource
             'background_thumbnail'  => $this->getBackground(true),
             'nsfw'                  => (bool) $this->nsfw,
             'genres'                => GenreResource::collection($this->genres),
-            'first_aired'           => $this->first_aired,
-            'last_aired'            => $this->last_aired,
+            'first_aired'           => $this->first_aired->format('Y-m-d'),
+            'last_aired'            => $this->last_aired->format('Y-m-d'),
 	        'air_time'              => $this->air_time,
 	        'air_day'               => $this->air_day,
             'copyright'             => $this->copyright
