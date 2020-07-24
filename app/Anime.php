@@ -43,6 +43,7 @@ class Anime extends KModel
     // How long to cache certain responses
     const CACHE_KEY_EXPLORE_SECONDS = 120 * 60;
     const CACHE_KEY_ACTORS_SECONDS = 120 * 60;
+    const CACHE_KEY_RELATIONS_SECONDS = 120 * 60;
     const CACHE_KEY_SEASONS_SECONDS = 120 * 60;
     const CACHE_KEY_GENRES_SECONDS = 120 * 60;
 
@@ -154,6 +155,32 @@ class Anime extends KModel
         });
 
         return $genresInfo;
+    }
+
+    /**
+     * The related anime of this Anime
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function anime_relations() {
+        return $this->hasMany(AnimeRelations::class, 'anime_id', 'id');
+    }
+
+    /**
+     * Returns this anime's related anime
+     *
+     * @return mixed
+     */
+    public function getAnimeRelations() {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'anime_relations', 'id' => $this->id]);
+
+        // Retrieve or save cached result
+        $relationsInfo = Cache::remember($cacheKey, self::CACHE_KEY_RELATIONS_SECONDS, function () {
+            return $this->anime_relations;
+        });
+
+        return $relationsInfo;
     }
 
     /**
