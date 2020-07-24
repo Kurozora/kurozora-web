@@ -24,13 +24,13 @@ class Anime extends KModel
         ]
     ];
 
-	/**
-	 * Casts rules.
-	 *
-	 * @var array
-	 */
+    /**
+     * Casts rules.
+     *
+     * @var array
+     */
     protected $casts = [
-	    'first_aired' => 'date',
+        'first_aired' => 'date',
         'last_aired' => 'date'
     ];
 
