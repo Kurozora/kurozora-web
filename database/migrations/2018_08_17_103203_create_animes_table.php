@@ -27,10 +27,6 @@ class CreateAnimesTable extends Migration
             $table->string('slug')->nullable();
             $table->string('network')->nullable();
             $table->integer('status')->default(AnimeStatus::TBA);
-            $table->string('cached_poster')->nullable();
-            $table->string('cached_poster_thumbnail')->nullable();
-            $table->string('cached_background')->nullable();
-            $table->string('cached_background_thumbnail')->nullable();
             $table->integer('type')->default(AnimeType::Unknown);
             $table->integer('source')->default(AnimeSource::Unknown);
             $table->boolean('nsfw')->default(false);
