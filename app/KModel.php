@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 class KModel extends Model
 {
+    use HasRelationships;
+
     // Remove column guards
     protected $guarded = [];
 

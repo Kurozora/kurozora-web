@@ -43,7 +43,9 @@ class Anime extends KModel
 
     // How long to cache certain responses
     const CACHE_KEY_EXPLORE_SECONDS = 120 * 60;
+    const CACHE_KEY_ACTOR_CHARACTERS_SECONDS = 120 * 60;
     const CACHE_KEY_ACTORS_SECONDS = 120 * 60;
+    const CACHE_KEY_CHARACTERS_SECONDS = 120 * 60;
     const CACHE_KEY_RELATIONS_SECONDS = 120 * 60;
     const CACHE_KEY_SEASONS_SECONDS = 120 * 60;
     const CACHE_KEY_GENRES_SECONDS = 120 * 60;
@@ -137,10 +139,10 @@ class Anime extends KModel
     /**
      * Get the Anime's actors
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Staudenmeir\EloquentHasManyDeep\HasManyDeep
      */
     public function actors() {
-        return $this->hasMany(Actor::class, 'anime_id', 'id');
+        return $this->hasManyDeep(Actor::class, [ActorCharacterAnime::class, ActorCharacter::class], ['anime_id', 'id', 'id'], ['id', 'actor_character_id', 'actor_id'])->distinct();
     }
 
     /**
@@ -158,6 +160,84 @@ class Anime extends KModel
         });
 
         return $actorsInfo;
+    }
+
+    /**
+     * Get the Anime's actors
+     *
+     * @return \Staudenmeir\EloquentHasManyDeep\HasManyDeep
+     */
+    public function characters() {
+        return $this->hasManyDeep(Character::class, [ActorCharacterAnime::class, ActorCharacter::class], ['anime_id', 'id', 'id'], ['id', 'actor_character_id', 'character_id'])->distinct();
+    }
+
+    /**
+     * Retrieves the characters for an Anime item in an array
+     *
+     * @return array
+     */
+    public function getCharacters() {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'characters', 'id' => $this->id]);
+
+        // Retrieve or save cached result
+        $actorsInfo = Cache::remember($cacheKey, self::CACHE_KEY_CHARACTERS_SECONDS, function () {
+            return $this->characters()->get();
+        });
+
+        return $actorsInfo;
+    }
+
+    /**
+     * Get the Anime's actor characters
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function actor_characters() {
+        return $this->belongsToMany(ActorCharacter::class, ActorCharacterAnime::TABLE_NAME, 'anime_id', 'actor_character_id');
+    }
+
+    /**
+     * Retrieves the actor-characters for an Anime item in an array
+     *
+     * @return array
+     */
+    public function getActorCharacters() {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'actor_characters', 'id' => $this->id]);
+
+        // Retrieve or save cached result
+        $actorCharactersInfo = Cache::remember($cacheKey, self::CACHE_KEY_ACTOR_CHARACTERS_SECONDS, function () {
+            return $this->actor_characters()->get();
+        });
+
+        return $actorCharactersInfo;
+    }
+
+    /**
+     * Get the Anime's actor-character-anime
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function actor_character_anime() {
+        return $this->hasMany(ActorCharacterAnime::class);
+    }
+
+    /**
+     * Retrieves the actor-characters-anime for an Anime item in an array
+     *
+     * @return array
+     */
+    public function getActorCharacterAnime() {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'actor_character_anime', 'id' => $this->id]);
+
+        // Retrieve or save cached result
+        $actorCharacterAnimeInfo = Cache::remember($cacheKey, self::CACHE_KEY_ACTOR_CHARACTERS_SECONDS, function () {
+            return $this->actor_character_anime()->get();
+        });
+
+        return $actorCharacterAnimeInfo;
     }
 
     /**

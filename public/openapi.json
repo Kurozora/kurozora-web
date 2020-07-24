@@ -49,6 +49,14 @@
             "description":"Everything anime episodes related"
         },
         {
+            "name":"actors",
+            "description":"Everything actor related"
+        },
+        {
+            "name":"characters",
+            "description":"Everything character related"
+        },
+        {
             "name":"genres",
             "description":"Everything genre related"
         },
@@ -1446,6 +1454,62 @@
                 }
             }
         },
+        "/anime/{animeID}/characters":{
+            "get":{
+                "tags":[
+                    "anime"
+                ],
+                "summary":"Anime character information.",
+                "description":"This endpoint will retrieve the characters of an Anime item.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"animeID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the anime."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/anime/{animeID}/cast":{
+            "get":{
+                "tags":[
+                    "anime"
+                ],
+                "summary":"Anime actor-character information.",
+                "description":"This endpoint will retrieve the actor-characters of an Anime item.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"animeID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the anime."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
         "/anime/{animeID}/relations":{
             "get":{
                 "security":[
@@ -1777,6 +1841,51 @@
                 }
             }
         },
+        "/actors":{
+            "get":{
+                "tags":[
+                    "actors"
+                ],
+                "summary":"Actors list.",
+                "description":"This endpoint will retrieve the actors.",
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/actors/{actorID}":{
+            "get":{
+                "tags":[
+                    "actors"
+                ],
+                "summary":"Get actor details.",
+                "description":"This endpoint will retrieve the details for a actor.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"actorID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the actor."
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
         "/anime-seasons/{seasonID}":{
             "get":{
                 "tags":[
@@ -1885,6 +1994,51 @@
                         }
                     }
                 },
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/characters":{
+            "get":{
+                "tags":[
+                    "characters"
+                ],
+                "summary":"Characters list.",
+                "description":"This endpoint will retrieve the characters.",
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/characters/{characterID}":{
+            "get":{
+                "tags":[
+                    "characters"
+                ],
+                "summary":"Get character details.",
+                "description":"This endpoint will retrieve the details for a character.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"characterID",
+                        "schema":{
+                            "type":"integer"
+                        },
+                        "required":true,
+                        "description":"ID of the character."
+                    }
+                ],
                 "responses":{
                     "200":{
                         "$ref":"#/components/responses/JSONSuccess"

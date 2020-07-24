@@ -233,16 +233,12 @@ class Anime extends Resource
                 ->onlyOnForms()
                 ->help('Whether or not the details (information_ were retrieved from TVDB.<br />Untick and the system will do so once the Anime gets visited the next time.'),
 
-            BelongsToMany::make('Moderators', 'moderators', User::class)
-// @TODO
-// This has been commented out, because it conflicts with the favoriteAnime relationship.
-//                ->fields(function() {
-//                    return [
-//                        DateTime::make('Moderating since', 'created_at')
-//                            ->rules('required')
-//                    ];
-//                })
-                ->searchable(),
+            HasMany::make('Cast', 'actor_character_anime')
+                ->sortable(),
+
+            HasMany::make('Actors'),
+
+            HasMany::make('Characters'),
 
             HasMany::make('Anime Images'),
 
@@ -253,7 +249,16 @@ class Anime extends Resource
 
             HasMany::make('Seasons'),
 
-            HasMany::make('Actors'),
+            BelongsToMany::make('Moderators', 'moderators', User::class)
+                // @TODO
+                // This has been commented out, because it conflicts with the favoriteAnime relationship.
+                //                ->fields(function() {
+                //                    return [
+                //                        DateTime::make('Moderating since', 'created_at')
+                //                            ->rules('required')
+                //                    ];
+                //                })
+                ->searchable(),
         ];
     }
 
