@@ -207,21 +207,6 @@ class Anime extends Resource
 	            ->hideFromIndex()
 	            ->help('The day of the week the show airs at. For example: Thursday'),
 
-            Heading::make('Images')
-                ->onlyOnForms(),
-
-            ExternalImage::make('Poster image URL', 'cached_poster')
-                ->onlyOnForms(),
-
-            ExternalImage::make('Poster Thumbnail image URL', 'cached_poster_thumbnail')
-                ->onlyOnForms(),
-
-            ExternalImage::make('Banner image URL', 'cached_background')
-                ->onlyOnForms(),
-
-            ExternalImage::make('Banner Thumbnail image URL', 'cached_background_thumbnail')
-                ->onlyOnForms(),
-
             Heading::make('Legal')
                 ->onlyOnForms(),
 
@@ -258,6 +243,8 @@ class Anime extends Resource
 //                    ];
 //                })
                 ->searchable(),
+
+            HasMany::make('Anime Images'),
 
             BelongsToMany::make('Genres')
                 ->searchable(),
