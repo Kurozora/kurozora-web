@@ -21,7 +21,7 @@ class AnimeSeasonResource extends JsonResource
         return [
             'id'            => $animeSeason->id,
             'type'          => 'seasons',
-            'href'          => url()->route('seasons.details', $animeSeason, false),
+            'href'          => route('seasons.details', $animeSeason, false),
             'attributes'    => [
                 'anime_id'      => $animeSeason->anime_id,
                 'title'         => $animeSeason->getTitle(),
