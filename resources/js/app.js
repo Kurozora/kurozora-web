@@ -3,11 +3,15 @@
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
+import {Plugin} from "vue-fragment"
 import Vue from 'vue'
 import './plugins'
 
 // Require vue
 window.Vue = require('vue')
+
+// Register vue plugins
+window.Vue.use(Plugin)
 
 // Disable console messages
 Vue.config.productionTip = false

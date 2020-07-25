@@ -11,12 +11,14 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet"/>
 </head>
 <body>
-    @include('website.resources.navigation.global')
+    <div id="app">
+        @include('website.resources.navigation.global')
 
-    <main id="app">
-        @yield('content')
-    </main>
+        <main id="main">
+            @yield('content')
+        </main>
 
-    @include('website.layouts.partials.footer')
+        @include('website.layouts.partials.footer')
+    </div>
 </body>
 </html>

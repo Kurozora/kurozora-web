@@ -3,12 +3,15 @@
 @include('website.layouts.partials.header')
 
 <body>
-    @include('website.resources.navigation.global')
+    <div id="app">
+        @component('website.resources.navigation.global')
+        @endcomponent
 
-    <main id="app">
-        @yield('content')
-    </main>
+        <main id="main">
+            @yield('content')
+        </main>
 
-    @include('website.layouts.partials.footer')
+        @include('website.layouts.partials.footer')
+    </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
 import Vue from 'vue'
 
-import ThemeRoller from './components/ThemeRoller';
+import GlobalNavigationContent from './components/GlobalNavigationContent'
+import ThemeRoller from './components/ThemeRoller'
 
-Vue.component('theme-roller', ThemeRoller);
+Vue.component('global-navigation-content', GlobalNavigationContent)
+Vue.component('theme-roller', ThemeRoller)
