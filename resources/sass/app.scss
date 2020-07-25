@@ -8,12 +8,12 @@ html {
   bg-no-repeat;
 }
 
-html, body {
+html, body, #app {
   @apply h-full
   w-full;
 }
 
-body {
+body, #app {
   @apply flex
   flex-col
   leading-snug
@@ -270,11 +270,6 @@ ul, menu, dir {
   @apply py-4
   text-left
   px-6;
-}
-
-/// Pagination styles ///
-.pagination .page-item .page-link{
-  @apply text-orange-500;
 }
 @tailwind components;
 @tailwind utilities;
