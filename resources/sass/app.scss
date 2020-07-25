@@ -1,17 +1,29 @@
 // Tailwind CSS
 @tailwind base;
+/// Global styles ///
 html {
   @apply bg-center
   bg-cover
   bg-fixed
-  bg-no-repeat
-  h-full;
+  bg-no-repeat;
+}
+
+html, body {
+  @apply h-full
+  w-full;
 }
 
 body {
-  @apply h-full
+  @apply flex
+  flex-col
   leading-snug
   tracking-tight;
+}
+
+main {
+  @apply flex
+  flex-col
+  flex-grow;
 }
 
 footer {
@@ -70,8 +82,26 @@ p + h6, ul + h6, ol + h6 {
 ul, menu, dir {
   @apply list-disc;
 }
+/// Global Navigation styles ///
+#globalnav .gn-link {
+  @apply block
+  mt-4
+  text-orange-500
+  mr-4;
+}
+#globalnav .gn-link:hover {
+  @apply text-orange-400
+  no-underline;
+}
 
-.kurozora-btn {
+/// Global Navigation styles ///
+#globalnav .k-outline-button {
+  @apply mt-4;
+}
+
+/// Kurozora Button styles ///
+// Default Kurozora button //
+.k-button {
   @apply bg-orange-500
   border-0
   border-none
@@ -86,12 +116,32 @@ ul, menu, dir {
   text-white
   uppercase;
 }
-
-.kurozora-btn:hover {
+.k-button:hover {
   @apply bg-orange-400
   no-underline;
 }
 
+// Outlined Kurozora button //
+.k-outline-button {
+  @apply inline-block
+  text-sm
+  px-4
+  py-2
+  leading-none
+  border
+  rounded
+  text-orange-500
+  border-orange-500;
+}
+.k-outline-button:hover {
+  @apply no-underline
+  border-transparent
+  text-white
+  bg-orange-500;
+}
+
+/// Placeholder styles ///
+// Anime placeholders //
 .anime-poster {
   @apply bg-center
   bg-cover
@@ -103,6 +153,7 @@ ul, menu, dir {
   shadow-lg;
 }
 
+// User placeholders //
 .user-avatar {
   @apply bg-center
   bg-cover
@@ -113,9 +164,143 @@ ul, menu, dir {
   rounded-full
   shadow-lg;
 }
+
+/// Global Footer styles ///
+#globalfooter .gf-footer {
+  @apply flex
+  flex-col
+  py-8
+  w-full;
+}
+
+#globalfooter .gf-footer-legal {
+  @apply flex
+  flex-row;
+}
+
+#globalfooter .gf-legal-copyright {
+  @apply text-gray-500
+  text-sm
+  mr-8;
+}
+
+#globalfooter .gf-legal-links {
+  @apply mr-8
+  text-sm;
+}
+
+#globalfooter .gf-legal-link {
+  @apply mr-2
+  pr-3
+  text-gray-400
+  whitespace-no-wrap;
+}
+#globalfooter .gf-legal-link:hover {
+  @apply text-gray-300;
+}
+#globalfooter .gf-legal-link:not(:last-child) {
+  @apply border-r
+  border-gray-400;
+}
+
+/// Card styles ///
+.card {
+  @apply bg-white
+  rounded
+  overflow-hidden
+  shadow-lg;
+}
+
+.card-content {
+  @apply px-6
+  py-4;
+}
+
+.card-footer {
+  @apply px-6
+  py-4;
+}
+
+/// Modal styles ///
+.modal {
+  @apply fixed
+  flex
+  w-full
+  h-full
+  top-0
+  left-0
+  items-center
+  justify-center;
+}
+
+.modal-overlay {
+  @apply absolute
+  w-full
+  h-full
+  bg-gray-900
+  opacity-50;
+}
+
+.modal-container {
+  @apply bg-white
+  w-11/12
+  mx-auto
+  rounded
+  shadow-lg
+  z-50
+  overflow-y-auto;
+}
+
+.modal-close {
+  @apply absolute
+  top-0
+  right-0
+  cursor-pointer
+  flex
+  flex-col
+  items-center
+  mt-4
+  mr-4
+  text-white
+  text-sm
+  z-50;
+}
+
+.modal-content {
+  @apply py-4
+  text-left
+  px-6;
+}
+
+/// Pagination styles ///
+.pagination .page-item .page-link{
+  @apply text-orange-500;
+}
 @tailwind components;
 @tailwind utilities;
+@tailwind screens;
+@screen md {
+  /// Modal styles ///
+  .modal-container {
+    @apply max-w-md;
+  }
+}
 
+@screen lg {
+  /// Global Navigation styles ///
+  #globalnav .gn-link {
+    @apply inline-block
+    mt-0;
+  }
+
+  /// Outlined Kurozora button ///
+  #globalnav .k-outline-button {
+    @apply mt-0;
+  }
+}
+
+//// Custom styles ////
+/// Global styles ///
 html {
   font-family: -apple-system, "SF Pro Text","SF Pro Icons","Helvetica Neue","Helvetica","Arial",sans-serif;
 }
@@ -134,6 +319,13 @@ ul, ol {
   margin: 1em 0 1em 1.1em;
 }
 
+/// Global Navigation styles ///
+#globalnav {
+  -webkit-backdrop-filter: blur(17px);
+  backdrop-filter: blur(17px);
+}
+
+/// Placeholder styles ///
 .anime-poster {
   margin: 10px auto 0;
   width: 180px;
