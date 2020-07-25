@@ -23,10 +23,7 @@
         <meta name="robots" content="noindex,nofollow" />
     @endif
 
-    {{-- jQuery --}}
-    <script type="text/javascript" src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
-
-    {{-- Landing stylesheet --}}
+    {{-- Stylesheets --}}
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 
