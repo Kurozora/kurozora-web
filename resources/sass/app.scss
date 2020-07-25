@@ -1,6 +1,336 @@
-// Bulma
-@import '../../node_modules/bulma/bulma';
+// Tailwind CSS
+@tailwind base;
+/// Global styles ///
+html {
+  @apply bg-center
+  bg-cover
+  bg-fixed
+  bg-no-repeat;
+}
 
-.white-text {
-  color: #fff;
+html, body, #app {
+  @apply h-full
+  w-full;
+}
+
+body, #app {
+  @apply flex
+  flex-col
+  leading-snug
+  tracking-tight;
+}
+
+main {
+  @apply flex
+  flex-col
+  flex-grow;
+}
+
+footer {
+  @apply bg-black
+  bg-opacity-25;
+}
+
+a {
+  @apply text-orange-500;
+}
+a:hover {
+  @apply underline;
+}
+
+h1 {
+  @apply text-4xl;
+}
+h2 {
+  @apply text-2xl;
+}
+h3 {
+  @apply text-xl;
+}
+h4 {
+  @apply text-lg;
+}
+h5 {
+  @apply text-base;
+}
+h6 {
+  @apply text-sm;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @apply font-semibold
+  mb-2
+  text-gray-900;
+}
+
+li {
+  @apply mb-1;
+}
+
+p {
+  @apply mb-4;
+}
+p + h1, ul + h1, ol + h1,
+p + h2, ul + h2, ol + h2,
+p + h3, ul + h3, ol + h3,
+p + h4, ul + h4, ol + h4,
+p + h5, ul + h5, ol + h5,
+p + h6, ul + h6, ol + h6 {
+  @apply mt-6;
+}
+
+ul, menu, dir {
+  @apply list-disc;
+}
+/// Global Navigation styles ///
+#globalnav .gn-link {
+  @apply block
+  mt-4
+  text-orange-500
+  mr-4;
+}
+#globalnav .gn-link:hover {
+  @apply text-orange-400
+  no-underline;
+}
+
+/// Global Navigation styles ///
+#globalnav .k-outline-button {
+  @apply mt-4;
+}
+
+/// Kurozora Button styles ///
+// Default Kurozora button //
+.k-button {
+  @apply bg-orange-500
+  border-0
+  border-none
+  cursor-pointer
+  font-bold
+  no-underline
+  px-4
+  py-1
+  rounded-full
+  shadow-lg
+  text-center
+  text-white
+  uppercase;
+}
+.k-button:hover {
+  @apply bg-orange-400
+  no-underline;
+}
+
+// Outlined Kurozora button //
+.k-outline-button {
+  @apply inline-block
+  text-sm
+  px-4
+  py-2
+  leading-none
+  border
+  rounded
+  text-orange-500
+  border-orange-500;
+}
+.k-outline-button:hover {
+  @apply no-underline
+  border-transparent
+  text-white
+  bg-orange-500;
+}
+
+/// Placeholder styles ///
+// Anime placeholders //
+.anime-poster {
+  @apply bg-center
+  bg-cover
+  bg-no-repeat
+  border-2
+  border-gray-100
+  border-opacity-25
+  rounded-lg
+  shadow-lg;
+}
+
+// User placeholders //
+.user-avatar {
+  @apply bg-center
+  bg-cover
+  bg-no-repeat
+  border-2
+  border-gray-100
+  border-opacity-25
+  rounded-full
+  shadow-lg;
+}
+
+/// Global Footer styles ///
+#globalfooter .gf-footer {
+  @apply flex
+  flex-col
+  py-8
+  w-full;
+}
+
+#globalfooter .gf-footer-legal {
+  @apply flex
+  flex-row;
+}
+
+#globalfooter .gf-legal-copyright {
+  @apply text-gray-500
+  text-sm
+  mr-8;
+}
+
+#globalfooter .gf-legal-links {
+  @apply mr-8
+  text-sm;
+}
+
+#globalfooter .gf-legal-link {
+  @apply mr-2
+  pr-3
+  text-gray-400
+  whitespace-no-wrap;
+}
+#globalfooter .gf-legal-link:hover {
+  @apply text-gray-300;
+}
+#globalfooter .gf-legal-link:not(:last-child) {
+  @apply border-r
+  border-gray-400;
+}
+
+/// Card styles ///
+.card {
+  @apply bg-white
+  rounded
+  overflow-hidden
+  shadow-lg;
+}
+
+.card-content {
+  @apply px-6
+  py-4;
+}
+
+.card-footer {
+  @apply px-6
+  py-4;
+}
+
+/// Modal styles ///
+.modal {
+  @apply fixed
+  flex
+  w-full
+  h-full
+  top-0
+  left-0
+  items-center
+  justify-center;
+}
+
+.modal-overlay {
+  @apply absolute
+  w-full
+  h-full
+  bg-gray-900
+  opacity-50;
+}
+
+.modal-container {
+  @apply bg-white
+  w-11/12
+  mx-auto
+  rounded
+  shadow-lg
+  z-50
+  overflow-y-auto;
+}
+
+.modal-close {
+  @apply absolute
+  top-0
+  right-0
+  cursor-pointer
+  flex
+  flex-col
+  items-center
+  mt-4
+  mr-4
+  text-white
+  text-sm
+  z-50;
+}
+
+.modal-content {
+  @apply py-4
+  text-left
+  px-6;
+}
+@tailwind components;
+@tailwind utilities;
+@tailwind screens;
+@screen md {
+  /// Modal styles ///
+  .modal-container {
+    @apply max-w-md;
+  }
+}
+
+@screen lg {
+  /// Global Navigation styles ///
+  #globalnav .gn-link {
+    @apply inline-block
+    mt-0;
+  }
+
+  /// Outlined Kurozora button ///
+  #globalnav .k-outline-button {
+    @apply mt-0;
+  }
+}
+
+//// Custom styles ////
+/// Global styles ///
+html {
+  font-family: -apple-system, "SF Pro Text","SF Pro Icons","Helvetica Neue","Helvetica","Arial",sans-serif;
+}
+
+body {
+  color: #333333;
+  quotes: "“" "”";
+}
+
+footer {
+  -webkit-backdrop-filter: blur(17px);
+  backdrop-filter: blur(17px);
+}
+
+ul, ol {
+  margin: 1em 0 1em 1.1em;
+}
+
+/// Global Navigation styles ///
+#globalnav {
+  -webkit-backdrop-filter: blur(17px);
+  backdrop-filter: blur(17px);
+}
+
+/// Placeholder styles ///
+.anime-poster {
+  margin: 10px auto 0;
+  width: 180px;
+  height: 268px;
+  background-size: 180px 268px; // ratio 45:67
+}
+
+.user-avatar {
+  margin: 10px auto 0;
+  width: 150px;
+  height: 150px;
+  background-size: 150px 150px;
 }
