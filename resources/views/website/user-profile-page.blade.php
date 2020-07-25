@@ -1,14 +1,14 @@
 @extends('website.layouts.landing')
 
 @section('content')
-    <h1 class="kurozora-title">{{ $userData['username'] }}</h1>
-    <h2 class="kurozora-under-title">{{ $userData['followers'] }} followers</h2>
+    <div class="flex flex-col w-full h-full items-center justify-center">
+        <div class="user-avatar" style="background-image: url('{{ $userData['avatar'] ?? asset('img/static/placeholders/user_profile.png') }}')"></div>
 
-    @if($userData['avatar'])
-        <div class="user-avatar-preview" style="background-image: url('{{ $userData['avatar'] }}')"></div>
-    @endif
+        <h1 class="text-white">{{ $userData['username'] }}</h1>
+        <h2 class="text-white">{{ $userData['followers'] }} followers</h2>
 
-    <a href="{{ ios_app_url('profile/' . $userData['id']) }}" class="kurozora-btn">
-        Open in Kurozora App
-    </a>
+        <a href="{{ ios_app_url('profile/' . $userData['id']) }}" class="k-button">
+            Open in Kurozora App
+        </a>
+    </div>
 @endsection

@@ -235,40 +235,32 @@
         <!-- /iPhone SVG  -->
 
         <!-- Color picker modal -->
-        <div class="modal" id="colorModal">
-            <div class="modal-background"></div>
+        <div id="colorModal" class="modal hidden">
+            <div class="modal-overlay"></div>
 
-            <div class="modal-content">
-                <div class="box">
-                    <div id="color-picker-container"></div>
+            <div class="modal-container align-content-center">
+                <button class="modal-close" @click="closeColorPicker">
+                    <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                        <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                    </svg>
+                </button>
 
-                    <hr>
+                <div class="modal-content">
+                    <div id="colorPickerContainer"></div>
 
-                    <div class="columns">
-                        <div class="column is-two-thirds">
-                            <div class="field is-horizontal">
-                                <div class="field-label is-normal">
-                                    <label class="label">Hex</label>
-                                </div>
-                                <div class="field-body">
-                                    <div class="field">
-                                        <p class="control">
-                                            <input type="text" class="input is-rounded" id="colorInput" :value="getSelectedColor" @change="updateColorFromInput" />
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <hr />
 
-                        <div class="column is-one-third">
-                            <button class="button is-success is-fullwidth" @click="saveSelectedColor">Save</button>
-                        </div>
+                    <div class="flex items-center mt-3">
+                        <label class="block text-gray-500 font-bold mb-0 pr-4" for="colorInput">
+                            Hex
+                        </label>
+                        <input type="text" class="flex-grow bg-gray-200 appearance-none border-2 border-gray-200 rounded-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-orange-500" id="colorInput" :value="getSelectedColor" @change="updateColorFromInput" />
+                        <button class="k-outline-button ml-4" @click="saveSelectedColor">Save</button>
                     </div>
                 </div>
             </div>
-
-            <button class="modal-close is-large" aria-label="close" @click="closeColorPicker"></button>
         </div>
+
         <!-- /Color picker modal -->
 
         <!-- Submit theme form -->
@@ -286,11 +278,12 @@
         margin: 0 auto;
     }
 
-    #color-picker-container {
-        display: block;
-        margin: 0 auto;
+    #colorPickerContainer {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1rem;
     }
-    
+
     .eyedropper:hover {
         cursor: pointer;
     }
@@ -325,9 +318,9 @@
 
         created() {
             // Initialize the colorpicker
-            this.colorPicker = new iro.ColorPicker('#color-picker-container', {
+            this.colorPicker = new iro.ColorPicker('#colorPickerContainer', {
                 width: 300,
-                color: '#f00'
+                color: '#FF9300'
             });
 
             // Warning before exiting page
@@ -345,15 +338,13 @@
                 this.colorPicker.color.hexString = this.colors[this.selectingFor];
 
                 // Show the picker
-                $('#colorModal').addClass('is-active');
+                $('#colorModal').fadeIn(250).css('display', 'flex');
             },
 
             // Saves the selected color in the colorpicker
             saveSelectedColor() {
                 // Write the new color
-                let newColor = this.colorPicker.color.hexString;
-
-                this.colors[this.selectingFor] = newColor;
+                this.colors[this.selectingFor] = this.colorPicker.color.hexString;
 
                 // Close the picker
                 this.closeColorPicker();
@@ -361,7 +352,7 @@
 
             // Closes the color picker
             closeColorPicker() {
-                $('#colorModal').removeClass('is-active');
+                $('.modal').fadeOut(250).css('display', 'flex');
             },
 
             // Updates the colorpicker with the value from the input

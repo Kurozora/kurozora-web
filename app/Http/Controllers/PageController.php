@@ -46,7 +46,10 @@ class PageController extends Controller
 
         if(!$user) abort(404);
 
-        $avatar = $user->getURLToAvatar();
+        $avatar = $user->getFirstMediaUrl('avatar');
+
+        if (!$avatar)
+            $avatar = null;
 
         return view('website.user-profile-page', [
             'page' => [

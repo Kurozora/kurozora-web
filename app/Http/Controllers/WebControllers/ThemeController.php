@@ -13,7 +13,7 @@ class ThemeController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     function index() {
-        $themes = AppTheme::simplePaginate(8);
+        $themes = AppTheme::paginate(6);
 
         return view('website.themes.index',
             ['themes' => $themes]
@@ -28,5 +28,4 @@ class ThemeController extends Controller
     function create() {
         return view('website.themes.create', ['title' => 'Create']);
     }
-
 }
