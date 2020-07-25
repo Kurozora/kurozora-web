@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Character;
 use App\Enums\AstrologicalSign;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -15,26 +16,30 @@ class CharacterResource extends JsonResource
      */
     public function toArray($request)
     {
-        /** @var \App\Character $character */
+        /** @var Character $character */
         $character = $this->resource;
 
         return [
-            'id'                => $character->id,
-            'name'              => $character->name,
-            'about'             => $character->about,
-            'image'             => $character->image,
-            'debut'             => $character->debut,
-            'status'            => $character->status,
-            'blood_type'        => $character->blood_type,
-            'favorite_food'     => $character->favorite_food,
-            'bust'              => $character->bust,
-            'waist'             => $character->waist,
-            'hip'               => $character->hip,
-            'height'            => $character->height,
-            'age'               => $character->age,
-            'birth_day'         => $character->birth_day,
-            'birth_month'       => $character->birth_month,
-            'astrological_sign' => AstrologicalSign::getDescription($character->astrological_sign)
+            'id'            => $character->id,
+            'type'          => 'characters',
+            'href'          => route('characters.details', $character, false),
+            'attributes'    => [
+                'name'              => $character->name,
+                'about'             => $character->about,
+                'image'             => $character->image,
+                'debut'             => $character->debut,
+                'status'            => $character->status,
+                'blood_type'        => $character->blood_type,
+                'favorite_food'     => $character->favorite_food,
+                'bust'              => $character->bust,
+                'waist'             => $character->waist,
+                'hip'               => $character->hip,
+                'height'            => $character->height,
+                'age'               => $character->age,
+                'birth_day'         => $character->birth_day,
+                'birth_month'       => $character->birth_month,
+                'astrological_sign' => AstrologicalSign::getDescription($character->astrological_sign)
+            ]
         ];
     }
 }

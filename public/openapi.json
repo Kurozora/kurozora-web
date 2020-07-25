@@ -1422,7 +1422,7 @@
                             "type":"[string]"
                         },
                         "required":false,
-                        "description":"The relations to include separated by ','. (seasons,actors)"
+                        "description":"The relations to include separated by ','. (actors,characters,cast,relations,seasons)",
                     }
                 ],
                 "responses":{

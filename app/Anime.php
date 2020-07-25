@@ -178,15 +178,16 @@ class Anime extends KModel
     /**
      * Retrieves the characters for an Anime item in an array
      *
+     * @param int|null $limit
      * @return array
      */
-    public function getCharacters() {
+    public function getCharacters(int $limit = null) {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'characters', 'id' => $this->id]);
+        $cacheKey = self::cacheKey(['name' => 'characters', 'id' => $this->id, 'limit' => $limit]);
 
         // Retrieve or save cached result
-        $actorsInfo = Cache::remember($cacheKey, self::CACHE_KEY_CHARACTERS_SECONDS, function () {
-            return $this->characters()->get();
+        $actorsInfo = Cache::remember($cacheKey, self::CACHE_KEY_CHARACTERS_SECONDS, function () use ($limit) {
+            return $this->characters()->limit($limit)->get();
         });
 
         return $actorsInfo;
@@ -204,15 +205,16 @@ class Anime extends KModel
     /**
      * Retrieves the actor-characters for an Anime item in an array
      *
+     * @param int|null $limit
      * @return array
      */
-    public function getActorCharacters() {
+    public function getActorCharacters(int $limit = null) {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'actor_characters', 'id' => $this->id]);
+        $cacheKey = self::cacheKey(['name' => 'actor_characters', 'id' => $this->id, 'limit' => $limit]);
 
         // Retrieve or save cached result
-        $actorCharactersInfo = Cache::remember($cacheKey, self::CACHE_KEY_ACTOR_CHARACTERS_SECONDS, function () {
-            return $this->actor_characters()->get();
+        $actorCharactersInfo = Cache::remember($cacheKey, self::CACHE_KEY_ACTOR_CHARACTERS_SECONDS, function () use ($limit) {
+            return $this->actor_characters()->limit($limit)->get();
         });
 
         return $actorCharactersInfo;
@@ -230,15 +232,16 @@ class Anime extends KModel
     /**
      * Retrieves the actor-characters-anime for an Anime item in an array
      *
+     * @param int|null $limit
      * @return array
      */
-    public function getActorCharacterAnime() {
+    public function getActorCharacterAnime(int $limit = null) {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'actor_character_anime', 'id' => $this->id]);
+        $cacheKey = self::cacheKey(['name' => 'actor_character_anime', 'id' => $this->id, 'limit' => $limit]);
 
         // Retrieve or save cached result
-        $actorCharacterAnimeInfo = Cache::remember($cacheKey, self::CACHE_KEY_ACTOR_CHARACTERS_SECONDS, function () {
-            return $this->actor_character_anime()->get();
+        $actorCharacterAnimeInfo = Cache::remember($cacheKey, self::CACHE_KEY_ACTOR_CHARACTERS_SECONDS, function () use ($limit) {
+            return $this->actor_character_anime()->limit($limit)->get();
         });
 
         return $actorCharacterAnimeInfo;
@@ -309,56 +312,19 @@ class Anime extends KModel
     /**
      * Returns this anime's related anime
      *
+     * @param int|null $limit
      * @return mixed
      */
-    public function getAnimeRelations() {
+    public function getAnimeRelations(int $limit = null) {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime_relations', 'id' => $this->id]);
+        $cacheKey = self::cacheKey(['name' => 'anime_relations', 'id' => $this->id, 'limit' => $limit]);
 
         // Retrieve or save cached result
-        $relationsInfo = Cache::remember($cacheKey, self::CACHE_KEY_RELATIONS_SECONDS, function () {
-            return $this->anime_relations;
+        $relationsInfo = Cache::remember($cacheKey, self::CACHE_KEY_RELATIONS_SECONDS, function () use ($limit) {
+            return $this->anime_relations()->limit($limit)->get();
         });
 
         return $relationsInfo;
-    }
-
-    /**
-     * Retrieves the poster image URL for an Anime item
-     *
-     * @param bool $thumbnail
-     * @return null|string
-     */
-    public function getPoster($thumbnail = false) {
-        // Try to retrieve the poster from the cache
-        if($this->fetched_images) {
-            if (!$thumbnail)
-                return $this->cached_poster;
-            else
-                return $this->cached_poster_thumbnail;
-        }
-
-        // Images not fetched yet
-        return null;
-    }
-
-    /**
-     * Retrieves the background image URL for an Anime item
-     *
-     * @param bool $thumbnail
-     * @return string
-     */
-    public function getBackground($thumbnail = false) {
-        // Try to retrieve the background from the cache
-        if($this->fetched_images) {
-            if (!$thumbnail)
-                return $this->cached_background;
-            else
-                return $this->cached_background_thumbnail;
-        }
-
-        // Images not fetched yet
-        return null;
     }
 
     /**
