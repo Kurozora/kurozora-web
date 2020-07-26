@@ -32,10 +32,10 @@ class SessionTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the response contains the current sessions
-        $response->assertJson(['current_session' => []]);
+        $response->assertJson(['data' => ['current_session' => []]]);
 
         // Check whether the response contains the sessions
-        $this->assertCount(20, $response->json()['other_sessions']);
+        $this->assertCount(20, $response->json()['data']['other_sessions']);
     }
 
     /**
@@ -76,7 +76,7 @@ class SessionTest extends TestCase
 
         // Check whether the response contains the sessions
         $response->assertJson([
-            'session' => SessionResource::make($session)->toArray()
+            'data' => SessionResource::make($session)->toArray()
         ]);
     }
 

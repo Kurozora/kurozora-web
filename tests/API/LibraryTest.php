@@ -34,7 +34,7 @@ class LibraryTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Assert that there is one anime in the list
-        $this->assertCount(1, $response->json()['anime']);
+        $this->assertCount(1, $response->json()['data']);
     }
 
     /**
@@ -57,7 +57,7 @@ class LibraryTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Assert that there is one anime in the list
-        $this->assertCount(1, $response->json()['anime']);
+        $this->assertCount(1, $response->json()['data']);
     }
 
     /**
@@ -80,7 +80,7 @@ class LibraryTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Assert that there is one anime in the list
-        $this->assertCount(1, $response->json()['anime']);
+        $this->assertCount(1, $response->json()['data']);
     }
 
     /**
@@ -103,7 +103,7 @@ class LibraryTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Assert that there is one anime in the list
-        $this->assertCount(1, $response->json()['anime']);
+        $this->assertCount(1, $response->json()['data']);
     }
 
     /**
@@ -126,7 +126,7 @@ class LibraryTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Assert that there is one anime in the list
-        $this->assertCount(1, $response->json()['anime']);
+        $this->assertCount(1, $response->json()['data']);
     }
 
     /**
@@ -400,7 +400,7 @@ class LibraryTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the result count is greater than zero
-        $this->assertGreaterThan(0, count($response->json('results')));
+        $this->assertGreaterThan(0, count($response->json('data')));
     }
 
     /**

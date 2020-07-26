@@ -147,7 +147,7 @@ class FollowTest extends TestCase
 
         // Check that the response contains the follower
         $response->assertJson([
-            'followers' => [
+            'data' => [
                 UserResourceBasic::make($anotherUser)->toArray(),
             ]
         ]);
@@ -175,7 +175,7 @@ class FollowTest extends TestCase
 
         // Check that the response contains the user
         $response->assertJson([
-            'following' => [
+            'data' => [
                 UserResourceBasic::make($anotherUser)->toArray(),
             ]
         ]);
