@@ -29,10 +29,10 @@ class SIWAAccountRegistrationTest extends TestCase
         ])->assertSuccessfulAPIResponse();
 
         // Check whether the account was created
-        $this->assertEquals(User::count(), 1, 'The user account was not created.');
+        $this->assertEquals(1, User::count(), 'The user account was not created.');
 
         // Check whether a session was created
-        $this->assertEquals(Session::count(), 1, 'A session was not created.');
+        $this->assertEquals(1, Session::count(), 'A session was not created.');
 
         // Check whether the user can change their username
         /** @var User $user */

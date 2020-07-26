@@ -41,6 +41,6 @@ class ActorsTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the actor id in the response is the desired actor's id
-        $this->assertEquals($response->json()['data'][0]['id'], $this->actor->id);
+        $this->assertEquals($this->actor->id, $response->json()['data'][0]['id']);
     }
 }

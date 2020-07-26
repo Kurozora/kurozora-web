@@ -41,6 +41,6 @@ class CharactersTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the character id in the response is the desired character's id
-        $this->assertEquals($response->json()['data'][0]['id'], $this->character->id);
+        $this->assertEquals($this->character->id, $response->json()['data'][0]['id']);
     }
 }
