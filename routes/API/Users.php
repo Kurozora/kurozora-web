@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('/users')->group(function() {
+Route::prefix('/users')
+    ->name('users.')
+    ->group(function() {
     Route::post('/', [RegistrationController::class, 'register']);
 
     Route::post('/register-siwa', [SignInWithAppleController::class, 'register']);
@@ -56,7 +58,8 @@ Route::prefix('/users')->group(function() {
         ->middleware('kurozora.userauth');
 
     Route::get('/{user}/profile', [UserController::class, 'profile'])
-        ->middleware('kurozora.userauth:optional');
+        ->middleware('kurozora.userauth:optional')
+        ->name('profile');
 
     Route::post('/{user}/profile', [UserController::class, 'updateProfile'])
         ->middleware('kurozora.userauth')
