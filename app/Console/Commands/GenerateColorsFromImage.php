@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\AnimeImages;
-use ColorPalette;
 use Illuminate\Console\Command;
 
 class GenerateColorsFromImage extends Command
@@ -35,7 +34,7 @@ class GenerateColorsFromImage extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return int
      */
     public function handle()
     {
@@ -47,12 +46,12 @@ class GenerateColorsFromImage extends Command
         // Specified anime image does not exists
         if($animeImage == null) {
             $this->error('The anime image was not found.');
-            return false;
+            return 0;
         }
 
         if($animeImage->background_color && !$this->option('force')) {
             $this->error('The colors were already generated for this anime image.');
-            return false;
+            return 0;
         }
 
         // Start generating
@@ -65,6 +64,6 @@ class GenerateColorsFromImage extends Command
         $animeImage->save();
         $this->info('Finished generating colors.');
 
-        return true;
+        return 1;
     }
 }

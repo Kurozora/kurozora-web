@@ -137,7 +137,8 @@ class ForumThreadController extends Controller
         if($givenOrder == 'recent')
             $replies = $replies->orderBy('created_at', 'DESC');
         else if($givenOrder == 'top')
-            $replies = $replies->orderByLikesCount();
+            $replies = $replies->joinReactionCounterOfType('Like')
+                               ->orderBy('reaction_like_count', 'desc');
 
         // Paginate the replies
         $replies = $replies->paginate(ForumThread::REPLIES_PER_PAGE);
