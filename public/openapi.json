@@ -1176,7 +1176,7 @@
                                 "type":"object",
                                 "properties":{
                                     "notification":{
-                                        "type":"string",
+                                        "type":"[string]",
                                         "description":"\"[uuid]\" to update a single notification, \"[uuid],[uuid],[uuid]\" to update multiple notifications. \"all\" to update all of the user's notifications."
                                     },
                                     "read":{

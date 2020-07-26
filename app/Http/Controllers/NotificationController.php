@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\JSONResult;
 use App\Http\Requests\UpdateUserNotifications;
 use App\Http\Resources\NotificationResource;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Notifications\DatabaseNotification;
 
@@ -16,9 +17,9 @@ class NotificationController extends Controller
      * @param DatabaseNotification $notification
      * @return JsonResponse
      */
-    public function getNotification(DatabaseNotification $notification) {
+    public function details(DatabaseNotification $notification) {
         return JSONResult::success([
-            'notification' => NotificationResource::make($notification)
+            'data' => NotificationResource::make($notification)
         ]);
     }
 
@@ -27,7 +28,7 @@ class NotificationController extends Controller
      *
      * @param DatabaseNotification $notification
      * @return JsonResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete(DatabaseNotification $notification) {
         // Delete the notification
