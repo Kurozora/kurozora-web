@@ -59,9 +59,11 @@ class Notification extends Resource
 
         return [
             Text::make('UUID', 'id')
+                ->required()
                 ->hideFromIndex(),
 
             Text::make('Type')
+                ->required()
                 ->sortable(),
 
             Text::make('Body', function() use ($notification) { return NotificationResource::getNotificationString($notification); })
