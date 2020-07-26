@@ -21,9 +21,11 @@ class LoginResponse
     public static function make(User $user, Session $session)
     {
         return JSONResult::success([
-            'kuro_auth_token'           => KuroAuthToken::generate($user->id, $session->secret),
-            'user'                      => UserResourceSmall::make($user)->includePrivateDetails(),
-            'session'                   => SessionResource::make($session)
+            'data' => [
+                'kuro_auth_token'   => KuroAuthToken::generate($user->id, $session->secret),
+                'user'              => UserResourceSmall::make($user)->includePrivateDetails(),
+                'session'           => SessionResource::make($session)
+            ]
         ]);
     }
 }
