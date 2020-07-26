@@ -6,17 +6,12 @@ use App\Helpers\JSONResult;
 use App\Http\Requests\CreateSessionRequest;
 use App\Http\Requests\UpdateSessionRequest;
 use App\Http\Resources\SessionResource;
-use App\Http\Resources\UserResourceSmall;
 use App\Http\Responses\LoginResponse;
-use App\Jobs\FetchSessionLocation;
 use App\LoginAttempt;
-use App\Notifications\NewSession;
 use App\Session;
 use App\User;
+use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Str;
-use App\Helpers\KuroAuthToken;
-use Illuminate\Http\Request;
 
 class SessionController extends Controller
 {
@@ -99,12 +94,11 @@ class SessionController extends Controller
     /**
      * Deletes a session
      *
-     * @param Request $request
      * @param Session $session
      * @return JsonResponse
-     * @throws \Exception
+     * @throws Exception
      */
-    public function delete(Request $request, Session $session)
+    public function delete(Session $session)
     {
         // Delete the session
         $session->delete();
@@ -121,7 +115,7 @@ class SessionController extends Controller
     public function details(Session $session)
     {
         return JSONResult::success([
-            'session' => SessionResource::make($session)
+            'data' => SessionResource::make($session)
         ]);
     }
 }
