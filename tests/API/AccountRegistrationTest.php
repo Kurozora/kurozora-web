@@ -28,7 +28,7 @@ class AccountRegistrationTest extends TestCase
         ])->assertSuccessfulAPIResponse();
 
         // Double check that the account was created
-        $this->assertEquals(User::count(), 1);
+        $this->assertEquals(1, User::count());
     }
 
     /**
@@ -56,7 +56,7 @@ class AccountRegistrationTest extends TestCase
         $user = User::first();
 
         // Double check that the account was created
-        $this->assertEquals(User::count(), 1);
+        $this->assertEquals(1, User::count());
 
         // Assert that the avatar was uploaded properly
         $avatar = $user->getMedia('avatar');
@@ -91,7 +91,7 @@ class AccountRegistrationTest extends TestCase
         ])->assertUnsuccessfulAPIResponse();
 
         // Double check that the account was not created
-        $this->assertEquals(User::count(), 0);
+        $this->assertEquals(0, User::count());
     }
 
     /**
@@ -117,7 +117,7 @@ class AccountRegistrationTest extends TestCase
         ])->assertUnsuccessfulAPIResponse();
 
         // Double check that the account was not created
-        $this->assertEquals(User::count(), 0);
+        $this->assertEquals(0, User::count());
     }
 
     /**
@@ -143,7 +143,7 @@ class AccountRegistrationTest extends TestCase
         ])->assertUnsuccessfulAPIResponse();
 
         // Double check that the account was not created
-        $this->assertEquals(User::count(), 0);
+        $this->assertEquals(0, User::count());
     }
 
     /**
@@ -162,7 +162,7 @@ class AccountRegistrationTest extends TestCase
         ])->assertSuccessfulAPIResponse();
 
         // Double check that the account was created
-        $this->assertEquals(User::count(), 1);
+        $this->assertEquals(1, User::count());
 
         // Attempt to create the second account
         $this->json('POST', '/api/v1/users', [
@@ -172,7 +172,7 @@ class AccountRegistrationTest extends TestCase
         ])->assertUnsuccessfulAPIResponse();
 
         // Double check that there is just 1 account
-        $this->assertEquals(User::count(), 1);
+        $this->assertEquals(1, User::count());
     }
 
     /**
@@ -191,7 +191,7 @@ class AccountRegistrationTest extends TestCase
         ])->assertSuccessfulAPIResponse();
 
         // Double check that the account was created
-        $this->assertEquals(User::count(), 1);
+        $this->assertEquals(1, User::count());
 
         // Attempt to create the second account
         $this->json('POST', '/api/v1/users', [
@@ -201,7 +201,7 @@ class AccountRegistrationTest extends TestCase
         ])->assertUnsuccessfulAPIResponse();
 
         // Double check that there is just 1 account
-        $this->assertEquals(User::count(), 1);
+        $this->assertEquals(1, User::count());
     }
 
     /**
@@ -223,7 +223,7 @@ class AccountRegistrationTest extends TestCase
         ])->assertUnsuccessfulAPIResponse();
 
         // Double check that the account was not created
-        $this->assertEquals(User::count(), 0);
+        $this->assertEquals(0, User::count());
     }
 
     /**
@@ -242,6 +242,6 @@ class AccountRegistrationTest extends TestCase
         ])->assertUnsuccessfulAPIResponse();
 
         // Double check that the account was not created
-        $this->assertEquals(User::count(), 0);
+        $this->assertEquals(0, User::count());
     }
 }

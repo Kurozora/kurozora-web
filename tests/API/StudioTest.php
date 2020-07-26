@@ -51,6 +51,6 @@ class StudioTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the studio id in the response is the desired studio's id
-        $this->assertEquals($response->json()['data'][0]['id'], $this->studio->id);
+        $this->assertEquals($this->studio->id, $response->json()['data'][0]['id']);
     }
 }
