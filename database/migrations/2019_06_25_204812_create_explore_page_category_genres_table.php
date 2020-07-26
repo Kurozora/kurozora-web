@@ -17,13 +17,15 @@ class CreateExplorePageCategoryGenresTable extends Migration
     public function up()
     {
         Schema::create(ExplorePageCategoryGenre::TABLE_NAME, function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('explore_page_category_id');
+            $table->unsignedBigInteger('genre_id');
             $table->timestamps();
+        });
 
-            $table->integer('explore_page_category_id')->unsigned();
+        Schema::table(ExplorePageCategoryGenre::TABLE_NAME, function (Blueprint $table) {
+            // Set foreign key constraints
             $table->foreign('explore_page_category_id')->references('id')->on(ExplorePageCategory::TABLE_NAME)->onDelete('cascade');
-
-            $table->integer('genre_id')->unsigned();
             $table->foreign('genre_id')->references('id')->on(Genre::TABLE_NAME)->onDelete('cascade');
         });
     }

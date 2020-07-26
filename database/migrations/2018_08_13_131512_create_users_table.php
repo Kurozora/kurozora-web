@@ -15,10 +15,8 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create(User::TABLE_NAME, function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('siwa_id')->nullable();
-            $table->timestamps();
-
             $table->string('username', 50)->nullable();
             $table->string('email');
             $table->string('password')->nullable();
@@ -27,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->string('email_confirmation_id')->nullable();
             $table->timestamp('last_mal_import_at')->nullable();
             $table->boolean('username_change_available')->default(false);
+            $table->timestamps();
         });
     }
 

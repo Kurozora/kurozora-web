@@ -8,6 +8,8 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateExplorePageCategoryAnimesTable extends Migration
 {
+    const TABLE_NAME = 'explore_page_category_animes';
+
     /**
      * Run the migrations.
      *
@@ -15,14 +17,16 @@ class CreateExplorePageCategoryAnimesTable extends Migration
      */
     public function up()
     {
-        Schema::create('explore_page_category_animes', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
-
-            $table->integer('explore_page_category_id')->unsigned();
-            $table->foreign('explore_page_category_id')->references('id')->on(ExplorePageCategory::TABLE_NAME)->onDelete('cascade');
-
+        Schema::create(self::TABLE_NAME, function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('explore_page_category_id');
             $table->unsignedBigInteger('anime_id');
+            $table->timestamps();
+        });
+
+        Schema::table(self::TABLE_NAME, function (Blueprint $table) {
+            // Set foreign key constraints
+            $table->foreign('explore_page_category_id')->references('id')->on(ExplorePageCategory::TABLE_NAME)->onDelete('cascade');
             $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
         });
     }
@@ -34,6 +38,6 @@ class CreateExplorePageCategoryAnimesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('explore_page_category_animes');
+        Schema::dropIfExists(self::TABLE_NAME);
     }
 }

@@ -17,20 +17,21 @@ class CreateForumPostsTable extends Migration
     public function up()
     {
         Schema::create(ForumThread::TABLE_NAME, function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
-            $table->timestamp('edited_at')->nullable()->default(null);
-
-            $table->integer('section_id')->unsigned();
-            $table->foreign('section_id')->references('id')->on(ForumSection::TABLE_NAME)->onDelete('cascade');
-
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
-
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('section_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('ip');
             $table->string('title')->nullable()->default(null);
             $table->text('content');
             $table->boolean('locked')->default(false);
+            $table->timestamp('edited_at')->nullable()->default(null);
+            $table->timestamps();
+        });
+
+        Schema::table(ForumThread::TABLE_NAME, function (Blueprint $table) {
+            // Set foreign key constraints
+            $table->foreign('section_id')->references('id')->on(ForumSection::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
         });
     }
 

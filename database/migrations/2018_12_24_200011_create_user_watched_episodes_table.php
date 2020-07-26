@@ -18,12 +18,14 @@ class CreateUserWatchedEpisodesTable extends Migration
     {
         Schema::create(UserWatchedEpisode::TABLE_NAME, function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('episode_id');
             $table->timestamps();
+        });
 
-            $table->integer('user_id')->unsigned();
+        Schema::table(UserWatchedEpisode::TABLE_NAME, function (Blueprint $table) {
+            // Set foreign key constraints
             $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
-
-            $table->integer('episode_id')->unsigned();
             $table->foreign('episode_id')->references('id')->on(AnimeEpisode::TABLE_NAME)->onDelete('cascade');
         });
     }

@@ -15,13 +15,12 @@ class CreateBadgesTable extends Migration
     public function up()
     {
         Schema::create(Badge::TABLE_NAME, function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
-
+            $table->bigIncrements('id');
             $table->string('text')->nullable()->default(null);
-            $table->string('textColor', 10)->default('#FFFFFF');
+            $table->string('textColor', 10)->default('#000000');
             $table->string('backgroundColor', 10)->default('#FFFFFF');
             $table->string('description')->nullable()->default(null);
+            $table->timestamps();
         });
     }
 
