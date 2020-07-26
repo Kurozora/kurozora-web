@@ -9,12 +9,11 @@ use App\Http\Requests\AddToLibrary;
 use App\Http\Requests\DeleteFromLibrary;
 use App\Http\Requests\GetLibrary;
 use App\Http\Requests\MALImport;
-use App\Http\Resources\AnimeResource;
+use App\Http\Resources\AnimeResourceBasic;
 use App\Jobs\ProcessMALImport;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
@@ -40,7 +39,7 @@ class LibraryController extends Controller
             ->get();
 
         return JSONResult::success([
-            'anime' => AnimeResource::collection($anime)
+            'data' => AnimeResourceBasic::collection($anime)
         ]);
     }
 
@@ -98,6 +97,8 @@ class LibraryController extends Controller
      * @param MALImport $request
      * @param User $user
      * @return JsonResponse
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     function malImport(MALImport $request, User $user) {
         $data = $request->validated();
@@ -146,7 +147,7 @@ class LibraryController extends Controller
         // Show response
         return JSONResult::success([
             'max_search_results'    => Anime::MAX_SEARCH_RESULTS,
-            'results'               => AnimeResource::collection($library)
+            'data'                  => AnimeResourceBasic::collection($library)
         ]);
     }
 }
