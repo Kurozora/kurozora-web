@@ -20,10 +20,14 @@ class ActorResource extends JsonResource
 
         return [
             'id'            => $actor->id,
-            'first_name'    => $actor->first_name,
-            'last_name'     => $actor->last_name,
-            'occupation'    => $actor->occupation,
-            'image'         => $actor->image
+            'type'          => 'actors',
+            'href'          => route('actors.details', $actor, false),
+            'attributes'    => [
+                'first_name'    => $actor->first_name,
+                'last_name'     => $actor->last_name,
+                'occupation'    => $actor->occupation,
+                'image'         => $actor->image
+            ]
         ];
     }
 }

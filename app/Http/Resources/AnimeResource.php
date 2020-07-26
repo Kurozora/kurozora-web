@@ -2,14 +2,8 @@
 
 namespace App\Http\Resources;
 
-use App\Enums\AnimeSource;
-use App\Enums\AnimeStatus;
-use App\Enums\AnimeType;
-use App\Enums\UserLibraryStatus;
-use App\Enums\WatchRating;
-use App\User;
+use App\Anime;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
 
 class AnimeResource extends JsonResource
 {
@@ -21,77 +15,125 @@ class AnimeResource extends JsonResource
      */
     public function toArray($request)
     {
-        $resource = [
-            'id'                    => $this->id,
-            'title'                 => $this->title,
-            'type'                  => AnimeType::getDescription($this->type),
-            'source'                => AnimeSource::getDescription($this->source),
-            'anidb_id'              => $this->anidb_id,
-            'anilist_id'            => $this->anilist_id,
-            'kitsu_id'              => $this->kitsu_id,
-            'imdb_id'               => $this->imdb_id,
-            'mal_id'                => $this->mal_id,
-            'network'               => $this->network,
-            'studio'                => StudioResourceSmall::collection($this->studios),
-            'status'                => AnimeStatus::getDescription($this->status),
-            'episodes'              => $this->episode_count,
-            'seasons'               => $this->season_count,
-            'average_rating'        => $this->average_rating,
-            'rating_count'          => $this->rating_count,
-            'synopsis'              => $this->synopsis,
-            'runtime'               => $this->runtime,
-            'watch_rating'          => WatchRating::getDescription($this->watch_rating),
-            'tagline'               => $this->tagline,
-            'video_url'             => $this->video_url,
-            'poster'                => AnimeImageResource::make($this->poster()),
-            'background'            => AnimeImageResource::make($this->banner()),
-            'nsfw'                  => (bool) $this->nsfw,
-            'genres'                => GenreResource::collection($this->genres),
-            'first_aired'           => $this->first_aired->format('Y-m-d'),
-            'last_aired'            => $this->last_aired->format('Y-m-d'),
-	        'air_time'              => $this->air_time,
-	        'air_day'               => $this->air_day,
-            'copyright'             => $this->copyright
-        ];
+        /** @param Anime $anime */
+        $anime = $this->resource;
 
-        if(Auth::check())
-            $resource = array_merge($resource, $this->getUserSpecificDetails());
+        $resource = AnimeResourceBasic::make($anime)->toArray($request);
+
+        if($request->input('include')) {
+            $includes = explode(',', $request->input('include'));
+
+            $relationships = [];
+            foreach ($includes as $include) {
+                switch ($include) {
+                    case 'actors':
+                        $relationships = array_merge($relationships, $this->getActorsRelationship());
+                        break;
+                    case 'cast':
+                        $relationships = array_merge($relationships, $this->getActorCharacterAnimeRelationship());
+                        break;
+                    case 'characters':
+                        $relationships = array_merge($relationships, $this->getCharactersRelationship());
+                        break;
+                    case 'relations':
+                        $relationships = array_merge($relationships, $this->getRelationsRelationship());
+                        break;
+                    case 'seasons':
+                        $relationships = array_merge($relationships, $this->getSeasonsRelationship());
+                        break;
+                }
+            }
+
+            $resource = array_merge($resource, ['relationships' => $relationships]);
+        }
 
         return $resource;
     }
 
     /**
-     * Returns the user specific details for the resource.
+     * Returns the seasons relationship for the resource.
      *
      * @return array
      */
-    protected function getUserSpecificDetails() {
-        /** @var User $user */
-        $user = Auth::user();
+    protected function getSeasonsRelationship() {
+        /** @param Anime $anime */
+        $anime = $this->resource;
 
-        // Get the user rating for this Anime
-        $userRating = null;
-
-        $foundRating = $this->ratings()
-            ->where('user_id', $user->id)
-            ->first();
-
-        if($foundRating)
-            $userRating = $foundRating->rating;
-
-        // Get the current library status
-        $libraryEntry = $user->library()->where('anime_id', $this->id)->first();
-        $currentLibraryStatus = null;
-
-        if($libraryEntry)
-            $currentLibraryStatus = UserLibraryStatus::getDescription($libraryEntry->pivot->status);
-
-        // Return the array
         return [
-            'current_user' => [
-                'given_rating'      => (double) $userRating,
-                'library_status'    => $currentLibraryStatus,
-                'is_favorite'       => $user->favoriteAnime()->wherePivot('anime_id', $this->id)->exists()
+            'seasons' => [
+                'data' => AnimeSeasonResource::collection($anime->getSeasons(Anime::MAXIMUM_RELATIONSHIP_LIMIT)),
+                'href' => route('anime.seasons', $anime, false)
+            ]
+        ];
+    }
+
+    /**
+     * Returns the actors relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getActorsRelationship() {
+        /** @param Anime $anime */
+        $anime = $this->resource;
+
+        return [
+            'actors' => [
+                'data' => ActorResource::collection($anime->getActors(Anime::MAXIMUM_RELATIONSHIP_LIMIT)),
+                'href' => route('anime.actors', $anime, false)
+            ]
+        ];
+    }
+
+    /**
+     * Returns the characters relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getCharactersRelationship()
+    {
+        /** @param Anime $anime */
+        $anime = $this->resource;
+
+        return [
+            'characters' => [
+                'data' => CharacterResource::collection($anime->getCharacters(Anime::MAXIMUM_RELATIONSHIP_LIMIT)),
+                'href' => route('anime.characters', $anime, false)
+            ]
+        ];
+    }
+
+    /**
+     * Returns the relations relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getRelationsRelationship()
+    {
+        /** @param Anime $anime */
+        $anime = $this->resource;
+
+        return [
+            'relations' => [
+                'data' => AnimeRelationsResource::collection($anime->getAnimeRelations(Anime::MAXIMUM_RELATIONSHIP_LIMIT)),
+                'href' => route('anime.relations', $anime, false)
+            ]
+        ];
+    }
+
+    /**
+     * Returns the cast relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getActorCharacterAnimeRelationship()
+    {
+        /** @param Anime $anime */
+        $anime = $this->resource;
+
+        return [
+            'cast' => [
+                'data' => ActorCharacterAnimeResource::collection($anime->getActorCharacterAnime(Anime::MAXIMUM_RELATIONSHIP_LIMIT)),
+                'href' => route('anime.cast', $anime, false)
             ]
         ];
     }

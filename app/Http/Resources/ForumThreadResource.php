@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\ForumThread;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,16 +16,23 @@ class ForumThreadResource extends JsonResource
      */
     public function toArray($request)
     {
+        /** @var ForumThread $forumThread */
+        $forumThread = $this->resource;
+
         $resource = [
-            'id'                => $this->id,
-            'title'             => $this->title,
-            'content'           => $this->content,
-            'locked'            => (bool) $this->locked,
-            'poster_user_id'    => $this->user->id,
-            'poster_username'   => $this->user->username,
-            'creation_date'     => $this->created_at->format('Y-m-d H:i:s'),
-            'reply_count'       => $this->replies->count(),
-            'score'             => $this->likesDiffDislikesCount
+            'id'            => $forumThread->id,
+            'type'          => 'threads',
+            'href'          => route('forum-threads.details', $forumThread, false),
+            'attributes'    => [
+                'title'             => $forumThread->title,
+                'content'           => $forumThread->content,
+                'locked'            => (bool) $forumThread->locked,
+                'poster_user_id'    => $forumThread->user->id,
+                'poster_username'   => $forumThread->user->username,
+                'creation_date'     => $forumThread->created_at->format('Y-m-d H:i:s'),
+                'reply_count'       => $forumThread->replies->count(),
+                'score'             => $forumThread->likesDiffDislikesCount
+            ]
         ];
 
         if(Auth::check())

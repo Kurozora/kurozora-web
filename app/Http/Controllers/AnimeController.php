@@ -10,6 +10,7 @@ use App\Http\Resources\ActorCharacterAnimeResource;
 use App\Http\Resources\ActorResource;
 use App\Http\Resources\AnimeRelationsResource;
 use App\Http\Resources\AnimeResource;
+use App\Http\Resources\AnimeResourceBasic;
 use App\Http\Resources\AnimeSeasonResource;
 use App\Http\Resources\CharacterResource;
 use Illuminate\Http\JsonResponse;
@@ -31,7 +32,7 @@ class AnimeController extends Controller
 
         // Show the Anime details response
         return JSONResult::success([
-            'anime' => AnimeResource::make($anime)
+            'data' => AnimeResource::collection([$anime])
         ]);
     }
 
@@ -46,7 +47,7 @@ class AnimeController extends Controller
         $actors = $anime->getActors();
 
         return JSONResult::success([
-            'actors'    => ActorResource::collection($actors)
+            'data' => ActorResource::collection($actors)
         ]);
     }
 
@@ -61,7 +62,7 @@ class AnimeController extends Controller
         $actors = $anime->getCharacters();
 
         return JSONResult::success([
-            'characters'    => CharacterResource::collection($actors)
+            'data' => CharacterResource::collection($actors)
         ]);
     }
 
@@ -76,7 +77,7 @@ class AnimeController extends Controller
         $actorCharacterAnime = $anime->getActorCharacterAnime();
 
         return JSONResult::success([
-            'cast'    => ActorCharacterAnimeResource::collection($actorCharacterAnime)
+            'data' => ActorCharacterAnimeResource::collection($actorCharacterAnime)
         ]);
     }
 
@@ -91,7 +92,7 @@ class AnimeController extends Controller
         $relations = $anime->getAnimeRelations();
 
         return JSONResult::success([
-            'related' =>    AnimeRelationsResource::collection($relations)
+            'data' => AnimeRelationsResource::collection($relations)
         ]);
     }
 
@@ -106,7 +107,7 @@ class AnimeController extends Controller
         $seasons = $anime->getSeasons();
 
         return JSONResult::success([
-            'seasons' => AnimeSeasonResource::collection($seasons)
+            'data' => AnimeSeasonResource::collection($seasons)
         ]);
     }
 
@@ -193,7 +194,7 @@ class AnimeController extends Controller
 
         return JSONResult::success([
             'max_search_results'    => Anime::MAX_SEARCH_RESULTS,
-            'results'               => AnimeResource::collection($resultArr)
+            'data'                  => AnimeResourceBasic::collection($resultArr)
         ]);
     }
 }

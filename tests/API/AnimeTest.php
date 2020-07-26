@@ -25,7 +25,7 @@ class AnimeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the cast array is not empty
-        $this->assertTrue(count($response->json()['cast']) > 0);
+        $this->assertTrue(count($response->json()['data']) > 0);
     }
 
     /**
@@ -42,7 +42,7 @@ class AnimeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the related array is not empty
-        $this->assertTrue(count($response->json()['related'][0]['show']) > 0);
+        $this->assertTrue(count($response->json()['data'][0]) > 0);
     }
 
     /**
@@ -59,6 +59,6 @@ class AnimeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the current_user array is not empty
-        $this->assertTrue(count($response->json()['related'][0]['show']['current_user']) > 0);
+        $this->assertTrue(count($response->json()['data'][0]['show']['current_user']) > 0);
     }
 }

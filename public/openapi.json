@@ -1176,7 +1176,7 @@
                                 "type":"object",
                                 "properties":{
                                     "notification":{
-                                        "type":"string",
+                                        "type":"[string]",
                                         "description":"\"[uuid]\" to update a single notification, \"[uuid],[uuid],[uuid]\" to update multiple notifications. \"all\" to update all of the user's notifications."
                                     },
                                     "read":{
@@ -1414,6 +1414,15 @@
                         },
                         "required":true,
                         "description":"ID of the anime."
+                    },
+                    {
+                        "in":"query",
+                        "name":"include",
+                        "schema":{
+                            "type":"[string]"
+                        },
+                        "required":false,
+                        "description":"The relations to include separated by ','. (actors,characters,cast,relations,seasons)",
                     }
                 ],
                 "responses":{
@@ -2446,43 +2455,11 @@
         },
         "/studios":{
             "get":{
-                "security":[
-                    {
-
-                    },
-                    {
-                        "kurozoraBearer":[
-
-                        ]
-                    }
-                ],
                 "tags":[
                     "studios"
                 ],
-                "summary":"(Optional authentication) Studios list.",
+                "summary":"Studios list.",
                 "description":"This endpoint will retrieve the studios.",
-                "parameters":[
-                    {
-                        "in":"query",
-                        "name":"anime",
-                        "schema":{
-                            "type":"integer",
-                            "minimum":0,
-                            "maximum":1
-                        },
-                        "required":false,
-                        "description":"Whether anime data should be included. (0 = false, 1 = true)"
-                    },
-                    {
-                        "in":"query",
-                        "name":"limit",
-                        "schema":{
-                            "type":"integer"
-                        },
-                        "required":false,
-                        "description":"Number of anime data to include. Leave empty for all data."
-                    }
-                ],
                 "responses":{
                     "200":{
                         "$ref":"#/components/responses/JSONSuccess"
@@ -2522,23 +2499,50 @@
                     },
                     {
                         "in":"query",
-                        "name":"anime",
+                        "name":"include",
                         "schema":{
-                            "type":"integer",
-                            "minimum":0,
-                            "maximum":1
+                            "type":"[string]"
                         },
                         "required":false,
-                        "description":"Whether anime data should be included. (0 = false, 1 = true)"
+                        "description":"The relations to include separated by ','. (anime)"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "$ref":"#/components/responses/JSONSuccess"
+                    },
+                    "400":{
+                        "$ref":"#/components/responses/JSONError"
+                    }
+                }
+            }
+        },
+        "/studios/{studioID}/anime":{
+            "get":{
+                "security":[
+                    {
+
                     },
                     {
-                        "in":"query",
-                        "name":"limit",
+                        "kurozoraBearer":[
+
+                        ]
+                    }
+                ],
+                "tags":[
+                    "studios"
+                ],
+                "summary":"(Optional authentication) Get studio anime details.",
+                "description":"This endpoint will retrieve the anime details for a studio.",
+                "parameters":[
+                    {
+                        "in":"path",
+                        "name":"studioID",
                         "schema":{
                             "type":"integer"
                         },
-                        "required":false,
-                        "description":"Number of anime data to include. Leave empty for all data."
+                        "required":true,
+                        "description":"ID of the studio."
                     }
                 ],
                 "responses":{

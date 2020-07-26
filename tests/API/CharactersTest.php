@@ -24,7 +24,7 @@ class CharactersTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the characters array is not empty
-        $this->assertTrue(count($response->json()['characters']) > 0);
+        $this->assertTrue(count($response->json()['data']) > 0);
     }
 
     /**
@@ -41,6 +41,6 @@ class CharactersTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the character id in the response is the desired character's id
-        $this->assertEquals($response->json()['character']['id'], $this->character->id);
+        $this->assertEquals($response->json()['data'][0]['id'], $this->character->id);
     }
 }

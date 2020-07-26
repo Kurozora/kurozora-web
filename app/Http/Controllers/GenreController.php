@@ -21,7 +21,7 @@ class GenreController extends Controller
         });
 
         // Show genres in response
-        return JSONResult::success(['genres' => $allGenres]);
+        return JSONResult::success(['data' => $allGenres]);
     }
 
     /**
@@ -33,7 +33,7 @@ class GenreController extends Controller
     public function details(Genre $genre) {
         // Show genre details
         return JSONResult::success([
-            'genre' => GenreResource::make($genre)
+            'data' => GenreResource::collection([$genre])
         ]);
     }
 }

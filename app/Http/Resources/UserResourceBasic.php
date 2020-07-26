@@ -6,7 +6,7 @@ use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
-class UserResourceSmall extends JsonResource
+class UserResourceBasic extends JsonResource
 {
     /**
      * Whether or not to include private details in the resource.
@@ -28,14 +28,18 @@ class UserResourceSmall extends JsonResource
 
         $resource = [
             'id'                => $user->id,
-            'username'          => $user->username,
-            'activity_status'   => $user->getActivityStatus()->description,
-            'biography'         => $user->biography,
-            'avatar_url'        => $user->getFirstMediaFullUrl('avatar'),
-            'banner_url'        => $user->getFirstMediaFullUrl('banner'),
-            'follower_count'    => $user->getFollowerCount(),
-            'following_count'   => $user->getFollowingCount(),
-            'reputation_count'  => $user->getReputationCount()
+            'type'              => 'users',
+            'href'              => route('users.profile', $user, false),
+            'attributes'        => [
+                'username'          => $user->username,
+                'activity_status'   => $user->getActivityStatus()->description,
+                'biography'         => $user->biography,
+                'avatar_url'        => $user->getFirstMediaFullUrl('avatar'),
+                'banner_url'        => $user->getFirstMediaFullUrl('banner'),
+                'follower_count'    => $user->getFollowerCount(),
+                'following_count'   => $user->getFollowingCount(),
+                'reputation_count'  => $user->getReputationCount()
+            ]
         ];
 
         if(Auth::check())

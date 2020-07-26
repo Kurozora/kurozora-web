@@ -18,13 +18,41 @@ class StudioResource extends JsonResource
         /** @var Studio $studio */
         $studio = $this->resource;
 
-        $anime = (bool) $request->input('anime');
-        $limit = $request->input('limit');
-        $resource = StudioResourceSmall::make($this)->toArray($request);
+        $resource = StudioResourceBasic::make($studio)->toArray($request);
 
-        if ($anime)
-            $resource = array_merge($resource, ['anime' => AnimeResource::collection($studio->anime->take($limit))]);
+        if($request->input('include')) {
+            $includes = explode(',', $request->input('include'));
+
+            $relationships = [];
+            foreach ($includes as $include) {
+                switch ($include) {
+                    case 'anime':
+                        $relationships = array_merge($relationships, $this->getAnimeRelationship());
+                        break;
+                }
+            }
+
+            $resource = array_merge($resource, ['relationships' => $relationships]);
+        }
 
         return $resource;
+    }
+
+    /**
+     * Returns the anime relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getAnimeRelationship()
+    {
+        /** @param Studio $studio */
+        $studio = $this->resource;
+
+        return [
+            'anime' => [
+                'data' => AnimeResourceBasic::collection($studio->getAnime()),
+                'href' => route('studios.anime', $studio, false)
+            ]
+        ];
     }
 }

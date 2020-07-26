@@ -2,10 +2,9 @@
 
 namespace Tests\API;
 
-use App\Http\Resources\UserResourceSmall;
+use App\Http\Resources\UserResourceBasic;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Http\Request;
 use Tests\Traits\ProvidesTestUser;
 use Tests\TestCase;
 
@@ -148,8 +147,8 @@ class FollowTest extends TestCase
 
         // Check that the response contains the follower
         $response->assertJson([
-            'followers' => [
-                UserResourceSmall::make($anotherUser)->toArray(),
+            'data' => [
+                UserResourceBasic::make($anotherUser)->toArray(),
             ]
         ]);
     }
@@ -176,8 +175,8 @@ class FollowTest extends TestCase
 
         // Check that the response contains the user
         $response->assertJson([
-            'following' => [
-                UserResourceSmall::make($anotherUser)->toArray(),
+            'data' => [
+                UserResourceBasic::make($anotherUser)->toArray(),
             ]
         ]);
     }

@@ -10,31 +10,31 @@ use Illuminate\Http\JsonResponse;
 class CharacterController extends Controller
 {
     /**
-     * Generate an overview of genres.
+     * Generate an overview of characters.
      *
      * @return JsonResponse
      */
     public function overview() {
-        // Get all genres and format them
+        // Get all characters and format them
         $allCharacters = Character::get()->map(function($character) {
             return CharacterResource::make($character);
         });
 
-        // Show genres in response
-        return JSONResult::success(['characters' => $allCharacters]);
+        // Show characters in response
+        return JSONResult::success(['data' => $allCharacters]);
     }
 
     /**
-     * Shows genre details
+     * Shows character details.
      *
-     * @param \App\Character $character
+     * @param Character $character
      *
      * @return JsonResponse
      */
     public function details(Character $character) {
-        // Show genre details
+        // Show character details
         return JSONResult::success([
-            'character' => CharacterResource::make($character)
+            'data' => CharacterResource::collection([$character])
         ]);
     }
 }
