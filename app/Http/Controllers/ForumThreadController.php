@@ -16,14 +16,14 @@ use Illuminate\Support\Facades\Validator;
 class ForumThreadController extends Controller
 {
     /**
-     * Get thread information
+     * Get thread details
      *
      * @param ForumThread $thread
      * @return JsonResponse
      */
-    public function threadInfo(ForumThread $thread) {
+    public function details(ForumThread $thread) {
         return JSONResult::success([
-            'thread' => ForumThreadResource::make($thread)
+            'data' => ForumThreadResource::collection([$thread])
         ]);
     }
 
@@ -37,7 +37,7 @@ class ForumThreadController extends Controller
     public function vote(Request $request, ForumThread $thread) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'vote'      => 'bail|required|numeric|min:0|max:1'
+            'vote' => 'bail|required|numeric|min:0|max:1'
         ]);
 
         // Check validator
@@ -78,7 +78,7 @@ class ForumThreadController extends Controller
 
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'content'   => 'bail|required|min:1'
+            'content' => 'bail|required|min:1'
         ]);
 
         // Check validator
@@ -105,7 +105,9 @@ class ForumThreadController extends Controller
         ]);
 
         return JSONResult::success([
-            'reply_id' => $newReply->id
+            'data' => [
+                'reply_id' => $newReply->id
+            ]
         ]);
     }
 
@@ -119,7 +121,7 @@ class ForumThreadController extends Controller
     public function replies(Request $request, ForumThread $thread) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'order'         => 'bail|required|in:top,recent'
+            'order' => 'bail|required|in:top,recent'
         ]);
 
         // Fetch the variables
@@ -145,8 +147,8 @@ class ForumThreadController extends Controller
 
         // Show successful response
         return JSONResult::success([
-            'replies'   => ForumReplyResource::collection($replies),
-            'next'      => empty($nextPageURL) ? null : $nextPageURL
+            'data' => ForumReplyResource::collection($replies),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 
@@ -176,7 +178,7 @@ class ForumThreadController extends Controller
         // Show response
         return JSONResult::success([
             'max_search_results'    => ForumThread::MAX_SEARCH_RESULTS,
-            'results'               => ForumThreadResource::collection($threads)
+            'data'                  => ForumThreadResource::collection($threads)
         ]);
     }
 
@@ -207,7 +209,7 @@ class ForumThreadController extends Controller
         }
 
         return JSONResult::success([
-            'thread' => [
+            'data' => [
                 'locked' => (bool) $thread->locked
             ]
         ]);

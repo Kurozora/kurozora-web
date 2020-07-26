@@ -112,7 +112,7 @@ class FavoriteAnimeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the response contains the correct amount of anime
-        $this->assertCount(30, $response->json()['anime']);
+        $this->assertCount(30, $response->json()['data']);
     }
 
     /**

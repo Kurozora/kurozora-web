@@ -25,7 +25,7 @@ class ForumSectionController extends Controller
         $sections = ForumSection::all();
 
         return JSONResult::success([
-            'sections' => ForumSectionResource::collection($sections)
+            'data' => ForumSectionResource::collection($sections)
         ]);
     }
 
@@ -37,7 +37,7 @@ class ForumSectionController extends Controller
      */
     public function details(ForumSection $section) {
         return JSONResult::success([
-            'section' => ForumSectionResource::make($section)
+            'data' => ForumSectionResource::collection([$section])
         ]);
     }
 
@@ -51,7 +51,7 @@ class ForumSectionController extends Controller
     public function threads(Request $request, ForumSection $section) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'order'     => 'bail|required|in:top,recent'
+            'order' => 'bail|required|in:top,recent'
         ]);
 
         // Fetch the variables
@@ -76,8 +76,8 @@ class ForumSectionController extends Controller
 
         // Show threads in response
         return JSONResult::success([
-            'threads'   => ForumThreadResource::collection($threads),
-            'next'      => empty($nextPageURL) ? null : $nextPageURL
+            'data' => ForumThreadResource::collection($threads),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 

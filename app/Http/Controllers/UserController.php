@@ -7,8 +7,8 @@ use App\Http\Requests\ResetPassword;
 use App\Http\Requests\UpdateProfile;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\SessionResource;
-use App\Http\Resources\UserResourceLarge;
-use App\Http\Resources\UserResourceSmall;
+use App\Http\Resources\UserResource;
+use App\Http\Resources\UserResourceBasic;
 use App\Http\Responses\LoginResponse;
 use App\Jobs\SendNewPasswordMail;
 use App\Jobs\SendPasswordResetMail;
@@ -16,6 +16,7 @@ use App\PasswordReset;
 use App\Session;
 use App\User;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -32,7 +33,7 @@ class UserController extends Controller
     public function profile(User $user) {
         // Show profile response
         return JSONResult::success([
-            'user' => UserResourceLarge::make($user)
+            'data' => UserResource::collection([$user])
         ]);
     }
 
@@ -114,8 +115,10 @@ class UserController extends Controller
         ])->first();
 
         return JSONResult::success([
-            'current_session'   => SessionResource::make($curSession),
-            'other_sessions'    => SessionResource::collection($otherSessions)
+            'data' => [
+                'current_session'   => SessionResource::make($curSession),
+                'other_sessions'    => SessionResource::collection($otherSessions)
+            ]
         ]);
     }
 
@@ -154,8 +157,10 @@ class UserController extends Controller
      * Password reset page
      *
      * @param string $token
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \Throwable
+     *
+     * @throws Exception
      */
     public function resetPasswordPage($token) {
         // Try to find a reset with this reset token
@@ -206,7 +211,7 @@ class UserController extends Controller
      */
     public function getNotifications(User $user) {
         return JSONResult::success([
-            'notifications' => NotificationResource::collection($user->notifications)
+            'data' => NotificationResource::collection($user->notifications)
         ]);
     }
 
@@ -236,7 +241,7 @@ class UserController extends Controller
         // Show response
         return JSONResult::success([
             'max_search_results'    => User::MAX_SEARCH_RESULTS,
-            'results'               => UserResourceSmall::collection($users)
+            'data'                  => UserResourceBasic::collection($users)
         ]);
     }
 
@@ -304,8 +309,10 @@ class UserController extends Controller
         else $displayMessage .= 'No information was updated.';
 
         return JSONResult::success([
-            'message' => $displayMessage,
-            'user' => UserResourceLarge::make($user)
+            'data' => [
+                'message' => $displayMessage,
+                'user' => UserResource::collection([$user])
+            ]
         ]);
     }
 }

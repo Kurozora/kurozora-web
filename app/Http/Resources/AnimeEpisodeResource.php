@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\AnimeEpisode;
 use App\AnimeSeason;
 use App\Enums\WatchStatus;
 use Carbon\Carbon;
@@ -19,16 +20,24 @@ class AnimeEpisodeResource extends JsonResource
 	 */
     public function toArray($request)
     {
-        $firstAiredUnix = Carbon::parse($this->first_aired);
-        $formattedFirstAired = $firstAiredUnix->format('j M, Y');
+        /** @var AnimeEpisode $animeEpisode */
+        $animeEpisode = $this->resource;
+
+        $firstAired = $animeEpisode->first_aired;
+        if($firstAired)
+            $firstAired = $firstAired->format('j M, Y');
 
         $resource = [
-            'id'            => $this->id,
-            'number'        => $this->number,
-            'name'          => $this->name,
-            'first_aired'   => $formattedFirstAired,
-            'overview'      => $this->overview,
-            'verified'      => (bool) $this->verified
+            'id'            => $animeEpisode->id,
+            'type'          => 'episodes',
+            'href'          => route('seasons.episodes', $animeEpisode, false),
+            'attributes'    => [
+                'number'        => $animeEpisode->number,
+                'name'          => $animeEpisode->name,
+                'first_aired'   => $firstAired,
+                'overview'      => $animeEpisode->overview,
+                'verified'      => (bool) $animeEpisode->verified
+            ]
         ];
 
         if(Auth::check())
@@ -43,13 +52,16 @@ class AnimeEpisodeResource extends JsonResource
      * @return array
      */
     protected function getUserSpecificDetails() {
+        /** @var AnimeEpisode $animeEpisode */
+        $animeEpisode = $this->resource;
+
         $user = Auth::user();
-        $season = AnimeSeason::where('id', $this->season_id)->first();
+        $season = AnimeSeason::where('id', $animeEpisode->season_id)->first();
 	    $anime = $season->anime()->first();
 
         $watchStatus = WatchStatus::Disabled();
         if($user->isTracking($anime))
-	        $watchStatus = WatchStatus::init($user->watchedAnimeEpisodes()->where('episode_id', $this->id)->exists());
+	        $watchStatus = WatchStatus::init($user->watchedAnimeEpisodes()->where('episode_id', $animeEpisode->id)->exists());
 
         // Return the array
         return [

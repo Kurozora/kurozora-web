@@ -24,7 +24,7 @@ class ActorsTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the actors array is not empty
-        $this->assertTrue(count($response->json()['actors']) > 0);
+        $this->assertTrue(count($response->json()['data']) > 0);
     }
 
     /**
@@ -41,6 +41,6 @@ class ActorsTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the actor id in the response is the desired actor's id
-        $this->assertEquals($response->json()['actor']['id'], $this->actor->id);
+        $this->assertEquals($response->json()['data'][0]['id'], $this->actor->id);
     }
 }

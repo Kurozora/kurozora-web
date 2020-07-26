@@ -20,11 +20,15 @@ class AnimeSeasonResource extends JsonResource
 
         return [
             'id'            => $animeSeason->id,
-            'anime_id'      => $animeSeason->anime_id,
-            'title'         => $animeSeason->getTitle(),
-            'number'        => $animeSeason->number,
-            'first_aired'   => $animeSeason->getFirstAired(),
-            'episode_count' => $animeSeason->getEpisodeCount()
+            'type'          => 'seasons',
+            'href'          => route('seasons.details', $animeSeason, false),
+            'attributes'    => [
+                'anime_id'      => $animeSeason->anime_id,
+                'title'         => $animeSeason->getTitle(),
+                'number'        => $animeSeason->number,
+                'first_aired'   => $animeSeason->getFirstAired(),
+                'episode_count' => $animeSeason->getEpisodeCount()
+            ]
         ];
     }
 }

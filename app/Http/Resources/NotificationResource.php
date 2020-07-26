@@ -23,11 +23,15 @@ class NotificationResource extends JsonResource
 
         return [
             'id'            => $notification->id,
-            'type'          => $this->typeWithoutNamespace($notification),
-            'read'          => ($this->read_at != null),
-            'data'          => $this->data,
-            'string'        => self::getNotificationString($notification),
-            'creation_date' => (string) $this->created_at
+            'type'          => 'notifications',
+            'href'          => route('notifications.details', $notification, false),
+            'attributes'    => [
+                'type'          => $this->typeWithoutNamespace($notification),
+                'read'          => ($notification->read_at != null),
+                'data'          => $notification->data,
+                'string'        => self::getNotificationString($notification),
+                'creation_date' => (string) $notification->created_at
+            ]
         ];
     }
 

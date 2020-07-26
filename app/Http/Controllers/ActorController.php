@@ -22,11 +22,11 @@ class ActorController extends Controller
         });
 
         // Show actors in response
-        return JSONResult::success(['actors' => $allActors]);
+        return JSONResult::success(['data' => $allActors]);
     }
 
     /**
-     * Shows actor details
+     * Shows actor details.
      *
      * @param Actor $actor
      *
@@ -36,7 +36,7 @@ class ActorController extends Controller
     {
         // Show actor details
         return JSONResult::success([
-            'actor' => ActorResource::make($actor)
+            'data' => ActorResource::collection([$actor])
         ]);
     }
 }

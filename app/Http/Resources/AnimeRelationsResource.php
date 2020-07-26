@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\AnimeRelations;
+use App\Enums\AnimeRelationType;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AnimeRelationsResource extends JsonResource
@@ -19,8 +20,10 @@ class AnimeRelationsResource extends JsonResource
         $animeRelation = $this->resource;
 
         return [
-            'show' => AnimeResource::make($animeRelation->related_anime),
-            'type' => $animeRelation->type
+            'show'          => AnimeResourceBasic::make($animeRelation->related_anime),
+            'attributes'    => [
+                'type' => AnimeRelationType::getDescription($animeRelation->type)
+            ]
         ];
     }
 }

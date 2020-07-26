@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Badge;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class BadgeResource extends JsonResource
@@ -14,12 +15,18 @@ class BadgeResource extends JsonResource
      */
     public function toArray($request)
     {
+        /** @var Badge $badge */
+        $badge = $this->resource;
+
         return [
-            'id'                => $this->id,
-            'text'              => $this->text,
-            'textColor'         => $this->textColor,
-            'backgroundColor'   => $this->backgroundColor,
-            'description'       => $this->description
+            'id'            => $badge->id,
+            'type'          => 'badges',
+            'attributes'    => [
+                'text'              => $badge->text,
+                'text_color'        => $badge->textColor,
+                'background_color'  => $badge->backgroundColor,
+                'description'       => $badge->description
+            ]
         ];
     }
 }

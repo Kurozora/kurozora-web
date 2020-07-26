@@ -76,7 +76,7 @@ class Studio extends Resource
                 ->help('The URL to the official website of the studio.')
                 ->hideFromIndex(),
 
-            HasMany::make('Anime Studio', 'anime'),
+            HasMany::make('Anime Studio'),
         ];
     }
 
