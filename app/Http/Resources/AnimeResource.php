@@ -30,7 +30,7 @@ class AnimeResource extends JsonResource
                         $relationships = array_merge($relationships, $this->getActorsRelationship());
                         break;
                     case 'cast':
-                        $relationships = array_merge($relationships, $this->getActorCharacterAnime());
+                        $relationships = array_merge($relationships, $this->getActorCharacterAnimeRelationship());
                         break;
                     case 'characters':
                         $relationships = array_merge($relationships, $this->getCharactersRelationship());
@@ -125,7 +125,7 @@ class AnimeResource extends JsonResource
      *
      * @return array
      */
-    protected function getActorCharacterAnime()
+    protected function getActorCharacterAnimeRelationship()
     {
         /** @param Anime $anime */
         $anime = $this->resource;
