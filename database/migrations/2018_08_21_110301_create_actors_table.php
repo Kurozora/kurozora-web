@@ -16,12 +16,11 @@ class CreateActorsTable extends Migration
     {
         Schema::create(Actor::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamps();
-
             $table->string('first_name');
             $table->string('last_name');
             $table->string('occupation')->nullable();
             $table->string('image')->nullable();
+            $table->timestamps();
         });
     }
 

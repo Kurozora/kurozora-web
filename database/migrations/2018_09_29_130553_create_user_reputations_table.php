@@ -16,16 +16,17 @@ class CreateUserReputationsTable extends Migration
     public function up()
     {
         Schema::create(UserReputation::TABLE_NAME, function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
-
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
-
-            $table->integer('given_user_id')->unsigned();
-            $table->foreign('given_user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
-
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('given_user_id');
             $table->integer('amount')->default(0);
+            $table->timestamps();
+        });
+
+        Schema::table(UserReputation::TABLE_NAME, function (Blueprint $table) {
+            // Set foreign key constraints
+            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('given_user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
         });
     }
 

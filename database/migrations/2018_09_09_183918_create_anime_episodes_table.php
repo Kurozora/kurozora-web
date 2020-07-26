@@ -16,18 +16,20 @@ class CreateAnimeEpisodesTable extends Migration
     public function up()
     {
         Schema::create(AnimeEpisode::TABLE_NAME, function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
-
-            $table->integer('season_id')->unsigned();
-            $table->foreign('season_id')->references('id')->on(AnimeSeason::TABLE_NAME)->onDelete('cascade');
-
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('season_id');
             $table->boolean('verified')->default(false);
             $table->integer('number')->unsigned()->nullable();
             $table->string('name')->nullable();
             $table->dateTime('first_aired')->nullable();
             $table->string('image')->nullable();
             $table->text('overview')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::table(AnimeEpisode::TABLE_NAME, function (Blueprint $table) {
+            // Set foreign key constraints
+            $table->foreign('season_id')->references('id')->on(AnimeSeason::TABLE_NAME)->onDelete('cascade');
         });
     }
 

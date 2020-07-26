@@ -31,7 +31,7 @@ class CreateAnimeImagesTable extends Migration
         });
 
         Schema::table(AnimeImages::TABLE_NAME, function (Blueprint $table) {
-            // Set unique constraints
+            // Set unique index constraints
             $table->unique(['anime_id', 'type']);
 
             // Set foreign key constraints

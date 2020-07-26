@@ -15,11 +15,9 @@ class CreateForumSectionsTable extends Migration
     public function up()
     {
         Schema::create(ForumSection::TABLE_NAME, function (Blueprint $table) {
-            $table->increments('id');
-
+            $table->bigIncrements('id');
             $table->string('name');
             $table->boolean('locked')->default(false);
-
             $table->timestamps();
         });
     }

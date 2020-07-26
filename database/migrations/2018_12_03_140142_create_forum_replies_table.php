@@ -18,17 +18,18 @@ class CreateForumRepliesTable extends Migration
     {
         Schema::create(ForumReply::TABLE_NAME, function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
-            $table->timestamp('edited_at')->nullable()->default(null);
-
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
-
-            $table->integer('thread_id')->unsigned();
-            $table->foreign('thread_id')->references('id')->on(ForumThread::TABLE_NAME)->onDelete('cascade');
-
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('thread_id');
             $table->string('ip');
             $table->text('content');
+            $table->timestamp('edited_at')->nullable()->default(null);
+            $table->timestamps();
+        });
+
+        Schema::table(ForumReply::TABLE_NAME, function (Blueprint $table) {
+            // Set foreign key constraints
+            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('thread_id')->references('id')->on(ForumThread::TABLE_NAME)->onDelete('cascade');
         });
     }
 
