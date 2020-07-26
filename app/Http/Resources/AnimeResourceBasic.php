@@ -47,7 +47,7 @@ class AnimeResourceBasic extends JsonResource
                 'imdb_id'               => $anime->imdb_id,
                 'mal_id'                => $anime->mal_id,
                 'network'               => $anime->network,
-                'studio'                => StudioResourceSmall::collection($anime->studios),
+                'studio'                => StudioResourceBasic::collection($anime->studios),
                 'status'                => AnimeStatus::getDescription($anime->status),
                 'episodes'              => $anime->episode_count,
                 'seasons'               => $anime->season_count,
