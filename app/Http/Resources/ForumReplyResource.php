@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\ForumReply;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,16 +16,23 @@ class ForumReplyResource extends JsonResource
      */
     public function toArray($request)
     {
+        /** @var ForumReply $reply */
+        $forumReply = $this->resource;
+
         $resource = [
-            'id'        => $this->id,
-            'posted_at' => $this->created_at->format('Y-m-d H:i:s'),
-            'poster' => [
-                'id'        => $this->user->id,
-                'username'  => $this->user->username,
-                'avatar'    => $this->user->getFirstMediaFullUrl('avatar')
-            ],
-            'score'     => $this->likesDiffDislikesCount,
-            'content'   => $this->content
+            'id'            => $forumReply->id,
+            'type'          => 'replies',
+            'href'          => route('forum-threads.replies', $forumReply, false),
+            'attributes'    => [
+                'posted_at' => $forumReply->created_at->format('Y-m-d H:i:s'),
+                'poster' => [
+                    'id'        => $forumReply->user->id,
+                    'username'  => $forumReply->user->username,
+                    'avatar'    => $forumReply->user->getFirstMediaFullUrl('avatar')
+                ],
+                'score'     => $forumReply->likesDiffDislikesCount,
+                'content'   => $forumReply->content
+            ]
         ];
 
         if(Auth::check())
