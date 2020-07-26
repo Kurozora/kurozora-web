@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\Anime;
 use App\AnimeRating;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 
 class CalculateAnimeRatings extends Command
 {
@@ -36,7 +35,7 @@ class CalculateAnimeRatings extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return int
      */
     public function handle()
     {
@@ -67,5 +66,7 @@ class CalculateAnimeRatings extends Command
             // This Anime does not have enough ratings
             else $this->error('Anime ' . $anime->id . ' does not have enough ratings. (' . $totalRatingCount . '/' . Anime::MINIMUM_RATINGS_REQUIRED . ')');
         }
+
+        return 1;
     }
 }

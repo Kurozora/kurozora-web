@@ -38,9 +38,7 @@ return [
             'team_id' => env('APN_TEAM_ID'),
             'app_bundle_id' => env('APN_BUNDLE_ID'),
             'private_key_content' => env('APN_PRIVATE_KEY_CONTENT'),
-            'environment' => env('APP_ENV', 'local') == 'local' ?
-                ApnChannel::SANDBOX : ApnChannel::PRODUCTION
-            ,
+            'production' => env('APP_ENV', 'local') != 'local',
         ],
 
         'redis' => [

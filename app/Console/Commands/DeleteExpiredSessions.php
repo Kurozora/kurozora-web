@@ -35,12 +35,14 @@ class DeleteExpiredSessions extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return int
      */
     public function handle()
     {
         Session::where('expires_at', '<', Carbon::now())->delete();
 
         $this->info('Deleted all expired sessions.');
+
+        return 1;
     }
 }

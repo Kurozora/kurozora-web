@@ -5,7 +5,7 @@ use App\Enums\AnimeType;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
 
-class AnimesTableDummySeeder extends Seeder
+class AnimeDummySeeder extends Seeder
 {
     // URL to retrieve Anime from
     const ANIME_JSON_FILE = 'https://raw.githubusercontent.com/Kurozora/anime/master/anime.json';
@@ -81,7 +81,7 @@ class AnimesTableDummySeeder extends Seeder
      * @return false|string
      */
     static function downloadJSON() {
-        $pathToAnimeJSON = AnimesTableDummySeeder::ANIME_JSON_PATH;
+        $pathToAnimeJSON = AnimeDummySeeder::ANIME_JSON_PATH;
 
         // Delete file if it exists
         if (Storage::exists($pathToAnimeJSON))
