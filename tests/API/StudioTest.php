@@ -34,7 +34,7 @@ class StudioTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the studios array is not empty
-        $this->assertTrue(count($response->json()['studios']) > 0);
+        $this->assertTrue(count($response->json()['data']) > 0);
     }
 
     /**
@@ -51,6 +51,6 @@ class StudioTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the studio id in the response is the desired studio's id
-        $this->assertEquals($response->json()['studio']['id'], $this->studio->id);
+        $this->assertEquals($response->json()['data'][0]['id'], $this->studio->id);
     }
 }

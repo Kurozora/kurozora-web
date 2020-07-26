@@ -38,7 +38,7 @@ class NotificationTest extends TestCase
             $notificationArray[] = NotificationResource::make($notification)->toArray();
 
         $response->assertJson([
-            'notifications' => $notificationArray
+            'data' => $notificationArray
         ]);
     }
 
@@ -82,7 +82,7 @@ class NotificationTest extends TestCase
 
         // Check whether the response shows the notification
         $response->assertJson([
-            'notification' => NotificationResource::make($notification)->toArray()
+            'data' => NotificationResource::make($notification)->toArray()
         ]);
     }
 
