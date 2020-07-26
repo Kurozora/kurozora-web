@@ -16,6 +16,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create(User::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('love_reacter_id')->nullable();
             $table->string('siwa_id')->nullable();
             $table->string('username', 50)->nullable();
             $table->string('email');
@@ -26,6 +27,11 @@ class CreateUsersTable extends Migration
             $table->timestamp('last_mal_import_at')->nullable();
             $table->boolean('username_change_available')->default(false);
             $table->timestamps();
+        });
+
+        Schema::table(User::TABLE_NAME, function (Blueprint $table) {
+            // Set foreign key constraints
+            $table->foreign('love_reacter_id')->references('id')->on('love_reacters');
         });
     }
 

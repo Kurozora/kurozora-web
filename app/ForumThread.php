@@ -4,12 +4,13 @@ namespace App;
 
 use App\Traits\KuroSearchTrait;
 use Carbon\Carbon;
-use Cog\Contracts\Love\Likeable\Models\Likeable as LikeableContract;
-use Cog\Laravel\Love\Likeable\Models\Traits\Likeable;
+use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
+use Cog\Laravel\Love\Reactable\Models\Traits\Reactable;
 
-class ForumThread extends KModel implements LikeableContract
+class ForumThread extends KModel implements ReactableContract
 {
-    use KuroSearchTrait, Likeable;
+    use KuroSearchTrait,
+        Reactable;
 
     /**
      * Searchable rules.
