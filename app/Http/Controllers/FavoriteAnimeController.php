@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\JSONResult;
 use App\Http\Requests\AddAnimeFavoriteRequest;
 use App\Http\Requests\GetAnimeFavoritesRequest;
-use App\Http\Resources\AnimeResource;
+use App\Http\Resources\AnimeResourceBasic;
 use App\User;
 
 class FavoriteAnimeController extends Controller
@@ -25,7 +25,11 @@ class FavoriteAnimeController extends Controller
         if($data['is_favorite'])
             $user->favoriteAnime()->attach($data['anime_id']);
 
-        return JSONResult::success(['is_favorite' => (bool) $data['is_favorite']]);
+        return JSONResult::success([
+            'data' => [
+                'is_favorite' => (bool) $data['is_favorite']
+            ]
+        ]);
     }
 
     /**
@@ -37,7 +41,7 @@ class FavoriteAnimeController extends Controller
      */
     function getFavorites(GetAnimeFavoritesRequest $request, User $user) {
         return JSONResult::success([
-            'anime' => AnimeResource::collection($user->favoriteAnime()->get())
+            'data' => AnimeResourceBasic::collection($user->favoriteAnime()->get())
         ]);
     }
 }
