@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use App\Enums\AnimeSource;
+use App\Enums\DayOfWeek;
 use App\Enums\WatchRating;
 use App\Nova\Actions\FetchAnimeActors;
 use App\Nova\Actions\FetchAnimeDetails;
@@ -188,21 +189,13 @@ class Anime extends Resource
                 ->hideFromIndex()
                 ->help('The date on which the show last aired. For example: 2016-03-08'),
 
-            Time::make('Air time', 'air_time')
+            Time::make('Air time')
 	            ->withTwelveHourTime()
 	            ->hideFromIndex()
 	            ->help('The exact time the show airs at. For example: 1:30 PM (13:30)'),
 
-            Select::make('Air day', 'air_day')
-	            ->options([
-                    0 => 'Sunday',
-	            	1 => 'Monday',
-		            2 => 'Tuesday',
-		            3 => 'Wednesday',
-		            4 => 'Thursday',
-		            5 => 'Friday',
-		            6 => 'Saturday'
-                ])
+            Select::make('Air day')
+	            ->options(DayOfWeek::toSelectArray())
 	            ->displayUsingLabels()
 	            ->hideFromIndex()
 	            ->help('The day of the week the show airs at. For example: Thursday'),
