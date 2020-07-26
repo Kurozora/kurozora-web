@@ -3,7 +3,7 @@
     <div class="flex mb-4">
       <h3 class="mr-3 text-base text-80 font-bold">{{ title }}</h3>
 
-      <div v-if="helpText" class="absolute pin-r pin-b p-2 z-50">
+      <div v-if="helpText" class="absolute pin-r pin-b p-2 z-25">
         <tooltip trigger="click">
           <icon
             type="help"
@@ -95,9 +95,6 @@
 </template>
 
 <script>
-import numbro from 'numbro'
-import numbroLanguages from 'numbro/dist/languages.min'
-Object.values(numbroLanguages).forEach(l => numbro.registerLanguage(l))
 import { SingularOrPlural } from 'laravel-nova'
 
 export default {
@@ -124,12 +121,6 @@ export default {
     zeroResult: {
       default: false,
     },
-  },
-
-  mounted() {
-    if (Nova.config.locale) {
-      numbro.setLanguage(Nova.config.locale.replace('_', '-'))
-    }
   },
 
   methods: {
@@ -178,7 +169,9 @@ export default {
 
     formattedValue() {
       if (!this.isNullValue) {
-        return this.prefix + numbro(new String(this.value)).format(this.format)
+        return (
+          this.prefix + Nova.formatNumber(new String(this.value), this.format)
+        )
       }
 
       return ''

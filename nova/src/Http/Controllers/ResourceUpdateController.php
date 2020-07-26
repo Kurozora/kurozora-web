@@ -5,8 +5,8 @@ namespace Laravel\Nova\Http\Controllers;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Laravel\Nova\Actions\ActionEvent;
 use Laravel\Nova\Http\Requests\UpdateResourceRequest;
+use Laravel\Nova\Nova;
 
 class ResourceUpdateController extends Controller
 {
@@ -31,7 +31,7 @@ class ResourceUpdateController extends Controller
 
             [$model, $callbacks] = $resource::fillForUpdate($request, $model);
 
-            ActionEvent::forResourceUpdate($request->user(), $model)->save();
+            Nova::actionEvent()->forResourceUpdate($request->user(), $model)->save();
 
             $model->save();
 

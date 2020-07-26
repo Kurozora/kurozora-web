@@ -27,8 +27,8 @@
   --80: #7c858e;
   --90: #3c4b5f;
   --90-half: rgba(40, 54, 61, 0.5);
-  --warning-light: #fefcbf;
-  --warning-dark: #b7791f;
+  --warning-light: #fff382;
+  --warning-dark: #684f1d;
   --success-light: #c6f6d5;
   --success-dark: #38a169;
   --danger-light: #fed7d7;
@@ -126,6 +126,17 @@ input[type='search']::-webkit-search-cancel-button {
 .td-fit {
   width: 1%;
   white-space: nowrap;
+}
+
+/* Table Style Modifiers
+---------------------------------------------------------------------------- */
+.table.table-grid td,
+.table.table-grid th {
+  @apply border-r border-50;
+}
+
+.table.table-tight td {
+  @apply h-9;
 }
 
 /* Forms
@@ -278,8 +289,7 @@ textarea.form-input:read-only,
 }
 
 .form-file-input:focus + .form-file-btn {
-  outline: none;
-  box-shadow: 0 0 8px config('colors.primary');
+  @apply form-control-focus;
 }
 
 /* Buttons
@@ -293,7 +303,7 @@ textarea.form-input:read-only,
 }
 
 .btn-default {
-  @apply h-9 px-6 leading-36 rounded-lg shadow btn-text-shadow;
+  @apply h-9 px-6 leading-9 rounded-lg shadow btn-text-shadow;
 }
 
 .btn-disabled,
@@ -313,6 +323,10 @@ textarea.form-input:read-only,
 
 .btn-sm {
   @apply .h-btn-sm;
+}
+
+.btn-xs {
+  @apply h-6 px-3 text-xs rounded shadow btn-text-shadow;
 }
 
 .btn-lg {
@@ -471,6 +485,7 @@ textarea.form-input:read-only,
 /* MultiSelect Component
 ---------------------------------------------------------------------------- */
 .select-box {
+  @apply rounded;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath fill='%2335393C' fill-rule='nonzero' d='M8.293.293a1 1 0 0 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4A1 1 0 0 1 1.707.293L5 3.586 8.293.293z'/%3E%3C/svg%3E");
   background-size: 10px 6px;
   background-repeat: no-repeat;
@@ -478,6 +493,7 @@ textarea.form-input:read-only,
 }
 
 .select-box-sm {
+  @apply rounded-sm;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath fill='%2335393C' fill-rule='nonzero' d='M8.293.293a1 1 0 0 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4A1 1 0 0 1 1.707.293L5 3.586 8.293.293z'/%3E%3C/svg%3E");
   background-size: 8px 5px;
   background-repeat: no-repeat;
@@ -737,6 +753,10 @@ textarea.form-input:read-only,
   @apply bg-info nova;
 }
 
+.toasted.warning {
+  @apply bg-warning-light text-warning-dark py-2 rounded-lg shadow-lg;
+}
+
 .nova-action {
   @apply text-white .py-0;
 }
@@ -924,6 +944,10 @@ trix-editor.disabled {
 /* Tooltip
 ---------------------------------------------------------------------------- */
 .tooltip {
+  @apply bg-white px-3 py-2 rounded border border-50 shadow text-sm leading-normal;
+}
+
+.tooltip {
   display: block !important;
   z-index: 88888;
 }
@@ -950,6 +974,21 @@ trix-editor.disabled {
 ---------------------------------------------------------------------------- */
 .flatpickr-calendar {
   z-index: 99999;
+}
+
+/* CodeMirror Styles
+---------------------------------------------------------------------------- */
+.CodeMirror {
+  min-height: 50px;
+  font: 14px/1.5 Menlo, Consolas, Monaco, 'Andale Mono', monospace;
+  box-sizing: border-box;
+  margin: auto;
+  position: relative;
+  z-index: 0;
+}
+
+.CodeMirror-wrap {
+  padding: 0.5rem 0;
 }
 
 /* Tailwind Utilities

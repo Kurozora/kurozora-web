@@ -11,8 +11,11 @@
 <script>
 import { Minimum } from 'laravel-nova'
 import BasePartitionMetric from './Base/PartitionMetric'
+import MetricBehavior from './MetricBehavior'
 
 export default {
+  mixins: [MetricBehavior],
+
   components: {
     BasePartitionMetric,
   },
@@ -52,10 +55,6 @@ export default {
 
   created() {
     this.fetch()
-
-    if (this.card.refreshWhenActionRuns) {
-      Nova.$on('action-executed', () => this.fetch())
-    }
   },
 
   methods: {

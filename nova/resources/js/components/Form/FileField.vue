@@ -1,11 +1,17 @@
 <template>
-  <default-field :field="field" :errors="errors">
+  <default-field
+    :field="field"
+    :errors="errors"
+    :full-width-content="true"
+    :show-help-text="!isReadonly"
+  >
     <template slot="field">
-      <div v-if="hasValue" class="mb-6">
+      <div v-if="hasValue" :class="{ 'mb-6': !isReadonly }">
         <template v-if="shouldShowLoader">
           <ImageLoader
             :src="imageUrl"
             :maxWidth="maxWidth"
+            :rounded="field.rounded"
             @missing="value => (missing = value)"
           />
         </template>
@@ -25,15 +31,16 @@
           </card>
         </template>
 
-        <p v-if="imageUrl" class="mt-3 flex items-center text-sm">
+        <p
+          v-if="imageUrl && !isReadonly"
+          class="mt-3 flex items-center text-sm"
+        >
           <DeleteButton
             :dusk="field.attribute + '-delete-link'"
             v-if="shouldShowRemoveButton"
             @click="confirmRemoval"
           >
-            <span class="class ml-2 mt-1">
-              {{ __('Delete') }}
-            </span>
+            <span class="class ml-2 mt-1"> {{ __('Delete') }} </span>
           </DeleteButton>
         </p>
 
@@ -46,7 +53,15 @@
         </portal>
       </div>
 
-      <span class="form-file mr-4" :class="{ 'opacity-75': isReadonly }">
+      <p v-if="!hasValue && isReadonly" class="pt-2 text-sm text-90">
+        {{ __('This file field is read-only.') }}
+      </p>
+
+      <span
+        v-if="shouldShowField"
+        class="form-file mr-4"
+        :class="{ 'opacity-75': isReadonly }"
+      >
         <input
           ref="fileField"
           :dusk="field.attribute"
@@ -55,22 +70,25 @@
           :id="idAttr"
           name="name"
           @change="fileChange"
-          :disabled="isReadonly"
+          :disabled="isReadonly || uploading"
           :accept="field.acceptedTypes"
         />
         <label
           :for="labelFor"
           class="form-file-btn btn btn-default btn-primary select-none"
         >
-          {{ __('Choose File') }}
+          <span v-if="uploading"
+            >{{ __('Uploading') }} ({{ uploadProgress }}%)</span
+          >
+          <span v-else>{{ __('Choose File') }}</span>
         </label>
       </span>
 
-      <span class="text-gray-50 select-none"> {{ currentLabel }} </span>
+      <span v-if="shouldShowField" class="text-90 text-sm select-none">
+        {{ currentLabel }}
+      </span>
 
-      <p v-if="hasError" class="text-xs mt-2 text-danger">
-        {{ firstError }}
-      </p>
+      <p v-if="hasError" class="text-xs mt-2 text-danger">{{ firstError }}</p>
     </template>
   </default-field>
 </template>
@@ -79,6 +97,7 @@
 import ImageLoader from '@/components/ImageLoader'
 import DeleteButton from '@/components/DeleteButton'
 import { FormField, HandlesValidationErrors, Errors } from 'laravel-nova'
+import Vapor from 'laravel-vapor'
 
 export default {
   props: [
@@ -99,12 +118,39 @@ export default {
     missing: false,
     deleted: false,
     uploadErrors: new Errors(),
+    vaporFile: {
+      key: '',
+      uuid: '',
+      filename: '',
+      extension: '',
+    },
+    uploading: false,
+    uploadProgress: 0,
   }),
 
   mounted() {
     this.field.fill = formData => {
-      if (this.file) {
-        formData.append(this.field.attribute, this.file, this.fileName)
+      let attribute = this.field.attribute
+
+      if (this.file && !this.isVaporField) {
+        formData.append(attribute, this.file, this.fileName)
+      }
+
+      if (this.file && this.isVaporField) {
+        formData.append(attribute, this.fileName)
+        formData.append('vaporFile[' + attribute + '][key]', this.vaporFile.key)
+        formData.append(
+          'vaporFile[' + attribute + '][uuid]',
+          this.vaporFile.uuid
+        )
+        formData.append(
+          'vaporFile[' + attribute + '][filename]',
+          this.vaporFile.filename
+        )
+        formData.append(
+          'vaporFile[' + attribute + '][extension]',
+          this.vaporFile.extension
+        )
       }
     }
   },
@@ -117,7 +163,27 @@ export default {
       let path = event.target.value
       let fileName = path.match(/[^\\/]*$/)[0]
       this.fileName = fileName
+      let extension = fileName.split('.').pop()
       this.file = this.$refs.fileField.files[0]
+
+      if (this.isVaporField) {
+        this.uploading = true
+        this.$emit('file-upload-started')
+
+        Vapor.store(this.$refs.fileField.files[0], {
+          progress: progress => {
+            this.uploadProgress = Math.round(progress * 100)
+          },
+        }).then(response => {
+          this.vaporFile.key = response.key
+          this.vaporFile.uuid = response.uuid
+          this.vaporFile.filename = fileName
+          this.vaporFile.extension = extension
+          this.uploading = false
+          this.uploadProgress = 0
+          this.$emit('file-upload-finished')
+        })
+      }
     },
 
     /**
@@ -158,6 +224,7 @@ export default {
         this.closeRemoveModal()
         this.deleted = true
         this.$emit('file-deleted')
+        Nova.success(this.__('The file was deleted!'))
       } catch (error) {
         this.closeRemoveModal()
 
@@ -225,10 +292,17 @@ export default {
     },
 
     /**
+     * Determine whether the file field input should be shown.
+     */
+    shouldShowField() {
+      return Boolean(!this.isReadonly)
+    },
+
+    /**
      * Determine whether the field should show the remove button.
      */
     shouldShowRemoveButton() {
-      return Boolean(this.field.deletable)
+      return Boolean(this.field.deletable && !this.isReadonly)
     },
 
     /**
@@ -243,6 +317,13 @@ export default {
      */
     maxWidth() {
       return this.field.maxWidth || 320
+    },
+
+    /**
+     * Determing if the field is a Vapor field.
+     */
+    isVaporField() {
+      return this.field.component == 'vapor-file-field'
     },
   },
 }

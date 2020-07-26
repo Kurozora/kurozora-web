@@ -57,7 +57,7 @@
       </card>
       <!-- Attach Button -->
       <div class="flex items-center">
-        <cancel-button />
+        <cancel-button @click="$router.back()" />
 
         <progress-button
           class="mr-3"

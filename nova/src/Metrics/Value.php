@@ -4,6 +4,7 @@ namespace Laravel\Nova\Metrics;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Laravel\Nova\Nova;
 
 abstract class Value extends RangedMetric
 {
@@ -107,7 +108,7 @@ abstract class Value extends RangedMetric
 
         $column = $column ?? $query->getModel()->getQualifiedKeyName();
 
-        $timezone = $request->timezone;
+        $timezone = Nova::resolveUserTimezone($request) ?? $request->timezone;
 
         $previousValue = round(with(clone $query)->whereBetween(
             $dateColumn ?? $query->getModel()->getCreatedAtColumn(),
@@ -129,12 +130,8 @@ abstract class Value extends RangedMetric
      * @param  string  $timezone
      * @return array
      */
-    protected function previousRange($range, $timezone = null)
+    protected function previousRange($range, $timezone)
     {
-        if (! $timezone) {
-            $timezone = $this->getDefaultTimezone();
-        }
-
         if ($range == 'TODAY') {
             return [
                 now($timezone)->modify('yesterday')->setTime(0, 0),
@@ -173,12 +170,8 @@ abstract class Value extends RangedMetric
      *
      * @return array
      */
-    protected function previousQuarterRange($timezone = null)
+    protected function previousQuarterRange($timezone)
     {
-        if (! $timezone) {
-            $timezone = $this->getDefaultTimezone();
-        }
-
         return [
             Carbon::firstDayOfPreviousQuarter($timezone)->setTimezone($timezone)->setTime(0, 0),
             now($timezone)->subMonthsNoOverflow(3),
@@ -192,12 +185,8 @@ abstract class Value extends RangedMetric
      * @param  string  $timezone
      * @return array
      */
-    protected function currentRange($range, $timezone = null)
+    protected function currentRange($range, $timezone)
     {
-        if (! $timezone) {
-            $timezone = $this->getDefaultTimezone();
-        }
-
         if ($range == 'TODAY') {
             return [
                 now($timezone)->today(),
@@ -236,12 +225,8 @@ abstract class Value extends RangedMetric
      *
      * @return array
      */
-    protected function currentQuarterRange($timezone = null)
+    protected function currentQuarterRange($timezone)
     {
-        if (! $timezone) {
-            $timezone = $this->getDefaultTimezone();
-        }
-
         return [
             Carbon::firstDayOfQuarter($timezone),
             now($timezone),
@@ -270,15 +255,5 @@ abstract class Value extends RangedMetric
     public function result($value)
     {
         return new ValueResult($value);
-    }
-
-    /**
-     * Get default timezone.
-     *
-     * @return mixed
-     */
-    private function getDefaultTimezone()
-    {
-        return request()->timezone;
     }
 }

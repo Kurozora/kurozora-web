@@ -119,7 +119,6 @@ export default {
     value: {},
     data: {},
     trackBy: {},
-    searchBy: {},
     error: {
       type: Boolean,
       default: false,

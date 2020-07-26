@@ -1,12 +1,12 @@
 <?php
 
-namespace DummyNamespace;
+namespace {{ namespace }};
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Laravel\Nova\Filters\DateFilter;
 
-class DummyClass extends DateFilter
+class {{ class }} extends DateFilter
 {
     /**
      * Apply the filter to the given query.

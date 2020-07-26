@@ -63,7 +63,7 @@ trait QueriesResources
     public function orderings()
     {
         return ! empty($this->orderBy)
-                        ? [$this->orderBy => $this->orderByDirection ?? 'asc']
+                        ? [$this->orderBy => $this->orderByDirection]
                         : [];
     }
 

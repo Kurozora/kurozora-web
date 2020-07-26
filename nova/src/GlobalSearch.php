@@ -2,7 +2,6 @@
 
 namespace Laravel\Nova;
 
-use Illuminate\Support\Collection;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class GlobalSearch
@@ -17,7 +16,7 @@ class GlobalSearch
     /**
      * The resource class names that should be searched.
      *
-     * @var \Illuminate\Support\Collection
+     * @var array
      */
     public $resources;
 
@@ -25,10 +24,10 @@ class GlobalSearch
      * Create a new global search instance.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @param  \Illuminate\Support\Collection  $resources
+     * @param  array  $resources
      * @return void
      */
-    public function __construct(NovaRequest $request, Collection $resources)
+    public function __construct(NovaRequest $request, $resources)
     {
         $this->request = $request;
         $this->resources = $resources;

@@ -2,7 +2,7 @@
 
 namespace Laravel\Nova\Fields;
 
-use Illuminate\Container\Container;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Str;
 
 class ResourceRelationshipGuesser
@@ -17,7 +17,7 @@ class ResourceRelationshipGuesser
     {
         $singular = Str::studly(Str::singular($name));
 
-        if (class_exists($appResource = Container::getInstance()->getNamespace().'Nova\\'.$singular)) {
+        if (class_exists($appResource = Application::getInstance()->getNamespace().'Nova\\'.$singular)) {
             return $appResource;
         }
 

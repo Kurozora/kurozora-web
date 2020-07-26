@@ -3,8 +3,10 @@
 namespace Laravel\Nova\Tests\Controller;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Actions\ActionEvent;
+use Laravel\Nova\Nova;
 use Laravel\Nova\Tests\Fixtures\IdFilter;
 use Laravel\Nova\Tests\Fixtures\Role;
 use Laravel\Nova\Tests\Fixtures\RoleAssignment;
@@ -166,5 +168,36 @@ class ResourceDetachTest extends IntegrationTest
         $this->assertNull($actionEvent->model_id);
 
         Relation::morphMap([], false);
+    }
+
+    public function test_should_store_action_event_on_correct_connection_when_detaching()
+    {
+        $this->setupActionEventsOnSeparateConnection();
+
+        $user = factory(User::class)->create();
+        $role = factory(Role::class)->create();
+        $role2 = factory(Role::class)->create();
+        $role3 = factory(Role::class)->create();
+
+        $user->roles()->attach($role);
+        $user->roles()->attach($role2);
+        $user->roles()->attach($role3);
+
+        $response = $this->withExceptionHandling()
+            ->deleteJson('/nova-api/roles/detach?viaResource=users&viaResourceId=1&viaRelationship=roles', [
+                'resources' => [$role->id, $role2->id],
+            ]);
+
+        $response->assertStatus(200);
+
+        $this->assertCount(1, User::first()->roles);
+
+        $this->assertCount(0, DB::connection('sqlite')->table('action_events')->get());
+        $this->assertCount(2, DB::connection('sqlite-custom')->table('action_events')->get());
+
+        tap(Nova::actionEvent()->first(), function ($actionEvent) use ($role) {
+            $this->assertEquals('Detach', $actionEvent->name);
+            $this->assertEquals($role->id, $actionEvent->target_id);
+        });
     }
 }

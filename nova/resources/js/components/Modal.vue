@@ -49,6 +49,8 @@ export default {
     },
 
     close(e) {
+      if (!e.isTrusted) return
+
       let classArray = Array.isArray(this.classWhitelist)
         ? this.classWhitelist
         : [this.classWhitelist]

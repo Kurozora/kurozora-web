@@ -14,7 +14,7 @@ use Laravel\Nova\TrashedStatus;
 
 class MorphToMany extends Field implements DeletableContract, ListableField, RelatableField
 {
-    use Deletable, DetachesPivotModels, FormatsRelatableDisplayValues;
+    use Deletable, DetachesPivotModels, FormatsRelatableDisplayValues, Searchable;
 
     /**
      * The field's component.
@@ -71,13 +71,6 @@ class MorphToMany extends Field implements DeletableContract, ListableField, Rel
      * @var string
      */
     public $pivotName;
-
-    /**
-     * Indicates if this relationship is searchable.
-     *
-     * @var bool
-     */
-    public $searchable = false;
 
     /**
      * The displayable singular label of the relation.
@@ -280,19 +273,6 @@ class MorphToMany extends Field implements DeletableContract, ListableField, Rel
     }
 
     /**
-     * Specify if the relationship should be searchable.
-     *
-     * @param  bool  $value
-     * @return $this
-     */
-    public function searchable($value = true)
-    {
-        $this->searchable = $value;
-
-        return $this;
-    }
-
-    /**
      * Set the displayable singular label of the resource.
      *
      * @return $this
@@ -317,6 +297,7 @@ class MorphToMany extends Field implements DeletableContract, ListableField, Rel
             'perPage'=> $this->resourceClass::$perPageViaRelationship,
             'resourceName' => $this->resourceName,
             'searchable' => $this->searchable,
+            'withSubtitles' => $this->withSubtitles,
             'singularLabel' => $this->singularLabel ?? Str::singular($this->name),
         ], parent::jsonSerialize());
     }

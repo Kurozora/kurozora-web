@@ -52,8 +52,6 @@ class Relatable implements Rule
             return false;
         }
 
-//        dd($this->relationshipIsFull($model, $attribute, $value));
-
         if ($this->relationshipIsFull($model, $attribute, $value)) {
             return false;
         }

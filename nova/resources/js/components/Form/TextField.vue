@@ -8,7 +8,15 @@
         v-model="value"
         v-bind="extraAttributes"
         :disabled="isReadonly"
+        :list="`${field.attribute}-list`"
       />
+
+      <datalist
+        v-if="field.suggestions && field.suggestions.length > 0"
+        :id="`${field.attribute}-list`"
+      >
+        <option v-for="suggestion in field.suggestions" :value="suggestion" />
+      </datalist>
     </template>
   </default-field>
 </template>

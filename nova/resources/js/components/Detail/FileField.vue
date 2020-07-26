@@ -11,7 +11,7 @@
       </template>
 
       <template v-if="field.value && !imageUrl">
-        <span class="break-words"> {{ field.value }} </span>
+        <span class="break-words">{{ field.value }}</span>
       </template>
 
       <span v-if="!field.value && !imageUrl">&mdash;</span>
@@ -91,6 +91,10 @@ export default {
 
     maxWidth() {
       return this.field.maxWidth || 320
+    },
+
+    isVaporField() {
+      return this.field.component == 'vapor-file-field'
     },
   },
 }

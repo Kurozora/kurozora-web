@@ -20,7 +20,7 @@ class CreationControllerTest extends IntegrationTest
         $response = $this->withExceptionHandling()
             ->getJson('/nova-api/posts/creation-fields');
 
-        $response->assertJsonCount(2, 'fields');
+        $response->assertJsonCount(3, 'fields');
 
         $response = $this->withExceptionHandling()
             ->getJson('/nova-api/comments/creation-fields');
@@ -35,7 +35,7 @@ class CreationControllerTest extends IntegrationTest
         $response = $this->withExceptionHandling()
             ->getJson("/nova-api/posts/creation-fields?viaResource=users&viaResourceId={$user->id}&viaRelationship=user");
 
-        $response->assertJsonCount(2, 'fields');
+        $response->assertJsonCount(3, 'fields');
     }
 
     public function test_morph_related_fields_count()
@@ -78,5 +78,40 @@ class CreationControllerTest extends IntegrationTest
             ->getJson('/nova-api/panels/creation-fields')
             ->assertJsonCount(3, 'panels')
             ->assertJsonCount(4, 'fields');
+    }
+
+    public function test_creation_fields_for_custom_model_attributes_do_not_crash()
+    {
+        $this->withoutExceptionHandling()
+            ->getJson('/nova-api/wheels/creation-fields')
+            ->assertOk();
+    }
+
+    public function test_creation_fields_can_have_default_values()
+    {
+        $response = $this->withExceptionHandling()
+            ->getJson('/nova-api/posts/creation-fields?editing=true&editMode=create');
+
+        $response->assertJsonCount(3, 'fields');
+
+        $this->assertEquals('default-slug', $response->decodeResponseJson()['fields'][3]['value']);
+    }
+
+    public function test_creation_fields_can_use_model_default_attributes()
+    {
+        $response = $this->withExceptionHandling()
+            ->getJson('/nova-api/users/creation-fields?editing=true&editMode=create');
+
+        $this->assertEquals('Anonymous User', $response->original['fields']->where('attribute', 'name')->first()->value);
+    }
+}
+
+class Author extends User
+{
+    protected $table = 'users';
+
+    public function getPostAttribute()
+    {
+        return $this->belongsTo(Post::class);
     }
 }

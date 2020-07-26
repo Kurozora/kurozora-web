@@ -107,7 +107,7 @@ export default {
   }),
 
   watch: {
-    $route: function() {
+    $route: function () {
       this.closeSearch()
     },
   },

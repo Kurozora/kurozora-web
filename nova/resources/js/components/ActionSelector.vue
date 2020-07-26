@@ -52,7 +52,7 @@
         :class="{ 'btn-disabled': !selectedAction }"
         :title="__('Run Action')"
       >
-        <icon type="play" class="text-white" style="margin-left: 7px" />
+        <icon type="play" class="text-white" style="margin-left: 7px;" />
       </button>
     </div>
 

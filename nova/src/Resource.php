@@ -30,6 +30,20 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
         ResolvesCards;
 
     /**
+     * The visual style used for the table. Available options are 'tight' and 'default'.
+     *
+     * @var string
+     */
+    public static $tableStyle = 'default';
+
+    /**
+     * Whether to show borders for each column on the X-axis.
+     *
+     * @var bool
+     */
+    public static $showColumnBorders = false;
+
+    /**
      * The underlying model resource instance.
      *
      * @var \Illuminate\Database\Eloquent\Model
@@ -72,7 +86,7 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     public static $displayInNavigation = true;
 
     /**
-     * Indicates if the resoruce should be globally searchable.
+     * Indicates if the resource should be globally searchable.
      *
      * @var bool
      */
@@ -174,7 +188,7 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
      */
     public static function availableForNavigation(Request $request)
     {
-        return true;
+        return static::$displayInNavigation;
     }
 
     /**
@@ -244,7 +258,7 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
      */
     public static function label()
     {
-        return Str::plural(Str::title(Str::snake(class_basename(get_called_class()), ' ')));
+        return __(Str::plural(Str::title(Str::snake(class_basename(get_called_class()), ' '))));
     }
 
     /**
@@ -254,7 +268,7 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
      */
     public static function singularLabel()
     {
-        return Str::singular(static::label());
+        return __(Str::singular(Str::title(Str::snake(class_basename(get_called_class()), ' '))));
     }
 
     /**
@@ -329,20 +343,6 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     public static function trafficCop(Request $request)
     {
         return static::$trafficCop;
-    }
-
-    /**
-     * Filter and authorize the given values.
-     *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @param  array  $values
-     * @return \Illuminate\Support\Collection
-     */
-    protected function filterAndAuthorize(NovaRequest $request, $values)
-    {
-        return collect(
-            array_values($this->filter($values))
-        )->filter->authorize($request, $request->newResource())->values();
     }
 
     /**
@@ -479,5 +479,46 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     public static function redirectAfterUpdate(NovaRequest $request, $resource)
     {
         return '/resources/'.static::uriKey().'/'.$resource->getKey();
+    }
+
+    /**
+     * Return the location to redirect the user after deletion.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @return string
+     */
+    public static function redirectAfterDelete(NovaRequest $request)
+    {
+        return '/resources/'.static::uriKey();
+    }
+
+    /**
+     * Return a fresh resource instance.
+     *
+     * @return \Laravel\Nova\Resource
+     */
+    protected static function newResource()
+    {
+        return new static(static::newModel());
+    }
+
+    /**
+     * Determine whether to show borders for each column on the X-axis.
+     *
+     * @return string
+     */
+    public static function showColumnBorders()
+    {
+        return static::$showColumnBorders;
+    }
+
+    /**
+     * Get the visual style that should be used for the table.
+     *
+     * @return string
+     */
+    public static function tableStyle()
+    {
+        return static::$tableStyle;
     }
 }

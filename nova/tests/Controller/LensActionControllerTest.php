@@ -2,6 +2,7 @@
 
 namespace Laravel\Nova\Tests\Controller;
 
+use Laravel\Nova\Tests\Fixtures\LensFieldValidationAction;
 use Laravel\Nova\Tests\Fixtures\NoopAction;
 use Laravel\Nova\Tests\Fixtures\User;
 use Laravel\Nova\Tests\IntegrationTest;
@@ -21,8 +22,9 @@ class LensActionControllerTest extends IntegrationTest
             ->get('/nova-api/users/lens/user-lens/actions');
 
         $response->assertStatus(200);
-        $this->assertCount(1, $response->original['actions']);
+        $this->assertCount(2, $response->original['actions']);
         $this->assertInstanceOf(NoopAction::class, $response->original['actions'][0]);
+        $this->assertInstanceOf(LensFieldValidationAction::class, $response->original['actions'][1]);
     }
 
     public function test_lens_actions_can_be_applied()
@@ -66,5 +68,18 @@ class LensActionControllerTest extends IntegrationTest
                         ->post('/nova-api/users/lens/paginating-user-lens/action?action='.(new NoopAction)->uriKey(), [
                             'resources' => 'all',
                         ]);
+    }
+
+    public function test_lens_actions_validation_rules_are_applied()
+    {
+        $response = $this->withExceptionHandling()
+            ->postJson('/nova-api/users/lens/user-lens/action?action=lens-field-validation-action', [
+                'reason' => '',
+            ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors([
+            'reason',
+        ]);
     }
 }

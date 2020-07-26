@@ -1,6 +1,14 @@
 <template>
   <div v-if="panel.fields.length > 0">
-    <heading :level="1" class="mb-3">{{ panel.name }}</heading>
+    <heading :level="1" :class="panel.helpText ? 'mb-2' : 'mb-3'">{{
+      panel.name
+    }}</heading>
+
+    <p
+      v-if="panel.helpText"
+      class="text-80 text-sm font-semibold italic mb-3"
+      v-html="panel.helpText"
+    ></p>
 
     <card>
       <component
@@ -17,7 +25,10 @@
         :via-resource="viaResource"
         :via-resource-id="viaResourceId"
         :via-relationship="viaRelationship"
+        :shown-via-new-relation-modal="shownViaNewRelationModal"
         @file-deleted="$emit('update-last-retrieved-at-timestamp')"
+        @file-upload-started="$emit('file-upload-started')"
+        @file-upload-finished="$emit('file-upload-finished')"
       />
     </card>
   </div>
@@ -28,6 +39,11 @@ export default {
   name: 'FormPanel',
 
   props: {
+    shownViaNewRelationModal: {
+      type: Boolean,
+      default: false,
+    },
+
     panel: {
       type: Object,
       required: true,

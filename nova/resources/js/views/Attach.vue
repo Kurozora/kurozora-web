@@ -24,7 +24,6 @@
               :value="selectedResource"
               :data="availableResources"
               trackBy="value"
-              searchBy="display"
               class="mb-3"
             >
               <div
@@ -54,7 +53,23 @@
                   />
                 </div>
 
-                {{ option.display }}
+                <div>
+                  <div
+                    class="text-sm font-semibold leading-5 text-90"
+                    :class="{ 'text-white': selected }"
+                  >
+                    {{ option.display }}
+                  </div>
+
+                  <div
+                    v-if="field.withSubtitles"
+                    class="mt-1 text-xs font-semibold leading-5 text-80"
+                    :class="{ 'text-white': selected }"
+                  >
+                    <span v-if="option.subtitle">{{ option.subtitle }}</span>
+                    <span v-else>{{ __('No additional information...') }}</span>
+                  </div>
+                </div>
               </div>
             </search-input>
 
@@ -83,7 +98,7 @@
               <checkbox-with-label
                 :dusk="field.resourceName + '-with-trashed-checkbox'"
                 :checked="withTrashed"
-                @change="toggleWithTrashed"
+                @input="toggleWithTrashed"
               >
                 {{ __('With Trashed') }}
               </checkbox-with-label>
@@ -107,7 +122,7 @@
 
       <!-- Attach Button -->
       <div class="flex items-center">
-        <cancel-button />
+        <cancel-button @click="$router.back()" />
 
         <progress-button
           class="mr-3"

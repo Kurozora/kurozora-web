@@ -20,11 +20,12 @@
 <script>
 import { InteractsWithDates, Minimum } from 'laravel-nova'
 import BaseValueMetric from './Base/ValueMetric'
+import MetricBehavior from './MetricBehavior'
 
 export default {
   name: 'ValueMetric',
 
-  mixins: [InteractsWithDates],
+  mixins: [InteractsWithDates, MetricBehavior],
 
   components: {
     BaseValueMetric,
@@ -72,11 +73,8 @@ export default {
 
   created() {
     if (this.hasRanges) {
-      this.selectedRangeKey = this.card.ranges[0].value
-    }
-
-    if (this.card.refreshWhenActionRuns) {
-      Nova.$on('action-executed', () => this.fetch())
+      this.selectedRangeKey =
+        this.card.selectedRangeKey || this.card.ranges[0].value
     }
   },
 

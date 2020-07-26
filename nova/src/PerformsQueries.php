@@ -95,7 +95,7 @@ trait PerformsQueries
             static::newModel()->search($search), $withTrashed
         ), function ($scoutBuilder) use ($request) {
             static::scoutQuery($request, $scoutBuilder);
-        })->take(200)->get()->map->getKey();
+        })->take(static::$globalSearchResults)->get()->map->getKey();
 
         return static::applySoftDeleteConstraint(
             $query->whereIn(static::newModel()->getQualifiedKeyName(), $keys->all()), $withTrashed
@@ -140,6 +140,8 @@ trait PerformsQueries
      */
     protected static function applyOrderings($query, array $orderings)
     {
+        $orderings = array_filter($orderings);
+
         if (empty($orderings)) {
             return empty($query->getQuery()->orders)
                         ? $query->latest($query->getModel()->getQualifiedKeyName())

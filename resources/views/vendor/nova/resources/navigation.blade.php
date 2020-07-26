@@ -2,10 +2,13 @@
 <ul class="sidemenu">
     @foreach($navigation as $group => $resources)
       @if (count($groups) > 1)
-      <li class="mb-2">
-        <span class="ml-8 mb-4 text-xs text-white-50% uppercase tracking-wide">{{ $group }}</span>
+      <li class="sidebar-dropdown mb-2">
+        <input type="checkbox" />
+        <a href="#" data-toggle="dropdown">
 
-        <ul class="list-reset">
+            <span class="sidebar-label ml-8">{{ $group }}</span>
+        </a>
+        <ul class="dropdown-menu">
           @foreach($resources as $resource)
           <li>
             <router-link :to="{

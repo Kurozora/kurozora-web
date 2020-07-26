@@ -1,7 +1,10 @@
 <template>
   <default-field :field="field" :errors="errors" :full-width-content="true">
     <template slot="field">
-      <KeyValueTable>
+      <KeyValueTable
+        :edit-mode="!field.readonly"
+        :can-delete-row="field.canDeleteRow"
+      >
         <KeyValueHeader
           :key-label="field.keyLabel"
           :value-label="field.valueLabel"
@@ -16,11 +19,16 @@
             :key="item.id"
             :ref="item.id"
             :read-only="field.readonly"
+            :read-only-keys="field.readonlyKeys"
+            :can-delete-row="field.canDeleteRow"
           />
         </div>
       </KeyValueTable>
 
-      <div class="mr-11" v-if="!field.readonly">
+      <div
+        class="mr-11"
+        v-if="!field.readonly && !field.readonlyKeys && field.canAddRow"
+      >
         <button
           @click="addRowAndSelect"
           type="button"
@@ -41,7 +49,7 @@ import KeyValueHeader from '@/components/Form/KeyValueField/KeyValueHeader'
 import KeyValueTable from '@/components/Form/KeyValueField/KeyValueTable'
 
 function guid() {
-  var S4 = function() {
+  var S4 = function () {
     return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
   }
   return (

@@ -4,7 +4,7 @@
       @submit.prevent="handleConfirm"
       slot-scope="props"
       class="bg-white rounded-lg shadow-lg overflow-hidden"
-      style="width: 460px"
+      style="width: 460px;"
     >
       <slot :uppercaseMode="uppercaseMode" :mode="mode">
         <div class="p-8">
@@ -54,7 +54,7 @@ export default {
     mode: {
       type: String,
       default: 'delete',
-      validator: function(value) {
+      validator: function (value) {
         return ['force delete', 'delete', 'detach'].indexOf(value) !== -1
       },
     },

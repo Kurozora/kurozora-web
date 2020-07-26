@@ -3,6 +3,7 @@ import store from '@/store'
 import Toasted from 'vue-toasted'
 import router from '@/router'
 import axios from '@/util/axios'
+import numbro from '@/util/numbro'
 import PortalVue from 'portal-vue'
 import Loading from '@/components/Loading'
 import AsyncComputed from 'vue-async-computed'
@@ -68,7 +69,7 @@ export default class Nova {
       router,
       store,
       components: { Loading },
-      mounted: function() {
+      mounted: function () {
         this.$loading = this.$refs.loading
 
         _this.$on('error', message => {
@@ -99,6 +100,19 @@ export default class Nova {
     }
 
     return axios
+  }
+
+  /**
+   * Format a number using numbro.js for consistent number formatting.
+   */
+  formatNumber(number, format) {
+    const num = numbro(number)
+
+    if (format !== undefined) {
+      return num.format(format)
+    }
+
+    return num.format()
   }
 
   /**
@@ -152,6 +166,15 @@ export default class Nova {
    */
   success(message) {
     Vue.toasted.show(message, { type: 'success' })
+  }
+
+  /**
+   * Show a warning message to the user.
+   *
+   * @param {string} message
+   */
+  warning(message) {
+    Vue.toasted.show(message, { type: 'warning' })
   }
 
   /**

@@ -25,7 +25,7 @@ class PostCountTrend extends Trend
         return $this->count(
             $request, $query,
             $_SERVER['nova.postCountUnit'] ?? Trend::BY_MONTHS
-        );
+        )->showSumValue();
     }
 
     /**

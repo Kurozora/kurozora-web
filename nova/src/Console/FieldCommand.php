@@ -184,7 +184,7 @@ class FieldCommand extends Command
      */
     protected function executeCommand($command, $path)
     {
-        $process = (new Process($command, $path))->setTimeout(null);
+        $process = (Process::fromShellCommandline($command, $path))->setTimeout(null);
 
         if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
             $process->setTty(true);

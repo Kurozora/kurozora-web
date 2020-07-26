@@ -4,6 +4,7 @@ namespace Laravel\Nova\Actions;
 
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Laravel\Nova\Nova;
 
 trait CallsQueuedActions
 {
@@ -45,14 +46,14 @@ trait CallsQueuedActions
      */
     protected function callAction($callback)
     {
-        ActionEvent::markBatchAsRunning($this->batchId);
+        Nova::actionEvent()->markBatchAsRunning($this->batchId);
 
         $action = $this->setJobInstanceIfNecessary($this->action);
 
         $callback($action);
 
         if (! $this->job->hasFailed() && ! $this->job->isReleased()) {
-            ActionEvent::markBatchAsFinished($this->batchId);
+            Nova::actionEvent()->markBatchAsFinished($this->batchId);
         }
     }
 

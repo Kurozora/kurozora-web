@@ -1,11 +1,11 @@
 <?php
 
-namespace DummyNamespace;
+namespace {{ namespace }};
 
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\Partition;
 
-class DummyClass extends Partition
+class {{ class }} extends Partition
 {
     /**
      * Calculate the value of the metric.

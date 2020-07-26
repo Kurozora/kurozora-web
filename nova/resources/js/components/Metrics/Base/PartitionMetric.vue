@@ -45,7 +45,13 @@
     <div
       ref="chart"
       :class="chartClasses"
-      style="width: 90px; height: 90px; right: 20px; bottom: 30px; top: calc(50% + 15px);"
+      style="
+        width: 90px;
+        height: 90px;
+        right: 20px;
+        bottom: 30px;
+        top: calc(50% + 15px);
+      "
     />
   </loading-card>
 </template>
@@ -82,7 +88,7 @@ export default {
   data: () => ({ chartist: null }),
 
   watch: {
-    chartData: function(newData, oldData) {
+    chartData: function (newData, oldData) {
       this.renderChart()
     },
   },
@@ -143,7 +149,11 @@ export default {
             color: this.getItemColor(item, index),
             percentage:
               this.formattedTotal > 0
-                ? ((item.value * 100) / this.formattedTotal).toFixed(2)
+                ? Nova.formatNumber(
+                    new String(
+                      ((item.value * 100) / this.formattedTotal).toFixed(2)
+                    )
+                  )
                 : '0',
           }
         })
