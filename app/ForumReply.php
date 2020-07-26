@@ -3,12 +3,12 @@
 namespace App;
 
 use Carbon\Carbon;
-use Cog\Contracts\Love\Likeable\Models\Likeable as LikeableContract;
-use Cog\Laravel\Love\Likeable\Models\Traits\Likeable;
+use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
+use Cog\Laravel\Love\Reactable\Models\Traits\Reactable;
 
-class ForumReply extends KModel implements LikeableContract
+class ForumReply extends KModel implements ReactableContract
 {
-    use Likeable;
+    use Reactable;
 
     // Table name
     const TABLE_NAME = 'forum_replies';
