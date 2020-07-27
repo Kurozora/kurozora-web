@@ -37,8 +37,8 @@ class MiscController extends Controller
         $commonMarkConverter = new CommonMarkConverter();
 
         return JSONResult::success([
-            'privacy_policy' => [
-                'text' => $commonMarkConverter->convertToHtml($privacyPolicyText)
+            'data' => [
+                'privacy_policy' => $commonMarkConverter->convertToHtml($privacyPolicyText)
             ]
         ]);
     }
