@@ -9,14 +9,14 @@
         <meta name="robots" content="noindex">
 
         {{-- Swagger CSS --}}
-        <link rel="stylesheet" type="text/css" href="{{ asset('css/swagger-ui_3.20.3.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/swagger-ui.css') }}">
     </head>
     <body style="padding: 0; margin: 0;">
         <div id="swagger-ui"></div>
 
         {{-- Include Swagger JS files --}}
-        <script type="text/javascript" src="{{ asset('js/swagger-ui-standalone-preset_3.20.3.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('js/swagger-ui-bundle_3.20.3.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/swagger-ui-standalone-preset.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/swagger-ui-bundle.js') }}"></script>
 
         {{-- Initialize Swagger --}}
         <script>
@@ -39,7 +39,7 @@
         <style>
             .kuro-warn {
                 padding: 10px 5px;
-                background: darkred;
+                background: crimson;
                 color: #ffffff;
                 display: inline-block;
                 font-size: 20px;
