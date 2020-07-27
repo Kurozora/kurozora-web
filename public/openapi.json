@@ -2,7 +2,7 @@
     "openapi":"3.0.0",
     "info":{
         "description":"This is the documentation for Kurozora API.",
-        "version":"1",
+        "version":"1.0.0",
         "title":"Kurozora API",
         "termsOfService":"http://swagger.io/terms/",
         "contact":{
@@ -1422,7 +1422,7 @@
                             "type":"[string]"
                         },
                         "required":false,
-                        "description":"The relations to include separated by ','. (actors,characters,cast,relations,seasons)",
+                        "description":"The relations to include separated by ','. (actors,characters,cast,relations,seasons)"
                     }
                 ],
                 "responses":{
