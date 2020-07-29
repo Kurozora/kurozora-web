@@ -4924,6 +4924,7 @@
                     "type": "themes",
                     "attributes": {
                       "name": "Watermelon",
+                      "screenshot": "http://kurozora-web.test/storage/1/Screenshot.jpeg",
                       "download_link": "/api/v1/themes/1/download"
                     }
                   },
@@ -4932,6 +4933,7 @@
                     "type": "themes",
                     "attributes": {
                       "name": "Blueberry",
+                      "screenshot": "http://kurozora-web.test/storage/2/Screenshot.jpeg",
                       "download_link": "/api/v1/themes/2/download"
                     }
                   }
