@@ -28,8 +28,8 @@ class ForumReplyResource extends JsonResource
             'href'          => route('forum-threads.replies', $forumReply, false),
             'attributes'    => [
                 'content'   => $forumReply->content,
-                'posted_at' => $forumReply->created_at->format('Y-m-d H:i:s'),
                 'score'     => $forumReply->viaLoveReactant()->getReactionTotal()->getCount(),
+                'created_at' => $forumReply->created_at,
             ]
         ];
 

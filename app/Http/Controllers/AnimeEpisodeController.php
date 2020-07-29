@@ -40,7 +40,9 @@ class AnimeEpisodeController extends Controller
         }
 
         return JSONResult::success([
-            'watched' => $watched
+            'data' => [
+                'watched' => $watched
+            ]
         ]);
     }
 }

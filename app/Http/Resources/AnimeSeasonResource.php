@@ -26,8 +26,8 @@ class AnimeSeasonResource extends JsonResource
                 'anime_id'      => $animeSeason->anime_id,
                 'title'         => $animeSeason->getTitle(),
                 'number'        => $animeSeason->number,
+                'episode_count' => $animeSeason->getEpisodeCount(),
                 'first_aired'   => $animeSeason->getFirstAired(),
-                'episode_count' => $animeSeason->getEpisodeCount()
             ]
         ];
     }
