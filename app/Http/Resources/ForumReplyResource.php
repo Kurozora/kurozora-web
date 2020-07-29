@@ -11,8 +11,11 @@ class ForumReplyResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
+     *
+     * @throws \BenSampo\Enum\Exceptions\InvalidEnumKeyException
      */
     public function toArray($request)
     {
@@ -24,16 +27,15 @@ class ForumReplyResource extends JsonResource
             'type'          => 'replies',
             'href'          => route('forum-threads.replies', $forumReply, false),
             'attributes'    => [
+                'content'   => $forumReply->content,
                 'posted_at' => $forumReply->created_at->format('Y-m-d H:i:s'),
-                'poster' => [
-                    'id'        => $forumReply->user->id,
-                    'username'  => $forumReply->user->username,
-                    'avatar'    => $forumReply->user->getFirstMediaFullUrl('avatar')
-                ],
-                'score'     => $forumReply->likesDiffDislikesCount,
-                'content'   => $forumReply->content
+                'score'     => $forumReply->viaLoveReactant()->getReactionTotal()->getCount(),
             ]
         ];
+
+        $relationships = [];
+        $relationships = array_merge($relationships, $this->getPosterRelationship());
+        $resource = array_merge($resource, ['relationships' => $relationships]);
 
         if(Auth::check())
             $resource = array_merge($resource, $this->getUserSpecificDetails());
@@ -45,13 +47,32 @@ class ForumReplyResource extends JsonResource
      * Returns the user specific details for the resource.
      *
      * @return array
+     *
+     * @throws \BenSampo\Enum\Exceptions\InvalidEnumKeyException
      */
     protected function getUserSpecificDetails() {
         $user = Auth::user();
 
         return [
             'current_user' => [
-                'like_action' => $user->likeAction($this->resource)
+                'like_action' => $user->getCurrentVoteValueFor($this->resource)
+            ]
+        ];
+    }
+
+    /**
+     * Returns the poster relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getPosterRelationship()
+    {
+        /** @param ForumReply $forumReply */
+        $forumReply = $this->resource;
+
+        return [
+            'user' => [
+                'data' => UserResourceBasic::collection([$forumReply->user]),
             ]
         ];
     }
