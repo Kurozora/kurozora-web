@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\VoteType;
 use App\ForumReply;
 use App\Helpers\JSONResult;
 use Illuminate\Http\JsonResponse;
@@ -17,11 +18,13 @@ class ForumReplyController extends Controller
      * @param Request $request
      * @param ForumReply $reply
      * @return JsonResponse
+     *
+     * @throws \BenSampo\Enum\Exceptions\InvalidEnumKeyException
      */
     public function vote(Request $request, ForumReply $reply) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'vote'      => 'bail|required|numeric|min:0|max:1'
+            'vote'      => 'bail|required|numeric|in:-1,1'
         ]);
 
         // Check validator
@@ -32,17 +35,14 @@ class ForumReplyController extends Controller
         $user = Auth::user();
 
         // Get the vote
-        $votePositive = $request->input('vote');
-
-        // Perform the action
-        if($votePositive)
-            $user->toggleLike($reply);
-        else
-            $user->toggleDislike($reply);
+        $voteType = VoteType::fromValue((int) $request->input('vote'));
+        $voteAction = $user->toggleVote($reply, $voteType);
 
         // Show successful response
         return JSONResult::success([
-            'action' => $user->likeAction($reply)
+            'data' => [
+                'vote_action' => $voteAction
+            ]
         ]);
     }
 }

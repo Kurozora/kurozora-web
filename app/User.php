@@ -7,7 +7,7 @@ use App\Helpers\OptionsBag;
 use App\Jobs\FetchSessionLocation;
 use App\Notifications\NewSession;
 use App\Traits\KuroSearchTrait;
-use App\Traits\LikeActionTrait;
+use App\Traits\VoteActionTrait;
 use App\Traits\MediaLibraryExtensionTrait;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
 use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
@@ -29,7 +29,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
         Authorizable,
         KuroSearchTrait,
         Reacterable,
-        LikeActionTrait,
+        VoteActionTrait,
         InteractsWithMedia,
         MediaLibraryExtensionTrait,
         LogsActivity,

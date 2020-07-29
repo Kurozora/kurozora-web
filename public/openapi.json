@@ -1218,191 +1218,6 @@
         }
       }
     },
-    "/sessions": {
-      "post": {
-        "tags": [
-          "sessions"
-        ],
-        "operationId": "postSessions",
-        "summary": "Create a new session (login)",
-        "description": "This endpoint will create a new session for a user.",
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "description": "The user's email address"
-                  },
-                  "password": {
-                    "type": "string",
-                    "description": "The user's password"
-                  },
-                  "platform": {
-                    "type": "string",
-                    "description": "The platform that was used to create the session",
-                    "example": "iOS"
-                  },
-                  "platform_version": {
-                    "type": "string",
-                    "description": "The platform version that was used to create the session",
-                    "example": "13.4"
-                  },
-                  "device_vendor": {
-                    "type": "string",
-                    "description": "The device vendor that was used to create the session",
-                    "example": "Apple"
-                  },
-                  "device_model": {
-                    "type": "string",
-                    "description": "The device model that was used to create the session",
-                    "example": "iPhone 11 Pro Max"
-                  }
-                },
-                "required": [
-                  "email",
-                  "password",
-                  "platform",
-                  "platform_version",
-                  "device_vendor",
-                  "device_model"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/sessions/{sessionID}": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "sessions"
-        ],
-        "operationId": "getSessions",
-        "summary": "Gets the details of a session",
-        "description": "This endpoint will retrieve the details of a session.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "sessionID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the session to be retrieved."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/sessions/{sessionID}/update": {
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "sessions"
-        ],
-        "operationId": "postSessionsUpdate",
-        "summary": "Updates the information of a session",
-        "description": "This endpoint will update the information of a sessions.",
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "apn_device_token": {
-                    "type": "string",
-                    "description": "The new APN device token for the session."
-                  }
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "in": "path",
-            "name": "sessionID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the session to be updated."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/sessions/{sessionID}/delete": {
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "sessions"
-        ],
-        "operationId": "postSessionsDelete",
-        "summary": "Deletes a session",
-        "description": "This endpoint will delete a session.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "sessionID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the session to be deleted."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
     "/anime/{animeID}": {
       "get": {
         "security": [
@@ -2147,7 +1962,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/JSONSuccess"
+            "$ref": "#/components/responses/GetForumThreadsDetails"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2187,10 +2002,7 @@
                 "type": "object",
                 "properties": {
                   "vote": {
-                    "type": "integer",
-                    "description": "The vote to submit.\n- -1 = downvote\n- 0 = novote\n- 1 = upvote",
-                    "minimum": -1,
-                    "maximum": 1
+                    "$ref": "#/components/schemas/VoteType"
                   }
                 },
                 "required": [
@@ -2202,7 +2014,7 @@
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/JSONSuccess"
+            "$ref": "#/components/responses/PostForumThreadsVote"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2240,26 +2052,24 @@
             "in": "query",
             "name": "order",
             "schema": {
-              "type": "string",
-              "example": "top"
+              "$ref": "#/components/schemas/ForumSortType"
             },
-            "required": false,
+            "required": true,
             "description": "The method of ordering the results."
           },
           {
             "in": "query",
             "name": "page",
             "schema": {
-              "type": "string",
-              "example": "1"
+              "type": "integer"
             },
             "required": false,
-            "description": "The page to retrieve threads from. (starts at 1)"
+            "description": "The page to retrieve replies from."
           }
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/JSONSuccess"
+            "$ref": "#/components/responses/GetForumThreadsReplies"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2310,7 +2120,7 @@
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/JSONSuccess"
+            "$ref": "#/components/responses/PostForumThreadsReplies"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2347,7 +2157,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/JSONSuccess"
+            "$ref": "#/components/responses/GetForumThreadsSearch"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2402,7 +2212,7 @@
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/JSONSuccess"
+            "$ref": "#/components/responses/PostForumThreadsLockSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2442,10 +2252,7 @@
                 "type": "object",
                 "properties": {
                   "vote": {
-                    "type": "integer",
-                    "description": "The vote to submit.\n- 0 = downvote\n- 1 = upvote",
-                    "minimum": 0,
-                    "maximum": 1
+                    "$ref": "#/components/schemas/VoteType"
                   }
                 },
                 "required": [
@@ -2457,7 +2264,195 @@
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/JSONSuccess"
+            "$ref": "#/components/responses/PostForumRepliesVoteSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/sessions": {
+      "post": {
+        "tags": [
+          "sessions"
+        ],
+        "operationId": "postSessions",
+        "summary": "Create a new session (login)",
+        "description": "This endpoint will create a new session for a user.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "The user's email address"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "The user's password"
+                  },
+                  "platform": {
+                    "type": "string",
+                    "description": "The platform that was used to create the session",
+                    "example": "iOS"
+                  },
+                  "platform_version": {
+                    "type": "string",
+                    "description": "The platform version that was used to create the session",
+                    "example": "13.4"
+                  },
+                  "device_vendor": {
+                    "type": "string",
+                    "description": "The device vendor that was used to create the session",
+                    "example": "Apple"
+                  },
+                  "device_model": {
+                    "type": "string",
+                    "description": "The device model that was used to create the session",
+                    "example": "iPhone 11 Pro Max"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password",
+                  "platform",
+                  "platform_version",
+                  "device_vendor",
+                  "device_model"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PostSessionsSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionID}": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "sessions"
+        ],
+        "operationId": "getSessions",
+        "summary": "Gets the details of a session",
+        "description": "This endpoint will retrieve the details of a session.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sessionID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the session to be retrieved."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetSessionsSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionID}/update": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "sessions"
+        ],
+        "operationId": "postSessionsUpdate",
+        "summary": "Updates the information of a session",
+        "description": "This endpoint will update the information of a sessions.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "apn_device_token": {
+                    "type": "string",
+                    "description": "The new APN device token for the session."
+                  }
+                },
+                "required": [
+                  "apn_device_token"
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sessionID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the session to be updated."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PostSessionsUpdateSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/sessions/{sessionID}/delete": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "sessions"
+        ],
+        "operationId": "postSessionsDelete",
+        "summary": "Deletes a session",
+        "description": "This endpoint will delete a session.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sessionID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the session to be deleted."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PostSessionsDeleteSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2475,7 +2470,7 @@
         "description": "This endpoint will retrieve the studios.",
         "responses": {
           "200": {
-            "$ref": "#/components/responses/JSONSuccess"
+            "$ref": "#/components/responses/GetStudiosSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2525,7 +2520,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/JSONSuccess"
+            "$ref": "#/components/responses/GetStudiosDetailsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2562,7 +2557,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/JSONSuccess"
+            "$ref": "#/components/responses/GetStudiosAnimeSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2580,7 +2575,7 @@
         "description": "This endpoint will retrieve an overview of themes.",
         "responses": {
           "200": {
-            "$ref": "#/components/responses/ThemesSuccess"
+            "$ref": "#/components/responses/GetThemesSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2598,7 +2593,7 @@
         "description": "This endpoint will retrieve the latest privacy policy.",
         "responses": {
           "200": {
-            "$ref": "#/components/responses/PrivacyPolicySuccess"
+            "$ref": "#/components/responses/GetPrivacyPolicySuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2609,12 +2604,31 @@
   },
   "components": {
     "schemas": {
+      "ForumSortType": {
+        "type": "string",
+        "enum": [
+          "top",
+          "recent"
+        ],
+        "default": "top",
+        "description": "The set of available forum sort types.\n- top: sorted by the most liked resource at the top.\n- recent: sorted by the newly created resource at the top."
+      },
+      "VoteType": {
+        "type": "integer",
+        "enum": [
+          -1,
+          1
+        ],
+        "default": 1,
+        "description": "The vote type to submit. Submitting the same vote type twice will undo the vote.\n- -1 = dislike\n- 1 = like"
+      },
       "EpisodeWatchStatus": {
         "type": "integer",
         "enum": [
           -1,
           1
         ],
+        "default": 1,
         "description": "The set of available watch status types.\n- -1 = not watched\n- 1 = watched"
       },
       "KurozoraLibraryStatus": {
@@ -2626,6 +2640,7 @@
           "Completed",
           "OnHold"
         ],
+        "default": "Watching",
         "description": "The set of available library status types."
       },
       "MALImportBehavior": {
@@ -2682,14 +2697,790 @@
           }
         }
       },
-      "ThemesSuccess": {
-        "description": "Successful Themes JSON response",
+      "GetForumThreadsDetails": {
+        "description": "Successful GET Forum-Threads Details JSON response.",
         "content": {
           "application/json": {
             "schema": {
               "type": "object",
               "example": {
-                "themes": [
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "threads",
+                    "href": "/api/v1/forum-threads/1",
+                    "attributes": {
+                      "title": "Enim quia molestiae.",
+                      "content": "Fuga repellendus blanditiis quaerat provident et doloremque. Ad ullam nulla at optio ipsa ipsum.",
+                      "locked": false,
+                      "reply_count": 13,
+                      "score": 10,
+                      "creation_date": "2020-07-27 12:59:34"
+                    },
+                    "relationships": {
+                      "user": {
+                        "data": [
+                          {
+                            "id": 29,
+                            "type": "users",
+                            "href": "/api/v1/users/29/profile",
+                            "attributes": {
+                              "username": "reynold71",
+                              "activity_status": "Offline",
+                              "biography": "Et in dolor illo sit non. Veniam est et qui qui atque. Ut mollitia autem accusantium ea molestiae voluptatem a. Dicta in qui necessitatibus maiores.",
+                              "avatar_url": null,
+                              "banner_url": null,
+                              "follower_count": 67,
+                              "following_count": 67,
+                              "reputation_count": 59
+                            },
+                            "current_user": {
+                              "following": false
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "current_user": {
+                      "vote_action": 1
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "PostForumThreadsVote": {
+        "description": "Successful GET Forum-Threads Vote JSON response.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": {
+                  "vote_action": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetForumThreadsReplies": {
+        "description": "Successful GET Forum-Threads Replies JSON response.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 56,
+                    "type": "replies",
+                    "href": "/api/v1/forum-threads/56/replies",
+                    "attributes": {
+                      "content": "Ipsum aliquid quasi hic accusamus. Dolor incidunt repellendus voluptatum modi temporibus cum totam.",
+                      "posted_at": "2020-07-27 12:59:35",
+                      "score": 0
+                    },
+                    "relationships": {
+                      "user": {
+                        "data": [
+                          {
+                            "id": 45,
+                            "type": "users",
+                            "href": "/api/v1/users/45/profile",
+                            "attributes": {
+                              "username": "mattie47",
+                              "activity_status": "Offline",
+                              "biography": "Alias odit quaerat odit magnam. Quia eius fuga quos temporibus cumque laborum. Tempora at itaque et sequi aperiam non accusantium. Dolorem consectetur maiores dolores id.",
+                              "avatar_url": null,
+                              "banner_url": null,
+                              "follower_count": 0,
+                              "following_count": 0,
+                              "reputation_count": 0
+                            },
+                            "current_user": {
+                              "following": false
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "current_user": {
+                      "like_action": 0
+                    }
+                  },
+                  {
+                    "id": 97,
+                    "type": "replies",
+                    "href": "/api/v1/forum-threads/97/replies",
+                    "attributes": {
+                      "content": "Tenetur dignissimos exercitationem qui dolores doloremque labore. Nobis non in iste qui est exercitationem.",
+                      "posted_at": "2020-07-27 12:59:35",
+                      "score": 233
+                    },
+                    "relationships": {
+                      "user": {
+                        "data": [
+                          {
+                            "id": 14,
+                            "type": "users",
+                            "href": "/api/v1/users/14/profile",
+                            "attributes": {
+                              "username": "neal.green",
+                              "activity_status": "Offline",
+                              "biography": "Aspernatur sint eligendi similique qui natus. Consequatur sed incidunt consectetur laborum. Ipsum voluptates expedita aut est ut reprehenderit.",
+                              "avatar_url": "https://kurozora.app/storage/14/ProfileImage.png",
+                              "banner_url": "https://kurozora.app/storage/14/BannerImage.png",
+                              "follower_count": 299,
+                              "following_count": 128,
+                              "reputation_count": 547
+                            },
+                            "current_user": {
+                              "following": true
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "current_user": {
+                      "like_action": 0
+                    }
+                  }
+                ],
+                "next": "/api/v1/forum-threads/1/replies?page=2"
+              }
+            }
+          }
+        }
+      },
+      "PostForumThreadsReplies": {
+        "description": "Successful POST Forum-Threads Replies JSON response.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 210,
+                    "type": "replies",
+                    "href": "/api/v1/forum-threads/209/replies",
+                    "attributes": {
+                      "content": "New reply content.",
+                      "posted_at": "2020-07-29 12:33:32",
+                      "score": 0
+                    },
+                    "relationships": {
+                      "user": {
+                        "data": [
+                          {
+                            "id": 2,
+                            "type": "users",
+                            "href": "/api/v1/users/2/profile",
+                            "attributes": {
+                              "username": "Kirito",
+                              "activity_status": "Online",
+                              "biography": "My biography.",
+                              "avatar_url": "https://kurozora.app/storage/2/ProfileImage.png",
+                              "banner_url": "https://kurozora.app/storage/2/BannerImage.png",
+                              "follower_count": 0,
+                              "following_count": 0,
+                              "reputation_count": 0
+                            },
+                            "current_user": {
+                              "following": false
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "current_user": {
+                      "like_action": 0
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetForumThreadsSearch": {
+        "description": "Successful GET Forum-Threads Search JSON response.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 31,
+                    "type": "threads",
+                    "href": "/api/v1/forum-threads/31",
+                    "attributes": {
+                      "title": "Saepe voluptas sunt itaque.",
+                      "content": "Beatae eos quisquam voluptatem id non. Inventore quam ea voluptatem laboriosam fuga quia enim qui. Illo blanditiis hic aperiam perspiciatis et id veniam.",
+                      "locked": false,
+                      "reply_count": 389,
+                      "score": 2361,
+                      "creation_date": "2020-07-27 12:59:34"
+                    },
+                    "relationships": {
+                      "user": {
+                        "data": [
+                          {
+                            "id": 36,
+                            "type": "users",
+                            "href": "/api/v1/users/36/profile",
+                            "attributes": {
+                              "username": "iliana.jacobs",
+                              "activity_status": "Offline",
+                              "biography": "Numquam dicta laborum ut quod distinctio rem sunt sint. Impedit est ea dicta eum. Laboriosam id minima voluptas molestiae. Dolorum tenetur blanditiis id adipisci et.",
+                              "avatar_url": "https://kurozora.app/storage/36/ProfileImage.png",
+                              "banner_url": null,
+                              "follower_count": 7694,
+                              "following_count": 5373,
+                              "reputation_count": 14734
+                            },
+                            "current_user": {
+                              "following": false
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "current_user": {
+                      "vote_action": 1
+                    }
+                  },
+                  {
+                    "id": 43,
+                    "type": "threads",
+                    "href": "/api/v1/forum-threads/43",
+                    "attributes": {
+                      "title": "Sunt harum quo fuga.",
+                      "content": "Exercitationem alias nemo nobis omnis deserunt sit. Quidem ab accusamus non nemo. Aut rerum officiis dignissimos nulla dolorem hic fugiat.",
+                      "locked": true,
+                      "reply_count": 3,
+                      "score": -53,
+                      "creation_date": "2020-07-27 12:59:34"
+                    },
+                    "relationships": {
+                      "user": {
+                        "data": [
+                          {
+                            "id": 44,
+                            "type": "users",
+                            "href": "/api/v1/users/44/profile",
+                            "attributes": {
+                              "username": "lilliana45",
+                              "activity_status": "Offline",
+                              "biography": "Quam repudiandae autem modi velit vitae. Animi ratione hic distinctio sint. Inventore maxime ut voluptatem id est.",
+                              "avatar_url": null,
+                              "banner_url": "https://kurozora.app/storage/44/BannerImage.png",
+                              "follower_count": 63,
+                              "following_count": 102,
+                              "reputation_count": 353
+                            },
+                            "current_user": {
+                              "following": false
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "current_user": {
+                      "vote_action": -1
+                    }
+                  },
+                  {
+                    "id": 47,
+                    "type": "threads",
+                    "href": "/api/v1/forum-threads/47",
+                    "attributes": {
+                      "title": "Sit possimus incidunt.",
+                      "content": "Vero hic ea explicabo iure aut. Maiores voluptates reprehenderit vel perferendis.",
+                      "locked": false,
+                      "reply_count": 0,
+                      "score": 0,
+                      "creation_date": "2020-07-27 12:59:34"
+                    },
+                    "relationships": {
+                      "user": {
+                        "data": [
+                          {
+                            "id": 53,
+                            "type": "users",
+                            "href": "/api/v1/users/53/profile",
+                            "attributes": {
+                              "username": "maximilian.glover",
+                              "activity_status": "Offline",
+                              "biography": "In laborum perspiciatis odio sint laboriosam ipsam. Velit qui aut et est temporibus. Quisquam et quia eligendi est sed. Facilis ducimus sint alias iusto.",
+                              "avatar_url": "https://kurozora.app/storage/53/ProfileImage.png",
+                              "banner_url": "https://kurozora.app/storage/53/BannerImage.png",
+                              "follower_count": 593,
+                              "following_count": 2846,
+                              "reputation_count": 8463
+                            },
+                            "current_user": {
+                              "following": true
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "current_user": {
+                      "like_action": 0
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "PostForumThreadsLockSuccess": {
+        "description": "Successful POST Forum-Threads Lock JSON response.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": {
+                  "locked": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "PostForumRepliesVoteSuccess": {
+        "description": "Successful POST Forum-Replies Vote response. There are three vote actions:\n- -1 = dislike\n- 0 = no vote\n- 1 = like",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": {
+                  "vote_action": 1
+                }
+              }
+            }
+          }
+        }
+      },
+      "PostSessionsSuccess": {
+        "description": "Successful POST Sessions JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": {
+                  "kuro_auth_token": "AuthenticationToken",
+                  "user": {
+                    "id": 2,
+                    "type": "users",
+                    "href": "/api/v1/users/2/profile",
+                    "attributes": {
+                      "username": "Kirito",
+                      "activity_status": "Online",
+                      "biography": "My biography.",
+                      "avatar_url": "https://kurozora.app/storage/2/ProfileImage.png",
+                      "banner_url": "https://kurozora.app/storage/2/BannerImage.png",
+                      "follower_count": 10,
+                      "following_count": 12,
+                      "reputation_count": 14
+                    },
+                    "private": {
+                      "username_change_available": false
+                    }
+                  },
+                  "session": {
+                    "id": 3,
+                    "type": "sessions",
+                    "href": "/api/v1/sessions/3",
+                    "attributes": {
+                      "ip": "127.0.0.1",
+                      "last_validated_at": "2020-07-28 02:43:50",
+                      "platform": {
+                        "human_readable_format": "iPhone 11 Pro Max on iOS 13.4",
+                        "platform": "iOS",
+                        "platform_version": "13.4",
+                        "device_vendor": "Apple",
+                        "device_model": "iPhone 11 Pro Max"
+                      },
+                      "location": {
+                        "city": "Amsterdam",
+                        "region": "Amsterdam",
+                        "country": "Netherlands",
+                        "latitude": 52.35997,
+                        "longitude": 4.86352
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetSessionsSuccess": {
+        "description": "Successful GET Sessions JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": {
+                  "id": 3,
+                  "type": "sessions",
+                  "href": "/api/v1/sessions/3",
+                  "attributes": {
+                    "ip": "127.0.0.1",
+                    "last_validated_at": "2020-07-28 02:43:50",
+                    "platform": {
+                      "human_readable_format": "iPhone 11 Pro Max on iOS 13.4",
+                      "platform": "iOS",
+                      "platform_version": "13.4",
+                      "device_vendor": "Apple",
+                      "device_model": "iPhone 11 Pro Max"
+                    },
+                    "location": {
+                      "city": "Amsterdam",
+                      "region": "Amsterdam",
+                      "country": "Netherlands",
+                      "latitude": 52.35997,
+                      "longitude": 4.86352
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "PostSessionsUpdateSuccess": {
+        "description": "Successful POST Sessions Update JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "Session update successful."
+              }
+            }
+          }
+        }
+      },
+      "PostSessionsDeleteSuccess": {
+        "description": "Successful POST Sessions Delete JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "meta": {
+                  "version": "1.0.8",
+                  "query_count": 0,
+                  "is_user_authenticated": false,
+                  "authenticated_user_id": null
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetStudiosSuccess": {
+        "description": "Successful GET Studios JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "studios",
+                    "href": "/api/v1/studios/1",
+                    "attributes": {
+                      "name": "Considine-Tillman",
+                      "logo_url": "https://lorempixel.com/640/480/?85310",
+                      "about": "Eos repellat optio aut explicabo quod. Consequatur sit quasi aliquam sed modi aut. Perspiciatis et perferendis architecto voluptas eos quis iure. Corrupti ea reiciendis et quo sed itaque. Unde ipsa officia et veniam dicta ullam omnis modi. Consequuntur non possimus fugiat quaerat delectus ea. In voluptas dignissimos veniam reprehenderit a. Cum dolores aperiam et nihil. Veniam id rerum commodi quia assumenda at. Et velit iure eos aut. Et est praesentium id fugiat reprehenderit. Sunt dolorem aut ratione ipsam ipsum quo.",
+                      "founded": "1983-09-30",
+                      "website_url": "http://rodriguez.com/eos-ut-earum-ut-eum-voluptas-iusto.html"
+                    }
+                  },
+                  {
+                    "id": 2,
+                    "type": "studios",
+                    "href": "/api/v1/studios/2",
+                    "attributes": {
+                      "name": "Harris-Kuhn",
+                      "logo_url": "https://lorempixel.com/640/480/?61391",
+                      "about": "Et suscipit sed veniam libero. Praesentium odio rerum commodi aut debitis expedita. Dolore quidem repudiandae omnis nemo voluptatem. Soluta enim soluta dolor aut earum et officiis. Illum sit rerum ab dolor sit eos. Est voluptates eos cupiditate natus. Adipisci sapiente aperiam rerum. Non et voluptatem dolorem ex exercitationem exercitationem. Consequatur qui totam ut. Distinctio quae voluptas omnis quae earum. Ut est eligendi ipsa voluptatibus et deserunt. Amet illum aliquid aut non. Sapiente iusto a soluta non. Temporibus et est est voluptas quo. Et necessitatibus nihil aut expedita maxime et aut. Voluptate aut laudantium rerum autem. Voluptatibus ullam tempore accusantium illum illo quia. Debitis qui assumenda dicta neque. Ullam optio non est ad. Facere quaerat voluptatem est qui quo consequatur error. Assumenda cumque ut molestias fugiat. Ut molestias laudantium aut dolorum ab. Sed sapiente tempore fugit et aliquam. Blanditiis ut id rem quis. Assumenda velit ea rerum temporibus. Ut debitis molestiae debitis esse deleniti at. Aut quis earum eius eum omnis ut quia rerum.",
+                      "founded": "1990-04-04",
+                      "website_url": "http://rice.biz/dolores-minima-quisquam-at-et.html"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetStudiosDetailsSuccess": {
+        "description": "Successful GET Studios Details JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "studios",
+                    "href": "/api/v1/studios/1",
+                    "attributes": {
+                      "name": "Considine-Tillman",
+                      "logo_url": "https://lorempixel.com/640/480/?85310",
+                      "about": "Eos repellat optio aut explicabo quod. Consequatur sit quasi aliquam sed modi aut. Perspiciatis et perferendis architecto voluptas eos quis iure. Corrupti ea reiciendis et quo sed itaque. Unde ipsa officia et veniam dicta ullam omnis modi. Consequuntur non possimus fugiat quaerat delectus ea. In voluptas dignissimos veniam reprehenderit a. Cum dolores aperiam et nihil. Veniam id rerum commodi quia assumenda at. Et velit iure eos aut. Et est praesentium id fugiat reprehenderit. Sunt dolorem aut ratione ipsam ipsum quo.",
+                      "founded": "1983-09-30",
+                      "website_url": "http://rodriguez.com/eos-ut-earum-ut-eum-voluptas-iusto.html"
+                    },
+                    "relationships": {
+                      "anime": {
+                        "data": [
+                          {
+                            "id": 1,
+                            "type": "show",
+                            "href": "/api/v1/anime/1",
+                            "attributes": {
+                              "title": "\"0\"",
+                              "type": "Tv",
+                              "source": "Unknown",
+                              "anidb_id": 10143,
+                              "anilist_id": 102416,
+                              "kitsu_id": 8925,
+                              "imdb_id": null,
+                              "mal_id": 20707,
+                              "network": null,
+                              "studio": [
+                                {
+                                  "id": 1,
+                                  "type": "studios",
+                                  "href": "/api/v1/studios/1",
+                                  "attributes": {
+                                    "name": null,
+                                    "logo_url": null,
+                                    "about": null,
+                                    "founded": null,
+                                    "website_url": null
+                                  }
+                                }
+                              ],
+                              "status": "Continuing",
+                              "episodes": 0,
+                              "seasons": 0,
+                              "average_rating": 0,
+                              "rating_count": 0,
+                              "synopsis": "Error ipsa eos et rem recusandae voluptate sunt corrupti. Qui est est autem sit pariatur laudantium. Suscipit laboriosam enim modi quae quia aperiam excepturi sunt. Temporibus est hic adipisci.",
+                              "runtime": 25,
+                              "watch_rating": "TV-14",
+                              "tagline": "Voluptatem rerum quos quidem aut.",
+                              "video_url": null,
+                              "poster": null,
+                              "background": null,
+                              "nsfw": false,
+                              "genres": [],
+                              "first_aired": "1973-11-15",
+                              "last_aired": "1974-02-07",
+                              "air_time": "20:00:00",
+                              "air_day": 3,
+                              "copyright": "® 2003 Watsica-Kling"
+                            }
+                          },
+                          {
+                            "id": 2,
+                            "type": "show",
+                            "href": "/api/v1/anime/2",
+                            "attributes": {
+                              "title": "\"Aesop\" no Ohanashi yori: Ushi to Kaeru, Yokubatta Inu",
+                              "type": "Tv",
+                              "source": "Digital manga",
+                              "anidb_id": 3689,
+                              "anilist_id": null,
+                              "kitsu_id": 9179,
+                              "imdb_id": null,
+                              "mal_id": 25627,
+                              "network": null,
+                              "studio": [
+                                {
+                                  "id": 2,
+                                  "type": "studios",
+                                  "href": "/api/v1/studios/2",
+                                  "attributes": {
+                                    "name": null,
+                                    "logo_url": null,
+                                    "about": null,
+                                    "founded": null,
+                                    "website_url": null
+                                  }
+                                }
+                              ],
+                              "status": "Ended",
+                              "episodes": 0,
+                              "seasons": 0,
+                              "average_rating": 0,
+                              "rating_count": 0,
+                              "synopsis": "Totam ex non eaque rem. Suscipit eos recusandae et. Pariatur reprehenderit aliquid reprehenderit nisi quae. Fuga enim atque ratione occaecati sequi iste dignissimos.",
+                              "runtime": 25,
+                              "watch_rating": "TV-14",
+                              "tagline": "Vel facilis dignissimos suscipit veritatis enim nemo ut.",
+                              "video_url": null,
+                              "poster": null,
+                              "background": null,
+                              "nsfw": false,
+                              "genres": [],
+                              "first_aired": "2014-09-28",
+                              "last_aired": "2014-12-21",
+                              "air_time": "19:24:00",
+                              "air_day": 4,
+                              "copyright": "® 1985 Fadel, Sipes and McGlynn"
+                            }
+                          }
+                        ],
+                        "href": "/api/v1/studios/1/anime"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetStudiosAnimeSuccess": {
+        "description": "Successful GET Studios Anime JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "show",
+                    "href": "/api/v1/anime/1",
+                    "attributes": {
+                      "title": "\"0\"",
+                      "type": "Tv",
+                      "source": "Unknown",
+                      "anidb_id": 10143,
+                      "anilist_id": 102416,
+                      "kitsu_id": 8925,
+                      "imdb_id": null,
+                      "mal_id": 20707,
+                      "network": null,
+                      "studio": [
+                        {
+                          "id": 1,
+                          "type": "studios",
+                          "href": "/api/v1/studios/1",
+                          "attributes": {
+                            "name": null,
+                            "logo_url": null,
+                            "about": null,
+                            "founded": null,
+                            "website_url": null
+                          }
+                        }
+                      ],
+                      "status": "Continuing",
+                      "episodes": 0,
+                      "seasons": 0,
+                      "average_rating": 0,
+                      "rating_count": 0,
+                      "synopsis": "Error ipsa eos et rem recusandae voluptate sunt corrupti. Qui est est autem sit pariatur laudantium. Suscipit laboriosam enim modi quae quia aperiam excepturi sunt. Temporibus est hic adipisci.",
+                      "runtime": 25,
+                      "watch_rating": "TV-14",
+                      "tagline": "Voluptatem rerum quos quidem aut.",
+                      "video_url": null,
+                      "poster": null,
+                      "background": null,
+                      "nsfw": false,
+                      "genres": [],
+                      "first_aired": "1973-11-15",
+                      "last_aired": "1974-02-07",
+                      "air_time": "20:00:00",
+                      "air_day": 3,
+                      "copyright": "® 2003 Watsica-Kling"
+                    }
+                  },
+                  {
+                    "id": 2,
+                    "type": "show",
+                    "href": "/api/v1/anime/2",
+                    "attributes": {
+                      "title": "\"Aesop\" no Ohanashi yori: Ushi to Kaeru, Yokubatta Inu",
+                      "type": "Tv",
+                      "source": "Digital manga",
+                      "anidb_id": 3689,
+                      "anilist_id": null,
+                      "kitsu_id": 9179,
+                      "imdb_id": null,
+                      "mal_id": 25627,
+                      "network": null,
+                      "studio": [
+                        {
+                          "id": 2,
+                          "type": "studios",
+                          "href": "/api/v1/studios/2",
+                          "attributes": {
+                            "name": null,
+                            "logo_url": null,
+                            "about": null,
+                            "founded": null,
+                            "website_url": null
+                          }
+                        }
+                      ],
+                      "status": "Ended",
+                      "episodes": 0,
+                      "seasons": 0,
+                      "average_rating": 0,
+                      "rating_count": 0,
+                      "synopsis": "Totam ex non eaque rem. Suscipit eos recusandae et. Pariatur reprehenderit aliquid reprehenderit nisi quae. Fuga enim atque ratione occaecati sequi iste dignissimos.",
+                      "runtime": 25,
+                      "watch_rating": "TV-14",
+                      "tagline": "Vel facilis dignissimos suscipit veritatis enim nemo ut.",
+                      "video_url": null,
+                      "poster": null,
+                      "background": null,
+                      "nsfw": false,
+                      "genres": [],
+                      "first_aired": "2014-09-28",
+                      "last_aired": "2014-12-21",
+                      "air_time": "19:24:00",
+                      "air_day": 4,
+                      "copyright": "® 1985 Fadel, Sipes and McGlynn"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetThemesSuccess": {
+        "description": "Successful GET Themes JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
                   {
                     "id": 1,
                     "type": "themes",
@@ -2712,15 +3503,15 @@
           }
         }
       },
-      "PrivacyPolicySuccess": {
-        "description": "Successful Privacy Policy JSON response",
+      "GetPrivacyPolicySuccess": {
+        "description": "Successful GET Privacy Policy JSON response",
         "content": {
           "application/json": {
             "schema": {
               "type": "object",
               "example": {
                 "data": {
-                  "privacy_policy": ""
+                  "privacy_policy": "The privacy policy in HTML format."
                 }
               }
             }
