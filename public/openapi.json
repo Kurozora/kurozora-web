@@ -37,6 +37,10 @@
       "description": "Everything user notification related"
     },
     {
+      "name": "actors",
+      "description": "Everything actor related"
+    },
+    {
       "name": "anime",
       "description": "Everything anime related"
     },
@@ -47,10 +51,6 @@
     {
       "name": "anime-episodes",
       "description": "Everything anime episodes related"
-    },
-    {
-      "name": "actors",
-      "description": "Everything actor related"
     },
     {
       "name": "characters",
@@ -1218,6 +1218,53 @@
         }
       }
     },
+    "/actors": {
+      "get": {
+        "tags": [
+          "actors"
+        ],
+        "operationId": "getActors",
+        "summary": "Actors list.",
+        "description": "This endpoint will retrieve the actors.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/actors/{actorID}": {
+      "get": {
+        "tags": [
+          "actors"
+        ],
+        "operationId": "getActorsDetails",
+        "summary": "Get actor details.",
+        "description": "This endpoint will retrieve the details for a actor.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "actorID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the actor."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetActorsDetails"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/anime/{animeID}": {
       "get": {
         "security": [
@@ -1254,13 +1301,14 @@
               },
               "uniqueItems": true
             },
+            "explode": false,
             "required": false,
             "description": "The relations to include in the response. Available relations are:\n- actors\n- characters\n- cast\n- relations\n- seasons"
           }
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/JSONSuccess"
+            "$ref": "#/components/responses/GetAnime"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1289,7 +1337,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/JSONSuccess"
+            "$ref": "#/components/responses/GetAnimeActors"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1318,7 +1366,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/JSONSuccess"
+            "$ref": "#/components/responses/GetAnimeCharacters"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1382,7 +1430,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/JSONSuccess"
+            "$ref": "#/components/responses/GetAnimeRelations"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1411,7 +1459,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/JSONSuccess"
+            "$ref": "#/components/responses/GetAnimeSeasons"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1505,7 +1553,218 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/JSONSuccess"
+            "$ref": "#/components/responses/GetAnimeSearch"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/anime-seasons/{seasonID}": {
+      "get": {
+        "tags": [
+          "anime-seasons"
+        ],
+        "operationId": "getAnimeSeasonsDetails",
+        "summary": "Get specific season details.",
+        "description": "This endpoint will retrieve the details of a specific season.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "seasonID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the season."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetAnimeSeasonsDetails"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/anime-seasons/{seasonID}/episodes": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "anime-seasons"
+        ],
+        "operationId": "getAnimeSeasonsEpisodes",
+        "summary": "Retrieve season episodes.",
+        "description": "This endpoint will retrieve the episodes in a certain season.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "seasonID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the season."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetAnimeSeasonsEpisodes"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/anime-episodes/{episodeID}/watched": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "anime-episodes"
+        ],
+        "operationId": "postAnimeEpisodesWatched",
+        "summary": "Marks an episode as \"watched\" or \"not watched\".",
+        "description": "This endpoint will updated the watched status for an episode.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "episodeID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the episode."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "watched": {
+                    "$ref": "#/components/schemas/EpisodeWatchStatus",
+                    "description": "Mark episode watched or not.\n- -1 = not watched\n- 1 = watched"
+                  }
+                },
+                "required": [
+                  "watched"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PostAnimeEpisodesWatched"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/characters": {
+      "get": {
+        "tags": [
+          "characters"
+        ],
+        "operationId": "getCharacters",
+        "summary": "Characters list.",
+        "description": "This endpoint will retrieve the characters.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetCharacters"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/characters/{characterID}": {
+      "get": {
+        "tags": [
+          "characters"
+        ],
+        "operationId": "getCharactersDetails",
+        "summary": "Get character details.",
+        "description": "This endpoint will retrieve the details of a specific character.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "characterID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the character."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetCharactersDetails"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/genres": {
+      "get": {
+        "tags": [
+          "genres"
+        ],
+        "operationId": "getGenres",
+        "summary": "Genres list.",
+        "description": "This endpoint will retrieve the genres.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetGenres"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/genres/{genreID}": {
+      "get": {
+        "tags": [
+          "genres"
+        ],
+        "operationId": "getGenreDetails",
+        "summary": "Get genre details.",
+        "description": "This endpoint will retrieve the details of a specific genre.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "genreID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the genre."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetGenresDetails"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1523,7 +1782,7 @@
         "description": "This endpoint will retrieve the forum sections.",
         "responses": {
           "200": {
-            "$ref": "#/components/responses/JSONSuccess"
+            "$ref": "#/components/responses/GetForumSections"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1552,7 +1811,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/JSONSuccess"
+            "$ref": "#/components/responses/GetForumSectionsDetails"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1590,8 +1849,7 @@
             "in": "query",
             "name": "order",
             "schema": {
-              "type": "string",
-              "example": "recent"
+              "$ref": "#/components/schemas/ForumSortType"
             },
             "required": true,
             "description": "The method of ordering the threads."
@@ -1600,16 +1858,15 @@
             "in": "query",
             "name": "page",
             "schema": {
-              "type": "string",
-              "example": "1"
+              "type": "string"
             },
             "required": false,
-            "description": "The page to retrieve threads from. (starts at 1)"
+            "description": "The page to retrieve threads from."
           }
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/JSONSuccess"
+            "$ref": "#/components/responses/GetForumSectionsThreads"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1665,267 +1922,7 @@
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/actors": {
-      "get": {
-        "tags": [
-          "actors"
-        ],
-        "operationId": "getActors",
-        "summary": "Actors list.",
-        "description": "This endpoint will retrieve the actors.",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/actors/{actorID}": {
-      "get": {
-        "tags": [
-          "actors"
-        ],
-        "operationId": "getActorsDetails",
-        "summary": "Get actor details.",
-        "description": "This endpoint will retrieve the details for a actor.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "actorID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the actor."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/anime-seasons/{seasonID}": {
-      "get": {
-        "tags": [
-          "anime-seasons"
-        ],
-        "operationId": "getAnimeSeasonsDetails",
-        "summary": "Get specific season details.",
-        "description": "This endpoint will retrieve the details of a specific season.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "seasonID",
-            "schema": {
-              "type": "integer",
-              "example": 1
-            },
-            "required": true,
-            "description": "ID of the season."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/anime-seasons/{seasonID}/episodes": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "anime-seasons"
-        ],
-        "operationId": "getAnimeSeasonsEpisodes",
-        "summary": "Retrieve season episodes.",
-        "description": "This endpoint will retrieve the episodes in a certain season.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "seasonID",
-            "schema": {
-              "type": "integer",
-              "example": 1
-            },
-            "required": true,
-            "description": "ID of the season."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/anime-episodes/{episodeID}/watched": {
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "anime-episodes"
-        ],
-        "operationId": "postAnimeEpisodesWatched",
-        "summary": "Marks an episode as \"watched\" or \"not watched\".",
-        "description": "This endpoint will updated the watched status for an episode.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "episodeID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the episode."
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "watched": {
-                    "$ref": "#/components/schemas/EpisodeWatchStatus",
-                    "description": "Mark episode watched or not.\n- -1 = not watched\n- 1 = watched"
-                  }
-                },
-                "required": [
-                  "watched"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/characters": {
-      "get": {
-        "tags": [
-          "characters"
-        ],
-        "operationId": "getCharacters",
-        "summary": "Characters list.",
-        "description": "This endpoint will retrieve the characters.",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/characters/{characterID}": {
-      "get": {
-        "tags": [
-          "characters"
-        ],
-        "operationId": "getCharactersDetails",
-        "summary": "Get character details.",
-        "description": "This endpoint will retrieve the details of a specific character.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "characterID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the character."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/genres": {
-      "get": {
-        "tags": [
-          "genres"
-        ],
-        "operationId": "getGenres",
-        "summary": "Genres list.",
-        "description": "This endpoint will retrieve the genres.",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/genres/{genreID}": {
-      "get": {
-        "tags": [
-          "genres"
-        ],
-        "operationId": "getGenreDetails",
-        "summary": "Get genre details.",
-        "description": "This endpoint will retrieve the details of a specific genre.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "genreID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the genre."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
+            "$ref": "#/components/responses/PostForumSectionsThreads"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2604,24 +2601,6 @@
   },
   "components": {
     "schemas": {
-      "ForumSortType": {
-        "type": "string",
-        "enum": [
-          "top",
-          "recent"
-        ],
-        "default": "top",
-        "description": "The set of available forum sort types.\n- top: sorted by the most liked resource at the top.\n- recent: sorted by the newly created resource at the top."
-      },
-      "VoteType": {
-        "type": "integer",
-        "enum": [
-          -1,
-          1
-        ],
-        "default": 1,
-        "description": "The vote type to submit. Submitting the same vote type twice will undo the vote.\n- -1 = dislike\n- 1 = like"
-      },
       "EpisodeWatchStatus": {
         "type": "integer",
         "enum": [
@@ -2630,6 +2609,15 @@
         ],
         "default": 1,
         "description": "The set of available watch status types.\n- -1 = not watched\n- 1 = watched"
+      },
+      "ForumSortType": {
+        "type": "string",
+        "enum": [
+          "top",
+          "recent"
+        ],
+        "default": "top",
+        "description": "The set of available forum sort types.\n- top: sorted by the most liked resource at the top.\n- recent: sorted by the newly created resource at the top."
       },
       "KurozoraLibraryStatus": {
         "type": "string",
@@ -2650,6 +2638,15 @@
         ],
         "default": "overwrite",
         "description": "The set of available MAL import behavior types."
+      },
+      "VoteType": {
+        "type": "integer",
+        "enum": [
+          -1,
+          1
+        ],
+        "default": 1,
+        "description": "The vote type to submit. Submitting the same vote type twice will undo the vote.\n- -1 = dislike\n- 1 = like"
       }
     },
     "securitySchemes": {
@@ -2692,6 +2689,1392 @@
                   "authenticated_user_id": null
                 },
                 "message": "Description of the error."
+              }
+            }
+          }
+        }
+      },
+      "GetAnime": {
+        "description": "Successful GET Anime JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "show",
+                    "href": "/api/v1/anime/1",
+                    "attributes": {
+                      "title": "\"0\"",
+                      "type": "Tv",
+                      "source": "Unknown",
+                      "anidb_id": 10143,
+                      "anilist_id": 102416,
+                      "kitsu_id": 8925,
+                      "imdb_id": null,
+                      "mal_id": 20707,
+                      "network": null,
+                      "studio": [
+                        {
+                          "id": 1,
+                          "type": "studios",
+                          "href": "/api/v1/studios/1",
+                          "attributes": {
+                            "name": null,
+                            "logo_url": null,
+                            "about": null,
+                            "founded": null,
+                            "website_url": null
+                          }
+                        }
+                      ],
+                      "status": "Continuing",
+                      "episodes": 0,
+                      "seasons": 0,
+                      "average_rating": 0,
+                      "rating_count": 0,
+                      "synopsis": "Error ipsa eos et rem recusandae voluptate sunt corrupti. Qui est est autem sit pariatur laudantium. Suscipit laboriosam enim modi quae quia aperiam excepturi sunt. Temporibus est hic adipisci.",
+                      "runtime": 25,
+                      "watch_rating": "TV-14",
+                      "tagline": "Voluptatem rerum quos quidem aut.",
+                      "video_url": null,
+                      "poster": {
+                        "url": "https://place-hold.it/680x1000",
+                        "height": 1000,
+                        "width": 680,
+                        "background_color": "#acacac",
+                        "text_color_1": "#171717",
+                        "text_color_2": "#545454",
+                        "text_color_3": "#6e6e6e",
+                        "text_color_4": "#5c5c5c"
+                      },
+                      "background": {
+                        "url": "https://place-hold.it/1920x1080",
+                        "height": 1080,
+                        "width": 1920,
+                        "background_color": "#acacac",
+                        "text_color_1": "#171717",
+                        "text_color_2": "#545454",
+                        "text_color_3": "#6d6d6d",
+                        "text_color_4": "#5c5c5c"
+                      },
+                      "nsfw": false,
+                      "genres": [],
+                      "first_aired": "1973-11-15",
+                      "last_aired": "1974-02-07",
+                      "air_time": "20:00:00",
+                      "air_day": 3,
+                      "copyright": "® 2003 Watsica-Kling"
+                    },
+                    "current_user": {
+                      "given_rating": 3.5,
+                      "library_status": "Watching",
+                      "is_favorite": false
+                    },
+                    "relationships": {
+                      "actors": {
+                        "data": [
+                          {
+                            "id": 10,
+                            "type": "actors",
+                            "href": "/api/v1/actors/10",
+                            "attributes": {
+                              "first_name": "Leatha",
+                              "last_name": "Dietrich",
+                              "occupation": "Installation and Repair Technician",
+                              "image": "https://lorempixel.com/640/480/?22657"
+                            }
+                          },
+                          {
+                            "id": 1,
+                            "type": "actors",
+                            "href": "/api/v1/actors/1",
+                            "attributes": {
+                              "first_name": "Aniyah",
+                              "last_name": "Waelchi",
+                              "occupation": "Government Property Inspector",
+                              "image": "https://lorempixel.com/640/480/?66477"
+                            }
+                          },
+                          {
+                            "id": 2,
+                            "type": "actors",
+                            "href": "/api/v1/actors/2",
+                            "attributes": {
+                              "first_name": "Ashley",
+                              "last_name": "Carroll",
+                              "occupation": "Inspector",
+                              "image": "https://lorempixel.com/640/480/?48504"
+                            }
+                          }
+                        ],
+                        "href": "/api/v1/anime/1/actors"
+                      },
+                      "characters": {
+                        "data": [
+                          {
+                            "id": 10,
+                            "type": "characters",
+                            "href": "/api/v1/characters/10",
+                            "attributes": {
+                              "name": "Savion Strosin",
+                              "about": "Quae rerum delectus neque et officiis fuga incidunt et. Exercitationem et consequatur quae sunt molestias repellat dolorem. Necessitatibus iusto voluptatem ea dolor quasi. Rerum voluptas vel voluptate. Aut est dignissimos et molestias dolores sed perspiciatis. Aperiam eveniet omnis quo vel ipsum incidunt earum. Maxime veritatis eligendi sit. Quae et placeat earum quos. Et ut possimus in cumque. Omnis veniam distinctio officia minus. Et aut quia vel pariatur. Sint ut natus quia vitae sed quia. Numquam voluptatem quis beatae optio facere animi voluptatem. Quidem ullam ipsa velit totam debitis enim. Eos nesciunt aut dolores vitae consequuntur voluptas. Molestiae illo repellendus necessitatibus voluptatem. Optio labore necessitatibus incidunt. Non quia molestiae dolores repudiandae. Quam sapiente ea sed delectus molestiae deleniti maiores.",
+                              "image": "https://lorempixel.com/640/480/?82757",
+                              "debut": "Episode 65",
+                              "status": "Deceased",
+                              "blood_type": "H",
+                              "favorite_food": "beatae",
+                              "bust": null,
+                              "waist": null,
+                              "hip": null,
+                              "height": "616",
+                              "age": 233,
+                              "birth_day": 1,
+                              "birth_month": 7,
+                              "astrological_sign": "Aquarius ♒️"
+                            }
+                          },
+                          {
+                            "id": 1,
+                            "type": "characters",
+                            "href": "/api/v1/characters/1",
+                            "attributes": {
+                              "name": "Tyra Armstrong IV",
+                              "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
+                              "image": "https://lorempixel.com/640/480/?46141",
+                              "debut": "Episode 05",
+                              "status": "Deceased",
+                              "blood_type": "W",
+                              "favorite_food": "numquam",
+                              "bust": "27.70",
+                              "waist": "78.44",
+                              "hip": "53.99",
+                              "height": "875",
+                              "age": 265,
+                              "birth_day": 1,
+                              "birth_month": 7,
+                              "astrological_sign": "Virgo ♍️"
+                            }
+                          },
+                          {
+                            "id": 2,
+                            "type": "characters",
+                            "href": "/api/v1/characters/2",
+                            "attributes": {
+                              "name": "Lorna Pollich",
+                              "about": "Est vitae et voluptas ullam unde id ea. Quo non distinctio ipsa blanditiis aspernatur. Perferendis aut officia sit similique soluta odit eum. Sunt quo delectus est quis sapiente. A natus voluptatem omnis distinctio quis quas. Molestiae ut aut voluptas incidunt necessitatibus nihil culpa. Molestiae dolores illo dignissimos amet sit. Sit non et enim doloremque ratione exercitationem. Hic voluptas ab eos quia quia quia. Hic expedita est distinctio quaerat accusamus.",
+                              "image": "https://lorempixel.com/640/480/?51170",
+                              "debut": "Episode 82",
+                              "status": "Deceased",
+                              "blood_type": "A",
+                              "favorite_food": "hic",
+                              "bust": "22.62",
+                              "waist": "33.46",
+                              "hip": "37.65",
+                              "height": "704",
+                              "age": 292,
+                              "birth_day": 1,
+                              "birth_month": 2,
+                              "astrological_sign": "Cancer ♋️"
+                            }
+                          }
+                        ],
+                        "href": "/api/v1/anime/1/characters"
+                      },
+                      "cast": {
+                        "data": [
+                          {
+                            "actor": {
+                              "id": 10,
+                              "type": "actors",
+                              "href": "/api/v1/actors/10",
+                              "attributes": {
+                                "first_name": "Leatha",
+                                "last_name": "Dietrich",
+                                "occupation": "Installation and Repair Technician",
+                                "image": "https://lorempixel.com/640/480/?22657"
+                              }
+                            },
+                            "character": {
+                              "id": 10,
+                              "type": "characters",
+                              "href": "/api/v1/characters/10",
+                              "attributes": {
+                                "name": "Savion Strosin",
+                                "about": "Quae rerum delectus neque et officiis fuga incidunt et. Exercitationem et consequatur quae sunt molestias repellat dolorem. Necessitatibus iusto voluptatem ea dolor quasi. Rerum voluptas vel voluptate. Aut est dignissimos et molestias dolores sed perspiciatis. Aperiam eveniet omnis quo vel ipsum incidunt earum. Maxime veritatis eligendi sit. Quae et placeat earum quos. Et ut possimus in cumque. Omnis veniam distinctio officia minus. Et aut quia vel pariatur. Sint ut natus quia vitae sed quia. Numquam voluptatem quis beatae optio facere animi voluptatem. Quidem ullam ipsa velit totam debitis enim. Eos nesciunt aut dolores vitae consequuntur voluptas. Molestiae illo repellendus necessitatibus voluptatem. Optio labore necessitatibus incidunt. Non quia molestiae dolores repudiandae. Quam sapiente ea sed delectus molestiae deleniti maiores.",
+                                "image": "https://lorempixel.com/640/480/?82757",
+                                "debut": "Episode 65",
+                                "status": "Deceased",
+                                "blood_type": "H",
+                                "favorite_food": "beatae",
+                                "bust": null,
+                                "waist": null,
+                                "hip": null,
+                                "height": "616",
+                                "age": 233,
+                                "birth_day": 1,
+                                "birth_month": 7,
+                                "astrological_sign": "Aquarius ♒️"
+                              }
+                            },
+                            "cast_role": "Protagonist"
+                          },
+                          {
+                            "actor": {
+                              "id": 1,
+                              "type": "actors",
+                              "href": "/api/v1/actors/1",
+                              "attributes": {
+                                "first_name": "Aniyah",
+                                "last_name": "Waelchi",
+                                "occupation": "Government Property Inspector",
+                                "image": "https://lorempixel.com/640/480/?66477"
+                              }
+                            },
+                            "character": {
+                              "id": 1,
+                              "type": "characters",
+                              "href": "/api/v1/characters/1",
+                              "attributes": {
+                                "name": "Tyra Armstrong IV",
+                                "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
+                                "image": "https://lorempixel.com/640/480/?46141",
+                                "debut": "Episode 05",
+                                "status": "Deceased",
+                                "blood_type": "W",
+                                "favorite_food": "numquam",
+                                "bust": "27.70",
+                                "waist": "78.44",
+                                "hip": "53.99",
+                                "height": "875",
+                                "age": 265,
+                                "birth_day": 1,
+                                "birth_month": 7,
+                                "astrological_sign": "Virgo ♍️"
+                              }
+                            },
+                            "cast_role": "Deuteragonist"
+                          },
+                          {
+                            "actor": {
+                              "id": 2,
+                              "type": "actors",
+                              "href": "/api/v1/actors/2",
+                              "attributes": {
+                                "first_name": "Ashley",
+                                "last_name": "Carroll",
+                                "occupation": "Inspector",
+                                "image": "https://lorempixel.com/640/480/?48504"
+                              }
+                            },
+                            "character": {
+                              "id": 2,
+                              "type": "characters",
+                              "href": "/api/v1/characters/2",
+                              "attributes": {
+                                "name": "Lorna Pollich",
+                                "about": "Est vitae et voluptas ullam unde id ea. Quo non distinctio ipsa blanditiis aspernatur. Perferendis aut officia sit similique soluta odit eum. Sunt quo delectus est quis sapiente. A natus voluptatem omnis distinctio quis quas. Molestiae ut aut voluptas incidunt necessitatibus nihil culpa. Molestiae dolores illo dignissimos amet sit. Sit non et enim doloremque ratione exercitationem. Hic voluptas ab eos quia quia quia. Hic expedita est distinctio quaerat accusamus.",
+                                "image": "https://lorempixel.com/640/480/?51170",
+                                "debut": "Episode 82",
+                                "status": "Deceased",
+                                "blood_type": "A",
+                                "favorite_food": "hic",
+                                "bust": "22.62",
+                                "waist": "33.46",
+                                "hip": "37.65",
+                                "height": "704",
+                                "age": 292,
+                                "birth_day": 1,
+                                "birth_month": 2,
+                                "astrological_sign": "Cancer ♋️"
+                              }
+                            },
+                            "cast_role": "Tritagonist"
+                          }
+                        ],
+                        "href": "/api/v1/anime/1/cast"
+                      },
+                      "relations": {
+                        "data": [
+                          {
+                            "show": {
+                              "id": 217,
+                              "type": "show",
+                              "href": "/api/v1/anime/217",
+                              "attributes": {
+                                "title": "Omnis odit hic dolorem itaque.",
+                                "type": "Special",
+                                "source": "4-Koma Manga",
+                                "anidb_id": null,
+                                "anilist_id": null,
+                                "kitsu_id": null,
+                                "imdb_id": null,
+                                "mal_id": null,
+                                "network": null,
+                                "studio": [],
+                                "status": "Tba",
+                                "episodes": 0,
+                                "seasons": 0,
+                                "average_rating": 0,
+                                "rating_count": 0,
+                                "synopsis": "Aspernatur aperiam corrupti similique voluptatibus qui. Voluptas eum ea doloribus qui inventore hic. Voluptas accusantium libero autem ipsum molestiae aut nobis. Aliquam unde voluptates corrupti ut temporibus eum.",
+                                "runtime": 25,
+                                "watch_rating": "TV-Y7 (FV)",
+                                "tagline": "Sunt error hic quod sint.",
+                                "video_url": null,
+                                "poster": null,
+                                "background": null,
+                                "nsfw": true,
+                                "genres": [],
+                                "first_aired": "2014-12-10",
+                                "last_aired": "2015-05-27",
+                                "air_time": "16:49:00",
+                                "air_day": 7,
+                                "copyright": "℗ 1997 Kulas-Baumbach"
+                              },
+                              "current_user": {
+                                "given_rating": 0,
+                                "library_status": null,
+                                "is_favorite": false
+                              }
+                            },
+                            "attributes": {
+                              "type": "Full story"
+                            }
+                          },
+                          {
+                            "show": {
+                              "id": 219,
+                              "type": "show",
+                              "href": "/api/v1/anime/219",
+                              "attributes": {
+                                "title": "Nam voluptatum voluptas optio qui.",
+                                "type": "Unknown",
+                                "source": "Original",
+                                "anidb_id": null,
+                                "anilist_id": null,
+                                "kitsu_id": null,
+                                "imdb_id": null,
+                                "mal_id": null,
+                                "network": null,
+                                "studio": [],
+                                "status": "Tba",
+                                "episodes": 0,
+                                "seasons": 0,
+                                "average_rating": 0,
+                                "rating_count": 0,
+                                "synopsis": "Rerum distinctio quibusdam porro et. Modi natus iusto ut qui praesentium dicta sed ratione. Porro excepturi et qui laudantium tenetur non iure.",
+                                "runtime": 25,
+                                "watch_rating": "TV-Y7",
+                                "tagline": "Expedita esse et cupiditate id impedit qui ut.",
+                                "video_url": null,
+                                "poster": null,
+                                "background": null,
+                                "nsfw": false,
+                                "genres": [],
+                                "first_aired": "2015-02-10",
+                                "last_aired": "2015-05-05",
+                                "air_time": "18:32:00",
+                                "air_day": 6,
+                                "copyright": "® 1976 Swift Ltd"
+                              },
+                              "current_user": {
+                                "given_rating": 0,
+                                "library_status": null,
+                                "is_favorite": false
+                              }
+                            },
+                            "attributes": {
+                              "type": "Adaptation"
+                            }
+                          }
+                        ],
+                        "href": "/api/v1/anime/1/relations"
+                      },
+                      "seasons": {
+                        "data": [
+                          {
+                            "id": 1,
+                            "type": "seasons",
+                            "href": "/api/v1/anime-seasons/1",
+                            "attributes": {
+                              "anime_id": 1,
+                              "title": "Season 1",
+                              "number": 1,
+                              "episode_count": 2,
+                              "first_aired": "2020-07-29T10:00:00.000000Z"
+                            }
+                          }
+                        ],
+                        "href": "/api/v1/anime/1/seasons"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetAnimeActors": {
+        "description": "Successful GET Anime Actors JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 10,
+                    "type": "actors",
+                    "href": "/api/v1/actors/10",
+                    "attributes": {
+                      "first_name": "Leatha",
+                      "last_name": "Dietrich",
+                      "occupation": "Installation and Repair Technician",
+                      "image": "https://lorempixel.com/640/480/?22657"
+                    }
+                  },
+                  {
+                    "id": 1,
+                    "type": "actors",
+                    "href": "/api/v1/actors/1",
+                    "attributes": {
+                      "first_name": "Aniyah",
+                      "last_name": "Waelchi",
+                      "occupation": "Government Property Inspector",
+                      "image": "https://lorempixel.com/640/480/?66477"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetAnimeCharacters": {
+        "description": "Successful GET Anime Characters JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "characters",
+                    "href": "/api/v1/characters/1",
+                    "attributes": {
+                      "name": "Tyra Armstrong IV",
+                      "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
+                      "image": "https://lorempixel.com/640/480/?46141",
+                      "debut": "Episode 05",
+                      "status": "Deceased",
+                      "blood_type": "W",
+                      "favorite_food": "numquam",
+                      "bust": "27.70",
+                      "waist": "78.44",
+                      "hip": "53.99",
+                      "height": "875",
+                      "age": 265,
+                      "birth_day": 1,
+                      "birth_month": 7,
+                      "astrological_sign": "Virgo ♍️"
+                    }
+                  },
+                  {
+                    "id": 2,
+                    "type": "characters",
+                    "href": "/api/v1/characters/2",
+                    "attributes": {
+                      "name": "Lorna Pollich",
+                      "about": "Est vitae et voluptas ullam unde id ea. Quo non distinctio ipsa blanditiis aspernatur. Perferendis aut officia sit similique soluta odit eum. Sunt quo delectus est quis sapiente. A natus voluptatem omnis distinctio quis quas. Molestiae ut aut voluptas incidunt necessitatibus nihil culpa. Molestiae dolores illo dignissimos amet sit. Sit non et enim doloremque ratione exercitationem. Hic voluptas ab eos quia quia quia. Hic expedita est distinctio quaerat accusamus.",
+                      "image": "https://lorempixel.com/640/480/?51170",
+                      "debut": "Episode 82",
+                      "status": "Deceased",
+                      "blood_type": "A",
+                      "favorite_food": "hic",
+                      "bust": "22.62",
+                      "waist": "33.46",
+                      "hip": "37.65",
+                      "height": "704",
+                      "age": 292,
+                      "birth_day": 1,
+                      "birth_month": 2,
+                      "astrological_sign": "Cancer ♋️"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetAnimeCast": {
+        "description": "Successful GET Anime Cast JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "actor": {
+                      "id": 10,
+                      "type": "actors",
+                      "href": "/api/v1/actors/10",
+                      "attributes": {
+                        "first_name": "Leatha",
+                        "last_name": "Dietrich",
+                        "occupation": "Installation and Repair Technician",
+                        "image": "https://lorempixel.com/640/480/?22657"
+                      }
+                    },
+                    "character": {
+                      "id": 10,
+                      "type": "characters",
+                      "href": "/api/v1/characters/10",
+                      "attributes": {
+                        "name": "Savion Strosin",
+                        "about": "Quae rerum delectus neque et officiis fuga incidunt et. Exercitationem et consequatur quae sunt molestias repellat dolorem. Necessitatibus iusto voluptatem ea dolor quasi. Rerum voluptas vel voluptate. Aut est dignissimos et molestias dolores sed perspiciatis. Aperiam eveniet omnis quo vel ipsum incidunt earum. Maxime veritatis eligendi sit. Quae et placeat earum quos. Et ut possimus in cumque. Omnis veniam distinctio officia minus. Et aut quia vel pariatur. Sint ut natus quia vitae sed quia. Numquam voluptatem quis beatae optio facere animi voluptatem. Quidem ullam ipsa velit totam debitis enim. Eos nesciunt aut dolores vitae consequuntur voluptas. Molestiae illo repellendus necessitatibus voluptatem. Optio labore necessitatibus incidunt. Non quia molestiae dolores repudiandae. Quam sapiente ea sed delectus molestiae deleniti maiores.",
+                        "image": "https://lorempixel.com/640/480/?82757",
+                        "debut": "Episode 65",
+                        "status": "Deceased",
+                        "blood_type": "H",
+                        "favorite_food": "beatae",
+                        "bust": null,
+                        "waist": null,
+                        "hip": null,
+                        "height": "616",
+                        "age": 233,
+                        "birth_day": 1,
+                        "birth_month": 7,
+                        "astrological_sign": "Aquarius ♒️"
+                      }
+                    },
+                    "cast_role": "Protagonist"
+                  },
+                  {
+                    "actor": {
+                      "id": 1,
+                      "type": "actors",
+                      "href": "/api/v1/actors/1",
+                      "attributes": {
+                        "first_name": "Aniyah",
+                        "last_name": "Waelchi",
+                        "occupation": "Government Property Inspector",
+                        "image": "https://lorempixel.com/640/480/?66477"
+                      }
+                    },
+                    "character": {
+                      "id": 1,
+                      "type": "characters",
+                      "href": "/api/v1/characters/1",
+                      "attributes": {
+                        "name": "Tyra Armstrong IV",
+                        "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
+                        "image": "https://lorempixel.com/640/480/?46141",
+                        "debut": "Episode 05",
+                        "status": "Deceased",
+                        "blood_type": "W",
+                        "favorite_food": "numquam",
+                        "bust": "27.70",
+                        "waist": "78.44",
+                        "hip": "53.99",
+                        "height": "875",
+                        "age": 265,
+                        "birth_day": 1,
+                        "birth_month": 7,
+                        "astrological_sign": "Virgo ♍️"
+                      }
+                    },
+                    "cast_role": "Deuteragonist"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetAnimeRelations": {
+        "description": "Successful GET Anime Relations JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "show": {
+                      "id": 217,
+                      "type": "show",
+                      "href": "/api/v1/anime/217",
+                      "attributes": {
+                        "title": "Omnis odit hic dolorem itaque.",
+                        "type": "Special",
+                        "source": "4-Koma Manga",
+                        "anidb_id": null,
+                        "anilist_id": null,
+                        "kitsu_id": null,
+                        "imdb_id": null,
+                        "mal_id": null,
+                        "network": null,
+                        "studio": [],
+                        "status": "Tba",
+                        "episodes": 0,
+                        "seasons": 0,
+                        "average_rating": 0,
+                        "rating_count": 0,
+                        "synopsis": "Aspernatur aperiam corrupti similique voluptatibus qui. Voluptas eum ea doloribus qui inventore hic. Voluptas accusantium libero autem ipsum molestiae aut nobis. Aliquam unde voluptates corrupti ut temporibus eum.",
+                        "runtime": 25,
+                        "watch_rating": "TV-Y7 (FV)",
+                        "tagline": "Sunt error hic quod sint.",
+                        "video_url": null,
+                        "poster": null,
+                        "background": null,
+                        "nsfw": true,
+                        "genres": [],
+                        "first_aired": "2014-12-10",
+                        "last_aired": "2015-05-27",
+                        "air_time": "16:49:00",
+                        "air_day": 7,
+                        "copyright": "℗ 1997 Kulas-Baumbach"
+                      },
+                      "current_user": {
+                        "given_rating": 0,
+                        "library_status": null,
+                        "is_favorite": false
+                      }
+                    },
+                    "attributes": {
+                      "type": "Full story"
+                    }
+                  },
+                  {
+                    "show": {
+                      "id": 219,
+                      "type": "show",
+                      "href": "/api/v1/anime/219",
+                      "attributes": {
+                        "title": "Nam voluptatum voluptas optio qui.",
+                        "type": "Unknown",
+                        "source": "Original",
+                        "anidb_id": null,
+                        "anilist_id": null,
+                        "kitsu_id": null,
+                        "imdb_id": null,
+                        "mal_id": null,
+                        "network": null,
+                        "studio": [],
+                        "status": "Tba",
+                        "episodes": 0,
+                        "seasons": 0,
+                        "average_rating": 0,
+                        "rating_count": 0,
+                        "synopsis": "Rerum distinctio quibusdam porro et. Modi natus iusto ut qui praesentium dicta sed ratione. Porro excepturi et qui laudantium tenetur non iure.",
+                        "runtime": 25,
+                        "watch_rating": "TV-Y7",
+                        "tagline": "Expedita esse et cupiditate id impedit qui ut.",
+                        "video_url": null,
+                        "poster": null,
+                        "background": null,
+                        "nsfw": false,
+                        "genres": [],
+                        "first_aired": "2015-02-10",
+                        "last_aired": "2015-05-05",
+                        "air_time": "18:32:00",
+                        "air_day": 6,
+                        "copyright": "® 1976 Swift Ltd"
+                      },
+                      "current_user": {
+                        "given_rating": 0,
+                        "library_status": null,
+                        "is_favorite": false
+                      }
+                    },
+                    "attributes": {
+                      "type": "Adaptation"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetAnimeSeasons": {
+        "description": "Successful GET Anime Seasons JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "seasons",
+                    "href": "/api/v1/anime-seasons/1",
+                    "attributes": {
+                      "anime_id": 1,
+                      "title": "Season 1",
+                      "number": 1,
+                      "episode_count": 2,
+                      "first_aired": "2020-07-29T10:00:00.000000Z"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetAnimeSearch": {
+        "description": "Successful GET Anime Search JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "show",
+                    "href": "/api/v1/anime/1",
+                    "attributes": {
+                      "title": "\"0\"",
+                      "type": "Tv",
+                      "source": "Unknown",
+                      "anidb_id": 10143,
+                      "anilist_id": 102416,
+                      "kitsu_id": 8925,
+                      "imdb_id": null,
+                      "mal_id": 20707,
+                      "network": null,
+                      "studio": [
+                        {
+                          "id": 1,
+                          "type": "studios",
+                          "href": "/api/v1/studios/1",
+                          "attributes": {
+                            "name": "Watsica-Kling",
+                            "logo_url": "https://place-hold.it/512x512",
+                            "about": "Error ipsa eos et rem recusandae rerum quos quidem aut.",
+                            "founded": "1963-11-15",
+                            "website_url": "https://watsica-kling.com/"
+                          }
+                        }
+                      ],
+                      "status": "Continuing",
+                      "episodes": 0,
+                      "seasons": 0,
+                      "average_rating": 0,
+                      "rating_count": 0,
+                      "synopsis": "Error ipsa eos et rem recusandae voluptate sunt corrupti. Qui est est autem sit pariatur laudantium. Suscipit laboriosam enim modi quae quia aperiam excepturi sunt. Temporibus est hic adipisci.",
+                      "runtime": 25,
+                      "watch_rating": "TV-14",
+                      "tagline": "Voluptatem rerum quos quidem aut.",
+                      "video_url": null,
+                      "poster": {
+                        "url": "https://place-hold.it/680x1000",
+                        "height": 1000,
+                        "width": 680,
+                        "background_color": "#acacac",
+                        "text_color_1": "#171717",
+                        "text_color_2": "#545454",
+                        "text_color_3": "#6e6e6e",
+                        "text_color_4": "#5c5c5c"
+                      },
+                      "background": {
+                        "url": "https://place-hold.it/1920x1080",
+                        "height": 1080,
+                        "width": 1920,
+                        "background_color": "#acacac",
+                        "text_color_1": "#171717",
+                        "text_color_2": "#545454",
+                        "text_color_3": "#6d6d6d",
+                        "text_color_4": "#5c5c5c"
+                      },
+                      "nsfw": false,
+                      "genres": [
+                        "Action",
+                        "Adventure"
+                      ],
+                      "first_aired": "1973-11-15",
+                      "last_aired": "1974-02-07",
+                      "air_time": "20:00:00",
+                      "air_day": 3,
+                      "copyright": "® 2003 Watsica-Kling"
+                    },
+                    "current_user": {
+                      "given_rating": 0,
+                      "library_status": null,
+                      "is_favorite": false
+                    }
+                  },
+                  {
+                    "id": 2,
+                    "type": "show",
+                    "href": "/api/v1/anime/2",
+                    "attributes": {
+                      "title": "\"Aesop\" no Ohanashi yori: Ushi to Kaeru, Yokubatta Inu",
+                      "type": "Tv",
+                      "source": "Digital manga",
+                      "anidb_id": 3689,
+                      "anilist_id": null,
+                      "kitsu_id": 9179,
+                      "imdb_id": null,
+                      "mal_id": 25627,
+                      "network": null,
+                      "studio": [
+                        {
+                          "id": 2,
+                          "type": "studios",
+                          "href": "/api/v1/studios/2",
+                          "attributes": {
+                            "name": null,
+                            "logo_url": null,
+                            "about": null,
+                            "founded": null,
+                            "website_url": null
+                          }
+                        }
+                      ],
+                      "status": "Ended",
+                      "episodes": 0,
+                      "seasons": 0,
+                      "average_rating": 0,
+                      "rating_count": 0,
+                      "synopsis": "Totam ex non eaque rem. Suscipit eos recusandae et. Pariatur reprehenderit aliquid reprehenderit nisi quae. Fuga enim atque ratione occaecati sequi iste dignissimos.",
+                      "runtime": 25,
+                      "watch_rating": "TV-14",
+                      "tagline": "Vel facilis dignissimos suscipit veritatis enim nemo ut.",
+                      "video_url": null,
+                      "poster": null,
+                      "background": null,
+                      "nsfw": false,
+                      "genres": [],
+                      "first_aired": "2014-09-28",
+                      "last_aired": "2014-12-21",
+                      "air_time": "19:24:00",
+                      "air_day": 4,
+                      "copyright": "® 1985 Fadel, Sipes and McGlynn"
+                    },
+                    "current_user": {
+                      "given_rating": 0,
+                      "library_status": null,
+                      "is_favorite": false
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetAnimeSeasonsDetails": {
+        "description": "Successful GET Anime Seasons Details JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "seasons",
+                    "href": "/api/v1/anime-seasons/1",
+                    "attributes": {
+                      "anime_id": 1,
+                      "title": "Season 1",
+                      "number": 1,
+                      "first_aired": "6-29-2020 2020-07-29 12:00:00",
+                      "episode_count": 2
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetAnimeSeasonsEpisodes": {
+        "description": "Successful GET Anime Seasons Episodes JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "episodes",
+                    "href": "/api/v1/anime-seasons/1/episodes",
+                    "attributes": {
+                      "number": 1,
+                      "name": "Episode 1",
+                      "first_aired": "29 Jul, 2020",
+                      "overview": "A short, or long description of the episode.",
+                      "verified": false
+                    },
+                    "current_user": {
+                      "watched": 1
+                    }
+                  },
+                  {
+                    "id": 2,
+                    "type": "episodes",
+                    "href": "/api/v1/anime-seasons/2/episodes",
+                    "attributes": {
+                      "number": 2,
+                      "name": "Episode 2",
+                      "first_aired": "5 Aug, 2020",
+                      "overview": "A long, or short description of the episode.",
+                      "verified": false
+                    },
+                    "current_user": {
+                      "watched": 0
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "PostAnimeEpisodesWatched": {
+        "description": "Successful POST Anime Episodes Watched JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": {
+                  "watched": 1
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetActors": {
+        "description": "Successful GET Actors JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "actors",
+                    "href": "/api/v1/actors/1",
+                    "attributes": {
+                      "first_name": "Aniyah",
+                      "last_name": "Waelchi",
+                      "occupation": "Government Property Inspector",
+                      "image": "https://lorempixel.com/640/480/?66477"
+                    }
+                  },
+                  {
+                    "id": 2,
+                    "type": "actors",
+                    "href": "/api/v1/actors/2",
+                    "attributes": {
+                      "first_name": "Ashley",
+                      "last_name": "Carroll",
+                      "occupation": "Inspector",
+                      "image": "https://lorempixel.com/640/480/?48504"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetActorsDetails": {
+        "description": "Successful GET Actors Details JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "actors",
+                    "href": "/api/v1/actors/1",
+                    "attributes": {
+                      "first_name": "Aniyah",
+                      "last_name": "Waelchi",
+                      "occupation": "Government Property Inspector",
+                      "image": "https://lorempixel.com/640/480/?66477"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetCharacters": {
+        "description": "Successful GET Characters JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "characters",
+                    "href": "/api/v1/characters/1",
+                    "attributes": {
+                      "name": "Tyra Armstrong IV",
+                      "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
+                      "image": "https://lorempixel.com/640/480/?46141",
+                      "debut": "Episode 05",
+                      "status": "Deceased",
+                      "blood_type": "W",
+                      "favorite_food": "numquam",
+                      "bust": "27.70",
+                      "waist": "78.44",
+                      "hip": "53.99",
+                      "height": "875",
+                      "age": 265,
+                      "birth_day": 1,
+                      "birth_month": 7,
+                      "astrological_sign": "Virgo ♍️"
+                    }
+                  },
+                  {
+                    "id": 2,
+                    "type": "characters",
+                    "href": "/api/v1/characters/2",
+                    "attributes": {
+                      "name": "Lorna Pollich",
+                      "about": "Est vitae et voluptas ullam unde id ea. Quo non distinctio ipsa blanditiis aspernatur. Perferendis aut officia sit similique soluta odit eum. Sunt quo delectus est quis sapiente. A natus voluptatem omnis distinctio quis quas. Molestiae ut aut voluptas incidunt necessitatibus nihil culpa. Molestiae dolores illo dignissimos amet sit. Sit non et enim doloremque ratione exercitationem. Hic voluptas ab eos quia quia quia. Hic expedita est distinctio quaerat accusamus.",
+                      "image": "https://lorempixel.com/640/480/?51170",
+                      "debut": "Episode 82",
+                      "status": "Deceased",
+                      "blood_type": "A",
+                      "favorite_food": "hic",
+                      "bust": "22.62",
+                      "waist": "33.46",
+                      "hip": "37.65",
+                      "height": "704",
+                      "age": 292,
+                      "birth_day": 1,
+                      "birth_month": 2,
+                      "astrological_sign": "Cancer ♋️"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetCharactersDetails": {
+        "description": "Successful GET Characters Details JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "characters",
+                    "href": "/api/v1/characters/1",
+                    "attributes": {
+                      "name": "Tyra Armstrong IV",
+                      "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
+                      "image": "https://lorempixel.com/640/480/?46141",
+                      "debut": "Episode 05",
+                      "status": "Deceased",
+                      "blood_type": "W",
+                      "favorite_food": "numquam",
+                      "bust": "27.70",
+                      "waist": "78.44",
+                      "hip": "53.99",
+                      "height": "875",
+                      "age": 265,
+                      "birth_day": 1,
+                      "birth_month": 7,
+                      "astrological_sign": "Virgo ♍️"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetGenres": {
+        "description": "Successful GET Genres JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "genres",
+                    "href": "/api/v1/genres/1",
+                    "attributes": {
+                      "name": "Action",
+                      "color": "#FFE4B9",
+                      "symbol": "https://raw.githubusercontent.com/Kurozora/anime/master/genre-symbols/Action.png",
+                      "description": "An action story is similar to adventure, and the protagonist usually takes a risky turn, which leads to desperate situations (including explosions, fight scenes, daring escapes, etc.).",
+                      "nsfw": false
+                    }
+                  },
+                  {
+                    "id": 2,
+                    "type": "genres",
+                    "href": "/api/v1/genres/2",
+                    "attributes": {
+                      "name": "Adventure",
+                      "color": "#CAF0FF",
+                      "symbol": "https://raw.githubusercontent.com/Kurozora/anime/master/genre-symbols/Adventure.png",
+                      "description": "An adventure story is about a protagonist who journeys to epic or distant places to accomplish something.",
+                      "nsfw": false
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetGenresDetails": {
+        "description": "Successful GET Genres Details JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "genres",
+                    "href": "/api/v1/genres/1",
+                    "attributes": {
+                      "name": "Action",
+                      "color": "#FFE4B9",
+                      "symbol": "https://raw.githubusercontent.com/Kurozora/anime/master/genre-symbols/Action.png",
+                      "description": "An action story is similar to adventure, and the protagonist usually takes a risky turn, which leads to desperate situations (including explosions, fight scenes, daring escapes, etc.).",
+                      "nsfw": false
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetForumSections": {
+        "description": "Successful GET Forum-Sections JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "sections",
+                    "href": "/api/v1/forum-sections/1",
+                    "attributes": {
+                      "name": "Anime",
+                      "locked": false
+                    }
+                  },
+                  {
+                    "id": 2,
+                    "type": "sections",
+                    "href": "/api/v1/forum-sections/2",
+                    "attributes": {
+                      "name": "Real Life",
+                      "locked": true
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetForumSectionsDetails": {
+        "description": "Successful GET Forum-Sections Details JSON response.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "sections",
+                    "href": "/api/v1/forum-sections/1",
+                    "attributes": {
+                      "name": "Anime",
+                      "locked": false
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetForumSectionsThreads": {
+        "description": "Successful GET Forum-Sections Threads JSON response.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "threads",
+                    "href": "/api/v1/forum-threads/1",
+                    "attributes": {
+                      "title": "Enim quia molestiae.",
+                      "content": "Fuga repellendus blanditiis quaerat provident et doloremque. Ad ullam nulla at optio ipsa ipsum.",
+                      "locked": false,
+                      "reply_count": 13,
+                      "score": 10,
+                      "creation_date": "2020-07-27 12:59:34"
+                    },
+                    "relationships": {
+                      "user": {
+                        "data": [
+                          {
+                            "id": 29,
+                            "type": "users",
+                            "href": "/api/v1/users/29/profile",
+                            "attributes": {
+                              "username": "reynold71",
+                              "activity_status": "Offline",
+                              "biography": "Et in dolor illo sit non. Veniam est et qui qui atque. Ut mollitia autem accusantium ea molestiae voluptatem a. Dicta in qui necessitatibus maiores.",
+                              "avatar_url": null,
+                              "banner_url": null,
+                              "follower_count": 67,
+                              "following_count": 67,
+                              "reputation_count": 59
+                            },
+                            "current_user": {
+                              "following": false
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "current_user": {
+                      "vote_action": 1
+                    }
+                  },
+                  {
+                    "id": 2,
+                    "type": "threads",
+                    "href": "/api/v1/forum-threads/2",
+                    "attributes": {
+                      "title": "Voluptatem possimus sunt.",
+                      "content": "Cupiditate voluptatem quaerat eaque veniam atque. Id et fugiat dolore nihil necessitatibus ut quia tempore. Natus aspernatur consequatur dolores dolore ea consequatur rerum possimus.",
+                      "locked": true,
+                      "reply_count": 2,
+                      "score": 0,
+                      "creation_date": "2020-07-27 12:59:34"
+                    },
+                    "relationships": {
+                      "user": {
+                        "data": [
+                          {
+                            "id": 29,
+                            "type": "users",
+                            "href": "/api/v1/users/29/profile",
+                            "attributes": {
+                              "username": "reynold71",
+                              "activity_status": "Offline",
+                              "biography": "Et in dolor illo sit non. Veniam est et qui qui atque. Ut mollitia autem accusantium ea molestiae voluptatem a. Dicta in qui necessitatibus maiores.",
+                              "avatar_url": null,
+                              "banner_url": null,
+                              "follower_count": 67,
+                              "following_count": 67,
+                              "reputation_count": 59
+                            },
+                            "current_user": {
+                              "following": false
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "current_user": {
+                      "vote_action": 1
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "PostForumSectionsThreads": {
+        "description": "Successful POST Forum-Threads Details JSON response.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 52,
+                    "type": "threads",
+                    "href": "/api/v1/forum-threads/52",
+                    "attributes": {
+                      "title": "Re:Zero",
+                      "content": "Good anime to watch.",
+                      "locked": false,
+                      "reply_count": 0,
+                      "score": 0,
+                      "creation_date": "2020-07-29 18:28:59"
+                    },
+                    "relationships": {
+                      "user": {
+                        "data": [
+                          {
+                            "id": 2,
+                            "type": "users",
+                            "href": "/api/v1/users/2/profile",
+                            "attributes": {
+                              "username": "Kirito",
+                              "activity_status": "Online",
+                              "biography": "My biography.",
+                              "avatar_url": "https://kurozora.app/storage/2/ProfileImage.png",
+                              "banner_url": "https://kurozora.app/storage/2/BannerImage.png",
+                              "follower_count": 0,
+                              "following_count": 0,
+                              "reputation_count": 0
+                            },
+                            "current_user": {
+                              "following": false
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "current_user": {
+                      "vote_action": 0
+                    }
+                  }
+                ]
               }
             }
           }

@@ -27,12 +27,12 @@ class ForumThreadResource extends JsonResource
             'type'          => 'threads',
             'href'          => route('forum-threads.details', $forumThread, false),
             'attributes'    => [
-                'title'             => $forumThread->title,
-                'content'           => $forumThread->content,
-                'locked'            => (bool) $forumThread->locked,
-                'reply_count'       => $forumThread->replies->count(),
-                'score'             => $forumThread->viaLoveReactant()->getReactionTotal()->getCount(),
-                'creation_date'     => $forumThread->created_at->format('Y-m-d H:i:s'),
+                'title'         => $forumThread->title,
+                'content'       => $forumThread->content,
+                'locked'        => (bool) $forumThread->locked,
+                'reply_count'   => $forumThread->replies->count(),
+                'score'         => $forumThread->viaLoveReactant()->getReactionTotal()->getCount(),
+                'created_at'    => $forumThread->created_at,
             ]
         ];
 

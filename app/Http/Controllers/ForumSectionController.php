@@ -112,7 +112,7 @@ class ForumSectionController extends Controller
         ]);
 
         return JSONResult::success([
-            'thread_id' => $newThread->id
+            'data' => ForumThreadResource::collection([$newThread])
         ]);
     }
 }
