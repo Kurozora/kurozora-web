@@ -2,10 +2,9 @@
 
 namespace App\Console\Commands;
 
-use AnimesTableDummySeeder;
+use AnimeDummySeeder;
 use Illuminate\Console\ConfirmableTrait;
 use Illuminate\Database\Console\Migrations\FreshCommand as BaseFreshCommand;
-use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Console\Input\InputOption;
 
 class FreshCommand extends BaseFreshCommand
@@ -42,7 +41,7 @@ class FreshCommand extends BaseFreshCommand
      */
     protected function runRedownload() {
         $this->info('Downloading anime JSON...');
-        AnimesTableDummySeeder::downloadJSON();
+        AnimeDummySeeder::downloadJSON();
         $this->info('Anime JSON downloaded.');
     }
 

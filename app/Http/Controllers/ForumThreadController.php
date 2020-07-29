@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\VoteType;
 use App\ForumReply;
 use App\ForumSectionBan;
 use App\ForumThread;
@@ -32,12 +33,15 @@ class ForumThreadController extends Controller
      *
      * @param Request $request
      * @param ForumThread $thread
+     *
      * @return JsonResponse
+     *
+     * @throws \BenSampo\Enum\Exceptions\InvalidEnumKeyException
      */
     public function vote(Request $request, ForumThread $thread) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'vote' => 'bail|required|numeric|min:0|max:1'
+            'vote' => 'bail|required|numeric|in:-1,1'
         ]);
 
         // Check validator
@@ -48,17 +52,14 @@ class ForumThreadController extends Controller
         $user = Auth::user();
 
         // Get the vote
-        $votePositive = $request->input('vote');
-
-        // Perform the action
-        if($votePositive)
-            $user->toggleLike($thread);
-        else
-            $user->toggleDislike($thread);
+        $voteType = VoteType::fromValue((int) $request->input('vote'));
+        $voteAction = $user->toggleVote($thread, $voteType);
 
         // Show successful response
         return JSONResult::success([
-            'action' => $user->likeAction($thread)
+            'data' => [
+                'vote_action' => $voteAction
+            ]
         ]);
     }
 
@@ -105,9 +106,7 @@ class ForumThreadController extends Controller
         ]);
 
         return JSONResult::success([
-            'data' => [
-                'reply_id' => $newReply->id
-            ]
+            'data' => ForumReplyResource::collection([$newReply])
         ]);
     }
 
@@ -137,7 +136,8 @@ class ForumThreadController extends Controller
         if($givenOrder == 'recent')
             $replies = $replies->orderBy('created_at', 'DESC');
         else if($givenOrder == 'top')
-            $replies = $replies->orderByLikesCount();
+            $replies = $replies->joinReactionCounterOfType('Like')
+                               ->orderBy('reaction_like_count', 'desc');
 
         // Paginate the replies
         $replies = $replies->paginate(ForumThread::REPLIES_PER_PAGE);

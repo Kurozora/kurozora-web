@@ -18,7 +18,7 @@ class PrivacyPageController extends Controller
         $responseData = (array) Route::dispatch($privacyPolicyRequest)->getData();
 
         return view('website.legal.privacy', [
-            'policyText'    => $responseData['privacy_policy']->text
+            'policyText'    => $responseData['data']->privacy_policy
         ]);
     }
 }

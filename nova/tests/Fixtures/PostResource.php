@@ -5,6 +5,7 @@ namespace Laravel\Nova\Tests\Fixtures;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\MorphMany;
 use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Text;
@@ -40,8 +41,22 @@ class PostResource extends Resource
         return [
             BelongsTo::make('User', 'user', UserResource::class)->nullable()
                 ->viewable($_SERVER['nova.user.viewable-field'] ?? true),
-            BelongsToMany::make('Authors', 'authors', UserResource::class),
+
+            tap(BelongsToMany::make('Authors', 'authors', UserResource::class), function ($field) {
+                if ($_SERVER['nova.addAuthorPivotFields'] ?? false) {
+                    return [
+                        Text::make('Added At')->onlyOnIndex(),
+                        Date::make('Added At')->onlyOnForms(),
+                    ];
+                }
+            }),
+
             Text::make('Title', 'title')->rules('required', 'string', 'max:255'),
+
+            Text::make('Slug', 'slug')->rules('required', 'string', 'max:255')->default(function ($request) {
+                return 'default-slug';
+            }),
+
             Text::make('Description', 'description')->rules('string', 'max:255')
                 ->nullable()
                 ->canSee(function () {

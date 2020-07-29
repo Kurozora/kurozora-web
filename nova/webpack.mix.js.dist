@@ -25,7 +25,6 @@ mix
         'laravel-nova',
         'lodash',
         'markdown-it',
-        'marked',
         'moment-timezone',
         'moment',
         'numbro',

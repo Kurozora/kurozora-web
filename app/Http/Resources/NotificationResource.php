@@ -30,7 +30,7 @@ class NotificationResource extends JsonResource
                 'read'          => ($notification->read_at != null),
                 'data'          => $notification->data,
                 'string'        => self::getNotificationString($notification),
-                'creation_date' => (string) $notification->created_at
+                'created_at'    => $notification->created_at
             ]
         ];
     }

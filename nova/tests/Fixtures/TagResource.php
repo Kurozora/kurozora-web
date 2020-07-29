@@ -12,6 +12,13 @@ use Laravel\Nova\Resource;
 class TagResource extends Resource
 {
     /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = 'Content';
+
+    /**
      * The model the resource corresponds to.
      *
      * @var string

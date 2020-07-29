@@ -32,6 +32,10 @@ export default {
       type: String,
       default: 'Y-m-d H:i:S',
     },
+    altFormat: {
+      type: String,
+      default: 'Y-m-d H:i:S',
+    },
     twelveHourTime: {
       type: Boolean,
       default: false,
@@ -60,6 +64,8 @@ export default {
         onClose: this.onChange,
         onChange: this.onChange,
         dateFormat: this.dateFormat,
+        altInput: true,
+        altFormat: this.altFormat,
         allowInput: true,
         // static: true,
         time_24hr: !this.twelveHourTime,
@@ -71,6 +77,10 @@ export default {
   methods: {
     onChange(event) {
       this.$emit('change', this.$refs.datePicker.value)
+    },
+
+    clear() {
+      this.flatpickr.clear()
     },
   },
 

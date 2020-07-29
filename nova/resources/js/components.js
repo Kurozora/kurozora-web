@@ -19,8 +19,14 @@ import ConfirmActionModal from '@/components/Modals/ConfirmActionModal'
 import ConfirmUploadRemovalModal from '@/components/Modals/ConfirmUploadRemovalModal'
 import CreateResourceButton from '@/components/CreateResourceButton'
 import CustomAttachHeader from '@/components/CustomAttachHeader'
+import CreateRelationModal from '@/components/Modals/CreateRelationModal'
+import CreateRelationButton from '@/components/Form/CreateRelationButton'
+import CreateForm from '@/components/CreateForm'
+import CustomCreateHeader from '@/components/CustomCreateHeader'
+import CustomDashboardHeader from '@/components/CustomDashboardHeader'
 import CustomDetailHeader from '@/components/CustomDetailHeader'
 import CustomDetailToolbar from '@/components/CustomDetailToolbar'
+import CustomLensHeader from '@/components/CustomLensHeader'
 import CustomIndexHeader from '@/components/CustomIndexHeader'
 import CustomIndexToolbar from '@/components/CustomIndexToolbar'
 import CustomUpdateHeader from '@/components/CustomUpdateHeader'
@@ -109,12 +115,18 @@ Vue.component('confirm-action-modal', ConfirmActionModal)
 Vue.component('confirm-upload-removal-modal', ConfirmUploadRemovalModal)
 Vue.component('create-resource-button', CreateResourceButton)
 Vue.component('custom-attach-header', CustomAttachHeader)
+Vue.component('custom-create-header', CustomCreateHeader)
+Vue.component('custom-dashboard-header', CustomDashboardHeader)
 Vue.component('custom-detail-header', CustomDetailHeader)
 Vue.component('custom-detail-toolbar', CustomDetailToolbar)
+Vue.component('custom-lens-header', CustomLensHeader)
 Vue.component('custom-index-header', CustomIndexHeader)
 Vue.component('custom-index-toolbar', CustomIndexToolbar)
 Vue.component('custom-update-header', CustomUpdateHeader)
 Vue.component('custom-update-attached-header', CustomUpdateAttachedHeader)
+Vue.component('create-relation-modal', CreateRelationModal)
+Vue.component('create-relation-button', CreateRelationButton)
+Vue.component('create-form', CreateForm)
 Vue.component('delete-menu', DeleteMenu)
 Vue.component('delete-resource-modal', DeleteResourceModal)
 Vue.component('dropdown', Dropdown)

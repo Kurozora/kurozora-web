@@ -60,4 +60,40 @@ class BooleanGroupTest extends IntegrationTest
             ['name' => 'delete', 'label' => 'Delete'],
         ], $field->jsonSerialize()['options']);
     }
+
+    public function test_the_field_can_hide_true_values()
+    {
+        $field = BooleanGroup::make('Sizes')->options([
+            'create',
+            'delete',
+        ])->hideTrueValues();
+
+        $this->assertContains([
+            'hideTrueValue' => true,
+        ], $field->jsonSerialize());
+    }
+
+    public function test_the_field_can_hide_false_values_from_index()
+    {
+        $field = BooleanGroup::make('Sizes')->options([
+            'create',
+            'delete',
+        ])->hideFalseValues();
+
+        $this->assertContains([
+            'hideFalseValues' => true,
+        ], $field->jsonSerialize());
+    }
+
+    public function test_the_field_can_change_no_data_text()
+    {
+        $field = BooleanGroup::make('Sizes')->options([
+            'create' => 'Create',
+            'delete' => 'Delete',
+        ])->noValueText('Custom No Data');
+
+        $this->assertContains([
+            'emptyText' => 'Custom No Data',
+        ], $field->jsonSerialize());
+    }
 }

@@ -24,7 +24,10 @@ class CreateAnimeRelationsTable extends Migration
         });
 
         Schema::table(AnimeRelations::TABLE_NAME, function (Blueprint $table) {
+            // Set unique index constraints
             $table->unique(['anime_id', 'related_anime_id', 'type']);
+
+            // Set foreign key constraints
             $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
             $table->foreign('related_anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
         });

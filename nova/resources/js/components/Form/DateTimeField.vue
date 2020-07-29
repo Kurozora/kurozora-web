@@ -4,10 +4,12 @@
       <div class="flex items-center">
         <date-time-picker
           class="w-full form-control form-input form-input-bordered"
+          ref="dateTimePicker"
           :dusk="field.attribute"
           :name="field.name"
           :placeholder="placeholder"
           :dateFormat="pickerFormat"
+          :alt-format="pickerDisplayFormat"
           :value="localizedValue"
           :twelve-hour-time="usesTwelveHourTime"
           :first-day-of-week="firstDayOfWeek"
@@ -15,6 +17,21 @@
           @change="handleChange"
           :disabled="isReadonly"
         />
+
+        <a
+          v-if="field.nullable"
+          @click.prevent="$refs.dateTimePicker.clear()"
+          href="#"
+          :title="__('Clear value')"
+          tabindex="-1"
+          class="p-1 px-2 cursor-pointer leading-none focus:outline-none"
+          :class="{
+            'text-50': !value.length,
+            'text-black hover:text-danger': value.length,
+          }"
+        >
+          <icon type="x-circle" width="22" height="22" viewBox="0 0 22 22" />
+        </a>
 
         <span class="text-80 text-sm ml-2">({{ userTimezone }})</span>
       </div>
@@ -51,6 +68,13 @@ export default {
     },
 
     /**
+     * On save, populate our form data
+     */
+    fill(formData) {
+      formData.append(this.field.attribute, this.value || '')
+    },
+
+    /**
      * Update the field's internal value when it's value changes
      */
     handleChange(value) {
@@ -73,6 +97,10 @@ export default {
 
     pickerFormat() {
       return this.field.pickerFormat || 'Y-m-d H:i:S'
+    },
+
+    pickerDisplayFormat() {
+      return this.field.pickerDisplayFormat || 'Y-m-d H:i:S'
     },
   },
 }

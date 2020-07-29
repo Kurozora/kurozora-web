@@ -17,16 +17,17 @@ class CreateForumBansTable extends Migration
     public function up()
     {
         Schema::create(ForumSectionBan::TABLE_NAME, function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
-
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
-
-            $table->integer('section_id')->unsigned();
-            $table->foreign('section_id')->references('id')->on(ForumSection::TABLE_NAME)->onDelete('cascade');
-
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('section_id');
             $table->string('reason');
+            $table->timestamps();
+        });
+
+        Schema::table(ForumSectionBan::TABLE_NAME, function (Blueprint $table) {
+            // Set foreign key constraints
+            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('section_id')->references('id')->on(ForumSection::TABLE_NAME)->onDelete('cascade');
         });
     }
 

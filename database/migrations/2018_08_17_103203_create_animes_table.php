@@ -19,8 +19,6 @@ class CreateAnimesTable extends Migration
     {
         Schema::create(Anime::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamps();
-
             $table->string('title')->default('Unknown title');
             $table->string('tagline')->nullable();
             $table->string('video_url')->nullable();
@@ -30,14 +28,14 @@ class CreateAnimesTable extends Migration
             $table->integer('type')->default(AnimeType::Unknown);
             $table->integer('source')->default(AnimeSource::Unknown);
             $table->boolean('nsfw')->default(false);
-            $table->integer('anidb_id')->nullable()->unsigned();
-            $table->integer('anilist_id')->nullable()->unsigned();
+            $table->unsignedInteger('anidb_id')->nullable();
+            $table->unsignedInteger('anilist_id')->nullable();
             $table->string('imdb_id')->nullable();
-            $table->integer('kitsu_id')->nullable()->unsigned();
-            $table->integer('mal_id')->nullable()->unsigned();
-            $table->integer('tvdb_id')->nullable()->unsigned();
+            $table->unsignedInteger('kitsu_id')->nullable();
+            $table->unsignedInteger('mal_id')->nullable();
+            $table->unsignedInteger('tvdb_id')->nullable();
             $table->mediumText('synopsis')->nullable();
-            $table->tinyInteger('runtime')->nullable()->unsigned();
+            $table->unsignedTinyInteger('runtime')->nullable();
             $table->integer('watch_rating')->nullable();
             $table->float('average_rating')->default(0.0);
             $table->integer('rating_count')->default(0);
@@ -46,7 +44,7 @@ class CreateAnimesTable extends Migration
             $table->date('first_aired')->nullable();
             $table->date('last_aired')->nullable();
             $table->time('air_time')->nullable();
-            $table->integer('air_day')->nullable()->unsigned();
+            $table->unsignedInteger('air_day')->nullable();
             $table->string('copyright')->nullable();
 
             // Flags for fetched data
@@ -54,6 +52,8 @@ class CreateAnimesTable extends Migration
             $table->boolean('fetched_base_episodes')->default(false);
             $table->boolean('fetched_images')->default(false);
             $table->boolean('fetched_details')->default(false);
+
+            $table->timestamps();
         });
     }
 

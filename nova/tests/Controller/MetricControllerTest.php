@@ -6,6 +6,7 @@ use Illuminate\Support\Carbon;
 use Laravel\Nova\Metrics\Metric;
 use Laravel\Nova\Nova;
 use Laravel\Nova\Tests\Fixtures\Post;
+use Laravel\Nova\Tests\Fixtures\PostCountTrend;
 use Laravel\Nova\Tests\Fixtures\TotalUsers;
 use Laravel\Nova\Tests\Fixtures\User;
 use Laravel\Nova\Tests\Fixtures\UserGrowth;
@@ -179,6 +180,8 @@ class MetricControllerTest extends IntegrationTest
 
     public function test_can_retrieve_today_count_calculations()
     {
+        Carbon::setTestNow('Oct 1 12:00 PM');
+
         factory(User::class, 3)->create();
 
         $user = User::find(1);
@@ -199,6 +202,8 @@ class MetricControllerTest extends IntegrationTest
         $response->assertStatus(200);
         $this->assertEquals(2, $response->original['value']->value);
         $this->assertEquals(1, $response->original['value']->previous);
+
+        Carbon::setTestNow();
     }
 
     public function test_can_retrieve_mtd_count_calculations()
@@ -335,6 +340,26 @@ class MetricControllerTest extends IntegrationTest
         $response->assertStatus(200);
         $this->assertEquals(100, $response->original['value']->value);
         $this->assertEquals(50, $response->original['value']->previous);
+    }
+
+    public function test_can_retrieve_sum_trend_value()
+    {
+        Nova::cards([new PostCountTrend]);
+
+        factory(Post::class, 2)->create([
+            'published_at' => now()->subMonth(),
+        ]);
+        factory(Post::class, 1)->create([
+            'published_at' => now()->subMonths(2),
+        ]);
+        factory(Post::class, 1)->create([
+            'published_at' => now()->subMonths(5),
+        ]);
+        $response = $this->withExceptionHandling()
+                         ->get('/nova-api/metrics/post-count-trend?range=30')
+                         ->assertStatus(200);
+
+        $this->assertEquals(4, $response->json('value.value'));
     }
 
     protected function getFirstDayOfPreviousQuarter()

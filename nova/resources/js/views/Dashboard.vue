@@ -1,5 +1,7 @@
 <template>
   <div :dusk="'dashboard-' + this.name">
+    <custom-dashboard-header class="mb-3" :dashboard-name="name" />
+
     <heading v-if="cards.length > 1" class="mb-6">{{
       __('Dashboard')
     }}</heading>

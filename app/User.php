@@ -7,10 +7,10 @@ use App\Helpers\OptionsBag;
 use App\Jobs\FetchSessionLocation;
 use App\Notifications\NewSession;
 use App\Traits\KuroSearchTrait;
-use App\Traits\LikeActionTrait;
+use App\Traits\VoteActionTrait;
 use App\Traits\MediaLibraryExtensionTrait;
-use Cog\Contracts\Love\Liker\Models\Liker as LikerContract;
-use Cog\Laravel\Love\Liker\Models\Traits\Liker;
+use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
+use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
@@ -19,18 +19,18 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
-use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements LikerContract, HasMedia
+class User extends Authenticatable implements ReacterableContract, HasMedia
 {
     use Notifiable,
         Authorizable,
         KuroSearchTrait,
-        Liker,
-        LikeActionTrait,
-        HasMediaTrait,
+        Reacterable,
+        VoteActionTrait,
+        InteractsWithMedia,
         MediaLibraryExtensionTrait,
         LogsActivity,
         HasRoles;
@@ -141,7 +141,7 @@ class User extends Authenticatable implements LikerContract, HasMedia
     /**
      * Registers the media collections for the model.
      */
-    public function registerMediaCollections()
+    public function registerMediaCollections(): void
     {
         $this->addMediaCollection('avatar')
             ->singleFile();
@@ -163,7 +163,7 @@ class User extends Authenticatable implements LikerContract, HasMedia
     /**
      * Returns a boolean indicating whether the user has the given anime in their library.
      *
-     * @param \App\Anime $anime The anime to be searched for in the user's library.
+     * @param Anime $anime The anime to be searched for in the user's library.
      *
      * @return bool
      */

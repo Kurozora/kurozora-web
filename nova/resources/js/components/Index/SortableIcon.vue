@@ -33,20 +33,43 @@ export default {
   },
 
   methods: {
+    /**
+     * Handle the clicke event.
+     */
     handleClick() {
-      this.$emit('sort', {
-        key: this.uriKey,
-        direction: this.direction,
-      })
+      if (this.notSorted || this.isAscDirection) {
+        this.$emit('sort', {
+          key: this.uriKey,
+          direction: this.direction,
+        })
+      }
+
+      if (this.isDescDirection) {
+        this.$emit('reset')
+      }
     },
   },
 
   computed: {
     /**
+     * Determine if the sorting direction is descending.
+     */
+    isDescDirection() {
+      return this.direction == 'desc'
+    },
+
+    /**
+     * Determine if the sorting direction is ascending.
+     */
+    isAscDirection() {
+      return this.direction == 'asc'
+    },
+
+    /**
      * The CSS class to apply to the ascending arrow icon
      */
     ascClass() {
-      if (this.isSorted && this.direction == 'desc') {
+      if (this.isSorted && this.isDescDirection) {
         return 'fill-80'
       }
 
@@ -57,7 +80,7 @@ export default {
      * The CSS class to apply to the descending arrow icon
      */
     descClass() {
-      if (this.isSorted && this.direction == 'asc') {
+      if (this.isSorted && this.isAscDirection) {
         return 'fill-80'
       }
 
@@ -68,7 +91,10 @@ export default {
      * Determine whether this column is being sorted
      */
     isSorted() {
-      return this.sortColumn == this.uriKey
+      return (
+        this.sortColumn == this.uriKey &&
+        ['asc', 'desc'].includes(this.direction)
+      )
     },
 
     /**
@@ -97,6 +123,10 @@ export default {
      */
     direction() {
       return this.$route.query[this.directionKey]
+    },
+
+    notSorted() {
+      return !!!this.isSorted
     },
   },
 }

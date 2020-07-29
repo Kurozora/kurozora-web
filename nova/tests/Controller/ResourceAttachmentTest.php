@@ -2,8 +2,10 @@
 
 namespace Laravel\Nova\Tests\Controller;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Actions\ActionEvent;
+use Laravel\Nova\Nova;
 use Laravel\Nova\Tests\Fixtures\Role;
 use Laravel\Nova\Tests\Fixtures\User;
 use Laravel\Nova\Tests\Fixtures\UserPolicy;
@@ -23,7 +25,7 @@ class ResourceAttachmentTest extends IntegrationTest
         $user = factory(User::class)->create();
         $role = factory(Role::class)->create();
 
-        $response = $this->withExceptionHandling()
+        $response = $this->withoutExceptionHandling()
                         ->postJson('/nova-api/users/'.$user->id.'/attach/roles', [
                             'roles' => $role->id,
                             'admin' => 'Y',
@@ -231,6 +233,7 @@ class ResourceAttachmentTest extends IntegrationTest
         $response = $this->withExceptionHandling()
             ->postJson('/nova-api/users/'.$user->id.'/attach/users', [
                 'users' => $user2->id,
+                'users_trashed' => false,
                 'viaRelationship' => 'relatedUsers',
             ]);
 
@@ -238,5 +241,82 @@ class ResourceAttachmentTest extends IntegrationTest
 
         $this->assertCount(1, $user->fresh()->relatedUsers);
         $this->assertEquals($user2->id, $user->fresh()->relatedUsers->first()->id);
+    }
+
+    public function test_attachable_resource_with_custom_relationship_name_are_validated()
+    {
+        $_SERVER['nova.useRolesCustomAttribute'] = true;
+
+        $user = factory(User::class)->create();
+        $role = factory(Role::class)->create();
+
+        $response = $this->withExceptionHandling()
+            ->postJson('/nova-api/users/'.$user->id.'/attach/roles', [
+                'roles' => null,
+                'roles_trashed' => false,
+                'viaRelationship' => 'userRoles',
+            ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors('roles');
+
+        unset($_SERVER['nova.useRolesCustomAttribute']);
+    }
+
+    public function test_attach_resource_with_custom_relationship_name()
+    {
+        $_SERVER['nova.useRolesCustomAttribute'] = true;
+
+        $user = factory(User::class)->create();
+        $role = factory(Role::class)->create();
+
+        $response = $this->withoutExceptionHandling()
+            ->postJson('/nova-api/users/'.$user->id.'/attach/roles', [
+                'roles' => $role->id,
+                'admin' => 'Y',
+                'viaRelationship' => 'userRoles',
+            ]);
+
+        $response->assertOk();
+
+        unset($_SERVER['nova.useRolesCustomAttribute']);
+    }
+
+    public function test_should_store_action_event_on_correct_connection_when_updating_attachments()
+    {
+        $this->setupActionEventsOnSeparateConnection();
+
+        $user = factory(User::class)->create();
+        $role = factory(Role::class)->create();
+
+        $response = $this->withExceptionHandling()
+            ->postJson('/nova-api/users/'.$user->id.'/attach/roles', [
+                'roles' => $role->id,
+                'admin' => 'Y',
+                'viaRelationship' => 'roles',
+            ]);
+
+        $response->assertStatus(200);
+
+        $this->assertCount(1, $user->fresh()->roles);
+        $this->assertEquals($role->id, $user->fresh()->roles->first()->id);
+        $this->assertEquals('Y', $user->fresh()->roles->first()->pivot->admin);
+
+        $this->assertCount(0, DB::connection('sqlite')->table('action_events')->get());
+        $this->assertCount(1, DB::connection('sqlite-custom')->table('action_events')->get());
+
+        tap(Nova::actionEvent()->first(), function ($actionEvent) use ($user, $role) {
+            $this->assertEquals('Attach', $actionEvent->name);
+            $this->assertEquals('finished', $actionEvent->status);
+
+            $this->assertEquals($user->id, $actionEvent->target_id);
+            $this->assertEmpty($actionEvent->original);
+
+            $this->assertSubset([
+                'user_id' => $user->id,
+                'role_id' => $role->id,
+                'admin' => 'Y',
+            ], $actionEvent->changes);
+        });
     }
 }

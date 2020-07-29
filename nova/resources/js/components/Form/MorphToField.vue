@@ -38,70 +38,110 @@
       v-if="hasMorphToTypes"
     >
       <template slot="field">
-        <search-input
-          v-if="isSearchable && !isLocked && !isReadonly"
-          :data-testid="`${field.attribute}-search-input`"
-          :disabled="!resourceType || isLocked || isReadonly"
-          @input="performSearch"
-          @clear="clearSelection"
-          @selected="selectResource"
-          :value="selectedResource"
-          :data="availableResources"
-          :clearable="field.nullable"
-          trackBy="value"
-          searchBy="display"
-          class="mb-3"
-        >
-          <div slot="default" v-if="selectedResource" class="flex items-center">
-            <div v-if="selectedResource.avatar" class="mr-3">
-              <img
-                :src="selectedResource.avatar"
-                class="w-8 h-8 rounded-full block"
-              />
+        <div class="flex items-center mb-3">
+          <search-input
+            class="w-full"
+            v-if="isSearchable && !isLocked && !isReadonly"
+            :data-testid="`${field.attribute}-search-input`"
+            :disabled="!resourceType || isLocked || isReadonly"
+            @input="performSearch"
+            @clear="clearSelection"
+            @selected="selectResource"
+            :value="selectedResource"
+            :data="availableResources"
+            :clearable="field.nullable"
+            trackBy="value"
+          >
+            <div
+              slot="default"
+              v-if="selectedResource"
+              class="flex items-center"
+            >
+              <div v-if="selectedResource.avatar" class="mr-3">
+                <img
+                  :src="selectedResource.avatar"
+                  class="w-8 h-8 rounded-full block"
+                />
+              </div>
+
+              {{ selectedResource.display }}
             </div>
 
-            {{ selectedResource.display }}
-          </div>
+            <div
+              slot="option"
+              slot-scope="{ option, selected }"
+              class="flex items-center"
+            >
+              <div v-if="option.avatar" class="mr-3">
+                <img :src="option.avatar" class="w-8 h-8 rounded-full block" />
+              </div>
 
-          <div
-            slot="option"
-            slot-scope="{ option, selected }"
-            class="flex items-center"
-          >
-            <div v-if="option.avatar" class="mr-3">
-              <img :src="option.avatar" class="w-8 h-8 rounded-full block" />
+              <div>
+                <div
+                  class="text-sm font-semibold leading-5 text-90"
+                  :class="{ 'text-white': selected }"
+                >
+                  {{ option.display }}
+                </div>
+
+                <div
+                  v-if="field.withSubtitles"
+                  class="mt-1 text-xs font-semibold leading-5 text-80"
+                  :class="{ 'text-white': selected }"
+                >
+                  <span v-if="option.subtitle">{{ option.subtitle }}</span>
+                  <span v-else>{{ __('No additional information...') }}</span>
+                </div>
+              </div>
             </div>
+          </search-input>
 
-            {{ option.display }}
-          </div>
-        </search-input>
-
-        <select-control
-          v-if="!isSearchable || isLocked"
-          class="form-control form-select mb-3 w-full"
-          :class="{ 'border-danger': hasError }"
-          :dusk="`${field.attribute}-select`"
-          @change="selectResourceFromSelectControl"
-          :disabled="!resourceType || isLocked || isReadonly"
-          :options="availableResources"
-          :selected="selectedResourceId"
-          label="display"
-        >
-          <option
-            value=""
-            :disabled="!field.nullable"
-            :selected="selectedResourceId == ''"
+          <select-control
+            v-if="!isSearchable || isLocked"
+            class="form-control form-select w-full"
+            :class="{ 'border-danger': hasError }"
+            :dusk="`${field.attribute}-select`"
+            @change="selectResourceFromSelectControl"
+            :disabled="!resourceType || isLocked || isReadonly"
+            :options="availableResources"
+            :selected="selectedResourceId"
+            label="display"
           >
-            {{ __('Choose') }} {{ fieldTypeName }}
-          </option>
-        </select-control>
+            <option
+              value=""
+              :disabled="!field.nullable"
+              :selected="selectedResourceId == ''"
+            >
+              {{ __('Choose') }} {{ fieldTypeName }}
+            </option>
+          </select-control>
+
+          <create-relation-button
+            v-if="canShowNewRelationModal"
+            @click="openRelationModal"
+            class="ml-1"
+          />
+        </div>
+
+        <portal to="modals" transition="fade-transition">
+          <create-relation-modal
+            v-if="relationModalOpen && !shownViaNewRelationModal"
+            @set-resource="handleSetResource"
+            @cancelled-create="closeRelationModal"
+            :resource-name="resourceType"
+            :via-relationship="viaRelationship"
+            :via-resource="viaResource"
+            :via-resource-id="viaResourceId"
+            width="800"
+          />
+        </portal>
 
         <!-- Trashed State -->
-        <div v-if="softDeletes && !isLocked && !isReadonly">
+        <div v-if="shouldShowTrashed">
           <checkbox-with-label
             :dusk="field.attribute + '-with-trashed-checkbox'"
             :checked="withTrashed"
-            @change="toggleWithTrashed"
+            @input="toggleWithTrashed"
           >
             {{ __('With Trashed') }}
           </checkbox-with-label>
@@ -115,19 +155,18 @@
 import _ from 'lodash'
 import storage from '@/storage/MorphToFieldStorage'
 import {
+  FormField,
   PerformsSearches,
   TogglesTrashed,
   HandlesValidationErrors,
 } from 'laravel-nova'
 
 export default {
-  mixins: [PerformsSearches, TogglesTrashed, HandlesValidationErrors],
-  props: [
-    'resourceName',
-    'field',
-    'viaResource',
-    'viaResourceId',
-    'viaRelationship',
+  mixins: [
+    PerformsSearches,
+    TogglesTrashed,
+    HandlesValidationErrors,
+    FormField,
   ],
 
   data: () => ({
@@ -137,12 +176,16 @@ export default {
     selectedResourceId: null,
     selectedResource: null,
     search: '',
+    relationModalOpen: false,
+    withTrashed: false,
   }),
 
   /**
    * Mount the component.
    */
   mounted() {
+    this.selectedResourceId = this.field.value
+
     if (this.editingExistingResource) {
       this.initializingWithExistingResource = true
       this.resourceType = this.field.morphToType
@@ -264,6 +307,20 @@ export default {
         this.getAvailableResources()
       }
     },
+
+    openRelationModal() {
+      this.relationModalOpen = true
+    },
+
+    closeRelationModal() {
+      this.relationModalOpen = false
+    },
+
+    handleSetResource({ id }) {
+      this.closeRelationModal()
+      this.selectedResourceId = id
+      this.getAvailableResources().then(() => this.selectInitialResource())
+    },
   },
 
   computed: {
@@ -364,6 +421,32 @@ export default {
      */
     hasMorphToTypes() {
       return this.field.morphToTypes.length > 0
+    },
+
+    authorizedToCreate() {
+      return _.find(Nova.config.resources, resource => {
+        return resource.uriKey == this.resourceType
+      }).authorizedToCreate
+    },
+
+    canShowNewRelationModal() {
+      return (
+        this.field.showCreateRelationButton &&
+        this.resourceType &&
+        !this.shownViaNewRelationModal &&
+        !this.isLocked &&
+        !this.isReadonly &&
+        this.authorizedToCreate
+      )
+    },
+
+    shouldShowTrashed() {
+      return (
+        this.softDeletes &&
+        !this.isLocked &&
+        !this.isReadonly &&
+        this.field.displaysWithTrashed
+      )
     },
   },
 }

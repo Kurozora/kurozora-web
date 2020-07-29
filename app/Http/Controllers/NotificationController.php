@@ -74,8 +74,10 @@ class NotificationController extends Controller
         ]);
 
         return JSONResult::success([
-            'read'              => $markAsRead,
-            'amount_updated'    => $amountUpdated
+            'data' => [
+                'read'              => $markAsRead,
+                'amount_updated'    => $amountUpdated
+            ]
         ]);
     }
 }

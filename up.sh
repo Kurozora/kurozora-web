@@ -14,5 +14,5 @@ php artisan up
 echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${LIME}✔ ${NC}Laravel queue worker started!"
 
 # Done updating
-echo -e "\n${ORANGE}Updated to Kurozora `grep -o "'version' => '\(.*\)'" config/app.php`!"
+echo -e "\n${ORANGE}Updated to Kurozora $(grep -o "'version' => '\(.*\)'" config/app.php)!"
 echo -e "\n${BLACK}___________________________________"

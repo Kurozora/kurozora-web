@@ -87,6 +87,20 @@ class TrendResult implements JsonSerializable
     }
 
     /**
+     * Set the sum of all the values of the trend as the primary result.
+     *
+     * @return $this
+     */
+    public function showSumValue()
+    {
+        if (is_array($this->trend)) {
+            return $this->result(array_sum(array_values($this->trend)));
+        }
+
+        return $this;
+    }
+
+    /**
      * Set the trend of data for the metric.
      *
      * @param  array  $trend

@@ -5,6 +5,7 @@ namespace Laravel\Nova\Actions;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
 use Laravel\Nova\Fields\ActionFields;
+use Laravel\Nova\Nova;
 
 class CallQueuedAction
 {
@@ -56,7 +57,7 @@ class CallQueuedAction
      */
     public function failed($e)
     {
-        ActionEvent::markBatchAsFailed($this->batchId, $e);
+        Nova::actionEvent()->markBatchAsFailed($this->batchId, $e);
 
         if ($method = $this->failedMethodName()) {
             call_user_func([$this->action, $method], $this->fields, $this->models, $e);

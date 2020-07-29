@@ -402,5 +402,17 @@
     "Show All Fields": "Show All Fields",
     "There was a problem submitting the form.": "There was a problem submitting the form.",
     "There was a problem executing the action.": "There was a problem executing the action.",
-    "*": "*"
+    "*": "*",
+    "—": "—",
+    "The file was deleted!": "The file was deleted!",
+    "This file field is read-only.": "This file field is read-only.",
+    "No additional information...": "No additional information...",
+    "ID": "ID",
+    "30 Days": "30 Days",
+    "60 Days": "60 Days",
+    "90 Days": "90 Days",
+    "Today": "Today",
+    "Month To Date": "Month To Date",
+    "Quarter To Date": "Quarter To Date",
+    "Year To Date": "Year To Date"
 }

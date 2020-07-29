@@ -20,11 +20,12 @@
 import _ from 'lodash'
 import { InteractsWithDates, Minimum } from 'laravel-nova'
 import BaseTrendMetric from './Base/TrendMetric'
+import MetricBehavior from './MetricBehavior'
 
 export default {
   name: 'TrendMetric',
 
-  mixins: [InteractsWithDates],
+  mixins: [InteractsWithDates, MetricBehavior],
 
   components: {
     BaseTrendMetric,
@@ -71,11 +72,8 @@ export default {
 
   created() {
     if (this.hasRanges) {
-      this.selectedRangeKey = this.card.ranges[0].value
-    }
-
-    if (this.card.refreshWhenActionRuns) {
-      Nova.$on('action-executed', () => this.fetch())
+      this.selectedRangeKey =
+        this.card.selectedRangeKey || this.card.ranges[0].value
     }
   },
 

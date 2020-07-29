@@ -15,7 +15,7 @@
     </button>
 
     <p class="leading-normal text-sm text-80">
-      {{ __(':amount Total', { amount: allMatchingResourceCount }) }}
+      {{ __(':amount Total', { amount: resourceTotalCountLabel }) }}
     </p>
   </div>
 </template>
@@ -65,11 +65,17 @@ export default {
 
   computed: {
     buttonLabel() {
-      return this.__('Load :perPage More', { perPage: this.perPage })
+      return this.__('Load :perPage More', {
+        perPage: Nova.formatNumber(this.perPage),
+      })
     },
 
     allResourcesLoaded() {
       return this.currentResourceCount == this.allMatchingResourceCount
+    },
+
+    resourceTotalCountLabel() {
+      return Nova.formatNumber(this.allMatchingResourceCount)
     },
   },
 }

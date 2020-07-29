@@ -29,7 +29,7 @@ class LoginTest extends TestCase
         ])->assertSuccessfulAPIResponse();
 
         // Check whether a session was created for the user
-        $this->assertEquals($this->user->sessions()->count(), 1);
+        $this->assertEquals(1, $this->user->sessions()->count());
     }
 
     /**
@@ -50,7 +50,7 @@ class LoginTest extends TestCase
         ])->assertUnsuccessfulAPIResponse();
 
         // Check that no session was created
-        $this->assertEquals($this->user->sessions()->count(), 0);
+        $this->assertEquals(0, $this->user->sessions()->count());
     }
 
     /**

@@ -28,10 +28,10 @@ class FollowTest extends TestCase
         ])->assertSuccessfulAPIResponse();
 
         // Check that the user is now following one person
-        $this->assertEquals($this->user->following()->count(), 1);
+        $this->assertEquals(1, $this->user->following()->count());
 
         // Check that the other user is now being followed by one person
-        $this->assertEquals($anotherUser->followers()->count(), 1);
+        $this->assertEquals(1, $anotherUser->followers()->count());
     }
 
     /**
@@ -54,10 +54,10 @@ class FollowTest extends TestCase
         ])->assertSuccessfulAPIResponse();
 
         // Check that the user is now following no-one
-        $this->assertEquals($this->user->following()->count(), 0);
+        $this->assertEquals(0, $this->user->following()->count());
 
         // Check that the other user is now being followed by no-one
-        $this->assertEquals($anotherUser->followers()->count(), 0);
+        $this->assertEquals(0, $anotherUser->followers()->count());
     }
 
     /**
@@ -73,7 +73,7 @@ class FollowTest extends TestCase
         ])->assertNotFound();
 
         // Check that the user is still following no-one
-        $this->assertEquals($this->user->following()->count(), 0);
+        $this->assertEquals(0, $this->user->following()->count());
     }
 
     /**
@@ -96,10 +96,10 @@ class FollowTest extends TestCase
         ])->assertUnsuccessfulAPIResponse();
 
         // Check that the user is now following one person
-        $this->assertEquals($this->user->following()->count(), 1);
+        $this->assertEquals(1, $this->user->following()->count());
 
         // Check that the other user is now being followed by one person
-        $this->assertEquals($anotherUser->followers()->count(), 1);
+        $this->assertEquals(1, $anotherUser->followers()->count());
     }
 
     /**
@@ -119,10 +119,10 @@ class FollowTest extends TestCase
         ])->assertUnsuccessfulAPIResponse();
 
         // Check that the user is now following one person
-        $this->assertEquals($this->user->following()->count(), 0);
+        $this->assertEquals(0, $this->user->following()->count());
 
         // Check that the other user is now being followed by one person
-        $this->assertEquals($anotherUser->followers()->count(), 0);
+        $this->assertEquals(0, $anotherUser->followers()->count());
     }
 
     /**

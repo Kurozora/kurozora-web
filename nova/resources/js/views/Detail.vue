@@ -141,7 +141,7 @@
               <icon
                 type="edit"
                 class="text-white"
-                style="margin-top: -2px; margin-left: 3px"
+                style="margin-top: -2px; margin-left: 3px;"
               />
             </router-link>
           </div>
@@ -179,7 +179,7 @@ export default {
   }),
 
   watch: {
-    resourceId: function(newResourceId, oldResourceId) {
+    resourceId: function (newResourceId, oldResourceId) {
       if (newResourceId != oldResourceId) {
         this.initializeComponent()
       }

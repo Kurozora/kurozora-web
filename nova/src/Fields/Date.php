@@ -58,12 +58,23 @@ class Date extends Field
     }
 
     /**
-     * Set the date format (flatpickr.js) that should be used to display the date in the input field (picker).
+     * Set the date format (flatpickr.js) that should be used in the input field (picker).
      *
      * @param  string  $format
      * @return $this
      */
     public function pickerFormat($format)
+    {
+        return $this->withMeta([__FUNCTION__ => $format]);
+    }
+
+    /**
+     * Set a readable date format, that should be used to display the date to the user.
+     *
+     * @param  string  $format
+     * @return $this
+     */
+    public function pickerDisplayFormat($format)
     {
         return $this->withMeta([__FUNCTION__ => $format]);
     }

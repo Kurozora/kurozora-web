@@ -74,7 +74,7 @@ export default {
           `/nova-api/${this.resourceName}/trix-attachment/${this.field.attribute}`,
           data,
           {
-            onUploadProgress: function(progressEvent) {
+            onUploadProgress: function (progressEvent) {
               attachment.setUploadProgress(
                 Math.round((progressEvent.loaded * 100) / progressEvent.total)
               )
