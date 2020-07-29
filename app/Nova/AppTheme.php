@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
@@ -50,6 +51,17 @@ class AppTheme extends Resource
     {
         return [
             ID::make()->sortable(),
+
+            Images::make('Screenshot')
+                ->setFileName(function($originalFilename, $extension, $model){
+                    return md5($originalFilename) . '.' . $extension;
+                })
+                ->setName(function($originalFilename, $model){
+                    return md5($originalFilename);
+                })
+                ->required()
+                ->singleMediaRules('dimensions:min-width=375,min-height=667,max_width=768,max-height=1024')
+                ->help('Screenshot should have a minimum dimension of 375x667 and a maximum dimension of 768x1024. i.e a screenshot on iPhone 6...iPhone 11 Pro.'),
 
             Text::make('Name')->sortable()
                 ->rules('required'),

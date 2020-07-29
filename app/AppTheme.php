@@ -2,10 +2,16 @@
 
 namespace App;
 
+use App\Traits\MediaLibraryExtensionTrait;
 use Illuminate\Support\Facades\View;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class AppTheme extends KModel
+class AppTheme extends KModel implements HasMedia
 {
+    use InteractsWithMedia,
+        MediaLibraryExtensionTrait;
+
     // Table name
     const TABLE_NAME = 'app_themes';
     protected $table = self::TABLE_NAME;
@@ -21,5 +27,14 @@ class AppTheme extends KModel
         ]);
 
         return $view->render();
+    }
+
+    /**
+     * Registers the media collections for the model.
+     */
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('screenshot')
+            ->singleFile();
     }
 }
