@@ -14,7 +14,6 @@ class APIDocumentationController extends Controller
     function render() {
         return view('website.api', [
             'openapi_json_file' => asset('openapi.json'),
-            'api_logo'          => asset('img/static/logo_xsm.png')
         ]);
     }
 }

@@ -16,14 +16,16 @@ class CreatePasswordResetsTable extends Migration
     public function up()
     {
         Schema::create(PasswordReset::TABLE_NAME, function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
-
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
-
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
             $table->string('ip');
             $table->string('token', PasswordReset::TOKEN_LENGTH);
+            $table->timestamps();
+        });
+
+        Schema::table(PasswordReset::TABLE_NAME, function (Blueprint $table) {
+            // Set foreign key constraints
+            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
         });
     }
 

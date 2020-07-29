@@ -67,7 +67,8 @@ class ForumSectionController extends Controller
         if($givenOrder == 'recent')
             $threads = $threads->orderBy('created_at', 'DESC');
         else if($givenOrder == 'top')
-            $threads = $threads->orderByLikesCount();
+            $threads = $threads->joinReactionCounterOfType('Like')
+                               ->orderBy('reaction_like_count', 'desc');
 
         $threads = $threads->paginate(ForumSection::THREADS_PER_PAGE);
 
@@ -111,7 +112,7 @@ class ForumSectionController extends Controller
         ]);
 
         return JSONResult::success([
-            'thread_id' => $newThread->id
+            'data' => ForumThreadResource::collection([$newThread])
         ]);
     }
 }

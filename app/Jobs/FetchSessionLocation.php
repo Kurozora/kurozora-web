@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Session;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -30,8 +31,7 @@ class FetchSessionLocation implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle()
     {
@@ -56,7 +56,7 @@ class FetchSessionLocation implements ShouldQueue
      * Queries the API for information regarding an IP address.
      *
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     private function getDataFromAPI() {
         // Get the IP in question and query the API
@@ -68,7 +68,7 @@ class FetchSessionLocation implements ShouldQueue
         $decodedResponse = json_decode($rawContent);
 
         // If the content could not be decoded throw an exception
-        if(!$decodedResponse) throw new \Exception("Could not get IP info for IP: " . $ip);
+        if(!$decodedResponse) throw new Exception("Could not get IP info for IP: " . $ip);
 
         return $decodedResponse;
     }

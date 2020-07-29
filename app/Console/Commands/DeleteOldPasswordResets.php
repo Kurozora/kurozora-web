@@ -35,7 +35,7 @@ class DeleteOldPasswordResets extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return int
      */
     public function handle()
     {
@@ -46,5 +46,7 @@ class DeleteOldPasswordResets extends Command
 
         // Show info message
         $this->info('Deleted all old password resets.');
+
+        return 1;
     }
 }

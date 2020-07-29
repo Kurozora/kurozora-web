@@ -15,13 +15,12 @@ class CreateExplorePageCategoriesTable extends Migration
     public function up()
     {
         Schema::create(ExplorePageCategory::TABLE_NAME, function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
-
+            $table->bigIncrements('id');
             $table->string('title');
             $table->string('type');
             $table->string('size');
             $table->smallInteger('position');
+            $table->timestamps();
         });
     }
 

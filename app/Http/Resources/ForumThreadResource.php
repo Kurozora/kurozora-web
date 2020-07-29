@@ -11,8 +11,11 @@ class ForumThreadResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
+     *
+     * @throws \BenSampo\Enum\Exceptions\InvalidEnumKeyException
      */
     public function toArray($request)
     {
@@ -24,16 +27,18 @@ class ForumThreadResource extends JsonResource
             'type'          => 'threads',
             'href'          => route('forum-threads.details', $forumThread, false),
             'attributes'    => [
-                'title'             => $forumThread->title,
-                'content'           => $forumThread->content,
-                'locked'            => (bool) $forumThread->locked,
-                'poster_user_id'    => $forumThread->user->id,
-                'poster_username'   => $forumThread->user->username,
-                'creation_date'     => $forumThread->created_at->format('Y-m-d H:i:s'),
-                'reply_count'       => $forumThread->replies->count(),
-                'score'             => $forumThread->likesDiffDislikesCount
+                'title'         => $forumThread->title,
+                'content'       => $forumThread->content,
+                'locked'        => (bool) $forumThread->locked,
+                'reply_count'   => $forumThread->replies->count(),
+                'score'         => $forumThread->viaLoveReactant()->getReactionTotal()->getCount(),
+                'created_at'    => $forumThread->created_at,
             ]
         ];
+
+        $relationships = [];
+        $relationships = array_merge($relationships, $this->getPosterRelationship());
+        $resource = array_merge($resource, ['relationships' => $relationships]);
 
         if(Auth::check())
             $resource = array_merge($resource, $this->getUserSpecificDetails());
@@ -45,13 +50,32 @@ class ForumThreadResource extends JsonResource
      * Returns the user specific details for the resource.
      *
      * @return array
+     *
+     * @throws \BenSampo\Enum\Exceptions\InvalidEnumKeyException
      */
     protected function getUserSpecificDetails() {
         $user = Auth::user();
 
         return [
             'current_user' => [
-                'like_action' => $user->likeAction($this->resource)
+                'vote_action' => $user->getCurrentVoteValueFor($this->resource)
+            ]
+        ];
+    }
+
+    /**
+     * Returns the poster relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getPosterRelationship()
+    {
+        /** @param ForumThread $forumThread */
+        $forumThread = $this->resource;
+
+        return [
+            'user' => [
+                'data' => UserResourceBasic::collection([$forumThread->user]),
             ]
         ];
     }

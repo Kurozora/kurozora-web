@@ -17,13 +17,15 @@ class CreateAnimeGenresTable extends Migration
     public function up()
     {
         Schema::create(AnimeGenre::TABLE_NAME, function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
-
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('anime_id');
-            $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
+            $table->unsignedBigInteger('genre_id');
+            $table->timestamps();
+        });
 
-            $table->integer('genre_id')->unsigned();
+        Schema::table(AnimeGenre::TABLE_NAME, function (Blueprint $table) {
+            // Set foreign key constraints
+            $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
             $table->foreign('genre_id')->references('id')->on(Genre::TABLE_NAME)->onDelete('cascade');
         });
     }

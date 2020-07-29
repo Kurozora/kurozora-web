@@ -16,8 +16,6 @@ class CreateCharactersTable extends Migration
     {
         Schema::create(Character::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamps();
-
             $table->string('name');
             $table->mediumText('about')->nullable();
             $table->string('image')->nullable();
@@ -33,6 +31,7 @@ class CreateCharactersTable extends Migration
             $table->unsignedTinyInteger('birth_day')->nullable();
             $table->unsignedTinyInteger('birth_month')->nullable();
             $table->unsignedTinyInteger('astrological_sign')->nullable();
+            $table->timestamps();
         });
     }
 

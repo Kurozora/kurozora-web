@@ -17,13 +17,15 @@ class CreateUserBadgesTable extends Migration
     public function up()
     {
         Schema::create(UserBadge::TABLE_NAME, function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('badge_id');
             $table->timestamps();
+        });
 
-            $table->integer('user_id')->unsigned();
+        Schema::table(UserBadge::TABLE_NAME, function (Blueprint $table) {
+            // Set foreign key constraints
             $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
-
-            $table->integer('badge_id')->unsigned();
             $table->foreign('badge_id')->references('id')->on(Badge::TABLE_NAME)->onDelete('cascade');
         });
     }

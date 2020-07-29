@@ -101,7 +101,7 @@ class CheckKurozoraUserAuthenticationTest extends TestCase
         // Check whether the expiry was extended
         $session->refresh();
 
-        $this->assertEquals(now()->addDays(Session::VALID_FOR_DAYS)->startOfDay(), $session->expires_at->startOfDay());
+        $this->assertEquals($session->expires_at->startOfDay(), now()->addDays(Session::VALID_FOR_DAYS)->startOfDay());
     }
 
     /**

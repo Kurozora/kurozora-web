@@ -18,14 +18,16 @@ class CreateActorCharacterTable extends Migration
     {
         Schema::create(ActorCharacter::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamps();
-
             $table->unsignedBigInteger('actor_id');
             $table->unsignedBigInteger('character_id');
+            $table->timestamps();
         });
 
         Schema::table(ActorCharacter::TABLE_NAME, function(Blueprint $table) {
+            // Set unique index constraints
             $table->unique(['actor_id', 'character_id']);
+
+            // Set foreign key constraints
             $table->foreign('actor_id')->references('id')->on(Actor::TABLE_NAME)->onDelete('cascade');
             $table->foreign('character_id')->references('id')->on(Character::TABLE_NAME)->onDelete('cascade');
         });

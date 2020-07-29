@@ -3,7 +3,7 @@
 namespace Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
-use Illuminate\Foundation\Testing\TestResponse;
+use Illuminate\Testing\TestResponse;
 use App\Helpers\KuroAuthToken;
 use Spatie\Snapshots\MatchesSnapshots;
 use Tests\Traits\ProvidesTestAnime;

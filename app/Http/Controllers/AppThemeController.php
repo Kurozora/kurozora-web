@@ -19,7 +19,7 @@ class AppThemeController extends Controller
         $themes = AppTheme::all();
 
         return JSONResult::success([
-            'themes' => AppThemeResource::collection($themes)
+            'data' => AppThemeResource::collection($themes)
         ]);
     }
 

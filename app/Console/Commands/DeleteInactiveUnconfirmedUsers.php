@@ -35,7 +35,7 @@ class DeleteInactiveUnconfirmedUsers extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return int
      */
     public function handle()
     {
@@ -48,5 +48,7 @@ class DeleteInactiveUnconfirmedUsers extends Command
             ->delete();
 
         $this->info('Deleted all inactive unconfirmed users.');
+
+        return 1;
     }
 }

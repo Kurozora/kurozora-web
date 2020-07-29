@@ -117,7 +117,7 @@ class ResetPasswordTest extends TestCase
         ])->assertSuccessfulAPIResponse();
 
         // Check that there is still just one password reset
-        $this->assertEquals(PasswordReset::where('user_id', $this->user->id)->count(), 1);
+        $this->assertEquals(1, PasswordReset::where('user_id', $this->user->id)->count());
 
         // Delete the previous password reset
         $oldPasswordReset->delete();
@@ -134,7 +134,7 @@ class ResetPasswordTest extends TestCase
         ])->assertSuccessfulAPIResponse();
 
         // Check that there are now two password resets
-        $this->assertEquals(PasswordReset::where('user_id', $this->user->id)->count(), 2);
+        $this->assertEquals(2, PasswordReset::where('user_id', $this->user->id)->count());
     }
 
     /**

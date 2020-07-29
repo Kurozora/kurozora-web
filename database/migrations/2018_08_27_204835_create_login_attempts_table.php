@@ -15,10 +15,9 @@ class CreateLoginAttemptsTable extends Migration
     public function up()
     {
         Schema::create(LoginAttempt::TABLE_NAME, function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
-
+            $table->bigIncrements('id');
             $table->string('ip');
+            $table->timestamps();
         });
     }
 

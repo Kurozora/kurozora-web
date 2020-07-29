@@ -18,14 +18,8 @@ class CreateSessionsTable extends Migration
     public function up()
     {
         Schema::create(Session::TABLE_NAME, function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
-
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
-
-            $table->timestamp('expires_at')->useCurrent = true;
-            $table->timestamp('last_validated_at')->useCurrent = true;
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
             $table->string('apn_device_token', ValidateAPNDeviceToken::TOKEN_LENGTH)->nullable()->unique();
             $table->string('secret', 128);
 
@@ -42,6 +36,14 @@ class CreateSessionsTable extends Migration
             $table->string('country')->nullable();
             $table->float('latitude')->nullable();
             $table->float('longitude')->nullable();
+
+            $table->timestamp('expires_at')->useCurrent();
+            $table->timestamp('last_validated_at')->useCurrent();
+            $table->timestamps();
+        });
+
+        Schema::table(Session::TABLE_NAME, function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
         });
     }
 
