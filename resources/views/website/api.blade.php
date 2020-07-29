@@ -3,7 +3,7 @@
         <title>Kurozora API</title>
 
         <meta charset="UTF-8">
-        <link rel="icon" href="{{ $api_logo }}">
+        <link rel="icon" href="{{ asset('img/static/favicon.ico') }}">
 
         {{-- Don't index the API docs --}}
         <meta name="robots" content="noindex">
@@ -36,8 +36,12 @@
             }
 
             .topbar-wrapper .link:before {
-                content: url('{{ $api_logo }}');
+                background-image: url('{{ asset('img/static/icon/logo.png') }}');
+                background-size: 48px 48px;
+                content: '';
                 margin-right: 0.5rem;
+                height: 48px;
+                width: 48px;
             }
 
             .topbar-wrapper .link:after {
