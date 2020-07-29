@@ -33,10 +33,6 @@
       "description": "Everything user related"
     },
     {
-      "name": "notifications",
-      "description": "Everything user notification related"
-    },
-    {
       "name": "actors",
       "description": "Everything actor related"
     },
@@ -73,6 +69,10 @@
       "description": "Everything forum replies related"
     },
     {
+      "name": "notifications",
+      "description": "Everything user notification related"
+    },
+    {
       "name": "sessions",
       "description": "Everything session related"
     },
@@ -90,24 +90,6 @@
     }
   ],
   "paths": {
-    "/info": {
-      "get": {
-        "tags": [
-          "misc"
-        ],
-        "operationId": "getInfo",
-        "summary": "API info.",
-        "description": "Plain API JSON response.",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
     "/explore": {
       "get": {
         "security": [
@@ -1094,130 +1076,6 @@
         }
       }
     },
-    "/notifications/{notificationUUID}": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "notifications"
-        ],
-        "operationId": "getNotifications",
-        "summary": "Gets the details of a notification",
-        "description": "This endpoint will retrieve the details of a notification.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "notificationUUID",
-            "schema": {
-              "type": "string"
-            },
-            "required": true,
-            "description": "UUID of the notification to be retrieved."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/notifications/{notificationUUID}/delete": {
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "notifications"
-        ],
-        "operationId": "getNotificationsDelete",
-        "summary": "Deletes a notification from the database",
-        "description": "This endpoint will delete a user's notification.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "notificationUUID",
-            "schema": {
-              "type": "string"
-            },
-            "required": true,
-            "description": "UUID of the notification to be deleted."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/notifications/update": {
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "notifications"
-        ],
-        "operationId": "postNotificationsUpdate",
-        "summary": "Update a single, multiple or all notifications' status",
-        "description": "This endpoint will update the status of a single, multiple or all notifications.",
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "notification": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "minItems": 1,
-                    "uniqueItems": true,
-                    "description": "The UUID of the notification to update. Use \"all\" to update all of the user's notifications."
-                  },
-                  "read": {
-                    "type": "integer",
-                    "description": "Mark notification(s) as read or unread.\n- 0 = unread\n- 1 = read",
-                    "minimum": 0,
-                    "maximum": 1
-                  }
-                },
-                "required": [
-                  "notification",
-                  "read"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
     "/actors": {
       "get": {
         "tags": [
@@ -2194,10 +2052,7 @@
                 "type": "object",
                 "properties": {
                   "lock": {
-                    "type": "integer",
-                    "description": "Lock or unlock.\n- 0 = unlock\n- 1 = lock",
-                    "minimum": 0,
-                    "maximum": 1
+                    "$ref": "#/components/schemas/LockStatus"
                   }
                 },
                 "required": [
@@ -2262,6 +2117,127 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/PostForumRepliesVoteSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/notifications/{notificationUUID}": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "notifications"
+        ],
+        "operationId": "getNotificationsDetails",
+        "summary": "Gets the details of a notification",
+        "description": "This endpoint will retrieve the details of a notification.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "notificationUUID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "UUID of the notification to be retrieved."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetNotificationsDetails"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/notifications/{notificationUUID}/delete": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "notifications"
+        ],
+        "operationId": "getNotificationsDelete",
+        "summary": "Deletes a notification from the database",
+        "description": "This endpoint will delete a user's notification.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "notificationUUID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "UUID of the notification to be deleted."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/notifications/update": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "notifications"
+        ],
+        "operationId": "postNotificationsUpdate",
+        "summary": "Update a single, multiple or all notifications' status",
+        "description": "This endpoint will update the status of a single, multiple or all notifications.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "notification": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "description": "The UUID of the notification to update. Use \"all\" to update all of the user's notifications."
+                  },
+                  "read": {
+                    "$ref": "#/components/schemas/NotificationReadStatus"
+                  }
+                },
+                "required": [
+                  "notification",
+                  "read"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PostNotificationsUpdate"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2580,6 +2556,24 @@
         }
       }
     },
+    "/info": {
+      "get": {
+        "tags": [
+          "misc"
+        ],
+        "operationId": "getInfo",
+        "summary": "API info.",
+        "description": "Plain API JSON response.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/privacy-policy": {
       "get": {
         "tags": [
@@ -2631,6 +2625,15 @@
         "default": "Watching",
         "description": "The set of available library status types."
       },
+      "LockStatus": {
+        "type": "integer",
+        "enum": [
+          0,
+          1
+        ],
+        "default": 1,
+        "description": "The lock status used to lock or unlock a thread.\n- 0 = unlock\n- 1 = lock"
+      },
       "MALImportBehavior": {
         "type": "string",
         "enum": [
@@ -2638,6 +2641,15 @@
         ],
         "default": "overwrite",
         "description": "The set of available MAL import behavior types."
+      },
+      "NotificationReadStatus": {
+        "type": "integer",
+        "enum": [
+          0,
+          1
+        ],
+        "default": 1,
+        "description": "The notification read status used to mark a notification as read or unread.\n- 0 = unread\n- 1 = read"
       },
       "VoteType": {
         "type": "integer",
@@ -2689,6 +2701,49 @@
                   "authenticated_user_id": null
                 },
                 "message": "Description of the error."
+              }
+            }
+          }
+        }
+      },
+      "GetNotificationsDetails": {
+        "description": "Successful POST Notifications Details JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": {
+                  "id": "1094845f-c175-462d-8aec-9bbad4af232f",
+                  "type": "notifications",
+                  "href": "/api/v1/notifications/1094845f-c175-462d-8aec-9bbad4af232f",
+                  "attributes": {
+                    "type": "NewSession",
+                    "read": true,
+                    "data": {
+                      "ip": "127.0.0.1",
+                      "session_id": 2
+                    },
+                    "string": "A new client has logged in to your account. (IP: 127.0.0.1)",
+                    "creation_date": "2020-07-27 13:57:12"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "PostNotificationsUpdate": {
+        "description": "Successful POST Notifications Update JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": {
+                  "read": true,
+                  "amount_updated": 1
+                }
               }
             }
           }
