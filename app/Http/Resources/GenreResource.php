@@ -21,7 +21,7 @@ class GenreResource extends JsonResource
         return [
             'id'            => $genre->id,
             'type'          => 'genres',
-            'href'          => route('genres.details', $genre, false),
+            'href'          => route('api.genres.details', $genre, false),
             'attributes'    => [
                 'name'          => $genre->name,
                 'color'         => $genre->color,

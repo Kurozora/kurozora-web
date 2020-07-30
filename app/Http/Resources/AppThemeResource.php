@@ -21,11 +21,11 @@ class AppThemeResource extends JsonResource
         return [
             'id'            => $theme->id,
             'type'          => 'themes',
-//            'href'          => route('themes.details', $theme, false),
+//            'href'          => route('api.themes.details', $theme, false),
             'attributes'        => [
                 'name'          => $theme->name,
                 'screenshot'    => $theme->getFirstMediaFullUrl('screenshot'),
-                'download_link' => route('themes.download', ['theme' => $theme->id])
+                'download_link' => route('api.themes.download', ['theme' => $theme->id])
             ]
         ];
     }
