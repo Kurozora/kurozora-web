@@ -161,6 +161,16 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
     }
 
     /**
+     * Returns the Anime that the user has added to their reminders.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    function reminderAnime()
+    {
+        return $this->belongsToMany(Anime::class, UserReminderAnime::class, 'user_id', 'anime_id');
+    }
+
+    /**
      * Returns a boolean indicating whether the user has the given anime in their library.
      *
      * @param Anime $anime The anime to be searched for in the user's library.

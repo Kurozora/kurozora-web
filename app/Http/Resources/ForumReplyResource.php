@@ -25,7 +25,7 @@ class ForumReplyResource extends JsonResource
         $resource = [
             'id'            => $forumReply->id,
             'type'          => 'replies',
-            'href'          => route('forum-threads.replies', $forumReply, false),
+            'href'          => route('api.forum-threads.replies', $forumReply, false),
             'attributes'    => [
                 'content'   => $forumReply->content,
                 'score'     => $forumReply->viaLoveReactant()->getReactionTotal()->getCount(),

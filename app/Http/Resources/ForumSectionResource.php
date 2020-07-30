@@ -21,7 +21,7 @@ class ForumSectionResource extends JsonResource
         return [
             'id'            => $forumSection->id,
             'type'          => 'sections',
-            'href'          => route('forum-sections.details', $forumSection, false),
+            'href'          => route('api.forum-sections.details', $forumSection, false),
             'attributes'    => [
                 'name'          => $forumSection->name,
                 'locked'        => (bool) $forumSection->locked

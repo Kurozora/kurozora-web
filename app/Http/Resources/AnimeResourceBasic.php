@@ -36,7 +36,7 @@ class AnimeResourceBasic extends JsonResource
         $resource = [
             'id'            => $anime->id,
             'type'          => 'show',
-            'href'          => route('anime.view', $anime, false),
+            'href'          => route('api.anime.view', $anime, false),
             'attributes'    => [
                 'title'                 => $anime->title,
                 'type'                  => AnimeType::getDescription($anime->type),
@@ -110,7 +110,8 @@ class AnimeResourceBasic extends JsonResource
             'current_user' => [
                 'given_rating'      => (double) $userRating,
                 'library_status'    => $currentLibraryStatus,
-                'is_favorite'       => $user->favoriteAnime()->wherePivot('anime_id', $anime->id)->exists()
+                'is_favorite'       => $user->favoriteAnime()->wherePivot('anime_id', $anime->id)->exists(),
+                'is_reminded'       => $user->reminderAnime()->wherePivot('anime_id', $this->id)->exists()
             ]
         ];
     }
