@@ -14,6 +14,46 @@ class EpisodeTest extends TestCase
     use DatabaseMigrations, ProvidesTestAnime, ProvidesTestUser;
 
     /**
+     * A user can view specific episode details.
+     *
+     * @return void
+     * @test
+     */
+    public function a_user_can_view_specific_episode_details()
+    {
+        /** @var AnimeEpisode $episode */
+        $episode = factory(AnimeEpisode::class)->create();
+
+        $response = $this->get('/api/v1/anime-episodes/'.$episode->id);
+
+        // Check whether the response was successful
+        $response->assertSuccessfulAPIResponse();
+
+        // Check whether the episode id in the response is the desired episode's id
+        $this->assertEquals($episode->id, $response->json()['data'][0]['id']);
+    }
+
+    /**
+     * An authenticated user can view specific episode details.
+     *
+     * @return void
+     * @test
+     */
+    public function an_authenticated_user_can_view_specific_episode_details()
+    {
+        /** @var AnimeEpisode $episode */
+        $episode = factory(AnimeEpisode::class)->create();
+
+        $response = $this->auth()->json('GET', '/api/v1/anime-episodes/'.$episode->id);
+
+        // Check whether the response was successful
+        $response->assertSuccessfulAPIResponse();
+
+        // Check whether the current_user array is not empty
+        $this->assertTrue(count($response->json()['data'][0]['current_user']) > 0);
+    }
+
+    /**
      * Test if an episode cannot be watched if anime not in library.
      *
      * @return void
