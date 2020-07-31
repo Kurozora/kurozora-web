@@ -710,12 +710,7 @@
                     "description": "The ID of the Anime to add."
                   },
                   "is_favorite": {
-                    "type": "integer",
-                    "description": "Whether to add or remove the anime.\n- 0 = remove\n- 1 = add",
-                    "enum": [
-                      0,
-                      1
-                    ]
+                    "$ref": "#/components/schemas/FavoriteStatus"
                   }
                 },
                 "required": [
@@ -780,7 +775,7 @@
           "users"
         ],
         "summary": "Add or remove an Anime to/from the user's Anime reminders",
-        "description": "This endpoint will add or remove to/from the list of Anime in a user's rmeinders.",
+        "description": "This endpoint will add or remove to/from the list of Anime in a user's reminders.",
         "parameters": [
           {
             "in": "path",
@@ -803,13 +798,7 @@
                     "description": "The ID of the Anime to add or remove."
                   },
                   "is_reminded": {
-                    "type": "integer",
-                    "description": "0: remove, 1: add.",
-                    "enum": [
-                      0,
-                      1
-                    ],
-                    "default": 1
+                    "$ref": "#/components/schemas/ReminderStatus"
                   }
                 },
                 "required": [
@@ -1089,12 +1078,7 @@
                 "type": "object",
                 "properties": {
                   "follow": {
-                    "type": "integer",
-                    "description": "Whether to follow or unfollow the user.\n- 0 = unfollow\n- 1 = follow",
-                    "enum": [
-                      0,
-                      1
-                    ]
+                    "$ref": "#/components/schemas/FollowStatus"
                   }
                 },
                 "required": [
@@ -1604,6 +1588,43 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/GetAnimeSeasonsEpisodes"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/anime-episodes/{episodeID}": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "anime-episodes"
+        ],
+        "operationId": "getAnimeEpisodesDetails",
+        "summary": "Get specific episode details.",
+        "description": "This endpoint will retrieve the details of a specific episode.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "episodeID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the episode."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetAnimeEpisodesDetails"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2732,6 +2753,24 @@
         "default": 1,
         "description": "The set of available watch status types.\n- -1 = not watched\n- 1 = watched"
       },
+      "FavoriteStatus": {
+        "type": "integer",
+        "enum": [
+          0,
+          1
+        ],
+        "default": 1,
+        "description": "The set of available favorite status types.\n- 0 = not favorite\n- 1 = favorite"
+      },
+      "FollowStatus": {
+        "type": "integer",
+        "enum": [
+          0,
+          1
+        ],
+        "default": 1,
+        "description": "The set of available follow status types.\n- 0 = unfollow\n- 1 = follow"
+      },
       "ForumSortType": {
         "type": "string",
         "enum": [
@@ -2778,6 +2817,15 @@
         ],
         "default": 1,
         "description": "The notification read status used to mark a notification as read or unread.\n- 0 = unread\n- 1 = read"
+      },
+      "ReminderStatus": {
+        "type": "integer",
+        "enum": [
+          0,
+          1
+        ],
+        "default": 1,
+        "description": "The set of available reminder status types.\n- 0 = not reminded\n- 1 = reminded"
       },
       "VoteType": {
         "type": "integer",
@@ -3818,6 +3866,35 @@
                     },
                     "current_user": {
                       "watched": 0
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetAnimeEpisodesDetails": {
+        "description": "Successful GET Anime Episodes Details JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "episodes",
+                    "href": "/api/v1/anime-episodes/1",
+                    "attributes": {
+                      "number": 1,
+                      "name": "Episode 1",
+                      "first_aired": "2 Jul, 2020",
+                      "overview": "Season 1 Episode 1 description",
+                      "verified": false
+                    },
+                    "current_user": {
+                      "watched": -1
                     }
                   }
                 ]
