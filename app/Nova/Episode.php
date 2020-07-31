@@ -6,9 +6,9 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
-use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Episode extends Resource
 {
@@ -56,6 +56,9 @@ class Episode extends Resource
             BelongsTo::make('Season')
                 ->searchable()
                 ->sortable(),
+
+            Number::make('Number')
+                ->rules('required'),
 
             Text::make('Episode Title', 'name')
                 ->rules('required', 'max:255'),

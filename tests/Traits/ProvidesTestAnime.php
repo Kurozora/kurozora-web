@@ -19,10 +19,10 @@ trait ProvidesTestAnime
     /** @var Anime $relatedAnime */
     public $relatedAnime;
 
-	/** @var AnimeSeason $season */
+    /** @var AnimeSeason $season */
     public $season;
 
-	/** @var AnimeEpisode $episode */
+    /** @var AnimeEpisode $episode */
     public $episode;
 
     /** @var Actor $actor */

@@ -122,25 +122,25 @@ class FetchAnimeDetails extends Command
         $this->info('[Status retrieved]');
         $this->info('');
 
-	    // First aired
-	    $this->info('[Retrieving first air date]');
-	    $anime->first_aired = ($details->firstAired);
-	    $this->info('[First air date retrieved]');
-	    $this->info('');
+        // First aired
+        $this->info('[Retrieving first air date]');
+        $anime->first_aired = ($details->firstAired);
+        $this->info('[First air date retrieved]');
+        $this->info('');
 
-	    // Air time
-	    $this->info('[Retrieving air time]');
-	    $anime->air_time = (Carbon::parse($details->airs["time"]));
-	    $this->info('[Air time retrieved]');
-	    $this->info('');
+        // Air time
+        $this->info('[Retrieving air time]');
+        $anime->air_time = (Carbon::parse($details->airs["time"]));
+        $this->info('[Air time retrieved]');
+        $this->info('');
 
-		// Air day
-	    $this->info('[Retrieving air day]');
-	    $anime->air_day = (DayOfWeek::getValue($details->airs["dayOfWeek"]));
-	    $this->info('[Air day retrieved]');
-	    $this->info('');
+        // Air day
+        $this->info('[Retrieving air day]');
+        $anime->air_day = (DayOfWeek::getValue($details->airs["dayOfWeek"]));
+        $this->info('[Air day retrieved]');
+        $this->info('');
 
-	    // Genres
+        // Genres
         $this->info('[Retrieving genres]');
 
         foreach($details->genres as $genre) {

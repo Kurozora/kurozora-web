@@ -11,7 +11,7 @@ class GetAnimeReminderRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         // Check if the user can get this user's favorites
         $user = $this->route('user');
@@ -24,7 +24,7 @@ class GetAnimeReminderRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [];
     }
