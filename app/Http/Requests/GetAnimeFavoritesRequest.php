@@ -12,9 +12,10 @@ class GetAnimeFavoritesRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         // Check if the user can get this user's favorites
+        /** @var User $user */
         $user = $this->route('user');
 
         return $this->user()->can('get_anime_favorites', $user);
@@ -25,7 +26,7 @@ class GetAnimeFavoritesRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [];
     }

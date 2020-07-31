@@ -13,7 +13,7 @@ class SIWARegistration extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return array_merge([
             'email'     => ['bail', 'required', new ValidateEmail(['must-be-available' => true])],

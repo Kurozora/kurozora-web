@@ -2,13 +2,14 @@
 
 namespace App\Rules;
 
+use App\Anime;
+use App\User;
 use Illuminate\Contracts\Validation\Rule;
 
-class ValidatePlatformName implements Rule
+class ValidateAnimeIDIsTracked implements Rule
 {
-    const VALID_PLATFORMS = [
-        'iOS', 'Android', 'Web', 'Console', 'macOS', 'iPadOS', 'tvOS', 'watchOS'
-    ];
+    /** @var Anime $anime */
+    protected $anime;
 
     /**
      * Determine if the validation rule passes.
@@ -19,7 +20,13 @@ class ValidatePlatformName implements Rule
      */
     public function passes($attribute, $value): bool
     {
-        return in_array($value, self::VALID_PLATFORMS, true);
+        // Find the anime instance
+        $this->anime = Anime::firstWhere('id', $value);
+
+        /** @var User $user */
+        $user = auth()->user();
+
+        return $user->isTracking($this->anime);
     }
 
     /**
@@ -29,6 +36,6 @@ class ValidatePlatformName implements Rule
      */
     public function message(): string
     {
-        return 'Valid platform names are ' . implode(', ', self::VALID_PLATFORMS) . '.';
+        return 'Please add ' . $this->anime->title . ' to your library first.';
     }
 }

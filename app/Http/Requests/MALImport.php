@@ -13,8 +13,10 @@ class MALImport extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
+        // Check if the user can import from MAL
+        /** @var User $user */
         $user = $this->route('user');
 
         return $this->user()->can('mal_import', $user);
@@ -25,7 +27,7 @@ class MALImport extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'file'      => ['required', 'file', 'mimes:xml', 'max:' . config('mal-import.max_xml_file_size')],
