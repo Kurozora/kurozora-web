@@ -23,7 +23,8 @@ class ValidatePassword implements Rule
      *
      * @param bool $required
      */
-    function __construct($required = true) {
+    function __construct($required = true)
+    {
         $this->required = $required;
     }
 
@@ -34,7 +35,7 @@ class ValidatePassword implements Rule
      * @param  mixed  $value
      * @return bool
      */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
         // Empty string does not pass
         if(!is_string($value) || !strlen($value)) {
@@ -64,7 +65,7 @@ class ValidatePassword implements Rule
      *
      * @return string
      */
-    public function message()
+    public function message(): string
     {
         if($this->errorType == 'length')
             return trans('validation.between.string', ['min' => self::MINIMUM_PASSWORD_LENGTH, 'max' => self::MAXIMUM_PASSWORD_LENGTH]);

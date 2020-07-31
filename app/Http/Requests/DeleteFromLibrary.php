@@ -2,7 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\ValidateAnimeID;
+use App\Anime;
+use App\Rules\ValidateAnimeIDIsTracked;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -13,9 +14,10 @@ class DeleteFromLibrary extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         // Check if the user can delete from this library
+        /** @var User $user */
         $user = $this->route('user');
 
         return $this->user()->can('del_from_library', $user);
@@ -26,10 +28,10 @@ class DeleteFromLibrary extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'anime_id'  => ['bail', 'required', new ValidateAnimeID],
+            'anime_id'  => ['bail', 'required', 'integer', 'exists:' . Anime::TABLE_NAME . ',id', new ValidateAnimeIDIsTracked],
         ];
     }
 }

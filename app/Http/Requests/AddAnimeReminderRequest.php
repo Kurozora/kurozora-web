@@ -2,7 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\ValidateAnimeID;
+use App\Anime;
+use App\Rules\ValidateAnimeIDIsTracked;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -15,7 +16,7 @@ class AddAnimeReminderRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Check if the user can add to this user's favorites
+        // Check if the user can add to this user's reminders
         /** @var User $user */
         $user = $this->route('user');
 
@@ -30,7 +31,7 @@ class AddAnimeReminderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'anime_id'      => ['bail', 'required', new ValidateAnimeID],
+            'anime_id'      => ['bail', 'required', 'integer', 'exists:' . Anime::TABLE_NAME . ',id', new ValidateAnimeIDIsTracked],
             'is_reminded'   => ['bail', 'required', 'boolean']
         ];
     }

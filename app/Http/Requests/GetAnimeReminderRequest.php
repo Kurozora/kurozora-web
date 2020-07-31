@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class GetAnimeReminderRequest extends FormRequest
@@ -14,6 +15,7 @@ class GetAnimeReminderRequest extends FormRequest
     public function authorize(): bool
     {
         // Check if the user can get this user's favorites
+        /** @var User $user */
         $user = $this->route('user');
 
         return $this->user()->can('get_anime_reminders', $user);

@@ -6,7 +6,6 @@ use App\Http\Sorters\AnimeAgeSorter;
 use App\Http\Sorters\AnimeMyRatingSorter;
 use App\Http\Sorters\AnimeRatingSorter;
 use App\Rules\ValidateLibraryStatus;
-use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 use musa11971\SortRequest\Traits\SortsViaRequest;
 
@@ -19,7 +18,7 @@ class GetLibrary extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         // Check if the user can get this library
         $user = $this->route('user');
@@ -32,7 +31,7 @@ class GetLibrary extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return array_merge([
             'status'    => ['bail', 'required', new ValidateLibraryStatus],
