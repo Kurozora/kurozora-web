@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\AppTheme;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AppThemeResource extends JsonResource
@@ -10,10 +11,10 @@ class AppThemeResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         /** @var AppTheme $theme */
         $theme = $this->resource;
@@ -21,7 +22,7 @@ class AppThemeResource extends JsonResource
         return [
             'id'            => $theme->id,
             'type'          => 'themes',
-//            'href'          => route('api.themes.details', $theme, false),
+            'href'          => route('api.themes.details', $theme, false),
             'attributes'        => [
                 'name'          => $theme->name,
                 'screenshot'    => $theme->getFirstMediaFullUrl('screenshot'),

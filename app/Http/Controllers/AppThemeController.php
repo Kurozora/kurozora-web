@@ -6,6 +6,7 @@ use App\AppTheme;
 use App\Helpers\JSONResult;
 use App\Http\Resources\AppThemeResource;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class AppThemeController extends Controller
@@ -15,11 +16,26 @@ class AppThemeController extends Controller
      *
      * @return JsonResponse
      */
-    function overview() {
+    function overview(): JsonResponse
+    {
         $themes = AppTheme::all();
 
         return JSONResult::success([
             'data' => AppThemeResource::collection($themes)
+        ]);
+    }
+
+    /**
+     * Returns the information for a theme.
+     *
+     * @param Request $request
+     * @param AppTheme $theme
+     * @return JsonResponse
+     */
+    public function details(Request $request, AppTheme $theme): JsonResponse
+    {
+        return JSONResult::success([
+            'data' => AppThemeResource::collection([$theme])
         ]);
     }
 
@@ -29,7 +45,8 @@ class AppThemeController extends Controller
      * @param AppTheme $theme
      * @return \Illuminate\Http\Response
      */
-    function download(AppTheme $theme) {
+    function download(AppTheme $theme): \Illuminate\Http\Response
+    {
         // Name for the theme file
         $fileName = 'theme-' . $theme->id . '.plist';
 

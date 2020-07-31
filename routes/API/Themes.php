@@ -9,6 +9,9 @@ Route::prefix('/themes')
     ->group(function() {
         Route::get('/', [AppThemeController::class, 'overview']);
 
+        Route::get('/{theme}', [AppThemeController::class, 'details'])
+            ->name('details');
+
         Route::get('/{theme}/download', [AppThemeController::class, 'download'])
             ->name('download');
     });
