@@ -1198,7 +1198,7 @@
         "description": "This endpoint will retrieve the actors.",
         "responses": {
           "200": {
-            "$ref": "#/components/responses/JSONSuccess"
+            "$ref": "#/components/responses/GetActorsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1227,7 +1227,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetActorsDetails"
+            "$ref": "#/components/responses/GetActorsDetailsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1278,7 +1278,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetAnime"
+            "$ref": "#/components/responses/GetAnimeSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1307,7 +1307,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetAnimeActors"
+            "$ref": "#/components/responses/GetAnimeActorsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1336,7 +1336,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetAnimeCharacters"
+            "$ref": "#/components/responses/GetAnimeCharactersSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1365,7 +1365,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/JSONSuccess"
+            "$ref": "#/components/responses/GetAnimeCastSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1400,7 +1400,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetAnimeRelations"
+            "$ref": "#/components/responses/GetAnimeRelationsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1429,7 +1429,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetAnimeSeasons"
+            "$ref": "#/components/responses/GetAnimeSeasonsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1523,7 +1523,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetAnimeSearch"
+            "$ref": "#/components/responses/GetAnimeSearchSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1552,7 +1552,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetAnimeSeasonsDetails"
+            "$ref": "#/components/responses/GetAnimeSeasonsDetailsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1587,7 +1587,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetAnimeSeasonsEpisodes"
+            "$ref": "#/components/responses/GetAnimeSeasonsEpisodesSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1624,7 +1624,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetAnimeEpisodesDetails"
+            "$ref": "#/components/responses/GetAnimeEpisodesDetailsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1677,7 +1677,7 @@
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/PostAnimeEpisodesWatched"
+            "$ref": "#/components/responses/PostAnimeEpisodesWatchedSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1695,7 +1695,7 @@
         "description": "This endpoint will retrieve the characters.",
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetCharacters"
+            "$ref": "#/components/responses/GetCharactersSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1724,7 +1724,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetCharactersDetails"
+            "$ref": "#/components/responses/GetCharactersDetailsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1742,7 +1742,7 @@
         "description": "This endpoint will retrieve the genres.",
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetGenres"
+            "$ref": "#/components/responses/GetGenresSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1771,7 +1771,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetGenresDetails"
+            "$ref": "#/components/responses/GetGenresDetailsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1789,7 +1789,7 @@
         "description": "This endpoint will retrieve the forum sections.",
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetForumSections"
+            "$ref": "#/components/responses/GetForumSectionsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1818,7 +1818,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetForumSectionsDetails"
+            "$ref": "#/components/responses/GetForumSectionsDetailsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1873,7 +1873,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetForumSectionsThreads"
+            "$ref": "#/components/responses/GetForumSectionsThreadsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1929,7 +1929,7 @@
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/PostForumSectionsThreads"
+            "$ref": "#/components/responses/PostForumSectionsThreadsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1966,7 +1966,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetForumThreadsDetails"
+            "$ref": "#/components/responses/GetForumThreadsDetailsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2018,7 +2018,7 @@
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/PostForumThreadsVote"
+            "$ref": "#/components/responses/PostForumThreadsVoteSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2073,7 +2073,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetForumThreadsReplies"
+            "$ref": "#/components/responses/GetForumThreadsRepliesSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2124,7 +2124,7 @@
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/PostForumThreadsReplies"
+            "$ref": "#/components/responses/PostForumThreadsRepliesSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2161,7 +2161,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetForumThreadsSearch"
+            "$ref": "#/components/responses/GetForumThreadsSearchSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2300,7 +2300,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetNotificationsDetails"
+            "$ref": "#/components/responses/GetNotificationsDetailsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2386,7 +2386,7 @@
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/PostNotificationsUpdate"
+            "$ref": "#/components/responses/PostNotificationsUpdateSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2705,6 +2705,35 @@
         }
       }
     },
+    "/themes/{themeID}": {
+      "get": {
+        "tags": [
+          "themes"
+        ],
+        "operationId": "getThemesDetails",
+        "summary": "Get specific theme details.",
+        "description": "This endpoint will retrieve the details of a specific theme.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "themeID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the theme."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetThemesDetailsSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/info": {
       "get": {
         "tags": [
@@ -2882,7 +2911,7 @@
           }
         }
       },
-      "GetNotificationsDetails": {
+      "GetNotificationsDetailsSuccess": {
         "description": "Successful POST Notifications Details JSON response",
         "content": {
           "application/json": {
@@ -2909,7 +2938,7 @@
           }
         }
       },
-      "PostNotificationsUpdate": {
+      "PostNotificationsUpdateSuccess": {
         "description": "Successful POST Notifications Update JSON response",
         "content": {
           "application/json": {
@@ -2925,7 +2954,7 @@
           }
         }
       },
-      "GetAnime": {
+      "GetAnimeSuccess": {
         "description": "Successful GET Anime JSON response",
         "content": {
           "application/json": {
@@ -3349,7 +3378,7 @@
           }
         }
       },
-      "GetAnimeActors": {
+      "GetAnimeActorsSuccess": {
         "description": "Successful GET Anime Actors JSON response",
         "content": {
           "application/json": {
@@ -3385,7 +3414,7 @@
           }
         }
       },
-      "GetAnimeCharacters": {
+      "GetAnimeCharactersSuccess": {
         "description": "Successful GET Anime Characters JSON response",
         "content": {
           "application/json": {
@@ -3443,7 +3472,7 @@
           }
         }
       },
-      "GetAnimeCast": {
+      "GetAnimeCastSuccess": {
         "description": "Successful GET Anime Cast JSON response",
         "content": {
           "application/json": {
@@ -3529,7 +3558,7 @@
           }
         }
       },
-      "GetAnimeRelations": {
+      "GetAnimeRelationsSuccess": {
         "description": "Successful GET Anime Relations JSON response",
         "content": {
           "application/json": {
@@ -3635,7 +3664,7 @@
           }
         }
       },
-      "GetAnimeSeasons": {
+      "GetAnimeSeasonsSuccess": {
         "description": "Successful GET Anime Seasons JSON response",
         "content": {
           "application/json": {
@@ -3661,7 +3690,7 @@
           }
         }
       },
-      "GetAnimeSearch": {
+      "GetAnimeSearchSuccess": {
         "description": "Successful GET Anime Search JSON response",
         "content": {
           "application/json": {
@@ -3804,7 +3833,7 @@
           }
         }
       },
-      "GetAnimeSeasonsDetails": {
+      "GetAnimeSeasonsDetailsSuccess": {
         "description": "Successful GET Anime Seasons Details JSON response",
         "content": {
           "application/json": {
@@ -3830,7 +3859,7 @@
           }
         }
       },
-      "GetAnimeSeasonsEpisodes": {
+      "GetAnimeSeasonsEpisodesSuccess": {
         "description": "Successful GET Anime Seasons Episodes JSON response",
         "content": {
           "application/json": {
@@ -3874,7 +3903,7 @@
           }
         }
       },
-      "GetAnimeEpisodesDetails": {
+      "GetAnimeEpisodesDetailsSuccess": {
         "description": "Successful GET Anime Episodes Details JSON response",
         "content": {
           "application/json": {
@@ -3903,7 +3932,7 @@
           }
         }
       },
-      "PostAnimeEpisodesWatched": {
+      "PostAnimeEpisodesWatchedSuccess": {
         "description": "Successful POST Anime Episodes Watched JSON response",
         "content": {
           "application/json": {
@@ -3918,7 +3947,7 @@
           }
         }
       },
-      "GetActors": {
+      "GetActorsSuccess": {
         "description": "Successful GET Actors JSON response",
         "content": {
           "application/json": {
@@ -3954,7 +3983,7 @@
           }
         }
       },
-      "GetActorsDetails": {
+      "GetActorsDetailsSuccess": {
         "description": "Successful GET Actors Details JSON response",
         "content": {
           "application/json": {
@@ -3979,7 +4008,7 @@
           }
         }
       },
-      "GetCharacters": {
+      "GetCharactersSuccess": {
         "description": "Successful GET Characters JSON response",
         "content": {
           "application/json": {
@@ -4037,7 +4066,7 @@
           }
         }
       },
-      "GetCharactersDetails": {
+      "GetCharactersDetailsSuccess": {
         "description": "Successful GET Characters Details JSON response",
         "content": {
           "application/json": {
@@ -4073,7 +4102,7 @@
           }
         }
       },
-      "GetGenres": {
+      "GetGenresSuccess": {
         "description": "Successful GET Genres JSON response",
         "content": {
           "application/json": {
@@ -4111,7 +4140,7 @@
           }
         }
       },
-      "GetGenresDetails": {
+      "GetGenresDetailsSuccess": {
         "description": "Successful GET Genres Details JSON response",
         "content": {
           "application/json": {
@@ -4137,7 +4166,7 @@
           }
         }
       },
-      "GetForumSections": {
+      "GetForumSectionsSuccess": {
         "description": "Successful GET Forum-Sections JSON response",
         "content": {
           "application/json": {
@@ -4169,7 +4198,7 @@
           }
         }
       },
-      "GetForumSectionsDetails": {
+      "GetForumSectionsDetailsSuccess": {
         "description": "Successful GET Forum-Sections Details JSON response.",
         "content": {
           "application/json": {
@@ -4192,7 +4221,7 @@
           }
         }
       },
-      "GetForumSectionsThreads": {
+      "GetForumSectionsThreadsSuccess": {
         "description": "Successful GET Forum-Sections Threads JSON response.",
         "content": {
           "application/json": {
@@ -4286,7 +4315,7 @@
           }
         }
       },
-      "PostForumSectionsThreads": {
+      "PostForumSectionsThreadsSuccess": {
         "description": "Successful POST Forum-Threads Details JSON response.",
         "content": {
           "application/json": {
@@ -4340,7 +4369,7 @@
           }
         }
       },
-      "GetForumThreadsDetails": {
+      "GetForumThreadsDetailsSuccess": {
         "description": "Successful GET Forum-Threads Details JSON response.",
         "content": {
           "application/json": {
@@ -4394,7 +4423,7 @@
           }
         }
       },
-      "PostForumThreadsVote": {
+      "PostForumThreadsVoteSuccess": {
         "description": "Successful GET Forum-Threads Vote JSON response.",
         "content": {
           "application/json": {
@@ -4409,7 +4438,7 @@
           }
         }
       },
-      "GetForumThreadsReplies": {
+      "GetForumThreadsRepliesSuccess": {
         "description": "Successful GET Forum-Threads Replies JSON response.",
         "content": {
           "application/json": {
@@ -4498,7 +4527,7 @@
           }
         }
       },
-      "PostForumThreadsReplies": {
+      "PostForumThreadsRepliesSuccess": {
         "description": "Successful POST Forum-Threads Replies JSON response.",
         "content": {
           "application/json": {
@@ -4549,7 +4578,7 @@
           }
         }
       },
-      "GetForumThreadsSearch": {
+      "GetForumThreadsSearchSuccess": {
         "description": "Successful GET Forum-Threads Search JSON response.",
         "content": {
           "application/json": {
@@ -5140,6 +5169,30 @@
                       "name": "Blueberry",
                       "screenshot": "http://kurozora-web.test/storage/2/Screenshot.jpeg",
                       "download_link": "/api/v1/themes/2/download"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetThemesDetailsSuccess": {
+        "description": "Successful GET Theme Details JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "themes",
+                    "href": "/api/v1/themes/1",
+                    "attributes": {
+                      "name": "Tatum Orn",
+                      "screenshot": "http://kurozora-web.test/storage/1/Screenshot.jpeg",
+                      "download_link": "http://kurozora-web.test/api/v1/themes/1/download"
                     }
                   }
                 ]
