@@ -29,7 +29,7 @@ class AnimeEpisodeResource extends JsonResource
         $resource = [
             'id'            => $animeEpisode->id,
             'type'          => 'episodes',
-//            'href'          => route('api.episodes.details', $animeEpisode, false),
+            'href'          => route('api.episodes.details', $animeEpisode, false),
             'attributes'    => [
                 'number'        => $animeEpisode->number,
                 'name'          => $animeEpisode->name,
