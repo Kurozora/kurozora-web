@@ -9,10 +9,10 @@ final class DayOfWeek extends Enum
     const Sunday    = 1;
     const Monday    = 2;
     const Tuesday   = 3;
-	const Wednesday = 4;
-	const Thursday  = 5;
-	const Friday    = 6;
-	const Saturday  = 7;
+    const Wednesday = 4;
+    const Thursday  = 5;
+    const Friday    = 6;
+    const Saturday  = 7;
 
     /**
      * Return the abbreviated string for the DayOfWeek type.

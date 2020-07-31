@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Rules\ValidateAnimeID;
+use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AddAnimeReminderRequest extends FormRequest
@@ -12,9 +13,10 @@ class AddAnimeReminderRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         // Check if the user can add to this user's favorites
+        /** @var User $user */
         $user = $this->route('user');
 
         return $this->user()->can('add_to_anime_reminder', $user);
@@ -25,7 +27,7 @@ class AddAnimeReminderRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'anime_id'      => ['bail', 'required', new ValidateAnimeID],

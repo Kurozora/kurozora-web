@@ -76,5 +76,5 @@ Route::prefix('/users')
             ->middleware('kurozora.userauth');
 
         Route::get('/{user}/reminder-anime/download/', [ReminderAnimeController::class, 'download'])
-            ->middleware('kurozora.userauth:optional');
+            ->middleware('auth.basic');
     });
