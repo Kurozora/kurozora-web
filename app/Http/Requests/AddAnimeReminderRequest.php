@@ -2,11 +2,12 @@
 
 namespace App\Http\Requests;
 
+use App\Anime;
+use App\Rules\ValidateAnimeIDIsTracked;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class MALImport extends FormRequest
+class AddAnimeReminderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,11 +16,11 @@ class MALImport extends FormRequest
      */
     public function authorize(): bool
     {
-        // Check if the user can import from MAL
+        // Check if the user can add to this user's reminders
         /** @var User $user */
         $user = $this->route('user');
 
-        return $this->user()->can('mal_import', $user);
+        return $this->user()->can('add_to_anime_reminder', $user);
     }
 
     /**
@@ -30,8 +31,8 @@ class MALImport extends FormRequest
     public function rules(): array
     {
         return [
-            'file'      => ['required', 'file', 'mimes:xml', 'max:' . config('mal-import.max_xml_file_size')],
-            'behavior'  => ['required', 'string', Rule::in(['overwrite'])]
+            'anime_id'      => ['bail', 'required', 'integer', 'exists:' . Anime::TABLE_NAME . ',id', new ValidateAnimeIDIsTracked],
+            'is_reminded'   => ['bail', 'required', 'boolean']
         ];
     }
 }

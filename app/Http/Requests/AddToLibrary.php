@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\ValidateAnimeID;
+use App\Anime;
 use App\Rules\ValidateLibraryStatus;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
@@ -14,9 +14,10 @@ class AddToLibrary extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         // Check if the user can add to this library
+        /** @var User $user */
         $user = $this->route('user');
 
         return $this->user()->can('add_to_library', $user);
@@ -27,10 +28,10 @@ class AddToLibrary extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'anime_id'  => ['bail', 'required', new ValidateAnimeID],
+            'anime_id'  => ['bail', 'required', 'integer', 'exists:' . Anime::TABLE_NAME . ',id'],
             'status'    => ['bail', 'required', new ValidateLibraryStatus],
         ];
     }

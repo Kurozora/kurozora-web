@@ -25,7 +25,7 @@ class StudioResourceBasic extends JsonResource
         return [
             'id'            => $studio->id,
             'type'          => 'studios',
-            'href'          => route('studios.details', $studio, false),
+            'href'          => route('api.studios.details', $studio, false),
             'attributes'    => [
                 'name'          => $studio->name,
                 'logo_url'      => $studio->logo_url,

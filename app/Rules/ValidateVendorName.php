@@ -17,7 +17,7 @@ class ValidateVendorName implements Rule
      * @param  mixed  $value
      * @return bool
      */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
         return in_array($value, self::VALID_VENDORS, true);
     }
@@ -27,7 +27,7 @@ class ValidateVendorName implements Rule
      *
      * @return string
      */
-    public function message()
+    public function message(): string
     {
         return 'Valid device vendor names are ' . implode(', ', self::VALID_VENDORS) . '.';
     }

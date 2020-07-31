@@ -13,6 +13,7 @@ use App\Http\Resources\AnimeResource;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Http\Resources\AnimeSeasonResource;
 use App\Http\Resources\CharacterResource;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -26,7 +27,8 @@ class AnimeController extends Controller
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function view(Anime $anime) {
+    public function view(Anime $anime): JsonResponse
+    {
         // Call the AnimeViewed event
         AnimeViewed::dispatch($anime);
 
@@ -42,7 +44,8 @@ class AnimeController extends Controller
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function actorsAnime(Anime $anime) {
+    public function actorsAnime(Anime $anime): JsonResponse
+    {
         // Get the actors
         $actors = $anime->getActors();
 
@@ -57,7 +60,8 @@ class AnimeController extends Controller
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function charactersAnime(Anime $anime) {
+    public function charactersAnime(Anime $anime): JsonResponse
+    {
         // Get the actors
         $actors = $anime->getCharacters();
 
@@ -72,7 +76,8 @@ class AnimeController extends Controller
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function actorCharacterAnime(Anime $anime) {
+    public function actorCharacterAnime(Anime $anime): JsonResponse
+    {
         // Get the actor-character-anime
         $actorCharacterAnime = $anime->getActorCharacterAnime();
 
@@ -87,7 +92,8 @@ class AnimeController extends Controller
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function relationsAnime(Anime $anime) {
+    public function relationsAnime(Anime $anime): JsonResponse
+    {
         // Get the actors
         $relations = $anime->getAnimeRelations();
 
@@ -102,7 +108,8 @@ class AnimeController extends Controller
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function seasonsAnime(Anime $anime) {
+    public function seasonsAnime(Anime $anime): JsonResponse
+    {
         // Get the seasons
         $seasons = $anime->getSeasons();
 
@@ -116,11 +123,10 @@ class AnimeController extends Controller
      *
      * @param Request $request
      * @param Anime   $anime
-     *
      * @return JsonResponse
-     * @throws \Exception
+     * @throws Exception
      */
-    public function rateAnime(Request $request, Anime $anime)
+    public function rateAnime(Request $request, Anime $anime): JsonResponse
     {
         if (!Auth::user()->isTracking($anime))
             return JSONResult::error('Please add ' . $anime->title . ' to your library first.');
@@ -175,7 +181,8 @@ class AnimeController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function search(Request $request) {
+    public function search(Request $request): JsonResponse
+    {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'query' => 'bail|required|string|min:1'

@@ -17,7 +17,7 @@ class AnimeEpisodePolicy
      * @param AnimeEpisode $episode
      * @return bool
      */
-    public function mark_as_watched(User $user, AnimeEpisode $episode)
+    public function mark_as_watched(User $user, AnimeEpisode $episode): bool
     {
         return $user->isTracking($episode->season->anime);
     }

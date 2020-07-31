@@ -2,12 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\ValidateAvatarImage;
-use App\Rules\ValidateBannerImage;
-use App\Rules\ValidateUserBiography;
+use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateProfile extends FormRequest
+class GetAnimeReminderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -16,7 +14,11 @@ class UpdateProfile extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        // Check if the user can get this user's favorites
+        /** @var User $user */
+        $user = $this->route('user');
+
+        return $this->user()->can('get_anime_reminders', $user);
     }
 
     /**
@@ -26,10 +28,6 @@ class UpdateProfile extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'profileImage'  => ['bail', new ValidateAvatarImage],
-            'bannerImage'   => ['bail', new ValidateBannerImage],
-            'biography'     => ['bail', new ValidateUserBiography]
-        ];
+        return [];
     }
 }

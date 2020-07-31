@@ -22,7 +22,7 @@ class CharacterResource extends JsonResource
         return [
             'id'            => $character->id,
             'type'          => 'characters',
-            'href'          => route('characters.details', $character, false),
+            'href'          => route('api.characters.details', $character, false),
             'attributes'    => [
                 'name'              => $character->name,
                 'about'             => $character->about,

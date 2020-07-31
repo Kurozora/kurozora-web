@@ -10,6 +10,7 @@ Route::get('/', function () {
 // Landing pages
 require 'Web/Anime.php';
 require 'Web/Profile.php';
+require 'Web/Theme.php';
 require 'Web/Thread.php';
 
 // Legal pages

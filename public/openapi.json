@@ -736,6 +736,134 @@
         }
       }
     },
+    "/users/{userID}/reminder-anime": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Get an overview of the user's reminder Anime",
+        "description": "This endpoint will retrieve the list of Anime in the user's reminder list.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the user."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Add or remove an Anime to/from the user's Anime reminders",
+        "description": "This endpoint will add or remove to/from the list of Anime in a user's rmeinders.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the user."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "anime_id": {
+                    "type": "integer",
+                    "description": "The ID of the Anime to add or remove."
+                  },
+                  "is_reminded": {
+                    "type": "integer",
+                    "description": "0: remove, 1: add.",
+                    "enum": [
+                      0,
+                      1
+                    ],
+                    "default": 1
+                  }
+                },
+                "required": [
+                  "anime_id",
+                  "is_reminded"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/users/{userID}/reminder-anime/download": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Get the calendar file of the user's Anime reminders",
+        "description": "This endpoint will retrieve the calendar file of Anime in the user's reminder list.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the user."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/users/{userID}/profile": {
       "get": {
         "security": [

@@ -17,7 +17,7 @@ class ValidateUserBiography implements Rule
      * @param  mixed  $value
      * @return bool
      */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
         $validator = Validator::make([$attribute => $value], [
             $attribute => ['min:0', 'max:' . User::BIOGRAPHY_LIMIT],
@@ -35,7 +35,7 @@ class ValidateUserBiography implements Rule
      *
      * @return string
      */
-    public function message()
+    public function message(): string
     {
         return $this->error;
     }

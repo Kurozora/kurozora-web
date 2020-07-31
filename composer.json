@@ -25,6 +25,7 @@
         "nicolaslopezj/searchable": "1.*",
         "nikkanetiya/laravel-color-palette": "dev-larave-6-7",
         "spatie/laravel-activitylog": "^3.9",
+        "spatie/icalendar-generator": "^1.0",
         "spatie/laravel-medialibrary": "^8.0",
         "spatie/laravel-permission": "^3.6",
         "staudenmeir/eloquent-has-many-deep": "^1.11",

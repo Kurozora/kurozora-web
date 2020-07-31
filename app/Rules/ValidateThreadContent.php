@@ -17,7 +17,7 @@ class ValidateThreadContent implements Rule
      * @param  mixed  $value
      * @return bool
      */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
         // Empty string does not pass
         if(!is_string($value) || !strlen($value)) {
@@ -39,7 +39,7 @@ class ValidateThreadContent implements Rule
      *
      * @return string
      */
-    public function message()
+    public function message(): string
     {
         if($this->errorType == 'short')
             return trans('validation.lt.string', ['value' => self::MINIMUM_THREAD_CONTENT_LENGTH]);

@@ -10,7 +10,7 @@
         .ExternalClass * {
             line-height: 100%;
         }
-        html, body,	* {
+        html, body, * {
             -webkit-text-size-adjust: none;
             text-size-adjust: none;
         }
@@ -175,6 +175,5 @@
         </tr>
         </tbody>
     </table>
-</div>
 </div>
 </body>

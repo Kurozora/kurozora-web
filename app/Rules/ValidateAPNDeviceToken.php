@@ -15,7 +15,7 @@ class ValidateAPNDeviceToken implements Rule
      * @param  mixed  $value
      * @return bool
      */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
         return is_string($value) && strlen($value) == self::TOKEN_LENGTH;
     }
@@ -25,7 +25,7 @@ class ValidateAPNDeviceToken implements Rule
      *
      * @return string
      */
-    public function message()
+    public function message(): string
     {
         return 'The :attribute is not in a valid format.';
     }

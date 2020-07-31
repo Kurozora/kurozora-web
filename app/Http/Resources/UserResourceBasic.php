@@ -29,7 +29,7 @@ class UserResourceBasic extends JsonResource
         $resource = [
             'id'                => $user->id,
             'type'              => 'users',
-            'href'              => route('users.profile', $user, false),
+            'href'              => route('api.users.profile', $user, false),
             'attributes'        => [
                 'username'          => $user->username,
                 'activity_status'   => $user->getActivityStatus()->description,

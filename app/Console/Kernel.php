@@ -44,7 +44,7 @@ class Kernel extends ConsoleKernel
         /**********************************************/
         // Truncates login attempts every day
         $schedule->call(function() {
-        	LoginAttempt::truncate();
+            LoginAttempt::truncate();
         })->daily();
     }
 
