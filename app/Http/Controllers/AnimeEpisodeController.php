@@ -6,12 +6,28 @@ use App\AnimeEpisode;
 use App\Enums\WatchStatus;
 use App\Helpers\JSONResult;
 use App\Http\Requests\MarkEpisodeAsWatchedRequest;
-use App\UserWatchedEpisode;
+use App\Http\Resources\AnimeEpisodeResource;
+use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class AnimeEpisodeController extends Controller
 {
+    /**
+     * Returns the information for an episode.
+     *
+     * @param Request $request
+     * @param AnimeEpisode $episode
+     * @return JsonResponse
+     */
+    public function details(Request $request, AnimeEpisode $episode): JsonResponse
+    {
+        return JSONResult::success([
+            'data' => AnimeEpisodeResource::collection([$episode])
+        ]);
+    }
+
     /**
      * Marks an episode as watched or not watched.
      *
@@ -19,9 +35,9 @@ class AnimeEpisodeController extends Controller
      * @param AnimeEpisode $episode
      *
      * @return JsonResponse
-     * @throws \Exception
+     * @throws Exception
      */
-    public function watched(MarkEpisodeAsWatchedRequest $request, AnimeEpisode $episode)
+    public function watched(MarkEpisodeAsWatchedRequest $request, AnimeEpisode $episode): JSONResponse
     {
         $user = Auth::user();
         $watched = (int) $request->input('watched');
