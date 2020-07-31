@@ -24,6 +24,8 @@ class FavoriteAnimeTest extends TestCase
         /** @var Anime $anime */
         $anime = factory(Anime::class)->create();
 
+        $this->user->library()->attach($anime);
+
         $response = $this->auth()->json('POST', '/api/v1/users/' . $this->user->id . '/favorite-anime', [
             'anime_id'      => $anime->id,
             'is_favorite'   => 1
@@ -48,6 +50,7 @@ class FavoriteAnimeTest extends TestCase
         /** @var Anime $anime */
         $anime = factory(Anime::class)->create();
 
+        $this->user->library()->attach($anime);
         $this->user->favoriteAnime()->attach($anime->id);
 
         // Send request to remove the anime from the user's favorites

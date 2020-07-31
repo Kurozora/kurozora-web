@@ -46,9 +46,7 @@ class ReminderAnimeController extends Controller
     function getReminders(GetAnimeReminderRequest $request, User $user): JsonResponse
     {
         return JSONResult::success([
-            'data' => [
-                AnimeResource::collection($user->reminderAnime()->get())
-            ]
+            'data' => AnimeResource::collection($user->reminderAnime()->get())
         ]);
     }
 
