@@ -12,7 +12,6 @@ use App\Nova\Lenses\UnmoderatedAnime;
 use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Support\Str;
 use Laraning\NovaTimeField\TimeField as Time;
-use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
@@ -167,21 +166,21 @@ class Anime extends Resource
                 ->help('Use `TV-Y7 (FV)` if the show exhibits more \'fantasy violence\', and/or is generally more intense or combative than other shows.'),
 
             Heading::make('Schedule')
-	            ->onlyOnForms(),
+                ->onlyOnForms(),
 
             Select::make('Air status', 'status')
-	            ->options([
-	            	0 => 'TBA',
-		            1 => 'Ended',
-		            2 => 'Continuing'
-	            	])
-	            ->displayUsingLabels()
-	            ->hideFromIndex()
-	            ->help('For example: Ended'),
+                ->options([
+                    0 => 'TBA',
+                    1 => 'Ended',
+                    2 => 'Continuing'
+                    ])
+                ->displayUsingLabels()
+                ->hideFromIndex()
+                ->help('For example: Ended'),
 
             Date::make('First aired')
                 ->format('DD-MM-YYYY')
-	            ->hideFromIndex()
+                ->hideFromIndex()
                 ->help('The date on which the show first aired. For example: 2015-12-03'),
 
             Date::make('Last aired')
@@ -190,15 +189,15 @@ class Anime extends Resource
                 ->help('The date on which the show last aired. For example: 2016-03-08'),
 
             Time::make('Air time')
-	            ->withTwelveHourTime()
-	            ->hideFromIndex()
-	            ->help('The exact time the show airs at. For example: 1:30 PM (13:30)'),
+                ->withTwelveHourTime()
+                ->hideFromIndex()
+                ->help('The exact time the show airs at. For example: 1:30 PM (13:30)'),
 
             Select::make('Air day')
-	            ->options(DayOfWeek::toSelectArray())
-	            ->displayUsingLabels()
-	            ->hideFromIndex()
-	            ->help('The day of the week the show airs at. For example: Thursday'),
+                ->options(DayOfWeek::toSelectArray())
+                ->displayUsingLabels()
+                ->hideFromIndex()
+                ->help('The day of the week the show airs at. For example: Thursday'),
 
             Heading::make('Legal')
                 ->onlyOnForms(),

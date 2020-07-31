@@ -17,7 +17,8 @@ class ForumThreadPolicy
      * @param ForumThread $thread
      * @return bool
      */
-    function lock_thread(User $user, ForumThread $thread) {
+    function lock_thread(User $user, ForumThread $thread): bool
+    {
         return $user->hasRole('admin');
     }
 }

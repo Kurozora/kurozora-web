@@ -25,7 +25,7 @@ class ForumThreadResource extends JsonResource
         $resource = [
             'id'            => $forumThread->id,
             'type'          => 'threads',
-            'href'          => route('forum-threads.details', $forumThread, false),
+            'href'          => route('api.forum-threads.details', $forumThread, false),
             'attributes'    => [
                 'title'         => $forumThread->title,
                 'content'       => $forumThread->content,

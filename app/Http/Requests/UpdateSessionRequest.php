@@ -12,7 +12,7 @@ class UpdateSessionRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'apn_device_token' => ['bail', new ValidateAPNDeviceToken]

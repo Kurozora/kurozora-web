@@ -16,7 +16,7 @@ class ValidateBannerImage implements Rule
      * @param  mixed  $value
      * @return bool
      */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
         $imgValidator = Validator::make([$attribute => $value], [
             $attribute => 'mimes:jpeg,jpg,png|max:1000|nullable',
@@ -34,7 +34,7 @@ class ValidateBannerImage implements Rule
      *
      * @return string
      */
-    public function message()
+    public function message(): string
     {
         return $this->error;
     }

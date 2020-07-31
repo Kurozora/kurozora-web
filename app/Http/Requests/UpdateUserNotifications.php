@@ -11,11 +11,11 @@ class UpdateUserNotifications extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'notification'  => ['bail', 'required', 'string'],
-            'read'          => ['bail', 'required', 'numeric', 'min:0', 'max:1'],
+            'read'          => ['bail', 'required', 'numeric', 'in:0,1'],
         ];
     }
 }

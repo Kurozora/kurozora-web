@@ -14,7 +14,7 @@ class ValidateLibraryStatus implements Rule
      * @param  mixed  $value
      * @return bool
      */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
         // Empty string does not pass
         if(!is_string($value) || !strlen($value)) return false;
@@ -28,7 +28,7 @@ class ValidateLibraryStatus implements Rule
      *
      * @return string
      */
-    public function message()
+    public function message(): string
     {
         return 'Pick a valid library status: ' .
             implode(', ', UserLibraryStatus::getKeys())

@@ -62,7 +62,7 @@ class AnimeResource extends JsonResource
         return [
             'seasons' => [
                 'data' => AnimeSeasonResource::collection($anime->getSeasons(Anime::MAXIMUM_RELATIONSHIP_LIMIT)),
-                'href' => route('anime.seasons', $anime, false)
+                'href' => route('api.anime.seasons', $anime, false)
             ]
         ];
     }
@@ -79,7 +79,7 @@ class AnimeResource extends JsonResource
         return [
             'actors' => [
                 'data' => ActorResource::collection($anime->getActors(Anime::MAXIMUM_RELATIONSHIP_LIMIT)),
-                'href' => route('anime.actors', $anime, false)
+                'href' => route('api.anime.actors', $anime, false)
             ]
         ];
     }
@@ -97,7 +97,7 @@ class AnimeResource extends JsonResource
         return [
             'characters' => [
                 'data' => CharacterResource::collection($anime->getCharacters(Anime::MAXIMUM_RELATIONSHIP_LIMIT)),
-                'href' => route('anime.characters', $anime, false)
+                'href' => route('api.anime.characters', $anime, false)
             ]
         ];
     }
@@ -115,7 +115,7 @@ class AnimeResource extends JsonResource
         return [
             'relations' => [
                 'data' => AnimeRelationsResource::collection($anime->getAnimeRelations(Anime::MAXIMUM_RELATIONSHIP_LIMIT)),
-                'href' => route('anime.relations', $anime, false)
+                'href' => route('api.anime.relations', $anime, false)
             ]
         ];
     }
@@ -133,7 +133,7 @@ class AnimeResource extends JsonResource
         return [
             'cast' => [
                 'data' => ActorCharacterAnimeResource::collection($anime->getActorCharacterAnime(Anime::MAXIMUM_RELATIONSHIP_LIMIT)),
-                'href' => route('anime.cast', $anime, false)
+                'href' => route('api.anime.cast', $anime, false)
             ]
         ];
     }

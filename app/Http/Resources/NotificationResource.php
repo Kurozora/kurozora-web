@@ -24,7 +24,7 @@ class NotificationResource extends JsonResource
         return [
             'id'            => $notification->id,
             'type'          => 'notifications',
-            'href'          => route('notifications.details', $notification, false),
+            'href'          => route('api.notifications.details', $notification, false),
             'attributes'    => [
                 'type'          => $this->typeWithoutNamespace($notification),
                 'read'          => ($notification->read_at != null),

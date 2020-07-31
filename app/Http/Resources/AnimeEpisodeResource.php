@@ -5,20 +5,19 @@ namespace App\Http\Resources;
 use App\AnimeEpisode;
 use App\AnimeSeason;
 use App\Enums\WatchStatus;
-use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
 class AnimeEpisodeResource extends JsonResource
 {
-	/**
-	 * Transform the resource into an array.
-	 *
-	 * @param \Illuminate\Http\Request $request
-	 *
-	 * @return array
-	 */
-    public function toArray($request)
+    /**
+     * Transform the resource into an array.
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function toArray($request): array
     {
         /** @var AnimeEpisode $animeEpisode */
         $animeEpisode = $this->resource;
@@ -30,7 +29,7 @@ class AnimeEpisodeResource extends JsonResource
         $resource = [
             'id'            => $animeEpisode->id,
             'type'          => 'episodes',
-            'href'          => route('seasons.episodes', $animeEpisode, false),
+//            'href'          => route('api.episodes.details', $animeEpisode, false),
             'attributes'    => [
                 'number'        => $animeEpisode->number,
                 'name'          => $animeEpisode->name,
@@ -51,17 +50,18 @@ class AnimeEpisodeResource extends JsonResource
      *
      * @return array
      */
-    protected function getUserSpecificDetails() {
+    protected function getUserSpecificDetails(): array
+    {
         /** @var AnimeEpisode $animeEpisode */
         $animeEpisode = $this->resource;
 
         $user = Auth::user();
         $season = AnimeSeason::where('id', $animeEpisode->season_id)->first();
-	    $anime = $season->anime()->first();
+        $anime = $season->anime()->first();
 
         $watchStatus = WatchStatus::Disabled();
         if($user->isTracking($anime))
-	        $watchStatus = WatchStatus::init($user->watchedAnimeEpisodes()->where('episode_id', $animeEpisode->id)->exists());
+            $watchStatus = WatchStatus::init($user->watchedAnimeEpisodes()->where('episode_id', $animeEpisode->id)->exists());
 
         // Return the array
         return [
