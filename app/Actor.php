@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 class Actor extends KModel
 {
     // Table name
@@ -13,7 +15,7 @@ class Actor extends KModel
      *
      * @return string
      */
-    public function getFullNameAttribute()
+    public function getFullNameAttribute(): string
     {
         return $this->last_name . ', ' . $this->first_name;
     }
@@ -21,9 +23,10 @@ class Actor extends KModel
     /**
      * Returns the characters the actor belongs to.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
-    function characters() {
+    function characters(): BelongsToMany
+    {
         return $this->belongsToMany(Character::class);
     }
 }

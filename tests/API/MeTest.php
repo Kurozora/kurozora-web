@@ -19,13 +19,13 @@ class MeTest extends TestCase
     public function user_can_get_own_details_with_authentication_token()
     {
         // Send request
-        $response = $this->auth()->json('GET', '/api/v1/users/me', []);
+        $response = $this->auth()->json('GET', '/api/v1/users/me');
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the user id in the response is the current user's id
-        $this->assertEquals($this->user->id, $response->json()['data']['user']['id']);
+        $this->assertEquals($this->user->id, $response->json()['data'][0]['relationships']['user']['data'][0]['id']);
     }
 
     /**

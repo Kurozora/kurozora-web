@@ -6,7 +6,7 @@ use App\Helpers\JSONResult;
 use App\Http\Requests\CreateSessionRequest;
 use App\Http\Requests\UpdateSessionRequest;
 use App\Http\Resources\SessionResource;
-use App\Http\Responses\LoginResponse;
+use App\Http\Resources\SessionResourceBasic;
 use App\LoginAttempt;
 use App\Session;
 use App\User;
@@ -21,7 +21,7 @@ class SessionController extends Controller
      * @param CreateSessionRequest $request
      * @return JsonResponse
      */
-    public function create(CreateSessionRequest $request)
+    public function create(CreateSessionRequest $request): JsonResponse
     {
         $data = $request->validated();
 
@@ -54,7 +54,11 @@ class SessionController extends Controller
             'device_model'      => $data['device_model'],
         ]);
 
-        return LoginResponse::make($user, $session);
+        return JSONResult::success([
+            'data' => [
+                SessionResource::make($session)->includesAuthKey()
+            ]
+        ]);
     }
 
     /**
@@ -64,7 +68,7 @@ class SessionController extends Controller
      * @param Session $session
      * @return JsonResponse
      */
-    function update(UpdateSessionRequest $request, Session $session)
+    function update(UpdateSessionRequest $request, Session $session): JsonResponse
     {
         $data = $request->validated();
 
@@ -98,7 +102,7 @@ class SessionController extends Controller
      * @return JsonResponse
      * @throws Exception
      */
-    public function delete(Session $session)
+    public function delete(Session $session): JsonResponse
     {
         // Delete the session
         $session->delete();
@@ -112,10 +116,10 @@ class SessionController extends Controller
      * @param Session $session
      * @return JsonResponse
      */
-    public function details(Session $session)
+    public function details(Session $session): JsonResponse
     {
         return JSONResult::success([
-            'data' => SessionResource::make($session)
+            'data' => SessionResourceBasic::collection([$session])
         ]);
     }
 }

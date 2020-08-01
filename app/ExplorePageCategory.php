@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 class ExplorePageCategory extends KModel
 {
     // Table name
@@ -11,18 +13,20 @@ class ExplorePageCategory extends KModel
     /**
      * Returns the animes associated with the category.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
-    function animes() {
+    function animes(): BelongsToMany
+    {
         return $this->belongsToMany(Anime::class, ExplorePageCategoryAnime::class, 'explore_page_category_id', 'anime_id');
     }
 
     /**
      * Returns the genres associated with the category.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
-    function genres() {
+    function genres(): BelongsToMany
+    {
         return $this->belongsToMany(Genre::class, ExplorePageCategoryGenre::class, 'explore_page_category_id', 'genre_id');
     }
 }

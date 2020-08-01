@@ -21,7 +21,8 @@ class FollowingController extends Controller
      * @param User $user
      * @return JsonResponse
      */
-    function followUser(Request $request, User $user) {
+    function followUser(Request $request, User $user): JsonResponse
+    {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'follow' => 'bail|required|integer|min:0|max:1'
@@ -70,7 +71,8 @@ class FollowingController extends Controller
      * @param User $user
      * @return JsonResponse
      */
-    function getFollowers(Request $request, User $user) {
+    function getFollowers(Request $request, User $user): JsonResponse
+    {
         // Get the followers
         $followers = $user->followers()->paginate(UserFollow::AMOUNT_OF_FOLLOWERS_PER_PAGE);
 
@@ -90,7 +92,8 @@ class FollowingController extends Controller
      * @param User $user
      * @return JsonResponse
      */
-    function getFollowing(Request $request, User $user) {
+    function getFollowing(Request $request, User $user): JsonResponse
+    {
         // Get the following
         $following = $user->following()->paginate(UserFollow::AMOUNT_OF_FOLLOWERS_PER_PAGE);
 

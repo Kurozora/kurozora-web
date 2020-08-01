@@ -6,6 +6,8 @@ use App\Traits\KuroSearchTrait;
 use Carbon\Carbon;
 use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
 use Cog\Laravel\Love\Reactable\Models\Traits\Reactable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ForumThread extends KModel implements ReactableContract
 {
@@ -39,27 +41,30 @@ class ForumThread extends KModel implements ReactableContract
     /**
      * Get the section the thread was posted in.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function forum_section() {
+    public function forum_section(): BelongsTo
+    {
         return $this->belongsTo(ForumSection::class, 'section_id', 'id');
     }
 
     /**
      * Get the user associated with the thread
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function user() {
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     /**
      * Retrieve the replies for the thread
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function replies() {
+    public function replies(): HasMany
+    {
         return $this->hasMany(ForumReply::class, 'thread_id', 'id');
     }
 
@@ -70,9 +75,10 @@ class ForumThread extends KModel implements ReactableContract
      * Returns false when the user is allowed to post
      *
      * @param $userID
-     * @return mixed
+     * @return bool
      */
-    public static function testPostCooldown($userID) {
+    public static function testPostCooldown($userID): bool
+    {
         $secondsCooldown = self::COOLDOWN_POST_THREAD;
 
         $checkQuery = ForumThread::where('user_id', '=', $userID)

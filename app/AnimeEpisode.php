@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 class AnimeEpisode extends KModel
 {
     // Table name
@@ -20,9 +22,10 @@ class AnimeEpisode extends KModel
     /**
      * Returns the season this episode belongs to
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    function season() {
+    function season(): BelongsTo
+    {
         return $this->belongsTo(AnimeSeason::class);
     }
 }

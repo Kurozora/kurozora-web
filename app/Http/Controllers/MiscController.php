@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
 use Carbon\Carbon;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
 use League\CommonMark\CommonMarkConverter;
@@ -14,9 +15,10 @@ class MiscController extends Controller
      * Returns the latest privacy policy.
      *
      * @return JsonResponse
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
-    public function getPrivacyPolicy() {
+    public function getPrivacyPolicy(): JsonResponse
+    {
         $privacyPolicyPath = 'resources/static/privacy_policy.md';
 
         // Get the privacy policy text

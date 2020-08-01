@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Anime;
 use App\Enums\ExplorePageCategoryTypes;
 use App\ExplorePageCategory;
 use App\Genre;
@@ -19,7 +18,7 @@ class ExplorePageController extends Controller
      * @param GetExplorePageRequest $request
      * @return JsonResponse
      */
-    function explore(GetExplorePageRequest $request)
+    function explore(GetExplorePageRequest $request): JsonResponse
     {
         // Get explore page for a specific genre
         if($request->has('genre_id')) {
@@ -41,9 +40,9 @@ class ExplorePageController extends Controller
      * Generates fixed explore page categories for a specific genre.
      *
      * @param Genre $genre
-     * @return ExplorePageCategory[]
+     * @return array
      */
-    private function getCategoriesForGenre($genre)
+    private function getCategoriesForGenre(Genre $genre): array
     {
         $categories = [];
 
@@ -60,8 +59,9 @@ class ExplorePageController extends Controller
      * @param int $position
      * @return ExplorePageCategory
      */
-    private function getFeaturedShowsCategoryForGenre($genre, $position)
+    private function getFeaturedShowsCategoryForGenre(Genre $genre, int $position): ExplorePageCategory
     {
+        /** @var ExplorePageCategory $category */
         $category = ExplorePageCategory::make([
             'title'     => 'Featured ' . $genre->name . ' Shows',
             'position'  => $position,
@@ -84,8 +84,9 @@ class ExplorePageController extends Controller
      * @param int $position
      * @return ExplorePageCategory
      */
-    private function getShowsWeLoveCategoryForGenre($genre, $position)
+    private function getShowsWeLoveCategoryForGenre(Genre $genre, int $position): ExplorePageCategory
     {
+        /** @var ExplorePageCategory $category */
         $category = ExplorePageCategory::make([
             'title'     => $genre->name . ' Shows We Love',
             'position'  => $position,

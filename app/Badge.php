@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 class Badge extends KModel
 {
     // Table name
@@ -11,9 +13,10 @@ class Badge extends KModel
     /**
      * Returns the associated users with this badge
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
-    function users() {
+    function users(): BelongsToMany
+    {
         return $this->belongsToMany(User::class, UserBadge::TABLE_NAME, 'badge_id', 'user_id');
     }
 }
