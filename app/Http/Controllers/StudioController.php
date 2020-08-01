@@ -16,24 +16,27 @@ class StudioController extends Controller
      *
      * @return JsonResponse
      */
-    public function overview() {
+    public function overview(): JsonResponse
+    {
         // Get all studios and format them
         $allStudios = Studio::get()->map(function($studio) {
             return StudioResourceBasic::make($studio);
         });
 
         // Show studios in response
-        return JSONResult::success(['data' => $allStudios]);
+        return JSONResult::success([
+            'data' => $allStudios
+        ]);
     }
 
     /**
      * Shows studio details
      *
      * @param Studio $studio
-     *
      * @return JsonResponse
      */
-    public function details(Studio $studio) {
+    public function details(Studio $studio): JsonResponse
+    {
         // Show studio details
         return JSONResult::success([
             'data' => StudioResource::collection([$studio])
@@ -44,10 +47,10 @@ class StudioController extends Controller
      * Returns anime information of a Studio.
      *
      * @param Studio $studio
-     *
      * @return JsonResponse
      */
-    public function anime(Studio $studio) {
+    public function anime(Studio $studio): JsonResponse
+    {
         // Get the anime
         $anime = $studio->getAnime();
 

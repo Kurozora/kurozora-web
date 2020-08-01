@@ -14,7 +14,7 @@ class ActorController extends Controller
      *
      * @return JsonResponse
      */
-    public function overview()
+    public function overview(): JsonResponse
     {
         // Get all actors and format them
         $allActors = Actor::get()->map(function($actor) {
@@ -29,10 +29,9 @@ class ActorController extends Controller
      * Shows actor details.
      *
      * @param Actor $actor
-     *
      * @return JsonResponse
      */
-    public function details(Actor $actor)
+    public function details(Actor $actor): JsonResponse
     {
         // Show actor details
         return JSONResult::success([

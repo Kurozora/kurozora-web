@@ -14,7 +14,8 @@ class GenreController extends Controller
      *
      * @return JsonResponse
      */
-    public function overview() {
+    public function overview(): JsonResponse
+    {
         // Get all genres and format them
         $allGenres = Genre::get()->map(function($genre) {
             return GenreResource::make($genre);
@@ -30,7 +31,8 @@ class GenreController extends Controller
      * @param Genre $genre
      * @return JsonResponse
      */
-    public function details(Genre $genre) {
+    public function details(Genre $genre): JsonResponse
+    {
         // Show genre details
         return JSONResult::success([
             'data' => GenreResource::collection([$genre])
