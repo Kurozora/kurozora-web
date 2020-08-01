@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AnimeStudio extends Model
 {
@@ -13,18 +14,20 @@ class AnimeStudio extends Model
     /**
      * Returns the anime belonging to the studio.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function anime() {
+    public function anime(): BelongsTo
+    {
         return $this->belongsTo(Anime::class);
     }
 
     /**
      * Returns the studio belonging to the anime.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function studio() {
+    public function studio(): BelongsTo
+    {
         return $this->belongsTo(Studio::class);
     }
 }

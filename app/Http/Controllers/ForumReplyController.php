@@ -18,10 +18,9 @@ class ForumReplyController extends Controller
      * @param Request $request
      * @param ForumReply $reply
      * @return JsonResponse
-     *
-     * @throws \BenSampo\Enum\Exceptions\InvalidEnumKeyException
      */
-    public function vote(Request $request, ForumReply $reply) {
+    public function vote(Request $request, ForumReply $reply): JsonResponse
+    {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'vote'      => 'bail|required|numeric|in:-1,1'

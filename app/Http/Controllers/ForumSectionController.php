@@ -22,7 +22,8 @@ class ForumSectionController extends Controller
      *
      * @return JsonResponse
      */
-    public function overview() {
+    public function overview(): JsonResponse
+    {
         $sections = ForumSection::all();
 
         return JSONResult::success([
@@ -36,7 +37,8 @@ class ForumSectionController extends Controller
      * @param ForumSection $section
      * @return JsonResponse
      */
-    public function details(ForumSection $section) {
+    public function details(ForumSection $section): JsonResponse
+    {
         return JSONResult::success([
             'data' => ForumSectionResource::collection([$section])
         ]);
@@ -49,7 +51,8 @@ class ForumSectionController extends Controller
      * @param ForumSection $section
      * @return JsonResponse
      */
-    public function threads(Request $request, ForumSection $section) {
+    public function threads(Request $request, ForumSection $section): JsonResponse
+    {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'order' => ['bail', 'required', 'in:' . implode(',', ForumOrderType::getValues())]
@@ -111,7 +114,8 @@ class ForumSectionController extends Controller
      * @param ForumSection $section
      * @return JsonResponse
      */
-    public function postThread(PostThread $request, ForumSection $section) {
+    public function postThread(PostThread $request, ForumSection $section): JsonResponse
+    {
         $data = $request->validated();
 
         // Check if the user is banned

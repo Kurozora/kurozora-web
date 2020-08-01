@@ -7,6 +7,7 @@ use App\Http\Requests\AddAnimeFavoriteRequest;
 use App\Http\Requests\GetAnimeFavoritesRequest;
 use App\Http\Resources\AnimeResourceBasic;
 use App\User;
+use Illuminate\Http\JsonResponse;
 
 class FavoriteAnimeController extends Controller
 {
@@ -15,9 +16,10 @@ class FavoriteAnimeController extends Controller
      *
      * @param AddAnimeFavoriteRequest $request
      * @param User $user
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    function addFavorite(AddAnimeFavoriteRequest $request, User $user) {
+    function addFavorite(AddAnimeFavoriteRequest $request, User $user): JsonResponse
+    {
         $data = $request->validated();
 
         $user->favoriteAnime()->detach($data['anime_id']);
@@ -37,9 +39,10 @@ class FavoriteAnimeController extends Controller
      *
      * @param GetAnimeFavoritesRequest $request
      * @param User $user
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    function getFavorites(GetAnimeFavoritesRequest $request, User $user) {
+    function getFavorites(GetAnimeFavoritesRequest $request, User $user): JsonResponse
+    {
         return JSONResult::success([
             'data' => AnimeResourceBasic::collection($user->favoriteAnime()->get())
         ]);

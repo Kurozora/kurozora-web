@@ -23,7 +23,8 @@ class ForumThreadController extends Controller
      * @param ForumThread $thread
      * @return JsonResponse
      */
-    public function details(ForumThread $thread) {
+    public function details(ForumThread $thread): JsonResponse
+    {
         return JSONResult::success([
             'data' => ForumThreadResource::collection([$thread])
         ]);
@@ -36,10 +37,9 @@ class ForumThreadController extends Controller
      * @param ForumThread $thread
      *
      * @return JsonResponse
-     *
-     * @throws \BenSampo\Enum\Exceptions\InvalidEnumKeyException
      */
-    public function vote(Request $request, ForumThread $thread) {
+    public function vote(Request $request, ForumThread $thread): JsonResponse
+    {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'vote' => 'bail|required|numeric|in:-1,1'
@@ -71,7 +71,8 @@ class ForumThreadController extends Controller
      * @param ForumThread $thread
      * @return JsonResponse
      */
-    public function postReply(Request $request, ForumThread $thread) {
+    public function postReply(Request $request, ForumThread $thread): JsonResponse
+    {
         // Check if the user is banned
         $foundBan = ForumSectionBan::getBanInfo(Auth::id(), $thread->section_id);
 
@@ -118,7 +119,8 @@ class ForumThreadController extends Controller
      * @param ForumThread $thread
      * @return JsonResponse
      */
-    public function replies(Request $request, ForumThread $thread) {
+    public function replies(Request $request, ForumThread $thread): JsonResponse
+    {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'order' => ['bail', 'required', 'in:' . implode(',', ForumOrderType::getValues())]
@@ -180,7 +182,8 @@ class ForumThreadController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function search(Request $request) {
+    public function search(Request $request): JsonResponse
+    {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'query' => 'bail|required|string|min:1'
@@ -211,7 +214,8 @@ class ForumThreadController extends Controller
      * @param ForumThread $thread
      * @return JsonResponse
      */
-    function lock(Request $request, ForumThread $thread) {
+    function lock(Request $request, ForumThread $thread): JsonResponse
+    {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'lock' => 'bail|required|numeric|min:0|max:1'
