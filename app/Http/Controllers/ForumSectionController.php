@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ForumOrderType;
 use App\ForumSection;
 use App\ForumSectionBan;
 use App\ForumThread;
@@ -51,7 +52,7 @@ class ForumSectionController extends Controller
     public function threads(Request $request, ForumSection $section) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'order' => 'bail|required|in:top,recent'
+            'order' => ['bail', 'required', 'in:' . implode(',', ForumOrderType::getValues())]
         ]);
 
         // Fetch the variables
@@ -62,13 +63,34 @@ class ForumSectionController extends Controller
             return JSONResult::error($validator->errors()->first());
 
         // Get the threads
+        /** @var ForumThread $threads */
         $threads = $section->forum_threads();
+        $forumOrder = ForumOrderType::fromValue($givenOrder);
 
-        if($givenOrder == 'recent')
-            $threads = $threads->orderBy('created_at', 'DESC');
-        else if($givenOrder == 'top')
-            $threads = $threads->joinReactionCounterOfType('Like')
-                               ->orderBy('reaction_like_count', 'desc');
+        switch ($forumOrder) {
+            case ForumOrderType::Best:
+                $threads->joinReactionTotal()
+                        ->orderBy('reaction_total_weight', 'desc');
+                break;
+            case ForumOrderType::Top:
+                $threads->joinReactionCounterOfType('Like')
+                        ->orderBy('reaction_like_count', 'desc');
+                break;
+            case ForumOrderType::New:
+                $threads->orderBy('created_at', 'desc');
+                break;
+            case ForumOrderType::Old:
+                $threads->orderBy('created_at', 'asc');
+                break;
+            case ForumOrderType::Poor:
+                $threads->joinReactionCounterOfType('Like')
+                        ->orderBy('reaction_like_count', 'asc');
+                break;
+            case ForumOrderType::Controversial:
+                $threads->joinReactionTotal()
+                        ->orderBy('reaction_total_weight', 'asc');
+                break;
+        }
 
         $threads = $threads->paginate(ForumSection::THREADS_PER_PAGE);
 

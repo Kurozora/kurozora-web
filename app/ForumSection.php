@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 class ForumSection extends KModel
 {
     // Table name
@@ -14,18 +16,20 @@ class ForumSection extends KModel
     /**
      * Retrieve the threads for the section
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function forum_threads() {
+    public function forum_threads(): HasMany
+    {
         return $this->hasMany(ForumThread::class, 'section_id', 'id');
     }
 
     /**
      * Get the amount of threads in this section
      *
-     * @return integer
+     * @return int
      */
-    public function getThreadCount() {
+    public function getThreadCount(): int
+    {
         return ForumThread::where('section_id', $this->id)->count();
     }
 }

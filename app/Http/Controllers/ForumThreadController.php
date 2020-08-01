@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ForumOrderType;
 use App\Enums\VoteType;
 use App\ForumReply;
 use App\ForumSectionBan;
@@ -120,7 +121,7 @@ class ForumThreadController extends Controller
     public function replies(Request $request, ForumThread $thread) {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'order' => 'bail|required|in:top,recent'
+            'order' => ['bail', 'required', 'in:' . implode(',', ForumOrderType::getValues())]
         ]);
 
         // Fetch the variables
@@ -131,13 +132,34 @@ class ForumThreadController extends Controller
             return JSONResult::error($validator->errors()->first());
 
         // Get the replies
+        /** @var ForumReply $replies */
         $replies = $thread->replies();
+        $forumOrder = ForumOrderType::fromValue($givenOrder);
 
-        if($givenOrder == 'recent')
-            $replies = $replies->orderBy('created_at', 'DESC');
-        else if($givenOrder == 'top')
-            $replies = $replies->joinReactionCounterOfType('Like')
-                               ->orderBy('reaction_like_count', 'desc');
+        switch ($forumOrder) {
+            case ForumOrderType::Best:
+                $replies->joinReactionTotal()
+                        ->orderBy('reaction_total_weight', 'desc');
+                break;
+            case ForumOrderType::Top:
+                $replies->joinReactionCounterOfType('Like')
+                        ->orderBy('reaction_like_count', 'desc');
+                break;
+            case ForumOrderType::New:
+                $replies->orderBy('created_at', 'desc');
+                break;
+            case ForumOrderType::Old:
+                $replies->orderBy('created_at', 'asc');
+                break;
+            case ForumOrderType::Poor:
+                $replies->joinReactionCounterOfType('Like')
+                        ->orderBy('reaction_like_count', 'asc');
+                break;
+            case ForumOrderType::Controversial:
+                $replies->joinReactionTotal()
+                        ->orderBy('reaction_total_weight', 'asc');
+                break;
+        }
 
         // Paginate the replies
         $replies = $replies->paginate(ForumThread::REPLIES_PER_PAGE);

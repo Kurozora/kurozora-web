@@ -2,7 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\VoteType;
 use App\ForumReply;
+use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,16 +14,18 @@ class ForumReplyResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request $request
-     *
+     * @param Request $request
      * @return array
-     *
-     * @throws \BenSampo\Enum\Exceptions\InvalidEnumKeyException
+     * @throws InvalidEnumKeyException
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         /** @var ForumReply $reply */
         $forumReply = $this->resource;
+
+        $totalReactions = $forumReply->viaLoveReactant()->getReactionTotal();
+        $totalLikes = $forumReply->viaLoveReactant()->getReactionCounterOfType(VoteType::Like()->description);
+        $totalDislikes = $forumReply->viaLoveReactant()->getReactionCounterOfType(VoteType::Dislike()->description);
 
         $resource = [
             'id'            => $forumReply->id,
@@ -28,7 +33,12 @@ class ForumReplyResource extends JsonResource
             'href'          => route('api.forum-threads.replies', $forumReply, false),
             'attributes'    => [
                 'content'   => $forumReply->content,
-                'score'     => $forumReply->viaLoveReactant()->getReactionTotal()->getCount(),
+                'metrics'       => [
+                    'count' => $totalReactions->getCount(),
+                    'weight' => $totalReactions->getWeight(),
+                    'likes' => $totalLikes->getCount(),
+                    'dislikes' => $totalDislikes->getCount()
+                ],
                 'created_at' => $forumReply->created_at,
             ]
         ];
@@ -47,15 +57,15 @@ class ForumReplyResource extends JsonResource
      * Returns the user specific details for the resource.
      *
      * @return array
-     *
-     * @throws \BenSampo\Enum\Exceptions\InvalidEnumKeyException
+     * @throws InvalidEnumKeyException
      */
-    protected function getUserSpecificDetails() {
+    protected function getUserSpecificDetails(): array
+    {
         $user = Auth::user();
 
         return [
             'current_user' => [
-                'like_action' => $user->getCurrentVoteValueFor($this->resource)
+                'like_action' => $user->getCurrentVoteValue()
             ]
         ];
     }
@@ -65,7 +75,7 @@ class ForumReplyResource extends JsonResource
      *
      * @return array
      */
-    protected function getPosterRelationship()
+    protected function getPosterRelationship(): array
     {
         /** @param ForumReply $forumReply */
         $forumReply = $this->resource;

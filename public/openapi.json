@@ -2803,11 +2803,15 @@
       "ForumSortType": {
         "type": "string",
         "enum": [
+          "best",
           "top",
-          "recent"
+          "new",
+          "old",
+          "poor",
+          "controversial"
         ],
-        "default": "top",
-        "description": "The set of available forum sort types.\n- top: sorted by the most liked resource at the top.\n- recent: sorted by the newly created resource at the top."
+        "default": "best",
+        "description": "The set of available forum sort types.\n- best: sorted by the most well received resource.\n- top: sorted by the most liked resource.\n- new: sorted by the newly created resource at the top.\n- old: sorted by the oldest created resource.\n- poor: sorted by the least liked resource.\n- controversial: sorted by the least well received resource."
       },
       "KurozoraLibraryStatus": {
         "type": "string",
@@ -4238,7 +4242,12 @@
                       "content": "Fuga repellendus blanditiis quaerat provident et doloremque. Ad ullam nulla at optio ipsa ipsum.",
                       "locked": false,
                       "reply_count": 13,
-                      "score": 10,
+                      "metrics": {
+                        "count": 20,
+                        "weight": 10,
+                        "likes": 15,
+                        "dislikes": 5
+                      },
                       "creation_date": "2020-07-27 12:59:34"
                     },
                     "relationships": {
@@ -4278,7 +4287,12 @@
                       "content": "Cupiditate voluptatem quaerat eaque veniam atque. Id et fugiat dolore nihil necessitatibus ut quia tempore. Natus aspernatur consequatur dolores dolore ea consequatur rerum possimus.",
                       "locked": true,
                       "reply_count": 2,
-                      "score": 0,
+                      "metrics": {
+                        "count": 0,
+                        "weight": 0,
+                        "likes": 0,
+                        "dislikes": 0
+                      },
                       "creation_date": "2020-07-27 12:59:34"
                     },
                     "relationships": {
@@ -4332,7 +4346,12 @@
                       "content": "Good anime to watch.",
                       "locked": false,
                       "reply_count": 0,
-                      "score": 0,
+                      "metrics": {
+                        "count": 0,
+                        "weight": 0,
+                        "likes": 0,
+                        "dislikes": 0
+                      },
                       "creation_date": "2020-07-29 18:28:59"
                     },
                     "relationships": {
@@ -4386,7 +4405,12 @@
                       "content": "Fuga repellendus blanditiis quaerat provident et doloremque. Ad ullam nulla at optio ipsa ipsum.",
                       "locked": false,
                       "reply_count": 13,
-                      "score": 10,
+                      "metrics": {
+                        "count": 20,
+                        "weight": 10,
+                        "likes": 15,
+                        "dislikes": 5
+                      },
                       "creation_date": "2020-07-27 12:59:34"
                     },
                     "relationships": {
@@ -4452,8 +4476,13 @@
                     "href": "/api/v1/forum-threads/56/replies",
                     "attributes": {
                       "content": "Ipsum aliquid quasi hic accusamus. Dolor incidunt repellendus voluptatum modi temporibus cum totam.",
-                      "posted_at": "2020-07-27 12:59:35",
-                      "score": 0
+                      "metrics": {
+                        "count": 22,
+                        "weight": -8,
+                        "likes": 7,
+                        "dislikes": 15
+                      },
+                      "created_at": "2020-07-27 12:59:35"
                     },
                     "relationships": {
                       "user": {
@@ -4489,8 +4518,13 @@
                     "href": "/api/v1/forum-threads/97/replies",
                     "attributes": {
                       "content": "Tenetur dignissimos exercitationem qui dolores doloremque labore. Nobis non in iste qui est exercitationem.",
-                      "posted_at": "2020-07-27 12:59:35",
-                      "score": 233
+                      "metrics": {
+                        "count": 233,
+                        "weight": 152,
+                        "likes": 152,
+                        "dislikes": 81
+                      },
+                      "created_at": "2020-07-27 12:59:35"
                     },
                     "relationships": {
                       "user": {
@@ -4541,8 +4575,13 @@
                     "href": "/api/v1/forum-threads/209/replies",
                     "attributes": {
                       "content": "New reply content.",
-                      "posted_at": "2020-07-29 12:33:32",
-                      "score": 0
+                      "metrics": {
+                        "count": 0,
+                        "weight": 0,
+                        "likes": 0,
+                        "dislikes": 0
+                      },
+                      "created_at": "2020-07-29 12:33:32"
                     },
                     "relationships": {
                       "user": {
@@ -4595,7 +4634,12 @@
                       "content": "Beatae eos quisquam voluptatem id non. Inventore quam ea voluptatem laboriosam fuga quia enim qui. Illo blanditiis hic aperiam perspiciatis et id veniam.",
                       "locked": false,
                       "reply_count": 389,
-                      "score": 2361,
+                      "metrics": {
+                        "count": 1200,
+                        "weight": 400,
+                        "likes": 800,
+                        "dislikes": 400
+                      },
                       "creation_date": "2020-07-27 12:59:34"
                     },
                     "relationships": {
@@ -4635,7 +4679,12 @@
                       "content": "Exercitationem alias nemo nobis omnis deserunt sit. Quidem ab accusamus non nemo. Aut rerum officiis dignissimos nulla dolorem hic fugiat.",
                       "locked": true,
                       "reply_count": 3,
-                      "score": -53,
+                      "metrics": {
+                        "count": 100,
+                        "weight": -53,
+                        "likes": 47,
+                        "dislikes": 53
+                      },
                       "creation_date": "2020-07-27 12:59:34"
                     },
                     "relationships": {
@@ -4675,7 +4724,12 @@
                       "content": "Vero hic ea explicabo iure aut. Maiores voluptates reprehenderit vel perferendis.",
                       "locked": false,
                       "reply_count": 0,
-                      "score": 0,
+                      "metrics": {
+                        "count": 0,
+                        "weight": 0,
+                        "likes": 0,
+                        "dislikes": 0
+                      },
                       "creation_date": "2020-07-27 12:59:34"
                     },
                     "relationships": {
