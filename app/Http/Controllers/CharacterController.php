@@ -14,7 +14,8 @@ class CharacterController extends Controller
      *
      * @return JsonResponse
      */
-    public function overview() {
+    public function overview(): JsonResponse
+    {
         // Get all characters and format them
         $allCharacters = Character::get()->map(function($character) {
             return CharacterResource::make($character);
@@ -31,7 +32,8 @@ class CharacterController extends Controller
      *
      * @return JsonResponse
      */
-    public function details(Character $character) {
+    public function details(Character $character): JsonResponse
+    {
         // Show character details
         return JSONResult::success([
             'data' => CharacterResource::collection([$character])

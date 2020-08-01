@@ -7,9 +7,9 @@ use App\Http\Requests\ResetPassword;
 use App\Http\Requests\UpdateProfile;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\SessionResource;
+use App\Http\Resources\SessionResourceBasic;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceBasic;
-use App\Http\Responses\LoginResponse;
 use App\Jobs\SendNewPasswordMail;
 use App\Jobs\SendPasswordResetMail;
 use App\PasswordReset;
@@ -17,10 +17,14 @@ use App\Session;
 use App\User;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class UserController extends Controller
 {
@@ -30,7 +34,8 @@ class UserController extends Controller
      * @param User $user
      * @return JsonResponse
      */
-    public function profile(User $user) {
+    public function profile(User $user): JsonResponse
+    {
         // Show profile response
         return JSONResult::success([
             'data' => UserResource::collection([$user])
@@ -40,19 +45,19 @@ class UserController extends Controller
     /**
      * Returns the profile details for the current user
      *
-     * @param \Illuminate\Http\Request $request
-     *
+     * @param Request $request
      * @return JsonResponse
      */
-    public function me(Request $request) {
-        // Get authenticated user
-        $user = Auth::user();
-
+    public function me(Request $request): JsonResponse
+    {
         // Get current session
-        $session = Session::find($request->session_id);
+        $sessionID = (int) $request->input('session_id');
+        $session = Session::find($sessionID);
 
         // Show profile response
-        return LoginResponse::make($user, $session);
+        return JSONResult::success([
+            'data' => SessionResource::collection([$session])
+        ]);
     }
 
     /**
@@ -61,7 +66,8 @@ class UserController extends Controller
      * @param ResetPassword $request
      * @return JsonResponse
      */
-    public function resetPassword(ResetPassword $request) {
+    public function resetPassword(ResetPassword $request): JsonResponse
+    {
         $data = $request->validated();
 
         // Try to find the user with this email
@@ -101,7 +107,8 @@ class UserController extends Controller
      * @param User $user
      * @return JsonResponse
      */
-    public function getSessions(Request $request, User $user) {
+    public function getSessions(Request $request, User $user): JsonResponse
+    {
         // Get the other sessions
         $otherSessions = Session::where([
             ['user_id', '=',    $user->id],
@@ -116,8 +123,8 @@ class UserController extends Controller
 
         return JSONResult::success([
             'data' => [
-                'current_session'   => SessionResource::make($curSession),
-                'other_sessions'    => SessionResource::collection($otherSessions)
+                'current_session'   => SessionResourceBasic::make($curSession),
+                'other_sessions'    => SessionResourceBasic::collection($otherSessions)
             ]
         ]);
     }
@@ -126,9 +133,10 @@ class UserController extends Controller
      * Email confirmation page
      *
      * @param $confirmationID
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Application|Factory|View
      */
-    public function confirmEmail($confirmationID) {
+    public function confirmEmail($confirmationID)
+    {
         // Try to find a user with this confirmation ID
         $foundUser = User::where('email_confirmation_id', $confirmationID)->first();
 
@@ -158,11 +166,11 @@ class UserController extends Controller
      *
      * @param string $token
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     *
+     * @return Application|Factory|View
      * @throws Exception
      */
-    public function resetPasswordPage($token) {
+    public function resetPasswordPage($token)
+    {
         // Try to find a reset with this reset token
         $foundReset = PasswordReset::where('token', $token)->first();
 
@@ -209,7 +217,8 @@ class UserController extends Controller
      * @param User $user
      * @return JsonResponse
      */
-    public function getNotifications(User $user) {
+    public function getNotifications(User $user): JsonResponse
+    {
         return JSONResult::success([
             'data' => NotificationResource::collection($user->notifications)
         ]);
@@ -221,7 +230,8 @@ class UserController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function search(Request $request) {
+    public function search(Request $request): JsonResponse
+    {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'query' => 'bail|required|string|min:1'
@@ -251,11 +261,11 @@ class UserController extends Controller
      * @param UpdateProfile $request
      * @param User $user
      * @return JsonResponse
-     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\DiskDoesNotExist
-     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist
-     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
      */
-    public function updateProfile(UpdateProfile $request, User $user) {
+    public function updateProfile(UpdateProfile $request, User $user): JsonResponse
+    {
         $data = $request->validated();
 
         // Track if anything changed

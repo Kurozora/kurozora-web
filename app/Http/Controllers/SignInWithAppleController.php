@@ -6,12 +6,10 @@ use App\Helpers\AppleAuthKeys;
 use App\Helpers\JSONResult;
 use App\Http\Requests\SIWALoginRequest;
 use App\Http\Requests\SIWARegistration;
-use App\Http\Responses\LoginResponse;
-use App\Session;
+use App\Http\Resources\SessionResource;
 use App\User;
-use CoderCat\JWKToPEM\JWKConverter;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Str;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use musa11971\JWTDecoder\JWTDecoder;
 
 class SignInWithAppleController extends Controller
@@ -20,9 +18,9 @@ class SignInWithAppleController extends Controller
      * Registers an account for the user via SIWA.
      *
      * @param SIWARegistration $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    function register(SIWARegistration $request)
+    function register(SIWARegistration $request): JsonResponse
     {
         $data = $request->validated();
 
@@ -41,16 +39,20 @@ class SignInWithAppleController extends Controller
             'device_model'      => $data['device_model'],
         ]);
 
-        return LoginResponse::make($user, $session);
+        return JSONResult::success([
+            'data' => [
+                SessionResource::make($session)->includesAuthKey()
+            ]
+        ]);
     }
 
     /**
      * Logs the user in via SIWA.
      *
      * @param SIWALoginRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    function login(SIWALoginRequest $request)
+    function login(SIWALoginRequest $request): JsonResponse
     {
         $data = $request->validated();
 
@@ -72,7 +74,7 @@ class SignInWithAppleController extends Controller
                 ->ignoreExpiry()
                 ->decode();
         }
-        catch(\Exception $e)
+        catch(Exception $e)
         {
             return JSONResult::error('Your credentials are invalid.', [
                 'error_code' => 220028
@@ -96,6 +98,10 @@ class SignInWithAppleController extends Controller
             'device_model'      => $data['device_model'],
         ]);
 
-        return LoginResponse::make($user, $session);
+        return JSONResult::success([
+            'data' => [
+                SessionResource::make($session)->includesAuthKey()
+            ]
+        ]);
     }
 }

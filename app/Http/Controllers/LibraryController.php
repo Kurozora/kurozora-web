@@ -12,6 +12,7 @@ use App\Http\Requests\MALImport;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Jobs\ProcessMALImport;
 use App\User;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -26,7 +27,8 @@ class LibraryController extends Controller
      * @param User $user
      * @return JsonResponse
      */
-    public function getLibrary(GetLibrary $request, User $user) {
+    public function getLibrary(GetLibrary $request, User $user): JsonResponse
+    {
         $data = $request->validated();
 
         // Get the status
@@ -50,7 +52,8 @@ class LibraryController extends Controller
      * @param User $user
      * @return JsonResponse
      */
-    public function addLibrary(AddToLibrary $request, User $user) {
+    public function addLibrary(AddToLibrary $request, User $user): JsonResponse
+    {
         $data = $request->validated();
 
         // Get the Anime
@@ -77,7 +80,8 @@ class LibraryController extends Controller
      * @param User $user
      * @return JsonResponse
      */
-    public function delLibrary(DeleteFromLibrary $request, User $user) {
+    public function delLibrary(DeleteFromLibrary $request, User $user): JsonResponse
+    {
         $data = $request->validated();
 
         // Remove this Anime from their library if it can be found
@@ -97,10 +101,10 @@ class LibraryController extends Controller
      * @param MALImport $request
      * @param User $user
      * @return JsonResponse
-     *
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
-    function malImport(MALImport $request, User $user) {
+    function malImport(MALImport $request, User $user): JsonResponse
+    {
         $data = $request->validated();
 
         if(!$user->canDoMALImport())
@@ -128,7 +132,8 @@ class LibraryController extends Controller
      * @param User $user
      * @return JsonResponse
      */
-    public function search(Request $request, User $user) {
+    public function search(Request $request, User $user): JsonResponse
+    {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
             'query' => 'bail|required|string|min:1'

@@ -17,7 +17,8 @@ class NotificationController extends Controller
      * @param DatabaseNotification $notification
      * @return JsonResponse
      */
-    public function details(DatabaseNotification $notification) {
+    public function details(DatabaseNotification $notification): JsonResponse
+    {
         return JSONResult::success([
             'data' => NotificationResource::make($notification)
         ]);
@@ -30,7 +31,8 @@ class NotificationController extends Controller
      * @return JsonResponse
      * @throws Exception
      */
-    public function delete(DatabaseNotification $notification) {
+    public function delete(DatabaseNotification $notification): JsonResponse
+    {
         // Delete the notification
         $notification->delete();
 
@@ -43,7 +45,8 @@ class NotificationController extends Controller
      * @param UpdateUserNotifications $request
      * @return JsonResponse
      */
-    public function update(UpdateUserNotifications $request) {
+    public function update(UpdateUserNotifications $request): JsonResponse
+    {
         /*
          * TODO:
          * This does NOT yet check whether or not the user is allowed to update the notification.

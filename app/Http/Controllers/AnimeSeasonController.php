@@ -16,7 +16,8 @@ class AnimeSeasonController extends Controller
      * @param AnimeSeason $season
      * @return JsonResponse
      */
-    public function details(AnimeSeason $season) {
+    public function details(AnimeSeason $season): JsonResponse
+    {
         return JSONResult::success([
             'data' => AnimeSeasonResource::collection([$season])
         ]);
@@ -28,7 +29,8 @@ class AnimeSeasonController extends Controller
      * @param AnimeSeason $season
      * @return JsonResponse
      */
-    public function episodes(AnimeSeason $season) {
+    public function episodes(AnimeSeason $season): JsonResponse
+    {
         // Get the episodes
         $episodes = $season->getEpisodes();
 

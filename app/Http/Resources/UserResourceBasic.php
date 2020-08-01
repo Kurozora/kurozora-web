@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\User;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,10 +19,10 @@ class UserResourceBasic extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function toArray($request = null)
+    public function toArray($request): array
     {
         /** @var User $user */
         $user = $this->resource;
@@ -56,7 +57,7 @@ class UserResourceBasic extends JsonResource
      *
      * @return array
      */
-    protected function getUserSpecificDetails()
+    protected function getUserSpecificDetails(): array
     {
         $user = Auth::user();
 
@@ -72,7 +73,7 @@ class UserResourceBasic extends JsonResource
      *
      * @return array
      */
-    protected function getPrivateDetails()
+    protected function getPrivateDetails(): array
     {
         /** @var User $user */
         $user = $this->resource;
@@ -87,9 +88,9 @@ class UserResourceBasic extends JsonResource
     /**
      * Enables including private details in the resource.
      *
-     * @return $this
+     * @return UserResourceBasic
      */
-    function includePrivateDetails()
+    function includePrivateDetails(): self
     {
         $this->includePrivateDetails = true;
         return $this;
