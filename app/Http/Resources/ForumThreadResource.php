@@ -35,14 +35,14 @@ class ForumThreadResource extends JsonResource
                 'title'         => $forumThread->title,
                 'content'       => $forumThread->content,
                 'locked'        => (bool) $forumThread->locked,
-                'reply_count'   => $forumThread->replies->count(),
+                'replyCount'    => $forumThread->replies->count(),
                 'metrics'       => [
-                    'count' => $totalReactions->getCount(),
-                    'weight' => $totalReactions->getWeight(),
-                    'likes' => $totalLikes->getCount(),
-                    'dislikes' => $totalDislikes->getCount()
+                    'count'     => $totalReactions->getCount(),
+                    'weight'    => $totalReactions->getWeight(),
+                    'likes'     => $totalLikes->getCount(),
+                    'dislikes'  => $totalDislikes->getCount()
                 ],
-                'created_at'    => $forumThread->created_at,
+                'createdAt'     => $forumThread->created_at,
             ]
         ];
 
@@ -67,8 +67,8 @@ class ForumThreadResource extends JsonResource
         $user = Auth::user();
 
         return [
-            'current_user' => [
-                'vote_action' => $user->getCurrentVoteValue()
+            'currentUser' => [
+                'voteAction' => $user->getCurrentVoteValue()
             ]
         ];
     }

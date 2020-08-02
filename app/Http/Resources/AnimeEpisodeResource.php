@@ -33,7 +33,7 @@ class AnimeEpisodeResource extends JsonResource
             'attributes'    => [
                 'number'        => $animeEpisode->number,
                 'name'          => $animeEpisode->name,
-                'first_aired'   => $firstAired,
+                'firstAired'   => $firstAired,
                 'overview'      => $animeEpisode->overview,
                 'verified'      => (bool) $animeEpisode->verified
             ]
@@ -65,7 +65,7 @@ class AnimeEpisodeResource extends JsonResource
 
         // Return the array
         return [
-            'current_user' => [
+            'currentUser' => [
                 'watched' => $watchStatus->value
             ]
         ];
