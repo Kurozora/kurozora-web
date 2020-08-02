@@ -35,11 +35,9 @@ class NotificationTest extends TestCase
         $notificationArray = [];
 
         foreach($this->user->notifications as $notification)
-            $notificationArray[] = NotificationResource::make($notification)->toArray();
+            $notificationArray = NotificationResource::make($notification)->resolve();
 
-        $response->assertJson([
-            'data' => $notificationArray
-        ]);
+        $response->assertJsonFragment($notificationArray);
     }
 
     /**
@@ -81,9 +79,7 @@ class NotificationTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the response shows the notification
-        $response->assertJson([
-            'data' => NotificationResource::make($notification)->toArray()
-        ]);
+        $response->assertJsonFragment(NotificationResource::make($notification)->resolve());
     }
 
     /**
@@ -121,17 +117,18 @@ class NotificationTest extends TestCase
         // Add a notification to the user
         $this->addNotificationsToUser($this->user, 1);
 
-        // Get the user's first notification
+        // Get the user's first notification id
         $notification = $this->user->notifications()->first();
+        $notificationID = $notification->id;
 
         // Send request to notification delete endpoint
-        $response = $this->auth()->json('POST', '/api/v1/notifications/' . $notification->id . '/delete');
+        $response = $this->auth()->json('POST', '/api/v1/notifications/' . $notificationID . '/delete');
 
         // Check whether the response is successful
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the user now has no notifications
-        $this->assertEquals(0, $this->user->notifications()->count());
+        $this->assertDeleted($notification);
     }
 
     /**
@@ -219,13 +216,43 @@ class NotificationTest extends TestCase
     }
 
     /**
-     * Test if a user can mark all their notifications as read.
+     * Test if a user can mark all their notifications as read using all string.
      *
      * @return void
      * @test
      */
-    function a_user_can_mark_all_their_notifications_as_read()
+    function a_user_can_mark_all_their_notifications_as_read_using_all_string()
     {
+        // Add 20 notifications to the user
+        $this->addNotificationsToUser($this->user, 20);
+
+        // Send request to notification update endpoint
+        $response = $this->auth()->json('POST', '/api/v1/notifications/update', [
+            'notification'  => 'all',
+            'read'          => 1
+        ]);
+
+        // Check whether the response is successful
+        $response->assertSuccessfulAPIResponse();
+
+        // Check whether all the notifications are now read
+        $notifications = $this->user->notifications()->get();
+
+        foreach($notifications as $notification)
+            $this->assertNotNull($notification->read_at);
+    }
+
+    /**
+     * Test if a user can mark all their notifications as read using ids.
+     *
+     * @return void
+     * @test
+     */
+    function a_user_can_mark_all_their_notifications_as_read_using_ids()
+    {
+        // Authenticate user for request
+        $authUser = $this->auth();
+
         // Add 20 notifications to the user
         $this->addNotificationsToUser($this->user, 20);
 
@@ -241,7 +268,7 @@ class NotificationTest extends TestCase
         }
 
         // Send request to notification update endpoint
-        $response = $this->auth()->json('POST', '/api/v1/notifications/update', [
+        $response = $authUser->json('POST', '/api/v1/notifications/update', [
             'notification'  => $notificationIDs,
             'read'          => 1
         ]);
@@ -264,6 +291,9 @@ class NotificationTest extends TestCase
      */
     function a_user_can_mark_all_their_notifications_as_unread()
     {
+        // Authenticate user for request
+        $authUser = $this->auth();
+
         // Add 20 notifications to the user
         $this->addNotificationsToUser($this->user, 20);
 
@@ -282,7 +312,7 @@ class NotificationTest extends TestCase
         }
 
         // Send request to notification update endpoint
-        $response = $this->auth()->json('POST', '/api/v1/notifications/update', [
+        $response = $authUser->json('POST', '/api/v1/notifications/update', [
             'notification'  => $notificationIDs,
             'read'          => 0
         ]);
@@ -305,6 +335,9 @@ class NotificationTest extends TestCase
      */
     function a_user_can_mark_multiple_notifications_as_read()
     {
+        // Authenticate user for request
+        $authUser = $this->auth();
+
         // Add 20 notifications to the user
         $this->addNotificationsToUser($this->user, 20);
 
@@ -320,7 +353,7 @@ class NotificationTest extends TestCase
         }
 
         // Send request to notification update endpoint
-        $response = $this->auth()->json('POST', '/api/v1/notifications/update', [
+        $response = $authUser->json('POST', '/api/v1/notifications/update', [
             'notification'  => $notificationIDs,
             'read'          => 1
         ]);
@@ -349,6 +382,9 @@ class NotificationTest extends TestCase
      */
     function a_user_can_mark_multiple_notifications_as_unread()
     {
+        // Authenticate user for request
+        $authUser = $this->auth();
+
         // Add 20 notifications to the user
         $this->addNotificationsToUser($this->user, 20);
 
@@ -367,7 +403,7 @@ class NotificationTest extends TestCase
         }
 
         // Send request to notification update endpoint
-        $response = $this->auth()->json('POST', '/api/v1/notifications/update', [
+        $response = $authUser->json('POST', '/api/v1/notifications/update', [
             'notification'  => $notificationIDs,
             'read'          => 0
         ]);
@@ -396,7 +432,23 @@ class NotificationTest extends TestCase
      */
     function a_user_cannot_update_notifications_of_others()
     {
-        $this->markTestIncomplete('Users can currently update notifications of others(!)');
+        /** @var User $otherUser */
+        $otherUser = factory(User::class)->create();
+
+        // Add 20 notifications to the other user
+        $this->addNotificationsToUser($otherUser, 20);
+
+        // Get the user's first notification
+        $notification = $otherUser->notifications()->first();
+
+        // Send request to notification update endpoint
+        $response = $this->auth()->json('POST', '/api/v1/notifications/update', [
+            'notification'  => $notification->id,
+            'read'          => 1
+        ]);
+
+        // Check whether the response is unsuccessful
+        $response->assertUnsuccessfulAPIResponse();
     }
 
     /**

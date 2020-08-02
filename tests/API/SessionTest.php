@@ -101,53 +101,6 @@ class SessionTest extends TestCase
     }
 
     /**
-     * Test if an expired session is deleted when validated by the user.
-     *
-     * @return void
-     * @test
-     */
-    function an_expired_session_is_deleted_when_validated_by_the_user()
-    {
-        // Create a session for the user that expired a minute ago
-        /** @var Session $session */
-        $session = factory(Session::class)->create([
-            'user_id'           => $this->user->id,
-            'expires_at'        => now()->subMinute()
-        ]);
-
-        // Send the request
-        $response = $this->auth()->json('POST', '/api/v1/sessions/' . $session->id . '/validate');
-
-        // Check whether the response was unsuccessful
-        $response->assertUnsuccessfulAPIResponse();
-
-        // Check whether the session was deleted
-        $this->assertNull(Session::find($session->id));
-    }
-
-    /**
-     * Test if a user cannot validate another user's session.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_cannot_validate_another_users_session()
-    {
-        // Create a session for the user
-        /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
-
-        /** @var Session $session */
-        $session = factory(Session::class)->create(['user_id' => $anotherUser->id]);
-
-        // Send the request
-        $response = $this->auth()->json('POST', '/api/v1/sessions/' . $session->id . '/validate');
-
-        // Check whether the response was unsuccessful
-        $response->assertUnsuccessfulAPIResponse();
-    }
-
-    /**
      * Test if a user can delete their session.
      *
      * @return void
