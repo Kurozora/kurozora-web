@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Actor;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ActorResource extends JsonResource
@@ -10,10 +11,10 @@ class ActorResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         /** @var Actor $actor */
         $actor = $this->resource;
@@ -23,8 +24,8 @@ class ActorResource extends JsonResource
             'type'          => 'actors',
             'href'          => route('api.actors.details', $actor, false),
             'attributes'    => [
-                'first_name'    => $actor->first_name,
-                'last_name'     => $actor->last_name,
+                'firstName'    => $actor->first_name,
+                'lastName'     => $actor->last_name,
                 'occupation'    => $actor->occupation,
                 'image'         => $actor->image
             ]

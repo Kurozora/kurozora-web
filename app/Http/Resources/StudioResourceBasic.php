@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Studio;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class StudioResourceBasic extends JsonResource
@@ -10,10 +11,10 @@ class StudioResourceBasic extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         /** @var Studio $studio */
         $studio = $this->resource;
@@ -28,10 +29,10 @@ class StudioResourceBasic extends JsonResource
             'href'          => route('api.studios.details', $studio, false),
             'attributes'    => [
                 'name'          => $studio->name,
-                'logo_url'      => $studio->logo_url,
+                'logoUrl'       => $studio->logo_url,
                 'about'         => $studio->about,
                 'founded'       => $founded,
-                'website_url'   => $studio->website_url
+                'websiteUrl'    => $studio->website_url
             ]
         ];
     }

@@ -9,6 +9,7 @@ use App\Enums\AnimeType;
 use App\Enums\UserLibraryStatus;
 use App\Enums\WatchRating;
 use App\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,10 +18,10 @@ class AnimeResourceBasic extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         /** @param Anime $anime */
         $anime = $this->resource;
@@ -41,31 +42,31 @@ class AnimeResourceBasic extends JsonResource
                 'title'                 => $anime->title,
                 'type'                  => AnimeType::getDescription($anime->type),
                 'source'                => AnimeSource::getDescription($anime->source),
-                'anidb_id'              => $anime->anidb_id,
-                'anilist_id'            => $anime->anilist_id,
-                'kitsu_id'              => $anime->kitsu_id,
-                'imdb_id'               => $anime->imdb_id,
-                'mal_id'                => $anime->mal_id,
+                'anidbID'               => $anime->anidb_id,
+                'anilistID'             => $anime->anilist_id,
+                'kitsuID'               => $anime->kitsu_id,
+                'imdbID'                => $anime->imdb_id,
+                'malID'                 => $anime->mal_id,
                 'network'               => $anime->network,
                 'studio'                => StudioResourceBasic::collection($anime->studios),
                 'status'                => AnimeStatus::getDescription($anime->status),
                 'episodes'              => $anime->episode_count,
                 'seasons'               => $anime->season_count,
-                'average_rating'        => $anime->average_rating,
-                'rating_count'          => $anime->rating_count,
+                'averageRating'         => $anime->average_rating,
+                'ratingCount'           => $anime->rating_count,
                 'synopsis'              => $anime->synopsis,
                 'runtime'               => $anime->runtime,
-                'watch_rating'          => WatchRating::getDescription($anime->watch_rating),
+                'watchRating'           => WatchRating::getDescription($anime->watch_rating),
                 'tagline'               => $anime->tagline,
-                'video_url'             => $anime->video_url,
+                'videoUrl'              => $anime->video_url,
                 'poster'                => AnimeImageResource::make($anime->poster()),
                 'background'            => AnimeImageResource::make($anime->banner()),
                 'nsfw'                  => (bool) $anime->nsfw,
                 'genres'                => GenreResource::collection($anime->genres),
-                'first_aired'           => $firstAired,
-                'last_aired'            => $lastAired,
-                'air_time'              => $anime->air_time,
-                'air_day'               => $anime->air_day,
+                'firstAired'            => $firstAired,
+                'lastAired'             => $lastAired,
+                'airTime'               => $anime->air_time,
+                'airDay'                => $anime->air_day,
                 'copyright'             => $anime->copyright
             ]
         ];
@@ -81,7 +82,8 @@ class AnimeResourceBasic extends JsonResource
      *
      * @return array
      */
-    protected function getUserSpecificDetails() {
+    protected function getUserSpecificDetails(): array
+    {
         /** @param Anime $anime */
         $anime = $this->resource;
 
@@ -107,11 +109,11 @@ class AnimeResourceBasic extends JsonResource
 
         // Return the array
         return [
-            'current_user' => [
-                'given_rating'      => (double) $userRating,
-                'library_status'    => $currentLibraryStatus,
-                'is_favorite'       => $user->favoriteAnime()->wherePivot('anime_id', $anime->id)->exists(),
-                'is_reminded'       => $user->reminderAnime()->wherePivot('anime_id', $this->id)->exists()
+            'currentUser' => [
+                'givenRating'       => (double) $userRating,
+                'libraryStatus'     => $currentLibraryStatus,
+                'isFavorite'        => $user->favoriteAnime()->wherePivot('anime_id', $anime->id)->exists(),
+                'isReminded'        => $user->reminderAnime()->wherePivot('anime_id', $this->id)->exists()
             ]
         ];
     }

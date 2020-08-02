@@ -33,13 +33,13 @@ class UserResourceBasic extends JsonResource
             'href'              => route('api.users.profile', $user, false),
             'attributes'        => [
                 'username'          => $user->username,
-                'activity_status'   => $user->getActivityStatus()->description,
+                'activityStatus'    => $user->getActivityStatus()->description,
                 'biography'         => $user->biography,
-                'avatar_url'        => $user->getFirstMediaFullUrl('avatar'),
-                'banner_url'        => $user->getFirstMediaFullUrl('banner'),
-                'follower_count'    => $user->getFollowerCount(),
-                'following_count'   => $user->getFollowingCount(),
-                'reputation_count'  => $user->getReputationCount()
+                'avatarUrl'         => $user->getFirstMediaFullUrl('avatar'),
+                'bannerUrl'         => $user->getFirstMediaFullUrl('banner'),
+                'followerCount'     => $user->getFollowerCount(),
+                'followingCount'    => $user->getFollowingCount(),
+                'reputationCount'   => $user->getReputationCount()
             ]
         ];
 
@@ -62,7 +62,7 @@ class UserResourceBasic extends JsonResource
         $user = Auth::user();
 
         return [
-            'current_user' => [
+            'currentUser' => [
                 'following' => $this->resource->followers()->where('user_id', $user->id)->exists()
             ]
         ];
@@ -80,7 +80,7 @@ class UserResourceBasic extends JsonResource
 
         return [
             'private' => [
-                'username_change_available' => $user->username_change_available,
+                'usernameChangeAvailable' => $user->username_change_available,
             ]
         ];
     }

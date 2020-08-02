@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Character;
 use App\Enums\AstrologicalSign;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CharacterResource extends JsonResource
@@ -11,10 +12,10 @@ class CharacterResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         /** @var Character $character */
         $character = $this->resource;
@@ -29,16 +30,16 @@ class CharacterResource extends JsonResource
                 'image'             => $character->image,
                 'debut'             => $character->debut,
                 'status'            => $character->status,
-                'blood_type'        => $character->blood_type,
-                'favorite_food'     => $character->favorite_food,
+                'bloodType'         => $character->blood_type,
+                'favoriteFood'      => $character->favorite_food,
                 'bust'              => $character->bust,
                 'waist'             => $character->waist,
                 'hip'               => $character->hip,
                 'height'            => $character->height,
                 'age'               => $character->age,
-                'birth_day'         => $character->birth_day,
-                'birth_month'       => $character->birth_month,
-                'astrological_sign' => AstrologicalSign::getDescription($character->astrological_sign)
+                'birthDay'          => $character->birth_day,
+                'birthMonth'        => $character->birth_month,
+                'astrologicalSign'  => AstrologicalSign::getDescription($character->astrological_sign)
             ]
         ];
     }

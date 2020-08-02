@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Anime;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AnimeResource extends JsonResource
@@ -10,10 +11,10 @@ class AnimeResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         /** @param Anime $anime */
         $anime = $this->resource;
