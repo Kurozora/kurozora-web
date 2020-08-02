@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\AnimeSeason;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AnimeSeasonResource extends JsonResource
@@ -10,10 +11,10 @@ class AnimeSeasonResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         /** @param AnimeSeason $animeSeason */
         $animeSeason = $this->resource;
@@ -23,11 +24,11 @@ class AnimeSeasonResource extends JsonResource
             'type'          => 'seasons',
             'href'          => route('seasons.details', $animeSeason, false),
             'attributes'    => [
-                'anime_id'      => $animeSeason->anime_id,
+                'animeID'       => $animeSeason->anime_id,
                 'title'         => $animeSeason->getTitle(),
                 'number'        => $animeSeason->number,
-                'episode_count' => $animeSeason->getEpisodeCount(),
-                'first_aired'   => $animeSeason->getFirstAired(),
+                'episodeCount'  => $animeSeason->getEpisodeCount(),
+                'firstAired'    => $animeSeason->getFirstAired(),
             ]
         ];
     }

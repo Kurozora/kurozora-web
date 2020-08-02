@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Anime;
 use App\Enums\ExplorePageCategoryTypes;
 use App\ExplorePageCategory;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ExplorePageCategoryResource extends JsonResource
@@ -12,10 +13,10 @@ class ExplorePageCategoryResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         /** @var ExplorePageCategory $category */
         $category = $this->resource;
@@ -33,12 +34,12 @@ class ExplorePageCategoryResource extends JsonResource
 
     /**
      * Returns specific data that should be added depending on the type of
-     * .. category.
+     * category.
      *
      * @param ExplorePageCategory $category
      * @return array
      */
-    private function getTypeSpecificData(ExplorePageCategory $category)
+    private function getTypeSpecificData(ExplorePageCategory $category): array
     {
         // Genres category
         switch($category->type) {

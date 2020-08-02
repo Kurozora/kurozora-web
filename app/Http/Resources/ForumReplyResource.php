@@ -34,12 +34,12 @@ class ForumReplyResource extends JsonResource
             'attributes'    => [
                 'content'   => $forumReply->content,
                 'metrics'       => [
-                    'count' => $totalReactions->getCount(),
-                    'weight' => $totalReactions->getWeight(),
-                    'likes' => $totalLikes->getCount(),
-                    'dislikes' => $totalDislikes->getCount()
+                    'count'     => $totalReactions->getCount(),
+                    'weight'    => $totalReactions->getWeight(),
+                    'likes'     => $totalLikes->getCount(),
+                    'dislikes'  => $totalDislikes->getCount()
                 ],
-                'created_at' => $forumReply->created_at,
+                'createdAt' => $forumReply->created_at,
             ]
         ];
 
@@ -64,8 +64,8 @@ class ForumReplyResource extends JsonResource
         $user = Auth::user();
 
         return [
-            'current_user' => [
-                'like_action' => $user->getCurrentVoteValue()
+            'currentUser' => [
+                'likeAction' => $user->getCurrentVoteValue()
             ]
         ];
     }

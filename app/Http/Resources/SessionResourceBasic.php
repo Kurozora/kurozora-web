@@ -25,13 +25,13 @@ class SessionResourceBasic extends JsonResource
             'href'          => route('api.sessions.details', $session, false),
             'attributes'    => [
                 'ip'                => $session->ip,
-                'last_validated_at' => $session->last_validated_at->format('Y-m-d H:i:s'),
+                'lastValidatedAt'   => $session->last_validated_at->format('Y-m-d H:i:s'),
                 'platform'          => [
-                    'human_readable_format' => $session->humanReadablePlatform(),
+                    'description'       => $session->humanReadablePlatform(),
                     'platform'          => $session->platform,
-                    'platform_version'  => $session->platform_version,
-                    'device_vendor'     => $session->device_vendor,
-                    'device_model'      => $session->device_model
+                    'platformVersion'   => $session->platform_version,
+                    'deviceVendor'      => $session->device_vendor,
+                    'deviceModel'       => $session->device_model
                 ],
                 'location'          => [
                     'city'          => $session->city,

@@ -54,9 +54,9 @@ class JSONResult
             'success'       => (bool) $isSuccess,
             'meta'          => [
                 'version'                   => Config::get('app.version'),
-                'query_count'               => (int) Config::get(AppServiceProvider::$queryCountConfigKey),
-                'is_user_authenticated'     => Auth::check(),
-                'authenticated_user_id'     => Auth::id()
+                'queryCount'               => (int) Config::get(AppServiceProvider::$queryCountConfigKey),
+                'isUserAuthenticated'     => Auth::check(),
+                'authenticatedUserID'     => Auth::id()
             ]
         ];
     }
