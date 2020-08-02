@@ -55,7 +55,7 @@ class SessionResource extends JsonResource
         $session = $this->resource;
 
         return [
-            'auth_token'   => KuroAuthToken::generate($session->user->id, $session->secret)
+            'authToken'   => KuroAuthToken::generate($session->user->id, $session->secret)
         ];
     }
 
