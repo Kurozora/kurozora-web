@@ -50,7 +50,7 @@ class EpisodeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the current_user array is not empty
-        $this->assertTrue(count($response->json()['data'][0]['current_user']) > 0);
+        $this->assertTrue(count($response->json()['data'][0]['currentUser']) > 0);
     }
 
     /**
