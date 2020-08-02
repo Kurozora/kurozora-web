@@ -59,6 +59,6 @@ class AnimeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the current_user array is not empty
-        $this->assertTrue(count($response->json()['data'][0]['show']['current_user']) > 0);
+        $this->assertTrue(count($response->json()['data'][0]['show']['currentUser']) > 0);
     }
 }
