@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Helpers\JSONResult;
 use App\Http\Requests\UpdateUserNotifications;
 use App\Http\Resources\NotificationResource;
+use App\User;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Notifications\DatabaseNotification;
 
@@ -44,13 +46,13 @@ class NotificationController extends Controller
      *
      * @param UpdateUserNotifications $request
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function update(UpdateUserNotifications $request): JsonResponse
     {
-        /*
-         * TODO:
-         * This does NOT yet check whether or not the user is allowed to update the notification.
-         */
+        /** @var User $user */
+        $user = $request->user();
+
         $markAsRead = (bool) $request->input('read');
 
         // Get the notification(s) the user is targeting to update
@@ -67,6 +69,13 @@ class NotificationController extends Controller
             if(!count($notificationIDs))
                 return JSONResult::error('No notifications were specified.');
 
+            // Make sure the notifications belong to the currently authenticated user
+            foreach ($notificationIDs as $notificationID) {
+                if (!$user->notifications->contains($notificationID)) {
+                    throw new AuthorizationException();
+                }
+            }
+
             // Update the notifications
             $notificationQuery->whereIn('id', $notificationIDs);
         }
@@ -79,7 +88,7 @@ class NotificationController extends Controller
         return JSONResult::success([
             'data' => [
                 'read'              => $markAsRead,
-                'amount_updated'    => $amountUpdated
+                'amountUpdated'     => $amountUpdated
             ]
         ]);
     }
