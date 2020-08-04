@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
 use App\Http\Requests\AddAnimeReminderRequest;
+use App\Http\Requests\DownloadAnimeReminderRequest;
 use App\Http\Requests\GetAnimeReminderRequest;
 use App\Http\Resources\AnimeResource;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Response;
-use Request;
 
 class ReminderAnimeController extends Controller
 {
@@ -53,11 +53,11 @@ class ReminderAnimeController extends Controller
     /**
      * Serves the calendar file to be downloaded.
      *
-     * @param Request $request
+     * @param DownloadAnimeReminderRequest $request
      * @param User $user
      * @return \Illuminate\Http\Response
      */
-    function download(Request $request, User $user): \Illuminate\Http\Response
+    function download(DownloadAnimeReminderRequest $request, User $user): \Illuminate\Http\Response
     {
         $calendarExportStream = $user->getCalendar();
 
