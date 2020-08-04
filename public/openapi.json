@@ -4803,50 +4803,61 @@
             "schema": {
               "type": "object",
               "example": {
-                "data": {
-                  "kuro_auth_token": "AuthenticationToken",
-                  "user": {
-                    "id": 2,
-                    "type": "users",
-                    "href": "/api/v1/users/2/profile",
-                    "attributes": {
-                      "username": "Kirito",
-                      "activity_status": "Online",
-                      "biography": "My biography.",
-                      "avatar_url": "https://kurozora.app/storage/2/ProfileImage.png",
-                      "banner_url": "https://kurozora.app/storage/2/BannerImage.png",
-                      "follower_count": 10,
-                      "following_count": 12,
-                      "reputation_count": 14
-                    },
-                    "private": {
-                      "username_change_available": false
-                    }
-                  },
-                  "session": {
-                    "id": 3,
+                "data": [
+                  {
+                    "id": 24,
                     "type": "sessions",
-                    "href": "/api/v1/sessions/3",
+                    "href": "/api/v1/sessions/24",
                     "attributes": {
                       "ip": "127.0.0.1",
-                      "last_validated_at": "2020-07-28 02:43:50",
+                      "lastValidatedAt": "2020-08-04 22:51:58"
+                    },
+                    "authToken": "AuthenticationToken",
+                    "relationships": {
+                      "user": {
+                        "data": [
+                          {
+                            "id": 2,
+                            "type": "users",
+                            "href": "/api/v1/users/2/profile",
+                            "attributes": {
+                              "username": "Kirito",
+                              "activityStatus": "Online",
+                              "biography": "An interesting biography.",
+                              "avatarUrl": "https://kurozora.app/storage/2/ProfileImage.png",
+                              "bannerUrl": "https://kurozora.app/storage/2/BannerImage.png",
+                              "followerCount": 10,
+                              "followingCount": 12,
+                              "reputationCount": 14
+                            }
+                          }
+                        ]
+                      },
                       "platform": {
-                        "human_readable_format": "iPhone 11 Pro Max on iOS 13.4",
-                        "platform": "iOS",
-                        "platform_version": "13.4",
-                        "device_vendor": "Apple",
-                        "device_model": "iPhone 11 Pro Max"
+                        "data": [
+                          {
+                            "description": "iPhone 11 Pro Max on iOS 13.4",
+                            "systemName": "iOS",
+                            "systemVersion": "13.4",
+                            "deviceVendor": "Apple",
+                            "deviceModel": "iPhone 11 Pro Max"
+                          }
+                        ]
                       },
                       "location": {
-                        "city": "Amsterdam",
-                        "region": "Amsterdam",
-                        "country": "Netherlands",
-                        "latitude": 52.35997,
-                        "longitude": 4.86352
+                        "data": [
+                          {
+                            "city": "Amsterdam",
+                            "region": "Amsterdam",
+                            "country": "Netherlands",
+                            "latitude": 52.35997,
+                            "longitude": 4.86352
+                          }
+                        ]
                       }
                     }
                   }
-                }
+                ]
               }
             }
           }
@@ -5263,7 +5274,11 @@
               "type": "object",
               "example": {
                 "data": {
-                  "privacy_policy": "The privacy policy in HTML format."
+                  "type": "legal",
+                  "href": "/api/v1/privacy-policy",
+                  "attributes": {
+                    "text": "The privacy policy in HTML format."
+                  }
                 }
               }
             }

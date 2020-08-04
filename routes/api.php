@@ -15,7 +15,8 @@ Route::prefix('/v1')
         Route::get('/explore', [ExplorePageController::class, 'explore'])
             ->middleware('kurozora.userauth:optional');
 
-        Route::get('/privacy-policy', [MiscController::class, 'getPrivacyPolicy']);
+        Route::get('/privacy-policy', [MiscController::class, 'getPrivacyPolicy'])
+            ->name('legal.privacy');
 
         require 'API/Users.php';
         require 'API/Notifications.php';

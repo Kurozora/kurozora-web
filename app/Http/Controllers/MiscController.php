@@ -40,7 +40,11 @@ class MiscController extends Controller
 
         return JSONResult::success([
             'data' => [
-                'privacy_policy' => $commonMarkConverter->convertToHtml($privacyPolicyText)
+                'type'          => 'legal',
+                'href'          => route('api.legal.privacy', [], false),
+                'attributes'    => [
+                    'text' => $commonMarkConverter->convertToHtml($privacyPolicyText)
+                ]
             ]
         ]);
     }
