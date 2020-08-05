@@ -31,17 +31,17 @@ class SessionResource extends JsonResource
 
         // Add additional data to the resource
         $relationships = [
-            'relationships' => [
-                'user' => [
-                    'data' => UserResourceBasic::collection([$session->user])
-                ]
+            'user' => [
+                'data' => UserResourceBasic::collection([$session->user])
             ]
         ];
+
+        $resource['relationships'] = array_merge($resource['relationships'], $relationships);
 
         if($this->shouldIncludesAuthKey)
             $resource = array_merge($resource, $this->getAuthenticationKey());
 
-        return array_merge($resource, $relationships);
+        return $resource;
     }
 
     /**

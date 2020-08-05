@@ -19,28 +19,28 @@ class SessionResourceBasic extends JsonResource
         /** @var Session $session */
         $session = $this->resource;
 
-        return [
+        $resource = [
             'id'            => $session->id,
             'type'          => 'sessions',
             'href'          => route('api.sessions.details', $session, false),
             'attributes'    => [
                 'ip'                => $session->ip,
                 'lastValidatedAt'   => $session->last_validated_at->format('Y-m-d H:i:s'),
-                'platform'          => [
-                    'description'       => $session->humanReadablePlatform(),
-                    'platform'          => $session->platform,
-                    'platformVersion'   => $session->platform_version,
-                    'deviceVendor'      => $session->device_vendor,
-                    'deviceModel'       => $session->device_model
+            ]
+        ];
+
+        // Add additional data to the resource
+        $relationships = [
+            'relationships' => [
+                'platform' => [
+                    'data' => PlatformResource::collection([$session])
                 ],
-                'location'          => [
-                    'city'          => $session->city,
-                    'region'        => $session->region,
-                    'country'       => $session->country,
-                    'latitude'      => $session->latitude,
-                    'longitude'     => $session->longitude,
+                'location' => [
+                    'data' => LocationResource::collection([$session])
                 ]
             ]
         ];
+
+        return array_merge($resource, $relationships);
     }
 }
