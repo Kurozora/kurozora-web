@@ -80,15 +80,9 @@ class NotificationController extends Controller
             $notificationQuery->whereIn('id', $notificationIDs);
         }
 
-        // Update the notifications
-        $amountUpdated = $notificationQuery->update([
-            'read_at' => $markAsRead ? now() : null
-        ]);
-
         return JSONResult::success([
             'data' => [
-                'read'              => $markAsRead,
-                'amountUpdated'     => $amountUpdated
+                'isRead' => $markAsRead
             ]
         ]);
     }
