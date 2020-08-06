@@ -33,13 +33,14 @@ class UserResourceBasic extends JsonResource
             'href'              => route('api.users.profile', $user, false),
             'attributes'        => [
                 'username'          => $user->username,
-                'activityStatus'    => $user->getActivityStatus()->description,
                 'biography'         => $user->biography,
-                'avatarUrl'         => $user->getFirstMediaFullUrl('avatar'),
-                'bannerUrl'         => $user->getFirstMediaFullUrl('banner'),
+                'activityStatus'    => $user->getActivityStatus()->description,
+                'profileImageURL'   => $user->getFirstMediaFullUrl('avatar'),
+                'bannerImageURL'    => $user->getFirstMediaFullUrl('banner'),
                 'followerCount'     => $user->getFollowerCount(),
                 'followingCount'    => $user->getFollowingCount(),
-                'reputationCount'   => $user->getReputationCount()
+                'reputationCount'   => $user->getReputationCount(),
+                'joinDate'          => $user->created_at->format('Y-m-d')
             ]
         ];
 
