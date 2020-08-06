@@ -56,7 +56,9 @@ class UserController extends Controller
 
         // Show profile response
         return JSONResult::success([
-            'data' => SessionResource::collection([$session])
+            'data' => [
+                SessionResource::make($session)->includesAuthKey()
+            ]
         ]);
     }
 
@@ -123,8 +125,8 @@ class UserController extends Controller
 
         return JSONResult::success([
             'data' => [
-                'current_session'   => SessionResourceBasic::make($curSession),
-                'other_sessions'    => SessionResourceBasic::collection($otherSessions)
+                'currentSession'   => SessionResourceBasic::make($curSession),
+                'otherSessions'    => SessionResourceBasic::collection($otherSessions)
             ]
         ]);
     }
