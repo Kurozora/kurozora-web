@@ -200,8 +200,7 @@ class AnimeController extends Controller
         ]);
 
         return JSONResult::success([
-            'max_search_results'    => Anime::MAX_SEARCH_RESULTS,
-            'data'                  => AnimeResourceBasic::collection($resultArr)
+            'data' => AnimeResourceBasic::collection($resultArr)
         ]);
     }
 }

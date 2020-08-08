@@ -202,8 +202,7 @@ class ForumThreadController extends Controller
 
         // Show response
         return JSONResult::success([
-            'max_search_results'    => ForumThread::MAX_SEARCH_RESULTS,
-            'data'                  => ForumThreadResource::collection($threads)
+            'data' => ForumThreadResource::collection($threads)
         ]);
     }
 

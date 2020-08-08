@@ -2,7 +2,6 @@
 
 namespace Tests\API;
 
-use App\Http\Resources\SessionResourceBasic;
 use App\Session;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;

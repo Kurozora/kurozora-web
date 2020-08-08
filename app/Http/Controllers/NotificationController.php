@@ -76,9 +76,14 @@ class NotificationController extends Controller
                 }
             }
 
-            // Update the notifications
+            // Get the notifications to be updated
             $notificationQuery->whereIn('id', $notificationIDs);
         }
+
+        // Update the notifications
+        $notificationQuery->update([
+            'read_at' => $markAsRead ? now() : null
+        ]);
 
         return JSONResult::success([
             'data' => [
