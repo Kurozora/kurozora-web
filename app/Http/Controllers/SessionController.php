@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
+use App\Helpers\KuroAuthToken;
 use App\Http\Requests\CreateSessionRequest;
 use App\Http\Requests\UpdateSessionRequest;
 use App\Http\Resources\SessionResource;
-use App\Http\Resources\SessionResourceBasic;
+use App\Http\Resources\UserResource;
 use App\LoginAttempt;
 use App\Session;
 use App\User;
@@ -55,9 +56,10 @@ class SessionController extends Controller
         ]);
 
         return JSONResult::success([
-            'data' => [
-                SessionResource::make($session)->includesAuthKey()
-            ]
+            'data'      => [
+                UserResource::make($user)->includingSession($session)
+            ],
+            'authToken' => KuroAuthToken::generate($user->id, $session->secret)
         ]);
     }
 
@@ -119,7 +121,7 @@ class SessionController extends Controller
     public function details(Session $session): JsonResponse
     {
         return JSONResult::success([
-            'data' => SessionResourceBasic::collection([$session])
+            'data' => SessionResource::collection([$session])
         ]);
     }
 }

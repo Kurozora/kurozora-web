@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Helpers\AppleAuthKeys;
 use App\Helpers\JSONResult;
+use App\Helpers\KuroAuthToken;
 use App\Http\Requests\SIWALoginRequest;
 use App\Http\Requests\SIWARegistration;
 use App\Http\Resources\SessionResource;
+use App\Http\Resources\UserResource;
 use App\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -40,9 +42,10 @@ class SignInWithAppleController extends Controller
         ]);
 
         return JSONResult::success([
-            'data' => [
-                SessionResource::make($session)->includesAuthKey()
-            ]
+            'data'      => [
+                UserResource::make($user)->includingSession($session)
+            ],
+            'authToken' => KuroAuthToken::generate($user->id, $session->secret)
         ]);
     }
 
@@ -99,9 +102,10 @@ class SignInWithAppleController extends Controller
         ]);
 
         return JSONResult::success([
-            'data' => [
-                SessionResource::make($session)->includesAuthKey()
-            ]
+            'data'      => [
+                UserResource::make($user)->includingSession($session)
+            ],
+            'authToken' => KuroAuthToken::generate($user->id, $session->secret)
         ]);
     }
 }
