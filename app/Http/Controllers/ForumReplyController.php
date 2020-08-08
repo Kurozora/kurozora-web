@@ -40,7 +40,7 @@ class ForumReplyController extends Controller
         // Show successful response
         return JSONResult::success([
             'data' => [
-                'vote_action' => $voteAction
+                'voteAction' => $voteAction
             ]
         ]);
     }

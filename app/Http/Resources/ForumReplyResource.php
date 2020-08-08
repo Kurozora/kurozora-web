@@ -39,7 +39,7 @@ class ForumReplyResource extends JsonResource
                     'likes'     => $totalLikes->getCount(),
                     'dislikes'  => $totalDislikes->getCount()
                 ],
-                'createdAt' => $forumReply->created_at,
+                'createdAt' => $forumReply->created_at->format('Y-m-d H:i:s'),
             ]
         ];
 
@@ -65,7 +65,7 @@ class ForumReplyResource extends JsonResource
 
         return [
             'currentUser' => [
-                'likeAction' => $user->getCurrentVoteValue()
+                'voteAction' => $user->getCurrentVoteValue()
             ]
         ];
     }

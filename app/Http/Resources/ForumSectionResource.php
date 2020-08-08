@@ -25,7 +25,7 @@ class ForumSectionResource extends JsonResource
             'href'          => route('api.forum-sections.details', $forumSection, false),
             'attributes'    => [
                 'name'      => $forumSection->name,
-                'locked'    => (bool) $forumSection->locked
+                'isLocked'  => (bool) $forumSection->locked
             ]
         ];
     }

@@ -34,7 +34,7 @@ class ForumThreadResource extends JsonResource
             'attributes'    => [
                 'title'         => $forumThread->title,
                 'content'       => $forumThread->content,
-                'locked'        => (bool) $forumThread->locked,
+                'isLocked'      => (bool) $forumThread->locked,
                 'replyCount'    => $forumThread->replies->count(),
                 'metrics'       => [
                     'count'     => $totalReactions->getCount(),
@@ -42,7 +42,7 @@ class ForumThreadResource extends JsonResource
                     'likes'     => $totalLikes->getCount(),
                     'dislikes'  => $totalDislikes->getCount()
                 ],
-                'createdAt'     => $forumThread->created_at,
+                'createdAt'     => $forumThread->created_at->format('Y-m-d H:i:s'),
             ]
         ];
 
