@@ -59,7 +59,7 @@ class ForumThreadController extends Controller
         // Show successful response
         return JSONResult::success([
             'data' => [
-                'vote_action' => $voteAction
+                'voteAction' => $voteAction
             ]
         ]);
     }
@@ -236,7 +236,7 @@ class ForumThreadController extends Controller
 
         return JSONResult::success([
             'data' => [
-                'locked' => (bool) $thread->locked
+                'isLocked' => (bool) $thread->locked
             ]
         ]);
     }

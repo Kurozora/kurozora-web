@@ -206,17 +206,17 @@
                     "description": "The platform that was used to create the session",
                     "example": "iOS"
                   },
-                  "platform_version": {
+                  "systemVersion": {
                     "type": "string",
                     "description": "The platform version that was used to create the session",
                     "example": "13.4"
                   },
-                  "device_vendor": {
+                  "deviceVendor": {
                     "type": "string",
                     "description": "The device vendor that was used to create the session",
                     "example": "Apple"
                   },
-                  "device_model": {
+                  "deviceModel": {
                     "type": "string",
                     "description": "The device model that was used to create the session",
                     "example": "iPhone 11 Pro Max"
@@ -226,9 +226,9 @@
                   "email",
                   "siwa_id",
                   "platform",
-                  "platform_version",
-                  "device_vendor",
-                  "device_model"
+                  "systemVersion",
+                  "deviceVendor",
+                  "deviceModel"
                 ]
               }
             }
@@ -267,17 +267,17 @@
                     "description": "The platform that was used to create the session",
                     "example": "iOS"
                   },
-                  "platform_version": {
+                  "systemVersion": {
                     "type": "string",
                     "description": "The platform version that was used to create the session",
                     "example": "13.4"
                   },
-                  "device_vendor": {
+                  "deviceVendor": {
                     "type": "string",
                     "description": "The device vendor that was used to create the session",
                     "example": "Apple"
                   },
-                  "device_model": {
+                  "deviceModel": {
                     "type": "string",
                     "description": "The device model that was used to create the session",
                     "example": "iPhone 11 Pro Max"
@@ -286,9 +286,9 @@
                 "required": [
                   "identity_token",
                   "platform",
-                  "platform_version",
-                  "device_vendor",
-                  "device_model"
+                  "systemVersion",
+                  "deviceVendor",
+                  "deviceModel"
                 ]
               }
             }
@@ -457,7 +457,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "anime_id": {
+                  "animeID": {
                     "type": "integer",
                     "description": "The ID of the Anime to add."
                   },
@@ -468,7 +468,7 @@
                   }
                 },
                 "required": [
-                  "anime_id",
+                  "animeID",
                   "status"
                 ]
               }
@@ -516,13 +516,13 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "anime_id": {
+                  "animeID": {
                     "type": "integer",
                     "description": "The ID of the Anime to remove."
                   }
                 },
                 "required": [
-                  "anime_id"
+                  "animeID"
                 ]
               }
             }
@@ -705,17 +705,17 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "anime_id": {
+                  "animeID": {
                     "type": "integer",
                     "description": "The ID of the Anime to add."
                   },
-                  "is_favorite": {
+                  "isFavorite": {
                     "$ref": "#/components/schemas/FavoriteStatus"
                   }
                 },
                 "required": [
-                  "anime_id",
-                  "is_favorite"
+                  "animeID",
+                  "isFavorite"
                 ]
               }
             }
@@ -793,7 +793,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "anime_id": {
+                  "animeID": {
                     "type": "integer",
                     "description": "The ID of the Anime to add or remove."
                   },
@@ -802,7 +802,7 @@
                   }
                 },
                 "required": [
-                  "anime_id",
+                  "animeID",
                   "is_reminded"
                 ]
               }
@@ -2421,17 +2421,17 @@
                     "description": "The platform that was used to create the session",
                     "example": "iOS"
                   },
-                  "platform_version": {
+                  "systemVersion": {
                     "type": "string",
                     "description": "The platform version that was used to create the session",
                     "example": "13.4"
                   },
-                  "device_vendor": {
+                  "deviceVendor": {
                     "type": "string",
                     "description": "The device vendor that was used to create the session",
                     "example": "Apple"
                   },
-                  "device_model": {
+                  "deviceModel": {
                     "type": "string",
                     "description": "The device model that was used to create the session",
                     "example": "iPhone 11 Pro Max"
@@ -2441,9 +2441,9 @@
                   "email",
                   "password",
                   "platform",
-                  "platform_version",
-                  "device_vendor",
-                  "device_model"
+                  "systemVersion",
+                  "deviceVendor",
+                  "deviceModel"
                 ]
               }
             }
@@ -2887,9 +2887,9 @@
               "example": {
                 "meta": {
                   "version": "1.0.8",
-                  "query_count": 0,
-                  "is_user_authenticated": false,
-                  "authenticated_user_id": null
+                  "queryCount": 0,
+                  "isUserAuthenticated": false,
+                  "authenticatedUserID": null
                 }
               }
             }
@@ -2905,9 +2905,9 @@
               "example": {
                 "meta": {
                   "version": "1.0.8",
-                  "query_count": 0,
-                  "is_user_authenticated": false,
-                  "authenticated_user_id": null
+                  "queryCount": 0,
+                  "isUserAuthenticated": false,
+                  "authenticatedUserID": null
                 },
                 "message": "Description of the error."
               }
@@ -2928,13 +2928,13 @@
                   "href": "/api/v1/notifications/1094845f-c175-462d-8aec-9bbad4af232f",
                   "attributes": {
                     "type": "NewSession",
-                    "read": true,
+                    "isRead": true,
                     "data": {
                       "ip": "127.0.0.1",
                       "session_id": 2
                     },
                     "string": "A new client has logged in to your account. (IP: 127.0.0.1)",
-                    "creation_date": "2020-07-27 13:57:12"
+                    "createdAt": "2020-07-27 13:57:12"
                   }
                 }
               }
@@ -2950,7 +2950,7 @@
               "type": "object",
               "example": {
                 "data": {
-                  "read": true,
+                  "isRead": true,
                   "amount_updated": 1
                 }
               }
@@ -2974,11 +2974,11 @@
                       "title": "\"0\"",
                       "type": "Tv",
                       "source": "Unknown",
-                      "anidb_id": 10143,
-                      "anilist_id": 102416,
-                      "kitsu_id": 8925,
-                      "imdb_id": null,
-                      "mal_id": 20707,
+                      "anidbID": 10143,
+                      "anilistID": 102416,
+                      "kitsuID": 8925,
+                      "imdbID": null,
+                      "malID": 20707,
                       "network": null,
                       "studio": [
                         {
@@ -2987,55 +2987,55 @@
                           "href": "/api/v1/studios/1",
                           "attributes": {
                             "name": null,
-                            "logo_url": null,
+                            "logoURL": null,
                             "about": null,
                             "founded": null,
-                            "website_url": null
+                            "websiteURL": null
                           }
                         }
                       ],
                       "status": "Continuing",
                       "episodes": 0,
                       "seasons": 0,
-                      "average_rating": 0,
-                      "rating_count": 0,
+                      "averageRating": 0,
+                      "ratingCount": 0,
                       "synopsis": "Error ipsa eos et rem recusandae voluptate sunt corrupti. Qui est est autem sit pariatur laudantium. Suscipit laboriosam enim modi quae quia aperiam excepturi sunt. Temporibus est hic adipisci.",
                       "runtime": 25,
-                      "watch_rating": "TV-14",
+                      "watchRating": "TV-14",
                       "tagline": "Voluptatem rerum quos quidem aut.",
-                      "video_url": null,
+                      "videoURL": null,
                       "poster": {
                         "url": "https://place-hold.it/680x1000",
                         "height": 1000,
                         "width": 680,
-                        "background_color": "#acacac",
-                        "text_color_1": "#171717",
-                        "text_color_2": "#545454",
-                        "text_color_3": "#6e6e6e",
-                        "text_color_4": "#5c5c5c"
+                        "backgroundColor": "#acacac",
+                        "textColor1": "#171717",
+                        "textColor2": "#545454",
+                        "textColor3": "#6e6e6e",
+                        "textColor4": "#5c5c5c"
                       },
                       "background": {
                         "url": "https://place-hold.it/1920x1080",
                         "height": 1080,
                         "width": 1920,
-                        "background_color": "#acacac",
-                        "text_color_1": "#171717",
-                        "text_color_2": "#545454",
-                        "text_color_3": "#6d6d6d",
-                        "text_color_4": "#5c5c5c"
+                        "backgroundColor": "#acacac",
+                        "textColor1": "#171717",
+                        "textColor2": "#545454",
+                        "textColor3": "#6d6d6d",
+                        "textColor4": "#5c5c5c"
                       },
                       "nsfw": false,
                       "genres": [],
-                      "first_aired": "1973-11-15",
-                      "last_aired": "1974-02-07",
-                      "air_time": "20:00:00",
-                      "air_day": 3,
+                      "firstAired": "1973-11-15",
+                      "lastAired": "1974-02-07",
+                      "airTime": "20:00:00",
+                      "airDay": 3,
                       "copyright": "® 2003 Watsica-Kling"
                     },
-                    "current_user": {
-                      "given_rating": 3.5,
-                      "library_status": "Watching",
-                      "is_favorite": false
+                    "currentUser": {
+                      "givenRating": 3.5,
+                      "libraryStatus": "Watching",
+                      "isFavorite": false
                     },
                     "relationships": {
                       "actors": {
@@ -3045,8 +3045,8 @@
                             "type": "actors",
                             "href": "/api/v1/actors/10",
                             "attributes": {
-                              "first_name": "Leatha",
-                              "last_name": "Dietrich",
+                              "firstName": "Leatha",
+                              "lastName": "Dietrich",
                               "occupation": "Installation and Repair Technician",
                               "image": "https://lorempixel.com/640/480/?22657"
                             }
@@ -3056,8 +3056,8 @@
                             "type": "actors",
                             "href": "/api/v1/actors/1",
                             "attributes": {
-                              "first_name": "Aniyah",
-                              "last_name": "Waelchi",
+                              "firstName": "Aniyah",
+                              "lastName": "Waelchi",
                               "occupation": "Government Property Inspector",
                               "image": "https://lorempixel.com/640/480/?66477"
                             }
@@ -3067,8 +3067,8 @@
                             "type": "actors",
                             "href": "/api/v1/actors/2",
                             "attributes": {
-                              "first_name": "Ashley",
-                              "last_name": "Carroll",
+                              "firstName": "Ashley",
+                              "lastName": "Carroll",
                               "occupation": "Inspector",
                               "image": "https://lorempixel.com/640/480/?48504"
                             }
@@ -3088,16 +3088,16 @@
                               "image": "https://lorempixel.com/640/480/?82757",
                               "debut": "Episode 65",
                               "status": "Deceased",
-                              "blood_type": "H",
-                              "favorite_food": "beatae",
+                              "bloodType": "H",
+                              "favoriteFood": "beatae",
                               "bust": null,
                               "waist": null,
                               "hip": null,
                               "height": "616",
                               "age": 233,
-                              "birth_day": 1,
-                              "birth_month": 7,
-                              "astrological_sign": "Aquarius ♒️"
+                              "birthDay": 1,
+                              "birthMonth": 7,
+                              "astrologicalSign": "Aquarius ♒️"
                             }
                           },
                           {
@@ -3110,16 +3110,16 @@
                               "image": "https://lorempixel.com/640/480/?46141",
                               "debut": "Episode 05",
                               "status": "Deceased",
-                              "blood_type": "W",
-                              "favorite_food": "numquam",
+                              "bloodType": "W",
+                              "favoriteFood": "numquam",
                               "bust": "27.70",
                               "waist": "78.44",
                               "hip": "53.99",
                               "height": "875",
                               "age": 265,
-                              "birth_day": 1,
-                              "birth_month": 7,
-                              "astrological_sign": "Virgo ♍️"
+                              "birthDay": 1,
+                              "birthMonth": 7,
+                              "astrologicalSign": "Virgo ♍️"
                             }
                           },
                           {
@@ -3132,16 +3132,16 @@
                               "image": "https://lorempixel.com/640/480/?51170",
                               "debut": "Episode 82",
                               "status": "Deceased",
-                              "blood_type": "A",
-                              "favorite_food": "hic",
+                              "bloodType": "A",
+                              "favoriteFood": "hic",
                               "bust": "22.62",
                               "waist": "33.46",
                               "hip": "37.65",
                               "height": "704",
                               "age": 292,
-                              "birth_day": 1,
-                              "birth_month": 2,
-                              "astrological_sign": "Cancer ♋️"
+                              "birthDay": 1,
+                              "birthMonth": 2,
+                              "astrologicalSign": "Cancer ♋️"
                             }
                           }
                         ],
@@ -3155,8 +3155,8 @@
                               "type": "actors",
                               "href": "/api/v1/actors/10",
                               "attributes": {
-                                "first_name": "Leatha",
-                                "last_name": "Dietrich",
+                                "firstName": "Leatha",
+                                "lastName": "Dietrich",
                                 "occupation": "Installation and Repair Technician",
                                 "image": "https://lorempixel.com/640/480/?22657"
                               }
@@ -3171,19 +3171,19 @@
                                 "image": "https://lorempixel.com/640/480/?82757",
                                 "debut": "Episode 65",
                                 "status": "Deceased",
-                                "blood_type": "H",
-                                "favorite_food": "beatae",
+                                "bloodType": "H",
+                                "favoriteFood": "beatae",
                                 "bust": null,
                                 "waist": null,
                                 "hip": null,
                                 "height": "616",
                                 "age": 233,
-                                "birth_day": 1,
-                                "birth_month": 7,
-                                "astrological_sign": "Aquarius ♒️"
+                                "birthDay": 1,
+                                "birthMonth": 7,
+                                "astrologicalSign": "Aquarius ♒️"
                               }
                             },
-                            "cast_role": "Protagonist"
+                            "castRole": "Protagonist"
                           },
                           {
                             "actor": {
@@ -3191,8 +3191,8 @@
                               "type": "actors",
                               "href": "/api/v1/actors/1",
                               "attributes": {
-                                "first_name": "Aniyah",
-                                "last_name": "Waelchi",
+                                "firstName": "Aniyah",
+                                "lastName": "Waelchi",
                                 "occupation": "Government Property Inspector",
                                 "image": "https://lorempixel.com/640/480/?66477"
                               }
@@ -3207,19 +3207,19 @@
                                 "image": "https://lorempixel.com/640/480/?46141",
                                 "debut": "Episode 05",
                                 "status": "Deceased",
-                                "blood_type": "W",
-                                "favorite_food": "numquam",
+                                "bloodType": "W",
+                                "favoriteFood": "numquam",
                                 "bust": "27.70",
                                 "waist": "78.44",
                                 "hip": "53.99",
                                 "height": "875",
                                 "age": 265,
-                                "birth_day": 1,
-                                "birth_month": 7,
-                                "astrological_sign": "Virgo ♍️"
+                                "birthDay": 1,
+                                "birthMonth": 7,
+                                "astrologicalSign": "Virgo ♍️"
                               }
                             },
-                            "cast_role": "Deuteragonist"
+                            "castRole": "Deuteragonist"
                           },
                           {
                             "actor": {
@@ -3227,8 +3227,8 @@
                               "type": "actors",
                               "href": "/api/v1/actors/2",
                               "attributes": {
-                                "first_name": "Ashley",
-                                "last_name": "Carroll",
+                                "firstName": "Ashley",
+                                "lastName": "Carroll",
                                 "occupation": "Inspector",
                                 "image": "https://lorempixel.com/640/480/?48504"
                               }
@@ -3243,19 +3243,19 @@
                                 "image": "https://lorempixel.com/640/480/?51170",
                                 "debut": "Episode 82",
                                 "status": "Deceased",
-                                "blood_type": "A",
-                                "favorite_food": "hic",
+                                "bloodType": "A",
+                                "favoriteFood": "hic",
                                 "bust": "22.62",
                                 "waist": "33.46",
                                 "hip": "37.65",
                                 "height": "704",
                                 "age": 292,
-                                "birth_day": 1,
-                                "birth_month": 2,
-                                "astrological_sign": "Cancer ♋️"
+                                "birthDay": 1,
+                                "birthMonth": 2,
+                                "astrologicalSign": "Cancer ♋️"
                               }
                             },
-                            "cast_role": "Tritagonist"
+                            "castRole": "Tritagonist"
                           }
                         ],
                         "href": "/api/v1/anime/1/cast"
@@ -3271,37 +3271,37 @@
                                 "title": "Omnis odit hic dolorem itaque.",
                                 "type": "Special",
                                 "source": "4-Koma Manga",
-                                "anidb_id": null,
-                                "anilist_id": null,
-                                "kitsu_id": null,
-                                "imdb_id": null,
-                                "mal_id": null,
+                                "anidbID": null,
+                                "anilistID": null,
+                                "kitsuID": null,
+                                "imdbID": null,
+                                "malID": null,
                                 "network": null,
                                 "studio": [],
                                 "status": "Tba",
                                 "episodes": 0,
                                 "seasons": 0,
-                                "average_rating": 0,
-                                "rating_count": 0,
+                                "averageRating": 0,
+                                "ratingCount": 0,
                                 "synopsis": "Aspernatur aperiam corrupti similique voluptatibus qui. Voluptas eum ea doloribus qui inventore hic. Voluptas accusantium libero autem ipsum molestiae aut nobis. Aliquam unde voluptates corrupti ut temporibus eum.",
                                 "runtime": 25,
-                                "watch_rating": "TV-Y7 (FV)",
+                                "watchRating": "TV-Y7 (FV)",
                                 "tagline": "Sunt error hic quod sint.",
-                                "video_url": null,
+                                "videoURL": null,
                                 "poster": null,
                                 "background": null,
                                 "nsfw": true,
                                 "genres": [],
-                                "first_aired": "2014-12-10",
-                                "last_aired": "2015-05-27",
-                                "air_time": "16:49:00",
-                                "air_day": 7,
+                                "firstAired": "2014-12-10",
+                                "lastAired": "2015-05-27",
+                                "airTime": "16:49:00",
+                                "airDay": 7,
                                 "copyright": "℗ 1997 Kulas-Baumbach"
                               },
-                              "current_user": {
-                                "given_rating": 0,
-                                "library_status": null,
-                                "is_favorite": false
+                              "currentUser": {
+                                "givenRating": 0,
+                                "libraryStatus": null,
+                                "isFavorite": false
                               }
                             },
                             "attributes": {
@@ -3317,37 +3317,37 @@
                                 "title": "Nam voluptatum voluptas optio qui.",
                                 "type": "Unknown",
                                 "source": "Original",
-                                "anidb_id": null,
-                                "anilist_id": null,
-                                "kitsu_id": null,
-                                "imdb_id": null,
-                                "mal_id": null,
+                                "anidbID": null,
+                                "anilistID": null,
+                                "kitsuID": null,
+                                "imdbID": null,
+                                "malID": null,
                                 "network": null,
                                 "studio": [],
                                 "status": "Tba",
                                 "episodes": 0,
                                 "seasons": 0,
-                                "average_rating": 0,
-                                "rating_count": 0,
+                                "averageRating": 0,
+                                "ratingCount": 0,
                                 "synopsis": "Rerum distinctio quibusdam porro et. Modi natus iusto ut qui praesentium dicta sed ratione. Porro excepturi et qui laudantium tenetur non iure.",
                                 "runtime": 25,
-                                "watch_rating": "TV-Y7",
+                                "watchRating": "TV-Y7",
                                 "tagline": "Expedita esse et cupiditate id impedit qui ut.",
-                                "video_url": null,
+                                "videoURL": null,
                                 "poster": null,
                                 "background": null,
                                 "nsfw": false,
                                 "genres": [],
-                                "first_aired": "2015-02-10",
-                                "last_aired": "2015-05-05",
-                                "air_time": "18:32:00",
-                                "air_day": 6,
+                                "firstAired": "2015-02-10",
+                                "lastAired": "2015-05-05",
+                                "airTime": "18:32:00",
+                                "airDay": 6,
                                 "copyright": "® 1976 Swift Ltd"
                               },
-                              "current_user": {
-                                "given_rating": 0,
-                                "library_status": null,
-                                "is_favorite": false
+                              "currentUser": {
+                                "givenRating": 0,
+                                "libraryStatus": null,
+                                "isFavorite": false
                               }
                             },
                             "attributes": {
@@ -3364,11 +3364,11 @@
                             "type": "seasons",
                             "href": "/api/v1/anime-seasons/1",
                             "attributes": {
-                              "anime_id": 1,
+                              "animeID": 1,
                               "title": "Season 1",
                               "number": 1,
-                              "episode_count": 2,
-                              "first_aired": "2020-07-29T10:00:00.000000Z"
+                              "episodeCount": 2,
+                              "firstAired": "2020-07-29 10:00:00"
                             }
                           }
                         ],
@@ -3395,8 +3395,8 @@
                     "type": "actors",
                     "href": "/api/v1/actors/10",
                     "attributes": {
-                      "first_name": "Leatha",
-                      "last_name": "Dietrich",
+                      "firstName": "Leatha",
+                      "lastName": "Dietrich",
                       "occupation": "Installation and Repair Technician",
                       "image": "https://lorempixel.com/640/480/?22657"
                     }
@@ -3406,8 +3406,8 @@
                     "type": "actors",
                     "href": "/api/v1/actors/1",
                     "attributes": {
-                      "first_name": "Aniyah",
-                      "last_name": "Waelchi",
+                      "firstName": "Aniyah",
+                      "lastName": "Waelchi",
                       "occupation": "Government Property Inspector",
                       "image": "https://lorempixel.com/640/480/?66477"
                     }
@@ -3436,16 +3436,16 @@
                       "image": "https://lorempixel.com/640/480/?46141",
                       "debut": "Episode 05",
                       "status": "Deceased",
-                      "blood_type": "W",
-                      "favorite_food": "numquam",
+                      "bloodType": "W",
+                      "favoriteFood": "numquam",
                       "bust": "27.70",
                       "waist": "78.44",
                       "hip": "53.99",
                       "height": "875",
                       "age": 265,
-                      "birth_day": 1,
-                      "birth_month": 7,
-                      "astrological_sign": "Virgo ♍️"
+                      "birthDay": 1,
+                      "birthMonth": 7,
+                      "astrologicalSign": "Virgo ♍️"
                     }
                   },
                   {
@@ -3458,16 +3458,16 @@
                       "image": "https://lorempixel.com/640/480/?51170",
                       "debut": "Episode 82",
                       "status": "Deceased",
-                      "blood_type": "A",
-                      "favorite_food": "hic",
+                      "bloodType": "A",
+                      "favoriteFood": "hic",
                       "bust": "22.62",
                       "waist": "33.46",
                       "hip": "37.65",
                       "height": "704",
                       "age": 292,
-                      "birth_day": 1,
-                      "birth_month": 2,
-                      "astrological_sign": "Cancer ♋️"
+                      "birthDay": 1,
+                      "birthMonth": 2,
+                      "astrologicalSign": "Cancer ♋️"
                     }
                   }
                 ]
@@ -3490,8 +3490,8 @@
                       "type": "actors",
                       "href": "/api/v1/actors/10",
                       "attributes": {
-                        "first_name": "Leatha",
-                        "last_name": "Dietrich",
+                        "firstName": "Leatha",
+                        "lastName": "Dietrich",
                         "occupation": "Installation and Repair Technician",
                         "image": "https://lorempixel.com/640/480/?22657"
                       }
@@ -3506,19 +3506,19 @@
                         "image": "https://lorempixel.com/640/480/?82757",
                         "debut": "Episode 65",
                         "status": "Deceased",
-                        "blood_type": "H",
-                        "favorite_food": "beatae",
+                        "bloodType": "H",
+                        "favoriteFood": "beatae",
                         "bust": null,
                         "waist": null,
                         "hip": null,
                         "height": "616",
                         "age": 233,
-                        "birth_day": 1,
-                        "birth_month": 7,
-                        "astrological_sign": "Aquarius ♒️"
+                        "birthDay": 1,
+                        "birthMonth": 7,
+                        "astrologicalSign": "Aquarius ♒️"
                       }
                     },
-                    "cast_role": "Protagonist"
+                    "castRole": "Protagonist"
                   },
                   {
                     "actor": {
@@ -3526,8 +3526,8 @@
                       "type": "actors",
                       "href": "/api/v1/actors/1",
                       "attributes": {
-                        "first_name": "Aniyah",
-                        "last_name": "Waelchi",
+                        "firstName": "Aniyah",
+                        "lastName": "Waelchi",
                         "occupation": "Government Property Inspector",
                         "image": "https://lorempixel.com/640/480/?66477"
                       }
@@ -3542,19 +3542,19 @@
                         "image": "https://lorempixel.com/640/480/?46141",
                         "debut": "Episode 05",
                         "status": "Deceased",
-                        "blood_type": "W",
-                        "favorite_food": "numquam",
+                        "bloodType": "W",
+                        "favoriteFood": "numquam",
                         "bust": "27.70",
                         "waist": "78.44",
                         "hip": "53.99",
                         "height": "875",
                         "age": 265,
-                        "birth_day": 1,
-                        "birth_month": 7,
-                        "astrological_sign": "Virgo ♍️"
+                        "birthDay": 1,
+                        "birthMonth": 7,
+                        "astrologicalSign": "Virgo ♍️"
                       }
                     },
-                    "cast_role": "Deuteragonist"
+                    "castRole": "Deuteragonist"
                   }
                 ]
               }
@@ -3579,37 +3579,37 @@
                         "title": "Omnis odit hic dolorem itaque.",
                         "type": "Special",
                         "source": "4-Koma Manga",
-                        "anidb_id": null,
-                        "anilist_id": null,
-                        "kitsu_id": null,
-                        "imdb_id": null,
-                        "mal_id": null,
+                        "anidbID": null,
+                        "anilistID": null,
+                        "kitsuID": null,
+                        "imdbID": null,
+                        "malID": null,
                         "network": null,
                         "studio": [],
                         "status": "Tba",
                         "episodes": 0,
                         "seasons": 0,
-                        "average_rating": 0,
-                        "rating_count": 0,
+                        "averageRating": 0,
+                        "ratingCount": 0,
                         "synopsis": "Aspernatur aperiam corrupti similique voluptatibus qui. Voluptas eum ea doloribus qui inventore hic. Voluptas accusantium libero autem ipsum molestiae aut nobis. Aliquam unde voluptates corrupti ut temporibus eum.",
                         "runtime": 25,
-                        "watch_rating": "TV-Y7 (FV)",
+                        "watchRating": "TV-Y7 (FV)",
                         "tagline": "Sunt error hic quod sint.",
-                        "video_url": null,
+                        "videoURL": null,
                         "poster": null,
                         "background": null,
                         "nsfw": true,
                         "genres": [],
-                        "first_aired": "2014-12-10",
-                        "last_aired": "2015-05-27",
-                        "air_time": "16:49:00",
-                        "air_day": 7,
+                        "firstAired": "2014-12-10",
+                        "lastAired": "2015-05-27",
+                        "airTime": "16:49:00",
+                        "airDay": 7,
                         "copyright": "℗ 1997 Kulas-Baumbach"
                       },
-                      "current_user": {
-                        "given_rating": 0,
-                        "library_status": null,
-                        "is_favorite": false
+                      "currentUser": {
+                        "givenRating": 0,
+                        "libraryStatus": null,
+                        "isFavorite": false
                       }
                     },
                     "attributes": {
@@ -3625,37 +3625,37 @@
                         "title": "Nam voluptatum voluptas optio qui.",
                         "type": "Unknown",
                         "source": "Original",
-                        "anidb_id": null,
-                        "anilist_id": null,
-                        "kitsu_id": null,
-                        "imdb_id": null,
-                        "mal_id": null,
+                        "anidbID": null,
+                        "anilistID": null,
+                        "kitsuID": null,
+                        "imdbID": null,
+                        "malID": null,
                         "network": null,
                         "studio": [],
                         "status": "Tba",
                         "episodes": 0,
                         "seasons": 0,
-                        "average_rating": 0,
-                        "rating_count": 0,
+                        "averageRating": 0,
+                        "ratingCount": 0,
                         "synopsis": "Rerum distinctio quibusdam porro et. Modi natus iusto ut qui praesentium dicta sed ratione. Porro excepturi et qui laudantium tenetur non iure.",
                         "runtime": 25,
-                        "watch_rating": "TV-Y7",
+                        "watchRating": "TV-Y7",
                         "tagline": "Expedita esse et cupiditate id impedit qui ut.",
-                        "video_url": null,
+                        "videoURL": null,
                         "poster": null,
                         "background": null,
                         "nsfw": false,
                         "genres": [],
-                        "first_aired": "2015-02-10",
-                        "last_aired": "2015-05-05",
-                        "air_time": "18:32:00",
-                        "air_day": 6,
+                        "firstAired": "2015-02-10",
+                        "lastAired": "2015-05-05",
+                        "airTime": "18:32:00",
+                        "airDay": 6,
                         "copyright": "® 1976 Swift Ltd"
                       },
-                      "current_user": {
-                        "given_rating": 0,
-                        "library_status": null,
-                        "is_favorite": false
+                      "currentUser": {
+                        "givenRating": 0,
+                        "libraryStatus": null,
+                        "isFavorite": false
                       }
                     },
                     "attributes": {
@@ -3681,11 +3681,11 @@
                     "type": "seasons",
                     "href": "/api/v1/anime-seasons/1",
                     "attributes": {
-                      "anime_id": 1,
+                      "animeID": 1,
                       "title": "Season 1",
                       "number": 1,
-                      "episode_count": 2,
-                      "first_aired": "2020-07-29T10:00:00.000000Z"
+                      "episodeCount": 2,
+                      "firstAired": "2020-07-29 10:00:00"
                     }
                   }
                 ]
@@ -3710,11 +3710,11 @@
                       "title": "\"0\"",
                       "type": "Tv",
                       "source": "Unknown",
-                      "anidb_id": 10143,
-                      "anilist_id": 102416,
-                      "kitsu_id": 8925,
-                      "imdb_id": null,
-                      "mal_id": 20707,
+                      "anidbID": 10143,
+                      "anilistID": 102416,
+                      "kitsuID": 8925,
+                      "imdbID": null,
+                      "malID": 20707,
                       "network": null,
                       "studio": [
                         {
@@ -3723,58 +3723,58 @@
                           "href": "/api/v1/studios/1",
                           "attributes": {
                             "name": "Watsica-Kling",
-                            "logo_url": "https://place-hold.it/512x512",
+                            "logoURL": "https://place-hold.it/512x512",
                             "about": "Error ipsa eos et rem recusandae rerum quos quidem aut.",
                             "founded": "1963-11-15",
-                            "website_url": "https://watsica-kling.com/"
+                            "websiteURL": "https://watsica-kling.com/"
                           }
                         }
                       ],
                       "status": "Continuing",
                       "episodes": 0,
                       "seasons": 0,
-                      "average_rating": 0,
-                      "rating_count": 0,
+                      "averageRating": 0,
+                      "ratingCount": 0,
                       "synopsis": "Error ipsa eos et rem recusandae voluptate sunt corrupti. Qui est est autem sit pariatur laudantium. Suscipit laboriosam enim modi quae quia aperiam excepturi sunt. Temporibus est hic adipisci.",
                       "runtime": 25,
-                      "watch_rating": "TV-14",
+                      "watchRating": "TV-14",
                       "tagline": "Voluptatem rerum quos quidem aut.",
-                      "video_url": null,
+                      "videoURL": null,
                       "poster": {
                         "url": "https://place-hold.it/680x1000",
                         "height": 1000,
                         "width": 680,
-                        "background_color": "#acacac",
-                        "text_color_1": "#171717",
-                        "text_color_2": "#545454",
-                        "text_color_3": "#6e6e6e",
-                        "text_color_4": "#5c5c5c"
+                        "backgroundColor": "#acacac",
+                        "textColor1": "#171717",
+                        "textColor2": "#545454",
+                        "textColor3": "#6e6e6e",
+                        "textColor4": "#5c5c5c"
                       },
                       "background": {
                         "url": "https://place-hold.it/1920x1080",
                         "height": 1080,
                         "width": 1920,
-                        "background_color": "#acacac",
-                        "text_color_1": "#171717",
-                        "text_color_2": "#545454",
-                        "text_color_3": "#6d6d6d",
-                        "text_color_4": "#5c5c5c"
+                        "backgroundColor": "#acacac",
+                        "textColor1": "#171717",
+                        "textColor2": "#545454",
+                        "textColor3": "#6d6d6d",
+                        "textColor4": "#5c5c5c"
                       },
                       "nsfw": false,
                       "genres": [
                         "Action",
                         "Adventure"
                       ],
-                      "first_aired": "1973-11-15",
-                      "last_aired": "1974-02-07",
-                      "air_time": "20:00:00",
-                      "air_day": 3,
+                      "firstAired": "1973-11-15",
+                      "lastAired": "1974-02-07",
+                      "airTime": "20:00:00",
+                      "airDay": 3,
                       "copyright": "® 2003 Watsica-Kling"
                     },
-                    "current_user": {
-                      "given_rating": 0,
-                      "library_status": null,
-                      "is_favorite": false
+                    "currentUser": {
+                      "givenRating": 0,
+                      "libraryStatus": null,
+                      "isFavorite": false
                     }
                   },
                   {
@@ -3785,11 +3785,11 @@
                       "title": "\"Aesop\" no Ohanashi yori: Ushi to Kaeru, Yokubatta Inu",
                       "type": "Tv",
                       "source": "Digital manga",
-                      "anidb_id": 3689,
-                      "anilist_id": null,
-                      "kitsu_id": 9179,
-                      "imdb_id": null,
-                      "mal_id": 25627,
+                      "anidbID": 3689,
+                      "anilistID": null,
+                      "kitsuID": 9179,
+                      "imdbID": null,
+                      "malID": 25627,
                       "network": null,
                       "studio": [
                         {
@@ -3798,37 +3798,37 @@
                           "href": "/api/v1/studios/2",
                           "attributes": {
                             "name": null,
-                            "logo_url": null,
+                            "logoURL": null,
                             "about": null,
                             "founded": null,
-                            "website_url": null
+                            "websiteURL": null
                           }
                         }
                       ],
                       "status": "Ended",
                       "episodes": 0,
                       "seasons": 0,
-                      "average_rating": 0,
-                      "rating_count": 0,
+                      "averageRating": 0,
+                      "ratingCount": 0,
                       "synopsis": "Totam ex non eaque rem. Suscipit eos recusandae et. Pariatur reprehenderit aliquid reprehenderit nisi quae. Fuga enim atque ratione occaecati sequi iste dignissimos.",
                       "runtime": 25,
-                      "watch_rating": "TV-14",
+                      "watchRating": "TV-14",
                       "tagline": "Vel facilis dignissimos suscipit veritatis enim nemo ut.",
-                      "video_url": null,
+                      "videoURL": null,
                       "poster": null,
                       "background": null,
                       "nsfw": false,
                       "genres": [],
-                      "first_aired": "2014-09-28",
-                      "last_aired": "2014-12-21",
-                      "air_time": "19:24:00",
-                      "air_day": 4,
+                      "firstAired": "2014-09-28",
+                      "lastAired": "2014-12-21",
+                      "airTime": "19:24:00",
+                      "airDay": 4,
                       "copyright": "® 1985 Fadel, Sipes and McGlynn"
                     },
-                    "current_user": {
-                      "given_rating": 0,
-                      "library_status": null,
-                      "is_favorite": false
+                    "currentUser": {
+                      "givenRating": 0,
+                      "libraryStatus": null,
+                      "isFavorite": false
                     }
                   }
                 ]
@@ -3850,11 +3850,11 @@
                     "type": "seasons",
                     "href": "/api/v1/anime-seasons/1",
                     "attributes": {
-                      "anime_id": 1,
+                      "animeID": 1,
                       "title": "Season 1",
                       "number": 1,
-                      "first_aired": "6-29-2020 2020-07-29 12:00:00",
-                      "episode_count": 2
+                      "firstAired": "6-29-2020 2020-07-29 12:00:00",
+                      "episodeCount": 2
                     }
                   }
                 ]
@@ -3878,11 +3878,11 @@
                     "attributes": {
                       "number": 1,
                       "name": "Episode 1",
-                      "first_aired": "29 Jul, 2020",
+                      "firstAired": "29 Jul, 2020",
                       "overview": "A short, or long description of the episode.",
                       "verified": false
                     },
-                    "current_user": {
+                    "currentUser": {
                       "watched": 1
                     }
                   },
@@ -3893,11 +3893,11 @@
                     "attributes": {
                       "number": 2,
                       "name": "Episode 2",
-                      "first_aired": "5 Aug, 2020",
+                      "firstAired": "5 Aug, 2020",
                       "overview": "A long, or short description of the episode.",
                       "verified": false
                     },
-                    "current_user": {
+                    "currentUser": {
                       "watched": 0
                     }
                   }
@@ -3922,11 +3922,11 @@
                     "attributes": {
                       "number": 1,
                       "name": "Episode 1",
-                      "first_aired": "2 Jul, 2020",
+                      "firstAired": "2 Jul, 2020",
                       "overview": "Season 1 Episode 1 description",
                       "verified": false
                     },
-                    "current_user": {
+                    "currentUser": {
                       "watched": -1
                     }
                   }
@@ -3964,8 +3964,8 @@
                     "type": "actors",
                     "href": "/api/v1/actors/1",
                     "attributes": {
-                      "first_name": "Aniyah",
-                      "last_name": "Waelchi",
+                      "firstName": "Aniyah",
+                      "lastName": "Waelchi",
                       "occupation": "Government Property Inspector",
                       "image": "https://lorempixel.com/640/480/?66477"
                     }
@@ -3975,8 +3975,8 @@
                     "type": "actors",
                     "href": "/api/v1/actors/2",
                     "attributes": {
-                      "first_name": "Ashley",
-                      "last_name": "Carroll",
+                      "firstName": "Ashley",
+                      "lastName": "Carroll",
                       "occupation": "Inspector",
                       "image": "https://lorempixel.com/640/480/?48504"
                     }
@@ -4000,8 +4000,8 @@
                     "type": "actors",
                     "href": "/api/v1/actors/1",
                     "attributes": {
-                      "first_name": "Aniyah",
-                      "last_name": "Waelchi",
+                      "firstName": "Aniyah",
+                      "lastName": "Waelchi",
                       "occupation": "Government Property Inspector",
                       "image": "https://lorempixel.com/640/480/?66477"
                     }
@@ -4030,16 +4030,16 @@
                       "image": "https://lorempixel.com/640/480/?46141",
                       "debut": "Episode 05",
                       "status": "Deceased",
-                      "blood_type": "W",
-                      "favorite_food": "numquam",
+                      "bloodType": "W",
+                      "favoriteFood": "numquam",
                       "bust": "27.70",
                       "waist": "78.44",
                       "hip": "53.99",
                       "height": "875",
                       "age": 265,
-                      "birth_day": 1,
-                      "birth_month": 7,
-                      "astrological_sign": "Virgo ♍️"
+                      "birthDay": 1,
+                      "birthMonth": 7,
+                      "astrologicalSign": "Virgo ♍️"
                     }
                   },
                   {
@@ -4052,16 +4052,16 @@
                       "image": "https://lorempixel.com/640/480/?51170",
                       "debut": "Episode 82",
                       "status": "Deceased",
-                      "blood_type": "A",
-                      "favorite_food": "hic",
+                      "bloodType": "A",
+                      "favoriteFood": "hic",
                       "bust": "22.62",
                       "waist": "33.46",
                       "hip": "37.65",
                       "height": "704",
                       "age": 292,
-                      "birth_day": 1,
-                      "birth_month": 2,
-                      "astrological_sign": "Cancer ♋️"
+                      "birthDay": 1,
+                      "birthMonth": 2,
+                      "astrologicalSign": "Cancer ♋️"
                     }
                   }
                 ]
@@ -4088,16 +4088,16 @@
                       "image": "https://lorempixel.com/640/480/?46141",
                       "debut": "Episode 05",
                       "status": "Deceased",
-                      "blood_type": "W",
-                      "favorite_food": "numquam",
+                      "bloodType": "W",
+                      "favoriteFood": "numquam",
                       "bust": "27.70",
                       "waist": "78.44",
                       "hip": "53.99",
                       "height": "875",
                       "age": 265,
-                      "birth_day": 1,
-                      "birth_month": 7,
-                      "astrological_sign": "Virgo ♍️"
+                      "birthDay": 1,
+                      "birthMonth": 7,
+                      "astrologicalSign": "Virgo ♍️"
                     }
                   }
                 ]
@@ -4184,7 +4184,7 @@
                     "href": "/api/v1/forum-sections/1",
                     "attributes": {
                       "name": "Anime",
-                      "locked": false
+                      "isLocked": false
                     }
                   },
                   {
@@ -4193,7 +4193,7 @@
                     "href": "/api/v1/forum-sections/2",
                     "attributes": {
                       "name": "Real Life",
-                      "locked": true
+                      "isLocked": true
                     }
                   }
                 ]
@@ -4216,7 +4216,7 @@
                     "href": "/api/v1/forum-sections/1",
                     "attributes": {
                       "name": "Anime",
-                      "locked": false
+                      "isLocked": false
                     }
                   }
                 ]
@@ -4240,15 +4240,15 @@
                     "attributes": {
                       "title": "Enim quia molestiae.",
                       "content": "Fuga repellendus blanditiis quaerat provident et doloremque. Ad ullam nulla at optio ipsa ipsum.",
-                      "locked": false,
-                      "reply_count": 13,
+                      "isLocked": false,
+                      "replyCount": 13,
                       "metrics": {
                         "count": 20,
                         "weight": 10,
                         "likes": 15,
                         "dislikes": 5
                       },
-                      "creation_date": "2020-07-27 12:59:34"
+                      "createdAt": "2020-07-27 12:59:34"
                     },
                     "relationships": {
                       "user": {
@@ -4259,23 +4259,23 @@
                             "href": "/api/v1/users/29/profile",
                             "attributes": {
                               "username": "reynold71",
-                              "activity_status": "Offline",
+                              "activityStatus": "Offline",
                               "biography": "Et in dolor illo sit non. Veniam est et qui qui atque. Ut mollitia autem accusantium ea molestiae voluptatem a. Dicta in qui necessitatibus maiores.",
-                              "avatar_url": null,
-                              "banner_url": null,
-                              "follower_count": 67,
-                              "following_count": 67,
-                              "reputation_count": 59
+                              "profileImageURL": null,
+                              "bannerImageURL": null,
+                              "followerCount": 67,
+                              "followingCount": 67,
+                              "reputationCount": 59
                             },
-                            "current_user": {
+                            "currentUser": {
                               "following": false
                             }
                           }
                         ]
                       }
                     },
-                    "current_user": {
-                      "vote_action": 1
+                    "currentUser": {
+                      "voteAction": 1
                     }
                   },
                   {
@@ -4285,15 +4285,15 @@
                     "attributes": {
                       "title": "Voluptatem possimus sunt.",
                       "content": "Cupiditate voluptatem quaerat eaque veniam atque. Id et fugiat dolore nihil necessitatibus ut quia tempore. Natus aspernatur consequatur dolores dolore ea consequatur rerum possimus.",
-                      "locked": true,
-                      "reply_count": 2,
+                      "isLocked": true,
+                      "replyCount": 2,
                       "metrics": {
                         "count": 0,
                         "weight": 0,
                         "likes": 0,
                         "dislikes": 0
                       },
-                      "creation_date": "2020-07-27 12:59:34"
+                      "createdAt": "2020-07-27 12:59:34"
                     },
                     "relationships": {
                       "user": {
@@ -4304,23 +4304,23 @@
                             "href": "/api/v1/users/29/profile",
                             "attributes": {
                               "username": "reynold71",
-                              "activity_status": "Offline",
+                              "activityStatus": "Offline",
                               "biography": "Et in dolor illo sit non. Veniam est et qui qui atque. Ut mollitia autem accusantium ea molestiae voluptatem a. Dicta in qui necessitatibus maiores.",
-                              "avatar_url": null,
-                              "banner_url": null,
-                              "follower_count": 67,
-                              "following_count": 67,
-                              "reputation_count": 59
+                              "profileImageURL": null,
+                              "bannerImageURL": null,
+                              "followerCount": 67,
+                              "followingCount": 67,
+                              "reputationCount": 59
                             },
-                            "current_user": {
+                            "currentUser": {
                               "following": false
                             }
                           }
                         ]
                       }
                     },
-                    "current_user": {
-                      "vote_action": 1
+                    "currentUser": {
+                      "voteAction": 1
                     }
                   }
                 ]
@@ -4344,15 +4344,15 @@
                     "attributes": {
                       "title": "Re:Zero",
                       "content": "Good anime to watch.",
-                      "locked": false,
-                      "reply_count": 0,
+                      "isLocked": false,
+                      "replyCount": 0,
                       "metrics": {
                         "count": 0,
                         "weight": 0,
                         "likes": 0,
                         "dislikes": 0
                       },
-                      "creation_date": "2020-07-29 18:28:59"
+                      "createdAt": "2020-07-29 18:28:59"
                     },
                     "relationships": {
                       "user": {
@@ -4363,23 +4363,23 @@
                             "href": "/api/v1/users/2/profile",
                             "attributes": {
                               "username": "Kirito",
-                              "activity_status": "Online",
+                              "activityStatus": "Online",
                               "biography": "My biography.",
-                              "avatar_url": "https://kurozora.app/storage/2/ProfileImage.png",
-                              "banner_url": "https://kurozora.app/storage/2/BannerImage.png",
-                              "follower_count": 0,
-                              "following_count": 0,
-                              "reputation_count": 0
+                              "profileImageURL": "https://kurozora.app/storage/2/ProfileImage.png",
+                              "bannerImageURL": "https://kurozora.app/storage/2/BannerImage.png",
+                              "followerCount": 0,
+                              "followingCount": 0,
+                              "reputationCount": 0
                             },
-                            "current_user": {
+                            "currentUser": {
                               "following": false
                             }
                           }
                         ]
                       }
                     },
-                    "current_user": {
-                      "vote_action": 0
+                    "currentUser": {
+                      "voteAction": 0
                     }
                   }
                 ]
@@ -4403,15 +4403,15 @@
                     "attributes": {
                       "title": "Enim quia molestiae.",
                       "content": "Fuga repellendus blanditiis quaerat provident et doloremque. Ad ullam nulla at optio ipsa ipsum.",
-                      "locked": false,
-                      "reply_count": 13,
+                      "isLocked": false,
+                      "replyCount": 13,
                       "metrics": {
                         "count": 20,
                         "weight": 10,
                         "likes": 15,
                         "dislikes": 5
                       },
-                      "creation_date": "2020-07-27 12:59:34"
+                      "createdAt": "2020-07-27 12:59:34"
                     },
                     "relationships": {
                       "user": {
@@ -4422,23 +4422,23 @@
                             "href": "/api/v1/users/29/profile",
                             "attributes": {
                               "username": "reynold71",
-                              "activity_status": "Offline",
+                              "activityStatus": "Offline",
                               "biography": "Et in dolor illo sit non. Veniam est et qui qui atque. Ut mollitia autem accusantium ea molestiae voluptatem a. Dicta in qui necessitatibus maiores.",
-                              "avatar_url": null,
-                              "banner_url": null,
-                              "follower_count": 67,
-                              "following_count": 67,
-                              "reputation_count": 59
+                              "profileImageURL": null,
+                              "bannerImageURL": null,
+                              "followerCount": 67,
+                              "followingCount": 67,
+                              "reputationCount": 59
                             },
-                            "current_user": {
+                            "currentUser": {
                               "following": false
                             }
                           }
                         ]
                       }
                     },
-                    "current_user": {
-                      "vote_action": 1
+                    "currentUser": {
+                      "voteAction": 1
                     }
                   }
                 ]
@@ -4455,7 +4455,7 @@
               "type": "object",
               "example": {
                 "data": {
-                  "vote_action": 0
+                  "voteAction": 0
                 }
               }
             }
@@ -4482,7 +4482,7 @@
                         "likes": 7,
                         "dislikes": 15
                       },
-                      "created_at": "2020-07-27 12:59:35"
+                      "createdAt": "2020-07-27 12:59:35"
                     },
                     "relationships": {
                       "user": {
@@ -4493,23 +4493,23 @@
                             "href": "/api/v1/users/45/profile",
                             "attributes": {
                               "username": "mattie47",
-                              "activity_status": "Offline",
+                              "activityStatus": "Offline",
                               "biography": "Alias odit quaerat odit magnam. Quia eius fuga quos temporibus cumque laborum. Tempora at itaque et sequi aperiam non accusantium. Dolorem consectetur maiores dolores id.",
-                              "avatar_url": null,
-                              "banner_url": null,
-                              "follower_count": 0,
-                              "following_count": 0,
-                              "reputation_count": 0
+                              "profileImageURL": null,
+                              "bannerImageURL": null,
+                              "followerCount": 0,
+                              "followingCount": 0,
+                              "reputationCount": 0
                             },
-                            "current_user": {
+                            "currentUser": {
                               "following": false
                             }
                           }
                         ]
                       }
                     },
-                    "current_user": {
-                      "like_action": 0
+                    "currentUser": {
+                      "voteAction": 0
                     }
                   },
                   {
@@ -4524,7 +4524,7 @@
                         "likes": 152,
                         "dislikes": 81
                       },
-                      "created_at": "2020-07-27 12:59:35"
+                      "createdAt": "2020-07-27 12:59:35"
                     },
                     "relationships": {
                       "user": {
@@ -4535,23 +4535,23 @@
                             "href": "/api/v1/users/14/profile",
                             "attributes": {
                               "username": "neal.green",
-                              "activity_status": "Offline",
+                              "activityStatus": "Offline",
                               "biography": "Aspernatur sint eligendi similique qui natus. Consequatur sed incidunt consectetur laborum. Ipsum voluptates expedita aut est ut reprehenderit.",
-                              "avatar_url": "https://kurozora.app/storage/14/ProfileImage.png",
-                              "banner_url": "https://kurozora.app/storage/14/BannerImage.png",
-                              "follower_count": 299,
-                              "following_count": 128,
-                              "reputation_count": 547
+                              "profileImageURL": "https://kurozora.app/storage/14/ProfileImage.png",
+                              "bannerImageURL": "https://kurozora.app/storage/14/BannerImage.png",
+                              "followerCount": 299,
+                              "followingCount": 128,
+                              "reputationCount": 547
                             },
-                            "current_user": {
+                            "currentUser": {
                               "following": true
                             }
                           }
                         ]
                       }
                     },
-                    "current_user": {
-                      "like_action": 0
+                    "currentUser": {
+                      "voteAction": 0
                     }
                   }
                 ],
@@ -4581,7 +4581,7 @@
                         "likes": 0,
                         "dislikes": 0
                       },
-                      "created_at": "2020-07-29 12:33:32"
+                      "createdAt": "2020-07-29 12:33:32"
                     },
                     "relationships": {
                       "user": {
@@ -4592,23 +4592,23 @@
                             "href": "/api/v1/users/2/profile",
                             "attributes": {
                               "username": "Kirito",
-                              "activity_status": "Online",
+                              "activityStatus": "Online",
                               "biography": "My biography.",
-                              "avatar_url": "https://kurozora.app/storage/2/ProfileImage.png",
-                              "banner_url": "https://kurozora.app/storage/2/BannerImage.png",
-                              "follower_count": 0,
-                              "following_count": 0,
-                              "reputation_count": 0
+                              "profileImageURL": "https://kurozora.app/storage/2/ProfileImage.png",
+                              "bannerImageURL": "https://kurozora.app/storage/2/BannerImage.png",
+                              "followerCount": 0,
+                              "followingCount": 0,
+                              "reputationCount": 0
                             },
-                            "current_user": {
+                            "currentUser": {
                               "following": false
                             }
                           }
                         ]
                       }
                     },
-                    "current_user": {
-                      "like_action": 0
+                    "currentUser": {
+                      "voteAction": 0
                     }
                   }
                 ]
@@ -4632,15 +4632,15 @@
                     "attributes": {
                       "title": "Saepe voluptas sunt itaque.",
                       "content": "Beatae eos quisquam voluptatem id non. Inventore quam ea voluptatem laboriosam fuga quia enim qui. Illo blanditiis hic aperiam perspiciatis et id veniam.",
-                      "locked": false,
-                      "reply_count": 389,
+                      "isLocked": false,
+                      "replyCount": 389,
                       "metrics": {
                         "count": 1200,
                         "weight": 400,
                         "likes": 800,
                         "dislikes": 400
                       },
-                      "creation_date": "2020-07-27 12:59:34"
+                      "createdAt": "2020-07-27 12:59:34"
                     },
                     "relationships": {
                       "user": {
@@ -4651,23 +4651,23 @@
                             "href": "/api/v1/users/36/profile",
                             "attributes": {
                               "username": "iliana.jacobs",
-                              "activity_status": "Offline",
+                              "activityStatus": "Offline",
                               "biography": "Numquam dicta laborum ut quod distinctio rem sunt sint. Impedit est ea dicta eum. Laboriosam id minima voluptas molestiae. Dolorum tenetur blanditiis id adipisci et.",
-                              "avatar_url": "https://kurozora.app/storage/36/ProfileImage.png",
-                              "banner_url": null,
-                              "follower_count": 7694,
-                              "following_count": 5373,
-                              "reputation_count": 14734
+                              "profileImageURL": "https://kurozora.app/storage/36/ProfileImage.png",
+                              "bannerImageURL": null,
+                              "followerCount": 7694,
+                              "followingCount": 5373,
+                              "reputationCount": 14734
                             },
-                            "current_user": {
+                            "currentUser": {
                               "following": false
                             }
                           }
                         ]
                       }
                     },
-                    "current_user": {
-                      "vote_action": 1
+                    "currentUser": {
+                      "voteAction": 1
                     }
                   },
                   {
@@ -4677,15 +4677,15 @@
                     "attributes": {
                       "title": "Sunt harum quo fuga.",
                       "content": "Exercitationem alias nemo nobis omnis deserunt sit. Quidem ab accusamus non nemo. Aut rerum officiis dignissimos nulla dolorem hic fugiat.",
-                      "locked": true,
-                      "reply_count": 3,
+                      "isLocked": true,
+                      "replyCount": 3,
                       "metrics": {
                         "count": 100,
                         "weight": -53,
                         "likes": 47,
                         "dislikes": 53
                       },
-                      "creation_date": "2020-07-27 12:59:34"
+                      "createdAt": "2020-07-27 12:59:34"
                     },
                     "relationships": {
                       "user": {
@@ -4696,23 +4696,23 @@
                             "href": "/api/v1/users/44/profile",
                             "attributes": {
                               "username": "lilliana45",
-                              "activity_status": "Offline",
+                              "activityStatus": "Offline",
                               "biography": "Quam repudiandae autem modi velit vitae. Animi ratione hic distinctio sint. Inventore maxime ut voluptatem id est.",
-                              "avatar_url": null,
-                              "banner_url": "https://kurozora.app/storage/44/BannerImage.png",
-                              "follower_count": 63,
-                              "following_count": 102,
-                              "reputation_count": 353
+                              "profileImageURL": null,
+                              "bannerImageURL": "https://kurozora.app/storage/44/BannerImage.png",
+                              "followerCount": 63,
+                              "followingCount": 102,
+                              "reputationCount": 353
                             },
-                            "current_user": {
+                            "currentUser": {
                               "following": false
                             }
                           }
                         ]
                       }
                     },
-                    "current_user": {
-                      "vote_action": -1
+                    "currentUser": {
+                      "voteAction": -1
                     }
                   },
                   {
@@ -4722,15 +4722,15 @@
                     "attributes": {
                       "title": "Sit possimus incidunt.",
                       "content": "Vero hic ea explicabo iure aut. Maiores voluptates reprehenderit vel perferendis.",
-                      "locked": false,
-                      "reply_count": 0,
+                      "isLocked": false,
+                      "replyCount": 0,
                       "metrics": {
                         "count": 0,
                         "weight": 0,
                         "likes": 0,
                         "dislikes": 0
                       },
-                      "creation_date": "2020-07-27 12:59:34"
+                      "createdAt": "2020-07-27 12:59:34"
                     },
                     "relationships": {
                       "user": {
@@ -4741,23 +4741,23 @@
                             "href": "/api/v1/users/53/profile",
                             "attributes": {
                               "username": "maximilian.glover",
-                              "activity_status": "Offline",
+                              "activityStatus": "Offline",
                               "biography": "In laborum perspiciatis odio sint laboriosam ipsam. Velit qui aut et est temporibus. Quisquam et quia eligendi est sed. Facilis ducimus sint alias iusto.",
-                              "avatar_url": "https://kurozora.app/storage/53/ProfileImage.png",
-                              "banner_url": "https://kurozora.app/storage/53/BannerImage.png",
-                              "follower_count": 593,
-                              "following_count": 2846,
-                              "reputation_count": 8463
+                              "profileImageURL": "https://kurozora.app/storage/53/ProfileImage.png",
+                              "bannerImageURL": "https://kurozora.app/storage/53/BannerImage.png",
+                              "followerCount": 593,
+                              "followingCount": 2846,
+                              "reputationCount": 8463
                             },
-                            "current_user": {
+                            "currentUser": {
                               "following": true
                             }
                           }
                         ]
                       }
                     },
-                    "current_user": {
-                      "like_action": 0
+                    "currentUser": {
+                      "voteAction": 0
                     }
                   }
                 ]
@@ -4774,7 +4774,7 @@
               "type": "object",
               "example": {
                 "data": {
-                  "locked": false
+                  "isLocked": false
                 }
               }
             }
@@ -4789,7 +4789,7 @@
               "type": "object",
               "example": {
                 "data": {
-                  "vote_action": 1
+                  "voteAction": 1
                 }
               }
             }
@@ -4824,8 +4824,8 @@
                               "username": "Kirito",
                               "activityStatus": "Online",
                               "biography": "An interesting biography.",
-                              "avatarUrl": "https://kurozora.app/storage/2/ProfileImage.png",
-                              "bannerUrl": "https://kurozora.app/storage/2/BannerImage.png",
+                              "profileImageURL": "https://kurozora.app/storage/2/ProfileImage.png",
+                              "bannerImageURL": "https://kurozora.app/storage/2/BannerImage.png",
                               "followerCount": 10,
                               "followingCount": 12,
                               "reputationCount": 14
@@ -4876,13 +4876,13 @@
                   "href": "/api/v1/sessions/3",
                   "attributes": {
                     "ip": "127.0.0.1",
-                    "last_validated_at": "2020-07-28 02:43:50",
+                    "lastValidatedAt": "2020-07-28 02:43:50",
                     "platform": {
-                      "human_readable_format": "iPhone 11 Pro Max on iOS 13.4",
-                      "platform": "iOS",
-                      "platform_version": "13.4",
-                      "device_vendor": "Apple",
-                      "device_model": "iPhone 11 Pro Max"
+                      "description": "iPhone 11 Pro Max on iOS 13.4",
+                      "systemName": "iOS",
+                      "systemVersion": "13.4",
+                      "deviceVendor": "Apple",
+                      "deviceModel": "iPhone 11 Pro Max"
                     },
                     "location": {
                       "city": "Amsterdam",
@@ -4920,9 +4920,9 @@
               "example": {
                 "meta": {
                   "version": "1.0.8",
-                  "query_count": 0,
-                  "is_user_authenticated": false,
-                  "authenticated_user_id": null
+                  "queryCount": 0,
+                  "isUserAuthenticated": false,
+                  "authenticatedUserID": null
                 }
               }
             }
@@ -4943,10 +4943,10 @@
                     "href": "/api/v1/studios/1",
                     "attributes": {
                       "name": "Considine-Tillman",
-                      "logo_url": "https://lorempixel.com/640/480/?85310",
+                      "logoURL": "https://lorempixel.com/640/480/?85310",
                       "about": "Eos repellat optio aut explicabo quod. Consequatur sit quasi aliquam sed modi aut. Perspiciatis et perferendis architecto voluptas eos quis iure. Corrupti ea reiciendis et quo sed itaque. Unde ipsa officia et veniam dicta ullam omnis modi. Consequuntur non possimus fugiat quaerat delectus ea. In voluptas dignissimos veniam reprehenderit a. Cum dolores aperiam et nihil. Veniam id rerum commodi quia assumenda at. Et velit iure eos aut. Et est praesentium id fugiat reprehenderit. Sunt dolorem aut ratione ipsam ipsum quo.",
                       "founded": "1983-09-30",
-                      "website_url": "http://rodriguez.com/eos-ut-earum-ut-eum-voluptas-iusto.html"
+                      "websiteURL": "http://rodriguez.com/eos-ut-earum-ut-eum-voluptas-iusto.html"
                     }
                   },
                   {
@@ -4955,10 +4955,10 @@
                     "href": "/api/v1/studios/2",
                     "attributes": {
                       "name": "Harris-Kuhn",
-                      "logo_url": "https://lorempixel.com/640/480/?61391",
+                      "logoURL": "https://lorempixel.com/640/480/?61391",
                       "about": "Et suscipit sed veniam libero. Praesentium odio rerum commodi aut debitis expedita. Dolore quidem repudiandae omnis nemo voluptatem. Soluta enim soluta dolor aut earum et officiis. Illum sit rerum ab dolor sit eos. Est voluptates eos cupiditate natus. Adipisci sapiente aperiam rerum. Non et voluptatem dolorem ex exercitationem exercitationem. Consequatur qui totam ut. Distinctio quae voluptas omnis quae earum. Ut est eligendi ipsa voluptatibus et deserunt. Amet illum aliquid aut non. Sapiente iusto a soluta non. Temporibus et est est voluptas quo. Et necessitatibus nihil aut expedita maxime et aut. Voluptate aut laudantium rerum autem. Voluptatibus ullam tempore accusantium illum illo quia. Debitis qui assumenda dicta neque. Ullam optio non est ad. Facere quaerat voluptatem est qui quo consequatur error. Assumenda cumque ut molestias fugiat. Ut molestias laudantium aut dolorum ab. Sed sapiente tempore fugit et aliquam. Blanditiis ut id rem quis. Assumenda velit ea rerum temporibus. Ut debitis molestiae debitis esse deleniti at. Aut quis earum eius eum omnis ut quia rerum.",
                       "founded": "1990-04-04",
-                      "website_url": "http://rice.biz/dolores-minima-quisquam-at-et.html"
+                      "websiteURL": "http://rice.biz/dolores-minima-quisquam-at-et.html"
                     }
                   }
                 ]
@@ -4981,10 +4981,10 @@
                     "href": "/api/v1/studios/1",
                     "attributes": {
                       "name": "Considine-Tillman",
-                      "logo_url": "https://lorempixel.com/640/480/?85310",
+                      "logoURL": "https://lorempixel.com/640/480/?85310",
                       "about": "Eos repellat optio aut explicabo quod. Consequatur sit quasi aliquam sed modi aut. Perspiciatis et perferendis architecto voluptas eos quis iure. Corrupti ea reiciendis et quo sed itaque. Unde ipsa officia et veniam dicta ullam omnis modi. Consequuntur non possimus fugiat quaerat delectus ea. In voluptas dignissimos veniam reprehenderit a. Cum dolores aperiam et nihil. Veniam id rerum commodi quia assumenda at. Et velit iure eos aut. Et est praesentium id fugiat reprehenderit. Sunt dolorem aut ratione ipsam ipsum quo.",
                       "founded": "1983-09-30",
-                      "website_url": "http://rodriguez.com/eos-ut-earum-ut-eum-voluptas-iusto.html"
+                      "websiteURL": "http://rodriguez.com/eos-ut-earum-ut-eum-voluptas-iusto.html"
                     },
                     "relationships": {
                       "anime": {
@@ -4997,11 +4997,11 @@
                               "title": "\"0\"",
                               "type": "Tv",
                               "source": "Unknown",
-                              "anidb_id": 10143,
-                              "anilist_id": 102416,
-                              "kitsu_id": 8925,
-                              "imdb_id": null,
-                              "mal_id": 20707,
+                              "anidbID": 10143,
+                              "anilistID": 102416,
+                              "kitsuID": 8925,
+                              "imdbID": null,
+                              "malID": 20707,
                               "network": null,
                               "studio": [
                                 {
@@ -5010,31 +5010,31 @@
                                   "href": "/api/v1/studios/1",
                                   "attributes": {
                                     "name": null,
-                                    "logo_url": null,
+                                    "logoURL": null,
                                     "about": null,
                                     "founded": null,
-                                    "website_url": null
+                                    "websiteURL": null
                                   }
                                 }
                               ],
                               "status": "Continuing",
                               "episodes": 0,
                               "seasons": 0,
-                              "average_rating": 0,
-                              "rating_count": 0,
+                              "averageRating": 0,
+                              "ratingCount": 0,
                               "synopsis": "Error ipsa eos et rem recusandae voluptate sunt corrupti. Qui est est autem sit pariatur laudantium. Suscipit laboriosam enim modi quae quia aperiam excepturi sunt. Temporibus est hic adipisci.",
                               "runtime": 25,
-                              "watch_rating": "TV-14",
+                              "watchRating": "TV-14",
                               "tagline": "Voluptatem rerum quos quidem aut.",
-                              "video_url": null,
+                              "videoURL": null,
                               "poster": null,
                               "background": null,
                               "nsfw": false,
                               "genres": [],
-                              "first_aired": "1973-11-15",
-                              "last_aired": "1974-02-07",
-                              "air_time": "20:00:00",
-                              "air_day": 3,
+                              "firstAired": "1973-11-15",
+                              "lastAired": "1974-02-07",
+                              "airTime": "20:00:00",
+                              "airDay": 3,
                               "copyright": "® 2003 Watsica-Kling"
                             }
                           },
@@ -5046,11 +5046,11 @@
                               "title": "\"Aesop\" no Ohanashi yori: Ushi to Kaeru, Yokubatta Inu",
                               "type": "Tv",
                               "source": "Digital manga",
-                              "anidb_id": 3689,
-                              "anilist_id": null,
-                              "kitsu_id": 9179,
-                              "imdb_id": null,
-                              "mal_id": 25627,
+                              "anidbID": 3689,
+                              "anilistID": null,
+                              "kitsuID": 9179,
+                              "imdbID": null,
+                              "malID": 25627,
                               "network": null,
                               "studio": [
                                 {
@@ -5059,31 +5059,31 @@
                                   "href": "/api/v1/studios/2",
                                   "attributes": {
                                     "name": null,
-                                    "logo_url": null,
+                                    "logoURL": null,
                                     "about": null,
                                     "founded": null,
-                                    "website_url": null
+                                    "websiteURL": null
                                   }
                                 }
                               ],
                               "status": "Ended",
                               "episodes": 0,
                               "seasons": 0,
-                              "average_rating": 0,
-                              "rating_count": 0,
+                              "averageRating": 0,
+                              "ratingCount": 0,
                               "synopsis": "Totam ex non eaque rem. Suscipit eos recusandae et. Pariatur reprehenderit aliquid reprehenderit nisi quae. Fuga enim atque ratione occaecati sequi iste dignissimos.",
                               "runtime": 25,
-                              "watch_rating": "TV-14",
+                              "watchRating": "TV-14",
                               "tagline": "Vel facilis dignissimos suscipit veritatis enim nemo ut.",
-                              "video_url": null,
+                              "videoURL": null,
                               "poster": null,
                               "background": null,
                               "nsfw": false,
                               "genres": [],
-                              "first_aired": "2014-09-28",
-                              "last_aired": "2014-12-21",
-                              "air_time": "19:24:00",
-                              "air_day": 4,
+                              "firstAired": "2014-09-28",
+                              "lastAired": "2014-12-21",
+                              "airTime": "19:24:00",
+                              "airDay": 4,
                               "copyright": "® 1985 Fadel, Sipes and McGlynn"
                             }
                           }
@@ -5114,11 +5114,11 @@
                       "title": "\"0\"",
                       "type": "Tv",
                       "source": "Unknown",
-                      "anidb_id": 10143,
-                      "anilist_id": 102416,
-                      "kitsu_id": 8925,
-                      "imdb_id": null,
-                      "mal_id": 20707,
+                      "anidbID": 10143,
+                      "anilistID": 102416,
+                      "kitsuID": 8925,
+                      "imdbID": null,
+                      "malID": 20707,
                       "network": null,
                       "studio": [
                         {
@@ -5127,31 +5127,31 @@
                           "href": "/api/v1/studios/1",
                           "attributes": {
                             "name": null,
-                            "logo_url": null,
+                            "logoURL": null,
                             "about": null,
                             "founded": null,
-                            "website_url": null
+                            "websiteURL": null
                           }
                         }
                       ],
                       "status": "Continuing",
                       "episodes": 0,
                       "seasons": 0,
-                      "average_rating": 0,
-                      "rating_count": 0,
+                      "averageRating": 0,
+                      "ratingCount": 0,
                       "synopsis": "Error ipsa eos et rem recusandae voluptate sunt corrupti. Qui est est autem sit pariatur laudantium. Suscipit laboriosam enim modi quae quia aperiam excepturi sunt. Temporibus est hic adipisci.",
                       "runtime": 25,
-                      "watch_rating": "TV-14",
+                      "watchRating": "TV-14",
                       "tagline": "Voluptatem rerum quos quidem aut.",
-                      "video_url": null,
+                      "videoURL": null,
                       "poster": null,
                       "background": null,
                       "nsfw": false,
                       "genres": [],
-                      "first_aired": "1973-11-15",
-                      "last_aired": "1974-02-07",
-                      "air_time": "20:00:00",
-                      "air_day": 3,
+                      "firstAired": "1973-11-15",
+                      "lastAired": "1974-02-07",
+                      "airTime": "20:00:00",
+                      "airDay": 3,
                       "copyright": "® 2003 Watsica-Kling"
                     }
                   },
@@ -5163,11 +5163,11 @@
                       "title": "\"Aesop\" no Ohanashi yori: Ushi to Kaeru, Yokubatta Inu",
                       "type": "Tv",
                       "source": "Digital manga",
-                      "anidb_id": 3689,
-                      "anilist_id": null,
-                      "kitsu_id": 9179,
-                      "imdb_id": null,
-                      "mal_id": 25627,
+                      "anidbID": 3689,
+                      "anilistID": null,
+                      "kitsuID": 9179,
+                      "imdbID": null,
+                      "malID": 25627,
                       "network": null,
                       "studio": [
                         {
@@ -5176,31 +5176,31 @@
                           "href": "/api/v1/studios/2",
                           "attributes": {
                             "name": null,
-                            "logo_url": null,
+                            "logoURL": null,
                             "about": null,
                             "founded": null,
-                            "website_url": null
+                            "websiteURL": null
                           }
                         }
                       ],
                       "status": "Ended",
                       "episodes": 0,
                       "seasons": 0,
-                      "average_rating": 0,
-                      "rating_count": 0,
+                      "averageRating": 0,
+                      "ratingCount": 0,
                       "synopsis": "Totam ex non eaque rem. Suscipit eos recusandae et. Pariatur reprehenderit aliquid reprehenderit nisi quae. Fuga enim atque ratione occaecati sequi iste dignissimos.",
                       "runtime": 25,
-                      "watch_rating": "TV-14",
+                      "watchRating": "TV-14",
                       "tagline": "Vel facilis dignissimos suscipit veritatis enim nemo ut.",
-                      "video_url": null,
+                      "videoURL": null,
                       "poster": null,
                       "background": null,
                       "nsfw": false,
                       "genres": [],
-                      "first_aired": "2014-09-28",
-                      "last_aired": "2014-12-21",
-                      "air_time": "19:24:00",
-                      "air_day": 4,
+                      "firstAired": "2014-09-28",
+                      "lastAired": "2014-12-21",
+                      "airTime": "19:24:00",
+                      "airDay": 4,
                       "copyright": "® 1985 Fadel, Sipes and McGlynn"
                     }
                   }
@@ -5224,7 +5224,7 @@
                     "attributes": {
                       "name": "Watermelon",
                       "screenshot": "http://kurozora-web.test/storage/1/Screenshot.jpeg",
-                      "download_link": "/api/v1/themes/1/download"
+                      "downloadLink": "/api/v1/themes/1/download"
                     }
                   },
                   {
@@ -5233,7 +5233,7 @@
                     "attributes": {
                       "name": "Blueberry",
                       "screenshot": "http://kurozora-web.test/storage/2/Screenshot.jpeg",
-                      "download_link": "/api/v1/themes/2/download"
+                      "downloadLink": "/api/v1/themes/2/download"
                     }
                   }
                 ]
@@ -5257,7 +5257,7 @@
                     "attributes": {
                       "name": "Tatum Orn",
                       "screenshot": "http://kurozora-web.test/storage/1/Screenshot.jpeg",
-                      "download_link": "http://kurozora-web.test/api/v1/themes/1/download"
+                      "downloadLink": "http://kurozora-web.test/api/v1/themes/1/download"
                     }
                   }
                 ]
