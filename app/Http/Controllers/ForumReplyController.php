@@ -23,7 +23,7 @@ class ForumReplyController extends Controller
     {
         // Validate the inputs
         $validator = Validator::make($request->all(), [
-            'vote'      => 'bail|required|numeric|in:-1,1'
+            'vote' => 'bail|required|numeric|in:-1,1'
         ]);
 
         // Check validator

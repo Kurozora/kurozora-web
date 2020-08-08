@@ -23,7 +23,7 @@ class BadgeResource extends JsonResource
             'id'            => $badge->id,
             'type'          => 'badges',
             'attributes'    => [
-                'text'              => $badge->text,
+                'name'              => $badge->text,
                 'textColor'         => $badge->textColor,
                 'backgroundColor'   => $badge->backgroundColor,
                 'description'       => $badge->description

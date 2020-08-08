@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
+use App\Helpers\KuroAuthToken;
 use App\Http\Requests\ResetPassword;
 use App\Http\Requests\UpdateProfile;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\SessionResource;
-use App\Http\Resources\SessionResourceBasic;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceBasic;
 use App\Jobs\SendNewPasswordMail;
@@ -56,9 +56,10 @@ class UserController extends Controller
 
         // Show profile response
         return JSONResult::success([
-            'data' => [
-                SessionResource::make($session)->includesAuthKey()
-            ]
+            'data'      => [
+                UserResource::make($session->user)->includingSession($session)
+            ],
+            'authToken' => KuroAuthToken::generate($session->user->id, $session->secret)
         ]);
     }
 
@@ -111,23 +112,14 @@ class UserController extends Controller
      */
     public function getSessions(Request $request, User $user): JsonResponse
     {
-        // Get the other sessions
-        $otherSessions = Session::where([
+        // Get all sessions except current one
+        $sessions = Session::where([
             ['user_id', '=',    $user->id],
             ['secret',  '!=',   $request['session_secret']]
         ])->get();
 
-        // Get the current session
-        $curSession = Session::where([
-            ['user_id', '=',    $user->id],
-            ['secret',  '=',    $request['session_secret']]
-        ])->first();
-
         return JSONResult::success([
-            'data' => [
-                'currentSession'   => SessionResourceBasic::make($curSession),
-                'otherSessions'    => SessionResourceBasic::collection($otherSessions)
-            ]
+            'data' => SessionResource::collection($sessions)
         ]);
     }
 
@@ -252,8 +244,7 @@ class UserController extends Controller
 
         // Show response
         return JSONResult::success([
-            'max_search_results'    => User::MAX_SEARCH_RESULTS,
-            'data'                  => UserResourceBasic::collection($users)
+            'data' => UserResourceBasic::collection($users)
         ]);
     }
 

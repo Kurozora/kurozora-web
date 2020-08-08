@@ -151,8 +151,7 @@ class LibraryController extends Controller
 
         // Show response
         return JSONResult::success([
-            'max_search_results'    => Anime::MAX_SEARCH_RESULTS,
-            'data'                  => AnimeResourceBasic::collection($library)
+            'data' => AnimeResourceBasic::collection($library)
         ]);
     }
 }
