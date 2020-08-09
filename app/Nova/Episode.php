@@ -2,7 +2,9 @@
 
 namespace App\Nova;
 
+use Chaseconey\ExternalImage\ExternalImage;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
@@ -57,18 +59,31 @@ class Episode extends Resource
                 ->searchable()
                 ->sortable(),
 
+            ExternalImage::make('Preview Image')
+                ->help('A link to a preview image of the episode.'),
+
             Number::make('Number')
-                ->rules('required'),
+                ->rules('required')
+                ->help('The episode number of the episode.'),
 
-            Text::make('Episode Title', 'name')
+            Text::make('Title')
                 ->rules('required', 'max:255'),
-
-            DateTime::make('First Aired At', 'first_aired')
-                ->sortable(),
 
             Textarea::make('Overview')
                 ->hideFromIndex()
                 ->help('A short description of the Episode.'),
+
+            DateTime::make('First Aired')
+                ->sortable()
+                ->help('The air date of the of the episode. Leave empty if not announced yet.'),
+
+            Number::make('Duration')
+                ->rules('required')
+                ->sortable()
+                ->help('The duration of the episode in minutes.'),
+
+            Boolean::make('Verified')
+                ->help('Check the box if the information is correct.'),
         ];
     }
 

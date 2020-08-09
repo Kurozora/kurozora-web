@@ -32,9 +32,11 @@ class AnimeEpisodeResource extends JsonResource
             'href'          => route('api.episodes.details', $animeEpisode, false),
             'attributes'    => [
                 'number'        => $animeEpisode->number,
-                'name'          => $animeEpisode->name,
-                'firstAired'   => $firstAired,
+                'title'         => $animeEpisode->title,
                 'overview'      => $animeEpisode->overview,
+                'previewImage'  => $animeEpisode->preview_image,
+                'firstAired'    => $firstAired,
+                'duration'      => $animeEpisode->duration,
                 'verified'      => (bool) $animeEpisode->verified
             ]
         ];
