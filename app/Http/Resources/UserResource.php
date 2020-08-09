@@ -37,8 +37,10 @@ class UserResource extends JsonResource
 
         $relationships = array_merge($relationships, $this->getBadgeRelationship());
 
-        if($this->shouldIncludeSession)
+        if($this->shouldIncludeSession) {
+            $resource['attributes'] = array_merge($resource['attributes'], ['email' => $user->email]);
             $relationships = array_merge($relationships, $this->getSessionRelationship());
+        }
 
         $resource = array_merge($resource, ['relationships' => $relationships]);
 
