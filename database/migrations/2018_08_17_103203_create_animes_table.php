@@ -35,7 +35,7 @@ class CreateAnimesTable extends Migration
             $table->unsignedInteger('mal_id')->nullable();
             $table->unsignedInteger('tvdb_id')->nullable();
             $table->mediumText('synopsis')->nullable();
-            $table->unsignedTinyInteger('runtime')->nullable();
+            $table->unsignedTinyInteger('runtime')->default(0);
             $table->integer('watch_rating')->nullable();
             $table->float('average_rating')->default(0.0);
             $table->integer('rating_count')->default(0);
