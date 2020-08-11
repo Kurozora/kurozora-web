@@ -8,7 +8,7 @@ use App\Events\AnimeViewed;
 use App\Helpers\JSONResult;
 use App\Http\Resources\ActorCharacterAnimeResource;
 use App\Http\Resources\ActorResource;
-use App\Http\Resources\AnimeRelationsResource;
+use App\Http\Resources\AnimeRelatedShowsResource;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Http\Resources\AnimeSeasonResource;
@@ -87,18 +87,18 @@ class AnimeController extends Controller
     }
 
     /**
-     * Returns relations information about an Anime.
+     * Returns related-shows information about an Anime.
      *
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function relationsAnime(Anime $anime): JsonResponse
+    public function relatedShowsAnime(Anime $anime): JsonResponse
     {
-        // Get the actors
+        // Get the related shows
         $relations = $anime->getAnimeRelations();
 
         return JSONResult::success([
-            'data' => AnimeRelationsResource::collection($relations)
+            'data' => AnimeRelatedShowsResource::collection($relations)
         ]);
     }
 

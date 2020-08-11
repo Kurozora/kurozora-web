@@ -20,7 +20,7 @@ class CreateGenresTable extends Migration
             $table->string('symbol')->nullable();
             $table->string('color')->default('#ffffff');
             $table->text('description')->nullable();
-            $table->boolean('nsfw')->default(false);
+            $table->boolean('is_nsfw')->default(false);
             $table->timestamps();
         });
     }
