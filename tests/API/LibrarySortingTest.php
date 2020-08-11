@@ -133,7 +133,7 @@ class LibrarySortingTest extends TestCase
         $anime = Anime::create([
             'title'             => 'Awesome Show',
             'created_at'        => now(),
-            'average_rating'    => 2.0
+            'average_rating'    => 2.5
         ]);
         $user->library()->attach($anime->id, ['status' => UserLibraryStatus::Watching]);
 

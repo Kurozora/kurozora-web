@@ -31,16 +31,22 @@ class AnimeResource extends JsonResource
                         $relationships = array_merge($relationships, $this->getActorsRelationship());
                         break;
                     case 'cast':
-                        $relationships = array_merge($relationships, $this->getActorCharacterAnimeRelationship());
+                        $relationships = array_merge($relationships, $this->getCastRelationship());
                         break;
                     case 'characters':
                         $relationships = array_merge($relationships, $this->getCharactersRelationship());
                         break;
-                    case 'relations':
-                        $relationships = array_merge($relationships, $this->getRelationsRelationship());
+                    case 'genres':
+                        $relationships = array_merge($relationships, $this->getGenresRelationship());
+                        break;
+                    case 'related-shows':
+                        $relationships = array_merge($relationships, $this->getRelatedShowsRelationship());
                         break;
                     case 'seasons':
                         $relationships = array_merge($relationships, $this->getSeasonsRelationship());
+                        break;
+                    case 'studios':
+                        $relationships = array_merge($relationships, $this->getStudiosRelationship());
                         break;
                 }
             }
@@ -49,23 +55,6 @@ class AnimeResource extends JsonResource
         }
 
         return $resource;
-    }
-
-    /**
-     * Returns the seasons relationship for the resource.
-     *
-     * @return array
-     */
-    protected function getSeasonsRelationship() {
-        /** @param Anime $anime */
-        $anime = $this->resource;
-
-        return [
-            'seasons' => [
-                'data' => AnimeSeasonResource::collection($anime->getSeasons(Anime::MAXIMUM_RELATIONSHIP_LIMIT)),
-                'href' => route('api.anime.seasons', $anime, false)
-            ]
-        ];
     }
 
     /**
@@ -79,8 +68,26 @@ class AnimeResource extends JsonResource
 
         return [
             'actors' => [
-                'data' => ActorResource::collection($anime->getActors(Anime::MAXIMUM_RELATIONSHIP_LIMIT)),
+                'data' => ActorResource::collection($anime->getActors(Anime::MAXIMUM_RELATED_SHOWS_LIMIT)),
                 'href' => route('api.anime.actors', $anime, false)
+            ]
+        ];
+    }
+
+    /**
+     * Returns the cast relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getCastRelationship()
+    {
+        /** @param Anime $anime */
+        $anime = $this->resource;
+
+        return [
+            'cast' => [
+                'data' => ActorCharacterAnimeResource::collection($anime->getActorCharacterAnime(Anime::MAXIMUM_RELATED_SHOWS_LIMIT)),
+                'href' => route('api.anime.cast', $anime, false)
             ]
         ];
     }
@@ -97,44 +104,79 @@ class AnimeResource extends JsonResource
 
         return [
             'characters' => [
-                'data' => CharacterResource::collection($anime->getCharacters(Anime::MAXIMUM_RELATIONSHIP_LIMIT)),
+                'data' => CharacterResource::collection($anime->getCharacters(Anime::MAXIMUM_RELATED_SHOWS_LIMIT)),
                 'href' => route('api.anime.characters', $anime, false)
             ]
         ];
     }
 
     /**
-     * Returns the relations relationship for the resource.
+     * Returns the genres relationship for the resource.
      *
      * @return array
      */
-    protected function getRelationsRelationship()
+    protected function getGenresRelationship()
     {
         /** @param Anime $anime */
         $anime = $this->resource;
 
         return [
-            'relations' => [
-                'data' => AnimeRelationsResource::collection($anime->getAnimeRelations(Anime::MAXIMUM_RELATIONSHIP_LIMIT)),
-                'href' => route('api.anime.relations', $anime, false)
+            'genres' => [
+                'data' => GenreResource::collection($anime->getGenres(Anime::MAXIMUM_RELATED_SHOWS_LIMIT)),
+                'href' => route('api.anime.genres', $anime, false)
             ]
         ];
     }
 
     /**
-     * Returns the cast relationship for the resource.
+     * Returns the related-shows relationship for the resource.
      *
      * @return array
      */
-    protected function getActorCharacterAnimeRelationship()
+    protected function getRelatedShowsRelationship()
     {
         /** @param Anime $anime */
         $anime = $this->resource;
 
         return [
-            'cast' => [
-                'data' => ActorCharacterAnimeResource::collection($anime->getActorCharacterAnime(Anime::MAXIMUM_RELATIONSHIP_LIMIT)),
-                'href' => route('api.anime.cast', $anime, false)
+            'relatedShows' => [
+                'data' => AnimeRelatedShowsResource::collection($anime->getAnimeRelations(Anime::MAXIMUM_RELATED_SHOWS_LIMIT)),
+                'href' => route('api.anime.related-shows', $anime, false)
+            ]
+        ];
+    }
+
+    /**
+     * Returns the seasons relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getSeasonsRelationship() {
+        /** @param Anime $anime */
+        $anime = $this->resource;
+
+        return [
+            'seasons' => [
+                'data' => AnimeSeasonResource::collection($anime->getSeasons(Anime::MAXIMUM_RELATED_SHOWS_LIMIT)),
+                'href' => route('api.anime.seasons', $anime, false)
+            ]
+        ];
+    }
+
+    /**
+     * Returns the studios relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getStudiosRelationship()
+    {
+        /** @param Anime $anime */
+        $anime = $this->resource;
+
+        return [
+            'studios' => [
+                'data' => StudioResource::collection($anime->getStudios(Anime::MAXIMUM_RELATED_SHOWS_LIMIT)),
+                'href' => route('api.anime.studios', $anime, false)
             ]
         ];
     }

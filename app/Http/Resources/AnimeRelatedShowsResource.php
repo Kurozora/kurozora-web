@@ -7,7 +7,7 @@ use App\Enums\AnimeRelationType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AnimeRelationsResource extends JsonResource
+class AnimeRelatedShowsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

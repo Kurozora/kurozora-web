@@ -1273,7 +1273,7 @@
             },
             "explode": false,
             "required": false,
-            "description": "The relations to include in the response. Available relations are:\n- actors\n- characters\n- cast\n- relations\n- seasons"
+            "description": "The relations to include in the response. Available relations are:\n- actors\n- characters\n- cast\n- related-shows\n- seasons"
           }
         ],
         "responses": {
@@ -1373,7 +1373,7 @@
         }
       }
     },
-    "/anime/{animeID}/relations": {
+    "/anime/{animeID}/related-shows": {
       "get": {
         "security": [
           {
@@ -1384,9 +1384,9 @@
         "tags": [
           "anime"
         ],
-        "operationId": "getAnimeRelations",
-        "summary": "Anime all relations information.",
-        "description": "This endpoint will retrieve the relations of an Anime item.",
+        "operationId": "getAnimeRelatedShows",
+        "summary": "Anime related-shows information.",
+        "description": "This endpoint will retrieve the related-shows of an Anime item.",
         "parameters": [
           {
             "in": "path",
@@ -1400,7 +1400,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetAnimeRelationsSuccess"
+            "$ref": "#/components/responses/GetAnimeRelatedShowsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -3260,7 +3260,7 @@
                         ],
                         "href": "/api/v1/anime/1/cast"
                       },
-                      "relations": {
+                      "relatedShows": {
                         "data": [
                           {
                             "show": {
@@ -3355,7 +3355,7 @@
                             }
                           }
                         ],
-                        "href": "/api/v1/anime/1/relations"
+                        "href": "/api/v1/anime/1/related-shows"
                       },
                       "seasons": {
                         "data": [
@@ -3562,8 +3562,8 @@
           }
         }
       },
-      "GetAnimeRelationsSuccess": {
-        "description": "Successful GET Anime Relations JSON response",
+      "getAnimeRelatedShows": {
+        "description": "Successful GET Anime Related Shows JSON response",
         "content": {
           "application/json": {
             "schema": {
