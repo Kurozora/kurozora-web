@@ -6,8 +6,8 @@ use App\Anime;
 use App\AnimeRating;
 use App\Events\AnimeViewed;
 use App\Helpers\JSONResult;
-use App\Http\Requests\RateAnime;
-use App\Http\Requests\SearchAnime;
+use App\Http\Requests\RateAnimeRequest;
+use App\Http\Requests\SearchAnimeRequest;
 use App\Http\Resources\ActorCharacterAnimeResource;
 use App\Http\Resources\ActorResource;
 use App\Http\Resources\AnimeRelatedShowsResource;
@@ -122,13 +122,13 @@ class AnimeController extends Controller
     /**
      * Adds a rating for an Anime item
      *
-     * @param RateAnime $request
+     * @param RateAnimeRequest $request
      * @param Anime $anime
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws Exception
      */
-    public function rateAnime(RateAnime $request, Anime $anime): JsonResponse
+    public function rateAnime(RateAnimeRequest $request, Anime $anime): JsonResponse
     {
         if (!Auth::user()->isTracking($anime))
             throw new AuthorizationException('Please add ' . $anime->title . ' to your library first.');
@@ -172,10 +172,10 @@ class AnimeController extends Controller
     /**
      * Retrieves Anime search results
      *
-     * @param SearchAnime $request
+     * @param SearchAnimeRequest $request
      * @return JsonResponse
      */
-    public function search(SearchAnime $request): JsonResponse
+    public function search(SearchAnimeRequest $request): JsonResponse
     {
         $searchQuery = $request->input('query');
 

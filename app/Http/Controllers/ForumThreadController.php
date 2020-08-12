@@ -8,6 +8,11 @@ use App\ForumReply;
 use App\ForumSectionBan;
 use App\ForumThread;
 use App\Helpers\JSONResult;
+use App\Http\Requests\GetRepliesRequest;
+use App\Http\Requests\LockThreadRequest;
+use App\Http\Requests\PostReplyRequest;
+use App\Http\Requests\SearchThreadRequest;
+use App\Http\Requests\VoteThreadRequest;
 use App\Http\Resources\ForumReplyResource;
 use App\Http\Resources\ForumThreadResource;
 use Illuminate\Http\JsonResponse;
@@ -33,22 +38,13 @@ class ForumThreadController extends Controller
     /**
      * Vote for a thread
      *
-     * @param Request $request
+     * @param VoteThreadRequest $request
      * @param ForumThread $thread
      *
      * @return JsonResponse
      */
-    public function vote(Request $request, ForumThread $thread): JsonResponse
+    public function vote(VoteThreadRequest $request, ForumThread $thread): JsonResponse
     {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'vote' => 'bail|required|numeric|in:-1,1'
-        ]);
-
-        // Check validator
-        if($validator->fails())
-            return JSONResult::error(($validator->errors()->first()));
-
         // Get the user
         $user = Auth::user();
 
@@ -67,11 +63,11 @@ class ForumThreadController extends Controller
     /**
      * Allows the user to submit a reply to a thread
      *
-     * @param Request $request
+     * @param PostReplyRequest $request
      * @param ForumThread $thread
      * @return JsonResponse
      */
-    public function postReply(Request $request, ForumThread $thread): JsonResponse
+    public function postReply(PostReplyRequest $request, ForumThread $thread): JsonResponse
     {
         // Check if the user is banned
         $foundBan = ForumSectionBan::getBanInfo(Auth::id(), $thread->section_id);
@@ -115,23 +111,14 @@ class ForumThreadController extends Controller
     /**
      * Vote for a thread.
      *
-     * @param Request $request
+     * @param GetRepliesRequest $request
      * @param ForumThread $thread
      * @return JsonResponse
      */
-    public function replies(Request $request, ForumThread $thread): JsonResponse
+    public function replies(GetRepliesRequest $request, ForumThread $thread): JsonResponse
     {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'order' => ['bail', 'required', 'in:' . implode(',', ForumOrderType::getValues())]
-        ]);
-
         // Fetch the variables
         $givenOrder = $request->input('order');
-
-        // Check validator
-        if($validator->fails())
-            return JSONResult::error($validator->errors()->first());
 
         // Get the replies
         /** @var ForumReply $replies */
@@ -179,20 +166,11 @@ class ForumThreadController extends Controller
     /**
      * Retrieves ForumThread search results
      *
-     * @param Request $request
+     * @param SearchThreadRequest $request
      * @return JsonResponse
      */
-    public function search(Request $request): JsonResponse
+    public function search(SearchThreadRequest $request): JsonResponse
     {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'query' => 'bail|required|string|min:1'
-        ]);
-
-        // Check validator
-        if($validator->fails())
-            return JSONResult::error($validator->errors()->first());
-
         $searchQuery = $request->input('query');
 
         // Search for the thread
@@ -209,21 +187,12 @@ class ForumThreadController extends Controller
     /**
      * Lock or unlock a thread
      *
-     * @param Request $request
+     * @param LockThreadRequest $request
      * @param ForumThread $thread
      * @return JsonResponse
      */
-    function lock(Request $request, ForumThread $thread): JsonResponse
+    function lock(LockThreadRequest $request, ForumThread $thread): JsonResponse
     {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'lock' => 'bail|required|numeric|min:0|max:1'
-        ]);
-
-        // Check validator
-        if($validator->fails())
-            return JSONResult::error($validator->errors()->first());
-
         // Lock or unlock the thread
         $doLock = (bool) $request->input('lock');
 

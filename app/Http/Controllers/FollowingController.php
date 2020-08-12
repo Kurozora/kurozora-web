@@ -16,11 +16,10 @@ class FollowingController extends Controller
     /**
      * Follows a user.
      *
-     * @param Request $request
      * @param User $user
      * @return JsonResponse
      */
-    function followUser(Request $request, User $user): JsonResponse
+    function followUser(User $user): JsonResponse
     {
         /** @var User $authUser */
         $authUser = Auth::user();

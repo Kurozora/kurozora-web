@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\JSONResult;
 use App\Helpers\KuroAuthToken;
 use App\Http\Requests\ResetPassword;
+use App\Http\Requests\SearchUserRequest;
 use App\Http\Requests\UpdateProfile;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\SessionResource;
@@ -74,6 +75,7 @@ class UserController extends Controller
         $data = $request->validated();
 
         // Try to find the user with this email
+        /** @var User $user */
         $user = User::where('email', $data['email'])->first();
 
         // There is a user with this email
@@ -132,6 +134,7 @@ class UserController extends Controller
     public function confirmEmail($confirmationID)
     {
         // Try to find a user with this confirmation ID
+        /** @var User $foundUser */
         $foundUser = User::where('email_confirmation_id', $confirmationID)->first();
 
         // No user found
@@ -166,6 +169,7 @@ class UserController extends Controller
     public function resetPasswordPage($token)
     {
         // Try to find a reset with this reset token
+        /** @var PasswordReset $foundReset */
         $foundReset = PasswordReset::where('token', $token)->first();
 
         // No reset found
@@ -221,20 +225,11 @@ class UserController extends Controller
     /**
      * Retrieves User search results
      *
-     * @param Request $request
+     * @param SearchUserRequest $request
      * @return JsonResponse
      */
-    public function search(Request $request): JsonResponse
+    public function search(SearchUserRequest $request): JsonResponse
     {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'query' => 'bail|required|string|min:1'
-        ]);
-
-        // Check validator
-        if($validator->fails())
-            return JSONResult::error($validator->errors()->first());
-
         $searchQuery = $request->input('query');
 
         // Search for the users

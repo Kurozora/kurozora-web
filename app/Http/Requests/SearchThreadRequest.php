@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\AnimeRating;
 use Illuminate\Foundation\Http\FormRequest;
 
-class RateAnime extends FormRequest
+class SearchThreadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +24,7 @@ class RateAnime extends FormRequest
     public function rules(): array
     {
         return [
-            'rating' => ['bail', 'required', 'numeric', 'between:' . AnimeRating::MIN_RATING_VALUE . ',' . AnimeRating::MAX_RATING_VALUE]
+            'query' => ['bail', 'required', 'string', 'min:1']
         ];
     }
 }
