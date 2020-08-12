@@ -2,6 +2,9 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
 
 class Studio extends KModel
@@ -25,9 +28,9 @@ class Studio extends KModel
     /**
      * Returns the anime that belongs to the studio
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function anime_studio()
+    public function anime_studio(): HasMany
     {
         return $this->hasMany(AnimeStudio::class);
     }
@@ -35,25 +38,27 @@ class Studio extends KModel
     /**
      * Returns the anime that belongs to the studio
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     * @return BelongsToMany
      */
-    public function anime()
+    public function anime(): BelongsToMany
     {
-        return $this->hasManyThrough(Anime::class, AnimeStudio::class, 'studio_id', 'id', 'id', 'anime_id');
+        return $this->belongsToMany(Anime::class);
     }
 
     /**
      * Retrieves the anime for a Studio item in an array
      *
-     * @return array
+     * @param array $where
+     * @return Collection
      */
-    public function getAnime() {
+    public function getAnime($where = []): Collection
+    {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'studios', 'id' => $this->id]);
+        $cacheKey = self::cacheKey(['name' => 'studios', 'id' => $this->id, 'where' => $where]);
 
         // Retrieve or save cached result
-        $animeInfo = Cache::remember($cacheKey, self::CACHE_KEY_ANIME_SECONDS, function () {
-            return $this->anime()->get();
+        $animeInfo = Cache::remember($cacheKey, self::CACHE_KEY_ANIME_SECONDS, function () use ($where) {
+            return $this->anime()->where($where)->get();
         });
 
         return $animeInfo;

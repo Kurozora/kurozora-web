@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Anime;
 use App\Studio;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -27,8 +28,8 @@ class StudioResource extends JsonResource
             $relationships = [];
             foreach ($includes as $include) {
                 switch ($include) {
-                    case 'anime':
-                        $relationships = array_merge($relationships, $this->getAnimeRelationship());
+                    case 'shows':
+                        $relationships = array_merge($relationships, $this->getAnimeRelationship($request->input('anime')));
                         break;
                 }
             }
@@ -42,16 +43,21 @@ class StudioResource extends JsonResource
     /**
      * Returns the anime relationship for the resource.
      *
+     * @param Anime|null $excludingAnime
      * @return array
      */
-    protected function getAnimeRelationship(): array
+    protected function getAnimeRelationship(Anime $excludingAnime = null): array
     {
         /** @param Studio $studio */
         $studio = $this->resource;
 
+        $whereRules = [];
+        if($excludingAnime)
+            array_push($whereRules, ['animes.id', '!=', $excludingAnime->id]);
+
         return [
             'shows' => [
-                'data' => AnimeResourceBasic::collection($studio->getAnime()),
+                'data' => AnimeResourceBasic::collection($studio->getAnime($whereRules)),
                 'href' => route('api.studios.anime', $studio, false)
             ]
         ];

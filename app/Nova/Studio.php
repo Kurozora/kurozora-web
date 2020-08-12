@@ -4,12 +4,11 @@ namespace App\Nova;
 
 use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Date;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
-use League\CommonMark\Inline\Renderer\ImageRenderer;
 
 class Studio extends Resource
 {
@@ -76,7 +75,7 @@ class Studio extends Resource
                 ->help('The URL to the official website of the studio.')
                 ->hideFromIndex(),
 
-            HasMany::make('Anime Studio'),
+            BelongsToMany::make('Anime'),
         ];
     }
 

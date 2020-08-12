@@ -46,6 +46,8 @@ class AnimeResource extends JsonResource
                         $relationships = array_merge($relationships, $this->getSeasonsRelationship());
                         break;
                     case 'studios':
+                        $request->merge(['include' => 'shows']);
+                        $request->merge(['anime' => $anime]);
                         $relationships = array_merge($relationships, $this->getStudiosRelationship());
                         break;
                 }

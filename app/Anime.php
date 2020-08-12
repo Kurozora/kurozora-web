@@ -101,11 +101,11 @@ class Anime extends KModel
     /**
      * Get the Anime's studios
      *
-     * @return HasMany
+     * @return BelongsToMany
      */
     public function studios()
     {
-        return $this->hasMany(AnimeStudio::class);
+        return $this->belongsToMany(Studio::class);
     }
 
     /**
