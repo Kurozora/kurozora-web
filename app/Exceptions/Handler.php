@@ -15,10 +15,14 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Swift_TransportException;
+use Symfony\Component\Console\Exception\CommandNotFoundException;
+use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -30,13 +34,13 @@ class Handler extends ExceptionHandler
      */
     protected $dontReport = [
         // Page not found exception
-        \Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class,
+        NotFoundHttpException::class,
         // PHP artisan command not found exception
-        \Symfony\Component\Console\Exception\CommandNotFoundException::class,
+        CommandNotFoundException::class,
         // Access denied exception
-        \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException::class,
+        AccessDeniedHttpException::class,
         // Missing arguments exception
-        \Symfony\Component\Console\Exception\RuntimeException::class,
+        RuntimeException::class,
         // Swift Mailer too many mails exception
         Swift_TransportException::class
     ];
@@ -75,77 +79,72 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception): Response
     {
-        // Custom render for authentication
-        if($exception instanceof AuthenticationException) {
-            $apiError = new APIError();
-            $apiError->id = 40001;
-            $apiError->status = 401;
-            $apiError->title = 'Unauthorized';
-            $apiError->detail = $exception->getMessage();
-            return JSONResult::error([$apiError]);
-        }
-        // Custom render for unauthorized
-        else if($exception instanceof AuthorizationException) {
-            $apiError = new APIError();
-            $apiError->id = 40003;
-            $apiError->status = 403;
-            $apiError->title = 'Forbidden';
-            $apiError->detail = $exception->getMessage();
-            return JSONResult::error([$apiError]);
-        }
-        // Custom render for model not found
-        else if($exception instanceof ModelNotFoundException) {
-            $apiError = new APIError();
-            $apiError->id = 40004;
-            $apiError->status = 404;
-            $apiError->title = 'Not Found';
-            $apiError->detail = 'The requested resource doesn’t exist.';
-            return JSONResult::error([$apiError]);
-        }
-        // Custom render for conflict
-        else if($exception instanceof ConflictHttpException) {
-            $apiError = new APIError();
-            $apiError->id = 40009;
-            $apiError->status = 409;
-            $apiError->title = 'Conflict';
-            $apiError->detail = $exception->getMessage();
-            return JSONResult::error([$apiError]);
-        }
-        // Custom render for too many request
-        else if($exception instanceof TooManyRequestsHttpException) {
-            $apiError = new APIError();
-            $apiError->id = 40029;
-            $apiError->status = 429;
-            $apiError->title = 'Too Many Requests';
-            $apiError->detail = $exception->getMessage();
-            return JSONResult::error([$apiError]);
-        }
-        // Custom render for not implemented
-        else if($exception instanceof NotImplementedException) {
-            $apiError = new APIError();
-            $apiError->id = 50001;
-            $apiError->status = 501;
-            $apiError->title = 'Not Implemented';
-            $apiError->detail = $exception->getMessage();
-            return JSONResult::error([$apiError]);
-        }
-        // Custom render for service unavailable
-        else if($exception instanceof ServiceUnavailableHttpException) {
-            $apiError = new APIError();
-            $apiError->id = 50003;
-            $apiError->status = 503;
-            $apiError->title = 'Service Unavailable';
-            $apiError->detail = $exception->getMessage();
-            return JSONResult::error([$apiError]);
-        }
-        // Custom render for maintenance mode
-        else if($exception instanceof MaintenanceModeException) {
-            $apiError = new APIError();
-            $apiError->id = 50003;
-            $apiError->status = 503;
-            $apiError->title = 'Service Unavailable';
-            $apiError->detail = 'The service is currently unavailable to process requests.';
-            return JSONResult::error([$apiError]);
+        if(strpos($request->path(), 'api') === 0) {
+            // Custom render for authentication
+            if ($exception instanceof AuthenticationException) {
+                $apiError = new APIError();
+                $apiError->id = 40001;
+                $apiError->status = 401;
+                $apiError->title = 'Unauthorized';
+                $apiError->detail = $exception->getMessage();
+                return JSONResult::error([$apiError]);
+            } // Custom render for unauthorized
+            else if ($exception instanceof AuthorizationException) {
+                $apiError = new APIError();
+                $apiError->id = 40003;
+                $apiError->status = 403;
+                $apiError->title = 'Forbidden';
+                $apiError->detail = $exception->getMessage();
+                return JSONResult::error([$apiError]);
+            } // Custom render for model not found
+            else if ($exception instanceof ModelNotFoundException) {
+                $apiError = new APIError();
+                $apiError->id = 40004;
+                $apiError->status = 404;
+                $apiError->title = 'Not Found';
+                $apiError->detail = 'The requested resource doesn’t exist.';
+                return JSONResult::error([$apiError]);
+            } // Custom render for conflict
+            else if ($exception instanceof ConflictHttpException) {
+                $apiError = new APIError();
+                $apiError->id = 40009;
+                $apiError->status = 409;
+                $apiError->title = 'Conflict';
+                $apiError->detail = $exception->getMessage();
+                return JSONResult::error([$apiError]);
+            } // Custom render for too many request
+            else if ($exception instanceof TooManyRequestsHttpException) {
+                $apiError = new APIError();
+                $apiError->id = 40029;
+                $apiError->status = 429;
+                $apiError->title = 'Too Many Requests';
+                $apiError->detail = $exception->getMessage();
+                return JSONResult::error([$apiError]);
+            } // Custom render for not implemented
+            else if ($exception instanceof NotImplementedException) {
+                $apiError = new APIError();
+                $apiError->id = 50001;
+                $apiError->status = 501;
+                $apiError->title = 'Not Implemented';
+                $apiError->detail = $exception->getMessage();
+                return JSONResult::error([$apiError]);
+            } // Custom render for service unavailable
+            else if ($exception instanceof ServiceUnavailableHttpException) {
+                $apiError = new APIError();
+                $apiError->id = 50003;
+                $apiError->status = 503;
+                $apiError->title = 'Service Unavailable';
+                $apiError->detail = $exception->getMessage();
+                return JSONResult::error([$apiError]);
+            } // Custom render for maintenance mode
+            else if ($exception instanceof MaintenanceModeException) {
+                $apiError = new APIError();
+                $apiError->id = 50003;
+                $apiError->status = 503;
+                $apiError->title = 'Service Unavailable';
+                $apiError->detail = 'The service is currently unavailable to process requests.';
+                return JSONResult::error([$apiError]);
+            }
         }
 
         return parent::render($request, $exception);
