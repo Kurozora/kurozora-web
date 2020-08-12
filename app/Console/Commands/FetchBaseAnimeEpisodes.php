@@ -106,7 +106,7 @@ class FetchBaseAnimeEpisodes extends Command
 
                 // Insert the new episode
                 $insertData = [
-                    'name'          => $episodeResult->name,
+                    'title'         => $episodeResult->name,
                     'season_id'     => $season->id,
                     'number'        => $episodeResult->number,
                     'overview'      => $episodeResult->synopsis,
