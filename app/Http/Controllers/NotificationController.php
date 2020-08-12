@@ -10,6 +10,7 @@ use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Notifications\DatabaseNotification;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class NotificationController extends Controller
 {
@@ -47,6 +48,7 @@ class NotificationController extends Controller
      * @param UpdateUserNotifications $request
      * @return JsonResponse
      * @throws AuthorizationException
+     * @throws ConflictHttpException
      */
     public function update(UpdateUserNotifications $request): JsonResponse
     {
@@ -67,12 +69,12 @@ class NotificationController extends Controller
 
             // Make sure there are items in the array
             if(!count($notificationIDs))
-                return JSONResult::error('No notifications were specified.');
+                throw new ConflictHttpException('No notifications were specified.');
 
             // Make sure the notifications belong to the currently authenticated user
             foreach ($notificationIDs as $notificationID) {
                 if (!$user->notifications->contains($notificationID)) {
-                    throw new AuthorizationException();
+                    throw new AuthorizationException('The request wasn’t accepted due to an issue with the notifications or because it’s using incorrect authentication.');
                 }
             }
 

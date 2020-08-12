@@ -11,9 +11,10 @@ use App\Http\Requests\GetThreadsRequest;
 use App\Http\Requests\PostThread;
 use App\Http\Resources\ForumSectionResource;
 use App\Http\Resources\ForumThreadResource;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class ForumSectionController extends Controller
 {
@@ -104,6 +105,8 @@ class ForumSectionController extends Controller
      * @param PostThread $request
      * @param ForumSection $section
      * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws TooManyRequestsHttpException
      */
     public function postThread(PostThread $request, ForumSection $section): JsonResponse
     {
@@ -113,11 +116,11 @@ class ForumSectionController extends Controller
         $foundBan = ForumSectionBan::getBanInfo(Auth::id(), $section->id);
 
         if($foundBan !== null)
-            return JSONResult::error($foundBan['message']);
+            throw new AuthorizationException($foundBan['message']);
 
         // Check if the user has already posted within the cooldown period
         if(ForumThread::testPostCooldown(Auth::id()))
-            return JSONResult::error('You can only post a thread once every minute.');
+            throw new TooManyRequestsHttpException(60, 'You can only post a thread once every minute.');
 
         // Create the thread
         $newThread = ForumThread::create([

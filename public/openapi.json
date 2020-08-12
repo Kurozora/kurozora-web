@@ -206,17 +206,17 @@
                     "description": "The platform that was used to create the session",
                     "example": "iOS"
                   },
-                  "systemVersion": {
+                  "platform_version": {
                     "type": "string",
                     "description": "The platform version that was used to create the session",
                     "example": "13.4"
                   },
-                  "deviceVendor": {
+                  "device_vendor": {
                     "type": "string",
                     "description": "The device vendor that was used to create the session",
                     "example": "Apple"
                   },
-                  "deviceModel": {
+                  "device_model": {
                     "type": "string",
                     "description": "The device model that was used to create the session",
                     "example": "iPhone 11 Pro Max"
@@ -226,9 +226,9 @@
                   "email",
                   "siwa_id",
                   "platform",
-                  "systemVersion",
-                  "deviceVendor",
-                  "deviceModel"
+                  "platform_version",
+                  "device_vendor",
+                  "device_model"
                 ]
               }
             }
@@ -267,17 +267,17 @@
                     "description": "The platform that was used to create the session",
                     "example": "iOS"
                   },
-                  "systemVersion": {
+                  "platform_version": {
                     "type": "string",
                     "description": "The platform version that was used to create the session",
                     "example": "13.4"
                   },
-                  "deviceVendor": {
+                  "device_vendor": {
                     "type": "string",
                     "description": "The device vendor that was used to create the session",
                     "example": "Apple"
                   },
-                  "deviceModel": {
+                  "device_model": {
                     "type": "string",
                     "description": "The device model that was used to create the session",
                     "example": "iPhone 11 Pro Max"
@@ -286,9 +286,9 @@
                 "required": [
                   "identity_token",
                   "platform",
-                  "systemVersion",
-                  "deviceVendor",
-                  "deviceModel"
+                  "platform_version",
+                  "device_vendor",
+                  "device_model"
                 ]
               }
             }
@@ -457,7 +457,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "animeID": {
+                  "anime_id": {
                     "type": "integer",
                     "description": "The ID of the Anime to add."
                   },
@@ -468,7 +468,7 @@
                   }
                 },
                 "required": [
-                  "animeID",
+                  "anime_id",
                   "status"
                 ]
               }
@@ -516,13 +516,13 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "animeID": {
+                  "anime_id": {
                     "type": "integer",
                     "description": "The ID of the Anime to remove."
                   }
                 },
                 "required": [
-                  "animeID"
+                  "anime_id"
                 ]
               }
             }
@@ -705,17 +705,17 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "animeID": {
+                  "anime_id": {
                     "type": "integer",
                     "description": "The ID of the Anime to add."
                   },
-                  "isFavorite": {
+                  "is_favorite": {
                     "$ref": "#/components/schemas/FavoriteStatus"
                   }
                 },
                 "required": [
-                  "animeID",
-                  "isFavorite"
+                  "anime_id",
+                  "is_favorite"
                 ]
               }
             }
@@ -793,7 +793,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "animeID": {
+                  "anime_id": {
                     "type": "integer",
                     "description": "The ID of the Anime to add or remove."
                   },
@@ -802,7 +802,7 @@
                   }
                 },
                 "required": [
-                  "animeID",
+                  "anime_id",
                   "is_reminded"
                 ]
               }
@@ -1071,23 +1071,6 @@
             "description": "ID of the user."
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "follow": {
-                    "$ref": "#/components/schemas/FollowStatus"
-                  }
-                },
-                "required": [
-                  "follow"
-                ]
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSONSuccess"
@@ -1459,7 +1442,7 @@
                 "properties": {
                   "rating": {
                     "type": "number",
-                    "format": "float",
+                    "format": "double",
                     "description": "The rating to leave.",
                     "example": 3.5,
                     "minimum": 1,
@@ -2421,17 +2404,17 @@
                     "description": "The platform that was used to create the session",
                     "example": "iOS"
                   },
-                  "systemVersion": {
+                  "platform_version": {
                     "type": "string",
                     "description": "The platform version that was used to create the session",
                     "example": "13.4"
                   },
-                  "deviceVendor": {
+                  "device_vendor": {
                     "type": "string",
                     "description": "The device vendor that was used to create the session",
                     "example": "Apple"
                   },
-                  "deviceModel": {
+                  "device_model": {
                     "type": "string",
                     "description": "The device model that was used to create the session",
                     "example": "iPhone 11 Pro Max"
@@ -2441,9 +2424,9 @@
                   "email",
                   "password",
                   "platform",
-                  "systemVersion",
-                  "deviceVendor",
-                  "deviceModel"
+                  "platform_version",
+                  "device_vendor",
+                  "device_model"
                 ]
               }
             }
