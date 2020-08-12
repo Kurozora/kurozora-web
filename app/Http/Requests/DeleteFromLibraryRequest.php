@@ -3,11 +3,11 @@
 namespace App\Http\Requests;
 
 use App\Anime;
-use App\Rules\ValidateLibraryStatus;
+use App\Rules\ValidateAnimeIDIsTracked;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddToLibrary extends FormRequest
+class DeleteFromLibraryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -16,11 +16,11 @@ class AddToLibrary extends FormRequest
      */
     public function authorize(): bool
     {
-        // Check if the user can add to this library
+        // Check if the user can delete from this library
         /** @var User $user */
         $user = $this->route('user');
 
-        return $this->user()->can('add_to_library', $user);
+        return $this->user()->can('del_from_library', $user);
     }
 
     /**
@@ -31,8 +31,7 @@ class AddToLibrary extends FormRequest
     public function rules(): array
     {
         return [
-            'anime_id'  => ['bail', 'required', 'integer', 'exists:' . Anime::TABLE_NAME . ',id'],
-            'status'    => ['bail', 'required', new ValidateLibraryStatus],
+            'anime_id'  => ['bail', 'required', 'integer', 'exists:' . Anime::TABLE_NAME . ',id', new ValidateAnimeIDIsTracked],
         ];
     }
 }

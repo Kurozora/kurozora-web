@@ -5,16 +5,16 @@ namespace App\Http\Controllers;
 use App\Anime;
 use App\Enums\UserLibraryStatus;
 use App\Helpers\JSONResult;
-use App\Http\Requests\AddToLibrary;
-use App\Http\Requests\DeleteFromLibrary;
-use App\Http\Requests\GetLibrary;
-use App\Http\Requests\MALImport;
+use App\Http\Requests\AddToLibraryRequest;
+use App\Http\Requests\DeleteFromLibraryRequest;
+use App\Http\Requests\GetLibraryRequest;
+use App\Http\Requests\MALImportRequest;
+use App\Http\Requests\SearchLibraryRequest;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Jobs\ProcessMALImport;
 use App\User;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
@@ -23,11 +23,11 @@ class LibraryController extends Controller
     /**
      * Gets the user's library depending on the status
      *
-     * @param GetLibrary $request
+     * @param GetLibraryRequest $request
      * @param User $user
      * @return JsonResponse
      */
-    public function getLibrary(GetLibrary $request, User $user): JsonResponse
+    public function getLibrary(GetLibraryRequest $request, User $user): JsonResponse
     {
         $data = $request->validated();
 
@@ -48,11 +48,11 @@ class LibraryController extends Controller
     /**
      * Adds an Anime to the user's library
      *
-     * @param AddToLibrary $request
+     * @param AddToLibraryRequest $request
      * @param User $user
      * @return JsonResponse
      */
-    public function addLibrary(AddToLibrary $request, User $user): JsonResponse
+    public function addLibrary(AddToLibraryRequest $request, User $user): JsonResponse
     {
         $data = $request->validated();
 
@@ -76,11 +76,11 @@ class LibraryController extends Controller
     /**
      * Removes an Anime from the user's library
      *
-     * @param DeleteFromLibrary $request
+     * @param DeleteFromLibraryRequest $request
      * @param User $user
      * @return JsonResponse
      */
-    public function delLibrary(DeleteFromLibrary $request, User $user): JsonResponse
+    public function delLibrary(DeleteFromLibraryRequest $request, User $user): JsonResponse
     {
         $data = $request->validated();
 
@@ -98,12 +98,12 @@ class LibraryController extends Controller
     /**
      * Allows the user to upload a MAL export file to be imported.
      *
-     * @param MALImport $request
+     * @param MALImportRequest $request
      * @param User $user
      * @return JsonResponse
      * @throws FileNotFoundException
      */
-    function malImport(MALImport $request, User $user): JsonResponse
+    function malImport(MALImportRequest $request, User $user): JsonResponse
     {
         $data = $request->validated();
 
@@ -128,21 +128,12 @@ class LibraryController extends Controller
     /**
      * Retrieves user library search results
      *
-     * @param Request $request
+     * @param SearchLibraryRequest $request
      * @param User $user
      * @return JsonResponse
      */
-    public function search(Request $request, User $user): JsonResponse
+    public function search(SearchLibraryRequest $request, User $user): JsonResponse
     {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'query' => 'bail|required|string|min:1'
-        ]);
-
-        // Check validator
-        if($validator->fails())
-            return JSONResult::error($validator->errors()->first());
-
         $searchQuery = $request->input('query');
 
         // Search for the anime
