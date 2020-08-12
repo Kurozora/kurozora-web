@@ -7,6 +7,7 @@ use App\Helpers\KuroAuthToken;
 use App\Http\Middleware\CheckKurozoraUserAuthentication;
 use App\Session;
 use Carbon\Carbon;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -27,10 +28,10 @@ class CheckKurozoraUserAuthenticationTest extends TestCase
     /** @test */
     function routes_that_require_authentication_cannot_be_accessed_without_being_authenticated()
     {
-        $response = $this->get('/auth-required');
-        $json = $response->json();
+        $this->expectException(AuthorizationException::class);
 
-        $this->assertSame(false, $json['success']);
+        $response = $this->get('/auth-required');
+        $response->json();
     }
 
     /** @test */
@@ -79,7 +80,7 @@ class CheckKurozoraUserAuthenticationTest extends TestCase
         // Perform request
         $response = $this->get('/auth-required');
 
-        $response->assertStatus(401);
+        $response->assertStatus(403);
     }
 
     /** @test */
