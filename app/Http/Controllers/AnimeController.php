@@ -6,6 +6,8 @@ use App\Anime;
 use App\AnimeRating;
 use App\Events\AnimeViewed;
 use App\Helpers\JSONResult;
+use App\Http\Requests\RateAnime;
+use App\Http\Requests\SearchAnime;
 use App\Http\Resources\ActorCharacterAnimeResource;
 use App\Http\Resources\ActorResource;
 use App\Http\Resources\AnimeRelatedShowsResource;
@@ -14,10 +16,9 @@ use App\Http\Resources\AnimeResourceBasic;
 use App\Http\Resources\AnimeSeasonResource;
 use App\Http\Resources\CharacterResource;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Http\Request;
 
 class AnimeController extends Controller
 {
@@ -121,29 +122,22 @@ class AnimeController extends Controller
     /**
      * Adds a rating for an Anime item
      *
-     * @param Request $request
-     * @param Anime   $anime
+     * @param RateAnime $request
+     * @param Anime $anime
      * @return JsonResponse
+     * @throws AuthorizationException
      * @throws Exception
      */
-    public function rateAnime(Request $request, Anime $anime): JsonResponse
+    public function rateAnime(RateAnime $request, Anime $anime): JsonResponse
     {
         if (!Auth::user()->isTracking($anime))
-            return JSONResult::error('Please add ' . $anime->title . ' to your library first.');
-
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'rating' => 'bail|required|numeric|between:' . AnimeRating::MIN_RATING_VALUE . ',' . AnimeRating::MAX_RATING_VALUE
-        ]);
-
-        // Check validator
-        if ($validator->fails())
-            return JSONResult::error($validator->errors()->first());
+            throw new AuthorizationException('Please add ' . $anime->title . ' to your library first.');
 
         // Fetch the variables
         $givenRating = $request->input('rating');
 
         // Try to modify the rating if it already exists
+        /** @var AnimeRating $foundRating */
         $foundRating = AnimeRating::where([
             ['anime_id', '=', $anime->id],
             ['user_id', '=', Auth::id()]
@@ -178,20 +172,11 @@ class AnimeController extends Controller
     /**
      * Retrieves Anime search results
      *
-     * @param Request $request
+     * @param SearchAnime $request
      * @return JsonResponse
      */
-    public function search(Request $request): JsonResponse
+    public function search(SearchAnime $request): JsonResponse
     {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'query' => 'bail|required|string|min:1'
-        ]);
-
-        // Check validator
-        if($validator->fails())
-            return JSONResult::error($validator->errors()->first());
-
         $searchQuery = $request->input('query');
 
         // Search for the Anime
