@@ -7,12 +7,13 @@ use App\Helpers\JSONResult;
 use App\Helpers\KuroAuthToken;
 use App\Http\Requests\SIWALoginRequest;
 use App\Http\Requests\SIWARegistration;
-use App\Http\Resources\SessionResource;
 use App\Http\Resources\UserResource;
 use App\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Laravel\Nova\Exceptions\AuthenticationException;
 use musa11971\JWTDecoder\JWTDecoder;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 class SignInWithAppleController extends Controller
 {
@@ -54,6 +55,8 @@ class SignInWithAppleController extends Controller
      *
      * @param SIWALoginRequest $request
      * @return JsonResponse
+     * @throws AuthenticationException
+     * @throws ServiceUnavailableHttpException
      */
     function login(SIWALoginRequest $request): JsonResponse
     {
@@ -64,14 +67,13 @@ class SignInWithAppleController extends Controller
 
         // If there are no keys, show an error
         if(!count($keys))
-            return JSONResult::error('Sorry, "Sign in with Apple" is not available at this moment!', [
-                'error_code' => 340056
-            ]);
+            throw new ServiceUnavailableHttpException('Sorry, "Sign in with Apple" is not available at this moment!');
 
         // Attempt to decode the JWT
         $payload = null;
 
-        try {
+        try
+        {
             $payload = JWTDecoder::token($data['identity_token'])
                 ->withKeys($keys)
                 ->ignoreExpiry()
@@ -79,19 +81,12 @@ class SignInWithAppleController extends Controller
         }
         catch(Exception $e)
         {
-            return JSONResult::error('Your credentials are invalid.', [
-                'error_code' => 220028
-            ]);
+            throw new AuthenticationException('Your credentials are incorrect.');
         }
 
         // Find the user
         /** @var User $user */
-        $user = User::findSIWA($payload->get('sub'), $payload->get('email'))->first();
-
-        if(!$user)
-            return JSONResult::error('Your account could not be located in the database.', [
-                'error_code' => 273782
-            ]);
+        $user = User::findSIWA($payload->get('sub'), $payload->get('email'))->firstOrFail();
 
         // Create a session for the user
         $session = $user->createSession([

@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use App\APIError;
+use App\Http\Resources\JSONErrorResource;
 use App\Providers\AppServiceProvider;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -13,18 +15,20 @@ class JSONResult
     /**
      * Returns an error response to the client.
      *
-     * @param string $message
-     * @param array $info
+     * @param APIError[] $apiError
      * @return JsonResponse
      */
-    static function error($message = 'Something went wrong with your request.', $info = [])
+    static function error(array $apiError)
     {
-        $endResponse = array_merge(self::getDefaultResponseArray(false), [
-            'error_message' => $message,
-            'error_code'    => (isset($info['error_code'])) ? $info['error_code'] : null
+        $endResponse = array_merge(self::getDefaultResponseArray(), [
+            'errors' => JSONErrorResource::collection($apiError)
         ]);
 
-        return Response::json($endResponse, (isset($info['status_code'])) ? $info['status_code'] : 400);
+        $statusCode = null;
+        if (count($apiError) == 1)
+            $statusCode = $apiError[0]->status;
+
+        return Response::json($endResponse, $statusCode ?? 400);
     }
 
     /**

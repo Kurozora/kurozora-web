@@ -15,10 +15,11 @@ use App\Http\Requests\SearchThreadRequest;
 use App\Http\Requests\VoteThreadRequest;
 use App\Http\Resources\ForumReplyResource;
 use App\Http\Resources\ForumThreadResource;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class ForumThreadController extends Controller
 {
@@ -66,6 +67,9 @@ class ForumThreadController extends Controller
      * @param PostReplyRequest $request
      * @param ForumThread $thread
      * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws ConflictHttpException
+     * @throws TooManyRequestsHttpException
      */
     public function postReply(PostReplyRequest $request, ForumThread $thread): JsonResponse
     {
@@ -73,27 +77,18 @@ class ForumThreadController extends Controller
         $foundBan = ForumSectionBan::getBanInfo(Auth::id(), $thread->section_id);
 
         if($foundBan !== null)
-            return JSONResult::error($foundBan['message']);
-
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'content' => 'bail|required|min:1'
-        ]);
-
-        // Check validator
-        if($validator->fails())
-            return JSONResult::error($validator->errors()->first());
+            throw new AuthorizationException($foundBan['message']);
 
         // Get variables
         $givenContent = $request->input('content');
 
         // Check if the thread is not locked
         if($thread->locked)
-            return JSONResult::error('You cannot post in this thread.');
+            throw new ConflictHttpException('You are not allowed to pos in a locked thread.');
 
         // Check if the user has already posted within the cooldown period
         if(ForumReply::testPostCooldown(Auth::id()))
-            return JSONResult::error('You can only post a reply once every ' . ForumReply::COOLDOWN_POST_REPLY . ' seconds.');
+            throw new TooManyRequestsHttpException(ForumReply::COOLDOWN_POST_REPLY,'You can only post a reply once every ' . ForumReply::COOLDOWN_POST_REPLY . ' seconds.');
 
         // Create the reply
         $newReply = ForumReply::create([

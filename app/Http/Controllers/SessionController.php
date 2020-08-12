@@ -13,6 +13,8 @@ use App\Session;
 use App\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Laravel\Nova\Exceptions\AuthenticationException;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class SessionController extends Controller
 {
@@ -21,6 +23,8 @@ class SessionController extends Controller
      *
      * @param CreateSessionRequest $request
      * @return JsonResponse
+     * @throws AuthenticationException
+     * @throws TooManyRequestsHttpException
      */
     public function create(CreateSessionRequest $request): JsonResponse
     {
@@ -28,7 +32,7 @@ class SessionController extends Controller
 
         // Check if the request IP is not banned from logging in
         if(!LoginAttempt::isIPAllowedToLogin($request->ip()))
-            return JSONResult::error('Oops. You have failed to login too many times. Please grab yourself a snack and try again in a bit.');
+            throw new TooManyRequestsHttpException(300, 'You have failed to login too many times. Please grab yourself a snack and try again in a bit.');
 
         // Find the user
         /** @var User $user */
@@ -39,13 +43,13 @@ class SessionController extends Controller
             // Register the login attempt
             LoginAttempt::registerFailedLoginAttempt($request->ip());
 
-            // Show error message
-            return JSONResult::error('The entered password does not match.');
+            // Throw authorization error message
+            throw new AuthenticationException('Your Kurozora ID or password was incorrect.');
         }
 
         // Check if email is confirmed
         if(!$user->hasConfirmedEmail())
-            return JSONResult::error('You have not confirmed your email address yet. Please check your email inbox or spam folder.');
+            throw new AuthenticationException('You have not confirmed your email address yet. Please check your email inbox or spam folder.');
 
         // Create a new session
         $session = $user->createSession([

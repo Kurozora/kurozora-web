@@ -13,10 +13,11 @@ use App\Http\Requests\SearchLibraryRequest;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Jobs\ProcessMALImport;
 use App\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class LibraryController extends Controller
 {
@@ -79,6 +80,7 @@ class LibraryController extends Controller
      * @param DeleteFromLibraryRequest $request
      * @param User $user
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function delLibrary(DeleteFromLibraryRequest $request, User $user): JsonResponse
     {
@@ -92,7 +94,7 @@ class LibraryController extends Controller
         }
 
         // The item could not be found
-        return JSONResult::error('This item is not in your library.');
+        throw new AuthorizationException('This item is not in your library.');
     }
 
     /**
@@ -102,13 +104,17 @@ class LibraryController extends Controller
      * @param User $user
      * @return JsonResponse
      * @throws FileNotFoundException
+     * @throws TooManyRequestsHttpException
      */
     function malImport(MALImportRequest $request, User $user): JsonResponse
     {
         $data = $request->validated();
 
-        if(!$user->canDoMALImport())
-            return JSONResult::error('Oops! You can only perform a MAL import every ' . config('mal-import.cooldown_in_days') . ' day(s).', 491812);
+        if(!$user->canDoMALImport()) {
+            $cooldownDays = config('mal-import.cooldown_in_days');
+
+            throw new TooManyRequestsHttpException($cooldownDays * 24 * 60 * 60, 'You can only perform a MAL import every ' . $cooldownDays . ' day(s).');
+        }
 
         // Read XML file
         $xmlContent = File::get($data['file']->getRealPath());
