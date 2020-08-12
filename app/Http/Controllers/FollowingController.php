@@ -10,7 +10,6 @@ use App\UserFollow;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
 class FollowingController extends Controller
 {
@@ -23,45 +22,28 @@ class FollowingController extends Controller
      */
     function followUser(Request $request, User $user): JsonResponse
     {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'follow' => 'bail|required|integer|min:0|max:1'
-        ]);
-
-        // Check validator
-        if($validator->fails())
-            return JSONResult::error($validator->errors()->first());
-
         /** @var User $authUser */
         $authUser = Auth::user();
 
-        $follow = (bool) $request->input('follow');
-
         $isAlreadyFollowing = $user->followers()->where('user_id', $authUser->id)->exists();
 
-        // Follow the user
-        if($follow) {
-            // Already following this user
-            if($isAlreadyFollowing)
-                return JSONResult::error('You are already following this user.');
-
+        if($isAlreadyFollowing) {
+            // Delete follow
+            $user->followers()->detach($authUser);
+        } else {
             // Follow the user
             $user->followers()->attach($authUser);
 
+            // Send notification
             $user->notify(new NewFollower($authUser));
-        }
-        // Unfollow the user
-        else {
-            // Not following this user
-            if(!$isAlreadyFollowing)
-                return JSONResult::error('You are not following this user.');
-
-            // Delete follow
-            $user->followers()->detach($authUser);
         }
 
         // Successful response
-        return JSONResult::success();
+        return JSONResult::success([
+            'data' => [
+                'isFollowing' => !$isAlreadyFollowing
+            ]
+        ]);
     }
 
     /**
