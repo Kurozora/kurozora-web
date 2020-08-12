@@ -37,7 +37,7 @@ class JSONResult
     {
         if(!is_array($data)) $data = [$data];
 
-        $endResponse = array_merge(self::getDefaultResponseArray(true), $data);
+        $endResponse = array_merge(self::getDefaultResponseArray(), $data);
 
         return Response::json($endResponse, 200);
     }
@@ -45,18 +45,16 @@ class JSONResult
     /**
      * Returns the default array that will be included in every JSON response.
      *
-     * @param $isSuccess
      * @return array
      */
-    private static function getDefaultResponseArray($isSuccess)
+    private static function getDefaultResponseArray()
     {
         return [
-            'success'       => (bool) $isSuccess,
-            'meta'          => [
-                'version'                   => Config::get('app.version'),
-                'queryCount'               => (int) Config::get(AppServiceProvider::$queryCountConfigKey),
-                'isUserAuthenticated'     => Auth::check(),
-                'authenticatedUserID'     => Auth::id()
+            'meta' => [
+                'version'               => Config::get('app.version'),
+                'queryCount'            => (int) Config::get(AppServiceProvider::$queryCountConfigKey),
+                'isUserAuthenticated'   => Auth::check(),
+                'authenticatedUserID'   => Auth::id()
             ]
         ];
     }

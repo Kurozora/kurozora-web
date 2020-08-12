@@ -32,4 +32,6 @@ Route::prefix('/v1')
         require 'API/Forum-Replies.php';
         require 'API/Studios.php';
         require 'API/Themes.php';
+
+        Route::fallback([APIController::class, 'error']);
     });
