@@ -146,7 +146,8 @@ class Anime extends Resource
 
             Heading::make('Production'),
 
-            BelongsToMany::make('Studios'),
+            BelongsToMany::make('Studios')
+                ->searchable(),
 
             Text::make('Network')
                 ->hideFromIndex()

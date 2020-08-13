@@ -14,7 +14,7 @@ class UserResourceBasic extends JsonResource
      *
      * @var bool $includePrivateDetails
      */
-    private $includePrivateDetails = false;
+    private bool $includePrivateDetails = false;
 
     /**
      * Transform the resource into an array.
@@ -63,7 +63,7 @@ class UserResourceBasic extends JsonResource
         $user = Auth::user();
 
         return [
-            'following' => $this->resource->followers()->where('user_id', $user->id)->exists()
+            'isFollowing' => $this->resource->followers()->where('user_id', $user->id)->exists()
         ];
     }
 
