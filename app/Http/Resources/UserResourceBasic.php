@@ -45,7 +45,7 @@ class UserResourceBasic extends JsonResource
         ];
 
         if(Auth::check())
-            $resource = array_merge($resource, $this->getUserSpecificDetails());
+            $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
 
         if($this->includePrivateDetails)
             $resource = array_merge($resource, $this->getPrivateDetails());
@@ -63,9 +63,7 @@ class UserResourceBasic extends JsonResource
         $user = Auth::user();
 
         return [
-            'currentUser' => [
-                'following' => $this->resource->followers()->where('user_id', $user->id)->exists()
-            ]
+            'following' => $this->resource->followers()->where('user_id', $user->id)->exists()
         ];
     }
 

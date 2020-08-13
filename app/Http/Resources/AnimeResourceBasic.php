@@ -72,7 +72,7 @@ class AnimeResourceBasic extends JsonResource
         ];
 
         if(Auth::check())
-            $resource = array_merge($resource, $this->getUserSpecificDetails());
+            $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
 
         return $resource;
     }
@@ -109,12 +109,10 @@ class AnimeResourceBasic extends JsonResource
 
         // Return the array
         return [
-            'currentUser' => [
-                'givenRating'       => (double) $userRating,
-                'libraryStatus'     => $currentLibraryStatus,
-                'isFavorite'        => $user->favoriteAnime()->wherePivot('anime_id', $anime->id)->exists(),
-                'isReminded'        => $user->reminderAnime()->wherePivot('anime_id', $this->id)->exists()
-            ]
+            'givenRating'       => (double) $userRating,
+            'libraryStatus'     => $currentLibraryStatus,
+            'isFavorite'        => $user->favoriteAnime()->wherePivot('anime_id', $anime->id)->exists(),
+            'isReminded'        => $user->reminderAnime()->wherePivot('anime_id', $this->id)->exists()
         ];
     }
 }
