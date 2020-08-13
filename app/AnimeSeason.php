@@ -53,7 +53,7 @@ class AnimeSeason extends KModel
         if($firstEpisode == null)
             return null;
 
-        return $firstEpisode->first_aired;
+        return $firstEpisode->first_aired->format('Y-m-d');
     }
 
     /**
