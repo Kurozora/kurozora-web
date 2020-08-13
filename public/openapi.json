@@ -403,7 +403,7 @@
             "in": "query",
             "name": "status",
             "schema": {
-              "$ref": "#/components/schemas/KurozoraLibraryStatus"
+              "$ref": "#/components/schemas/LibraryStatus"
             },
             "required": true,
             "description": "The status to retrieve the library items for."
@@ -708,14 +708,10 @@
                   "anime_id": {
                     "type": "integer",
                     "description": "The ID of the Anime to add."
-                  },
-                  "is_favorite": {
-                    "$ref": "#/components/schemas/FavoriteStatus"
                   }
                 },
                 "required": [
-                  "anime_id",
-                  "is_favorite"
+                  "anime_id"
                 ]
               }
             }
@@ -796,14 +792,10 @@
                   "anime_id": {
                     "type": "integer",
                     "description": "The ID of the Anime to add or remove."
-                  },
-                  "is_reminded": {
-                    "$ref": "#/components/schemas/ReminderStatus"
                   }
                 },
                 "required": [
-                  "anime_id",
-                  "is_reminded"
+                  "anime_id"
                 ]
               }
             }
@@ -2765,24 +2757,6 @@
         "default": 1,
         "description": "The set of available watch status types.\n- -1 = not watched\n- 1 = watched"
       },
-      "FavoriteStatus": {
-        "type": "integer",
-        "enum": [
-          0,
-          1
-        ],
-        "default": 1,
-        "description": "The set of available favorite status types.\n- 0 = not favorite\n- 1 = favorite"
-      },
-      "FollowStatus": {
-        "type": "integer",
-        "enum": [
-          0,
-          1
-        ],
-        "default": 1,
-        "description": "The set of available follow status types.\n- 0 = unfollow\n- 1 = follow"
-      },
       "ForumSortType": {
         "type": "string",
         "enum": [
@@ -2796,7 +2770,7 @@
         "default": "best",
         "description": "The set of available forum sort types.\n- best: sorted by the most well received resource.\n- top: sorted by the most liked resource.\n- new: sorted by the newly created resource at the top.\n- old: sorted by the oldest created resource.\n- poor: sorted by the least liked resource.\n- controversial: sorted by the least well received resource."
       },
-      "KurozoraLibraryStatus": {
+      "LibraryStatus": {
         "type": "string",
         "enum": [
           "Watching",
@@ -2833,15 +2807,6 @@
         ],
         "default": 1,
         "description": "The notification read status used to mark a notification as read or unread.\n- 0 = unread\n- 1 = read"
-      },
-      "ReminderStatus": {
-        "type": "integer",
-        "enum": [
-          0,
-          1
-        ],
-        "default": 1,
-        "description": "The set of available reminder status types.\n- 0 = not reminded\n- 1 = reminded"
       },
       "VoteType": {
         "type": "integer",

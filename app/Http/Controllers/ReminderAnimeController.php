@@ -22,16 +22,18 @@ class ReminderAnimeController extends Controller
      */
     function addReminder(AddAnimeReminderRequest $request, User $user): JsonResponse
     {
-        $data = $request->validated();
+        $animeID = $request->input('anime_id');
 
-        $user->reminderAnime()->detach($data['anime_id']);
+        $isAlreadyReminded = $user->userReminderAnime()->where('anime_id', $animeID)->exists();
 
-        if($data['is_reminded'])
-            $user->reminderAnime()->attach($data['anime_id']);
+        if($isAlreadyReminded) // Don't remind the user
+            $user->reminderAnime()->detach($animeID);
+        else // Remind the user
+            $user->reminderAnime()->attach($animeID);
 
         return JSONResult::success([
             'data' => [
-                'is_reminded' => (bool) $data['is_reminded']
+                'isReminded' => !$isAlreadyReminded
             ]
         ]);
     }
