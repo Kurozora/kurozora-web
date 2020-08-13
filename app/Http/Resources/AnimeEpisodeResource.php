@@ -42,7 +42,7 @@ class AnimeEpisodeResource extends JsonResource
         ];
 
         if(Auth::check())
-            $resource = array_merge($resource, $this->getUserSpecificDetails());
+            $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
 
         return $resource;
     }
@@ -67,9 +67,7 @@ class AnimeEpisodeResource extends JsonResource
 
         // Return the array
         return [
-            'currentUser' => [
-                'watched' => $watchStatus->value
-            ]
+            'isWatched' => $watchStatus->value
         ];
     }
 }

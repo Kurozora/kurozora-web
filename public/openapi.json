@@ -1638,13 +1638,13 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "watched": {
+                  "is_watched": {
                     "$ref": "#/components/schemas/EpisodeWatchStatus",
                     "description": "Mark episode watched or not.\n- -1 = not watched\n- 1 = watched"
                   }
                 },
                 "required": [
-                  "watched"
+                  "is_watched"
                 ]
               }
             }
@@ -2978,12 +2978,11 @@
                       "lastAired": "1974-02-07",
                       "airTime": "20:00:00",
                       "airDay": 3,
-                      "copyright": "® 2003 Watsica-Kling"
-                    },
-                    "currentUser": {
+                      "copyright": "® 2003 Watsica-Kling",
                       "givenRating": 3.5,
                       "libraryStatus": "Watching",
-                      "isFavorite": false
+                      "isFavorite": true,
+                      "isReminded": true
                     },
                     "relationships": {
                       "actors": {
@@ -3244,12 +3243,11 @@
                                 "lastAired": "2015-05-27",
                                 "airTime": "16:49:00",
                                 "airDay": 7,
-                                "copyright": "℗ 1997 Kulas-Baumbach"
-                              },
-                              "currentUser": {
+                                "copyright": "℗ 1997 Kulas-Baumbach",
                                 "givenRating": 0,
                                 "libraryStatus": null,
-                                "isFavorite": false
+                                "isFavorite": false,
+                                "isReminded": false
                               }
                             },
                             "attributes": {
@@ -3290,12 +3288,11 @@
                                 "lastAired": "2015-05-05",
                                 "airTime": "18:32:00",
                                 "airDay": 6,
-                                "copyright": "® 1976 Swift Ltd"
-                              },
-                              "currentUser": {
+                                "copyright": "® 1976 Swift Ltd",
                                 "givenRating": 0,
                                 "libraryStatus": null,
-                                "isFavorite": false
+                                "isFavorite": false,
+                                "isReminded": false
                               }
                             },
                             "attributes": {
@@ -3552,12 +3549,11 @@
                         "lastAired": "2015-05-27",
                         "airTime": "16:49:00",
                         "airDay": 7,
-                        "copyright": "℗ 1997 Kulas-Baumbach"
-                      },
-                      "currentUser": {
+                        "copyright": "℗ 1997 Kulas-Baumbach",
                         "givenRating": 0,
                         "libraryStatus": null,
-                        "isFavorite": false
+                        "isFavorite": false,
+                        "isReminded": false
                       }
                     },
                     "attributes": {
@@ -3598,12 +3594,11 @@
                         "lastAired": "2015-05-05",
                         "airTime": "18:32:00",
                         "airDay": 6,
-                        "copyright": "® 1976 Swift Ltd"
-                      },
-                      "currentUser": {
+                        "copyright": "® 1976 Swift Ltd",
                         "givenRating": 0,
                         "libraryStatus": null,
-                        "isFavorite": false
+                        "isFavorite": false,
+                        "isReminded": false
                       }
                     },
                     "attributes": {
@@ -3718,11 +3713,6 @@
                       "airTime": "20:00:00",
                       "airDay": 3,
                       "copyright": "® 2003 Watsica-Kling"
-                    },
-                    "currentUser": {
-                      "givenRating": 0,
-                      "libraryStatus": null,
-                      "isFavorite": false
                     }
                   },
                   {
@@ -3772,11 +3762,6 @@
                       "airTime": "19:24:00",
                       "airDay": 4,
                       "copyright": "® 1985 Fadel, Sipes and McGlynn"
-                    },
-                    "currentUser": {
-                      "givenRating": 0,
-                      "libraryStatus": null,
-                      "isFavorite": false
                     }
                   }
                 ]
@@ -3825,13 +3810,11 @@
                     "href": "/api/v1/anime-seasons/1/episodes",
                     "attributes": {
                       "number": 1,
-                      "name": "Episode 1",
+                      "title": "Episode 1",
                       "firstAired": "29 Jul, 2020",
                       "overview": "A short, or long description of the episode.",
-                      "verified": false
-                    },
-                    "currentUser": {
-                      "watched": 1
+                      "isVerified": false,
+                      "isWatched": true
                     }
                   },
                   {
@@ -3840,13 +3823,11 @@
                     "href": "/api/v1/anime-seasons/2/episodes",
                     "attributes": {
                       "number": 2,
-                      "name": "Episode 2",
+                      "title": "Episode 2",
                       "firstAired": "5 Aug, 2020",
                       "overview": "A long, or short description of the episode.",
-                      "verified": false
-                    },
-                    "currentUser": {
-                      "watched": 0
+                      "isVerified": false,
+                      "isWatched": false
                     }
                   }
                 ]
@@ -3869,13 +3850,11 @@
                     "href": "/api/v1/anime-episodes/1",
                     "attributes": {
                       "number": 1,
-                      "name": "Episode 1",
+                      "title": "Episode 1",
                       "firstAired": "2 Jul, 2020",
                       "overview": "Season 1 Episode 1 description",
-                      "verified": false
-                    },
-                    "currentUser": {
-                      "watched": -1
+                      "isVerified": false,
+                      "isWatched": false
                     }
                   }
                 ]
@@ -3892,7 +3871,7 @@
               "type": "object",
               "example": {
                 "data": {
-                  "watched": 1
+                  "is_watched": 1
                 }
               }
             }
@@ -4196,7 +4175,8 @@
                         "likes": 15,
                         "dislikes": 5
                       },
-                      "createdAt": "2020-07-27 12:59:34"
+                      "createdAt": "2020-07-27 12:59:34",
+                      "voteAction": 1
                     },
                     "relationships": {
                       "user": {
@@ -4213,17 +4193,12 @@
                               "bannerImageURL": null,
                               "followerCount": 67,
                               "followingCount": 67,
-                              "reputationCount": 59
-                            },
-                            "currentUser": {
-                              "following": false
+                              "reputationCount": 59,
+                              "isFollowing": false
                             }
                           }
                         ]
                       }
-                    },
-                    "currentUser": {
-                      "voteAction": 1
                     }
                   },
                   {
@@ -4241,7 +4216,8 @@
                         "likes": 0,
                         "dislikes": 0
                       },
-                      "createdAt": "2020-07-27 12:59:34"
+                      "createdAt": "2020-07-27 12:59:34",
+                      "voteAction": 1
                     },
                     "relationships": {
                       "user": {
@@ -4258,17 +4234,12 @@
                               "bannerImageURL": null,
                               "followerCount": 67,
                               "followingCount": 67,
-                              "reputationCount": 59
-                            },
-                            "currentUser": {
-                              "following": false
+                              "reputationCount": 59,
+                              "isFollowing": false
                             }
                           }
                         ]
                       }
-                    },
-                    "currentUser": {
-                      "voteAction": 1
                     }
                   }
                 ]
@@ -4300,7 +4271,8 @@
                         "likes": 0,
                         "dislikes": 0
                       },
-                      "createdAt": "2020-07-29 18:28:59"
+                      "createdAt": "2020-07-29 18:28:59",
+                      "voteAction": 0
                     },
                     "relationships": {
                       "user": {
@@ -4317,17 +4289,12 @@
                               "bannerImageURL": "https://kurozora.app/storage/2/BannerImage.png",
                               "followerCount": 0,
                               "followingCount": 0,
-                              "reputationCount": 0
-                            },
-                            "currentUser": {
-                              "following": false
+                              "reputationCount": 0,
+                              "isFollowing": false
                             }
                           }
                         ]
                       }
-                    },
-                    "currentUser": {
-                      "voteAction": 0
                     }
                   }
                 ]
@@ -4359,7 +4326,8 @@
                         "likes": 15,
                         "dislikes": 5
                       },
-                      "createdAt": "2020-07-27 12:59:34"
+                      "createdAt": "2020-07-27 12:59:34",
+                      "voteAction": 1
                     },
                     "relationships": {
                       "user": {
@@ -4376,17 +4344,12 @@
                               "bannerImageURL": null,
                               "followerCount": 67,
                               "followingCount": 67,
-                              "reputationCount": 59
-                            },
-                            "currentUser": {
-                              "following": false
+                              "reputationCount": 59,
+                              "isFollowing": false
                             }
                           }
                         ]
                       }
-                    },
-                    "currentUser": {
-                      "voteAction": 1
                     }
                   }
                 ]
@@ -4430,7 +4393,8 @@
                         "likes": 7,
                         "dislikes": 15
                       },
-                      "createdAt": "2020-07-27 12:59:35"
+                      "createdAt": "2020-07-27 12:59:35",
+                      "voteAction": 0
                     },
                     "relationships": {
                       "user": {
@@ -4447,17 +4411,12 @@
                               "bannerImageURL": null,
                               "followerCount": 0,
                               "followingCount": 0,
-                              "reputationCount": 0
-                            },
-                            "currentUser": {
-                              "following": false
+                              "reputationCount": 0,
+                              "isFollowing": false
                             }
                           }
                         ]
                       }
-                    },
-                    "currentUser": {
-                      "voteAction": 0
                     }
                   },
                   {
@@ -4472,7 +4431,8 @@
                         "likes": 152,
                         "dislikes": 81
                       },
-                      "createdAt": "2020-07-27 12:59:35"
+                      "createdAt": "2020-07-27 12:59:35",
+                      "voteAction": 0
                     },
                     "relationships": {
                       "user": {
@@ -4489,17 +4449,12 @@
                               "bannerImageURL": "https://kurozora.app/storage/14/BannerImage.png",
                               "followerCount": 299,
                               "followingCount": 128,
-                              "reputationCount": 547
-                            },
-                            "currentUser": {
-                              "following": true
+                              "reputationCount": 547,
+                              "isFollowing": true
                             }
                           }
                         ]
                       }
-                    },
-                    "currentUser": {
-                      "voteAction": 0
                     }
                   }
                 ],
@@ -4529,7 +4484,8 @@
                         "likes": 0,
                         "dislikes": 0
                       },
-                      "createdAt": "2020-07-29 12:33:32"
+                      "createdAt": "2020-07-29 12:33:32",
+                      "voteAction": 0
                     },
                     "relationships": {
                       "user": {
@@ -4546,17 +4502,12 @@
                               "bannerImageURL": "https://kurozora.app/storage/2/BannerImage.png",
                               "followerCount": 0,
                               "followingCount": 0,
-                              "reputationCount": 0
-                            },
-                            "currentUser": {
-                              "following": false
+                              "reputationCount": 0,
+                              "isFollowing": false
                             }
                           }
                         ]
                       }
-                    },
-                    "currentUser": {
-                      "voteAction": 0
                     }
                   }
                 ]
@@ -4588,7 +4539,8 @@
                         "likes": 800,
                         "dislikes": 400
                       },
-                      "createdAt": "2020-07-27 12:59:34"
+                      "createdAt": "2020-07-27 12:59:34",
+                      "voteAction": 1
                     },
                     "relationships": {
                       "user": {
@@ -4605,17 +4557,12 @@
                               "bannerImageURL": null,
                               "followerCount": 7694,
                               "followingCount": 5373,
-                              "reputationCount": 14734
-                            },
-                            "currentUser": {
-                              "following": false
+                              "reputationCount": 14734,
+                              "isFollowing": false
                             }
                           }
                         ]
                       }
-                    },
-                    "currentUser": {
-                      "voteAction": 1
                     }
                   },
                   {
@@ -4633,7 +4580,8 @@
                         "likes": 47,
                         "dislikes": 53
                       },
-                      "createdAt": "2020-07-27 12:59:34"
+                      "createdAt": "2020-07-27 12:59:34",
+                      "voteAction": -1
                     },
                     "relationships": {
                       "user": {
@@ -4650,17 +4598,12 @@
                               "bannerImageURL": "https://kurozora.app/storage/44/BannerImage.png",
                               "followerCount": 63,
                               "followingCount": 102,
-                              "reputationCount": 353
-                            },
-                            "currentUser": {
-                              "following": false
+                              "reputationCount": 353,
+                              "isFollowing": false
                             }
                           }
                         ]
                       }
-                    },
-                    "currentUser": {
-                      "voteAction": -1
                     }
                   },
                   {
@@ -4678,7 +4621,8 @@
                         "likes": 0,
                         "dislikes": 0
                       },
-                      "createdAt": "2020-07-27 12:59:34"
+                      "createdAt": "2020-07-27 12:59:34",
+                      "voteAction": 0
                     },
                     "relationships": {
                       "user": {
@@ -4695,17 +4639,12 @@
                               "bannerImageURL": "https://kurozora.app/storage/53/BannerImage.png",
                               "followerCount": 593,
                               "followingCount": 2846,
-                              "reputationCount": 8463
-                            },
-                            "currentUser": {
-                              "following": true
+                              "reputationCount": 8463,
+                              "isFollowing": true
                             }
                           }
                         ]
                       }
-                    },
-                    "currentUser": {
-                      "voteAction": 0
                     }
                   }
                 ]
