@@ -56,10 +56,11 @@ class LibraryController extends Controller
     public function addLibrary(AddToLibraryRequest $request, User $user): JsonResponse
     {
         $data = $request->validated();
+        $animeID = $data['anime_id'];
 
         // Get the Anime
         /** @var Anime $anime */
-        $anime = Anime::find($data['anime_id']);
+        $anime = Anime::findOrFail($animeID);
 
         // Get the status
         $foundStatus = UserLibraryStatus::getValue($data['status']);
@@ -71,7 +72,13 @@ class LibraryController extends Controller
         $user->library()->attach($anime, ['status' => $foundStatus]);
 
         // Successful response
-        return JSONResult::success();
+        return JSONResult::success([
+            'data' => [
+                'libraryStatus' => $data['status'],
+                'isFavorited'   => $user->favoriteAnime()->where('anime_id', $animeID)->exists(),
+                'isReminded'    => $user->userReminderAnime()->where('anime_id', $animeID)->exists()
+            ]
+        ]);
     }
 
     /**
@@ -85,12 +92,24 @@ class LibraryController extends Controller
     public function delLibrary(DeleteFromLibraryRequest $request, User $user): JsonResponse
     {
         $data = $request->validated();
+        $animeID = $data['anime_id'];
 
         // Remove this Anime from their library if it can be found
-        if($user->library()->where('anime_id', $data['anime_id'])->count()) {
-            $user->library()->detach($data['anime_id']);
+        if($user->library()->where('anime_id', $animeID)->count()) {
+            $user->library()->detach($animeID);
 
-            return JSONResult::success();
+            // Remove from favorites as you can't favorite and not have anime in library
+            $user->favoriteAnime()->detach($animeID);
+            // Remove from reminders as you can't remind and not have anime in library
+            $user->reminderAnime()->detach($animeID);
+
+            return JSONResult::success([
+                'data' => [
+                    'libraryStatus' => $data['status'],
+                    'isFavorited'   => null,
+                    'isReminded'    => null
+                ]
+            ]);
         }
 
         // The item could not be found

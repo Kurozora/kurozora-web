@@ -31,7 +31,7 @@ class AddToLibraryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'anime_id'  => ['bail', 'required', 'integer', 'exists:' . Anime::TABLE_NAME . ',id'],
+            'anime_id'  => ['bail', 'required', 'integer'],
             'status'    => ['bail', 'required', new ValidateLibraryStatus],
         ];
     }
