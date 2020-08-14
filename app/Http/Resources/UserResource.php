@@ -14,10 +14,10 @@ class UserResource extends JsonResource
      *
      * @var bool $shouldIncludeSession
      */
-    private $shouldIncludeSession = false;
+    private bool $shouldIncludeSession = false;
 
     /** @var Session $session */
-    private $session;
+    private Session $session;
 
     /**
      * Transform the resource into an array.

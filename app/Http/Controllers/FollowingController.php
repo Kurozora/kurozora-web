@@ -40,7 +40,7 @@ class FollowingController extends Controller
         // Successful response
         return JSONResult::success([
             'data' => [
-                'isFollowing' => !$isAlreadyFollowing
+                'isFollowed' => !$isAlreadyFollowing
             ]
         ]);
     }
