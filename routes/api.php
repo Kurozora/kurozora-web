@@ -13,7 +13,8 @@ Route::prefix('/v1')
         Route::get('/info', [APIController::class, 'info']);
 
         Route::get('/explore', [ExplorePageController::class, 'explore'])
-            ->middleware('kurozora.userauth:optional');
+            ->middleware('kurozora.userauth:optional')
+            ->name('explore');
 
         Route::get('/privacy-policy', [MiscController::class, 'getPrivacyPolicy'])
             ->name('legal.privacy');
