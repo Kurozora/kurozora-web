@@ -122,7 +122,7 @@ class AnimeResourceBasic extends JsonResource
         return [
             'givenRating'       => (double) $userRating,
             'libraryStatus'     => $currentLibraryStatus,
-            'isFavorite'        => $favoriteStatus,
+            'isFavorited'       => $favoriteStatus,
             'isReminded'        => $reminderStatus
         ];
     }

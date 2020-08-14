@@ -2954,7 +2954,7 @@
                       "copyright": "® 2003 Watsica-Kling",
                       "givenRating": 3.5,
                       "libraryStatus": "Watching",
-                      "isFavorite": true,
+                      "isFavorited": true,
                       "isReminded": true
                     },
                     "relationships": {
@@ -3219,7 +3219,7 @@
                                 "copyright": "℗ 1997 Kulas-Baumbach",
                                 "givenRating": 0,
                                 "libraryStatus": null,
-                                "isFavorite": false,
+                                "isFavorited": false,
                                 "isReminded": false
                               }
                             },
@@ -3264,7 +3264,7 @@
                                 "copyright": "® 1976 Swift Ltd",
                                 "givenRating": 0,
                                 "libraryStatus": null,
-                                "isFavorite": false,
+                                "isFavorited": false,
                                 "isReminded": false
                               }
                             },
@@ -3525,7 +3525,7 @@
                         "copyright": "℗ 1997 Kulas-Baumbach",
                         "givenRating": 0,
                         "libraryStatus": null,
-                        "isFavorite": false,
+                        "isFavorited": false,
                         "isReminded": false
                       }
                     },
@@ -3570,7 +3570,7 @@
                         "copyright": "® 1976 Swift Ltd",
                         "givenRating": 0,
                         "libraryStatus": null,
-                        "isFavorite": false,
+                        "isFavorited": false,
                         "isReminded": false
                       }
                     },

@@ -31,7 +31,7 @@ class FavoriteAnimeController extends Controller
 
         return JSONResult::success([
             'data' => [
-                'isFavorite' => !$isAlreadyFavorited
+                'isFavorited' => !$isAlreadyFavorited
             ]
         ]);
     }
