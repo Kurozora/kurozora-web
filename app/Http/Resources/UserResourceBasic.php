@@ -60,10 +60,18 @@ class UserResourceBasic extends JsonResource
      */
     protected function getUserSpecificDetails(): array
     {
+        /** @var User $followedUser */
+        $followedUser = $this->resource;
+
+        /** @var User $user */
         $user = Auth::user();
 
+        $isFollowed = null;
+        if($followedUser->id != $user->id)
+            $isFollowed = $this->resource->followers()->where('user_id', $user->id)->exists();
+
         return [
-            'isFollowing' => $this->resource->followers()->where('user_id', $user->id)->exists()
+            'isFollowed' => $isFollowed
         ];
     }
 

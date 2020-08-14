@@ -4167,7 +4167,7 @@
                               "followerCount": 67,
                               "followingCount": 67,
                               "reputationCount": 59,
-                              "isFollowing": false
+                              "isFollowed": false
                             }
                           }
                         ]
@@ -4208,7 +4208,7 @@
                               "followerCount": 67,
                               "followingCount": 67,
                               "reputationCount": 59,
-                              "isFollowing": false
+                              "isFollowed": false
                             }
                           }
                         ]
@@ -4263,7 +4263,7 @@
                               "followerCount": 0,
                               "followingCount": 0,
                               "reputationCount": 0,
-                              "isFollowing": false
+                              "isFollowed": false
                             }
                           }
                         ]
@@ -4318,7 +4318,7 @@
                               "followerCount": 67,
                               "followingCount": 67,
                               "reputationCount": 59,
-                              "isFollowing": false
+                              "isFollowed": false
                             }
                           }
                         ]
@@ -4385,7 +4385,7 @@
                               "followerCount": 0,
                               "followingCount": 0,
                               "reputationCount": 0,
-                              "isFollowing": false
+                              "isFollowed": false
                             }
                           }
                         ]
@@ -4423,7 +4423,7 @@
                               "followerCount": 299,
                               "followingCount": 128,
                               "reputationCount": 547,
-                              "isFollowing": true
+                              "isFollowed": true
                             }
                           }
                         ]
@@ -4476,7 +4476,7 @@
                               "followerCount": 0,
                               "followingCount": 0,
                               "reputationCount": 0,
-                              "isFollowing": false
+                              "isFollowed": false
                             }
                           }
                         ]
@@ -4531,7 +4531,7 @@
                               "followerCount": 7694,
                               "followingCount": 5373,
                               "reputationCount": 14734,
-                              "isFollowing": false
+                              "isFollowed": false
                             }
                           }
                         ]
@@ -4572,7 +4572,7 @@
                               "followerCount": 63,
                               "followingCount": 102,
                               "reputationCount": 353,
-                              "isFollowing": false
+                              "isFollowed": false
                             }
                           }
                         ]
@@ -4613,7 +4613,7 @@
                               "followerCount": 593,
                               "followingCount": 2846,
                               "reputationCount": 8463,
-                              "isFollowing": true
+                              "isFollowed": true
                             }
                           }
                         ]
