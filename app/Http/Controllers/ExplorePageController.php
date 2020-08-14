@@ -32,7 +32,7 @@ class ExplorePageController extends Controller
         }
 
         return JSONResult::success([
-            'categories' => ExplorePageCategoryResource::collection(($categories))
+            'data' => ExplorePageCategoryResource::collection(($categories))
         ]);
     }
 
@@ -66,7 +66,7 @@ class ExplorePageController extends Controller
             'title'     => 'Featured ' . $genre->name . ' Shows',
             'position'  => $position,
             'type'      => ExplorePageCategoryTypes::Shows,
-            'size'      => 'medium'
+            'size'      => 'large'
         ]);
 
         $popularShows = $genre->animes()->mostPopular(10)->get();
@@ -91,7 +91,7 @@ class ExplorePageController extends Controller
             'title'     => $genre->name . ' Shows We Love',
             'position'  => $position,
             'type'      => ExplorePageCategoryTypes::Shows,
-            'size'      => 'medium'
+            'size'      => 'video'
         ]);
 
         $randomShows = $genre->animes()
