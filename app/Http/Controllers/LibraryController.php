@@ -13,6 +13,7 @@ use App\Http\Requests\SearchLibraryRequest;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Jobs\ProcessMALImport;
 use App\User;
+use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -52,6 +53,7 @@ class LibraryController extends Controller
      * @param AddToLibraryRequest $request
      * @param User $user
      * @return JsonResponse
+     * @throws InvalidEnumKeyException
      */
     public function addLibrary(AddToLibraryRequest $request, User $user): JsonResponse
     {
@@ -63,18 +65,18 @@ class LibraryController extends Controller
         $anime = Anime::findOrFail($animeID);
 
         // Get the status
-        $foundStatus = UserLibraryStatus::getValue($data['status']);
+        $userLibraryStatus = UserLibraryStatus::fromKey($data['status']);
 
         // Detach the current entry (if there is one)
         $user->library()->detach($anime);
 
         // Add a new library entry
-        $user->library()->attach($anime, ['status' => $foundStatus]);
+        $user->library()->attach($anime, ['status' => $userLibraryStatus->value]);
 
         // Successful response
         return JSONResult::success([
             'data' => [
-                'libraryStatus' => $data['status'],
+                'libraryStatus' => $userLibraryStatus->description,
                 'isFavorited'   => $user->favoriteAnime()->where('anime_id', $animeID)->exists(),
                 'isReminded'    => $user->userReminderAnime()->where('anime_id', $animeID)->exists()
             ]
@@ -105,7 +107,7 @@ class LibraryController extends Controller
 
             return JSONResult::success([
                 'data' => [
-                    'libraryStatus' => $data['status'],
+                    'libraryStatus' => null,
                     'isFavorited'   => null,
                     'isReminded'    => null
                 ]
