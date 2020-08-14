@@ -2,9 +2,11 @@
 
 namespace App\Http\Resources;
 
+use App\Anime;
 use App\AnimeEpisode;
 use App\AnimeSeason;
 use App\Enums\WatchStatus;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
@@ -37,7 +39,7 @@ class AnimeEpisodeResource extends JsonResource
                 'previewImage'  => $animeEpisode->preview_image,
                 'firstAired'    => $firstAired,
                 'duration'      => $animeEpisode->duration,
-                'verified'      => (bool) $animeEpisode->verified
+                'isVerified'    => (bool) $animeEpisode->verified
             ]
         ];
 
@@ -57,17 +59,22 @@ class AnimeEpisodeResource extends JsonResource
         /** @var AnimeEpisode $animeEpisode */
         $animeEpisode = $this->resource;
 
+        /** @var User $user */
         $user = Auth::user();
+
+        /** @var AnimeSeason $user */
         $season = AnimeSeason::where('id', $animeEpisode->season_id)->first();
+
+        /** @var Anime $anime */
         $anime = $season->anime()->first();
 
         $watchStatus = WatchStatus::Disabled();
         if($user->isTracking($anime))
-            $watchStatus = WatchStatus::init($user->watchedAnimeEpisodes()->where('episode_id', $animeEpisode->id)->exists());
+            $watchStatus = WatchStatus::fromBool($user->watchedAnimeEpisodes()->where('episode_id', $animeEpisode->id)->exists());
 
         // Return the array
         return [
-            'isWatched' => $watchStatus->value
+            'isWatched' => $watchStatus->boolValue
         ];
     }
 }

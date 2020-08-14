@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\AnimeEpisode;
-use App\Enums\WatchStatus;
 use App\Helpers\JSONResult;
 use App\Http\Requests\MarkEpisodeAsWatchedRequest;
 use App\Http\Resources\AnimeEpisodeResource;
@@ -38,20 +37,19 @@ class AnimeEpisodeController extends Controller
     public function watched(MarkEpisodeAsWatchedRequest $request, AnimeEpisode $episode): JSONResponse
     {
         $user = Auth::user();
-        $watched = (int) $request->input('is_watched');
 
         // Find if the user has watched the episode
-        $alreadyWatched = $user->hasWatched($episode);
+        $isAlreadyWatched = $user->hasWatched($episode);
 
         // Attach or detach the watched episode
-        if ($watched == WatchStatus::Watched && !$alreadyWatched)
-            $user->watchedAnimeEpisodes()->attach($episode);
-        else if ($watched == WatchStatus::NotWatched && $alreadyWatched)
+        if($isAlreadyWatched) // Unwatch the episode
             $user->watchedAnimeEpisodes()->detach($episode);
+        else // Watch the episode
+            $user->watchedAnimeEpisodes()->attach($episode);
 
         return JSONResult::success([
             'data' => [
-                'isWatched' => $watched
+                'isWatched' => !$isAlreadyWatched
             ]
         ]);
     }
