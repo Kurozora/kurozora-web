@@ -306,10 +306,12 @@ class UserController extends Controller
         else $displayMessage .= 'No information was updated.';
 
         return JSONResult::success([
-            'data' => [
-                'message' => $displayMessage,
-                'user' => UserResource::collection([$user])
-            ]
+            'data'      => [
+                'biography'         => $user->biography,
+                'profileImageURL'   => $user->getFirstMediaFullUrl('avatar'),
+                'bannerImageURL'    => $user->getFirstMediaFullUrl('banner')
+            ],
+            'message'   => $displayMessage,
         ]);
     }
 }
