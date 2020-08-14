@@ -107,12 +107,23 @@ class AnimeResourceBasic extends JsonResource
         if($libraryEntry)
             $currentLibraryStatus = UserLibraryStatus::getDescription($libraryEntry->pivot->status);
 
+        // Get the favorite status
+        $isTrackingAnime = $user->isTracking($anime);
+        $favoriteStatus = null;
+        if($isTrackingAnime)
+            $favoriteStatus = $user->favoriteAnime()->wherePivot('anime_id', $anime->id)->exists();
+
+        // Get the reminder status
+        $reminderStatus = null;
+        if($isTrackingAnime)
+            $reminderStatus = $user->reminderAnime()->wherePivot('anime_id', $anime->id)->exists();
+
         // Return the array
         return [
             'givenRating'       => (double) $userRating,
             'libraryStatus'     => $currentLibraryStatus,
-            'isFavorite'        => $user->favoriteAnime()->wherePivot('anime_id', $anime->id)->exists(),
-            'isReminded'        => $user->reminderAnime()->wherePivot('anime_id', $this->id)->exists()
+            'isFavorite'        => $favoriteStatus,
+            'isReminded'        => $reminderStatus
         ];
     }
 }
