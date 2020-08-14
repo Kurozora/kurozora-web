@@ -1632,24 +1632,6 @@
             "description": "ID of the episode."
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "is_watched": {
-                    "$ref": "#/components/schemas/EpisodeWatchStatus",
-                    "description": "Mark episode watched or not.\n- -1 = not watched\n- 1 = watched"
-                  }
-                },
-                "required": [
-                  "is_watched"
-                ]
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "$ref": "#/components/responses/PostAnimeEpisodesWatchedSuccess"
@@ -2748,15 +2730,6 @@
   },
   "components": {
     "schemas": {
-      "EpisodeWatchStatus": {
-        "type": "integer",
-        "enum": [
-          -1,
-          1
-        ],
-        "default": 1,
-        "description": "The set of available watch status types.\n- -1 = not watched\n- 1 = watched"
-      },
       "ForumSortType": {
         "type": "string",
         "enum": [
@@ -3871,7 +3844,7 @@
               "type": "object",
               "example": {
                 "data": {
-                  "is_watched": 1
+                  "isWatched": 1
                 }
               }
             }
