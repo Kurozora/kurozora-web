@@ -1,4 +1,4 @@
 #!/bin/bash
 
-php artisan migrate -n
+yes | php artisan migrate
 php artisan love:reaction-type-add --default
