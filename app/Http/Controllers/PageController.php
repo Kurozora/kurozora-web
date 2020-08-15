@@ -14,16 +14,11 @@ class PageController extends Controller
     /**
      * Anime landing page
      *
-     * @param $animeID
+     * @param Anime $anime
      * @return Application|Factory|View
      */
-    public function anime($animeID)
+    public function anime(Anime $anime)
     {
-        /** @var Anime $anime */
-        $anime = Anime::find($animeID);
-
-        if(!$anime) abort(404);
-
         $poster = $anime->poster();
         $posterURL = null;
         if($poster)

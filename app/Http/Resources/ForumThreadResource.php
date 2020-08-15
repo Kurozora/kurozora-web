@@ -34,7 +34,7 @@ class ForumThreadResource extends JsonResource
             'attributes'    => [
                 'title'         => $forumThread->title,
                 'content'       => $forumThread->content,
-                'locked'        => (bool) $forumThread->locked,
+                'isLocked'      => (bool) $forumThread->locked,
                 'replyCount'    => $forumThread->replies->count(),
                 'metrics'       => [
                     'count'     => $totalReactions->getCount(),
@@ -42,7 +42,7 @@ class ForumThreadResource extends JsonResource
                     'likes'     => $totalLikes->getCount(),
                     'dislikes'  => $totalDislikes->getCount()
                 ],
-                'createdAt'     => $forumThread->created_at,
+                'createdAt'     => $forumThread->created_at->format('Y-m-d H:i:s'),
             ]
         ];
 
@@ -51,7 +51,7 @@ class ForumThreadResource extends JsonResource
         $resource = array_merge($resource, ['relationships' => $relationships]);
 
         if(Auth::check())
-            $resource = array_merge($resource, $this->getUserSpecificDetails());
+            $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
 
         return $resource;
     }
@@ -67,9 +67,7 @@ class ForumThreadResource extends JsonResource
         $user = Auth::user();
 
         return [
-            'currentUser' => [
-                'voteAction' => $user->getCurrentVoteValue()
-            ]
+            'voteAction' => $user->getCurrentVoteValue()
         ];
     }
 

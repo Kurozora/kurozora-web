@@ -54,7 +54,7 @@ class AnimeDummySeeder extends Seeder
                 factory(Anime::class)->create([
                     'title'         => $animeData->title,
                     'type'          => AnimeType::TV,
-                    'nsfw'          => $animeData->nsfw,
+                    'is_nsfw'       => $animeData->nsfw,
                     'anidb_id'      => $animeData->anidb_id,
                     'anilist_id'    => $animeData->anilist_id,
                     'kitsu_id'      => $animeData->kitsu_id,

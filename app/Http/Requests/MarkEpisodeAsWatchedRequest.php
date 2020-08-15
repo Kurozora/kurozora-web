@@ -27,8 +27,6 @@ class MarkEpisodeAsWatchedRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'watched' => ['bail', 'required', 'numeric', 'in:-1,1']
-        ];
+        return [];
     }
 }

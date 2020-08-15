@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Testing\Assert as PHPUnit;
 use Illuminate\Testing\TestResponse;
 use App\Helpers\KuroAuthToken;
 use Spatie\Snapshots\MatchesSnapshots;
@@ -25,17 +26,14 @@ abstract class TestCase extends BaseTestCase
 
         // API response macro's
         TestResponse::macro('assertSuccessfulAPIResponse', function() {
-            $this->assertSuccessful()
-                ->assertJson([
-                    'success' => true
-                ]);
+            $this->assertSuccessful();
         });
 
         TestResponse::macro('assertUnsuccessfulAPIResponse', function() {
-            $this->assertStatus(400)
-                ->assertJson([
-                    'success' => false
-                ]);
+            PHPUnit::assertFalse(
+                $this->isSuccessful(),
+                'Response status code ['.$this->getStatusCode().'] is not an unsuccessful status code.'
+            );
         });
     }
 

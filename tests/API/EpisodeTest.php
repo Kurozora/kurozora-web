@@ -50,7 +50,7 @@ class EpisodeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the current_user array is not empty
-        $this->assertTrue(count($response->json()['data'][0]['currentUser']) > 0);
+        $this->assertArrayHasKey('isWatched', $response->json()['data'][0]['attributes']);
     }
 
     /**
@@ -62,7 +62,7 @@ class EpisodeTest extends TestCase
     function an_episode_can_not_be_watched_if_anime_not_in_library()
     {
         $this->auth()->json('POST', '/api/v1/anime-episodes/' . $this->episode->id . '/watched', [
-            'watched' => 1
+            'is_watched' => 1
         ])->assertUnsuccessfulAPIResponse();
 
         // Check whether the episode is not watched
@@ -78,7 +78,7 @@ class EpisodeTest extends TestCase
     function an_episode_can_not_be_unwatched_if_anime_not_in_library()
     {
         $this->auth()->json('POST', '/api/v1/anime-episodes/' . $this->episode->id . '/watched', [
-            'watched' => -1
+            'is_watched' => -1
         ])->assertUnsuccessfulAPIResponse();
 
         // Check whether the episode is not watched
@@ -98,7 +98,7 @@ class EpisodeTest extends TestCase
 
         // Mark episode as watched
         $response = $this->auth()->json('POST', '/api/v1/anime-episodes/' . $this->episode->id . '/watched', [
-            'watched' => 1
+            'is_watched' => 1
         ]);
 
         // Check whether the request was successful
@@ -121,7 +121,7 @@ class EpisodeTest extends TestCase
 
         // Mark episode as unwatched.
         $response = $this->auth()->json('POST', '/api/v1/anime-episodes/' . $this->episode->id . '/watched', [
-            'watched' => -1
+            'is_watched' => -1
         ]);
 
         // Check whether the request was successful
