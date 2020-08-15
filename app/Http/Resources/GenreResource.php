@@ -28,7 +28,7 @@ class GenreResource extends JsonResource
                 'color'         => $genre->color,
                 'symbol'        => $genre->symbol,
                 'description'   => $genre->description,
-                'nsfw'          => (bool) $genre->nsfw
+                'isNSFW'        => (bool) $genre->is_nsfw
             ]
         ];
     }

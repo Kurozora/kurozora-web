@@ -23,12 +23,19 @@ Route::prefix('/anime')
         Route::get('/{anime}/cast', [AnimeController::class, 'actorCharacterAnime'])
             ->name('cast');
 
-        Route::get('/{anime}/relations', [AnimeController::class, 'relationsAnime'])
+        Route::get('/{anime}/genres', [AnimeController::class, 'genresAnime'])
+            ->name('genres');
+
+        Route::get('/{anime}/related-shows', [AnimeController::class, 'relatedShowsAnime'])
             ->middleware('kurozora.userauth:optional')
-            ->name('relations');
+            ->name('related-shows');
 
         Route::get('/{anime}/seasons', [AnimeController::class, 'seasonsAnime'])
             ->name('seasons');
+
+        Route::get('/{anime}/studios', [AnimeController::class, 'studiosAnime'])
+            ->middleware('kurozora.userauth:optional')
+            ->name('studios');
 
         Route::post('/{anime}/rate', [AnimeController::class, 'rateAnime'])
             ->middleware('kurozora.userauth');

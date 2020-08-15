@@ -3,6 +3,8 @@
 namespace App\Nova;
 
 use App\Enums\AnimeSource;
+use App\Enums\AnimeStatus;
+use App\Enums\AnimeType;
 use App\Enums\DayOfWeek;
 use App\Enums\WatchRating;
 use App\Nova\Actions\FetchAnimeActors;
@@ -65,40 +67,42 @@ class Anime extends Resource
     public function fields(Request $request)
     {
         return [
-            Heading::make('Identification')
-                ->onlyOnForms(),
+            Heading::make('Identification'),
 
             ID::make()->sortable(),
 
             ExternalImage::make('Thumbnail', 'cached_poster_thumbnail')
                 ->onlyOnIndex(),
 
-            Number::make('AniDB', 'anidb_id')
+            Number::make('AniDB ID')
                 ->hideFromIndex()
                 ->help('The ID of the Anime as noted on AniDB.'),
 
-            Number::make('AniList', 'anilist_id')
+            Number::make('AniList ID')
                 ->hideFromIndex()
                 ->help('The ID of the Anime as noted on AniList.'),
 
-            Number::make('Kitsu', 'kitsu_id')
-                ->hideFromIndex()
-                ->help('The ID of the Anime as noted on Kitsu.'),
-
-            Text::make('IMDB ID', 'imdb_id')
+            Text::make('IMDB ID')
                 ->onlyOnForms()
                 ->help('The ID of the Anime as noted on IMDB.'),
 
-            Number::make('MAL ID', 'mal_id')
+            Number::make('Kitsu ID')
+                ->hideFromIndex()
+                ->help('The ID of the Anime as noted on Kitsu.'),
+
+            Number::make('MAL ID')
                 ->hideFromIndex()
                 ->help('The ID of the Anime as noted on MyAnimeList.'),
 
-            Number::make('TVDB ID', 'tvdb_id')
-                ->sortable()
+            Number::make('TVDB ID')
+                ->hideFromIndex()
                 ->help('The ID of the Anime as noted on The TVDB.'),
 
-            Heading::make('Basic information')
-                ->onlyOnForms(),
+            Heading::make('Meta information'),
+
+            Text::make('Slug')
+                ->onlyOnForms()
+                ->help('Used to identify the Anime in a URL: https://kurozora.app/anime/<strong>wolf-children</strong>. Leave empty to auto-generate from title.'),
 
             Text::make('Title')
                 ->rules('required')
@@ -108,49 +112,50 @@ class Anime extends Resource
                 ->rules('max:255')
                 ->hideFromIndex(),
 
+            Textarea::make('Synopsis')
+                ->hideFromIndex()
+                ->help('A short description of the Anime.'),
+
+            Select::make('Type')
+                ->options(AnimeType::toSelectArray())
+                ->displayUsingLabels()
+                ->required()
+                ->help('The general type of the anime, such as TV, Movie, or Music.'),
+
+            Select::make('Watch rating')
+                ->options(WatchRating::toSelectArray())
+                ->displayUsingLabels()
+                ->sortable()
+                ->required()
+                ->help('Use `TV-Y7 (FV)` if the show exhibits more \'fantasy violence\', and/or is generally more intense or combative than other shows.'),
+
+            Select::make('Adaptation Source')
+                ->options(AnimeSource::toSelectArray())
+                ->displayUsingLabels()
+                ->sortable()
+                ->required()
+                ->help('The adaptation source of the anime. For example `Manga`, `Game` or `Original` if not adapted from other sources. If no source is available, especially for older anime, then choose `Unknown`.'),
+
             Text::make('Video URL', 'video_url')
                 ->rules('max:255')
                 ->hideFromIndex(),
 
-            Text::make('Slug')
-                ->rules('required')
-                ->onlyOnForms()
-                ->help('Used to identify the Anime in a URL: https://kurozora.app/anime/<strong>wolf-children</strong>'),
-
-            Textarea::make('Synopsis')
-                ->onlyOnForms()
-                ->help('A short description of the Anime.'),
-
-            Heading::make('Meta information')
-                ->onlyOnForms(),
-
-            Number::make('Runtime in minutes', 'runtime')
-                ->onlyOnForms()
-                ->help('For series: The average runtime in minutes of a single episode.<br />For movies: The amount of minutes the movie takes.'),
-
-            Select::make('Source')
-                ->options(AnimeSource::toSelectArray())
-                ->displayUsingLabels()
-                ->sortable()
-                ->rules('required')
-                ->help('The adaptation source of the anime. For example `Manga`, `Game` or `Original` if not adapted from other sources. If no source is available, especially for older anime, then choose `Unknown`.'),
-
-            Boolean::make('NSFW')
+            Boolean::make('Is NSFW')
                 ->sortable()
                 ->help('NSFW: Not Safe For Work (not suitable for watchers under the age of 18).'),
 
-            Text::make('Watch rating', 'watch_rating')
-                ->onlyOnForms()
-                ->help('for example: TV-PG.'),
+            Heading::make('Production'),
 
-            Heading::make('Production')
-                ->onlyOnForms(),
-
-            HasMany::make('Anime Studio', 'studios'),
+            BelongsToMany::make('Studios')
+                ->searchable(),
 
             Text::make('Network')
-                ->onlyOnForms()
+                ->hideFromIndex()
                 ->help('The network that airs the Anime.'),
+
+            Text::make('Producer')
+                ->hideFromIndex()
+                ->help('The producer that produces the Anime.'),
 
             // Display moderation indicator on index
             Text::make('Moderated by', function() { return $this->displayModIndicatorForIndex(); })
@@ -158,25 +163,7 @@ class Anime extends Resource
                 ->readonly()
                 ->onlyOnIndex(),
 
-            Select::make('Watch rating')
-                ->options(WatchRating::toSelectArray())
-                ->displayUsingLabels()
-                ->nullable()
-                ->hideFromIndex()
-                ->help('Use `TV-Y7 (FV)` if the show exhibits more \'fantasy violence\', and/or is generally more intense or combative than other shows.'),
-
-            Heading::make('Schedule')
-                ->onlyOnForms(),
-
-            Select::make('Air status', 'status')
-                ->options([
-                    0 => 'TBA',
-                    1 => 'Ended',
-                    2 => 'Continuing'
-                    ])
-                ->displayUsingLabels()
-                ->hideFromIndex()
-                ->help('For example: Ended'),
+            Heading::make('Schedule'),
 
             Date::make('First aired')
                 ->format('DD-MM-YYYY')
@@ -187,6 +174,16 @@ class Anime extends Resource
                 ->format('DD-MM-YYYY')
                 ->hideFromIndex()
                 ->help('The date on which the show last aired. For example: 2016-03-08'),
+
+            Number::make('Runtime')
+                ->onlyOnForms()
+                ->help('For series: The average runtime in minutes of a single episode.<br />For movies: The amount of minutes the movie takes.'),
+
+            Select::make('Air status')
+                ->options(AnimeStatus::toSelectArray())
+                ->displayUsingLabels()
+                ->hideFromIndex()
+                ->help('For example: Ended'),
 
             Time::make('Air time')
                 ->withTwelveHourTime()
@@ -199,8 +196,7 @@ class Anime extends Resource
                 ->hideFromIndex()
                 ->help('The day of the week the show airs at. For example: Thursday'),
 
-            Heading::make('Legal')
-                ->onlyOnForms(),
+            Heading::make('Legal'),
 
             Text::make('Copyright')
                 ->hideFromIndex()

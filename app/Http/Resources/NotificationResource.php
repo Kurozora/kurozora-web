@@ -28,10 +28,10 @@ class NotificationResource extends JsonResource
             'href'          => route('api.notifications.details', $notification, false),
             'attributes'    => [
                 'type'          => $this->typeWithoutNamespace($notification),
-                'read'          => ($notification->read_at != null),
-                'data'          => $notification->data,
-                'string'        => self::getNotificationString($notification),
-                'createdAt'     => $notification->created_at
+                'description'   => self::getNotificationDescription($notification),
+                'payload'       => $notification->data,
+                'isRead'        => ($notification->read_at != null),
+                'createdAt'     => $notification->created_at->format('Y-m-d H:i:s')
             ]
         ];
     }
@@ -49,12 +49,12 @@ class NotificationResource extends JsonResource
     }
 
     /**
-     * Returns the body string that represents the notification.
+     * Returns the body string that describes the notification.
      *
      * @param DatabaseNotification $notification
      * @return string
      */
-    static function getNotificationString($notification): string
+    static function getNotificationDescription($notification): string
     {
         switch($notification->type) {
             case NewSession::class: {

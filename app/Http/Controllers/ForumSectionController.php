@@ -7,13 +7,14 @@ use App\ForumSection;
 use App\ForumSectionBan;
 use App\ForumThread;
 use App\Helpers\JSONResult;
+use App\Http\Requests\GetThreadsRequest;
 use App\Http\Requests\PostThread;
 use App\Http\Resources\ForumSectionResource;
 use App\Http\Resources\ForumThreadResource;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class ForumSectionController extends Controller
 {
@@ -47,23 +48,14 @@ class ForumSectionController extends Controller
     /**
      * Returns the threads of a section.
      *
-     * @param Request $request
+     * @param GetThreadsRequest $request
      * @param ForumSection $section
      * @return JsonResponse
      */
-    public function threads(Request $request, ForumSection $section): JsonResponse
+    public function threads(GetThreadsRequest $request, ForumSection $section): JsonResponse
     {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'order' => ['bail', 'required', 'in:' . implode(',', ForumOrderType::getValues())]
-        ]);
-
         // Fetch the variables
         $givenOrder = $request->input('order');
-
-        // Check validator
-        if($validator->fails())
-            return JSONResult::error($validator->errors()->first());
 
         // Get the threads
         /** @var ForumThread $threads */
@@ -113,6 +105,8 @@ class ForumSectionController extends Controller
      * @param PostThread $request
      * @param ForumSection $section
      * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws TooManyRequestsHttpException
      */
     public function postThread(PostThread $request, ForumSection $section): JsonResponse
     {
@@ -122,11 +116,11 @@ class ForumSectionController extends Controller
         $foundBan = ForumSectionBan::getBanInfo(Auth::id(), $section->id);
 
         if($foundBan !== null)
-            return JSONResult::error($foundBan['message']);
+            throw new AuthorizationException($foundBan['message']);
 
         // Check if the user has already posted within the cooldown period
         if(ForumThread::testPostCooldown(Auth::id()))
-            return JSONResult::error('You can only post a thread once every minute.');
+            throw new TooManyRequestsHttpException(60, 'You can only post a thread once every minute.');
 
         // Create the thread
         $newThread = ForumThread::create([

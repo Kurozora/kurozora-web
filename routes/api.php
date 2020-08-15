@@ -13,9 +13,11 @@ Route::prefix('/v1')
         Route::get('/info', [APIController::class, 'info']);
 
         Route::get('/explore', [ExplorePageController::class, 'explore'])
-            ->middleware('kurozora.userauth:optional');
+            ->middleware('kurozora.userauth:optional')
+            ->name('explore');
 
-        Route::get('/privacy-policy', [MiscController::class, 'getPrivacyPolicy']);
+        Route::get('/privacy-policy', [MiscController::class, 'getPrivacyPolicy'])
+            ->name('legal.privacy');
 
         require 'API/Users.php';
         require 'API/Notifications.php';
@@ -31,4 +33,6 @@ Route::prefix('/v1')
         require 'API/Forum-Replies.php';
         require 'API/Studios.php';
         require 'API/Themes.php';
+
+        Route::fallback([APIController::class, 'error']);
     });

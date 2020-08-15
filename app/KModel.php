@@ -31,6 +31,9 @@ class KModel extends Model
         // Add a limit
         if(isset($options['limit'])) $key .= '-' . $options['limit'];
 
+        // Add a where
+        if(isset($options['where'])) $key .= '-' . implode(',', array_map('implode', $options['where']));
+
         // Add a whereBetween
         if(isset($options['whereBetween'])) $key .= '-' . implode(',', $options['whereBetween']);
 

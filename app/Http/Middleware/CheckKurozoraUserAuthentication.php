@@ -2,13 +2,15 @@
 
 namespace App\Http\Middleware;
 
-use App\Helpers\JSONResult;
 use App\Session;
 use Closure;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\KuroAuthToken;
+use Laravel\Nova\Exceptions\AuthenticationException;
 
 /*
  * This middleware checks the Kurozora user's authentication details before
@@ -19,10 +21,11 @@ class CheckKurozoraUserAuthentication
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure $next
+     * @param Request $request
+     * @param Closure $next
      * @param null|string $parameter
-     * @return mixed
+     * @return JsonResponse|mixed
+     * @throws AuthorizationException
      * @throws Exception
      */
     public function handle($request, Closure $next, $parameter = null)
@@ -40,14 +43,14 @@ class CheckKurozoraUserAuthentication
             if($parameter === 'optional')
                 return $next($request);
 
-            return JSONResult::error('Authentication token is not in a correct format.');
+            throw new AuthorizationException('The request wasn’t accepted due to an issue with the kuro-auth token or because it’s using incorrect authentication.');
         }
 
         // Read the authentication token
         $token = KuroAuthToken::readToken($rawToken);
 
         if($token === null)
-            return JSONResult::error('Unable to read authentication token.');
+            throw new AuthorizationException('The request wasn’t accepted due to an issue with the kuro-auth token or because it’s using incorrect authentication.');
 
         // Fetch the variables
         $secret = $token['session_secret'];
@@ -63,7 +66,8 @@ class CheckKurozoraUserAuthentication
      * @param string $secret
      * @param Closure $next
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse|mixed
+     * @return JsonResponse|mixed
+     * @throws AuthorizationException
      * @throws Exception
      */
     private function authenticate($userID, $secret, Closure $next, $request)
@@ -75,14 +79,14 @@ class CheckKurozoraUserAuthentication
             ['secret',  '=', $secret]
         ])->first();
 
-        // Check whether the session has expired
+        // Check whether the session exists
         if($session === null)
-            return $this->sessionExpiredResponse();
+            throw new AuthorizationException('The request wasn’t accepted due to an expired kuro-auth token.');
 
         if($session->isExpired()) {
             $session->delete();
 
-            return $this->sessionExpiredResponse();
+            throw new AuthorizationException('The request wasn’t accepted due to an expired kuro-auth token.');
         }
 
         // Update the session's fields if necessary
@@ -117,17 +121,5 @@ class CheckKurozoraUserAuthentication
         $session->last_validated_at = now();
 
         $session->save();
-    }
-
-    /**
-     * Returns the response for expired sessions.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    private function sessionExpiredResponse()
-    {
-        return JSONResult::error('Your session has expired.', [
-            'status_code' => 401
-        ]);
     }
 }

@@ -25,7 +25,7 @@ class MeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the user id in the response is the current user's id
-        $this->assertEquals($this->user->id, $response->json()['data'][0]['relationships']['user']['data'][0]['id']);
+        $this->assertEquals($this->user->id, $response->json()['data'][0]['id']);
     }
 
     /**

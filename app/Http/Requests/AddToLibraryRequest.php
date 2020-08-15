@@ -7,7 +7,7 @@ use App\Rules\ValidateLibraryStatus;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddToLibrary extends FormRequest
+class AddToLibraryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -31,7 +31,7 @@ class AddToLibrary extends FormRequest
     public function rules(): array
     {
         return [
-            'anime_id'  => ['bail', 'required', 'integer', 'exists:' . Anime::TABLE_NAME . ',id'],
+            'anime_id'  => ['bail', 'required', 'integer'],
             'status'    => ['bail', 'required', new ValidateLibraryStatus],
         ];
     }
