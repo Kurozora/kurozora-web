@@ -27,7 +27,7 @@ class CharacterResource extends JsonResource
             'attributes'    => [
                 'name'              => $character->name,
                 'about'             => $character->about,
-                'image'             => $character->image,
+                'imageURL'          => $character->image,
                 'debut'             => $character->debut,
                 'status'            => $character->status,
                 'bloodType'         => $character->blood_type,
