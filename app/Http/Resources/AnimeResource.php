@@ -64,7 +64,8 @@ class AnimeResource extends JsonResource
      *
      * @return array
      */
-    protected function getActorsRelationship() {
+    protected function getActorsRelationship(): array
+    {
         /** @param Anime $anime */
         $anime = $this->resource;
 
@@ -81,7 +82,7 @@ class AnimeResource extends JsonResource
      *
      * @return array
      */
-    protected function getCastRelationship()
+    protected function getCastRelationship(): array
     {
         /** @param Anime $anime */
         $anime = $this->resource;
@@ -99,7 +100,7 @@ class AnimeResource extends JsonResource
      *
      * @return array
      */
-    protected function getCharactersRelationship()
+    protected function getCharactersRelationship(): array
     {
         /** @param Anime $anime */
         $anime = $this->resource;
@@ -117,7 +118,7 @@ class AnimeResource extends JsonResource
      *
      * @return array
      */
-    protected function getGenresRelationship()
+    protected function getGenresRelationship(): array
     {
         /** @param Anime $anime */
         $anime = $this->resource;
@@ -135,7 +136,7 @@ class AnimeResource extends JsonResource
      *
      * @return array
      */
-    protected function getRelatedShowsRelationship()
+    protected function getRelatedShowsRelationship(): array
     {
         /** @param Anime $anime */
         $anime = $this->resource;
@@ -153,7 +154,8 @@ class AnimeResource extends JsonResource
      *
      * @return array
      */
-    protected function getSeasonsRelationship() {
+    protected function getSeasonsRelationship(): array
+    {
         /** @param Anime $anime */
         $anime = $this->resource;
 
@@ -170,7 +172,7 @@ class AnimeResource extends JsonResource
      *
      * @return array
      */
-    protected function getStudiosRelationship()
+    protected function getStudiosRelationship(): array
     {
         /** @param Anime $anime */
         $anime = $this->resource;

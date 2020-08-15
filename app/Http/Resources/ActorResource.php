@@ -26,8 +26,8 @@ class ActorResource extends JsonResource
             'attributes'    => [
                 'firstName'    => $actor->first_name,
                 'lastName'     => $actor->last_name,
-                'occupation'    => $actor->occupation,
-                'image'         => $actor->image
+                'occupation'   => $actor->occupation,
+                'imageURL'     => $actor->image
             ]
         ];
     }
