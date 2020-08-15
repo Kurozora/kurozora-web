@@ -116,7 +116,7 @@ class Anime extends KModel
     public function getStudios()
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'studios', 'id' => $this->id]);
+        $cacheKey = self::cacheKey(['name' => 'anime.studios', 'id' => $this->id]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_STUDIOS_SECONDS, function () {
@@ -183,7 +183,7 @@ class Anime extends KModel
     public function getActors(int $limit = null)
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'actors', 'id' => $this->id, 'limit' => $limit]);
+        $cacheKey = self::cacheKey(['name' => 'anime.actors', 'id' => $this->id, 'limit' => $limit]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_ACTORS_SECONDS, function () use ($limit) {
@@ -210,7 +210,7 @@ class Anime extends KModel
     public function getCharacters(int $limit = null)
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'characters', 'id' => $this->id, 'limit' => $limit]);
+        $cacheKey = self::cacheKey(['name' => 'anime.characters', 'id' => $this->id, 'limit' => $limit]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_CHARACTERS_SECONDS, function () use ($limit) {
@@ -237,7 +237,7 @@ class Anime extends KModel
     public function getActorCharacters(int $limit = null)
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'actor_characters', 'id' => $this->id, 'limit' => $limit]);
+        $cacheKey = self::cacheKey(['name' => 'anime.actor_characters', 'id' => $this->id, 'limit' => $limit]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_ACTOR_CHARACTERS_SECONDS, function () use ($limit) {
@@ -264,7 +264,7 @@ class Anime extends KModel
     public function getActorCharacterAnime(int $limit = null)
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'actor_character_anime', 'id' => $this->id, 'limit' => $limit]);
+        $cacheKey = self::cacheKey(['name' => 'anime.actor_character_anime', 'id' => $this->id, 'limit' => $limit]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_ACTOR_CHARACTERS_SECONDS, function () use ($limit) {
@@ -292,7 +292,7 @@ class Anime extends KModel
     function getEpisodes(array $whereBetween = [], int $limit = null)
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'episodes', 'id' => $this->id, 'limit' => $limit, 'whereBetween' => $whereBetween]);
+        $cacheKey = self::cacheKey(['name' => 'anime.episodes', 'id' => $this->id, 'limit' => $limit, 'whereBetween' => $whereBetween]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_EPISODES_SECONDS, function () use ($whereBetween, $limit) {
@@ -324,7 +324,7 @@ class Anime extends KModel
     public function getSeasons(int $limit = null)
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'seasons', 'id' => $this->id, 'limit' => $limit]);
+        $cacheKey = self::cacheKey(['name' => 'anime.seasons', 'id' => $this->id, 'limit' => $limit]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_SEASONS_SECONDS, function () use ($limit) {
@@ -350,7 +350,7 @@ class Anime extends KModel
     public function getGenres()
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'genres', 'id' => $this->id]);
+        $cacheKey = self::cacheKey(['name' => 'anime.genres', 'id' => $this->id]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_GENRES_SECONDS, function () {
@@ -377,7 +377,7 @@ class Anime extends KModel
     public function getAnimeRelations(int $limit = null)
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime_relations', 'id' => $this->id, 'limit' => $limit]);
+        $cacheKey = self::cacheKey(['name' => 'anime.anime_relations', 'id' => $this->id, 'limit' => $limit]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_RELATIONS_SECONDS, function () use ($limit) {

@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use App\Character;
-use App\Enums\AstrologicalSign;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,26 +19,61 @@ class CharacterResource extends JsonResource
         /** @var Character $character */
         $character = $this->resource;
 
+        $resource = CharacterResourceBasic::make($character)->toArray($request);
+
+        if($request->input('include')) {
+            $includes = array_unique(explode(',', $request->input('include')));
+
+            $relationships = [];
+            foreach ($includes as $include) {
+                switch ($include) {
+                    case 'shows':
+                        $relationships = array_merge($relationships, $this->getAnimeRelationship());
+                        break;
+                    case 'actors':
+                        $relationships = array_merge($relationships, $this->getActorsRelationship());
+                        break;
+                }
+            }
+
+            $resource = array_merge($resource, ['relationships' => $relationships]);
+        }
+
+        return $resource;
+    }
+
+    /**
+     * Returns the actors relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getActorsRelationship(): array
+    {
+        /** @param Character $character */
+        $character = $this->resource;
+
         return [
-            'id'            => $character->id,
-            'type'          => 'characters',
-            'href'          => route('api.characters.details', $character, false),
-            'attributes'    => [
-                'name'              => $character->name,
-                'about'             => $character->about,
-                'imageURL'          => $character->image,
-                'debut'             => $character->debut,
-                'status'            => $character->status,
-                'bloodType'         => $character->blood_type,
-                'favoriteFood'      => $character->favorite_food,
-                'bust'              => $character->bust,
-                'waist'             => $character->waist,
-                'hip'               => $character->hip,
-                'height'            => $character->height,
-                'age'               => $character->age,
-                'birthDay'          => $character->birth_day,
-                'birthMonth'        => $character->birth_month,
-                'astrologicalSign'  => AstrologicalSign::getDescription($character->astrological_sign)
+            'actors' => [
+                'href' => route('api.characters.actors', $character, false),
+                'data' => ActorResource::collection($character->getActors(Character::MAXIMUM_RELATED_SHOWS_LIMIT))
+            ]
+        ];
+    }
+
+    /**
+     * Returns the anime relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getAnimeRelationship(): array
+    {
+        /** @param Character $character */
+        $character = $this->resource;
+
+        return [
+            'shows' => [
+                'href' => route('api.characters.anime', $character, false),
+                'data' => AnimeResourceBasic::collection($character->getAnime(Character::MAXIMUM_RELATED_SHOWS_LIMIT))
             ]
         ];
     }
