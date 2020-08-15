@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
+use App\Helpers\KuroAuthToken;
 use App\Http\Requests\ResetPassword;
+use App\Http\Requests\SearchUserRequest;
 use App\Http\Requests\UpdateProfile;
 use App\Http\Resources\NotificationResource;
 use App\Http\Resources\SessionResource;
-use App\Http\Resources\SessionResourceBasic;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceBasic;
 use App\Jobs\SendNewPasswordMail;
@@ -20,7 +21,6 @@ use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -56,7 +56,10 @@ class UserController extends Controller
 
         // Show profile response
         return JSONResult::success([
-            'data' => SessionResource::collection([$session])
+            'data'      => [
+                UserResource::make($session->user)->includingSession($session)
+            ],
+            'authToken' => KuroAuthToken::generate($session->user->id, $session->secret)
         ]);
     }
 
@@ -71,6 +74,7 @@ class UserController extends Controller
         $data = $request->validated();
 
         // Try to find the user with this email
+        /** @var User $user */
         $user = User::where('email', $data['email'])->first();
 
         // There is a user with this email
@@ -109,23 +113,14 @@ class UserController extends Controller
      */
     public function getSessions(Request $request, User $user): JsonResponse
     {
-        // Get the other sessions
-        $otherSessions = Session::where([
+        // Get all sessions except current one
+        $sessions = Session::where([
             ['user_id', '=',    $user->id],
             ['secret',  '!=',   $request['session_secret']]
         ])->get();
 
-        // Get the current session
-        $curSession = Session::where([
-            ['user_id', '=',    $user->id],
-            ['secret',  '=',    $request['session_secret']]
-        ])->first();
-
         return JSONResult::success([
-            'data' => [
-                'current_session'   => SessionResourceBasic::make($curSession),
-                'other_sessions'    => SessionResourceBasic::collection($otherSessions)
-            ]
+            'data' => SessionResource::collection($sessions)
         ]);
     }
 
@@ -138,6 +133,7 @@ class UserController extends Controller
     public function confirmEmail($confirmationID)
     {
         // Try to find a user with this confirmation ID
+        /** @var User $foundUser */
         $foundUser = User::where('email_confirmation_id', $confirmationID)->first();
 
         // No user found
@@ -172,6 +168,7 @@ class UserController extends Controller
     public function resetPasswordPage($token)
     {
         // Try to find a reset with this reset token
+        /** @var PasswordReset $foundReset */
         $foundReset = PasswordReset::where('token', $token)->first();
 
         // No reset found
@@ -227,20 +224,11 @@ class UserController extends Controller
     /**
      * Retrieves User search results
      *
-     * @param Request $request
+     * @param SearchUserRequest $request
      * @return JsonResponse
      */
-    public function search(Request $request): JsonResponse
+    public function search(SearchUserRequest $request): JsonResponse
     {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'query' => 'bail|required|string|min:1'
-        ]);
-
-        // Check validator
-        if($validator->fails())
-            return JSONResult::error($validator->errors()->first());
-
         $searchQuery = $request->input('query');
 
         // Search for the users
@@ -250,8 +238,7 @@ class UserController extends Controller
 
         // Show response
         return JSONResult::success([
-            'max_search_results'    => User::MAX_SEARCH_RESULTS,
-            'data'                  => UserResourceBasic::collection($users)
+            'data' => UserResourceBasic::collection($users)
         ]);
     }
 
@@ -319,10 +306,12 @@ class UserController extends Controller
         else $displayMessage .= 'No information was updated.';
 
         return JSONResult::success([
-            'data' => [
-                'message' => $displayMessage,
-                'user' => UserResource::collection([$user])
-            ]
+            'data'      => [
+                'biography'         => $user->biography,
+                'profileImageURL'   => $user->getFirstMediaFullUrl('avatar'),
+                'bannerImageURL'    => $user->getFirstMediaFullUrl('banner')
+            ],
+            'message'   => $displayMessage,
         ]);
     }
 }

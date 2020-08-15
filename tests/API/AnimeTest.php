@@ -36,7 +36,7 @@ class AnimeTest extends TestCase
      */
     public function a_user_can_view_the_related_anime_of_an_anime()
     {
-        $response = $this->json('GET', '/api/v1/anime/' . $this->anime->id . '/relations', []);
+        $response = $this->json('GET', '/api/v1/anime/' . $this->anime->id . '/related-shows');
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
@@ -53,12 +53,12 @@ class AnimeTest extends TestCase
      */
     public function an_authenticated_user_can_view_the_related_anime_of_an_anime_with_personal_information()
     {
-        $response = $this->auth()->json('GET', '/api/v1/anime/' . $this->anime->id . '/relations', []);
+        $response = $this->auth()->json('GET', '/api/v1/anime/' . $this->anime->id . '/related-shows');
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the current_user array is not empty
-        $this->assertTrue(count($response->json()['data'][0]['show']['currentUser']) > 0);
+        $this->assertArrayHasKey('libraryStatus', $response->json()['data'][0]['show']['attributes']);
     }
 }

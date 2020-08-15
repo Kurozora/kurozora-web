@@ -4,6 +4,8 @@ namespace App;
 
 use App\Enums\AnimeImageType;
 use App\Traits\KuroSearchTrait;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,7 +17,9 @@ use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 
 class Anime extends KModel
 {
-    use KuroSearchTrait, LogsActivity;
+    use HasSlug,
+        KuroSearchTrait,
+        LogsActivity;
 
     /**
      * Searchable rules.
@@ -45,8 +49,8 @@ class Anime extends KModel
     // Minimum ratings required to calculate average
     const MINIMUM_RATINGS_REQUIRED = 30;
 
-    // Maximum relationship fetch limit
-    const MAXIMUM_RELATIONSHIP_LIMIT = 10;
+    // Maximum related-shows fetch limit
+    const MAXIMUM_RELATED_SHOWS_LIMIT = 10;
 
     // How long to cache certain responses
     const CACHE_KEY_EXPLORE_SECONDS = 120 * 60;
@@ -62,6 +66,16 @@ class Anime extends KModel
     // Table name
     const TABLE_NAME = 'animes';
     protected $table = self::TABLE_NAME;
+
+    /**
+     * Get the options for generating the slug.
+     */
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('title')
+            ->saveSlugsTo('slug');
+    }
 
     /**
      * Returns the users who have this Anime in their favorites.
@@ -87,11 +101,11 @@ class Anime extends KModel
     /**
      * Get the Anime's studios
      *
-     * @return HasMany
+     * @return BelongsToMany
      */
     public function studios()
     {
-        return $this->hasMany(AnimeStudio::class);
+        return $this->belongsToMany(Studio::class);
     }
 
     /**

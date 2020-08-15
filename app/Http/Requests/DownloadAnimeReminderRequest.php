@@ -2,12 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Anime;
-use App\Rules\ValidateAnimeIDIsTracked;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DeleteFromLibrary extends FormRequest
+class DownloadAnimeReminderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -16,11 +14,11 @@ class DeleteFromLibrary extends FormRequest
      */
     public function authorize(): bool
     {
-        // Check if the user can delete from this library
+        // Check if the user can download this user's reminders.
         /** @var User $user */
         $user = $this->route('user');
 
-        return $this->user()->can('del_from_library', $user);
+        return $this->user()->can('download_anime_reminder', $user);
     }
 
     /**
@@ -30,8 +28,6 @@ class DeleteFromLibrary extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'anime_id'  => ['bail', 'required', 'integer', 'exists:' . Anime::TABLE_NAME . ',id', new ValidateAnimeIDIsTracked],
-        ];
+        return [];
     }
 }

@@ -9,7 +9,7 @@ use App\Rules\ValidateLibraryStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use musa11971\SortRequest\Traits\SortsViaRequest;
 
-class GetLibrary extends FormRequest
+class GetLibraryRequest extends FormRequest
 {
     use SortsViaRequest;
 

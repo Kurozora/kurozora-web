@@ -72,7 +72,7 @@ class AnimeRelation extends Resource
      * @return string
      */
     public static function label() {
-        return 'Relations';
+        return 'Related Shows';
     }
 
     /**

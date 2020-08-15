@@ -39,7 +39,7 @@ class ForumReplyResource extends JsonResource
                     'likes'     => $totalLikes->getCount(),
                     'dislikes'  => $totalDislikes->getCount()
                 ],
-                'createdAt' => $forumReply->created_at,
+                'createdAt' => $forumReply->created_at->format('Y-m-d H:i:s'),
             ]
         ];
 
@@ -48,7 +48,7 @@ class ForumReplyResource extends JsonResource
         $resource = array_merge($resource, ['relationships' => $relationships]);
 
         if(Auth::check())
-            $resource = array_merge($resource, $this->getUserSpecificDetails());
+            $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
 
         return $resource;
     }
@@ -64,9 +64,7 @@ class ForumReplyResource extends JsonResource
         $user = Auth::user();
 
         return [
-            'currentUser' => [
-                'likeAction' => $user->getCurrentVoteValue()
-            ]
+            'voteAction' => $user->getCurrentVoteValue()
         ];
     }
 
