@@ -2968,7 +2968,7 @@
                               "firstName": "Leatha",
                               "lastName": "Dietrich",
                               "occupation": "Installation and Repair Technician",
-                              "image": "https://lorempixel.com/640/480/?22657"
+                              "imageURL": "https://lorempixel.com/640/480/?22657"
                             }
                           },
                           {
@@ -2979,7 +2979,7 @@
                               "firstName": "Aniyah",
                               "lastName": "Waelchi",
                               "occupation": "Government Property Inspector",
-                              "image": "https://lorempixel.com/640/480/?66477"
+                              "imageURL": "https://lorempixel.com/640/480/?66477"
                             }
                           },
                           {
@@ -2990,7 +2990,7 @@
                               "firstName": "Ashley",
                               "lastName": "Carroll",
                               "occupation": "Inspector",
-                              "image": "https://lorempixel.com/640/480/?48504"
+                              "imageURL": "https://lorempixel.com/640/480/?48504"
                             }
                           }
                         ],
@@ -3005,7 +3005,7 @@
                             "attributes": {
                               "name": "Savion Strosin",
                               "about": "Quae rerum delectus neque et officiis fuga incidunt et. Exercitationem et consequatur quae sunt molestias repellat dolorem. Necessitatibus iusto voluptatem ea dolor quasi. Rerum voluptas vel voluptate. Aut est dignissimos et molestias dolores sed perspiciatis. Aperiam eveniet omnis quo vel ipsum incidunt earum. Maxime veritatis eligendi sit. Quae et placeat earum quos. Et ut possimus in cumque. Omnis veniam distinctio officia minus. Et aut quia vel pariatur. Sint ut natus quia vitae sed quia. Numquam voluptatem quis beatae optio facere animi voluptatem. Quidem ullam ipsa velit totam debitis enim. Eos nesciunt aut dolores vitae consequuntur voluptas. Molestiae illo repellendus necessitatibus voluptatem. Optio labore necessitatibus incidunt. Non quia molestiae dolores repudiandae. Quam sapiente ea sed delectus molestiae deleniti maiores.",
-                              "image": "https://lorempixel.com/640/480/?82757",
+                              "imageURL": "https://lorempixel.com/640/480/?82757",
                               "debut": "Episode 65",
                               "status": "Deceased",
                               "bloodType": "H",
@@ -3027,7 +3027,7 @@
                             "attributes": {
                               "name": "Tyra Armstrong IV",
                               "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
-                              "image": "https://lorempixel.com/640/480/?46141",
+                              "imageURL": "https://lorempixel.com/640/480/?46141",
                               "debut": "Episode 05",
                               "status": "Deceased",
                               "bloodType": "W",
@@ -3049,7 +3049,7 @@
                             "attributes": {
                               "name": "Lorna Pollich",
                               "about": "Est vitae et voluptas ullam unde id ea. Quo non distinctio ipsa blanditiis aspernatur. Perferendis aut officia sit similique soluta odit eum. Sunt quo delectus est quis sapiente. A natus voluptatem omnis distinctio quis quas. Molestiae ut aut voluptas incidunt necessitatibus nihil culpa. Molestiae dolores illo dignissimos amet sit. Sit non et enim doloremque ratione exercitationem. Hic voluptas ab eos quia quia quia. Hic expedita est distinctio quaerat accusamus.",
-                              "image": "https://lorempixel.com/640/480/?51170",
+                              "imageURL": "https://lorempixel.com/640/480/?51170",
                               "debut": "Episode 82",
                               "status": "Deceased",
                               "bloodType": "A",
@@ -3078,7 +3078,7 @@
                                 "firstName": "Leatha",
                                 "lastName": "Dietrich",
                                 "occupation": "Installation and Repair Technician",
-                                "image": "https://lorempixel.com/640/480/?22657"
+                                "imageURL": "https://lorempixel.com/640/480/?22657"
                               }
                             },
                             "character": {
@@ -3088,7 +3088,7 @@
                               "attributes": {
                                 "name": "Savion Strosin",
                                 "about": "Quae rerum delectus neque et officiis fuga incidunt et. Exercitationem et consequatur quae sunt molestias repellat dolorem. Necessitatibus iusto voluptatem ea dolor quasi. Rerum voluptas vel voluptate. Aut est dignissimos et molestias dolores sed perspiciatis. Aperiam eveniet omnis quo vel ipsum incidunt earum. Maxime veritatis eligendi sit. Quae et placeat earum quos. Et ut possimus in cumque. Omnis veniam distinctio officia minus. Et aut quia vel pariatur. Sint ut natus quia vitae sed quia. Numquam voluptatem quis beatae optio facere animi voluptatem. Quidem ullam ipsa velit totam debitis enim. Eos nesciunt aut dolores vitae consequuntur voluptas. Molestiae illo repellendus necessitatibus voluptatem. Optio labore necessitatibus incidunt. Non quia molestiae dolores repudiandae. Quam sapiente ea sed delectus molestiae deleniti maiores.",
-                                "image": "https://lorempixel.com/640/480/?82757",
+                                "imageURL": "https://lorempixel.com/640/480/?82757",
                                 "debut": "Episode 65",
                                 "status": "Deceased",
                                 "bloodType": "H",
@@ -3103,7 +3103,7 @@
                                 "astrologicalSign": "Aquarius ♒️"
                               }
                             },
-                            "castRole": "Protagonist"
+                            "role": "Protagonist"
                           },
                           {
                             "actor": {
@@ -3114,7 +3114,7 @@
                                 "firstName": "Aniyah",
                                 "lastName": "Waelchi",
                                 "occupation": "Government Property Inspector",
-                                "image": "https://lorempixel.com/640/480/?66477"
+                                "imageURL": "https://lorempixel.com/640/480/?66477"
                               }
                             },
                             "character": {
@@ -3124,7 +3124,7 @@
                               "attributes": {
                                 "name": "Tyra Armstrong IV",
                                 "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
-                                "image": "https://lorempixel.com/640/480/?46141",
+                                "imageURL": "https://lorempixel.com/640/480/?46141",
                                 "debut": "Episode 05",
                                 "status": "Deceased",
                                 "bloodType": "W",
@@ -3139,7 +3139,7 @@
                                 "astrologicalSign": "Virgo ♍️"
                               }
                             },
-                            "castRole": "Deuteragonist"
+                            "role": "Deuteragonist"
                           },
                           {
                             "actor": {
@@ -3150,7 +3150,7 @@
                                 "firstName": "Ashley",
                                 "lastName": "Carroll",
                                 "occupation": "Inspector",
-                                "image": "https://lorempixel.com/640/480/?48504"
+                                "imageURL": "https://lorempixel.com/640/480/?48504"
                               }
                             },
                             "character": {
@@ -3160,7 +3160,7 @@
                               "attributes": {
                                 "name": "Lorna Pollich",
                                 "about": "Est vitae et voluptas ullam unde id ea. Quo non distinctio ipsa blanditiis aspernatur. Perferendis aut officia sit similique soluta odit eum. Sunt quo delectus est quis sapiente. A natus voluptatem omnis distinctio quis quas. Molestiae ut aut voluptas incidunt necessitatibus nihil culpa. Molestiae dolores illo dignissimos amet sit. Sit non et enim doloremque ratione exercitationem. Hic voluptas ab eos quia quia quia. Hic expedita est distinctio quaerat accusamus.",
-                                "image": "https://lorempixel.com/640/480/?51170",
+                                "imageURL": "https://lorempixel.com/640/480/?51170",
                                 "debut": "Episode 82",
                                 "status": "Deceased",
                                 "bloodType": "A",
@@ -3175,7 +3175,7 @@
                                 "astrologicalSign": "Cancer ♋️"
                               }
                             },
-                            "castRole": "Tritagonist"
+                            "role": "Tritagonist"
                           }
                         ],
                         "href": "/api/v1/anime/1/cast"
@@ -3316,7 +3316,7 @@
                       "firstName": "Leatha",
                       "lastName": "Dietrich",
                       "occupation": "Installation and Repair Technician",
-                      "image": "https://lorempixel.com/640/480/?22657"
+                      "imageURL": "https://lorempixel.com/640/480/?22657"
                     }
                   },
                   {
@@ -3327,7 +3327,7 @@
                       "firstName": "Aniyah",
                       "lastName": "Waelchi",
                       "occupation": "Government Property Inspector",
-                      "image": "https://lorempixel.com/640/480/?66477"
+                      "imageURL": "https://lorempixel.com/640/480/?66477"
                     }
                   }
                 ]
@@ -3351,7 +3351,7 @@
                     "attributes": {
                       "name": "Tyra Armstrong IV",
                       "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
-                      "image": "https://lorempixel.com/640/480/?46141",
+                      "imageURL": "https://lorempixel.com/640/480/?46141",
                       "debut": "Episode 05",
                       "status": "Deceased",
                       "bloodType": "W",
@@ -3373,7 +3373,7 @@
                     "attributes": {
                       "name": "Lorna Pollich",
                       "about": "Est vitae et voluptas ullam unde id ea. Quo non distinctio ipsa blanditiis aspernatur. Perferendis aut officia sit similique soluta odit eum. Sunt quo delectus est quis sapiente. A natus voluptatem omnis distinctio quis quas. Molestiae ut aut voluptas incidunt necessitatibus nihil culpa. Molestiae dolores illo dignissimos amet sit. Sit non et enim doloremque ratione exercitationem. Hic voluptas ab eos quia quia quia. Hic expedita est distinctio quaerat accusamus.",
-                      "image": "https://lorempixel.com/640/480/?51170",
+                      "imageURL": "https://lorempixel.com/640/480/?51170",
                       "debut": "Episode 82",
                       "status": "Deceased",
                       "bloodType": "A",
@@ -3411,7 +3411,7 @@
                         "firstName": "Leatha",
                         "lastName": "Dietrich",
                         "occupation": "Installation and Repair Technician",
-                        "image": "https://lorempixel.com/640/480/?22657"
+                        "imageURL": "https://lorempixel.com/640/480/?22657"
                       }
                     },
                     "character": {
@@ -3421,7 +3421,7 @@
                       "attributes": {
                         "name": "Savion Strosin",
                         "about": "Quae rerum delectus neque et officiis fuga incidunt et. Exercitationem et consequatur quae sunt molestias repellat dolorem. Necessitatibus iusto voluptatem ea dolor quasi. Rerum voluptas vel voluptate. Aut est dignissimos et molestias dolores sed perspiciatis. Aperiam eveniet omnis quo vel ipsum incidunt earum. Maxime veritatis eligendi sit. Quae et placeat earum quos. Et ut possimus in cumque. Omnis veniam distinctio officia minus. Et aut quia vel pariatur. Sint ut natus quia vitae sed quia. Numquam voluptatem quis beatae optio facere animi voluptatem. Quidem ullam ipsa velit totam debitis enim. Eos nesciunt aut dolores vitae consequuntur voluptas. Molestiae illo repellendus necessitatibus voluptatem. Optio labore necessitatibus incidunt. Non quia molestiae dolores repudiandae. Quam sapiente ea sed delectus molestiae deleniti maiores.",
-                        "image": "https://lorempixel.com/640/480/?82757",
+                        "imageURL": "https://lorempixel.com/640/480/?82757",
                         "debut": "Episode 65",
                         "status": "Deceased",
                         "bloodType": "H",
@@ -3436,7 +3436,7 @@
                         "astrologicalSign": "Aquarius ♒️"
                       }
                     },
-                    "castRole": "Protagonist"
+                    "role": "Protagonist"
                   },
                   {
                     "actor": {
@@ -3447,7 +3447,7 @@
                         "firstName": "Aniyah",
                         "lastName": "Waelchi",
                         "occupation": "Government Property Inspector",
-                        "image": "https://lorempixel.com/640/480/?66477"
+                        "imageURL": "https://lorempixel.com/640/480/?66477"
                       }
                     },
                     "character": {
@@ -3457,7 +3457,7 @@
                       "attributes": {
                         "name": "Tyra Armstrong IV",
                         "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
-                        "image": "https://lorempixel.com/640/480/?46141",
+                        "imageURL": "https://lorempixel.com/640/480/?46141",
                         "debut": "Episode 05",
                         "status": "Deceased",
                         "bloodType": "W",
@@ -3472,7 +3472,7 @@
                         "astrologicalSign": "Virgo ♍️"
                       }
                     },
-                    "castRole": "Deuteragonist"
+                    "role": "Deuteragonist"
                   }
                 ]
               }
@@ -3867,7 +3867,7 @@
                       "firstName": "Aniyah",
                       "lastName": "Waelchi",
                       "occupation": "Government Property Inspector",
-                      "image": "https://lorempixel.com/640/480/?66477"
+                      "imageURL": "https://lorempixel.com/640/480/?66477"
                     }
                   },
                   {
@@ -3878,7 +3878,7 @@
                       "firstName": "Ashley",
                       "lastName": "Carroll",
                       "occupation": "Inspector",
-                      "image": "https://lorempixel.com/640/480/?48504"
+                      "imageURL": "https://lorempixel.com/640/480/?48504"
                     }
                   }
                 ]
@@ -3903,7 +3903,7 @@
                       "firstName": "Aniyah",
                       "lastName": "Waelchi",
                       "occupation": "Government Property Inspector",
-                      "image": "https://lorempixel.com/640/480/?66477"
+                      "imageURL": "https://lorempixel.com/640/480/?66477"
                     }
                   }
                 ]
@@ -3927,7 +3927,7 @@
                     "attributes": {
                       "name": "Tyra Armstrong IV",
                       "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
-                      "image": "https://lorempixel.com/640/480/?46141",
+                      "imageURL": "https://lorempixel.com/640/480/?46141",
                       "debut": "Episode 05",
                       "status": "Deceased",
                       "bloodType": "W",
@@ -3949,7 +3949,7 @@
                     "attributes": {
                       "name": "Lorna Pollich",
                       "about": "Est vitae et voluptas ullam unde id ea. Quo non distinctio ipsa blanditiis aspernatur. Perferendis aut officia sit similique soluta odit eum. Sunt quo delectus est quis sapiente. A natus voluptatem omnis distinctio quis quas. Molestiae ut aut voluptas incidunt necessitatibus nihil culpa. Molestiae dolores illo dignissimos amet sit. Sit non et enim doloremque ratione exercitationem. Hic voluptas ab eos quia quia quia. Hic expedita est distinctio quaerat accusamus.",
-                      "image": "https://lorempixel.com/640/480/?51170",
+                      "imageURL": "https://lorempixel.com/640/480/?51170",
                       "debut": "Episode 82",
                       "status": "Deceased",
                       "bloodType": "A",
@@ -3985,7 +3985,7 @@
                     "attributes": {
                       "name": "Tyra Armstrong IV",
                       "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
-                      "image": "https://lorempixel.com/640/480/?46141",
+                      "imageURL": "https://lorempixel.com/640/480/?46141",
                       "debut": "Episode 05",
                       "status": "Deceased",
                       "bloodType": "W",
