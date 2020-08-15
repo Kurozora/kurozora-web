@@ -66,7 +66,7 @@ class Notification extends Resource
                 ->required()
                 ->sortable(),
 
-            Text::make('Body', function() use ($notification) { return NotificationResource::getNotificationString($notification); })
+            Text::make('Body', function() use ($notification) { return NotificationResource::getNotificationDescription($notification); })
                 ->readonly(),
 
             MorphTo::make('Receiver', 'notifiable')->types([

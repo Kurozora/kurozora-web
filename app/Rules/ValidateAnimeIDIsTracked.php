@@ -9,7 +9,7 @@ use Illuminate\Contracts\Validation\Rule;
 class ValidateAnimeIDIsTracked implements Rule
 {
     /** @var Anime $anime */
-    protected $anime;
+    protected Anime $anime;
 
     /**
      * Determine if the validation rule passes.

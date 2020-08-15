@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use Chaseconey\ExternalImage\ExternalImage;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
@@ -54,18 +55,17 @@ class Genre extends Resource
         return [
             ID::make()->sortable(),
 
-            Text::make('Genre Name', 'name')
+            ExternalImage::make('Symbol image URL', 'symbol')
+                ->rules('max:255'),
+
+            Text::make('Name')
                 ->rules('required')
                 ->sortable(),
 
-            Text::make('Symbol image URL', 'symbol')
-                ->rules('max:255')
-                ->hideFromIndex(),
-
-            Color::make('Genre Color', 'color')
+            Color::make('Color')
                 ->rules('required'),
 
-            Boolean::make('NSFW', 'nsfw')
+            Boolean::make('Is NSFW')
                 ->rules('required')
                 ->sortable(),
 

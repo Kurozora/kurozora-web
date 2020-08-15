@@ -22,11 +22,10 @@ class AnimeSeasonResource extends JsonResource
         return [
             'id'            => $animeSeason->id,
             'type'          => 'seasons',
-            'href'          => route('seasons.details', $animeSeason, false),
+            'href'          => route('api.seasons.details', $animeSeason, false),
             'attributes'    => [
-                'animeID'       => $animeSeason->anime_id,
-                'title'         => $animeSeason->getTitle(),
                 'number'        => $animeSeason->number,
+                'title'         => $animeSeason->getTitle(),
                 'episodeCount'  => $animeSeason->getEpisodeCount(),
                 'firstAired'    => $animeSeason->getFirstAired(),
             ]

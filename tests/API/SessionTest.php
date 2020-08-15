@@ -2,7 +2,6 @@
 
 namespace Tests\API;
 
-use App\Http\Resources\SessionResourceBasic;
 use App\Session;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -31,11 +30,8 @@ class SessionTest extends TestCase
         // Check whether the request was successful
         $response->assertSuccessfulAPIResponse();
 
-        // Check whether the response contains the current sessions
-        $response->assertJson(['data' => ['current_session' => []]]);
-
         // Check whether the response contains the sessions
-        $this->assertCount(20, $response->json()['data']['other_sessions']);
+        $this->assertCount(20, $response->json()['data']);
     }
 
     /**

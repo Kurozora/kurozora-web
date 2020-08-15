@@ -5,31 +5,21 @@ namespace App\Http\Controllers;
 use App\Enums\VoteType;
 use App\ForumReply;
 use App\Helpers\JSONResult;
+use App\Http\Requests\VoteReplyRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
 class ForumReplyController extends Controller
 {
     /**
      * Leaves a vote for a reply.
      *
-     * @param Request $request
+     * @param VoteReplyRequest $request
      * @param ForumReply $reply
      * @return JsonResponse
      */
-    public function vote(Request $request, ForumReply $reply): JsonResponse
+    public function vote(VoteReplyRequest $request, ForumReply $reply): JsonResponse
     {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'vote'      => 'bail|required|numeric|in:-1,1'
-        ]);
-
-        // Check validator
-        if($validator->fails())
-            return JSONResult::error($validator->errors()->first());
-
         // Get the user
         $user = Auth::user();
 
@@ -40,7 +30,7 @@ class ForumReplyController extends Controller
         // Show successful response
         return JSONResult::success([
             'data' => [
-                'vote_action' => $voteAction
+                'voteAction' => $voteAction
             ]
         ]);
     }

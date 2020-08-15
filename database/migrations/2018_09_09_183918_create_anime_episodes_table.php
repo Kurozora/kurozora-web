@@ -18,12 +18,13 @@ class CreateAnimeEpisodesTable extends Migration
         Schema::create(AnimeEpisode::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('season_id');
-            $table->boolean('verified')->default(false);
-            $table->integer('number')->unsigned()->nullable();
-            $table->string('name')->nullable();
-            $table->dateTime('first_aired')->nullable();
-            $table->string('image')->nullable();
+            $table->unsignedInteger('number');
+            $table->string('title');
             $table->text('overview')->nullable();
+            $table->string('preview_image')->nullable();
+            $table->dateTime('first_aired');
+            $table->unsignedTinyInteger('duration')->default(0);
+            $table->boolean('verified')->default(false);
             $table->timestamps();
         });
 

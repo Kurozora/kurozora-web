@@ -183,6 +183,16 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
     }
 
     /**
+     * Returns the User-Reminder-Anime relationship for the user.
+     *
+     * @return HasMany
+     */
+    function userReminderAnime()
+    {
+        return $this->hasMany(UserReminderAnime::class);
+    }
+
+    /**
      * Returns the content of the calendar generated from the user's anime reminders.
      *
      * @return string

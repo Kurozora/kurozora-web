@@ -31,8 +31,7 @@ class AddAnimeFavoriteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'anime_id'      => ['bail', 'required', 'integer', 'exists:' . Anime::TABLE_NAME . ',id', new ValidateAnimeIDIsTracked],
-            'is_favorite'   => ['bail', 'required', 'boolean']
+            'anime_id' => ['bail', 'required', 'integer', 'exists:' . Anime::TABLE_NAME . ',id', new ValidateAnimeIDIsTracked]
         ];
     }
 }

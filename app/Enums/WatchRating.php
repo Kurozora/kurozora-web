@@ -5,6 +5,7 @@ namespace App\Enums;
 use BenSampo\Enum\Enum;
 
 /**
+ * @method static WatchRating Unknown()
  * @method static WatchRating TVY()
  * @method static WatchRating TVY7()
  * @method static WatchRating TVY7FV()
@@ -15,13 +16,14 @@ use BenSampo\Enum\Enum;
  */
 final class WatchRating extends Enum
 {
-    const TVY       = 0;
-    const TVY7      = 1;
-    const TVY7FV    = 2;
-    const TVG       = 3;
-    const TVPG      = 4;
-    const TV14      = 5;
-    const TVMA      = 6;
+    const Unknown   = 0;
+    const TVY       = 1;
+    const TVY7      = 2;
+    const TVY7FV    = 3;
+    const TVG       = 4;
+    const TVPG      = 5;
+    const TV14      = 6;
+    const TVMA      = 7;
 
     /**
      * Get the description for an enum value
@@ -34,25 +36,18 @@ final class WatchRating extends Enum
         switch($value) {
         case self::TVY:
             return 'TV-Y';
-            break;
         case self::TVY7:
             return 'TV-Y7';
-            break;
         case self::TVY7FV:
             return 'TV-Y7 (FV)';
-            break;
         case self::TVG:
             return 'TV-G';
-            break;
         case self::TVPG:
             return 'TV-PG';
-            break;
         case self::TV14:
             return 'TV-14';
-            break;
         case self::TVMA:
             return 'TV-MA';
-            break;
         }
         return parent::getDescription($value);
     }
