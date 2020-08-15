@@ -1,4 +1,4 @@
 #!/bin/bash
 
-php artisan migrate:fresh --force
+php artisan migrate --force
 php artisan love:reaction-type-add --default
