@@ -49,4 +49,39 @@ class CharactersTest extends TestCase
         // Check whether the response includes actors relationship
         $this->assertArrayHasKey('actors', $response->json()['data'][0]['relationships']);
     }
+
+
+    /**
+     * A user can view specific character actors.
+     *
+     * @return void
+     * @test
+     */
+    public function a_user_can_view_specific_character_actors()
+    {
+        $response = $this->get('/api/v1/characters/'.$this->character->id.'/actors');
+
+        // Check whether the response was successful
+        $response->assertSuccessfulAPIResponse();
+
+        // Check whether the characters are in the response
+        $this->assertTrue($response->json()['data'] > 0);
+    }
+
+    /**
+     * A user can view specific character anime.
+     *
+     * @return void
+     * @test
+     */
+    public function a_user_can_view_specific_character_anime()
+    {
+        $response = $this->get('/api/v1/characters/'.$this->character->id.'/anime');
+
+        // Check whether the response was successful
+        $response->assertSuccessfulAPIResponse();
+
+        // Check whether the anime are in the response
+        $this->assertTrue($response->json()['data'] > 0);
+    }
 }

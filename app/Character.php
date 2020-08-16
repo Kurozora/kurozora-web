@@ -9,8 +9,8 @@ use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 
 class Character extends KModel
 {
-    // Maximum related-shows fetch limit
-    const MAXIMUM_RELATED_SHOWS_LIMIT = 10;
+    // Maximum relationships fetch limit
+    const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
 
     // How long to cache certain responses
     const CACHE_KEY_ACTORS_SECONDS = 120 * 60;

@@ -1163,26 +1163,16 @@
         }
       }
     },
-    "/actors": {
-      "get": {
-        "tags": [
-          "actors"
-        ],
-        "operationId": "getActors",
-        "summary": "Actors list.",
-        "description": "This endpoint will retrieve the actors.",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetActorsSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
     "/actors/{actorID}": {
       "get": {
+        "security": [
+          {
+          },
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
         "tags": [
           "actors"
         ],
@@ -1198,11 +1188,91 @@
             },
             "required": true,
             "description": "ID of the actor."
+          },
+          {
+            "in": "query",
+            "name": "include",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "uniqueItems": true
+            },
+            "explode": false,
+            "required": false,
+            "description": "The relations to include in the response. Available relations are:\n- characters\n- shows"
           }
         ],
         "responses": {
           "200": {
             "$ref": "#/components/responses/GetActorsDetailsSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/actors/{actorID}/anime": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "actors"
+        ],
+        "operationId": "getActorsAnime",
+        "summary": "Get actor anime.",
+        "description": "This endpoint will retrieve the anime of a specific actor.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "actorID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the actor."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetActorsAnimeSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/actors/{actorID}/characters": {
+      "get": {
+        "tags": [
+          "actors"
+        ],
+        "operationId": "getActorsCharacters",
+        "summary": "Actor character information.",
+        "description": "This endpoint will retrieve the characters of an Actor item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "actorID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the actor."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetActorsCharactersSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -1637,24 +1707,6 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/PostAnimeEpisodesWatchedSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/characters": {
-      "get": {
-        "tags": [
-          "characters"
-        ],
-        "operationId": "getCharacters",
-        "summary": "Characters list.",
-        "description": "This endpoint will retrieve the characters.",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetCharactersSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2970,6 +3022,181 @@
           }
         }
       },
+      "GetActorsDetailsSuccess": {
+        "description": "Successful GET Actors Details JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "actors",
+                    "href": "/api/v1/actors/1",
+                    "attributes": {
+                      "firstName": "Aniyah",
+                      "lastName": "Waelchi",
+                      "occupation": "Government Property Inspector",
+                      "imageURL": "https://lorempixel.com/640/480/?66477"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetActorsAnimeSuccess": {
+        "description": "Successful GET Actors Anime JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 227,
+                    "type": "show",
+                    "href": "/api/v1/anime/227",
+                    "attributes": {
+                      "anidbID": null,
+                      "anilistID": null,
+                      "kitsuID": null,
+                      "imdbID": null,
+                      "malID": null,
+                      "title": "Molestias quibusdam voluptas non et cupiditate.",
+                      "tagline": "Sed ipsum ducimus et expedita alias.",
+                      "synopsis": "Atque vel voluptas rerum omnis asperiores. Animi laboriosam voluptatum rerum et optio quas. Suscipit quos numquam a non eos beatae ducimus. Dolore doloribus quasi voluptates libero.",
+                      "type": "Ova",
+                      "watchRating": "TV-Y7",
+                      "adaptationSource": "Music",
+                      "network": null,
+                      "producer": null,
+                      "episodeCount": 0,
+                      "seasonCount": 0,
+                      "averageRating": 0,
+                      "ratingCount": 0,
+                      "videoUrl": null,
+                      "poster": null,
+                      "background": null,
+                      "firstAired": "1993-07-18",
+                      "lastAired": "1993-10-10",
+                      "runtime": 25,
+                      "airStatus": "Continuing",
+                      "airTime": "21:59:00",
+                      "airDay": "Monday",
+                      "isNSFW": false,
+                      "copyright": "℗ 1979 Ernser, Jerde and Hoppe",
+                      "givenRating": 0,
+                      "libraryStatus": null,
+                      "isFavorited": null,
+                      "isReminded": null
+                    }
+                  },
+                  {
+                    "id": 229,
+                    "type": "show",
+                    "href": "/api/v1/anime/229",
+                    "attributes": {
+                      "anidbID": null,
+                      "anilistID": null,
+                      "kitsuID": null,
+                      "imdbID": null,
+                      "malID": null,
+                      "title": "Quod consequatur corporis nihil qui et.",
+                      "tagline": "Qui illum qui quia voluptatem repellat expedita occaecati quod.",
+                      "synopsis": "Eum eos voluptas officia sed. Amet consequuntur iusto beatae culpa sequi pariatur ea. Provident quaerat laudantium repellendus iusto provident non autem. Nostrum aperiam in quae nulla iusto officia.",
+                      "type": "Ova",
+                      "watchRating": "TV-MA",
+                      "adaptationSource": "Visual novel",
+                      "network": null,
+                      "producer": null,
+                      "episodeCount": 0,
+                      "seasonCount": 0,
+                      "averageRating": 0,
+                      "ratingCount": 0,
+                      "videoUrl": null,
+                      "poster": null,
+                      "background": null,
+                      "firstAired": "1970-09-10",
+                      "lastAired": "1971-02-25",
+                      "runtime": 25,
+                      "airStatus": "Tba",
+                      "airTime": "04:18:00",
+                      "airDay": "Monday",
+                      "isNSFW": false,
+                      "copyright": "℗ 1972 Prosacco, Weissnat and Kirlin",
+                      "givenRating": 0,
+                      "libraryStatus": null,
+                      "isFavorited": null,
+                      "isReminded": null
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetActorsCharactersSuccess": {
+        "description": "Successful GET Actors Characters JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "characters",
+                    "href": "/api/v1/characters/1",
+                    "attributes": {
+                      "name": "Tyra Armstrong IV",
+                      "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
+                      "imageURL": "https://lorempixel.com/640/480/?46141",
+                      "debut": "Episode 05",
+                      "status": "Deceased",
+                      "bloodType": "W",
+                      "favoriteFood": "numquam",
+                      "bust": "27.70",
+                      "waist": "78.44",
+                      "hip": "53.99",
+                      "height": "875",
+                      "age": 265,
+                      "birthDay": 1,
+                      "birthMonth": 7,
+                      "astrologicalSign": "Virgo ♍️"
+                    }
+                  },
+                  {
+                    "id": 2,
+                    "type": "characters",
+                    "href": "/api/v1/characters/2",
+                    "attributes": {
+                      "name": "Lorna Pollich",
+                      "about": "Est vitae et voluptas ullam unde id ea. Quo non distinctio ipsa blanditiis aspernatur. Perferendis aut officia sit similique soluta odit eum. Sunt quo delectus est quis sapiente. A natus voluptatem omnis distinctio quis quas. Molestiae ut aut voluptas incidunt necessitatibus nihil culpa. Molestiae dolores illo dignissimos amet sit. Sit non et enim doloremque ratione exercitationem. Hic voluptas ab eos quia quia quia. Hic expedita est distinctio quaerat accusamus.",
+                      "imageURL": "https://lorempixel.com/640/480/?51170",
+                      "debut": "Episode 82",
+                      "status": "Deceased",
+                      "bloodType": "A",
+                      "favoriteFood": "hic",
+                      "bust": "22.62",
+                      "waist": "33.46",
+                      "hip": "37.65",
+                      "height": "704",
+                      "age": 292,
+                      "birthDay": 1,
+                      "birthMonth": 2,
+                      "astrologicalSign": "Cancer ♋️"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
       "GetAnimeSuccess": {
         "description": "Successful GET Anime JSON response",
         "content": {
@@ -3937,125 +4164,6 @@
                 "data": {
                   "isWatched": 1
                 }
-              }
-            }
-          }
-        }
-      },
-      "GetActorsSuccess": {
-        "description": "Successful GET Actors JSON response",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "example": {
-                "data": [
-                  {
-                    "id": 1,
-                    "type": "actors",
-                    "href": "/api/v1/actors/1",
-                    "attributes": {
-                      "firstName": "Aniyah",
-                      "lastName": "Waelchi",
-                      "occupation": "Government Property Inspector",
-                      "imageURL": "https://lorempixel.com/640/480/?66477"
-                    }
-                  },
-                  {
-                    "id": 2,
-                    "type": "actors",
-                    "href": "/api/v1/actors/2",
-                    "attributes": {
-                      "firstName": "Ashley",
-                      "lastName": "Carroll",
-                      "occupation": "Inspector",
-                      "imageURL": "https://lorempixel.com/640/480/?48504"
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        }
-      },
-      "GetActorsDetailsSuccess": {
-        "description": "Successful GET Actors Details JSON response",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "example": {
-                "data": [
-                  {
-                    "id": 1,
-                    "type": "actors",
-                    "href": "/api/v1/actors/1",
-                    "attributes": {
-                      "firstName": "Aniyah",
-                      "lastName": "Waelchi",
-                      "occupation": "Government Property Inspector",
-                      "imageURL": "https://lorempixel.com/640/480/?66477"
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        }
-      },
-      "GetCharactersSuccess": {
-        "description": "Successful GET Characters JSON response",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "example": {
-                "data": [
-                  {
-                    "id": 1,
-                    "type": "characters",
-                    "href": "/api/v1/characters/1",
-                    "attributes": {
-                      "name": "Tyra Armstrong IV",
-                      "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
-                      "imageURL": "https://lorempixel.com/640/480/?46141",
-                      "debut": "Episode 05",
-                      "status": "Deceased",
-                      "bloodType": "W",
-                      "favoriteFood": "numquam",
-                      "bust": "27.70",
-                      "waist": "78.44",
-                      "hip": "53.99",
-                      "height": "875",
-                      "age": 265,
-                      "birthDay": 1,
-                      "birthMonth": 7,
-                      "astrologicalSign": "Virgo ♍️"
-                    }
-                  },
-                  {
-                    "id": 2,
-                    "type": "characters",
-                    "href": "/api/v1/characters/2",
-                    "attributes": {
-                      "name": "Lorna Pollich",
-                      "about": "Est vitae et voluptas ullam unde id ea. Quo non distinctio ipsa blanditiis aspernatur. Perferendis aut officia sit similique soluta odit eum. Sunt quo delectus est quis sapiente. A natus voluptatem omnis distinctio quis quas. Molestiae ut aut voluptas incidunt necessitatibus nihil culpa. Molestiae dolores illo dignissimos amet sit. Sit non et enim doloremque ratione exercitationem. Hic voluptas ab eos quia quia quia. Hic expedita est distinctio quaerat accusamus.",
-                      "imageURL": "https://lorempixel.com/640/480/?51170",
-                      "debut": "Episode 82",
-                      "status": "Deceased",
-                      "bloodType": "A",
-                      "favoriteFood": "hic",
-                      "bust": "22.62",
-                      "waist": "33.46",
-                      "hip": "37.65",
-                      "height": "704",
-                      "age": 292,
-                      "birthDay": 1,
-                      "birthMonth": 2,
-                      "astrologicalSign": "Cancer ♋️"
-                    }
-                  }
-                ]
               }
             }
           }
