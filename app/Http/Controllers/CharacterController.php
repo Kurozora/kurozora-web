@@ -12,22 +12,6 @@ use Illuminate\Http\JsonResponse;
 class CharacterController extends Controller
 {
     /**
-     * Generate an overview of characters.
-     *
-     * @return JsonResponse
-     */
-    public function overview(): JsonResponse
-    {
-        // Get all characters and format them
-        $allCharacters = Character::get()->map(function($character) {
-            return CharacterResource::make($character);
-        });
-
-        // Show characters in response
-        return JSONResult::success(['data' => $allCharacters]);
-    }
-
-    /**
      * Shows character details.
      *
      * @param Character $character

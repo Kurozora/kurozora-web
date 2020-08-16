@@ -11,23 +11,6 @@ class CharactersTest extends TestCase
     use DatabaseMigrations, ProvidesTestAnime;
 
     /**
-     * A user can view all characters.
-     *
-     * @return void
-     * @test
-     */
-    public function a_user_can_view_all_characters()
-    {
-        $response = $this->json('GET', '/api/v1/characters', []);
-
-        // Check whether the response was successful
-        $response->assertSuccessfulAPIResponse();
-
-        // Check whether the characters array is not empty
-        $this->assertTrue(count($response->json()['data']) > 0);
-    }
-
-    /**
      * A user can view specific character details.
      *
      * @return void
