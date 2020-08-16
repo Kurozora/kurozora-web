@@ -27,11 +27,11 @@ class CharacterResource extends JsonResource
             $relationships = [];
             foreach ($includes as $include) {
                 switch ($include) {
-                    case 'shows':
-                        $relationships = array_merge($relationships, $this->getAnimeRelationship());
-                        break;
                     case 'actors':
                         $relationships = array_merge($relationships, $this->getActorsRelationship());
+                        break;
+                    case 'shows':
+                        $relationships = array_merge($relationships, $this->getAnimeRelationship());
                         break;
                 }
             }
@@ -55,7 +55,7 @@ class CharacterResource extends JsonResource
         return [
             'actors' => [
                 'href' => route('api.characters.actors', $character, false),
-                'data' => ActorResource::collection($character->getActors(Character::MAXIMUM_RELATED_SHOWS_LIMIT))
+                'data' => ActorResource::collection($character->getActors(Character::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }
@@ -73,7 +73,7 @@ class CharacterResource extends JsonResource
         return [
             'shows' => [
                 'href' => route('api.characters.anime', $character, false),
-                'data' => AnimeResourceBasic::collection($character->getAnime(Character::MAXIMUM_RELATED_SHOWS_LIMIT))
+                'data' => AnimeResourceBasic::collection($character->getAnime(Character::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }
