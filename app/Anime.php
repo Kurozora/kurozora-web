@@ -49,8 +49,8 @@ class Anime extends KModel
     // Minimum ratings required to calculate average
     const MINIMUM_RATINGS_REQUIRED = 30;
 
-    // Maximum related-shows fetch limit
-    const MAXIMUM_RELATED_SHOWS_LIMIT = 10;
+    // Maximum relationships fetch limit
+    const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
 
     // How long to cache certain responses
     const CACHE_KEY_EXPLORE_SECONDS = 120 * 60;

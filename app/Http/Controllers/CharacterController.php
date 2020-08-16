@@ -19,7 +19,7 @@ class CharacterController extends Controller
      */
     public function details(Character $character): JsonResponse
     {
-        // Show character details
+        // Return character details
         return JSONResult::success([
             'data' => CharacterResource::collection([$character])
         ]);
@@ -36,7 +36,7 @@ class CharacterController extends Controller
         // Get the actors
         $actors = $character->getActors();
 
-        // Show character details
+        // Return character actors
         return JSONResult::success([
             'data' => ActorResource::collection($actors)
         ]);
@@ -53,7 +53,7 @@ class CharacterController extends Controller
         // Get the anime
         $anime = $character->getAnime();
 
-        // Show character details
+        // Return character anime
         return JSONResult::success([
             'data' => AnimeResourceBasic::collection($anime)
         ]);
