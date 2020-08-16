@@ -564,8 +564,7 @@
                     "description": "The MAL export file"
                   },
                   "behavior": {
-                    "$ref": "#/components/schemas/MALImportBehavior",
-                    "description": "The behavior to use while processing the import request."
+                    "$ref": "#/components/schemas/MALImportBehavior"
                   }
                 },
                 "required": [
@@ -2681,24 +2680,6 @@
         }
       }
     },
-    "/studios": {
-      "get": {
-        "tags": [
-          "studios"
-        ],
-        "operationId": "getStudios",
-        "summary": "Studios list.",
-        "description": "This endpoint will retrieve the studios.",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetStudiosSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
     "/studios/{studioID}": {
       "get": {
         "security": [
@@ -2737,7 +2718,7 @@
             },
             "explode": false,
             "required": false,
-            "description": "The relations to include in the response. Available relations are: anime"
+            "description": "The relations to include in the response. Available relations are:\n- shows"
           }
         ],
         "responses": {
@@ -3798,7 +3779,7 @@
           }
         }
       },
-      "getAnimeRelatedShows": {
+      "GetAnimeRelatedShowsSuccess": {
         "description": "Successful GET Anime Related Shows JSON response",
         "content": {
           "application/json": {
@@ -5162,44 +5143,6 @@
                   "isUserAuthenticated": false,
                   "authenticatedUserID": null
                 }
-              }
-            }
-          }
-        }
-      },
-      "GetStudiosSuccess": {
-        "description": "Successful GET Studios JSON response",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "example": {
-                "data": [
-                  {
-                    "id": 1,
-                    "type": "studios",
-                    "href": "/api/v1/studios/1",
-                    "attributes": {
-                      "name": "Considine-Tillman",
-                      "logoURL": "https://lorempixel.com/640/480/?85310",
-                      "about": "Eos repellat optio aut explicabo quod. Consequatur sit quasi aliquam sed modi aut. Perspiciatis et perferendis architecto voluptas eos quis iure. Corrupti ea reiciendis et quo sed itaque. Unde ipsa officia et veniam dicta ullam omnis modi. Consequuntur non possimus fugiat quaerat delectus ea. In voluptas dignissimos veniam reprehenderit a. Cum dolores aperiam et nihil. Veniam id rerum commodi quia assumenda at. Et velit iure eos aut. Et est praesentium id fugiat reprehenderit. Sunt dolorem aut ratione ipsam ipsum quo.",
-                      "founded": "1983-09-30",
-                      "websiteURL": "http://rodriguez.com/eos-ut-earum-ut-eum-voluptas-iusto.html"
-                    }
-                  },
-                  {
-                    "id": 2,
-                    "type": "studios",
-                    "href": "/api/v1/studios/2",
-                    "attributes": {
-                      "name": "Harris-Kuhn",
-                      "logoURL": "https://lorempixel.com/640/480/?61391",
-                      "about": "Et suscipit sed veniam libero. Praesentium odio rerum commodi aut debitis expedita. Dolore quidem repudiandae omnis nemo voluptatem. Soluta enim soluta dolor aut earum et officiis. Illum sit rerum ab dolor sit eos. Est voluptates eos cupiditate natus. Adipisci sapiente aperiam rerum. Non et voluptatem dolorem ex exercitationem exercitationem. Consequatur qui totam ut. Distinctio quae voluptas omnis quae earum. Ut est eligendi ipsa voluptatibus et deserunt. Amet illum aliquid aut non. Sapiente iusto a soluta non. Temporibus et est est voluptas quo. Et necessitatibus nihil aut expedita maxime et aut. Voluptate aut laudantium rerum autem. Voluptatibus ullam tempore accusantium illum illo quia. Debitis qui assumenda dicta neque. Ullam optio non est ad. Facere quaerat voluptatem est qui quo consequatur error. Assumenda cumque ut molestias fugiat. Ut molestias laudantium aut dolorum ab. Sed sapiente tempore fugit et aliquam. Blanditiis ut id rem quis. Assumenda velit ea rerum temporibus. Ut debitis molestiae debitis esse deleniti at. Aut quis earum eius eum omnis ut quia rerum.",
-                      "founded": "1990-04-04",
-                      "websiteURL": "http://rice.biz/dolores-minima-quisquam-at-et.html"
-                    }
-                  }
-                ]
               }
             }
           }

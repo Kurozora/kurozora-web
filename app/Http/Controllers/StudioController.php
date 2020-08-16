@@ -12,24 +12,6 @@ use Illuminate\Http\JsonResponse;
 class StudioController extends Controller
 {
     /**
-     * Generate an overview of studios.
-     *
-     * @return JsonResponse
-     */
-    public function overview(): JsonResponse
-    {
-        // Get all studios and format them
-        $allStudios = Studio::get()->map(function($studio) {
-            return StudioResourceBasic::make($studio);
-        });
-
-        // Show studios in response
-        return JSONResult::success([
-            'data' => $allStudios
-        ]);
-    }
-
-    /**
      * Shows studio details
      *
      * @param Studio $studio
