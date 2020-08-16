@@ -6,6 +6,7 @@ use App\Enums\AstrologicalSign;
 use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
@@ -138,6 +139,8 @@ class Character extends Resource
 
             BelongsToMany::make('Actors')
                 ->searchable(),
+
+            HasMany::make('Anime'),
         ];
     }
 

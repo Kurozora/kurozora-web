@@ -71,8 +71,8 @@ class AnimeResource extends JsonResource
 
         return [
             'actors' => [
-                'data' => ActorResource::collection($anime->getActors(Anime::MAXIMUM_RELATED_SHOWS_LIMIT)),
-                'href' => route('api.anime.actors', $anime, false)
+                'href' => route('api.anime.actors', $anime, false),
+                'data' => ActorResource::collection($anime->getActors(Anime::MAXIMUM_RELATED_SHOWS_LIMIT))
             ]
         ];
     }
@@ -89,8 +89,8 @@ class AnimeResource extends JsonResource
 
         return [
             'cast' => [
-                'data' => ActorCharacterAnimeResource::collection($anime->getActorCharacterAnime(Anime::MAXIMUM_RELATED_SHOWS_LIMIT)),
-                'href' => route('api.anime.cast', $anime, false)
+                'href' => route('api.anime.cast', $anime, false),
+                'data' => ActorCharacterAnimeResource::collection($anime->getActorCharacterAnime(Anime::MAXIMUM_RELATED_SHOWS_LIMIT))
             ]
         ];
     }
@@ -107,8 +107,8 @@ class AnimeResource extends JsonResource
 
         return [
             'characters' => [
-                'data' => CharacterResource::collection($anime->getCharacters(Anime::MAXIMUM_RELATED_SHOWS_LIMIT)),
-                'href' => route('api.anime.characters', $anime, false)
+                'href' => route('api.anime.characters', $anime, false),
+                'data' => CharacterResourceBasic::collection($anime->getCharacters(Anime::MAXIMUM_RELATED_SHOWS_LIMIT))
             ]
         ];
     }
@@ -125,8 +125,8 @@ class AnimeResource extends JsonResource
 
         return [
             'genres' => [
-                'data' => GenreResource::collection($anime->getGenres(Anime::MAXIMUM_RELATED_SHOWS_LIMIT)),
-                'href' => route('api.anime.genres', $anime, false)
+                'href' => route('api.anime.genres', $anime, false),
+                'data' => GenreResource::collection($anime->getGenres(Anime::MAXIMUM_RELATED_SHOWS_LIMIT))
             ]
         ];
     }
@@ -143,8 +143,8 @@ class AnimeResource extends JsonResource
 
         return [
             'relatedShows' => [
-                'data' => AnimeRelatedShowsResource::collection($anime->getAnimeRelations(Anime::MAXIMUM_RELATED_SHOWS_LIMIT)),
-                'href' => route('api.anime.related-shows', $anime, false)
+                'href' => route('api.anime.related-shows', $anime, false),
+                'data' => AnimeRelatedShowsResource::collection($anime->getAnimeRelations(Anime::MAXIMUM_RELATED_SHOWS_LIMIT))
             ]
         ];
     }
@@ -161,8 +161,8 @@ class AnimeResource extends JsonResource
 
         return [
             'seasons' => [
-                'data' => AnimeSeasonResource::collection($anime->getSeasons(Anime::MAXIMUM_RELATED_SHOWS_LIMIT)),
-                'href' => route('api.anime.seasons', $anime, false)
+                'href' => route('api.anime.seasons', $anime, false),
+                'data' => AnimeSeasonResource::collection($anime->getSeasons(Anime::MAXIMUM_RELATED_SHOWS_LIMIT))
             ]
         ];
     }
@@ -179,8 +179,8 @@ class AnimeResource extends JsonResource
 
         return [
             'studios' => [
-                'data' => StudioResource::collection($anime->getStudios(Anime::MAXIMUM_RELATED_SHOWS_LIMIT)),
-                'href' => route('api.anime.studios', $anime, false)
+                'href' => route('api.anime.studios', $anime, false),
+                'data' => StudioResource::collection($anime->getStudios(Anime::MAXIMUM_RELATED_SHOWS_LIMIT))
             ]
         ];
     }

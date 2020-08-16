@@ -75,7 +75,7 @@ class ActorCharacterAnimeResource extends JsonResource
 
         return [
             'characters' => [
-                'data' => CharacterResource::collection([$actorCharacter->character])
+                'data' => CharacterResourceBasic::collection([$actorCharacter->character])
             ]
         ];
     }
