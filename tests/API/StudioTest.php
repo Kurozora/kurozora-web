@@ -21,23 +21,6 @@ class StudioTest extends TestCase
     }
 
     /**
-     * A user can view all studios.
-     *
-     * @return void
-     * @test
-     */
-    public function a_user_can_view_all_studios()
-    {
-        $response = $this->json('GET', '/api/v1/studios', []);
-
-        // Check whether the response was successful
-        $response->assertSuccessfulAPIResponse();
-
-        // Check whether the studios array is not empty
-        $this->assertTrue(count($response->json()['data']) > 0);
-    }
-
-    /**
      * A user can view specific studio details.
      *
      * @return void
@@ -52,5 +35,43 @@ class StudioTest extends TestCase
 
         // Check whether the studio id in the response is the desired studio's id
         $this->assertEquals($this->studio->id, $response->json()['data'][0]['id']);
+    }
+
+    /**
+     * A user can view specific studio details including relationships.
+     *
+     * @return void
+     * @test
+     */
+    public function a_user_can_view_specific_studio_details_including_relationships()
+    {
+        $response = $this->get('/api/v1/studios/'.$this->studio->id.'?include=shows');
+
+        // Check whether the response was successful
+        $response->assertSuccessfulAPIResponse();
+
+        // Check whether the studio id in the response is the desired studio's id
+        $this->assertEquals($this->studio->id, $response->json()['data'][0]['id']);
+
+        // Check whether the response includes shows relationship
+        $this->assertArrayHasKey('shows', $response->json()['data'][0]['relationships']);
+    }
+
+
+    /**
+     * A user can view specific studio anime.
+     *
+     * @return void
+     * @test
+     */
+    public function a_user_can_view_specific_studio_anime()
+    {
+        $response = $this->get('/api/v1/studios/'.$this->studio->id.'/anime');
+
+        // Check whether the response was successful
+        $response->assertSuccessfulAPIResponse();
+
+        // Check whether the anime are in the response
+        $this->assertTrue($response->json()['data'] > 0);
     }
 }
