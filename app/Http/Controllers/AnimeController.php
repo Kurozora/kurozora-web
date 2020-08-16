@@ -14,7 +14,7 @@ use App\Http\Resources\AnimeRelatedShowsResource;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Http\Resources\AnimeSeasonResource;
-use App\Http\Resources\CharacterResource;
+use App\Http\Resources\CharacterResourceBasic;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -67,7 +67,7 @@ class AnimeController extends Controller
         $actors = $anime->getCharacters();
 
         return JSONResult::success([
-            'data' => CharacterResource::collection($actors)
+            'data' => CharacterResourceBasic::collection($actors)
         ]);
     }
 
