@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Helpers\JSONResult;
 use App\Helpers\KuroAuthToken;
 use App\Http\Requests\GetAnimeFavoritesRequest;
+use App\Http\Requests\GetFollowersRequest;
+use App\Http\Requests\GetFollowingRequest;
 use App\Http\Requests\GetSessionsRequest;
 use App\Http\Requests\UpdateProfile;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Http\Resources\SessionResource;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\UserResourceBasic;
 use App\Session;
 use App\User;
 use Auth;
@@ -135,6 +138,54 @@ class MeController extends Controller
         // Show successful response
         return JSONResult::success([
             'data' => AnimeResourceBasic::collection($favoriteAnime),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Returns a list of the user's followers.
+     *
+     * @param GetFollowersRequest $request
+     * @return JsonResponse
+     */
+    function getFollowers(GetFollowersRequest $request): JsonResponse
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        // Get the followers
+        $followers = $user->followers()->paginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $followers->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => UserResourceBasic::collection($followers),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Returns a list of the user's following.
+     *
+     * @param GetFollowingRequest $request
+     * @return JsonResponse
+     */
+    function getFollowing(GetFollowingRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        /** @var User $user */
+        $user = Auth::user();
+
+        // Get the following
+        $following = $user->following()->paginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $following->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => UserResourceBasic::collection($following),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
