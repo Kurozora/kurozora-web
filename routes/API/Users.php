@@ -18,10 +18,6 @@ Route::prefix('/users')
 
         Route::post('/reset-password', [UserController::class, 'resetPassword']);
 
-        Route::get('/{user}/sessions', [UserController::class, 'getSessions'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:get_sessions,user');
-
         Route::post('/{user}/follow', [FollowingController::class, 'followUser'])
             ->middleware('kurozora.userauth')
             ->middleware('can:follow,user');

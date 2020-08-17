@@ -6,7 +6,6 @@ use App\Helpers\JSONResult;
 use App\Http\Requests\ResetPassword;
 use App\Http\Requests\SearchUserRequest;
 use App\Http\Requests\UpdateProfile;
-use App\Http\Resources\SessionResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceBasic;
 use App\Jobs\SendNewPasswordMail;
@@ -19,7 +18,6 @@ use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
@@ -79,26 +77,6 @@ class UserController extends Controller
 
         // Show successful response
         return JSONResult::success();
-    }
-
-    /**
-     * Returns the current active sessions for a user
-     *
-     * @param Request $request
-     * @param User $user
-     * @return JsonResponse
-     */
-    public function getSessions(Request $request, User $user): JsonResponse
-    {
-        // Get all sessions except current one
-        $sessions = Session::where([
-            ['user_id', '=',    $user->id],
-            ['secret',  '!=',   $request['session_secret']]
-        ])->get();
-
-        return JSONResult::success([
-            'data' => SessionResource::collection($sessions)
-        ]);
     }
 
     /**

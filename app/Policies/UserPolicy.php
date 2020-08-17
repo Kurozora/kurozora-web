@@ -35,18 +35,6 @@ class UserPolicy
     }
 
     /**
-     * Determine whether the user can get another user's sessions.
-     *
-     * @param User $user
-     * @param User $model
-     * @return bool
-     */
-    public function get_sessions(User $user, User $model): bool
-    {
-        return $user->id === $model->id;
-    }
-
-    /**
      * Determine whether the user can follow another user.
      *
      * @param User $user
