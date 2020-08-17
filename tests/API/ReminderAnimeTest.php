@@ -26,7 +26,7 @@ class ReminderAnimeTest extends TestCase
 
         $this->user->library()->attach($anime);
 
-        $response = $this->auth()->json('POST', '/api/v1/users/' . $this->user->id . '/reminder-anime', [
+        $response = $this->auth()->json('POST', '/api/v1/me/reminder-anime', [
             'anime_id'      => $anime->id,
             'is_reminded'   => 1
         ]);
@@ -36,33 +36,6 @@ class ReminderAnimeTest extends TestCase
 
         // Check whether the user now has 1 anime in their reminders
         $this->assertEquals(1, $this->user->reminderAnime()->count());
-    }
-
-    /**
-     * Test if a user cannot add anime to another user's reminders.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_cannot_add_anime_to_another_users_reminders()
-    {
-        // Send request to add anime to the user's reminders
-        /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
-
-        /** @var Anime $anime */
-        $anime = factory(Anime::class)->create();
-
-        $response = $this->auth()->json('POST', '/api/v1/users/' . $anotherUser->id . '/reminder-anime', [
-            'anime_id'      => $anime->id,
-            'is_reminded'   => 1
-        ]);
-
-        // Check whether the request was unsuccessful
-        $response->assertUnsuccessfulAPIResponse();
-
-        // Check whether the user still has no anime in their reminders
-        $this->assertEquals(0, $anotherUser->reminderAnime()->count());
     }
 
     /**
@@ -81,7 +54,7 @@ class ReminderAnimeTest extends TestCase
         $this->user->reminderAnime()->attach($anime->id);
 
         // Send request to remove the anime from the user's reminders
-        $response = $this->auth()->json('POST', '/api/v1/users/' . $this->user->id . '/reminder-anime', [
+        $response = $this->auth()->json('POST', '/api/v1/me/reminder-anime', [
             'anime_id'      => $anime->id,
             'is_reminded'   => 0
         ]);
@@ -91,37 +64,6 @@ class ReminderAnimeTest extends TestCase
 
         // Check whether the user now has no anime in their reminders
         $this->assertEquals(0, $this->user->reminderAnime()->count());
-    }
-
-    /**
-     * Test if a user can remove anime from another user's reminders.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_cannot_remove_anime_from_another_users_reminders()
-    {
-        // Add the anime to the user's reminders
-        /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
-
-        /** @var Anime $anime */
-        $anime = factory(Anime::class)->create();
-
-        $anotherUser->library()->attach($anime);
-        $anotherUser->reminderAnime()->attach($anime->id);
-
-        // Send request to remove the anime from the user's reminders
-        $response = $this->auth()->json('POST', '/api/v1/users/' . $anotherUser->id . '/reminder-anime', [
-            'anime_id'      => $anime->id,
-            'is_reminded'   => 0
-        ]);
-
-        // Check whether the request was successful
-        $response->assertUnsuccessfulAPIResponse();
-
-        // Check whether the user now has no anime in their reminders
-        $this->assertEquals(1, $this->user->reminderAnime()->count());
     }
 
     /**
@@ -140,33 +82,12 @@ class ReminderAnimeTest extends TestCase
             $this->user->reminderAnime()->attach($anime->id);
 
         // Send request for the list of anime
-        $response = $this->auth()->json('GET', '/api/v1/users/' . $this->user->id . '/reminder-anime');
+        $response = $this->auth()->json('GET', '/api/v1/me/reminder-anime');
 
         // Check whether the request was successful
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the response contains the correct amount of anime
         $this->assertCount(30, $response->json()['data']);
-    }
-
-    /**
-     * == This is currently disabled, because there is no preference system in place
-     * == to facilitate this behavior
-     *
-     * Test if a user cannot get a list of another user's anime reminders.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_cannot_get_a_list_of_another_users_anime_reminders()
-    {
-        // Send request to get the other user's list of anime reminders
-        /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
-
-        $response = $this->auth()->json('GET', '/api/v1/users/' . $anotherUser->id . '/reminder-anime');
-
-        // Check whether the request was unsuccessful
-        $response->assertUnsuccessfulAPIResponse();
     }
 }

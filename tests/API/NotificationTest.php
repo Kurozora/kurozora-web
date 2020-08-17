@@ -26,7 +26,7 @@ class NotificationTest extends TestCase
         $this->addNotificationsToUser($this->user, 10);
 
         // Send request to notifications endpoint
-        $response = $this->auth()->json('GET', '/api/v1/users/' . $this->user->id . '/notifications');
+        $response = $this->auth()->json('GET', '/api/v1/me/notifications');
 
         // Check whether the response is successful
         $response->assertSuccessfulAPIResponse();
@@ -38,24 +38,6 @@ class NotificationTest extends TestCase
             $notificationArray = NotificationResource::make($notification)->resolve();
 
         $response->assertJsonFragment($notificationArray);
-    }
-
-    /**
-     * Test if a user cannot get the notifications of someone else.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_cannot_get_the_notifications_of_someone_else()
-    {
-        /** @var User $otherUser */
-        $otherUser = factory(User::class)->create();
-
-        // Send request to notifications endpoint
-        $response = $this->auth()->json('GET', '/api/v1/users/' . $otherUser->id . '/notifications');
-
-        // Check whether the response is unsuccessful
-        $response->assertUnsuccessfulAPIResponse();
     }
 
     /**
@@ -73,7 +55,7 @@ class NotificationTest extends TestCase
         $notification = $this->user->notifications()->first();
 
         // Send request to notification endpoint
-        $response = $this->auth()->json('GET', '/api/v1/notifications/' . $notification->id);
+        $response = $this->auth()->json('GET', '/api/v1/me/notifications/' . $notification->id);
 
         // Check whether the response is successful
         $response->assertSuccessfulAPIResponse();
@@ -100,7 +82,7 @@ class NotificationTest extends TestCase
         $notification = $otherUser->notifications()->first();
 
         // Send request to notification endpoint
-        $response = $this->auth()->json('GET', '/api/v1/notifications/' . $notification->id);
+        $response = $this->auth()->json('GET', '/api/v1/me/notifications/' . $notification->id);
 
         // Check whether the response is unsuccessful
         $response->assertUnsuccessfulAPIResponse();
@@ -122,7 +104,7 @@ class NotificationTest extends TestCase
         $notificationID = $notification->id;
 
         // Send request to notification delete endpoint
-        $response = $this->auth()->json('POST', '/api/v1/notifications/' . $notificationID . '/delete');
+        $response = $this->auth()->json('POST', '/api/v1/me/notifications/' . $notificationID . '/delete');
 
         // Check whether the response is successful
         $response->assertSuccessfulAPIResponse();
@@ -149,7 +131,7 @@ class NotificationTest extends TestCase
         $notification = $otherUser->notifications()->first();
 
         // Send request to notification delete endpoint
-        $response = $this->auth()->json('POST', '/api/v1/notifications/' . $notification->id . '/delete');
+        $response = $this->auth()->json('POST', '/api/v1/me/notifications/' . $notification->id . '/delete');
 
         // Check whether the response is unsuccessful
         $response->assertUnsuccessfulAPIResponse();
@@ -170,7 +152,7 @@ class NotificationTest extends TestCase
         $notification = $this->user->notifications()->first();
 
         // Send request to notification update endpoint
-        $response = $this->auth()->json('POST', '/api/v1/notifications/update', [
+        $response = $this->auth()->json('POST', '/api/v1/me/notifications/update', [
             'notification'  => $notification->id,
             'read'          => 1
         ]);
@@ -202,7 +184,7 @@ class NotificationTest extends TestCase
         $notification->markAsRead();
 
         // Send request to notification update endpoint
-        $response = $this->auth()->json('POST', '/api/v1/notifications/update', [
+        $response = $this->auth()->json('POST', '/api/v1/me/notifications/update', [
             'notification'  => $notification->id,
             'read'          => 0
         ]);
@@ -227,7 +209,7 @@ class NotificationTest extends TestCase
         $this->addNotificationsToUser($this->user, 20);
 
         // Send request to notification update endpoint
-        $response = $this->auth()->json('POST', '/api/v1/notifications/update', [
+        $response = $this->auth()->json('POST', '/api/v1/me/notifications/update', [
             'notification'  => 'all',
             'read'          => 1
         ]);
@@ -268,7 +250,7 @@ class NotificationTest extends TestCase
         }
 
         // Send request to notification update endpoint
-        $response = $authUser->json('POST', '/api/v1/notifications/update', [
+        $response = $authUser->json('POST', '/api/v1/me/notifications/update', [
             'notification'  => $notificationIDs,
             'read'          => 1
         ]);
@@ -312,7 +294,7 @@ class NotificationTest extends TestCase
         }
 
         // Send request to notification update endpoint
-        $response = $authUser->json('POST', '/api/v1/notifications/update', [
+        $response = $authUser->json('POST', '/api/v1/me/notifications/update', [
             'notification'  => $notificationIDs,
             'read'          => 0
         ]);
@@ -353,7 +335,7 @@ class NotificationTest extends TestCase
         }
 
         // Send request to notification update endpoint
-        $response = $authUser->json('POST', '/api/v1/notifications/update', [
+        $response = $authUser->json('POST', '/api/v1/me/notifications/update', [
             'notification'  => $notificationIDs,
             'read'          => 1
         ]);
@@ -403,7 +385,7 @@ class NotificationTest extends TestCase
         }
 
         // Send request to notification update endpoint
-        $response = $authUser->json('POST', '/api/v1/notifications/update', [
+        $response = $authUser->json('POST', '/api/v1/me/notifications/update', [
             'notification'  => $notificationIDs,
             'read'          => 0
         ]);
@@ -442,7 +424,7 @@ class NotificationTest extends TestCase
         $notification = $otherUser->notifications()->first();
 
         // Send request to notification update endpoint
-        $response = $this->auth()->json('POST', '/api/v1/notifications/update', [
+        $response = $this->auth()->json('POST', '/api/v1/me/notifications/update', [
             'notification'  => $notification->id,
             'read'          => 1
         ]);

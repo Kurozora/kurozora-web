@@ -19,7 +19,7 @@ class MeTest extends TestCase
     public function user_can_get_own_details_with_authentication_token()
     {
         // Send request
-        $response = $this->auth()->json('GET', '/api/v1/users/me');
+        $response = $this->auth()->json('GET', '/api/v1/me');
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
@@ -37,7 +37,7 @@ class MeTest extends TestCase
     public function user_cannot_get_own_details_without_authentication_token()
     {
         // Send request
-        $response = $this->json('GET', '/api/v1/users/me', []);
+        $response = $this->json('GET', '/api/v1/me', []);
 
         // Check whether the response was unsuccessful
         $response->assertUnsuccessfulAPIResponse();
