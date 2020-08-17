@@ -35,42 +35,6 @@ class UserPolicy
     }
 
     /**
-     * Determine whether the user can get to another user's anime reminders.
-     *
-     * @param User $user
-     * @param User $model
-     * @return bool
-     */
-    public function get_anime_reminders(User $user, User $model): bool
-    {
-        return $user->id === $model->id;
-    }
-
-    /**
-     * Determine whether the user can add to another user's anime reminders.
-     *
-     * @param User $user
-     * @param User $model
-     * @return bool
-     */
-    public function add_to_anime_reminder(User $user, User $model): bool
-    {
-        return $user->id === $model->id;
-    }
-
-    /**
-     * Determine whether the user can download another user's anime reminders.
-     *
-     * @param User $user
-     * @param User $model
-     * @return bool
-     */
-    public function download_anime_reminder(User $user, User $model): bool
-    {
-        return $user->id === $model->id;
-    }
-
-    /**
      * Determine whether the user can update the other user's profile.
      *
      * @param User $user
@@ -90,18 +54,6 @@ class UserPolicy
      * @return bool
      */
     public function get_sessions(User $user, User $model): bool
-    {
-        return $user->id === $model->id;
-    }
-
-    /**
-     * Determine whether the user can get another user's notifications.
-     *
-     * @param User $user
-     * @param User $model
-     * @return bool
-     */
-    public function get_notifications(User $user, User $model): bool
     {
         return $user->id === $model->id;
     }

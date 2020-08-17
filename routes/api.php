@@ -19,20 +19,20 @@ Route::prefix('/v1')
         Route::get('/privacy-policy', [MiscController::class, 'getPrivacyPolicy'])
             ->name('legal.privacy');
 
-        require 'API/Users.php';
-        require 'API/Notifications.php';
-        require 'API/Sessions.php';
         require 'API/Actors.php';
         require 'API/Anime.php';
-        require 'API/Anime-Seasons.php';
         require 'API/Anime-Episodes.php';
+        require 'API/Anime-Seasons.php';
         require 'API/Characters.php';
         require 'API/Genres.php';
+        require 'API/Forum-Replies.php';
         require 'API/Forum-Sections.php';
         require 'API/Forum-Threads.php';
-        require 'API/Forum-Replies.php';
+        require 'API/Me.php';
+        require 'API/Sessions.php';
         require 'API/Studios.php';
         require 'API/Themes.php';
+        require 'API/Users.php';
 
         Route::fallback([APIController::class, 'error']);
     });
