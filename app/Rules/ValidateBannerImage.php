@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Validator;
 
 class ValidateBannerImage implements Rule
 {
-    protected $error;
+    /** @var string $error */
+    protected string $error;
 
     /**
      * Determine if the validation rule passes.
