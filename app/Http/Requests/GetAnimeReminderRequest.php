@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class MALImportRequest extends FormRequest
+class GetAnimeReminderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,8 +24,8 @@ class MALImportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file'      => ['required', 'file', 'mimes:xml', 'max:' . config('mal-import.max_xml_file_size')],
-            'behavior'  => ['required', 'string', 'in:overwrite']
+            'limit' => ['bail', 'integer', 'min:25', 'max:100'],
+            'page'  => ['bail', 'integer', 'min:1']
         ];
     }
 }

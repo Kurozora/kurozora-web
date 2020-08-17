@@ -16,11 +16,7 @@ class DeleteFromLibraryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Check if the user can delete from this library
-        /** @var User $user */
-        $user = $this->route('user');
-
-        return $this->user()->can('del_from_library', $user);
+        return true;
     }
 
     /**

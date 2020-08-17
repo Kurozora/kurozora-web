@@ -10,6 +10,7 @@ Route::prefix('/me')
         Route::get('/', [MeController::class, 'me'])
             ->middleware('kurozora.userauth');
 
+        require 'Me/Favorite-Anime.php';
         require 'Me/Library.php';
         require 'Me/Notifications.php';
         require 'Me/Reminder-Anime.php';

@@ -33,10 +33,8 @@ Route::prefix('/users')
             ->middleware('kurozora.userauth:optional');
 
         Route::get('/{user}/favorite-anime', [FavoriteAnimeController::class, 'getFavorites'])
-            ->middleware('kurozora.userauth');
-
-        Route::post('/{user}/favorite-anime', [FavoriteAnimeController::class, 'addFavorite'])
-            ->middleware('kurozora.userauth');
+            ->middleware('kurozora.userauth')
+            ->middleware('can:get_anime_favorites,user');
 
         Route::get('/{user}/profile', [UserController::class, 'profile'])
             ->middleware('kurozora.userauth:optional')

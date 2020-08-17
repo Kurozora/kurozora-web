@@ -4,7 +4,6 @@ namespace Tests\API;
 
 use App\Anime;
 use App\Enums\UserLibraryStatus;
-use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Testing\TestResponse;
 use Tests\Traits\ProvidesTestUser;
@@ -141,26 +140,6 @@ class LibraryTest extends TestCase
         // Send the request
         $response = $this->auth()->json('GET', '/api/v1/me/library', [
             'status' => 'Invalid Status'
-        ]);
-
-        // Check whether the response was unsuccessful
-        $response->assertUnsuccessfulAPIResponse();
-    }
-
-    /**
-     * Test if a user cannot get the anime of another user's library.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_cannot_get_the_anime_of_another_users_library()
-    {
-        /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
-
-        // Send the request
-        $response = $this->auth()->json('GET', '/api/v1/users/' . $anotherUser->id . '/library', [
-            'status' => 'Watching'
         ]);
 
         // Check whether the response was unsuccessful
