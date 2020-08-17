@@ -435,64 +435,6 @@
             "$ref": "#/components/responses/JSONError"
           }
         }
-      },
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "postUsersProfile",
-        "summary": "Updates a user's profile information",
-        "description": "This endpoint will update a user's profile information.\n<h3><strong>WARNING: You should only send the request body parameters that actually need to be changed!</strong></h3>",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "biography": {
-                    "type": "string",
-                    "description": "The new biography to set."
-                  },
-                  "profileImage": {
-                    "type": "string",
-                    "format": "binary",
-                    "description": "The new user's avatar image"
-                  },
-                  "bannerImage": {
-                    "type": "string",
-                    "format": "binary",
-                    "description": "The new user's banner image"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
       }
     },
     "/me": {
@@ -511,6 +453,53 @@
         "description": "This endpoint will retrieve the details of the authenticated user's profile.",
         "parameters": [
         ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "postMe",
+        "summary": "Updates profile information.",
+        "description": "This endpoint will update the authenticated user's profile information.",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "biography": {
+                    "type": "string",
+                    "description": "The new biography to set. Send <strong>null</strong> to remove."
+                  },
+                  "profileImage": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "The new user's avatar image. Send <strong>null</strong> to remove."
+                  },
+                  "bannerImage": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "The new user's banner image. Send <strong>null</strong> to remove."
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSONSuccess"

@@ -23,18 +23,6 @@ class UserPolicy
     }
 
     /**
-     * Determine whether the user can update the other user's profile.
-     *
-     * @param User $user
-     * @param User $model
-     * @return bool
-     */
-    public function update_profile(User $user, User $model): bool
-    {
-        return $user->id === $model->id;
-    }
-
-    /**
      * Determine whether the user can follow another user.
      *
      * @param User $user

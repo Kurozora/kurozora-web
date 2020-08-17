@@ -10,6 +10,9 @@ Route::prefix('/me')
         Route::get('/', [MeController::class, 'me'])
             ->middleware('kurozora.userauth');
 
+        Route::post('/', [MeController::class, 'updateProfile'])
+            ->middleware('kurozora.userauth');
+
         require 'Me/Favorite-Anime.php';
         require 'Me/Library.php';
         require 'Me/Notifications.php';

@@ -35,8 +35,4 @@ Route::prefix('/users')
         Route::get('/{user}/profile', [UserController::class, 'profile'])
             ->middleware('kurozora.userauth:optional')
             ->name('profile');
-
-        Route::post('/{user}/profile', [UserController::class, 'updateProfile'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:update_profile,user');
     });

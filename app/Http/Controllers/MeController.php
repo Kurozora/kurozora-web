@@ -6,6 +6,7 @@ use App\Helpers\JSONResult;
 use App\Helpers\KuroAuthToken;
 use App\Http\Requests\GetAnimeFavoritesRequest;
 use App\Http\Requests\GetSessionsRequest;
+use App\Http\Requests\UpdateProfile;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Http\Resources\SessionResource;
 use App\Http\Resources\UserResource;
@@ -14,6 +15,8 @@ use App\User;
 use Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class MeController extends Controller
 {
@@ -34,6 +37,79 @@ class MeController extends Controller
                 UserResource::make($session->user)->includingSession($session)
             ],
             'authToken' => KuroAuthToken::generate($session->user->id, $session->secret)
+        ]);
+    }
+
+    /**
+     * Update profile information.
+     *
+     * @param UpdateProfile $request
+     * @return JsonResponse
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
+    public function updateProfile(UpdateProfile $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        /** @var User $user */
+        $user = Auth::user();
+
+        // Track if anything changed
+        $changedFields = [];
+
+        // Update biography
+        if($request->has('biography')) {
+            $user->biography = $data['biography'];
+            $changedFields[] = 'biography';
+        }
+
+        // Update avatar
+        if($request->has('profileImage')) {
+            // Remove previous avatar
+            $user->clearMediaCollection('avatar');
+
+            if($data['profileImage'] != null) {
+                // Upload a new avatar, if one was uploaded
+                if ($request->hasFile('profileImage') && $request->file('profileImage')->isValid()) {
+                    $user->addMediaFromRequest('profileImage')->toMediaCollection('avatar');
+                }
+            }
+
+            $changedFields[] = 'avatar';
+        }
+
+        // Update banner
+        if($request->has('bannerImage')) {
+            // Remove previous banner
+            $user->clearMediaCollection('banner');
+
+            if($data['bannerImage'] != null) {
+                // Save the uploaded banner, if one was uploaded
+                if ($request->hasFile('bannerImage') && $request->file('bannerImage')->isValid()) {
+                    $user->addMediaFromRequest('bannerImage')->toMediaCollection('banner');
+                }
+            }
+
+            $changedFields[] = 'banner image';
+        }
+
+        // Successful response
+        $displayMessage = 'Your settings were saved. ';
+
+        if(count($changedFields)) {
+            $displayMessage .= 'You have updated your ' . join(', ', $changedFields) . '.';
+            $user->save();
+        }
+        else $displayMessage .= 'No information was updated.';
+
+        return JSONResult::success([
+            'data'      => [
+                'biography'         => $user->biography,
+                'profileImageURL'   => $user->getFirstMediaFullUrl('avatar'),
+                'bannerImageURL'    => $user->getFirstMediaFullUrl('banner')
+            ],
+            'message'   => $displayMessage,
         ]);
     }
 
