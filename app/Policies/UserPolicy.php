@@ -23,18 +23,6 @@ class UserPolicy
     }
 
     /**
-     * Determine whether the user can add to another user's anime favorites.
-     *
-     * @param User $user
-     * @param User $model
-     * @return bool
-     */
-    public function add_to_anime_favorites(User $user, User $model): bool
-    {
-        return $user->id === $model->id;
-    }
-
-    /**
      * Determine whether the user can update the other user's profile.
      *
      * @param User $user
@@ -54,66 +42,6 @@ class UserPolicy
      * @return bool
      */
     public function get_sessions(User $user, User $model): bool
-    {
-        return $user->id === $model->id;
-    }
-
-    /**
-     * Determine whether the user can search in another user's library.
-     *
-     * @param User $user
-     * @param User $model
-     * @return bool
-     */
-    public function search_library(User $user, User $model): bool
-    {
-        return $user->id === $model->id;
-    }
-
-    /**
-     * Determine whether the user can get another user's library.
-     *
-     * @param User $user
-     * @param User $model
-     * @return bool
-     */
-    public function get_library(User $user, User $model): bool
-    {
-        return $user->id === $model->id;
-    }
-
-    /**
-     * Determine whether the user can add to another user's library.
-     *
-     * @param User $user
-     * @param User $model
-     * @return bool
-     */
-    public function add_to_library(User $user, User $model): bool
-    {
-        return $user->id === $model->id;
-    }
-
-    /**
-     * Determine whether the user can delete from another user's library.
-     *
-     * @param User $user
-     * @param User $model
-     * @return bool
-     */
-    public function del_from_library(User $user, User $model): bool
-    {
-        return $user->id === $model->id;
-    }
-
-    /**
-     * Determine whether the user can perform a MAL import.
-     *
-     * @param User $user
-     * @param User $model
-     * @return bool
-     */
-    public function mal_import(User $user, User $model): bool
     {
         return $user->id === $model->id;
     }

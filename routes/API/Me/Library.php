@@ -24,6 +24,5 @@ Route::prefix('/library')
             ->name('mal-import');
 
         Route::get('/search', [LibraryController::class, 'search'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:search_library,user');
+            ->middleware('kurozora.userauth');
     });

@@ -20,10 +20,7 @@ class GetLibraryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Check if the user can get this library
-        $user = $this->route('user');
-
-        return $this->user()->can('get_library', $user);
+        return true;
     }
 
     /**

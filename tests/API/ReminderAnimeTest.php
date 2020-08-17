@@ -76,7 +76,7 @@ class ReminderAnimeTest extends TestCase
     {
         // Add some anime to the user's reminders
         /** @var Anime[] $anime */
-        $animeList = factory(Anime::class, 30)->create();
+        $animeList = factory(Anime::class, 25)->create();
 
         foreach($animeList as $anime)
             $this->user->reminderAnime()->attach($anime->id);
@@ -88,6 +88,6 @@ class ReminderAnimeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the response contains the correct amount of anime
-        $this->assertCount(30, $response->json()['data']);
+        $this->assertCount(25, $response->json()['data']);
     }
 }

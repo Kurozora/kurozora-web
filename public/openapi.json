@@ -402,59 +402,29 @@
             },
             "required": true,
             "description": "ID of the user."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
           },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      },
-      "post": {
-        "security": [
           {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "postUsersFavoriteAnime",
-        "summary": "Add or remove an Anime to the user's Anime favorites",
-        "description": "This endpoint will add or remove to the list of Anime in a user's favorites.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
+            "in": "query",
+            "name": "limit",
             "schema": {
-              "type": "integer"
+              "type": "string",
+              "minimum": 25,
+              "maximum": 100
             },
-            "required": true,
-            "description": "ID of the user."
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "anime_id": {
-                    "type": "integer",
-                    "description": "The ID of the Anime to add."
-                  }
-                },
-                "required": [
-                  "anime_id"
-                ]
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSONSuccess"
@@ -576,6 +546,93 @@
         "description": "This endpoint will retrieve the details of the authenticated user's profile.",
         "parameters": [
         ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/favorite-anime": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "getMeFavoriteAnime",
+        "summary": "Get an overview of favorites.",
+        "description": "This endpoint will retrieve the list of anime in the authenticated user's favorites.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "minimum": 25,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "postMeFavoriteAnime",
+        "summary": "Add or remove from favorites.",
+        "description": "This endpoint will add or remove an anime to/from the authenticated user's favorites.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "anime_id": {
+                    "type": "integer",
+                    "description": "The ID of the Anime to add."
+                  }
+                },
+                "required": [
+                  "anime_id"
+                ]
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSONSuccess"
@@ -956,6 +1013,29 @@
         ],
         "summary": "Get an overview reminders.",
         "description": "This endpoint will retrieve the list of anime in the authenticated user's reminder list.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "minimum": 25,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSONSuccess"
@@ -1132,7 +1212,7 @@
               "example": "1"
             },
             "required": false,
-            "description": "The page to retrieve followers from. (starts at 1)"
+            "description": "The next page or group of objects to fetch. The default value is 1."
           }
         ],
         "responses": {
@@ -1177,7 +1257,7 @@
               "example": "1"
             },
             "required": false,
-            "description": "The page to retrieve followers from. (starts at 1)"
+            "description": "The next page or group of objects to fetch. The default value is 1."
           }
         ],
         "responses": {
@@ -1991,10 +2071,11 @@
             "in": "query",
             "name": "page",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "minimum": 1
             },
             "required": false,
-            "description": "The page to retrieve threads from."
+            "description": "The next page or group of objects to fetch. The default value is 1."
           }
         ],
         "responses": {
@@ -2191,10 +2272,11 @@
             "in": "query",
             "name": "page",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1
             },
             "required": false,
-            "description": "The page to retrieve replies from."
+            "description": "The next page or group of objects to fetch. The default value is 1."
           }
         ],
         "responses": {
