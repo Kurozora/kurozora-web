@@ -7,14 +7,13 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('/users')
     ->name('users.')
     ->group(function() {
-        Route::post('/', [RegistrationController::class, 'register']);
+        Route::post('/', [RegistrationController::class, 'signup']);
 
-        Route::post('/register-siwa', [SignInWithAppleController::class, 'register']);
+        Route::post('/signin', [SessionController::class, 'create']);
 
-        Route::post('/login-siwa', [SignInWithAppleController::class, 'login']);
+        Route::post('/signup/siwa', [SignInWithAppleController::class, 'signup']);
 
-        Route::get('/search', [UserController::class, 'search'])
-            ->middleware('kurozora.userauth:optional');
+        Route::post('/signin/siwa', [SignInWithAppleController::class, 'signin']);
 
         Route::post('/reset-password', [UserController::class, 'resetPassword']);
 
@@ -35,4 +34,7 @@ Route::prefix('/users')
         Route::get('/{user}/profile', [UserController::class, 'profile'])
             ->middleware('kurozora.userauth:optional')
             ->name('profile');
+
+        Route::get('/search', [UserController::class, 'search'])
+            ->middleware('kurozora.userauth:optional');
     });

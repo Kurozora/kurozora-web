@@ -29,7 +29,6 @@ Route::prefix('/v1')
         require 'API/Forum-Sections.php';
         require 'API/Forum-Threads.php';
         require 'API/Me.php';
-        require 'API/Sessions.php';
         require 'API/Studios.php';
         require 'API/Themes.php';
         require 'API/Users.php';
