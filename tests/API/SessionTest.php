@@ -14,51 +14,12 @@ class SessionTest extends TestCase
     use DatabaseMigrations, ProvidesTestUser;
 
     /**
-     * Test if a user can get a list of their sessions.
+     * User can get the details of their session.
      *
      * @return void
      * @test
      */
-    function a_user_can_get_a_list_of_their_sessions()
-    {
-        // Create some sessions for the user
-        factory(Session::class, 20)->create(['user_id' => $this->user->id]);
-
-        // Send the request
-        $response = $this->auth()->json('GET', '/api/v1/users/' . $this->user->id . '/sessions');
-
-        // Check whether the request was successful
-        $response->assertSuccessfulAPIResponse();
-
-        // Check whether the response contains the sessions
-        $this->assertCount(20, $response->json()['data']);
-    }
-
-    /**
-     * Test if a user cannot get another user's list of sessions.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_cannot_get_another_users_list_of_sessions()
-    {
-        /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
-
-        // Send the request
-        $response = $this->auth()->json('GET', '/api/v1/users/' . $anotherUser->id . '/sessions');
-
-        // Check whether the request was unsuccessful
-        $response->assertUnsuccessfulAPIResponse();
-    }
-
-    /**
-     * Test if a user can get the details of their session.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_can_get_the_details_of_their_session()
+    function user_can_get_the_details_of_their_session()
     {
         // Create a session for the user
         /** @var Session $session */
@@ -75,12 +36,12 @@ class SessionTest extends TestCase
     }
 
     /**
-     * Test if a user cannot get the details of another user's session.
+     * User cannot get the details of another user's session.
      *
      * @return void
      * @test
      */
-    function a_user_cannot_get_the_details_of_another_users_session()
+    function user_cannot_get_the_details_of_another_users_session()
     {
         // Create a session for the user
         /** @var User $anotherUser */
@@ -97,12 +58,12 @@ class SessionTest extends TestCase
     }
 
     /**
-     * Test if a user can delete their session.
+     * User can delete their session.
      *
      * @return void
      * @test
      */
-    function a_user_can_delete_their_session()
+    function user_can_delete_their_session()
     {
         // Create a session for the user
         /** @var Session $session */
@@ -119,12 +80,12 @@ class SessionTest extends TestCase
     }
 
     /**
-     * Test if a user cannot delete another user's session.
+     * User cannot delete another user's session.
      *
      * @return void
      * @test
      */
-    function a_user_cannot_delete_another_users_session()
+    function user_cannot_delete_another_users_session()
     {
         // Create a session for the user
         /** @var User $anotherUser */
@@ -143,8 +104,13 @@ class SessionTest extends TestCase
         $this->assertNotNull(Session::find($session->id));
     }
 
-    /** @test */
-    function a_user_can_update_the_apn_device_token_of_their_session()
+    /**
+     * User can update the apn device token of their session.
+     *
+     * @return void
+     * @test
+     */
+    function user_can_update_the_apn_device_token_of_their_session()
     {
         // Create a session for the user
         /** @var Session $session */
@@ -166,8 +132,13 @@ class SessionTest extends TestCase
         $this->assertSame($newToken, $session->apn_device_token);
     }
 
-    /** @test */
-    function a_user_cannot_update_the_apn_device_token_of_another_users_session()
+    /**
+     * User cannot update the apn device token of another users' session.
+     *
+     * @return void
+     * @test
+     */
+    function user_cannot_update_the_apn_device_token_of_another_users_session()
     {
         // Create a session for the user
         /** @var User $anotherUser */

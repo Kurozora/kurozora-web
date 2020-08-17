@@ -13,12 +13,12 @@ class FavoriteAnimeTest extends TestCase
     use DatabaseMigrations, ProvidesTestUser;
 
     /**
-     * Test if a user can add anime to their favorites.
+     * User can add anime to their favorites.
      *
      * @return void
      * @test
      */
-    function a_user_can_add_anime_to_their_favorites()
+    function user_can_add_anime_to_their_favorites()
     {
         // Send request to add anime to the user's favorites
         /** @var Anime $anime */
@@ -39,12 +39,12 @@ class FavoriteAnimeTest extends TestCase
     }
 
     /**
-     * Test if a user can remove anime from their favorites.
+     * User can remove anime from their favorites.
      *
      * @return void
      * @test
      */
-    function a_user_can_remove_anime_from_their_favorites()
+    function user_can_remove_anime_from_their_favorites()
     {
         // Add the anime to the user's favorites
         /** @var Anime $anime */
@@ -67,35 +67,10 @@ class FavoriteAnimeTest extends TestCase
     }
 
     /**
-     * Test if a user can get a list of the anime in their favorites.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_can_get_a_list_of_the_anime_in_their_favorites()
-    {
-        // Add some anime to the user's favorites
-        /** @var Anime[] $anime */
-        $animeList = factory(Anime::class, 25)->create();
-
-        foreach($animeList as $anime)
-            $this->user->favoriteAnime()->attach($anime->id);
-
-        // Send request for the list of anime
-        $response = $this->auth()->json('GET', '/api/v1/me/favorite-anime');
-
-        // Check whether the request was successful
-        $response->assertSuccessfulAPIResponse();
-
-        // Check whether the response contains the correct amount of anime
-        $this->assertCount(25, $response->json()['data']);
-    }
-
-    /**
      * == This is currently disabled, because there is no preference system in place
      * == to facilitate this behavior
      *
-     * Test if a user cannot get a list of another user's anime favorites.
+     * A user cannot get a list of another user's anime favorites.
      *
      * @return void
      * @test

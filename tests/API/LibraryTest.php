@@ -15,12 +15,12 @@ class LibraryTest extends TestCase
     use DatabaseMigrations, ProvidesTestUser, RunsSeeders;
 
     /**
-     * Test if a user can get the Watching anime in their library.
+     * User can get the Watching anime in their library.
      *
      * @return void
      * @test
      */
-    function a_user_can_get_the_Watching_anime_in_their_library()
+    function user_can_get_the_Watching_anime_in_their_library()
     {
         // Add an anime to the list
         $this->user->library()->attach(1, ['status' => UserLibraryStatus::Watching]);
@@ -38,12 +38,12 @@ class LibraryTest extends TestCase
     }
 
     /**
-     * Test if a user can get the Dropped anime in their library.
+     * User can get the Dropped anime in their library.
      *
      * @return void
      * @test
      */
-    function a_user_can_get_the_Dropped_anime_in_their_library()
+    function user_can_get_the_Dropped_anime_in_their_library()
     {
         // Add an anime to the list
         $this->user->library()->attach(1, ['status' => UserLibraryStatus::Dropped]);
@@ -61,12 +61,12 @@ class LibraryTest extends TestCase
     }
 
     /**
-     * Test if a user can get the Planning anime in their library.
+     * User can get the Planning anime in their library.
      *
      * @return void
      * @test
      */
-    function a_user_can_get_the_Planning_anime_in_their_library()
+    function user_can_get_the_Planning_anime_in_their_library()
     {
         // Add an anime to the list
         $this->user->library()->attach(1, ['status' => UserLibraryStatus::Planning]);
@@ -84,12 +84,12 @@ class LibraryTest extends TestCase
     }
 
     /**
-     * Test if a user can get the Completed anime in their library.
+     * User can get the Completed anime in their library.
      *
      * @return void
      * @test
      */
-    function a_user_can_get_the_Completed_anime_in_their_library()
+    function user_can_get_the_Completed_anime_in_their_library()
     {
         // Add an anime to the list
         $this->user->library()->attach(1, ['status' => UserLibraryStatus::Completed]);
@@ -107,12 +107,12 @@ class LibraryTest extends TestCase
     }
 
     /**
-     * Test if a user can get the OnHold anime in their library.
+     * User can get the OnHold anime in their library.
      *
      * @return void
      * @test
      */
-    function a_user_can_get_the_OnHold_anime_in_their_library()
+    function user_can_get_the_OnHold_anime_in_their_library()
     {
         // Add an anime to the list
         $this->user->library()->attach(1, ['status' => UserLibraryStatus::OnHold]);
@@ -130,12 +130,12 @@ class LibraryTest extends TestCase
     }
 
     /**
-     * Test if a user cannot get the anime in their library with an invalid status.
+     * User cannot get the anime in their library with an invalid status.
      *
      * @return void
      * @test
      */
-    function a_user_cannot_get_the_anime_in_their_library_with_an_invalid_status()
+    function user_cannot_get_the_anime_in_their_library_with_an_invalid_status()
     {
         // Send the request
         $response = $this->auth()->json('GET', '/api/v1/me/library', [
@@ -147,12 +147,12 @@ class LibraryTest extends TestCase
     }
 
     /**
-     * Test if a user can add anime to their library (Watching).
+     * User can add anime to their library (Watching).
      *
      * @return void
      * @test
      */
-    function a_user_can_add_anime_to_their_library_with_status_Watching()
+    function user_can_add_anime_to_their_library_with_status_Watching()
     {
         // Send request to add first anime to library
         $anime = Anime::first();
@@ -171,12 +171,12 @@ class LibraryTest extends TestCase
     }
 
     /**
-     * Test if a user can add anime to their library (Dropped).
+     * User can add anime to their library (Dropped).
      *
      * @return void
      * @test
      */
-    function a_user_can_add_anime_to_their_library_with_status_Dropped()
+    function user_can_add_anime_to_their_library_with_status_Dropped()
     {
         // Send request to add first anime to library
         $anime = Anime::first();
@@ -195,12 +195,12 @@ class LibraryTest extends TestCase
     }
 
     /**
-     * Test if a user can add anime to their library (Planning).
+     * User can add anime to their library (Planning).
      *
      * @return void
      * @test
      */
-    function a_user_can_add_anime_to_their_library_with_status_Planning()
+    function user_can_add_anime_to_their_library_with_status_Planning()
     {
         // Send request to add first anime to library
         $anime = Anime::first();
@@ -219,12 +219,12 @@ class LibraryTest extends TestCase
     }
 
     /**
-     * Test if a user can add anime to their library (Completed).
+     * User can add anime to their library (Completed).
      *
      * @return void
      * @test
      */
-    function a_user_can_add_anime_to_their_library_with_status_Completed()
+    function user_can_add_anime_to_their_library_with_status_Completed()
     {
         // Send request to add first anime to library
         $anime = Anime::first();
@@ -243,12 +243,12 @@ class LibraryTest extends TestCase
     }
 
     /**
-     * Test if a user can add anime to their library (OnHold).
+     * User can add anime to their library (OnHold).
      *
      * @return void
      * @test
      */
-    function a_user_can_add_anime_to_their_library_with_status_OnHold()
+    function user_can_add_anime_to_their_library_with_status_OnHold()
     {
         // Send request to add first anime to library
         $anime = Anime::first();
@@ -267,12 +267,12 @@ class LibraryTest extends TestCase
     }
 
     /**
-     * Test if a user cannot add anime to their library with an invalid status.
+     * User cannot add anime to their library with an invalid status.
      *
      * @return void
      * @test
      */
-    function a_user_cannot_add_anime_to_their_library_with_an_invalid_status()
+    function user_cannot_add_anime_to_their_library_with_an_invalid_status()
     {
         // Send request to add first anime to library
         $anime = Anime::first();
@@ -284,12 +284,12 @@ class LibraryTest extends TestCase
     }
 
     /**
-     * Test if a user can delete anime from their library.
+     * User can delete anime from their library.
      *
      * @return void
      * @test
      */
-    function a_user_can_delete_anime_from_their_library()
+    function user_can_delete_anime_from_their_library()
     {
         // Add an anime to the list
         $this->user->library()->attach(1, ['status' => UserLibraryStatus::Watching]);
@@ -309,12 +309,12 @@ class LibraryTest extends TestCase
     }
 
     /**
-     * Test if a user can search in own library.
+     * User can search in own library.
      *
      * @return void
      * @test
      */
-    function a_user_can_search_in_own_library()
+    function user_can_search_in_own_library()
     {
         // Add an anime to the user's list
         $shows = factory(Anime::class, 20)->create();

@@ -344,41 +344,6 @@
         }
       }
     },
-    "/users/{userID}/sessions": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "getUsersSessions",
-        "summary": "Get a list of the user's sessions",
-        "description": "This endpoint will retrieve a list of sessions for the user.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
     "/users/{userID}/favorite-anime": {
       "get": {
         "security": [
@@ -1098,6 +1063,53 @@
         ],
         "summary": "Download reminders.",
         "description": "This endpoint will retrieve the calendar file with anime in the authenticated user's reminder list.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/sessions": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "getMeSessions",
+        "summary": "Get a list of sessions.",
+        "description": "This endpoint will retrieve a list of sessions for the authenticated user.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "minimum": 25,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSONSuccess"
