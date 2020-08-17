@@ -13,9 +13,6 @@ Route::prefix('/users')
 
         Route::post('/login-siwa', [SignInWithAppleController::class, 'login']);
 
-        Route::get('/me', [UserController::class, 'me'])
-            ->middleware('kurozora.userauth');
-
         Route::get('/search', [UserController::class, 'search'])
             ->middleware('kurozora.userauth:optional');
 
@@ -35,22 +32,6 @@ Route::prefix('/users')
         Route::get('/{user}/following', [FollowingController::class, 'getFollowing'])
             ->middleware('kurozora.userauth:optional');
 
-        Route::get('/{user}/library', [LibraryController::class, 'getLibrary'])
-            ->middleware('kurozora.userauth');
-
-        Route::post('/{user}/library', [LibraryController::class, 'addLibrary'])
-            ->middleware('kurozora.userauth');
-
-        Route::get('/{user}/library/search', [LibraryController::class, 'search'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:search_library,user');
-
-        Route::post('/{user}/library/delete', [LibraryController::class, 'delLibrary'])
-            ->middleware('kurozora.userauth');
-
-        Route::post('/{user}/library/mal-import', [LibraryController::class, 'malImport'])
-            ->middleware('kurozora.userauth');
-
         Route::get('/{user}/favorite-anime', [FavoriteAnimeController::class, 'getFavorites'])
             ->middleware('kurozora.userauth');
 
@@ -64,17 +45,4 @@ Route::prefix('/users')
         Route::post('/{user}/profile', [UserController::class, 'updateProfile'])
             ->middleware('kurozora.userauth')
             ->middleware('can:update_profile,user');
-
-        Route::get('/{user}/notifications', [UserController::class, 'getNotifications'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:get_notifications,user');
-
-        Route::get('/{user}/reminder-anime', [ReminderAnimeController::class, 'getReminders'])
-            ->middleware('kurozora.userauth');
-
-        Route::post('/{user}/reminder-anime', [ReminderAnimeController::class, 'addReminder'])
-            ->middleware('kurozora.userauth');
-
-        Route::get('/{user}/reminder-anime/download/', [ReminderAnimeController::class, 'download'])
-            ->middleware('auth.basic');
     });

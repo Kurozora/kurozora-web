@@ -29,10 +29,6 @@
       "description": "Everything explore page related"
     },
     {
-      "name": "users",
-      "description": "Everything user related"
-    },
-    {
       "name": "actors",
       "description": "Everything actor related"
     },
@@ -57,6 +53,10 @@
       "description": "Everything genre related"
     },
     {
+      "name": "studios",
+      "description": "Everything studio related"
+    },
+    {
       "name": "forum-sections",
       "description": "Everything forum sections related"
     },
@@ -69,6 +69,10 @@
       "description": "Everything forum replies related"
     },
     {
+      "name": "me",
+      "description": "Endpoints related to the authenticated user."
+    },
+    {
       "name": "notifications",
       "description": "Everything user notification related"
     },
@@ -77,8 +81,8 @@
       "description": "Everything session related"
     },
     {
-      "name": "studios",
-      "description": "Everything studio related"
+      "name": "users",
+      "description": "Everything user related"
     },
     {
       "name": "themes",
@@ -375,271 +379,6 @@
         }
       }
     },
-    "/users/{userID}/library": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "getUsersLibrary",
-        "summary": "Get an overview of the user's Anime library",
-        "description": "This endpoint will retrieve the list of Anime in a user's library.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          },
-          {
-            "in": "query",
-            "name": "status",
-            "schema": {
-              "$ref": "#/components/schemas/LibraryStatus"
-            },
-            "required": true,
-            "description": "The status to retrieve the library items for."
-          },
-          {
-            "in": "query",
-            "name": "sort",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Available sorting options:\n- title(asc/desc)\n- age(newest/oldest)\n- rating(worst/best)\n- my-rating(worst/best)"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      },
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "postUsersLibrary",
-        "summary": "Add an Anime to the user's Anime library",
-        "description": "This endpoint will add to the list of Anime in a user's library.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "anime_id": {
-                    "type": "integer",
-                    "description": "The ID of the Anime to add."
-                  },
-                  "status": {
-                    "type": "string",
-                    "description": "The watch status to assign to the Anime.",
-                    "example": "Watching"
-                  }
-                },
-                "required": [
-                  "anime_id",
-                  "status"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/library/delete": {
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "postUsersLibraryDelete",
-        "summary": "Remove an Anime from the user's Anime library",
-        "description": "This endpoint will remove from the list of Anime in a user's library.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "anime_id": {
-                    "type": "integer",
-                    "description": "The ID of the Anime to remove."
-                  }
-                },
-                "required": [
-                  "anime_id"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/library/mal-import": {
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "postUsersLibraryMALImport",
-        "summary": "Import a MAL export file into the user's library",
-        "description": "This endpoint will import a MAL export file into the user's library.",
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "file": {
-                    "type": "string",
-                    "format": "binary",
-                    "description": "The MAL export file"
-                  },
-                  "behavior": {
-                    "$ref": "#/components/schemas/MALImportBehavior"
-                  }
-                },
-                "required": [
-                  "file",
-                  "behavior"
-                ]
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/library/search": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "getUsersLibrarySearch",
-        "summary": "Searches Anime in library.",
-        "description": "This endpoint will retrieve the search results of Anime in the user's library.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          },
-          {
-            "in": "query",
-            "name": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "The search query."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
     "/users/{userID}/favorite-anime": {
       "get": {
         "security": [
@@ -716,124 +455,6 @@
             }
           }
         },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/reminder-anime": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "summary": "Get an overview of the user's reminder Anime",
-        "description": "This endpoint will retrieve the list of Anime in the user's reminder list.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      },
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "summary": "Add or remove an Anime to/from the user's Anime reminders",
-        "description": "This endpoint will add or remove to/from the list of Anime in a user's reminders.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "anime_id": {
-                    "type": "integer",
-                    "description": "The ID of the Anime to add or remove."
-                  }
-                },
-                "required": [
-                  "anime_id"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/reminder-anime/download": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "summary": "Get the calendar file of the user's Anime reminders",
-        "description": "This endpoint will retrieve the calendar file of Anime in the user's reminder list.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSONSuccess"
@@ -939,7 +560,7 @@
         }
       }
     },
-    "/users/me": {
+    "/me": {
       "get": {
         "security": [
           {
@@ -948,11 +569,11 @@
           }
         ],
         "tags": [
-          "users"
+          "me"
         ],
-        "operationId": "getUsersMe",
-        "summary": "User profile details.",
-        "description": "This endpoint will retrieve the details of the current user's profile.",
+        "operationId": "getMe",
+        "summary": "Authenticated user profile details.",
+        "description": "This endpoint will retrieve the details of the authenticated user's profile.",
         "parameters": [
         ],
         "responses": {
@@ -965,7 +586,7 @@
         }
       }
     },
-    "/users/{userID}/notifications": {
+    "/me/library": {
       "get": {
         "security": [
           {
@@ -974,22 +595,429 @@
           }
         ],
         "tags": [
-          "users"
+          "me"
         ],
-        "operationId": "getUsersNotifications",
-        "summary": "User's list of notifications.",
-        "description": "This endpoint will retrieve the list of a user's notifications.",
+        "operationId": "getMeLibrary",
+        "summary": "Get an overview of the library.",
+        "description": "This endpoint will retrieve the list of anime in the authenticated user's library.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "$ref": "#/components/schemas/LibraryStatus"
+            },
+            "required": true,
+            "description": "The status to retrieve the library items for."
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Available sorting options:\n- title(asc/desc)\n- age(newest/oldest)\n- rating(worst/best)\n- my-rating(worst/best)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "postMeLibrary",
+        "summary": "Add an anime to the library.",
+        "description": "This endpoint will add to the list of anime in the authenticated user's library.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "anime_id": {
+                    "type": "integer",
+                    "description": "The ID of the Anime to add."
+                  },
+                  "status": {
+                    "$ref": "#/components/schemas/LibraryStatus"
+                  }
+                },
+                "required": [
+                  "anime_id",
+                  "status"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/library/mal-import": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "postMeLibraryMALImport",
+        "summary": "Import a MAL export file.",
+        "description": "This endpoint will import a MAL export file into the authenticated user's library.",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "The MAL export file"
+                  },
+                  "behavior": {
+                    "$ref": "#/components/schemas/MALImportBehavior"
+                  }
+                },
+                "required": [
+                  "file",
+                  "behavior"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/library/delete": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "postMeLibraryDelete",
+        "summary": "Remove an anime from library.",
+        "description": "This endpoint will remove an anime from the authenticated user's library.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "anime_id": {
+                    "type": "integer",
+                    "description": "The ID of the Anime to remove."
+                  }
+                },
+                "required": [
+                  "anime_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/library/search": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "getMeLibrarySearch",
+        "summary": "Search in library.",
+        "description": "This endpoint will retrieve the search results of anime in the authenticated user's library.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "The search query."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/notifications": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "getMeNotifications",
+        "summary": "Authenticated user's list of notifications.",
+        "description": "This endpoint will retrieve the list of the authenticated user's notifications.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/notifications/{notificationUUID}": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "getMeNotificationsDetails",
+        "summary": "Get a notification's details.",
+        "description": "This endpoint will retrieve the details of a notification.",
         "parameters": [
           {
             "in": "path",
-            "name": "userID",
+            "name": "notificationUUID",
             "schema": {
-              "type": "integer"
+              "type": "string"
             },
             "required": true,
-            "description": "ID of the user."
+            "description": "UUID of the notification to be retrieved."
           }
         ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetMeNotificationsDetailsSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/notifications/{notificationUUID}/delete": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "getMeNotificationsDelete",
+        "summary": "Delete a notification.",
+        "description": "This endpoint will delete the authenticated user's notification.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "notificationUUID",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "UUID of the notification to be deleted."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/notifications/update": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "postMeNotificationsUpdate",
+        "summary": "Update a notification's status.",
+        "description": "This endpoint will update the status of a single, multiple or all notifications of the authenticated user.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "notification": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "description": "The UUID of the notification to update. Use \"all\" to update all of the user's notifications."
+                  },
+                  "read": {
+                    "$ref": "#/components/schemas/NotificationReadStatus"
+                  }
+                },
+                "required": [
+                  "notification",
+                  "read"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PostMeNotificationsUpdateSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/reminder-anime": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "summary": "Get an overview reminders.",
+        "description": "This endpoint will retrieve the list of anime in the authenticated user's reminder list.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "summary": "Add or remove reminders.",
+        "description": "This endpoint will add or remove to/from the list of anime in an authenticated user's reminders.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "anime_id": {
+                    "type": "integer",
+                    "description": "The ID of the Anime to add or remove."
+                  }
+                },
+                "required": [
+                  "anime_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/reminder-anime/download": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "summary": "Download reminders.",
+        "description": "This endpoint will retrieve the calendar file with anime in the authenticated user's reminder list.",
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSONSuccess"
@@ -2371,127 +2399,6 @@
         }
       }
     },
-    "/notifications/{notificationUUID}": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "notifications"
-        ],
-        "operationId": "getNotificationsDetails",
-        "summary": "Gets the details of a notification",
-        "description": "This endpoint will retrieve the details of a notification.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "notificationUUID",
-            "schema": {
-              "type": "string"
-            },
-            "required": true,
-            "description": "UUID of the notification to be retrieved."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetNotificationsDetailsSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/notifications/{notificationUUID}/delete": {
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "notifications"
-        ],
-        "operationId": "getNotificationsDelete",
-        "summary": "Deletes a notification from the database",
-        "description": "This endpoint will delete a user's notification.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "notificationUUID",
-            "schema": {
-              "type": "string"
-            },
-            "required": true,
-            "description": "UUID of the notification to be deleted."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/notifications/update": {
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "notifications"
-        ],
-        "operationId": "postNotificationsUpdate",
-        "summary": "Update a single, multiple or all notifications' status",
-        "description": "This endpoint will update the status of a single, multiple or all notifications.",
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "notification": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "minItems": 1,
-                    "uniqueItems": true,
-                    "description": "The UUID of the notification to update. Use \"all\" to update all of the user's notifications."
-                  },
-                  "read": {
-                    "$ref": "#/components/schemas/NotificationReadStatus"
-                  }
-                },
-                "required": [
-                  "notification",
-                  "read"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/PostNotificationsUpdateSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
     "/sessions": {
       "post": {
         "tags": [
@@ -2770,6 +2677,14 @@
     },
     "/themes": {
       "get": {
+        "security": [
+          {
+          },
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
         "tags": [
           "themes"
         ],
@@ -2788,6 +2703,14 @@
     },
     "/themes/{themeID}": {
       "get": {
+        "security": [
+          {
+          },
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
         "tags": [
           "themes"
         ],
@@ -2954,13 +2877,20 @@
                   "isUserAuthenticated": false,
                   "authenticatedUserID": null
                 },
-                "message": "Description of the error."
+                "errors": [
+                  {
+                    "id": 40001,
+                    "status": 401,
+                    "title": "Unauthorized",
+                    "detail": "The request wasn’t accepted due to an issue with the kuro-auth token or because it’s using incorrect authentication."
+                  }
+                ]
               }
             }
           }
         }
       },
-      "GetNotificationsDetailsSuccess": {
+      "GetMeNotificationsDetailsSuccess": {
         "description": "Successful POST Notifications Details JSON response",
         "content": {
           "application/json": {
@@ -2987,7 +2917,7 @@
           }
         }
       },
-      "PostNotificationsUpdateSuccess": {
+      "PostMeNotificationsUpdateSuccess": {
         "description": "Successful POST Notifications Update JSON response",
         "content": {
           "application/json": {
@@ -4143,7 +4073,7 @@
               "type": "object",
               "example": {
                 "data": {
-                  "isWatched": 1
+                  "isWatched": true
                 }
               }
             }

@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
-use App\Helpers\KuroAuthToken;
 use App\Http\Requests\ResetPassword;
 use App\Http\Requests\SearchUserRequest;
 use App\Http\Requests\UpdateProfile;
-use App\Http\Resources\NotificationResource;
 use App\Http\Resources\SessionResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceBasic;
@@ -39,27 +37,6 @@ class UserController extends Controller
         // Show profile response
         return JSONResult::success([
             'data' => UserResource::collection([$user])
-        ]);
-    }
-
-    /**
-     * Returns the profile details for the current user
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function me(Request $request): JsonResponse
-    {
-        // Get current session
-        $sessionID = (int) $request->input('session_id');
-        $session = Session::find($sessionID);
-
-        // Show profile response
-        return JSONResult::success([
-            'data'      => [
-                UserResource::make($session->user)->includingSession($session)
-            ],
-            'authToken' => KuroAuthToken::generate($session->user->id, $session->secret)
         ]);
     }
 
@@ -205,19 +182,6 @@ class UserController extends Controller
             'page' => [
                 'no_index' => true
             ]
-        ]);
-    }
-
-    /**
-     * Returns the notifications for the user
-     *
-     * @param User $user
-     * @return JsonResponse
-     */
-    public function getNotifications(User $user): JsonResponse
-    {
-        return JSONResult::success([
-            'data' => NotificationResource::collection($user->notifications)
         ]);
     }
 
