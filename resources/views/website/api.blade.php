@@ -9,6 +9,7 @@
         <meta name="robots" content="noindex">
 
         {{-- Swagger CSS --}}
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ asset('css/swagger-ui.css') }}">
 
         {{-- Custom Style --}}

@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "description": "This is the documentation for Kurozora API.",
+    "description": "Integrate tracking shows with Kurozora content.\n *** \nThe Kurozora API is a web service that lets you access information about the media found in the Kurozora&nbsp;Catalog and the user's personal Kurozora&nbsp;Library. Here's what each one includes:\n- The Kurozora&nbsp;Catalog includes all resources available in Kurozora.\n- The user's Kurozora&nbsp;Library contains only those resources that the user added to their personal library. For example, it contains shows added to their tracking list, and favorites.\n\nUse this service to retrieve information about actors, characters, episodes, genres, shows, studios, threads, users, and the users' library.\nWith proper authorization from the user, you can also create or modify their library, apply ratings to shows, create or modify threads and vote on replies.",
     "version": "1.0.8",
     "title": "Kurozora API",
     "termsOfService": "http://swagger.io/terms/",
@@ -79,6 +79,10 @@
     {
       "name": "themes",
       "description": "Everything theme related"
+    },
+    {
+      "name": "legal",
+      "description": "All legal endpoints"
     },
     {
       "name": "misc",
@@ -2929,6 +2933,24 @@
         }
       }
     },
+    "/privacy-policy": {
+      "get": {
+        "tags": [
+          "legal"
+        ],
+        "operationId": "getPrivacyPolicy",
+        "summary": "Retrieve latest privacy policy.",
+        "description": "This endpoint will retrieve the latest privacy policy.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetPrivacyPolicySuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/info": {
       "get": {
         "tags": [
@@ -2940,24 +2962,6 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/privacy-policy": {
-      "get": {
-        "tags": [
-          "misc"
-        ],
-        "operationId": "getPrivacyPolicy",
-        "summary": "Retrieve latest privacy policy.",
-        "description": "This endpoint will retrieve the latest privacy policy.",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetPrivacyPolicySuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
