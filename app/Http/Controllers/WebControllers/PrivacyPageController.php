@@ -17,7 +17,7 @@ class PrivacyPageController extends Controller
      * @return Application|Factory|View
      */
     function show() {
-        $privacyPolicyRequest = Request::create('/api/v1/privacy-policy', 'GET');
+        $privacyPolicyRequest = Request::create('/api/v1/legal/privacy-policy', 'GET');
         $responseData = (array) Route::dispatch($privacyPolicyRequest)->getData();
 
         return view('website.legal.privacy', [

@@ -1,4 +1,4 @@
-<footer id="globalfooter" class="bg-grayBlue-500 bg-opacity-25 w-full">
+<footer id="globalfooter" class="bg-grayBlue-500  {{ (Route::currentRouteName() == 'api.legal.privacy') ? '' : 'bg-opacity-25'}} w-full">
     <div class="container mx-auto px-4 flex">
         <section class="gf-footer">
             <div class="gf-footer-legal">
