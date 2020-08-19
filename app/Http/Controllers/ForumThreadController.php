@@ -146,7 +146,7 @@ class ForumThreadController extends Controller
         }
 
         // Paginate the replies
-        $replies = $replies->paginate(ForumThread::REPLIES_PER_PAGE);
+        $replies = $replies->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $replies->nextPageUrl());

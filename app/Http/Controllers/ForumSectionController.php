@@ -87,7 +87,7 @@ class ForumSectionController extends Controller
                 break;
         }
 
-        $threads = $threads->paginate(ForumSection::THREADS_PER_PAGE);
+        $threads = $threads->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $threads->nextPageUrl());

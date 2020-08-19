@@ -25,7 +25,9 @@ class GetThreadsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'order' => ['bail', 'required', 'in:' . implode(',', ForumOrderType::getValues())]
+            'order' => ['bail', 'required', 'in:' . implode(',', ForumOrderType::getValues())],
+            'limit' => ['bail', 'integer', 'min:1', 'max:100'],
+            'page'  => ['bail', 'integer', 'min:1']
         ];
     }
 }
