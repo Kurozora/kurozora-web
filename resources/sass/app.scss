@@ -83,9 +83,28 @@ ul, menu, dir {
   @apply list-disc;
 }
 /// Global Navigation styles ///
+#globalnav .gn-container {
+  @apply flex
+  items-center
+  justify-between
+  flex-wrap
+  mx-auto
+  px-4
+  h-full;
+}
+
+#globalnav .gn-header {
+  @apply w-full
+  flex-grow
+  overflow-hidden;
+}
+
+#globalnav .gn-kurozora {
+  @apply flex-1;
+}
+
 #globalnav .gn-link {
-  @apply block
-  mt-4
+  @apply mt-4
   text-orange-500
   mr-4;
 }
@@ -283,9 +302,22 @@ ul, menu, dir {
 
 @screen lg {
   /// Global Navigation styles ///
+  #globalnav .gn-header {
+    @apply flex
+    items-center
+    w-auto;
+  }
+
+  #globalnav .gn-header {
+    height: 44px;
+  }
+
+  #globalnav .gn-kurozora {
+    height: 44px;
+  }
+
   #globalnav .gn-link {
-    @apply inline-block
-    mt-0;
+    @apply inline-block;
   }
 
   /// Outlined Kurozora button ///
@@ -314,10 +346,48 @@ ul, ol {
   margin: 1em 0 1em 1.1em;
 }
 
+nav ul, nav ol {
+  margin: 0;
+  list-style: none;
+}
+
 /// Global Navigation styles ///
 #globalnav {
   -webkit-backdrop-filter: blur(17px);
   backdrop-filter: blur(17px);
+}
+
+#globalnav .gn-links {
+  line-height: 3;
+}
+
+#globalnav .gn-link {
+  margin-top: 0;
+  height: 44px;
+  background: no-repeat;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), color 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+#globalnav .gn-link-kurozora {
+  background-image: url(http://kurozora-web.test/img/static/icon/navigation_kurozora.svg);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 32px 44px;
+  text-align: center;
+  width: 32px;
+  opacity: 0.8;
+}
+#globalnav .gn-link-kurozora:hover {
+  opacity: 1.0;
+}
+
+#globalnav .gn-actions {
+  @apply flex
+  flex-1
+  items-end
+  flex-col;
 }
 
 /// Placeholder styles ///

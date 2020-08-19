@@ -16,9 +16,6 @@ Route::prefix('/v1')
             ->middleware('kurozora.userauth:optional')
             ->name('explore');
 
-        Route::get('/privacy-policy', [MiscController::class, 'getPrivacyPolicy'])
-            ->name('legal.privacy');
-
         require 'API/Actors.php';
         require 'API/Anime.php';
         require 'API/Anime-Episodes.php';
@@ -28,6 +25,7 @@ Route::prefix('/v1')
         require 'API/Forum-Replies.php';
         require 'API/Forum-Sections.php';
         require 'API/Forum-Threads.php';
+        require 'API/Legal.php';
         require 'API/Me.php';
         require 'API/Studios.php';
         require 'API/Themes.php';
