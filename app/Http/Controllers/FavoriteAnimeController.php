@@ -21,8 +21,17 @@ class FavoriteAnimeController extends Controller
      */
     function getFavorites(GetAnimeFavoritesRequest $request, User $user): JsonResponse
     {
+        $data = $request->validated();
+
+        // Paginate the favorited anime
+        $favoriteAnime = $user->favoriteAnime()->paginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $favoriteAnime->nextPageUrl());
+
         return JSONResult::success([
-            'data' => AnimeResourceBasic::collection($user->favoriteAnime()->get())
+            'data' => AnimeResourceBasic::collection($favoriteAnime),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 

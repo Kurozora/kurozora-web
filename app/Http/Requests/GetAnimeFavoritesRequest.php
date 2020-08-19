@@ -25,7 +25,7 @@ class GetAnimeFavoritesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'limit' => ['bail', 'integer', 'min:25', 'max:100'],
+            'limit' => ['bail', 'integer', 'min:1', 'max:100'],
             'page'  => ['bail', 'integer', 'min:1']
         ];
     }
