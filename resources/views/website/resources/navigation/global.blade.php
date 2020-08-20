@@ -1,25 +1,23 @@
-<nav id="globalnav" class="bg-grayBlue-500 bg-opacity-25">
-    <div class="container flex items-center justify-between flex-wrap mx-auto px-4 py-2 h-full">
-        <div class="flex items-center flex-shrink-0 text-white mr-6">
-            <span class="font-semibold text-xl tracking-tight">Kurozora</span>
-        </div>
-
+<nav id="globalnav" class="bg-grayBlue-500 {{ (Route::currentRouteName() == 'api.legal.privacy') ? '' : 'bg-opacity-25'}}">
+    <div class="container gn-container">
         <global-navigation-content>
-            <div class="text-sm lg:flex-grow">
-                <a class="gn-link" href="{{ route('home') }}">
-                    Home
-                </a>
+            <div class="gn-kurozora">
+                <a class="gn-link gn-link-kurozora sm:hidden" href="{{ route('home') }}"></a>
+            </div>
 
+            <div class="text-sm gn-links">
                 <a class="gn-link" href="{{ route('themes.index') }}">
                     Themes
                 </a>
             </div>
 
-            <div>
-                <a class="k-outline-button {{ (Route::currentRouteName() == 'themes.index') ? '' : 'hidden' }}"
-                   href="{{ (Route::currentRouteName() !== 'themes.create') ? route('themes.create') : '#' }}">
-                    Create your own
-                </a>
+            <div class="gn-actions">
+                @if(Route::currentRouteName() == 'themes.index')
+                    <a class="k-outline-button"
+                       href="{{ (Route::currentRouteName() !== 'themes.create') ? route('themes.create') : '#' }}">
+                        Create your own
+                    </a>
+                @endif
             </div>
         </global-navigation-content>
     </div>

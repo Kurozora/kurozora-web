@@ -3,12 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
-use App\Helpers\KuroAuthToken;
 use App\Http\Requests\ResetPassword;
 use App\Http\Requests\SearchUserRequest;
-use App\Http\Requests\UpdateProfile;
-use App\Http\Resources\NotificationResource;
-use App\Http\Resources\SessionResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceBasic;
 use App\Jobs\SendNewPasswordMail;
@@ -21,10 +17,7 @@ use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class UserController extends Controller
 {
@@ -39,27 +32,6 @@ class UserController extends Controller
         // Show profile response
         return JSONResult::success([
             'data' => UserResource::collection([$user])
-        ]);
-    }
-
-    /**
-     * Returns the profile details for the current user
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function me(Request $request): JsonResponse
-    {
-        // Get current session
-        $sessionID = (int) $request->input('session_id');
-        $session = Session::find($sessionID);
-
-        // Show profile response
-        return JSONResult::success([
-            'data'      => [
-                UserResource::make($session->user)->includingSession($session)
-            ],
-            'authToken' => KuroAuthToken::generate($session->user->id, $session->secret)
         ]);
     }
 
@@ -102,26 +74,6 @@ class UserController extends Controller
 
         // Show successful response
         return JSONResult::success();
-    }
-
-    /**
-     * Returns the current active sessions for a user
-     *
-     * @param Request $request
-     * @param User $user
-     * @return JsonResponse
-     */
-    public function getSessions(Request $request, User $user): JsonResponse
-    {
-        // Get all sessions except current one
-        $sessions = Session::where([
-            ['user_id', '=',    $user->id],
-            ['secret',  '!=',   $request['session_secret']]
-        ])->get();
-
-        return JSONResult::success([
-            'data' => SessionResource::collection($sessions)
-        ]);
     }
 
     /**
@@ -209,19 +161,6 @@ class UserController extends Controller
     }
 
     /**
-     * Returns the notifications for the user
-     *
-     * @param User $user
-     * @return JsonResponse
-     */
-    public function getNotifications(User $user): JsonResponse
-    {
-        return JSONResult::success([
-            'data' => NotificationResource::collection($user->notifications)
-        ]);
-    }
-
-    /**
      * Retrieves User search results
      *
      * @param SearchUserRequest $request
@@ -239,79 +178,6 @@ class UserController extends Controller
         // Show response
         return JSONResult::success([
             'data' => UserResourceBasic::collection($users)
-        ]);
-    }
-
-    /**
-     * Update a user's profile information
-     *
-     * @param UpdateProfile $request
-     * @param User $user
-     * @return JsonResponse
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
-     */
-    public function updateProfile(UpdateProfile $request, User $user): JsonResponse
-    {
-        $data = $request->validated();
-
-        // Track if anything changed
-        $changedFields = [];
-
-        // Update biography
-        if($request->has('biography')) {
-            $newBiography = $data['biography'];
-
-            if($newBiography !== $user->biography) {
-                $user->biography = $newBiography;
-                $changedFields[] = 'biography';
-            }
-        }
-
-        // Update avatar
-        if($request->has('profileImage')) {
-            // Remove previous avatar
-            $user->clearMediaCollection('avatar');
-
-            // Upload a new avatar, if one was uploaded
-            if($request->hasFile('profileImage') && $request->file('profileImage')->isValid())
-            {
-                $user->addMediaFromRequest('profileImage')->toMediaCollection('avatar');
-            }
-
-            $changedFields[] = 'avatar';
-        }
-
-        // Update banner
-        if($request->has('bannerImage')) {
-            // Remove previous banner
-            $user->clearMediaCollection('banner');
-
-            // Save the uploaded banner, if one was uploaded
-            if($request->hasFile('bannerImage') && $request->file('bannerImage')->isValid())
-            {
-                $user->addMediaFromRequest('bannerImage')->toMediaCollection('banner');
-            }
-
-            $changedFields[] = 'banner image';
-        }
-
-        // Successful response
-        $displayMessage = 'Your settings were saved. ';
-
-        if(count($changedFields)) {
-            $displayMessage .= 'You have updated your ' . join(', ', $changedFields) . '.';
-            $user->save();
-        }
-        else $displayMessage .= 'No information was updated.';
-
-        return JSONResult::success([
-            'data'      => [
-                'biography'         => $user->biography,
-                'profileImageURL'   => $user->getFirstMediaFullUrl('avatar'),
-                'bannerImageURL'    => $user->getFirstMediaFullUrl('banner')
-            ],
-            'message'   => $displayMessage,
         ]);
     }
 }

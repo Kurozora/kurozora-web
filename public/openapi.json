@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "description": "This is the documentation for Kurozora API.",
+    "description": "Integrate tracking shows with Kurozora content.\n *** \nThe Kurozora API is a web service that lets you access information about the media found in the Kurozora&nbsp;Catalog and the user's personal Kurozora&nbsp;Library. Here's what each one includes:\n- The Kurozora&nbsp;Catalog includes all resources available in Kurozora.\n- The user's Kurozora&nbsp;Library contains only those resources that the user added to their personal library. For example, it contains shows added to their tracking list, and favorites.\n\nUse this service to retrieve information about actors, characters, episodes, genres, shows, studios, threads, users, and the users' library.\nWith proper authorization from the user, you can also create or modify their library, apply ratings to shows, create or modify threads and vote on replies.",
     "version": "1.0.8",
     "title": "Kurozora API",
     "termsOfService": "http://swagger.io/terms/",
@@ -29,10 +29,6 @@
       "description": "Everything explore page related"
     },
     {
-      "name": "users",
-      "description": "Everything user related"
-    },
-    {
       "name": "actors",
       "description": "Everything actor related"
     },
@@ -57,6 +53,10 @@
       "description": "Everything genre related"
     },
     {
+      "name": "studios",
+      "description": "Everything studio related"
+    },
+    {
       "name": "forum-sections",
       "description": "Everything forum sections related"
     },
@@ -69,20 +69,20 @@
       "description": "Everything forum replies related"
     },
     {
-      "name": "notifications",
-      "description": "Everything user notification related"
+      "name": "me",
+      "description": "Endpoints related to the authenticated user."
     },
     {
-      "name": "sessions",
-      "description": "Everything session related"
-    },
-    {
-      "name": "studios",
-      "description": "Everything studio related"
+      "name": "users",
+      "description": "Everything user related"
     },
     {
       "name": "themes",
       "description": "Everything theme related"
+    },
+    {
+      "name": "legal",
+      "description": "All legal endpoints"
     },
     {
       "name": "misc",
@@ -115,1041 +115,6 @@
             },
             "required": false,
             "description": "ID of the genre to filter on."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users": {
-      "post": {
-        "tags": [
-          "users"
-        ],
-        "operationId": "postUsers",
-        "summary": "Register a new user",
-        "description": "This endpoint will create a new user based on the given details.",
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "username": {
-                    "type": "string",
-                    "description": "The new user's username",
-                    "example": "Kurozora"
-                  },
-                  "password": {
-                    "type": "string",
-                    "description": "The new user's password"
-                  },
-                  "email": {
-                    "type": "string",
-                    "description": "The new user's email"
-                  },
-                  "profileImage": {
-                    "type": "string",
-                    "format": "binary",
-                    "description": "The new user's avatar image"
-                  }
-                },
-                "required": [
-                  "username",
-                  "password",
-                  "email"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/register-siwa": {
-      "post": {
-        "tags": [
-          "users"
-        ],
-        "operationId": "postRegisterSiwA",
-        "summary": "Register a new user (sign in with Apple)",
-        "description": "This endpoint will create a new user using Sign in with Apple.",
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "description": "The new user's email"
-                  },
-                  "siwa_id": {
-                    "type": "string",
-                    "description": "The new user's SIWA ID"
-                  },
-                  "platform": {
-                    "type": "string",
-                    "description": "The platform that was used to create the session",
-                    "example": "iOS"
-                  },
-                  "platform_version": {
-                    "type": "string",
-                    "description": "The platform version that was used to create the session",
-                    "example": "13.4"
-                  },
-                  "device_vendor": {
-                    "type": "string",
-                    "description": "The device vendor that was used to create the session",
-                    "example": "Apple"
-                  },
-                  "device_model": {
-                    "type": "string",
-                    "description": "The device model that was used to create the session",
-                    "example": "iPhone 11 Pro Max"
-                  }
-                },
-                "required": [
-                  "email",
-                  "siwa_id",
-                  "platform",
-                  "platform_version",
-                  "device_vendor",
-                  "device_model"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/login-siwa": {
-      "post": {
-        "tags": [
-          "users"
-        ],
-        "operationId": "postLoginSiwA",
-        "summary": "Log a user in via SIWA (sign in with Apple)",
-        "description": "This endpoint will log a user in using Sign in with Apple.",
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "identity_token": {
-                    "type": "string",
-                    "description": "The identity token (JWT) as provided by Apple"
-                  },
-                  "platform": {
-                    "type": "string",
-                    "description": "The platform that was used to create the session",
-                    "example": "iOS"
-                  },
-                  "platform_version": {
-                    "type": "string",
-                    "description": "The platform version that was used to create the session",
-                    "example": "13.4"
-                  },
-                  "device_vendor": {
-                    "type": "string",
-                    "description": "The device vendor that was used to create the session",
-                    "example": "Apple"
-                  },
-                  "device_model": {
-                    "type": "string",
-                    "description": "The device model that was used to create the session",
-                    "example": "iPhone 11 Pro Max"
-                  }
-                },
-                "required": [
-                  "identity_token",
-                  "platform",
-                  "platform_version",
-                  "device_vendor",
-                  "device_model"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/reset-password": {
-      "post": {
-        "tags": [
-          "users"
-        ],
-        "operationId": "postResetPassword",
-        "summary": "Request a password reset for a user",
-        "description": "This endpoint will send an email to the user to reset their password.",
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "description": "The email of the user to request a password reset."
-                  }
-                },
-                "required": [
-                  "email"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/sessions": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "getUsersSessions",
-        "summary": "Get a list of the user's sessions",
-        "description": "This endpoint will retrieve a list of sessions for the user.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/library": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "getUsersLibrary",
-        "summary": "Get an overview of the user's Anime library",
-        "description": "This endpoint will retrieve the list of Anime in a user's library.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          },
-          {
-            "in": "query",
-            "name": "status",
-            "schema": {
-              "$ref": "#/components/schemas/LibraryStatus"
-            },
-            "required": true,
-            "description": "The status to retrieve the library items for."
-          },
-          {
-            "in": "query",
-            "name": "sort",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "Available sorting options:\n- title(asc/desc)\n- age(newest/oldest)\n- rating(worst/best)\n- my-rating(worst/best)"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      },
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "postUsersLibrary",
-        "summary": "Add an Anime to the user's Anime library",
-        "description": "This endpoint will add to the list of Anime in a user's library.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "anime_id": {
-                    "type": "integer",
-                    "description": "The ID of the Anime to add."
-                  },
-                  "status": {
-                    "type": "string",
-                    "description": "The watch status to assign to the Anime.",
-                    "example": "Watching"
-                  }
-                },
-                "required": [
-                  "anime_id",
-                  "status"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/library/delete": {
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "postUsersLibraryDelete",
-        "summary": "Remove an Anime from the user's Anime library",
-        "description": "This endpoint will remove from the list of Anime in a user's library.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "anime_id": {
-                    "type": "integer",
-                    "description": "The ID of the Anime to remove."
-                  }
-                },
-                "required": [
-                  "anime_id"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/library/mal-import": {
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "postUsersLibraryMALImport",
-        "summary": "Import a MAL export file into the user's library",
-        "description": "This endpoint will import a MAL export file into the user's library.",
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "file": {
-                    "type": "string",
-                    "format": "binary",
-                    "description": "The MAL export file"
-                  },
-                  "behavior": {
-                    "$ref": "#/components/schemas/MALImportBehavior"
-                  }
-                },
-                "required": [
-                  "file",
-                  "behavior"
-                ]
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/library/search": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "getUsersLibrarySearch",
-        "summary": "Searches Anime in library.",
-        "description": "This endpoint will retrieve the search results of Anime in the user's library.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          },
-          {
-            "in": "query",
-            "name": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "The search query."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/favorite-anime": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "getUsersFavoriteAnime",
-        "summary": "Get an overview of the user's favorite Anime",
-        "description": "This endpoint will retrieve the list of Anime in the user's favorites list.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      },
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "postUsersFavoriteAnime",
-        "summary": "Add or remove an Anime to the user's Anime favorites",
-        "description": "This endpoint will add or remove to the list of Anime in a user's favorites.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "anime_id": {
-                    "type": "integer",
-                    "description": "The ID of the Anime to add."
-                  }
-                },
-                "required": [
-                  "anime_id"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/reminder-anime": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "summary": "Get an overview of the user's reminder Anime",
-        "description": "This endpoint will retrieve the list of Anime in the user's reminder list.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      },
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "summary": "Add or remove an Anime to/from the user's Anime reminders",
-        "description": "This endpoint will add or remove to/from the list of Anime in a user's reminders.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "anime_id": {
-                    "type": "integer",
-                    "description": "The ID of the Anime to add or remove."
-                  }
-                },
-                "required": [
-                  "anime_id"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/reminder-anime/download": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "summary": "Get the calendar file of the user's Anime reminders",
-        "description": "This endpoint will retrieve the calendar file of Anime in the user's reminder list.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/profile": {
-      "get": {
-        "security": [
-          {
-          },
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "getUsersProfile",
-        "summary": "(optional authentication) User profile details.",
-        "description": "This endpoint will retrieve the details of a user's profile.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      },
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "postUsersProfile",
-        "summary": "Updates a user's profile information",
-        "description": "This endpoint will update a user's profile information.\n<h3><strong>WARNING: You should only send the request body parameters that actually need to be changed!</strong></h3>",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "biography": {
-                    "type": "string",
-                    "description": "The new biography to set."
-                  },
-                  "profileImage": {
-                    "type": "string",
-                    "format": "binary",
-                    "description": "The new user's avatar image"
-                  },
-                  "bannerImage": {
-                    "type": "string",
-                    "format": "binary",
-                    "description": "The new user's banner image"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/me": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "getUsersMe",
-        "summary": "User profile details.",
-        "description": "This endpoint will retrieve the details of the current user's profile.",
-        "parameters": [
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/notifications": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "getUsersNotifications",
-        "summary": "User's list of notifications.",
-        "description": "This endpoint will retrieve the list of a user's notifications.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/search": {
-      "get": {
-        "security": [
-          {
-          },
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "getUsersSearch",
-        "summary": "(optional authentication) Searches users.",
-        "description": "This endpoint will retrieve the search results for users.\n<h3><strong>TIP: You can prefix your search with \"id:\" to search for a user with a specific ID.</strong></h3>",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "The search query."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/follow": {
-      "post": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "postUsersFollow",
-        "summary": "Follow or unfollow another user",
-        "description": "This endpoint will follow or unfollow another user.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/followers": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "getUsersFollowers",
-        "summary": "Retrieve the user's list of followers.",
-        "description": "This endpoint will retrieve the user's list of followers.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          },
-          {
-            "in": "query",
-            "name": "page",
-            "schema": {
-              "type": "string",
-              "example": "1"
-            },
-            "required": false,
-            "description": "The page to retrieve followers from. (starts at 1)"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/{userID}/following": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "getUsersFollowing",
-        "summary": "Retrieve the user's list of following users.",
-        "description": "This endpoint will retrieve the user's list of following users.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the user."
-          },
-          {
-            "in": "query",
-            "name": "page",
-            "schema": {
-              "type": "string",
-              "example": "1"
-            },
-            "required": false,
-            "description": "The page to retrieve followers from. (starts at 1)"
           }
         ],
         "responses": {
@@ -1963,10 +928,23 @@
             "in": "query",
             "name": "page",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "minimum": 1
             },
             "required": false,
-            "description": "The page to retrieve threads from."
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
           }
         ],
         "responses": {
@@ -2163,10 +1141,11 @@
             "in": "query",
             "name": "page",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1
             },
             "required": false,
-            "description": "The page to retrieve replies from."
+            "description": "The next page or group of objects to fetch. The default value is 1."
           }
         ],
         "responses": {
@@ -2371,7 +1350,7 @@
         }
       }
     },
-    "/notifications/{notificationUUID}": {
+    "/me": {
       "get": {
         "security": [
           {
@@ -2380,10 +1359,503 @@
           }
         ],
         "tags": [
-          "notifications"
+          "me"
         ],
-        "operationId": "getNotificationsDetails",
-        "summary": "Gets the details of a notification",
+        "operationId": "getMe",
+        "summary": "Authenticated user profile details.",
+        "description": "This endpoint will retrieve the details of the authenticated user's profile.",
+        "parameters": [
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "postMe",
+        "summary": "Updates profile information.",
+        "description": "This endpoint will update the authenticated user's profile information.",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "biography": {
+                    "type": "string",
+                    "description": "The new biography to set. Send <strong>null</strong> to remove."
+                  },
+                  "profileImage": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "The new user's avatar image. Send <strong>null</strong> to remove."
+                  },
+                  "bannerImage": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "The new user's banner image. Send <strong>null</strong> to remove."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/favorite-anime": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "getMeFavoriteAnime",
+        "summary": "Get an overview of favorites.",
+        "description": "This endpoint will retrieve the list of anime in the authenticated user's favorites.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "postMeFavoriteAnime",
+        "summary": "Add or remove from favorites.",
+        "description": "This endpoint will add or remove an anime to/from the authenticated user's favorites.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "anime_id": {
+                    "type": "integer",
+                    "description": "The ID of the Anime to add."
+                  }
+                },
+                "required": [
+                  "anime_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/followers": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "getMeFollowers",
+        "summary": "Fetch followers list.",
+        "description": "This endpoint will retrieve the authenticated user's followers list.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/following": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "getMeFollowing",
+        "summary": "Fetch following list.",
+        "description": "This endpoint will retrieve the authenticated user's following list.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/library": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "getMeLibrary",
+        "summary": "Get an overview of the library.",
+        "description": "This endpoint will retrieve the list of anime in the authenticated user's library.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "$ref": "#/components/schemas/LibraryStatus"
+            },
+            "required": true,
+            "description": "The status to retrieve the library items for."
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Available sorting options:\n- title(asc/desc)\n- age(newest/oldest)\n- rating(worst/best)\n- my-rating(worst/best)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "postMeLibrary",
+        "summary": "Add an anime to the library.",
+        "description": "This endpoint will add to the list of anime in the authenticated user's library.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "anime_id": {
+                    "type": "integer",
+                    "description": "The ID of the Anime to add."
+                  },
+                  "status": {
+                    "$ref": "#/components/schemas/LibraryStatus"
+                  }
+                },
+                "required": [
+                  "anime_id",
+                  "status"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/library/mal-import": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "postMeLibraryMALImport",
+        "summary": "Import a MAL export file.",
+        "description": "This endpoint will import a MAL export file into the authenticated user's library.",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "The MAL export file"
+                  },
+                  "behavior": {
+                    "$ref": "#/components/schemas/MALImportBehavior"
+                  }
+                },
+                "required": [
+                  "file",
+                  "behavior"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/library/delete": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "postMeLibraryDelete",
+        "summary": "Remove an anime from library.",
+        "description": "This endpoint will remove an anime from the authenticated user's library.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "anime_id": {
+                    "type": "integer",
+                    "description": "The ID of the Anime to remove."
+                  }
+                },
+                "required": [
+                  "anime_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/library/search": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "getMeLibrarySearch",
+        "summary": "Search in library.",
+        "description": "This endpoint will retrieve the search results of anime in the authenticated user's library.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "The search query."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/notifications": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "getMeNotifications",
+        "summary": "Authenticated user's list of notifications.",
+        "description": "This endpoint will retrieve the list of the authenticated user's notifications.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/notifications/{notificationUUID}": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "getMeNotificationsDetails",
+        "summary": "Get a notification's details.",
         "description": "This endpoint will retrieve the details of a notification.",
         "parameters": [
           {
@@ -2398,7 +1870,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetNotificationsDetailsSuccess"
+            "$ref": "#/components/responses/GetMeNotificationsDetailsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2406,7 +1878,7 @@
         }
       }
     },
-    "/notifications/{notificationUUID}/delete": {
+    "/me/notifications/{notificationUUID}/delete": {
       "post": {
         "security": [
           {
@@ -2415,11 +1887,11 @@
           }
         ],
         "tags": [
-          "notifications"
+          "me"
         ],
-        "operationId": "getNotificationsDelete",
-        "summary": "Deletes a notification from the database",
-        "description": "This endpoint will delete a user's notification.",
+        "operationId": "getMeNotificationsDelete",
+        "summary": "Delete a notification.",
+        "description": "This endpoint will delete the authenticated user's notification.",
         "parameters": [
           {
             "in": "path",
@@ -2441,7 +1913,7 @@
         }
       }
     },
-    "/notifications/update": {
+    "/me/notifications/update": {
       "post": {
         "security": [
           {
@@ -2450,11 +1922,11 @@
           }
         ],
         "tags": [
-          "notifications"
+          "me"
         ],
-        "operationId": "postNotificationsUpdate",
-        "summary": "Update a single, multiple or all notifications' status",
-        "description": "This endpoint will update the status of a single, multiple or all notifications.",
+        "operationId": "postMeNotificationsUpdate",
+        "summary": "Update a notification's status.",
+        "description": "This endpoint will update the status of a single, multiple or all notifications of the authenticated user.",
         "requestBody": {
           "content": {
             "application/x-www-form-urlencoded": {
@@ -2484,7 +1956,7 @@
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/PostNotificationsUpdateSuccess"
+            "$ref": "#/components/responses/PostMeNotificationsUpdateSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2492,72 +1964,7 @@
         }
       }
     },
-    "/sessions": {
-      "post": {
-        "tags": [
-          "sessions"
-        ],
-        "operationId": "postSessions",
-        "summary": "Create a new session (login)",
-        "description": "This endpoint will create a new session for a user.",
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "description": "The user's email address"
-                  },
-                  "password": {
-                    "type": "string",
-                    "description": "The user's password"
-                  },
-                  "platform": {
-                    "type": "string",
-                    "description": "The platform that was used to create the session",
-                    "example": "iOS"
-                  },
-                  "platform_version": {
-                    "type": "string",
-                    "description": "The platform version that was used to create the session",
-                    "example": "13.4"
-                  },
-                  "device_vendor": {
-                    "type": "string",
-                    "description": "The device vendor that was used to create the session",
-                    "example": "Apple"
-                  },
-                  "device_model": {
-                    "type": "string",
-                    "description": "The device model that was used to create the session",
-                    "example": "iPhone 11 Pro Max"
-                  }
-                },
-                "required": [
-                  "email",
-                  "password",
-                  "platform",
-                  "platform_version",
-                  "device_vendor",
-                  "device_model"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/PostSessionsSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/sessions/{sessionID}": {
+    "/me/reminder-anime": {
       "get": {
         "security": [
           {
@@ -2566,10 +1973,167 @@
           }
         ],
         "tags": [
-          "sessions"
+          "me"
         ],
-        "operationId": "getSessions",
-        "summary": "Gets the details of a session",
+        "summary": "Get an overview reminders.",
+        "description": "This endpoint will retrieve the list of anime in the authenticated user's reminder list.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "summary": "Add or remove reminders.",
+        "description": "This endpoint will add or remove to/from the list of anime in an authenticated user's reminders.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "anime_id": {
+                    "type": "integer",
+                    "description": "The ID of the Anime to add or remove."
+                  }
+                },
+                "required": [
+                  "anime_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/reminder-anime/download": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "summary": "Download reminders.",
+        "description": "This endpoint will retrieve the calendar file with anime in the authenticated user's reminder list.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/sessions": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "getMeSessions",
+        "summary": "Get a list of sessions.",
+        "description": "This endpoint will retrieve a list of sessions for the authenticated user.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/sessions/{sessionID}": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "getMeSessions",
+        "summary": "Fetch session details.",
         "description": "This endpoint will retrieve the details of a session.",
         "parameters": [
           {
@@ -2592,7 +2156,7 @@
         }
       }
     },
-    "/sessions/{sessionID}/update": {
+    "/me/sessions/{sessionID}/update": {
       "post": {
         "security": [
           {
@@ -2601,11 +2165,11 @@
           }
         ],
         "tags": [
-          "sessions"
+          "me"
         ],
-        "operationId": "postSessionsUpdate",
-        "summary": "Updates the information of a session",
-        "description": "This endpoint will update the information of a sessions.",
+        "operationId": "postMeSessionsUpdate",
+        "summary": "Updates session.",
+        "description": "This endpoint will update the information of an authenticated user's session.",
         "requestBody": {
           "content": {
             "application/x-www-form-urlencoded": {
@@ -2645,7 +2209,7 @@
         }
       }
     },
-    "/sessions/{sessionID}/delete": {
+    "/me/sessions/{sessionID}/delete": {
       "post": {
         "security": [
           {
@@ -2654,11 +2218,11 @@
           }
         ],
         "tags": [
-          "sessions"
+          "me"
         ],
-        "operationId": "postSessionsDelete",
-        "summary": "Deletes a session",
-        "description": "This endpoint will delete a session.",
+        "operationId": "postMeSessionsDelete",
+        "summary": "Delete a session.",
+        "description": "This endpoint will delete an authenticated user's session.",
         "parameters": [
           {
             "in": "path",
@@ -2770,6 +2334,14 @@
     },
     "/themes": {
       "get": {
+        "security": [
+          {
+          },
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
         "tags": [
           "themes"
         ],
@@ -2788,6 +2360,14 @@
     },
     "/themes/{themeID}": {
       "get": {
+        "security": [
+          {
+          },
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
         "tags": [
           "themes"
         ],
@@ -2815,14 +2395,554 @@
         }
       }
     },
-    "/info": {
-      "get": {
+    "/users": {
+      "post": {
         "tags": [
-          "misc"
+          "users"
         ],
-        "operationId": "getInfo",
-        "summary": "API info.",
-        "description": "Plain API JSON response.",
+        "operationId": "postUsers",
+        "summary": "Register a new user",
+        "description": "This endpoint will create a new user based on the given details.",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "The new user's username",
+                    "example": "Kurozora"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "The new user's password"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "The new user's email"
+                  },
+                  "profileImage": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "The new user's avatar image"
+                  }
+                },
+                "required": [
+                  "username",
+                  "password",
+                  "email"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/users/signin": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "operationId": "postSignIn",
+        "summary": "Sign in to account.",
+        "description": "This endpoint will sign in a user to their account.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "The user's email address"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "The user's password"
+                  },
+                  "platform": {
+                    "type": "string",
+                    "description": "The platform that was used to create the session",
+                    "example": "iOS"
+                  },
+                  "platform_version": {
+                    "type": "string",
+                    "description": "The platform version that was used to create the session",
+                    "example": "13.4"
+                  },
+                  "device_vendor": {
+                    "type": "string",
+                    "description": "The device vendor that was used to create the session",
+                    "example": "Apple"
+                  },
+                  "device_model": {
+                    "type": "string",
+                    "description": "The device model that was used to create the session",
+                    "example": "iPhone 11 Pro Max"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password",
+                  "platform",
+                  "platform_version",
+                  "device_vendor",
+                  "device_model"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PostSessionsSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/users/signin/siwa": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "operationId": "postLoginSiwA",
+        "summary": "Log a user in via SIWA (sign in with Apple)",
+        "description": "This endpoint will log a user in using Sign in with Apple.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "identity_token": {
+                    "type": "string",
+                    "description": "The identity token (JWT) as provided by Apple"
+                  },
+                  "platform": {
+                    "type": "string",
+                    "description": "The platform that was used to create the session",
+                    "example": "iOS"
+                  },
+                  "platform_version": {
+                    "type": "string",
+                    "description": "The platform version that was used to create the session",
+                    "example": "13.4"
+                  },
+                  "device_vendor": {
+                    "type": "string",
+                    "description": "The device vendor that was used to create the session",
+                    "example": "Apple"
+                  },
+                  "device_model": {
+                    "type": "string",
+                    "description": "The device model that was used to create the session",
+                    "example": "iPhone 11 Pro Max"
+                  }
+                },
+                "required": [
+                  "identity_token",
+                  "platform",
+                  "platform_version",
+                  "device_vendor",
+                  "device_model"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/users/signup/siwa": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "operationId": "postSignupSiwA",
+        "summary": "Sign up a new user (sign in with Apple)",
+        "description": "This endpoint will create a new user using Sign in with Apple.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "The new user's email"
+                  },
+                  "siwa_id": {
+                    "type": "string",
+                    "description": "The new user's SIWA ID"
+                  },
+                  "platform": {
+                    "type": "string",
+                    "description": "The platform that was used to create the session",
+                    "example": "iOS"
+                  },
+                  "platform_version": {
+                    "type": "string",
+                    "description": "The platform version that was used to create the session",
+                    "example": "13.4"
+                  },
+                  "device_vendor": {
+                    "type": "string",
+                    "description": "The device vendor that was used to create the session",
+                    "example": "Apple"
+                  },
+                  "device_model": {
+                    "type": "string",
+                    "description": "The device model that was used to create the session",
+                    "example": "iPhone 11 Pro Max"
+                  }
+                },
+                "required": [
+                  "email",
+                  "siwa_id",
+                  "platform",
+                  "platform_version",
+                  "device_vendor",
+                  "device_model"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/users/reset-password": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "operationId": "postResetPassword",
+        "summary": "Request a password reset for a user",
+        "description": "This endpoint will send an email to the user to reset their password.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "The email of the user to request a password reset."
+                  }
+                },
+                "required": [
+                  "email"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/users/{userID}/favorite-anime": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "users"
+        ],
+        "operationId": "getUsersFavoriteAnime",
+        "summary": "Get an overview of the user's favorite Anime",
+        "description": "This endpoint will retrieve the list of Anime in the user's favorites list.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the user."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/users/{userID}/profile": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "users"
+        ],
+        "operationId": "getUsersProfile",
+        "summary": "(optional authentication) User profile details.",
+        "description": "This endpoint will retrieve the details of a user's profile.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the user."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/users/{userID}/follow": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "users"
+        ],
+        "operationId": "postUsersFollow",
+        "summary": "Follow or unfollow another user",
+        "description": "This endpoint will follow or unfollow another user.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the user."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/users/{userID}/followers": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "users"
+        ],
+        "operationId": "getUsersFollowers",
+        "summary": "Fetch followers list.",
+        "description": "This endpoint will retrieve the user's followers list.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the user."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/users/{userID}/following": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "users"
+        ],
+        "operationId": "getUsersFollowing",
+        "summary": "Fetch following list.",
+        "description": "This endpoint will retrieve the user's following list.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the user."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/users/search": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "users"
+        ],
+        "operationId": "getUsersSearch",
+        "summary": "(optional authentication) Searches users.",
+        "description": "This endpoint will retrieve the search results for users.\n<h3><strong>TIP: You can prefix your search with \"id:\" to search for a user with a specific ID.</strong></h3>",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "The search query."
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSONSuccess"
@@ -2836,7 +2956,7 @@
     "/privacy-policy": {
       "get": {
         "tags": [
-          "misc"
+          "legal"
         ],
         "operationId": "getPrivacyPolicy",
         "summary": "Retrieve latest privacy policy.",
@@ -2844,6 +2964,24 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/GetPrivacyPolicySuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/info": {
+      "get": {
+        "tags": [
+          "misc"
+        ],
+        "operationId": "getInfo",
+        "summary": "API info.",
+        "description": "Plain API JSON response.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2954,13 +3092,20 @@
                   "isUserAuthenticated": false,
                   "authenticatedUserID": null
                 },
-                "message": "Description of the error."
+                "errors": [
+                  {
+                    "id": 40001,
+                    "status": 401,
+                    "title": "Unauthorized",
+                    "detail": "The request wasn’t accepted due to an issue with the kuro-auth token or because it’s using incorrect authentication."
+                  }
+                ]
               }
             }
           }
         }
       },
-      "GetNotificationsDetailsSuccess": {
+      "GetMeNotificationsDetailsSuccess": {
         "description": "Successful POST Notifications Details JSON response",
         "content": {
           "application/json": {
@@ -2970,7 +3115,7 @@
                 "data": {
                   "id": "1094845f-c175-462d-8aec-9bbad4af232f",
                   "type": "notifications",
-                  "href": "/api/v1/notifications/1094845f-c175-462d-8aec-9bbad4af232f",
+                  "href": "/api/v1/me/notifications/1094845f-c175-462d-8aec-9bbad4af232f",
                   "attributes": {
                     "type": "NewSession",
                     "isRead": true,
@@ -2987,7 +3132,7 @@
           }
         }
       },
-      "PostNotificationsUpdateSuccess": {
+      "PostMeNotificationsUpdateSuccess": {
         "description": "Successful POST Notifications Update JSON response",
         "content": {
           "application/json": {
@@ -4143,7 +4288,7 @@
               "type": "object",
               "example": {
                 "data": {
-                  "isWatched": 1
+                  "isWatched": true
                 }
               }
             }

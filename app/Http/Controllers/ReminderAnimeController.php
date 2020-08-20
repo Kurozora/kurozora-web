@@ -4,25 +4,54 @@ namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
 use App\Http\Requests\AddAnimeReminderRequest;
-use App\Http\Requests\DownloadAnimeReminderRequest;
 use App\Http\Requests\GetAnimeReminderRequest;
 use App\Http\Resources\AnimeResource;
 use App\User;
+use Auth;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class ReminderAnimeController extends Controller
 {
     /**
+     * Returns a calendar file of the user's reminder anime.
+     *
+     * @param GetAnimeReminderRequest $request
+     * @return JsonResponse
+     */
+    function getReminders(GetAnimeReminderRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        /** @var User $user */
+        $user = Auth::user();
+
+        // Paginate the reminder anime
+        $reminderAnime = $user->reminderAnime()->paginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $reminderAnime->nextPageUrl());
+
+        // Show successful response
+        return JSONResult::success([
+            'data' => AnimeResource::collection($reminderAnime),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
      * Adds an anime to the user's reminders.
      *
      * @param AddAnimeReminderRequest $request
-     * @param User $user
      * @return JsonResponse
      */
-    function addReminder(AddAnimeReminderRequest $request, User $user): JsonResponse
+    function addReminder(AddAnimeReminderRequest $request): JsonResponse
     {
         $animeID = $request->input('anime_id');
+
+        /** @var User $user */
+        $user = Auth::user();
 
         $isAlreadyReminded = $user->userReminderAnime()->where('anime_id', $animeID)->exists();
 
@@ -39,28 +68,16 @@ class ReminderAnimeController extends Controller
     }
 
     /**
-     * Returns a calendar file of the user's reminder anime.
-     *
-     * @param GetAnimeReminderRequest $request
-     * @param User $user
-     * @return JsonResponse
-     */
-    function getReminders(GetAnimeReminderRequest $request, User $user): JsonResponse
-    {
-        return JSONResult::success([
-            'data' => AnimeResource::collection($user->reminderAnime()->get())
-        ]);
-    }
-
-    /**
      * Serves the calendar file to be downloaded.
      *
-     * @param DownloadAnimeReminderRequest $request
-     * @param User $user
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    function download(DownloadAnimeReminderRequest $request, User $user): \Illuminate\Http\Response
+    function download(Request $request): \Illuminate\Http\Response
     {
+        /** @var User $user */
+        $user = Auth::user();
+
         $calendarExportStream = $user->getCalendar();
 
         // Headers to return for the download

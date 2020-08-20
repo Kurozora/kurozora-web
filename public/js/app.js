@@ -1981,6 +1981,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -14395,57 +14400,73 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("fragment", [
-    _c("div", { staticClass: "block lg:hidden" }, [
-      _c(
-        "button",
-        {
-          staticClass:
-            "flex items-center px-3 py-2 border rounded text-orange-500 border-orange-500 hover:text-orange-400 hover:border-orange-400",
-          on: {
-            click: function($event) {
-              _vm.isOpen = !_vm.isOpen
-            }
-          }
-        },
-        [
-          _c(
-            "svg",
-            {
-              staticClass: "fill-current h-3 w-3",
-              attrs: {
-                viewBox: "0 0 20 20",
-                xmlns: "http://www.w3.org/2000/svg"
-              }
-            },
-            [
-              _c("title", [_vm._v("Menu")]),
-              _vm._v(" "),
-              _vm.isOpen
-                ? _c("path", {
-                    attrs: {
-                      d:
-                        "M16.672988,12.1848426 C17.0788943,12.6051083 17.0730892,13.2731418 16.6599408,13.6862902 C16.2467924,14.0994386 15.5787589,14.1052437 15.1584932,13.6993374 L9.98628977,8.52820508 L4.81515744,13.6993374 C4.39489167,14.1052437 3.72685818,14.0994386 3.31370977,13.6862902 C2.90056136,13.2731418 2.89475633,12.6051083 3.30066259,12.1848426 L8.47179492,7.01263916 L3.30066259,1.84150684 C2.89475633,1.42124106 2.90056136,0.753207573 3.31370977,0.340059165 C3.72685818,-0.0730892433 4.39489167,-0.0788942738 4.81515744,0.32701199 L9.98736084,5.49814432 L15.1584932,0.32701199 C15.4274118,0.0485799487 15.8256398,-0.0630856764 16.2001179,0.0349338873 C16.5745959,0.132953451 16.8670465,0.425404077 16.9650661,0.799882133 C17.0630857,1.17436019 16.9514201,1.57258817 16.672988,1.84150684 L11.5018557,7.01371023 L16.672988,12.1848426 Z"
-                    }
-                  })
-                : _vm._e(),
-              _vm._v(" "),
-              !_vm.isOpen
-                ? _c("path", {
-                    attrs: { d: "M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" }
-                  })
-                : _vm._e()
-            ]
-          )
-        ]
-      )
-    ]),
-    _vm._v(" "),
     _c(
       "div",
       {
-        staticClass: "w-full block flex-grow lg:flex lg:items-center lg:w-auto",
-        class: _vm.isOpen ? "block" : "hidden"
+        staticClass:
+          "flex flex-grow items-center w-full overflow-hidden lg:hidden",
+        staticStyle: { "min-height": "48px" }
       },
+      [
+        _c("div", { staticClass: "flex-1" }, [
+          _c(
+            "button",
+            {
+              staticClass:
+                "px-3 py-2 border rounded text-orange-500 border-orange-500 hover:text-orange-400 hover:border-orange-400",
+              on: {
+                click: function($event) {
+                  _vm.isOpen = !_vm.isOpen
+                }
+              }
+            },
+            [
+              _c(
+                "svg",
+                {
+                  staticClass: "fill-current h-3 w-3",
+                  attrs: {
+                    viewBox: "0 0 20 20",
+                    xmlns: "http://www.w3.org/2000/svg"
+                  }
+                },
+                [
+                  _c("title", [_vm._v("Menu")]),
+                  _vm._v(" "),
+                  _vm.isOpen
+                    ? _c("path", {
+                        attrs: {
+                          d:
+                            "M16.672988,12.1848426 C17.0788943,12.6051083 17.0730892,13.2731418 16.6599408,13.6862902 C16.2467924,14.0994386 15.5787589,14.1052437 15.1584932,13.6993374 L9.98628977,8.52820508 L4.81515744,13.6993374 C4.39489167,14.1052437 3.72685818,14.0994386 3.31370977,13.6862902 C2.90056136,13.2731418 2.89475633,12.6051083 3.30066259,12.1848426 L8.47179492,7.01263916 L3.30066259,1.84150684 C2.89475633,1.42124106 2.90056136,0.753207573 3.31370977,0.340059165 C3.72685818,-0.0730892433 4.39489167,-0.0788942738 4.81515744,0.32701199 L9.98736084,5.49814432 L15.1584932,0.32701199 C15.4274118,0.0485799487 15.8256398,-0.0630856764 16.2001179,0.0349338873 C16.5745959,0.132953451 16.8670465,0.425404077 16.9650661,0.799882133 C17.0630857,1.17436019 16.9514201,1.57258817 16.672988,1.84150684 L11.5018557,7.01371023 L16.672988,12.1848426 Z"
+                        }
+                      })
+                    : _vm._e(),
+                  _vm._v(" "),
+                  !_vm.isOpen
+                    ? _c("path", {
+                        attrs: {
+                          d: "M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"
+                        }
+                      })
+                    : _vm._e()
+                ]
+              )
+            ]
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "gn-kurozora" }, [
+          _c("a", {
+            staticClass: "gn-link gn-link-kurozora block m-0",
+            attrs: { href: "/" }
+          })
+        ])
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "gn-header", class: _vm.isOpen ? "block" : "hidden" },
       [_vm._t("default")],
       2
     )

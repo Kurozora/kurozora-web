@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DownloadAnimeReminderRequest extends FormRequest
+class GetFollowersRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,11 +13,7 @@ class DownloadAnimeReminderRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Check if the user can download this user's reminders.
-        /** @var User $user */
-        $user = $this->route('user');
-
-        return $this->user()->can('download_anime_reminder', $user);
+        return true;
     }
 
     /**
@@ -28,6 +23,9 @@ class DownloadAnimeReminderRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [];
+        return [
+            'limit' => ['bail', 'integer', 'min:1', 'max:100'],
+            'page'  => ['bail', 'integer', 'min:1']
+        ];
     }
 }

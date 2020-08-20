@@ -76,16 +76,16 @@ class FollowTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_can_get_their_followers_list()
+    function a_user_can_get_someone_elses_followers_list()
     {
         // Add a follower
         /** @var User $anotherUser */
         $anotherUser = factory(User::class)->create();
 
-        $this->user->followers()->attach($anotherUser);
+        $anotherUser ->followers()->attach($this->user);
 
         // Request the list of followers
-        $response = $this->auth()->json('GET', '/api/v1/users/' . $this->user->id . '/followers', []);
+        $response = $this->auth()->json('GET', '/api/v1/users/'.$anotherUser->id.'/followers');
 
         // Check that the response is successful
         $response->assertSuccessfulAPIResponse();
@@ -100,16 +100,16 @@ class FollowTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_can_get_their_following_list()
+    function a_user_can_get_someone_elses_following_list()
     {
         // Add a user to the following list
         /** @var User $anotherUser */
         $anotherUser = factory(User::class)->create();
 
-        $this->user->following()->attach($anotherUser);
+        $anotherUser->following()->attach($this->user);
 
         // Request the list of following
-        $response = $this->auth()->json('GET', '/api/v1/users/' . $this->user->id . '/following');
+        $response = $this->auth()->json('GET', '/api/v1/users/'.$anotherUser->id.'/following');
 
         // Check that the response is successful
         $response->assertSuccessfulAPIResponse();

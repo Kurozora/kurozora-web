@@ -687,8 +687,29 @@ ul, menu, dir {
   list-style-type: disc;
 }
 
+#globalnav .gn-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  height: 100%;
+}
+
+#globalnav .gn-header {
+  width: 100%;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+#globalnav .gn-kurozora {
+  flex: 1 1 0%;
+}
+
 #globalnav .gn-link {
-  display: block;
   margin-top: 1rem;
   --text-opacity: 1;
   color: #FF9300;
@@ -92288,9 +92309,22 @@ ul, menu, dir {
 }
 
 @media (min-width: 1024px) {
+  #globalnav .gn-header {
+    display: flex;
+    align-items: center;
+    width: auto;
+  }
+
+  #globalnav .gn-header {
+    height: 44px;
+  }
+
+  #globalnav .gn-kurozora {
+    height: 44px;
+  }
+
   #globalnav .gn-link {
     display: inline-block;
-    margin-top: 0;
   }
 
   #globalnav .k-outline-button {
@@ -92316,9 +92350,48 @@ ul, ol {
   margin: 1em 0 1em 1.1em;
 }
 
+nav ul, nav ol {
+  margin: 0;
+  list-style: none;
+}
+
 #globalnav {
   -webkit-backdrop-filter: blur(17px);
   backdrop-filter: blur(17px);
+}
+
+#globalnav .gn-links {
+  line-height: 3;
+}
+
+#globalnav .gn-link {
+  margin-top: 0;
+  height: 44px;
+  background: no-repeat;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), color 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+#globalnav .gn-link-kurozora {
+  background-image: url(http://kurozora-web.test/img/static/icon/navigation_kurozora.svg);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 32px 44px;
+  text-align: center;
+  width: 32px;
+  opacity: 0.8;
+}
+
+#globalnav .gn-link-kurozora:hover {
+  opacity: 1;
+}
+
+#globalnav .gn-actions {
+  display: flex;
+  flex: 1 1 0%;
+  align-items: flex-end;
+  flex-direction: column;
 }
 
 .anime-poster {

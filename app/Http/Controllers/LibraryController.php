@@ -13,6 +13,7 @@ use App\Http\Requests\SearchLibraryRequest;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Jobs\ProcessMALImport;
 use App\User;
+use Auth;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -23,15 +24,18 @@ use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 class LibraryController extends Controller
 {
     /**
-     * Gets the user's library depending on the status
+     * Returns the authenticated user's library with the given status.
      *
      * @param GetLibraryRequest $request
-     * @param User $user
      * @return JsonResponse
      */
-    public function getLibrary(GetLibraryRequest $request, User $user): JsonResponse
+    public function index(GetLibraryRequest $request): JsonResponse
     {
         $data = $request->validated();
+
+        // Get the authenticated user
+        /** @var User $user */
+        $user = Auth::user();
 
         // Get the status
         $foundStatus = UserLibraryStatus::getValue($data['status']);
@@ -48,17 +52,20 @@ class LibraryController extends Controller
     }
 
     /**
-     * Adds an Anime to the user's library
+     * Adds an Anime to the authenticated user's library
      *
      * @param AddToLibraryRequest $request
-     * @param User $user
      * @return JsonResponse
      * @throws InvalidEnumKeyException
      */
-    public function addLibrary(AddToLibraryRequest $request, User $user): JsonResponse
+    public function addLibrary(AddToLibraryRequest $request): JsonResponse
     {
         $data = $request->validated();
         $animeID = $data['anime_id'];
+
+        // Get the authenticated user
+        /** @var User $user */
+        $user = Auth::user();
 
         // Get the Anime
         /** @var Anime $anime */
@@ -84,17 +91,20 @@ class LibraryController extends Controller
     }
 
     /**
-     * Removes an Anime from the user's library
+     * Removes an Anime from the authenticated user's library
      *
      * @param DeleteFromLibraryRequest $request
-     * @param User $user
      * @return JsonResponse
      * @throws AuthorizationException
      */
-    public function delLibrary(DeleteFromLibraryRequest $request, User $user): JsonResponse
+    public function delLibrary(DeleteFromLibraryRequest $request): JsonResponse
     {
         $data = $request->validated();
         $animeID = $data['anime_id'];
+
+        // Get the authenticated user
+        /** @var User $user */
+        $user = Auth::user();
 
         // Remove this Anime from their library if it can be found
         if($user->library()->where('anime_id', $animeID)->count()) {
@@ -119,17 +129,20 @@ class LibraryController extends Controller
     }
 
     /**
-     * Allows the user to upload a MAL export file to be imported.
+     * Allows the authenticated user to upload a MAL export file to be imported.
      *
      * @param MALImportRequest $request
-     * @param User $user
      * @return JsonResponse
      * @throws FileNotFoundException
      * @throws TooManyRequestsHttpException
      */
-    function malImport(MALImportRequest $request, User $user): JsonResponse
+    function malImport(MALImportRequest $request): JsonResponse
     {
         $data = $request->validated();
+
+        // Get the authenticated user
+        /** @var User $user */
+        $user = Auth::user();
 
         if(!$user->canDoMALImport()) {
             $cooldownDays = config('mal-import.cooldown_in_days');
@@ -156,12 +169,15 @@ class LibraryController extends Controller
      * Retrieves user library search results
      *
      * @param SearchLibraryRequest $request
-     * @param User $user
      * @return JsonResponse
      */
-    public function search(SearchLibraryRequest $request, User $user): JsonResponse
+    public function search(SearchLibraryRequest $request): JsonResponse
     {
         $searchQuery = $request->input('query');
+
+        // Get the authenticated user
+        /** @var User $user */
+        $user = Auth::user();
 
         // Search for the anime
         $library = $user->library()

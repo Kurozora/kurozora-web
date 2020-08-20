@@ -18,12 +18,12 @@ use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 class SignInWithAppleController extends Controller
 {
     /**
-     * Registers an account for the user via SIWA.
+     * Signup an account for the user via SIWA.
      *
      * @param SIWARegistration $request
      * @return JsonResponse
      */
-    function register(SIWARegistration $request): JsonResponse
+    function signup(SIWARegistration $request): JsonResponse
     {
         $data = $request->validated();
 
@@ -51,14 +51,14 @@ class SignInWithAppleController extends Controller
     }
 
     /**
-     * Logs the user in via SIWA.
+     * Sign in the user in via SIWA.
      *
      * @param SIWALoginRequest $request
      * @return JsonResponse
      * @throws AuthenticationException
      * @throws ServiceUnavailableHttpException
      */
-    function login(SIWALoginRequest $request): JsonResponse
+    function signin(SIWALoginRequest $request): JsonResponse
     {
         $data = $request->validated();
 
