@@ -16,11 +16,7 @@ class AddToLibraryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Check if the user can add to this library
-        /** @var User $user */
-        $user = $this->route('user');
-
-        return $this->user()->can('add_to_library', $user);
+        return true;
     }
 
     /**

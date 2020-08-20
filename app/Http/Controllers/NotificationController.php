@@ -6,6 +6,7 @@ use App\Helpers\JSONResult;
 use App\Http\Requests\UpdateUserNotifications;
 use App\Http\Resources\NotificationResource;
 use App\User;
+use Auth;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -15,7 +16,22 @@ use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 class NotificationController extends Controller
 {
     /**
-     * Retrieves details for a specific notification
+     * Returns the notifications for the authenticated user.
+     *
+     * @return JsonResponse
+     */
+    public function index(): JsonResponse
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        return JSONResult::success([
+            'data' => NotificationResource::collection($user->notifications)
+        ]);
+    }
+
+    /**
+     * Retrieves details for a specific notification.
      *
      * @param DatabaseNotification $notification
      * @return JsonResponse
@@ -28,7 +44,7 @@ class NotificationController extends Controller
     }
 
     /**
-     * Deletes a user's notification
+     * Deletes the authenticated user's notification.
      *
      * @param DatabaseNotification $notification
      * @return JsonResponse
@@ -43,7 +59,7 @@ class NotificationController extends Controller
     }
 
     /**
-     * Updates a single, multiple or all notifications' status.
+     * Updates a single, multiple or all notifications' status of the authenticated user.
      *
      * @param UpdateUserNotifications $request
      * @return JsonResponse

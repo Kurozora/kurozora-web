@@ -15,7 +15,7 @@ use Throwable;
 class RegistrationController extends Controller
 {
     /**
-     * Registers a new user
+     * Signup a new user
      *
      * @param Registration $request
      * @return JsonResponse
@@ -23,7 +23,7 @@ class RegistrationController extends Controller
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
-    public function register(Registration $request): JsonResponse
+    public function signup(Registration $request): JsonResponse
     {
         $data = $request->validated();
 

@@ -35,9 +35,6 @@ class ForumThread extends KModel implements ReactableContract
     // A user can post a thread once every {?} seconds
     const COOLDOWN_POST_THREAD = 60;
 
-    // Amount of results to display per thread page
-    const REPLIES_PER_PAGE = 25;
-
     /**
      * Get the section the thread was posted in.
      *

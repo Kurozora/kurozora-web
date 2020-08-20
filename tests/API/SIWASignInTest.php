@@ -7,17 +7,17 @@ use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
-class SIWALoginTest extends TestCase
+class SIWASignInTest extends TestCase
 {
     use DatabaseMigrations;
 
     /**
-     * Test if a user can login via SIWA.
+     * Test if a user can sign in via SIWA.
      *
      * @return void
      * @test
      */
-    function a_user_can_login_via_SIWA()
+    function a_user_can_sign_in_via_SIWA()
     {
         // Create a SIWA user
         factory(User::class)->create([
@@ -26,7 +26,7 @@ class SIWALoginTest extends TestCase
         ]);
 
         // Make the login request
-        $response = $this->json('POST', '/api/v1/users/login-siwa', [
+        $response = $this->json('POST', '/api/v1/users/signin/siwa', [
             'identity_token'    => 'eyJraWQiOiJlWGF1bm1MIiwiYWxnIjoiUlMyNTYifQ.eyJpc3MiOiJodHRwczovL2FwcGxlaWQuYXBwbGUuY29tIiwiYXVkIjoiYXBwLmt1cm96b3JhLnRyYWNrZXIiLCJleHAiOjE1ODI3MjczNTcsImlhdCI6MTU4MjcyNjc1Nywic3ViIjoiMDAxMTUxLjZhNTRmM2JhZmE1MDQxYmJhMDY5M2ZkMTA3OWIwZTc4LjEzNTQiLCJjX2hhc2giOiIxS3lzLURLbDAzUmNJZUFvYmlaUlFnIiwiZW1haWwiOiJtdTR5NzZtN2Q3QHByaXZhdGVyZWxheS5hcHBsZWlkLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjoidHJ1ZSIsImlzX3ByaXZhdGVfZW1haWwiOiJ0cnVlIiwiYXV0aF90aW1lIjoxNTgyNzI2NzU3LCJub25jZV9zdXBwb3J0ZWQiOnRydWV9.qFHuG25KsAYybjJ9DXl9X2bq64eejYQ5bfdG0xH5xySu38BFNxGi15t18209JdwiuAO3PPSt8l-DdFJU6WB568-UedbiASo6TBVKAdqjX4bG7VJdUqS5NgMJRARhLQ19EF6DHGDQF4JNkzzkcPxkq2YViSdtnMfceXl-irh3rsK3ISxz2eMshcvpOAVnJPWGwwiAJQq33FlIISbVn2TKbDVsunAgSNpNFzZV7uQEFxxmEqMPqA393XkWKOWeJpP4b-N1aMTfiqBMjZLO4laoClGur1bIaJUmPqo-hNSTu7ubNQhVhkBVpdlUo83KJDr6d6wxl6ZgMF70nmchx2H7Tw',
             'platform'          => 'iOS',
             'platform_version'  => '13.4',

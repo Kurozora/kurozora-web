@@ -7,23 +7,15 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('/users')
     ->name('users.')
     ->group(function() {
-        Route::post('/', [RegistrationController::class, 'register']);
+        Route::post('/', [RegistrationController::class, 'signup']);
 
-        Route::post('/register-siwa', [SignInWithAppleController::class, 'register']);
+        Route::post('/signin', [SessionController::class, 'create']);
 
-        Route::post('/login-siwa', [SignInWithAppleController::class, 'login']);
+        Route::post('/signup/siwa', [SignInWithAppleController::class, 'signup']);
 
-        Route::get('/me', [UserController::class, 'me'])
-            ->middleware('kurozora.userauth');
-
-        Route::get('/search', [UserController::class, 'search'])
-            ->middleware('kurozora.userauth:optional');
+        Route::post('/signin/siwa', [SignInWithAppleController::class, 'signin']);
 
         Route::post('/reset-password', [UserController::class, 'resetPassword']);
-
-        Route::get('/{user}/sessions', [UserController::class, 'getSessions'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:get_sessions,user');
 
         Route::post('/{user}/follow', [FollowingController::class, 'followUser'])
             ->middleware('kurozora.userauth')
@@ -35,46 +27,14 @@ Route::prefix('/users')
         Route::get('/{user}/following', [FollowingController::class, 'getFollowing'])
             ->middleware('kurozora.userauth:optional');
 
-        Route::get('/{user}/library', [LibraryController::class, 'getLibrary'])
-            ->middleware('kurozora.userauth');
-
-        Route::post('/{user}/library', [LibraryController::class, 'addLibrary'])
-            ->middleware('kurozora.userauth');
-
-        Route::get('/{user}/library/search', [LibraryController::class, 'search'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:search_library,user');
-
-        Route::post('/{user}/library/delete', [LibraryController::class, 'delLibrary'])
-            ->middleware('kurozora.userauth');
-
-        Route::post('/{user}/library/mal-import', [LibraryController::class, 'malImport'])
-            ->middleware('kurozora.userauth');
-
         Route::get('/{user}/favorite-anime', [FavoriteAnimeController::class, 'getFavorites'])
-            ->middleware('kurozora.userauth');
-
-        Route::post('/{user}/favorite-anime', [FavoriteAnimeController::class, 'addFavorite'])
-            ->middleware('kurozora.userauth');
+            ->middleware('kurozora.userauth')
+            ->middleware('can:get_anime_favorites,user');
 
         Route::get('/{user}/profile', [UserController::class, 'profile'])
             ->middleware('kurozora.userauth:optional')
             ->name('profile');
 
-        Route::post('/{user}/profile', [UserController::class, 'updateProfile'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:update_profile,user');
-
-        Route::get('/{user}/notifications', [UserController::class, 'getNotifications'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:get_notifications,user');
-
-        Route::get('/{user}/reminder-anime', [ReminderAnimeController::class, 'getReminders'])
-            ->middleware('kurozora.userauth');
-
-        Route::post('/{user}/reminder-anime', [ReminderAnimeController::class, 'addReminder'])
-            ->middleware('kurozora.userauth');
-
-        Route::get('/{user}/reminder-anime/download/', [ReminderAnimeController::class, 'download'])
-            ->middleware('auth.basic');
+        Route::get('/search', [UserController::class, 'search'])
+            ->middleware('kurozora.userauth:optional');
     });

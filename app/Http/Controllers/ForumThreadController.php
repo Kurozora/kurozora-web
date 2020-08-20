@@ -84,7 +84,7 @@ class ForumThreadController extends Controller
 
         // Check if the thread is not locked
         if($thread->locked)
-            throw new ConflictHttpException('You are not allowed to pos in a locked thread.');
+            throw new ConflictHttpException('You are not allowed to post in a locked thread.');
 
         // Check if the user has already posted within the cooldown period
         if(ForumReply::testPostCooldown(Auth::id()))
@@ -146,7 +146,7 @@ class ForumThreadController extends Controller
         }
 
         // Paginate the replies
-        $replies = $replies->paginate(ForumThread::REPLIES_PER_PAGE);
+        $replies = $replies->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $replies->nextPageUrl());

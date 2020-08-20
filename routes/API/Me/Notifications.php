@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('/notifications')
     ->name('notifications.')
     ->group(function() {
+        Route::get('/', [NotificationController::class, 'index'])
+            ->middleware('kurozora.userauth')
+            ->name('index');
+
         Route::get('/{notification}', [NotificationController::class, 'details'])
             ->middleware('kurozora.userauth')
             ->middleware('can:get_notification,notification')
