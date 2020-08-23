@@ -75,7 +75,8 @@ class Studio extends Resource
                 ->help('The URL to the official website of the studio.')
                 ->hideFromIndex(),
 
-            BelongsToMany::make('Anime'),
+            BelongsToMany::make('Anime')
+                ->searchable(),
         ];
     }
 

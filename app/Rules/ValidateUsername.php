@@ -10,7 +10,7 @@ class ValidateUsername implements Rule
     const MINIMUM_USERNAME_LENGTH = 3;
     const MAXIMUM_USERNAME_LENGTH = 50;
 
-    protected $errorType;
+    protected string $errorType;
 
     /**
      * Determine if the validation rule passes.
