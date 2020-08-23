@@ -2,8 +2,10 @@
 
 namespace Laravel\Nova\Tests\Controller;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Actions\ActionEvent;
+use Laravel\Nova\Nova;
 use Laravel\Nova\Tests\Fixtures\IdFilter;
 use Laravel\Nova\Tests\Fixtures\User;
 use Laravel\Nova\Tests\Fixtures\UserPolicy;
@@ -101,5 +103,30 @@ class LensResourceForceDeleteTest extends IntegrationTest
         $response->assertStatus(200);
         $this->assertCount(1, User::all());
         $this->assertCount(0, ActionEvent::all());
+    }
+
+    public function test_should_store_action_event_on_correct_connection_when_force_deleting()
+    {
+        $this->setupActionEventsOnSeparateConnection();
+
+        $user = factory(User::class)->create();
+        $user2 = factory(User::class)->create();
+
+        $response = $this->withExceptionHandling()
+            ->deleteJson('/nova-api/users/lens/user-lens/force', [
+                'resources' => [$user->id, $user2->id],
+            ]);
+
+        $response->assertStatus(200);
+
+        $this->assertCount(0, User::all());
+
+        $this->assertCount(0, DB::connection('sqlite')->table('action_events')->get());
+        $this->assertCount(2, DB::connection('sqlite-custom')->table('action_events')->get());
+
+        tap(Nova::actionEvent()->first(), function ($actionEvent) use ($user) {
+            $this->assertEquals('Delete', $actionEvent->name);
+            $this->assertEquals($user->id, $actionEvent->target_id);
+        });
     }
 }

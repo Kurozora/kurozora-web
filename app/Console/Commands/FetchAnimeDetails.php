@@ -40,7 +40,8 @@ class FetchAnimeDetails extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return int
+     *
      * @throws \musa11971\TVDB\Exceptions\TVDBNotFoundException
      * @throws \musa11971\TVDB\Exceptions\TVDBUnauthorizedException
      */
@@ -54,17 +55,17 @@ class FetchAnimeDetails extends Command
         // Specified Anime does not exists
         if($anime == null) {
             $this->error('The Anime was not found.');
-            return false;
+            return 0;
         }
 
         if($anime->tvdb_id === null) {
             $this->error('The Anime does not have a connected TVDB ID.');
-            return false;
+            return 0;
         }
 
         if($anime->fetched_details) {
             $this->error('The details were already fetched for this Anime.');
-            return false;
+            return 0;
         }
 
         // Start retrieving
@@ -121,25 +122,25 @@ class FetchAnimeDetails extends Command
         $this->info('[Status retrieved]');
         $this->info('');
 
-	    // First aired
-	    $this->info('[Retrieving first air date]');
-	    $anime->first_aired = ($details->firstAired);
-	    $this->info('[First air date retrieved]');
-	    $this->info('');
+        // First aired
+        $this->info('[Retrieving first air date]');
+        $anime->first_aired = ($details->firstAired);
+        $this->info('[First air date retrieved]');
+        $this->info('');
 
-	    // Air time
-	    $this->info('[Retrieving air time]');
-	    $anime->air_time = (Carbon::parse($details->airs["time"]));
-	    $this->info('[Air time retrieved]');
-	    $this->info('');
+        // Air time
+        $this->info('[Retrieving air time]');
+        $anime->air_time = (Carbon::parse($details->airs["time"]));
+        $this->info('[Air time retrieved]');
+        $this->info('');
 
-		// Air day
-	    $this->info('[Retrieving air day]');
-	    $anime->air_day = (DayOfWeek::getValue($details->airs["dayOfWeek"]));
-	    $this->info('[Air day retrieved]');
-	    $this->info('');
+        // Air day
+        $this->info('[Retrieving air day]');
+        $anime->air_day = (DayOfWeek::getValue($details->airs["dayOfWeek"]));
+        $this->info('[Air day retrieved]');
+        $this->info('');
 
-	    // Genres
+        // Genres
         $this->info('[Retrieving genres]');
 
         foreach($details->genres as $genre) {
@@ -164,6 +165,6 @@ class FetchAnimeDetails extends Command
 
         $this->info('Finished fetching details');
 
-        return true;
+        return 1;
     }
 }

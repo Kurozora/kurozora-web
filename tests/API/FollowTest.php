@@ -2,10 +2,9 @@
 
 namespace Tests\API;
 
-use App\Http\Resources\UserResourceSmall;
+use App\Http\Resources\UserResourceBasic;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Http\Request;
 use Tests\Traits\ProvidesTestUser;
 use Tests\TestCase;
 
@@ -24,15 +23,13 @@ class FollowTest extends TestCase
         /** @var User $anotherUser */
         $anotherUser = factory(User::class)->create();
 
-        $this->auth()->json('POST', '/api/v1/users/' . $anotherUser->id . '/follow', [
-            'follow' => 1
-        ])->assertSuccessfulAPIResponse();
+        $this->auth()->json('POST', '/api/v1/users/' . $anotherUser->id . '/follow')->assertSuccessfulAPIResponse();
 
         // Check that the user is now following one person
-        $this->assertEquals($this->user->following()->count(), 1);
+        $this->assertEquals(1, $this->user->following()->count());
 
         // Check that the other user is now being followed by one person
-        $this->assertEquals($anotherUser->followers()->count(), 1);
+        $this->assertEquals(1, $anotherUser->followers()->count());
     }
 
     /**
@@ -50,15 +47,13 @@ class FollowTest extends TestCase
         $this->user->following()->attach($anotherUser);
 
         // Send the unfollow API request
-        $this->auth()->json('POST', '/api/v1/users/' . $anotherUser->id . '/follow', [
-            'follow' => 0
-        ])->assertSuccessfulAPIResponse();
+        $this->auth()->json('POST', '/api/v1/users/' . $anotherUser->id . '/follow')->assertSuccessfulAPIResponse();
 
         // Check that the user is now following no-one
-        $this->assertEquals($this->user->following()->count(), 0);
+        $this->assertEquals(0, $this->user->following()->count());
 
         // Check that the other user is now being followed by no-one
-        $this->assertEquals($anotherUser->followers()->count(), 0);
+        $this->assertEquals(0, $anotherUser->followers()->count());
     }
 
     /**
@@ -69,61 +64,10 @@ class FollowTest extends TestCase
      */
     function a_user_cannot_follow_an_invalid_user()
     {
-        $this->auth()->json('POST', '/api/v1/users/' . 99999 . '/follow', [
-            'follow' => 1
-        ])->assertNotFound();
+        $this->auth()->json('POST', '/api/v1/users/' . 99999 . '/follow')->assertNotFound();
 
         // Check that the user is still following no-one
-        $this->assertEquals($this->user->following()->count(), 0);
-    }
-
-    /**
-     * Test if a user cannot follow a user they already follow.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_cannot_follow_a_user_they_already_follow()
-    {
-        /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
-
-        // Add the other user to our following list
-        $this->user->following()->attach($anotherUser);
-
-        // Send the follow API request
-        $this->auth()->json('POST', '/api/v1/users/' . $anotherUser->id . '/follow', [
-            'follow' => 1
-        ])->assertUnsuccessfulAPIResponse();
-
-        // Check that the user is now following one person
-        $this->assertEquals($this->user->following()->count(), 1);
-
-        // Check that the other user is now being followed by one person
-        $this->assertEquals($anotherUser->followers()->count(), 1);
-    }
-
-    /**
-     * Test if a user cannot unfollow a user they do not follow.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_cannot_unfollow_a_user_they_do_not_follow()
-    {
-        /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
-
-        // Send the unfollow API request
-        $this->auth()->json('POST', '/api/v1/users/' . $anotherUser->id . '/follow', [
-            'follow' => 0
-        ])->assertUnsuccessfulAPIResponse();
-
-        // Check that the user is now following one person
-        $this->assertEquals($this->user->following()->count(), 0);
-
-        // Check that the other user is now being followed by one person
-        $this->assertEquals($anotherUser->followers()->count(), 0);
+        $this->assertEquals(0, $this->user->following()->count());
     }
 
     /**
@@ -132,26 +76,22 @@ class FollowTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_can_get_their_followers_list()
+    function a_user_can_get_someone_elses_followers_list()
     {
         // Add a follower
         /** @var User $anotherUser */
         $anotherUser = factory(User::class)->create();
 
-        $this->user->followers()->attach($anotherUser);
+        $anotherUser ->followers()->attach($this->user);
 
         // Request the list of followers
-        $response = $this->auth()->json('GET', '/api/v1/users/' . $this->user->id . '/followers');
+        $response = $this->auth()->json('GET', '/api/v1/users/'.$anotherUser->id.'/followers');
 
         // Check that the response is successful
         $response->assertSuccessfulAPIResponse();
 
         // Check that the response contains the follower
-        $response->assertJson([
-            'followers' => [
-                UserResourceSmall::make($anotherUser)->toArray(),
-            ]
-        ]);
+        $this->assertTrue($response['data'] > 0);
     }
 
     /**
@@ -160,26 +100,22 @@ class FollowTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_can_get_their_following_list()
+    function a_user_can_get_someone_elses_following_list()
     {
         // Add a user to the following list
         /** @var User $anotherUser */
         $anotherUser = factory(User::class)->create();
 
-        $this->user->following()->attach($anotherUser);
+        $anotherUser->following()->attach($this->user);
 
         // Request the list of following
-        $response = $this->auth()->json('GET', '/api/v1/users/' . $this->user->id . '/following');
+        $response = $this->auth()->json('GET', '/api/v1/users/'.$anotherUser->id.'/following');
 
         // Check that the response is successful
         $response->assertSuccessfulAPIResponse();
 
         // Check that the response contains the user
-        $response->assertJson([
-            'following' => [
-                UserResourceSmall::make($anotherUser)->toArray(),
-            ]
-        ]);
+        $this->assertTrue($response['data'] > 0);
     }
 
     /**

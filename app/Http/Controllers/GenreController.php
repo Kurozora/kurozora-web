@@ -14,14 +14,15 @@ class GenreController extends Controller
      *
      * @return JsonResponse
      */
-    public function overview() {
+    public function overview(): JsonResponse
+    {
         // Get all genres and format them
         $allGenres = Genre::get()->map(function($genre) {
             return GenreResource::make($genre);
         });
 
         // Show genres in response
-        return JSONResult::success(['genres' => $allGenres]);
+        return JSONResult::success(['data' => $allGenres]);
     }
 
     /**
@@ -30,10 +31,11 @@ class GenreController extends Controller
      * @param Genre $genre
      * @return JsonResponse
      */
-    public function details(Genre $genre) {
+    public function details(Genre $genre): JsonResponse
+    {
         // Show genre details
         return JSONResult::success([
-            'genre' => GenreResource::make($genre)
+            'data' => GenreResource::collection([$genre])
         ]);
     }
 }

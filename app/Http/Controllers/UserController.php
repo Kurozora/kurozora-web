@@ -4,21 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
 use App\Http\Requests\ResetPassword;
-use App\Http\Requests\UpdateProfile;
-use App\Http\Resources\NotificationResource;
-use App\Http\Resources\SessionResource;
-use App\Http\Resources\UserResourceLarge;
-use App\Http\Resources\UserResourceSmall;
+use App\Http\Requests\SearchUserRequest;
+use App\Http\Resources\UserResource;
+use App\Http\Resources\UserResourceBasic;
 use App\Jobs\SendNewPasswordMail;
 use App\Jobs\SendPasswordResetMail;
 use App\PasswordReset;
 use App\Session;
 use App\User;
 use Carbon\Carbon;
+use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
@@ -28,10 +27,11 @@ class UserController extends Controller
      * @param User $user
      * @return JsonResponse
      */
-    public function profile(User $user) {
+    public function profile(User $user): JsonResponse
+    {
         // Show profile response
         return JSONResult::success([
-            'user' => UserResourceLarge::make($user)
+            'data' => UserResource::collection([$user])
         ]);
     }
 
@@ -41,10 +41,12 @@ class UserController extends Controller
      * @param ResetPassword $request
      * @return JsonResponse
      */
-    public function resetPassword(ResetPassword $request) {
+    public function resetPassword(ResetPassword $request): JsonResponse
+    {
         $data = $request->validated();
 
         // Try to find the user with this email
+        /** @var User $user */
         $user = User::where('email', $data['email'])->first();
 
         // There is a user with this email
@@ -75,39 +77,15 @@ class UserController extends Controller
     }
 
     /**
-     * Returns the current active sessions for a user
-     *
-     * @param Request $request
-     * @param User $user
-     * @return JsonResponse
-     */
-    public function getSessions(Request $request, User $user) {
-        // Get the other sessions
-        $otherSessions = Session::where([
-            ['user_id', '=',    $user->id],
-            ['secret',  '!=',   $request['session_secret']]
-        ])->get();
-
-        // Get the current session
-        $curSession = Session::where([
-            ['user_id', '=',    $user->id],
-            ['secret',  '=',    $request['session_secret']]
-        ])->first();
-
-        return JSONResult::success([
-            'current_session'   => SessionResource::make($curSession),
-            'other_sessions'    => SessionResource::collection($otherSessions)
-        ]);
-    }
-
-    /**
      * Email confirmation page
      *
      * @param $confirmationID
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Application|Factory|View
      */
-    public function confirmEmail($confirmationID) {
+    public function confirmEmail($confirmationID)
+    {
         // Try to find a user with this confirmation ID
+        /** @var User $foundUser */
         $foundUser = User::where('email_confirmation_id', $confirmationID)->first();
 
         // No user found
@@ -135,11 +113,14 @@ class UserController extends Controller
      * Password reset page
      *
      * @param string $token
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \Throwable
+     *
+     * @return Application|Factory|View
+     * @throws Exception
      */
-    public function resetPasswordPage($token) {
+    public function resetPasswordPage($token)
+    {
         // Try to find a reset with this reset token
+        /** @var PasswordReset $foundReset */
         $foundReset = PasswordReset::where('token', $token)->first();
 
         // No reset found
@@ -180,33 +161,13 @@ class UserController extends Controller
     }
 
     /**
-     * Returns the notifications for the user
-     *
-     * @param User $user
-     * @return JsonResponse
-     */
-    public function getNotifications(User $user) {
-        return JSONResult::success([
-            'notifications' => NotificationResource::collection($user->notifications)
-        ]);
-    }
-
-    /**
      * Retrieves User search results
      *
-     * @param Request $request
+     * @param SearchUserRequest $request
      * @return JsonResponse
      */
-    public function search(Request $request) {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'query' => 'bail|required|string|min:1'
-        ]);
-
-        // Check validator
-        if($validator->fails())
-            return JSONResult::error($validator->errors()->first());
-
+    public function search(SearchUserRequest $request): JsonResponse
+    {
         $searchQuery = $request->input('query');
 
         // Search for the users
@@ -216,77 +177,7 @@ class UserController extends Controller
 
         // Show response
         return JSONResult::success([
-            'max_search_results'    => User::MAX_SEARCH_RESULTS,
-            'results'               => UserResourceSmall::collection($users)
-        ]);
-    }
-
-    /**
-     * Update a user's profile information
-     *
-     * @param UpdateProfile $request
-     * @param User $user
-     * @return JsonResponse
-     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\DiskDoesNotExist
-     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist
-     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig
-     */
-    public function updateProfile(UpdateProfile $request, User $user) {
-        $data = $request->validated();
-
-        // Track if anything changed
-        $changedFields = [];
-
-        // Update biography
-        if($request->has('biography')) {
-            $newBiography = $data['biography'];
-
-            if($newBiography !== $user->biography) {
-                $user->biography = $newBiography;
-                $changedFields[] = 'biography';
-            }
-        }
-
-        // Update avatar
-        if($request->has('profileImage')) {
-            // Remove previous avatar
-            $user->clearMediaCollection('avatar');
-
-            // Upload a new avatar, if one was uploaded
-            if($request->hasFile('profileImage') && $request->file('profileImage')->isValid())
-            {
-                $user->addMediaFromRequest('profileImage')->toMediaCollection('avatar');
-            }
-
-            $changedFields[] = 'avatar';
-        }
-
-        // Update banner
-        if($request->has('bannerImage')) {
-            // Remove previous banner
-            $user->clearMediaCollection('banner');
-
-            // Save the uploaded banner, if one was uploaded
-            if($request->hasFile('bannerImage') && $request->file('bannerImage')->isValid())
-            {
-                $user->addMediaFromRequest('bannerImage')->toMediaCollection('banner');
-            }
-
-            $changedFields[] = 'banner image';
-        }
-
-        // Successful response
-        $displayMessage = 'Your settings were saved. ';
-
-        if(count($changedFields)) {
-            $displayMessage .= 'You have updated your ' . join(', ', $changedFields) . '.';
-            $user->save();
-        }
-        else $displayMessage .= 'No information was updated.';
-
-        return JSONResult::success([
-            'message' => $displayMessage,
-            'user' => UserResourceLarge::make($user)
+            'data' => UserResourceBasic::collection($users)
         ]);
     }
 }

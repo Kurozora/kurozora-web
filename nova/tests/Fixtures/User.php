@@ -33,6 +33,10 @@ class User extends Authenticatable
         'meta' => 'array',
     ];
 
+    protected $attributes = [
+        'name' => 'Anonymous User',
+    ];
+
     /**
      * The password reset token that was last issued.
      *
@@ -72,6 +76,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id')
                             ->withPivot('id', 'admin', 'photo', 'restricted')
                             ->using(RoleAssignment::class);
+    }
+
+    public function userRoles()
+    {
+        return $this->roles();
     }
 
     /**

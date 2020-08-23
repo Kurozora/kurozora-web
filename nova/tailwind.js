@@ -95,7 +95,6 @@ module.exports = {
     loose: 2,
     '9': '2.25rem',
     '12': '3rem',
-    '36': '2.25rem',
   },
 
   tracking: {

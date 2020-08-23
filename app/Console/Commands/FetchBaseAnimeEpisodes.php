@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\Anime;
 use App\AnimeEpisode;
 use App\AnimeSeason;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
 use musa11971\TVDB\Exceptions\TVDBNotFoundException;
 use musa11971\TVDB\TVDB;
@@ -39,7 +38,8 @@ class FetchBaseAnimeEpisodes extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return int
+     *
      * @throws \musa11971\TVDB\Exceptions\TVDBUnauthorizedException
      */
     public function handle()
@@ -52,17 +52,17 @@ class FetchBaseAnimeEpisodes extends Command
         // Specified Anime does not exists
         if($anime == null) {
             $this->error('The Anime was not found.');
-            return false;
+            return 0;
         }
 
         if($anime->tvdb_id === null) {
             $this->error('The Anime does not have a connected TVDB ID.');
-            return false;
+            return 0;
         }
 
         if($anime->fetched_base_episodes) {
             $this->error('The base episodes were already fetched for this Anime.');
-            return false;
+            return 0;
         }
 
         // Start looping through episode requests
@@ -106,7 +106,7 @@ class FetchBaseAnimeEpisodes extends Command
 
                 // Insert the new episode
                 $insertData = [
-                    'name'          => $episodeResult->name,
+                    'title'         => $episodeResult->name,
                     'season_id'     => $season->id,
                     'number'        => $episodeResult->number,
                     'overview'      => $episodeResult->synopsis,
@@ -139,5 +139,7 @@ class FetchBaseAnimeEpisodes extends Command
         $anime->season_count = $highestSeason;
         $anime->fetched_base_episodes = true;
         $anime->save();
+
+        return 1;
     }
 }

@@ -20,4 +20,9 @@ class UserWithRedirectResource extends UserResource
     {
         return 'https://google.com';
     }
+
+    public static function redirectAfterDelete(NovaRequest $request)
+    {
+        return 'https://laravel.com';
+    }
 }

@@ -23,7 +23,7 @@ export default {
   data: () => ({ chartist: null }),
 
   watch: {
-    'field.data': function(newData, oldData) {
+    'field.data': function (newData, oldData) {
       this.renderChart()
     },
   },

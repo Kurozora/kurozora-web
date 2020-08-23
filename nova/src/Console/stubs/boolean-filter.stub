@@ -1,11 +1,11 @@
 <?php
 
-namespace DummyNamespace;
+namespace {{ namespace }};
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Filters\BooleanFilter;
 
-class DummyClass extends BooleanFilter
+class {{ class }} extends BooleanFilter
 {
     /**
      * Apply the filter to the given query.

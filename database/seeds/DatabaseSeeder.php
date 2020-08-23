@@ -13,14 +13,17 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RoleSeeder::class,
-            AnimesTableDummySeeder::class,
-            UsersTableSeeder::class,
+            StudioSeeder::class,
+            AnimeDummySeeder::class,
+            AnimeRelationsSeeder::class,
+            UserSeeder::class,
             ForumSectionSeeder::class,
             BadgeSeeder::class,
             ForumThreadSeeder::class,
             ForumReplySeeder::class,
             GenreSeeder::class,
             AppThemeSeeder::class,
+            ActorCharacterAnimeSeeder::class,
         ]);
     }
 }

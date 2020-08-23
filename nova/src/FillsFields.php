@@ -55,6 +55,24 @@ trait FillsFields
     }
 
     /**
+     * Fill a new pivot model instance using the given request.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param  \Illuminate\Database\Eloquent\Relations\Pivot  $pivot
+     * @return array
+     */
+    public static function fillPivotForUpdate(NovaRequest $request, $model, $pivot)
+    {
+        $instance = new static($model);
+
+        return static::fillFields(
+            $request, $pivot,
+            $instance->updatePivotFields($request, $request->relatedResource)
+        );
+    }
+
+    /**
      * Fill the given fields for the model.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request

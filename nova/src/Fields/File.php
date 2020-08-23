@@ -8,10 +8,9 @@ use Laravel\Nova\Contracts\Deletable as DeletableContract;
 use Laravel\Nova\Contracts\Storable as StorableContract;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class File extends Field implements StorableContract, DeletableContract
+class File extends Field implements StorableContract, DeletableContract, Downloadable
 {
-    use Storable;
-    use Deletable;
+    use Storable, Deletable, AcceptsTypes, HasDownload, HasThumbnail, HasPreview;
 
     /**
      * The field's component.
@@ -89,13 +88,6 @@ class File extends Field implements StorableContract, DeletableContract
      * @var bool
      */
     public $showOnIndex = false;
-
-    /**
-     * The file types accepted by the field.
-     *
-     * @var string
-     */
-    public $acceptedTypes;
 
     /**
      * Create a new field.
@@ -246,26 +238,6 @@ class File extends Field implements StorableContract, DeletableContract
     }
 
     /**
-     * Resolve the thumbnail URL for the field.
-     *
-     * @return string|null
-     */
-    public function resolveThumbnailUrl()
-    {
-        return call_user_func($this->thumbnailUrlCallback, $this->value, $this->getStorageDisk());
-    }
-
-    /**
-     * Resolve the preview URL for the field.
-     *
-     * @return string|null
-     */
-    public function resolvePreviewUrl()
-    {
-        return call_user_func($this->previewUrlCallback, $this->value, $this->getStorageDisk());
-    }
-
-    /**
      * Specify the callback that should be used to retrieve the preview URL.
      *
      * @param  callable  $previewUrlCallback
@@ -274,19 +246,6 @@ class File extends Field implements StorableContract, DeletableContract
     public function preview(callable $previewUrlCallback)
     {
         $this->previewUrlCallback = $previewUrlCallback;
-
-        return $this;
-    }
-
-    /**
-     * Specify the callback that should be used to create a download HTTP response.
-     *
-     * @param  callable  $downloadResponseCallback
-     * @return $this
-     */
-    public function download(callable $downloadResponseCallback)
-    {
-        $this->downloadResponseCallback = $downloadResponseCallback;
 
         return $this;
     }
@@ -386,32 +345,6 @@ class File extends Field implements StorableContract, DeletableContract
     }
 
     /**
-     * Create an HTTP response to download the underlying field.
-     *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @param  \Laravel\Nova\Resource  $resource
-     * @return \Illuminate\Http\Response
-     */
-    public function toDownloadResponse(NovaRequest $request, $resource)
-    {
-        return call_user_func(
-            $this->downloadResponseCallback, $request, $resource->resource
-        );
-    }
-
-    /**
-     * Disable downloading the file.
-     *
-     * @return $this
-     */
-    public function disableDownload()
-    {
-        $this->downloadsAreEnabled = false;
-
-        return $this;
-    }
-
-    /**
      * Get the full path that the field is stored at on disk.
      *
      * @return string|null
@@ -419,19 +352,6 @@ class File extends Field implements StorableContract, DeletableContract
     public function getStoragePath()
     {
         return $this->value;
-    }
-
-    /**
-     * Set the fields accepted file types.
-     *
-     * @param  string  $acceptedTypes
-     * @return $this
-     */
-    public function acceptedTypes($acceptedTypes)
-    {
-        $this->acceptedTypes = $acceptedTypes;
-
-        return $this;
     }
 
     /**

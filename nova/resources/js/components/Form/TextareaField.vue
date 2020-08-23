@@ -18,14 +18,6 @@ import { FormField, HandlesValidationErrors } from 'laravel-nova'
 export default {
   mixins: [FormField, HandlesValidationErrors],
 
-  props: {
-    resourceName: { type: String },
-    field: {
-      type: Object,
-      required: true,
-    },
-  },
-
   computed: {
     defaultAttributes() {
       return {

@@ -1,19 +1,19 @@
 <?php
 
-namespace DummyNamespace;
+namespace {{ namespace }};
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class DummyClass extends Resource
+class {{ class }} extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'DummyFullModel';
+    public static $model = \{{ namespacedModel }}::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -40,7 +40,7 @@ class DummyClass extends Resource
     public function fields(Request $request)
     {
         return [
-            ID::make()->sortable(),
+            ID::make(__('ID'), 'id')->sortable(),
         ];
     }
 

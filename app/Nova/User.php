@@ -9,7 +9,6 @@ use App\Rules\ValidatePassword;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Date;
-use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
@@ -27,7 +26,7 @@ class User extends Resource
      *
      * @var string
      */
-    public static $model = 'App\\User';
+    public static $model = 'App\User';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -63,12 +62,22 @@ class User extends Resource
         return [
             ID::make()->sortable(),
 
-            Images::make('Avatar', 'avatar'),
-//                ->conversionOnIndexView('thumb'),
+            Images::make('Avatar', 'avatar')
+                ->setFileName(function($originalFilename, $extension, $model){
+                    return md5($originalFilename) . '.' . $extension;
+                })
+                ->setName(function($originalFilename, $model){
+                    return md5($originalFilename);
+                }),
 
             Images::make('Banner image', 'banner')
-                ->hideFromIndex(),
-//                ->conversionOnIndexView('thumb'),
+                ->hideFromIndex()
+                ->setFileName(function($originalFilename, $extension, $model){
+                    return md5($originalFilename) . '.' . $extension;
+                })
+                ->setName(function($originalFilename, $model){
+                    return md5($originalFilename);
+                }),
 
             Text::make('Name', 'username')
                 ->sortable()

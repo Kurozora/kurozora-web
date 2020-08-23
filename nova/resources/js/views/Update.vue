@@ -15,6 +15,8 @@
       <form-panel
         v-for="panel in panelsWithFields"
         @update-last-retrieved-at-timestamp="updateLastRetrievedAtTimestamp"
+        @file-upload-started="handleFileUploadStarted"
+        @file-upload-finished="handleFileUploadFinished"
         :panel="panel"
         :name="panel.name"
         :key="panel.name"
@@ -31,7 +33,7 @@
 
       <!-- Update Button -->
       <div class="flex items-center">
-        <cancel-button />
+        <cancel-button @click="$router.back()" />
 
         <progress-button
           class="mr-3"
@@ -57,29 +59,23 @@
 </template>
 
 <script>
-import { Errors, InteractsWithResourceInformation } from 'laravel-nova'
+import {
+  mapProps,
+  Errors,
+  InteractsWithResourceInformation,
+} from 'laravel-nova'
+import HandlesUploads from '@/mixins/HandlesUploads'
 
 export default {
-  mixins: [InteractsWithResourceInformation],
+  mixins: [InteractsWithResourceInformation, HandlesUploads],
 
-  props: {
-    resourceName: {
-      type: String,
-      required: true,
-    },
-    resourceId: {
-      required: true,
-    },
-    viaResource: {
-      default: '',
-    },
-    viaResourceId: {
-      default: '',
-    },
-    viaRelationship: {
-      default: '',
-    },
-  },
+  props: mapProps([
+    'resourceName',
+    'resourceId',
+    'viaResource',
+    'viaResourceId',
+    'viaRelationship',
+  ]),
 
   data: () => ({
     relationResponse: null,
@@ -90,7 +86,6 @@ export default {
     panels: [],
     validationErrors: new Errors(),
     lastRetrievedAt: null,
-    isWorking: false,
   }),
 
   async created() {
@@ -283,7 +278,7 @@ export default {
     panelsWithFields() {
       return _.map(this.panels, panel => {
         return {
-          name: panel.name,
+          ...panel,
           fields: _.filter(this.fields, field => field.panel == panel.name),
         }
       })

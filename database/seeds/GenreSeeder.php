@@ -25,7 +25,7 @@ class GenreSeeder extends Seeder
                 Genre::create([
                     'name'          => $genre->name,
                     'description'   => $genre->description,
-                    'nsfw'          => $genre->nsfw,
+                    'is_nsfw'       => $genre->nsfw,
                     'symbol'        => $genre->symbol,
                     'color'         => $genre->color
                 ]);

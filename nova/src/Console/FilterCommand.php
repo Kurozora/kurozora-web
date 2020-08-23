@@ -7,6 +7,8 @@ use Symfony\Component\Console\Input\InputOption;
 
 class FilterCommand extends GeneratorCommand
 {
+    use ResolvesStubPath;
+
     /**
      * The console command name.
      *
@@ -36,12 +38,12 @@ class FilterCommand extends GeneratorCommand
     protected function getStub()
     {
         if ($this->option('boolean')) {
-            return __DIR__.'/stubs/boolean-filter.stub';
+            return $this->resolveStubPath('/stubs/nova/boolean-filter.stub');
         } elseif ($this->option('date')) {
-            return __DIR__.'/stubs/date-filter.stub';
+            return $this->resolveStubPath('/stubs/nova/date-filter.stub');
         }
 
-        return __DIR__.'/stubs/filter.stub';
+        return $this->resolveStubPath('/stubs/nova/filter.stub');
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 
 use Faker\Generator as Faker;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,7 @@ $factory->define(Laravel\Nova\Tests\Fixtures\Post::class, function (Faker $faker
     return [
         'user_id' => factory(Laravel\Nova\Tests\Fixtures\User::class),
         'title' => $faker->word,
+        'slug' => Str::slug($faker->word),
         'word_count' => random_int(100, 500),
         'published_at' => now()->subDays(random_int(1, 30)),
     ];

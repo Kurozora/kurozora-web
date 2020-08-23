@@ -101,7 +101,6 @@ export default {
       type: String,
       default: '',
     },
-    softDeletes: Boolean,
     viaResource: String,
     viaHasOne: Boolean,
     softDeletes: Boolean,

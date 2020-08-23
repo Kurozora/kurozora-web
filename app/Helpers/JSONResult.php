@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use App\APIError;
+use App\Http\Resources\JSONErrorResource;
 use App\Providers\AppServiceProvider;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -13,18 +15,20 @@ class JSONResult
     /**
      * Returns an error response to the client.
      *
-     * @param string $message
-     * @param array $info
+     * @param APIError[] $apiError
      * @return JsonResponse
      */
-    static function error($message = 'Something went wrong with your request.', $info = [])
+    static function error(array $apiError)
     {
-        $endResponse = array_merge(self::getDefaultResponseArray(false), [
-            'error_message' => $message,
-            'error_code'    => (isset($info['error_code'])) ? $info['error_code'] : null
+        $endResponse = array_merge(self::getDefaultResponseArray(), [
+            'errors' => JSONErrorResource::collection($apiError)
         ]);
 
-        return Response::json($endResponse, (isset($info['status_code'])) ? $info['status_code'] : 400);
+        $statusCode = null;
+        if (count($apiError) == 1)
+            $statusCode = $apiError[0]->status;
+
+        return Response::json($endResponse, $statusCode ?? 400);
     }
 
     /**
@@ -37,7 +41,7 @@ class JSONResult
     {
         if(!is_array($data)) $data = [$data];
 
-        $endResponse = array_merge(self::getDefaultResponseArray(true), $data);
+        $endResponse = array_merge(self::getDefaultResponseArray(), $data);
 
         return Response::json($endResponse, 200);
     }
@@ -45,18 +49,16 @@ class JSONResult
     /**
      * Returns the default array that will be included in every JSON response.
      *
-     * @param $isSuccess
      * @return array
      */
-    private static function getDefaultResponseArray($isSuccess)
+    private static function getDefaultResponseArray()
     {
         return [
-            'success'       => (bool) $isSuccess,
-            'meta'          => [
-                'version'                   => Config::get('app.version'),
-                'query_count'               => (int) Config::get(AppServiceProvider::$queryCountConfigKey),
-                'is_user_authenticated'     => Auth::check(),
-                'authenticated_user_id'     => Auth::id()
+            'meta' => [
+                'version'               => Config::get('app.version'),
+                'queryCount'            => (int) Config::get(AppServiceProvider::$queryCountConfigKey),
+                'isUserAuthenticated'   => Auth::check(),
+                'authenticatedUserID'   => Auth::id()
             ]
         ];
     }

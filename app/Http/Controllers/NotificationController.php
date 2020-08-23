@@ -5,31 +5,53 @@ namespace App\Http\Controllers;
 use App\Helpers\JSONResult;
 use App\Http\Requests\UpdateUserNotifications;
 use App\Http\Resources\NotificationResource;
+use App\User;
+use Auth;
+use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Notifications\DatabaseNotification;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class NotificationController extends Controller
 {
     /**
-     * Retrieves details for a specific notification
+     * Returns the notifications for the authenticated user.
      *
-     * @param DatabaseNotification $notification
      * @return JsonResponse
      */
-    public function getNotification(DatabaseNotification $notification) {
+    public function index(): JsonResponse
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
         return JSONResult::success([
-            'notification' => NotificationResource::make($notification)
+            'data' => NotificationResource::collection($user->notifications)
         ]);
     }
 
     /**
-     * Deletes a user's notification
+     * Retrieves details for a specific notification.
      *
      * @param DatabaseNotification $notification
      * @return JsonResponse
-     * @throws \Exception
      */
-    public function delete(DatabaseNotification $notification) {
+    public function details(DatabaseNotification $notification): JsonResponse
+    {
+        return JSONResult::success([
+            'data' => NotificationResource::make($notification)
+        ]);
+    }
+
+    /**
+     * Deletes the authenticated user's notification.
+     *
+     * @param DatabaseNotification $notification
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function delete(DatabaseNotification $notification): JsonResponse
+    {
         // Delete the notification
         $notification->delete();
 
@@ -37,16 +59,18 @@ class NotificationController extends Controller
     }
 
     /**
-     * Updates a single, multiple or all notifications' status.
+     * Updates a single, multiple or all notifications' status of the authenticated user.
      *
      * @param UpdateUserNotifications $request
      * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws ConflictHttpException
      */
-    public function update(UpdateUserNotifications $request) {
-        /*
-         * TODO:
-         * This does NOT yet check whether or not the user is allowed to update the notification.
-         */
+    public function update(UpdateUserNotifications $request): JsonResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+
         $markAsRead = (bool) $request->input('read');
 
         // Get the notification(s) the user is targeting to update
@@ -61,20 +85,28 @@ class NotificationController extends Controller
 
             // Make sure there are items in the array
             if(!count($notificationIDs))
-                return JSONResult::error('No notifications were specified.');
+                throw new ConflictHttpException('No notifications were specified.');
 
-            // Update the notifications
+            // Make sure the notifications belong to the currently authenticated user
+            foreach ($notificationIDs as $notificationID) {
+                if (!$user->notifications->contains($notificationID)) {
+                    throw new AuthorizationException('The request wasn’t accepted due to an issue with the notifications or because it’s using incorrect authentication.');
+                }
+            }
+
+            // Get the notifications to be updated
             $notificationQuery->whereIn('id', $notificationIDs);
         }
 
         // Update the notifications
-        $amountUpdated = $notificationQuery->update([
+        $notificationQuery->update([
             'read_at' => $markAsRead ? now() : null
         ]);
 
         return JSONResult::success([
-            'read'              => $markAsRead,
-            'amount_updated'    => $amountUpdated
+            'data' => [
+                'isRead' => $markAsRead
+            ]
         ]);
     }
 }

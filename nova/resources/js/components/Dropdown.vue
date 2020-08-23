@@ -29,7 +29,7 @@ export default {
         offset={this.offset}
         placement={this.placement}
         boundariesElement={this.boundary}
-        popoverClass="tooltip"
+        popoverClass="z-50"
         popoverBaseClass=""
         popoverWrapperClass=""
         popoverArrowClass=""

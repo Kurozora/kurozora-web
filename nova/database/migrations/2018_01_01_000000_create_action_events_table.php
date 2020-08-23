@@ -14,16 +14,16 @@ class CreateActionEventsTable extends Migration
     public function up()
     {
         Schema::create('action_events', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->char('batch_id', 36);
-            $table->unsignedInteger('user_id')->index();
+            $table->unsignedBigInteger('user_id')->index();
             $table->string('name');
             $table->string('actionable_type');
-            $table->unsignedInteger('actionable_id');
+            $table->unsignedBigInteger('actionable_id');
             $table->string('target_type');
-            $table->unsignedInteger('target_id');
+            $table->unsignedBigInteger('target_id');
             $table->string('model_type');
-            $table->unsignedInteger('model_id')->nullable();
+            $table->unsignedBigInteger('model_id')->nullable();
             $table->text('fields');
             $table->string('status', 25)->default('running');
             $table->text('exception');

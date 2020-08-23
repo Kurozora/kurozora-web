@@ -1,12 +1,7 @@
 <template>
   <tr :dusk="resource['id'].value + '-row'">
     <!-- Resource Selection Checkbox -->
-    <td
-      :class="{
-        'w-16': shouldShowCheckboxes,
-        'w-8': !shouldShowCheckboxes,
-      }"
-    >
+    <td class="w-16" v-if="shouldShowCheckboxes">
       <checkbox
         :data-testid="`${testId}-checkbox`"
         :dusk="`${resource['id'].value}-checkbox`"
@@ -45,7 +40,8 @@
           <router-link
             :data-testid="`${testId}-view-button`"
             :dusk="`${resource['id'].value}-view-button`"
-            class="inline-flex cursor-pointer text-70 hover:text-primary mr-3"
+            class="cursor-pointer text-70 hover:text-primary mr-3 inline-flex items-center"
+            v-tooltip.click="__('View')"
             :to="{
               name: 'detail',
               params: {
@@ -53,21 +49,21 @@
                 resourceId: resource['id'].value,
               },
             }"
-            :title="__('View')"
           >
             <icon type="view" width="22" height="18" view-box="0 0 22 16" />
           </router-link>
         </span>
 
-        <span class="inline-flex" v-if="resource.authorizedToUpdate">
+        <span v-if="resource.authorizedToUpdate" class="inline-flex">
           <!-- Edit Pivot Button -->
           <router-link
             v-if="
               relationshipType == 'belongsToMany' ||
-                relationshipType == 'morphToMany'
+              relationshipType == 'morphToMany'
             "
             class="inline-flex cursor-pointer text-70 hover:text-primary mr-3"
             :dusk="`${resource['id'].value}-edit-attached-button`"
+            v-tooltip.click="__('Edit Attached')"
             :to="{
               name: 'edit-attached',
               params: {
@@ -80,7 +76,6 @@
                 viaRelationship: viaRelationship,
               },
             }"
-            :title="__('Edit Attached')"
           >
             <icon type="edit" />
           </router-link>
@@ -102,7 +97,7 @@
                 viaRelationship: viaRelationship,
               },
             }"
-            :title="__('Edit')"
+            v-tooltip.click="__('Edit')"
           >
             <icon type="edit" />
           </router-link>
@@ -113,12 +108,12 @@
           :data-testid="`${testId}-delete-button`"
           :dusk="`${resource['id'].value}-delete-button`"
           class="inline-flex appearance-none cursor-pointer text-70 hover:text-primary mr-3"
+          v-tooltip.click="__(viaManyToMany ? 'Detach' : 'Delete')"
           v-if="
             resource.authorizedToDelete &&
-              (!resource.softDeleted || viaManyToMany)
+            (!resource.softDeleted || viaManyToMany)
           "
           @click.prevent="openDeleteModal"
-          :title="__(viaManyToMany ? 'Detach' : 'Delete')"
         >
           <icon />
         </button>
@@ -126,55 +121,55 @@
         <!-- Restore Resource Link -->
         <button
           :dusk="`${resource['id'].value}-restore-button`"
-          class="inline-flex appearance-none cursor-pointer text-70 hover:text-primary mr-3"
+          class="appearance-none cursor-pointer text-70 hover:text-primary mr-3"
           v-if="
             resource.authorizedToRestore &&
-              resource.softDeleted &&
-              !viaManyToMany
+            resource.softDeleted &&
+            !viaManyToMany
           "
+          v-tooltip.click="__('Restore')"
           @click.prevent="openRestoreModal"
-          :title="__('Restore')"
         >
           <icon type="restore" with="20" height="21" />
         </button>
+
+        <portal
+          to="modals"
+          transition="fade-transition"
+          v-if="deleteModalOpen || restoreModalOpen"
+        >
+          <delete-resource-modal
+            v-if="deleteModalOpen"
+            @confirm="confirmDelete"
+            @close="closeDeleteModal"
+            :mode="viaManyToMany ? 'detach' : 'delete'"
+          >
+            <div slot-scope="{ uppercaseMode, mode }" class="p-8">
+              <heading :level="2" class="mb-6">{{
+                __(uppercaseMode + ' Resource')
+              }}</heading>
+              <p class="text-80 leading-normal">
+                {{ __('Are you sure you want to ' + mode + ' this resource?') }}
+              </p>
+            </div>
+          </delete-resource-modal>
+
+          <restore-resource-modal
+            v-if="restoreModalOpen"
+            @confirm="confirmRestore"
+            @close="closeRestoreModal"
+          >
+            <div class="p-8">
+              <heading :level="2" class="mb-6">{{
+                __('Restore Resource')
+              }}</heading>
+              <p class="text-80 leading-normal">
+                {{ __('Are you sure you want to restore this resource?') }}
+              </p>
+            </div>
+          </restore-resource-modal>
+        </portal>
       </div>
-
-      <portal
-        to="modals"
-        transition="fade-transition"
-        v-if="deleteModalOpen || restoreModalOpen"
-      >
-        <delete-resource-modal
-          v-if="deleteModalOpen"
-          @confirm="confirmDelete"
-          @close="closeDeleteModal"
-          :mode="viaManyToMany ? 'detach' : 'delete'"
-        >
-          <div slot-scope="{ uppercaseMode, mode }" class="p-8">
-            <heading :level="2" class="mb-6">{{
-              __(uppercaseMode + ' Resource')
-            }}</heading>
-            <p class="text-80 leading-normal">
-              {{ __('Are you sure you want to ' + mode + ' this resource?') }}
-            </p>
-          </div>
-        </delete-resource-modal>
-
-        <restore-resource-modal
-          v-if="restoreModalOpen"
-          @confirm="confirmRestore"
-          @close="closeRestoreModal"
-        >
-          <div class="p-8">
-            <heading :level="2" class="mb-6">{{
-              __('Restore Resource')
-            }}</heading>
-            <p class="text-80 leading-normal">
-              {{ __('Are you sure you want to restore this resource?') }}
-            </p>
-          </div>
-        </restore-resource-modal>
-      </portal>
     </td>
   </tr>
 </template>

@@ -3,29 +3,72 @@
         <title>Kurozora API</title>
 
         <meta charset="UTF-8">
-        <link rel="icon" href="{{ $api_logo }}">
+        <link rel="icon" href="{{ asset('img/static/favicon.ico') }}">
 
         {{-- Don't index the API docs --}}
         <meta name="robots" content="noindex">
 
         {{-- Swagger CSS --}}
-        <link rel="stylesheet" type="text/css" href="{{ asset('css/swagger-ui_3.20.3.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/swagger-ui.css') }}">
+
+        {{-- Custom Style --}}
+        <style>
+            body {
+                margin: 0;
+                background: #FFF9F7;
+            }
+
+            .info a.link {
+                color: #FF9300 !important;
+            }
+
+            .swagger-ui .scheme-container {
+                background: #FFF9F7;
+                box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.05);
+            }
+
+            .topbar-wrapper img[alt="Swagger UI"], .topbar-wrapper span {
+                visibility: collapse;
+            }
+
+            .topbar-wrapper .link {
+                margin-block-end: 16px;
+            }
+
+            .topbar-wrapper .link:before {
+                background-image: url('{{ asset('img/static/icon/logo.png') }}');
+                background-size: 48px 48px;
+                content: '';
+                margin-right: 0.5rem;
+                height: 48px;
+                width: 48px;
+            }
+
+            .topbar-wrapper .link:after {
+                content: 'Kurozora';
+            }
+        </style>
     </head>
-    <body style="padding: 0; margin: 0;">
+    <body>
         <div id="swagger-ui"></div>
 
         {{-- Include Swagger JS files --}}
-        <script type="text/javascript" src="{{ asset('js/swagger-ui-standalone-preset_3.20.3.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('js/swagger-ui-bundle_3.20.3.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/swagger-ui-bundle.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/swagger-ui-standalone-preset.js') }}"></script>
 
         {{-- Initialize Swagger --}}
         <script>
             window.onload = function() {
                 // Begin Swagger UI call region
-                window.swaggerUi = SwaggerUIBundle({
+                window.ui = SwaggerUIBundle({
                     url: '{{ $openapi_json_file  }}',
                     dom_id: '#swagger-ui',
                     deepLinking: true,
+                    docExpansion: "none",
+                    syntaxHighlight: {
+                        theme: "arta"
+                    },
                     presets: [
                         SwaggerUIBundle.presets.apis,
                         SwaggerUIStandalonePreset
@@ -34,39 +77,5 @@
                 });
             };
         </script>
-
-        {{-- Custom style --}}
-        <style>
-            .kuro-warn {
-                padding: 10px 5px;
-                background: darkred;
-                color: #ffffff;
-                display: inline-block;
-                font-size: 20px;
-                font-weight: bold;
-                margin: 10px 0;
-                border-radius: 5px;
-            }
-
-            .kuro-tip {
-                padding: 10px 5px;
-                background: lightskyblue;
-                color: #ffffff;
-                display: inline-block;
-                font-size: 20px;
-                font-weight: bold;
-                margin: 10px 0;
-                border-radius: 5px;
-            }
-
-            .topbar-wrapper img[alt="Swagger UI"], .topbar-wrapper span {
-                visibility: collapse;
-            }
-
-            .topbar-wrapper .link:after {
-                content: url('{{ $api_logo }}');
-                position: absolute;
-            }
-        </style>
     </body>
 </html>

@@ -17,7 +17,7 @@ class ValidatePlatformName implements Rule
      * @param  mixed  $value
      * @return bool
      */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
         return in_array($value, self::VALID_PLATFORMS, true);
     }
@@ -27,7 +27,7 @@ class ValidatePlatformName implements Rule
      *
      * @return string
      */
-    public function message()
+    public function message(): string
     {
         return 'Valid platform names are ' . implode(', ', self::VALID_PLATFORMS) . '.';
     }

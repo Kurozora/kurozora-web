@@ -9,7 +9,7 @@ class ID extends Field
      *
      * @var string
      */
-    public $component = 'text-field';
+    public $component = 'id-field';
 
     /**
      * Create a new field.
@@ -45,6 +45,21 @@ class ID extends Field
         $this->resolveCallback = function ($id) {
             return (string) $id;
         };
+
+        return $this;
+    }
+
+    /**
+     * Hide the ID field from the Nova interface but keep it available for operations.
+     *
+     * @return $this
+     */
+    public function hide()
+    {
+        $this->showOnIndex = false;
+        $this->showOnDetail = false;
+        $this->showOnCreation = false;
+        $this->showOnUpdate = false;
 
         return $this;
     }

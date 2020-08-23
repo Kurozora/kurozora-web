@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\ForumSection;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ForumSectionResource extends JsonResource
@@ -9,15 +11,22 @@ class ForumSectionResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
+        /** @var ForumSection $forumSection */
+        $forumSection = $this->resource;
+
         return [
-            'id'            => $this->id,
-            'name'          => $this->name,
-            'locked'        => (bool) $this->locked
+            'id'            => $forumSection->id,
+            'type'          => 'sections',
+            'href'          => route('api.forum-sections.details', $forumSection, false),
+            'attributes'    => [
+                'name'      => $forumSection->name,
+                'isLocked'  => (bool) $forumSection->locked
+            ]
         ];
     }
 }

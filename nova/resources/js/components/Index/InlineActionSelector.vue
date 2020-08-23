@@ -1,28 +1,32 @@
 <template>
   <span>
-    <dropdown
-      v-if="actions.length > 0"
-      class="text-left inline-block bg-30 hover:bg-40 rounded"
+    <select
+      ref="selectBox"
+      v-if="actions.length > 1"
+      class="rounded-sm select-box-sm mr-2 h-6 text-xs appearance-none bg-40 pl-2 pr-6 active:outline-none active:shadow-outline focus:outline-none focus:shadow-outline"
+      style="max-width: 90px;"
+      @change="handleSelectionChange"
     >
-      <dropdown-trigger class="text-sm text-90 px-3 py-1 h-!8">
-        {{ __('Actions') }}
-      </dropdown-trigger>
+      <option disabled selected>{{ __('Actions') }}</option>
+      <option
+        v-for="action in actions"
+        :key="action.uriKey"
+        :value="action.uriKey"
+      >
+        {{ action.name }}
+      </option>
+    </select>
 
-      <dropdown-menu slot="menu" direction="rtl" width="150">
-        <button
-          v-for="action in actions"
-          :key="action.uriKey"
-          class="block px-3 text-90 text-left text-sm w-full leading-normal dim my-2 active:outline-none active:shadow-outline focus:outline-none focus:shadow-outline"
-          @click="
-            () => {
-              selectAndExecuteAction(action)
-            }
-          "
-        >
-          {{ action.name }}
-        </button>
-      </dropdown-menu>
-    </dropdown>
+    <button
+      v-else
+      v-for="action in actions"
+      :key="action.uriKey"
+      @click="executeSingleAction(action)"
+      class="btn btn-xs mr-1"
+      :class="action.class"
+    >
+      {{ action.name }}
+    </button>
 
     <!-- Action Confirmation Modal -->
     <portal to="modals">
@@ -54,7 +58,13 @@ export default {
   },
 
   methods: {
-    selectAndExecuteAction(action) {
+    handleSelectionChange(event) {
+      this.selectedActionKey = event.target.value
+      this.determineActionStrategy()
+      this.$refs.selectBox.selectedIndex = 0
+    },
+
+    executeSingleAction(action) {
       this.selectedActionKey = action.uriKey
       this.determineActionStrategy()
     },

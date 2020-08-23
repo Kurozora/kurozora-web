@@ -33,6 +33,8 @@ class LensActionController extends Controller
      */
     public function store(LensActionRequest $request)
     {
+        $request->validateFields();
+
         return $request->action()->handleRequest($request);
     }
 }

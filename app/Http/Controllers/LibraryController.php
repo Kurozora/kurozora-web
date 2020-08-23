@@ -5,30 +5,37 @@ namespace App\Http\Controllers;
 use App\Anime;
 use App\Enums\UserLibraryStatus;
 use App\Helpers\JSONResult;
-use App\Http\Requests\AddToLibrary;
-use App\Http\Requests\DeleteFromLibrary;
-use App\Http\Requests\GetLibrary;
-use App\Http\Requests\MALImport;
-use App\Http\Resources\AnimeResource;
+use App\Http\Requests\AddToLibraryRequest;
+use App\Http\Requests\DeleteFromLibraryRequest;
+use App\Http\Requests\GetLibraryRequest;
+use App\Http\Requests\MALImportRequest;
+use App\Http\Requests\SearchLibraryRequest;
+use App\Http\Resources\AnimeResourceBasic;
 use App\Jobs\ProcessMALImport;
 use App\User;
+use Auth;
+use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class LibraryController extends Controller
 {
     /**
-     * Gets the user's library depending on the status
+     * Returns the authenticated user's library with the given status.
      *
-     * @param GetLibrary $request
-     * @param User $user
+     * @param GetLibraryRequest $request
      * @return JsonResponse
      */
-    public function getLibrary(GetLibrary $request, User $user) {
+    public function index(GetLibraryRequest $request): JsonResponse
+    {
         $data = $request->validated();
+
+        // Get the authenticated user
+        /** @var User $user */
+        $user = Auth::user();
 
         // Get the status
         $foundStatus = UserLibraryStatus::getValue($data['status']);
@@ -40,70 +47,108 @@ class LibraryController extends Controller
             ->get();
 
         return JSONResult::success([
-            'anime' => AnimeResource::collection($anime)
+            'data' => AnimeResourceBasic::collection($anime)
         ]);
     }
 
     /**
-     * Adds an Anime to the user's library
+     * Adds an Anime to the authenticated user's library
      *
-     * @param AddToLibrary $request
-     * @param User $user
+     * @param AddToLibraryRequest $request
      * @return JsonResponse
+     * @throws InvalidEnumKeyException
      */
-    public function addLibrary(AddToLibrary $request, User $user) {
+    public function addLibrary(AddToLibraryRequest $request): JsonResponse
+    {
         $data = $request->validated();
+        $animeID = $data['anime_id'];
+
+        // Get the authenticated user
+        /** @var User $user */
+        $user = Auth::user();
 
         // Get the Anime
         /** @var Anime $anime */
-        $anime = Anime::find($data['anime_id']);
+        $anime = Anime::findOrFail($animeID);
 
         // Get the status
-        $foundStatus = UserLibraryStatus::getValue($data['status']);
+        $userLibraryStatus = UserLibraryStatus::fromKey($data['status']);
 
         // Detach the current entry (if there is one)
         $user->library()->detach($anime);
 
         // Add a new library entry
-        $user->library()->attach($anime, ['status' => $foundStatus]);
+        $user->library()->attach($anime, ['status' => $userLibraryStatus->value]);
 
         // Successful response
-        return JSONResult::success();
+        return JSONResult::success([
+            'data' => [
+                'libraryStatus' => $userLibraryStatus->description,
+                'isFavorited'   => $user->favoriteAnime()->where('anime_id', $animeID)->exists(),
+                'isReminded'    => $user->userReminderAnime()->where('anime_id', $animeID)->exists()
+            ]
+        ]);
     }
 
     /**
-     * Removes an Anime from the user's library
+     * Removes an Anime from the authenticated user's library
      *
-     * @param DeleteFromLibrary $request
-     * @param User $user
+     * @param DeleteFromLibraryRequest $request
      * @return JsonResponse
+     * @throws AuthorizationException
      */
-    public function delLibrary(DeleteFromLibrary $request, User $user) {
+    public function delLibrary(DeleteFromLibraryRequest $request): JsonResponse
+    {
         $data = $request->validated();
+        $animeID = $data['anime_id'];
+
+        // Get the authenticated user
+        /** @var User $user */
+        $user = Auth::user();
 
         // Remove this Anime from their library if it can be found
-        if($user->library()->where('anime_id', $data['anime_id'])->count()) {
-            $user->library()->detach($data['anime_id']);
+        if($user->library()->where('anime_id', $animeID)->count()) {
+            $user->library()->detach($animeID);
 
-            return JSONResult::success();
+            // Remove from favorites as you can't favorite and not have anime in library
+            $user->favoriteAnime()->detach($animeID);
+            // Remove from reminders as you can't remind and not have anime in library
+            $user->reminderAnime()->detach($animeID);
+
+            return JSONResult::success([
+                'data' => [
+                    'libraryStatus' => null,
+                    'isFavorited'   => null,
+                    'isReminded'    => null
+                ]
+            ]);
         }
 
         // The item could not be found
-        return JSONResult::error('This item is not in your library.');
+        throw new AuthorizationException('This item is not in your library.');
     }
 
     /**
-     * Allows the user to upload a MAL export file to be imported.
+     * Allows the authenticated user to upload a MAL export file to be imported.
      *
-     * @param MALImport $request
-     * @param User $user
+     * @param MALImportRequest $request
      * @return JsonResponse
+     * @throws FileNotFoundException
+     * @throws TooManyRequestsHttpException
      */
-    function malImport(MALImport $request, User $user) {
+    function malImport(MALImportRequest $request): JsonResponse
+    {
         $data = $request->validated();
 
-        if(!$user->canDoMALImport())
-            return JSONResult::error('Oops! You can only perform a MAL import every ' . config('mal-import.cooldown_in_days') . ' day(s).', 491812);
+        // Get the authenticated user
+        /** @var User $user */
+        $user = Auth::user();
+
+        if(!$user->canDoMALImport()) {
+            $cooldownDays = config('mal-import.cooldown_in_days');
+
+            throw new TooManyRequestsHttpException($cooldownDays * 24 * 60 * 60, 'You can only perform a MAL import every ' . $cooldownDays . ' day(s).');
+        }
 
         // Read XML file
         $xmlContent = File::get($data['file']->getRealPath());
@@ -123,21 +168,16 @@ class LibraryController extends Controller
     /**
      * Retrieves user library search results
      *
-     * @param Request $request
-     * @param User $user
+     * @param SearchLibraryRequest $request
      * @return JsonResponse
      */
-    public function search(Request $request, User $user) {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'query' => 'bail|required|string|min:1'
-        ]);
-
-        // Check validator
-        if($validator->fails())
-            return JSONResult::error($validator->errors()->first());
-
+    public function search(SearchLibraryRequest $request): JsonResponse
+    {
         $searchQuery = $request->input('query');
+
+        // Get the authenticated user
+        /** @var User $user */
+        $user = Auth::user();
 
         // Search for the anime
         $library = $user->library()
@@ -145,8 +185,7 @@ class LibraryController extends Controller
 
         // Show response
         return JSONResult::success([
-            'max_search_results'    => Anime::MAX_SEARCH_RESULTS,
-            'results'               => AnimeResource::collection($library)
+            'data' => AnimeResourceBasic::collection($library)
         ]);
     }
 }

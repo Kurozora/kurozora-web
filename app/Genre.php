@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 class Genre extends KModel
 {
     // Table name
@@ -11,9 +13,10 @@ class Genre extends KModel
     /**
      * Returns the Anime with the genre
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
-    function animes() {
+    function animes(): BelongsToMany
+    {
         return $this->belongsToMany(Anime::class, AnimeGenre::TABLE_NAME, 'genre_id', 'anime_id');
     }
 }

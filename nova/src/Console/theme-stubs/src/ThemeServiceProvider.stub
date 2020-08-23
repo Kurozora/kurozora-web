@@ -15,7 +15,9 @@ class ThemeServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Nova::theme(asset('/{{ vendor }}/theme.css'));
+        Nova::serving(function (ServingNova $event) {
+            Nova::theme(asset('/{{ vendor }}/theme.css'));
+        });
 
         $this->publishes([
             __DIR__.'/../resources/css' => public_path('{{ vendor }}'),

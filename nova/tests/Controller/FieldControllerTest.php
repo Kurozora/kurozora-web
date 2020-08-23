@@ -86,6 +86,21 @@ class FieldControllerTest extends IntegrationTest
         $this->assertCount(0, $fields->where('attribute', 'posts'));
     }
 
+    public function test_creation_fields_do_not_contain_default_values()
+    {
+        $post = factory(Post::class)->create();
+        $post->forceFill(['slug' => null]);
+        $post->save();
+
+        $response = $this->withExceptionHandling()
+            ->getJson('/nova-api/posts/'.$post->id.'/update-fields');
+
+        $response->assertJsonCount(3, 'fields');
+
+        $this->assertNotEquals('default-slug', $response->decodeResponseJson()['fields'][3]['value']);
+        $this->assertNull($response->decodeResponseJson()['fields'][3]['value']);
+    }
+
     public function test_cant_retrieve_update_fields_if_not_authorized_to_update_resource()
     {
         $_SERVER['nova.user.authorizable'] = true;

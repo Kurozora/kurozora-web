@@ -3,8 +3,10 @@
 namespace Laravel\Nova\Tests\Controller;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Actions\ActionEvent;
+use Laravel\Nova\Nova;
 use Laravel\Nova\Tests\Fixtures\IdFilter;
 use Laravel\Nova\Tests\Fixtures\User;
 use Laravel\Nova\Tests\Fixtures\UserPolicy;
@@ -156,5 +158,36 @@ class ResourceRestoreTest extends IntegrationTest
         $this->assertEquals($user->id, $actionEvent->model_id);
 
         Relation::morphMap([], false);
+    }
+
+    public function test_should_store_action_event_on_correct_connection_when_restoring()
+    {
+        $this->setupActionEventsOnSeparateConnection();
+
+        $user = factory(User::class)->create();
+        $user2 = factory(User::class)->create();
+
+        $user->delete();
+        $user2->delete();
+
+        $response = $this->withExceptionHandling()
+            ->putJson('/nova-api/users/restore', [
+                'resources' => [$user->id, $user2->id],
+            ]);
+
+        $response->assertStatus(200);
+
+        $this->assertCount(2, User::all());
+
+        $this->assertNull(User::withTrashed()->find($user->id)->deleted_at);
+        $this->assertNull(User::withTrashed()->find($user2->id)->deleted_at);
+
+        $this->assertCount(0, DB::connection('sqlite')->table('action_events')->get());
+        $this->assertCount(2, DB::connection('sqlite-custom')->table('action_events')->get());
+
+        tap(Nova::actionEvent()->first(), function ($actionEvent) use ($user) {
+            $this->assertEquals('Restore', $actionEvent->name);
+            $this->assertEquals($user->id, $actionEvent->target_id);
+        });
     }
 }

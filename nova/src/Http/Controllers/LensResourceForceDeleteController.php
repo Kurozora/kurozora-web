@@ -5,8 +5,8 @@ namespace Laravel\Nova\Http\Controllers;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Laravel\Nova\Actions\Actionable;
-use Laravel\Nova\Actions\ActionEvent;
 use Laravel\Nova\Http\Requests\ForceDeleteLensResourceRequest;
+use Laravel\Nova\Nova;
 
 class LensResourceForceDeleteController extends Controller
 {
@@ -30,10 +30,12 @@ class LensResourceForceDeleteController extends Controller
 
                 $model->forceDelete();
 
-                DB::table('action_events')->insert(
-                    ActionEvent::forResourceDelete($request->user(), collect([$model]))
-                                ->map->getAttributes()->all()
-                );
+                tap(Nova::actionEvent(), function ($actionEvent) use ($model, $request) {
+                    DB::connection($actionEvent->getConnectionName())->table('action_events')->insert(
+                        $actionEvent->forResourceDelete($request->user(), collect([$model]))
+                            ->map->getAttributes()->all()
+                    );
+                });
             });
         });
     }

@@ -10,12 +10,12 @@ class NovaExceptionHandler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Exception  $e
+     * @param  \Throwable  $e
      * @return mixed
      *
-     * @throws \Exception
+     * @throws \Throwable
      */
-    public function report(\Exception $e)
+    public function report(\Throwable $e)
     {
         return with(Nova::$reportCallback, function ($handler) use ($e) {
             if (is_callable($handler) || $handler instanceof Closure) {

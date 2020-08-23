@@ -1,11 +1,11 @@
 <?php
 
-namespace DummyNamespace;
+namespace {{ namespace }};
 
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\Value;
 
-class DummyClass extends Value
+class {{ class }} extends Value
 {
     /**
      * Calculate the value of the metric.
@@ -26,13 +26,13 @@ class DummyClass extends Value
     public function ranges()
     {
         return [
-            30 => '30 Days',
-            60 => '60 Days',
-            365 => '365 Days',
-            'TODAY' => 'Today',
-            'MTD' => 'Month To Date',
-            'QTD' => 'Quarter To Date',
-            'YTD' => 'Year To Date',
+            30 => __('30 Days'),
+            60 => __('60 Days'),
+            365 => __('365 Days'),
+            'TODAY' => __('Today'),
+            'MTD' => __('Month To Date'),
+            'QTD' => __('Quarter To Date'),
+            'YTD' => __('Year To Date'),
         ];
     }
 

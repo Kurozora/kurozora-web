@@ -93,14 +93,14 @@ export default {
     /**
      * Determine if prior pages are available.
      */
-    hasPreviousPages: function() {
+    hasPreviousPages: function () {
       return this.previous
     },
 
     /**
      * Determine if more pages are available.
      */
-    hasMorePages: function() {
+    hasMorePages: function () {
       return this.next
     },
   },

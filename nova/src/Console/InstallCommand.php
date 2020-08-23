@@ -3,12 +3,11 @@
 namespace Laravel\Nova\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Console\DetectsApplicationNamespace;
 use Illuminate\Support\Str;
 
 class InstallCommand extends Command
 {
-    use DetectsApplicationNamespace;
+    use ResolvesStubPath;
 
     /**
      * The name and signature of the console command.
@@ -41,7 +40,7 @@ class InstallCommand extends Command
 
         $this->comment('Generating User Resource...');
         $this->callSilent('nova:resource', ['name' => 'User']);
-        copy(__DIR__.'/stubs/user-resource.stub', app_path('Nova/User.php'));
+        copy($this->resolveStubPath('/stubs/nova/user-resource.stub'), app_path('Nova/User.php'));
 
         $this->setAppNamespace();
 
@@ -55,7 +54,7 @@ class InstallCommand extends Command
      */
     protected function registerNovaServiceProvider()
     {
-        $namespace = Str::replaceLast('\\', '', $this->getAppNamespace());
+        $namespace = Str::replaceLast('\\', '', $this->laravel->getNamespace());
 
         file_put_contents(config_path('app.php'), str_replace(
             "{$namespace}\\Providers\EventServiceProvider::class,".PHP_EOL,
@@ -71,7 +70,7 @@ class InstallCommand extends Command
      */
     protected function setAppNamespace()
     {
-        $namespace = $this->getAppNamespace();
+        $namespace = $this->laravel->getNamespace();
 
         $this->setAppNamespaceOn(app_path('Nova/User.php'), $namespace);
         $this->setAppNamespaceOn(app_path('Providers/NovaServiceProvider.php'), $namespace);

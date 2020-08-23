@@ -18,12 +18,14 @@ class CreateAnimeModeratorsTable extends Migration
     {
         Schema::create(AnimeModerator::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('anime_id');
             $table->timestamps();
+        });
 
-            $table->integer('user_id')->unsigned();
+        Schema::table(AnimeModerator::TABLE_NAME, function (Blueprint $table) {
+            // Set foreign key constraints
             $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
-
-            $table->integer('anime_id')->unsigned();
             $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
         });
     }

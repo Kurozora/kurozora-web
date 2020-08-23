@@ -8,17 +8,23 @@ use App\Http\Requests\Registration;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
+use Throwable;
 
 class RegistrationController extends Controller
 {
     /**
-     * Registers a new user
+     * Signup a new user
      *
      * @param Registration $request
      * @return JsonResponse
-     * @throws \Throwable
+     * @throws Throwable
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
      */
-    public function register(Registration $request) {
+    public function signUp(Registration $request): JsonResponse
+    {
         $data = $request->validated();
 
         // Create the user

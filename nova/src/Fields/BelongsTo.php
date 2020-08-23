@@ -13,8 +13,7 @@ use Laravel\Nova\TrashedStatus;
 
 class BelongsTo extends Field implements RelatableField
 {
-    use FormatsRelatableDisplayValues;
-    use ResolvesReverseRelation;
+    use FormatsRelatableDisplayValues, ResolvesReverseRelation, DeterminesIfCreateRelationCanBeShown, Searchable;
 
     /**
      * The field's component.
@@ -66,13 +65,6 @@ class BelongsTo extends Field implements RelatableField
     public $viewable = true;
 
     /**
-     * Indicates if this relationship is searchable.
-     *
-     * @var bool
-     */
-    public $searchable = false;
-
-    /**
      * The callback that should be run when the field is filled.
      *
      * @var \Closure
@@ -117,7 +109,7 @@ class BelongsTo extends Field implements RelatableField
         $this->resourceClass = $resource;
         $this->resourceName = $resource::uriKey();
         $this->belongsToRelationship = $this->attribute;
-        $this->singularLabel = $resource::singularLabel();
+        $this->singularLabel = $name;
     }
 
     /**
@@ -323,21 +315,9 @@ class BelongsTo extends Field implements RelatableField
         return array_filter([
             'avatar' => $resource->resolveAvatarUrl($request),
             'display' => $this->formatDisplayValue($resource),
+            'subtitle' => $resource->subtitle(),
             'value' => $resource->getKey(),
         ]);
-    }
-
-    /**
-     * Specify if the relationship should be searchable.
-     *
-     * @param  bool  $value
-     * @return $this
-     */
-    public function searchable($value = true)
-    {
-        $this->searchable = $value;
-
-        return $this;
     }
 
     /**
@@ -382,7 +362,7 @@ class BelongsTo extends Field implements RelatableField
     /**
      * Set the displayable singular label of the resource.
      *
-     * @return string
+     * @return $this
      */
     public function singularLabel($singularLabel)
     {
@@ -413,13 +393,15 @@ class BelongsTo extends Field implements RelatableField
         return array_merge([
             'belongsToId' => $this->belongsToId,
             'belongsToRelationship' => $this->belongsToRelationship,
+            'displaysWithTrashed' => $this->displaysWithTrashed,
             'label' => forward_static_call([$this->resourceClass, 'label']),
             'resourceName' => $this->resourceName,
             'reverse' => $this->isReverseRelation(app(NovaRequest::class)),
             'searchable' => $this->searchable,
+            'withSubtitles' => $this->withSubtitles,
+            'showCreateRelationButton' => $this->createRelationShouldBeShown(app(NovaRequest::class)),
             'singularLabel' => $this->singularLabel,
             'viewable' => $this->viewable,
-            'displaysWithTrashed' => $this->displaysWithTrashed,
         ], parent::jsonSerialize());
     }
 }

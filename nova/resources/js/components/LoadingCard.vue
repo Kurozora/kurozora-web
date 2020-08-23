@@ -23,7 +23,7 @@ export default {
     mode: {
       type: String,
       default: 'light',
-      validator: function(value) {
+      validator: function (value) {
         return ['light', 'dark'].indexOf(value) !== -1
       },
     },

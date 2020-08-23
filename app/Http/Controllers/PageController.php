@@ -5,32 +5,36 @@ namespace App\Http\Controllers;
 use App\Anime;
 use App\ForumThread;
 use App\User;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\View\View;
 
 class PageController extends Controller
 {
     /**
      * Anime landing page
      *
-     * @param $animeID
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Anime $anime
+     * @return Application|Factory|View
      */
-    public function anime($animeID) {
-        $anime = Anime::find($animeID);
-
-        if(!$anime) abort(404);
+    public function anime(Anime $anime)
+    {
+        $poster = $anime->poster();
+        $posterURL = null;
+        if($poster)
+            $posterURL = $poster->url;
 
         return view('website.anime-page', [
             'page' => [
                 'title' => $anime->title,
                 'type' => 'video.tv_show',
-                'image' => $anime->cached_poster
+                'image' => $posterURL
             ],
             'animeData' => [
                 'id'            => $anime->id,
                 'title'         => $anime->title,
                 'episode_count' => $anime->episode_count,
-                'poster'        => $anime->cached_poster
+                'poster'        => $posterURL
             ]
         ]);
     }
@@ -39,14 +43,18 @@ class PageController extends Controller
      * User profile landing page
      *
      * @param $userID
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Application|Factory|View
      */
-    public function userProfile($userID) {
+    public function userProfile($userID)
+    {
         $user = User::find($userID);
 
         if(!$user) abort(404);
 
-        $avatar = $user->getURLToAvatar();
+        $avatar = $user->getFirstMediaUrl('avatar');
+
+        if (!$avatar)
+            $avatar = null;
 
         return view('website.user-profile-page', [
             'page' => [
@@ -67,9 +75,10 @@ class PageController extends Controller
      * Thread landing page
      *
      * @param $threadID
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Application|Factory|View
      */
-    public function thread($threadID) {
+    public function thread($threadID)
+    {
         $thread = ForumThread::find($threadID);
 
         if(!$thread) abort(404);

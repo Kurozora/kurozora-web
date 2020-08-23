@@ -35,6 +35,13 @@ class Code extends Field
     public $showOnIndex = false;
 
     /**
+     * Indicates the visual height of the Code editor.
+     *
+     * @var string|int
+     */
+    public $height = 300;
+
+    /**
      * Resolve the given attribute from the given resource.
      *
      * @param  mixed  $resource
@@ -99,6 +106,43 @@ class Code extends Field
     }
 
     /**
+     * Set the Code editor to display all of its contents.
+     *
+     * @return $this
+     */
+    public function fullHeight()
+    {
+        $this->height = '100%';
+
+        return $this;
+    }
+
+    /**
+     * Set the visual height of the Code editor to automatic.
+     *
+     * @return $this
+     */
+    public function autoHeight()
+    {
+        $this->height = 'auto';
+
+        return $this;
+    }
+
+    /**
+     * Set the visual height of the Code editor.
+     *
+     * @param string|int $height
+     * @return $this
+     */
+    public function height($height)
+    {
+        $this->height = $height;
+
+        return $this;
+    }
+
+    /**
      * Set configuration options for the code editor instance.
      *
      * @param  array  $options
@@ -110,6 +154,18 @@ class Code extends Field
 
         return $this->withMeta([
             'options' => array_merge($currentOptions, $options),
+        ]);
+    }
+
+    /**
+     * Prepare the field for JSON serialization.
+     *
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return array_merge(parent::jsonSerialize(), [
+            'height' => $this->height,
         ]);
     }
 }

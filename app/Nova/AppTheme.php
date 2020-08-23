@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
@@ -51,12 +52,23 @@ class AppTheme extends Resource
         return [
             ID::make()->sortable(),
 
+            Images::make('Screenshot')
+                ->setFileName(function($originalFilename, $extension, $model){
+                    return md5($originalFilename) . '.' . $extension;
+                })
+                ->setName(function($originalFilename, $model){
+                    return md5($originalFilename);
+                })
+                ->required()
+                ->singleMediaRules('dimensions:min-width=375,min-height=667,max_width=768,max-height=1024')
+                ->help('Screenshot should have a minimum dimension of 375x667 and a maximum dimension of 768x1024. i.e a screenshot on iPhone 6...iPhone 11 Pro.'),
+
             Text::make('Name')->sortable()
                 ->rules('required'),
 
             Text::make('Download link', function () {
                 return '
-                    <a href="' . route('themes.download', ['theme' => $this->id]) . '" target="_blank" class="btn btn-default btn-primary">Download</a>
+                    <a href="' . route('api.themes.download', ['theme' => $this->id]) . '" target="_blank" class="btn btn-default btn-primary">Download</a>
                 ';
             })
                 ->asHtml()
@@ -235,8 +247,8 @@ class AppTheme extends Resource
      * @var string
      */
     public static $icon = '
-        <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M7.27659574,0 C8.61618003,0 9.70212766,1.0745166 9.70212766,2.4 L9.70212766,21.6 C9.70212766,22.9254834 8.61618003,24 7.27659574,24 L2.42553191,24 C1.08594763,24 0,22.9254834 0,21.6 L0,2.388 C0,1.08 1.0793617,0 2.42553191,0 L7.27659574,0 Z M21.5981431,14.2978723 C22.9258027,14.2978723 24,15.377234 24,16.7234043 L24,21.5744681 C24,22.9140524 22.9192483,24 21.5860735,24 L10.7234043,24 L10.7234043,21.9382979 L10.7354739,21.647234 L18.0496712,14.2978723 L21.5981431,14.2978723 Z M4.72340426,18.1276596 C4.08886433,18.1276596 3.57446809,18.6420558 3.57446809,19.2765957 C3.57446809,19.9111357 4.08886433,20.4255319 4.72340426,20.4255319 C5.35794418,20.4255319 5.87234043,19.9111357 5.87234043,19.2765957 C5.87234043,18.6420558 5.35794418,18.1276596 4.72340426,18.1276596 Z M14.9044946,3.06382979 C15.5384662,3.06382979 16.1463296,3.31411546 16.593703,3.75935551 L19.9841,7.11989469 C20.9131014,8.04620999 20.9131014,9.54224388 19.9841,10.4685592 L10.7234043,19.6595745 L10.7234043,6.21741774 L13.2152862,3.75935551 C13.6626596,3.31411546 14.270523,3.06382979 14.9044946,3.06382979 Z" id="Shape" fill="var(--sidebar-icon)"></path>
+        <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path fill="var(--sidebar-icon)" d="M112 424c13.25 0 24-10.75 24-24 0-13.26-10.75-24-24-24s-24 10.74-24 24c0 13.25 10.75 24 24 24zm368-136h-97.61l69.02-69.02c12.5-12.5 12.5-32.76 0-45.25L338.27 60.59c-6.25-6.25-14.44-9.37-22.63-9.37s-16.38 3.12-22.63 9.37L224 129.61V32c0-17.67-14.33-32-32-32H32C14.33 0 0 14.33 0 32v368c0 61.86 50.14 112 112 112h368c17.67 0 32-14.33 32-32V320c0-17.67-14.33-32-32-32zM176 400c0 17.88-7.41 34.03-19.27 45.65-3.65 3.57-7.7 6.53-11.99 9.05-.86.51-1.76.96-2.64 1.43-4.47 2.34-9.12 4.31-14.02 5.57-5.16 1.35-10.48 2.29-16.06 2.29H112c-35.29 0-64-28.71-64-64v-96h128V400zm0-144H48v-80h128v80zm0-128H48V48h128v80zm48 69.49l91.65-91.65 90.51 90.51L224 378.51V197.49zM464 464H206.39l128-128H464v128z"/>
         </svg>
     ';
 }
