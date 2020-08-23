@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Events\MALImportFinished;
 use App\Notifications\NewFollower;
 use App\Notifications\NewSession;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Notifications\DatabaseNotification;
 
@@ -13,21 +14,25 @@ class NotificationResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
-    public function toArray($request = null)
+    public function toArray($request): array
     {
         /** @var DatabaseNotification $notification */
         $notification = $this->resource;
 
         return [
             'id'            => $notification->id,
-            'type'          => $this->typeWithoutNamespace($notification),
-            'read'          => ($this->read_at != null),
-            'data'          => $this->data,
-            'string'        => self::getNotificationString($notification),
-            'creation_date' => (string) $this->created_at
+            'type'          => 'notifications',
+            'href'          => route('api.me.notifications.details', $notification, false),
+            'attributes'    => [
+                'type'          => $this->typeWithoutNamespace($notification),
+                'description'   => self::getNotificationDescription($notification),
+                'payload'       => $notification->data,
+                'isRead'        => ($notification->read_at != null),
+                'createdAt'     => $notification->created_at->format('Y-m-d H:i:s')
+            ]
         ];
     }
 
@@ -37,18 +42,20 @@ class NotificationResource extends JsonResource
      * @param DatabaseNotification $notification
      * @return string
      */
-    private function typeWithoutNamespace($notification) {
+    private function typeWithoutNamespace($notification): string
+    {
         $class_parts = explode('\\', $notification->type);
         return end($class_parts);
     }
 
     /**
-     * Returns the body string that represents the notification.
+     * Returns the body string that describes the notification.
      *
      * @param DatabaseNotification $notification
      * @return string
      */
-    static function getNotificationString($notification) {
+    static function getNotificationDescription($notification): string
+    {
         switch($notification->type) {
             case NewSession::class: {
                 $body = 'A new client has logged in to your account.';
@@ -85,14 +92,15 @@ class NotificationResource extends JsonResource
 
     /**
      * Gets a data variable from the notification or return null when
-     * .. it doesn't exist.
+     * it doesn't exist.
      *
      * @param DatabaseNotification $notification
      * @param string $key
      * @return mixed|null
      */
-    private static function getData($notification, $key) {
-        return isset($notification->data[$key]) ? $notification->data[$key] : null;
+    private static function getData($notification, $key)
+    {
+        return self::hasData($notification, $key) ? $notification->data[$key] : null;
     }
 
     /**
@@ -102,7 +110,8 @@ class NotificationResource extends JsonResource
      * @param string $key
      * @return bool
      */
-    private static function hasData($notification, $key) {
+    private static function hasData($notification, $key): bool
+    {
         return isset($notification->data[$key]);
     }
 }

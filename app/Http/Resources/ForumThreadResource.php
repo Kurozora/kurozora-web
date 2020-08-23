@@ -2,6 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\VoteType;
+use App\ForumThread;
+use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,25 +14,44 @@ class ForumThreadResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
+     * @throws InvalidEnumKeyException
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
+        /** @var ForumThread $forumThread */
+        $forumThread = $this->resource;
+
+        $totalReactions = $forumThread->viaLoveReactant()->getReactionTotal();
+        $totalLikes = $forumThread->viaLoveReactant()->getReactionCounterOfType(VoteType::Like()->description);
+        $totalDislikes = $forumThread->viaLoveReactant()->getReactionCounterOfType(VoteType::Dislike()->description);
+
         $resource = [
-            'id'                => $this->id,
-            'title'             => $this->title,
-            'content'           => $this->content,
-            'locked'            => (bool) $this->locked,
-            'poster_user_id'    => $this->user->id,
-            'poster_username'   => $this->user->username,
-            'creation_date'     => $this->created_at->format('Y-m-d H:i:s'),
-            'reply_count'       => $this->replies->count(),
-            'score'             => $this->likesDiffDislikesCount
+            'id'            => $forumThread->id,
+            'type'          => 'threads',
+            'href'          => route('api.forum-threads.details', $forumThread, false),
+            'attributes'    => [
+                'title'         => $forumThread->title,
+                'content'       => $forumThread->content,
+                'isLocked'      => (bool) $forumThread->locked,
+                'replyCount'    => $forumThread->replies->count(),
+                'metrics'       => [
+                    'count'     => $totalReactions->getCount(),
+                    'weight'    => $totalReactions->getWeight(),
+                    'likes'     => $totalLikes->getCount(),
+                    'dislikes'  => $totalDislikes->getCount()
+                ],
+                'createdAt'     => $forumThread->created_at->format('Y-m-d H:i:s'),
+            ]
         ];
 
+        $relationships = [];
+        $relationships = array_merge($relationships, $this->getPosterRelationship());
+        $resource = array_merge($resource, ['relationships' => $relationships]);
+
         if(Auth::check())
-            $resource = array_merge($resource, $this->getUserSpecificDetails());
+            $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
 
         return $resource;
     }
@@ -37,13 +60,30 @@ class ForumThreadResource extends JsonResource
      * Returns the user specific details for the resource.
      *
      * @return array
+     * @throws InvalidEnumKeyException
      */
-    protected function getUserSpecificDetails() {
+    protected function getUserSpecificDetails(): array
+    {
         $user = Auth::user();
 
         return [
-            'current_user' => [
-                'like_action' => $user->likeAction($this->resource)
+            'voteAction' => $user->getCurrentVoteValue()
+        ];
+    }
+
+    /**
+     * Returns the poster relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getPosterRelationship(): array
+    {
+        /** @param ForumThread $forumThread */
+        $forumThread = $this->resource;
+
+        return [
+            'user' => [
+                'data' => UserResourceBasic::collection([$forumThread->user]),
             ]
         ];
     }

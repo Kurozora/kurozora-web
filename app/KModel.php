@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 class KModel extends Model
 {
+    use HasRelationships;
+
     // Remove column guards
     protected $guarded = [];
 
@@ -24,6 +27,15 @@ class KModel extends Model
 
         // Add an ID
         if(isset($options['id'])) $key .= '-' . $options['id'];
+
+        // Add a limit
+        if(isset($options['limit'])) $key .= '-' . $options['limit'];
+
+        // Add a where
+        if(isset($options['where'])) $key .= '-' . implode(',', array_map('implode', $options['where']));
+
+        // Add a whereBetween
+        if(isset($options['whereBetween'])) $key .= '-' . implode(',', $options['whereBetween']);
 
         return $key;
     }

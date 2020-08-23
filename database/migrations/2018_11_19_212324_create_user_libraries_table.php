@@ -17,16 +17,17 @@ class CreateUserLibrariesTable extends Migration
     public function up()
     {
         Schema::create(UserLibrary::TABLE_NAME, function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
-
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
-
-            $table->integer('anime_id')->unsigned();
-            $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
-
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('anime_id');
             $table->tinyInteger('status')->nullable()->default(null);
+            $table->timestamps();
+        });
+
+        Schema::table(UserLibrary::TABLE_NAME, function (Blueprint $table) {
+            // Set foreign key constraints
+            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
         });
     }
 

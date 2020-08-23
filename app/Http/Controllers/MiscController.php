@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
+use Carbon\Carbon;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
+use League\CommonMark\CommonMarkConverter;
 
 class MiscController extends Controller
 {
@@ -12,9 +15,11 @@ class MiscController extends Controller
      * Returns the latest privacy policy.
      *
      * @return JsonResponse
+     * @throws FileNotFoundException
      */
-    public function getPrivacyPolicy() {
-        $privacyPolicyPath = 'public/privacy_policy.txt';
+    public function getPrivacyPolicy(): JsonResponse
+    {
+        $privacyPolicyPath = 'resources/static/privacy_policy.md';
 
         // Get the privacy policy text
         $privacyPolicyText = null;
@@ -24,14 +29,22 @@ class MiscController extends Controller
             Storage::put($privacyPolicyPath, 'Privacy Policy is empty. Please inform an administrator.');
 
         // Get the last update date
-        $lastUpdateUnix = Storage::lastModified($privacyPolicyPath);
-        $lastUpdateStr = date('j M, Y', $lastUpdateUnix) . ' at ';
-        $lastUpdateStr .= date('H:i', $lastUpdateUnix);
+        $lastUpdateUnix = Carbon::createFromTimestamp(Storage::lastModified($privacyPolicyPath));
+        $lastUpdateStr = $lastUpdateUnix->format('F d, Y');
+
+        // Get privacy policy text and attach date
+        $privacyPolicyText = str_replace('#UPDATE_DATE#', $lastUpdateStr, Storage::get($privacyPolicyPath));
+
+        // Prepare for converting Markdown to HTML
+        $commonMarkConverter = new CommonMarkConverter();
 
         return JSONResult::success([
-            'privacy_policy' => [
-                'text'          => Storage::get($privacyPolicyPath),
-                'last_update'   => $lastUpdateStr
+            'data' => [
+                'type'          => 'legal',
+                'href'          => route('api.legal.privacy', [], false),
+                'attributes'    => [
+                    'text' => $commonMarkConverter->convertToHtml($privacyPolicyText)
+                ]
             ]
         ]);
     }

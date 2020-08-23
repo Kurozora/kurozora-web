@@ -7,30 +7,38 @@ use App\Helpers\OptionsBag;
 use App\Jobs\FetchSessionLocation;
 use App\Notifications\NewSession;
 use App\Traits\KuroSearchTrait;
-use App\Traits\LikeActionTrait;
+use App\Traits\VoteActionTrait;
 use App\Traits\MediaLibraryExtensionTrait;
-use Cog\Contracts\Love\Liker\Models\Liker as LikerContract;
-use Cog\Laravel\Love\Liker\Models\Traits\Liker;
-use Illuminate\Database\Eloquent\Builder;
+use Carbon\Carbon;
+use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
+use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Str;
+use Ramsey\Uuid\Uuid;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
-use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\IcalendarGenerator\Components\Alert;
+use Spatie\IcalendarGenerator\Components\Calendar;
+use Spatie\IcalendarGenerator\Components\Event;
+use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
+use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements LikerContract, HasMedia
+class User extends Authenticatable implements ReacterableContract, HasMedia
 {
     use Notifiable,
         Authorizable,
         KuroSearchTrait,
-        Liker,
-        LikeActionTrait,
-        HasMediaTrait,
+        Reacterable,
+        VoteActionTrait,
+        InteractsWithMedia,
         MediaLibraryExtensionTrait,
         LogsActivity,
         HasRoles;
@@ -41,6 +49,9 @@ class User extends Authenticatable implements LikerContract, HasMedia
     // Cache user's badges
     const CACHE_KEY_BADGES = 'user-badges-%d';
     const CACHE_KEY_BADGES_SECONDS = 120 * 60;
+
+    // Cache user's calendar
+    const CACHE_KEY_CALENDAR_SECONDS = 60 * 60 * 24;
 
     // Cache user's follower count
     const CACHE_KEY_FOLLOWER_COUNT = 'user-followers-%d';
@@ -131,27 +142,9 @@ class User extends Authenticatable implements LikerContract, HasMedia
     }
 
     /**
-     * Finds the user with the given SIWA details.
-     * e.g. User::findSIWA($id, $email);
-     *
-     * @param Builder $query
-     * @param string $siwaID
-     * @param string $email
-     * @return User|null
-     */
-    public function scopeFindSIWA($query, $siwaID, $email)
-    {
-        /** @var User $user */
-        $user = $query->where('email', $email)
-            ->where('siwa_id', $siwaID);
-
-        return $user;
-    }
-
-    /**
      * Registers the media collections for the model.
      */
-    public function registerMediaCollections()
+    public function registerMediaCollections(): void
     {
         $this->addMediaCollection('avatar')
             ->singleFile();
@@ -163,7 +156,7 @@ class User extends Authenticatable implements LikerContract, HasMedia
     /**
      * Returns the Anime that the user has added to their favorites.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     function favoriteAnime()
     {
@@ -171,9 +164,111 @@ class User extends Authenticatable implements LikerContract, HasMedia
     }
 
     /**
+     * Returns the Anime that the user has added to their reminders.
+     *
+     * @return BelongsToMany
+     */
+    function reminderAnime()
+    {
+        return $this->belongsToMany(Anime::class, UserReminderAnime::class, 'user_id', 'anime_id');
+    }
+
+    /**
+     * Returns the User-Reminder-Anime relationship for the user.
+     *
+     * @return HasMany
+     */
+    function userReminderAnime()
+    {
+        return $this->hasMany(UserReminderAnime::class);
+    }
+
+    /**
+     * Returns the content of the calendar generated from the user's anime reminders.
+     *
+     * @return string
+     */
+    function getCalendar(): string
+    {
+        /** @var Anime[] $animes */
+        $animes = $this->reminderAnime()->get();
+
+        // Find location of cached data
+        $cacheKey = self::TABLE_NAME . '-name-reminders-id-' . $this->id . '-reminder_count-' . count($animes);
+
+        // Retrieve or save cached result
+        return Cache::remember($cacheKey, self::CACHE_KEY_CALENDAR_SECONDS, function() use ($animes) {
+            $appName = env('APP_NAME');
+            $productIdentifier = '-//Kurozora B.V.//' . $appName . '//'. strtoupper(config('app.locale'));
+
+            $calendar = Calendar::create(UserReminderAnime::CAL_NAME);
+            $calendar->description(UserReminderAnime::CAL_DESCRIPTION)
+                ->productIdentifier($productIdentifier)
+                ->refreshInterval(UserReminderAnime::CAL_REFRESH_INTERVAL)
+                ->appendProperty(TextPropertyType::create('CALSCALE', 'GREGORIAN'))
+                ->appendProperty(TextPropertyType::create('X-APPLE-CALENDAR-COLOR', '#FF9300'))
+                ->appendProperty(TextPropertyType::create('COLOR', 'orange'))
+                ->appendProperty(TextPropertyType::create('ORGANIZER', 'kurozoraapp@gmail.app')
+                    ->addParameter(Parameter::create('CN', 'Kurozora')));
+
+            $startDate = Carbon::now()->startOfWeek()->subWeeks(1);
+            $endDate = Carbon::now()->endOfWeek()->addWeeks(2);
+            $whereBetween = [$startDate, $endDate];
+
+            foreach($animes as $anime) {
+                $episodes = $anime->getEpisodes($whereBetween);
+
+                foreach($episodes as $episode) {
+                    $uniqueIdentifier = Uuid::uuid4() . '@kurozora.app';
+                    $eventName = $anime->title . ' Episode ' . $episode->number;
+                    $startsAt = $episode->first_aired->setTimezone('Asia/Tokyo');
+                    $endsAt = $episode->first_aired->addMinutes($anime->runtime)->setTimezone('Asia/Tokyo');
+
+                    // Create event
+                    $calendarEvent = Event::create($eventName)
+                        ->description($episode->overview)
+                        ->organizer('kurozoraapp@gmail.com', 'Kurozora')
+                        ->startsAt($startsAt)
+                        ->endsAt($endsAt)
+                        ->uniqueIdentifier($uniqueIdentifier);
+
+                    // Add custom properties
+                    $calendarEvent->appendProperty(TextPropertyType::create('URL', route('anime.details', $anime)))
+                        ->appendProperty(TextPropertyType::create('X-APPLE-TRAVEL-ADVISORY-BEHAVIOR', 'AUTOMATIC'));
+
+                    // Add alerts
+                    $firstReminderMessage = $eventName . ' starts in ' . UserReminderAnime::CAL_FIRST_ALERT_MINUTES . ' minutes.';
+                    $secondReminderMessage = $eventName . ' starts in ' . UserReminderAnime::CAL_SECOND_ALERT_MINUTES . ' minutes.';
+                    $thirdReminderMessage = $eventName . ' starts in ' . UserReminderAnime::CAL_THIRD_ALERT_DAY . ' day.';
+
+                    $firstAlert = Alert::minutesBeforeStart(UserReminderAnime::CAL_FIRST_ALERT_MINUTES)
+                        ->message($firstReminderMessage)
+                        ->appendProperty(TextPropertyType::create('UID', Uuid::uuid4() . '@kurozora.app'));
+                    $secondAlert = Alert::minutesBeforeStart(UserReminderAnime::CAL_SECOND_ALERT_MINUTES)
+                        ->message($secondReminderMessage)
+                        ->appendProperty(TextPropertyType::create('UID', Uuid::uuid4() . '@kurozora.app'));
+                    $thirdAlert = Alert::minutesBeforeStart(UserReminderAnime::CAL_THIRD_ALERT_DAY)
+                        ->message($thirdReminderMessage)
+                        ->appendProperty(TextPropertyType::create('UID', Uuid::uuid4() . '@kurozora.app'));
+
+                    $calendarEvent->alert($firstAlert)
+                        ->alert($secondAlert)
+                        ->alert($thirdAlert);
+
+                    // Add event to calendar
+                    $calendar->event($calendarEvent);
+                }
+            }
+
+            // Export calendar
+            return $calendar->get();
+        });
+    }
+
+    /**
      * Returns a boolean indicating whether the user has the given anime in their library.
      *
-     * @param \App\Anime $anime The anime to be searched for in the user's library.
+     * @param Anime $anime The anime to be searched for in the user's library.
      *
      * @return bool
      */
@@ -185,7 +280,7 @@ class User extends Authenticatable implements LikerContract, HasMedia
     /**
      * Returns the Anime that the user is moderating.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     function moderatingAnime()
     {
@@ -196,7 +291,7 @@ class User extends Authenticatable implements LikerContract, HasMedia
     /**
      * Returns the Anime items in the user's library.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     function library()
     {
@@ -207,7 +302,7 @@ class User extends Authenticatable implements LikerContract, HasMedia
     /**
      * Returns the watched Episode items.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     function watchedAnimeEpisodes()
     {
@@ -229,7 +324,7 @@ class User extends Authenticatable implements LikerContract, HasMedia
     /**
      * Returns the associated badges for the user
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     function badges()
     {
@@ -239,7 +334,7 @@ class User extends Authenticatable implements LikerContract, HasMedia
     /**
      * Returns the associated sessions for the user
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function sessions()
     {
@@ -302,7 +397,7 @@ class User extends Authenticatable implements LikerContract, HasMedia
     /**
      * Returns the associated threads for the user
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function threads()
     {
@@ -320,7 +415,7 @@ class User extends Authenticatable implements LikerContract, HasMedia
         $cacheKey = sprintf(self::CACHE_KEY_BADGES, $this->id);
 
         // Retrieve or save cached result
-        $badgeInfo = Cache::remember($cacheKey, self::CACHE_KEY_BADGES_SECONDS, function () {
+        return Cache::remember($cacheKey, self::CACHE_KEY_BADGES_SECONDS, function () {
             return Badge::
                 join(UserBadge::TABLE_NAME, function ($join) {
                     $join->on(UserBadge::TABLE_NAME . '.badge_id', '=', Badge::TABLE_NAME . '.id');
@@ -330,14 +425,12 @@ class User extends Authenticatable implements LikerContract, HasMedia
                 ])
                 ->get();
         });
-
-        return $badgeInfo;
     }
 
     /**
      * Get the user's followers
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function followers()
     {
@@ -365,7 +458,7 @@ class User extends Authenticatable implements LikerContract, HasMedia
     /**
      * Get the user's following users.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function following()
     {
@@ -377,16 +470,15 @@ class User extends Authenticatable implements LikerContract, HasMedia
      *
      * @return int
      */
-    public function getFollowingCount() {
+    public function getFollowingCount()
+    {
         // Find location of cached data
         $cacheKey = sprintf(self::CACHE_KEY_FOLLOWING_COUNT, $this->id);
 
         // Retrieve or save cached result
-        $followingCount = Cache::remember($cacheKey, self::CACHE_KEY_FOLLOWING_COUNT_SECONDS, function () {
+        return Cache::remember($cacheKey, self::CACHE_KEY_FOLLOWING_COUNT_SECONDS, function () {
             return $this->following()->count();
         });
-
-        return $followingCount;
     }
 
     /**
@@ -462,7 +554,7 @@ class User extends Authenticatable implements LikerContract, HasMedia
     /**
      * Returns the APN token(s) for the user.
      *
-     * @return string|array
+     * @return array
      */
     public function routeNotificationForApn()
     {

@@ -16,8 +16,7 @@ class CreateAppThemesTable extends Migration
     public function up()
     {
         Schema::create(AppTheme::TABLE_NAME, function (Blueprint $table) {
-            $table->increments('id');
-
+            $table->bigIncrements('id');
             $table->string('name');
 
             $table->string('ui_status_bar_style')->default(iOSUIKit::StatusBarStyleDefault);

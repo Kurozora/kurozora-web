@@ -3,12 +3,14 @@
 namespace App;
 
 use Carbon\Carbon;
-use Cog\Contracts\Love\Likeable\Models\Likeable as LikeableContract;
-use Cog\Laravel\Love\Likeable\Models\Traits\Likeable;
+use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
+use Cog\Laravel\Love\Reactable\Models\Traits\Reactable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class ForumReply extends KModel implements LikeableContract
+class ForumReply extends KModel implements ReactableContract
 {
-    use Likeable;
+    use Reactable;
 
     // Table name
     const TABLE_NAME = 'forum_replies';
@@ -20,18 +22,20 @@ class ForumReply extends KModel implements LikeableContract
     /**
      * Returns the thread the reply was posted in.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    function forum_thread() {
+    function forum_thread(): BelongsTo
+    {
         return $this->belongsTo(ForumThread::class, 'thread_id', 'id');
     }
 
     /**
      * Get the user associated with the reply
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
-    public function user() {
+    public function user(): HasOne
+    {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
@@ -42,9 +46,10 @@ class ForumReply extends KModel implements LikeableContract
      * Returns false when the user is allowed to post
      *
      * @param $userID
-     * @return mixed
+     * @return bool
      */
-    public static function testPostCooldown($userID) {
+    public static function testPostCooldown($userID): bool
+    {
         $secondsCooldown = self::COOLDOWN_POST_REPLY;
 
         $checkQuery = ForumReply::where('user_id', '=', $userID)

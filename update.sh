@@ -35,9 +35,9 @@ echo -e "${BLACK}[${ORANGE}Kurozora${BLACK}] ${LIME}✔ ${NC}Cache reloaded!"
 
 # Migrate fresh
 echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Would you like to run a fresh migration? (y/n): "
-read migrateResponse
+read -r migrateResponse
 
-if [ $migrateResponse == 'y' ]
+if [ "$migrateResponse" == 'y' ]
 then
     echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${NC}Running fresh migration..."
     php artisan migrate:fresh --seed

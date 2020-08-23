@@ -3,24 +3,25 @@
 namespace App\Http\Controllers\WebControllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\View\View;
 
 class PrivacyPageController extends Controller
 {
     /**
      * Shows the privacy page.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Application|Factory|View
      */
     function show() {
-        $request = Request::create('/api/v1/privacy-policy', 'GET');
+        $privacyPolicyRequest = Request::create('/api/v1/legal/privacy-policy', 'GET');
+        $responseData = (array) Route::dispatch($privacyPolicyRequest)->getData();
 
-        $responseData = (array) Route::dispatch($request)->getData();
-
-        return view('website.privacy', [
-            'policyText'    => nl2br($responseData['privacy_policy']->text),
-            'lastUpdated'   => $responseData['privacy_policy']->last_update
+        return view('website.legal.privacy', [
+            'policyText'    => $responseData['data']->attributes->text
         ]);
     }
 }

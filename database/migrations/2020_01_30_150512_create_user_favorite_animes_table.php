@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateUserFavoriteAnimesTable extends Migration
 {
+    const TABLE_NAME = 'user_favorite_animes';
+
     /**
      * Run the migrations.
      *
@@ -15,14 +17,16 @@ class CreateUserFavoriteAnimesTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_favorite_animes', function (Blueprint $table) {
+        Schema::create(self::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('anime_id');
             $table->timestamps();
+        });
 
-            $table->integer('user_id')->unsigned();
+        Schema::table(self::TABLE_NAME, function (Blueprint $table) {
+            // Set foreign key constraints
             $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
-
-            $table->integer('anime_id')->unsigned();
             $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
         });
     }
@@ -34,6 +38,6 @@ class CreateUserFavoriteAnimesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_favorite_animes');
+        Schema::dropIfExists(self::TABLE_NAME);
     }
 }

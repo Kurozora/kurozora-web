@@ -2,7 +2,9 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use ReflectionClass;
+use ReflectionException;
 
 class UserNotification extends KModel
 {
@@ -19,9 +21,10 @@ class UserNotification extends KModel
     /**
      * Returns the user the notification belongs to.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    function user() {
+    function user(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 
@@ -30,7 +33,8 @@ class UserNotification extends KModel
      *
      * @return string
      */
-    public function getString() {
+    public function getString(): string
+    {
         switch($this->type) {
             // Someone started following the user
             case self::TYPE_NEW_FOLLOWER: {
@@ -39,8 +43,6 @@ class UserNotification extends KModel
                 return
                     (($followerName == null) ? 'An unknown user' : $followerName) .
                     ' started following you';
-
-                break;
             }
             // A new client/session was made for the user
             case self::TYPE_NEW_SESSION: {
@@ -49,8 +51,6 @@ class UserNotification extends KModel
                 return
                     'A new client has logged in to your account.' .
                     (($sessionIP != null) ? ' (IP: ' . $sessionIP . ')' : null);
-
-                break;
             }
             // MAL import update notification
             case self::TYPE_MAL_IMPORT_UPDATE: {
@@ -69,9 +69,10 @@ class UserNotification extends KModel
      * Returns the type of the notification as a string
      *
      * @return string
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
-    public function getTypeString() {
+    public function getTypeString(): string
+    {
         $reflection = new ReflectionClass(get_class($this));
 
         $constants_array = $reflection->getConstants();
@@ -89,7 +90,8 @@ class UserNotification extends KModel
      *
      * @return array
      */
-    public function getData() {
+    public function getData(): array
+    {
         $decoded =  json_decode($this->data);
 
         if($decoded == null)
@@ -104,7 +106,8 @@ class UserNotification extends KModel
      * @param $varName
      * @return mixed|null
      */
-    public function getDataVariable($varName) {
+    public function getDataVariable($varName)
+    {
         $data = $this->getData();
 
         if(isset($data[$varName]))

@@ -45,8 +45,6 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapApiRoutes();
 
         $this->mapWebRoutes();
-
-        $this->mapThemeRoutes();
     }
 
     /**
@@ -59,8 +57,8 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapWebRoutes()
     {
         Route::middleware('web')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/web.php'));
+            ->namespace($this->namespace)
+            ->group(base_path('routes/web.php'));
     }
 
     /**
@@ -73,22 +71,8 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes()
     {
         Route::prefix('api')
-             ->middleware('api')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/api.php'));
-    }
-
-    /**
-     * Define the "theme" routes for the application.
-     *
-     * These routes are relevant to the Kurozora theming.
-     *
-     * @return void
-     */
-    protected function mapThemeRoutes()
-    {
-        Route::middleware('web')
-            ->namespace($this->webNamespace)
-            ->group(base_path('routes/theme.php'));
+            ->middleware('api')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/api.php'));
     }
 }

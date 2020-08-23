@@ -1,14 +1,17 @@
 @extends('website.layouts.landing')
 
 @section('content')
-    <h1 class="kurozora-title">{{ $animeData['title'] }}</h1>
-    <h2 class="kurozora-under-title">{{ $animeData['episode_count'] }} episodes</h2>
+    <div class="flex flex-col w-full h-full items-center justify-center">
+        <div class="anime-poster" style="background-image: url('{{ $animeData['poster'] ?? asset('img/static/placeholders/anime_poster.jpg') }}')"></div>
 
-    @if($animeData['poster'])
-        <div class="anime-poster" style="background-image: url('{{ $animeData['poster'] }}')"></div>
-    @endif
+        <h1 class="text-white">{{ $animeData['title'] }}</h1>
 
-    <a href="{{ ios_app_url('anime/' . $animeData['id']) }}" class="kurozora-btn">
-        Open in Kurozora App
-    </a>
+        @if($animeData['episode_count'])
+            <h2 class="text-white">{{ $animeData['episode_count'] }} episodes</h2>
+        @endif
+
+        <a href="{{ ios_app_url('anime/' . $animeData['id']) }}" class="k-button">
+            Open in Kurozora App
+        </a>
+    </div>
 @endsection

@@ -12,10 +12,10 @@ class GetExplorePageRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'genre_id' => ['numeric', 'exists:' . Genre::TABLE_NAME . ',id']
+            'genre_id' => ['integer', 'exists:' . Genre::TABLE_NAME . ',id']
         ];
     }
 }

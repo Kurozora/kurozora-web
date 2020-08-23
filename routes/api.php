@@ -5,26 +5,32 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\WebControllers\APIDocumentationController;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['prefix' => 'v1'], function () {
-    Route::get('/', [APIDocumentationController::class, 'render']);
+Route::prefix('/v1')
+    ->name('api.')
+    ->group(function () {
+        Route::get('/', [APIDocumentationController::class, 'render']);
 
-    Route::get('/info', [APIController::class, 'info']);
+        Route::get('/info', [APIController::class, 'info']);
 
-    Route::get('/explore', [ExplorePageController::class, 'explore'])
-        ->middleware('kurozora.userauth:optional');
+        Route::get('/explore', [ExplorePageController::class, 'explore'])
+            ->middleware('kurozora.userauth:optional')
+            ->name('explore');
 
-    Route::get('/privacy-policy', [MiscController::class, 'getPrivacyPolicy']);
+        require 'API/Actors.php';
+        require 'API/Anime.php';
+        require 'API/Anime-Episodes.php';
+        require 'API/Anime-Seasons.php';
+        require 'API/Characters.php';
+        require 'API/Genres.php';
+        require 'API/Feed.php';
+        require 'API/Forum-Replies.php';
+        require 'API/Forum-Sections.php';
+        require 'API/Forum-Threads.php';
+        require 'API/Legal.php';
+        require 'API/Me.php';
+        require 'API/Studios.php';
+        require 'API/Themes.php';
+        require 'API/Users.php';
 
-    require 'API/Users.php';
-    require 'API/Notifications.php';
-    require 'API/Sessions.php';
-    require 'API/Anime.php';
-    require 'API/Anime-Seasons.php';
-    require 'API/Anime-Episodes.php';
-    require 'API/Genres.php';
-    require 'API/Forum-Sections.php';
-    require 'API/Forum-Threads.php';
-    require 'API/Forum-Replies.php';
-    require 'API/Themes.php';
-    require 'API/Feed.php';
-});
+        Route::fallback([APIController::class, 'error']);
+    });

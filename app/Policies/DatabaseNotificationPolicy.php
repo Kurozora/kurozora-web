@@ -17,7 +17,8 @@ class DatabaseNotificationPolicy
      * @param DatabaseNotification $notification
      * @return bool
      */
-    public function get_notification(User $user, DatabaseNotification $notification) {
+    public function get_notification(User $user, DatabaseNotification $notification): bool
+    {
         if(!$this->isUserNotification($notification)) return false;
 
         return $user->id === $notification->notifiable->id;
@@ -30,7 +31,8 @@ class DatabaseNotificationPolicy
      * @param DatabaseNotification $notification
      * @return bool
      */
-    public function del_notification(User $user, DatabaseNotification $notification) {
+    public function del_notification(User $user, DatabaseNotification $notification): bool
+    {
         if(!$this->isUserNotification($notification)) return false;
 
         return $user->id === $notification->notifiable->id;
@@ -42,7 +44,8 @@ class DatabaseNotificationPolicy
      * @param DatabaseNotification $notification
      * @return bool
      */
-    private function isUserNotification($notification) {
-        return $notification->notifiable instanceof \App\User;
+    private function isUserNotification(DatabaseNotification $notification): bool
+    {
+        return $notification->notifiable instanceof User;
     }
 }

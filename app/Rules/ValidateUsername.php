@@ -10,7 +10,7 @@ class ValidateUsername implements Rule
     const MINIMUM_USERNAME_LENGTH = 3;
     const MAXIMUM_USERNAME_LENGTH = 50;
 
-    protected $errorType;
+    protected string $errorType;
 
     /**
      * Determine if the validation rule passes.
@@ -19,7 +19,7 @@ class ValidateUsername implements Rule
      * @param  mixed  $value
      * @return bool
      */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
         // Empty string does not pass
         if(!is_string($value) || !strlen($value)) {
@@ -59,7 +59,7 @@ class ValidateUsername implements Rule
      *
      * @return string
      */
-    public function message()
+    public function message(): string
     {
         if($this->errorType == 'length')
             return trans('validation.between.string', ['min' => self::MINIMUM_USERNAME_LENGTH, 'max' => self::MAXIMUM_USERNAME_LENGTH]);

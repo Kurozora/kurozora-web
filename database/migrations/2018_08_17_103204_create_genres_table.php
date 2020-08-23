@@ -15,14 +15,13 @@ class CreateGenresTable extends Migration
     public function up()
     {
         Schema::create(Genre::TABLE_NAME, function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
-
+            $table->bigIncrements('id');
             $table->string('name');
             $table->string('symbol')->nullable();
             $table->string('color')->default('#ffffff');
             $table->text('description')->nullable();
-            $table->boolean('nsfw')->default(false);
+            $table->boolean('is_nsfw')->default(false);
+            $table->timestamps();
         });
     }
 

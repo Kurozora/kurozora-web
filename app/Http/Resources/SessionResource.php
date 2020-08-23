@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Session;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SessionResource extends JsonResource
@@ -10,32 +11,36 @@ class SessionResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function toArray($request = null)
+    public function toArray($request): array
     {
         /** @var Session $session */
         $session = $this->resource;
 
-        return [
-            'id'                => $session->id,
-            'ip'                => $session->ip,
-            'last_validated_at' => $session->last_validated_at->isoFormat('MMMM Do YYYY, h:mm:ss a'),
-            'platform'          => [
-                'human_readable_format' => $session->humanReadablePlatform(),
-                'platform'          => $session->platform,
-                'platform_version'  => $session->platform_version,
-                'device_vendor'     => $session->device_vendor,
-                'device_model'      => $session->device_model
-            ],
-            'location'          => [
-                'city'          => $session->city,
-                'region'        => $session->region,
-                'country'       => $session->country,
-                'latitude'      => $session->latitude,
-                'longitude'     => $session->longitude,
+        $resource = [
+            'id'            => $session->id,
+            'type'          => 'sessions',
+            'href'          => route('api.me.sessions.details', $session, false),
+            'attributes'    => [
+                'ip'                => $session->ip,
+                'lastValidatedAt'   => $session->last_validated_at->format('Y-m-d H:i:s'),
             ]
         ];
+
+        // Add additional data to the resource
+        $relationships = [
+            'relationships' => [
+                'platform' => [
+                    'data' => PlatformResource::collection([$session])
+                ],
+                'location' => [
+                    'data' => LocationResource::collection([$session])
+                ]
+            ]
+        ];
+
+        return array_merge($resource, $relationships);
     }
 }

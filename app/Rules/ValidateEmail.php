@@ -42,7 +42,7 @@ class ValidateEmail implements Rule
      * @param  mixed  $value
      * @return bool
      */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
         // Empty string does not pass
         if(!is_string($value) || !strlen($value))
@@ -80,7 +80,7 @@ class ValidateEmail implements Rule
      *
      * @return string
      */
-    public function message()
+    public function message(): string
     {
         return $this->error;
     }
@@ -91,7 +91,7 @@ class ValidateEmail implements Rule
      * @param string $error
      * @return bool
      */
-    private function fail($error)
+    private function fail($error): bool
     {
         $this->error = $error;
         return false;

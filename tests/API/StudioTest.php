@@ -1,0 +1,77 @@
+<?php
+
+namespace Tests\API;
+
+use App\Studio;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\TestCase;
+
+class StudioTest extends TestCase
+{
+    use DatabaseMigrations;
+
+    /** @var Studio $studio */
+    protected $studio;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->studio = factory(Studio::class)->create();
+    }
+
+    /**
+     * A user can view specific studio details.
+     *
+     * @return void
+     * @test
+     */
+    public function a_user_can_view_specific_studio_details()
+    {
+        $response = $this->get('/api/v1/studios/'.$this->studio->id);
+
+        // Check whether the response was successful
+        $response->assertSuccessfulAPIResponse();
+
+        // Check whether the studio id in the response is the desired studio's id
+        $this->assertEquals($this->studio->id, $response->json()['data'][0]['id']);
+    }
+
+    /**
+     * A user can view specific studio details including relationships.
+     *
+     * @return void
+     * @test
+     */
+    public function a_user_can_view_specific_studio_details_including_relationships()
+    {
+        $response = $this->get('/api/v1/studios/'.$this->studio->id.'?include=shows');
+
+        // Check whether the response was successful
+        $response->assertSuccessfulAPIResponse();
+
+        // Check whether the studio id in the response is the desired studio's id
+        $this->assertEquals($this->studio->id, $response->json()['data'][0]['id']);
+
+        // Check whether the response includes shows relationship
+        $this->assertArrayHasKey('shows', $response->json()['data'][0]['relationships']);
+    }
+
+
+    /**
+     * A user can view specific studio anime.
+     *
+     * @return void
+     * @test
+     */
+    public function a_user_can_view_specific_studio_anime()
+    {
+        $response = $this->get('/api/v1/studios/'.$this->studio->id.'/anime');
+
+        // Check whether the response was successful
+        $response->assertSuccessfulAPIResponse();
+
+        // Check whether the anime are in the response
+        $this->assertTrue($response->json()['data'] > 0);
+    }
+}

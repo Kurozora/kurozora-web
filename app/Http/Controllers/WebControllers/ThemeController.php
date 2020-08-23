@@ -4,16 +4,19 @@ namespace App\Http\Controllers\WebControllers;
 
 use App\AppTheme;
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\View\View;
 
 class ThemeController extends Controller
 {
     /**
      * Index page of themes.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Application|Factory|View
      */
     function index() {
-        $themes = AppTheme::simplePaginate(8);
+        $themes = AppTheme::paginate(6);
 
         return view('website.themes.index',
             ['themes' => $themes]
@@ -23,10 +26,9 @@ class ThemeController extends Controller
     /**
      * Page to create theme.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Application|Factory|View
      */
     function create() {
         return view('website.themes.create', ['title' => 'Create']);
     }
-
 }

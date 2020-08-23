@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Genre;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class GenreResource extends JsonResource
@@ -9,18 +11,25 @@ class GenreResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
+        /** @var Genre $genre */
+        $genre = $this->resource;
+
         return [
-            'id'            => $this->id,
-            'name'          => $this->name,
-            'color'         => $this->color,
-            'symbol'        => $this->symbol,
-            'description'   => $this->description,
-            'nsfw'          => (bool) $this->nsfw
+            'id'            => $genre->id,
+            'type'          => 'genres',
+            'href'          => route('api.genres.details', $genre, false),
+            'attributes'    => [
+                'name'          => $genre->name,
+                'color'         => $genre->color,
+                'symbol'        => $genre->symbol,
+                'description'   => $genre->description,
+                'isNSFW'        => (bool) $genre->is_nsfw
+            ]
         ];
     }
 }

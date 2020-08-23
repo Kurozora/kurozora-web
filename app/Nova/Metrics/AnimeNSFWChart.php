@@ -16,7 +16,7 @@ class AnimeNSFWChart extends Partition
      */
     public function calculate(NovaRequest $request)
     {
-        return $this->count($request, Anime::class, 'nsfw')
+        return $this->count($request, Anime::class, 'is_nsfw')
             ->label(function ($value) {
                 switch ($value) {
                     case false:

@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Validator;
 
 class ValidateBannerImage implements Rule
 {
-    protected $error;
+    /** @var string $error */
+    protected string $error;
 
     /**
      * Determine if the validation rule passes.
@@ -16,7 +17,7 @@ class ValidateBannerImage implements Rule
      * @param  mixed  $value
      * @return bool
      */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
         $imgValidator = Validator::make([$attribute => $value], [
             $attribute => 'mimes:jpeg,jpg,png|max:1000|nullable',
@@ -34,7 +35,7 @@ class ValidateBannerImage implements Rule
      *
      * @return string
      */
-    public function message()
+    public function message(): string
     {
         return $this->error;
     }

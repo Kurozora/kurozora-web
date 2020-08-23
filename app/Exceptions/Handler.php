@@ -2,13 +2,28 @@
 
 namespace App\Exceptions;
 
+use App\APIError;
 use App\Helpers\JSONResult;
 use Exception;
+use FG\ASN1\Exception\NotImplementedException;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Foundation\Http\Exceptions\MaintenanceModeException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Swift_TransportException;
+use Symfony\Component\Console\Exception\CommandNotFoundException;
+use Symfony\Component\Console\Exception\RuntimeException;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -19,13 +34,13 @@ class Handler extends ExceptionHandler
      */
     protected $dontReport = [
         // Page not found exception
-        \Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class,
+        NotFoundHttpException::class,
         // PHP artisan command not found exception
-        \Symfony\Component\Console\Exception\CommandNotFoundException::class,
+        CommandNotFoundException::class,
         // Access denied exception
-        \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException::class,
+        AccessDeniedHttpException::class,
         // Missing arguments exception
-        \Symfony\Component\Console\Exception\RuntimeException::class,
+        RuntimeException::class,
         // Swift Mailer too many mails exception
         Swift_TransportException::class
     ];
@@ -43,11 +58,12 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Exception $exception
+     * @param Throwable $exception
      * @return void
-     * @throws \Throwable
+     *
+     * @throws Exception
      */
-    public function report(Exception $exception)
+    public function report(Throwable $exception): void
     {
         parent::report($exception);
     }
@@ -55,24 +71,80 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Exception $exception
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @throws Exception
+     * @param Request $request
+     * @param Throwable $exception
+     * @return Response
+     *
+     * @throws Throwable
      */
-    public function render($request, Exception $exception)
+    public function render($request, Throwable $exception): Response
     {
-        // Custom render for unauthorized
-        if($exception instanceof AuthorizationException) {
-            return JSONResult::error('You are not permitted to do this.', [
-                'error_code' => 9028123
-            ]);
-        }
-        // Custom render for maintenance mode
-        else if($exception instanceof MaintenanceModeException) {
-            return JSONResult::error($exception->getMessage(), [
-                'error_code' => 17281627
-            ]);
+        if(strpos($request->path(), 'api') === 0) {
+            // Custom render for authentication
+            if ($exception instanceof AuthenticationException) {
+                $apiError = new APIError();
+                $apiError->id = 40001;
+                $apiError->status = 401;
+                $apiError->title = 'Unauthorized';
+                $apiError->detail = $exception->getMessage();
+                return JSONResult::error([$apiError]);
+            } // Custom render for unauthorized
+            else if ($exception instanceof AuthorizationException) {
+                $apiError = new APIError();
+                $apiError->id = 40003;
+                $apiError->status = 403;
+                $apiError->title = 'Forbidden';
+                $apiError->detail = $exception->getMessage();
+                return JSONResult::error([$apiError]);
+            } // Custom render for model not found
+            else if ($exception instanceof ModelNotFoundException) {
+                $apiError = new APIError();
+                $apiError->id = 40004;
+                $apiError->status = 404;
+                $apiError->title = 'Not Found';
+                $apiError->detail = 'The requested resource doesn’t exist.';
+                return JSONResult::error([$apiError]);
+            } // Custom render for conflict
+            else if ($exception instanceof ConflictHttpException) {
+                $apiError = new APIError();
+                $apiError->id = 40009;
+                $apiError->status = 409;
+                $apiError->title = 'Conflict';
+                $apiError->detail = $exception->getMessage();
+                return JSONResult::error([$apiError]);
+            } // Custom render for too many request
+            else if ($exception instanceof TooManyRequestsHttpException) {
+                $apiError = new APIError();
+                $apiError->id = 40029;
+                $apiError->status = 429;
+                $apiError->title = 'Too Many Requests';
+                $apiError->detail = $exception->getMessage();
+                return JSONResult::error([$apiError]);
+            } // Custom render for not implemented
+            else if ($exception instanceof NotImplementedException) {
+                $apiError = new APIError();
+                $apiError->id = 50001;
+                $apiError->status = 501;
+                $apiError->title = 'Not Implemented';
+                $apiError->detail = $exception->getMessage();
+                return JSONResult::error([$apiError]);
+            } // Custom render for service unavailable
+            else if ($exception instanceof ServiceUnavailableHttpException) {
+                $apiError = new APIError();
+                $apiError->id = 50003;
+                $apiError->status = 503;
+                $apiError->title = 'Service Unavailable';
+                $apiError->detail = $exception->getMessage();
+                return JSONResult::error([$apiError]);
+            } // Custom render for maintenance mode
+            else if ($exception instanceof MaintenanceModeException) {
+                $apiError = new APIError();
+                $apiError->id = 50003;
+                $apiError->status = 503;
+                $apiError->title = 'Service Unavailable';
+                $apiError->detail = 'The service is currently unavailable to process requests.';
+                return JSONResult::error([$apiError]);
+            }
         }
 
         return parent::render($request, $exception);
@@ -81,14 +153,23 @@ class Handler extends ExceptionHandler
     /**
      * Convert a validation exception into a JSON response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Validation\ValidationException  $exception
-     * @return \Illuminate\Http\JsonResponse
+     * @param  Request $request
+     * @param ValidationException $exception
+     * @return JsonResponse
      */
-    protected function invalidJson($request, ValidationException $exception)
+    protected function invalidJson($request, ValidationException $exception): JsonResponse
     {
-        return JSONResult::error($exception->validator->errors()->first(), [
-            'error_code' => 567
-        ]);
+        $apiErrors = [];
+        $errors = $exception->validator->errors()->all();
+        foreach ($errors as $error) {
+            $apiError = new APIError();
+            $apiError->id = 40022;
+            $apiError->status = 422;
+            $apiError->title = 'Unprocessable Entity';
+            $apiError->detail = $error;
+            array_push($apiErrors, $apiError);
+        }
+
+        return JSONResult::error($apiErrors);
     }
 }

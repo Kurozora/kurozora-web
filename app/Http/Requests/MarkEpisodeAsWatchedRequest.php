@@ -12,8 +12,9 @@ class MarkEpisodeAsWatchedRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
+        /** @var AnimeEpisode $episode */
         $episode = $this->route('episode');
 
         return $this->user()->can('mark_as_watched', $episode);
@@ -24,10 +25,8 @@ class MarkEpisodeAsWatchedRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
-        return [
-            'watched' => ['bail', 'required', 'numeric', 'in:-1,1']
-        ];
+        return [];
     }
 }

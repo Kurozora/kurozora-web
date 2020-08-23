@@ -2,17 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\AnimeEpisode;
 use App\AnimeSeason;
 use App\Helpers\JSONResult;
 use App\Http\Resources\AnimeEpisodeResource;
 use App\Http\Resources\AnimeSeasonResource;
-use App\UserWatchedEpisode;
-use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class AnimeSeasonController extends Controller
 {
@@ -22,9 +16,10 @@ class AnimeSeasonController extends Controller
      * @param AnimeSeason $season
      * @return JsonResponse
      */
-    public function details(AnimeSeason $season) {
+    public function details(AnimeSeason $season): JsonResponse
+    {
         return JSONResult::success([
-            'season' => AnimeSeasonResource::make($season)
+            'data' => AnimeSeasonResource::collection([$season])
         ]);
     }
 
@@ -33,14 +28,14 @@ class AnimeSeasonController extends Controller
      *
      * @param AnimeSeason $season
      * @return JsonResponse
-     * @throws \Exception
      */
-    public function episodes(AnimeSeason $season) {
+    public function episodes(AnimeSeason $season): JsonResponse
+    {
         // Get the episodes
         $episodes = $season->getEpisodes();
 
         return JSONResult::success([
-            'episodes'  => AnimeEpisodeResource::collection($episodes)
+            'data'  => AnimeEpisodeResource::collection($episodes)
         ]);
     }
 }

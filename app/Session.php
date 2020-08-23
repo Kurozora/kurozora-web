@@ -5,6 +5,7 @@ namespace App;
 use App\Rules\ValidatePlatformName;
 use App\Rules\ValidatePlatformVersion;
 use App\Rules\ValidateVendorName;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Session extends KModel
 {
@@ -28,9 +29,9 @@ class Session extends KModel
     /**
      * Returns the user that owns the session.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    function user()
+    function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
@@ -41,7 +42,7 @@ class Session extends KModel
      *
      * @return bool
      */
-    public function isExpired()
+    public function isExpired(): bool
     {
         return $this->expires_at <= now();
     }
@@ -51,7 +52,7 @@ class Session extends KModel
      *
      * @return string
      */
-    function humanReadablePlatform()
+    function humanReadablePlatform(): string
     {
         if($this->device_model == null ||
             $this->platform == null ||
@@ -66,7 +67,7 @@ class Session extends KModel
      *
      * @return array
      */
-    static function platformRules()
+    static function platformRules(): array
     {
         return [
             'platform'          => ['bail', 'required', new ValidatePlatformName],

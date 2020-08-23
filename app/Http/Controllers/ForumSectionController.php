@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ForumOrderType;
 use App\ForumSection;
 use App\ForumSectionBan;
 use App\ForumThread;
 use App\Helpers\JSONResult;
+use App\Http\Requests\GetThreadsRequest;
 use App\Http\Requests\PostThread;
 use App\Http\Resources\ForumSectionResource;
 use App\Http\Resources\ForumThreadResource;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class ForumSectionController extends Controller
 {
@@ -21,11 +23,12 @@ class ForumSectionController extends Controller
      *
      * @return JsonResponse
      */
-    public function overview() {
+    public function overview(): JsonResponse
+    {
         $sections = ForumSection::all();
 
         return JSONResult::success([
-            'sections' => ForumSectionResource::collection($sections)
+            'data' => ForumSectionResource::collection($sections)
         ]);
     }
 
@@ -35,47 +38,64 @@ class ForumSectionController extends Controller
      * @param ForumSection $section
      * @return JsonResponse
      */
-    public function details(ForumSection $section) {
+    public function details(ForumSection $section): JsonResponse
+    {
         return JSONResult::success([
-            'section' => ForumSectionResource::make($section)
+            'data' => ForumSectionResource::collection([$section])
         ]);
     }
 
     /**
      * Returns the threads of a section.
      *
-     * @param Request $request
+     * @param GetThreadsRequest $request
      * @param ForumSection $section
      * @return JsonResponse
      */
-    public function threads(Request $request, ForumSection $section) {
-        // Validate the inputs
-        $validator = Validator::make($request->all(), [
-            'order'         => 'bail|required|in:top,recent'
-        ]);
-
+    public function threads(GetThreadsRequest $request, ForumSection $section): JsonResponse
+    {
         // Fetch the variables
         $givenOrder = $request->input('order');
 
-        // Check validator
-        if($validator->fails())
-            return JSONResult::error($validator->errors()->first());
-
         // Get the threads
+        /** @var ForumThread $threads */
         $threads = $section->forum_threads();
+        $forumOrder = ForumOrderType::fromValue($givenOrder);
 
-        if($givenOrder == 'recent')
-            $threads = $threads->orderBy('created_at', 'DESC');
-        else if($givenOrder == 'top')
-            $threads = $threads->orderByLikesCount();
+        switch ($forumOrder) {
+            case ForumOrderType::Best:
+                $threads->joinReactionTotal()
+                        ->orderBy('reaction_total_weight', 'desc');
+                break;
+            case ForumOrderType::Top:
+                $threads->joinReactionCounterOfType('Like')
+                        ->orderBy('reaction_like_count', 'desc');
+                break;
+            case ForumOrderType::New:
+                $threads->orderBy('created_at', 'desc');
+                break;
+            case ForumOrderType::Old:
+                $threads->orderBy('created_at', 'asc');
+                break;
+            case ForumOrderType::Poor:
+                $threads->joinReactionCounterOfType('Like')
+                        ->orderBy('reaction_like_count', 'asc');
+                break;
+            case ForumOrderType::Controversial:
+                $threads->joinReactionTotal()
+                        ->orderBy('reaction_total_weight', 'asc');
+                break;
+        }
 
-        $threads = $threads->paginate(ForumSection::THREADS_PER_PAGE);
+        $threads = $threads->paginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $threads->nextPageUrl());
 
         // Show threads in response
         return JSONResult::success([
-            'page'          => $threads->currentPage(),
-            'last_page'     => $threads->lastPage(),
-            'threads'       => ForumThreadResource::collection($threads)
+            'data' => ForumThreadResource::collection($threads),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 
@@ -85,19 +105,22 @@ class ForumSectionController extends Controller
      * @param PostThread $request
      * @param ForumSection $section
      * @return JsonResponse
+     * @throws AuthorizationException
+     * @throws TooManyRequestsHttpException
      */
-    public function postThread(PostThread $request, ForumSection $section) {
+    public function postThread(PostThread $request, ForumSection $section): JsonResponse
+    {
         $data = $request->validated();
 
         // Check if the user is banned
         $foundBan = ForumSectionBan::getBanInfo(Auth::id(), $section->id);
 
         if($foundBan !== null)
-            return JSONResult::error($foundBan['message']);
+            throw new AuthorizationException($foundBan['message']);
 
         // Check if the user has already posted within the cooldown period
         if(ForumThread::testPostCooldown(Auth::id()))
-            return JSONResult::error('You can only post a thread once every minute.');
+            throw new TooManyRequestsHttpException(60, 'You can only post a thread once every minute.');
 
         // Create the thread
         $newThread = ForumThread::create([
@@ -109,7 +132,7 @@ class ForumSectionController extends Controller
         ]);
 
         return JSONResult::success([
-            'thread_id' => $newThread->id
+            'data' => ForumThreadResource::collection([$newThread])
         ]);
     }
 }
