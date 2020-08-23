@@ -5,9 +5,10 @@ namespace App\Http\Requests;
 use App\Rules\ValidateAvatarImage;
 use App\Rules\ValidateBannerImage;
 use App\Rules\ValidateUserBiography;
+use App\Rules\ValidateUsername;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateProfile extends FormRequest
+class UpdateProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,6 +28,7 @@ class UpdateProfile extends FormRequest
     public function rules(): array
     {
         return [
+            'username'      => ['bail', new ValidateUsername],
             'profileImage'  => ['bail', new ValidateAvatarImage],
             'bannerImage'   => ['bail', new ValidateBannerImage],
             'biography'     => ['bail', new ValidateUserBiography]

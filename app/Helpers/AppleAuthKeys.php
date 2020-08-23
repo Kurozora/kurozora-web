@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use CoderCat\JWKToPEM\JWKConverter;
+use Exception;
 use Illuminate\Support\Facades\Cache;
 
 class AppleAuthKeys
@@ -31,7 +32,7 @@ class AppleAuthKeys
             foreach ($jwk->keys as $appleKey) {
                 try {
                     $keys[] = $jwkConverter->toPem((array)$appleKey);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     return [];
                 }
             }

@@ -12,7 +12,6 @@ use App\Traits\MediaLibraryExtensionTrait;
 use Carbon\Carbon;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
 use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\Access\Authorizable;
@@ -130,24 +129,6 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
         }
 
         return UserActivityStatus::Offline();
-    }
-
-    /**
-     * Finds the user with the given SIWA details.
-     * e.g. User::findSIWA($id, $email);
-     *
-     * @param Builder $query
-     * @param string $siwaID
-     * @param string $email
-     * @return User|null
-     */
-    public function scopeFindSIWA(Builder $query, string $siwaID, string $email)
-    {
-        /** @var User $user */
-        $user = $query->where('email', $email)
-            ->where('siwa_id', $siwaID);
-
-        return $user;
     }
 
     /**
