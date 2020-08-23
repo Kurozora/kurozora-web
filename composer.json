@@ -93,11 +93,6 @@
             "@php artisan ide-helper:generate",
             "@php artisan ide-helper:models -N",
             "@php artisan ide-helper:meta"
-        ],
-        "ide": [
-            "@php artisan ide-helper:generate",
-            "@php artisan ide-helper:models -N",
-            "@php artisan ide-helper:meta"
         ]
     },
     "config": {
