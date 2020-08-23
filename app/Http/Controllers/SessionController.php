@@ -60,10 +60,10 @@ class SessionController extends Controller
         ]);
 
         return JSONResult::success([
-            'data'      => [
+            'data'                  => [
                 UserResource::make($user)->includingSession($session)
             ],
-            'authToken' => KuroAuthToken::generate($user->id, $session->secret)
+            'authenticationToken'   => KuroAuthToken::generate($user->id, $session->secret)
         ]);
     }
 
