@@ -16,6 +16,7 @@ use App\Http\Resources\UserResourceBasic;
 use App\Session;
 use App\User;
 use Auth;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -36,10 +37,10 @@ class MeController extends Controller
         $session = Session::find($sessionID);
 
         return JSONResult::success([
-            'data'      => [
+            'data'                  => [
                 UserResource::make($session->user)->includingSession($session)
             ],
-            'authToken' => KuroAuthToken::generate($session->user->id, $session->secret)
+            'authenticationToken'   => KuroAuthToken::generate($session->user->id, $session->secret)
         ]);
     }
 
@@ -48,6 +49,7 @@ class MeController extends Controller
      *
      * @param UpdateProfile $request
      * @return JsonResponse
+     * @throws AuthorizationException
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
@@ -60,6 +62,15 @@ class MeController extends Controller
 
         // Track if anything changed
         $changedFields = [];
+
+        // Update username
+        if($request->has('username')) {
+            if(!$user->username_change_available)
+                throw new AuthorizationException('The request wasn’t accepted due to not being allowed to change the username.');
+
+            $user->username = $data['username'];
+            $changedFields[] = 'username';
+        }
 
         // Update biography
         if($request->has('biography')) {

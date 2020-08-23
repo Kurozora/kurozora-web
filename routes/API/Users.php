@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Auth\SignInWithAppleController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/users')
     ->name('users.')
     ->group(function() {
-        Route::post('/', [RegistrationController::class, 'signup']);
+        Route::post('/', [RegistrationController::class, 'signUp']);
 
         Route::post('/signin', [SessionController::class, 'create']);
 
-        Route::post('/signup/siwa', [SignInWithAppleController::class, 'signup']);
-
-        Route::post('/signin/siwa', [SignInWithAppleController::class, 'signin']);
+        Route::post('/signin/siwa', [SignInWithAppleController::class, 'signIn']);
 
         Route::post('/reset-password', [UserController::class, 'resetPassword']);
 

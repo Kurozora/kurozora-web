@@ -23,7 +23,7 @@ class RegistrationController extends Controller
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
-    public function signup(Registration $request): JsonResponse
+    public function signUp(Registration $request): JsonResponse
     {
         $data = $request->validated();
 

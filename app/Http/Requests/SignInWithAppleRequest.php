@@ -2,12 +2,21 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\ValidateEmail;
 use App\Session;
 use Illuminate\Foundation\Http\FormRequest;
 
-class SIWARegistration extends FormRequest
+class SignInWithAppleRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -16,8 +25,7 @@ class SIWARegistration extends FormRequest
     public function rules(): array
     {
         return array_merge([
-            'email'     => ['bail', 'required', new ValidateEmail(['must-be-available' => true])],
-            'siwa_id'   => ['bail', 'required', 'string', 'min:1', 'max:200']
+            'token' => ['required', 'string']
         ], Session::platformRules());
     }
 }
