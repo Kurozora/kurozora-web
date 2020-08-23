@@ -8,7 +8,7 @@ use App\Http\Requests\GetAnimeFavoritesRequest;
 use App\Http\Requests\GetFollowersRequest;
 use App\Http\Requests\GetFollowingRequest;
 use App\Http\Requests\GetSessionsRequest;
-use App\Http\Requests\UpdateProfile;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Http\Resources\SessionResource;
 use App\Http\Resources\UserResource;
@@ -47,13 +47,13 @@ class MeController extends Controller
     /**
      * Update profile information.
      *
-     * @param UpdateProfile $request
+     * @param UpdateProfileRequest $request
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
-    public function updateProfile(UpdateProfile $request): JsonResponse
+    public function updateProfile(UpdateProfileRequest $request): JsonResponse
     {
         $data = $request->validated();
 

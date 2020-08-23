@@ -8,7 +8,7 @@ use App\Rules\ValidateUserBiography;
 use App\Rules\ValidateUsername;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateProfile extends FormRequest
+class UpdateProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
