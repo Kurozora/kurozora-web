@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
+use App\Http\Requests\GetFeedMessagesRequest;
 use App\Http\Requests\ResetPassword;
 use App\Http\Requests\SearchUserRequest;
+use App\Http\Resources\FeedMessageResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceBasic;
 use App\Jobs\SendNewPasswordMail;
@@ -32,6 +34,27 @@ class UserController extends Controller
         // Show profile response
         return JSONResult::success([
             'data' => UserResource::collection([$user])
+        ]);
+    }
+
+    /**
+     * Returns the feed messages for a user.
+     *
+     * @param GetFeedMessagesRequest $request
+     * @param User $user
+     * @return JsonResponse
+     */
+    public function getFeedMessages(GetFeedMessagesRequest $request, User $user): JsonResponse
+    {
+        // Get the feed messages
+        $feedMessages = $user->feedMessages()->paginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $feedMessages->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => FeedMessageResource::collection($feedMessages),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 

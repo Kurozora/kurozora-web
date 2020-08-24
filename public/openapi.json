@@ -847,7 +847,7 @@
       }
     },
     "/feed": {
-      "post":{
+      "post": {
         "security":[
           {
             "kurozoraBearer":[
@@ -858,64 +858,51 @@
         "tags":[
           "feed"
         ],
+        "operationId": "postFeed",
         "summary":"Creates a new message on the feed.",
         "description":"This endpoint will create a new message on the feed.",
-        "requestBody":{
-          "content":{
-            "application/x-www-form-urlencoded":{
-              "schema":{
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
                 "type":"object",
-                "properties":{
-                  "body":{
+                "properties": {
+                  "body": {
                     "type":"string",
                     "description":"Text in the feed message."
                   },
-                  "in_reply_to":{
+                  "parent_id": {
                     "type":"integer",
-                    "description":"ID of the feed message the user is replying to."
+                    "description":"ID of the feed message the user is replying to. Omit if not a reply.",
+                    "nullable": false
+                  },
+                  "is_nsfw": {
+                    "$ref": "#/components/schemas/NSFWStatus"
+                  },
+                  "is_spoiler": {
+                    "$ref": "#/components/schemas/SpoilerStatus"
                   }
                 },
                 "required":[
-                  "body"
+                  "body",
+                  "is_nsfw",
+                  "is_spoiler"
                 ]
               }
             }
           }
         },
-        "responses":{
-          "200":{
+        "responses": {
+          "200": {
             "$ref":"#/components/responses/JSONSuccess"
           },
-          "400":{
+          "400": {
             "$ref":"#/components/responses/JSONError"
           }
         }
       }
     },
-    "/feed/personal": {
-      "get": {
-        "security": [
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "feed"
-        ],
-        "summary": "Get the user's personal feed",
-        "description": "This endpoint will retrieve the user's personal feed.",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/feed/global": {
+    "/feed/explore": {
       "get": {
         "security": [
           {
@@ -929,8 +916,153 @@
         "tags": [
           "feed"
         ],
-        "summary": "(optional authentication) Get the global feed",
-        "description": "This endpoint will retrieve the global feed.",
+        "operationId": "getFeedExplore",
+        "summary": "(optional authentication) Explore feed posts.",
+        "description": "This endpoint will retrieve the an unpersonalised feed.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/feed/home": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "feed"
+        ],
+        "operationId": "getFeedHome",
+        "summary": "Get the user's personal feed",
+        "description": "This endpoint will retrieve the authenticated user's personal feed.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/feed/messages/{messageID}": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "feed"
+        ],
+        "operationId": "getFeedMessagesDetails",
+        "summary": "Get the feed message's details",
+        "description": "This endpoint will retrieve a feed message's details.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "messageID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the message."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/feed/messages/{messageID}/heart": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "feed"
+        ],
+        "operationId": "postFeedMessagesHeart",
+        "summary": "Heart or un-heart a feed message.",
+        "description": "This endpoint will heart or un-heart a feed message.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "messageID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the message."
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSONSuccess"
@@ -1493,6 +1625,10 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "The new username to set. Send only if user is allowed to change username."
+                  },
                   "biography": {
                     "type": "string",
                     "description": "The new biography to set. Send <strong>null</strong> to remove."
@@ -1600,6 +1736,54 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/me/feed-messages": {
+      "get": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "me"
+        ],
+        "operationId": "getMeFeedMessages",
+        "summary": "Get feed messages.",
+        "description": "This endpoint will retrieve the authenticated user's feed messages.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSONSuccess"
@@ -2616,16 +2800,16 @@
         "tags": [
           "users"
         ],
-        "operationId": "postLoginSiwA",
-        "summary": "Log a user in via SIWA (sign in with Apple)",
-        "description": "This endpoint will log a user in using Sign in with Apple.",
+        "operationId": "postSignInSiwA",
+        "summary": "Sign in or sign up a user.",
+        "description": "This endpoint will sign in or sign up a user using Sign in with Apple.",
         "requestBody": {
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "identity_token": {
+                  "token": {
                     "type": "string",
                     "description": "The identity token (JWT) as provided by Apple"
                   },
@@ -2651,72 +2835,7 @@
                   }
                 },
                 "required": [
-                  "identity_token",
-                  "platform",
-                  "platform_version",
-                  "device_vendor",
-                  "device_model"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/users/signup/siwa": {
-      "post": {
-        "tags": [
-          "users"
-        ],
-        "operationId": "postSignupSiwA",
-        "summary": "Sign up a new user (sign in with Apple)",
-        "description": "This endpoint will create a new user using Sign in with Apple.",
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "description": "The new user's email"
-                  },
-                  "siwa_id": {
-                    "type": "string",
-                    "description": "The new user's SIWA ID"
-                  },
-                  "platform": {
-                    "type": "string",
-                    "description": "The platform that was used to create the session",
-                    "example": "iOS"
-                  },
-                  "platform_version": {
-                    "type": "string",
-                    "description": "The platform version that was used to create the session",
-                    "example": "13.4"
-                  },
-                  "device_vendor": {
-                    "type": "string",
-                    "description": "The device vendor that was used to create the session",
-                    "example": "Apple"
-                  },
-                  "device_model": {
-                    "type": "string",
-                    "description": "The device model that was used to create the session",
-                    "example": "iPhone 11 Pro Max"
-                  }
-                },
-                "required": [
-                  "email",
-                  "siwa_id",
+                  "token",
                   "platform",
                   "platform_version",
                   "device_vendor",
@@ -2786,6 +2905,65 @@
         "operationId": "getUsersFavoriteAnime",
         "summary": "Get an overview of the user's favorite Anime",
         "description": "This endpoint will retrieve the list of Anime in the user's favorites list.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the user."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/users/{userID}/feed-messages": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "users"
+        ],
+        "operationId": "getUsersFeedMessages",
+        "summary": "Get feed messages.",
+        "description": "This endpoint will retrieve the user's feed messages.",
         "parameters": [
           {
             "in": "path",
@@ -3141,6 +3319,24 @@
         ],
         "default": 1,
         "description": "The notification read status used to mark a notification as read or unread.\n- 0 = unread\n- 1 = read"
+      },
+      "NSFWStatus": {
+        "type": "integer",
+        "enum": [
+          0,
+          1
+        ],
+        "default": 0,
+        "description": "Whether the message contains NSFW material.\n- 0 = no NSFW\n- 1 = NSFW"
+      },
+      "SpoilerStatus": {
+        "type": "integer",
+        "enum": [
+          0,
+          1
+        ],
+        "default": 0,
+        "description": "Whether the message contains spoiler material.\n- 0 = no spoiler\n- 1 = spoiler"
       },
       "VoteType": {
         "type": "integer",
