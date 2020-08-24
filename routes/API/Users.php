@@ -16,6 +16,13 @@ Route::prefix('/users')
 
         Route::post('/reset-password', [UserController::class, 'resetPassword']);
 
+        Route::get('/{user}/favorite-anime', [FavoriteAnimeController::class, 'getFavorites'])
+            ->middleware('kurozora.userauth')
+            ->middleware('can:get_anime_favorites,user');
+
+        Route::get('/{user}/feed-messages', [UserController::class, 'getFeedMessages'])
+            ->middleware('kurozora.userauth:optional');
+
         Route::post('/{user}/follow', [FollowingController::class, 'followUser'])
             ->middleware('kurozora.userauth')
             ->middleware('can:follow,user');
@@ -25,10 +32,6 @@ Route::prefix('/users')
 
         Route::get('/{user}/following', [FollowingController::class, 'getFollowing'])
             ->middleware('kurozora.userauth:optional');
-
-        Route::get('/{user}/favorite-anime', [FavoriteAnimeController::class, 'getFavorites'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:get_anime_favorites,user');
 
         Route::get('/{user}/profile', [UserController::class, 'profile'])
             ->middleware('kurozora.userauth:optional')

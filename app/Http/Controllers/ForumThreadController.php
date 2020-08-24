@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ForumOrderType;
-use App\Enums\VoteType;
+use App\Enums\ForumsVoteType;
 use App\ForumReply;
 use App\ForumSectionBan;
 use App\ForumThread;
@@ -50,7 +50,7 @@ class ForumThreadController extends Controller
         $user = Auth::user();
 
         // Get the vote
-        $voteType = VoteType::fromValue((int) $request->input('vote'));
+        $voteType = ForumsVoteType::fromValue((int) $request->input('vote'));
         $voteAction = $user->toggleVote($thread, $voteType);
 
         // Show successful response

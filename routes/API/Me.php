@@ -20,6 +20,7 @@ Route::prefix('/me')
             ->middleware('kurozora.userauth:optional');
 
         require 'Me/Favorite-Anime.php';
+        require 'Me/Feed-Messages.php';
         require 'Me/Library.php';
         require 'Me/Notifications.php';
         require 'Me/Reminder-Anime.php';

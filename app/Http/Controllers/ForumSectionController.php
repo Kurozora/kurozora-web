@@ -8,7 +8,7 @@ use App\ForumSectionBan;
 use App\ForumThread;
 use App\Helpers\JSONResult;
 use App\Http\Requests\GetThreadsRequest;
-use App\Http\Requests\PostThread;
+use App\Http\Requests\PostThreadRequest;
 use App\Http\Resources\ForumSectionResource;
 use App\Http\Resources\ForumThreadResource;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -102,13 +102,13 @@ class ForumSectionController extends Controller
     /**
      * Allows the user to submit a new thread
      *
-     * @param PostThread $request
+     * @param PostThreadRequest $request
      * @param ForumSection $section
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws TooManyRequestsHttpException
      */
-    public function postThread(PostThread $request, ForumSection $section): JsonResponse
+    public function postThread(PostThreadRequest $request, ForumSection $section): JsonResponse
     {
         $data = $request->validated();
 
