@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Enums\VoteType;
+use App\Enums\ForumsVoteType;
 use App\ForumThread;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Http\Request;
@@ -24,8 +24,8 @@ class ForumThreadResource extends JsonResource
         $forumThread = $this->resource;
 
         $totalReactions = $forumThread->viaLoveReactant()->getReactionTotal();
-        $totalLikes = $forumThread->viaLoveReactant()->getReactionCounterOfType(VoteType::Like()->description);
-        $totalDislikes = $forumThread->viaLoveReactant()->getReactionCounterOfType(VoteType::Dislike()->description);
+        $totalLikes = $forumThread->viaLoveReactant()->getReactionCounterOfType(ForumsVoteType::Like()->description);
+        $totalDislikes = $forumThread->viaLoveReactant()->getReactionCounterOfType(ForumsVoteType::Dislike()->description);
 
         $resource = [
             'id'            => $forumThread->id,
