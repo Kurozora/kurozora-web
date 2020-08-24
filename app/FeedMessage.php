@@ -2,10 +2,16 @@
 
 namespace App;
 
+use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
+use Cog\Laravel\Love\Reactable\Models\Traits\Reactable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class FeedMessage extends KModel
+class FeedMessage extends KModel implements ReactableContract
 {
+    use Reactable;
+
     // Table name
     const TABLE_NAME = 'feed_messages';
     protected $table = self::TABLE_NAME;
@@ -18,7 +24,7 @@ class FeedMessage extends KModel
      *
      * @return bool
      */
-    function isReply()
+    function isReply(): bool
     {
         return $this->parent_feed_message_id !== null;
     }
@@ -26,7 +32,7 @@ class FeedMessage extends KModel
     /**
      * Returns the user that posted the feed message.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     function user()
     {
@@ -36,7 +42,7 @@ class FeedMessage extends KModel
     /**
      * Returns all the feed messages that reply to this one.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function replies()
     {

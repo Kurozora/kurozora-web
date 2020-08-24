@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use App\Enums\VoteType;
+use App\Enums\ForumsVoteType;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Cog\Contracts\Love\Reactable\Models\Reactable;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable;
@@ -25,7 +25,7 @@ trait VoteActionTrait {
         $reacter = $reactant->viaLoveReacter();
 
         foreach($reacter->getReactions() as $reaction)
-            return VoteType::fromKey($reaction->type->name)->value;
+            return ForumsVoteType::fromKey($reaction->type->name)->value;
 
         return 0;
     }
@@ -34,10 +34,10 @@ trait VoteActionTrait {
      * Toggles the vote between 'Like' and 'Dislike' or removes the vote if it already exists.
      *
      * @param Reactable $reactable The object to react on.
-     * @param VoteType $voteType The vote to be applied on the given Reactable object.
+     * @param ForumsVoteType $voteType The vote to be applied on the given Reactable object.
      * @return int the current state of the VoteType on the given Reactable object.
      */
-    public function toggleVote(Reactable $reactable, VoteType $voteType): int
+    public function toggleVote(Reactable $reactable, ForumsVoteType $voteType): int
     {
         /** @var Reacterable $reactant */
         $reactant = $this;
@@ -56,7 +56,7 @@ trait VoteActionTrait {
         }
 
         switch ($voteType->value) {
-            case VoteType::Like:
+            case ForumsVoteType::Like:
                 $reacter->reactTo($reactable, $voteTypeDescription);
                 return 1;
             default:

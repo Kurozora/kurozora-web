@@ -6,43 +6,39 @@ use BenSampo\Enum\Enum;
 use \Cog\Laravel\Love\ReactionType\Models\ReactionType as ReactionType;
 
 /**
- * @method static VoteType Dislike()
- * @method static VoteType Like()
+ * @method static ForumsVoteType Dislike()
+ * @method static ForumsVoteType Like()
  */
-final class VoteType extends Enum
+final class ForumsVoteType extends Enum
 {
     const Dislike   = -1;
     const Like      = 1;
 
     /**
-     * Returns the next VoteType type.
+     * Returns the next ForumsVoteType type.
      *
-     * @return VoteType
+     * @return ForumsVoteType
      */
-    public function next(): VoteType {
+    public function next(): ForumsVoteType {
         switch($this) {
             case self::Dislike():
                 return self::Like();
-                break;
             default:
                 return self::Dislike();
-                break;
         }
     }
 
     /**
-     * Returns the previous VoteType type.
+     * Returns the previous ForumsVoteType type.
      *
-     * @return VoteType
+     * @return ForumsVoteType
      */
-    public function previous(): VoteType {
+    public function previous(): ForumsVoteType {
         switch($this) {
             case self::Like():
                 return self::Dislike();
-                break;
             default:
                 return self::Like();
-                break;
         }
     }
 }

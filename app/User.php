@@ -6,6 +6,7 @@ use App\Enums\UserActivityStatus;
 use App\Helpers\OptionsBag;
 use App\Jobs\FetchSessionLocation;
 use App\Notifications\NewSession;
+use App\Traits\HeartActionTrait;
 use App\Traits\KuroSearchTrait;
 use App\Traits\VoteActionTrait;
 use App\Traits\MediaLibraryExtensionTrait;
@@ -33,15 +34,16 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements ReacterableContract, HasMedia
 {
-    use Notifiable,
-        Authorizable,
-        KuroSearchTrait,
-        Reacterable,
-        VoteActionTrait,
+    use Authorizable,
+        HasRoles,
+        HeartActionTrait,
         InteractsWithMedia,
-        MediaLibraryExtensionTrait,
+        KuroSearchTrait,
         LogsActivity,
-        HasRoles;
+        MediaLibraryExtensionTrait,
+        Notifiable,
+        Reacterable,
+        VoteActionTrait;
 
     // Maximum amount of returned search results
     const MAX_SEARCH_RESULTS = 10;
@@ -64,6 +66,9 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
     // Cache user's reputation count
     const CACHE_KEY_REPUTATION_COUNT = 'user-reputation-%d';
     const CACHE_KEY_REPUTATION_COUNT_SECONDS = 10 * 60;
+
+    // User biography character limited
+    const BIOGRAPHY_LIMIT = 250;
 
     // Table name
     const TABLE_NAME = 'users';
@@ -101,13 +106,10 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
         ]
     ];
 
-    // User biography character limited
-    const BIOGRAPHY_LIMIT = 250;
-
     /**
      * Returns the associated feed messages for the user.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     function feedMessages()
     {

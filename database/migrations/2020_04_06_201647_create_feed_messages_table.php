@@ -17,15 +17,20 @@ class CreateFeedMessagesTable extends Migration
     {
         Schema::create(FeedMessage::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamps();
-
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
-
-            $table->bigInteger('parent_feed_message_id')->unsigned()->nullable();
-            $table->foreign('parent_feed_message_id')->references('id')->on(FeedMessage::TABLE_NAME)->onDelete('cascade');
-
+            $table->unsignedBigInteger('love_reactant_id')->nullable();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('parent_feed_message_id')->nullable();
             $table->string('body', FeedMessage::MAX_BODY_LENGTH);
+            $table->boolean('is_nsfw')->default(false);
+            $table->boolean('is_spoiler')->default(false);
+            $table->timestamps();
+        });
+
+        Schema::table(FeedMessage::TABLE_NAME, function (Blueprint $table) {
+            // Set foreign key constraints
+            $table->foreign('love_reactant_id')->references('id')->on('love_reactants');
+            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('parent_feed_message_id')->references('id')->on(FeedMessage::TABLE_NAME)->onDelete('cascade');
         });
     }
 
