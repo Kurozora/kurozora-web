@@ -876,6 +876,12 @@
                     "description":"ID of the feed message the user is replying to. Omit if not a reply.",
                     "nullable": false
                   },
+                  "is_reply": {
+                    "$ref": "#/components/schemas/ReplyStatus"
+                  },
+                  "is_reshare": {
+                    "$ref": "#/components/schemas/Re-shareStatus"
+                  },
                   "is_nsfw": {
                     "$ref": "#/components/schemas/NSFWStatus"
                   },
@@ -3328,6 +3334,24 @@
         ],
         "default": 0,
         "description": "Whether the message contains NSFW material.\n- 0 = no NSFW\n- 1 = NSFW"
+      },
+      "Re-shareStatus": {
+        "type": "integer",
+        "enum": [
+          0,
+          1
+        ],
+        "default": 0,
+        "description": "Whether the message is a re-share. If it's a re-share then parent_id cannot be empty.\n- 0 = not re-share\n- 1 = re-share"
+      },
+      "ReplyStatus": {
+        "type": "integer",
+        "enum": [
+          0,
+          1
+        ],
+        "default": 0,
+        "description": "Whether the message is a reply or not. If it's a reply then parent_id cannot be empty.\n- 0 = not reply\n- 1 = reply"
       },
       "SpoilerStatus": {
         "type": "integer",

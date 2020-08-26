@@ -20,30 +20,17 @@ class FeedMessageResource extends JsonResource
         /** @var FeedMessage $feedMessage */
         $feedMessage = $this->resource;
 
-        $totalReactions = $feedMessage->viaLoveReactant()->getReactionTotal();
-        $totalHearts = $feedMessage->viaLoveReactant()->getReactionCounterOfType(FeedVoteType::Heart()->description);
+        // Get basic response
+        $resource = FeedMessageResourceBasic::make($feedMessage)->toArray($request);
 
-        $resource = [
-            'id'            => $feedMessage->id,
-            'type'          => 'feed-messages',
-            'href'          => route('api.feed.messages.details', $feedMessage, false),
-            'attribute'     => [
-                'body'      => $feedMessage->body,
-                'replyCount'    => $feedMessage->replies->count(),
-                'metrics'       => [
-                    'count'     => $totalReactions->getCount(),
-                    'weight'    => $totalReactions->getWeight(),
-                    'hearts'    => $totalHearts->getCount()
-                ],
-                'isNSFW'    => $feedMessage->is_nsfw,
-                'isSpoiler' => $feedMessage->is_spoiler,
-                'createdAt' => $feedMessage->created_at->format('Y-m-d H:i:s'),
-            ]
-        ];
-
+        // Add relationships
         $relationships = [];
         $relationships = array_merge($relationships, $this->getUserDetails());
-        $relationships = array_merge($relationships, $this->getReplies());
+
+        if ($feedMessage->is_reshare != 1)
+            $relationships = array_merge($relationships, $this->getReplies());
+        else
+            $relationships = array_merge($relationships, $this->getReShares());
 
         return array_merge($resource, ['relationships' => $relationships]);
     }
@@ -61,6 +48,25 @@ class FeedMessageResource extends JsonResource
         return [
             'users' => [
                 'data' => UserResourceBasic::collection([$feedMessage->user]),
+            ]
+        ];
+    }
+
+    /**
+     * Get the re-shares belonging to the re-shared feed message filtered by the current user's ID.
+     *
+     * @return array
+     */
+    private function getReShares(): array
+    {
+        /** @var FeedMessage $feedMessage */
+        $feedMessage = $this->resource;
+
+        return [
+            'messages' => [
+                'data' => FeedMessageResourceBasic::collection(
+                   $feedMessage->reShares->where('user_id', '=', $feedMessage->user_id)
+                )
             ]
         ];
     }
