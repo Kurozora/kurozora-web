@@ -9,6 +9,7 @@ use App\Http\Requests\GetFeedMessagesHomeRequest;
 use App\Http\Requests\PostFeedRequest;
 use App\Http\Resources\FeedMessageResource;
 use App\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,6 +20,7 @@ class FeedController extends Controller
      *
      * @param PostFeedRequest $request
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function post(PostFeedRequest $request)
     {
@@ -27,22 +29,26 @@ class FeedController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        // Get the ID of the feed message we are replying to
-        $replyingToID = null;
-
-        if($request->has('parent_id')) {
+        // Check if the message is a re-share as user is allowed only one re-share per message
+        if($data['is_reshare'] ?? false) {
             /** @var FeedMessage $parent */
-            $parent = FeedMessage::find($data['parent_id']);
+            $reShareExists = FeedMessage::where('parent_feed_message_id', '=', $data['parent_id'])
+                ->where('user_id', $user->id)
+                ->where('is_reshare', true)
+                ->exists();
 
-            $replyingToID = $parent->id;
+            if ($reShareExists)
+                throw new AuthorizationException('You are not allowed to re-share a message more than once.');
         }
 
         // Create the feed message
         $feedMessage = $user->feedMessages()->create([
-            'parent_feed_message_id'    => $replyingToID,
+            'parent_feed_message_id'    => $data['parent_id'] ?? null,
             'body'                      => $request->input('body'),
-            'is_nsfw'                   => $data['is_nsfw'],
-            'is_spoiler'                => $data['is_spoiler']
+            'is_reply'                  => $data['is_reply'] ?? false,
+            'is_reshare'                => $data['is_reshare'] ?? false,
+            'is_nsfw'                   => $data['is_nsfw'] ?? false,
+            'is_spoiler'                => $data['is_spoiler'] ?? false,
         ]);
 
         return JSONResult::success([

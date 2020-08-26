@@ -26,7 +26,7 @@ class FeedMessage extends KModel implements ReactableContract
      */
     function isReply(): bool
     {
-        return $this->parent_feed_message_id !== null;
+        return $this->parent_feed_message_id !== null && $this->is_reply;
     }
 
     /**
@@ -46,7 +46,19 @@ class FeedMessage extends KModel implements ReactableContract
      */
     function replies()
     {
-        return $this->hasMany(FeedMessage::class, 'parent_feed_message_id');
+        return $this->hasMany(FeedMessage::class, 'parent_feed_message_id')
+            ->where('is_reply', '=', true);
+    }
+
+    /**
+     * Returns the parent feed message that this one re-shared.
+     *
+     * @return HasMany
+     */
+    function reShares()
+    {
+        return $this->hasMany(FeedMessage::class, 'parent_feed_message_id', 'parent_feed_message_id')
+            ->where('is_reshare', '=', true);
     }
 
     /**
@@ -57,7 +69,7 @@ class FeedMessage extends KModel implements ReactableContract
      */
     public function scopeNoReplies($query)
     {
-        return $query->whereNull('parent_feed_message_id');
+        return $query->where('is_reply', '=', false);
     }
 
     /**
@@ -68,6 +80,6 @@ class FeedMessage extends KModel implements ReactableContract
      */
     public function scopeRepliesOnly($query)
     {
-        return $query->whereNotNull('parent_feed_message_id');
+        return $query->where('is_reply', '=', true);
     }
 }

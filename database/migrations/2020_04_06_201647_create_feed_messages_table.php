@@ -21,6 +21,8 @@ class CreateFeedMessagesTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('parent_feed_message_id')->nullable();
             $table->string('body', FeedMessage::MAX_BODY_LENGTH);
+            $table->boolean('is_reply')->default(false);
+            $table->boolean('is_reshare')->default(false);
             $table->boolean('is_nsfw')->default(false);
             $table->boolean('is_spoiler')->default(false);
             $table->timestamps();
