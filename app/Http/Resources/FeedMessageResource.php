@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Enums\FeedVoteType;
 use App\FeedMessage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -24,8 +23,7 @@ class FeedMessageResource extends JsonResource
         $resource = FeedMessageResourceBasic::make($feedMessage)->toArray($request);
 
         // Add relationships
-        $relationships = [];
-        $relationships = array_merge($relationships, $this->getUserDetails());
+        $relationships = $resource['relationships'];
 
         if ($feedMessage->is_reshare != 1)
             $relationships = array_merge($relationships, $this->getReplies());
@@ -33,23 +31,6 @@ class FeedMessageResource extends JsonResource
             $relationships = array_merge($relationships, $this->getReShares());
 
         return array_merge($resource, ['relationships' => $relationships]);
-    }
-
-    /**
-     * Get the user details belonging to the feed message.
-     *
-     * @return array
-     */
-    private function getUserDetails(): array
-    {
-        /** @var FeedMessage $feedMessage */
-        $feedMessage = $this->resource;
-
-        return [
-            'users' => [
-                'data' => UserResourceBasic::collection([$feedMessage->user]),
-            ]
-        ];
     }
 
     /**
