@@ -3,30 +3,26 @@
 namespace App\Traits;
 
 use App\Enums\FeedVoteType;
-use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Cog\Contracts\Love\Reactable\Models\Reactable;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable;
 
 trait HeartActionTrait {
     /**
-     * Gets the current user's heart value.
+     * Gets the user's current heart value for the given reactable object.
      *
      * 0    = neutral (no vote)
      * 1    = hearted
      *
+     * @param Reactable $reactable The object whose current reaction to get.
      * @return int the current user's heart value.
-     * @throws InvalidEnumKeyException
      */
-    public function getCurrentHeartValue(): int
+    public function getCurrentHeartValueFor(Reactable $reactable): int
     {
-        /** @var Reacterable $reactant */
-        $reactant = $this;
-        $reacter = $reactant->viaLoveReacter();
+        /** @var Reacterable $reacterable */
+        $reacterable = $this;
+        $hasHearted = $reacterable->viaLoveReacter()->hasReactedTo($reactable, FeedVoteType::Heart()->description);
 
-        foreach($reacter->getReactions() as $reaction)
-            return FeedVoteType::fromKey($reaction->type->name)->value;
-
-        return 0;
+        return $hasHearted ? FeedVoteType::Heart : FeedVoteType::UnHeart;
     }
 
     /**
@@ -37,9 +33,9 @@ trait HeartActionTrait {
      */
     public function toggleHeart(Reactable $reactable): int
     {
-        /** @var Reacterable $reactant */
-        $reactant = $this;
-        $reacter = $reactant->viaLoveReacter();
+        /** @var Reacterable $reacterable */
+        $reacterable = $this;
+        $reacter = $reacterable->viaLoveReacter();
 
         if ($reacter->hasReactedTo($reactable)) {
             $reacter->unreactTo($reactable, FeedVoteType::Heart()->description);
