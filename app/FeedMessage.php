@@ -57,7 +57,7 @@ class FeedMessage extends KModel implements ReactableContract
      */
     function reShares()
     {
-        return $this->hasMany(FeedMessage::class, 'parent_feed_message_id', 'parent_feed_message_id')
+        return $this->hasMany(FeedMessage::class, 'parent_feed_message_id', 'id')
             ->where('is_reshare', '=', true);
     }
 

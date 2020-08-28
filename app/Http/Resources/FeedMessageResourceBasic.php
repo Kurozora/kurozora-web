@@ -21,7 +21,6 @@ class FeedMessageResourceBasic extends JsonResource
         /** @var FeedMessage $feedMessage */
         $feedMessage = $this->resource;
 
-        $totalReactions = $feedMessage->viaLoveReactant()->getReactionTotal();
         $totalHearts = $feedMessage->viaLoveReactant()->getReactionCounterOfType(FeedVoteType::Heart()->description);
 
         $resource = [
@@ -30,12 +29,10 @@ class FeedMessageResourceBasic extends JsonResource
             'href'          => route('api.feed.messages.details', $feedMessage, false),
             'attributes'    => [
                 'body'          => $feedMessage->body,
-                'replyCount'    => $feedMessage->replies->count(),
-                'reShareCount'  => $feedMessage->reShares->count(),
                 'metrics'       => [
-                    'count'     => $totalReactions->getCount(),
-                    'weight'    => $totalReactions->getWeight(),
-                    'hearts'    => $totalHearts->getCount()
+                    'heartCount'    => $totalHearts->getCount(),
+                    'replyCount'    => $feedMessage->replies->count(),
+                    'reShareCount'  => $feedMessage->reShares->count()
                 ],
                 'isReply'       => $feedMessage->is_reply == 1,
                 'isReShare'     => $feedMessage->is_reshare == 1,
