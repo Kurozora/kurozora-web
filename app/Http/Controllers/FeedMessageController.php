@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\FeedVoteType;
 use App\FeedMessage;
 use App\Helpers\JSONResult;
 use App\Http\Resources\FeedMessageResource;
@@ -41,7 +42,7 @@ class FeedMessageController extends Controller
         // Show successful response
         return JSONResult::success([
             'data' => [
-                'voteAction' => $voteAction
+                'isHearted' => $voteAction == FeedVoteType::Heart
             ]
         ]);
     }

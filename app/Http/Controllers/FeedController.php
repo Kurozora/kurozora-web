@@ -77,6 +77,7 @@ class FeedController extends Controller
         // Get paginated feed messages that are not a reply
         $feed = FeedMessage::whereIn('user_id', $userIDs)
             ->noReplies()
+            ->orderByDesc('created_at')
             ->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
@@ -100,7 +101,8 @@ class FeedController extends Controller
 
         // Get paginated global feed messages that are not a reply
         $feed = FeedMessage::noReplies()
-            ->paginate($data['limit'] ?? 25);;
+            ->orderByDesc('created_at')
+            ->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $feed->nextPageUrl());
