@@ -4,7 +4,6 @@ namespace App\Http\Resources;
 
 use App\Enums\ForumsVoteType;
 use App\ForumReply;
-use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +15,6 @@ class ForumReplyResource extends JsonResource
      *
      * @param Request $request
      * @return array
-     * @throws InvalidEnumKeyException
      */
     public function toArray($request): array
     {
@@ -57,14 +55,16 @@ class ForumReplyResource extends JsonResource
      * Returns the user specific details for the resource.
      *
      * @return array
-     * @throws InvalidEnumKeyException
      */
     protected function getUserSpecificDetails(): array
     {
+        /** @var ForumReply $forumReply */
+        $forumReply = $this->resource;
+
         $user = Auth::user();
 
         return [
-            'voteAction' => $user->getCurrentVoteValue()
+            'voteAction' => $user->getCurrentVoteValueFor($forumReply)
         ];
     }
 
