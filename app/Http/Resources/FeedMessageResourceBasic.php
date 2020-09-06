@@ -23,6 +23,9 @@ class FeedMessageResourceBasic extends JsonResource
 
         $totalHearts = $feedMessage->viaLoveReactant()->getReactionCounterOfType(FeedVoteType::Heart()->description);
 
+        $user = Auth::user();
+        $isReShared = $user ? $feedMessage->reShares()->where('user_id', $user->id)->exists() : false;
+
         $resource = [
             'id'            => $feedMessage->id,
             'type'          => 'feed-messages',
@@ -36,6 +39,7 @@ class FeedMessageResourceBasic extends JsonResource
                 ],
                 'isReply'       => $feedMessage->is_reply == 1,
                 'isReShare'     => $feedMessage->is_reshare == 1,
+                'isReShared'    => $isReShared,
                 'isNSFW'        => $feedMessage->is_nsfw == 1,
                 'isSpoiler'     => $feedMessage->is_spoiler == 1,
                 'createdAt'     => $feedMessage->created_at->format('Y-m-d H:i:s'),

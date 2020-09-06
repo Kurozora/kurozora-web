@@ -7,6 +7,7 @@ use Cog\Laravel\Love\Reactable\Models\Traits\Reactable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class FeedMessage extends KModel implements ReactableContract
 {
@@ -40,6 +41,16 @@ class FeedMessage extends KModel implements ReactableContract
     }
 
     /**
+     * Returns the parent message to which the current message belongs.
+     *
+     * @return HasOne
+     */
+    function parentMessage()
+    {
+        return $this->hasOne(FeedMessage::class, 'id', 'parent_feed_message_id');
+    }
+
+    /**
      * Returns all the feed messages that reply to this one.
      *
      * @return HasMany
@@ -57,7 +68,7 @@ class FeedMessage extends KModel implements ReactableContract
      */
     function reShares()
     {
-        return $this->hasMany(FeedMessage::class, 'parent_feed_message_id', 'id')
+        return $this->hasMany(FeedMessage::class, 'parent_feed_message_id')
             ->where('is_reshare', '=', true);
     }
 
@@ -67,7 +78,7 @@ class FeedMessage extends KModel implements ReactableContract
      * @param Builder $query
      * @return Builder
      */
-    public function scopeNoReplies($query)
+    public function scopeNoReplies(Builder $query): Builder
     {
         return $query->where('is_reply', '=', false);
     }
@@ -78,7 +89,7 @@ class FeedMessage extends KModel implements ReactableContract
      * @param Builder $query
      * @return Builder
      */
-    public function scopeRepliesOnly($query)
+    public function scopeRepliesOnly(Builder $query): Builder
     {
         return $query->where('is_reply', '=', true);
     }

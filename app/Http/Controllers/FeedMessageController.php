@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\FeedVoteType;
 use App\FeedMessage;
 use App\Helpers\JSONResult;
+use App\Http\Requests\FeedMessageRepliesRequest;
 use App\Http\Resources\FeedMessageResource;
 use App\User;
 use Auth;
@@ -22,6 +23,30 @@ class FeedMessageController extends Controller
     {
         return JSONResult::success([
             'data' => FeedMessageResource::collection([$feedMessage])
+        ]);
+    }
+
+    /**
+     * Get the replies of the feed message.
+     *
+     * @param FeedMessageRepliesRequest $request
+     * @param FeedMessage $feedMessage
+     * @return JsonResponse
+     */
+    function replies(FeedMessageRepliesRequest $request, FeedMessage $feedMessage) {
+        $data = $request->validated();
+
+        // Get the feed message replies
+        $feedMessageReplies = $feedMessage->replies()
+            ->orderByDesc('created_at')
+            ->paginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $feedMessageReplies->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => FeedMessageResource::collection($feedMessageReplies),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 
