@@ -25,16 +25,32 @@ class FeedMessageResource extends JsonResource
         // Add relationships
         $relationships = $resource['relationships'];
 
-        if ($feedMessage->is_reshare != 1)
-            $relationships = array_merge($relationships, $this->getReplies());
-        else
-            $relationships = array_merge($relationships, $this->getReShares());
+        if ($feedMessage->is_reshare) {
+            $relationships = array_merge($relationships, $this->getParentMessage());
+        }
 
         return array_merge($resource, ['relationships' => $relationships]);
     }
 
     /**
-     * Get the re-shares belonging to the re-shared feed message filtered by the current user's ID.
+     * Get the parent message to which the current message belongs.
+     *
+     * @return array
+     */
+    private function getParentMessage(): array
+    {
+        /** @var FeedMessage $feedMessage */
+        $feedMessage = $this->resource;
+
+        return [
+            'messages' => [
+                'data' => FeedMessageResource::collection([$feedMessage->parentMessage])
+            ]
+        ];
+    }
+
+    /**
+     * Get the re-shares belonging to the feed message.
      *
      * @return array
      */
@@ -46,7 +62,9 @@ class FeedMessageResource extends JsonResource
         return [
             'messages' => [
                 'data' => FeedMessageResourceBasic::collection(
-                   $feedMessage->reShares->where('user_id', '=', $feedMessage->user_id)
+                   $feedMessage->reShares()
+                       ->orderByDesc('created_at')
+                       ->paginate(25)
                 )
             ]
         ];
@@ -64,7 +82,10 @@ class FeedMessageResource extends JsonResource
 
         return [
             'messages' => [
-                'data' => FeedMessageResource::collection($feedMessage->replies)
+                'data' => FeedMessageResource::collection(
+                    $feedMessage->replies()
+                        ->orderByDesc('created_at')
+                        ->paginate(25))
             ]
         ];
     }

@@ -11,6 +11,9 @@ Route::prefix('/messages')
             ->middleware('kurozora.userauth:optional')
             ->name('details');
 
+        Route::get('/{feedMessage}/replies', [FeedMessageController::class, 'replies'])
+            ->middleware('kurozora.userauth:optional');
+
         Route::post('/{feedMessage}/heart', [FeedMessageController::class, 'heart'])
             ->middleware('kurozora.userauth');
     });
