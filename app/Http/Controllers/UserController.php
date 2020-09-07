@@ -46,8 +46,12 @@ class UserController extends Controller
      */
     public function getFeedMessages(GetFeedMessagesRequest $request, User $user): JsonResponse
     {
+        $data = $request->validated();
+
         // Get the feed messages
-        $feedMessages = $user->feedMessages()->paginate($data['limit'] ?? 25);
+        $feedMessages = $user->feedMessages()
+            ->orderByDesc('created_at')
+            ->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $feedMessages->nextPageUrl());
