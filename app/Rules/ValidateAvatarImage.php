@@ -7,13 +7,14 @@ use Illuminate\Support\Facades\Validator;
 
 class ValidateAvatarImage implements Rule
 {
-    protected $error;
+    /** @var string $error */
+    protected string $error;
 
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed $value
      * @return bool
      */
     public function passes($attribute, $value): bool

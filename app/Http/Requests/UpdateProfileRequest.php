@@ -29,9 +29,9 @@ class UpdateProfileRequest extends FormRequest
     {
         return [
             'username'      => ['bail', new ValidateUsername],
-            'profileImage'  => ['bail', new ValidateAvatarImage],
-            'bannerImage'   => ['bail', new ValidateBannerImage],
-            'biography'     => ['bail', new ValidateUserBiography]
+            'profileImage'  => ['bail', new ValidateAvatarImage, 'nullable'],
+            'bannerImage'   => ['bail', new ValidateBannerImage, 'nullable'],
+            'biography'     => ['bail', new ValidateUserBiography, 'nullable']
         ];
     }
 }

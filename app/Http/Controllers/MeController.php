@@ -163,11 +163,15 @@ class MeController extends Controller
      */
     function getFeedMessages(GetFeedMessagesRequest $request): JsonResponse
     {
+        $data = $request->validated();
+
         /** @var User $user */
         $user = Auth::user();
 
         // Get the feed messages
-        $feedMessages = $user->feedMessages()->paginate($data['limit'] ?? 25);
+        $feedMessages = $user->feedMessages()
+            ->orderByDesc('created_at')
+            ->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $feedMessages->nextPageUrl());
