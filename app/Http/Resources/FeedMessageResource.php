@@ -25,7 +25,7 @@ class FeedMessageResource extends JsonResource
         // Add relationships
         $relationships = $resource['relationships'];
 
-        if ($feedMessage->is_reshare) {
+        if ($feedMessage->is_reshare || $feedMessage->is_reply) {
             $relationships = array_merge($relationships, $this->getParentMessage());
         }
 
@@ -43,7 +43,7 @@ class FeedMessageResource extends JsonResource
         $feedMessage = $this->resource;
 
         return [
-            'messages' => [
+            'parent' => [
                 'data' => FeedMessageResource::collection([$feedMessage->parentMessage])
             ]
         ];
