@@ -3295,7 +3295,7 @@
         }
       }
     },
-    "/privacy-policy": {
+    "/legal/privacy-policy": {
       "get": {
         "tags": [
           "legal"
