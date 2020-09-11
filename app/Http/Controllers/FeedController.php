@@ -75,8 +75,12 @@ class FeedController extends Controller
             ->add($user->id);
 
         // Get paginated feed messages that are not a reply
-        $feed = FeedMessage::whereIn('user_id', $userIDs)
-            ->noReplies()
+        $feed = FeedMessage::noReplies()
+            ->with([
+                'loveReactant.reactions.reacter.reacterable',
+                'loveReactant.reactionCounters',
+            ])
+            ->whereIn('user_id', $userIDs)
             ->orderByDesc('created_at')
             ->paginate($data['limit'] ?? 25);
 
@@ -101,6 +105,10 @@ class FeedController extends Controller
 
         // Get paginated global feed messages that are not a reply
         $feed = FeedMessage::noReplies()
+            ->with([
+                'loveReactant.reactions.reacter.reacterable',
+                'loveReactant.reactionCounters',
+            ])
             ->orderByDesc('created_at')
             ->paginate($data['limit'] ?? 25);
 
