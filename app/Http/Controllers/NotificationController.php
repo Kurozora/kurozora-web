@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
-use App\Http\Requests\UpdateUserNotifications;
+use App\Http\Requests\UpdateUserNotificationsRequest;
 use App\Http\Resources\NotificationResource;
 use App\User;
 use Auth;
@@ -61,12 +61,12 @@ class NotificationController extends Controller
     /**
      * Updates a single, multiple or all notifications' status of the authenticated user.
      *
-     * @param UpdateUserNotifications $request
+     * @param UpdateUserNotificationsRequest $request
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws ConflictHttpException
      */
-    public function update(UpdateUserNotifications $request): JsonResponse
+    public function update(UpdateUserNotificationsRequest $request): JsonResponse
     {
         /** @var User $user */
         $user = $request->user();

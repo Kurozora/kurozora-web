@@ -2,9 +2,8 @@
 
 namespace App\Http\Resources;
 
-use App\Enums\VoteType;
+use App\Enums\ForumsVoteType;
 use App\ForumThread;
-use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +15,6 @@ class ForumThreadResource extends JsonResource
      *
      * @param Request $request
      * @return array
-     * @throws InvalidEnumKeyException
      */
     public function toArray($request): array
     {
@@ -24,8 +22,8 @@ class ForumThreadResource extends JsonResource
         $forumThread = $this->resource;
 
         $totalReactions = $forumThread->viaLoveReactant()->getReactionTotal();
-        $totalLikes = $forumThread->viaLoveReactant()->getReactionCounterOfType(VoteType::Like()->description);
-        $totalDislikes = $forumThread->viaLoveReactant()->getReactionCounterOfType(VoteType::Dislike()->description);
+        $totalLikes = $forumThread->viaLoveReactant()->getReactionCounterOfType(ForumsVoteType::Like()->description);
+        $totalDislikes = $forumThread->viaLoveReactant()->getReactionCounterOfType(ForumsVoteType::Dislike()->description);
 
         $resource = [
             'id'            => $forumThread->id,
@@ -60,14 +58,16 @@ class ForumThreadResource extends JsonResource
      * Returns the user specific details for the resource.
      *
      * @return array
-     * @throws InvalidEnumKeyException
      */
     protected function getUserSpecificDetails(): array
     {
+        /** @var ForumThread $forumThread */
+        $forumThread = $this->resource;
+
         $user = Auth::user();
 
         return [
-            'voteAction' => $user->getCurrentVoteValue()
+            'voteAction' => $user->getCurrentVoteValueFor($forumThread)
         ];
     }
 

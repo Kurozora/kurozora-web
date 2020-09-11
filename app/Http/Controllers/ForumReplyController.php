@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\VoteType;
+use App\Enums\ForumsVoteType;
 use App\ForumReply;
 use App\Helpers\JSONResult;
 use App\Http\Requests\VoteReplyRequest;
@@ -24,7 +24,7 @@ class ForumReplyController extends Controller
         $user = Auth::user();
 
         // Get the vote
-        $voteType = VoteType::fromValue((int) $request->input('vote'));
+        $voteType = ForumsVoteType::fromValue((int) $request->input('vote'));
         $voteAction = $user->toggleVote($reply, $voteType);
 
         // Show successful response

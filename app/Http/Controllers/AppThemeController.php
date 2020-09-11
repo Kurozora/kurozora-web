@@ -18,7 +18,7 @@ class AppThemeController extends Controller
      */
     function overview(): JsonResponse
     {
-        $themes = AppTheme::all();
+        $themes = AppTheme::with('media')->get();
 
         return JSONResult::success([
             'data' => AppThemeResource::collection($themes)
