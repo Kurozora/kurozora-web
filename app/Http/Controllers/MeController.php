@@ -7,9 +7,11 @@ use App\Helpers\KuroAuthToken;
 use App\Http\Requests\GetAnimeFavoritesRequest;
 use App\Http\Requests\GetFollowersRequest;
 use App\Http\Requests\GetFollowingRequest;
+use App\Http\Requests\GetFeedMessagesRequest;
 use App\Http\Requests\GetSessionsRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Resources\AnimeResourceBasic;
+use App\Http\Resources\FeedMessageResource;
 use App\Http\Resources\SessionResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceBasic;
@@ -149,6 +151,33 @@ class MeController extends Controller
         // Show successful response
         return JSONResult::success([
             'data' => AnimeResourceBasic::collection($favoriteAnime),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Returns a list of the user's feed messages.
+     *
+     * @param GetFeedMessagesRequest $request
+     * @return JsonResponse
+     */
+    function getFeedMessages(GetFeedMessagesRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        /** @var User $user */
+        $user = Auth::user();
+
+        // Get the feed messages
+        $feedMessages = $user->feedMessages()
+            ->orderByDesc('created_at')
+            ->paginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $feedMessages->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => FeedMessageResource::collection($feedMessages),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

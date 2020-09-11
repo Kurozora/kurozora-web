@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\ValidateThreadContent;
-use App\Rules\ValidateThreadTitle;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PostThread extends FormRequest
+class GetFeedMessagesExploreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,8 +24,8 @@ class PostThread extends FormRequest
     public function rules(): array
     {
         return [
-            'title'     => ['bail', 'required', new ValidateThreadTitle],
-            'content'   => ['bail', 'required', new ValidateThreadContent],
+            'limit' => ['bail', 'integer', 'min:1', 'max:100'],
+            'page'  => ['bail', 'integer', 'min:1']
         ];
     }
 }

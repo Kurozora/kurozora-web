@@ -2,30 +2,30 @@
 
 namespace App\Traits;
 
-use App\Enums\VoteType;
-use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
+use App\Enums\ForumsVoteType;
 use Cog\Contracts\Love\Reactable\Models\Reactable;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable;
 
 trait VoteActionTrait {
     /**
-     * Gets the current user's vote value.
+     * Gets the user's current vote value for the given reactable object.
      *
      * -1   = disliked
      * 0    = neutral (no vote)
      * 1    = liked
      *
+     * @param Reactable $reactable The object whose vote value to get.
      * @return int the current user's vote value.
-     * @throws InvalidEnumKeyException
      */
-    public function getCurrentVoteValue(): int
+    public function getCurrentVoteValueFor(Reactable $reactable): int
     {
-        /** @var Reacterable $reactant */
-        $reactant = $this;
-        $reacter = $reactant->viaLoveReacter();
+        /** @var Reacterable $reacterable */
+        $reacterable = $this;
 
-        foreach($reacter->getReactions() as $reaction)
-            return VoteType::fromKey($reaction->type->name)->value;
+        if ($reacterable->viaLoveReacter()->hasReactedTo($reactable, ForumsVoteType::Like()->description))
+            return ForumsVoteType::Like;
+        else if ($reacterable->viaLoveReacter()->hasReactedTo($reactable, ForumsVoteType::Dislike()->description))
+            return ForumsVoteType::Dislike;
 
         return 0;
     }
@@ -34,14 +34,14 @@ trait VoteActionTrait {
      * Toggles the vote between 'Like' and 'Dislike' or removes the vote if it already exists.
      *
      * @param Reactable $reactable The object to react on.
-     * @param VoteType $voteType The vote to be applied on the given Reactable object.
+     * @param ForumsVoteType $voteType The vote to be applied on the given Reactable object.
      * @return int the current state of the VoteType on the given Reactable object.
      */
-    public function toggleVote(Reactable $reactable, VoteType $voteType): int
+    public function toggleVote(Reactable $reactable, ForumsVoteType $voteType): int
     {
-        /** @var Reacterable $reactant */
-        $reactant = $this;
-        $reacter = $reactant->viaLoveReacter();
+        /** @var Reacterable $reacterable */
+        $reacterable = $this;
+        $reacter = $reacterable->viaLoveReacter();
         $voteTypeDescription = (string) $voteType->description;
         $nextVoteTypeDescription = (string) $voteType->next()->description;
 
@@ -56,7 +56,7 @@ trait VoteActionTrait {
         }
 
         switch ($voteType->value) {
-            case VoteType::Like:
+            case ForumsVoteType::Like:
                 $reacter->reactTo($reactable, $voteTypeDescription);
                 return 1;
             default:

@@ -22,6 +22,7 @@ Route::prefix('/v1')
         require 'API/Anime-Seasons.php';
         require 'API/Characters.php';
         require 'API/Genres.php';
+        require 'API/Feed.php';
         require 'API/Forum-Replies.php';
         require 'API/Forum-Sections.php';
         require 'API/Forum-Threads.php';

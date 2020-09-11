@@ -40,7 +40,7 @@ class ForumThread extends KModel implements ReactableContract
      *
      * @return BelongsTo
      */
-    public function forum_section(): BelongsTo
+    public function forum_section()
     {
         return $this->belongsTo(ForumSection::class, 'section_id', 'id');
     }
@@ -50,7 +50,7 @@ class ForumThread extends KModel implements ReactableContract
      *
      * @return BelongsTo
      */
-    public function user(): BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
@@ -60,7 +60,7 @@ class ForumThread extends KModel implements ReactableContract
      *
      * @return HasMany
      */
-    public function replies(): HasMany
+    public function replies()
     {
         return $this->hasMany(ForumReply::class, 'thread_id', 'id');
     }
