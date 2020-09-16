@@ -132,7 +132,7 @@ class Character extends Resource
                 ->hideFromIndex(),
 
             Select::make('Astrological Sign')
-                ->options(AstrologicalSign::toSelectArray())
+                ->options(AstrologicalSign::asSelectArray())
                 ->displayUsingLabels()
                 ->nullable(true)
                 ->sortable(),

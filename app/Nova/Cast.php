@@ -60,7 +60,7 @@ class Cast extends Resource
                 ->sortable(),
 
             Select::make('Cast Role')
-                ->options(CastRole::toSelectArray())
+                ->options(CastRole::asSelectArray())
                 ->displayUsingLabels()
                 ->rules('required')
                 ->help('If you\'re not sure what role the character has, choose "Supporting character".')

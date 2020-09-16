@@ -35,4 +35,9 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'apple' => [
+        'store_kit' => [
+            'password' => env('SK_APP_PASSWORD')
+        ]
+    ]
 ];
