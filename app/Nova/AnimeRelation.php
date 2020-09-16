@@ -60,7 +60,7 @@ class AnimeRelation extends Resource
                 ->sortable(),
 
             Select::make('Type')
-                ->options(AnimeRelationType::toSelectArray())
+                ->options(AnimeRelationType::asSelectArray())
                 ->displayUsingLabels()
                 ->sortable(),
         ];

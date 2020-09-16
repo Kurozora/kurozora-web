@@ -65,7 +65,7 @@ class AnimeImage extends Resource
                 ->help('The URL to request the image asset.'),
 
             Select::make('Type')
-                ->options(AnimeImageType::toSelectArray())
+                ->options(AnimeImageType::asSelectArray())
                 ->displayUsingLabels()
                 ->rules('required')
                 ->help('The type of the image asset.'),
