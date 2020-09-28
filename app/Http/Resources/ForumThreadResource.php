@@ -40,6 +40,7 @@ class ForumThreadResource extends JsonResource
                     'likes'     => $totalLikes->getCount(),
                     'dislikes'  => $totalDislikes->getCount()
                 ],
+                'voteAction'    => 0,
                 'createdAt'     => $forumThread->created_at->format('Y-m-d H:i:s'),
             ]
         ];

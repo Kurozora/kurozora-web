@@ -30,14 +30,15 @@ class ForumReplyResource extends JsonResource
             'type'          => 'replies',
             'href'          => route('api.forum-threads.replies', $forumReply, false),
             'attributes'    => [
-                'content'   => $forumReply->content,
+                'content'       => $forumReply->content,
                 'metrics'       => [
                     'count'     => $totalReactions->getCount(),
                     'weight'    => $totalReactions->getWeight(),
                     'likes'     => $totalLikes->getCount(),
                     'dislikes'  => $totalDislikes->getCount()
                 ],
-                'createdAt' => $forumReply->created_at->format('Y-m-d H:i:s'),
+                'voteAction'    => 0,
+                'createdAt'     => $forumReply->created_at->format('Y-m-d H:i:s'),
             ]
         ];
 
