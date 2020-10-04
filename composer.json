@@ -8,6 +8,7 @@
         "ext-json": "*",
         "ext-simplexml": "*",
         "anaseqal/nova-sidebar-icons": "^0.0",
+        "aporat/store-receipt-validator": "^4.0",
         "bensampo/laravel-enum": "^2.0",
         "chaseconey/nova-external-image": "^0.2",
         "codercat/jwk-to-pem": "^0.0.3",
@@ -77,9 +78,15 @@
         "laravel": {
             "dont-discover": [
             ]
-        }
+        },
+        "google/apiclient-services": [
+            "AndroidPublisher"
+        ]
     },
     "scripts": {
+        "post-install-cmd": [
+            "Google_Task_Composer::cleanup"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
@@ -92,6 +99,7 @@
         ],
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
+            "Google_Task_Composer::cleanup",
             "@php artisan ide-helper:generate",
             "@php artisan ide-helper:models -N",
             "@php artisan ide-helper:meta"

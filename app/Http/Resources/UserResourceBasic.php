@@ -27,6 +27,9 @@ class UserResourceBasic extends JsonResource
         /** @var User $user */
         $user = $this->resource;
 
+        $purchaseReceipt = $user->receipt;
+        $isPro = $purchaseReceipt != null ? (bool) $purchaseReceipt->is_valid : false;
+
         $resource = [
             'id'                => $user->id,
             'type'              => 'users',
@@ -40,7 +43,8 @@ class UserResourceBasic extends JsonResource
                 'followerCount'     => $user->getFollowerCount(),
                 'followingCount'    => $user->getFollowingCount(),
                 'reputationCount'   => $user->getReputationCount(),
-                'joinDate'          => $user->created_at->format('Y-m-d')
+                'joinDate'          => $user->created_at->format('Y-m-d'),
+                'isPro'             => $isPro
             ]
         ];
 

@@ -15,6 +15,7 @@ use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
 use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
@@ -564,5 +565,15 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
             ->whereNotNull('apn_device_token')
             ->pluck('apn_device_token')
             ->toArray();
+    }
+
+    /**
+     * Returns the store receipt of the user.
+     *
+     * @return HasOne
+     */
+    function receipt()
+    {
+        return $this->hasOne(UserReceipt::class);
     }
 }
