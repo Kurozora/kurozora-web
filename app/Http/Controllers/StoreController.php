@@ -7,12 +7,16 @@ use App\Http\Requests\GetStoreRequest;
 use App\Http\Requests\VerifyReceiptRequest;
 use App\Http\Resources\StoreProductResource;
 use App\StoreProduct;
-use App\User;
 use App\UserReceipt;
 use Auth;
-use Http;
+use Carbon\Carbon;
+use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
-use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
+use ReceiptValidator\iTunes\PurchaseItem;
+use ReceiptValidator\iTunes\ResponseInterface as iTunesResponseInterface;
+use \ReceiptValidator\iTunes\Validator as iTunesValidator;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class StoreController extends Controller
 {
@@ -42,65 +46,83 @@ class StoreController extends Controller
      *
      * @param VerifyReceiptRequest $request
      * @return JsonResponse
+     * @throws GuzzleException
      */
     function verifyReceipt(VerifyReceiptRequest $request): JsonResponse
     {
         $data = $request->validated();
         $receipt = $data['receipt'];
-        $receiptData = $this->isVerified('https://buy.itunes.apple.com/verifyReceipt', $receipt);
+        $receiptData = $this->validated($receipt);
 
-        $result = collect($receiptData['receipt']['in_app']);
-        $sorted = $result->sortByDesc('purchase_date');
-        $sorted = $sorted->values()->all();
-        if (!isset($sorted[0]))
-            dd('no subscriptions');
+        if ($receiptData->isValid()) {
+            $result = collect($receiptData->getPurchases());
 
-        // If user is authenticated then connect the purchase to the user's account.
-        $userID = Auth::id();
+            /** @var PurchaseItem $sorted */
+            $sorted = $result->whereNotNull('expires_date_ms')
+                            ->whereNull(['cancellation_date'])
+                            ->sortByDesc('purchase_date')->first();
+            $expirationDate = $sorted->getExpiresDate();
 
-        if($userID) {
-            /** @var UserReceipt $foundReceipt */
-            $foundReceipt = UserReceipt::where('user_id', '=', $userID)->first();
+            // Check for grace period.
+            $isInGracePeriod = false;
+            if(array_key_exists('grace_period_expires_date', $sorted->getRawResponse())) {
+                $gracePeriod = Carbon::createFromTimestampUTC(
+                    (int) round((int) $sorted->getRawResponse()['grace_period_expires_date'] / 1000)
+                );
 
-            if ($foundReceipt) {
-                $foundReceipt->receipt = $receipt;
-                $foundReceipt->save();
-            } else {
-                UserReceipt::create([
-                    'receipt' => $receipt,
-                    'user_id' => $userID
-                ]);
+                $isInGracePeriod = $gracePeriod->isFuture();
             }
+        } else {
+            throw new ConflictHttpException('The generated receipt is invalid.');
         }
 
-        return JSONResult::success();
+        // Decide validity of the subscription.
+        $subscriptionIsValid = $expirationDate->isFuture() || $isInGracePeriod;
+        $userID = Auth::id();
+
+        /** @var UserReceipt $foundReceipt */
+        $foundReceipt = UserReceipt::where('user_id', '=', $userID)->first();
+
+        if ($foundReceipt) {
+            $foundReceipt->receipt = $receipt;
+            $foundReceipt->is_valid = $subscriptionIsValid;
+            $foundReceipt->save();
+        } else {
+            UserReceipt::create([
+                'receipt'   => $receipt,
+                'user_id'   => $userID,
+                'is_valid'  => $subscriptionIsValid
+            ]);
+        }
+
+        return JSONResult::success([
+            'data' => [
+                'type' => 'receipt',
+                'attributes' => [
+                    'isValid' => $subscriptionIsValid
+                ]
+            ]
+        ]);
     }
 
     /**
      * Checks with Apple if the receipt is verified.
      *
-     * @param string $verificationServer
      * @param string $receiptData
-     * @return array
+     * @return iTunesResponseInterface
+     * @throws GuzzleException
      */
-    private function isVerified(string $verificationServer, string $receiptData): array
+    private function validated(string $receiptData): iTunesResponseInterface
     {
-        $requestBody = [
-            'receipt-data' => $receiptData,
-            'password' => config('services.apple.store_kit.password'),
-            'exclude-old-transactions' => true
-        ];
-        $requestBodyJSON = json_encode($requestBody);
+        $validator = new iTunesValidator();
 
-        $response = Http::withBody($requestBodyJSON, 'application/json')->post($verificationServer);
-        $data = json_decode($response->body(), true);
-
-        if ($data['status'] == 21007) {
-            return $this->isVerified('https://sandbox.itunes.apple.com/verifyReceipt', $receiptData);
-        }  else if ($data['status'] != 0) {
-            throw new ServiceUnavailableHttpException(null, 'There was a problem validating the receipt, please try again later.');
+        try {
+            $sharedSecret = config('services.apple.store_kit.password');
+            $response = $validator->setExcludeOldTransactions(false)->setSharedSecret($sharedSecret)->setReceiptData($receiptData)->validate();
+        } catch (Exception $e) {
+            dd('got error = ' . $e->getMessage());
         }
 
-        return $data;
+        return $response;
     }
 }

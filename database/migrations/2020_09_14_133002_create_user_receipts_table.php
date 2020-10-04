@@ -19,6 +19,7 @@ class CreateUserReceiptsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->longText('receipt');
+            $table->boolean('is_valid');
             $table->timestamps();
         });
 
