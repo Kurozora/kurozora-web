@@ -28,7 +28,7 @@ class UserResourceBasic extends JsonResource
         $user = $this->resource;
 
         $purchaseReceipt = $user->receipt;
-        $isPro = $purchaseReceipt != null ? (bool) $purchaseReceipt->is_valid : false;
+        $isPro = $purchaseReceipt != null ? (bool) $purchaseReceipt->is_subscribed : false;
 
         $resource = [
             'id'                => $user->id,
