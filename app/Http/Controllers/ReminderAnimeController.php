@@ -8,6 +8,7 @@ use App\Http\Requests\GetAnimeReminderRequest;
 use App\Http\Resources\AnimeResource;
 use App\User;
 use Auth;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -72,11 +73,19 @@ class ReminderAnimeController extends Controller
      *
      * @param Request $request
      * @return \Illuminate\Http\Response
+     * @throws AuthorizationException
      */
     function download(Request $request): \Illuminate\Http\Response
     {
         /** @var User $user */
         $user = Auth::user();
+        $userReceipt = $user->receipt;
+
+        if($userReceipt === null)
+            throw new AuthorizationException('Reminders are only available to pro users.');
+
+        if (!$userReceipt->is_subscribed)
+            throw new AuthorizationException('Reminders are only available to pro users.');
 
         $calendarExportStream = $user->getCalendar();
 

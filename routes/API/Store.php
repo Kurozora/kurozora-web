@@ -14,4 +14,6 @@ Route::prefix('/store')
 
         Route::post('/verify', [StoreController::class, 'verifyReceipt'])
             ->middleware('kurozora.userauth:optional');
+
+        Route::post('/update', [StoreController::class, 'updateSubscription']);
     });
