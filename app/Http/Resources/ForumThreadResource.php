@@ -83,7 +83,7 @@ class ForumThreadResource extends JsonResource
         $forumThread = $this->resource;
 
         return [
-            'user' => [
+            'users' => [
                 'data' => UserResourceBasic::collection([$forumThread->user]),
             ]
         ];

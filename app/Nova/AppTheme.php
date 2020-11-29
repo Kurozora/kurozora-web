@@ -61,7 +61,7 @@ class AppTheme extends Resource
                 })
                 ->required()
                 ->singleMediaRules('dimensions:min-width=375,min-height=667,max_width=768,max-height=1024')
-                ->help('Screenshot should have a minimum dimension of 375x667 and a maximum dimension of 768x1024. i.e a screenshot on iPhone 6...iPhone 11 Pro.'),
+                ->help('Screenshot should have a minimum dimension of 375x667 and a maximum dimension of 768x1024. i.e a screenshot on iPhone 6...iPhone 12 Pro Max.'),
 
             Text::make('Name')->sortable()
                 ->rules('required'),

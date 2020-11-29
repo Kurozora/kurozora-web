@@ -80,7 +80,7 @@ class ForumReplyResource extends JsonResource
         $forumReply = $this->resource;
 
         return [
-            'user' => [
+            'users' => [
                 'data' => UserResourceBasic::collection([$forumReply->user]),
             ]
         ];

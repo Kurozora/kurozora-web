@@ -144,7 +144,7 @@ class UserController extends Controller
      * @return Application|Factory|View
      * @throws Exception
      */
-    public function resetPasswordPage($token)
+    public function resetPasswordPage(string $token)
     {
         // Try to find a reset with this reset token
         /** @var PasswordReset $foundReset */
