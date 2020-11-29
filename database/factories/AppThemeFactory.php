@@ -36,3 +36,7 @@ $factory->define(AppTheme::class, function (Faker $faker) {
         'table_view_cell_action_default_color'          => $faker->hexcolor,
     ];
 });
+
+$factory->afterCreating(AppTheme::class, function (AppTheme $theme, Faker $faker) {
+    $theme->addMediaFromUrl($faker->imageUrl(768, 1024, true, false))->toMediaCollection('screenshot');
+});

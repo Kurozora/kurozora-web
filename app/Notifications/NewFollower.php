@@ -47,9 +47,9 @@ class NewFollower extends Notification implements ShouldQueue
     public function toDatabase($notifiable)
     {
         return [
-            'user_id'       => $this->follower->id,
-            'username'      => $this->follower->username,
-            'avatar_url'    => $this->follower->getFirstMediaFullUrl('avatar')
+            'userID'            => $this->follower->id,
+            'username'          => $this->follower->username,
+            'profileImageURL'   => $this->follower->getFirstMediaFullUrl('avatar')
         ];
     }
 
