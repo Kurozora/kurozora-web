@@ -1,11 +1,11 @@
 <?php
 
-use App\AnimeEpisode;
-use App\User;
-use App\UserWatchedEpisode;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\AnimeEpisode;
+use App\Models\User;
+use App\Models\UserWatchedEpisode;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateUserWatchedEpisodesTable extends Migration
 {

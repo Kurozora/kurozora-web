@@ -1,6 +1,6 @@
 <?php
 
-use App\AnimeRelations;
+use App\Models\AnimeRelations;
 use Illuminate\Database\Seeder;
 
 class AnimeRelationsSeeder extends Seeder

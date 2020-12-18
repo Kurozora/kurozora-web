@@ -2,9 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Anime;
+use App\Models\Anime;
 use App\Rules\ValidateAnimeIDIsTracked;
-use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AddAnimeFavoriteRequest extends FormRequest

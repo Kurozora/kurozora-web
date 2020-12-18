@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Genre;
+use App\Models\Genre;
 use Illuminate\Foundation\Http\FormRequest;
 
 class GetExplorePageRequest extends FormRequest

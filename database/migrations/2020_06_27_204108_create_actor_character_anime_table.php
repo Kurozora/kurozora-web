@@ -1,8 +1,8 @@
 <?php
 
-use App\ActorCharacter;
-use App\ActorCharacterAnime;
-use App\Anime;
+use App\Models\ActorCharacter;
+use App\Models\ActorCharacterAnime;
+use App\Models\Anime;
 use App\Enums\CastRole;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;

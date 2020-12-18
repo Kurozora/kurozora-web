@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\AnimeRating;
+use App\Models\AnimeRating;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RateAnimeRequest extends FormRequest

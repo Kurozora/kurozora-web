@@ -1,8 +1,8 @@
 <?php
 
-use App\Actor;
-use App\ActorCharacter;
-use App\Character;
+use App\Models\Actor;
+use App\Models\ActorCharacter;
+use App\Models\Character;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

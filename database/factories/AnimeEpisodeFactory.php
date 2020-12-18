@@ -2,8 +2,8 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\AnimeEpisode;
-use App\AnimeSeason;
+use App\Models\AnimeEpisode;
+use App\Models\AnimeSeason;
 use Faker\Generator as Faker;
 
 $factory->define(AnimeEpisode::class, function (Faker $faker) {

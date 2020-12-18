@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Observers\UserObserver;
-use App\User;
+use App\Models\User;
 use Illuminate\Support\ServiceProvider;
 
 class UserModelServiceProvider extends ServiceProvider

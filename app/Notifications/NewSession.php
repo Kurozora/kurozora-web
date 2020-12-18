@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Session;
+use App\Models\Session;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
@@ -35,7 +35,7 @@ class NewSession extends Notification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return array
      */
-    public function via($notifiable)
+    public function via($notifiable): array
     {
         return ['database'];
     }
@@ -46,7 +46,7 @@ class NewSession extends Notification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toDatabase($notifiable)
+    public function toDatabase($notifiable): array
     {
         return [
             'ip'        => $this->ip,

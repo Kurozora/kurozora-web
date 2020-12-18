@@ -6,7 +6,7 @@ use App\Helpers\JSONResult;
 use App\Http\Requests\AddAnimeReminderRequest;
 use App\Http\Requests\GetAnimeReminderRequest;
 use App\Http\Resources\AnimeResource;
-use App\User;
+use App\Models\User;
 use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;

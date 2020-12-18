@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Enums\StoreProductType;
-use App\StoreProduct;
+use App\Models\StoreProduct;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 

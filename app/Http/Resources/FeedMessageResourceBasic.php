@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Enums\FeedVoteType;
-use App\FeedMessage;
+use App\Models\FeedMessage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;

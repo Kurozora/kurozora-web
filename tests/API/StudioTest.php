@@ -2,7 +2,7 @@
 
 namespace Tests\API;
 
-use App\Studio;
+use App\Models\Studio;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 

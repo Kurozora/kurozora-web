@@ -1,11 +1,11 @@
 <?php
 
-use App\ForumSectionBan;
-use App\ForumSection;
-use App\User;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\ForumSection;
+use App\Models\ForumSectionBan;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateForumBansTable extends Migration
 {

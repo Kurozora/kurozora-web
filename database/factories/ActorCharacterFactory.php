@@ -2,9 +2,9 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Actor;
-use App\ActorCharacter;
-use App\Character;
+use App\Models\Actor;
+use App\Models\ActorCharacter;
+use App\Models\Character;
 use Faker\Generator as Faker;
 
 $factory->define(ActorCharacter::class, function (Faker $faker) {

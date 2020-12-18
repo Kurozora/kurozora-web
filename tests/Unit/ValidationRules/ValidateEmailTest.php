@@ -3,7 +3,7 @@
 namespace Tests\Unit\ValidationRules;
 
 use App\Rules\ValidateEmail;
-use App\User;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;

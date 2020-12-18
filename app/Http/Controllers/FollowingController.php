@@ -7,7 +7,7 @@ use App\Http\Requests\GetFollowersRequest;
 use App\Http\Requests\GetFollowingRequest;
 use App\Http\Resources\UserResourceBasic;
 use App\Notifications\NewFollower;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 

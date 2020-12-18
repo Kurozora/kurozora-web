@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\AppTheme;
+use App\Models\AppTheme;
 use App\Helpers\JSONResult;
 use App\Http\Resources\AppThemeResource;
 use Illuminate\Http\JsonResponse;

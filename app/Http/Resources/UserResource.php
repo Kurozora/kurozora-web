@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources;
 
-use App\Session;
-use App\User;
+use App\Models\Session;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 

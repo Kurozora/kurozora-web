@@ -1,11 +1,11 @@
 <?php
 
-use App\Badge;
-use App\User;
-use App\UserBadge;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Badge;
+use App\Models\User;
+use App\Models\UserBadge;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateUserBadgesTable extends Migration
 {

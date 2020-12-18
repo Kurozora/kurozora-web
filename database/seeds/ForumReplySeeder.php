@@ -1,6 +1,6 @@
 <?php
 
-use App\ForumReply;
+use App\Models\ForumReply;
 use Illuminate\Database\Seeder;
 
 class ForumReplySeeder extends Seeder

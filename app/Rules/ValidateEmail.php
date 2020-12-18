@@ -3,7 +3,7 @@
 namespace App\Rules;
 
 use App\Helpers\OptionsBag;
-use App\User;
+use App\Models\User;
 use Illuminate\Contracts\Validation\Rule;
 use InvalidArgumentException;
 

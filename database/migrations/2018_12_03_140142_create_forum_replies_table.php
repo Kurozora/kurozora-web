@@ -1,11 +1,11 @@
 <?php
 
-use App\ForumReply;
-use App\ForumThread;
-use App\User;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\ForumReply;
+use App\Models\ForumThread;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateForumRepliesTable extends Migration
 {

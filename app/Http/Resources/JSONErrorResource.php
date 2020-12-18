@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\APIError;
+use App\Models\APIError;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 

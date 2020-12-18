@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\FeedMessage;
+use App\Models\FeedMessage;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PostFeedRequest extends FormRequest
