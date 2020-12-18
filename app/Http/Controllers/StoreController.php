@@ -13,9 +13,11 @@ use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use ReceiptValidator\iTunes\PurchaseItem;
 use ReceiptValidator\iTunes\ResponseInterface as iTunesResponseInterface;
-use \ReceiptValidator\iTunes\Validator as iTunesValidator;
+use ReceiptValidator\iTunes\Validator as iTunesValidator;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class StoreController extends Controller

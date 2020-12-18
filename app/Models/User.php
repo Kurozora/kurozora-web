@@ -201,7 +201,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_CALENDAR_SECONDS, function() use ($animes) {
-            $appName = env('APP_NAME');
+            $appName = Env('APP_NAME');
             $productIdentifier = '-//Kurozora B.V.//' . $appName . '//'. strtoupper(config('app.locale'));
 
             $calendar = Calendar::create(UserReminderAnime::CAL_NAME);
