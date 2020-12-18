@@ -1,17 +1,24 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 module.exports = {
     purge: {
         content: [
-            "resources/**/*.html",
-            "resources/**/*.js",
-            "resources/**/*.jsx",
-            "resources/**/*.ts",
-            "resources/**/*.tsx",
-            "resources/**/*.php",
-            "resources/**/*.vue",
-            "resources/**/*.twig",
+            './vendor/laravel/jetstream/**/*.blade.php',
+            './storage/framework/views/*.php',
+            "./resources/**/*.html",
+            "./resources/**/*.js",
+            "./resources/**/*.jsx",
+            "./resources/**/*.ts",
+            "./resources/**/*.tsx",
+            './resources/**/*.blade.php',
+            "./resources/**/*.php",
+            "./resources/**/*.vue",
+            "./resources/**/*.twig",
         ],
-        defaultExtractor: (content) => content.match(/[\w-/.:]+(?<!:)/g) || [],
-        whitelistPatterns: [/-active$/, /-enter$/, /-leave-to$/, /show$/],
+        options: {
+            defaultExtractor: (content) => content.match(/[\w-/.:]+(?<!:)/g) || [],
+            whitelistPatterns: [/-active$/, /-enter$/, /-leave-to$/, /show$/]
+        }
     },
     theme: {
         pagination: theme => ({
@@ -24,6 +31,7 @@ module.exports = {
         extend: {
             colors: {
                 grayBlue: {
+                    DEFAULT: '#353A50',
                     '100': '#EBEBEE',
                     '200': '#CDCED3',
                     '300': '#AEB0B9',
@@ -35,6 +43,7 @@ module.exports = {
                     '900': '#101118',
                 },
                 orange: {
+                    DEFAULT: '#FF9300',
                     '100': '#FFF4E6',
                     '200': '#FFE4BF',
                     '300': '#FFD499',
@@ -48,8 +57,12 @@ module.exports = {
             }
         }
     },
-    variants: {},
+    variants: {
+        opacity: ['responsive', 'hover', 'focus', 'disabled'],
+    },
     plugins: [
-        require('tailwindcss-plugins/pagination')
+        require('@tailwindcss/aspect-ratio'),
+        require('@tailwindcss/forms'),
+        require('@tailwindcss/typography')
     ],
 }
