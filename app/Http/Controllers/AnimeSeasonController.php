@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\AnimeSeason;
+use App\Models\AnimeSeason;
 use App\Helpers\JSONResult;
 use App\Http\Resources\AnimeEpisodeResource;
 use App\Http\Resources\AnimeSeasonResource;

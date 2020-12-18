@@ -4,11 +4,11 @@ namespace Tests\API;
 
 use App\Http\Resources\NotificationResource;
 use App\Notifications\NewFollower;
-use App\User;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Notifications\DatabaseNotification;
-use Tests\Traits\ProvidesTestUser;
 use Tests\TestCase;
+use Tests\Traits\ProvidesTestUser;
 
 class NotificationTest extends TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-use App\AnimeStudio;
+use App\Models\AnimeStudio;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

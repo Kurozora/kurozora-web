@@ -1,11 +1,11 @@
 <?php
 
-use App\Anime;
-use App\AnimeGenre;
-use App\Genre;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Anime;
+use App\Models\AnimeGenre;
+use App\Models\Genre;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateAnimeGenresTable extends Migration
 {

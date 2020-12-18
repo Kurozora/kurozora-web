@@ -1,9 +1,9 @@
 <?php
 
-use App\LoginAttempt;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\LoginAttempt;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateLoginAttemptsTable extends Migration
 {

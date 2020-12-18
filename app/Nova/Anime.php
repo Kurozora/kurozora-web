@@ -12,6 +12,7 @@ use App\Nova\Actions\FetchAnimeDetails;
 use App\Nova\Actions\FetchAnimeImages;
 use App\Nova\Lenses\UnmoderatedAnime;
 use Chaseconey\ExternalImage\ExternalImage;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Laraning\NovaTimeField\TimeField as Time;
 use Laravel\Nova\Fields\BelongsToMany;
@@ -20,7 +21,6 @@ use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
@@ -332,7 +332,7 @@ class Anime extends Resource
     private function displayModIndicatorForIndex()
     {
         // Get the anime and moderator count
-        /** @var \App\Anime $anime */
+        /** @var \App\Models\Anime $anime */
         $anime = $this->resource;
         $modCount = $anime->moderators->count();
 

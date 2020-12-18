@@ -2,11 +2,11 @@
 
 use App\Rules\ValidateAPNDeviceToken;
 use App\Rules\ValidatePlatformVersion;
-use App\Session;
-use App\User;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Session;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateSessionsTable extends Migration
 {

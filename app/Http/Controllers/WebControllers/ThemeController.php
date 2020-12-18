@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\WebControllers;
 
-use App\AppTheme;
+use App\Models\AppTheme;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;

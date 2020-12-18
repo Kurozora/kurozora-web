@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\AnimeEpisode;
+use App\Models\AnimeEpisode;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MarkEpisodeAsWatchedRequest extends FormRequest

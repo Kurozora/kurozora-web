@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources;
 
-use App\Anime;
-use App\AnimeEpisode;
-use App\AnimeSeason;
+use App\Models\Anime;
+use App\Models\AnimeEpisode;
+use App\Models\AnimeSeason;
 use App\Enums\WatchStatus;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;

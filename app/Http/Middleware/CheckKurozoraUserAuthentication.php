@@ -2,15 +2,14 @@
 
 namespace App\Http\Middleware;
 
-use App\Session;
+use App\Helpers\KuroAuthToken;
+use App\Models\Session;
 use Closure;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Helpers\KuroAuthToken;
-use Laravel\Nova\Exceptions\AuthenticationException;
 
 /*
  * This middleware checks the Kurozora user's authentication details before
@@ -28,7 +27,7 @@ class CheckKurozoraUserAuthentication
      * @throws AuthorizationException
      * @throws Exception
      */
-    public function handle($request, Closure $next, $parameter = null)
+    public function handle(Request $request, Closure $next, $parameter = null)
     {
         // Check whether parameter value is valid
         if(!in_array($parameter, [null, 'optional']))
@@ -70,7 +69,7 @@ class CheckKurozoraUserAuthentication
      * @throws AuthorizationException
      * @throws Exception
      */
-    private function authenticate($userID, $secret, Closure $next, $request)
+    private function authenticate(int $userID, string $secret, Closure $next, Request $request)
     {
         // Find the session
         /** @var Session $session */
@@ -109,7 +108,7 @@ class CheckKurozoraUserAuthentication
      *
      * @param Session $session
      */
-    private function updateSession($session)
+    private function updateSession(Session $session)
     {
         // Extend the session's lifetime when at least 1 day has passed
         if($session->expires_at->startOfDay() < now()->addDays(Session::VALID_FOR_DAYS)->startOfDay())

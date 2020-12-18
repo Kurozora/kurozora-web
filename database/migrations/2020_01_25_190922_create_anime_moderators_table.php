@@ -1,8 +1,8 @@
 <?php
 
-use App\Anime;
-use App\AnimeModerator;
-use App\User;
+use App\Models\Anime;
+use App\Models\AnimeModerator;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

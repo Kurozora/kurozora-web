@@ -1,6 +1,6 @@
 <?php
 
-use App\AppTheme;
+use App\Models\AppTheme;
 use Illuminate\Database\Seeder;
 
 class AppThemeSeeder extends Seeder

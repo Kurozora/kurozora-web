@@ -2,17 +2,17 @@
 
 namespace App\Http\Resources;
 
-use App\Anime;
+use App\Models\Anime;
 use App\Enums\AnimeSource;
 use App\Enums\AnimeStatus;
 use App\Enums\AnimeType;
 use App\Enums\DayOfWeek;
 use App\Enums\UserLibraryStatus;
 use App\Enums\WatchRating;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class AnimeResourceBasic extends JsonResource
 {

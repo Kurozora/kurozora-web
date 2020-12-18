@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Anime;
-use App\ForumThread;
-use App\User;
+use App\Models\Anime;
+use App\Models\ForumThread;
+use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;

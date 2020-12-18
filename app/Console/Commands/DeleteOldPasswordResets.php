@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\PasswordReset;
+use App\Models\PasswordReset;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 

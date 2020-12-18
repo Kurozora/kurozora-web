@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Enums\ForumsVoteType;
-use App\ForumReply;
+use App\Models\ForumReply;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;

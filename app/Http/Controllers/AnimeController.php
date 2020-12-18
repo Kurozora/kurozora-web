@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Anime;
-use App\AnimeRating;
+use App\Models\Anime;
+use App\Models\AnimeRating;
 use App\Events\AnimeViewed;
 use App\Helpers\JSONResult;
 use App\Http\Requests\RateAnimeRequest;

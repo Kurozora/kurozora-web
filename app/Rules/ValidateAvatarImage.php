@@ -2,6 +2,8 @@
 
 namespace App\Rules;
 
+use App\Models\User;
+use Auth;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\AnimeRelations;
+use App\Models\AnimeRelations;
 use App\Enums\AnimeRelationType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;

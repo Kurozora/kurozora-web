@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Anime;
+use App\Models\Anime;
 use App\Enums\UserLibraryStatus;
 use App\Helpers\JSONResult;
 use App\Http\Requests\AddToLibraryRequest;
@@ -12,7 +12,7 @@ use App\Http\Requests\MALImportRequest;
 use App\Http\Requests\SearchLibraryRequest;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Jobs\ProcessMALImport;
-use App\User;
+use App\Models\User;
 use Auth;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Auth\Access\AuthorizationException;

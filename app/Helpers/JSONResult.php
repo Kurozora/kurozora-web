@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use App\APIError;
+use App\Models\APIError;
 use App\Http\Resources\JSONErrorResource;
 use App\Providers\AppServiceProvider;
 use Illuminate\Http\JsonResponse;

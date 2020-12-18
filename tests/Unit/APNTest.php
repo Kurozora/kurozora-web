@@ -2,10 +2,10 @@
 
 namespace Tests\Unit;
 
-use App\Session;
+use App\Models\Session;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Tests\Traits\ProvidesTestUser;
 use Tests\TestCase;
+use Tests\Traits\ProvidesTestUser;
 
 class APNTest extends TestCase
 {

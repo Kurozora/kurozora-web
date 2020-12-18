@@ -7,14 +7,14 @@ use App\Nova\Lenses\UnconfirmedUsers;
 use App\Rules\ValidateEmail;
 use App\Rules\ValidatePassword;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
+use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\MorphMany;
-use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Password;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Vyuldashev\NovaPermission\PermissionBooleanGroup;
 use Vyuldashev\NovaPermission\RoleBooleanGroup;
@@ -217,7 +217,7 @@ class User extends Resource
      */
     private function displayRolesForIndex() {
         // Get the role names of the user
-        /** @var \App\User $user */
+        /** @var \App\Models\User $user */
         $user = $this->resource;
 
         $roles = $user->getRoleNames();

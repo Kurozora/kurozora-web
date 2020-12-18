@@ -2,8 +2,8 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\FeedMessage;
-use App\User;
+use App\Models\FeedMessage;
+use App\Models\User;
 use Faker\Generator as Faker;
 
 $factory->define(FeedMessage::class, function (Faker $faker) {

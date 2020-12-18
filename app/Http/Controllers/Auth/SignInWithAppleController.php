@@ -8,7 +8,7 @@ use App\Helpers\KuroAuthToken;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignInWithAppleRequest;
 use App\Http\Resources\UserResource;
-use App\User;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;

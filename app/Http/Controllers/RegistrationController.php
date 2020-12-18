@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\NewUserRegisteredEvent;
 use App\Helpers\JSONResult;
 use App\Http\Requests\Registration;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;

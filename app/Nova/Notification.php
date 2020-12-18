@@ -3,15 +3,12 @@
 namespace App\Nova;
 
 use App\Http\Resources\NotificationResource;
+use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
-use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\DateTime;
-use Laravel\Nova\Fields\ID;
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\MorphTo;
-use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 
 class Notification extends Resource

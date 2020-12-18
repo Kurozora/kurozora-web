@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources;
 
-use App\Anime;
+use App\Models\Anime;
 use App\Enums\ExplorePageCategoryTypes;
-use App\ExplorePageCategory;
+use App\Models\ExplorePageCategory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 

@@ -2,10 +2,10 @@
 
 namespace Tests;
 
+use App\Helpers\KuroAuthToken;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Testing\Assert as PHPUnit;
 use Illuminate\Testing\TestResponse;
-use App\Helpers\KuroAuthToken;
 use Spatie\Snapshots\MatchesSnapshots;
 use Tests\Traits\ProvidesTestAnime;
 use Tests\Traits\ProvidesTestUser;

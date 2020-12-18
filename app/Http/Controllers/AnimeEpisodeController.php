@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\AnimeEpisode;
+use App\Models\AnimeEpisode;
 use App\Helpers\JSONResult;
 use App\Http\Requests\MarkEpisodeAsWatchedRequest;
 use App\Http\Resources\AnimeEpisodeResource;

@@ -2,11 +2,11 @@
 
 namespace Tests\API;
 
-use App\Anime;
-use App\User;
+use App\Models\Anime;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Tests\Traits\ProvidesTestUser;
 use Tests\TestCase;
+use Tests\Traits\ProvidesTestUser;
 
 class FavoriteAnimeTest extends TestCase
 {

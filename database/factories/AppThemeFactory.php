@@ -2,7 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\AppTheme;
+use App\Models\AppTheme;
 use Faker\Generator as Faker;
 
 $factory->define(AppTheme::class, function (Faker $faker) {

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ForumOrderType;
-use App\ForumSection;
-use App\ForumSectionBan;
-use App\ForumThread;
+use App\Models\ForumSection;
+use App\Models\ForumSectionBan;
+use App\Models\ForumThread;
 use App\Helpers\JSONResult;
 use App\Http\Requests\GetThreadsRequest;
 use App\Http\Requests\PostThreadRequest;

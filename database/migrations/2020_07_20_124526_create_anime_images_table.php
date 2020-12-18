@@ -1,7 +1,7 @@
 <?php
 
-use App\Anime;
-use App\AnimeImages;
+use App\Models\Anime;
+use App\Models\AnimeImages;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

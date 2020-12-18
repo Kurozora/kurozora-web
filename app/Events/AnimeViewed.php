@@ -2,7 +2,8 @@
 
 namespace App\Events;
 
-use App\Anime;
+use App\Models\Anime;
+use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 

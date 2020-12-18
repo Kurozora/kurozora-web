@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Session;
+use App\Models\Session;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SignInWithAppleRequest extends FormRequest

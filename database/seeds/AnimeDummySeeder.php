@@ -1,6 +1,6 @@
 <?php
 
-use App\Anime;
+use App\Models\Anime;
 use App\Enums\AnimeType;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;

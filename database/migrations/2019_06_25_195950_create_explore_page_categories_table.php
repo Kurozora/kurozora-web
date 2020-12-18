@@ -1,9 +1,9 @@
 <?php
 
-use App\ExplorePageCategory;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\ExplorePageCategory;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateExplorePageCategoriesTable extends Migration
 {
