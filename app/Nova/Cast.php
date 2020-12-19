@@ -15,7 +15,7 @@ class Cast extends Resource
      *
      * @var string
      */
-    public static $model = 'App\ActorCharacterAnime';
+    public static $model = 'App\Models\ActorCharacterAnime';
 
     /**
      * The single value that should be used to represent the resource when being displayed.

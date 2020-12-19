@@ -17,7 +17,7 @@ class Genre extends Resource
      *
      * @var string
      */
-    public static $model = 'App\Genre';
+    public static $model = 'App\Models\Genre';
 
     /**
      * The single value that should be used to represent the resource when being displayed.

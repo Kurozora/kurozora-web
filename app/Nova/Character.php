@@ -21,7 +21,7 @@ class Character extends Resource
      *
      * @var string
      */
-    public static $model = 'App\Character';
+    public static $model = 'App\Models\Character';
 
     /**
      * The single value that should be used to represent the resource when being displayed.

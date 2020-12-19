@@ -15,7 +15,7 @@ class AnimeRelation extends Resource
      *
      * @var string
      */
-    public static $model = 'App\AnimeRelations';
+    public static $model = 'App\Models\AnimeRelations';
 
     /**
      * The single value that should be used to represent the resource when being displayed.

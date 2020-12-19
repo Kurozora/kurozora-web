@@ -33,7 +33,7 @@ class Anime extends Resource
      *
      * @var string
      */
-    public static $model = 'App\Anime';
+    public static $model = 'App\Models\Anime';
 
     /**
      * The single value that should be used to represent the resource when being displayed.

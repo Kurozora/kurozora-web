@@ -4,6 +4,8 @@
 
 use App\Models\AppTheme;
 use Faker\Generator as Faker;
+use Salopot\ImageGenerator\ImageProvider;
+use Salopot\ImageGenerator\ImageSources\Remote\PicsumPhotosSource;
 
 $factory->define(AppTheme::class, function (Faker $faker) {
     return [
@@ -38,5 +40,9 @@ $factory->define(AppTheme::class, function (Faker $faker) {
 });
 
 $factory->afterCreating(AppTheme::class, function (AppTheme $theme, Faker $faker) {
-    $theme->addMediaFromUrl($faker->imageUrl(768, 1024, true, false))->toMediaCollection('screenshot');
+    $imageProvider = new ImageProvider($faker);
+    $imageProvider->addImageSource(new PicsumPhotosSource($imageProvider));
+    $faker->addProvider($imageProvider);
+
+    $theme->addMediaFromBase64($faker->imageGenerator(768, 1024)->getDataUrl())->toMediaCollection('screenshot');
 });
