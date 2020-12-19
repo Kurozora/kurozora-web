@@ -19,7 +19,7 @@ class Episode extends Resource
      *
      * @var string
      */
-    public static $model = 'App\AnimeEpisode';
+    public static $model = 'App\Models\AnimeEpisode';
 
     /**
      * The single value that should be used to represent the resource when being displayed.

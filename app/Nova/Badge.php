@@ -16,7 +16,7 @@ class Badge extends Resource
      *
      * @var string
      */
-    public static $model = 'App\Badge';
+    public static $model = 'App\Models\Badge';
 
     /**
      * The single value that should be used to represent the resource when being displayed.

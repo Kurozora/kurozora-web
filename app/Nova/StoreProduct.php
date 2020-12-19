@@ -15,7 +15,7 @@ class StoreProduct extends Resource
      *
      * @var string
      */
-    public static $model = 'App\StoreProduct';
+    public static $model = 'App\Models\StoreProduct';
 
     /**
      * The single value that should be used to represent the resource when being displayed.

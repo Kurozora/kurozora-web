@@ -17,7 +17,7 @@ class Studio extends Resource
      *
      * @var string
      */
-    public static $model = 'App\Studio';
+    public static $model = 'App\Models\Studio';
 
     /**
      * The single value that should be used to represent the resource when being displayed.

@@ -13,7 +13,7 @@ class AnimeStudio extends Resource
      *
      * @var string
      */
-    public static $model = 'App\AnimeStudio';
+    public static $model = 'App\Models\AnimeStudio';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
