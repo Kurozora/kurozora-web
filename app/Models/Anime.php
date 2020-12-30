@@ -277,7 +277,7 @@ class Anime extends KModel
      *
      * @return HasManyThrough
      */
-    function episodes()
+    public function episodes()
     {
         return $this->hasManyThrough(AnimeEpisode::class, AnimeSeason::class, 'anime_id', 'season_id');
     }
@@ -289,7 +289,7 @@ class Anime extends KModel
      * @param int|null $limit The number of resources to fetch.
      * @return object
      */
-    function getEpisodes(array $whereBetween = [], int $limit = null)
+    public function getEpisodes(array $whereBetween = [], int $limit = null)
     {
         // Find location of cached data
         $cacheKey = self::cacheKey(['name' => 'anime.episodes', 'id' => $this->id, 'limit' => $limit, 'whereBetween' => $whereBetween]);

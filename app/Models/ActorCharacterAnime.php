@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class ActorCharacterAnime extends Pivot
@@ -17,11 +18,23 @@ class ActorCharacterAnime extends Pivot
      */
     public $incrementing = true;
 
-    function anime() {
+    /**
+     * Returns the anime relationship of the object.
+     *
+     * @return BelongsTo
+     */
+    function anime(): BelongsTo
+    {
         return $this->belongsTo(Anime::class);
     }
 
-    function actor_character() {
+    /**
+     * Returns the actor_character relationship of the object.
+     *
+     * @return BelongsTo
+     */
+    function actor_character(): BelongsTo
+    {
         return $this->belongsTo(ActorCharacter::class);
     }
 }

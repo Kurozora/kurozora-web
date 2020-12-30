@@ -8,6 +8,7 @@ use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
 
 class Actor extends Resource
 {
@@ -61,6 +62,10 @@ class Actor extends Resource
             Text::make('Last name')
                 ->rules('required', 'max:255')
                 ->sortable(),
+
+            Textarea::make('About')
+                ->onlyOnForms()
+                ->help('A short description of the actor.'),
 
             Text::make('Occupation')
                 ->rules('max:255')
