@@ -46,6 +46,7 @@ class ReminderAnimeController extends Controller
      *
      * @param AddAnimeReminderRequest $request
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     function addReminder(AddAnimeReminderRequest $request): JsonResponse
     {
@@ -53,6 +54,9 @@ class ReminderAnimeController extends Controller
 
         /** @var User $user */
         $user = Auth::user();
+
+        if(empty($user->receipt) || !$user->receipt->is_subscribed ?? true)
+            throw new AuthorizationException('Reminders are only available to pro users.');
 
         $isAlreadyReminded = $user->userReminderAnime()->where('anime_id', $animeID)->exists();
 
@@ -79,12 +83,8 @@ class ReminderAnimeController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-        $userReceipt = $user->receipt;
 
-        if($userReceipt === null)
-            throw new AuthorizationException('Reminders are only available to pro users.');
-
-        if (!$userReceipt->is_subscribed)
+        if(empty($user->receipt) || !$user->receipt->is_subscribed ?? true)
             throw new AuthorizationException('Reminders are only available to pro users.');
 
         $calendarExportStream = $user->getCalendar();
