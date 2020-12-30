@@ -63,7 +63,7 @@ class ExplorePageCategoryResource extends JsonResource
                 $request->merge(['include' => 'genres']);
                 return [
                     'shows' => [
-                        'data' => AnimeResourceBasic::collection($category->animes)
+                        'data' => AnimeResource::collection($category->animes)
                     ]
                 ];
             }
@@ -71,7 +71,7 @@ class ExplorePageCategoryResource extends JsonResource
                 $request->merge(['include' => 'genres']);
                 return [
                     'shows' => [
-                        'data' => AnimeResourceBasic::collection(Anime::mostPopular(10)->get())
+                        'data' => AnimeResource::collection(Anime::mostPopular()->get())
                     ]
                 ];
             }

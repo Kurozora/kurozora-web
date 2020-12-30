@@ -26,6 +26,7 @@ class ActorResourceBasic extends JsonResource
             'attributes'    => [
                 'firstName'    => $actor->first_name,
                 'lastName'     => $actor->last_name,
+                'about'        => $actor->about,
                 'occupation'   => $actor->occupation,
                 'imageURL'     => $actor->image
             ]

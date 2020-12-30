@@ -21,6 +21,7 @@ class ActorCharacterAnimeResource extends JsonResource
         $actorCharacterAnime = $this->resource;
 
         $resource = [
+            'id'            => $actorCharacterAnime->id,
             'type'          => 'cast',
             'href'          => route('api.anime.cast', $actorCharacterAnime, false),
             'attributes'    => [
