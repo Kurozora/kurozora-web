@@ -20,7 +20,7 @@ class CreateSessionsTable extends Migration
         Schema::create(Session::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->string('apn_device_token', ValidateAPNDeviceToken::TOKEN_LENGTH)->nullable()->unique();
+            $table->string('apn_device_token', ValidateAPNDeviceToken::TOKEN_LENGTH)->nullable();
             $table->string('secret', 128);
 
             // Platform information
@@ -43,7 +43,11 @@ class CreateSessionsTable extends Migration
         });
 
         Schema::table(Session::TABLE_NAME, function (Blueprint $table) {
+            // Set foreign key constraints
             $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
+
+            // Set unique key constraints
+            $table->unique(['secret', 'apn_device_token']);
         });
     }
 
