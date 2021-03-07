@@ -112,7 +112,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      *
      * @return HasMany
      */
-    function feedMessages()
+    function feedMessages(): HasMany
     {
         return $this->hasMany(FeedMessage::class);
     }
@@ -122,7 +122,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      *
      * @return UserActivityStatus
      */
-    public function getActivityStatus()
+    public function getActivityStatus(): UserActivityStatus
     {
         /** @var Session $session */
         $session = $this->sessions()
@@ -161,7 +161,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      *
      * @return BelongsToMany
      */
-    function favoriteAnime()
+    function favoriteAnime(): BelongsToMany
     {
         return $this->belongsToMany(Anime::class, UserFavoriteAnime::class, 'user_id', 'anime_id');
     }
@@ -171,7 +171,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      *
      * @return BelongsToMany
      */
-    function reminderAnime()
+    function reminderAnime(): BelongsToMany
     {
         return $this->belongsToMany(Anime::class, UserReminderAnime::class, 'user_id', 'anime_id');
     }
@@ -181,7 +181,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      *
      * @return HasMany
      */
-    function userReminderAnime()
+    function userReminderAnime(): HasMany
     {
         return $this->hasMany(UserReminderAnime::class);
     }
@@ -275,7 +275,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      *
      * @return bool
      */
-    function isTracking(Anime $anime)
+    function isTracking(Anime $anime): bool
     {
         return $this->library()->where('anime_id', $anime->id)->exists();
     }
@@ -285,7 +285,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      *
      * @return BelongsToMany
      */
-    function moderatingAnime()
+    function moderatingAnime(): BelongsToMany
     {
         return $this->belongsToMany(Anime::class, AnimeModerator::class, 'user_id', 'anime_id')
             ->withPivot('created_at');
@@ -296,7 +296,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      *
      * @return BelongsToMany
      */
-    function library()
+    function library(): BelongsToMany
     {
         return $this->belongsToMany(Anime::class, UserLibrary::class, 'user_id', 'anime_id')
             ->withPivot('status');
@@ -307,7 +307,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      *
      * @return BelongsToMany
      */
-    function watchedAnimeEpisodes()
+    function watchedAnimeEpisodes(): BelongsToMany
     {
         return $this->belongsToMany(AnimeEpisode::class, UserWatchedEpisode::class, 'user_id', 'episode_id');
     }
@@ -319,7 +319,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      *
      * @return bool
      */
-    function hasWatched(AnimeEpisode $episode)
+    function hasWatched(AnimeEpisode $episode): bool
     {
         return $this->watchedAnimeEpisodes()->where('episode_id', $episode->id)->exists();
     }
@@ -329,7 +329,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      *
      * @return BelongsToMany
      */
-    function badges()
+    function badges(): BelongsToMany
     {
         return $this->belongsToMany(Badge::class, UserBadge::class, 'user_id', 'badge_id');
     }
@@ -339,7 +339,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      *
      * @return HasMany
      */
-    function sessions()
+    function sessions(): HasMany
     {
         return $this->hasMany(Session::class);
     }
@@ -359,7 +359,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      * @param array $options
      * @return Session
      */
-    function createSession($options = [])
+    function createSession($options = []): Session
     {
         $options = new OptionsBag($options);
 
@@ -402,7 +402,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      *
      * @return HasMany
      */
-    function threads()
+    function threads(): HasMany
     {
         return $this->hasMany(ForumThread::class);
     }
@@ -412,7 +412,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      *
      * @return array
      */
-    public function getBadges()
+    public function getBadges(): array
     {
         // Find location of cached data
         $cacheKey = sprintf(self::CACHE_KEY_BADGES, $this->id);
@@ -435,7 +435,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      *
      * @return BelongsToMany
      */
-    public function followers()
+    public function followers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, UserFollow::class, 'following_user_id', 'user_id');
     }
@@ -445,7 +445,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      *
      * @return int
      */
-    public function getFollowerCount()
+    public function getFollowerCount(): int
     {
         // Find location of cached data
         $cacheKey = sprintf(self::CACHE_KEY_FOLLOWER_COUNT, $this->id);
@@ -463,7 +463,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      *
      * @return BelongsToMany
      */
-    public function following()
+    public function following(): BelongsToMany
     {
         return $this->belongsToMany(User::class, UserFollow::class, 'user_id', 'following_user_id');
     }
@@ -473,7 +473,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      *
      * @return int
      */
-    public function getFollowingCount()
+    public function getFollowingCount(): int
     {
         // Find location of cached data
         $cacheKey = sprintf(self::CACHE_KEY_FOLLOWING_COUNT, $this->id);
@@ -489,7 +489,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      *
      * @return int
      */
-    public function getReputationCount()
+    public function getReputationCount(): int
     {
         // Find location of cached data
         $cacheKey = sprintf(self::CACHE_KEY_REPUTATION_COUNT, $this->id);
@@ -511,7 +511,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      * @param $rawPass
      * @return string
      */
-    public static function hashPass($rawPass)
+    public static function hashPass($rawPass): string
     {
         return Hash::make($rawPass);
     }
@@ -523,7 +523,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      * @param $hash
      * @return bool
      */
-    public static function checkPassHash($rawPass, $hash)
+    public static function checkPassHash($rawPass, $hash): bool
     {
         return Hash::check($rawPass, $hash);
     }
@@ -533,7 +533,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      *
      * @return bool
      */
-    public function hasConfirmedEmail()
+    public function hasConfirmedEmail(): bool
     {
         return ($this->email_confirmation_id == null);
     }
@@ -543,7 +543,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      *
      * @return bool
      */
-    function canDoMALImport()
+    function canDoMALImport(): bool
     {
         if(!$this->last_mal_import_at)
             return true;
@@ -559,7 +559,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      *
      * @return array
      */
-    public function routeNotificationForApn()
+    public function routeNotificationForApn(): array
     {
         return $this->sessions()
             ->whereNotNull('apn_device_token')
@@ -572,7 +572,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      *
      * @return HasOne
      */
-    function receipt()
+    function receipt(): HasOne
     {
         return $this->hasOne(UserReceipt::class);
     }
