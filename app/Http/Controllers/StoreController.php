@@ -9,15 +9,12 @@ use App\Http\Resources\StoreProductResource;
 use App\Models\StoreProduct;
 use App\Models\UserReceipt;
 use Auth;
-use Carbon\Carbon;
-use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use ReceiptValidator\iTunes\PurchaseItem;
-use ReceiptValidator\iTunes\ResponseInterface as iTunesResponseInterface;
-use ReceiptValidator\iTunes\Validator as iTunesValidator;
+use Imdhemy\AppStore\Exceptions\InvalidReceiptException;
+use Imdhemy\AppStore\Receipts\ReceiptResponse;
+use Imdhemy\AppStore\ValueObjects\PendingRenewal;
+use Imdhemy\Purchases\Facades\Subscription;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class StoreController extends Controller
@@ -26,6 +23,7 @@ class StoreController extends Controller
      * Returns the list of products in the store.
      *
      * @param GetStoreRequest $request
+     *
      * @return JsonResponse
      */
     function index(GetStoreRequest $request): JsonResponse
@@ -47,8 +45,11 @@ class StoreController extends Controller
      * Verify the App Store receipt.
      *
      * @param VerifyReceiptRequest $request
+     *
      * @return JsonResponse
+     *
      * @throws GuzzleException
+     * @throws InvalidReceiptException
      */
     function verifyReceipt(VerifyReceiptRequest $request): JsonResponse
     {
@@ -56,50 +57,54 @@ class StoreController extends Controller
         $receipt = $data['receipt'];
         $receiptData = $this->validated($receipt);
 
-        if ($receiptData->isValid()) {
-            $result = collect($receiptData->getPurchases());
-
-            /** @var PurchaseItem $sorted */
-            $sorted = $result->whereNotNull('expires_date_ms')
-                            ->whereNull(['cancellation_date'])
-                            ->sortByDesc('purchase_date')->first();
-            $expirationDate = $sorted->getExpiresDate();
-
-            // Check for grace period.
-            $isInGracePeriod = false;
-            if(array_key_exists('grace_period_expires_date', $sorted->getRawResponse())) {
-                $gracePeriod = Carbon::createFromTimestampUTC(
-                    (int) round((int) $sorted->getRawResponse()['grace_period_expires_date'] / 1000)
-                );
-
-                $isInGracePeriod = $gracePeriod->isFuture();
-            }
-        } else {
+        if (!$receiptData->getStatus()->isValid() &&
+            $receiptData->getReceipt()->getBundleId() != Env('APP_BUNDLE_ID')) {
             throw new ConflictHttpException('The generated receipt is invalid.');
         }
 
-        // Decide validity of the subscription.
-        $subscriptionIsValid = $expirationDate->isFuture() || $isInGracePeriod;
+        $latestReceiptInfo = $receiptData->getLatestReceiptInfo()[0];
+        $expiresDate = $latestReceiptInfo->getExpiresDate();
+        $originalTransactionID = $latestReceiptInfo->getOriginalTransactionId();
+        $webOrderLineItemID = $latestReceiptInfo->getWebOrderLineItemId();
+        $subscriptionProductId = $latestReceiptInfo->getProductId();
+
+        // Check for grace period.
+        $pendingRenewalInfo = $receiptData->getPendingRenewalInfo()[0];
+        $isInGracePeriod = $this->isInGracePeriod($pendingRenewalInfo);
+
+        // Decide validity of the subscription and whether it will auto renew.
+        $subscriptionIsValid = $expiresDate->isFuture() || $isInGracePeriod;
+        $willAutoRenew = $pendingRenewalInfo->isAutoRenewStatus();
+
+        // Get authenticated user.
         $userID = Auth::id();
 
         /** @var UserReceipt $foundReceipt */
-        $foundReceipt = UserReceipt::where('user_id', '=', $userID)->first();
+        $foundReceipt = UserReceipt::whereUserId($userID)->first();
 
         if ($foundReceipt) {
-            $foundReceipt->receipt = $receipt;
-            $foundReceipt->is_valid = $subscriptionIsValid;
-            $foundReceipt->save();
+            $foundReceipt->save([
+                'latest_receipt_data' => $receipt,
+                'latest_expires_date' => $expiresDate->toDateTime(),
+                'is_subscribed' => $subscriptionIsValid,
+                'subscription_product_id' => $subscriptionProductId
+            ]);
         } else {
             UserReceipt::create([
-                'receipt'   => $receipt,
-                'user_id'   => $userID,
-                'is_valid'  => $subscriptionIsValid
+                'user_id'                   => $userID,
+                'original_transaction_id'   => $originalTransactionID,
+                'web_order_line_item_id'    => $webOrderLineItemID,
+                'latest_receipt_data'       => $receipt,
+                'latest_expires_date'       => $expiresDate->toDateTime(),
+                'is_subscribed'             => $subscriptionIsValid,
+                'will_auto_renew'           => $willAutoRenew,
+                'subscription_product_id'   => $subscriptionProductId
             ]);
         }
 
         return JSONResult::success([
             'data' => [
-                'type' => 'receipt',
+                'type' => 'subscription',
                 'attributes' => [
                     'isValid' => $subscriptionIsValid
                 ]
@@ -111,20 +116,31 @@ class StoreController extends Controller
      * Checks with Apple if the receipt is verified.
      *
      * @param string $receiptData
-     * @return iTunesResponseInterface
+     *
+     *
+     * @return ReceiptResponse
+     *
      * @throws GuzzleException
+     * @throws InvalidReceiptException
      */
-    private function validated(string $receiptData): iTunesResponseInterface
+    private function validated(string $receiptData): ReceiptResponse
     {
-        $validator = new iTunesValidator();
+        // To verify auto-renewable receipt
+        return Subscription::appStore()->receiptData($receiptData)->renewable()->verifyReceipt();
+    }
 
-        try {
-            $sharedSecret = config('services.apple.store_kit.password');
-            $response = $validator->setExcludeOldTransactions(false)->setSharedSecret($sharedSecret)->setReceiptData($receiptData)->validate();
-        } catch (Exception $e) {
-            dd('got error = ' . $e->getMessage());
-        }
 
-        return $response;
+    /**
+     * Billing retrying and grace period expires date is in the future.
+     *
+     * @param PendingRenewal $pendingRenewalInfo
+     *
+     * @return bool
+     */
+    public function isInGracePeriod(PendingRenewal $pendingRenewalInfo): bool
+    {
+        return $pendingRenewalInfo->isInBillingRetryPeriod() &&
+            $pendingRenewalInfo->getGracePeriodExpiresDate() !== null &&
+            $pendingRenewalInfo->getGracePeriodExpiresDate()->isFuture();
     }
 }
