@@ -47,6 +47,7 @@
               :errors="errors"
               :resource-name="resourceName"
               :field="field"
+              :show-help-text="field.helpText != null"
             />
           </div>
         </div>

@@ -43,7 +43,7 @@
                 stroke="#4A90E2"
                 rx="7.6"
                 ry="7.39"
-                style="mix-blend-mode: multiply;"
+                style="mix-blend-mode: multiply"
               />
             </g>
             <path
@@ -275,3 +275,13 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  metaInfo() {
+    return {
+      title: 'Forbidden',
+    }
+  },
+}
+</script>

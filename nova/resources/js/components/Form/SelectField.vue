@@ -1,5 +1,5 @@
 <template>
-  <default-field :field="field" :errors="errors">
+  <default-field :field="field" :errors="errors" :show-help-text="showHelpText">
     <template slot="field">
       <!-- Search Input -->
       <search-input
@@ -35,15 +35,16 @@
         v-else
         :id="field.attribute"
         :dusk="field.attribute"
-        v-model="value"
+        @change="handleChange"
+        :value="this.value"
         class="w-full form-control form-select"
         :class="errorClasses"
         :options="field.options"
         :disabled="isReadonly"
       >
-        <option value="" selected :disabled="!field.nullable">{{
-          placeholder
-        }}</option>
+        <option value="" selected :disabled="!field.nullable">
+          {{ placeholder }}
+        </option>
       </select-control>
     </template>
   </default-field>
@@ -101,6 +102,17 @@ export default {
     selectOption(option) {
       this.selectedOption = option
       this.value = option.value
+    },
+
+    /**
+     * Handle the selection change event.
+     */
+    handleChange(e) {
+      this.value = e.target.value
+
+      if (this.field) {
+        Nova.$emit(this.field.attribute + '-change', this.value)
+      }
     },
   },
 

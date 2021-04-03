@@ -32,6 +32,8 @@ trait QueriesResources
             return $this->model()->newQuery();
         }
 
+        abort_unless($this->newViaResource()->hasRelatableField($this, $this->viaRelationship), 409);
+
         return forward_static_call([$this->viaResource(), 'newModel'])
                         ->newQueryWithoutScopes()->findOrFail(
                             $this->viaResourceId
@@ -48,6 +50,8 @@ trait QueriesResources
         if (! $this->viaRelationship()) {
             return $this->model()->newQueryWithoutScopes();
         }
+
+        abort_unless($this->newViaResource()->hasRelatableField($this, $this->viaRelationship), 409);
 
         return forward_static_call([$this->viaResource(), 'newModel'])
                     ->newQueryWithoutScopes()->findOrFail(

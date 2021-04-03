@@ -20,7 +20,7 @@
                         params: {
                             resourceName: '{{ $resource::uriKey() }}'
                         }
-                    }" class="text-white text-justify no-underline dim">
+                    }" class="text-white text-justify no-underline dim" dusk="{{ $resource::uriKey() }}-resource-link">
                         {{ $resource::label() }}
                     </router-link>
                 </li>

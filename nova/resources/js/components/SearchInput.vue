@@ -37,7 +37,7 @@
         v-if="!shouldShowDropdownArrow && !disabled"
         tabindex="-1"
         class="absolute p-2 inline-block"
-        style="right: 4px; top: 6px;"
+        style="right: 4px; top: 6px"
       >
         <svg
           class="block fill-current icon h-2 w-2"
@@ -78,7 +78,7 @@
         ref="container"
         class="search-input-options relative overflow-y-scroll scrolling-touch text-sm"
         tabindex="-1"
-        style="max-height: 155px;"
+        style="max-height: 155px"
       >
         <div
           v-for="(option, index) in data"
@@ -135,6 +135,7 @@ export default {
   },
 
   data: () => ({
+    debouncer: null,
     show: false,
     search: '',
     selected: 0,
@@ -180,6 +181,11 @@ export default {
       }
     },
   },
+
+  created() {
+    this.debouncer = _.debounce(callback => callback(), this.debounce)
+  },
+
   mounted() {
     document.addEventListener('keydown', e => {
       if (this.show && (e.keyCode == 9 || e.keyCode == 27)) {
@@ -270,11 +276,6 @@ export default {
         this.$emit('input', e.target.value)
       })
     },
-
-    /**
-     * Debounce function for the input handler
-     */
-    debouncer: _.debounce(callback => callback(), 500),
   },
 
   computed: {

@@ -1,5 +1,5 @@
 <template>
-  <default-field :field="field" :errors="errors">
+  <default-field :field="field" :errors="errors" :show-help-text="showHelpText">
     <template slot="field">
       <div class="flex items-center">
         <date-time-picker
@@ -40,7 +40,6 @@
 
 <script>
 import {
-  Errors,
   FormField,
   HandlesValidationErrors,
   InteractsWithDates,
@@ -48,6 +47,15 @@ import {
 
 export default {
   mixins: [HandlesValidationErrors, FormField, InteractsWithDates],
+
+  methods: {
+    /**
+     * Update the field's internal value when it's value changes
+     */
+    handleChange(value) {
+      this.value = value
+    },
+  },
 
   computed: {
     firstDayOfWeek() {

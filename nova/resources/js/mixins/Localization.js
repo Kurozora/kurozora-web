@@ -9,6 +9,18 @@ export default {
         : key
 
       _.forEach(replace, (value, key) => {
+        key = new String(key)
+
+        if (value === null) {
+          console.error(
+            `Translation '${translation}' for key '${key}' contains a null replacement.`
+          )
+
+          return
+        }
+
+        value = new String(value)
+
         const searches = [
           ':' + key,
           ':' + key.toUpperCase(),

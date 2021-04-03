@@ -9,7 +9,7 @@
     <span
       v-if="processing"
       class="absolute"
-      style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
+      style="top: 50%; left: 50%; transform: translate(-50%, -50%)"
     >
       <loader class="text-white" width="32" />
     </span>

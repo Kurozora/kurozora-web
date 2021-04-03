@@ -162,6 +162,7 @@ class NovaServiceProvider extends ServiceProvider
             );
 
             Nova::provideToScript([
+                'appName' => config('app.name', 'Laravel Nova'),
                 'timezone' => config('app.timezone', 'UTC'),
                 'translations' => Nova::allTranslations(),
                 'userTimezone' => Nova::resolveUserTimezone($event->request),
@@ -197,6 +198,7 @@ class NovaServiceProvider extends ServiceProvider
             Console\ResourceCommand::class,
             Console\ResourceToolCommand::class,
             Console\StubPublishCommand::class,
+            Console\TranslateCommand::class,
             Console\ThemeCommand::class,
             Console\ToolCommand::class,
             Console\TrendCommand::class,

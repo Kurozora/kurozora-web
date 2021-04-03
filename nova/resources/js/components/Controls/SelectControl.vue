@@ -3,13 +3,13 @@
     <slot />
     <template v-for="(options, group) in groupedOptions">
       <optgroup :label="group" v-if="group">
-        <option v-for="option in options" v-bind="attrsFor(option)"
-          >{{ labelFor(option) }}
+        <option v-for="option in options" v-bind="attrsFor(option)">
+          {{ labelFor(option) }}
         </option>
       </optgroup>
       <template v-else>
-        <option v-for="option in options" v-bind="attrsFor(option)"
-          >{{ labelFor(option) }}
+        <option v-for="option in options" v-bind="attrsFor(option)">
+          {{ labelFor(option) }}
         </option>
       </template>
     </template>

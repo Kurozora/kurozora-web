@@ -75,9 +75,11 @@ class HasOne extends Field implements ListableField, RelatableField
             $resource = Nova::resourceForKey($request->viaResource);
 
             if ($resource && $request->viaResourceId) {
-                $parent = $resource::newModel()->find($request->viaResourceId);
+                $parent = $resource::newModel()
+                    ->with($this->attribute)
+                    ->find($request->viaResourceId);
 
-                return ! is_null($parent->{$this->attribute});
+                return optional($parent->{$this->attribute})->exists === true;
             }
 
             return false;

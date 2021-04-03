@@ -3,9 +3,11 @@
 namespace Laravel\Nova;
 
 use Illuminate\Contracts\Http\Kernel as HttpKernel;
+use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Nova\Http\Middleware\ServeNova;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 /**
  * The primary purpose of this service provider is to push the ServeNova
@@ -33,6 +35,16 @@ class NovaCoreServiceProvider extends ServiceProvider
 
         $this->app->make(HttpKernel::class)
                     ->pushMiddleware(ServeNova::class);
+
+        $this->app->afterResolving(NovaRequest::class, function ($request, $app) {
+            if (! $app->bound(NovaRequest::class)) {
+                $app->instance(NovaRequest::class, $request);
+            }
+        });
+
+        $this->app['events']->listen(RequestHandled::class, function ($event) {
+            $this->app->forgetInstance(NovaRequest::class);
+        });
     }
 
     /**

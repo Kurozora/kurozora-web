@@ -7,7 +7,7 @@ trait Searchable
     /**
      * Indicates if this relationship is searchable.
      *
-     * @var bool
+     * @var bool|\Closure
      */
     public $searchable = false;
 
@@ -19,13 +19,21 @@ trait Searchable
     public $withSubtitles = false;
 
     /**
+     * The debounce amount to use when searching this field.
+     *
+     * @var int
+     */
+    public $debounce = 500;
+
+    /**
      * Specify if the relationship should be searchable.
      *
+     * @param  bool|\Closure  $searchable
      * @return $this
      */
-    public function searchable()
+    public function searchable($searchable = true)
     {
-        $this->searchable = true;
+        $this->searchable = $searchable;
 
         return $this;
     }
@@ -38,6 +46,19 @@ trait Searchable
     public function withSubtitles()
     {
         $this->withSubtitles = true;
+
+        return $this;
+    }
+
+    /**
+     * Set the debounce period for use in searchable select inputs.
+     *
+     * @param int $amount
+     * @return $this
+     */
+    public function debounce($amount)
+    {
+        $this->debounce = $amount;
 
         return $this;
     }

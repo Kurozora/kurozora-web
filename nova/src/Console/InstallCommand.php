@@ -36,11 +36,18 @@ class InstallCommand extends Command
         $this->comment('Publishing Nova Service Provider...');
         $this->callSilent('vendor:publish', ['--tag' => 'nova-provider']);
 
-        $this->registerNovaServiceProvider();
+        $this->installNovaServiceProvider();
 
         $this->comment('Generating User Resource...');
         $this->callSilent('nova:resource', ['name' => 'User']);
         copy($this->resolveStubPath('/stubs/nova/user-resource.stub'), app_path('Nova/User.php'));
+
+        if (file_exists(app_path('Models/User.php'))) {
+            file_put_contents(
+                app_path('Nova/User.php'),
+                str_replace('App\User::class', 'App\Models\User::class', file_get_contents(app_path('Nova/User.php')))
+            );
+        }
 
         $this->setAppNamespace();
 
@@ -48,19 +55,21 @@ class InstallCommand extends Command
     }
 
     /**
-     * Register the Nova service provider in the application configuration file.
+     * Install the Nova service providers in the application configuration file.
      *
      * @return void
      */
-    protected function registerNovaServiceProvider()
+    protected function installNovaServiceProvider()
     {
         $namespace = Str::replaceLast('\\', '', $this->laravel->getNamespace());
 
-        file_put_contents(config_path('app.php'), str_replace(
-            "{$namespace}\\Providers\EventServiceProvider::class,".PHP_EOL,
-            "{$namespace}\\Providers\EventServiceProvider::class,".PHP_EOL."        {$namespace}\Providers\NovaServiceProvider::class,".PHP_EOL,
-            file_get_contents(config_path('app.php'))
-        ));
+        if (! Str::contains($appConfig = file_get_contents(config_path('app.php')), "{$namespace}\\Providers\\NovaServiceProvider::class")) {
+            file_put_contents(config_path('app.php'), str_replace(
+                "{$namespace}\\Providers\EventServiceProvider::class,".PHP_EOL,
+                "{$namespace}\\Providers\EventServiceProvider::class,".PHP_EOL."        {$namespace}\Providers\NovaServiceProvider::class,".PHP_EOL,
+                $appConfig
+            ));
+        }
     }
 
     /**

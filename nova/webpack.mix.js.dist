@@ -28,6 +28,7 @@ mix
         'moment-timezone',
         'moment',
         'numbro',
+        'numbro/dist/languages.min',
         'places.js',
         'popper.js',
         'portal-vue',

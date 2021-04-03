@@ -6,6 +6,8 @@ use Faker\Provider\Uuid;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Laravel\Nova\Fields\Image;
+use Laravel\Nova\Tests\Fixtures\File;
 use Laravel\Nova\Tests\Fixtures\VaporFile;
 use Laravel\Nova\Tests\IntegrationTest;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -112,45 +114,47 @@ class VaporFileFieldControllerTest extends IntegrationTest
         $this->assertEquals('new_avatar.jpg', $file->original_name);
     }
 
-//    public function test_update_prunable_file_with_custom_delete_callback()
-//    {
-//        $_SERVER['nova.fileResource.imageField'] = function () {
-//            return Image::make('Avatar', 'avatar')
-//                ->prunable()
-//                ->delete(function ($request, $model, $disk, $path) {
-//                    Storage::disk($disk)->delete($path);
-//                });
-//        };
-//
-//        $response = $this->withExceptionHandling()
-//            ->postJson('/nova-api/files', [
-//                'avatar' => UploadedFile::fake()->image('avatar.png'),
-//            ]);
-//
-//        $response->assertStatus(201);
-//
-//        $_SERVER['__nova.fileResource.imageName'] = 'avatar2.png';
-//
-//        $file = File::first();
-//
-//        $filename = $file->avatar;
-//        Storage::disk('public')->assertExists($file->avatar);
-//
-//        $this->withExceptionHandling()
-//            ->postJson('/nova-api/files/'.$file->id, [
-//                '_method'=>'PUT',
-//                'avatar' => UploadedFile::fake()->image('avatar2.png'),
-//            ]);
-//
-//        unset($_SERVER['nova.fileResource.imageField']);
-//
-//        $file = File::first();
-//
-//        Storage::disk('public')->assertMissing($filename);
-//        Storage::disk('public')->assertExists($file->avatar);
-//        $this->assertnotEquals($filename, $file->avatar);
-//    }
-//
+    public function test_update_prunable_file_with_custom_delete_callback()
+    {
+        $_SERVER['nova.fileResource.imageField'] = function () {
+            return Image::make('Avatar', 'avatar')
+               ->prunable()
+               ->delete(function ($request, $model, $disk, $path) {
+                   Storage::disk($disk)->delete($path);
+               });
+        };
+
+        $response = $this->withoutMix()
+           ->withExceptionHandling()
+           ->postJson('/nova-api/files', [
+               'avatar' => UploadedFile::fake()->image('avatar.png'),
+           ]);
+
+        $response->assertStatus(201);
+
+        $_SERVER['__nova.fileResource.imageName'] = 'avatar2.png';
+
+        $file = File::first();
+
+        $filename = $file->avatar;
+        Storage::disk('public')->assertExists($file->avatar);
+
+        $this->withoutMix()
+           ->withExceptionHandling()
+           ->postJson('/nova-api/files/'.$file->id, [
+               '_method'=>'PUT',
+               'avatar' => UploadedFile::fake()->image('avatar2.png'),
+           ]);
+
+        unset($_SERVER['nova.fileResource.imageField']);
+
+        $file = File::first();
+
+        Storage::disk('public')->assertMissing($filename);
+        Storage::disk('public')->assertExists($file->avatar);
+        $this->assertnotEquals($filename, $file->avatar);
+    }
+
     public function test_proper_response_returned_when_required_file_not_provided()
     {
         $this->setupVaporFilesystem();

@@ -8,6 +8,7 @@
           class="whitespace-no-wrap"
           :is="`index-${line.component}`"
           :field="line"
+          :resourceName="resourceName"
         />
       </div>
     </template>

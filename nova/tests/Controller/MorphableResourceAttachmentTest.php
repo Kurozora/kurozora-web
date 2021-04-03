@@ -132,4 +132,18 @@ class MorphableResourceAttachmentTest extends IntegrationTest
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['admin']);
     }
+
+    public function test_pivot_data_failed_with_invalid_via_relationship()
+    {
+        $post = factory(Post::class)->create();
+        $tag = factory(Tag::class)->create();
+
+        $response = $this->withExceptionHandling()
+                        ->postJson('/nova-api/posts/'.$post->id.'/attach/tags', [
+                            'tags' => $tag->id,
+                            'viaRelationship' => 'delete',
+                        ]);
+
+        $response->assertStatus(404);
+    }
 }

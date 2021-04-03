@@ -26,9 +26,11 @@
         :via-resource-id="viaResourceId"
         :via-relationship="viaRelationship"
         :shown-via-new-relation-modal="shownViaNewRelationModal"
+        @field-changed="$emit('field-changed')"
         @file-deleted="$emit('update-last-retrieved-at-timestamp')"
         @file-upload-started="$emit('file-upload-started')"
         @file-upload-finished="$emit('file-upload-finished')"
+        :show-help-text="field.helpText != null"
       />
     </card>
   </div>

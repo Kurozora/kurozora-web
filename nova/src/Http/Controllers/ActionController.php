@@ -16,11 +16,17 @@ class ActionController extends Controller
      */
     public function index(NovaRequest $request)
     {
+        $resource = $request->newResourceWith(
+            ($request->resourceId
+                ? $request->findModelQuery()->first()
+                : null) ?? $request->model()
+        );
+
         return response()->json([
-            'actions' => $request->newResource()->availableActions($request),
+            'actions' => $resource->availableActions($request),
             'pivotActions' => [
                 'name' => $request->pivotName(),
-                'actions' => $request->newResource()->availablePivotActions($request),
+                'actions' => $resource->availablePivotActions($request),
             ],
         ]);
     }

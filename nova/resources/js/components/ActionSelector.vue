@@ -52,7 +52,7 @@
         :class="{ 'btn-disabled': !selectedAction }"
         :title="__('Run Action')"
       >
-        <icon type="play" class="text-white" style="margin-left: 7px;" />
+        <icon type="play" class="text-white" style="margin-left: 7px" />
       </button>
     </div>
 
@@ -70,6 +70,13 @@
         @confirm="executeAction"
         @close="closeConfirmationModal"
       />
+
+      <component
+        :is="actionResponseData.modal"
+        @close="closeActionResponseModal"
+        v-if="showActionResponseModal"
+        :data="actionResponseData"
+      />
     </portal>
   </div>
 </template>
@@ -77,7 +84,7 @@
 <script>
 import _ from 'lodash'
 import HandlesActions from '@/mixins/HandlesActions'
-import { Errors, InteractsWithResourceInformation } from 'laravel-nova'
+import { InteractsWithResourceInformation } from 'laravel-nova'
 
 export default {
   mixins: [InteractsWithResourceInformation, HandlesActions],
@@ -90,6 +97,11 @@ export default {
     pivotActions: {},
     pivotName: String,
   },
+
+  data: () => ({
+    showActionResponseModal: false,
+    actionResponseData: {},
+  }),
 
   watch: {
     /**

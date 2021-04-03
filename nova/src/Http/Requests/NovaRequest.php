@@ -61,4 +61,14 @@ class NovaRequest extends FormRequest
     {
         return $this instanceof ResourceDetailRequest;
     }
+
+    /**
+     * Determine if this request is an action request.
+     *
+     * @return bool
+     */
+    public function isActionRequest()
+    {
+        return $this->segment(3) == 'actions';
+    }
 }

@@ -25,8 +25,14 @@ class AssociatableController extends Controller
             $request, $associatedResource = $field->resourceClass
         );
 
+        $limit = $associatedResource::usesScout()
+                    ? $associatedResource::$scoutSearchResults
+                    : $associatedResource::$relatableSearchResults;
+
         return [
-            'resources' => $field->buildAssociatableQuery($request, $withTrashed)->get()
+            'resources' => $field->buildAssociatableQuery($request, $withTrashed)
+                        ->take($limit)
+                        ->get()
                         ->mapInto($field->resourceClass)
                         ->filter->authorizedToAdd($request, $request->model())
                         ->map(function ($resource) use ($request, $field) {

@@ -65,8 +65,17 @@ class Text extends Field
      */
     public function jsonSerialize()
     {
-        return array_merge(parent::jsonSerialize(), [
-            'suggestions' => $this->resolveSuggestions(app(NovaRequest::class)),
-        ]);
+        $request = app(NovaRequest::class);
+
+        if ($request->isCreateOrAttachRequest()
+            || $request->isUpdateOrUpdateAttachedRequest()
+            || $request->isActionRequest() === true
+        ) {
+            return array_merge(parent::jsonSerialize(), [
+                'suggestions' => $this->resolveSuggestions($request),
+            ]);
+        }
+
+        return parent::jsonSerialize();
     }
 }

@@ -27,7 +27,7 @@ class DateTime extends Field
         parent::__construct($name, $attribute, $resolveCallback ?? function ($value) {
             if (! is_null($value)) {
                 if ($value instanceof DateTimeInterface) {
-                    return $value->format('Y-m-d H:i:s');
+                    return $value->format('Y-m-d H:i:s.u');
                 }
 
                 throw new Exception("DateTime field must cast to 'datetime' in Eloquent model.");

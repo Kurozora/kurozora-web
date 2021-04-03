@@ -11,7 +11,9 @@
          stopOnFailure="false">
     <testsuites>
         <testsuite name="Package Tests">
-            <directory suffix="Test.php">./tests</directory>
+            <directory suffix="Test.php">./tests/Controller</directory>
+            <directory suffix="Test.php">./tests/Feature</directory>
+            <directory suffix="Test.php">./tests/Unit</directory>
         </testsuite>
     </testsuites>
     <filter>
@@ -21,5 +23,11 @@
     </filter>
     <php>
         <env name="APP_KEY" value="base64:la8jDWcqBHfGO6PR+OA9FAZqdi0XQKuhnzqc5tUATZs="/>
+        <!--
+        <env name="REDIS_CLIENT" value="predis"/>
+
+        <env name="RUN_MYSQL_TESTS" value="false"/>
+        <env name="RUN_POSTGRES_TESTS" value="false"/>
+        -->
     </php>
 </phpunit>

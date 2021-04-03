@@ -30,6 +30,6 @@ class StyleController extends Controller
             [
                 'Content-Type' => 'text/css',
             ]
-        )->setLastModified(DateTime::createFromFormat('U', filemtime($path)));
+        )->setLastModified(DateTime::createFromFormat('U', (string) filemtime($path)));
     }
 }

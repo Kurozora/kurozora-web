@@ -151,7 +151,7 @@
                 stroke="#4A90E2"
                 rx="17.51"
                 ry="17.27"
-                style="mix-blend-mode: multiply;"
+                style="mix-blend-mode: multiply"
               />
             </g>
             <path
@@ -322,3 +322,13 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  metaInfo() {
+    return {
+      title: 'Page Not Found',
+    }
+  },
+}
+</script>

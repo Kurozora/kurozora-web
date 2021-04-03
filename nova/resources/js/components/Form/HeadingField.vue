@@ -6,6 +6,7 @@
     </div>
   </field-wrapper>
 </template>
+
 <script>
 export default {
   props: {

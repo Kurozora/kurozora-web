@@ -1,5 +1,5 @@
 <template>
-  <default-field :field="field" :errors="errors">
+  <default-field :field="field" :errors="errors" :show-help-text="showHelpText">
     <template slot="field">
       <div class="flex items-center">
         <date-time-picker
@@ -41,7 +41,6 @@
 
 <script>
 import {
-  Errors,
   FormField,
   HandlesValidationErrors,
   InteractsWithDates,

@@ -588,7 +588,7 @@ textarea.form-input:read-only,
 }
 
 .markdown a {
-  color: blue;
+  @apply text-primary;
 }
 
 .markdown table {

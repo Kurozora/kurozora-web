@@ -9,6 +9,7 @@
             :class="line.classes"
             :is="`index-${line.component}`"
             :field="line"
+            :resourceName="resourceName"
           />
         </div>
       </template>

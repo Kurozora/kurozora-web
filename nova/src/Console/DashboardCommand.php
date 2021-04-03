@@ -7,6 +7,8 @@ use Illuminate\Support\Str;
 
 class DashboardCommand extends GeneratorCommand
 {
+    use ResolvesStubPath;
+
     /**
      * The name and signature of the console command.
      *
@@ -50,7 +52,7 @@ class DashboardCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return realpath(__DIR__.'/stubs/dashboard.stub');
+        return $this->resolveStubPath('/stubs/nova/dashboard.stub');
     }
 
     /**

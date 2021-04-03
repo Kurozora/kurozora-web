@@ -158,7 +158,7 @@ class Trix extends Field implements StorableContract, DeletableContract
         }
 
         if ($request->{$this->attribute.'DraftId'} && $this->withFiles) {
-            $callbacks[] = function () use ($request, $model, $attribute) {
+            $callbacks[] = function () use ($request, $model) {
                 PendingAttachment::persistDraft(
                     $request->{$this->attribute.'DraftId'},
                     $this,

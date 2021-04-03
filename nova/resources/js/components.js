@@ -76,6 +76,7 @@ import PartitionMetric from '@/components/Metrics/PartitionMetric'
 import Play from '@/components/Icons/Play'
 import ProgressButton from '@/components/ProgressButton'
 import Refresh from '@/components/Icons/Refresh'
+import ResourcePollingButton from '@/components/ResourcePollingButton'
 import ResourceTable from '@/components/ResourceTable'
 import ResourceTableRow from '@/components/Index/ResourceTableRow'
 import InlineActionSelector from '@/components/Index/InlineActionSelector'
@@ -199,3 +200,5 @@ Vue.component('select-control', SelectControl)
 Vue.component('date-time-picker', DateTimePicker)
 
 Vue.component('fade-transition', FadeTransition)
+
+Vue.component('resource-polling-button', ResourcePollingButton)

@@ -23,6 +23,13 @@ class ActionResource extends Resource
     public static $model = ActionEvent::class;
 
     /**
+     * Indicates whether the resource should automatically poll for new resources.
+     *
+     * @var bool
+     */
+    public static $polling = true;
+
+    /**
      * Determine if the current user can create new resources.
      *
      * @param  \Illuminate\Http\Request  $request
