@@ -15,6 +15,6 @@ class ForumThreadSeeder extends Seeder
     public function run()
     {
         // 50 random threads
-        factory(ForumThread::class, 50)->create();
+        ForumThread::factory(50)->create();
     }
 }

@@ -32,8 +32,9 @@ class UserSeeder extends Seeder
             'email_confirmation_id' => null
         ]);
 
-        foreach($admins as $admin)
+        foreach($admins as $admin) {
             $admin->assignRole('admin');
+        }
 
         /*
          * Apple test account
@@ -48,6 +49,6 @@ class UserSeeder extends Seeder
         ]);
 
         // 50 fake users
-        factory(User::class, 50)->create();
+        User::factory(50)->create();
     }
 }

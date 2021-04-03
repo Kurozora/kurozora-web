@@ -15,6 +15,6 @@ class CharacterSeeder extends Seeder
     public function run()
     {
         // Create initial characters
-        factory(Character::class, 10)->create();
+        Character::factory(10)->create();
     }
 }

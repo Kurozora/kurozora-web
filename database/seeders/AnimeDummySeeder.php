@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Anime;
 use App\Enums\AnimeType;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
 
@@ -19,7 +20,7 @@ class AnimeDummySeeder extends Seeder
      * Run the database seeds.
      *
      * @return void
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
     public function run()
     {
@@ -53,7 +54,7 @@ class AnimeDummySeeder extends Seeder
                 }
 
                 // Create the anime
-                factory(Anime::class)->create([
+                Anime::create([
                     'title'         => $animeData->title,
                     'type'          => AnimeType::TV,
                     'is_nsfw'       => $animeData->nsfw,

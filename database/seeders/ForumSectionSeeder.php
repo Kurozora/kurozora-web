@@ -18,10 +18,11 @@ class ForumSectionSeeder extends Seeder
         $sectionNames = ['Anime', 'Real Life', 'Memes', 'Art Showcase'];
 
         // Create the sections
-        foreach($sectionNames as $sectName)
+        foreach($sectionNames as $sectName) {
             ForumSection::create([
-                'name'      => $sectName,
-                'locked'    => false
+                'name' => $sectName,
+                'locked' => false
             ]);
+        }
     }
 }

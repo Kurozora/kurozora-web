@@ -15,6 +15,6 @@ class StudioSeeder extends Seeder
     public function run()
     {
         // 10 random studios
-        factory(Studio::class, 10)->create();
+        Studio::factory(10)->create();
     }
 }
