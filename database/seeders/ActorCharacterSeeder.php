@@ -1,9 +1,11 @@
 <?php
 
-use App\Models\ForumThread;
+namespace Database\Seeders;
+
+use App\Models\ActorCharacter;
 use Illuminate\Database\Seeder;
 
-class ForumThreadSeeder extends Seeder
+class ActorCharacterSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,7 +14,6 @@ class ForumThreadSeeder extends Seeder
      */
     public function run()
     {
-        // 50 random threads
-        factory(ForumThread::class, 50)->create();
+        factory(ActorCharacter::class, 10)->create();
     }
 }

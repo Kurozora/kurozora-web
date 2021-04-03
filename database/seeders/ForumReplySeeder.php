@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Models\ForumReply;
 use Illuminate\Database\Seeder;
 

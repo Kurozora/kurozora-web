@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Models\Anime;
 use App\Enums\AnimeType;
 use Illuminate\Database\Seeder;
