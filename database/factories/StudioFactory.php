@@ -1,16 +1,32 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
 use App\Models\Studio;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(Studio::class, function (Faker $faker) {
-    return [
-        'name'          => $faker->company,
-        'logo_url'      => $faker->imageUrl(),
-        'about'         => $faker->paragraph(mt_rand(10, 30)),
-        'founded'       => $faker->date(),
-        'website_url'   => $faker->url
-    ];
-});
+class StudioFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Studio::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'name'          => $this->faker->company,
+            'logo_url'      => $this->faker->imageUrl(),
+            'about'         => $this->faker->paragraph(mt_rand(10, 30)),
+            'founded'       => $this->faker->date(),
+            'website_url'   => $this->faker->url
+        ];
+    }
+}
