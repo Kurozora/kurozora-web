@@ -21,10 +21,15 @@ class ResourceAttachController extends Controller
      */
     public function handle(NovaRequest $request)
     {
-        $this->validate(
-            $request, $model = $request->findModelOrFail(),
-            $resource = $request->resource()
-        );
+        $resource = $request->resource();
+
+        $model = $request->findModelOrFail();
+
+        tap(new $resource($model), function ($resource) use ($request) {
+            abort_unless($resource->hasRelatableField($request, $request->viaRelationship), 404);
+        });
+
+        $this->validate($request, $model, $resource);
 
         DB::transaction(function () use ($request, $resource, $model) {
             [$pivot, $callbacks] = $resource::fillPivot(
@@ -51,7 +56,7 @@ class ResourceAttachController extends Controller
      */
     protected function validate(NovaRequest $request, $model, $resource)
     {
-        $attribute = $resource::validationAttributeFor($request, $request->relatedResource);
+        $attribute = $resource::validationAttachableAttributeFor($request, $request->relatedResource);
 
         tap($this->creationRules($request, $resource), function ($rules) use ($resource, $request, $attribute) {
             Validator::make($request->all(), $rules, [], $this->customRulesKeys($request, $attribute))->validate();

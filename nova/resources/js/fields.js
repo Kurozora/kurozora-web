@@ -39,6 +39,11 @@ Vue.component(
   require('./components/Detail/StackField.vue')
 )
 
+// Slug Field...
+Vue.component('index-slug-field', require('./components/Index/TextField.vue'))
+Vue.component('detail-slug-field', require('./components/Detail/TextField.vue'))
+Vue.component('form-slug-field', require('./components/Form/SlugField.vue'))
+
 // Text Field...
 Vue.component('index-text-field', require('./components/Index/TextField.vue'))
 Vue.component('detail-text-field', require('./components/Detail/TextField.vue'))
@@ -227,10 +232,22 @@ Vue.component(
   require('./components/Detail/HasOneField.vue')
 )
 
+// Has One Through Field...
+Vue.component(
+  'detail-has-one-through-field',
+  require('./components/Detail/HasOneThroughField.vue')
+)
+
 // Has Many Field...
 Vue.component(
   'detail-has-many-field',
   require('./components/Detail/HasManyField.vue')
+)
+
+// Has Many Through Field...
+Vue.component(
+  'detail-has-many-through-field',
+  require('./components/Detail/HasManyThroughField.vue')
 )
 
 // Belongs To Field...

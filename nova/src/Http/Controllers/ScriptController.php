@@ -30,6 +30,6 @@ class ScriptController extends Controller
             [
                 'Content-Type' => 'application/javascript',
             ]
-        )->setLastModified(DateTime::createFromFormat('U', filemtime($path)));
+        )->setLastModified(DateTime::createFromFormat('U', (string) filemtime($path)));
     }
 }

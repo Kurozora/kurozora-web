@@ -14,10 +14,16 @@
 </template>
 
 <script>
-import { HasCards } from 'laravel-nova'
+import { CardSizes } from 'laravel-nova'
 
 export default {
-  mixins: [HasCards],
+  metaInfo() {
+    return {
+      title: `${this.label}`,
+    }
+  },
+
+  data: () => ({ label: '', cards: '' }),
 
   props: {
     name: {
@@ -27,12 +33,67 @@ export default {
     },
   },
 
+  watch: {
+    name() {
+      this.fetchDashboard()
+    },
+  },
+
+  created() {
+    this.fetchDashboard()
+  },
+
+  methods: {
+    async fetchDashboard() {
+      const {
+        data: { label, cards },
+      } = await Nova.request()
+        .get(this.dashboardEndpoint, {
+          params: this.extraCardParams,
+        })
+        .catch(e => {
+          this.$router.push({ name: '404' })
+        })
+
+      this.label = label
+      this.cards = cards
+    },
+  },
+
   computed: {
     /**
-     * Get the endpoint for this dashboard's cards.
+     * Get the endpoint for this dashboard.
      */
-    cardsEndpoint() {
+    dashboardEndpoint() {
       return `/nova-api/dashboards/${this.name}`
+    },
+
+    /**
+     * Determine whether we have cards to show on the Dashboard
+     */
+    shouldShowCards() {
+      return this.cards.length > 0
+    },
+
+    /**
+     * Return the small cards used for the Dashboard
+     */
+    smallCards() {
+      return _.filter(this.cards, c => CardSizes.indexOf(c.width) !== -1)
+    },
+
+    /**
+     * Return the full-width cards used for the Dashboard
+     */
+    largeCards() {
+      return _.filter(this.cards, c => c.width == 'full')
+    },
+
+    /**
+     * Get the extra card params to pass to the endpoint.
+     */
+    extraCardParams() {
+      return null
     },
   },
 }

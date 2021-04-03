@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Laravel\Nova\Contracts\RelatableField;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Http\Requests\ResourceIndexRequest;
+use Laravel\Nova\Query\Builder;
 use Laravel\Nova\Rules\Relatable;
 use Laravel\Nova\TrashedStatus;
 
@@ -158,9 +159,9 @@ class BelongsTo extends Field implements RelatableField
         }
 
         if ($value) {
-            $this->belongsToId = $value->getKey();
-
             $resource = new $this->resourceClass($value);
+
+            $this->belongsToId = optional(ID::forResource($resource))->value ?? $value->getKey();
 
             $this->value = $this->formatDisplayValue($resource);
 
@@ -190,7 +191,7 @@ class BelongsTo extends Field implements RelatableField
     {
         $query = $this->buildAssociatableQuery(
             $request, $request->{$this->attribute.'_trashed'} === 'true'
-        );
+        )->toBase();
 
         return array_merge_recursive(parent::getRules($request), [
             $this->attribute => array_filter([
@@ -253,7 +254,7 @@ class BelongsTo extends Field implements RelatableField
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @param  bool  $withTrashed
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Laravel\Nova\Query\Builder
      */
     public function buildAssociatableQuery(NovaRequest $request, $withTrashed = false)
     {
@@ -261,15 +262,17 @@ class BelongsTo extends Field implements RelatableField
             [$resourceClass = $this->resourceClass, 'newModel']
         );
 
-        $query = $request->first === 'true'
-                        ? $model->newQueryWithoutScopes()->whereKey($request->current)
-                        : $resourceClass::buildIndexQuery(
+        $query = new Builder($resourceClass);
+
+        $request->first === 'true'
+                        ? $query->whereKey($model->newQueryWithoutScopes(), $request->current)
+                        : $query->search(
                                 $request, $model->newQuery(), $request->search,
                                 [], [], TrashedStatus::fromBoolean($withTrashed)
                           );
 
         return $query->tap(function ($query) use ($request, $model) {
-            forward_static_call($this->associatableQueryCallable($request, $model), $request, $query);
+            forward_static_call($this->associatableQueryCallable($request, $model), $request, $query, $this);
         });
     }
 
@@ -393,6 +396,7 @@ class BelongsTo extends Field implements RelatableField
         return array_merge([
             'belongsToId' => $this->belongsToId,
             'belongsToRelationship' => $this->belongsToRelationship,
+            'debounce' => $this->debounce,
             'displaysWithTrashed' => $this->displaysWithTrashed,
             'label' => forward_static_call([$this->resourceClass, 'label']),
             'resourceName' => $this->resourceName,

@@ -1,12 +1,17 @@
 export default {
-  data: () => ({ isWorking: false }),
+  data: () => ({ isWorking: false, fileUploadsCount: 0 }),
 
   methods: {
     /**
      * Handle file upload finishing
      */
     handleFileUploadFinished() {
-      this.isWorking = false
+      this.fileUploadsCount--
+
+      if (this.fileUploadsCount < 1) {
+        this.fileUploadsCount = 0
+        this.isWorking = false
+      }
     },
 
     /**
@@ -14,6 +19,7 @@ export default {
      */
     handleFileUploadStarted() {
       this.isWorking = true
+      this.fileUploadsCount++
     },
   },
 }

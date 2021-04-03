@@ -46,7 +46,9 @@ class Relatable implements Rule
      */
     public function passes($attribute, $value)
     {
-        $model = $this->query->select('*')->whereKey($value)->first();
+        $model = $this->query->tap(function ($query) {
+            $query->getQuery()->orders = [];
+        })->select('*')->whereKey($value)->first();
 
         if (! $model) {
             return false;

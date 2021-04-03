@@ -9,7 +9,7 @@
         <br /><br />
 
         <!-- Error Listing -->
-        <ul style="margin-bottom: 0;">
+        <ul style="margin-bottom: 0">
           <li v-for="error in errors">{{ error }}</li>
         </ul>
       </div>

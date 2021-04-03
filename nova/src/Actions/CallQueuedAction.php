@@ -2,7 +2,7 @@
 
 namespace Laravel\Nova\Actions;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Nova;
@@ -12,9 +12,9 @@ class CallQueuedAction
     use CallsQueuedActions;
 
     /**
-     * The Eloquent model collection.
+     * The Eloquent model/data collection.
      *
-     * @var \Illuminate\Database\Eloquent\Collection
+     * @var \Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection
      */
     public $models;
 
@@ -24,7 +24,7 @@ class CallQueuedAction
      * @param  \Laravel\Nova\Actions\Action  $action
      * @param  string  $method
      * @param  \Laravel\Nova\Fields\ActionFields  $fields
-     * @param  \Illuminate\Database\Eloquent\Collection  $models
+     * @param  \Illuminate\Support\Collection  $models
      * @param  string  $batchId
      * @return void
      */
@@ -67,7 +67,7 @@ class CallQueuedAction
     /**
      * Get the name of the "failed" method that should be called for the action.
      *
-     * @return string
+     * @return string|null
      */
     protected function failedMethodName()
     {
@@ -76,7 +76,7 @@ class CallQueuedAction
             return $method;
         }
 
-        return method_exists($this, 'failed')
+        return method_exists($this->action, 'failed')
                     ? 'failed' : null;
     }
 

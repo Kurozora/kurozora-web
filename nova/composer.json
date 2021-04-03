@@ -1,63 +1,87 @@
 {
-    "name": "laravel/nova",
-    "description": "A wonderful administration interface for Laravel.",
-    "keywords": [
-        "laravel",
-        "admin"
+  "name": "laravel/nova",
+  "description": "A wonderful administration interface for Laravel.",
+  "keywords": [
+    "laravel",
+    "admin"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Taylor Otwell",
+      "email": "taylor@laravel.com"
+    }
+  ],
+  "require": {
+    "php": "^7.2.5|^8.0",
+    "brick/money": "^0.5.0",
+    "cakephp/chronos": "^1.0|^2.0",
+    "doctrine/dbal": "^2.9",
+    "illuminate/support": "^7.0|^8.0",
+    "laravel/ui": "^2.0|^3.0",
+    "moontoast/math": "^1.1",
+    "spatie/once": "^1.1|^2.0|^3.0",
+    "symfony/console": "^5.0",
+    "symfony/finder": "^5.0",
+    "symfony/intl": "^5.0",
+    "symfony/process": "^5.0"
+  },
+  "require-dev": {
+    "laravel/legacy-factories": "^1.0",
+    "laravel/nova-dusk-suite": "8.x-dev",
+    "mockery/mockery": "^1.3.3|^1.4.2",
+    "orchestra/testbench-dusk": "^6.5",
+    "phpunit/phpunit": "^8.4",
+    "predis/predis": "^1.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Laravel\\Nova\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Laravel\\Nova\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "3.x-dev"
+    },
+    "laravel": {
+      "providers": [
+        "Laravel\\Nova\\NovaCoreServiceProvider"
+      ],
+      "aliases": {
+        "Nova": "Laravel\\Nova\\Nova"
+      }
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "scripts": {
+    "dusk:prepare": [
+      "./vendor/bin/dusk-updater detect --auto-update",
+      "@php -r \"file_exists('phpunit.dusk.xml') || copy('phpunit.dusk.xml.dist', 'phpunit.dusk.xml'); \"",
+      "@php -r \"if (file_exists('.env.dusk')) { copy('.env.dusk', 'vendor/laravel/nova-dusk-suite/.env'); } else { copy('.env.dusk.example', 'vendor/laravel/nova-dusk-suite/.env'); }\""
     ],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Taylor Otwell",
-            "email": "taylor@laravel.com"
-        }
+    "dusk:assets": [
+      "yarn install",
+      "yarn run prod",
+      "./vendor/bin/testbench-dusk nova:publish"
     ],
-    "require": {
-        "php": "^7.2.5",
-        "brick/money": "^0.4.2",
-        "cakephp/chronos": "^1.0|^2.0",
-        "doctrine/dbal": "^2.9",
-        "illuminate/support": "^7.0",
-        "laravel/ui": "^2.0",
-        "moontoast/math": "^1.1",
-        "spatie/once": "^1.1 | ^2.0",
-        "symfony/console": "^5.0",
-        "symfony/finder": "^5.0",
-        "symfony/intl": "^5.0",
-        "symfony/process": "^5.0"
-    },
-    "require-dev": {
-        "mockery/mockery": "^1.0",
-        "orchestra/testbench": "^5.0",
-        "phpunit/phpunit": "^8.4",
-        "predis/predis": "^1.1"
-    },
-    "autoload": {
-        "psr-4": {
-            "Laravel\\Nova\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Laravel\\Nova\\Tests\\": "tests/"
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "3.x-dev"
-        },
-        "laravel": {
-            "providers": [
-                "Laravel\\Nova\\NovaCoreServiceProvider"
-            ],
-            "aliases": {
-                "Nova": "Laravel\\Nova\\Nova"
-            }
-        }
-    },
-    "config": {
-        "sort-packages": true
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    "dusk:test": [
+      "./vendor/bin/phpunit -c phpunit.dusk.xml"
+    ]
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/laravel/nova-dusk-suite"
+    }
+  ],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "version": "3.22.0"
 }

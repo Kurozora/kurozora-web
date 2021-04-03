@@ -35,6 +35,11 @@
 
 <script>
 export default {
+    metaInfo() {
+        return {
+          title: '{{ class }}',
+        }
+    },
     mounted() {
         //
     },

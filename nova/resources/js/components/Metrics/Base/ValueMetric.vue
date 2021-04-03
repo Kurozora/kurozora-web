@@ -3,8 +3,8 @@
     <div class="flex mb-4">
       <h3 class="mr-3 text-base text-80 font-bold">{{ title }}</h3>
 
-      <div v-if="helpText" class="absolute pin-r pin-b p-2 z-25">
-        <tooltip trigger="click">
+      <div v-if="helpText" class="absolute pin-r pin-b p-2 z-20">
+        <tooltip trigger="click" placement="top-start">
           <icon
             type="help"
             viewBox="0 0 17 17"
@@ -44,26 +44,39 @@
       }}</span>
     </p>
 
-    <div class="flex items-center">
-      <p class="text-80 font-bold">
+    <div>
+      <p class="flex items-center text-80 font-bold">
         <svg
           v-if="increaseOrDecreaseLabel == 'Decrease'"
-          class="text-danger fill-current mr-2"
-          width="20"
-          height="12"
+          xmlns="http://www.w3.org/2000/svg"
+          class="text-danger stroke-current mr-2"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
         >
           <path
-            d="M2 3a1 1 0 0 0-2 0v8a1 1 0 0 0 1 1h8a1 1 0 0 0 0-2H3.414L9 4.414l3.293 3.293a1 1 0 0 0 1.414 0l6-6A1 1 0 0 0 18.293.293L13 5.586 9.707 2.293a1 1 0 0 0-1.414 0L2 8.586V3z"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"
           />
         </svg>
         <svg
           v-if="increaseOrDecreaseLabel == 'Increase'"
-          class="rotate-180 text-success fill-current mr-2"
-          width="20"
-          height="12"
+          class="text-success stroke-current mr-2"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
         >
           <path
-            d="M2 3a1 1 0 0 0-2 0v8a1 1 0 0 0 1 1h8a1 1 0 0 0 0-2H3.414L9 4.414l3.293 3.293a1 1 0 0 0 1.414 0l6-6A1 1 0 0 0 18.293.293L13 5.586 9.707 2.293a1 1 0 0 0-1.414 0L2 8.586V3z"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
           />
         </svg>
 

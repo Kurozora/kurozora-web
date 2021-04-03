@@ -2,6 +2,8 @@
 
 namespace Laravel\Nova\Fields;
 
+use Laravel\Nova\Http\Requests\NovaRequest;
+
 class Select extends Field
 {
     use Searchable;
@@ -71,8 +73,12 @@ class Select extends Field
      */
     public function jsonSerialize()
     {
-        return array_merge(parent::jsonSerialize(), [
-            'searchable' => $this->searchable,
-        ]);
+        return with(app(NovaRequest::class), function ($request) {
+            return array_merge(parent::jsonSerialize(), [
+                'searchable' => is_bool($this->searchable)
+                    ? $this->searchable
+                    : call_user_func($this->searchable, $request),
+            ]);
+        });
     }
 }

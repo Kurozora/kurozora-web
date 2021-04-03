@@ -2,6 +2,7 @@
 
 namespace Laravel\Nova\Tests\Feature;
 
+use Illuminate\Support\Facades\Cache;
 use Laravel\Nova\Actions\ActionEvent;
 use Laravel\Nova\Actions\ActionResource;
 use Laravel\Nova\Exceptions\NovaExceptionHandler;
@@ -17,6 +18,17 @@ use Laravel\Nova\Tests\IntegrationTest;
 
 class NovaTest extends IntegrationTest
 {
+    public function test_nova_version()
+    {
+        $this->assertFalse(Cache::driver('array')->has('nova.version'));
+
+        $version = Nova::version();
+
+        $this->assertTrue((bool) preg_match_all('/^3\.\d+\.\d+/s', Nova::version()));
+        $this->assertSame(Cache::driver('array')->get('nova.version'), Nova::version());
+        $this->assertSame($version, Nova::version());
+    }
+
     public function test_nova_can_use_a_custom_report_callback()
     {
         $_SERVER['nova.exception.error_handled'] = false;

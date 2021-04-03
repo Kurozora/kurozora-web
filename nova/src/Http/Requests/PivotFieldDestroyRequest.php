@@ -29,10 +29,12 @@ class PivotFieldDestroyRequest extends NovaRequest
     public function findPivotModel()
     {
         return once(function () {
-            $model = $this->findModelOrFail();
+            $resource = $this->findResourceOrFail();
+
+            abort_unless($resource->hasRelatableField($this, $this->viaRelationship), 404);
 
             return $this->findRelatedModel()->{
-                $model->{$this->viaRelationship}()->getPivotAccessor()
+                $resource->model()->{$this->viaRelationship}()->getPivotAccessor()
             };
         });
     }
@@ -59,7 +61,11 @@ class PivotFieldDestroyRequest extends NovaRequest
     public function findRelatedModel()
     {
         return once(function () {
-            return $this->findModelOrFail()->{$this->viaRelationship}()
+            $resource = $this->findResourceOrFail();
+
+            abort_unless($resource->hasRelatableField($this, $this->viaRelationship), 404);
+
+            return $resource->model()->{$this->viaRelationship}()
                         ->withoutGlobalScopes()
                         ->lockForUpdate()
                         ->findOrFail($this->relatedResourceId);

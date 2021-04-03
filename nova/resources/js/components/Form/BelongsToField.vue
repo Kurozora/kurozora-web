@@ -1,7 +1,7 @@
 <template>
-  <default-field :field="field" :errors="errors">
+  <default-field :field="field" :errors="errors" :show-help-text="showHelpText">
     <template slot="field">
-      <div class="flex items-center mb-3">
+      <div class="flex items-center">
         <search-input
           v-if="isSearchable && !isLocked && !isReadonly"
           :data-testid="`${field.resourceName}-search-input`"
@@ -9,6 +9,7 @@
           @clear="clearSelection"
           @selected="selectResource"
           :error="hasError"
+          :debounce="field.debounce"
           :value="selectedResource"
           :data="availableResources"
           :clearable="field.nullable"
@@ -68,15 +69,16 @@
           :selected="selectedResourceId"
           label="display"
         >
-          <option value="" selected :disabled="!field.nullable">{{
-            placeholder
-          }}</option>
+          <option value="" selected :disabled="!field.nullable">
+            {{ placeholder }}
+          </option>
         </select-control>
 
         <create-relation-button
           v-if="canShowNewRelationModal"
           @click="openRelationModal"
           class="ml-1"
+          :dusk="`${field.attribute}-inline-create`"
         />
       </div>
 
@@ -95,7 +97,7 @@
       </portal>
 
       <!-- Trashed State -->
-      <div v-if="shouldShowTrashed">
+      <div v-if="shouldShowTrashed" class="mt-3">
         <checkbox-with-label
           :dusk="`${field.resourceName}-with-trashed-checkbox`"
           :checked="withTrashed"
@@ -154,18 +156,16 @@ export default {
 
       this.selectedResourceId = this.field.value
 
-      // If a user is editing an existing resource with this relation
-      // we'll have a belongsToId on the field, and we should prefill
-      // that resource in this field
       if (this.editingExistingResource) {
+        // If a user is editing an existing resource with this relation
+        // we'll have a belongsToId on the field, and we should prefill
+        // that resource in this field
         this.initializingWithExistingResource = true
         this.selectedResourceId = this.field.belongsToId
-      }
-
-      // If the user is creating this resource via a related resource's index
-      // page we'll have a viaResource and viaResourceId in the params and
-      // should prefill the resource in this field with that information
-      if (this.creatingViaRelatedResource) {
+      } else if (this.creatingViaRelatedResource) {
+        // If the user is creating this resource via a related resource's index
+        // page we'll have a viaResource and viaResourceId in the params and
+        // should prefill the resource in this field with that information
         this.initializingWithExistingResource = true
         this.selectedResourceId = this.viaResourceId
       }
@@ -173,19 +173,18 @@ export default {
       if (this.shouldSelectInitialResource && !this.isSearchable) {
         // If we should select the initial resource but the field is not
         // searchable we should load all of the available resources into the
-        // field first and select the initial option
+        // field first and select the initial option.
         this.initializingWithExistingResource = false
         this.getAvailableResources().then(() => this.selectInitialResource())
       } else if (this.shouldSelectInitialResource && this.isSearchable) {
         // If we should select the initial resource and the field is
         // searchable, we won't load all the resources but we will select
-        // the initial option
-        // this.selectedResourceId = this.viaResourceId
+        // the initial option.
         this.getAvailableResources().then(() => this.selectInitialResource())
       } else if (!this.shouldSelectInitialResource && !this.isSearchable) {
         // If we don't need to select an initial resource because the user
         // came to create a resource directly and there's no parent resource,
-        // and the field is searchable we'll just load all of the resources
+        // and the field is searchable we'll just load all of the resources.
         this.getAvailableResources()
       }
 
@@ -200,6 +199,10 @@ export default {
     selectResourceFromSelectControl(e) {
       this.selectedResourceId = e.target.value
       this.selectInitialResource()
+
+      if (this.field) {
+        Nova.$emit(this.field.attribute + '-change', this.selectedResourceId)
+      }
     },
 
     /**
@@ -287,6 +290,7 @@ export default {
     handleSetResource({ id }) {
       this.closeRelationModal()
       this.selectedResourceId = id
+      this.initializingWithExistingResource = true
       this.getAvailableResources().then(() => this.selectInitialResource())
     },
   },
@@ -315,7 +319,9 @@ export default {
      */
     shouldSelectInitialResource() {
       return Boolean(
-        this.editingExistingResource || this.creatingViaRelatedResource
+        this.editingExistingResource ||
+          this.creatingViaRelatedResource ||
+          this.field.value
       )
     },
 

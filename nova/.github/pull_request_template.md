@@ -6,7 +6,7 @@ Thank you for submitting a pull request to Nova! Here are some guidelines for su
 -   Bug fix pull requests should include any relevant issues from [laravel/nova-issues](http://github.com/laravel/nova-issues) that they fix.
 -   In general, we do not merge pull requests that only attempt to "clean up" the codebase or update dependencies. These types of PRs tend to introduce hard-to-track-down bugs and are mostly subjective. We prioritize merging provable bugs above all else.
 -   Pull requests that are indicated as "work in progress" in their description will be closed after 15 days if there is no further progress on the feature.
--   Make sure to add tests for any new features you're adding, bug fixes, or other behavior changes. Pull requests without these will be closed. If a certain feature makes sense to test only in the browser, submit the test as a pull request to [laravel/nova-dusk-suite](http://github.com/laravel/nova-dusk-suite) and link to this pull request in your pull request's description.
+-   Make sure to add tests for any new features you're adding, bug fixes, or other behavior changes. Pull requests without these will be closed. Do read the [testing documentation](https://github.com/laravel/nova/blob/3.0/tests/readme.md) to get started running tests locally.
 
 Thank you!
 Nova Team

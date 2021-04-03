@@ -2,6 +2,7 @@
 
 namespace Laravel\Nova\Tests\Controller;
 
+use Laravel\Nova\Tests\Fixtures\Category;
 use Laravel\Nova\Tests\Fixtures\Post;
 use Laravel\Nova\Tests\Fixtures\User;
 use Laravel\Nova\Tests\IntegrationTest;
@@ -29,6 +30,21 @@ class CreationControllerTest extends IntegrationTest
     }
 
     public function test_related_fields_count()
+    {
+        $response = $this->withoutExceptionHandling()
+            ->getJson('/nova-api/comments/creation-fields');
+
+        $response->assertJsonCount(3, 'fields');
+        $response->assertJson([
+            'fields' => [
+                1 => ['component' => 'morph-to-field'],
+                2 => ['component' => 'belongs-to-field'],
+                3 => ['component' => 'text-field'],
+            ],
+        ]);
+    }
+
+    public function test_related_fields_count_via_relation()
     {
         $user = factory(User::class)->create();
 
@@ -70,6 +86,32 @@ class CreationControllerTest extends IntegrationTest
 
         $this->assertTrue($response->decodeResponseJson()['fields'][0]['reverse']);
         $this->assertFalse($response->decodeResponseJson()['fields'][1]['reverse']);
+    }
+
+    public function test_reverse_can_be_true_if_two_relation_fields_share_the_same_related_resource_class()
+    {
+        $parent = factory(Category::class)->create(['title' => 'Parent']);
+        $category = factory(Category::class)->create(['parent_id' => $parent->getKey(), 'title' => 'Child']);
+
+        $params = http_build_query([
+            'editing' => true,
+            'editMode' => 'create',
+            'viaResource' => 'categories',
+            'viaResourceId' => $parent->getKey(),
+            'viaRelationship' => 'children',
+        ]);
+
+        $response = $this->withExceptionHandling()
+                        ->getJson("/nova-api/categories/creation-fields?{$params}")
+                        ->assertOk()
+                        ->assertJson([
+                            'fields' => [
+                                [
+                                    'label' => 'Category Resources',
+                                    'reverse' => true,
+                                ],
+                            ],
+                        ]);
     }
 
     public function test_panel_are_returned()

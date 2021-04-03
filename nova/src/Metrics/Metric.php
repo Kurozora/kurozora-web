@@ -130,4 +130,19 @@ abstract class Metric extends Card
             'refreshWhenActionRuns' => $this->refreshWhenActionRuns,
         ]);
     }
+
+    /**
+     * Convert datetime to application timezone.
+     *
+     * @param  \Cake\Chronos\ChronosInterface|\Carbon\CarbonInterface  $datetime
+     * @return \Cake\Chronos\ChronosInterface|\Carbon\CarbonInterface
+     */
+    protected function asQueryDatetime($datetime)
+    {
+        if (! $datetime instanceof \DateTimeImmutable) {
+            return $datetime->copy()->timezone(config('app.timezone'));
+        }
+
+        return $datetime->timezone(config('app.timezone'));
+    }
 }

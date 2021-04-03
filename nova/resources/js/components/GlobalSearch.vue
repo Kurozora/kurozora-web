@@ -19,6 +19,7 @@
           type="search"
           :placeholder="__('Press / to search')"
           class="pl-search w-full form-global-search"
+          spellcheck="false"
         />
       </div>
 
@@ -94,11 +95,14 @@
 <script>
 import { Minimum } from 'laravel-nova'
 import { mixin as clickaway } from 'vue-clickaway'
+import { CancelToken, Cancel } from 'axios'
 
 export default {
   mixins: [clickaway],
 
   data: () => ({
+    debouncer: null,
+    canceller: null,
     loading: false,
     currentlySearching: false,
     searchTerm: '',
@@ -110,6 +114,10 @@ export default {
     $route: function () {
       this.closeSearch()
     },
+  },
+
+  created() {
+    this.debouncer = _.debounce(callback => callback(), Nova.config.debounce)
   },
 
   mounted() {
@@ -159,10 +167,14 @@ export default {
       this.loading = true
 
       if (this.searchTerm == '') {
+        if (this.canceller !== null) this.canceller()
+
         this.loading = false
         this.results = []
       } else {
         this.debouncer(() => {
+          if (this.canceller !== null) this.canceller()
+
           this.fetchResults(event.target.value)
         }, 500)
       }
@@ -176,6 +188,9 @@ export default {
           const { data: results } = await Minimum(
             Nova.request().get('/nova-api/search', {
               params: { search },
+              cancelToken: new CancelToken(canceller => {
+                this.canceller = canceller
+              }),
             })
           )
 
@@ -184,15 +199,14 @@ export default {
           this.loading = false
         } catch (e) {
           this.loading = false
+          if (e instanceof Cancel) {
+            return
+          }
+
           throw e
         }
       }
     },
-
-    /**
-     * Debounce function for the search handler
-     */
-    debouncer: _.debounce(callback => callback(), 500),
 
     /**
      * Move the highlighted results

@@ -32,6 +32,7 @@
           :resource="resource"
           :resource-name="resourceName"
           :actions="availableActions"
+          :endpoint="actionsEndpoint"
           @actionExecuted="$emit('actionExecuted')"
         />
 
@@ -190,6 +191,7 @@ export default {
     'viaManyToMany',
     'checked',
     'actionsAreAvailable',
+    'actionsEndpoint',
     'shouldShowCheckboxes',
     'updateSelectionStatus',
     'queryString',

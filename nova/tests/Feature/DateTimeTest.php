@@ -16,7 +16,7 @@ class DateTimeTest extends TestCase
         tap($this->dateTimeField(), function ($field) {
             $field->resolve((object) ['created_at' => Carbon::now()]);
 
-            $this->assertEquals('1984-10-14 00:00:00', $field->value);
+            $this->assertEquals('1984-10-14 00:00:00.000000', $field->value);
 
             Carbon::setTestNow();
         });
@@ -29,7 +29,18 @@ class DateTimeTest extends TestCase
         tap($this->dateTimeField(), function ($field) {
             $field->resolveForDisplay((object) ['created_at' => Carbon::now()]);
 
-            $this->assertEquals('1984-10-14 00:00:00', $field->value);
+            $this->assertEquals('1984-10-14 00:00:00.000000', $field->value);
+
+            Carbon::setTestNow();
+        });
+    }
+
+    public function test_field_can_be_resolved_datetime_with_fractional_seconds_for_display()
+    {
+        tap($this->dateTimeField(), function ($field) {
+            $field->resolveForDisplay((object) ['created_at' => new \DateTime('1984-10-14 10:10:30.889342')]);
+
+            $this->assertEquals('1984-10-14 10:10:30.889342', $field->value);
 
             Carbon::setTestNow();
         });

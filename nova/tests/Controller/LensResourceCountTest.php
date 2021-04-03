@@ -3,6 +3,7 @@
 namespace Laravel\Nova\Tests\Controller;
 
 use Laravel\Nova\Tests\Fixtures\IdFilter;
+use Laravel\Nova\Tests\Fixtures\Post;
 use Laravel\Nova\Tests\Fixtures\Role;
 use Laravel\Nova\Tests\Fixtures\User;
 use Laravel\Nova\Tests\IntegrationTest;
@@ -61,6 +62,24 @@ class LensResourceCountTest extends IntegrationTest
 
         $response = $this->withExceptionHandling()
                         ->getJson('/nova-api/users/lens/grouping-user-lens/count');
+
+        $response->assertStatus(200);
+        $this->assertEquals(3, $response->original['count']);
+    }
+
+    public function test_can_count_a_resource_with_having()
+    {
+        factory(User::class, 2)->create();
+        factory(User::class, 3)
+           ->create()
+           ->each(function ($user) {
+               factory(Post::class, 2)->create([
+                   'user_id' => $user->id,
+               ]);
+           });
+
+        $response = $this->withExceptionHandling()
+                        ->getJson('/nova-api/users/lens/having-user-lens/count');
 
         $response->assertStatus(200);
         $this->assertEquals(3, $response->original['count']);

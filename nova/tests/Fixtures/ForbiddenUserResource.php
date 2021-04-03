@@ -15,6 +15,13 @@ class ForbiddenUserResource extends Resource
     public static $model = \Laravel\Nova\Tests\Fixtures\User::class;
 
     /**
+     * Indicates if the resource should be globally searchable.
+     *
+     * @var bool
+     */
+    public static $globallySearchable = false;
+
+    /**
      * Determine if the resource should be displayed for the given request.
      *
      * @param  \Illuminate\Http\Request  $request

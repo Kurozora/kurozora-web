@@ -258,6 +258,34 @@ class MetricControllerTest extends IntegrationTest
         $this->assertEquals(1, $response->original['value']->previous);
     }
 
+    public function test_can_retrieve_forever_count_calculations()
+    {
+        Carbon::setTestNow('Oct 1 12:00 PM');
+
+        factory(User::class, 3)->create();
+
+        $user = User::find(1);
+        $user->created_at = now()->setTime(1, 0, 0);
+        $user->save();
+
+        $user = User::find(2);
+        $user->created_at = now()->setTime(3, 0, 0);
+        $user->save();
+
+        $user = User::find(3);
+        $user->created_at = now()->yesterday();
+        $user->save();
+
+        $response = $this->withExceptionHandling()
+                        ->get('/nova-api/users/metrics/user-growth?range=ALL');
+
+        $response->assertStatus(200);
+        $this->assertEquals(3, $response->original['value']->value);
+        $this->assertNull($response->original['value']->previous);
+
+        Carbon::setTestNow();
+    }
+
     public function test_can_retrieve_average_calculations()
     {
         factory(Post::class, 2)->create(['word_count' => 100]);
@@ -280,7 +308,6 @@ class MetricControllerTest extends IntegrationTest
 
         $post = Post::find(2);
         $post->word_count = 50;
-        $post->created_at = now()->setTime(1, 0, 0);
         $post->save();
 
         $response = $this->withExceptionHandling()

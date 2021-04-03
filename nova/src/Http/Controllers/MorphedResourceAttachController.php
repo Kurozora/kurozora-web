@@ -16,10 +16,14 @@ class MorphedResourceAttachController extends ResourceAttachController
      */
     protected function initializePivot(NovaRequest $request, $relationship)
     {
+        $model = tap($request->findResourceOrFail(), function ($resource) use ($request) {
+            abort_unless($resource->hasRelatableField($request, $request->viaRelationship), 404);
+        })->model();
+
         ($pivot = $relationship->newPivot())->forceFill([
             $relationship->getForeignPivotKeyName() => $request->resourceId,
             $relationship->getRelatedPivotKeyName() => $request->input($request->relatedResource),
-            $relationship->getMorphType() => $request->findModelOrFail()->{$request->viaRelationship}()->getMorphClass(),
+            $relationship->getMorphType() => $model->{$request->viaRelationship}()->getMorphClass(),
         ]);
 
         if ($relationship->withTimestamps) {

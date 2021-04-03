@@ -327,4 +327,24 @@ class ResourceAttachmentUpdateTest extends IntegrationTest
 
         unset($_SERVER['nova.useRolesCustomAttribute']);
     }
+
+    public function test_cannot_update_attach_resource_with_invalid_via_relationship()
+    {
+        $_SERVER['nova.useRolesCustomAttribute'] = true;
+
+        $user = factory(User::class)->create();
+        $role = factory(Role::class)->create();
+        $user->roles()->attach($role);
+
+        $response = $this->withExceptionHandling()
+            ->postJson('/nova-api/users/'.$user->id.'/update-attached/roles/'.$role->id, [
+                'roles' => $role->id,
+                'admin' => 'Y',
+                'viaRelationship' => 'delete',
+            ]);
+
+        $response->assertStatus(404);
+
+        unset($_SERVER['nova.useRolesCustomAttribute']);
+    }
 }

@@ -29,9 +29,9 @@ class ResourceStoreController extends Controller
             );
 
             if ($request->viaRelationship()) {
-                $request->findParentModelOrFail()
-                        ->{$request->viaRelationship}()
-                        ->save($model);
+                tap($request->findParentResourceOrFail(), function ($resource) use ($request) {
+                    abort_unless($resource->hasRelatableField($request, $request->viaRelationship), 404);
+                })->model()->{$request->viaRelationship}()->save($model);
             } else {
                 $model->save();
             }

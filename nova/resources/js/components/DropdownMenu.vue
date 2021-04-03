@@ -20,9 +20,9 @@ export default {
     // If we recieve a click event from an anchor or button element, let's make sure
     // and close the dropdown's menu so it doesn't stay visible if we toggle a modal.
     this.$refs.menu.addEventListener('click', event => {
-      if (event.target.tagName != 'A' && event.target.tagName != 'BUTTON')
-        return
-      Nova.$emit('close-dropdowns')
+      if (event.target.tagName != 'A' && event.target.tagName != 'BUTTON') {
+        Nova.$emit('close-dropdowns')
+      }
     })
   },
 
