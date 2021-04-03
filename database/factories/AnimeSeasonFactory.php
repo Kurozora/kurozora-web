@@ -1,17 +1,38 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
 use App\Models\Anime;
 use App\Models\AnimeSeason;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(AnimeSeason::class, function (Faker $faker) {
-    static $number = 1;
+class AnimeSeasonFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = AnimeSeason::class;
 
-    return [
-        'anime_id'  => factory(Anime::class)->create()->id,
-        'number'    => $number++,
-        'title'     => $faker->title
-    ];
-});
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        static $number = 1;
+        $anime = Anime::inRandomOrder()->first();
+
+        if ($anime == null) {
+            $anime = Anime::factory()->create();
+        }
+
+        return [
+            'anime_id'  => $anime,
+            'number'    => $number++,
+            'title'     => $this->faker->title
+        ];
+    }
+}
