@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Console\Commands\FreshCommand;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Console\Migrations\MigrateCommand;
 use Illuminate\Database\Migrations\MigrationRepositoryInterface;
@@ -32,7 +33,7 @@ class MigrationServiceProvider extends BaseMigrationServiceProvider
         $this->app->bindIf(ConnectionResolverInterface::class, 'db');
         $this->app->bindIf(MigrationRepositoryInterface::class, 'migration.repository');
         $this->app->singleton('command.migrate', function ($app) {
-            return new MigrateCommand($app['migrator']);
+            return new MigrateCommand($app['migrator'], $app[Dispatcher::class]);
         });
     }
 
