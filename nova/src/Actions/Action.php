@@ -4,12 +4,14 @@ namespace Laravel\Nova\Actions;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use JsonSerializable;
 use Laravel\Nova\AuthorizedToSee;
 use Laravel\Nova\Exceptions\MissingActionHandlerException;
 use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Http\Requests\ActionRequest;
+use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Makeable;
 use Laravel\Nova\Metable;
 use Laravel\Nova\Nova;
@@ -133,6 +135,13 @@ class Action implements JsonSerializable
     public $confirmText = 'Are you sure you want to run this action?';
 
     /**
+     * Indicates if the action can be run without any models.
+     *
+     * @var bool
+     */
+    public $standalone = false;
+
+    /**
      * Determine if the action is executable for the given request.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -228,6 +237,18 @@ class Action implements JsonSerializable
     }
 
     /**
+     * Return an action modal response from the action.
+     *
+     * @param  string  $modal
+     * @param  array  $data
+     * @return array
+     */
+    public static function modal($modal, $data)
+    {
+        return array_merge(['modal' => $modal], $data);
+    }
+
+    /**
      * Execute the action for the given request.
      *
      * @param  \Laravel\Nova\Http\Requests\ActionRequest  $request
@@ -246,19 +267,29 @@ class Action implements JsonSerializable
 
         $fields = $request->resolveFields();
 
-        $results = $request->chunks(
-            static::$chunkCount, function ($models) use ($fields, $request, $method, &$wasExecuted) {
-                $models = $models->filterForExecution($request);
+        if ($this->standalone) {
+            $wasExecuted = true;
 
-                if (count($models) > 0) {
-                    $wasExecuted = true;
+            $results = [
+                DispatchAction::forModels(
+                    $request, $this, $method, $results = collect([]), $fields
+                ),
+            ];
+        } else {
+            $results = $request->chunks(
+                static::$chunkCount, function ($models) use ($fields, $request, $method, &$wasExecuted) {
+                    $models = $models->filterForExecution($request);
+
+                    if (count($models) > 0) {
+                        $wasExecuted = true;
+                    }
+
+                    return DispatchAction::forModels(
+                        $request, $this, $method, $models, $fields
+                    );
                 }
-
-                return DispatchAction::forModels(
-                $request, $this, $method, $models, $fields
             );
-            }
-        );
+        }
 
         if (! $wasExecuted) {
             return static::danger(__('Sorry! You are not authorized to perform this action.'));
@@ -278,6 +309,18 @@ class Action implements JsonSerializable
     public function handleResult(ActionFields $fields, $results)
     {
         return count($results) ? end($results) : null;
+    }
+
+    /**
+     * Handle any post-validation processing.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param  \Illuminate\Validation\Validator  $validator
+     * @return void
+     */
+    protected function afterValidation(NovaRequest $request, $validator)
+    {
+        //
     }
 
     /**
@@ -311,6 +354,32 @@ class Action implements JsonSerializable
     public function fields()
     {
         return [];
+    }
+
+    /**
+     * Validate the given request.
+     *
+     * @param  \Laravel\Nova\Http\Requests\ActionRequest  $request
+     * @return void
+     */
+    public function validateFields(ActionRequest $request)
+    {
+        $fields = collect($this->fields());
+
+        return Validator::make(
+            $request->all(),
+            $fields->mapWithKeys(function ($field) use ($request) {
+                return $field->getCreationRules($request);
+            })->all(),
+            [],
+            $fields->reject(function ($field) {
+                return empty($field->name);
+            })->mapWithKeys(function ($field) {
+                return [$field->attribute => $field->name];
+            })->all()
+        )->after(function ($validator) use ($request) {
+            $this->afterValidation($request, $validator);
+        })->validate();
     }
 
     /**
@@ -629,12 +698,36 @@ class Action implements JsonSerializable
     }
 
     /**
+     * Mark the action as a standalone action.
+     *
+     * @return $this
+     */
+    public function standalone()
+    {
+        $this->standalone = true;
+
+        return $this;
+    }
+
+    /**
+     * Determine if the action is a standalone action.
+     *
+     * @return bool
+     */
+    public function isStandalone()
+    {
+        return $this->standalone;
+    }
+
+    /**
      * Prepare the action for JSON serialization.
      *
      * @return array
      */
     public function jsonSerialize()
     {
+        $request = app(NovaRequest::class);
+
         return array_merge([
             'cancelButtonText' => __($this->cancelButtonText),
             'component' => $this->component(),
@@ -644,12 +737,12 @@ class Action implements JsonSerializable
             'destructive' => $this instanceof DestructiveAction,
             'name' => $this->name(),
             'uriKey' => $this->uriKey(),
-            'fields' => collect($this->fields())->each->resolve(new class {
-            })->all(),
+            'fields' => collect($this->fields())->each->resolveForAction($request)->all(),
             'availableForEntireResource' => $this->availableForEntireResource,
             'showOnDetail' => $this->shownOnDetail(),
             'showOnIndex' => $this->shownOnIndex(),
             'showOnTableRow' => $this->shownOnTableRow(),
+            'standalone' => $this->isStandalone(),
             'withoutConfirmation' => $this->withoutConfirmation,
         ], $this->meta());
     }

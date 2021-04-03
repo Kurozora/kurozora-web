@@ -26,7 +26,14 @@ class AttachableController extends Controller
 
         $parentResource = $request->findResourceOrFail();
 
+        $viaResource = [
+            'key' => $parentResource->resource->getKey(),
+            'name' => $parentResource->singularLabel(),
+            'display' => $parentResource->title(),
+        ];
+
         return [
+            'viaResource' => $viaResource,
             'resources' => $field->buildAttachableQuery($request, $withTrashed)->get()
                         ->mapInto($field->resourceClass)
                         ->filter(function ($resource) use ($request, $parentResource) {

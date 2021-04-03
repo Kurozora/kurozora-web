@@ -39,8 +39,10 @@ class PostResource extends Resource
     public function fields(Request $request)
     {
         return [
-            BelongsTo::make('User', 'user', UserResource::class)->nullable()
-                ->viewable($_SERVER['nova.user.viewable-field'] ?? true),
+            BelongsTo::make('User', 'user', UserResource::class)
+                ->nullable()
+                ->viewable($_SERVER['nova.user.viewable-field'] ?? true)
+                ->default($_SERVER['nova.user.default-value'] ?? null),
 
             tap(BelongsToMany::make('Authors', 'authors', UserResource::class), function ($field) {
                 if ($_SERVER['nova.addAuthorPivotFields'] ?? false) {
@@ -149,6 +151,19 @@ class PostResource extends Resource
             new PostMinTrend,
             new PostsByUserPartition,
             new WordCountByUserPartition,
+        ];
+    }
+
+    /**
+     * Get the lenses available for the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function lenses(Request $request)
+    {
+        return [
+            new PostLens,
         ];
     }
 

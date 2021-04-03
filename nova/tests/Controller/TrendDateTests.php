@@ -643,12 +643,10 @@ trait TrendDateTests
 
     public function trendDateProvider()
     {
-        return [
-            [Chronos::create(2018, 12, 31)],
-            [Chronos::create(2018, 12, 31, 23, 59, 59)],
-            [Chronos::create(2018, 12, 31, 13, 0, 0)],
-            [Chronos::create(2018, 2, 28)],
-            [Chronos::create(2018, 1, 1)],
-        ];
+        yield '2018-12-31' => [Chronos::create(2018, 12, 31)];
+        yield '2018-12-31 23:59:59' => [Chronos::create(2018, 12, 31, 23, 59, 59)];
+        yield '2018-12-31 13:00:00' => [Chronos::create(2018, 12, 31, 13, 0, 0)];
+        yield '2018-02-28' => [Chronos::create(2018, 2, 38)];
+        yield '2018-01-01' => [Chronos::create(2018, 1, 1)];
     }
 }

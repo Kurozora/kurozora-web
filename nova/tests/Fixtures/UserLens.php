@@ -81,6 +81,7 @@ class UserLens extends Lens
         return [
             new NoopAction(),
             new LensFieldValidationAction(),
+            (new NoopInlineAction())->showOnTableRow(),
         ];
     }
 

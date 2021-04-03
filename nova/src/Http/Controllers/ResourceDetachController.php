@@ -19,9 +19,11 @@ class ResourceDetachController extends Controller
      */
     public function handle(DetachResourceRequest $request)
     {
-        $request->chunks(150, function ($models) use ($request) {
-            $parent = $request->findParentModelOrFail();
+        $parent = tap($request->findParentResourceOrFail(), function ($resource) use ($request) {
+            abort_unless($resource->hasRelatableField($request, $request->viaRelationship), 409);
+        })->model();
 
+        $request->chunks(150, function ($models) use ($request, $parent) {
             foreach ($models as $model) {
                 $this->deletePivotFields(
                     $request, $resource = $request->newResourceWith($model),

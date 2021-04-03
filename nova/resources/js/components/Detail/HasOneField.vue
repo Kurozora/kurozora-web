@@ -9,6 +9,7 @@
     @actionExecuted="actionExecuted"
     :load-cards="false"
     :disable-pagination="true"
+    :should-override-meta="false"
   />
 </template>
 

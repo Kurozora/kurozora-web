@@ -16,7 +16,7 @@ trait DetachesPivotModels
     protected function detachmentCallback()
     {
         return function ($request, $model) {
-            foreach ($model->{$this->attribute}()->withoutGlobalScopes()->get() as $related) {
+            foreach ($model->{$this->attribute}()->withoutGlobalScopes()->cursor() as $related) {
                 $resource = Nova::resourceForModel($related);
 
                 $resource = new $resource($related);

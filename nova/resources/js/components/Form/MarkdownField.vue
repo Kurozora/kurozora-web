@@ -1,5 +1,10 @@
 <template>
-  <default-field :field="field" :errors="errors" :full-width-content="true">
+  <default-field
+    :field="field"
+    :errors="errors"
+    :full-width-content="true"
+    :show-help-text="showHelpText"
+  >
     <template slot="field">
       <div
         class="bg-white rounded-lg overflow-hidden"

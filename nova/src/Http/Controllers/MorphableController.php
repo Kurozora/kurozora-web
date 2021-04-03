@@ -28,8 +28,14 @@ class MorphableController extends Controller
             $request, $relatedResource
         );
 
+        $limit = $relatedResource::usesScout()
+                    ? $relatedResource::$scoutSearchResults
+                    : $relatedResource::$relatableSearchResults;
+
         return [
-            'resources' => $field->buildMorphableQuery($request, $relatedResource, $withTrashed)->get()
+            'resources' => $field->buildMorphableQuery($request, $relatedResource, $withTrashed)
+                                ->take($limit)
+                                ->get()
                                 ->mapInto($relatedResource)
                                 ->filter->authorizedToAdd($request, $request->model())
                                 ->map(function ($resource) use ($request, $field, $relatedResource) {

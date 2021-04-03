@@ -55,7 +55,11 @@ trait HasDownload
     public function toDownloadResponse(NovaRequest $request, $resource)
     {
         return call_user_func(
-            $this->downloadResponseCallback, $request, $resource->resource
+            $this->downloadResponseCallback,
+            $request,
+            $resource->resource,
+            $this->getStorageDisk(),
+            $this->getStoragePath()
         );
     }
 }

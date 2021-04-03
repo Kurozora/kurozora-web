@@ -14,7 +14,7 @@ export default router
  */
 function createRouter({ base }) {
   const router = new Router({
-    // scrollBehavior,
+    scrollBehavior,
     base,
     mode: 'history',
     routes,
@@ -88,19 +88,21 @@ function resolveComponents(components) {
  * @return {Object}
  */
 function scrollBehavior(to, from, savedPosition) {
-  if (savedPosition) {
-    return savedPosition
-  }
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (savedPosition) {
+        return resolve(savedPosition)
+      }
 
-  if (to.hash) {
-    return { selector: to.hash }
-  }
+      if (from.name !== to.name) {
+        return resolve({ x: 0, y: 0 })
+      }
 
-  const [component] = router.getMatchedComponents({ ...to }).slice(-1)
+      if (from.params.resourceName !== to.params.resourceName) {
+        return resolve({ x: 0, y: 0 })
+      }
 
-  if (component && component.scrollToTop === false) {
-    return {}
-  }
-
-  return { x: 0, y: 0 }
+      return resolve({})
+    }, 250)
+  })
 }

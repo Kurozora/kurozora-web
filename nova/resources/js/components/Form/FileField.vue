@@ -3,7 +3,7 @@
     :field="field"
     :errors="errors"
     :full-width-content="true"
-    :show-help-text="!isReadonly"
+    :show-help-text="!isReadonly && showHelpText"
   >
     <template slot="field">
       <div v-if="hasValue" :class="{ 'mb-6': !isReadonly }">
@@ -215,9 +215,12 @@ export default {
       } = this
       const attribute = this.field.attribute
 
-      const uri = this.viaRelationship
-        ? `/nova-api/${resourceName}/${resourceId}/${relatedResourceName}/${relatedResourceId}/field/${attribute}?viaRelationship=${viaRelationship}`
-        : `/nova-api/${resourceName}/${resourceId}/field/${attribute}`
+      const uri =
+        this.viaRelationship &&
+        this.relatedResourceName &&
+        this.relatedResourceId
+          ? `/nova-api/${resourceName}/${resourceId}/${relatedResourceName}/${relatedResourceId}/field/${attribute}?viaRelationship=${viaRelationship}`
+          : `/nova-api/${resourceName}/${resourceId}/field/${attribute}`
 
       try {
         await Nova.request().delete(uri)
@@ -270,7 +273,13 @@ export default {
      * The label attribute to use for the file field.
      */
     labelFor() {
-      return `file-${this.field.attribute}`
+      let name = this.resourceName
+
+      if (this.relatedResourceName) {
+        name += '-' + this.relatedResourceName
+      }
+
+      return `file-${name}-${this.field.attribute}`
     },
 
     /**

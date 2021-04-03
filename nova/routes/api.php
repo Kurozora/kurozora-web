@@ -17,14 +17,15 @@ Route::delete('/{resource}/trix-attachment/{field}', 'TrixAttachmentController@d
 Route::delete('/{resource}/trix-attachment/{field}/{draftId}', 'TrixAttachmentController@destroyPending');
 Route::get('/{resource}/creation-fields', 'CreationFieldController@index');
 Route::get('/{resource}/{resourceId}/update-fields', 'UpdateFieldController@index');
-Route::get('/{resource}/creation-pivot-fields/{relatedResource}', 'CreationPivotFieldController@index');
+Route::get('/{resource}/{resourceId}/creation-pivot-fields/{relatedResource}', 'CreationPivotFieldController@index');
 Route::get('/{resource}/{resourceId}/update-pivot-fields/{relatedResource}/{relatedResourceId}', 'UpdatePivotFieldController@index');
 Route::get('/{resource}/{resourceId}/download/{field}', 'FieldDownloadController@show');
 Route::delete('/{resource}/{resourceId}/field/{field}', 'FieldDestroyController@handle');
 Route::delete('/{resource}/{resourceId}/{relatedResource}/{relatedResourceId}/field/{field}', 'PivotFieldDestroyController@handle');
 
 // Dashboards...
-Route::get('/dashboards/{dashboard}', 'DashboardCardController@index');
+Route::get('/dashboards/{dashboard}', 'DashboardController@index');
+Route::get('/dashboards/cards/{dashboard}', 'DashboardCardController@index');
 
 // Actions...
 Route::get('/{resource}/actions', 'ActionController@index');

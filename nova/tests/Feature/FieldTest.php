@@ -4,8 +4,11 @@ namespace Laravel\Nova\Tests\Feature;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Testing\Assert;
 use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Password;
@@ -16,6 +19,8 @@ use Laravel\Nova\Fields\Trix;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Tests\Fixtures\File;
 use Laravel\Nova\Tests\Fixtures\FileResource;
+use Laravel\Nova\Tests\Fixtures\Post;
+use Laravel\Nova\Tests\Fixtures\PostResource;
 use Laravel\Nova\Tests\Fixtures\UserResource;
 use Laravel\Nova\Tests\IntegrationTest;
 use stdClass;
@@ -25,6 +30,13 @@ class FieldTest extends IntegrationTest
     public function setUp(): void
     {
         parent::setUp();
+    }
+
+    public function tearDown(): void
+    {
+        parent::tearDown();
+
+        Field::$customComponents = [];
     }
 
     public function test_component_can_be_customized()
@@ -90,6 +102,22 @@ class FieldTest extends IntegrationTest
         $this->assertEquals('Computed', $field->value);
     }
 
+    public function test_computed_fields_resolve_for_display_once()
+    {
+        DB::enableQueryLog();
+        DB::flushQueryLog();
+
+        $field = Text::make('InvokableComputed', function ($resource) {
+            return Post::count(); // Do a simple SQL query
+        });
+
+        $field->resolveForDisplay((object) []);
+        $this->assertEquals(1, count(DB::getQueryLog()));
+
+        DB::flushQueryLog();
+        DB::disableQueryLog();
+    }
+
     public function test_computed_fields_use_display_callback()
     {
         $field = Text::make('InvokableComputed', function ($resource) {
@@ -100,6 +128,24 @@ class FieldTest extends IntegrationTest
 
         $field->resolveForDisplay((object) []);
         $this->assertEquals('Displayed Via Computed Field', $field->value);
+    }
+
+    public function test_computed_fields_resolve_once_with_display_callback()
+    {
+        DB::enableQueryLog();
+        DB::flushQueryLog();
+
+        $field = Text::make('InvokableComputed', function ($resource) {
+            return Post::count();
+        })->displayUsing(function ($value) {
+            return sprintf('Count Is %s', $value);
+        });
+
+        $field->resolveForDisplay((object) []);
+        $this->assertEquals(1, count(DB::getQueryLog()));
+
+        DB::flushQueryLog();
+        DB::disableQueryLog();
     }
 
     public function test_computed_fields_resolve_with_resource()
@@ -187,7 +233,7 @@ class FieldTest extends IntegrationTest
     {
         $field = Text::make('Name');
 
-        $this->assertContains([
+        Assert::assertArraySubset([
             'component' => 'text-field',
             'prefixComponent' => true,
             'indexName' => 'Name',
@@ -210,8 +256,16 @@ class FieldTest extends IntegrationTest
             'James',
         ]);
 
-        $this->assertContains([
-            'suggestions' => ['James'],
+        $this->app->instance(
+            NovaRequest::class,
+            NovaRequest::create('/', 'GET', [
+                'editing' => true,
+                'editMode' => 'create',
+            ])
+        );
+
+        Assert::assertArraySubset([
+            'suggestions' => [4 => 'James'],
         ], $field->jsonSerialize());
     }
 
@@ -227,8 +281,16 @@ class FieldTest extends IntegrationTest
             ];
         });
 
-        $this->assertContains([
-            'suggestions' => ['James'],
+        $this->app->instance(
+            NovaRequest::class,
+            NovaRequest::create('/', 'GET', [
+                'editing' => true,
+                'editMode' => 'create',
+            ])
+        );
+
+        Assert::assertArraySubset([
+            'suggestions' => [4 => 'James'],
         ], $field->jsonSerialize());
     }
 
@@ -236,7 +298,15 @@ class FieldTest extends IntegrationTest
     {
         $field = Text::make('Sizes')->suggestions(['Laravel\Nova\Tests\Feature\SuggestionOptions', 'options']);
 
-        $this->assertContains([
+        $this->app->instance(
+            NovaRequest::class,
+            NovaRequest::create('/', 'GET', [
+                'editing' => true,
+                'editMode' => 'create',
+            ])
+        );
+
+        Assert::assertArraySubset([
             'suggestions' => [
                 'Taylor',
                 'David',
@@ -253,7 +323,7 @@ class FieldTest extends IntegrationTest
             'placeholder' => 'This is a placeholder',
         ]]);
 
-        $this->assertContains([
+        Assert::assertArraySubset([
             'extraAttributes' => ['placeholder' => 'This is a placeholder'],
         ], $field->jsonSerialize());
     }
@@ -541,6 +611,49 @@ class FieldTest extends IntegrationTest
         ], $field->jsonSerialize());
     }
 
+    public function test_belongs_to_fields_support_default_values()
+    {
+        $_SERVER['nova.user.default-value'] = 4;
+
+        $this->authenticate()
+            ->withoutExceptionHandling()
+            ->getJson('/nova-api/posts/creation-fields?editing=true&editMode=create')
+            ->assertJson([
+                'fields' => [
+                    [
+                        'name' => 'User',
+                        'component' => 'belongs-to-field',
+                        'value' => 4, // This is the default value of the field.
+                    ],
+                ],
+            ]);
+
+        unset($_SERVER['nova.user.default-value']);
+    }
+
+    public function test_morph_to_fields_support_default_values()
+    {
+        $_SERVER['nova.user.default-value'] = 4;
+        $_SERVER['nova.user.default-resource'] = PostResource::class;
+
+        $this->authenticate()
+            ->withoutExceptionHandling()
+            ->getJson('/nova-api/comments/creation-fields?editing=true&editMode=create')
+            ->assertJson([
+                'fields' => [
+                    1 => [
+                        'name' => 'Commentable',
+                        'component' => 'morph-to-field',
+                        'value' => 4, // This is the default value of the field.
+                        'defaultResource' => 'posts',
+                    ],
+                ],
+            ]);
+
+        unset($_SERVER['nova.user.default-value']);
+        unset($_SERVER['nova.user.default-resource']);
+    }
+
     public function test_heading_fields_can_be_computed()
     {
         $field = Heading::make('InvokableComputed', function () {
@@ -549,6 +662,17 @@ class FieldTest extends IntegrationTest
 
         $field->resolve((object) ['name' => 'David']);
         $this->assertEquals('Computed', $field->value);
+    }
+
+    public function test_field_can_have_placeholder_text()
+    {
+        $field = Text::make('Name')->placeholder('This is placeholder text.');
+
+        $this->assertSubset([
+            'extraAttributes' => [
+                'placeholder' => 'This is placeholder text.',
+            ],
+        ], $field->jsonSerialize());
     }
 }
 

@@ -3,6 +3,7 @@
 namespace Laravel\Nova;
 
 use Illuminate\Support\Facades\Validator;
+use Laravel\Nova\Contracts\PivotableField;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 trait PerformsValidation
@@ -16,7 +17,9 @@ trait PerformsValidation
      */
     public static function validateForCreation(NovaRequest $request)
     {
-        static::validatorForCreation($request)->validate();
+        static::validatorForCreation($request)
+            ->addCustomAttributes(self::attributeNamesForFields($request)->toArray())
+            ->validate();
     }
 
     /**
@@ -79,7 +82,9 @@ trait PerformsValidation
      */
     public static function validateForUpdate(NovaRequest $request, $resource = null)
     {
-        static::validatorForUpdate($request, $resource)->validate();
+        static::validatorForUpdate($request, $resource)
+            ->addCustomAttributes(self::attributeNamesForFields($request)->toArray())
+            ->validate();
     }
 
     /**
@@ -248,8 +253,47 @@ trait PerformsValidation
     {
         return self::newResource()
                     ->availableFields($request)
+                    ->filter(function ($field) {
+                        return ! $field instanceof PivotableField;
+                    })
                     ->firstWhere('resourceName', $field)
                     ->getValidationAttribute($request);
+    }
+
+    /**
+     * Get the validation attachable attribute for a specific field.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param  string  $field
+     * @return string
+     */
+    public static function validationAttachableAttributeFor(NovaRequest $request, $field)
+    {
+        return self::newResource()
+                    ->availableFields($request)
+                    ->filter(function ($field) {
+                        return $field instanceof PivotableField;
+                    })
+                    ->firstWhere('resourceName', $field)
+                    ->getValidationAttribute($request);
+    }
+
+    /**
+     * Map field attributes to field names.
+     *
+     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
+     * @return Illuminate\Support\Collection
+     */
+    private static function attributeNamesForFields(NovaRequest $request)
+    {
+        return (new static(static::newModel()))
+            ->availableFields($request)
+            ->reject(function ($item) {
+                return empty($item->name);
+            })
+            ->mapWithKeys(function ($item) {
+                return [$item->attribute => $item->name];
+            });
     }
 
     /**

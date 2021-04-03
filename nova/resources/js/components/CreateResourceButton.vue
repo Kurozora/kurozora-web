@@ -38,7 +38,7 @@
         },
       }"
     >
-      {{ __('Create :resource', { resource: singularName }) }}
+      {{ label }}
     </router-link>
   </div>
 </template>
@@ -47,6 +47,7 @@
 export default {
   props: {
     classes: { default: 'btn btn-default btn-primary' },
+    label: {},
     singularName: {},
     resourceName: {},
     viaResource: {},
@@ -55,6 +56,10 @@ export default {
     relationshipType: {},
     authorizedToCreate: {},
     authorizedToRelate: {},
+    alreadyFilled: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   computed: {
@@ -80,7 +85,11 @@ export default {
      * Determine if the create button should be displayed.
      */
     shouldShowCreateButton() {
-      return this.authorizedToCreate && this.authorizedToRelate
+      return (
+        this.authorizedToCreate &&
+        this.authorizedToRelate &&
+        !this.alreadyFilled
+      )
     },
   },
 }

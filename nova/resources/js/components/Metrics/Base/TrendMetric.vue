@@ -3,8 +3,8 @@
     <div class="flex mb-4">
       <h3 class="mr-3 text-base text-80 font-bold">{{ title }}</h3>
 
-      <div v-if="helpText" class="absolute pin-r pin-b p-2 z-25">
-        <tooltip trigger="click">
+      <div v-if="helpText" class="absolute pin-r pin-b p-2 z-20">
+        <tooltip trigger="click" placement="top-start">
           <icon
             type="help"
             viewBox="0 0 17 17"
@@ -47,7 +47,7 @@
     <div
       ref="chart"
       class="absolute pin rounded-b-lg ct-chart"
-      style="top: 60%;"
+      style="top: 60%"
     />
   </loading-card>
 </template>
@@ -82,7 +82,10 @@ export default {
     },
   },
 
-  data: () => ({ chartist: null }),
+  data: () => ({
+    chartist: null,
+    resizeObserver: null,
+  }),
 
   watch: {
     selectedRangeKey: function (newRange, oldRange) {
@@ -92,6 +95,16 @@ export default {
     chartData: function (newData, oldData) {
       this.renderChart()
     },
+  },
+
+  created() {
+    const debouncer = _.debounce(callback => callback(), Nova.config.debounce)
+
+    this.resizeObserver = new ResizeObserver(entries => {
+      debouncer(() => {
+        this.renderChart()
+      })
+    })
   },
 
   mounted() {
@@ -141,7 +154,9 @@ export default {
             }
 
             if (this.suffix) {
-              const suffix = SingularOrPlural(value, this.suffix)
+              const suffix = this.suffixInflection
+                ? SingularOrPlural(value, this.suffix)
+                : this.suffix
 
               return `${formattedValue} ${suffix}`
             }
@@ -151,6 +166,12 @@ export default {
         }),
       ],
     })
+
+    this.resizeObserver.observe(this.$refs.chart)
+  },
+
+  beforeDestroy() {
+    this.resizeObserver.unobserve(this.$refs.chart)
   },
 
   methods: {

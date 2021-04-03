@@ -75,12 +75,14 @@ class ResourceCommand extends GeneratorCommand
     {
         $model = $this->option('model');
 
+        $modelNamespace = $this->getModelNamespace();
+
         if (is_null($model)) {
-            $model = $this->laravel->getNamespace().str_replace('/', '\\', $this->argument('name'));
+            $model = $modelNamespace.str_replace('/', '\\', $this->argument('name'));
         } elseif (! Str::startsWith($model, [
-            $this->laravel->getNamespace(), '\\',
+            $modelNamespace, '\\',
         ])) {
-            $model = $this->laravel->getNamespace().$model;
+            $model = $modelNamespace.$model;
         }
 
         $resourceName = $this->argument('name');
@@ -119,6 +121,19 @@ class ResourceCommand extends GeneratorCommand
     protected function getDefaultNamespace($rootNamespace)
     {
         return $rootNamespace.'\Nova';
+    }
+
+    /**
+     * Get the default namespace for the class.
+     *
+     * @param  string  $rootNamespace
+     * @return string
+     */
+    protected function getModelNamespace()
+    {
+        $rootNamespace = $this->laravel->getNamespace();
+
+        return is_dir(app_path('Models')) ? $rootNamespace.'Models\\' : $rootNamespace;
     }
 
     /**

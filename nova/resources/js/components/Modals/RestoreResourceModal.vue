@@ -4,7 +4,7 @@
       @submit.prevent="handleConfirm"
       slot-scope="props"
       class="bg-white rounded-lg shadow-lg overflow-hidden"
-      style="width: 460px;"
+      style="width: 460px"
     >
       <slot>
         <div class="p-8">

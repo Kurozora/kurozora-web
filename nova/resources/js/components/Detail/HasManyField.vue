@@ -9,6 +9,7 @@
     @actionExecuted="actionExecuted"
     :load-cards="false"
     :initialPerPage="field.perPage || 5"
+    :should-override-meta="false"
   />
 </template>
 

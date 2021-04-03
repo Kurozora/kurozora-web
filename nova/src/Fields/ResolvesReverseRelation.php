@@ -55,7 +55,9 @@ trait ResolvesReverseRelation
                             return false;
                         }
 
-                        if ($field instanceof BelongsToMany || $field instanceof MorphToMany) {
+                        if (! $field instanceof HasMany
+                            && ! $field instanceof MorphMany
+                            && ! $field instanceof HasOne) {
                             return false;
                         }
 

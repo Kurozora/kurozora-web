@@ -12,6 +12,20 @@ trait InteractsWithRelatedResources
      *
      * @return \Laravel\Nova\Resource
      */
+    public function findParentResource()
+    {
+        return once(function () {
+            $resource = $this->viaResource();
+
+            return new $resource($this->findParentModel());
+        });
+    }
+
+    /**
+     * Find the parent resource model instance for the request.
+     *
+     * @return \Laravel\Nova\Resource
+     */
     public function findParentResourceOrFail()
     {
         return once(function () {
@@ -90,7 +104,11 @@ trait InteractsWithRelatedResources
             return $name;
         }
 
-        return ($parent = $this->findParentModel())
+        $parentResource = $this->findParentResource();
+
+        $parent = $parentResource->model();
+
+        return ($parent && $parentResource->hasRelatableField($this, $this->viaRelationship))
                     ? class_basename($parent->{$this->viaRelationship}()->getPivotClass())
                     : Resource::DEFAULT_PIVOT_NAME;
     }

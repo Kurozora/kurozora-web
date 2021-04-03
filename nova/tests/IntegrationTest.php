@@ -3,6 +3,7 @@
 namespace Laravel\Nova\Tests;
 
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Foundation\Mix;
 use Illuminate\Queue\WorkerOptions;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
@@ -11,6 +12,8 @@ use Laravel\Nova\NovaCoreServiceProvider;
 use Laravel\Nova\NovaServiceProvider;
 use Laravel\Nova\Tests\Fixtures\AddressResource;
 use Laravel\Nova\Tests\Fixtures\BooleanResource;
+use Laravel\Nova\Tests\Fixtures\CallableDefaultResource;
+use Laravel\Nova\Tests\Fixtures\CategoryResource;
 use Laravel\Nova\Tests\Fixtures\CommentResource;
 use Laravel\Nova\Tests\Fixtures\CustomConnectionActionResource;
 use Laravel\Nova\Tests\Fixtures\CustomKeyResource;
@@ -24,9 +27,11 @@ use Laravel\Nova\Tests\Fixtures\PostResource;
 use Laravel\Nova\Tests\Fixtures\ProfileResource;
 use Laravel\Nova\Tests\Fixtures\RecipientResource;
 use Laravel\Nova\Tests\Fixtures\RoleResource;
+use Laravel\Nova\Tests\Fixtures\SnippetResource;
 use Laravel\Nova\Tests\Fixtures\SoftDeletingFileResource;
 use Laravel\Nova\Tests\Fixtures\TagResource;
 use Laravel\Nova\Tests\Fixtures\UserResource;
+use Laravel\Nova\Tests\Fixtures\UserWithCustomFields;
 use Laravel\Nova\Tests\Fixtures\UserWithRedirectResource;
 use Laravel\Nova\Tests\Fixtures\VaporFileResource;
 use Laravel\Nova\Tests\Fixtures\VehicleResource;
@@ -54,8 +59,6 @@ abstract class IntegrationTest extends TestCase
 
         Hash::driver('bcrypt')->setRounds(4);
 
-        $this->loadMigrations();
-
         $this->withFactories(__DIR__.'/Factories');
 
         Nova::$tools = [];
@@ -66,6 +69,8 @@ abstract class IntegrationTest extends TestCase
         Nova::resources([
             AddressResource::class,
             BooleanResource::class,
+            CallableDefaultResource::class,
+            CategoryResource::class,
             CommentResource::class,
             CustomKeyResource::class,
             DiscussionResource::class,
@@ -78,9 +83,11 @@ abstract class IntegrationTest extends TestCase
             RecipientResource::class,
             RoleResource::class,
             SoftDeletingFileResource::class,
+            SnippetResource::class,
             TagResource::class,
             UserResource::class,
             UserWithRedirectResource::class,
+            UserWithCustomFields::class,
             VaporFileResource::class,
             VehicleResource::class,
             WheelResource::class,
@@ -96,7 +103,7 @@ abstract class IntegrationTest extends TestCase
      *
      * @return void
      */
-    protected function loadMigrations()
+    protected function defineDatabaseMigrations()
     {
         $this->loadMigrationsFrom([
             '--database' => 'sqlite',
@@ -183,7 +190,7 @@ abstract class IntegrationTest extends TestCase
      * @param  \Illuminate\Foundation\Application  $app
      * @return void
      */
-    protected function getEnvironmentSetUp($app)
+    protected function defineEnvironment($app)
     {
         $app['config']->set('database.default', 'sqlite');
 
@@ -192,6 +199,20 @@ abstract class IntegrationTest extends TestCase
             'database' => ':memory:',
             'prefix'   => '',
         ]);
+    }
+
+    /**
+     * Run tests Without Mix.
+     *
+     * @return $this
+     */
+    protected function withoutMix()
+    {
+        $this->instance(Mix::class, function () {
+            //
+        });
+
+        return $this;
     }
 
     /**

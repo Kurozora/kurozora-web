@@ -6,10 +6,11 @@ use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Nova\Actions\Actionable;
 
 class User extends Authenticatable
 {
-    use Notifiable, SoftDeletes;
+    use Actionable, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -57,7 +58,7 @@ class User extends Authenticatable
      */
     public function profile()
     {
-        return $this->hasOne(Profile::class);
+        return $this->hasOne(Profile::class)->withDefault();
     }
 
     /**

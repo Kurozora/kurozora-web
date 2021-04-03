@@ -319,4 +319,21 @@ class ResourceAttachmentTest extends IntegrationTest
             ], $actionEvent->changes);
         });
     }
+
+    public function test_cannot_attach_resource_with_invalid_via_relationship()
+    {
+        $this->setupActionEventsOnSeparateConnection();
+
+        $user = factory(User::class)->create();
+        $role = factory(Role::class)->create();
+
+        $response = $this->withExceptionHandling()
+            ->postJson('/nova-api/users/'.$user->id.'/attach/roles', [
+                'roles' => $role->id,
+                'admin' => 'Y',
+                'viaRelationship' => 'delete',
+            ]);
+
+        $response->assertStatus(404);
+    }
 }

@@ -45,7 +45,7 @@ class ResourceShowTest extends IntegrationTest
         $this->assertTrue($response->original['resource']['authorizedToDelete']);
         $this->assertTrue($response->original['resource']['softDeletes']);
 
-        $this->assertEquals('User Resource Details', $response->original['panels'][0]->name);
+        $this->assertEquals('User Resource Details: 1', $response->original['panels'][0]->name);
     }
 
     public function test_can_show_resource_with_null_relation()
@@ -148,7 +148,7 @@ class ResourceShowTest extends IntegrationTest
         $fields = $response->original['resource']['fields'];
 
         // Default panel assignment...
-        $this->assertEquals('Panel Resource Details', collect($fields)->where('attribute', 'email')->first()->panel);
+        $this->assertEquals('Panel Resource Details: 1', collect($fields)->where('attribute', 'email')->first()->panel);
 
         // Includes / Excludes...
         $this->assertNotNull(collect($fields)->where('attribute', 'include')->first());
@@ -158,7 +158,7 @@ class ResourceShowTest extends IntegrationTest
         $panels = $response->original['panels'];
 
         $this->assertEquals(3, count($panels));
-        $this->assertEquals('Panel Resource Details', $panels[0]->name);
+        $this->assertEquals('Panel Resource Details: 1', $panels[0]->name);
         $this->assertEquals('Basics', $panels[1]->name);
         $this->assertEquals('Extra', $panels[2]->name);
     }
@@ -174,11 +174,11 @@ class ResourceShowTest extends IntegrationTest
 
         $fields = $response->original['resource']['fields'];
 
-        $this->assertEquals('Role Resource Details', collect($fields)->where('attribute', 'id')->first()->panel);
+        $this->assertEquals('Role Resource Details: 1', collect($fields)->where('attribute', 'id')->first()->panel);
 
         $panels = $response->original['panels'];
         $this->assertEquals(1, count($panels));
-        $this->assertEquals('Role Resource Details', $panels[0]->name);
+        $this->assertEquals('Role Resource Details: 1', $panels[0]->name);
     }
 
     public function test_resource_tool_component_name()

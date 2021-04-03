@@ -39,11 +39,26 @@ class Boolean extends Field
      *
      * @param  mixed  $resource
      * @param  string  $attribute
-     * @return mixed
+     * @return bool|null
      */
     protected function resolveAttribute($resource, $attribute)
     {
-        return parent::resolveAttribute($resource, $attribute) == $this->trueValue ? true : false;
+        $value = parent::resolveAttribute($resource, $attribute);
+
+        return ! is_null($value)
+                    ? $value == $this->trueValue ? true : false
+                    : null;
+    }
+
+    /**
+     * Resolve the default value for the field.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @return bool
+     */
+    protected function resolveDefaultValue(NovaRequest $request)
+    {
+        return parent::resolveDefaultValue($request) ?? false;
     }
 
     /**

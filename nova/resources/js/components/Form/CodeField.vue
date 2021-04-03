@@ -1,5 +1,10 @@
 <template>
-  <default-field :field="field" :errors="errors" :full-width-content="true">
+  <default-field
+    :field="field"
+    :errors="errors"
+    :full-width-content="true"
+    :show-help-text="showHelpText"
+  >
     <template slot="field">
       <div class="form-input form-input-bordered px-0 overflow-hidden">
         <textarea ref="theTextarea" />

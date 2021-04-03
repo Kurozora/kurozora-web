@@ -2,6 +2,8 @@
 
 namespace Laravel\Nova\Fields;
 
+use Laravel\Nova\Http\Requests\NovaRequest;
+
 class ID extends Field
 {
     /**
@@ -25,6 +27,36 @@ class ID extends Field
     }
 
     /**
+     * Create a new, resolved ID field for the given resource.
+     *
+     * @param  \Laravel\Nova\Resource  $resource
+     * @return static
+     */
+    public static function forResource($resource)
+    {
+        $model = $resource->model();
+
+        $methods = collect(['fieldsForIndex', 'fieldsForDetail'])
+            ->filter(function ($method) use ($resource) {
+                return method_exists($resource, $method);
+            })->all();
+
+        $field = transform(
+            $resource->buildAvailableFields(app(NovaRequest::class), $methods)
+                    ->whereInstanceOf(self::class)
+                    ->first(),
+            function ($field) use ($model) {
+                return tap($field)->resolve($model);
+            },
+            function () use ($model) {
+                return ! is_null($model) && $model->exists ? static::forModel($model) : null;
+            }
+        );
+
+        return empty($field->value) && $field->nullable !== true ? null : $field;
+    }
+
+    /**
      * Create a new, resolved ID field for the given model.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model
@@ -32,7 +64,33 @@ class ID extends Field
      */
     public static function forModel($model)
     {
-        return tap(static::make('ID', $model->getKeyName()))->resolve($model);
+        return tap(static::make('ID', $model->getKeyName()), function ($field) use ($model) {
+            $value = $model->getKey();
+
+            if (is_int($value) && $value >= 9007199254740991) {
+                $field->asBigInt();
+            }
+
+            $field->resolve($model);
+        });
+    }
+
+    /**
+     * Resolve the given attribute from the given resource.
+     *
+     * @param  mixed  $resource
+     * @param  string  $attribute
+     * @return mixed
+     */
+    protected function resolveAttribute($resource, $attribute)
+    {
+        $value = parent::resolveAttribute($resource, $attribute);
+
+        if (is_int($value) && $value >= 9007199254740991) {
+            return (string) $value;
+        }
+
+        return $value;
     }
 
     /**

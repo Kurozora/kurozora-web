@@ -15,6 +15,13 @@ class NotAvailableForNavigationUserResource extends Resource
     public static $model = \Laravel\Nova\Tests\Fixtures\User::class;
 
     /**
+     * Indicates if the resource should be globally searchable.
+     *
+     * @var bool
+     */
+    public static $globallySearchable = false;
+
+    /**
      * Determine if this resource is available for navigation.
      *
      * @param  \Illuminate\Http\Request  $request

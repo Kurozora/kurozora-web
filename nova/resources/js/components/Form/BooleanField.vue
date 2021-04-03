@@ -1,5 +1,5 @@
 <template>
-  <default-field :field="field" :errors="errors">
+  <default-field :field="field" :errors="errors" :show-help-text="showHelpText">
     <template slot="field">
       <checkbox
         class="mt-2"
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { Errors, FormField, HandlesValidationErrors } from 'laravel-nova'
+import { FormField, HandlesValidationErrors } from 'laravel-nova'
 
 export default {
   mixins: [HandlesValidationErrors, FormField],

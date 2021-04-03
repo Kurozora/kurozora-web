@@ -20,6 +20,24 @@ export default {
       type: String,
       default: 'window',
     },
+
+    preventOverflow: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
+  data() {
+    return {
+      popperOptions: {
+        modifiers: {
+          preventOverflow: {
+            boundariesElement: this.boundary,
+            enabled: this.preventOverflow,
+          },
+        },
+      },
+    }
   },
 
   render(h) {
@@ -29,6 +47,7 @@ export default {
         offset={this.offset}
         placement={this.placement}
         boundariesElement={this.boundary}
+        popperOptions={this.popperOptions}
         popoverClass="z-50"
         popoverBaseClass=""
         popoverWrapperClass=""

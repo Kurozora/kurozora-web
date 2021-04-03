@@ -1,6 +1,11 @@
 <template>
   <div>
-    <default-field :field="field" :show-errors="false" :field-name="fieldName">
+    <default-field
+      :field="field"
+      :show-errors="false"
+      :field-name="fieldName"
+      :show-help-text="field.helpText != null"
+    >
       <select
         v-if="hasMorphToTypes"
         :disabled="isLocked || isReadonly"
@@ -47,6 +52,7 @@
             @input="performSearch"
             @clear="clearSelection"
             @selected="selectResource"
+            :debounce="field.debounce"
             :value="selectedResource"
             :data="availableResources"
             :clearable="field.nullable"
@@ -120,6 +126,7 @@
             v-if="canShowNewRelationModal"
             @click="openRelationModal"
             class="ml-1"
+            :dusk="`${field.attribute}-inline-create`"
           />
         </div>
 
@@ -190,17 +197,16 @@ export default {
       this.initializingWithExistingResource = true
       this.resourceType = this.field.morphToType
       this.selectedResourceId = this.field.morphToId
-    }
-
-    if (this.creatingViaRelatedResource) {
+    } else if (this.creatingViaRelatedResource) {
       this.initializingWithExistingResource = true
       this.resourceType = this.viaResource
       this.selectedResourceId = this.viaResourceId
     }
 
-    if (this.shouldSelectInitialResource && !this.isSearchable) {
-      this.getAvailableResources().then(() => this.selectInitialResource())
-    } else if (this.shouldSelectInitialResource && this.isSearchable) {
+    if (this.shouldSelectInitialResource) {
+      if (!this.resourceType && this.field.defaultResource) {
+        this.resourceType = this.field.defaultResource
+      }
       this.getAvailableResources().then(() => this.selectInitialResource())
     }
 
@@ -218,6 +224,10 @@ export default {
     selectResourceFromSelectControl(e) {
       this.selectedResourceId = e.target.value
       this.selectInitialResource()
+
+      if (this.field) {
+        Nova.$emit(this.field.attribute + '-change', this.selectedResourceId)
+      }
     },
 
     /**
@@ -335,7 +345,14 @@ export default {
      * Determine if we are creating a new resource via a parent relation
      */
     creatingViaRelatedResource() {
-      return Boolean(this.viaResource && this.viaResourceId)
+      return Boolean(
+        _.find(
+          this.field.morphToTypes,
+          type => type.value == this.viaResource
+        ) &&
+          this.viaResource &&
+          this.viaResourceId
+      )
     },
 
     /**
@@ -343,7 +360,9 @@ export default {
      */
     shouldSelectInitialResource() {
       return Boolean(
-        this.editingExistingResource || this.creatingViaRelatedResource
+        this.editingExistingResource ||
+          this.creatingViaRelatedResource ||
+          Boolean(this.field.value && this.field.defaultResource)
       )
     },
 

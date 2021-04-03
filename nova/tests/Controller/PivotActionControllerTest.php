@@ -348,6 +348,16 @@ class PivotActionControllerTest extends IntegrationTest
         Relation::morphMap([], false);
     }
 
+    public function test_cannot_retrieve_pivot_actions_for_a_resource_with_invalid_via_relationship()
+    {
+        $response = $this->withExceptionHandling()
+                        ->post('/nova-api/roles/action?action='.UpdateStatusAction::class.'&pivotAction=true&viaResource=users&viaResourceId=1&viaRelationship=delete', [
+                            'resources' => 'all',
+                        ]);
+
+        $response->assertStatus(404);
+    }
+
     /**
      * Get a pivot action URL for the given action.
      *

@@ -15,6 +15,13 @@ class PartitionResult implements JsonSerializable
     public $value;
 
     /**
+     * The custom label name.
+     *
+     * @var array
+     */
+    public $labels = [];
+
+    /**
      * The custom label colors.
      *
      * @var array
@@ -41,8 +48,8 @@ class PartitionResult implements JsonSerializable
      */
     public function label(Closure $callback)
     {
-        $this->value = collect($this->value)->mapWithKeys(function ($value, $label) use ($callback) {
-            return [$callback($label) => $value];
+        $this->labels = collect($this->value)->mapWithKeys(function ($value, $label) use ($callback) {
+            return [$label => $callback($label)];
         })->all();
 
         return $this;
@@ -70,9 +77,11 @@ class PartitionResult implements JsonSerializable
     {
         return [
             'value' => collect($this->value ?? [])->map(function ($value, $label) {
+                $resolvedLabel = $this->labels[$label] ?? $label;
+
                 return array_filter([
-                    'color' => $this->colors->get($label),
-                    'label' => $label,
+                    'color' => data_get($this->colors->colors, $label, $this->colors->get($resolvedLabel)),
+                    'label' => $resolvedLabel,
                     'value' => $value,
                 ], function ($value) {
                     return ! is_null($value);

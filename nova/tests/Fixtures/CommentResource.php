@@ -42,7 +42,11 @@ class CommentResource extends Resource
                 return $resource->title;
             }])->types([
                 PostResource::class => 'Post',
-            ])->searchable(),
+            ])
+            ->viewable($_SERVER['nova.comment.viewable-field'] ?? true)
+            ->searchable()
+            ->default($_SERVER['nova.user.default-value'] ?? null)
+            ->defaultResource($_SERVER['nova.user.default-resource'] ?? null),
             BelongsTo::make('Author', 'author', UserResource::class),
             Text::make('Body', 'body')->rules('required', 'string', 'max:255'),
         ];

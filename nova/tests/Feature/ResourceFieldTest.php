@@ -3,9 +3,11 @@
 namespace Laravel\Nova\Tests\Feature;
 
 use Illuminate\Support\Collection;
+use Illuminate\Validation\ValidationException;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Http\Requests\ResourceDetailRequest;
 use Laravel\Nova\Http\Requests\ResourceIndexRequest;
+use Laravel\Nova\Tests\Fixtures\CustomFieldNameUserResource;
 use Laravel\Nova\Tests\Fixtures\Post;
 use Laravel\Nova\Tests\Fixtures\PostResource;
 use Laravel\Nova\Tests\Fixtures\User;
@@ -146,8 +148,13 @@ class ResourceFieldTest extends IntegrationTest
 
         $request = ResourceIndexRequest::create('/');
 
+        $this->assertSame(
+            ['Index Name'],
+            $resource->indexFields($request)->pluck('name')->all()
+        );
+
         $this->assertCount(1, $resource->availableFields($request));
-        $this->assertEquals('Index Name', $resource->availableFields($request)->first()->name);
+        $this->assertCount(1, $resource->indexFields($request));
     }
 
     public function test_uses_detail_fields()
@@ -157,8 +164,43 @@ class ResourceFieldTest extends IntegrationTest
 
         $request = ResourceDetailRequest::create('/');
 
-        $this->assertCount(1, $resource->availableFields($request));
-        $this->assertEquals('Detail Name', $resource->availableFields($request)->first()->name);
+        $this->assertSame(
+            ['Detail Name', 'Restricted', 'Avatar', 'Actions'],
+            $resource->detailFields($request)->pluck('name')->all()
+        );
+
+        $this->assertCount(3, $resource->availableFields($request));
+        $this->assertCount(4, $resource->detailFields($request));
+    }
+
+    public function test_uses_deletable_fields()
+    {
+        $user = factory(User::class)->create();
+        $resource = new UserWithCustomFields($user);
+
+        $request = NovaRequest::create('/');
+
+        $this->assertSame(
+            ['Avatar'],
+            $resource->deletableFields($request)->pluck('name')->all()
+        );
+
+        $this->assertCount(1, $resource->deletableFields($request));
+    }
+
+    public function test_uses_downloadable_fields()
+    {
+        $user = factory(User::class)->create();
+        $resource = new UserWithCustomFields($user);
+
+        $request = NovaRequest::create('/');
+
+        $this->assertSame(
+            ['Avatar'],
+            $resource->downloadableFields($request)->pluck('name')->all()
+        );
+
+        $this->assertCount(1, $resource->downloadableFields($request));
     }
 
     public function test_uses_update_fields()
@@ -171,8 +213,13 @@ class ResourceFieldTest extends IntegrationTest
             'editMode' => 'update',
         ]);
 
+        $this->assertSame(
+            ['Update Name'],
+            $resource->updateFields($request)->pluck('name')->all()
+        );
+
         $this->assertCount(1, $resource->availableFields($request));
-        $this->assertEquals('Update Name', $resource->availableFields($request)->first()->name);
+        $this->assertCount(1, $resource->updateFields($request));
     }
 
     public function test_uses_create_fields()
@@ -185,7 +232,44 @@ class ResourceFieldTest extends IntegrationTest
             'editMode' => 'create',
         ]);
 
+        $this->assertSame(
+            ['Create Name', 'Nickname'],
+            $resource->creationFields($request)->pluck('name')->all()
+        );
+
         $this->assertCount(2, $resource->availableFields($request));
-        $this->assertEquals('Create Name', $resource->availableFields($request)->first()->name);
+        $this->assertCount(2, $resource->creationFields($request));
+    }
+
+    public function test_use_field_names_as_validator_attributes()
+    {
+        $user = factory(User::class)->create();
+        $resource = new CustomFieldNameUserResource($user);
+
+        $request = NovaRequest::create(
+            '/nova-api/users', 'POST', [], [], [], [], json_encode(['name' => null])
+        );
+
+        try {
+            $resource::validateForCreation($request);
+            $this->fail('ValidationException expected');
+        } catch (ValidationException $e) {
+            $this->assertStringContainsString('Custom Name', $e->validator->errors()->first(), 'Attribute name not found');
+        }
+    }
+
+    public function test_resource_can_verify_relatable_field()
+    {
+        $user = factory(User::class)->create();
+        $resource = new UserResource($user);
+        $request = NovaRequest::create('/');
+
+        $this->assertTrue($resource->hasRelatableField($request, 'roles'));
+        $this->assertTrue($resource->hasRelatableField($request, 'posts'));
+        $this->assertTrue($resource->hasRelatableField($request, 'actions'));
+        $this->assertFalse($resource->hasRelatableField($request, 'delete'));
+        $this->assertFalse($resource->hasRelatableField($request, 'forceDelete'));
+        $this->assertFalse($resource->hasRelatableField($request, 'restore'));
+        $this->assertFalse($resource->hasRelatableField($request, 'get'));
     }
 }

@@ -4,6 +4,10 @@ namespace Laravel\Nova\Tests\Controller;
 
 use Laravel\Nova\Lenses\Lens;
 use Laravel\Nova\Tests\Fixtures\IdFilter;
+use Laravel\Nova\Tests\Fixtures\LensFieldValidationAction;
+use Laravel\Nova\Tests\Fixtures\NoopAction;
+use Laravel\Nova\Tests\Fixtures\NoopInlineAction;
+use Laravel\Nova\Tests\Fixtures\Post;
 use Laravel\Nova\Tests\Fixtures\User;
 use Laravel\Nova\Tests\IntegrationTest;
 
@@ -35,6 +39,8 @@ class LensControllerTest extends IntegrationTest
 
     public function test_lens_resources_can_be_retrieved()
     {
+        $user = factory(User::class)->create();
+
         $response = $this->withExceptionHandling()
                         ->get('/nova-api/users/lens/user-lens');
 
@@ -50,6 +56,11 @@ class LensControllerTest extends IntegrationTest
         ]);
 
         $this->assertEquals([25, 50, 100], $response->original['per_page_options']);
+
+        $this->assertCount(3, $response->original['resources'][0]['actions']);
+        $this->assertInstanceOf(NoopAction::class, $response->original['resources'][0]['actions'][0]);
+        $this->assertInstanceOf(LensFieldValidationAction::class, $response->original['resources'][0]['actions'][1]);
+        $this->assertInstanceOf(NoopInlineAction::class, $response->original['resources'][0]['actions'][2]);
     }
 
     public function test_lens_that_returns_paginator_can_be_retrieved()
@@ -102,5 +113,39 @@ class LensControllerTest extends IntegrationTest
         $this->assertEquals(2, $response->original['resources'][0]['id']->value);
 
         $response->assertJsonCount(1, 'resources');
+    }
+
+    public function test_lenses_can_be_sorted()
+    {
+        factory(Post::class)->create();
+        factory(Post::class)->create();
+        factory(Post::class)->create();
+
+        $response = $this->withExceptionHandling()
+                        ->getJson('/nova-api/posts/lens/post-lens?orderBy=id&orderByDirection=desc');
+
+        $this->assertEquals(3, $response->original['resources'][0]['id']->value);
+        $this->assertEquals(2, $response->original['resources'][1]['id']->value);
+        $this->assertEquals(1, $response->original['resources'][2]['id']->value);
+
+        $response->assertJsonCount(3, 'resources');
+    }
+
+    public function test_lenses_can_be_sorted_using_relation()
+    {
+        $users = factory(User::class, 3)->create();
+
+        factory(Post::class)->create(['user_id' => $users[0]->id]);
+        factory(Post::class)->create(['user_id' => $users[2]->id]);
+        factory(Post::class)->create(['user_id' => $users[1]->id]);
+
+        $response = $this->withExceptionHandling()
+                        ->getJson('/nova-api/posts/lens/post-lens?orderBy=user_id&orderByDirection=desc');
+
+        $this->assertEquals(2, $response->original['resources'][0]['id']->value);
+        $this->assertEquals(3, $response->original['resources'][1]['id']->value);
+        $this->assertEquals(1, $response->original['resources'][2]['id']->value);
+
+        $response->assertJsonCount(3, 'resources');
     }
 }

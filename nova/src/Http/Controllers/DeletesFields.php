@@ -35,8 +35,7 @@ trait DeletesFields
         }
 
         $request->newResourceWith($model)
-                    ->detailFields($request)
-                    ->whereInstanceOf(Deletable::class)
+                    ->deletableFields($request)
                     ->filter->isPrunable()
                     ->each(function ($field) use ($request, $model) {
                         DeleteField::forRequest($request, $field, $model);

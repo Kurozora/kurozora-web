@@ -8,6 +8,7 @@ abstract class Dashboard extends Element
 {
     use AuthorizedToSee,
         Metable,
+        Makeable,
         ProxiesCanSeeToGate;
 
     /**

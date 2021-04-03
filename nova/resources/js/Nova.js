@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import Meta from 'vue-meta'
 import store from '@/store'
 import Toasted from 'vue-toasted'
 import router from '@/router'
@@ -11,6 +12,7 @@ import resources from '@/store/resources'
 import VTooltip from 'v-tooltip'
 import Mousetrap from 'mousetrap'
 
+Vue.use(Meta)
 Vue.use(PortalVue)
 Vue.use(AsyncComputed)
 Vue.use(VTooltip)
@@ -66,9 +68,13 @@ export default class Nova {
 
     this.app = new Vue({
       el: '#nova',
+      name: 'Nova',
       router,
       store,
       components: { Loading },
+      metaInfo: {
+        titleTemplate: `%s | ${window.config.appName}`,
+      },
       mounted: function () {
         this.$loading = this.$refs.loading
 

@@ -213,13 +213,13 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
 
         $attribute = $attribute ?? $this->attribute;
 
-        if ($attribute === 'ComputedField') {
-            $this->value = call_user_func($this->computedCallback, $resource);
-        }
-
         if (! $this->displayCallback) {
             $this->resolve($resource, $attribute);
         } elseif (is_callable($this->displayCallback)) {
+            if ($attribute === 'ComputedField') {
+                $this->value = call_user_func($this->computedCallback, $resource);
+            }
+
             tap($this->value ?? $this->resolveAttribute($resource, $attribute), function ($value) use ($resource, $attribute) {
                 $this->value = call_user_func($this->displayCallback, $value, $resource, $attribute);
             });
@@ -252,6 +252,17 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
                 $this->value = call_user_func($this->resolveCallback, $value, $resource, $attribute);
             });
         }
+    }
+
+    /**
+     * Resolve the default value for an Action field.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @return void
+     */
+    public function resolveForAction($request)
+    {
+        $this->resolveDefaultValue($request);
     }
 
     /**
@@ -668,6 +679,7 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
 
     /**
      * Determine if the field is required.
+     *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return bool
      */
@@ -679,6 +691,10 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
             }
 
             if (! empty($this->attribute) && is_null($callback)) {
+                if ($request->isResourceIndexRequest() || $request->isActionRequest()) {
+                    return in_array('required', $this->getCreationRules($request)[$this->attribute]);
+                }
+
                 if ($request->isCreateOrAttachRequest()) {
                     return in_array('required', $this->getCreationRules($request)[$this->attribute]);
                 }
@@ -742,17 +758,31 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
      * Resolve the default value for the field.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @return callable|mixed
+     * @return string
      */
     protected function resolveDefaultValue(NovaRequest $request)
     {
-        if ($request->isCreateOrAttachRequest()) {
-            if (is_null($this->value) && is_callable($this->defaultCallback)) {
+        if ($request->isCreateOrAttachRequest() || $request->isResourceIndexRequest() || $request->isActionRequest()) {
+            if (is_null($this->value) && $this->defaultCallback instanceof Closure) {
                 return call_user_func($this->defaultCallback, $request);
             }
 
             return $this->defaultCallback;
         }
+    }
+
+    /**
+     * Set the placeholder text for the field if supported.
+     *
+     * @param string $text
+     * @return $this
+     */
+    public function placeholder($text)
+    {
+        $this->placeholder = $text;
+        $this->withMeta(['extraAttributes' => ['placeholder' => $text]]);
+
+        return $this;
     }
 
     /**
@@ -779,7 +809,7 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
                 'stacked' => $this->stacked,
                 'textAlign' => $this->textAlign,
                 'validationKey' => $this->validationKey(),
-                'value' => $this->resolveDefaultValue($request) ?? $this->value,
+                'value' => $this->value ?? $this->resolveDefaultValue($request),
             ], $this->meta());
         });
     }

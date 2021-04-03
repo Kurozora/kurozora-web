@@ -18,6 +18,8 @@ class Gravatar extends Avatar
 
         $this->exceptOnForms();
 
+        $this->maxWidth(50);
+
         $this->withMeta(['indexName' => '']);
     }
 

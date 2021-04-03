@@ -62,8 +62,15 @@ abstract class TrendDateExpression extends Expression
      */
     public function offset()
     {
+        $timezoneOffset = function ($timezone) {
+            return (new DateTime(Chronos::now()->format('Y-m-d H:i:s'), new DateTimeZone($timezone)))->getOffset() / 60 / 60;
+        };
+
         if ($this->timezone) {
-            return (new DateTime(Chronos::now()->format('Y-m-d H:i:s'), new DateTimeZone($this->timezone)))->getOffset() / 60 / 60;
+            $appOffset = $timezoneOffset(config('app.timezone'));
+            $userOffset = $timezoneOffset($this->timezone);
+
+            return $userOffset - $appOffset;
         }
 
         return 0;

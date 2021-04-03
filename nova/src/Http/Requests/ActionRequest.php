@@ -82,8 +82,9 @@ class ActionRequest extends NovaRequest
         $output = [];
 
         $this->toSelectedResourceQuery()->when(! $this->forAllMatchingResources(), function ($query) {
-            $query->whereKey(explode(',', $this->resources));
-        })->latest($this->model()->getKeyName())->chunk($count, function ($chunk) use ($callback, &$output) {
+            $query->whereKey(explode(',', $this->resources))
+                ->latest($this->model()->getQualifiedKeyName());
+        })->chunk($count, function ($chunk) use ($callback, &$output) {
             $output[] = $callback($this->mapChunk($chunk));
         });
 
@@ -102,8 +103,14 @@ class ActionRequest extends NovaRequest
         }
 
         return $this->viaRelationship()
-                        ? $this->modelsViaRelationship()
-                        : $this->newQueryWithoutScopes();
+                    ? $this->modelsViaRelationship()
+                    : tap($this->newQueryWithoutScopes(), function ($query) {
+                        $resource = $this->resource();
+
+                        $resource::indexQuery(
+                            $this, $query->with($resource::$with)
+                        );
+                    });
     }
 
     /**
@@ -113,7 +120,9 @@ class ActionRequest extends NovaRequest
      */
     protected function modelsViaRelationship()
     {
-        return $this->findParentModel()->{$this->viaRelationship}()
+        return tap($this->findParentResource(), function ($resource) {
+            abort_unless($resource->hasRelatableField($this, $this->viaRelationship), 404);
+        })->model()->{$this->viaRelationship}()
                         ->withoutGlobalScopes()
                         ->whereIn($this->model()->getQualifiedKeyName(), explode(',', $this->resources));
     }
@@ -132,15 +141,13 @@ class ActionRequest extends NovaRequest
     }
 
     /**
-     * Validqte the given fields.
+     * Validate the given fields.
      *
      * @return void
      */
     public function validateFields()
     {
-        $this->validate(collect($this->action()->fields())->mapWithKeys(function ($field) {
-            return $field->getCreationRules($this);
-        })->all());
+        $this->action()->validateFields($this);
     }
 
     /**
@@ -237,7 +244,9 @@ class ActionRequest extends NovaRequest
     public function pivotRelation()
     {
         if ($this->isPivotAction()) {
-            return $this->newViaResource()->model()->{$this->viaRelationship}();
+            return tap($this->newViaResource(), function ($resource) {
+                abort_unless($resource->hasRelatableField($this, $this->viaRelationship), 404);
+            })->model()->{$this->viaRelationship}();
         }
     }
 
