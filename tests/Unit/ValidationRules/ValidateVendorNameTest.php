@@ -2,8 +2,6 @@
 
 namespace Tests\Unit\ValidationRules;
 
-use App\Rules\ValidatePlatformName;
-use App\Rules\ValidatePlatformVersion;
 use App\Rules\ValidateVendorName;
 use Tests\TestCase;
 

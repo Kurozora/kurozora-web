@@ -1,6 +1,6 @@
 <?php
 
-use App\Studio;
+use App\Models\Studio;
 use Illuminate\Database\Seeder;
 
 class StudioSeeder extends Seeder

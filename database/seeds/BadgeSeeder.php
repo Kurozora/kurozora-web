@@ -1,6 +1,6 @@
 <?php
 
-use App\Badge;
+use App\Models\Badge;
 use Illuminate\Database\Seeder;
 
 class BadgeSeeder extends Seeder

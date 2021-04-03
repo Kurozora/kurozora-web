@@ -2,37 +2,37 @@
 
 namespace Tests\Traits;
 
-use App\Actor;
-use App\ActorCharacter;
-use App\ActorCharacterAnime;
-use App\Anime;
-use App\AnimeEpisode;
-use App\AnimeRelations;
-use App\AnimeSeason;
-use App\Character;
+use App\Models\Actor;
+use App\Models\ActorCharacter;
+use App\Models\ActorCharacterAnime;
+use App\Models\Anime;
+use App\Models\AnimeEpisode;
+use App\Models\AnimeRelations;
+use App\Models\AnimeSeason;
+use App\Models\Character;
 
 trait ProvidesTestAnime
 {
     /** @var Anime $anime */
-    public $anime;
+    public Anime $anime;
 
     /** @var Anime $relatedAnime */
-    public $relatedAnime;
+    public Anime $relatedAnime;
 
     /** @var AnimeSeason $season */
-    public $season;
+    public AnimeSeason $season;
 
     /** @var AnimeEpisode $episode */
-    public $episode;
+    public AnimeEpisode $episode;
 
     /** @var Actor $actor */
-    public $actor;
+    public Actor $actor;
 
     /** @var Character $character */
-    public $character;
+    public Character $character;
 
     /** @var ActorCharacter $actorCharacter */
-    public $actorCharacter;
+    public ActorCharacter $actorCharacter;
 
     /**
      * Creates the test Anime data to be used in tests.

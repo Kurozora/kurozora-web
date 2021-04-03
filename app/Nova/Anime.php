@@ -12,6 +12,7 @@ use App\Nova\Actions\FetchAnimeDetails;
 use App\Nova\Actions\FetchAnimeImages;
 use App\Nova\Lenses\UnmoderatedAnime;
 use Chaseconey\ExternalImage\ExternalImage;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Laraning\NovaTimeField\TimeField as Time;
 use Laravel\Nova\Fields\BelongsToMany;
@@ -20,7 +21,6 @@ use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
@@ -33,7 +33,7 @@ class Anime extends Resource
      *
      * @var string
      */
-    public static $model = 'App\Anime';
+    public static $model = 'App\Models\Anime';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -117,20 +117,20 @@ class Anime extends Resource
                 ->help('A short description of the Anime.'),
 
             Select::make('Type')
-                ->options(AnimeType::toSelectArray())
+                ->options(AnimeType::asSelectArray())
                 ->displayUsingLabels()
                 ->required()
                 ->help('The general type of the anime, such as TV, Movie, or Music.'),
 
             Select::make('Watch rating')
-                ->options(WatchRating::toSelectArray())
+                ->options(WatchRating::asSelectArray())
                 ->displayUsingLabels()
                 ->sortable()
                 ->required()
                 ->help('Use `TV-Y7 (FV)` if the show exhibits more \'fantasy violence\', and/or is generally more intense or combative than other shows.'),
 
             Select::make('Adaptation Source')
-                ->options(AnimeSource::toSelectArray())
+                ->options(AnimeSource::asSelectArray())
                 ->displayUsingLabels()
                 ->sortable()
                 ->required()
@@ -180,7 +180,7 @@ class Anime extends Resource
                 ->help('For series: The average runtime in minutes of a single episode.<br />For movies: The amount of minutes the movie takes.'),
 
             Select::make('Air status')
-                ->options(AnimeStatus::toSelectArray())
+                ->options(AnimeStatus::asSelectArray())
                 ->displayUsingLabels()
                 ->hideFromIndex()
                 ->help('For example: Ended'),
@@ -191,7 +191,7 @@ class Anime extends Resource
                 ->help('The exact time the show airs at. For example: 1:30 PM (13:30)'),
 
             Select::make('Air day')
-                ->options(DayOfWeek::toSelectArray())
+                ->options(DayOfWeek::asSelectArray())
                 ->displayUsingLabels()
                 ->hideFromIndex()
                 ->help('The day of the week the show airs at. For example: Thursday'),
@@ -332,7 +332,7 @@ class Anime extends Resource
     private function displayModIndicatorForIndex()
     {
         // Get the anime and moderator count
-        /** @var \App\Anime $anime */
+        /** @var \App\Models\Anime $anime */
         $anime = $this->resource;
         $modCount = $anime->moderators->count();
 

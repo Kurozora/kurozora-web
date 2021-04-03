@@ -2,11 +2,10 @@
 
 namespace Tests\API;
 
-use App\Anime;
-use App\User;
+use App\Models\Anime;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Tests\Traits\ProvidesTestUser;
 use Tests\TestCase;
+use Tests\Traits\ProvidesTestUser;
 
 class ReminderAnimeTest extends TestCase
 {

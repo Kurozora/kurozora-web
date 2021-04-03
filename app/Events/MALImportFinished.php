@@ -2,9 +2,9 @@
 
 namespace App\Events;
 
-use App\User;
-use Illuminate\Queue\SerializesModels;
+use App\Models\User;
 use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 
 class MALImportFinished
 {

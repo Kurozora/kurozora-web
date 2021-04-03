@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
@@ -14,10 +14,10 @@ class MALImportFinished extends Notification implements ShouldQueue
     use Queueable;
 
     /** @var array $results */
-    private $results;
+    private array $results;
 
     /** @var string $behavior */
-    private $behavior;
+    private string $behavior;
 
     /**
      * Create a new notification instance.
@@ -25,7 +25,7 @@ class MALImportFinished extends Notification implements ShouldQueue
      * @param array $results
      * @param string $behavior
      */
-    public function __construct($results, $behavior)
+    public function __construct(array $results, string $behavior)
     {
         $this->results = $results;
         $this->behavior = $behavior;
@@ -37,7 +37,7 @@ class MALImportFinished extends Notification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return array
      */
-    public function via($notifiable)
+    public function via($notifiable): array
     {
         return ['database', ApnChannel::class];
     }
@@ -48,7 +48,7 @@ class MALImportFinished extends Notification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toDatabase($notifiable)
+    public function toDatabase($notifiable): array
     {
         return [
             'successful_count'  => count($this->results['successful']),
@@ -60,10 +60,10 @@ class MALImportFinished extends Notification implements ShouldQueue
     /**
      * Get the APN representation of the notification.
      *
-     * @param  User  $notifiable
+     * @param User $notifiable
      * @return ApnMessage
      */
-    public function toApn($notifiable)
+    public function toApn(User $notifiable): ApnMessage
     {
         return ApnMessage::create()
             ->title('🤩 MAL Import finished')

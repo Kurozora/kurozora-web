@@ -20,7 +20,7 @@ class AnimeImage extends Resource
      *
      * @var string
      */
-    public static $model = 'App\AnimeImages';
+    public static $model = 'App\Models\AnimeImages';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -65,7 +65,7 @@ class AnimeImage extends Resource
                 ->help('The URL to request the image asset.'),
 
             Select::make('Type')
-                ->options(AnimeImageType::toSelectArray())
+                ->options(AnimeImageType::asSelectArray())
                 ->displayUsingLabels()
                 ->rules('required')
                 ->help('The type of the image asset.'),

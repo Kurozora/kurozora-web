@@ -11,9 +11,9 @@ use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceBasic;
 use App\Jobs\SendNewPasswordMail;
 use App\Jobs\SendPasswordResetMail;
-use App\PasswordReset;
-use App\Session;
-use App\User;
+use App\Models\PasswordReset;
+use App\Models\Session;
+use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -144,7 +144,7 @@ class UserController extends Controller
      * @return Application|Factory|View
      * @throws Exception
      */
-    public function resetPasswordPage($token)
+    public function resetPasswordPage(string $token)
     {
         // Try to find a reset with this reset token
         /** @var PasswordReset $foundReset */

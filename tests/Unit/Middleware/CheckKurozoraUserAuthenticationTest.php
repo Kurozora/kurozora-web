@@ -5,14 +5,14 @@ namespace Tests\Unit\Middleware;
 use App\Helpers\JSONResult;
 use App\Helpers\KuroAuthToken;
 use App\Http\Middleware\CheckKurozoraUserAuthentication;
-use App\Session;
+use App\Models\Session;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Tests\Traits\ProvidesTestUser;
 use Tests\TestCase;
+use Tests\Traits\ProvidesTestUser;
 
 class CheckKurozoraUserAuthenticationTest extends TestCase
 {

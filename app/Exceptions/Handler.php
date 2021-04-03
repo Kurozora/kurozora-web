@@ -2,8 +2,8 @@
 
 namespace App\Exceptions;
 
-use App\APIError;
 use App\Helpers\JSONResult;
+use App\Models\APIError;
 use Exception;
 use FG\ASN1\Exception\NotImplementedException;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -18,11 +18,11 @@ use Swift_TransportException;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler

@@ -1,6 +1,6 @@
 <?php
 
-use App\Anime;
+use App\Models\Anime;
 use App\Enums\AnimeType;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
@@ -44,9 +44,9 @@ class AnimeDummySeeder extends Seeder
             foreach ($parsedAnime->anime as $index => $animeData) {
                 $count = $index + 1;
                 // Respect the maximum amount
-                if(env('MAX_ANIME_TO_SEED', null) != null) {
+                if(Env('MAX_ANIME_TO_SEED') != null) {
                     // Break out of the loop if the max has been reached
-                    if($count >= env('MAX_ANIME_TO_SEED'))
+                    if($count >= Env('MAX_ANIME_TO_SEED'))
                         break;
                 }
 

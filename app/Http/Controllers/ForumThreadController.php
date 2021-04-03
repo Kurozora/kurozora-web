@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Enums\ForumOrderType;
 use App\Enums\ForumsVoteType;
-use App\ForumReply;
-use App\ForumSectionBan;
-use App\ForumThread;
+use App\Models\ForumReply;
+use App\Models\ForumSectionBan;
+use App\Models\ForumThread;
 use App\Helpers\JSONResult;
 use App\Http\Requests\GetRepliesRequest;
 use App\Http\Requests\LockThreadRequest;

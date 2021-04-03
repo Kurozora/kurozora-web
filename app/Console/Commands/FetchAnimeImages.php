@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Anime;
+use App\Models\Anime;
 use Illuminate\Console\Command;
 use musa11971\TVDB\Exceptions\TVDBNotFoundException;
 use musa11971\TVDB\TVDB;

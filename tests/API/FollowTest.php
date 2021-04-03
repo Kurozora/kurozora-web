@@ -2,11 +2,10 @@
 
 namespace Tests\API;
 
-use App\Http\Resources\UserResourceBasic;
-use App\User;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Tests\Traits\ProvidesTestUser;
 use Tests\TestCase;
+use Tests\Traits\ProvidesTestUser;
 
 class FollowTest extends TestCase
 {

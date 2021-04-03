@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Session;
-use App\User;
+use App\Models\Session;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class SessionPolicy

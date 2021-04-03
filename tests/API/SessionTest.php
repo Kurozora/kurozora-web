@@ -2,12 +2,12 @@
 
 namespace Tests\API;
 
-use App\Session;
-use App\User;
+use App\Models\Session;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Str;
-use Tests\Traits\ProvidesTestUser;
 use Tests\TestCase;
+use Tests\Traits\ProvidesTestUser;
 
 class SessionTest extends TestCase
 {

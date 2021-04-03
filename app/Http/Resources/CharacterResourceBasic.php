@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Character;
+use App\Models\Character;
 use App\Enums\AstrologicalSign;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;

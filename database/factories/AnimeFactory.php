@@ -2,14 +2,14 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Anime;
+use App\Models\Anime;
 use App\Enums\AnimeSource;
 use App\Enums\AnimeStatus;
 use App\Enums\AnimeType;
 use App\Enums\DayOfWeek;
 use App\Enums\WatchRating;
-use Faker\Generator as Faker;
 use Carbon\Carbon;
+use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
 $factory->define(Anime::class, function (Faker $faker) {

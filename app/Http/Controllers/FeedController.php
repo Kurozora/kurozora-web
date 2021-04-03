@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\FeedMessage;
+use App\Models\FeedMessage;
 use App\Helpers\JSONResult;
 use App\Http\Requests\GetFeedMessagesExploreRequest;
 use App\Http\Requests\GetFeedMessagesHomeRequest;
 use App\Http\Requests\PostFeedRequest;
 use App\Http\Resources\FeedMessageResource;
-use App\User;
+use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;

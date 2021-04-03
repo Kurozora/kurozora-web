@@ -1,11 +1,11 @@
 <?php
 
-use App\ExplorePageCategory;
-use App\ExplorePageCategoryGenre;
-use App\Genre;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\ExplorePageCategory;
+use App\Models\ExplorePageCategoryGenre;
+use App\Models\Genre;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateExplorePageCategoryGenresTable extends Migration
 {

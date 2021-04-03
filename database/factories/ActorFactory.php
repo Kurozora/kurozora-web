@@ -2,7 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Actor;
+use App\Models\Actor;
 use Faker\Generator as Faker;
 
 $factory->define(Actor::class, function (Faker $faker) {
@@ -12,6 +12,7 @@ $factory->define(Actor::class, function (Faker $faker) {
     return [
         'first_name'    => $faker->firstName($genderString),
         'last_name'     => $faker->lastName($genderString),
+        'about'         => $faker->paragraph(mt_rand(10, 30)),
         'occupation'    => $faker->jobTitle,
         'image'         => $faker->imageUrl()
     ];

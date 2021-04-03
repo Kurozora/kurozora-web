@@ -2,8 +2,8 @@
 
 namespace App\Http\Sorters;
 
-use App\Anime;
-use App\AnimeRating;
+use App\Models\Anime;
+use App\Models\AnimeRating;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use musa11971\SortRequest\Support\Foundation\Contracts\Sorter;

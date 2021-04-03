@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\AnimeResourceBasic;
-use App\Http\Resources\StudioResourceBasic;
-use App\Studio;
 use App\Helpers\JSONResult;
+use App\Http\Resources\AnimeResourceBasic;
 use App\Http\Resources\StudioResource;
+use App\Models\Studio;
 use Illuminate\Http\JsonResponse;
 
 class StudioController extends Controller

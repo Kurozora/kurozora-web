@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Rules\ValidateEmail;
-use App\Session;
+use App\Models\Session;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateSessionRequest extends FormRequest

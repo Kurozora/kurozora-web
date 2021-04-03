@@ -2,13 +2,12 @@
 
 namespace App\Nova;
 
+use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Season extends Resource
 {
@@ -17,7 +16,7 @@ class Season extends Resource
      *
      * @var string
      */
-    public static $model = 'App\AnimeSeason';
+    public static $model = 'App\Models\AnimeSeason';
 
     /**
      * The single value that should be used to represent the resource when being displayed.

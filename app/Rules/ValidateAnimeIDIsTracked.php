@@ -2,8 +2,8 @@
 
 namespace App\Rules;
 
-use App\Anime;
-use App\User;
+use App\Models\Anime;
+use App\Models\User;
 use Illuminate\Contracts\Validation\Rule;
 
 class ValidateAnimeIDIsTracked implements Rule

@@ -2,8 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Http\Resources\NotificationResource;
-use App\User;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
@@ -15,7 +14,7 @@ class NewFollower extends Notification implements ShouldQueue
     use Queueable;
 
     /** @var User $follower */
-    private $follower;
+    private User $follower;
 
     /**
      * Create a new notification instance.
@@ -33,7 +32,7 @@ class NewFollower extends Notification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return array
      */
-    public function via($notifiable)
+    public function via($notifiable): array
     {
         return ['database', ApnChannel::class];
     }
@@ -44,26 +43,26 @@ class NewFollower extends Notification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toDatabase($notifiable)
+    public function toDatabase($notifiable): array
     {
         return [
-            'user_id'       => $this->follower->id,
-            'username'      => $this->follower->username,
-            'avatar_url'    => $this->follower->getFirstMediaFullUrl('avatar')
+            'userID'            => $this->follower->id,
+            'username'          => $this->follower->username,
+            'profileImageURL'   => $this->follower->getFirstMediaFullUrl('avatar')
         ];
     }
 
     /**
      * Get the APN representation of the notification.
      *
-     * @param  User  $notifiable
+     * @param User $notifiable
      * @return ApnMessage
      */
-    public function toApn($notifiable)
+    public function toApn(User $notifiable): ApnMessage
     {
         return ApnMessage::create()
             ->title('New follower')
             ->badge($notifiable->unreadNotifications()->count())
-            ->body($this->follower->username . ' has started following you.');
+            ->body($this->follower->username . ' followed you.');
     }
 }

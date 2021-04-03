@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ExplorePageCategoryTypes;
-use App\ExplorePageCategory;
-use App\Genre;
+use App\Models\ExplorePageCategory;
+use App\Models\Genre;
 use App\Helpers\JSONResult;
 use App\Http\Requests\GetExplorePageRequest;
 use App\Http\Resources\ExplorePageCategoryResource;

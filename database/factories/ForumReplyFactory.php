@@ -2,9 +2,9 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\ForumReply;
-use App\ForumThread;
-use App\User;
+use App\Models\ForumReply;
+use App\Models\ForumThread;
+use App\Models\User;
 use Faker\Generator as Faker;
 
 $factory->define(ForumReply::class, function (Faker $faker) {

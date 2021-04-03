@@ -3,7 +3,7 @@
 <div style="text-align: center;">
 
 ### The Kurozora Privacy Policy was updated on #UPDATE_DATE#.
-Your privacy is important to Kurozora so we have developed a Privacy Policy that covers how we collect, use, disclose, transfer, and store your personal information.
+Your privacy is important to Kurozora, so we have developed a Privacy Policy that covers how we collect, use, disclose, transfer, and store your personal information.
 <div></div>
 
 We want to ensure that you have a pleasant time on our platform. If you decide to register an account with us, we will have to store some data to keep track of your account and your details. Your privacy is very important to us, so we will always process your personal data with the utmost care.

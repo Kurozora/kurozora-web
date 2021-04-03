@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Actor;
+use App\Models\Actor;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -26,6 +26,7 @@ class ActorResourceBasic extends JsonResource
             'attributes'    => [
                 'firstName'    => $actor->first_name,
                 'lastName'     => $actor->last_name,
+                'about'        => $actor->about,
                 'occupation'   => $actor->occupation,
                 'imageURL'     => $actor->image
             ]

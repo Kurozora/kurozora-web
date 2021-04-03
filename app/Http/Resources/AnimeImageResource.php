@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\AnimeImages;
+use App\Models\AnimeImages;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 

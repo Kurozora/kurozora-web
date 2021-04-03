@@ -1,9 +1,9 @@
 <?php
 
-use App\Actor;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Actor;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateActorsTable extends Migration
 {
@@ -18,6 +18,7 @@ class CreateActorsTable extends Migration
             $table->bigIncrements('id');
             $table->string('first_name');
             $table->string('last_name');
+            $table->mediumText('about')->nullable();
             $table->string('occupation')->nullable();
             $table->string('image')->nullable();
             $table->timestamps();

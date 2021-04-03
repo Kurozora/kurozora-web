@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Enums\FeedVoteType;
-use App\FeedMessage;
+use App\Models\FeedMessage;
 use App\Helpers\JSONResult;
 use App\Http\Requests\FeedMessageRepliesRequest;
 use App\Http\Resources\FeedMessageResource;
-use App\User;
+use App\Models\User;
 use Auth;
 use Illuminate\Http\JsonResponse;
 

@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Anime;
-use App\AnimeRating;
+use App\Models\Anime;
+use App\Models\AnimeRating;
 use Illuminate\Console\Command;
 
 class CalculateAnimeRatings extends Command

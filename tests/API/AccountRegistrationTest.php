@@ -2,7 +2,7 @@
 
 namespace Tests\API;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -46,7 +46,7 @@ class AccountRegistrationTest extends TestCase
         $image = UploadedFile::fake()->image('avatar.jpg', 250, 250)->size(100);
 
         // Attempt to signup the user
-        $this->json('POST', '/api/v1/users', [
+        $response = $this->json('POST', '/api/v1/users', [
             'username'      => 'KurozoraTester',
             'password'      => 'StrongPassword909@!',
             'email'         => 'tester@kurozora.app',

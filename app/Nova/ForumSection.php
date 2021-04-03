@@ -2,12 +2,11 @@
 
 namespace App\Nova;
 
+use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
 
 class ForumSection extends Resource
 {
@@ -16,7 +15,7 @@ class ForumSection extends Resource
      *
      * @var string
      */
-    public static $model = 'App\ForumSection';
+    public static $model = 'App\Models\ForumSection';
 
     /**
      * The single value that should be used to represent the resource when being displayed.

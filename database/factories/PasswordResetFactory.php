@@ -2,8 +2,8 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\PasswordReset;
-use App\User;
+use App\Models\PasswordReset;
+use App\Models\User;
 use Faker\Generator as Faker;
 
 $factory->define(PasswordReset::class, function (Faker $faker) {

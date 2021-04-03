@@ -1,6 +1,6 @@
 <?php
 
-use App\ActorCharacterAnime;
+use App\Models\ActorCharacterAnime;
 use Illuminate\Database\Seeder;
 
 class ActorCharacterAnimeSeeder extends Seeder

@@ -6,14 +6,13 @@ use App\Rules\ValidateAPNDeviceToken;
 use App\Rules\ValidatePlatformName;
 use App\Rules\ValidatePlatformVersion;
 use App\Rules\ValidateVendorName;
+use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Session extends Resource
 {
@@ -22,7 +21,7 @@ class Session extends Resource
      *
      * @var string
      */
-    public static $model = 'App\Session';
+    public static $model = 'App\Models\Session';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -50,12 +49,12 @@ class Session extends Resource
     /**
      * Get the fields displayed by the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
     public function fields(Request $request)
     {
-        /** @var \App\Session $session */
+        /** @var \App\Models\Session $session */
         $session = $this->resource;
 
         return [
@@ -153,7 +152,7 @@ class Session extends Resource
     /**
      * Get the cards available for the request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
     public function cards(Request $request)
@@ -164,7 +163,7 @@ class Session extends Resource
     /**
      * Get the filters available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
     public function filters(Request $request)
@@ -175,7 +174,7 @@ class Session extends Resource
     /**
      * Get the lenses available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
     public function lenses(Request $request)
@@ -186,7 +185,7 @@ class Session extends Resource
     /**
      * Get the actions available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
     public function actions(Request $request)

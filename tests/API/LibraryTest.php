@@ -2,13 +2,13 @@
 
 namespace Tests\API;
 
-use App\Anime;
+use App\Models\Anime;
 use App\Enums\UserLibraryStatus;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Testing\TestResponse;
+use Tests\TestCase;
 use Tests\Traits\ProvidesTestUser;
 use Tests\Traits\RunsSeeders;
-use Tests\TestCase;
 
 class LibraryTest extends TestCase
 {
@@ -338,11 +338,11 @@ class LibraryTest extends TestCase
     /**
      * Sends an API request to add anime to a user's library.
      *
-     * @param $animeID
-     * @param $status
+     * @param int $animeID
+     * @param string $status
      * @return TestResponse
      */
-    private function addAnimeToLibraryAPIRequest($animeID, $status)
+    private function addAnimeToLibraryAPIRequest(int $animeID, string $status): TestResponse
     {
         return $this->auth()->json('POST', '/api/v1/me/library', [
             'anime_id'  => $animeID,

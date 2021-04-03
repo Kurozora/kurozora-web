@@ -30,9 +30,14 @@ return [
     ],
 
     'stripe' => [
-        'model' => App\User::class,
+        'model' => App\Models\User::class,
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'apple' => [
+        'store_kit' => [
+            'password' => env('SK_APP_PASSWORD')
+        ]
+    ]
 ];
