@@ -14,6 +14,6 @@ class ActorCharacterSeeder extends Seeder
      */
     public function run()
     {
-        factory(ActorCharacter::class, 10)->create();
+        ActorCharacter::factory(10)->create();
     }
 }

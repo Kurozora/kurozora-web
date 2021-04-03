@@ -15,6 +15,6 @@ class ForumReplySeeder extends Seeder
     public function run()
     {
         // 200 random replies
-        factory(ForumReply::class, 200)->create();
+        ForumReply::factory(200)->create();
     }
 }

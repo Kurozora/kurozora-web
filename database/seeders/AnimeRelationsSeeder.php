@@ -15,6 +15,6 @@ class AnimeRelationsSeeder extends Seeder
     public function run()
     {
         // 10 random anime-anime
-        factory(AnimeRelations::class, 10)->create();
+        AnimeRelations::factory(10)->create();
     }
 }
