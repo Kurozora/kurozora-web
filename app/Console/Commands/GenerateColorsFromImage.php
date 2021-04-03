@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\AnimeImages;
+use App\Models\AnimeImages;
 use Illuminate\Console\Command;
 
 class GenerateColorsFromImage extends Command

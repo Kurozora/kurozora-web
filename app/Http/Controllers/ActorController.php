@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Actor;
 use App\Helpers\JSONResult;
+use App\Models\Actor;
 use App\Http\Resources\ActorResource;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Http\Resources\CharacterResourceBasic;

@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Events\MALImportFinished;
 use App\Notifications\NewFollower;
 use App\Notifications\NewSession;
+use App\Notifications\SubscriptionStatus;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Notifications\DatabaseNotification;
@@ -57,34 +58,35 @@ class NotificationResource extends JsonResource
     static function getNotificationDescription($notification): string
     {
         switch($notification->type) {
-            case NewSession::class: {
+            case NewSession::class:
                 $body = 'A new client has logged in to your account.';
 
-                if(self::hasData($notification, 'ip'))
+                if(self::hasData($notification, 'ip')) {
                     $body .= ' (IP: ' . self::getData($notification, 'ip') . ')';
+                }
 
                 return $body;
-            }
-
-            case NewFollower::class: {
+            case NewFollower::class:
                 $body = (self::hasData($notification, 'username')) ? self::getData($notification, 'username') : 'Someone';
 
                 $body .= ' has started following you.';
 
                 return $body;
-            }
-
-            case MALImportFinished::class: {
+            case MALImportFinished::class:
                 $body = 'Your "MyAnimeList" import request has been processed.';
 
-                if(self::hasData($notification, 'successful_count'))
+                if (self::hasData($notification, 'successful_count')) {
                     $body .= ' ' . self::getData($notification, 'successful_count') . ' Anime successfully imported.';
+                }
 
-                if(self::hasData($notification, 'failure_count'))
+                if (self::hasData($notification, 'failure_count')) {
                     $body .= ' ' . self::getData($notification, 'failure_count') . ' failed imports.';
+                }
 
                 return $body;
-            }
+            case SubscriptionStatus::class:
+                $body = SubscriptionStatus::getDescription(self::getData($notification, 'subscriptionStatus')) ?? '';
+                return $body;
         }
 
         return 'Something went wrong... please contact an administrator.';

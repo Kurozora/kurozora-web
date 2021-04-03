@@ -1,10 +1,10 @@
 <?php
 
-use App\Anime;
-use App\AnimeSeason;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Anime;
+use App\Models\AnimeSeason;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateAnimeSeasonsTable extends Migration
 {

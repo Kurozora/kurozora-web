@@ -1,11 +1,11 @@
 <?php
 
-use App\Anime;
-use App\AnimeRating;
-use App\User;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Anime;
+use App\Models\AnimeRating;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateAnimeRatingsTable extends Migration
 {

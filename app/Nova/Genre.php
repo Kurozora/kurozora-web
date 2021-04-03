@@ -3,13 +3,11 @@
 namespace App\Nova;
 
 use Chaseconey\ExternalImage\ExternalImage;
+use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Timothyasp\Color\Color;
 
 class Genre extends Resource
@@ -19,7 +17,7 @@ class Genre extends Resource
      *
      * @var string
      */
-    public static $model = 'App\Genre';
+    public static $model = 'App\Models\Genre';
 
     /**
      * The single value that should be used to represent the resource when being displayed.

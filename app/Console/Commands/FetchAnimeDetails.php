@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Anime;
-use App\AnimeGenre;
 use App\Enums\AnimeStatus;
 use App\Enums\DayOfWeek;
-use App\Genre;
+use App\Models\Anime;
+use App\Models\AnimeGenre;
+use App\Models\Genre;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use musa11971\TVDB\TVDB;

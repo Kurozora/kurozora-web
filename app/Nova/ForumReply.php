@@ -2,9 +2,9 @@
 
 namespace App\Nova;
 
+use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 
@@ -15,7 +15,7 @@ class ForumReply extends Resource
      *
      * @var string
      */
-    public static $model = 'App\ForumReply';
+    public static $model = 'App\Models\ForumReply';
 
     /**
      * The single value that should be used to represent the resource when being displayed.

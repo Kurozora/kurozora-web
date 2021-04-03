@@ -2,12 +2,11 @@
 
 namespace App\Nova;
 
+use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\ID;
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Timothyasp\Color\Color;
 
 class Badge extends Resource
@@ -17,7 +16,7 @@ class Badge extends Resource
      *
      * @var string
      */
-    public static $model = 'App\Badge';
+    public static $model = 'App\Models\Badge';
 
     /**
      * The single value that should be used to represent the resource when being displayed.

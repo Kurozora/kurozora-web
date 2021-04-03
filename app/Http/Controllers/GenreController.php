@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Genre;
+use App\Models\Genre;
 use App\Helpers\JSONResult;
 use App\Http\Resources\GenreResource;
 use Illuminate\Http\JsonResponse;

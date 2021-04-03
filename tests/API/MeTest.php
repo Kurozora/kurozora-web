@@ -2,9 +2,9 @@
 
 namespace Tests\API;
 
-use App\Anime;
-use App\Session;
-use App\User;
+use App\Models\Anime;
+use App\Models\Session;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;

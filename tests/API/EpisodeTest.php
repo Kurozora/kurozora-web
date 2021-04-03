@@ -2,12 +2,12 @@
 
 namespace Tests\API;
 
-use App\AnimeEpisode;
+use App\Models\AnimeEpisode;
 use App\Enums\UserLibraryStatus;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\TestCase;
 use Tests\Traits\ProvidesTestAnime;
 use Tests\Traits\ProvidesTestUser;
-use Tests\TestCase;
 
 class EpisodeTest extends TestCase
 {
@@ -137,7 +137,7 @@ class EpisodeTest extends TestCase
      * @param bool $expected
      * @param AnimeEpisode $episode
      */
-    private function assertEpisodeWatched($expected, $episode)
+    private function assertEpisodeWatched(bool $expected, AnimeEpisode $episode)
     {
         $exists = $this->user->watchedAnimeEpisodes()->where('episode_id', $episode->id)->exists();
 

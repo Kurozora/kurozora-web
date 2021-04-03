@@ -3,9 +3,9 @@
 namespace App\Nova;
 
 use App\Enums\ExplorePageCategoryTypes;
+use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\ID;
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
@@ -18,7 +18,7 @@ class ExplorePageCategory extends Resource
      *
      * @var string
      */
-    public static $model = 'App\ExplorePageCategory';
+    public static $model = 'App\Models\ExplorePageCategory';
 
     /**
      * The single value that should be used to represent the resource when being displayed.

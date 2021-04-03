@@ -2,8 +2,8 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Anime;
-use App\AnimeRelations;
+use App\Models\Anime;
+use App\Models\AnimeRelations;
 use App\Enums\AnimeRelationType;
 use Faker\Generator as Faker;
 

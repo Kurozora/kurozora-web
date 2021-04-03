@@ -14,7 +14,7 @@ class ActorCharacter extends Resource
      *
      * @var string
      */
-    public static $model = 'App\ActorCharacter';
+    public static $model = 'App\Models\ActorCharacter';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -70,7 +70,7 @@ class ActorCharacter extends Resource
      */
     public function title()
     {
-        /** @var \App\ActorCharacter $actor */
+        /** @var \App\Models\ActorCharacter $actor */
         $actorCharacter = $this->resource;
 
         $actorName = $actorCharacter->actor->full_name;

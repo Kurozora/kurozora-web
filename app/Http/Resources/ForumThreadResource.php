@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Enums\ForumsVoteType;
-use App\ForumThread;
+use App\Models\ForumThread;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
@@ -40,6 +40,7 @@ class ForumThreadResource extends JsonResource
                     'likes'     => $totalLikes->getCount(),
                     'dislikes'  => $totalDislikes->getCount()
                 ],
+                'voteAction'    => 0,
                 'createdAt'     => $forumThread->created_at->format('Y-m-d H:i:s'),
             ]
         ];
@@ -82,7 +83,7 @@ class ForumThreadResource extends JsonResource
         $forumThread = $this->resource;
 
         return [
-            'user' => [
+            'users' => [
                 'data' => UserResourceBasic::collection([$forumThread->user]),
             ]
         ];

@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Studio;
+use App\Models\Studio;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -29,7 +29,7 @@ class StudioResourceBasic extends JsonResource
             'href'          => route('api.studios.details', $studio, false),
             'attributes'    => [
                 'name'          => $studio->name,
-                'logoUrl'       => $studio->logo_url,
+                'logo'          => StudioImageResource::make($studio->logo_url),
                 'about'         => $studio->about,
                 'founded'       => $founded,
                 'websiteUrl'    => $studio->website_url

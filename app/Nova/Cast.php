@@ -15,7 +15,7 @@ class Cast extends Resource
      *
      * @var string
      */
-    public static $model = 'App\ActorCharacterAnime';
+    public static $model = 'App\Models\ActorCharacterAnime';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -60,7 +60,7 @@ class Cast extends Resource
                 ->sortable(),
 
             Select::make('Cast Role')
-                ->options(CastRole::toSelectArray())
+                ->options(CastRole::asSelectArray())
                 ->displayUsingLabels()
                 ->rules('required')
                 ->help('If you\'re not sure what role the character has, choose "Supporting character".')

@@ -2,15 +2,18 @@
 
 namespace App\Events;
 
-use App\Anime;
-use Illuminate\Queue\SerializesModels;
+use App\Models\Anime;
 use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 
 class AnimeViewed
 {
     use Dispatchable, SerializesModels;
 
-    public $anime;
+    /**
+     * @var Anime $anime
+     */
+    public Anime $anime;
 
     /**
      * Create a new event instance.

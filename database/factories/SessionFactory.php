@@ -1,14 +1,16 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+/** @var Factory $factory */
 
-use App\Session;
+use App\Models\Session;
+use App\Models\User;
 use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\Str;
 
 $factory->define(Session::class, function (Faker $faker) {
     return [
-        'user_id'           => factory(\App\User::class)->create()->id,
+        'user_id'           => factory(User::class)->create()->id,
         'expires_at'        => now()->addDays(90),
         'last_validated_at' => now(),
         'ip'                => $faker->ipv4,

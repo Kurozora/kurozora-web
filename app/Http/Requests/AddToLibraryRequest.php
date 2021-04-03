@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Anime;
 use App\Rules\ValidateLibraryStatus;
-use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AddToLibraryRequest extends FormRequest

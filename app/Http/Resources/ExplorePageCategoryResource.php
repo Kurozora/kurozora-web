@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources;
 
-use App\Anime;
+use App\Models\Anime;
 use App\Enums\ExplorePageCategoryTypes;
-use App\ExplorePageCategory;
+use App\Models\ExplorePageCategory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -63,7 +63,7 @@ class ExplorePageCategoryResource extends JsonResource
                 $request->merge(['include' => 'genres']);
                 return [
                     'shows' => [
-                        'data' => AnimeResourceBasic::collection($category->animes)
+                        'data' => AnimeResource::collection($category->animes)
                     ]
                 ];
             }
@@ -71,7 +71,7 @@ class ExplorePageCategoryResource extends JsonResource
                 $request->merge(['include' => 'genres']);
                 return [
                     'shows' => [
-                        'data' => AnimeResourceBasic::collection(Anime::mostPopular(10)->get())
+                        'data' => AnimeResource::collection(Anime::mostPopular()->get())
                     ]
                 ];
             }

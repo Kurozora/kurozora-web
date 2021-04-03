@@ -85,6 +85,10 @@
       "description": "Everything theme related"
     },
     {
+      "name": "store",
+      "description": "All store endpoints"
+    },
+    {
       "name": "legal",
       "description": "All legal endpoints"
     },
@@ -3295,6 +3299,77 @@
         }
       }
     },
+    "/store": {
+      "get": {
+        "tags": [
+          "store"
+        ],
+        "operationId": "getStore",
+        "summary": "Fetch store products.",
+        "description": "This endpoint will retrieve the available products from the store",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "$ref": "#/components/schemas/StoreProductType"
+            },
+            "required": false,
+            "description": "The type of products to fetch.\n- 0: Consumable\n- 1: Non-Consumable\n- 2: Non-Renewing Subscription\n- 3: Auto-Renewing Subscription"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/store/verify": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "store"
+        ],
+        "operationId": "postStoreVerify",
+        "summary": "Verify receipt",
+        "description": "This endpoint will verify the receipt for authenticity.",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "receipt": {
+                    "type": "string",
+                    "description": "The Base64 encoded receipt data."
+                  }
+                },
+                "required": [
+                  "receipt"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/legal/privacy-policy": {
       "get": {
         "tags": [
@@ -3420,6 +3495,16 @@
         ],
         "default": 0,
         "description": "Whether the message contains spoiler material.\n- 0 = no spoiler\n- 1 = spoiler"
+      },
+      "StoreProductType": {
+        "type": "integer",
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "description": "The set of available store product types.\n- 0: Consumable\n- 1: Non-Consumable\n- 2: Non-Renewing Subscription\n- 3: Auto-Renewing Subscription"
       },
       "VoteType": {
         "type": "integer",

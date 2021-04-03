@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Enums\ForumsVoteType;
-use App\ForumReply;
+use App\Models\ForumReply;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
@@ -30,14 +30,15 @@ class ForumReplyResource extends JsonResource
             'type'          => 'replies',
             'href'          => route('api.forum-threads.replies', $forumReply, false),
             'attributes'    => [
-                'content'   => $forumReply->content,
+                'content'       => $forumReply->content,
                 'metrics'       => [
                     'count'     => $totalReactions->getCount(),
                     'weight'    => $totalReactions->getWeight(),
                     'likes'     => $totalLikes->getCount(),
                     'dislikes'  => $totalDislikes->getCount()
                 ],
-                'createdAt' => $forumReply->created_at->format('Y-m-d H:i:s'),
+                'voteAction'    => 0,
+                'createdAt'     => $forumReply->created_at->format('Y-m-d H:i:s'),
             ]
         ];
 
@@ -79,7 +80,7 @@ class ForumReplyResource extends JsonResource
         $forumReply = $this->resource;
 
         return [
-            'user' => [
+            'users' => [
                 'data' => UserResourceBasic::collection([$forumReply->user]),
             ]
         ];

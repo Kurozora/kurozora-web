@@ -6,7 +6,7 @@ use App\Helpers\JSONResult;
 use App\Http\Requests\AddAnimeFavoriteRequest;
 use App\Http\Requests\GetAnimeFavoritesRequest;
 use App\Http\Resources\AnimeResourceBasic;
-use App\User;
+use App\Models\User;
 use Auth;
 use Illuminate\Http\JsonResponse;
 

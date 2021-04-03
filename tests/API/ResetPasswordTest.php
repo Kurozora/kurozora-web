@@ -3,11 +3,11 @@
 namespace Tests\API;
 
 use App\Mail\ResetPassword;
-use App\PasswordReset;
+use App\Models\PasswordReset;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Mail;
-use Tests\Traits\ProvidesTestUser;
 use Tests\TestCase;
+use Tests\Traits\ProvidesTestUser;
 
 class ResetPasswordTest extends TestCase
 {

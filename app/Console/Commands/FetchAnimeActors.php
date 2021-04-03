@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Actor;
-use App\Anime;
+use App\Models\Actor;
+use App\Models\Anime;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use musa11971\TVDB\Exceptions\TVDBNotFoundException;

@@ -2,13 +2,13 @@
 
 namespace Tests\API;
 
-use App\Anime;
-use App\AnimeRating;
+use App\Models\Anime;
+use App\Models\AnimeRating;
 use App\Enums\UserLibraryStatus;
-use App\User;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Tests\Traits\ProvidesTestUser;
 use Tests\TestCase;
+use Tests\Traits\ProvidesTestUser;
 
 class LibrarySortingTest extends TestCase
 {

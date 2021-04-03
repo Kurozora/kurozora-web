@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
@@ -27,6 +27,9 @@ class UserResourceBasic extends JsonResource
         /** @var User $user */
         $user = $this->resource;
 
+        $purchaseReceipt = $user->receipt;
+        $isPro = $purchaseReceipt != null ? (bool) $purchaseReceipt->is_subscribed : false;
+
         $resource = [
             'id'                => $user->id,
             'type'              => 'users',
@@ -40,7 +43,8 @@ class UserResourceBasic extends JsonResource
                 'followerCount'     => $user->getFollowerCount(),
                 'followingCount'    => $user->getFollowingCount(),
                 'reputationCount'   => $user->getReputationCount(),
-                'joinDate'          => $user->created_at->format('Y-m-d')
+                'joinDate'          => $user->created_at->format('Y-m-d'),
+                'isPro'             => $isPro
             ]
         ];
 

@@ -2,11 +2,11 @@
 
 namespace Tests\API;
 
-use App\FeedMessage;
+use App\Models\FeedMessage;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Str;
-use Tests\Traits\ProvidesTestUser;
 use Tests\TestCase;
+use Tests\Traits\ProvidesTestUser;
 
 class FeedMessageTest extends TestCase
 {

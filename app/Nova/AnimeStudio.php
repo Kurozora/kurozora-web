@@ -5,7 +5,6 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Http\Requests\NovaRequest;
 
 class AnimeStudio extends Resource
 {
@@ -14,7 +13,7 @@ class AnimeStudio extends Resource
      *
      * @var string
      */
-    public static $model = 'App\AnimeStudio';
+    public static $model = 'App\Models\AnimeStudio';
 
     /**
      * The single value that should be used to represent the resource when being displayed.

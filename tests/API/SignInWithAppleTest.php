@@ -2,8 +2,8 @@
 
 namespace Tests\API;
 
-use App\Session;
-use App\User;
+use App\Models\Session;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 

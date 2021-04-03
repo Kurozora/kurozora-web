@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "31529fd0e9a16138191162ae07a6388b",
+    "content-hash": "20b382527f2c4d422c67d9db617aefed",
     "packages": [
         {
             "name": "anaseqal/nova-sidebar-icons",
@@ -1425,6 +1425,275 @@
             "time": "2020-10-22T13:48:01+00:00"
         },
         {
+            "name": "firebase/php-jwt",
+            "version": "v5.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/firebase/php-jwt.git",
+                "reference": "f42c9110abe98dd6cfe9053c49bc86acc70b2d23"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/f42c9110abe98dd6cfe9053c49bc86acc70b2d23",
+                "reference": "f42c9110abe98dd6cfe9053c49bc86acc70b2d23",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=4.8 <=9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Firebase\\JWT\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Neuman Vong",
+                    "email": "neuman+pear@twilio.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Anant Narayanan",
+                    "email": "anant@php.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
+            "homepage": "https://github.com/firebase/php-jwt",
+            "keywords": [
+                "jwt",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/firebase/php-jwt/issues",
+                "source": "https://github.com/firebase/php-jwt/tree/v5.2.1"
+            },
+            "time": "2021-02-12T00:02:00+00:00"
+        },
+        {
+            "name": "google/auth",
+            "version": "v1.15.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/googleapis/google-auth-library-php.git",
+                "reference": "b346c07de6613e26443d7b4830e5e1933b830dc4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/b346c07de6613e26443d7b4830e5e1933b830dc4",
+                "reference": "b346c07de6613e26443d7b4830e5e1933b830dc4",
+                "shasum": ""
+            },
+            "require": {
+                "firebase/php-jwt": "~2.0|~3.0|~4.0|~5.0",
+                "guzzlehttp/guzzle": "^5.3.1|^6.2.1|^7.0",
+                "guzzlehttp/psr7": "^1.2",
+                "php": ">=5.4",
+                "psr/cache": "^1.0",
+                "psr/http-message": "^1.0"
+            },
+            "require-dev": {
+                "guzzlehttp/promises": "0.1.1|^1.3",
+                "kelvinmo/simplejwt": "^0.2.5|^0.5.1",
+                "phpseclib/phpseclib": "^2",
+                "phpunit/phpunit": "^4.8.36|^5.7",
+                "sebastian/comparator": ">=1.2.3",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "suggest": {
+                "phpseclib/phpseclib": "May be used in place of OpenSSL for signing strings or for token management. Please require version ^2."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Google\\Auth\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "Google Auth Library for PHP",
+            "homepage": "http://github.com/google/google-auth-library-php",
+            "keywords": [
+                "Authentication",
+                "google",
+                "oauth2"
+            ],
+            "support": {
+                "docs": "https://googleapis.github.io/google-auth-library-php/master/",
+                "issues": "https://github.com/googleapis/google-auth-library-php/issues",
+                "source": "https://github.com/googleapis/google-auth-library-php/tree/v1.15.0"
+            },
+            "time": "2021-02-05T20:50:04+00:00"
+        },
+        {
+            "name": "guzzlehttp/guzzle",
+            "version": "7.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/guzzle.git",
+                "reference": "7008573787b430c1c1f650e3722d9bba59967628"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/7008573787b430c1c1f650e3722d9bba59967628",
+                "reference": "7008573787b430c1c1f650e3722d9bba59967628",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/promises": "^1.4",
+                "guzzlehttp/psr7": "^1.7 || ^2.0",
+                "php": "^7.2.5 || ^8.0",
+                "psr/http-client": "^1.0"
+            },
+            "provide": {
+                "psr/http-client-implementation": "1.0"
+            },
+            "require-dev": {
+                "bamarni/composer-bin-plugin": "^1.4.1",
+                "ext-curl": "*",
+                "php-http/client-integration-tests": "^3.0",
+                "phpunit/phpunit": "^8.5.5 || ^9.3.5",
+                "psr/log": "^1.1"
+            },
+            "suggest": {
+                "ext-curl": "Required for CURL handler support",
+                "ext-intl": "Required for Internationalized Domain Name (IDN) support",
+                "psr/log": "Required for using the Log middleware"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "7.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleHttp\\": "src/"
+                },
+                "files": [
+                    "src/functions_include.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                },
+                {
+                    "name": "Márk Sági-Kazár",
+                    "email": "mark.sagikazar@gmail.com",
+                    "homepage": "https://sagikazarmark.hu"
+                }
+            ],
+            "description": "Guzzle is a PHP HTTP client library",
+            "homepage": "http://guzzlephp.org/",
+            "keywords": [
+                "client",
+                "curl",
+                "framework",
+                "http",
+                "http client",
+                "psr-18",
+                "psr-7",
+                "rest",
+                "web service"
+            ],
+            "support": {
+                "issues": "https://github.com/guzzle/guzzle/issues",
+                "source": "https://github.com/guzzle/guzzle/tree/7.3.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/GrahamCampbell",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/Nyholm",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/alexeyshockov",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/gmponos",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-03-23T11:33:13+00:00"
+        },
+        {
+            "name": "guzzlehttp/promises",
+            "version": "1.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/promises.git",
+                "reference": "8e7d04f1f6450fef59366c399cfad4b9383aa30d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/8e7d04f1f6450fef59366c399cfad4b9383aa30d",
+                "reference": "8e7d04f1f6450fef59366c399cfad4b9383aa30d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "^4.4 || ^5.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleHttp\\Promise\\": "src/"
+                },
+                "files": [
+                    "src/functions_include.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "Guzzle promises library",
+            "keywords": [
+                "promise"
+            ],
+            "support": {
+                "issues": "https://github.com/guzzle/promises/issues",
+                "source": "https://github.com/guzzle/promises/tree/1.4.1"
+            },
+            "time": "2021-03-07T09:25:29+00:00"
+        },
+        {
             "name": "guzzlehttp/psr7",
             "version": "1.8.1",
             "source": {
@@ -1547,6 +1816,174 @@
                 "source": "https://github.com/hanneskod/classtools/tree/1.0"
             },
             "time": "2020-03-05T20:41:28+00:00"
+        },
+        {
+            "name": "imdhemy/appstore-iap",
+            "version": "0.3.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/imdhemy/appstore-iap.git",
+                "reference": "79939da98d74b83788ed13e9ad9e4111387cb0eb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/imdhemy/appstore-iap/zipball/79939da98d74b83788ed13e9ad9e4111387cb0eb",
+                "reference": "79939da98d74b83788ed13e9ad9e4111387cb0eb",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^6.0|^7.0",
+                "nesbot/carbon": "^2.41"
+            },
+            "require-dev": {
+                "fakerphp/faker": "^1.14",
+                "friendsofphp/php-cs-fixer": "^2.16",
+                "phpunit/phpunit": "^8.5",
+                "symfony/var-dumper": "^5.1",
+                "vimeo/psalm": "^3.17"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Imdhemy\\AppStore\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "imdhemy",
+                    "email": "imdhemy@gmail.com"
+                }
+            ],
+            "description": "PHP Appstore In-App Purchase implementation",
+            "support": {
+                "issues": "https://github.com/imdhemy/appstore-iap/issues",
+                "source": "https://github.com/imdhemy/appstore-iap/tree/0.3.10"
+            },
+            "time": "2021-04-03T15:04:16+00:00"
+        },
+        {
+            "name": "imdhemy/google-play-billing",
+            "version": "0.6.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/imdhemy/google-play-billing.git",
+                "reference": "202fea36c689fb350028b4d4d5d003618a6d73d5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/imdhemy/google-play-billing/zipball/202fea36c689fb350028b4d4d5d003618a6d73d5",
+                "reference": "202fea36c689fb350028b4d4d5d003618a6d73d5",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "google/auth": "^1.15",
+                "guzzlehttp/guzzle": "^6.0|^7.0",
+                "nesbot/carbon": "^2.41",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.16",
+                "fzaninotto/faker": "^1.9",
+                "phpunit/phpunit": "^8.5",
+                "symfony/var-dumper": "^5.1",
+                "vimeo/psalm": "^3.17"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Imdhemy\\GooglePlay\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "imdhemy",
+                    "email": "imdhemy@gmail.com"
+                }
+            ],
+            "description": "Google Play Billing",
+            "support": {
+                "issues": "https://github.com/imdhemy/google-play-billing/issues",
+                "source": "https://github.com/imdhemy/google-play-billing/tree/0.6.2"
+            },
+            "time": "2021-03-03T14:51:16+00:00"
+        },
+        {
+            "name": "imdhemy/laravel-purchases",
+            "version": "0.10.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/imdhemy/laravel-in-app-purchases.git",
+                "reference": "49a883f71a8cc272cac4db9d046b2d362725e501"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/imdhemy/laravel-in-app-purchases/zipball/49a883f71a8cc272cac4db9d046b2d362725e501",
+                "reference": "49a883f71a8cc272cac4db9d046b2d362725e501",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "imdhemy/appstore-iap": "^0.3",
+                "imdhemy/google-play-billing": "^0.6",
+                "nesbot/carbon": "^2.41",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.17",
+                "orchestra/testbench": "^5.0",
+                "phpunit/phpunit": "^8.5",
+                "psalm/plugin-laravel": "^1.2",
+                "vimeo/psalm": "^4.3"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Imdhemy\\Purchases\\PurchaseServiceProvider"
+                    ],
+                    "aliases": {
+                        "Product": "\\Imdhemy\\Purchases\\Facades\\Product",
+                        "Subscription": "\\Imdhemy\\Purchases\\Facades\\Subscription"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Imdhemy\\Purchases\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "imdhemy",
+                    "email": "imdhemy@gmail.com",
+                    "homepage": "http://dhemy.studio",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Laravel receipt validator for Google Play",
+            "homepage": "https://github.com/imdhemy/laravel-in-app-purchases",
+            "keywords": [
+                "google_play",
+                "in_app_purchases",
+                "laravel",
+                "laravel-in-app-purchases"
+            ],
+            "support": {
+                "issues": "https://github.com/imdhemy/laravel-in-app-purchases/issues",
+                "source": "https://github.com/imdhemy/laravel-in-app-purchases/tree/0.10.3"
+            },
+            "time": "2021-04-03T15:29:14+00:00"
         },
         {
             "name": "intervention/image",
@@ -3728,6 +4165,55 @@
                 }
             ],
             "time": "2020-12-17T05:42:04+00:00"
+        },
+        {
+            "name": "psr/cache",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/cache.git",
+                "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/cache/zipball/d11b50ad223250cf17b86e38383413f5a6764bf8",
+                "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Cache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for caching libraries",
+            "keywords": [
+                "cache",
+                "psr",
+                "psr-6"
+            ],
+            "support": {
+                "source": "https://github.com/php-fig/cache/tree/master"
+            },
+            "time": "2016-08-06T20:24:11+00:00"
         },
         {
             "name": "psr/container",
@@ -10299,6 +10785,59 @@
                 "source": "https://github.com/reactphp/promise/tree/v2.8.0"
             },
             "time": "2020-05-12T15:16:56+00:00"
+        },
+        {
+            "name": "salopot/image-generator",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/salopot/image-generator.git",
+                "reference": "dd9d99e929f540093c65a1a529da802ebe779451"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/salopot/image-generator/zipball/dd9d99e929f540093c65a1a529da802ebe779451",
+                "reference": "dd9d99e929f540093c65a1a529da802ebe779451",
+                "shasum": ""
+            },
+            "require": {
+                "fzaninotto/faker": "^1.4",
+                "intervention/image": "^2.4",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Salopot\\ImageGenerator\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander Kireev",
+                    "email": "salopot@gmail.com"
+                }
+            ],
+            "description": "Images generator for Faker",
+            "keywords": [
+                "faker",
+                "image",
+                "local",
+                "lorempixel",
+                "picsum.photos",
+                "unspash"
+            ],
+            "support": {
+                "issues": "https://github.com/salopot/image-generator/issues",
+                "source": "https://github.com/salopot/image-generator/tree/1.0.1"
+            },
+            "time": "2020-02-29T19:58:16+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",

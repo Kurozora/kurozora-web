@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\AnimeEpisode;
-use App\User;
+use App\Models\AnimeEpisode;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class AnimeEpisodePolicy

@@ -2,15 +2,15 @@
 
 namespace App\Providers;
 
-use App\AnimeEpisode;
-use App\ForumThread;
+use App\Models\AnimeEpisode;
+use App\Models\ForumThread;
 use App\Policies\AnimeEpisodePolicy;
 use App\Policies\DatabaseNotificationPolicy;
 use App\Policies\ForumThreadPolicy;
 use App\Policies\SessionPolicy;
 use App\Policies\UserPolicy;
-use App\Session;
-use App\User;
+use App\Models\Session;
+use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Gate;
