@@ -11,4 +11,4 @@ kill $(ps aux | grep '[p]hp artisan queue:work' | awk '{print $2}')
 echo -e "\n${BLACK}[${ORANGE}Kurozora${BLACK}] ${LIME}✔ ${NC}Laravel queue workers stopped!"
 
 # Put application in maintenance mode
-php artisan down --message="Server is being updated"
+php artisan down --render="errors::503"
