@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Models\Badge;
 use Illuminate\Database\Seeder;
 

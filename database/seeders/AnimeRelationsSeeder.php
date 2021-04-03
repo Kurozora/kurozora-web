@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Models\AnimeRelations;
 use Illuminate\Database\Seeder;
 
