@@ -2,11 +2,23 @@
 
 namespace App\Providers;
 
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
+    /**
+     * The path to the "home" route for your application.
+     *
+     * This is used by Laravel authentication to redirect users after login.
+     *
+     * @var string
+     */
+    public const HOME = '/nova/dashboard';
+
     /**
      * This namespace is applied to your controller routes.
      *
@@ -14,14 +26,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $namespace = 'App\Http\Controllers';
-
-    /**
-     * Namespace applied to web routes
-     *
-     * @var string
-     */
-    protected $webNamespace = 'App\Http\Controllers\WebControllers';
+    // protected $namespace = 'App\Http\Controllers';
 
     /**
      * Define your route model bindings, pattern filters, etc.
@@ -30,21 +35,25 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
-
         parent::boot();
+
+        $this->mapApiRoutes();
+        $this->mapWebRoutes();
     }
 
     /**
-     * Define the routes for the application.
+     * Define the "api" routes for the application.
+     *
+     * These routes are typically stateless.
      *
      * @return void
      */
-    public function map()
+    protected function mapApiRoutes()
     {
-        $this->mapApiRoutes();
-
-        $this->mapWebRoutes();
+        Route::prefix('api')
+            ->middleware('api')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/api.php'));
     }
 
     /**
@@ -62,17 +71,14 @@ class RouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Define the "api" routes for the application.
-     *
-     * These routes are typically stateless.
+     * Configure the rate limiters for the application.
      *
      * @return void
      */
-    protected function mapApiRoutes()
+    protected function configureRateLimiting()
     {
-        Route::prefix('api')
-            ->middleware('api')
-            ->namespace($this->namespace)
-            ->group(base_path('routes/api.php'));
+        RateLimiter::for('api', function (Request $request) {
+            return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
+        });
     }
 }
