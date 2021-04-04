@@ -100,19 +100,21 @@ class FeedMessageTest extends TestCase
      */
     function user_can_reply_to_a_feed_message()
     {
-        $parent = factory(FeedMessage::class)->create();
+        $parent = FeedMessage::factory()->create();
 
-        $this->auth()->json('POST', '/api/v1/feed', [
+        $response = $this->auth()->json('POST', '/api/v1/feed', [
             'body'          => 'Hello, Kurozora!',
             'parent_id'     => $parent->id,
             'is_reply'      => 1,
             'is_reshare'    => 0,
             'is_nsfw'       => 0,
             'is_spoiler'    => 0,
-        ])->assertSuccessfulAPIResponse();
+        ]);
+
+        $response->assertSuccessfulAPIResponse();
 
         // Check whether the feed message was created
-        $this->assertEquals(1, $this->user->feedMessages()->count());
+        $this->assertEquals(1, $this->user->feedMessages()->where('is_reply', 1)->count());
     }
 
     /**
@@ -123,7 +125,7 @@ class FeedMessageTest extends TestCase
      */
     function user_can_re_share_a_feed_message_once()
     {
-        $parent = factory(FeedMessage::class)->create();
+        $parent = FeedMessage::factory()->create();
 
         $this->auth()->json('POST', '/api/v1/feed', [
             'body'          => 'Hello, Kurozora!',
@@ -135,7 +137,7 @@ class FeedMessageTest extends TestCase
         ])->assertSuccessfulAPIResponse();
 
         // Check whether the feed message was created
-        $this->assertEquals(1, $this->user->feedMessages()->count());
+        $this->assertEquals(1, $this->user->feedMessages()->where('is_reshare', 1)->count());
 
         $this->auth()->json('POST', '/api/v1/feed', [
             'body'          => 'Hello, Kurozora!',
@@ -155,8 +157,8 @@ class FeedMessageTest extends TestCase
      */
     function user_can_reply_to_feed_messages()
     {
-        $parent = factory(FeedMessage::class)->create([
-            'parent_feed_message_id' => factory(FeedMessage::class)->create()->id
+        $parent = FeedMessage::factory()->create([
+            'parent_feed_message_id' => FeedMessage::factory()->create()->id
         ]);
 
         $this->auth()->json('POST', '/api/v1/feed', [

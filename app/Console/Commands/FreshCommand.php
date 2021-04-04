@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use AnimeDummySeeder;
+use Database\Seeders\AnimeDummySeeder;
 use Illuminate\Console\ConfirmableTrait;
 use Illuminate\Database\Console\Migrations\FreshCommand as BaseFreshCommand;
 use Symfony\Component\Console\Input\InputOption;

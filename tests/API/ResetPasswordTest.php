@@ -106,15 +106,17 @@ class ResetPasswordTest extends TestCase
     {
         // Create a password reset from 23 hours ago
         /** @var PasswordReset $oldPasswordReset */
-        $oldPasswordReset = factory(PasswordReset::class)->create([
+        $oldPasswordReset = PasswordReset::factory()->create([
             'user_id'       => $this->user->id,
             'created_at'    => now()->subHours(23)
         ]);
 
         // Attempt to request a new password reset
-        $this->json('POST', '/api/v1/users/reset-password', [
+        $request = $this->json('POST', '/api/v1/users/reset-password', [
             'email' => $this->user->email
-        ])->assertSuccessfulAPIResponse();
+        ]);
+
+        $request->assertSuccessfulAPIResponse();
 
         // Check that there is still just one password reset
         $this->assertEquals(1, PasswordReset::where('user_id', $this->user->id)->count());
@@ -123,15 +125,17 @@ class ResetPasswordTest extends TestCase
         $oldPasswordReset->delete();
 
         // Create a password reset from 25 hours ago
-        factory(PasswordReset::class)->create([
+        PasswordReset::factory()->create([
             'user_id'       => $this->user->id,
             'created_at'    => now()->subHours(25)
         ]);
 
         // Attempt to request a new password reset
-        $this->json('POST', '/api/v1/users/reset-password', [
+        $request = $this->json('POST', '/api/v1/users/reset-password', [
             'email' => $this->user->email
-        ])->assertSuccessfulAPIResponse();
+        ]);
+
+        $request->assertSuccessfulAPIResponse();
 
         // Check that there are now two password resets
         $this->assertEquals(2, PasswordReset::where('user_id', $this->user->id)->count());
@@ -146,7 +150,7 @@ class ResetPasswordTest extends TestCase
      */
     function password_reset_email_contains_link()
     {
-        $passwordReset = factory(PasswordReset::class)->create([
+        $passwordReset = PasswordReset::factory()->create([
             'user_id'       => $this->user->id,
             'created_at'    => now()->subHours(25)
         ]);

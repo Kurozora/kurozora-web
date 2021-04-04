@@ -1,19 +1,35 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
 use App\Models\Actor;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(Actor::class, function (Faker $faker) {
-    $gender = mt_rand(0, 1);
-    $genderString = $gender ? 'female' : 'male';
+class ActorFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Actor::class;
 
-    return [
-        'first_name'    => $faker->firstName($genderString),
-        'last_name'     => $faker->lastName($genderString),
-        'about'         => $faker->paragraph(mt_rand(10, 30)),
-        'occupation'    => $faker->jobTitle,
-        'image'         => $faker->imageUrl()
-    ];
-});
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        $isFemale = mt_rand(0, 1);
+        $genderString = $isFemale ? 'female' : 'male';
+
+        return [
+            'first_name'    => $this->faker->firstName($genderString),
+            'last_name'     => $this->faker->lastName($genderString),
+            'about'         => $this->faker->paragraph(mt_rand(10, 30)),
+            'occupation'    => $this->faker->jobTitle,
+            'image'         => $this->faker->imageUrl()
+        ];
+    }
+}

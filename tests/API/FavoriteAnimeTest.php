@@ -22,7 +22,7 @@ class FavoriteAnimeTest extends TestCase
     {
         // Send request to add anime to the user's favorites
         /** @var Anime $anime */
-        $anime = factory(Anime::class)->create();
+        $anime = Anime::factory()->create();
 
         $this->user->library()->attach($anime);
 
@@ -48,7 +48,7 @@ class FavoriteAnimeTest extends TestCase
     {
         // Add the anime to the user's favorites
         /** @var Anime $anime */
-        $anime = factory(Anime::class)->create();
+        $anime = Anime::factory()->create();
 
         $this->user->library()->attach($anime);
         $this->user->favoriteAnime()->attach($anime->id);
@@ -66,29 +66,29 @@ class FavoriteAnimeTest extends TestCase
         $this->assertEquals(0, $this->user->favoriteAnime()->count());
     }
 
-    /**
-     * == This is currently disabled, because there is no preference system in place
-     * == to facilitate this behavior
-     *
-     * A user cannot get a list of another user's anime favorites.
-     *
-     * @return void
-     * @test
-     */
-    function a_user_cannot_get_a_list_of_another_users_anime_favorites()
-    {
-        $this->markTestIncomplete('\\
-        This is currently disabled, because there is\\
-        no preference system in place to facilitate this behavior
-        ');
-
-        // Send request to get the other user's list of anime favorites
-        /** @var User $anotherUser */
-        //$anotherUser = factory(User::class)->create();
-
-        //$response = $this->auth()->json('GET', '/api/v1/users/' . $anotherUser->id . '/favorite-anime');
-
-        // Check whether the request was unsuccessful
-        //$response->assertUnsuccessfulAPIResponse();
-    }
+//    /**
+//     * == This is currently disabled, because there is no preference system in place
+//     * == to facilitate this behavior
+//     *
+//     * A user cannot get a list of another user's anime favorites.
+//     *
+//     * @return void
+//     * @test
+//     */
+//    function a_user_cannot_get_a_list_of_another_users_anime_favorites()
+//    {
+//        $this->markTestIncomplete('\\
+//        This is currently disabled, because there is\\
+//        no preference system in place to facilitate this behavior
+//        ');
+//
+//        // Send request to get the other user's list of anime favorites
+//        /** @var User $anotherUser */
+//        //$anotherUser = User::factory()->create();
+//
+//        //$response = $this->auth()->json('GET', '/api/v1/users/' . $anotherUser->id . '/favorite-anime');
+//
+//        // Check whether the request was unsuccessful
+//        //$response->assertUnsuccessfulAPIResponse();
+//    }
 }

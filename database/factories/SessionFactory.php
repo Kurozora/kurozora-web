@@ -1,25 +1,46 @@
 <?php
 
-/** @var Factory $factory */
+namespace Database\Factories;
 
 use App\Models\Session;
 use App\Models\User;
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
-$factory->define(Session::class, function (Faker $faker) {
-    return [
-        'user_id'           => factory(User::class)->create()->id,
-        'expires_at'        => now()->addDays(90),
-        'last_validated_at' => now(),
-        'ip'                => $faker->ipv4,
-        'apn_device_token'  => null,
-        'secret'            => Str::random(128),
-        'city'              => $faker->city,
-        'region'            => $faker->state,
-        'country'           => $faker->country,
-        'latitude'          => $faker->latitude,
-        'longitude'         => $faker->longitude
-    ];
-});
+class SessionFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Session::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        $user = User::inRandomOrder()->first();
+
+        if ($user == null) {
+            $user = User::factory()->create();
+        }
+
+        return [
+            'user_id'           => $user,
+            'expires_at'        => now()->addDays(90),
+            'last_validated_at' => now(),
+            'ip'                => $this->faker->ipv4,
+            'apn_device_token'  => null,
+            'secret'            => Str::random(128),
+            'city'              => $this->faker->city,
+            'region'            => $this->faker->state,
+            'country'           => $this->faker->country,
+            'latitude'          => $this->faker->latitude,
+            'longitude'         => $this->faker->longitude
+        ];
+    }
+}

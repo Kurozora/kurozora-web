@@ -23,7 +23,7 @@ class SessionTest extends TestCase
     {
         // Create a session for the user
         /** @var Session $session */
-        $session = factory(Session::class)->create(['user_id' => $this->user->id]);
+        $session = Session::factory()->create(['user_id' => $this->user->id]);
 
         // Send the request
         $response = $this->auth()->json('GET', '/api/v1/me/sessions/' . $session->id);
@@ -45,10 +45,10 @@ class SessionTest extends TestCase
     {
         // Create a session for the user
         /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
+        $anotherUser = User::factory()->create();
 
         /** @var Session $session */
-        $session = factory(Session::class)->create(['user_id' => $anotherUser->id]);
+        $session = Session::factory()->create(['user_id' => $anotherUser->id]);
 
         // Send the request
         $response = $this->auth()->json('GET', '/api/v1/me/sessions/' . $session->id);
@@ -67,7 +67,7 @@ class SessionTest extends TestCase
     {
         // Create a session for the user
         /** @var Session $session */
-        $session = factory(Session::class)->create(['user_id' => $this->user->id]);
+        $session = Session::factory()->create(['user_id' => $this->user->id]);
 
         // Send the request
         $response = $this->auth()->json('POST', '/api/v1/me/sessions/' . $session->id . '/delete');
@@ -89,10 +89,10 @@ class SessionTest extends TestCase
     {
         // Create a session for the user
         /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
+        $anotherUser = User::factory()->create();
 
         /** @var Session $session */
-        $session = factory(Session::class)->create(['user_id' => $anotherUser->id]);
+        $session = Session::factory()->create(['user_id' => $anotherUser->id]);
 
         // Send the request
         $response = $this->auth()->json('POST', '/api/v1/me/sessions/' . $session->id . '/delete');
@@ -114,7 +114,7 @@ class SessionTest extends TestCase
     {
         // Create a session for the user
         /** @var Session $session */
-        $session = factory(Session::class)->create(['user_id' => $this->user->id]);
+        $session = Session::factory()->create(['user_id' => $this->user->id]);
 
         // Create a new token
         $newToken = Str::random(64);
@@ -142,10 +142,10 @@ class SessionTest extends TestCase
     {
         // Create a session for the user
         /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
+        $anotherUser = User::factory()->create();
 
         /** @var Session $session */
-        $session = factory(Session::class)->create(['user_id' => $anotherUser->id]);
+        $session = Session::factory()->create(['user_id' => $anotherUser->id]);
 
         // Create a new token
         $newToken = Str::random(64);

@@ -1,16 +1,38 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
-use App\Models\PasswordReset;
 use App\Models\User;
-use Faker\Generator as Faker;
+use App\Models\PasswordReset;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(PasswordReset::class, function (Faker $faker) {
-    return [
-        'user_id'       => factory(User::class)->create()->id,
-        'ip'            => $faker->ipv4,
-        'token'         => PasswordReset::genToken(),
-        'created_at'    => now()
-    ];
-});
+class PasswordResetFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = PasswordReset::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        $user = User::inRandomOrder()->first();
+
+        if ($user == null) {
+            $user = User::factory()->create();
+        }
+
+        return [
+            'user_id'       => $user,
+            'ip'            => $this->faker->ipv4,
+            'token'         => PasswordReset::genToken(),
+            'created_at'    => now()
+        ];
+    }
+}

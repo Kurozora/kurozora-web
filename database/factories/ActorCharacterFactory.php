@@ -1,15 +1,41 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
 use App\Models\Actor;
 use App\Models\ActorCharacter;
 use App\Models\Character;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(ActorCharacter::class, function (Faker $faker) {
-    return [
-        'actor_id'      => factory(Actor::class)->create()->id,
-        'character_id'  => factory(Character::class)->create()->id,
-    ];
-});
+class ActorCharacterFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = ActorCharacter::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        $actor = Actor::inRandomOrder()->first();
+        $character = Character::inRandomOrder()->first();
+
+        if ($actor == null) {
+            $actor = Actor::factory()->create();
+        }
+        if ($character == null) {
+            $character = Character::factory()->create();
+        }
+
+        return [
+            'actor_id'      => $actor,
+            'character_id'  => $character,
+        ];
+    }
+}

@@ -89,7 +89,7 @@ class UserController extends Controller
             // No password reset has been requested recently
             if(!$pReset) {
                 // Create password reset
-                $createdReset = factory(PasswordReset::class)->create([
+                $createdReset = PasswordReset::factory()->create([
                     'user_id'   => $user->id,
                     'ip'        => $request->ip()
                 ]);

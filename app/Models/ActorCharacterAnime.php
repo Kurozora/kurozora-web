@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class ActorCharacterAnime extends Pivot
 {
+    use HasFactory;
+
     // Table name
     const TABLE_NAME = 'actor_character_anime';
     protected $table = self::TABLE_NAME;

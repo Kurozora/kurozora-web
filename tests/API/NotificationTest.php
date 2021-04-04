@@ -73,7 +73,7 @@ class NotificationTest extends TestCase
     function a_user_cannot_get_the_details_of_another_users_notification()
     {
         /** @var User $otherUser */
-        $otherUser = factory(User::class)->create();
+        $otherUser = User::factory()->create();
 
         // Add a notification to the user
         $this->addNotificationsToUser($otherUser, 1);
@@ -122,7 +122,7 @@ class NotificationTest extends TestCase
     function a_user_cannot_delete_the_notification_of_someone_else()
     {
         /** @var User $otherUser */
-        $otherUser = factory(User::class)->create();
+        $otherUser = User::factory()->create();
 
         // Add a notification to the user
         $this->addNotificationsToUser($otherUser, 1);
@@ -415,7 +415,7 @@ class NotificationTest extends TestCase
     function a_user_cannot_update_notifications_of_others()
     {
         /** @var User $otherUser */
-        $otherUser = factory(User::class)->create();
+        $otherUser = User::factory()->create();
 
         // Add 20 notifications to the other user
         $this->addNotificationsToUser($otherUser, 20);
@@ -440,7 +440,7 @@ class NotificationTest extends TestCase
      * @param int $amount
      */
     private function addNotificationsToUser($user, $amount) {
-        $otherUser = factory(User::class)->create();
+        $otherUser = User::factory()->create();
 
         for($i = 0; $i < $amount; $i++)
             $user->notify(new NewFollower($otherUser));

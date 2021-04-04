@@ -1,48 +1,72 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
 use App\Models\AppTheme;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Salopot\ImageGenerator\ImageProvider;
 use Salopot\ImageGenerator\ImageSources\Remote\PicsumPhotosSource;
 
-$factory->define(AppTheme::class, function (Faker $faker) {
-    return [
-        'name'                                          => $faker->name,
+class AppThemeFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = AppTheme::class;
 
-        'global_background_color'                       => $faker->hexColor,
-        'global_tinted_background_color'                => $faker->hexColor,
-        'global_bar_tint_color'                         => $faker->hexColor,
-        'global_bar_title_text_color'                   => $faker->hexColor,
-        'global_blur_background_color'                  => $faker->hexColor,
-        'global_border_color'                           => $faker->hexColor,
-        'global_text_color'                             => $faker->hexColor,
-        'global_text_field_background_color'            => $faker->hexColor,
-        'global_text_field_text_color'                  => $faker->hexColor,
-        'global_text_field_placeholder_text_color'      => $faker->hexColor,
-        'global_tint_color'                             => $faker->hexColor,
-        'global_tinted_button_text_color'               => $faker->hexColor,
-        'global_separator_color'                        => $faker->hexColor,
-        'global_separator_color_light'                  => $faker->hexColor,
-        'global_sub_text_color'                         => $faker->hexColor,
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'name'                                          => $this->faker->name,
 
-        'table_view_cell_background_color'              => $faker->hexColor,
-        'table_view_cell_title_text_color'              => $faker->hexColor,
-        'table_view_cell_sub_text_color'                => $faker->hexColor,
-        'table_view_cell_chevron_color'                 => $faker->hexColor,
-        'table_view_cell_selected_background_color'     => $faker->hexColor,
-        'table_view_cell_selected_title_text_color'     => $faker->hexColor,
-        'table_view_cell_selected_sub_text_color'       => $faker->hexColor,
-        'table_view_cell_selected_chevron_color'        => $faker->hexColor,
-        'table_view_cell_action_default_color'          => $faker->hexColor,
-    ];
-});
+            'global_background_color'                       => $this->faker->hexColor,
+            'global_tinted_background_color'                => $this->faker->hexColor,
+            'global_bar_tint_color'                         => $this->faker->hexColor,
+            'global_bar_title_text_color'                   => $this->faker->hexColor,
+            'global_blur_background_color'                  => $this->faker->hexColor,
+            'global_border_color'                           => $this->faker->hexColor,
+            'global_text_color'                             => $this->faker->hexColor,
+            'global_text_field_background_color'            => $this->faker->hexColor,
+            'global_text_field_text_color'                  => $this->faker->hexColor,
+            'global_text_field_placeholder_text_color'      => $this->faker->hexColor,
+            'global_tint_color'                             => $this->faker->hexColor,
+            'global_tinted_button_text_color'               => $this->faker->hexColor,
+            'global_separator_color'                        => $this->faker->hexColor,
+            'global_separator_color_light'                  => $this->faker->hexColor,
+            'global_sub_text_color'                         => $this->faker->hexColor,
 
-$factory->afterCreating(AppTheme::class, function (AppTheme $theme, Faker $faker) {
-    $imageProvider = new ImageProvider($faker);
-    $imageProvider->addImageSource(new PicsumPhotosSource($imageProvider));
-    $faker->addProvider($imageProvider);
+            'table_view_cell_background_color'              => $this->faker->hexColor,
+            'table_view_cell_title_text_color'              => $this->faker->hexColor,
+            'table_view_cell_sub_text_color'                => $this->faker->hexColor,
+            'table_view_cell_chevron_color'                 => $this->faker->hexColor,
+            'table_view_cell_selected_background_color'     => $this->faker->hexColor,
+            'table_view_cell_selected_title_text_color'     => $this->faker->hexColor,
+            'table_view_cell_selected_sub_text_color'       => $this->faker->hexColor,
+            'table_view_cell_selected_chevron_color'        => $this->faker->hexColor,
+            'table_view_cell_action_default_color'          => $this->faker->hexColor,
+        ];
+    }
 
-    $theme->addMediaFromBase64($faker->imageGenerator(768, 1024)->getDataUrl())->toMediaCollection('screenshot');
-});
+    /**
+     * Configure the factory.
+     *
+     * @return $this
+     */
+    public function configure(): AppThemeFactory
+    {
+        return $this->afterCreating(function (AppTheme $theme) {
+            $imageProvider = new ImageProvider($this->faker);
+            $imageProvider->addImageSource(new PicsumPhotosSource($imageProvider));
+            $this->faker->addProvider($imageProvider);
+
+            $theme->addMediaFromBase64($this->faker->imageGenerator(768, 1024)->getDataUrl())->toMediaCollection('screenshot');
+        });
+    }
+}

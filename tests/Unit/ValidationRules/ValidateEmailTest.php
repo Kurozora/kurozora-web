@@ -88,7 +88,7 @@ class ValidateEmailTest extends TestCase
         $this->assertFalse($this->rule->passes('email', $email), "$email passed, while it should not have!");
 
         // Create a user account with the email
-        factory(User::class)->create(['email' => $email]);
+        User::factory()->create(['email' => $email]);
 
         // The email should pass, because it is taken
         $this->assertTrue($this->rule->passes('email', $email), "$email did not pass, while it should have!");
@@ -106,7 +106,7 @@ class ValidateEmailTest extends TestCase
         $this->assertTrue($this->rule->passes('email', $email), "$email did not pass, while it should have!");
 
         // Create a user account with the email
-        factory(User::class)->create(['email' => $email]);
+        User::factory()->create(['email' => $email]);
 
         // The email should not pass, because it is taken
         $this->assertFalse($this->rule->passes('email', $email), "$email passed, while it should not have!");

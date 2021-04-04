@@ -1,17 +1,43 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
 use App\Models\ForumReply;
 use App\Models\ForumThread;
 use App\Models\User;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(ForumReply::class, function (Faker $faker) {
-    return [
-        'thread_id'     => (ForumThread::inRandomOrder()->limit(1)->first())->id,
-        'user_id'       => (User::inRandomOrder()->limit(1)->first())->id,
-        'ip'            => $faker->ipv4,
-        'content'       => $faker->paragraph(2)
-     ];
-});
+class ForumReplyFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = ForumReply::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        $forumThread = ForumThread::inRandomOrder()->first();
+        $user = User::inRandomOrder()->first();
+
+        if ($forumThread == null) {
+            $forumThread = ForumThread::factory()->create();
+        }
+        if ($user == null) {
+            $user = User::factory()->create();
+        }
+
+        return [
+            'thread_id'     => $forumThread,
+            'user_id'       => $user,
+            'ip'            => $this->faker->ipv4,
+            'content'       => $this->faker->paragraph()
+        ];
+    }
+}
