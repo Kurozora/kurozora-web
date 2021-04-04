@@ -1,6 +1,7 @@
-// Tailwind CSS
+/*Tailwind CSS*/
 @tailwind base;
-/// Global styles ///
+
+/* Global styles */
 html {
   @apply bg-center
   bg-cover
@@ -82,7 +83,7 @@ p + h6, ul + h6, ol + h6 {
 ul, menu, dir {
   @apply list-disc;
 }
-/// Global Navigation styles ///
+/* Global Navigation styles */
 #globalnav .gn-container {
   @apply flex
   items-center
@@ -113,13 +114,13 @@ ul, menu, dir {
   no-underline;
 }
 
-/// Global Navigation styles ///
+/* Global Navigation styles */
 #globalnav .k-outline-button {
   @apply mt-4;
 }
 
-/// Kurozora Button styles ///
-// Default Kurozora button //
+/* Kurozora Button styles */
+/* Default Kurozora button */
 .k-button {
   @apply bg-orange-500
   border-0
@@ -140,7 +141,7 @@ ul, menu, dir {
   no-underline;
 }
 
-// Outlined Kurozora button //
+/* Outlined Kurozora button */
 .k-outline-button {
   @apply inline-block
   text-sm
@@ -159,8 +160,8 @@ ul, menu, dir {
   bg-orange-500;
 }
 
-/// Placeholder styles ///
-// Anime placeholders //
+/* Placeholder styles */
+/* Anime placeholders */
 .anime-poster {
   @apply bg-center
   bg-cover
@@ -172,7 +173,7 @@ ul, menu, dir {
   shadow-lg;
 }
 
-// User placeholders //
+/* User placeholders */
 .user-avatar {
   @apply bg-center
   bg-cover
@@ -184,7 +185,7 @@ ul, menu, dir {
   shadow-lg;
 }
 
-/// Global Footer styles ///
+/* Global Footer styles */
 #globalfooter .gf-footer {
   @apply flex
   flex-col
@@ -222,7 +223,7 @@ ul, menu, dir {
   border-gray-400;
 }
 
-/// Card styles ///
+/* Card styles */
 .card {
   @apply bg-white
   rounded
@@ -240,7 +241,7 @@ ul, menu, dir {
   py-4;
 }
 
-/// Modal styles ///
+/* Modal styles */
 .modal {
   @apply fixed
   flex
@@ -294,14 +295,14 @@ ul, menu, dir {
 @tailwind utilities;
 @tailwind screens;
 @screen md {
-  /// Modal styles ///
+  /* Modal styles */
   .modal-container {
     @apply max-w-md;
   }
 }
 
 @screen lg {
-  /// Global Navigation styles ///
+  /* Global Navigation styles */
   #globalnav .gn-header {
     @apply flex
     items-center
@@ -320,14 +321,14 @@ ul, menu, dir {
     @apply inline-block;
   }
 
-  /// Outlined Kurozora button ///
+  /* Outlined Kurozora button */
   #globalnav .k-outline-button {
     @apply mt-0;
   }
 }
 
-//// Custom styles ////
-/// Global styles ///
+/* Custom styles */
+/* Global styles */
 html {
   font-family: -apple-system, "SF Pro Text","SF Pro Icons","Helvetica Neue","Helvetica","Arial",sans-serif;
 }
@@ -351,7 +352,7 @@ nav ul, nav ol {
   list-style: none;
 }
 
-/// Global Navigation styles ///
+/* Global Navigation styles */
 #globalnav {
   -webkit-backdrop-filter: blur(17px);
   backdrop-filter: blur(17px);
@@ -390,12 +391,12 @@ nav ul, nav ol {
   flex-col;
 }
 
-/// Placeholder styles ///
+/* Placeholder styles */
 .anime-poster {
   margin: 10px auto 0;
   width: 180px;
   height: 268px;
-  background-size: 180px 268px; // ratio 45:67
+  background-size: 180px 268px;  /* ratio 45:67 */
 }
 
 .user-avatar {
