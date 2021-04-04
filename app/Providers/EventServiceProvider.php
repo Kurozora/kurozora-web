@@ -2,6 +2,13 @@
 
 namespace App\Providers;
 
+use App\Events\AnimeViewed;
+use App\Events\Event;
+use App\Listeners\EventListener;
+use App\Listeners\FetchAnimeActors;
+use App\Listeners\FetchAnimeDetails;
+use App\Listeners\FetchAnimeImages;
+use App\Listeners\FetchBaseAnimeEpisodes;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -12,15 +19,19 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        \App\Events\Event::class => [
-            \App\Listeners\EventListener::class,
+//        \Illuminate\Auth\Events\Registered::class => [
+//            \Illuminate\Auth\Listeners\SendEmailVerificationNotification::class,
+//        ],
+
+        Event::class => [
+            EventListener::class,
         ],
 
-        \App\Events\AnimeViewed::class => [
-            \App\Listeners\FetchAnimeDetails::class,
-            \App\Listeners\FetchBaseAnimeEpisodes::class,
-            \App\Listeners\FetchAnimeImages::class,
-            \App\Listeners\FetchAnimeActors::class,
+        AnimeViewed::class => [
+            FetchAnimeDetails::class,
+            FetchBaseAnimeEpisodes::class,
+            FetchAnimeImages::class,
+            FetchAnimeActors::class,
         ],
     ];
 
@@ -31,6 +42,6 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        parent::boot();
+        //
     }
 }
