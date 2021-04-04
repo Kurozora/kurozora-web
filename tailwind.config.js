@@ -4,6 +4,7 @@ module.exports = {
     purge: {
         content: [
             './vendor/laravel/jetstream/**/*.blade.php',
+            './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
             './storage/framework/views/*.php',
             "./resources/**/*.html",
             "./resources/**/*.js",
@@ -20,6 +21,7 @@ module.exports = {
             whitelistPatterns: [/-active$/, /-enter$/, /-leave-to$/, /show$/]
         }
     },
+
     theme: {
         pagination: theme => ({
             color: theme('colors.orange.500'),
@@ -28,6 +30,7 @@ module.exports = {
             linkBeforeLast: 'rounded-r border-r',
             linkLast: 'ml-6 border rounded',
         }),
+
         extend: {
             colors: {
                 grayBlue: {
@@ -57,12 +60,15 @@ module.exports = {
             }
         }
     },
+
     variants: {
         opacity: ['responsive', 'hover', 'focus', 'disabled'],
     },
+
     plugins: [
         require('@tailwindcss/aspect-ratio'),
         require('@tailwindcss/forms'),
+        require('@tailwindcss/line-clamp'),
         require('@tailwindcss/typography')
     ],
 }
