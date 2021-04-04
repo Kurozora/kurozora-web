@@ -1,8 +1,8 @@
 {
     "name": "musa11971/kurozora-web",
-    "description": "Kurozora web application.",
-    "keywords": [],
     "type": "project",
+    "description": "Kurozora web application.",
+    "keywords": ["Kurozora", "anime", "manga", "character", "actor", "studio", "hentai", "song", "track", "watch"],
     "require": {
         "php": ">=7.4",
         "ext-json": "*",
@@ -14,6 +14,7 @@
         "cybercog/laravel-love": "^8.0",
         "ebess/advanced-nova-media-library": "^3.0",
         "fideloper/proxy": "^4.4",
+        "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.3",
         "imdhemy/laravel-purchases": "^0.10.2",
         "itsgoingd/clockwork": "^5.0",
@@ -41,6 +42,7 @@
         "beyondcode/tinkerwell-helper": "^1.1",
         "facade/ignition": "^2.7",
         "fakerphp/faker": "^1.14",
+        "laravel/sail": "^1.4",
         "mockery/mockery": "^1.4",
         "nunomaduro/collision": "^5.3",
         "phpunit/phpunit": "^9.5",
@@ -62,9 +64,6 @@
         }
     ],
     "autoload": {
-        "files": [
-            "app/Helpers/CustomHelpers.php"
-        ],
         "psr-4": {
             "App\\": "app/",
             "App\\Helpers\\": "app/Helpers/",
@@ -76,15 +75,6 @@
         "psr-4": {
             "Tests\\": "tests/"
         }
-    },
-    "extra": {
-        "laravel": {
-            "dont-discover": [
-            ]
-        },
-        "google/apiclient-services": [
-            "AndroidPublisher"
-        ]
     },
     "scripts": {
         "post-autoload-dump": [
@@ -103,6 +93,15 @@
             "@php artisan ide-helper:generate",
             "@php artisan ide-helper:models -N",
             "@php artisan ide-helper:meta"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": [
+            ]
+        },
+        "google/apiclient-services": [
+            "AndroidPublisher"
         ]
     },
     "config": {
