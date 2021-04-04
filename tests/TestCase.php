@@ -9,7 +9,6 @@ use Illuminate\Testing\TestResponse;
 use Spatie\Snapshots\MatchesSnapshots;
 use Tests\Traits\ProvidesTestAnime;
 use Tests\Traits\ProvidesTestUser;
-use Tests\Traits\RunsSeeders;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -51,9 +50,6 @@ abstract class TestCase extends BaseTestCase
         }
         if (isset($uses[ProvidesTestAnime::class])) {
             $this->initializeTestAnime();
-        }
-        if (isset($uses[RunsSeeders::class])) {
-            $this->seedDatabase();
         }
 
         return $uses;

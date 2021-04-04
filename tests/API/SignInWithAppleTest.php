@@ -48,7 +48,7 @@ class SignInWithAppleTest extends TestCase
     function a_user_can_sign_in_via_SIWA()
     {
         // Create a SIWA user
-        factory(User::class)->create([
+        User::factory()->create([
             'email'     => 'mu4y76m7d7@privaterelay.appleid.com',
             'siwa_id'   => '001151.6a54f3bafa5041bba0693fd1079b0e78.1354'
         ]);

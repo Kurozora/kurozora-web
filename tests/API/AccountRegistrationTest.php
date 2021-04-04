@@ -51,7 +51,10 @@ class AccountRegistrationTest extends TestCase
             'password'      => 'StrongPassword909@!',
             'email'         => 'tester@kurozora.app',
             'profileImage'  => $image
-        ])->assertSuccessfulAPIResponse();
+        ]);
+
+        // Check whether the request was successful
+        $response->assertSuccessfulAPIResponse();
 
         $user = User::first();
 

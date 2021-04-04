@@ -17,7 +17,7 @@ class StudioTest extends TestCase
     {
         parent::setUp();
 
-        $this->studio = factory(Studio::class)->create();
+        $this->studio = Studio::factory()->create();
     }
 
     /**

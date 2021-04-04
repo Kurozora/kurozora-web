@@ -41,33 +41,33 @@ trait ProvidesTestAnime
      */
     protected function initializeTestAnime()
     {
-        $this->anime = factory(Anime::class)->create();
+        $this->anime = Anime::factory()->create();
 
-        $this->relatedAnime = factory(Anime::class)->create();
+        $this->relatedAnime = Anime::factory()->create();
 
-        $this->season = factory(AnimeSeason::class)->create([
+        $this->season = AnimeSeason::factory()->create([
             'anime_id' => $this->anime->id
         ]);
 
-        $this->episode = factory(AnimeEpisode::class)->create([
+        $this->episode = AnimeEpisode::factory()->create([
             'season_id' => $this->season->id,
         ]);
 
-        $this->actor = factory(Actor::class)->create();
+        $this->actor = Actor::factory()->create();
 
-        $this->character = factory(Character::class)->create();
+        $this->character = Character::factory()->create();
 
-        $this->actorCharacter = factory(ActorCharacter::class)->create([
+        $this->actorCharacter = ActorCharacter::factory()->create([
             'actor_id' => $this->actor->id,
             'character_id' => $this->character->id
         ]);
 
-        factory(ActorCharacterAnime::class)->create([
+        ActorCharacterAnime::factory()->create([
             'actor_character_id' => $this->actorCharacter->id,
             'anime_id' => $this->anime->id
         ]);
 
-        factory(AnimeRelations::class)->create([
+        AnimeRelations::factory()->create([
             'anime_id'          => $this->anime->id,
             'related_anime_id'  => $this->relatedAnime->id
         ]);
