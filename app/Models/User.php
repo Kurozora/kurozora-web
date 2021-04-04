@@ -13,6 +13,7 @@ use App\Traits\VoteActionTrait;
 use Carbon\Carbon;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
 use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -27,8 +28,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Components\Calendar;
 use Spatie\IcalendarGenerator\Components\Event;
-use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
-use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
+use Spatie\IcalendarGenerator\Properties\Parameter;
+use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
@@ -36,6 +37,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements ReacterableContract, HasMedia
 {
     use Authorizable,
+        HasFactory,
         HasRoles,
         HeartActionTrait,
         InteractsWithMedia,
@@ -208,10 +210,10 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
             $calendar->description(UserReminderAnime::CAL_DESCRIPTION)
                 ->productIdentifier($productIdentifier)
                 ->refreshInterval(UserReminderAnime::CAL_REFRESH_INTERVAL)
-                ->appendProperty(TextPropertyType::create('CALSCALE', 'GREGORIAN'))
-                ->appendProperty(TextPropertyType::create('X-APPLE-CALENDAR-COLOR', '#FF9300'))
-                ->appendProperty(TextPropertyType::create('COLOR', 'orange'))
-                ->appendProperty(TextPropertyType::create('ORGANIZER', 'kurozoraapp@gmail.app')
+                ->appendProperty(TextProperty::create('CALSCALE', 'GREGORIAN'))
+                ->appendProperty(TextProperty::create('X-APPLE-CALENDAR-COLOR', '#FF9300'))
+                ->appendProperty(TextProperty::create('COLOR', 'orange'))
+                ->appendProperty(TextProperty::create('ORGANIZER', 'kurozoraapp@gmail.app')
                     ->addParameter(Parameter::create('CN', 'Kurozora')));
 
             $startDate = Carbon::now()->startOfWeek()->subWeeks(1);
@@ -236,8 +238,8 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
                         ->uniqueIdentifier($uniqueIdentifier);
 
                     // Add custom properties
-                    $calendarEvent->appendProperty(TextPropertyType::create('URL', route('anime.details', $anime)))
-                        ->appendProperty(TextPropertyType::create('X-APPLE-TRAVEL-ADVISORY-BEHAVIOR', 'AUTOMATIC'));
+                    $calendarEvent->appendProperty(TextProperty::create('URL', route('anime.details', $anime)))
+                        ->appendProperty(TextProperty::create('X-APPLE-TRAVEL-ADVISORY-BEHAVIOR', 'AUTOMATIC'));
 
                     // Add alerts
                     $firstReminderMessage = $eventName . ' starts in ' . UserReminderAnime::CAL_FIRST_ALERT_MINUTES . ' minutes.';
@@ -246,13 +248,13 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
 
                     $firstAlert = Alert::minutesBeforeStart(UserReminderAnime::CAL_FIRST_ALERT_MINUTES)
                         ->message($firstReminderMessage)
-                        ->appendProperty(TextPropertyType::create('UID', Uuid::uuid4() . '@kurozora.app'));
+                        ->appendProperty(TextProperty::create('UID', Uuid::uuid4() . '@kurozora.app'));
                     $secondAlert = Alert::minutesBeforeStart(UserReminderAnime::CAL_SECOND_ALERT_MINUTES)
                         ->message($secondReminderMessage)
-                        ->appendProperty(TextPropertyType::create('UID', Uuid::uuid4() . '@kurozora.app'));
+                        ->appendProperty(TextProperty::create('UID', Uuid::uuid4() . '@kurozora.app'));
                     $thirdAlert = Alert::minutesBeforeStart(UserReminderAnime::CAL_THIRD_ALERT_DAY)
                         ->message($thirdReminderMessage)
-                        ->appendProperty(TextPropertyType::create('UID', Uuid::uuid4() . '@kurozora.app'));
+                        ->appendProperty(TextProperty::create('UID', Uuid::uuid4() . '@kurozora.app'));
 
                     $calendarEvent->alert($firstAlert)
                         ->alert($secondAlert)

@@ -22,7 +22,7 @@ Vue.config.devtools = false
  * so that they are always available. Then, we will be ready to create
  * the actual Vue instance and start up this JavaScript application.
  */
-import './components'
+// import './components'
 
 const app = new Vue({
     el: '#app',

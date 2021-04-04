@@ -1,8 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\App;
-use NotificationChannels\Apn\ApnChannel;
-
 return [
 
     /*
@@ -14,11 +11,11 @@ return [
     | framework when an event needs to be broadcast. You may set this to
     | any of the connections defined in the "connections" array below.
     |
-    | Supported: "pusher", "redis", "log", "null"
+    | Supported: "pusher", "ably", "redis", "log", "null"
     |
     */
 
-    'default' => null,
+    'default' => env('BROADCAST_DRIVER', 'null'),
 
     /*
     |--------------------------------------------------------------------------
@@ -38,7 +35,23 @@ return [
             'team_id' => env('APN_TEAM_ID'),
             'app_bundle_id' => env('APN_BUNDLE_ID'),
             'private_key_content' => env('APN_PRIVATE_KEY_CONTENT'),
-            'production' => env('APP_ENV', 'local') != 'local',
+            'production' => (bool) env('APP_ENV', 'local') != 'local',
+        ],
+
+        'pusher' => [
+            'driver' => 'pusher',
+            'key' => env('PUSHER_APP_KEY'),
+            'secret' => env('PUSHER_APP_SECRET'),
+            'app_id' => env('PUSHER_APP_ID'),
+            'options' => [
+                'cluster' => env('PUSHER_APP_CLUSTER'),
+                'useTLS' => true,
+            ],
+        ],
+
+        'ably' => [
+            'driver' => 'ably',
+            'key' => env('ABLY_KEY'),
         ],
 
         'redis' => [

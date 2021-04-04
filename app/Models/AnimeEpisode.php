@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AnimeEpisode extends KModel
 {
+    use HasFactory;
+
     // Table name
     const TABLE_NAME = 'anime_episodes';
     protected $table = self::TABLE_NAME;

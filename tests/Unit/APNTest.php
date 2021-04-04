@@ -16,10 +16,10 @@ class APNTest extends TestCase
     {
         // Create some sessions for the user
         /** @var Session[] $sessions */
-        $sessions = factory(Session::class, 5)->create(['user_id' => $this->user->id]);
+        $sessions = Session::factory(5)->create(['user_id' => $this->user->id]);
 
         // Also create a session without device token
-        $sessions[] = factory(Session::class)->create([
+        $sessions[] = Session::factory()->create([
             'user_id' => $this->user->id,
             'apn_device_token' => null
         ]);

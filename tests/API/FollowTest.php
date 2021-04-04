@@ -20,7 +20,7 @@ class FollowTest extends TestCase
     function a_user_can_follow_another_user()
     {
         /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
+        $anotherUser = User::factory()->create();
 
         $this->auth()->json('POST', '/api/v1/users/' . $anotherUser->id . '/follow')->assertSuccessfulAPIResponse();
 
@@ -40,7 +40,7 @@ class FollowTest extends TestCase
     function a_user_can_unfollow_another_user()
     {
         /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
+        $anotherUser = User::factory()->create();
 
         // Add the other user to our following list
         $this->user->following()->attach($anotherUser);
@@ -79,7 +79,7 @@ class FollowTest extends TestCase
     {
         // Add a follower
         /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
+        $anotherUser = User::factory()->create();
 
         $anotherUser ->followers()->attach($this->user);
 
@@ -103,7 +103,7 @@ class FollowTest extends TestCase
     {
         // Add a user to the following list
         /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
+        $anotherUser = User::factory()->create();
 
         $anotherUser->following()->attach($this->user);
 
@@ -126,7 +126,7 @@ class FollowTest extends TestCase
     function a_user_receives_a_notification_when_someone_follows_them()
     {
         /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
+        $anotherUser = User::factory()->create();
 
         $this->auth()->json('POST', '/api/v1/users/' . $anotherUser->id . '/follow', [
             'follow' => 1

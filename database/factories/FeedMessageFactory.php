@@ -1,15 +1,37 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
 use App\Models\FeedMessage;
 use App\Models\User;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(FeedMessage::class, function (Faker $faker) {
-    return [
-        'user_id'                   => factory(User::class)->create()->id,
-        'parent_feed_message_id'    => null,
-        'body'                      => $faker->sentence
-    ];
-});
+class FeedMessageFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = FeedMessage::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        $user = User::inRandomOrder()->first();
+
+        if ($user == null) {
+            $user = User::factory()->create();
+        }
+
+        return [
+            'user_id'                   => $user,
+            'parent_feed_message_id'    => null,
+            'body'                      => $this->faker->sentence
+        ];
+    }
+}

@@ -1,19 +1,45 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
 use App\Models\ForumSection;
 use App\Models\ForumThread;
 use App\Models\User;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(ForumThread::class, function (Faker $faker) {
-    return [
-        'section_id'    => (ForumSection::inRandomOrder()->limit(1)->first())->id,
-        'user_id'       => (User::inRandomOrder()->limit(1)->first())->id,
-        'ip'            => $faker->ipv4,
-        'title'         => $faker->sentence(3),
-        'content'       => $faker->paragraph(2),
-        'locked'        => $faker->boolean()
-     ];
-});
+class ForumThreadFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = ForumThread::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        $forumSection = ForumSection::inRandomOrder()->first();
+        $user = User::inRandomOrder()->first();
+
+        if ($forumSection == null) {
+            $forumSection = ForumSection::factory()->create();
+        }
+        if ($user == null) {
+            $user = User::factory()->create();
+        }
+
+        return [
+            'section_id'    => $forumSection,
+            'user_id'       => $user,
+            'ip'            => $this->faker->ipv4,
+            'title'         => $this->faker->sentence(),
+            'content'       => $this->faker->paragraph(),
+            'locked'        => $this->faker->boolean()
+        ];
+    }
+}

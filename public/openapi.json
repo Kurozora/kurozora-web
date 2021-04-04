@@ -2484,7 +2484,7 @@
         "tags": [
           "me"
         ],
-        "operationId": "getMeSessions",
+        "operationId": "getMeSessionsSession",
         "summary": "Fetch session details.",
         "description": "This endpoint will retrieve the details of a session.",
         "parameters": [
