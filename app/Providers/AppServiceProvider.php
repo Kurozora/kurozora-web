@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
@@ -30,6 +31,14 @@ class AppServiceProvider extends ServiceProvider
             }
             else Config::set(self::$queryCountConfigKey, $currentConfigValue + 1);
         });
+
+        /**
+         * Set the default pagination views.
+         *
+         * Options: default, simple-default, tailwind, simple-tailwind
+         */
+        Paginator::defaultView('pagination::tailwind');
+        Paginator::defaultSimpleView('pagination::simple-tailwind');
     }
 
     /**
