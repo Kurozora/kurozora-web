@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b8442a27df61038584b0a1ffce6f81ab",
+    "content-hash": "1e590c5acb01b8e00c6dada3964040ff",
     "packages": [
         {
             "name": "anaseqal/nova-sidebar-icons",
@@ -3615,27 +3615,21 @@
         },
         {
             "name": "musa11971/laravel-sort-request",
-            "version": "1.0.1",
+            "version": "dev-add-php->=7.4-support",
             "source": {
                 "type": "git",
-                "url": "https://github.com/musa11971/laravel-sort-request.git",
-                "reference": "b810f053eb5350973dde9e54767e7370a6a090dc"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/musa11971/laravel-sort-request/zipball/b810f053eb5350973dde9e54767e7370a6a090dc",
-                "reference": "b810f053eb5350973dde9e54767e7370a6a090dc",
-                "shasum": ""
+                "url": "https://github.com/kiritokatklian/laravel-sort-request",
+                "reference": "be42adaf2e5cc2052fd5eec87c34c063f08b3530"
             },
             "require": {
-                "php": "^7.3"
+                "php": ">=7.4"
             },
             "require-dev": {
-                "calebporzio/sushi": "^1.0",
-                "orchestra/testbench": "^4.0",
-                "phpunit/phpunit": "^8.2",
-                "spatie/phpunit-snapshot-assertions": "^3.1",
-                "symfony/var-dumper": "^4.3"
+                "calebporzio/sushi": "^2.0",
+                "orchestra/testbench": "^6.0",
+                "phpunit/phpunit": "^9.0",
+                "spatie/phpunit-snapshot-assertions": "^4.2",
+                "symfony/var-dumper": "^5.2"
             },
             "type": "library",
             "extra": {
@@ -3650,7 +3644,19 @@
                     "musa11971\\SortRequest\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "musa11971\\SortRequest\\Tests\\": "tests"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "vendor/bin/phpunit"
+                ],
+                "test-coverage": [
+                    "vendor/bin/phpunit --coverage-html coverage"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -3665,60 +3671,7 @@
             "keywords": [
                 "laravel-sort-request"
             ],
-            "support": {
-                "issues": "https://github.com/musa11971/laravel-sort-request/issues",
-                "source": "https://github.com/musa11971/laravel-sort-request/tree/1.0.1"
-            },
-            "time": "2020-02-14T13:00:45+00:00"
-        },
-        {
-            "name": "musa11971/laravel-tvdb",
-            "version": "v1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/musa11971/laravel-tvdb.git",
-                "reference": "ebba7ede02c94ecefde186fc0d751f16eb67a6d0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/musa11971/laravel-tvdb/zipball/ebba7ede02c94ecefde186fc0d751f16eb67a6d0",
-                "reference": "ebba7ede02c94ecefde186fc0d751f16eb67a6d0",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "ext-json": "*",
-                "php": "^7.1.3"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "musa11971\\TVDB\\TVDBServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "musa11971\\TVDB\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "musa11971",
-                    "email": "mussesemou99@gmail.com"
-                }
-            ],
-            "description": "A TVDB API wrapper for Laravel.",
-            "support": {
-                "issues": "https://github.com/musa11971/laravel-tvdb/issues",
-                "source": "https://github.com/musa11971/laravel-tvdb/tree/master"
-            },
-            "time": "2019-01-21T11:04:52+00:00"
+            "time": "2021-04-04T02:12:10+00:00"
         },
         {
             "name": "musa11971/php-jwt-decoder",
@@ -5675,23 +5628,24 @@
         },
         {
             "name": "spatie/once",
-            "version": "2.2.1",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/once.git",
-                "reference": "e6c13ae474a7d4b30975ef6a502a593874ac12d2"
+                "reference": "edf25d4f87e3a91666298ebe78ee2e89f9761bf7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/once/zipball/e6c13ae474a7d4b30975ef6a502a593874ac12d2",
-                "reference": "e6c13ae474a7d4b30975ef6a502a593874ac12d2",
+                "url": "https://api.github.com/repos/spatie/once/zipball/edf25d4f87e3a91666298ebe78ee2e89f9761bf7",
+                "reference": "edf25d4f87e3a91666298ebe78ee2e89f9761bf7",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2|^8.0"
+                "php": "^8.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^8.0"
+                "phpunit/phpunit": "^9.3",
+                "symfony/var-dumper": "^5.1"
             },
             "type": "library",
             "autoload": {
@@ -5725,7 +5679,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/once/issues",
-                "source": "https://github.com/spatie/once/tree/2.2.1"
+                "source": "https://github.com/spatie/once/tree/3.0.0"
             },
             "funding": [
                 {
@@ -5733,7 +5687,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2020-10-29T18:22:10+00:00"
+            "time": "2020-11-03T13:23:06+00:00"
         },
         {
             "name": "spatie/temporary-directory",
@@ -9128,54 +9082,6 @@
                 "source": "https://github.com/barryvdh/ReflectionDocBlock/tree/v2.0.6"
             },
             "time": "2018-12-13T10:34:14+00:00"
-        },
-        {
-            "name": "beyondcode/tinkerwell-helper",
-            "version": "1.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/beyondcode/tinkerwell-helper.git",
-                "reference": "97e1b015cbc6adf38cce5f264fbbb0f828896b0b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/beyondcode/tinkerwell-helper/zipball/97e1b015cbc6adf38cce5f264fbbb0f828896b0b",
-                "reference": "97e1b015cbc6adf38cce5f264fbbb0f828896b0b",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/support": "5.6.*|5.7.*|5.8.*|^6.0|^7.0|^8.0",
-                "php": "^7.2"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/helper.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marcel Pociot",
-                    "email": "marcel@beyondco.de",
-                    "homepage": "https://beyondcode.de",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Open Tinkerwell from your Laravel project.",
-            "homepage": "https://github.com/beyondcode/tinkerwell-helper",
-            "keywords": [
-                "beyondcode",
-                "tinkerwell-helper"
-            ],
-            "support": {
-                "issues": "https://github.com/beyondcode/tinkerwell-helper/issues",
-                "source": "https://github.com/beyondcode/tinkerwell-helper/tree/1.2.0"
-            },
-            "time": "2020-10-18T21:18:07+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -12843,13 +12749,14 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "musa11971/laravel-sort-request": 20,
         "musa11971/php-jwt-decoder": 20,
         "nikkanetiya/laravel-color-palette": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.4",
+        "php": "^8.0",
         "ext-json": "*",
         "ext-simplexml": "*"
     },
