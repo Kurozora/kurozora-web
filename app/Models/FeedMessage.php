@@ -5,13 +5,15 @@ namespace App\Models;
 use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
 use Cog\Laravel\Love\Reactable\Models\Traits\Reactable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class FeedMessage extends KModel implements ReactableContract
 {
-    use Reactable;
+    use HasFactory,
+        Reactable;
 
     // Table name
     const TABLE_NAME = 'feed_messages';

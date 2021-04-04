@@ -5,10 +5,13 @@ namespace App\Models;
 use App\Rules\ValidatePlatformName;
 use App\Rules\ValidatePlatformVersion;
 use App\Rules\ValidateVendorName;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Session extends KModel
 {
+    use HasFactory;
+
     // Table name
     const TABLE_NAME = 'sessions';
     protected $table = self::TABLE_NAME;

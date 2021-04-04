@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 
 class PasswordReset extends KModel
 {
+    use HasFactory;
+
     // The length of a reset token
     const TOKEN_LENGTH = 30;
 
