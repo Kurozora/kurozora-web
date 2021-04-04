@@ -28,7 +28,7 @@ class AnimeRelationsFactory extends Factory
             $anime = Anime::factory()->create();
         }
 
-        $relatedAnime = Anime::whereNotIn('id', $anime->id)->inRandomOrder()->first();
+        $relatedAnime = Anime::whereNotIn('id', [$anime->id])->inRandomOrder()->first();
         if ($relatedAnime == null) {
             $relatedAnime = Anime::factory()->create();
         }
