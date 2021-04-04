@@ -3,23 +3,20 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 module.exports = {
     purge: {
         content: [
-            './vendor/laravel/jetstream/**/*.blade.php',
-            './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
-            './storage/framework/views/*.php',
-            "./resources/**/*.html",
-            "./resources/**/*.js",
-            "./resources/**/*.jsx",
-            "./resources/**/*.ts",
-            "./resources/**/*.tsx",
-            './resources/**/*.blade.php',
-            "./resources/**/*.php",
-            "./resources/**/*.vue",
-            "./resources/**/*.twig",
+            './app/**/*.php',
+            './resources/**/*.html',
+            './resources/**/*.js',
+            './resources/**/*.jsx',
+            './resources/**/*.ts',
+            './resources/**/*.tsx',
+            './resources/**/*.php',
+            './resources/**/*.vue',
+            './resources/**/*.twig',
         ],
         options: {
             defaultExtractor: (content) => content.match(/[\w-/.:]+(?<!:)/g) || [],
-            whitelistPatterns: [/-active$/, /-enter$/, /-leave-to$/, /show$/]
-        }
+            whitelistPatterns: [/-active$/, /-enter$/, /-leave-to$/, /show$/],
+        },
     },
 
     theme: {
@@ -56,13 +53,21 @@ module.exports = {
                     '700': '#c05621',
                     '800': '#9c4221',
                     '900': '#7B341E',
-                }
-            }
-        }
+                },
+            },
+
+            fontFamily: {
+                sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+            },
+        },
     },
 
     variants: {
         opacity: ['responsive', 'hover', 'focus', 'disabled'],
+
+        extend: {
+            backgroundColor: ['active'],
+        },
     },
 
     plugins: [
