@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\AnimeImageType;
 use App\Traits\KuroSearchTrait;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -17,7 +18,8 @@ use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 
 class Anime extends KModel
 {
-    use HasSlug,
+    use HasFactory,
+        HasSlug,
         KuroSearchTrait,
         LogsActivity;
 

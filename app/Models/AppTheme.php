@@ -3,13 +3,15 @@
 namespace App\Models;
 
 use App\Traits\MediaLibraryExtensionTrait;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\View;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 class AppTheme extends KModel implements HasMedia
 {
-    use InteractsWithMedia,
+    use HasFactory,
+        InteractsWithMedia,
         MediaLibraryExtensionTrait;
 
     // Table name

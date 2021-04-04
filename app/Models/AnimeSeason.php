@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class AnimeSeason extends KModel
 {
+    use HasFactory;
+
     // Table name
     const TABLE_NAME = 'anime_seasons';
     protected $table = self::TABLE_NAME;
