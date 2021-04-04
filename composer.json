@@ -23,7 +23,7 @@
         "laravel/framework": "^8.0",
         "laravel/nova": "*",
         "laravel/tinker": "^2.6",
-        "musa11971/laravel-sort-request": "dev-add-php->=7.4-support",
+        "musa11971/laravel-sort-request": "dev-php-7.4-and-8.0-support",
         "musa11971/php-jwt-decoder": "dev-php-7.4-and-8.0-support",
         "nicolaslopezj/searchable": "1.*",
         "nikkanetiya/laravel-color-palette": "dev-master",
