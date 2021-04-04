@@ -6,8 +6,6 @@ use App\Models\Actor;
 use App\Models\Anime;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use musa11971\TVDB\Exceptions\TVDBNotFoundException;
-use musa11971\TVDB\TVDB;
 
 class FetchAnimeActors extends Command
 {
@@ -39,71 +37,70 @@ class FetchAnimeActors extends Command
      * Execute the console command.
      *
      * @return int
-     *
-     * @throws \musa11971\TVDB\Exceptions\TVDBUnauthorizedException
      */
     public function handle()
     {
-        // Request anime ID parameter
-        $animeID = $this->argument('id');
+//        // Request anime ID parameter
+//        $animeID = $this->argument('id');
+//
+//        $anime = Anime::find($animeID);
+//
+//        // Specified Anime does not exists
+//        if($anime == null) {
+//            $this->error('The Anime was not found.');
+//            return 0;
+//        }
+//
+//        if($anime->tvdb_id === null) {
+//            $this->error('The Anime does not have a connected TVDB ID.');
+//            return 0;
+//        }
+//
+//        if($anime->fetched_actors) {
+//            $this->error('The actors were already fetched for this Anime.');
+//            return 0;
+//        }
+//
+//        // Start retrieving
+//        $this->info('Start retrieving anime actors...');
+//        $this->info('');
+//
+//        // Get the actors
+//        $retActors = [];
+//
+//        try {
+//            $retActors = TVDB::getSeriesActors($anime->tvdb_id);
+//        }
+//        // Actors could not be found on TVDB
+//        catch(TVDBNotFoundException $e) {
+//            $this->error('Ran into "TVDBNotFoundException", actors will be set to none.');
+//            $retActors = [];
+//        }
+//
+//        // Delete old actors if there were any
+//        Actor::where('anime_id', $anime->id)->delete();
+//
+//        // Insert the new actors
+//        $insertActors = [];
+//
+//        foreach ($retActors as $actor) {
+//            $insertActors[] = [
+//                'created_at'    => Carbon::now(),
+//                'anime_id'      => $anime->id,
+//                'name'          => $actor->name,
+//                'role'          => $actor->role,
+//                'image'         => $actor->imageURL
+//            ];
+//        }
+//
+//        Actor::insert($insertActors);
+//
+//        $anime->fetched_actors = true;
+//        $anime->save();
+//
+//        $this->info('Finished fetching actors - ' . count($insertActors) . ' found.');
 
-        $anime = Anime::find($animeID);
-
-        // Specified Anime does not exists
-        if($anime == null) {
-            $this->error('The Anime was not found.');
-            return 0;
-        }
-
-        if($anime->tvdb_id === null) {
-            $this->error('The Anime does not have a connected TVDB ID.');
-            return 0;
-        }
-
-        if($anime->fetched_actors) {
-            $this->error('The actors were already fetched for this Anime.');
-            return 0;
-        }
-
-        // Start retrieving
-        $this->info('Start retrieving anime actors...');
-        $this->info('');
-
-        // Get the actors
-        $retActors = [];
-
-        try {
-            $retActors = TVDB::getSeriesActors($anime->tvdb_id);
-        }
-        // Actors could not be found on TVDB
-        catch(TVDBNotFoundException $e) {
-            $this->error('Ran into "TVDBNotFoundException", actors will be set to none.');
-            $retActors = [];
-        }
-
-        // Delete old actors if there were any
-        Actor::where('anime_id', $anime->id)->delete();
-
-        // Insert the new actors
-        $insertActors = [];
-
-        foreach ($retActors as $actor) {
-            $insertActors[] = [
-                'created_at'    => Carbon::now(),
-                'anime_id'      => $anime->id,
-                'name'          => $actor->name,
-                'role'          => $actor->role,
-                'image'         => $actor->imageURL
-            ];
-        }
-
-        Actor::insert($insertActors);
-
-        $anime->fetched_actors = true;
-        $anime->save();
-
-        $this->info('Finished fetching actors - ' . count($insertActors) . ' found.');
-
+        $this->warn('Fetching of actors is currently disabled.');
         return 1;
     }
 }
