@@ -28,10 +28,10 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         AnimeViewed::class => [
-            FetchAnimeDetails::class,
-            FetchBaseAnimeEpisodes::class,
-            FetchAnimeImages::class,
-            FetchAnimeActors::class,
+//            FetchAnimeDetails::class,
+//            FetchBaseAnimeEpisodes::class,
+//            FetchAnimeImages::class,
+//            FetchAnimeActors::class,
         ],
     ];
 
