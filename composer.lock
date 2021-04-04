@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1e590c5acb01b8e00c6dada3964040ff",
+    "content-hash": "caad5b5fe17a50a20cda7b3e436343c1",
     "packages": [
         {
             "name": "anaseqal/nova-sidebar-icons",
@@ -3615,14 +3615,14 @@
         },
         {
             "name": "musa11971/laravel-sort-request",
-            "version": "dev-add-php->=7.4-support",
+            "version": "dev-php-7.4-and-8.0-support",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kiritokatklian/laravel-sort-request",
-                "reference": "be42adaf2e5cc2052fd5eec87c34c063f08b3530"
+                "reference": "bc2e5c8a22d40fec101533b396e46ff6a448be9c"
             },
             "require": {
-                "php": ">=7.4"
+                "php": "^7.4|^8.0"
             },
             "require-dev": {
                 "calebporzio/sushi": "^2.0",
@@ -3671,7 +3671,7 @@
             "keywords": [
                 "laravel-sort-request"
             ],
-            "time": "2021-04-04T02:12:10+00:00"
+            "time": "2021-04-04T10:56:02+00:00"
         },
         {
             "name": "musa11971/php-jwt-decoder",
@@ -3679,13 +3679,13 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kiritokatklian/php-jwt-decoder",
-                "reference": "7ccf19e88c005709bf963daa07dcadc3666717bf"
+                "reference": "d97cd51b899b9e88e2a8ae52def3adefe2b50265"
             },
             "require": {
                 "ext-json": "*",
                 "ext-mbstring": "*",
                 "ext-openssl": "*",
-                "php": ">=7.4"
+                "php": "^7.4|^8.0"
             },
             "require-dev": {
                 "firebase/php-jwt": "^5.2",
@@ -3724,7 +3724,7 @@
             "keywords": [
                 "php-jwt-decoder"
             ],
-            "time": "2021-04-03T19:42:04+00:00"
+            "time": "2021-04-04T11:14:02+00:00"
         },
         {
             "name": "myclabs/php-enum",
