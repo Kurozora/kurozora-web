@@ -21,8 +21,17 @@ class ValidateAvatarImage implements Rule
      */
     public function passes($attribute, $value): bool
     {
+//        /** @var User $user */
+//        $user = Auth::user();
+//        $userReceipt = $user->receipt;
+
+        $rules = ['max:1000', 'nullable'];
+        $allowedMimes = 'mimes:jpeg,jpg,png';
+//        $allowedMimes = $userReceipt === null || !$userReceipt->is_subscribed ? 'mimes:jpeg,jpg,png' : 'mimes:jpeg,jpg,png,gif';
+        array_push($rules, $allowedMimes);
+
         $imgValidator = Validator::make([$attribute => $value], [
-            $attribute => 'mimes:jpeg,jpg,png|max:1000|nullable',
+            $attribute => $rules,
         ]);
 
         if($imgValidator->fails()) {

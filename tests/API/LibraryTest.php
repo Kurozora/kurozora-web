@@ -7,12 +7,12 @@ use App\Enums\UserLibraryStatus;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
+use Tests\Traits\ProvidesTestAnime;
 use Tests\Traits\ProvidesTestUser;
-use Tests\Traits\RunsSeeders;
 
 class LibraryTest extends TestCase
 {
-    use DatabaseMigrations, ProvidesTestUser, RunsSeeders;
+    use DatabaseMigrations, ProvidesTestUser, ProvidesTestAnime;
 
     /**
      * User can get the Watching anime in their library.
@@ -23,7 +23,7 @@ class LibraryTest extends TestCase
     function user_can_get_the_Watching_anime_in_their_library()
     {
         // Add an anime to the list
-        $this->user->library()->attach(1, ['status' => UserLibraryStatus::Watching]);
+        $this->user->library()->attach($this->anime->id, ['status' => UserLibraryStatus::Watching]);
 
         // Send the request
         $response = $this->auth()->json('GET', '/api/v1/me/library', [
@@ -46,7 +46,7 @@ class LibraryTest extends TestCase
     function user_can_get_the_Dropped_anime_in_their_library()
     {
         // Add an anime to the list
-        $this->user->library()->attach(1, ['status' => UserLibraryStatus::Dropped]);
+        $this->user->library()->attach($this->anime->id, ['status' => UserLibraryStatus::Dropped]);
 
         // Send the request
         $response = $this->auth()->json('GET', '/api/v1/me/library', [
@@ -69,7 +69,7 @@ class LibraryTest extends TestCase
     function user_can_get_the_Planning_anime_in_their_library()
     {
         // Add an anime to the list
-        $this->user->library()->attach(1, ['status' => UserLibraryStatus::Planning]);
+        $this->user->library()->attach($this->anime->id, ['status' => UserLibraryStatus::Planning]);
 
         // Send the request
         $response = $this->auth()->json('GET', '/api/v1/me/library', [
@@ -92,7 +92,7 @@ class LibraryTest extends TestCase
     function user_can_get_the_Completed_anime_in_their_library()
     {
         // Add an anime to the list
-        $this->user->library()->attach(1, ['status' => UserLibraryStatus::Completed]);
+        $this->user->library()->attach($this->anime->id, ['status' => UserLibraryStatus::Completed]);
 
         // Send the request
         $response = $this->auth()->json('GET', '/api/v1/me/library', [
@@ -115,7 +115,7 @@ class LibraryTest extends TestCase
     function user_can_get_the_OnHold_anime_in_their_library()
     {
         // Add an anime to the list
-        $this->user->library()->attach(1, ['status' => UserLibraryStatus::OnHold]);
+        $this->user->library()->attach($this->anime->id, ['status' => UserLibraryStatus::OnHold]);
 
         // Send the request
         $response = $this->auth()->json('GET', '/api/v1/me/library', [
@@ -292,7 +292,7 @@ class LibraryTest extends TestCase
     function user_can_delete_anime_from_their_library()
     {
         // Add an anime to the list
-        $this->user->library()->attach(1, ['status' => UserLibraryStatus::Watching]);
+        $this->user->library()->attach($this->anime->id, ['status' => UserLibraryStatus::Watching]);
 
         // Send the request
         $response = $this->auth()->json('POST', '/api/v1/me/library/delete', [
@@ -317,7 +317,7 @@ class LibraryTest extends TestCase
     function user_can_search_in_own_library()
     {
         // Add an anime to the user's list
-        $shows = factory(Anime::class, 20)->create();
+        $shows = Anime::factory(20)->create();
 
         /** @var Anime $show */
         foreach ($shows as $show)

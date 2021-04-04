@@ -18,7 +18,7 @@ class AppThemeTest extends TestCase
      */
     public function a_user_can_view_all_app_themes()
     {
-        factory(AppTheme::class, 2)->create();
+        AppTheme::factory(2)->create();
 
         $response = $this->json('GET', '/api/v1/themes', []);
 
@@ -38,7 +38,7 @@ class AppThemeTest extends TestCase
     public function a_user_can_view_specific_app_theme_details()
     {
         /** @var AppTheme $theme */
-        $theme = factory(AppTheme::class)->create();
+        $theme = AppTheme::factory()->create();
 
         $response = $this->get('/api/v1/themes/'.$theme->id);
 

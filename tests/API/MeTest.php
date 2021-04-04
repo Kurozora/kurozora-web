@@ -237,7 +237,7 @@ class MeTest extends TestCase
     {
         // Add some anime to the user's favorites
         /** @var Anime[] $anime */
-        $animeList = factory(Anime::class, 25)->create();
+        $animeList = Anime::factory(25)->create();
 
         foreach($animeList as $anime)
             $this->user->favoriteAnime()->attach($anime->id);
@@ -263,7 +263,7 @@ class MeTest extends TestCase
     {
         // Add a follower
         /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
+        $anotherUser = User::factory()->create();
 
         $this->user->followers()->attach($anotherUser);
 
@@ -287,7 +287,7 @@ class MeTest extends TestCase
     {
         // Add a user to the following list
         /** @var User $anotherUser */
-        $anotherUser = factory(User::class)->create();
+        $anotherUser = User::factory()->create();
 
         $this->user->following()->attach($anotherUser);
 
@@ -310,7 +310,7 @@ class MeTest extends TestCase
     function user_can_get_a_list_of_their_sessions()
     {
         // Create some sessions for the user
-        factory(Session::class, 25)->create(['user_id' => $this->user->id]);
+        Session::factory(25)->create(['user_id' => $this->user->id]);
 
         // Send the request
         $response = $this->auth()->json('GET', '/api/v1/me/sessions');
