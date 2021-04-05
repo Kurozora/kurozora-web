@@ -5,37 +5,37 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/anime')
-    ->name('anime.')
+    ->name('.anime')
     ->group(function() {
         Route::get('/search', [AnimeController::class, 'search'])
             ->middleware('kurozora.userauth:optional');
 
         Route::get('/{anime}', [AnimeController::class, 'view'])
             ->middleware('kurozora.userauth:optional')
-            ->name('view');
+            ->name('.view');
 
         Route::get('/{anime}/actors', [AnimeController::class, 'actorsAnime'])
-            ->name('actors');
+            ->name('.actors');
 
         Route::get('/{anime}/characters', [AnimeController::class, 'charactersAnime'])
-            ->name('characters');
+            ->name('.characters');
 
         Route::get('/{anime}/cast', [AnimeController::class, 'actorCharacterAnime'])
-            ->name('cast');
+            ->name('.cast');
 
         Route::get('/{anime}/genres', [AnimeController::class, 'genresAnime'])
-            ->name('genres');
+            ->name('.genres');
 
         Route::get('/{anime}/related-shows', [AnimeController::class, 'relatedShowsAnime'])
             ->middleware('kurozora.userauth:optional')
-            ->name('related-shows');
+            ->name('.related-shows');
 
         Route::get('/{anime}/seasons', [AnimeController::class, 'seasonsAnime'])
-            ->name('seasons');
+            ->name('.seasons');
 
         Route::get('/{anime}/studios', [AnimeController::class, 'studiosAnime'])
             ->middleware('kurozora.userauth:optional')
-            ->name('studios');
+            ->name('.studios');
 
         Route::post('/{anime}/rate', [AnimeController::class, 'rateAnime'])
             ->middleware('kurozora.userauth');
