@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('/legal')
     ->name('legal')
     ->group(function() {
-        Route::get('/privacy', [PrivacyPageController::class, 'show'])
-            ->name('privacy');
+        Route::get('/privacy-policy', PrivacyPolicy::class)
+            ->name('.privacy-policy');
+
+        Route::get('/terms-of-use', TermsOfUse::class)
+            ->name('.terms-of-use');
     });
