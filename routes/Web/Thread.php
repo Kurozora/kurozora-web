@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/thread')
-    ->name('thread.')
+    ->name('thread')
     ->group(function() {
         Route::get('/{threadID}', [PageController::class, 'thread'])
-        ->name('details');
+        ->name('.details');
     });

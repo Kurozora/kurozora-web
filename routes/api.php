@@ -6,7 +6,7 @@ use App\Http\Controllers\WebControllers\APIDocumentationController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/v1')
-    ->name('api.')
+    ->name('api')
     ->group(function () {
         Route::get('/', [APIDocumentationController::class, 'render']);
 
@@ -14,7 +14,7 @@ Route::prefix('/v1')
 
         Route::get('/explore', [ExplorePageController::class, 'explore'])
             ->middleware('kurozora.userauth:optional')
-            ->name('explore');
+            ->name('.explore');
 
         require 'API/Actors.php';
         require 'API/Anime.php';
