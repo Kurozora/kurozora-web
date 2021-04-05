@@ -1,5 +1,11 @@
 import 'alpinejs';
 
+import iro from "@jaames/iro"
+
+try {
+    window.iro = iro
+} catch (e) {}
+
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
