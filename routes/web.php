@@ -1,11 +1,11 @@
 <?php
 
 use App\Http\Controllers\UserController;
+use App\Http\Livewire\Home;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('website.home');
-})->name('home');
+Route::get('/', Home::class)
+    ->name('home');
 
 // Landing pages
 require 'Web/Anime.php';
