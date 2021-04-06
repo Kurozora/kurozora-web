@@ -9,5 +9,5 @@ Route::prefix('/anime')
     ->name('anime')
     ->group(function() {
         Route::get('/{anime}', Details::class)
-        ->name('.details');
+            ->name('.details');
     });

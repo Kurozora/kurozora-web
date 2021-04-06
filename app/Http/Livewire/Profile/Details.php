@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\Profile;
 
-use App\Models\Anime;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
