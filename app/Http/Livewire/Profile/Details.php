@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Livewire\Anime;
+namespace App\Http\Livewire\Profile;
 
 use App\Models\Anime;
+use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -11,11 +12,11 @@ use Livewire\Component;
 class Details extends Component
 {
     /**
-     * The object containing the anime data.
+     * The object containing the user data.
      *
-     * @var ?Anime $anime
+     * @var ?User $user
      */
-    public ?Anime $anime;
+    public ?User $user;
 
     /**
      * The page's data.
@@ -25,22 +26,23 @@ class Details extends Component
     public array $page = [
         'title' => '',
         'image' => '',
-        'type' => 'video.tv_show',
+        'type' => 'profile',
     ];
 
     /**
      * Prepare the component.
      *
-     * @param Anime $anime
+     * @param User $user
      *
      * @return void
      */
-    public function mount(Anime $anime)
+    public function mount(User $user)
     {
-        $this->anime = $anime;
+        $this->user = $user;
+        $avatar = $user->getFirstMediaUrl('avatar');
 
-        $this->page['title'] = $anime->title;
-        $this->page['image'] = $anime->poster()->url ?? asset('img/static/placeholders/anime_poster.jpg');
+        $this->page['title'] = $user->username . ' on Kurozora';
+        $this->page['image'] = !empty($avatar) ? $avatar : asset('img/static/placeholders/user_profile.jpg');
     }
 
     /**
@@ -50,7 +52,7 @@ class Details extends Component
      */
     public function render(): Factory|View|Application
     {
-        return view('livewire.anime.details')
+        return view('livewire.profile.details')
             ->layout('layouts.base');
     }
 }
