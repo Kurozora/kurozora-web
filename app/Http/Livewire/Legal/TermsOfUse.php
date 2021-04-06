@@ -16,7 +16,7 @@ class TermsOfUse extends Component
      *
      * @return Application|Factory|View
      */
-    public function render()
+    public function render(): View|Factory|Application
     {
         $privacyPolicyRequest = Request::create('/api/v1/legal/terms-of-use');
         $responseData = (array) Route::dispatch($privacyPolicyRequest)->getData();
