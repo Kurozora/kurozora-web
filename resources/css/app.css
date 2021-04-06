@@ -37,79 +37,28 @@ html {
   bg-no-repeat;
 }
 
-html, body, #app {
+html, body {
   @apply h-full
   w-full;
 }
 
-body, #app {
+ul, ol {
+  margin: 1em 0 1em 1.1em;
+}
+
+body {
   @apply flex
   flex-col
   leading-snug
   tracking-tight;
+  color: #333333;
+  quotes: "“" "”";
 }
 
 main {
   @apply flex
   flex-col
   flex-grow;
-}
-
-footer {
-  @apply bg-black
-  bg-opacity-25;
-}
-
-a {
-  @apply text-orange-500;
-}
-a:hover {
-  @apply underline;
-}
-
-h1 {
-  @apply text-4xl;
-}
-h2 {
-  @apply text-2xl;
-}
-h3 {
-  @apply text-xl;
-}
-h4 {
-  @apply text-lg;
-}
-h5 {
-  @apply text-base;
-}
-h6 {
-  @apply text-sm;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  @apply font-semibold
-  mb-2
-  text-gray-900;
-}
-
-li {
-  @apply mb-1;
-}
-
-p {
-  @apply mb-4;
-}
-p + h1, ul + h1, ol + h1,
-p + h2, ul + h2, ol + h2,
-p + h3, ul + h3, ol + h3,
-p + h4, ul + h4, ol + h4,
-p + h5, ul + h5, ol + h5,
-p + h6, ul + h6, ol + h6 {
-  @apply mt-6;
-}
-
-ul, menu, dir {
-  @apply list-disc;
 }
 
 /* Kurozora Button styles */
@@ -164,6 +113,10 @@ ul, menu, dir {
   border-opacity-25
   rounded-lg
   shadow-lg;
+  margin: 10px auto 0;
+  width: 180px;
+  height: 268px;
+  background-size: 180px 268px;  /* ratio 45:67 */
 }
 
 /* User placeholders */
@@ -176,6 +129,10 @@ ul, menu, dir {
   border-opacity-25
   rounded-full
   shadow-lg;
+  margin: 10px auto 0;
+  width: 150px;
+  height: 150px;
+  background-size: 150px 150px;
 }
 
 /* Card styles */
@@ -196,59 +153,8 @@ ul, menu, dir {
   py-4;
 }
 
-/* Modal styles */
-.modal {
-  @apply fixed
-  flex
-  w-full
-  h-full
-  top-0
-  left-0
-  items-center
-  justify-center;
-}
-
-.modal-overlay {
-  @apply absolute
-  w-full
-  h-full
-  bg-gray-900
-  opacity-50;
-}
-
-.modal-container {
-  @apply bg-white
-  w-11/12
-  mx-auto
-  rounded
-  shadow-lg
-  z-50
-  overflow-y-auto;
-}
-
-.modal-close {
-  @apply absolute
-  top-0
-  right-0
-  cursor-pointer
-  flex
-  flex-col
-  items-center
-  mt-4
-  mr-4
-  text-white
-  text-sm
-  z-50;
-}
-
-.modal-content {
-  @apply py-4
-  text-left
-  px-6;
-}
-
 /**
- * This injects all of Tailwind's utility classes, generated based on your
+ * This injects all of Tailwind's utility classes, generated based on the
  * config file.
  */
 @tailwind utilities;
@@ -267,39 +173,9 @@ ul, menu, dir {
   display: none;
 }
 
+
+/**
+ * This injects all of Tailwind's screen classes, generated based on the
+ * config file.
+ */
 @tailwind screens;
-@screen md {
-  /* Modal styles */
-  .modal-container {
-    @apply max-w-md;
-  }
-}
-
-/* Global styles */
-html {
-  font-family: -apple-system, "SF Pro Text","SF Pro Icons","Helvetica Neue","Helvetica","Arial",sans-serif;
-}
-
-body {
-  color: #333333;
-  quotes: "“" "”";
-}
-
-ul, ol {
-  margin: 1em 0 1em 1.1em;
-}
-
-/* Placeholder styles */
-.anime-poster {
-  margin: 10px auto 0;
-  width: 180px;
-  height: 268px;
-  background-size: 180px 268px;  /* ratio 45:67 */
-}
-
-.user-avatar {
-  margin: 10px auto 0;
-  width: 150px;
-  height: 150px;
-  background-size: 150px 150px;
-}
