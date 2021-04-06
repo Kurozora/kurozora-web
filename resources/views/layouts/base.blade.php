@@ -9,6 +9,10 @@
             <title>{{ config('app.name') }}</title>
         @endif
 
+        @hasSection('open-graph')
+            @yield('open-graph')
+        @endif()
+
         <!-- Favicon -->
         <link rel="shortcut icon" href="{{ url(asset('favicon.ico')) }}">
 
