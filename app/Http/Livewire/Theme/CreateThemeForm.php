@@ -2,17 +2,13 @@
 
 namespace App\Http\Livewire\Theme;
 
-use App\Models\AppTheme;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
-use Livewire\WithPagination;
 
-class Index extends Component
+class CreateThemeForm extends Component
 {
-    use WithPagination;
-
     /**
      * Render the component.
      *
@@ -20,8 +16,6 @@ class Index extends Component
      */
     public function render(): View|Factory|Application
     {
-        return view('livewire.theme.index', [
-            'themes' => AppTheme::paginate(5),
-        ]);
+        return view('livewire.theme.create-theme-form');
     }
 }
