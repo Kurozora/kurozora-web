@@ -1,4 +1,8 @@
 <x-base-layout>
+    <x-slot name="title">
+        {{ $title }}
+    </x-slot>
+
     <!-- Page Heading -->
     <header class="bg-gray-100 shadow">
         <div class="flex max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
