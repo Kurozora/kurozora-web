@@ -23,7 +23,7 @@ class NavigationDropdown extends Component
      *
      * @return Application|Factory|View
      */
-    public function render(): View|Factory|Application
+    public function render(): Application|Factory|View
     {
         return view('livewire.navigation-dropdown');
     }

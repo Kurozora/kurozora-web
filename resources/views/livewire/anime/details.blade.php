@@ -5,7 +5,7 @@
         <meta property="og:type" content="{{ $page['type'] }}" />
     </x-slot>
 
-    <div class="anime-poster" style="background-image: url('{{ $anime->poster()->url ?? asset('img/static/placeholders/anime_poster.jpg') }}')"></div>
+    <div class="anime-poster" style="background-image: url('{{ $anime->poster()->url ?? asset('images/static/placeholders/anime_poster.jpg') }}')"></div>
 
     <h1 class="text-white font-bold mt-6 mb-2">{{ $anime->title }}</h1>
 

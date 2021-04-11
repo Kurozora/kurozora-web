@@ -14,7 +14,7 @@ class CreateThemeForm extends Component
      *
      * @return Application|Factory|View
      */
-    public function render(): View|Factory|Application
+    public function render(): Application|Factory|View
     {
         return view('livewire.theme.create-theme-form');
     }

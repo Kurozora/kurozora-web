@@ -5,6 +5,7 @@ npm-debug.log
 # Laravel
 /public/hot
 /public/storage
+/public/images/user_uploads
 /public/img/user_uploads
 /storage/*.key
 .env

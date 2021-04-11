@@ -9,7 +9,7 @@
         <meta property="og:type" content="{{ $page['type'] }}" />
     </x-slot>
 
-    <div class="user-avatar" style="background-image: url('{{ !empty($avatar) ? $avatar : asset('img/static/placeholders/user_profile.png') }}')"></div>
+    <div class="user-avatar" style="background-image: url('{{ !empty($avatar) ? $avatar : asset('images/static/placeholders/user_profile.png') }}')"></div>
 
     <h1 class="text-white font-bold mt-6">{{ $user->username }}</h1>
     <h2 class="text-white mb-2">{{ $user->getFollowerCount() }} {{ __('followers') }}</h2>
