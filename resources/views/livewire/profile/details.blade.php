@@ -3,7 +3,11 @@
 @endphp
 
 <div class="flex flex-col w-full h-full items-center justify-center">
-    <x-slot name="open-graph">
+    <x-slot name="title">
+        {{ $user->username }}
+    </x-slot>
+
+    <x-slot name="meta">
         <meta property="og:title" content="{{ $page['title'] }}" />
         <meta property="og:image" content="{{ $page['image'] }}" />
         <meta property="og:type" content="{{ $page['type'] }}" />
