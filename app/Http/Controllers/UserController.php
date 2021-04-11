@@ -104,39 +104,6 @@ class UserController extends Controller
     }
 
     /**
-     * Email confirmation page
-     *
-     * @param $confirmationID
-     * @return Application|Factory|View
-     */
-    public function confirmEmail($confirmationID)
-    {
-        // Try to find a user with this confirmation ID
-        /** @var User $foundUser */
-        $foundUser = User::where('email_confirmation_id', $confirmationID)->first();
-
-        // No user found
-        if(!$foundUser)
-            return view('website.email_confirm_page', [
-                'success' => false,
-                'page' => [
-                    'no_index' => true
-                ]
-            ]);
-
-        // Confirm their email and show the page
-        $foundUser->email_confirmation_id = null;
-        $foundUser->save();
-
-        return view('website.email_confirm_page', [
-            'success' => true,
-            'page' => [
-                'no_index' => true
-            ]
-        ]);
-    }
-
-    /**
      * Password reset page
      *
      * @param string $token
