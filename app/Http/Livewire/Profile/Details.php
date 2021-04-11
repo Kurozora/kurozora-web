@@ -41,7 +41,7 @@ class Details extends Component
         $avatar = $user->getFirstMediaUrl('avatar');
 
         $this->page['title'] = $user->username . ' on Kurozora';
-        $this->page['image'] = !empty($avatar) ? $avatar : asset('img/static/placeholders/user_profile.jpg');
+        $this->page['image'] = !empty($avatar) ? $avatar : asset('images/static/placeholders/user_profile.jpg');
     }
 
     /**

@@ -16,7 +16,7 @@ class PrivacyPolicy extends Component
      *
      * @return Application|Factory|View
      */
-    public function render(): View|Factory|Application
+    public function render(): Application|Factory|View
     {
         $privacyPolicyRequest = Request::create('/api/v1/legal/privacy-policy');
         $responseData = (array) Route::dispatch($privacyPolicyRequest)->getData();

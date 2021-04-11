@@ -40,7 +40,7 @@ class Details extends Component
         $this->anime = $anime;
 
         $this->page['title'] = $anime->title;
-        $this->page['image'] = $anime->poster()->url ?? asset('img/static/placeholders/anime_poster.jpg');
+        $this->page['image'] = $anime->poster()->url ?? asset('images/static/placeholders/anime_poster.jpg');
     }
 
     /**

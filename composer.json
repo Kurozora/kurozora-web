@@ -9,6 +9,7 @@
         "ext-simplexml": "*",
         "anaseqal/nova-sidebar-icons": "^0.0",
         "bensampo/laravel-enum": "^3.0",
+        "blade-ui-kit/blade-icons": "^1.0",
         "chaseconey/nova-external-image": "^0.3",
         "codercat/jwk-to-pem": "^1.0",
         "cybercog/laravel-love": "^8.0",

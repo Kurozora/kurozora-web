@@ -4,7 +4,7 @@
     <title>Kurozora API</title>
 
     <meta charset="UTF-8">
-    <link rel="icon" href="{{ asset('img/static/favicon.ico') }}">
+    <link rel="icon" href="{{ asset('images/static/favicon.ico') }}">
 
     {{-- Don't index the API docs --}}
     <meta name="robots" content="noindex">
