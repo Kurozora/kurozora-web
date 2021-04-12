@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
-
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AnimeController;
 
 Route::prefix('/anime')
     ->name('.anime')
