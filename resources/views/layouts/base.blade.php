@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" style="background-image: url({{ asset('images/static/star_bg_lg.jpg') }})">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {{ $meta ?? '' }}
+
+        @if(empty($title))
+            <title>{{ config('app.name') }}</title>
+        @else
+            <title>{{ $title . ' - ' . config('app.name') }}</title>
+        @endif
+
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="{{ url(asset('favicon.ico')) }}">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+
+        <!-- Styles -->
+        <link rel="stylesheet" href="{{ url(mix('css/app.css')) }}">
+        @livewireStyles
+
+        <!-- Scripts -->
+        <script src="{{ url(mix('js/app.js')) }}" defer></script>
+
+        <!-- CSRF Token -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+    </head>
+
+    <body>
+        <livewire:navigation-dropdown />
+
+        {{ $slot }}
+
+        @livewireScripts
+    </body>
+</html>
