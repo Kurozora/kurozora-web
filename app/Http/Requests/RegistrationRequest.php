@@ -8,7 +8,7 @@ use App\Rules\ValidatePassword;
 use App\Rules\ValidateUsername;
 use Illuminate\Foundation\Http\FormRequest;
 
-class Registration extends FormRequest
+class RegistrationRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
