@@ -63,7 +63,7 @@
         window.onload = function() {
             // Begin Swagger UI call region
             const ui = SwaggerUIBundle({
-                url: '{{ $openapi_json_file  }}',
+                url: '{{ asset('openapi.json')  }}',
                 dom_id: '#swagger-ui',
                 deepLinking: true,
                 docExpansion: false,
