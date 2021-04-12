@@ -25,7 +25,7 @@ class AppThemeResource extends JsonResource
             'href'          => route('api.themes.details', $theme, false),
             'attributes'        => [
                 'name'          => $theme->name,
-                'screenshot'    => $theme->getFirstMediaFullUrl('screenshot'),
+                'screenshot'    => $theme->screenshot,
                 'downloadLink'  => route('api.themes.download', ['theme' => $theme->id])
             ]
         ];
