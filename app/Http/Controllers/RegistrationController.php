@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\NewUserRegisteredEvent;
 use App\Helpers\JSONResult;
-use App\Http\Requests\Registration;
+use App\Http\Requests\RegistrationRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
@@ -17,13 +17,13 @@ class RegistrationController extends Controller
     /**
      * Signup a new user
      *
-     * @param Registration $request
+     * @param RegistrationRequest $request
      * @return JsonResponse
      * @throws Throwable
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
-    public function signUp(Registration $request): JsonResponse
+    public function signUp(RegistrationRequest $request): JsonResponse
     {
         $data = $request->validated();
 
