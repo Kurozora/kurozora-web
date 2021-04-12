@@ -1,4 +1,5 @@
 <div>
+
     <style>
         .checkmark {
             border-radius: 50%;
@@ -70,7 +71,7 @@
 
     <div class="flex flex-col items-center mt-20">
         @svg('checkmark_circle', 'checkmark')
-        <p class="text-2xl font-bold mt-6">{{ __('Email Address Verified') }}</p>
-        <p>{{ $email . ' ' . __('has been verified.') }}</p>
+        <p class="text-2xl font-bold mt-6">{{ __('Your password has been reset.') }}</p>
+        <p>{{ __('We have sent you an email with your new password.') }}</p>
     </div>
 </div>

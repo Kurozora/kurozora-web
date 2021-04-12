@@ -9,17 +9,11 @@ use App\Http\Requests\SearchUserRequest;
 use App\Http\Resources\FeedMessageResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceBasic;
-use App\Jobs\SendNewPasswordMail;
 use App\Jobs\SendPasswordResetMail;
 use App\Models\PasswordReset;
-use App\Models\Session;
 use App\Models\User;
 use Carbon\Carbon;
-use Exception;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
 
 class UserController extends Controller
 {
@@ -101,57 +95,6 @@ class UserController extends Controller
 
         // Show successful response
         return JSONResult::success();
-    }
-
-    /**
-     * Password reset page
-     *
-     * @param string $token
-     *
-     * @return Application|Factory|View
-     * @throws Exception
-     */
-    public function resetPasswordPage(string $token)
-    {
-        // Try to find a reset with this reset token
-        /** @var PasswordReset $foundReset */
-        $foundReset = PasswordReset::where('token', $token)->first();
-
-        // No reset found
-        if(!$foundReset)
-            return view('website.password_reset_page', [
-                'success' => false,
-                'page' => [
-                    'no_index' => true
-                ]
-            ]);
-
-        $user = User::find($foundReset->user_id);
-
-        if($user) {
-            // Reset their password to a temporary one
-            $newPass = PasswordReset::genTempPassword();
-
-            $user->password = User::hashPass($newPass);
-            $user->save();
-
-            // Delete all their sessions
-            Session::where('user_id', $user->id)->delete();
-
-            // Dispatch job to send them the new password
-            SendNewPasswordMail::dispatch($user, $newPass);
-
-            // Delete the password reset
-            $foundReset->delete();
-        }
-
-        // Show successful response
-        return view('website.password_reset_page', [
-            'success' => true,
-            'page' => [
-                'no_index' => true
-            ]
-        ]);
     }
 
     /**
