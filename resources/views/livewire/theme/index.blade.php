@@ -1,4 +1,8 @@
 <div>
+    <x-slot name="title">
+        {{ __('Themes') }}
+    </x-slot>
+
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight self-center">
             {{ __('Themes') }}
