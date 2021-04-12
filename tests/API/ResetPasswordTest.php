@@ -21,9 +21,10 @@ class ResetPasswordTest extends TestCase
      */
     function password_reset_cannot_be_requested_with_an_invalid_email_address_format()
     {
-        $this->json('POST', '/api/v1/users/reset-password', [
+        $response = $this->json('POST', '/api/v1/users/reset-password', [
             'email' => 'not_an_email'
-        ])->assertUnsuccessfulAPIResponse();
+        ]);
+        $response->assertUnsuccessfulAPIResponse();
     }
 
     /**
@@ -34,9 +35,10 @@ class ResetPasswordTest extends TestCase
      */
     function password_request_can_be_requested_with_known_email_address()
     {
-        $this->json('POST', '/api/v1/users/reset-password', [
+        $response = $this->json('POST', '/api/v1/users/reset-password', [
             'email' => $this->user->email
-        ])->assertSuccessfulAPIResponse();
+        ]);
+        $response->assertSuccessfulAPIResponse();
     }
 
     /**
@@ -50,9 +52,10 @@ class ResetPasswordTest extends TestCase
         Mail::fake();
 
         // Attempt to request password reset
-        $this->json('POST', '/api/v1/users/reset-password', [
+        $response = $this->json('POST', '/api/v1/users/reset-password', [
             'email' => $this->user->email
-        ])->assertSuccessfulAPIResponse();
+        ]);
+        $response->assertSuccessfulAPIResponse();
 
         Mail::assertSent(ResetPassword::class, function ($mail) {
             return $mail->hasTo($this->user->email);
@@ -70,9 +73,10 @@ class ResetPasswordTest extends TestCase
      */
     function password_request_can_be_requested_with_unknown_email_address()
     {
-        $this->json('POST', '/api/v1/users/reset-password', [
+        $response = $this->json('POST', '/api/v1/users/reset-password', [
             'email' => 'unknown@example.com'
-        ])->assertSuccessfulAPIResponse();
+        ]);
+        $response->assertSuccessfulAPIResponse();
     }
 
     /**
@@ -86,9 +90,10 @@ class ResetPasswordTest extends TestCase
         Mail::fake();
 
         // Attempt to request password reset
-        $this->json('POST', '/api/v1/users/reset-password', [
+        $response = $this->json('POST', '/api/v1/users/reset-password', [
             'email' => 'unknown@example.com'
-        ])->assertSuccessfulAPIResponse();
+        ]);
+        $response->assertSuccessfulAPIResponse();
 
         Mail::assertNotSent(ResetPassword::class, function ($mail) {
             return $mail->hasTo($this->user->email);
@@ -160,7 +165,7 @@ class ResetPasswordTest extends TestCase
 
         // Check that the link is in the email
         $this->assertStringContainsString(
-            route('reset-password', ['token' => $passwordReset->token]),
+            route('password.reset', ['token' => $passwordReset->token]),
             $email->render()
         );
     }
