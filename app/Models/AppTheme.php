@@ -19,6 +19,15 @@ class AppTheme extends KModel implements HasMedia
     protected $table = self::TABLE_NAME;
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'screenshot'
+    ];
+
+    /**
      * Generates the plist string for the theme
      *
      * @return string
@@ -29,6 +38,16 @@ class AppTheme extends KModel implements HasMedia
         ]);
 
         return $view->render();
+    }
+
+    /**
+     * Returns the theme's screenshot.
+     *
+     * @return string
+     */
+    public function getScreenshotAttribute(): string
+    {
+        return $this->getFirstMediaFullUrl('screenshot');
     }
 
     /**
