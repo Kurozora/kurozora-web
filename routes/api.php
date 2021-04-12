@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\WebControllers\APIDocumentationController;
+use App\Http\Livewire\Misc\ApiIndex;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/v1')
     ->name('api')
     ->group(function () {
-        Route::get('/', [APIDocumentationController::class, 'render']);
+        Route::get('/', ApiIndex::class);
 
         Route::get('/info', [APIController::class, 'info']);
 
