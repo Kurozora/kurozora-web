@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\WebControllers\APIDocumentationController;
+use App\Http\Livewire\Misc\ApiIndex;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/v1')
-    ->name('api.')
+    ->name('api')
     ->group(function () {
-        Route::get('/', [APIDocumentationController::class, 'render']);
+        Route::get('/', ApiIndex::class);
 
         Route::get('/info', [APIController::class, 'info']);
 
         Route::get('/explore', [ExplorePageController::class, 'explore'])
             ->middleware('kurozora.userauth:optional')
-            ->name('explore');
+            ->name('.explore');
 
         require 'API/Actors.php';
         require 'API/Anime.php';

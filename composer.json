@@ -2,13 +2,14 @@
     "name": "musa11971/kurozora-web",
     "type": "project",
     "description": "Kurozora web application.",
-    "keywords": ["Kurozora", "anime", "manga", "character", "actor", "studio", "hentai", "song", "track", "watch"],
+    "keywords": ["kurozora", "anime", "manga", "character", "actor", "studio", "hentai", "song", "track", "watch"],
     "require": {
         "php": "^8.0",
         "ext-json": "*",
         "ext-simplexml": "*",
         "anaseqal/nova-sidebar-icons": "^0.0",
         "bensampo/laravel-enum": "^3.0",
+        "blade-ui-kit/blade-icons": "^1.0",
         "chaseconey/nova-external-image": "^0.3",
         "codercat/jwk-to-pem": "^1.0",
         "cybercog/laravel-love": "^8.0",
@@ -23,6 +24,7 @@
         "laravel/framework": "^8.0",
         "laravel/nova": "*",
         "laravel/tinker": "^2.6",
+        "livewire/livewire": "^2.4",
         "musa11971/laravel-sort-request": "dev-php-7.4-and-8.0-support",
         "musa11971/php-jwt-decoder": "dev-php-7.4-and-8.0-support",
         "nicolaslopezj/searchable": "1.*",
@@ -31,7 +33,7 @@
         "spatie/laravel-activitylog": "^3.9",
         "spatie/laravel-medialibrary": "^9.0",
         "spatie/laravel-permission": "^4.0",
-        "spatie/laravel-sluggable": "^2.5",
+        "spatie/laravel-sluggable": "^3.0",
         "staudenmeir/eloquent-has-many-deep": "^1.11",
         "timothyasp/nova-color-field": "^1.0",
         "vyuldashev/nova-permission": "^2.5"
@@ -66,6 +68,9 @@
         }
     ],
     "autoload": {
+        "files": [
+            "app/Helpers/CustomHelpers.php"
+        ],
         "psr-4": {
             "App\\": "app/",
             "App\\Helpers\\": "app/Helpers/",

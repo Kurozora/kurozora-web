@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/me')
-    ->name('me.')
+    ->name('.me')
     ->group(function() {
         Route::get('/', [MeController::class, 'me'])
             ->middleware('kurozora.userauth');

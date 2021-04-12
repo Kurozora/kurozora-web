@@ -6,7 +6,7 @@ use App\Http\Controllers\Auth\SignInWithAppleController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/users')
-    ->name('users.')
+    ->name('.users')
     ->group(function() {
         Route::post('/', [RegistrationController::class, 'signUp']);
 
@@ -35,7 +35,7 @@ Route::prefix('/users')
 
         Route::get('/{user}/profile', [UserController::class, 'profile'])
             ->middleware('kurozora.userauth:optional')
-            ->name('profile');
+            ->name('.profile');
 
         Route::get('/search', [UserController::class, 'search'])
             ->middleware('kurozora.userauth:optional');

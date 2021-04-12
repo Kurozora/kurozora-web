@@ -1,14 +1,14 @@
 <?php
 
-use App\Http\Controllers\WebControllers\ThemeController;
+use App\Http\Livewire\Theme\Index as ThemeIndex;
+use App\Http\Livewire\Theme\CreateThemeForm;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/themes')
-    ->name('themes.')
+    ->name('themes')
     ->group(function () {
-        Route::get('/', [ThemeController::class, 'index'])
-        ->name('index');
+        Route::get('/', ThemeIndex::class);
 
-        Route::get('/create', [ThemeController::class, 'create'])
-        ->name('create');
+        Route::get('/create', CreateThemeForm::class)
+            ->name('.create');
     });
