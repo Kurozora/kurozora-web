@@ -34,11 +34,12 @@ class AuthenticatedSessionController extends Controller
     public function store(SignInRequest $request): RedirectResponse
     {
         $credentials = $request->only('email', 'password');
+        $rememberMe = $request->has('remember');
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $rememberMe)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('/');
+            return redirect()->intended();
         }
 
         return back()->withErrors([
@@ -54,6 +55,8 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): Application|Redirector|RedirectResponse
     {
+        Auth::logout();
+
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
