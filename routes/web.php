@@ -1,19 +1,20 @@
 <?php
 
-use App\Http\Controllers\UserController;
 use App\Http\Livewire\Email\Verification;
 use App\Http\Livewire\Home;
+use App\Http\Livewire\Misc\ResetPassword;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', Home::class)
     ->name('home');
 
 // Verify email
-Route::get('/verification/{verificationID}', Verification::class);
+Route::get('/verify/{verificationID}', Verification::class)
+    ->name('email.verify');
 
 // Reset password
-Route::get('/reset/{token}', [UserController::class, 'resetPasswordPage'])
-    ->name('reset-password');
+Route::get('/reset-password/{token}', ResetPassword::class)
+    ->name('password.reset');
 
 // Landing pages
 require 'Web/Anime.php';
