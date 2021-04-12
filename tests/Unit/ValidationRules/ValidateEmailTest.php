@@ -18,17 +18,17 @@ class ValidateEmailTest extends TestCase
      *
      * @var Collection $validEmailAddresses
      */
-    private $validEmailAddresses;
+    private Collection $validEmailAddresses;
 
     /**
      * A collection of email addresses that are invalid.
      *
      * @var Collection $invalidEmailAddresses
      */
-    private $invalidEmailAddresses;
+    private Collection $invalidEmailAddresses;
 
     /** @var ValidateEmail $rule */
-    private $rule;
+    private ValidateEmail $rule;
 
     public function setUp(): void
     {
@@ -65,15 +65,17 @@ class ValidateEmailTest extends TestCase
     /** @test */
     function valid_email_addresses_pass()
     {
-        foreach($this->validEmailAddresses as $email)
+        foreach($this->validEmailAddresses as $email) {
             $this->assertTrue($this->rule->passes('email', $email), "$email did not pass, while it should have!");
+        }
     }
 
     /** @test */
     function invalid_email_addresses_dont_pass()
     {
-        foreach($this->invalidEmailAddresses as $email)
+        foreach($this->invalidEmailAddresses as $email) {
             $this->assertFalse($this->rule->passes('email', $email), "$email passed, while it should not have!");
+        }
     }
 
     /** @test */
