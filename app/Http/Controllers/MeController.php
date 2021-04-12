@@ -122,8 +122,8 @@ class MeController extends Controller
         return JSONResult::success([
             'data'      => [
                 'biography'         => $user->biography,
-                'profileImageURL'   => $user->getFirstMediaFullUrl('avatar'),
-                'bannerImageURL'    => $user->getFirstMediaFullUrl('banner')
+                'profileImageURL'   => $user->profile_image,
+                'bannerImageURL'    => $user->banner_image
             ],
             'message'   => $displayMessage,
         ]);

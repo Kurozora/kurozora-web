@@ -99,6 +99,16 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'profile_image',
+        'banner_image'
+    ];
+
+    /**
      * Searchable rules.
      *
      * @var array
@@ -156,6 +166,27 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
 
         $this->addMediaCollection('banner')
             ->singleFile();
+    }
+
+    /**
+     * Returns the profile image of the user if the user has one, otherwise a placeholder image is returned.
+     *
+     * @return string
+     */
+    function getProfileImageAttribute(): string
+    {
+        $profileImageUrl = $this->getFirstMediaFullUrl('avatar');
+        return empty($profileImageUrl) ? asset('images/static/placeholders/user_profile.png') : $profileImageUrl;
+    }
+
+    /**
+     * Returns the banner image of the user if the user has one, otherwise a placeholder image is returned.
+     *
+     * @return string
+     */
+    function getBannerImageAttribute(): string
+    {
+        return $this->getFirstMediaFullUrl('banner');
     }
 
     /**

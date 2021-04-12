@@ -38,10 +38,9 @@ class Details extends Component
     public function mount(User $user)
     {
         $this->user = $user;
-        $avatar = $user->getFirstMediaUrl('avatar');
 
         $this->page['title'] = $user->username . ' on Kurozora';
-        $this->page['image'] = !empty($avatar) ? $avatar : asset('images/static/placeholders/user_profile.jpg');
+        $this->page['image'] = $user->profile_image;
     }
 
     /**
