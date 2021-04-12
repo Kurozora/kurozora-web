@@ -10,7 +10,7 @@ use Illuminate\Support\ServiceProvider;
 class AppServiceProvider extends ServiceProvider
 {
     // The global query count is logged to this config key
-    public static $queryCountConfigKey = 'kurozora.query_count';
+    public static string $queryCountConfigKey = 'kurozora.query_count';
 
     /**
      * Bootstrap any application services.
