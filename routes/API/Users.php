@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
-
 use App\Http\Controllers\Auth\SignInWithAppleController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FavoriteAnimeController;
+use App\Http\Controllers\FollowingController;
+use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\SessionController;
+use App\Http\Controllers\UserController;
 
 Route::prefix('/users')
     ->name('.users')

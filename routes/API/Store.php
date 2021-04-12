@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
-
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StoreController;
 
 Route::prefix('/store')
     ->name('.store')

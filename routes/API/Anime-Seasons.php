@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
-
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AnimeSeasonController;
 
 Route::prefix('/anime-seasons')
     ->name('.seasons')
