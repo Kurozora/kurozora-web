@@ -6,6 +6,7 @@ use App\Helpers\OptionsBag;
 use App\Models\User;
 use Illuminate\Contracts\Validation\Rule;
 use InvalidArgumentException;
+use Validator;
 
 class ValidateEmail implements Rule
 {
@@ -13,10 +14,10 @@ class ValidateEmail implements Rule
     const MAXIMUM_EMAIL_LENGTH = 255;
 
     /** @var OptionsBag $options */
-    protected $options;
+    protected OptionsBag $options;
 
     /** @var string $error */
-    protected $error = 'The :attribute is invalid';
+    protected string $error = 'The :attribute is invalid';
 
     /**
      * Available options:
@@ -38,41 +39,33 @@ class ValidateEmail implements Rule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed $value
      * @return bool
      */
     public function passes($attribute, $value): bool
     {
-        // Empty string does not pass
-        if(!is_string($value) || !strlen($value))
-            return $this->fail(trans('validation.min', ['min' => self::MINIMUM_EMAIL_LENGTH]));
+        $availabilityRule = '';
+        $validationRules = ['required', 'min:'.self::MINIMUM_EMAIL_LENGTH, 'max:'.self::MAXIMUM_EMAIL_LENGTH, 'email:filter'];
 
-        // Check minimum length
-        if(strlen($value) < self::MINIMUM_EMAIL_LENGTH)
-            return $this->fail(trans('validation.min', ['min' => self::MINIMUM_EMAIL_LENGTH]));
-
-        // Check maximum length
-        if(strlen($value) > self::MAXIMUM_EMAIL_LENGTH)
-            return $this->fail(trans('validation.max', ['max' => self::MINIMUM_EMAIL_LENGTH]));
-
-        // Check if valid email format
-        if(!filter_var($value, FILTER_VALIDATE_EMAIL))
-            return $this->fail(trans('validation.email'));
-
-        // (option) The email must be taken
         if($this->options->get('must-be-taken', false) === true) {
-            if (!User::where('email', $value)->exists())
-                return $this->fail(trans('validation.exists'));
+            $availabilityRule = 'exists:' . User::TABLE_NAME . ',email';
         }
 
-        // (option) The email must be available
         if($this->options->get('must-be-available', false) === true) {
-            if (User::where('email', $value)->exists())
-                return $this->fail(trans('validation.unique'));
+            $availabilityRule = 'unique:' . User::TABLE_NAME . ',email';
         }
 
-        return true;
+        if(!empty($availabilityRule)) {
+            array_push($validationRules, $availabilityRule);
+        }
+
+        $validator = Validator::make([$attribute => $value], [
+            $attribute => $validationRules
+        ]);
+
+        $this->error = $validator->errors()->first();
+        return $validator->passes();
     }
 
     /**
@@ -83,17 +76,5 @@ class ValidateEmail implements Rule
     public function message(): string
     {
         return $this->error;
-    }
-
-    /**
-     * Fails the validator and sets the error.
-     *
-     * @param string $error
-     * @return bool
-     */
-    private function fail($error): bool
-    {
-        $this->error = $error;
-        return false;
     }
 }
