@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Route;
 Route::get(RouteServiceProvider::HOME, Home::class)
     ->name('home');
 
+// Authentication routes
+require 'Web/Authentication.php';
+
 // Verify email
 Route::get('/verify/{verificationID}', Verification::class)
     ->name('email.verify');
@@ -16,6 +19,7 @@ Route::get('/verify/{verificationID}', Verification::class)
 // Reset password
 Route::get('/reset-password/{token}', ResetPassword::class)
     ->name('password.reset');
+
 
 // Landing pages
 require 'Web/Anime.php';
