@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Web;
 
+use App\Rules\ValidateEmail;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SignInRequest extends FormRequest
@@ -24,7 +25,7 @@ class SignInRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email'     => ['required', 'email'],
+            'email'     => ['required', new ValidateEmail()],
             'password'  => ['required', 'string'],
         ];
     }
