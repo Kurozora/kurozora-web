@@ -44,17 +44,17 @@ class FetchAnimeImages extends Command
 //        $anime = Anime::find($animeID);
 //
 //        // Specified Anime does not exists
-//        if($anime == null) {
+//        if ($anime == null) {
 //            $this->error('The Anime was not found.');
 //            return 0;
 //        }
 //
-//        if($anime->tvdb_id === null) {
+//        if ($anime->tvdb_id === null) {
 //            $this->error('The Anime does not have a connected TVDB ID.');
 //            return 0;
 //        }
 //
-//        if($anime->fetched_images) {
+//        if ($anime->fetched_images) {
 //            $this->error('The images were already fetched for this Anime.');
 //            return 0;
 //        }
@@ -73,7 +73,7 @@ class FetchAnimeImages extends Command
 //            $this->info('[Posters not found]');
 //        }
 //
-//        if(isset($posterData) && count($posterData)) {
+//        if (isset($posterData) && count($posterData)) {
 //            $anime->cached_poster = $posterData[0]['image'];
 //            $anime->cached_poster_thumbnail = $posterData[0]['image_thumb'];
 //        }
@@ -94,7 +94,7 @@ class FetchAnimeImages extends Command
 //            $this->info('[Backgrounds not found]');
 //        }
 //
-//        if(isset($backgroundData) && count($backgroundData)) {
+//        if (isset($backgroundData) && count($backgroundData)) {
 //            $anime->cached_background = $backgroundData[0]['image'];
 //            $anime->cached_background_thumbnail = $backgroundData[0]['image_thumb'];
 //        }

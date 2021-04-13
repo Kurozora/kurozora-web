@@ -25,7 +25,7 @@ class AnimeEpisodeResource extends JsonResource
         $animeEpisode = $this->resource;
 
         $firstAired = $animeEpisode->first_aired;
-        if($firstAired)
+        if ($firstAired)
             $firstAired = $firstAired->format('j M, Y');
 
         $resource = [
@@ -43,7 +43,7 @@ class AnimeEpisodeResource extends JsonResource
             ]
         ];
 
-        if(Auth::check())
+        if (Auth::check())
             $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
 
         return $resource;
@@ -69,7 +69,7 @@ class AnimeEpisodeResource extends JsonResource
         $anime = $season->anime()->first();
 
         $watchStatus = WatchStatus::Disabled();
-        if($user->isTracking($anime))
+        if ($user->isTracking($anime))
             $watchStatus = WatchStatus::fromBool($user->watchedAnimeEpisodes()->where('episode_id', $animeEpisode->id)->exists());
 
         // Return the array

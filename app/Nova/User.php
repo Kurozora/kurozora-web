@@ -224,7 +224,7 @@ class User extends Resource
         $roles = $user->getRoleNames();
 
         // Return null when there are no roles to properly render an "empty" cell
-        if($roles->isEmpty()) return null;
+        if ($roles->isEmpty()) return null;
 
         // Join all roles together and create the string
         $roleString = '';

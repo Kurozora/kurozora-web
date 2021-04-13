@@ -17,7 +17,7 @@
                     resourceName: '{{ $resource::uriKey() }}'
                 }
             }" class="flex items-center font-normal text-white mb-4 text-base no-underline dim">
-                @if(property_exists($resource, 'icon'))
+                @if (property_exists($resource, 'icon'))
                     {!! $resource::$icon !!}
                 @else
                 <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -41,7 +41,7 @@
                     resourceName: '{{ $resource::uriKey() }}'
                 }
             }" class="flex items-center font-normal text-white mb-6 text-base no-underline dim">
-                @if(property_exists($resource, 'icon'))
+                @if (property_exists($resource, 'icon'))
                     {!! $resource::$icon !!}
                 @else
                 <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

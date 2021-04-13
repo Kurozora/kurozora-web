@@ -21,19 +21,19 @@ class ValidateThreadTitle implements Rule
     public function passes($attribute, $value): bool
     {
         // Empty string does not pass
-        if(!is_string($value) || !strlen($value)) {
+        if (!is_string($value) || !strlen($value)) {
             $this->errorType = 'length';
             return false;
         }
 
         // Check minimum length
-        if(strlen($value) < self::MINIMUM_THREAD_TITLE_LENGTH) {
+        if (strlen($value) < self::MINIMUM_THREAD_TITLE_LENGTH) {
             $this->errorType = 'length';
             return false;
         }
 
         // Check maximum length
-        if(strlen($value) > self::MAXIMUM_THREAD_TITLE_LENGTH) {
+        if (strlen($value) > self::MAXIMUM_THREAD_TITLE_LENGTH) {
             $this->errorType = 'length';
             return false;
         }
@@ -48,7 +48,7 @@ class ValidateThreadTitle implements Rule
      */
     public function message(): string
     {
-        if($this->errorType == 'length')
+        if ($this->errorType == 'length')
             return trans('validation.between.string', ['min' => self::MINIMUM_THREAD_TITLE_LENGTH, 'max' => self::MAXIMUM_THREAD_TITLE_LENGTH]);
 
         return 'The :attribute is invalid.';

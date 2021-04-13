@@ -66,8 +66,8 @@ class MeController extends Controller
         $changedFields = [];
 
         // Update username
-        if($request->has('username')) {
-            if(!$user->username_change_available)
+        if ($request->has('username')) {
+            if (!$user->username_change_available)
                 throw new AuthorizationException('The request wasn’t accepted due to not being allowed to change the username.');
 
             $user->username = $data['username'];
@@ -75,17 +75,17 @@ class MeController extends Controller
         }
 
         // Update biography
-        if($request->has('biography')) {
+        if ($request->has('biography')) {
             $user->biography = $data['biography'];
             $changedFields[] = 'biography';
         }
 
         // Update avatar
-        if($request->has('profileImage')) {
+        if ($request->has('profileImage')) {
             // Remove previous avatar
             $user->clearMediaCollection('avatar');
 
-            if($data['profileImage'] != null) {
+            if ($data['profileImage'] != null) {
                 // Upload a new avatar, if one was uploaded
                 if ($request->hasFile('profileImage') && $request->file('profileImage')->isValid()) {
                     $user->addMediaFromRequest('profileImage')->toMediaCollection('avatar');
@@ -96,11 +96,11 @@ class MeController extends Controller
         }
 
         // Update banner
-        if($request->has('bannerImage')) {
+        if ($request->has('bannerImage')) {
             // Remove previous banner
             $user->clearMediaCollection('banner');
 
-            if($data['bannerImage'] != null) {
+            if ($data['bannerImage'] != null) {
                 // Save the uploaded banner, if one was uploaded
                 if ($request->hasFile('bannerImage') && $request->file('bannerImage')->isValid()) {
                     $user->addMediaFromRequest('bannerImage')->toMediaCollection('banner');
@@ -113,7 +113,7 @@ class MeController extends Controller
         // Successful response
         $displayMessage = 'Your settings were saved. ';
 
-        if(count($changedFields)) {
+        if (count($changedFields)) {
             $displayMessage .= 'You have updated your ' . join(', ', $changedFields) . '.';
             $user->save();
         }

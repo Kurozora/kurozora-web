@@ -79,12 +79,12 @@ class NotificationController extends Controller
         // User wants to update all of their notifications
         $notificationQuery = $request->user()->notifications();
 
-        if($targetedNotification != 'all') {
+        if ($targetedNotification != 'all') {
             // Explode the string. This leaves an array of IDs
             $notificationIDs = explode(',', $targetedNotification);
 
             // Make sure there are items in the array
-            if(!count($notificationIDs))
+            if (!count($notificationIDs))
                 throw new ConflictHttpException('No notifications were specified.');
 
             // Make sure the notifications belong to the currently authenticated user

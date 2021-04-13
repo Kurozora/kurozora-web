@@ -29,7 +29,7 @@ class ValidateEmail implements Rule
     function __construct($options = [])
     {
         // The `must-be-taken` and `must-be-available` options cannot be used simultaneously
-        if(isset($options['must-be-taken']) && isset($options['must-be-available']))
+        if (isset($options['must-be-taken']) && isset($options['must-be-available']))
             throw new InvalidArgumentException('The `must-be-taken` and `must-be-available` options cannot be used simultaneously.');
 
         // Set the options
@@ -48,15 +48,15 @@ class ValidateEmail implements Rule
         $availabilityRule = '';
         $validationRules = ['required', 'min:'.self::MINIMUM_EMAIL_LENGTH, 'max:'.self::MAXIMUM_EMAIL_LENGTH, 'email:filter'];
 
-        if($this->options->get('must-be-taken', false) === true) {
+        if ($this->options->get('must-be-taken', false) === true) {
             $availabilityRule = 'exists:' . User::TABLE_NAME . ',email';
         }
 
-        if($this->options->get('must-be-available', false) === true) {
+        if ($this->options->get('must-be-available', false) === true) {
             $availabilityRule = 'unique:' . User::TABLE_NAME . ',email';
         }
 
-        if(!empty($availabilityRule)) {
+        if (!empty($availabilityRule)) {
             array_push($validationRules, $availabilityRule);
         }
 

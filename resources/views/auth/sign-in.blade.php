@@ -16,7 +16,7 @@
 
     <x-validation-errors class="mb-4" />
 
-    @if(session('status'))
+    @if (session('status'))
         <div class="mb-4 font-medium text-sm text-green-600">
             {{ session('status') }}
         </div>
@@ -43,7 +43,7 @@
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            @if(Route::has('password.request'))
+            @if (Route::has('password.request'))
                 <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
                     {{ __('Forgot your password? Let\'s reset it 📧') }}
                 </a>

@@ -153,7 +153,7 @@ class Character extends Resource
     {
         $characterName = $this->name;
 
-        if(!is_string($characterName) || !strlen($characterName))
+        if (!is_string($characterName) || !strlen($characterName))
             $characterName = 'No character title';
 
         return $characterName . ' (ID: ' . $this->id . ')';

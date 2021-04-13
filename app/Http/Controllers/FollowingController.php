@@ -26,7 +26,7 @@ class FollowingController extends Controller
 
         $isAlreadyFollowing = $user->followers()->where('user_id', $authUser->id)->exists();
 
-        if($isAlreadyFollowing) {
+        if ($isAlreadyFollowing) {
             // Delete follow
             $user->followers()->detach($authUser);
         } else {

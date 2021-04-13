@@ -245,7 +245,7 @@ class NotificationTest extends TestCase
         $notificationIDs = '';
 
         foreach($notifications as $notification) {
-            if(strlen($notificationIDs)) $notificationIDs .= ',';
+            if (strlen($notificationIDs)) $notificationIDs .= ',';
             $notificationIDs .= $notification->id;
         }
 
@@ -289,7 +289,7 @@ class NotificationTest extends TestCase
         $notificationIDs = '';
 
         foreach($notifications as $notification) {
-            if(strlen($notificationIDs)) $notificationIDs .= ',';
+            if (strlen($notificationIDs)) $notificationIDs .= ',';
             $notificationIDs .= $notification->id;
         }
 
@@ -330,7 +330,7 @@ class NotificationTest extends TestCase
         $notificationIDs = '';
 
         foreach($notifications as $notification) {
-            if(strlen($notificationIDs)) $notificationIDs .= ',';
+            if (strlen($notificationIDs)) $notificationIDs .= ',';
             $notificationIDs .= $notification->id;
         }
 
@@ -380,7 +380,7 @@ class NotificationTest extends TestCase
         $notificationIDs = '';
 
         foreach($notifications as $notification) {
-            if(strlen($notificationIDs)) $notificationIDs .= ',';
+            if (strlen($notificationIDs)) $notificationIDs .= ',';
             $notificationIDs .= $notification->id;
         }
 

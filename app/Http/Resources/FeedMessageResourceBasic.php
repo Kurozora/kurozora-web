@@ -50,7 +50,7 @@ class FeedMessageResourceBasic extends JsonResource
         $relationships = [];
         $relationships = array_merge($relationships, $this->getUserDetails());
 
-        if(Auth::check())
+        if (Auth::check())
             $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
 
         return array_merge($resource, ['relationships' => $relationships]);

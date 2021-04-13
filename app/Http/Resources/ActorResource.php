@@ -21,7 +21,7 @@ class ActorResource extends JsonResource
 
         $resource = ActorResourceBasic::make($actor)->toArray($request);
 
-        if($request->input('include')) {
+        if ($request->input('include')) {
             $includes = array_unique(explode(',', $request->input('include')));
 
             $relationships = [];

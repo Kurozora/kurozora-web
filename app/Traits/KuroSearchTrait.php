@@ -21,7 +21,7 @@ trait KuroSearchTrait {
         // Find the item by ID if the search query is an ID
         preg_match('/^id:\s*([0-9]+?)$/i', $query, $idMatches);
 
-        if(isset($idMatches[1])) {
+        if (isset($idMatches[1])) {
             $foundEntity = self::find($idMatches[1]);
 
             return [$foundEntity];

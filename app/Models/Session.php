@@ -57,7 +57,7 @@ class Session extends KModel
      */
     function humanReadablePlatform(): string
     {
-        if($this->device_model == null ||
+        if ($this->device_model == null ||
             $this->platform == null ||
             $this->platform_version == null)
             return 'Unknown platform';

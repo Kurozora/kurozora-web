@@ -31,7 +31,7 @@ class SessionController extends Controller
         $data = $request->validated();
 
         // Check if the request IP is not banned from logging in
-        if(!LoginAttempt::isIPAllowedToLogin($request->ip()))
+        if (!LoginAttempt::isIPAllowedToLogin($request->ip()))
             throw new TooManyRequestsHttpException(300, 'You have failed to login too many times. Please grab yourself a snack and try again in a bit.');
 
         // Find the user
@@ -39,7 +39,7 @@ class SessionController extends Controller
         $user = User::where('email', $data['email'])->first();
 
         // Compare the passwords
-        if(!User::checkPassHash($data['password'], $user->password)) {
+        if (!User::checkPassHash($data['password'], $user->password)) {
             // Register the login attempt
             LoginAttempt::registerFailedLoginAttempt($request->ip());
 
@@ -48,7 +48,7 @@ class SessionController extends Controller
         }
 
         // Check if email is confirmed
-        if(!$user->hasConfirmedEmail())
+        if (!$user->hasConfirmedEmail())
             throw new AuthenticationException('You have not confirmed your email address yet. Please check your email inbox or spam folder.');
 
         // Create a new session
@@ -82,7 +82,7 @@ class SessionController extends Controller
         $changedFields = [];
 
         // Update APN device token
-        if($request->has('apn_device_token')) {
+        if ($request->has('apn_device_token')) {
             $session->apn_device_token = $data['apn_device_token'];
             $changedFields[] = 'APN device token';
         }
@@ -90,7 +90,7 @@ class SessionController extends Controller
         // Successful response
         $displayMessage = 'Session update successful. ';
 
-        if(count($changedFields)) {
+        if (count($changedFields)) {
             $displayMessage .= 'You have updated: ' . join(', ', $changedFields) . '.';
             $session->save();
         }

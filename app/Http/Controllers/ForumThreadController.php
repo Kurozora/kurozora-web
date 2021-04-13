@@ -76,18 +76,18 @@ class ForumThreadController extends Controller
         // Check if the user is banned
         $foundBan = ForumSectionBan::getBanInfo(Auth::id(), $thread->section_id);
 
-        if($foundBan !== null)
+        if ($foundBan !== null)
             throw new AuthorizationException($foundBan['message']);
 
         // Get variables
         $givenContent = $request->input('content');
 
         // Check if the thread is not locked
-        if($thread->locked)
+        if ($thread->locked)
             throw new ConflictHttpException('You are not allowed to post in a locked thread.');
 
         // Check if the user has already posted within the cooldown period
-        if(ForumReply::testPostCooldown(Auth::id()))
+        if (ForumReply::testPostCooldown(Auth::id()))
             throw new TooManyRequestsHttpException(ForumReply::COOLDOWN_POST_REPLY,'You can only post a reply once every ' . ForumReply::COOLDOWN_POST_REPLY . ' seconds.');
 
         // Create the reply
@@ -192,7 +192,7 @@ class ForumThreadController extends Controller
         $doLock = (bool) $request->input('lock');
 
         // If the action is different that the current lock state
-        if($thread->locked != $doLock) {
+        if ($thread->locked != $doLock) {
             $thread->locked = $doLock;
             $thread->save();
         }

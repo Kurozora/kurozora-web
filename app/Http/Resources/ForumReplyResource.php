@@ -46,7 +46,7 @@ class ForumReplyResource extends JsonResource
         $relationships = array_merge($relationships, $this->getPosterRelationship());
         $resource = array_merge($resource, ['relationships' => $relationships]);
 
-        if(Auth::check())
+        if (Auth::check())
             $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
 
         return $resource;

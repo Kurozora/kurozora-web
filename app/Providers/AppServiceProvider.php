@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
         DB::listen(function ($query) {
             $currentConfigValue = Config::get(self::$queryCountConfigKey);
 
-            if($currentConfigValue == null) {
+            if ($currentConfigValue == null) {
                 Config::set(self::$queryCountConfigKey, 1);
             }
             else Config::set(self::$queryCountConfigKey, $currentConfigValue + 1);

@@ -35,7 +35,7 @@ class RegistrationController extends Controller
             'email_confirmation_id' => Str::random(50)
         ]);
 
-        if( $request->hasFile('profileImage') &&
+        if ( $request->hasFile('profileImage') &&
             $request->file('profileImage')->isValid()
         ) {
             // Save the uploaded avatar

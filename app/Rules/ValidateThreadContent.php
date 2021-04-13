@@ -20,13 +20,13 @@ class ValidateThreadContent implements Rule
     public function passes($attribute, $value): bool
     {
         // Empty string does not pass
-        if(!is_string($value) || !strlen($value)) {
+        if (!is_string($value) || !strlen($value)) {
             $this->errorType = 'short';
             return false;
         }
 
         // Check minimum length
-        if(strlen($value) < self::MINIMUM_THREAD_CONTENT_LENGTH) {
+        if (strlen($value) < self::MINIMUM_THREAD_CONTENT_LENGTH) {
             $this->errorType = 'short';
             return false;
         }
@@ -41,7 +41,7 @@ class ValidateThreadContent implements Rule
      */
     public function message(): string
     {
-        if($this->errorType == 'short')
+        if ($this->errorType == 'short')
             return trans('validation.lt.string', ['value' => self::MINIMUM_THREAD_CONTENT_LENGTH]);
 
         return 'The :attribute is invalid.';
