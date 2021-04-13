@@ -22,14 +22,16 @@ class UserSeeder extends Seeder
             'username'              => 'Usopp',
             'email'                 => 'mussesemou99@gmail.com',
             'password'              => '$2y$10$LFvuPaQpn6kccakk4sRABef223GV0.NJUJ94Xr.TAvswkCKJBisVK',
-            'email_confirmation_id' => null
+            'email_verified_at'     => now(),
+            'email_confirmation_id' => null,
         ]);
 
         $admins[] = User::create([
             'username'              => 'Kirito',
             'email'                 => 'casillaskhoren1@gmail.com',
             'password'              => '$2y$10$LFvuPaQpn6kccakk4sRABef223GV0.NJUJ94Xr.TAvswkCKJBisVK',
-            'email_confirmation_id' => null
+            'email_verified_at'     => now(),
+            'email_confirmation_id' => null,
         ]);
 
         foreach($admins as $admin) {
@@ -45,7 +47,7 @@ class UserSeeder extends Seeder
             'username'              => 'JohnAppleseed',
             'email'                 => 'john.appleseed@apple.com',
             'password'              => '$2y$10$/aVrkVAq4LT6FEEw3dNwguaM77MzoHB4.IpVoVxLLEKI4jyHuITii',
-            'email_confirmation_id' => null
+            'email_verified_at'     => now(),
         ]);
 
         // 50 fake users
