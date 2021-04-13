@@ -3,30 +3,51 @@
 namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Support\Str;
 
 class ValidatePassword implements Rule
 {
-    const MINIMUM_PASSWORD_LENGTH = 5;
-    const MAXIMUM_PASSWORD_LENGTH = 255;
-
-    protected $errorType;
+    /**
+     * The minimum length of the password.
+     *
+     * @var int $minLength
+     */
+    protected int $minLength = 5;
 
     /**
-     * Whether or not it is required
+     * The maximum length of the password.
      *
-     * @var bool
+     * @var int $maxLength
      */
-    protected $required;
+    protected int $maxLength = 255;
 
     /**
-     * ValidatePassword constructor.
+     * Indicates if the password must contain one uppercase character.
      *
-     * @param bool $required
+     * @var bool $requireUppercase
      */
-    function __construct($required = true)
-    {
-        $this->required = $required;
-    }
+    protected bool $requireUppercase = true;
+
+    /**
+     * Indicates if the password must contain one numeric digit.
+     *
+     * @var bool $requireNumeric
+     */
+    protected bool $requireNumeric = true;
+
+    /**
+     * Indicates if the password must contain one special character.
+     *
+     * @var bool $requireSpecialCharacter
+     */
+    protected bool $requireSpecialCharacter = true;
+
+    /**
+     * The message that should be used when validation fails.
+     *
+     * @var string $message
+     */
+    protected string $message = '';
 
     /**
      * Determine if the validation rule passes.
@@ -37,27 +58,21 @@ class ValidatePassword implements Rule
      */
     public function passes($attribute, $value): bool
     {
-        // Empty string does not pass
-        if(!is_string($value) || !strlen($value)) {
-            $this->errorType = 'length';
+        $stringLength = Str::length($value);
 
-            if($this->required) return false;
-            else return true;
-        }
-
-        // Check minimum length
-        if(strlen($value) < self::MINIMUM_PASSWORD_LENGTH) {
-            $this->errorType = 'length';
+        if ($this->requireUppercase && Str::lower($value) === $value) {
             return false;
         }
 
-        // Check maximum length
-        if(strlen($value) > self::MAXIMUM_PASSWORD_LENGTH) {
-            $this->errorType = 'length';
+        if ($this->requireNumeric && !preg_match('/[0-9]/', $value)) {
             return false;
         }
 
-        return true;
+        if ($this->requireSpecialCharacter && !preg_match('/[\W_]/', $value)) {
+            return false;
+        }
+
+        return $stringLength >= $this->minLength && $stringLength <= $this->maxLength;
     }
 
     /**
@@ -67,9 +82,123 @@ class ValidatePassword implements Rule
      */
     public function message(): string
     {
-        if($this->errorType == 'length')
-            return trans('validation.between.string', ['min' => self::MINIMUM_PASSWORD_LENGTH, 'max' => self::MAXIMUM_PASSWORD_LENGTH]);
+        if ($this->message) {
+            return $this->message;
+        }
 
-        return 'The password is invalid.';
+        return match (true) {
+            $this->requireUppercase
+            && !$this->requireNumeric
+            && !$this->requireSpecialCharacter => __('The :attribute must be at least :minLength and at most :maxLength characters and contain at least one uppercase character.', [
+                'minLength' => $this->minLength,
+                'maxLength' => $this->maxLength
+            ]),
+            $this->requireNumeric
+            && !$this->requireUppercase
+            && !$this->requireSpecialCharacter => __('The :attribute must be at least :minLength and at most :maxLength characters and contain at least one number.', [
+                'minLength' => $this->minLength,
+                'maxLength' => $this->maxLength
+            ]),
+            $this->requireSpecialCharacter
+            && !$this->requireUppercase
+            && !$this->requireNumeric => __('The :attribute must be at least :minLength and at most :maxLength characters and contain at least one special character.', [
+                'minLength' => $this->minLength,
+                'maxLength' => $this->maxLength
+            ]),
+            $this->requireUppercase
+            && $this->requireNumeric
+            && !$this->requireSpecialCharacter => __('The :attribute must be at least :minLength and at most :maxLength characters and contain at least one uppercase character and one number.', [
+                'minLength' => $this->minLength,
+                'maxLength' => $this->maxLength
+            ]),
+            $this->requireUppercase
+            && $this->requireSpecialCharacter
+            && !$this->requireNumeric => __('The :attribute must be at least :minLength and at most :maxLength characters and contain at least one uppercase character and one special character.', [
+                'minLength' => $this->minLength,
+                'maxLength' => $this->maxLength
+            ]),
+            $this->requireUppercase
+            && $this->requireNumeric
+            && $this->requireSpecialCharacter => __('The :attribute must be at least :minLength and at most :maxLength characters and contain at least one uppercase character, one number, and one special character.', [
+                'minLength' => $this->minLength,
+                'maxLength' => $this->maxLength
+            ]),
+            default => __('The :attribute must be at least :minLength and at most :maxLength characters.', [
+                'minLength' => $this->minLength,
+                'maxLength' => $this->maxLength
+            ]),
+        };
+    }
+
+    /**
+     * Set the minimum length of the password.
+     *
+     * @param  int  $minLength
+     * @return $this
+     */
+    public function minLength(int $minLength): ValidatePassword
+    {
+        $this->minLength = $minLength;
+        return $this;
+    }
+
+    /**
+     * Set the maximum length of the password.
+     *
+     * @param  int  $maxLength
+     * @return $this
+     */
+    public function maxLength(int $maxLength): ValidatePassword
+    {
+        $this->maxLength = $maxLength;
+        return $this;
+    }
+
+    /**
+     * Indicate whether at least one uppercase character is required.
+     *
+     * @param bool $requireUppercase
+     * @return $this
+     */
+    public function requireUppercase(bool $requireUppercase): ValidatePassword
+    {
+        $this->requireUppercase = $requireUppercase;
+        return $this;
+    }
+
+    /**
+     * Indicate whether at least one numeric digit is required.
+     *
+     * @param bool $requireNumeric
+     * @return $this
+     */
+    public function requireNumeric(bool $requireNumeric): ValidatePassword
+    {
+        $this->requireNumeric = $requireNumeric;
+        return $this;
+    }
+
+    /**
+     * Indicate whether at least one special character is required.
+     *
+     * @param bool $requireSpecialCharacter
+     * @return $this
+     */
+    public function requireSpecialCharacter(bool $requireSpecialCharacter): ValidatePassword
+    {
+        $this->requireSpecialCharacter = $requireSpecialCharacter;
+        return $this;
+    }
+
+    /**
+     * Set the message that should be used when the rule fails.
+     *
+     * @param  string  $message
+     * @return $this
+     */
+    public function withMessage(string $message): ValidatePassword
+    {
+        $this->message = $message;
+        return $this;
     }
 }
