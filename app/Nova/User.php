@@ -63,19 +63,19 @@ class User extends Resource
             ID::make()->sortable(),
 
             Images::make('Avatar', 'avatar')
-                ->setFileName(function($originalFilename, $extension, $model){
+                ->setFileName(function($originalFilename, $extension, $model) {
                     return md5($originalFilename) . '.' . $extension;
                 })
-                ->setName(function($originalFilename, $model){
+                ->setName(function($originalFilename, $model) {
                     return md5($originalFilename);
                 }),
 
             Images::make('Banner image', 'banner')
                 ->hideFromIndex()
-                ->setFileName(function($originalFilename, $extension, $model){
+                ->setFileName(function($originalFilename, $extension, $model) {
                     return md5($originalFilename) . '.' . $extension;
                 })
-                ->setName(function($originalFilename, $model){
+                ->setName(function($originalFilename, $model) {
                     return md5($originalFilename);
                 }),
 
@@ -89,7 +89,8 @@ class User extends Resource
 
             Password::make('Password')
                 ->onlyOnForms()
-                ->rules(new ValidatePassword(false)),
+                ->creationRules(['required', new ValidatePassword])
+                ->updateRules(['nullable', new ValidatePassword]),
 
             Textarea::make('Biography'),
 
