@@ -36,10 +36,10 @@ class AnimeSeason extends KModel
      * @return string
      */
     public function getTitle() {
-        if($this->number == 0)
+        if ($this->number == 0)
             return 'Specials';
 
-        if($this->title != null)
+        if ($this->title != null)
             return $this->title;
 
         return 'Season ' . $this->number;
@@ -54,7 +54,7 @@ class AnimeSeason extends KModel
     {
         $firstEpisode = $this->episodes->firstWhere('number', 1);
 
-        if($firstEpisode == null)
+        if ($firstEpisode == null)
             return null;
 
         return $firstEpisode->first_aired->format('Y-m-d');

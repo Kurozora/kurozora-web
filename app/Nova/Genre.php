@@ -81,7 +81,7 @@ class Genre extends Resource
     {
         $genreName = $this->name;
 
-        if(!is_string($genreName) || !strlen($genreName))
+        if (!is_string($genreName) || !strlen($genreName))
             $genreName = 'No genre title';
 
         return $genreName . ' (ID: ' . $this->id . ')';

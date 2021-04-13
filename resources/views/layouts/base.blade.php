@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         {{ $meta ?? '' }}
 
-        @if(empty($title))
+        @if (empty($title))
             <title>{{ config('app.name') }}</title>
         @else
             <title>{{ $title . ' - ' . config('app.name') }}</title>

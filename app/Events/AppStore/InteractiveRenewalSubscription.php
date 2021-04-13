@@ -31,7 +31,7 @@ class InteractiveRenewalSubscription implements HandlesSubscription
         $user->save();
 
         // Notify the user about the subscription update.
-        if(Env('APP_ENV') === 'local') {
+        if (Env('APP_ENV') === 'local') {
             $this->notifyUserAboutUpdate($user, $event);
         }
     }

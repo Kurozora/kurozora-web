@@ -50,7 +50,7 @@ class FavoriteAnimeController extends Controller
 
         $isAlreadyFavorited = $user->favoriteAnime()->where('anime_id', $animeID)->exists();
 
-        if($isAlreadyFavorited) // Unfavorite the show
+        if ($isAlreadyFavorited) // Unfavorite the show
             $user->favoriteAnime()->detach($animeID);
         else // Favorite the show
             $user->favoriteAnime()->attach($animeID);

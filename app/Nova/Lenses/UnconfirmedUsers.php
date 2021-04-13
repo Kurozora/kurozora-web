@@ -42,7 +42,7 @@ class UnconfirmedUsers extends Lens
             Text::make('Email Address', 'email'),
 
             Text::make('Has not confirmed since', 'created_at', function($value) {
-                if($value == null) return 'Unknown';
+                if ($value == null) return 'Unknown';
                 else {
                     return $value->diffForHumans();
                 }

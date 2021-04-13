@@ -25,18 +25,18 @@ class KuroAuthToken {
      */
     private static function tokenHasValidFormat($token)
     {
-        if($token === null)
+        if ($token === null)
             return false;
 
         // Decode the token
         $decoded = base64_decode($token);
 
         // Could not decode token
-        if($decoded === false)
+        if ($decoded === false)
             return false;
 
         // Decoded token does not match regex
-        if(!preg_match(self::VALIDITY_REGEX, $decoded))
+        if (!preg_match(self::VALIDITY_REGEX, $decoded))
             return false;
 
         return true;
@@ -51,7 +51,7 @@ class KuroAuthToken {
     public static function readToken($token)
     {
         // Token is not of valid structure
-        if(!self::tokenHasValidFormat($token))
+        if (!self::tokenHasValidFormat($token))
             return null;
 
         // Decode the token

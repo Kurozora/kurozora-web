@@ -34,7 +34,7 @@ class ValidateAvatarImage implements Rule
             $attribute => $rules,
         ]);
 
-        if($imgValidator->fails()) {
+        if ($imgValidator->fails()) {
             $this->error = $imgValidator->errors()->first();
             return false;
         }

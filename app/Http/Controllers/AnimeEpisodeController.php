@@ -42,7 +42,7 @@ class AnimeEpisodeController extends Controller
         $isAlreadyWatched = $user->hasWatched($episode);
 
         // Attach or detach the watched episode
-        if($isAlreadyWatched) // Unwatch the episode
+        if ($isAlreadyWatched) // Unwatch the episode
             $user->watchedAnimeEpisodes()->detach($episode);
         else // Watch the episode
             $user->watchedAnimeEpisodes()->attach($episode);

@@ -50,7 +50,7 @@ class CalculateAnimeRatings extends Command
             $totalRatingCount = $anime->ratings()->count();
 
             // Check if minimum ratings are acquired
-            if($totalRatingCount >= Anime::MINIMUM_RATINGS_REQUIRED) {
+            if ($totalRatingCount >= Anime::MINIMUM_RATINGS_REQUIRED) {
                 $this->info('=============================');
                 $this->info('Calculating for Anime ID ' . $anime->id);
 

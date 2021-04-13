@@ -28,11 +28,11 @@ class AnimeResourceBasic extends JsonResource
         $anime = $this->resource;
 
         $firstAired = $anime->first_aired;
-        if($firstAired)
+        if ($firstAired)
             $firstAired = $anime->first_aired->format('Y-m-d');
 
         $lastAired = $anime->last_aired;
-        if($lastAired)
+        if ($lastAired)
             $lastAired = $anime->last_aired->format('Y-m-d');
 
         $resource = [
@@ -71,7 +71,7 @@ class AnimeResourceBasic extends JsonResource
             ]
         ];
 
-        if(Auth::check())
+        if (Auth::check())
             $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
 
         return $resource;
@@ -97,25 +97,25 @@ class AnimeResourceBasic extends JsonResource
             ->where('user_id', $user->id)
             ->first();
 
-        if($foundRating)
+        if ($foundRating)
             $userRating = $foundRating->rating;
 
         // Get the current library status
         $libraryEntry = $user->library()->where('anime_id', $anime->id)->first();
         $currentLibraryStatus = null;
 
-        if($libraryEntry)
+        if ($libraryEntry)
             $currentLibraryStatus = UserLibraryStatus::getDescription($libraryEntry->pivot->status);
 
         // Get the favorite status
         $isTrackingAnime = $user->isTracking($anime);
         $favoriteStatus = null;
-        if($isTrackingAnime)
+        if ($isTrackingAnime)
             $favoriteStatus = $user->favoriteAnime()->wherePivot('anime_id', $anime->id)->exists();
 
         // Get the reminder status
         $reminderStatus = null;
-        if($isTrackingAnime)
+        if ($isTrackingAnime)
             $reminderStatus = $user->reminderAnime()->wherePivot('anime_id', $anime->id)->exists();
 
         // Return the array

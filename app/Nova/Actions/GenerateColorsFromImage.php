@@ -26,7 +26,7 @@ class GenerateColorsFromImage extends Action
 
         foreach($models as $model) {
             // Skip the image asset if colors were already fetched
-            if($model->background_color) {
+            if ($model->background_color) {
                 continue;
             }
 
@@ -34,7 +34,7 @@ class GenerateColorsFromImage extends Action
             $amountSuccess++;
         }
 
-        if(!$amountSuccess) {
+        if (!$amountSuccess) {
             return Action::danger('The colors for these image assets were already generated.');
         }
 

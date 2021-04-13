@@ -141,15 +141,15 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
             ->orderBy('last_validated_at', 'desc')
             ->first();
 
-        if($session === null)
+        if ($session === null)
             return UserActivityStatus::Offline();
 
         // Seen within the last 5 minutes
-        if($session->last_validated_at >= now()->subMinutes(5)) {
+        if ($session->last_validated_at >= now()->subMinutes(5)) {
             return UserActivityStatus::Online();
         }
         // Seen within the last 15 minutes
-        else if($session->last_validated_at >= now()->subMinutes(15)) {
+        else if ($session->last_validated_at >= now()->subMinutes(15)) {
             return UserActivityStatus::SeenRecently();
         }
 
@@ -399,7 +399,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
         // Determine the IP address to use
         $ip = $options->get('ip');
 
-        if($ip === null) $ip = request()->ip();
+        if ($ip === null) $ip = request()->ip();
 
         /** @var Session $session */
         $session = $this->sessions()->create([
@@ -418,12 +418,12 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
         ]);
 
         // Dispatch job to retrieve location
-        if($options->get('retrieve_location', true)) {
+        if ($options->get('retrieve_location', true)) {
             dispatch(new FetchSessionLocation($session));
         }
 
         // Send notification
-        if($options->get('notify', true)) {
+        if ($options->get('notify', true)) {
             $this->notify(new NewSession($session->ip, $session));
         }
 
@@ -531,7 +531,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
         $repCount = Cache::remember($cacheKey, self::CACHE_KEY_REPUTATION_COUNT_SECONDS, function () {
             $foundRep = UserReputation::where('given_user_id', $this->id)->sum('amount');
 
-            if($foundRep === null) return 0;
+            if ($foundRep === null) return 0;
             return (int) $foundRep;
         });
 
@@ -578,10 +578,10 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      */
     function canDoMALImport(): bool
     {
-        if(!$this->last_mal_import_at)
+        if (!$this->last_mal_import_at)
             return true;
 
-        if($this->last_mal_import_at > now()->subDays(config('mal-import.cooldown_in_days')))
+        if ($this->last_mal_import_at > now()->subDays(config('mal-import.cooldown_in_days')))
             return false;
 
         return true;

@@ -46,7 +46,7 @@ class ProcessMALImport implements ShouldQueue
     public function handle()
     {
         // Wipe current library if behavior is set to overwrite
-        if($this->behavior === 'overwrite') {
+        if ($this->behavior === 'overwrite') {
             $this->user->library()->detach();
         }
 
@@ -77,12 +77,12 @@ class ProcessMALImport implements ShouldQueue
         $animeMatch = Anime::where('mal_id', $malID)->first();
 
         // If a match was found
-        if($animeMatch) {
+        if ($animeMatch) {
             // Convert the MAL status to one of our own
             $status = $this->convertMALStatus($malStatus);
 
             // Status not found
-            if($status === null) {
+            if ($status === null) {
                 $this->registerFailure($malID, 'Could not handle status: ' . $malStatus);
                 return;
             }

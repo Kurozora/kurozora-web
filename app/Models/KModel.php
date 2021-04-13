@@ -23,19 +23,19 @@ class KModel extends Model
         $key = get_called_class()::TABLE_NAME;
 
         // Add a name
-        if(isset($options['name'])) $key .= '-' . $options['name'];
+        if (isset($options['name'])) $key .= '-' . $options['name'];
 
         // Add an ID
-        if(isset($options['id'])) $key .= '-' . $options['id'];
+        if (isset($options['id'])) $key .= '-' . $options['id'];
 
         // Add a limit
-        if(isset($options['limit'])) $key .= '-' . $options['limit'];
+        if (isset($options['limit'])) $key .= '-' . $options['limit'];
 
         // Add a where
-        if(isset($options['where'])) $key .= '-' . implode(',', array_map('implode', $options['where']));
+        if (isset($options['where'])) $key .= '-' . implode(',', array_map('implode', $options['where']));
 
         // Add a whereBetween
-        if(isset($options['whereBetween'])) $key .= '-' . implode(',', $options['whereBetween']);
+        if (isset($options['whereBetween'])) $key .= '-' . implode(',', $options['whereBetween']);
 
         return $key;
     }

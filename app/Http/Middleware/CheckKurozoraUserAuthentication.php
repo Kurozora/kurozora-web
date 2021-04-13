@@ -30,16 +30,16 @@ class CheckKurozoraUserAuthentication
     public function handle(Request $request, Closure $next, $parameter = null)
     {
         // Check whether parameter value is valid
-        if(!in_array($parameter, [null, 'optional']))
+        if (!in_array($parameter, [null, 'optional']))
             throw new Exception('Middleware parameter value "' . $parameter . '" is not valid.');
 
         // Get kuro auth token from header
         $rawToken = $request->header('kuro-auth');
 
         // Header is invalid
-        if(!is_string($rawToken)) {
+        if (!is_string($rawToken)) {
             // Continue with the request if authentication is optional
-            if($parameter === 'optional')
+            if ($parameter === 'optional')
                 return $next($request);
 
             throw new AuthorizationException('The request wasn’t accepted due to an issue with the kuro-auth token or because it’s using incorrect authentication.');
@@ -48,7 +48,7 @@ class CheckKurozoraUserAuthentication
         // Read the authentication token
         $token = KuroAuthToken::readToken($rawToken);
 
-        if($token === null)
+        if ($token === null)
             throw new AuthorizationException('The request wasn’t accepted due to an issue with the kuro-auth token or because it’s using incorrect authentication.');
 
         // Fetch the variables
@@ -79,10 +79,10 @@ class CheckKurozoraUserAuthentication
         ])->first();
 
         // Check whether the session exists
-        if($session === null)
+        if ($session === null)
             throw new AuthorizationException('The request wasn’t accepted due to an expired kuro-auth token.');
 
-        if($session->isExpired()) {
+        if ($session->isExpired()) {
             $session->delete();
 
             throw new AuthorizationException('The request wasn’t accepted due to an expired kuro-auth token.');
@@ -111,7 +111,7 @@ class CheckKurozoraUserAuthentication
     private function updateSession(Session $session)
     {
         // Extend the session's lifetime when at least 1 day has passed
-        if($session->expires_at->startOfDay() < now()->addDays(Session::VALID_FOR_DAYS)->startOfDay())
+        if ($session->expires_at->startOfDay() < now()->addDays(Session::VALID_FOR_DAYS)->startOfDay())
         {
             $session->expires_at = now()->addDays(Session::VALID_FOR_DAYS);
         }

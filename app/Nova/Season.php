@@ -77,7 +77,7 @@ class Season extends Resource
     {
         $seasonName = $this->title;
 
-        if(!is_string($seasonName) || !strlen($seasonName))
+        if (!is_string($seasonName) || !strlen($seasonName))
             $seasonName = 'No season title';
 
         return $seasonName . ' (ID: ' . $this->id . ')';

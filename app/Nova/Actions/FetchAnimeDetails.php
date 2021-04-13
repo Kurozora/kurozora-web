@@ -28,7 +28,7 @@ class FetchAnimeDetails extends Action
 
         foreach($models as $model) {
             // Skip the Anime if dtails were already fetched
-            if($model->fetched_details) {
+            if ($model->fetched_details) {
                 $amountFailed++;
                 continue;
             }
@@ -37,8 +37,8 @@ class FetchAnimeDetails extends Action
             $amountSuccess++;
         }
 
-        if(!$amountSuccess) {
-            if($amountFailed > 1) {
+        if (!$amountSuccess) {
+            if ($amountFailed > 1) {
                 return Action::danger('The details for these anime were already fetched.');
             }
             else {

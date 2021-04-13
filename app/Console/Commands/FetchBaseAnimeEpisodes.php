@@ -46,17 +46,17 @@ class FetchBaseAnimeEpisodes extends Command
 //        $anime = Anime::find($animeID);
 //
 //        // Specified Anime does not exists
-//        if($anime == null) {
+//        if ($anime == null) {
 //            $this->error('The Anime was not found.');
 //            return 0;
 //        }
 //
-//        if($anime->tvdb_id === null) {
+//        if ($anime->tvdb_id === null) {
 //            $this->error('The Anime does not have a connected TVDB ID.');
 //            return 0;
 //        }
 //
-//        if($anime->fetched_base_episodes) {
+//        if ($anime->fetched_base_episodes) {
 //            $this->error('The base episodes were already fetched for this Anime.');
 //            return 0;
 //        }
@@ -94,7 +94,7 @@ class FetchBaseAnimeEpisodes extends Command
 //                );
 //
 //                // This episode already exists
-//                if(AnimeEpisode::where([
+//                if (AnimeEpisode::where([
 //                    ['number',      '=', $episodeResult->number],
 //                    ['season_id',   '=', $season->id]
 //                ])->exists())
@@ -115,7 +115,7 @@ class FetchBaseAnimeEpisodes extends Command
 //                $insertCount++;
 //
 //                // Update the highest season
-//                if($episodeResult->season > $highestSeason)
+//                if ($episodeResult->season > $highestSeason)
 //                    $highestSeason = $episodeResult->season;
 //            }
 //

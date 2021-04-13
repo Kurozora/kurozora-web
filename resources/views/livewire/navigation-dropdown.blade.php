@@ -58,7 +58,7 @@
                                 {{ __('Sign in') }}
                             </x-dropdown-link>
 
-                            @if(Route::has('sign-up'))
+                            @if (Route::has('sign-up'))
                                 <x-dropdown-link href="{{ route('sign-up') }}">
                                     {{ __('Create Account') }}
                                 </x-dropdown-link>
@@ -109,7 +109,7 @@
                         {{ __('Sign in') }}
                     </x-responsive-nav-link>
 
-                    @if(Route::has('sign-up'))
+                    @if (Route::has('sign-up'))
                         <x-responsive-nav-link href="{{ route('sign-up') }}">
                             {{ __('Create Account') }}
                         </x-responsive-nav-link>
