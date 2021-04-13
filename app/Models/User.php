@@ -177,7 +177,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     function getProfileImageAttribute(): string
     {
         $profileImageUrl = $this->getFirstMediaFullUrl('avatar');
-        return empty($profileImageUrl) ? asset('images/static/placeholders/user_profile.png') : $profileImageUrl;
+        return empty($profileImageUrl) ? 'https://ui-avatars.com/api/?name=' . $this->username . '&color=000000&background=e0e0e0&length=1&bold=true' : $profileImageUrl;
     }
 
     /**
