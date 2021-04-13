@@ -20,7 +20,6 @@ Route::get('/verify/{verificationID}', Verification::class)
 Route::get('/reset-password/{token}', ResetPassword::class)
     ->name('password.reset');
 
-
 // Landing pages
 require 'Web/Anime.php';
 require 'Web/Profile.php';
