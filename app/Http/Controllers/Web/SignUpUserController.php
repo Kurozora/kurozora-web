@@ -13,7 +13,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
-use Illuminate\Support\Str;
 use Throwable;
 
 class SignUpUserController extends Controller
@@ -46,8 +45,7 @@ class SignUpUserController extends Controller
         $newUser = User::create([
             'username'              => $data['username'],
             'email'                 => $data['email'],
-            'password'              => User::hashPass($data['password']),
-            'email_confirmation_id' => Str::random(50)
+            'password'              => User::hashPass($data['password'])
         ]);
 
         event(new NewUserRegisteredEvent($newUser));

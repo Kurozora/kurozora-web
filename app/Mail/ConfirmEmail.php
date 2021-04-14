@@ -36,7 +36,7 @@ class ConfirmEmail extends Mailable
             ->with([
                 'title' => 'Your Kurozora account registration',
                 'username'          => $this->user->username,
-                'confirmation_url'  => url('/confirmation/' . $this->user->email_confirmation_id)
+                'confirmation_url'  => url('/confirmation/' . $this->user->email_verified_at)
             ]);
     }
 }

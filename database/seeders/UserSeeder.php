@@ -23,7 +23,6 @@ class UserSeeder extends Seeder
             'email'                 => 'mussesemou99@gmail.com',
             'password'              => '$2y$10$LFvuPaQpn6kccakk4sRABef223GV0.NJUJ94Xr.TAvswkCKJBisVK',
             'email_verified_at'     => now(),
-            'email_confirmation_id' => null,
         ]);
 
         $admins[] = User::create([
@@ -31,7 +30,6 @@ class UserSeeder extends Seeder
             'email'                 => 'casillaskhoren1@gmail.com',
             'password'              => '$2y$10$LFvuPaQpn6kccakk4sRABef223GV0.NJUJ94Xr.TAvswkCKJBisVK',
             'email_verified_at'     => now(),
-            'email_confirmation_id' => null,
         ]);
 
         foreach($admins as $admin) {
