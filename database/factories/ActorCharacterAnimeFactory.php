@@ -33,6 +33,9 @@ class ActorCharacterAnimeFactory extends Factory
         if ($anime == null) {
             $anime = Anime::factory()->create();
         }
+        if (ActorCharacterAnime::where('anime_id', $anime->id)->exists()) {
+            $anime = Anime::whereNotIn('id', $anime->id)->inRandomOrder()->first();
+        }
 
         return [
             'actor_character_id'    => $actorCharacter,
