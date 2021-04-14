@@ -48,7 +48,7 @@ class SignUpUserController extends Controller
             'password'              => User::hashPass($data['password'])
         ]);
 
-        event(new NewUserRegisteredEvent($newUser));
+        $newUser->sendEmailVerificationNotification();
 
         Auth::login($newUser);
 
