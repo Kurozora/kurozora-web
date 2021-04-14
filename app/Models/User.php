@@ -563,16 +563,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
-     * Checks if this user has confirmed their email address
-     *
-     * @return bool
-     */
-    public function hasConfirmedEmail(): bool
-    {
-        return ($this->email_confirmation_id == null);
-    }
-
-    /**
      * Checks the cooldown whether the user can do a MAL import.
      *
      * @return bool
