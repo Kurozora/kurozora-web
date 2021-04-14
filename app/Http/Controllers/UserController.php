@@ -71,7 +71,7 @@ class UserController extends Controller
         $user = User::where('email', $data['email'])->first();
 
         // There is a user with this email
-        if ($user && $user->hasConfirmedEmail()) {
+        if ($user && $user->hasVerifiedEmail()) {
             $compareTime = Carbon::now()->subHours(PasswordReset::VALID_HOURS);
 
             // Check if a password reset was requested recently

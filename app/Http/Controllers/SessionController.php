@@ -48,7 +48,7 @@ class SessionController extends Controller
         }
 
         // Check if email is confirmed
-        if (!$user->hasConfirmedEmail())
+        if (!$user->hasVerifiedEmail())
             throw new AuthenticationException('You have not confirmed your email address yet. Please check your email inbox or spam folder.');
 
         // Create a new session

@@ -29,8 +29,7 @@ class PasswordResetFactory extends Factory
         }
 
         return [
-            'user_id'       => $user,
-            'ip'            => $this->faker->ipv4,
+            'email'         => $user->email,
             'token'         => PasswordReset::genToken(),
             'created_at'    => now()
         ];
