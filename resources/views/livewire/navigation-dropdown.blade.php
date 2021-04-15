@@ -42,8 +42,20 @@
                     </x-slot>
 
                     <x-slot name="content">
+                        @auth
+                            <!-- Account Management -->
+                            <div class="block px-4 py-2 text-xs text-gray-400">
+                                {{ __('Manage Account') }}
+                            </div>
+
+                            <x-dropdown-link href="{{ route('profile.settings') }}">
+                                {{ __('Settings') }}
+                            </x-dropdown-link>
+
+                            <div class="border-t border-gray-100"></div>
+                        @endauth
+
                         <!-- Authentication -->
-                        <div class="border-t border-gray-100"></div>
                         @auth
                             <form method="POST" action="{{ route('sign-out') }}">
                                 @csrf
@@ -92,8 +104,29 @@
             </x-responsive-nav-link>
         </div>
 
-        <!-- Authentication -->
+        <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
+            @auth
+                <div class="flex items-center px-4 pb-4">
+                    <div class="flex-shrink-0">
+                        <div class="h-10 w-10 bg-cover rounded-full" style="background-image: url({{ Auth::user()->profile_image_url }});"
+                             alt="{{ Auth::user()->username }}" role="img"></div>
+                    </div>
+
+                    <div class="ml-3">
+                        <div class="font-medium text-base text-gray-800">{{ Auth::user()->username }}</div>
+                        <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                    </div>
+                </div>
+
+                <!-- Account Management -->
+                <x-responsive-nav-link href="{{ route('profile.settings') }}"
+                                       :active="request()->routeIs('profile.settings')">
+                    {{ __('Settings') }}
+                </x-responsive-nav-link>
+            @endauth
+
+            <!-- Authentication -->
             <div class="space-y-1">
                 @auth
                     <form method="POST" action="{{ route('sign-out') }}">
