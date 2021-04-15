@@ -120,7 +120,7 @@ main {
 }
 
 /* User placeholders */
-.user-avatar {
+.profile-image {
   @apply bg-center
   bg-cover
   bg-no-repeat

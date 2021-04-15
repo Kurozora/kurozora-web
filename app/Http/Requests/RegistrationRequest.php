@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\ValidateAvatarImage;
+use App\Rules\ValidateProfileImage;
 use App\Rules\ValidateEmail;
 use App\Rules\ValidatePassword;
 use App\Rules\ValidateUsername;
@@ -21,7 +21,7 @@ class RegistrationRequest extends FormRequest
             'username'      => ['bail', 'required', new ValidateUsername],
             'password'      => ['bail', 'required', new ValidatePassword],
             'email'         => ['bail', 'required', new ValidateEmail(['must-be-available' => true])],
-            'profileImage'  => ['bail', new ValidateAvatarImage],
+            'profileImage'  => ['bail', new ValidateProfileImage],
         ];
     }
 }

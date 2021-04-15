@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\ValidateAvatarImage;
+use App\Rules\ValidateProfileImage;
 use App\Rules\ValidateBannerImage;
 use App\Rules\ValidateUserBiography;
 use App\Rules\ValidateUsername;
@@ -29,7 +29,7 @@ class UpdateProfileRequest extends FormRequest
     {
         return [
             'username'      => ['bail', new ValidateUsername],
-            'profileImage'  => ['bail', new ValidateAvatarImage, 'nullable'],
+            'profileImage'  => ['bail', new ValidateProfileImage, 'nullable'],
             'bannerImage'   => ['bail', new ValidateBannerImage, 'nullable'],
             'biography'     => ['bail', new ValidateUserBiography, 'nullable']
         ];
