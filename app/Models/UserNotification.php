@@ -78,7 +78,7 @@ class UserNotification extends KModel
         $constants_array = $reflection->getConstants();
 
         foreach ($constants_array as $constant_key => $constant_value) {
-            if($this->type == $constant_value)
+            if ($this->type == $constant_value)
                 return $constant_key;
         }
 
@@ -94,7 +94,7 @@ class UserNotification extends KModel
     {
         $decoded =  json_decode($this->data);
 
-        if($decoded == null)
+        if ($decoded == null)
             return [];
 
         return (array) $decoded;
@@ -110,7 +110,7 @@ class UserNotification extends KModel
     {
         $data = $this->getData();
 
-        if(isset($data[$varName]))
+        if (isset($data[$varName]))
             return $data[$varName];
 
         return null;

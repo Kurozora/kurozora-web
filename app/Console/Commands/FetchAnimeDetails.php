@@ -49,17 +49,17 @@ class FetchAnimeDetails extends Command
 //        $anime = Anime::find($animeID);
 //
 //        // Specified Anime does not exists
-//        if($anime == null) {
+//        if ($anime == null) {
 //            $this->error('The Anime was not found.');
 //            return 0;
 //        }
 //
-//        if($anime->tvdb_id === null) {
+//        if ($anime->tvdb_id === null) {
 //            $this->error('The Anime does not have a connected TVDB ID.');
 //            return 0;
 //        }
 //
-//        if($anime->fetched_details) {
+//        if ($anime->fetched_details) {
 //            $this->error('The details were already fetched for this Anime.');
 //            return 0;
 //        }

@@ -22,7 +22,7 @@ class UnconfirmedUsers extends Lens
     {
         return $request->withOrdering($request->withFilters(
             $query->select(['users.id', 'users.username', 'users.email', 'users.created_at'])
-                ->where('email_confirmation_id', '!=', null)
+                ->where('email_verified_at', '!=', null)
         ));
     }
 
@@ -41,8 +41,8 @@ class UnconfirmedUsers extends Lens
 
             Text::make('Email Address', 'email'),
 
-            Text::make('Has not confirmed since', 'created_at', function($value) {
-                if($value == null) return 'Unknown';
+            Text::make('Is not verified since', 'created_at', function($value) {
+                if ($value == null) return 'Unknown';
                 else {
                     return $value->diffForHumans();
                 }

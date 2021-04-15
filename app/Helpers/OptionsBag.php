@@ -21,7 +21,7 @@ class OptionsBag
      */
     function get($key, $default = null)
     {
-        if(isset($this->data[$key]))
+        if (isset($this->data[$key]))
             return $this->data[$key];
         else return $default;
     }

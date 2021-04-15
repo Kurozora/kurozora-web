@@ -115,11 +115,11 @@ class ForumSectionController extends Controller
         // Check if the user is banned
         $foundBan = ForumSectionBan::getBanInfo(Auth::id(), $section->id);
 
-        if($foundBan !== null)
+        if ($foundBan !== null)
             throw new AuthorizationException($foundBan['message']);
 
         // Check if the user has already posted within the cooldown period
-        if(ForumThread::testPostCooldown(Auth::id()))
+        if (ForumThread::testPostCooldown(Auth::id()))
             throw new TooManyRequestsHttpException(60, 'You can only post a thread once every minute.');
 
         // Create the thread

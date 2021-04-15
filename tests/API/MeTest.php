@@ -100,18 +100,18 @@ class MeTest extends TestCase
     }
 
     /**
-     * User can update their avatar.
+     * User can update their profile image.
      *
      * @return void
      * @test
      */
-    function user_can_update_their_avatar()
+    function user_can_update_their_profile_image()
     {
         // Create fake storage
-        Storage::fake('avatars');
+        Storage::fake('profile_images');
 
         // Create fake 100kb image
-        $image = UploadedFile::fake()->image('avatar.jpg', 250, 250)->size(100);
+        $image = UploadedFile::fake()->image('ProfileImage.jpg', 250, 250)->size(100);
 
         // Send the update request
         $response = $this->auth()->json('POST', '/api/v1/me', [
@@ -121,33 +121,33 @@ class MeTest extends TestCase
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
 
-        // Assert that the avatar was uploaded properly
-        $avatar = $this->user->getMedia('avatar');
+        // Assert that the profile image was uploaded properly
+        $profileImage = $this->user->getMedia(User::MEDIA_PROFILE_IMAGE);
 
-        $this->assertCount(1, $avatar);
-        $this->assertFileExists($avatar->first()->getPath());
+        $this->assertCount(1, $profileImage);
+        $this->assertFileExists($profileImage->first()->getPath());
 
-        // Delete the avatar
-        $this->user->clearMediaCollection('avatar');
+        // Delete the profile image
+        $this->user->clearMediaCollection(User::MEDIA_PROFILE_IMAGE);
     }
 
     /**
-     * User can remove their avatar.
+     * User can remove their profile image.
      *
      * @return void
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      * @test
      */
-    function user_can_remove_their_avatar()
+    function user_can_remove_their_profile_image()
     {
         // Create fake storage
-        Storage::fake('avatars');
+        Storage::fake('profile_images');
 
-        // Create fake 100kb image and set it as the avatar
-        $image = UploadedFile::fake()->image('avatar.jpg', 250, 250)->size(100);
+        // Create fake 100kb image and set it as the profile image
+        $image = UploadedFile::fake()->image('ProfileImage.jpg', 250, 250)->size(100);
 
-        $this->user->addMedia($image)->toMediaCollection('avatar');
+        $this->user->addMedia($image)->toMediaCollection(User::MEDIA_PROFILE_IMAGE);
 
         // Send the update request
         $response = $this->auth()->json('POST', '/api/v1/me', [
@@ -157,10 +157,10 @@ class MeTest extends TestCase
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
 
-        // Assert that the avatar was removed properly
-        $avatar = $this->user->getMedia('avatar');
+        // Assert that the profile image was removed properly
+        $profileImage = $this->user->getMedia(User::MEDIA_PROFILE_IMAGE);
 
-        $this->assertCount(0, $avatar);
+        $this->assertCount(0, $profileImage);
     }
 
     /**
@@ -186,13 +186,13 @@ class MeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Assert that the banner image was uploaded properly
-        $banner = $this->user->getMedia('banner');
+        $banner = $this->user->getMedia(User::MEDIA_BANNER_IMAGE);
 
         $this->assertCount(1, $banner);
         $this->assertFileExists($banner->first()->getPath());
 
         // Delete the banner
-        $this->user->clearMediaCollection('banner');
+        $this->user->clearMediaCollection(User::MEDIA_BANNER_IMAGE);
     }
 
     /**
@@ -211,7 +211,7 @@ class MeTest extends TestCase
         // Create fake 100kb image and set it as the banner
         $image = UploadedFile::fake()->image('banner.jpg', 250, 250)->size(100);
 
-        $this->user->addMedia($image)->toMediaCollection('banner');
+        $this->user->addMedia($image)->toMediaCollection(User::MEDIA_BANNER_IMAGE);
 
         // Send the update request
         $response = $this->auth()->json('POST', '/api/v1/me', [
@@ -222,7 +222,7 @@ class MeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Assert that the banner was removed properly
-        $banner = $this->user->getMedia('banner');
+        $banner = $this->user->getMedia(User::MEDIA_BANNER_IMAGE);
 
         $this->assertCount(0, $banner);
     }

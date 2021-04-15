@@ -13,12 +13,14 @@ use App\Traits\VoteActionTrait;
 use Carbon\Carbon;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
 use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
@@ -32,9 +34,12 @@ use Spatie\IcalendarGenerator\Properties\Parameter;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements ReacterableContract, HasMedia
+class User extends Authenticatable implements HasMedia, MustVerifyEmail, ReacterableContract
 {
     use Authorizable,
         HasFactory,
@@ -73,6 +78,10 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
     // User biography character limited
     const BIOGRAPHY_LIMIT = 250;
 
+    // Media keys
+    const MEDIA_PROFILE_IMAGE = 'profile';
+    const MEDIA_BANNER_IMAGE = 'banner';
+
     // Table name
     const TABLE_NAME = 'users';
     protected $table = self::TABLE_NAME;
@@ -96,6 +105,18 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      */
     protected $casts = [
         'username_change_available' => 'boolean',
+    ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'profile_image',
+        'profile_image_url',
+        'banner_image',
+        'banner_image_url'
     ];
 
     /**
@@ -131,15 +152,15 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
             ->orderBy('last_validated_at', 'desc')
             ->first();
 
-        if($session === null)
+        if ($session === null)
             return UserActivityStatus::Offline();
 
         // Seen within the last 5 minutes
-        if($session->last_validated_at >= now()->subMinutes(5)) {
+        if ($session->last_validated_at >= now()->subMinutes(5)) {
             return UserActivityStatus::Online();
         }
         // Seen within the last 15 minutes
-        else if($session->last_validated_at >= now()->subMinutes(15)) {
+        else if ($session->last_validated_at >= now()->subMinutes(15)) {
             return UserActivityStatus::SeenRecently();
         }
 
@@ -151,11 +172,66 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
      */
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('avatar')
-            ->singleFile();
+        $this->addMediaCollection(User::MEDIA_PROFILE_IMAGE)
+            ->singleFile()
+            ->useFallbackUrl('https://ui-avatars.com/api/?name=' . $this->username . '&color=000000&background=e0e0e0&length=1&bold=true');
 
-        $this->addMediaCollection('banner')
-            ->singleFile();
+        $this->addMediaCollection(self::MEDIA_BANNER_IMAGE)
+            ->singleFile()
+            ->withResponsiveImages();
+    }
+
+    /**
+     * Updates the user's profile image with the given request key.
+     *
+     * @param string|UploadedFile $uploadFile
+     *
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
+    function updateProfileImage(string|UploadedFile $uploadFile)
+    {
+        $this->addMedia($uploadFile)->toMediaCollection(self::MEDIA_PROFILE_IMAGE);
+    }
+
+    /**
+     * Returns the profile image of the user if the user has one, otherwise a placeholder image is returned.
+     *
+     * @return Media|null
+     */
+    function getProfileImageAttribute(): Media|null
+    {
+         return $this->getFirstMedia(self::MEDIA_PROFILE_IMAGE);
+    }
+
+    /**
+     * Returns the profile image of the user if the user has one, otherwise a placeholder image is returned.
+     *
+     * @return string
+     */
+    function getProfileImageUrlAttribute(): string
+    {
+        return $this->getFirstMediaFullUrl(self::MEDIA_PROFILE_IMAGE);
+    }
+
+    /**
+     * Returns the banner image object of the user.
+     *
+     * @return Media|null
+     */
+    function getBannerImageAttribute(): Media|null
+    {
+        return $this->getFirstMedia(self::MEDIA_BANNER_IMAGE);
+    }
+
+    /**
+     * Returns the banner image of the user if the user has one, otherwise a placeholder image is returned.
+     *
+     * @return string
+     */
+    function getBannerImageUrlAttribute(): string
+    {
+        return $this->getFirstMediaFullUrl(self::MEDIA_BANNER_IMAGE);
     }
 
     /**
@@ -368,7 +444,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
         // Determine the IP address to use
         $ip = $options->get('ip');
 
-        if($ip === null) $ip = request()->ip();
+        if ($ip === null) $ip = request()->ip();
 
         /** @var Session $session */
         $session = $this->sessions()->create([
@@ -387,12 +463,12 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
         ]);
 
         // Dispatch job to retrieve location
-        if($options->get('retrieve_location', true)) {
+        if ($options->get('retrieve_location', true)) {
             dispatch(new FetchSessionLocation($session));
         }
 
         // Send notification
-        if($options->get('notify', true)) {
+        if ($options->get('notify', true)) {
             $this->notify(new NewSession($session->ip, $session));
         }
 
@@ -500,7 +576,7 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
         $repCount = Cache::remember($cacheKey, self::CACHE_KEY_REPUTATION_COUNT_SECONDS, function () {
             $foundRep = UserReputation::where('given_user_id', $this->id)->sum('amount');
 
-            if($foundRep === null) return 0;
+            if ($foundRep === null) return 0;
             return (int) $foundRep;
         });
 
@@ -531,26 +607,16 @@ class User extends Authenticatable implements ReacterableContract, HasMedia
     }
 
     /**
-     * Checks if this user has confirmed their email address
-     *
-     * @return bool
-     */
-    public function hasConfirmedEmail(): bool
-    {
-        return ($this->email_confirmation_id == null);
-    }
-
-    /**
      * Checks the cooldown whether the user can do a MAL import.
      *
      * @return bool
      */
     function canDoMALImport(): bool
     {
-        if(!$this->last_mal_import_at)
+        if (!$this->last_mal_import_at)
             return true;
 
-        if($this->last_mal_import_at > now()->subDays(config('mal-import.cooldown_in_days')))
+        if ($this->last_mal_import_at > now()->subDays(config('mal-import.cooldown_in_days')))
             return false;
 
         return true;

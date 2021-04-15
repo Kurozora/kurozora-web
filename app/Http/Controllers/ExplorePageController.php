@@ -21,7 +21,7 @@ class ExplorePageController extends Controller
     function explore(GetExplorePageRequest $request): JsonResponse
     {
         // Get explore page for a specific genre
-        if($request->has('genre_id')) {
+        if ($request->has('genre_id')) {
             $genre = Genre::find($request->input('genre_id'));
 
             $categories = $this->getCategoriesForGenre($genre);

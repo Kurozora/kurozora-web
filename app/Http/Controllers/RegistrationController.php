@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Events\NewUserRegisteredEvent;
 use App\Helpers\JSONResult;
-use App\Http\Requests\Registration;
+use App\Http\Requests\RegistrationRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Str;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Throwable;
@@ -17,13 +16,13 @@ class RegistrationController extends Controller
     /**
      * Signup a new user
      *
-     * @param Registration $request
+     * @param RegistrationRequest $request
      * @return JsonResponse
      * @throws Throwable
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
-    public function signUp(Registration $request): JsonResponse
+    public function signUp(RegistrationRequest $request): JsonResponse
     {
         $data = $request->validated();
 
@@ -31,15 +30,14 @@ class RegistrationController extends Controller
         $newUser = User::create([
             'username'              => $data['username'],
             'email'                 => $data['email'],
-            'password'              => User::hashPass($data['password']),
-            'email_confirmation_id' => Str::random(50)
+            'password'              => User::hashPass($data['password'])
         ]);
 
-        if( $request->hasFile('profileImage') &&
+        if ( $request->hasFile('profileImage') &&
             $request->file('profileImage')->isValid()
         ) {
-            // Save the uploaded avatar
-            $newUser->addMediaFromRequest('profileImage')->toMediaCollection('avatar');
+            // Save the uploaded profile image
+            $newUser->addMediaFromRequest('profileImage')->toMediaCollection(User::MEDIA_PROFILE_IMAGE);
         }
 
         // Fire registration event

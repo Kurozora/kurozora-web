@@ -23,31 +23,31 @@ class ValidateUsername implements Rule
     public function passes($attribute, $value): bool
     {
         // Empty string does not pass
-        if(!is_string($value) || !strlen($value)) {
+        if (!is_string($value) || !strlen($value)) {
             $this->errorType = 'length';
             return false;
         }
 
         // Check minimum length
-        if(strlen($value) < self::MINIMUM_USERNAME_LENGTH) {
+        if (strlen($value) < self::MINIMUM_USERNAME_LENGTH) {
             $this->errorType = 'length';
             return false;
         }
 
         // Check maximum length
-        if(strlen($value) > self::MAXIMUM_USERNAME_LENGTH) {
+        if (strlen($value) > self::MAXIMUM_USERNAME_LENGTH) {
             $this->errorType = 'length';
             return false;
         }
 
         // Check alpha numeric
-        if(!ctype_alnum($value)) {
+        if (!ctype_alnum($value)) {
             $this->errorType = 'alpha-num';
             return false;
         }
 
         // Check if username taken
-        if(User::where('username', $value)->exists()) {
+        if (User::where('username', $value)->exists()) {
             $this->errorType = 'exists';
             return false;
         }
@@ -62,11 +62,11 @@ class ValidateUsername implements Rule
      */
     public function message(): string
     {
-        if($this->errorType == 'length')
+        if ($this->errorType == 'length')
             return trans('validation.between.string', ['min' => self::MINIMUM_USERNAME_LENGTH, 'max' => self::MAXIMUM_USERNAME_LENGTH]);
-        else if($this->errorType == 'alpha-num')
+        else if ($this->errorType == 'alpha-num')
             return trans('validation.alpha_num');
-        else if($this->errorType == 'exists')
+        else if ($this->errorType == 'exists')
             return trans('validation.unique');
 
         return 'The :attribute is invalid.';

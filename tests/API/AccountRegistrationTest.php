@@ -32,18 +32,18 @@ class AccountRegistrationTest extends TestCase
     }
 
     /**
-     * An account can be signed up with an avatar.
+     * An account can be signed up with a profile image.
      *
      * @return void
      * @test
      */
-    function an_account_can_be_sined_up_with_an_avatar()
+    function an_account_can_be_sined_up_with_an_profile_image()
     {
         // Create fake storage
-        Storage::fake('avatars');
+        Storage::fake('profile_images');
 
         // Create fake 100kb image
-        $image = UploadedFile::fake()->image('avatar.jpg', 250, 250)->size(100);
+        $image = UploadedFile::fake()->image('ProfileImage.jpg', 250, 250)->size(100);
 
         // Attempt to signup the user
         $response = $this->json('POST', '/api/v1/users', [
@@ -61,29 +61,29 @@ class AccountRegistrationTest extends TestCase
         // Double check that the account was created
         $this->assertEquals(1, User::count());
 
-        // Assert that the avatar was uploaded properly
-        $avatar = $user->getMedia('avatar');
+        // Assert that the profile image was uploaded properly
+        $profileImage = $user->getMedia(User::MEDIA_PROFILE_IMAGE);
 
-        $this->assertCount(1, $avatar);
-        $this->assertFileExists($avatar->first()->getPath());
+        $this->assertCount(1, $profileImage);
+        $this->assertFileExists($profileImage->first()->getPath());
 
         // Delete the media
-        $user->clearMediaCollection('avatar');
+        $user->clearMediaCollection(User::MEDIA_PROFILE_IMAGE);
     }
 
     /**
-     * An account cannot be signed up with a large avatar.
+     * An account cannot be signed up with a large profile image.
      *
      * @return void
      * @test
      */
-    function an_account_cannot_be_signed_up_with_a_large_avatar()
+    function an_account_cannot_be_signed_up_with_a_large_profile_image()
     {
         // Create fake storage
-        Storage::fake('avatars');
+        Storage::fake('profile_images');
 
         // Create fake 1.2mb image
-        $image = UploadedFile::fake()->image('avatar.jpg', 250, 250)->size(1200);
+        $image = UploadedFile::fake()->image('ProfileImage.jpg', 250, 250)->size(1200);
 
         // Attempt to signup the user
         $this->json('POST', '/api/v1/users', [
@@ -98,15 +98,15 @@ class AccountRegistrationTest extends TestCase
     }
 
     /**
-     * An account cannot be signed up with a PDF as avatar.
+     * An account cannot be signed up with a PDF as profile image.
      *
      * @return void
      * @test
      */
-    function an_account_cannot_be_singed_up_with_a_pdf_as_avatar()
+    function an_account_cannot_be_singed_up_with_a_pdf_as_profile_image()
     {
         // Create fake storage
-        Storage::fake('avatars');
+        Storage::fake('profile_images');
 
         // Create fake 100kb pdf
         $pdfFile = UploadedFile::fake()->create('document.pdf', 100);
@@ -124,18 +124,18 @@ class AccountRegistrationTest extends TestCase
     }
 
     /**
-     * An account cannot be signed up with a gif as avatar.
+     * An account cannot be signed up with a gif as profile image.
      *
      * @return void
      * @test
      */
-    function an_account_cannot_be_signed_up_with_a_gif_as_avatar()
+    function an_account_cannot_be_signed_up_with_a_gif_as_profile_image()
     {
         // Create fake storage
-        Storage::fake('avatars');
+        Storage::fake('profile_images');
 
         // Create fake 100kb gif
-        $image = UploadedFile::fake()->image('avatar.gif', 250, 250)->size(100);
+        $image = UploadedFile::fake()->image('ProfileImage.gif', 250, 250)->size(100);
 
         // Attempt to sign up the user
         $this->json('POST', '/api/v1/users', [

@@ -19,7 +19,7 @@ class DatabaseNotificationPolicy
      */
     public function get_notification(User $user, DatabaseNotification $notification): bool
     {
-        if(!$this->isUserNotification($notification)) return false;
+        if (!$this->isUserNotification($notification)) return false;
 
         return $user->id === $notification->notifiable->id;
     }
@@ -33,7 +33,7 @@ class DatabaseNotificationPolicy
      */
     public function del_notification(User $user, DatabaseNotification $notification): bool
     {
-        if(!$this->isUserNotification($notification)) return false;
+        if (!$this->isUserNotification($notification)) return false;
 
         return $user->id === $notification->notifiable->id;
     }

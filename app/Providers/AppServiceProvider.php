@@ -10,7 +10,7 @@ use Illuminate\Support\ServiceProvider;
 class AppServiceProvider extends ServiceProvider
 {
     // The global query count is logged to this config key
-    public static $queryCountConfigKey = 'kurozora.query_count';
+    public static string $queryCountConfigKey = 'kurozora.query_count';
 
     /**
      * Bootstrap any application services.
@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
         DB::listen(function ($query) {
             $currentConfigValue = Config::get(self::$queryCountConfigKey);
 
-            if($currentConfigValue == null) {
+            if ($currentConfigValue == null) {
                 Config::set(self::$queryCountConfigKey, 1);
             }
             else Config::set(self::$queryCountConfigKey, $currentConfigValue + 1);

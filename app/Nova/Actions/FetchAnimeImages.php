@@ -28,7 +28,7 @@ class FetchAnimeImages extends Action
 
         foreach($models as $model) {
             // Skip the Anime if images were already fetched
-            if($model->fetched_images) {
+            if ($model->fetched_images) {
                 $amountFailed++;
                 continue;
             }
@@ -37,8 +37,8 @@ class FetchAnimeImages extends Action
             $amountSuccess++;
         }
 
-        if(!$amountSuccess) {
-            if($amountFailed > 1) {
+        if (!$amountSuccess) {
+            if ($amountFailed > 1) {
                 return Action::danger('The images for these anime were already fetched.');
             }
             else {

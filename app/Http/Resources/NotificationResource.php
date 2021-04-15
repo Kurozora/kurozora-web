@@ -61,7 +61,7 @@ class NotificationResource extends JsonResource
             case NewSession::class:
                 $body = 'A new client has logged in to your account.';
 
-                if(self::hasData($notification, 'ip')) {
+                if (self::hasData($notification, 'ip')) {
                     $body .= ' (IP: ' . self::getData($notification, 'ip') . ')';
                 }
 

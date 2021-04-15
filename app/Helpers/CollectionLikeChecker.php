@@ -67,7 +67,7 @@ class CollectionLikeChecker {
      */
     function hasLiked($item) {
         foreach($this->queryData as $queryItem)
-            if($queryItem->likeable_id == $item->id && $queryItem->type_id == 'LIKE')
+            if ($queryItem->likeable_id == $item->id && $queryItem->type_id == 'LIKE')
                 return true;
 
         return false;
@@ -81,7 +81,7 @@ class CollectionLikeChecker {
      */
     function hasDisliked($item) {
         foreach($this->queryData as $queryItem)
-            if($queryItem->likeable_id == $item->id && $queryItem->type_id == 'DISLIKE')
+            if ($queryItem->likeable_id == $item->id && $queryItem->type_id == 'DISLIKE')
                 return true;
 
         return false;
@@ -97,9 +97,9 @@ class CollectionLikeChecker {
      * @return int
      */
     function getCurrentLikeAction($item) {
-        if($this->hasLiked($item))
+        if ($this->hasLiked($item))
             return 1;
-        else if($this->hasDisliked($item))
+        else if ($this->hasDisliked($item))
             return -1;
         else
             return 0;

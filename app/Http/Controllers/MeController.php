@@ -66,8 +66,8 @@ class MeController extends Controller
         $changedFields = [];
 
         // Update username
-        if($request->has('username')) {
-            if(!$user->username_change_available)
+        if ($request->has('username')) {
+            if (!$user->username_change_available)
                 throw new AuthorizationException('The request wasn’t accepted due to not being allowed to change the username.');
 
             $user->username = $data['username'];
@@ -75,35 +75,35 @@ class MeController extends Controller
         }
 
         // Update biography
-        if($request->has('biography')) {
+        if ($request->has('biography')) {
             $user->biography = $data['biography'];
             $changedFields[] = 'biography';
         }
 
-        // Update avatar
-        if($request->has('profileImage')) {
-            // Remove previous avatar
-            $user->clearMediaCollection('avatar');
+        // Update profile image
+        if ($request->has('profileImage')) {
+            // Remove previous profile image
+            $user->clearMediaCollection(User::MEDIA_PROFILE_IMAGE);
 
-            if($data['profileImage'] != null) {
-                // Upload a new avatar, if one was uploaded
+            if ($data['profileImage'] != null) {
+                // Upload a new profile image, if one was uploaded
                 if ($request->hasFile('profileImage') && $request->file('profileImage')->isValid()) {
-                    $user->addMediaFromRequest('profileImage')->toMediaCollection('avatar');
+                    $user->addMediaFromRequest('profileImage')->toMediaCollection(User::MEDIA_PROFILE_IMAGE);
                 }
             }
 
-            $changedFields[] = 'avatar';
+            $changedFields[] = 'profile';
         }
 
         // Update banner
-        if($request->has('bannerImage')) {
+        if ($request->has('bannerImage')) {
             // Remove previous banner
-            $user->clearMediaCollection('banner');
+            $user->clearMediaCollection(User::MEDIA_BANNER_IMAGE);
 
-            if($data['bannerImage'] != null) {
+            if ($data['bannerImage'] != null) {
                 // Save the uploaded banner, if one was uploaded
                 if ($request->hasFile('bannerImage') && $request->file('bannerImage')->isValid()) {
-                    $user->addMediaFromRequest('bannerImage')->toMediaCollection('banner');
+                    $user->addMediaFromRequest('bannerImage')->toMediaCollection(User::MEDIA_BANNER_IMAGE);
                 }
             }
 
@@ -113,7 +113,7 @@ class MeController extends Controller
         // Successful response
         $displayMessage = 'Your settings were saved. ';
 
-        if(count($changedFields)) {
+        if (count($changedFields)) {
             $displayMessage .= 'You have updated your ' . join(', ', $changedFields) . '.';
             $user->save();
         }
@@ -122,8 +122,8 @@ class MeController extends Controller
         return JSONResult::success([
             'data'      => [
                 'biography'         => $user->biography,
-                'profileImageURL'   => $user->getFirstMediaFullUrl('avatar'),
-                'bannerImageURL'    => $user->getFirstMediaFullUrl('banner')
+                'profileImageURL'   => $user->profile_image_url,
+                'bannerImageURL'    => $user->banner_image_url
             ],
             'message'   => $displayMessage,
         ]);
