@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Actions\Web\Auth\UpdateUserPassword;
 use App\Actions\Web\Auth\UpdateUserProfileInformation;
+use App\Actions\Web\Auth\DeleteUser;
+use App\Contracts\DeletesUsers;
 use App\Contracts\UpdatesUserPasswords;
 use App\Contracts\UpdatesUserProfileInformation;
 use Illuminate\Support\ServiceProvider;
@@ -29,5 +31,6 @@ class ProfileServiceProvider extends ServiceProvider
     {
         app()->singleton(UpdatesUserProfileInformation::class, UpdateUserProfileInformation::class);
         app()->singleton(UpdatesUserPasswords::class, UpdateUserPassword::class);
+        app()->singleton(DeletesUsers::class, DeleteUser::class);
     }
 }
