@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
@@ -33,6 +34,9 @@ use Spatie\IcalendarGenerator\Properties\Parameter;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements HasMedia, MustVerifyEmail, ReacterableContract
@@ -74,6 +78,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     // User biography character limited
     const BIOGRAPHY_LIMIT = 250;
 
+    // Media keys
+    const MEDIA_PROFILE_IMAGE = 'profile';
+    const MEDIA_BANNER_IMAGE = 'banner';
+
     // Table name
     const TABLE_NAME = 'users';
     protected $table = self::TABLE_NAME;
@@ -106,7 +114,9 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     protected $appends = [
         'profile_image',
-        'banner_image'
+        'profile_image_url',
+        'banner_image',
+        'banner_image_url'
     ];
 
     /**
@@ -162,11 +172,36 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('avatar')
-            ->singleFile();
+        $this->addMediaCollection(User::MEDIA_PROFILE_IMAGE)
+            ->singleFile()
+            ->useFallbackUrl('https://ui-avatars.com/api/?name=' . $this->username . '&color=000000&background=e0e0e0&length=1&bold=true');
 
-        $this->addMediaCollection('banner')
-            ->singleFile();
+        $this->addMediaCollection(self::MEDIA_BANNER_IMAGE)
+            ->singleFile()
+            ->withResponsiveImages();
+    }
+
+    /**
+     * Updates the user's profile image with the given request key.
+     *
+     * @param string|UploadedFile $uploadFile
+     *
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
+    function updateProfileImage(string|UploadedFile $uploadFile)
+    {
+        $this->addMedia($uploadFile)->toMediaCollection(self::MEDIA_PROFILE_IMAGE);
+    }
+
+    /**
+     * Returns the profile image of the user if the user has one, otherwise a placeholder image is returned.
+     *
+     * @return Media|null
+     */
+    function getProfileImageAttribute(): Media|null
+    {
+         return $this->getFirstMedia(self::MEDIA_PROFILE_IMAGE);
     }
 
     /**
@@ -174,10 +209,19 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return string
      */
-    function getProfileImageAttribute(): string
+    function getProfileImageUrlAttribute(): string
     {
-        $profileImageUrl = $this->getFirstMediaFullUrl('avatar');
-        return empty($profileImageUrl) ? 'https://ui-avatars.com/api/?name=' . $this->username . '&color=000000&background=e0e0e0&length=1&bold=true' : $profileImageUrl;
+        return $this->getFirstMediaFullUrl(self::MEDIA_PROFILE_IMAGE);
+    }
+
+    /**
+     * Returns the banner image object of the user.
+     *
+     * @return Media|null
+     */
+    function getBannerImageAttribute(): Media|null
+    {
+        return $this->getFirstMedia(self::MEDIA_BANNER_IMAGE);
     }
 
     /**
@@ -185,9 +229,9 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return string
      */
-    function getBannerImageAttribute(): string
+    function getBannerImageUrlAttribute(): string
     {
-        return $this->getFirstMediaFullUrl('banner');
+        return $this->getFirstMediaFullUrl(self::MEDIA_BANNER_IMAGE);
     }
 
     /**
