@@ -27,11 +27,14 @@ class ActorCharacterAnimeFactory extends Factory
         $actorCharacter = ActorCharacter::inRandomOrder()->first();
         $anime = Anime::inRandomOrder()->first();
 
-        if($actorCharacter == null) {
+        if ($actorCharacter == null) {
             $actorCharacter = ActorCharacter::factory()->create();
         }
-        if($anime == null) {
+        if ($anime == null) {
             $anime = Anime::factory()->create();
+        }
+        if (ActorCharacterAnime::where('anime_id', $anime->id)->exists()) {
+            $anime = Anime::whereNotIn('id', $anime->id)->inRandomOrder()->first();
         }
 
         return [

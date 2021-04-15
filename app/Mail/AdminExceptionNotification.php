@@ -60,7 +60,7 @@ class AdminExceptionNotification extends Mailable
         // Get exception type
         $exceptionType = 'LIVE exception';
 
-        if(config('app.debug'))
+        if (config('app.debug'))
             $exceptionType = 'local exception';
 
         // Return the subject

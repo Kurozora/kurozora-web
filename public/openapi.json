@@ -1705,7 +1705,7 @@
                   "profileImage": {
                     "type": "string",
                     "format": "binary",
-                    "description": "The new user's avatar image. Send <strong>null</strong> to remove."
+                    "description": "The new user's profile image. Send <strong>null</strong> to remove."
                   },
                   "bannerImage": {
                     "type": "string",
@@ -2777,7 +2777,7 @@
                   "profileImage": {
                     "type": "string",
                     "format": "binary",
-                    "description": "The new user's avatar image"
+                    "description": "The new user's profile image"
                   }
                 },
                 "required": [

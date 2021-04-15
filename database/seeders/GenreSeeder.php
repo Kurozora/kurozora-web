@@ -21,7 +21,7 @@ class GenreSeeder extends Seeder
         $genreJson = file_get_contents(self::GENRE_JSON_FILE);
         $parsedGenres = json_decode($genreJson);
 
-        if($parsedGenres != null) {
+        if ($parsedGenres != null) {
             // Create genres
             foreach ($parsedGenres->genres as $genre) {
                 Genre::create([

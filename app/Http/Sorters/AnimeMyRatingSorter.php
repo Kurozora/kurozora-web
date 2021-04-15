@@ -26,7 +26,7 @@ class AnimeMyRatingSorter extends Sorter
             ->select(Anime::TABLE_NAME . '.*');
 
         // Order by the user rating
-        if($direction == 'worst')
+        if ($direction == 'worst')
             $builder->orderBy(AnimeRating::TABLE_NAME . '.rating', 'asc');
         else
             $builder->orderBy(AnimeRating::TABLE_NAME . '.rating', 'desc');

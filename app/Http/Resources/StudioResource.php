@@ -22,7 +22,7 @@ class StudioResource extends JsonResource
 
         $resource = StudioResourceBasic::make($studio)->toArray($request);
 
-        if($request->input('include')) {
+        if ($request->input('include')) {
             $includes = array_unique(explode(',', $request->input('include')));
 
             $relationships = [];
@@ -52,7 +52,7 @@ class StudioResource extends JsonResource
         $studio = $this->resource;
 
         $whereRules = [];
-        if($excludingAnime)
+        if ($excludingAnime)
             array_push($whereRules, ['animes.id', '!=', $excludingAnime->id]);
 
         return [

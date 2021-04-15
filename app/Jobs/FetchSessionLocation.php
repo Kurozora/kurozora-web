@@ -43,7 +43,7 @@ class FetchSessionLocation implements ShouldQueue
         $this->session->region = (isset($data->region)) ? $data->region : null;
         $this->session->country = (isset($data->country)) ? $data->country : null;
 
-        if($coordinates = $this->getCoordinates($data)) {
+        if ($coordinates = $this->getCoordinates($data)) {
             $this->session->latitude = $coordinates['lat'];
             $this->session->longitude = $coordinates['lon'];
         }
@@ -68,7 +68,7 @@ class FetchSessionLocation implements ShouldQueue
         $decodedResponse = json_decode($rawContent);
 
         // If the content could not be decoded throw an exception
-        if(!$decodedResponse) throw new Exception("Could not get IP info for IP: " . $ip);
+        if (!$decodedResponse) throw new Exception("Could not get IP info for IP: " . $ip);
 
         return $decodedResponse;
     }
@@ -80,14 +80,14 @@ class FetchSessionLocation implements ShouldQueue
      * @return array|null
      */
     private function getCoordinates($data) {
-        if(!isset($data->loc) || !is_string($data->loc))
+        if (!isset($data->loc) || !is_string($data->loc))
             return null;
 
         // Explode the string
         $coords = explode(',', $data->loc);
 
         // Return null if the string wasn't properly split
-        if(!count($coords))
+        if (!count($coords))
             return null;
 
         return [

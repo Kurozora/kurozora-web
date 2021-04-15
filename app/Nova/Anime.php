@@ -259,7 +259,7 @@ class Anime extends Resource
     {
         $animeName = $this->title;
 
-        if(!is_string($animeName) || !strlen($animeName))
+        if (!is_string($animeName) || !strlen($animeName))
             $animeName = 'No Anime title';
 
         return $animeName . ' (ID: ' . $this->id . ')';
@@ -337,7 +337,7 @@ class Anime extends Resource
         $modCount = $anime->moderators->count();
 
         // Return null when there are no mods to properly format the empty value
-        if($modCount <= 0) return null;
+        if ($modCount <= 0) return null;
 
         return '<span class="py-1 px-2 mr-1 inline-block rounded align-middle" style="background-color: #465161; color: #fff;">' . $modCount . ' ' . Str::plural('mod', $modCount) . '</span>';
     }

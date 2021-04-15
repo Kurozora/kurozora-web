@@ -198,6 +198,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\MigrationServiceProvider::class,
         App\Providers\NovaServiceProvider::class,
+        App\Providers\ProfileServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\UserModelServiceProvider::class,
 

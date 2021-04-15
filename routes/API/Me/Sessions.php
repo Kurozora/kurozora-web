@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
-
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MeController;
+use App\Http\Controllers\SessionController;
 
 Route::prefix('/sessions')
     ->name('.sessions')

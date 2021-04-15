@@ -107,7 +107,7 @@ class LibraryController extends Controller
         $user = Auth::user();
 
         // Remove this Anime from their library if it can be found
-        if($user->library()->where('anime_id', $animeID)->count()) {
+        if ($user->library()->where('anime_id', $animeID)->count()) {
             $user->library()->detach($animeID);
 
             // Remove from favorites as you can't favorite and not have anime in library
@@ -144,7 +144,7 @@ class LibraryController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        if(!$user->canDoMALImport()) {
+        if (!$user->canDoMALImport()) {
             $cooldownDays = config('mal-import.cooldown_in_days');
 
             throw new TooManyRequestsHttpException($cooldownDays * 24 * 60 * 60, 'You can only perform a MAL import every ' . $cooldownDays . ' day(s).');

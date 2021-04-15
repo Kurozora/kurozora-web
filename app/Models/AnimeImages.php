@@ -21,7 +21,7 @@ class AnimeImages extends Model
         parent::boot();
 
         static::saving(function(AnimeImages $animeImage) {
-            if(!$animeImage->background_color || $animeImage->isDirty('url')) {
+            if (!$animeImage->background_color || $animeImage->isDirty('url')) {
                 if ($animeImage->isDirty('url'))
                     static::generateDimensionsFor($animeImage);
 

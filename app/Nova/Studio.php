@@ -89,7 +89,7 @@ class Studio extends Resource
     {
         $studioName = $this->name;
 
-        if(!is_string($studioName) || !strlen($studioName))
+        if (!is_string($studioName) || !strlen($studioName))
             $studioName = 'No Studio name';
 
         return $studioName . ' (ID: ' . $this->id . ')';

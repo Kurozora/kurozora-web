@@ -13,7 +13,7 @@
 
     <h1 class="text-white font-bold mt-6 mb-2">{{ $anime->title }}</h1>
 
-    @if($anime->episode_count)
+    @if ($anime->episode_count)
         <h2 class="text-white">{{ $anime->episode_count }} {{ __('episodes') }}</h2>
     @endif
 

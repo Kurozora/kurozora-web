@@ -11,7 +11,7 @@
 
     <p style="font-size: 12px; line-height: 12px; text-align: center; margin: 2px 0; color: #CCC;">
         or copy the URL below and paste it in your browser <br>
-        <a href="{{ $confirmation_url }}" target="_blank" style="color: #FDC84A; font-weight: bold; text-decoration: none !important;">
+        <a href="{{ $verification_url }}" target="_blank" style="color: #FDC84A; font-weight: bold; text-decoration: none !important;">
             {{ $confirmation_url }}
         </a>
     </p>

@@ -10,14 +10,15 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 class SendEmailConfirmationMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $user;
+    protected User $user;
 
-    public $tries = 1;
+    public int $tries = 1;
 
     /**
      * Create a new job instance.
@@ -32,7 +33,7 @@ class SendEmailConfirmationMail implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function handle()
     {
@@ -43,9 +44,10 @@ class SendEmailConfirmationMail implements ShouldQueue
      * Sends the mail
      *
      * @return bool
-     * @throws \Throwable
+     * @throws Throwable
      */
-    protected function send() {
+    protected function send(): bool
+    {
         Mail::to($this->user->email)
             ->send(new ConfirmEmail($this->user));
 

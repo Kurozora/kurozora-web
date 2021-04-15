@@ -9,11 +9,9 @@ use App\Http\Requests\SearchUserRequest;
 use App\Http\Resources\FeedMessageResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceBasic;
-use App\Jobs\SendPasswordResetMail;
-use App\Models\PasswordReset;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Password;
 
 class UserController extends Controller
 {
@@ -70,27 +68,10 @@ class UserController extends Controller
         /** @var User $user */
         $user = User::where('email', $data['email'])->first();
 
-        // There is a user with this email
-        if($user && $user->hasConfirmedEmail()) {
-            $compareTime = Carbon::now()->subHours(PasswordReset::VALID_HOURS);
-
-            // Check if a password reset was requested recently
-            $pReset = PasswordReset::where([
-                ['user_id',     '=',    $user->id],
-                ['created_at',  '>=',   $compareTime]
-            ])->first();
-
-            // No password reset has been requested recently
-            if(!$pReset) {
-                // Create password reset
-                $createdReset = PasswordReset::factory()->create([
-                    'user_id'   => $user->id,
-                    'ip'        => $request->ip()
-                ]);
-
-                // Dispatch job to send reset mail
-                SendPasswordResetMail::dispatch($user, $createdReset);
-            }
+        // There is a user with this email the try to send a reset link.
+        // Request may be throttled if requested a lot.
+        if ($user) {
+            Password::sendResetLink(['email' => $data['email']]);
         }
 
         // Show successful response

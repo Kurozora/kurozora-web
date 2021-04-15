@@ -38,8 +38,8 @@ class UserResourceBasic extends JsonResource
                 'username'          => $user->username,
                 'biography'         => $user->biography,
                 'activityStatus'    => $user->getActivityStatus()->description,
-                'profileImageURL'   => $user->getFirstMediaFullUrl('avatar'),
-                'bannerImageURL'    => $user->getFirstMediaFullUrl('banner'),
+                'profileImageURL'   => $user->profile_image_url,
+                'bannerImageURL'    => $user->banner_image_url,
                 'followerCount'     => $user->getFollowerCount(),
                 'followingCount'    => $user->getFollowingCount(),
                 'reputationCount'   => $user->getReputationCount(),
@@ -48,10 +48,10 @@ class UserResourceBasic extends JsonResource
             ]
         ];
 
-        if(Auth::check())
+        if (Auth::check())
             $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
 
-        if($this->includePrivateDetails)
+        if ($this->includePrivateDetails)
             $resource = array_merge($resource, $this->getPrivateDetails());
 
         return $resource;
@@ -71,7 +71,7 @@ class UserResourceBasic extends JsonResource
         $user = Auth::user();
 
         $isFollowed = null;
-        if($followedUser->id != $user->id)
+        if ($followedUser->id != $user->id)
             $isFollowed = $this->resource->followers()->where('user_id', $user->id)->exists();
 
         return [

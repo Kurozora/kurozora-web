@@ -144,9 +144,9 @@ class AnimeController extends Controller
         ])->first();
 
         // The rating exists
-        if($foundRating) {
+        if ($foundRating) {
             // If the given rating is 0, delete the rating
-            if($givenRating <= 0)
+            if ($givenRating <= 0)
                 $foundRating->delete();
             // Update the current rating
             else {
@@ -157,7 +157,7 @@ class AnimeController extends Controller
         // Rating needs to be inserted
         else {
             // Only insert the rating if it's rated higher than 0
-            if($givenRating > 0) {
+            if ($givenRating > 0) {
                 AnimeRating::create([
                     'anime_id'  => $anime->id,
                     'user_id'   => Auth::id(),

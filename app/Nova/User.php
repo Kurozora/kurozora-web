@@ -62,20 +62,20 @@ class User extends Resource
         return [
             ID::make()->sortable(),
 
-            Images::make('Avatar', 'avatar')
-                ->setFileName(function($originalFilename, $extension, $model){
+            Images::make('Profile Image', 'profile_image_url')
+                ->setFileName(function($originalFilename, $extension, $model) {
                     return md5($originalFilename) . '.' . $extension;
                 })
-                ->setName(function($originalFilename, $model){
+                ->setName(function($originalFilename, $model) {
                     return md5($originalFilename);
                 }),
 
-            Images::make('Banner image', 'banner')
+            Images::make('Banner image', 'banner_image_url')
                 ->hideFromIndex()
-                ->setFileName(function($originalFilename, $extension, $model){
+                ->setFileName(function($originalFilename, $extension, $model) {
                     return md5($originalFilename) . '.' . $extension;
                 })
-                ->setName(function($originalFilename, $model){
+                ->setName(function($originalFilename, $model) {
                     return md5($originalFilename);
                 }),
 
@@ -89,7 +89,8 @@ class User extends Resource
 
             Password::make('Password')
                 ->onlyOnForms()
-                ->rules(new ValidatePassword(false)),
+                ->creationRules(['required', new ValidatePassword])
+                ->updateRules(['nullable', new ValidatePassword]),
 
             Textarea::make('Biography'),
 
@@ -223,7 +224,7 @@ class User extends Resource
         $roles = $user->getRoleNames();
 
         // Return null when there are no roles to properly render an "empty" cell
-        if($roles->isEmpty()) return null;
+        if ($roles->isEmpty()) return null;
 
         // Join all roles together and create the string
         $roleString = '';

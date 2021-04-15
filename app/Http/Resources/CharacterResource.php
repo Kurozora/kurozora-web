@@ -21,7 +21,7 @@ class CharacterResource extends JsonResource
 
         $resource = CharacterResourceBasic::make($character)->toArray($request);
 
-        if($request->input('include')) {
+        if ($request->input('include')) {
             $includes = array_unique(explode(',', $request->input('include')));
 
             $relationships = [];

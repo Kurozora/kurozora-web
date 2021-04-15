@@ -22,8 +22,9 @@ trait ProvidesTestUser
         $this->user = User::factory()->create([
             'username'  => 'KurozoraTester',
             'email'     => 'tester@kurozora.app',
+            'email_verified_at' => now(),
             'password'  => User::hashPass($this->userPassword),
-            'biography' => 'Hi! This is my Kurozora account.'
+            'biography' => 'Hi! This is my Kurozora account.',
         ]);
     }
 }

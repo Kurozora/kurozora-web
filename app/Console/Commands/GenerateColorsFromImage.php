@@ -44,12 +44,12 @@ class GenerateColorsFromImage extends Command
         $animeImage = AnimeImages::find($animeImageID);
 
         // Specified anime image does not exists
-        if($animeImage == null) {
+        if ($animeImage == null) {
             $this->error('The anime image was not found.');
             return 0;
         }
 
-        if($animeImage->background_color && !$this->option('force')) {
+        if ($animeImage->background_color && !$this->option('force')) {
             $this->error('The colors were already generated for this anime image.');
             return 0;
         }

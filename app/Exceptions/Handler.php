@@ -66,7 +66,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e): Response
     {
-        if(strpos($request->path(), 'api') === 0) {
+        if (strpos($request->path(), 'api') === 0) {
             // Custom render for authentication
             if ($e instanceof AuthenticationException) {
                 $apiError = new APIError();

@@ -19,7 +19,7 @@ class AnimeAgeSorter extends Sorter
      */
     public function apply(Request $request, Builder $builder, $direction): Builder
     {
-        if($direction == 'newest')
+        if ($direction == 'newest')
             $builder->orderBy('created_at', 'desc');
         else
             $builder->orderBy('created_at', 'asc');

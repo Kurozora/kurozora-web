@@ -23,7 +23,7 @@ class ValidateBannerImage implements Rule
             $attribute => 'mimes:jpeg,jpg,png|max:1000|nullable',
         ]);
 
-        if($imgValidator->fails()) {
+        if ($imgValidator->fails()) {
             $this->error = $imgValidator->errors()->first();
             return false;
         }

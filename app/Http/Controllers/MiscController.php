@@ -77,7 +77,7 @@ class MiscController extends Controller
         $termsOfUseText = null;
 
         // Create the file if it does not exist yet
-        if(!Storage::exists($filePath))
+        if (!Storage::exists($filePath))
             Storage::put($filePath, 'Page is empty. Please inform an administrator.');
 
         // Get the last update date

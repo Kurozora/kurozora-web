@@ -24,7 +24,7 @@ class ValidateUserBiography implements Rule
             $attribute => ['min:0', 'max:' . User::BIOGRAPHY_LIMIT],
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             $this->error = $validator->errors()->first();
             return false;
         }

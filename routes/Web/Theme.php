@@ -2,7 +2,6 @@
 
 use App\Http\Livewire\Theme\Index as ThemeIndex;
 use App\Http\Livewire\Theme\CreateThemeForm;
-use Illuminate\Support\Facades\Route;
 
 Route::prefix('/themes')
     ->name('themes')

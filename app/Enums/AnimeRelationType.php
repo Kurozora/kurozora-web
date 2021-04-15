@@ -41,7 +41,7 @@ final class AnimeRelationType extends Enum
      */
     public static function getDescription($value): string
     {
-        if($value == self::SpinOff)
+        if ($value == self::SpinOff)
             return 'Spin-Off';
 
         return parent::getDescription($value);

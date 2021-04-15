@@ -28,7 +28,7 @@ class FetchAnimeActors extends Action
 
         foreach($models as $model) {
             // Skip the Anime if actors were already fetched
-            if($model->fetched_actors) {
+            if ($model->fetched_actors) {
                 $amountFailed++;
                 continue;
             }
@@ -37,8 +37,8 @@ class FetchAnimeActors extends Action
             $amountSuccess++;
         }
 
-        if(!$amountSuccess) {
-            if($amountFailed > 1) {
+        if (!$amountSuccess) {
+            if ($amountFailed > 1) {
                 return Action::danger('The actors for these anime were already fetched.');
             }
             else {

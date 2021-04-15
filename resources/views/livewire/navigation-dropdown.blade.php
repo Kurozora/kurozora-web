@@ -18,6 +18,56 @@
                 </div>
             </div>
 
+            <!-- Settings Dropdown -->
+            <div class="hidden sm:flex sm:items-center sm:ml-6">
+                <x-dropdown align="right" width="48">
+                    <x-slot name="trigger">
+                        @auth
+                            <button
+                                class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
+                                <div class="h-8 w-8 bg-cover rounded-full"
+                                     style="background-image: url({{ Auth::user()->profile_image_url }});" alt="{{ Auth::user()->username }}" role="img"></div>
+                            </button>
+                        @else
+                            <button
+                                class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                     viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                          clip-rule="evenodd"/>
+                                </svg>
+                            </button>
+                        @endauth
+                    </x-slot>
+
+                    <x-slot name="content">
+                        <!-- Authentication -->
+                        <div class="border-t border-gray-100"></div>
+                        @auth
+                            <form method="POST" action="{{ route('sign-out') }}">
+                                @csrf
+
+                                <x-dropdown-link href="{{ route('sign-out') }}"
+                                                 onclick="event.preventDefault(); this.closest('form').submit();">
+                                    {{ __('Sign out') }}
+                                </x-dropdown-link>
+                            </form>
+                        @else
+                            <x-dropdown-link href="{{ route('sign-in') }}">
+                                {{ __('Sign in') }}
+                            </x-dropdown-link>
+
+                            @if (Route::has('sign-up'))
+                                <x-dropdown-link href="{{ route('sign-up') }}">
+                                    {{ __('Create Account') }}
+                                </x-dropdown-link>
+                            @endif
+                        @endauth
+                    </x-slot>
+                </x-dropdown>
+            </div>
+
             <!-- Hamburger -->
             <div class="-mr-2 flex items-center sm:hidden">
                 <button @click="open = ! open"
@@ -40,6 +90,32 @@
             <x-responsive-nav-link href="{{ route('themes') }}" :active="request()->routeIs('themes')">
                 {{ __('Themes') }}
             </x-responsive-nav-link>
+        </div>
+
+        <!-- Authentication -->
+        <div class="pt-4 pb-1 border-t border-gray-200">
+            <div class="space-y-1">
+                @auth
+                    <form method="POST" action="{{ route('sign-out') }}">
+                        @csrf
+
+                        <x-responsive-nav-link href="{{ route('sign-out') }}" onclick="event.preventDefault();
+                                                                            this.closest('form').submit();">
+                            {{ __('Sign out') }}
+                        </x-responsive-nav-link>
+                    </form>
+                @else
+                    <x-responsive-nav-link href="{{ route('sign-in') }}">
+                        {{ __('Sign in') }}
+                    </x-responsive-nav-link>
+
+                    @if (Route::has('sign-up'))
+                        <x-responsive-nav-link href="{{ route('sign-up') }}">
+                            {{ __('Create Account') }}
+                        </x-responsive-nav-link>
+                    @endif
+                @endauth
+            </div>
         </div>
     </div>
 </nav>

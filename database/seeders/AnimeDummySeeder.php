@@ -27,7 +27,7 @@ class AnimeDummySeeder extends Seeder
         // Get the anime JSON
         $animeJSON = null;
 
-        if(!Storage::exists(self::ANIME_JSON_PATH)) {
+        if (!Storage::exists(self::ANIME_JSON_PATH)) {
             $this->command->info('Downloading anime JSON...');
             $animeJSON = self::downloadJSON();
             $this->command->info('Anime JSON downloaded.');
@@ -39,7 +39,7 @@ class AnimeDummySeeder extends Seeder
         // Parse the JSON
         $parsedAnime = json_decode($animeJSON);
 
-        if($parsedAnime != null) {
+        if ($parsedAnime != null) {
             $total = count($parsedAnime->anime);
             $this->command->info('Start importing ' . $total . ' anime...');
 
@@ -47,9 +47,9 @@ class AnimeDummySeeder extends Seeder
             foreach ($parsedAnime->anime as $index => $animeData) {
                 $count = $index + 1;
                 // Respect the maximum amount
-                if(Env('MAX_ANIME_TO_SEED') != null) {
+                if (Env('MAX_ANIME_TO_SEED') != null) {
                     // Break out of the loop if the max has been reached
-                    if($count >= Env('MAX_ANIME_TO_SEED'))
+                    if ($count >= Env('MAX_ANIME_TO_SEED'))
                         break;
                 }
 
@@ -67,7 +67,7 @@ class AnimeDummySeeder extends Seeder
                 ]);
 
                 // Print progress every 100 anime and at the last anime
-                if($count % 100 == 0 || $count == $total)
+                if ($count % 100 == 0 || $count == $total)
                     $this->command->info($count . '/' . $total . ' anime imported.');
             }
         }

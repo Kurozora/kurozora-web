@@ -30,7 +30,7 @@ class FeedController extends Controller
         $user = Auth::user();
 
         // Check if the message is a re-share as user is allowed only one re-share per message
-        if($data['is_reshare'] ?? false) {
+        if ($data['is_reshare'] ?? false) {
             /** @var FeedMessage $parent */
             $reShareExists = FeedMessage::where('parent_feed_message_id', '=', $data['parent_id'])
                 ->where('user_id', $user->id)

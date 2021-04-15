@@ -19,7 +19,7 @@ class UserRole extends BooleanFilter
     public function apply(Request $request, $query, $value)
     {
         foreach($value as $roleName => $enabled) {
-            if(!$enabled) continue;
+            if (!$enabled) continue;
 
             $query->role($roleName);
         }
