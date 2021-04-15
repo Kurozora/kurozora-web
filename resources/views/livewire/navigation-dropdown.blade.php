@@ -25,8 +25,8 @@
                         @auth
                             <button
                                 class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
-                                <img class="h-8 w-8 rounded-full object-cover"
-                                     src="{{ Auth::user()->profile_image }}" alt="{{ Auth::user()->username }}"/>
+                                <div class="h-8 w-8 bg-cover rounded-full"
+                                     style="background-image: url({{ Auth::user()->profile_image_url }});" alt="{{ Auth::user()->username }}" role="img"></div>
                             </button>
                         @else
                             <button

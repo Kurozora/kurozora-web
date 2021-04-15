@@ -40,7 +40,7 @@ class Details extends Component
         $this->user = $user;
 
         $this->page['title'] = $user->username . ' on Kurozora';
-        $this->page['image'] = $user->profile_image;
+        $this->page['image'] = $user->profile_image_url;
     }
 
     /**
