@@ -36,8 +36,8 @@ class RegistrationController extends Controller
         if ( $request->hasFile('profileImage') &&
             $request->file('profileImage')->isValid()
         ) {
-            // Save the uploaded avatar
-            $newUser->addMediaFromRequest('profileImage')->toMediaCollection('avatar');
+            // Save the uploaded profile image
+            $newUser->addMediaFromRequest('profileImage')->toMediaCollection(User::MEDIA_PROFILE_IMAGE);
         }
 
         // Fire registration event

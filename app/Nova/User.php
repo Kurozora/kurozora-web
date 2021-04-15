@@ -62,7 +62,7 @@ class User extends Resource
         return [
             ID::make()->sortable(),
 
-            Images::make('Avatar', 'avatar')
+            Images::make('Profile Image', 'profile_image_url')
                 ->setFileName(function($originalFilename, $extension, $model) {
                     return md5($originalFilename) . '.' . $extension;
                 })
@@ -70,7 +70,7 @@ class User extends Resource
                     return md5($originalFilename);
                 }),
 
-            Images::make('Banner image', 'banner')
+            Images::make('Banner image', 'banner_image_url')
                 ->hideFromIndex()
                 ->setFileName(function($originalFilename, $extension, $model) {
                     return md5($originalFilename) . '.' . $extension;

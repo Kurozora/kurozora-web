@@ -80,30 +80,30 @@ class MeController extends Controller
             $changedFields[] = 'biography';
         }
 
-        // Update avatar
+        // Update profile image
         if ($request->has('profileImage')) {
-            // Remove previous avatar
-            $user->clearMediaCollection('avatar');
+            // Remove previous profile image
+            $user->clearMediaCollection(User::MEDIA_PROFILE_IMAGE);
 
             if ($data['profileImage'] != null) {
-                // Upload a new avatar, if one was uploaded
+                // Upload a new profile image, if one was uploaded
                 if ($request->hasFile('profileImage') && $request->file('profileImage')->isValid()) {
-                    $user->addMediaFromRequest('profileImage')->toMediaCollection('avatar');
+                    $user->addMediaFromRequest('profileImage')->toMediaCollection(User::MEDIA_PROFILE_IMAGE);
                 }
             }
 
-            $changedFields[] = 'avatar';
+            $changedFields[] = 'profile';
         }
 
         // Update banner
         if ($request->has('bannerImage')) {
             // Remove previous banner
-            $user->clearMediaCollection('banner');
+            $user->clearMediaCollection(User::MEDIA_BANNER_IMAGE);
 
             if ($data['bannerImage'] != null) {
                 // Save the uploaded banner, if one was uploaded
                 if ($request->hasFile('bannerImage') && $request->file('bannerImage')->isValid()) {
-                    $user->addMediaFromRequest('bannerImage')->toMediaCollection('banner');
+                    $user->addMediaFromRequest('bannerImage')->toMediaCollection(User::MEDIA_BANNER_IMAGE);
                 }
             }
 
@@ -122,8 +122,8 @@ class MeController extends Controller
         return JSONResult::success([
             'data'      => [
                 'biography'         => $user->biography,
-                'profileImageURL'   => $user->profile_image,
-                'bannerImageURL'    => $user->banner_image
+                'profileImageURL'   => $user->profile_image_url,
+                'bannerImageURL'    => $user->banner_image_url
             ],
             'message'   => $displayMessage,
         ]);
