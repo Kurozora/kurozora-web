@@ -2,12 +2,10 @@
 
 namespace App\Rules;
 
-use App\Models\User;
-use Auth;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 
-class ValidateAvatarImage implements Rule
+class ValidateProfileImage implements Rule
 {
     /** @var string $error */
     protected string $error;
