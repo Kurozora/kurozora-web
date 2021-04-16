@@ -2,25 +2,28 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Actions\Web\Auth\AttemptToAuthenticate;
+use App\Actions\Web\Auth\PrepareAuthenticatedSession;
+use App\Actions\Web\Auth\RedirectIfTwoFactorAuthenticatable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\SignInRequest;
+use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pipeline\Pipeline;
 use Illuminate\Routing\Redirector;
-use Auth;
 
 class AuthenticatedSessionController extends Controller
 {
     /**
      * Show the sign in view.
      *
-     * @param Request $request
      * @return Application|Factory|View
      */
-    public function create(Request $request): Application|Factory|View
+    public function create(): Application|Factory|View
     {
         return view('auth.sign-in');
     }
@@ -33,18 +36,24 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(SignInRequest $request): RedirectResponse
     {
-        $credentials = $request->only('email', 'password');
-        $rememberMe = $request->has('remember');
-
-        if (Auth::attempt($credentials, $rememberMe)) {
-            $request->session()->regenerate();
-
+        return $this->loginPipeline($request)->then(function () {
             return redirect()->intended();
-        }
+        });
+    }
 
-        return back()->withErrors([
-            'email' => __('The provided credentials do not match our records.'),
-        ]);
+    /**
+     * Get the authentication pipeline instance.
+     *
+     * @param SignInRequest $request
+     * @return Pipeline
+     */
+    protected function loginPipeline(SignInRequest $request): Pipeline
+    {
+        return (new Pipeline(app()))->send($request)->through(array_filter([
+            RedirectIfTwoFactorAuthenticatable::class,
+            AttemptToAuthenticate::class,
+            PrepareAuthenticatedSession::class,
+        ]));
     }
 
     /**

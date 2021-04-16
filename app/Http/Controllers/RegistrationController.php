@@ -28,9 +28,9 @@ class RegistrationController extends Controller
 
         // Create the user
         $newUser = User::create([
-            'username'              => $data['username'],
-            'email'                 => $data['email'],
-            'password'              => User::hashPass($data['password'])
+            'username'  => $data['username'],
+            'email'     => $data['email'],
+            'password'  => User::hashPass($data['password'])
         ]);
 
         if ( $request->hasFile('profileImage') &&

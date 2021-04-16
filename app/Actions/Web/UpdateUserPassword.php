@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Web\Auth;
+namespace App\Actions\Web;
 
 use App\Contracts\UpdatesUserPasswords;
 use App\Rules\ValidatePassword;
