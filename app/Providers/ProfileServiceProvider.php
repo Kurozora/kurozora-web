@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
-use App\Actions\Web\Auth\UpdateUserPassword;
-use App\Actions\Web\Auth\UpdateUserProfileInformation;
-use App\Actions\Web\Auth\DeleteUser;
+use App\Actions\Web\UpdateUserPassword;
+use App\Actions\Web\UpdateUserProfileInformation;
+use App\Actions\Web\DeleteUser;
 use App\Contracts\DeletesUsers;
 use App\Contracts\UpdatesUserPasswords;
 use App\Contracts\UpdatesUserProfileInformation;
@@ -29,8 +29,8 @@ class ProfileServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        app()->singleton(UpdatesUserProfileInformation::class, UpdateUserProfileInformation::class);
-        app()->singleton(UpdatesUserPasswords::class, UpdateUserPassword::class);
-        app()->singleton(DeletesUsers::class, DeleteUser::class);
+        $this->app->singleton(UpdatesUserProfileInformation::class, UpdateUserProfileInformation::class);
+        $this->app->singleton(UpdatesUserPasswords::class, UpdateUserPassword::class);
+        $this->app->singleton(DeletesUsers::class, DeleteUser::class);
     }
 }
