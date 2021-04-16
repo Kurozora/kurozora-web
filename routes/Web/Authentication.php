@@ -5,6 +5,10 @@ use App\Http\Controllers\Web\EmailVerificationNotificationController;
 use App\Http\Controllers\Web\EmailVerificationPromptController;
 use App\Http\Controllers\Web\NewPasswordController;
 use App\Http\Controllers\Web\PasswordResetLinkController;
+use App\Http\Controllers\Web\RecoveryCodeController;
+use App\Http\Controllers\Web\TwoFactorAuthenticatedSessionController;
+use App\Http\Controllers\Web\TwoFactorAuthenticationController;
+use App\Http\Controllers\Web\TwoFactorQrCodeController;
 use App\Http\Controllers\Web\VerifyEmailController;
 use App\Http\Controllers\Web\SignUpUserController;
 
@@ -57,4 +61,30 @@ Route::name('password')
         Route::post('/reset-password', [NewPasswordController::class, 'store'])
             ->middleware(['guest'])
             ->name('.update');
+    });
+
+Route::name('two-factor')
+    ->group(function () {
+        Route::get('/two-factor-challenge', [TwoFactorAuthenticatedSessionController::class, 'create'])
+            ->middleware(['guest'])
+            ->name('.sign-in');
+
+        Route::post('/two-factor-challenge', [TwoFactorAuthenticatedSessionController::class, 'store'])
+            ->middleware(['guest'])
+            ->name('.update');
+
+        Route::post('/user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'store'])
+            ->middleware(['auth', 'password.confirm']);
+
+        Route::delete('/user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'destroy'])
+            ->middleware(['auth', 'password.confirm']);
+
+        Route::get('/user/two-factor-qr-code', [TwoFactorQrCodeController::class, 'show'])
+            ->middleware(['auth', 'password.confirm']);
+
+        Route::get('/user/two-factor-recovery-codes', [RecoveryCodeController::class, 'index'])
+            ->middleware(['auth', 'password.confirm']);
+
+        Route::post('/user/two-factor-recovery-codes', [RecoveryCodeController::class, 'store'])
+            ->middleware(['auth', 'password.confirm']);
     });

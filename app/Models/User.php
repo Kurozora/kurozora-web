@@ -9,6 +9,7 @@ use App\Notifications\NewSession;
 use App\Traits\HeartActionTrait;
 use App\Traits\KuroSearchTrait;
 use App\Traits\MediaLibraryExtensionTrait;
+use App\Traits\Web\Auth\TwoFactorAuthenticatable;
 use App\Traits\VoteActionTrait;
 use Carbon\Carbon;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
@@ -51,6 +52,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         MediaLibraryExtensionTrait,
         Notifiable,
         Reacterable,
+        TwoFactorAuthenticatable,
         VoteActionTrait;
 
     // Maximum amount of returned search results
