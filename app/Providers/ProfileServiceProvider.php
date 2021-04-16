@@ -8,6 +8,7 @@ use App\Actions\Web\DeleteUser;
 use App\Contracts\DeletesUsers;
 use App\Contracts\UpdatesUserPasswords;
 use App\Contracts\UpdatesUserProfileInformation;
+use App\Contracts\Web\Auth\TwoFactorAuthenticationProvider as TwoFactorAuthenticationProviderContract;
 use Illuminate\Support\ServiceProvider;
 
 class ProfileServiceProvider extends ServiceProvider
@@ -19,7 +20,7 @@ class ProfileServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton(TwoFactorAuthenticationProviderContract::class, TwoFactorAuthenticationProvider::class);
     }
 
     /**
