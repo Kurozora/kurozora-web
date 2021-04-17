@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Events\NewUserRegisteredEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\SignUpRequest;
 use App\Models\User;
 use Auth;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -48,7 +48,13 @@ class SignUpUserController extends Controller
             'password'              => User::hashPass($data['password'])
         ]);
 
-        $newUser->sendEmailVerificationNotification();
+        if ($request->hasFile('profileImage') &&
+            $request->file('profileImage')->isValid()) {
+            // Save the uploaded profile image
+            $newUser->updateProfileImage($request->file('profileImage'));
+        }
+
+        event(new Registered($newUser));
 
         Auth::login($newUser);
 
