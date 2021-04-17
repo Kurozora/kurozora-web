@@ -111,24 +111,24 @@ class MeTest extends TestCase
         Storage::fake('profile_images');
 
         // Create fake 100kb image
-        $image = UploadedFile::fake()->image('ProfileImage.jpg', 250, 250)->size(100);
+        $uploadFile = UploadedFile::fake()->image('ProfileImage.jpg', 250, 250)->size(100);
 
         // Send the update request
         $response = $this->auth()->json('POST', '/api/v1/me', [
-            'profileImage' => $image
+            'profileImage' => $uploadFile
         ]);
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
 
         // Assert that the profile image was uploaded properly
-        $profileImage = $this->user->getMedia(User::MEDIA_PROFILE_IMAGE);
+        $profileImage = $this->user->profile_image;
 
-        $this->assertCount(1, $profileImage);
+        $this->assertNotNull($profileImage);
         $this->assertFileExists($profileImage->first()->getPath());
 
         // Delete the profile image
-        $this->user->clearMediaCollection(User::MEDIA_PROFILE_IMAGE);
+        $this->user->deleteProfileImage();
     }
 
     /**
@@ -145,9 +145,9 @@ class MeTest extends TestCase
         Storage::fake('profile_images');
 
         // Create fake 100kb image and set it as the profile image
-        $image = UploadedFile::fake()->image('ProfileImage.jpg', 250, 250)->size(100);
+        $uploadFile = UploadedFile::fake()->image('ProfileImage.jpg', 250, 250)->size(100);
 
-        $this->user->addMedia($image)->toMediaCollection(User::MEDIA_PROFILE_IMAGE);
+        $this->user->updateProfileImage($uploadFile);
 
         // Send the update request
         $response = $this->auth()->json('POST', '/api/v1/me', [
@@ -158,9 +158,9 @@ class MeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Assert that the profile image was removed properly
-        $profileImage = $this->user->getMedia(User::MEDIA_PROFILE_IMAGE);
+        $profileImage = $this->user->profile_image;
 
-        $this->assertCount(0, $profileImage);
+        $this->assertNull($profileImage);
     }
 
     /**
@@ -175,24 +175,24 @@ class MeTest extends TestCase
         Storage::fake('banners');
 
         // Create fake 100kb image
-        $image = UploadedFile::fake()->image('banner.jpg', 250, 250)->size(100);
+        $uploadFile = UploadedFile::fake()->image('banner.jpg', 250, 250)->size(100);
 
         // Send the update request
         $response = $this->auth()->json('POST', '/api/v1/me', [
-            'bannerImage' => $image
+            'bannerImage' => $uploadFile
         ]);
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
 
         // Assert that the banner image was uploaded properly
-        $banner = $this->user->getMedia(User::MEDIA_BANNER_IMAGE);
+        $bannerImageImage = $this->user->banner_image;
 
-        $this->assertCount(1, $banner);
-        $this->assertFileExists($banner->first()->getPath());
+        $this->assertNotNull($bannerImageImage);
+        $this->assertFileExists($bannerImageImage->first()->getPath());
 
         // Delete the banner
-        $this->user->clearMediaCollection(User::MEDIA_BANNER_IMAGE);
+        $this->user->deleteBannerImage();
     }
 
     /**
@@ -209,9 +209,9 @@ class MeTest extends TestCase
         Storage::fake('banners');
 
         // Create fake 100kb image and set it as the banner
-        $image = UploadedFile::fake()->image('banner.jpg', 250, 250)->size(100);
+        $uploadFile = UploadedFile::fake()->image('banner.jpg', 250, 250)->size(100);
 
-        $this->user->addMedia($image)->toMediaCollection(User::MEDIA_BANNER_IMAGE);
+        $this->user->updateBannerImage($uploadFile);
 
         // Send the update request
         $response = $this->auth()->json('POST', '/api/v1/me', [
@@ -222,9 +222,9 @@ class MeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Assert that the banner was removed properly
-        $banner = $this->user->getMedia(User::MEDIA_BANNER_IMAGE);
+        $bannerImage = $this->user->banner_image;
 
-        $this->assertCount(0, $banner);
+        $this->assertNull($bannerImage);
     }
 
     /**
