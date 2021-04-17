@@ -10,6 +10,7 @@ use App\Traits\HeartActionTrait;
 use App\Traits\KuroSearchTrait;
 use App\Traits\MediaLibraryExtensionTrait;
 use App\Traits\Web\Auth\TwoFactorAuthenticatable;
+use App\Traits\User\HasProfileImage;
 use App\Traits\VoteActionTrait;
 use Carbon\Carbon;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
@@ -44,6 +45,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
 {
     use Authorizable,
         HasFactory,
+        HasProfileImage,
         HasRoles,
         HeartActionTrait,
         InteractsWithMedia,
@@ -80,8 +82,12 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     // User biography character limited
     const BIOGRAPHY_LIMIT = 250;
 
-    // Media keys
-    const MEDIA_PROFILE_IMAGE = 'profile';
+    /**
+     * The name of the profile image media collection.
+     *
+     * @var string $profileImageCollectionName
+     */
+    protected string $profileImageCollectionName = 'profile';
     const MEDIA_BANNER_IMAGE = 'banner';
 
     // Table name
@@ -174,46 +180,13 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection(User::MEDIA_PROFILE_IMAGE)
+        $this->addMediaCollection($this->profileImageCollectionName)
             ->singleFile()
             ->useFallbackUrl('https://ui-avatars.com/api/?name=' . $this->username . '&color=000000&background=e0e0e0&length=1&bold=true');
 
         $this->addMediaCollection(self::MEDIA_BANNER_IMAGE)
             ->singleFile()
             ->withResponsiveImages();
-    }
-
-    /**
-     * Updates the user's profile image with the given request key.
-     *
-     * @param string|UploadedFile $uploadFile
-     *
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
-     */
-    function updateProfileImage(string|UploadedFile $uploadFile)
-    {
-        $this->addMedia($uploadFile)->toMediaCollection(self::MEDIA_PROFILE_IMAGE);
-    }
-
-    /**
-     * Returns the profile image of the user if the user has one, otherwise a placeholder image is returned.
-     *
-     * @return Media|null
-     */
-    function getProfileImageAttribute(): Media|null
-    {
-         return $this->getFirstMedia(self::MEDIA_PROFILE_IMAGE);
-    }
-
-    /**
-     * Returns the profile image of the user if the user has one, otherwise a placeholder image is returned.
-     *
-     * @return string
-     */
-    function getProfileImageUrlAttribute(): string
-    {
-        return $this->getFirstMediaFullUrl(self::MEDIA_PROFILE_IMAGE);
     }
 
     /**
