@@ -9,6 +9,8 @@ use App\Listeners\FetchAnimeActors;
 use App\Listeners\FetchAnimeDetails;
 use App\Listeners\FetchAnimeImages;
 use App\Listeners\FetchBaseAnimeEpisodes;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -19,9 +21,9 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-//        \Illuminate\Auth\Events\Registered::class => [
-//            \Illuminate\Auth\Listeners\SendEmailVerificationNotification::class,
-//        ],
+        Registered::class => [
+            SendEmailVerificationNotification::class,
+        ],
 
         Event::class => [
             EventListener::class,
