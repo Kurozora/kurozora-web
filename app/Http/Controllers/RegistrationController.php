@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\JSONResult;
 use App\Http\Requests\Web\SignUpRequest;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
@@ -37,7 +38,7 @@ class RegistrationController extends Controller
             $newUser->updateProfileImage($request->file('profileImage'));
         }
 
-        $newUser->sendEmailVerificationNotification();
+        event(new Registered($newUser));
 
         // Show a successful response
         return JSONResult::success();
