@@ -2,29 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\NewUserRegisteredEvent;
 use App\Helpers\JSONResult;
-use App\Http\Requests\RegistrationRequest;
+use App\Http\Requests\Web\SignUpRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
-use Throwable;
 
 class RegistrationController extends Controller
 {
     /**
      * Signup a new user
      *
-     * @param RegistrationRequest $request
+     * @param SignUpRequest $request
+     *
      * @return JsonResponse
-     * @throws Throwable
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
-    public function signUp(RegistrationRequest $request): JsonResponse
+    public function signUp(SignUpRequest $request): JsonResponse
     {
-        $data = $request->validated();
+        $data = $request->only(['username', 'email', 'password']);
 
         // Create the user
         $newUser = User::create([
@@ -39,8 +37,7 @@ class RegistrationController extends Controller
             $newUser->updateProfileImage($request->file('profileImage'));
         }
 
-        // Fire registration event
-        event(new NewUserRegisteredEvent($newUser));
+        $newUser->sendEmailVerificationNotification();
 
         // Show a successful response
         return JSONResult::success();
