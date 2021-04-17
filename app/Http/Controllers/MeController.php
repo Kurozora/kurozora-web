@@ -83,12 +83,12 @@ class MeController extends Controller
         // Update profile image
         if ($request->has('profileImage')) {
             // Remove previous profile image
-            $user->clearMediaCollection(User::MEDIA_PROFILE_IMAGE);
+            $user->deleteProfileImage();
 
             if ($data['profileImage'] != null) {
                 // Upload a new profile image, if one was uploaded
                 if ($request->hasFile('profileImage') && $request->file('profileImage')->isValid()) {
-                    $user->addMediaFromRequest('profileImage')->toMediaCollection(User::MEDIA_PROFILE_IMAGE);
+                    $user->updateProfileImage($request->file('profileImage'));
                 }
             }
 
@@ -98,12 +98,12 @@ class MeController extends Controller
         // Update banner
         if ($request->has('bannerImage')) {
             // Remove previous banner
-            $user->clearMediaCollection(User::MEDIA_BANNER_IMAGE);
+            $user->deleteBannerImage();
 
             if ($data['bannerImage'] != null) {
                 // Save the uploaded banner, if one was uploaded
                 if ($request->hasFile('bannerImage') && $request->file('bannerImage')->isValid()) {
-                    $user->addMediaFromRequest('bannerImage')->toMediaCollection(User::MEDIA_BANNER_IMAGE);
+                    $user->updateBannerImage($request->file('bannerImage'));
                 }
             }
 
@@ -142,7 +142,7 @@ class MeController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        // Paginate the favorited anime
+        // Paginate the favorite anime
         $favoriteAnime = $user->favoriteAnime()->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain

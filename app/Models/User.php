@@ -10,6 +10,8 @@ use App\Traits\HeartActionTrait;
 use App\Traits\KuroSearchTrait;
 use App\Traits\MediaLibraryExtensionTrait;
 use App\Traits\Web\Auth\TwoFactorAuthenticatable;
+use App\Traits\User\HasBannerImage;
+use App\Traits\User\HasProfileImage;
 use App\Traits\VoteActionTrait;
 use Carbon\Carbon;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
@@ -21,7 +23,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
@@ -35,15 +36,15 @@ use Spatie\IcalendarGenerator\Properties\Parameter;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements HasMedia, MustVerifyEmail, ReacterableContract
 {
     use Authorizable,
+        HasBannerImage,
         HasFactory,
+        HasProfileImage,
         HasRoles,
         HeartActionTrait,
         InteractsWithMedia,
@@ -79,10 +80,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
 
     // User biography character limited
     const BIOGRAPHY_LIMIT = 250;
-
-    // Media keys
-    const MEDIA_PROFILE_IMAGE = 'profile';
-    const MEDIA_BANNER_IMAGE = 'banner';
 
     // Table name
     const TABLE_NAME = 'users';
@@ -133,6 +130,20 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     ];
 
     /**
+     * The name of the banner image media collection.
+     *
+     * @var string $bannerImageCollectionName
+     */
+    protected string $bannerImageCollectionName = 'banner';
+
+    /**
+     * The name of the profile image media collection.
+     *
+     * @var string $profileImageCollectionName
+     */
+    protected string $profileImageCollectionName = 'profile';
+
+    /**
      * Returns the associated feed messages for the user.
      *
      * @return HasMany
@@ -174,66 +185,13 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection(User::MEDIA_PROFILE_IMAGE)
+        $this->addMediaCollection($this->profileImageCollectionName)
             ->singleFile()
             ->useFallbackUrl('https://ui-avatars.com/api/?name=' . $this->username . '&color=000000&background=e0e0e0&length=1&bold=true');
 
-        $this->addMediaCollection(self::MEDIA_BANNER_IMAGE)
+        $this->addMediaCollection($this->bannerImageCollectionName)
             ->singleFile()
             ->withResponsiveImages();
-    }
-
-    /**
-     * Updates the user's profile image with the given request key.
-     *
-     * @param string|UploadedFile $uploadFile
-     *
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
-     */
-    function updateProfileImage(string|UploadedFile $uploadFile)
-    {
-        $this->addMedia($uploadFile)->toMediaCollection(self::MEDIA_PROFILE_IMAGE);
-    }
-
-    /**
-     * Returns the profile image of the user if the user has one, otherwise a placeholder image is returned.
-     *
-     * @return Media|null
-     */
-    function getProfileImageAttribute(): Media|null
-    {
-         return $this->getFirstMedia(self::MEDIA_PROFILE_IMAGE);
-    }
-
-    /**
-     * Returns the profile image of the user if the user has one, otherwise a placeholder image is returned.
-     *
-     * @return string
-     */
-    function getProfileImageUrlAttribute(): string
-    {
-        return $this->getFirstMediaFullUrl(self::MEDIA_PROFILE_IMAGE);
-    }
-
-    /**
-     * Returns the banner image object of the user.
-     *
-     * @return Media|null
-     */
-    function getBannerImageAttribute(): Media|null
-    {
-        return $this->getFirstMedia(self::MEDIA_BANNER_IMAGE);
-    }
-
-    /**
-     * Returns the banner image of the user if the user has one, otherwise a placeholder image is returned.
-     *
-     * @return string
-     */
-    function getBannerImageUrlAttribute(): string
-    {
-        return $this->getFirstMediaFullUrl(self::MEDIA_BANNER_IMAGE);
     }
 
     /**
