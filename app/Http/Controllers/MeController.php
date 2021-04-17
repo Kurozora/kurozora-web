@@ -98,12 +98,12 @@ class MeController extends Controller
         // Update banner
         if ($request->has('bannerImage')) {
             // Remove previous banner
-            $user->clearMediaCollection(User::MEDIA_BANNER_IMAGE);
+            $user->deleteBannerImage();
 
             if ($data['bannerImage'] != null) {
                 // Save the uploaded banner, if one was uploaded
                 if ($request->hasFile('bannerImage') && $request->file('bannerImage')->isValid()) {
-                    $user->addMediaFromRequest('bannerImage')->toMediaCollection(User::MEDIA_BANNER_IMAGE);
+                    $user->updateBannerImage($request->file('bannerImage'));
                 }
             }
 
