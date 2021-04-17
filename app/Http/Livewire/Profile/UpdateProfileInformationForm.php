@@ -28,7 +28,7 @@ class UpdateProfileInformationForm extends Component
      *
      * @var mixed
      */
-    public $photo;
+    public mixed $photo = null;
 
     /**
      * The component's listeners.
@@ -84,7 +84,7 @@ class UpdateProfileInformationForm extends Component
      */
     public function deleteProfilePhoto()
     {
-        Auth::user()->getFirstMedia(User::MEDIA_PROFILE_IMAGE)->delete();
+        Auth::user()->deleteProfileImage();
 
         $this->emitSelf('refresh-component');
 
