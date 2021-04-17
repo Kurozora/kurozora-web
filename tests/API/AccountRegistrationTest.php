@@ -37,20 +37,20 @@ class AccountRegistrationTest extends TestCase
      * @return void
      * @test
      */
-    function an_account_can_be_sined_up_with_an_profile_image()
+    function an_account_can_be_signed_up_with_an_profile_image()
     {
         // Create fake storage
         Storage::fake('profile_images');
 
         // Create fake 100kb image
-        $image = UploadedFile::fake()->image('ProfileImage.jpg', 250, 250)->size(100);
+        $uploadFile = UploadedFile::fake()->image('ProfileImage.jpg', 250, 250)->size(100);
 
         // Attempt to signup the user
         $response = $this->json('POST', '/api/v1/users', [
             'username'      => 'KurozoraTester',
             'password'      => 'StrongPassword909@!',
             'email'         => 'tester@kurozora.app',
-            'profileImage'  => $image
+            'profileImage'  => $uploadFile
         ]);
 
         // Check whether the request was successful
@@ -62,13 +62,13 @@ class AccountRegistrationTest extends TestCase
         $this->assertEquals(1, User::count());
 
         // Assert that the profile image was uploaded properly
-        $profileImage = $user->getMedia(User::MEDIA_PROFILE_IMAGE);
+        $profileImage = $user->profile_image;
 
-        $this->assertCount(1, $profileImage);
+        $this->assertNotNull($profileImage);
         $this->assertFileExists($profileImage->first()->getPath());
 
         // Delete the media
-        $user->clearMediaCollection(User::MEDIA_PROFILE_IMAGE);
+        $user->deleteProfileImage();
     }
 
     /**
@@ -83,14 +83,14 @@ class AccountRegistrationTest extends TestCase
         Storage::fake('profile_images');
 
         // Create fake 1.2mb image
-        $image = UploadedFile::fake()->image('ProfileImage.jpg', 250, 250)->size(1200);
+        $uploadFile = UploadedFile::fake()->image('ProfileImage.jpg', 250, 250)->size(1200);
 
         // Attempt to signup the user
         $this->json('POST', '/api/v1/users', [
             'username'      => 'KurozoraTester',
             'password'      => 'StrongPassword909@!',
             'email'         => 'tester@kurozora.app',
-            'profileImage'  => $image
+            'profileImage'  => $uploadFile
         ])->assertUnsuccessfulAPIResponse();
 
         // Double check that the account was not created
@@ -109,14 +109,14 @@ class AccountRegistrationTest extends TestCase
         Storage::fake('profile_images');
 
         // Create fake 100kb pdf
-        $pdfFile = UploadedFile::fake()->create('document.pdf', 100);
+        $uploadFile = UploadedFile::fake()->create('document.pdf', 100);
 
         // Attempt to signup the user
         $this->json('POST', '/api/v1/users', [
             'username'      => 'KurozoraTester',
             'password'      => 'StrongPassword909@!',
             'email'         => 'tester@kurozora.app',
-            'profileImage'  => $pdfFile
+            'profileImage'  => $uploadFile
         ])->assertUnsuccessfulAPIResponse();
 
         // Double check that the account was not created
@@ -135,14 +135,14 @@ class AccountRegistrationTest extends TestCase
         Storage::fake('profile_images');
 
         // Create fake 100kb gif
-        $image = UploadedFile::fake()->image('ProfileImage.gif', 250, 250)->size(100);
+        $uploadFile = UploadedFile::fake()->image('ProfileImage.gif', 250, 250)->size(100);
 
         // Attempt to sign up the user
         $this->json('POST', '/api/v1/users', [
             'username'      => 'KurozoraTester',
             'password'      => 'StrongPassword909@!',
             'email'         => 'tester@kurozora.app',
-            'profileImage'  => $image
+            'profileImage'  => $uploadFile
         ])->assertUnsuccessfulAPIResponse();
 
         // Double check that the account was not created
