@@ -2,6 +2,7 @@
 
 namespace Tests\API;
 
+use App\Helpers\Settings;
 use App\Models\Session;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -34,9 +35,8 @@ class SignInWithAppleTest extends TestCase
         $this->assertEquals(1, Session::count(), 'A session was not created.');
 
         // Check whether the user can change their username
-        /** @var User $user */
-        $user = User::first();
-        $this->assertTrue($user->username_change_available, 'The user does not have a username change available.');
+        $settings = Settings::create(User::first());
+        $this->assertTrue($settings->get('can_change_username'), 'The user cannot change their username when it should be possible.');
     }
 
     /**
