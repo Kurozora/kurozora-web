@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 use Laravel\Nova\Exceptions\AuthenticationException;
+use musa11971\JWTDecoder\Exceptions\ValueNotFoundException;
 use musa11971\JWTDecoder\JWTDecoder;
 use musa11971\JWTDecoder\JWTPayload;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
@@ -25,7 +26,7 @@ class SignInWithAppleController extends Controller
      * @param SignInWithAppleRequest $request
      * @return JsonResponse
      * @throws AuthenticationException
-     * @throws ServiceUnavailableHttpException
+     * @throws ValueNotFoundException
      */
     public function signIn(SignInWithAppleRequest $request): JsonResponse
     {
@@ -39,8 +40,6 @@ class SignInWithAppleController extends Controller
             throw new ServiceUnavailableHttpException('Sorry, "Sign in with Apple" is not available at this moment due to an issue with Apple.');
 
         // Attempt to decode the JWT
-        $payload = null;
-
         try {
             $payload = JWTDecoder::token($data['token'])
                 ->withKeys($keys)
@@ -108,11 +107,12 @@ class SignInWithAppleController extends Controller
      * Find user account if it exists.
      *
      * @param JWTPayload $payload
+     *
      * @return User|null
+     * @throws ValueNotFoundException
      */
     protected function getUser(JWTPayload $payload): ?User
     {
-        $user = null;
         try {
             $email = $payload->get('email');
             $user = User::where('email', $email)->first();
@@ -136,7 +136,9 @@ class SignInWithAppleController extends Controller
      * Creates a new user from the given payload.
      *
      * @param JWTPayload $payload
+     *
      * @return User|null
+     * @throws ValueNotFoundException
      */
     protected function signUpUser(JWTPayload $payload): ?User
     {

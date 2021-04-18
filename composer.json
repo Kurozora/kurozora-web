@@ -18,6 +18,7 @@
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.3",
+        "hisorange/browser-detect": "^4.4",
         "imdhemy/laravel-purchases": "^0.10.2",
         "itsgoingd/clockwork": "^5.0",
         "laraning/nova-time-field": "^1.0",

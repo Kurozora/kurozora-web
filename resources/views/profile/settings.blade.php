@@ -28,6 +28,12 @@
             <x-section-border />
 
             <div class="mt-10 sm:mt-0">
+                @livewire('profile.sign-out-other-sessions-form')
+            </div>
+
+            <x-section-border />
+
+            <div class="mt-10 sm:mt-0">
                 @livewire('profile.delete-user-form')
             </div>
         </div>

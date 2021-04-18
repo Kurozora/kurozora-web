@@ -21,7 +21,7 @@ class CreateForumThreadsTable extends Migration
             $table->unsignedBigInteger('love_reactant_id')->nullable();
             $table->unsignedBigInteger('section_id');
             $table->unsignedBigInteger('user_id');
-            $table->string('ip');
+            $table->string('ip_address', 45);
             $table->string('title')->nullable()->default(null);
             $table->text('content');
             $table->boolean('locked')->default(false);

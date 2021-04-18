@@ -3,6 +3,8 @@
 namespace App\Actions\Web\Auth;
 
 use App\Helpers\SignInRateLimiter;
+use Auth;
+use Browser;
 use Illuminate\Http\Request;
 
 class PrepareAuthenticatedSession
@@ -35,6 +37,16 @@ class PrepareAuthenticatedSession
     public function handle(Request $request, callable $next): mixed
     {
         $request->session()->regenerate();
+        $request->session()->save();
+
+        $browser = Browser::detect();
+
+        Auth::user()->createSession([
+            'platform'          => $browser->platformFamily(),
+            'platform_version'  => $browser->platformVersion(),
+            'device_vendor'     => $browser->deviceFamily(),
+            'device_model'      => $browser->deviceModel(),
+        ]);
 
         $this->limiter->clear($request);
 

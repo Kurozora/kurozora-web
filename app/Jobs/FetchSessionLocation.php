@@ -14,9 +14,19 @@ class FetchSessionLocation implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $tries = 1;
+    /**
+     * The number of tries.
+     *
+     * @var int $tries
+     */
+    public int $tries = 1;
 
-    private $session;
+    /**
+     * The session object.
+     *
+     * @var Session $session
+     */
+    private Session $session;
 
     /**
      * Create a new job instance.
@@ -58,9 +68,10 @@ class FetchSessionLocation implements ShouldQueue
      * @return mixed
      * @throws Exception
      */
-    private function getDataFromAPI() {
+    private function getDataFromAPI(): mixed
+    {
         // Get the IP in question and query the API
-        $ip = $this->session->ip;
+        $ip = $this->session->ip_address;
 
         $rawContent = file_get_contents('https://ipinfo.io/' . $ip . '/json');
 
@@ -68,7 +79,9 @@ class FetchSessionLocation implements ShouldQueue
         $decodedResponse = json_decode($rawContent);
 
         // If the content could not be decoded throw an exception
-        if (!$decodedResponse) throw new Exception("Could not get IP info for IP: " . $ip);
+        if (!$decodedResponse) {
+            throw new Exception("Could not get IP info for IP: " . $ip);
+        }
 
         return $decodedResponse;
     }
@@ -79,16 +92,19 @@ class FetchSessionLocation implements ShouldQueue
      * @param $data
      * @return array|null
      */
-    private function getCoordinates($data) {
-        if (!isset($data->loc) || !is_string($data->loc))
+    private function getCoordinates($data): ?array
+    {
+        if (!isset($data->loc) || !is_string($data->loc)) {
             return null;
+        }
 
         // Explode the string
         $coords = explode(',', $data->loc);
 
         // Return null if the string wasn't properly split
-        if (!count($coords))
+        if (!count($coords)) {
             return null;
+        }
 
         return [
             'lat' => $coords[0],
