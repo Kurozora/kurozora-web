@@ -24,10 +24,10 @@ class CreateUsersTable extends Migration
             $table->string('password')->nullable();
             $table->text('two_factor_secret')->nullable();
             $table->text('two_factor_recovery_codes')->nullable();
-            $table->text('biography')->nullable();
             $table->rememberToken();
+            $table->text('biography')->nullable();
+            $table->json('settings');
             $table->timestamp('last_mal_import_at')->nullable();
-            $table->boolean('username_change_available')->default(false);
             $table->timestamps();
         });
 

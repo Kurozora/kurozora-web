@@ -91,7 +91,7 @@ class UserResourceBasic extends JsonResource
 
         return [
             'private' => [
-                'usernameChangeAvailable' => $user->username_change_available,
+                'settings' => $user->settings,
             ]
         ];
     }
