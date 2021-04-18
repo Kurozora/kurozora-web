@@ -28,7 +28,16 @@ return [
 
     'env' => env('APP_ENV', 'production'),
 
-    'version' => '1.0.8',
+    /*
+    |--------------------------------------------------------------------------
+    | Application Version
+    |--------------------------------------------------------------------------
+    |
+    | This value is the version of your application. This value is used when
+    | the framework needs to place the application's version in a notification
+    | or any other location as required by the application or its packages.
+    */
+    'version' => env('APP_VERSION', '1.0.0'),
 
     /*
     |--------------------------------------------------------------------------
