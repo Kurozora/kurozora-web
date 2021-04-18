@@ -11,21 +11,20 @@ class NewSession extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    /** @var string $ip */
-    private string $ip;
-
-    /** @var Session $session */
+    /**
+     * The session object.
+     *
+     * @var Session $session
+     */
     private Session $session;
 
     /**
      * Create a new notification instance.
      *
-     * @param string $ip
      * @param Session $session
      */
-    public function __construct(string $ip, Session $session)
+    public function __construct(Session $session)
     {
-        $this->ip = $ip;
         $this->session = $session;
     }
 
@@ -35,7 +34,7 @@ class NewSession extends Notification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return array
      */
-    public function via($notifiable): array
+    public function via(mixed $notifiable): array
     {
         return ['database'];
     }
@@ -46,11 +45,11 @@ class NewSession extends Notification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toDatabase($notifiable): array
+    public function toDatabase(mixed $notifiable): array
     {
         return [
-            'ip'        => $this->ip,
-            'sessionID' => $this->session->id
+            'sessionID' => $this->session->id,
+            'ipAddress' => $this->session->ip_address,
         ];
     }
 }

@@ -17,12 +17,13 @@ class LoginAttempt extends KModel
     /**
      * Checks if the given IP is allowed to login (in terms of login requests)
      *
-     * @param string $ip
+     * @param string $ipAddress
      * @return bool
      */
-    public static function isIPAllowedToLogin($ip) {
+    public static function isIPAllowedToLogin(string $ipAddress): bool
+    {
         $attemptCount = LoginAttempt::where([
-            ['ip', '=', $ip],
+            ['ip_address', '=', $ipAddress],
             ['created_at', '>=', now()->subMinutes(self::CHECK_TIMESPAN)]
         ])->count();
 
@@ -32,9 +33,9 @@ class LoginAttempt extends KModel
     /**
      * Registers a failed login attempt for an IP address
      *
-     * @param string $ip
+     * @param string $ipAddress
      */
-    public static function registerFailedLoginAttempt($ip) {
-        LoginAttempt::create(['ip'=> $ip]);
+    public static function registerFailedLoginAttempt(string $ipAddress) {
+        LoginAttempt::create(['ip_address'=> $ipAddress]);
     }
 }

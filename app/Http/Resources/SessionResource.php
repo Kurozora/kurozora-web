@@ -24,8 +24,8 @@ class SessionResource extends JsonResource
             'type'          => 'sessions',
             'href'          => route('api.me.sessions.details', $session, false),
             'attributes'    => [
-                'ip'                => $session->ip,
-                'lastValidatedAt'   => $session->last_validated_at->format('Y-m-d H:i:s'),
+                'ip_address'        => $session->ip_address,
+                'lastValidatedAt'   => $session->last_activity_at->format('Y-m-d H:i:s'),
             ]
         ];
 

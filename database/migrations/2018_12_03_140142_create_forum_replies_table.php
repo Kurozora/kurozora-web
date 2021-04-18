@@ -21,7 +21,7 @@ class CreateForumRepliesTable extends Migration
             $table->unsignedBigInteger('love_reactant_id')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('thread_id');
-            $table->string('ip');
+            $table->string('ip_address', 45);
             $table->text('content');
             $table->timestamp('edited_at')->nullable()->default(null);
             $table->timestamps();

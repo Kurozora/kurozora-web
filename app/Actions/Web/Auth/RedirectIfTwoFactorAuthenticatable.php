@@ -86,7 +86,7 @@ class RedirectIfTwoFactorAuthenticatable
         $this->limiter->increment($request);
 
         throw ValidationException::withMessages([
-            'email' => [trans('auth.failed')],
+            'email' => [__('auth.failed')],
         ]);
     }
 
