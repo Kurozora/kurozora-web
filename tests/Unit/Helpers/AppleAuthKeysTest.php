@@ -24,7 +24,7 @@ class AppleAuthKeysTest extends TestCase
         $this->assertFalse(AppleAuthKeys::areCached());
 
         // Get the keys once
-        $keys = AppleAuthKeys::get();
+        AppleAuthKeys::get();
 
         // The keys should be cached
         $this->assertTrue(AppleAuthKeys::areCached());
