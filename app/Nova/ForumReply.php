@@ -61,7 +61,7 @@ class ForumReply extends Resource
                 ->searchable()
                 ->sortable(),
 
-            Text::make('Replied from IP address', 'ip')
+            Text::make('Replied from IP address', 'ip_address')
                 ->rules('required', 'max:255')
                 ->help('The IP address that the reply was posted from.'),
 

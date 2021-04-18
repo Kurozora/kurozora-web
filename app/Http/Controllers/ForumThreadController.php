@@ -94,7 +94,7 @@ class ForumThreadController extends Controller
         $newReply = ForumReply::create([
             'thread_id'     => $thread->id,
             'user_id'       => Auth::id(),
-            'ip'            => $request->ip(),
+            'ip_address'    => $request->ip(),
             'content'       => $givenContent
         ]);
 

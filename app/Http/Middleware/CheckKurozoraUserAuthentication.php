@@ -117,7 +117,7 @@ class CheckKurozoraUserAuthentication
         }
 
         // Update the last validated date
-        $session->last_validated_at = now();
+        $session->last_activity_at = now();
 
         $session->save();
     }

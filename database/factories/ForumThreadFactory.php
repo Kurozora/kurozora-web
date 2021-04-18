@@ -36,7 +36,7 @@ class ForumThreadFactory extends Factory
         return [
             'section_id'    => $forumSection,
             'user_id'       => $user,
-            'ip'            => $this->faker->ipv4,
+            'ip_address'    => $this->faker->ipv4,
             'title'         => $this->faker->sentence(),
             'content'       => $this->faker->paragraph(),
             'locked'        => $this->faker->boolean()

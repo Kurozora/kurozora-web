@@ -68,7 +68,7 @@ class ForumThread extends Resource
                 ->rules('required')
                 ->hideFromIndex(),
 
-            Text::make('Posted from IP address', 'ip')
+            Text::make('Posted from IP address', 'ip_address')
                 ->rules('required', 'max:255')
                 ->sortable()
                 ->hideFromIndex(),

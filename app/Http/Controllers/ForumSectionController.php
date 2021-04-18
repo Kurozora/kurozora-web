@@ -126,7 +126,7 @@ class ForumSectionController extends Controller
         $newThread = ForumThread::create([
             'section_id'    => $section->id,
             'user_id'       => Auth::id(),
-            'ip'            => $request->ip(),
+            'ip_address'    => $request->ip(),
             'title'         => $data['title'],
             'content'       => $data['content']
         ]);

@@ -46,11 +46,11 @@ class UserNotification extends KModel
             }
             // A new client/session was made for the user
             case self::TYPE_NEW_SESSION: {
-                $sessionIP = $this->getDataVariable('ip');
+                $sessionIPAddress = $this->getDataVariable('ip_address');
 
                 return
                     'A new client has logged in to your account.' .
-                    (($sessionIP != null) ? ' (IP: ' . $sessionIP . ')' : null);
+                    (($sessionIPAddress != null) ? ' (IP Address: ' . $sessionIPAddress . ')' : null);
             }
             // MAL import update notification
             case self::TYPE_MAL_IMPORT_UPDATE: {

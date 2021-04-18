@@ -26,7 +26,7 @@ class Session extends KModel
      */
     protected $dates = [
         'expires_at',
-        'last_validated_at'
+        'last_activity_at'
     ];
 
     /**
@@ -38,7 +38,6 @@ class Session extends KModel
     {
         return $this->belongsTo(User::class);
     }
-
 
     /**
      * Returns whether or not the session is expired.

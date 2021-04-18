@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
+use RuntimeException;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Components\Calendar;
@@ -36,7 +37,6 @@ use Spatie\IcalendarGenerator\Properties\Parameter;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements HasMedia, MustVerifyEmail, ReacterableContract
@@ -162,18 +162,18 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     {
         /** @var Session $session */
         $session = $this->sessions()
-            ->orderBy('last_validated_at', 'desc')
+            ->orderBy('last_activity_at', 'desc')
             ->first();
 
         if ($session === null)
             return UserActivityStatus::Offline();
 
         // Seen within the last 5 minutes
-        if ($session->last_validated_at >= now()->subMinutes(5)) {
+        if ($session->last_activity_at >= now()->subMinutes(5)) {
             return UserActivityStatus::Online();
         }
         // Seen within the last 15 minutes
-        else if ($session->last_validated_at >= now()->subMinutes(15)) {
+        else if ($session->last_activity_at >= now()->subMinutes(15)) {
             return UserActivityStatus::SeenRecently();
         }
 
@@ -386,7 +386,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      * Creates a new session for the user.
      *
      * Available options:
-     * - `ip`: the IP address used to create the session, request IP is used by default.
+     * - `ip_address`: the IP address used to create the session, request IP is used by default.
      * - `platform`: the user's platform, null by default.
      * - `platform_version`: version of the user's platform, null by default.
      * - `device_vendor`: vendor of the user's device, null by default.
@@ -402,24 +402,32 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         $options = new OptionsBag($options);
 
         // Determine the IP address to use
-        $ip = $options->get('ip');
+        $ipAddress = $options->get('ip_address');
 
-        if ($ip === null) $ip = request()->ip();
+        if ($ipAddress === null) {
+            $ipAddress = request()->ip();
+        }
 
-        /** @var Session $session */
-        $session = $this->sessions()->create([
+        try {
+            $sessionID = request()->session()->getId();
+        } catch (RuntimeException $e) {
+            // Laravel session doesn't exist on API requests, so null is used instead.
+            $sessionID = null;
+        }
+
+        $session = Session::create([
+            'session_id'        => $sessionID,
             'user_id'           => $this->id,
             'secret'            => Str::random(128),
             'expires_at'        => now()->addDays(Session::VALID_FOR_DAYS),
-            'last_validated_at' => now(),
-            'ip'                => $ip,
+            'last_activity_at'  => now(),
+            'ip_address'        => $ipAddress,
 
             // Platform information
             'platform'          => $options->get('platform'),
             'platform_version'  => $options->get('platform_version'),
             'device_vendor'     => $options->get('device_vendor'),
             'device_model'      => $options->get('device_model'),
-
         ]);
 
         // Dispatch job to retrieve location
@@ -429,10 +437,30 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
 
         // Send notification
         if ($options->get('notify', true)) {
-            $this->notify(new NewSession($session->ip, $session));
+            $this->notify(new NewSession($session));
         }
 
         return $session;
+    }
+
+    /**
+     * Attempts to delete the user's current session.
+     * This method works only on routes with Laravel session in the middleware.
+     *
+     * @return bool|null
+     * @throws RuntimeException
+     */
+    function deleteCurrentSession(): bool|null
+    {
+        try {
+            $sessionID = request()->session()->getId();
+        } catch (RuntimeException $exception) {
+            throw new RuntimeException($exception->getMessage() . ' Use the delete method on the session model itself if attempting to delete through the API.');
+        }
+
+        return $this->sessions()
+            ->where('session_id', $sessionID)
+            ->delete();
     }
 
     /**
@@ -489,11 +517,9 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         $cacheKey = sprintf(self::CACHE_KEY_FOLLOWER_COUNT, $this->id);
 
         // Retrieve or save cached result
-        $followerCount = Cache::remember($cacheKey, self::CACHE_KEY_FOLLOWER_COUNT_SECONDS, function () {
+        return Cache::remember($cacheKey, self::CACHE_KEY_FOLLOWER_COUNT_SECONDS, function () {
             return $this->followers()->count();
         });
-
-        return $followerCount;
     }
 
     /**
