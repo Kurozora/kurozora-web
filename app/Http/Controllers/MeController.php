@@ -67,7 +67,7 @@ class MeController extends Controller
 
         // Update username
         if ($request->has('username')) {
-            if (!$user->username_change_available)
+            if (!settings('can_change_username'))
                 throw new AuthorizationException('The request wasn’t accepted due to not being allowed to change the username.');
 
             $user->username = $data['username'];

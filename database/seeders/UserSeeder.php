@@ -19,17 +19,25 @@ class UserSeeder extends Seeder
         $admins = [];
 
         $admins[] = User::create([
-            'username'              => 'Usopp',
-            'email'                 => 'mussesemou99@gmail.com',
-            'password'              => '$2y$10$LFvuPaQpn6kccakk4sRABef223GV0.NJUJ94Xr.TAvswkCKJBisVK',
-            'email_verified_at'     => now(),
+            'username'          => 'Usopp',
+            'email'             => 'mussesemou99@gmail.com',
+            'password'          => '$2y$10$LFvuPaQpn6kccakk4sRABef223GV0.NJUJ94Xr.TAvswkCKJBisVK',
+            'email_verified_at' => now(),
+            'settings'          => [
+                'can_change_username'   => false,
+                'tv_rating'             => -1,
+            ],
         ]);
 
         $admins[] = User::create([
-            'username'              => 'Kirito',
-            'email'                 => 'casillaskhoren1@gmail.com',
-            'password'              => '$2y$10$LFvuPaQpn6kccakk4sRABef223GV0.NJUJ94Xr.TAvswkCKJBisVK',
-            'email_verified_at'     => now(),
+            'username'          => 'Kirito',
+            'email'             => 'casillaskhoren1@gmail.com',
+            'password'          => '$2y$10$LFvuPaQpn6kccakk4sRABef223GV0.NJUJ94Xr.TAvswkCKJBisVK',
+            'email_verified_at' => now(),
+            'settings'          => [
+                'can_change_username'   => false,
+                'tv_rating'             => -1,
+            ],
         ]);
 
         foreach($admins as $admin) {
@@ -42,10 +50,14 @@ class UserSeeder extends Seeder
          * password: KurozoraLovesApple4Ever!
          */
         User::create([
-            'username'              => 'JohnAppleseed',
-            'email'                 => 'john.appleseed@apple.com',
-            'password'              => '$2y$10$/aVrkVAq4LT6FEEw3dNwguaM77MzoHB4.IpVoVxLLEKI4jyHuITii',
-            'email_verified_at'     => now(),
+            'username'          => 'JohnAppleseed',
+            'email'             => 'john.appleseed@apple.com',
+            'password'          => '$2y$10$/aVrkVAq4LT6FEEw3dNwguaM77MzoHB4.IpVoVxLLEKI4jyHuITii',
+            'email_verified_at' => now(),
+            'settings'          => [
+                'can_change_username'   => false,
+                'tv_rating'             => -1,
+            ],
         ]);
 
         // 50 fake users
