@@ -144,10 +144,13 @@ class SignInWithAppleController extends Controller
     {
         return User::create(
             [
-                'email'                     => $payload->get('email'),
-                'siwa_id'                   => $payload->get('sub'),
-                'password'                  => User::hashPass(Str::random(30)),
-                'username_change_available' => true,
+                'email'     => $payload->get('email'),
+                'siwa_id'   => $payload->get('sub'),
+                'password'  => User::hashPass(Str::random(30)),
+                'settings'  => [
+                    'can_change_username'   => true,
+                    'tv_rating'             => -1
+                ],
             ]
         );
     }

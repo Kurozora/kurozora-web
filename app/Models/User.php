@@ -103,7 +103,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      * @var array
      */
     protected $casts = [
-        'username_change_available' => 'boolean',
+        'settings' => 'json'
     ];
 
     /**

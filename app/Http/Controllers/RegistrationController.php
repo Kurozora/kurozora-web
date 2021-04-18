@@ -29,7 +29,11 @@ class RegistrationController extends Controller
         $newUser = User::create([
             'username'  => $data['username'],
             'email'     => $data['email'],
-            'password'  => User::hashPass($data['password'])
+            'password'  => User::hashPass($data['password']),
+            'settings'  => [
+                'can_change_username'   => false,
+                'tv_rating'             => -1,
+            ],
         ]);
 
         if ($request->hasFile('profileImage') &&
