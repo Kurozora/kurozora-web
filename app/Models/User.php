@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
+use RuntimeException;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Components\Calendar;
@@ -36,7 +37,6 @@ use Spatie\IcalendarGenerator\Properties\Parameter;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements HasMedia, MustVerifyEmail, ReacterableContract
@@ -441,6 +441,26 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         }
 
         return $session;
+    }
+
+    /**
+     * Attempts to delete the user's current session.
+     * This method works only on routes with Laravel session in the middleware.
+     *
+     * @return bool|null
+     * @throws RuntimeException
+     */
+    function deleteCurrentSession(): bool|null
+    {
+        try {
+            $sessionID = request()->session()->getId();
+        } catch (RuntimeException $exception) {
+            throw new RuntimeException($exception->getMessage() . ' Use the delete method on the session model itself if attempting to delete through the API.');
+        }
+
+        return $this->sessions()
+            ->where('session_id', $sessionID)
+            ->delete();
     }
 
     /**
