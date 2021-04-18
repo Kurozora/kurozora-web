@@ -90,10 +90,17 @@ class SignOutOtherSessionsForm extends Component
      */
     public function getSessionsProperty(): Collection
     {
+        $otherSessions = Session::where('user_id', Auth::user()->id)
+            ->where('session_id', '!=', request()->session()->getId())
+            ->orderBy('last_activity_at', 'desc')
+            ->get();
+
+        $currentSession = Session::where('user_id', Auth::user()->id)
+            ->where('session_id', request()->session()->getId())
+            ->first();
+
         return collect(
-            Session::where('user_id', Auth::user()->id)
-                ->orderBy('last_activity_at', 'desc')
-                ->get()
+            $otherSessions->prepend($currentSession)
         )->map(function (Session $session) {
             return (object) [
                 'browser'           => Browser::detect(),
