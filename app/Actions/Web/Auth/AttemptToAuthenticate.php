@@ -51,30 +51,6 @@ class AttemptToAuthenticate
     }
 
     /**
-     * Attempt to authenticate using a custom callback.
-     *
-     * @param Request $request
-     * @param callable $next
-     *
-     * @return mixed
-     * @throws ValidationException
-     */
-    protected function handleUsingCustomCallback(Request $request, callable $next): mixed
-    {
-        $user = Auth::user();
-
-        if (!$user) {
-            $this->fireFailedEvent($request);
-
-            return $this->throwFailedAuthenticationException($request);
-        }
-
-        Auth::login($user, $request->filled('remember'));
-
-        return $next($request);
-    }
-
-    /**
      * Throw a failed authentication validation exception.
      *
      * @param Request $request
@@ -87,7 +63,7 @@ class AttemptToAuthenticate
         $this->limiter->increment($request);
 
         throw ValidationException::withMessages([
-            'email' => [trans('auth.failed')],
+            'email' => [__('auth.failed')],
         ]);
     }
 

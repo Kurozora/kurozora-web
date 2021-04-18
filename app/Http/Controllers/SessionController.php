@@ -35,7 +35,6 @@ class SessionController extends Controller
             throw new TooManyRequestsHttpException(300, 'You have failed to login too many times. Please grab yourself a snack and try again in a bit.');
 
         // Find the user
-        /** @var User $user */
         $user = User::where('email', $data['email'])->first();
 
         // Compare the passwords

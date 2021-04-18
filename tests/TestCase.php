@@ -3,6 +3,7 @@
 namespace Tests;
 
 use App\Helpers\KuroAuthToken;
+use App\Models\User;
 use Illuminate\Foundation\Mix;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Testing\Assert as PHPUnit;
@@ -49,7 +50,7 @@ abstract class TestCase extends BaseTestCase
      *
      * @return array
      */
-    protected function setUpTraits()
+    protected function setUpTraits(): array
     {
         $uses = parent::setUpTraits();
 
@@ -71,16 +72,20 @@ abstract class TestCase extends BaseTestCase
      *
      * @return $this
      */
-    protected function auth()
+    protected function auth(): TestCase
     {
-        if (!isset($this->user))
+        /** @var User $user */
+        $user = $this->user;
+
+        if (!isset($user)) {
             $this->fail('Used "authHeader", but no user present.');
+        }
 
         // Create a session
-        $session = $this->user->createSession();
+        $session = $user->createSession();
 
         // Attach the auth header
-        $this->withHeader('kuro-auth', KuroAuthToken::generate($this->user->id, $session->secret));
+        $this->withHeader('kuro-auth', KuroAuthToken::generate($user->id, $session->secret));
 
         return $this;
     }

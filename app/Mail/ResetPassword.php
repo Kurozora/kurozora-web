@@ -38,10 +38,10 @@ class ResetPassword extends Mailable
             ->subject('Request to reset your Kurozora password')
             ->view('email.password_reset_notification')
             ->with([
-                'title'     => 'Password reset',
-                'username'  => $this->user->username,
-                'ip'        => $this->passwordReset->ip,
-                'reset_url' => route('password.reset', ['token' => $this->passwordReset->token])
+                'title'         => 'Password reset',
+                'username'      => $this->user->username,
+                'ip_address'    => $this->passwordReset->ip_address,
+                'reset_url'     => route('password.reset', ['token' => $this->passwordReset->token])
             ]);
     }
 }

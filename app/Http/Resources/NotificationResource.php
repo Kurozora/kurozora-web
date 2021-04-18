@@ -43,7 +43,7 @@ class NotificationResource extends JsonResource
      * @param DatabaseNotification $notification
      * @return string
      */
-    private function typeWithoutNamespace($notification): string
+    private function typeWithoutNamespace(DatabaseNotification $notification): string
     {
         $class_parts = explode('\\', $notification->type);
         return end($class_parts);
@@ -55,14 +55,14 @@ class NotificationResource extends JsonResource
      * @param DatabaseNotification $notification
      * @return string
      */
-    static function getNotificationDescription($notification): string
+    static function getNotificationDescription(DatabaseNotification $notification): string
     {
         switch($notification->type) {
             case NewSession::class:
                 $body = 'A new client has logged in to your account.';
 
-                if (self::hasData($notification, 'ip')) {
-                    $body .= ' (IP: ' . self::getData($notification, 'ip') . ')';
+                if (self::hasData($notification, 'ip_address')) {
+                    $body .= ' (IP: ' . self::getData($notification, 'ip_address') . ')';
                 }
 
                 return $body;
@@ -85,8 +85,7 @@ class NotificationResource extends JsonResource
 
                 return $body;
             case SubscriptionStatus::class:
-                $body = SubscriptionStatus::getDescription(self::getData($notification, 'subscriptionStatus')) ?? '';
-                return $body;
+                return SubscriptionStatus::getDescription(self::getData($notification, 'subscriptionStatus')) ?? '';
         }
 
         return 'Something went wrong... please contact an administrator.';
@@ -100,7 +99,7 @@ class NotificationResource extends JsonResource
      * @param string $key
      * @return mixed|null
      */
-    private static function getData($notification, $key)
+    private static function getData(DatabaseNotification $notification, string $key)
     {
         return self::hasData($notification, $key) ? $notification->data[$key] : null;
     }
@@ -112,7 +111,7 @@ class NotificationResource extends JsonResource
      * @param string $key
      * @return bool
      */
-    private static function hasData($notification, $key): bool
+    private static function hasData(DatabaseNotification $notification, string $key): bool
     {
         return isset($notification->data[$key]);
     }

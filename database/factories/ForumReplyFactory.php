@@ -36,7 +36,7 @@ class ForumReplyFactory extends Factory
         return [
             'thread_id'     => $forumThread,
             'user_id'       => $user,
-            'ip'            => $this->faker->ipv4,
+            'ip_address'    => $this->faker->ipv4,
             'content'       => $this->faker->paragraph()
         ];
     }

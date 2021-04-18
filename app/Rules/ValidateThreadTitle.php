@@ -49,7 +49,7 @@ class ValidateThreadTitle implements Rule
     public function message(): string
     {
         if ($this->errorType == 'length')
-            return trans('validation.between.string', ['min' => self::MINIMUM_THREAD_TITLE_LENGTH, 'max' => self::MAXIMUM_THREAD_TITLE_LENGTH]);
+            return __('validation.between.string', ['min' => self::MINIMUM_THREAD_TITLE_LENGTH, 'max' => self::MAXIMUM_THREAD_TITLE_LENGTH]);
 
         return 'The :attribute is invalid.';
     }

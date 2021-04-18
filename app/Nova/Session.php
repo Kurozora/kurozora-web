@@ -105,8 +105,8 @@ class Session extends Resource
 
             Heading::make('Location'),
 
-            Text::make('IP Address', 'ip')
-                ->rules('max:255')
+            Text::make('IP Address', 'ip_address')
+                ->rules('max:45')
                 ->hideFromIndex(),
 
             Text::make('City')

@@ -63,11 +63,11 @@ class ValidateUsername implements Rule
     public function message(): string
     {
         if ($this->errorType == 'length')
-            return trans('validation.between.string', ['min' => self::MINIMUM_USERNAME_LENGTH, 'max' => self::MAXIMUM_USERNAME_LENGTH]);
+            return __('validation.between.string', ['min' => self::MINIMUM_USERNAME_LENGTH, 'max' => self::MAXIMUM_USERNAME_LENGTH]);
         else if ($this->errorType == 'alpha-num')
-            return trans('validation.alpha_num');
+            return __('validation.alpha_num');
         else if ($this->errorType == 'exists')
-            return trans('validation.unique');
+            return __('validation.unique');
 
         return 'The :attribute is invalid.';
     }
