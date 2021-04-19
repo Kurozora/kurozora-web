@@ -5,6 +5,7 @@ namespace App\Actions\Web;
 use App\Models\User;
 use App\Rules\ValidateProfileImage;
 use App\Rules\ValidateEmail;
+use App\Rules\ValidateUsername;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
 use App\Contracts\UpdatesUserProfileInformation;
@@ -28,10 +29,18 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
      */
     public function update(User $user, array $input)
     {
-        Validator::make($input, [
+        $rules = [
             'email' => ['required', new ValidateEmail, Rule::unique(User::TABLE_NAME)->ignore($user->id)],
             'photo' => [new ValidateProfileImage],
-        ])->validateWithBag('updateProfileInformation');
+        ];
+
+        if (settings('can_change_username')) {
+            $rules = array_merge($rules, [
+                'username' => ['required', new ValidateUsername]
+            ]);
+        }
+
+        Validator::make($input, $rules)->validateWithBag('updateProfileInformation');
 
         if (isset($input['photo'])) {
             $user->updateProfileImage($input['photo']->getRealPath());
@@ -42,8 +51,18 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             $this->updateVerifiedUser($user, $input);
         } else {
             $user->forceFill([
-                'email' => $input['email']
+                'email' => $input['email'],
             ])->save();
+        }
+
+        if (settings('can_change_username')) {
+            if ($input['username'] !== $user->username) {
+                $user->forceFill([
+                    'username' => $input['username']
+                ])->save();
+
+                settings('can_change_username', false, true);
+            }
         }
     }
 

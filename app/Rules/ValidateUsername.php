@@ -3,6 +3,7 @@
 namespace App\Rules;
 
 use App\Models\User;
+use Auth;
 use Illuminate\Contracts\Validation\Rule;
 
 class ValidateUsername implements Rule
@@ -47,9 +48,20 @@ class ValidateUsername implements Rule
         }
 
         // Check if username taken
-        if (User::where('username', $value)->exists()) {
-            $this->errorType = 'exists';
-            return false;
+        $user = Auth::user();
+        if (!empty($user)) {
+            if (User::whereNotIn('id', [$user->id])
+                ->where('username', $value)
+                ->exists()
+            ) {
+                $this->errorType = 'exists';
+                return false;
+            }
+        } else {
+            if (User::where('username', $value)->exists()) {
+                $this->errorType = 'exists';
+                return false;
+            }
         }
 
         return true;
