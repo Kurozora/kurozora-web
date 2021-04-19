@@ -143,15 +143,16 @@ class Settings
      *
      * @param ?string $key
      * @param mixed $value
+     * @param bool $setEmptyValue
      * @return mixed
      */
-    public function settings(?string $key = null, mixed $value = null): mixed
+    public function settings(?string $key = null, mixed $value = null, bool $setEmptyValue = false): mixed
     {
         if (empty($key) && empty($value)) {
             return $this;
         }
 
-        if (empty($value)) {
+        if (empty($value) && !$setEmptyValue) {
             return $this->get($key);
         }
 
