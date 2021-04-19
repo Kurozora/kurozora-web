@@ -1,3 +1,3 @@
 @props(['disabled' => false])
 
-<input {{ $disabled ? 'disabled' : '' }} {!! $attributes->merge(['class' => 'form-input rounded-md shadow-sm']) !!}>
+<input {{ $attributes->merge(['class' => 'form-input rounded-md shadow-sm']) }} {{ $disabled ? 'disabled' : '' }}>
