@@ -53,7 +53,7 @@
         <!-- Username -->
         <div class="col-span-3 sm:col-span-2">
             <x-label for="username" value="{{ __('Username') }}" />
-            <x-input id="username" type="text" class="mt-1 block w-full select-none opacity-25" wire:model.defer="state.username" autocomplete="username" disabled />
+            <x-input id="username" type="text" class="mt-1 block w-full {{ settings('can_change_username') ?: 'select-none opacity-25' }}" wire:model.defer="state.username" autocomplete="username" disabled="{{ !settings('can_change_username') }}" />
             <x-input-error for="username" class="mt-2" />
         </div>
 
