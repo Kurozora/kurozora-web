@@ -30,13 +30,6 @@ input:invalid, textarea:invalid, select:invalid {
  */
 
 /* Global styles */
-html {
-  @apply bg-center
-  bg-cover
-  bg-fixed
-  bg-no-repeat;
-}
-
 html, body {
   @apply h-full
   w-full;
@@ -50,6 +43,7 @@ body {
   @apply flex
   flex-col
   leading-snug
+  dark:text-white
   tracking-tight;
   color: #333333;
   quotes: "“" "”";
@@ -59,47 +53,6 @@ main {
   @apply flex
   flex-col
   flex-grow;
-}
-
-/* Kurozora Button styles */
-/* Default Kurozora button */
-.k-button {
-  @apply bg-orange-500
-  border-0
-  border-none
-  cursor-pointer
-  font-bold
-  no-underline
-  px-4
-  py-1
-  rounded-full
-  shadow-lg
-  text-center
-  text-white
-  uppercase;
-}
-.k-button:hover {
-  @apply bg-orange-400
-  no-underline;
-}
-
-/* Outlined Kurozora button */
-.k-outline-button {
-  @apply inline-block
-  text-sm
-  px-4
-  py-2
-  leading-none
-  border
-  rounded
-  text-orange-500
-  border-orange-500;
-}
-.k-outline-button:hover {
-  @apply no-underline
-  border-transparent
-  text-white
-  bg-orange-500;
 }
 
 /* Placeholder styles */
@@ -133,24 +86,6 @@ main {
   width: 150px;
   height: 150px;
   background-size: 150px 150px;
-}
-
-/* Card styles */
-.card {
-  @apply bg-white
-  rounded
-  overflow-hidden
-  shadow-lg;
-}
-
-.card-content {
-  @apply px-6
-  py-4;
-}
-
-.card-footer {
-  @apply px-6
-  py-4;
 }
 
 /**
