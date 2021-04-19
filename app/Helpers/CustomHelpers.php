@@ -17,12 +17,13 @@ if (!function_exists('ios_app_url')) {
  *
  * @param ?string $key
  * @param mixed $value
+ * @param bool $setEmptyValue
  * @return mixed
  */
-function settings(?string $key = null, mixed $value = null): mixed
+function settings(?string $key = null, mixed $value = null, bool $setEmptyValue = false): mixed
 {
     /** @var Settings $settings */
     $settings = app(Settings::class);
 
-    return $settings->settings($key, $value);
+    return $settings->settings($key, $value, $setEmptyValue);
 }
