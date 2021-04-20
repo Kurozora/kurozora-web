@@ -46,6 +46,7 @@ module.exports = {
             green: colors.green,
             lime: colors.lime,
             yellow: colors.yellow,
+            amber: colors.amber,
             orange: {
                 DEFAULT: '#FF9300',
                 '50': '#FFF4E5',
@@ -60,9 +61,11 @@ module.exports = {
                 '900': '#995800'
             },
             red: colors.red,
+            warmGray: colors.warmGray,
+            trueGray: colors.trueGray,
             gray: colors.gray,
             coolGray: colors.coolGray,
-            blueGray: colors.blueGray,
+            blueGray: colors.blueGray
         },
 
         extend: {
