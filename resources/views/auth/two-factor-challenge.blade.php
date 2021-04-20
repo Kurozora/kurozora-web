@@ -9,13 +9,17 @@
         </h2>
     </x-slot>
 
-    <div x-data="{ recovery: false }">
-        <div class="mb-4 text-sm text-gray-600" x-show="! recovery">
-            {{ __('Please confirm access to your account by entering the authentication code provided by your authenticator application.') }}
+    <div x-data="{ recovery: false }"
+         class="max-w-prose w-screen my-auto mx-4 sm:mx-0 p-10 rounded-md shadow-lg"
+    >
+        <div class="mb-5 text-center text-gray-600" x-show="! recovery">
+            <p class="text-2xl font-bold">{{ __('Enter Authorization Code') }}</p>
+            <p>{{ __('Please confirm access to your account by entering the authentication code provided by your authenticator application.') }}</p>
         </div>
 
-        <div class="mb-4 text-sm text-gray-600" x-show="recovery">
-            {{ __('Please confirm access to your account by entering one of your emergency recovery codes.') }}
+        <div class="mb-5 text-center text-gray-600" x-show="recovery">
+            <p class="text-2xl font-bold">{{ __('Enter Recovery Code') }}</p>
+            <p>{{ __('Please confirm access to your account by entering one of your emergency recovery codes.') }}</p>
         </div>
 
         <x-validation-errors class="mb-4" />
