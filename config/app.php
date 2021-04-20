@@ -37,7 +37,7 @@ return [
     | the framework needs to place the application's version in a notification
     | or any other location as required by the application or its packages.
     */
-    'version' => '1.2.0-alpha.4',
+    'version' => '1.2.0-alpha.5',
 
     /*
     |--------------------------------------------------------------------------
