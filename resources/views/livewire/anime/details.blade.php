@@ -11,10 +11,10 @@
 
     <div class="anime-poster" style="background-image: url('{{ $anime->poster()->url ?? asset('images/static/placeholders/anime_poster.jpg') }}')"></div>
 
-    <h1 class="text-white font-bold mt-6 mb-2">{{ $anime->title }}</h1>
+    <h1 class="font-bold mt-6 mb-2">{{ $anime->title }}</h1>
 
     @if ($anime->episode_count)
-        <h2 class="text-white">{{ $anime->episode_count }} {{ __('episodes') }}</h2>
+        <h2>{{ $anime->episode_count }} {{ __('episodes') }}</h2>
     @endif
 
     <x-link-button href="{{ ios_app_url('anime/' . $anime->id) }}" class="rounded-full">
