@@ -10,10 +10,14 @@
     </x-slot>
 
     <div class="text-center mt-16">
-        <h1>Privacy Policy</h1>
+        <h1 class="text-xl font-bold">{{ __('Privacy Policy') }}</h1>
     </div>
+
     {!! $privacyPolicyText !!}
+
     <div>
-        <a href="{{ url('/') }}">Take me back</a>
+        <x-link-button href="{{ url('/') }}">
+            {{ __('Take me back') }}
+        </x-link-button>
     </div>
 </div>
