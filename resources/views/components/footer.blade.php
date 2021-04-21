@@ -17,20 +17,20 @@
                 <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('About Kurozora') }}</h5>
                 <ul class="m-0 mb-4">
                     <li class="mt-2">
-{{--                        <x-footer-link href="{{ route('misc.leadership') }}" class="hover:underline text-sm text-gray-400 hover:text-blue-500">{{ __('Kurozora Leadership') }}</x-footer-link>--}}
-                        <x-footer-link href="#" class="hover:underline text-sm text-gray-400 hover:text-blue-500">{{ __('Kurozora Leadership') }}</x-footer-link>
+{{--                        <x-footer-link href="{{ route('misc.leadership') }}">{{ __('Kurozora Leadership') }}</x-footer-link>--}}
+                        <x-footer-link href="#">{{ __('Kurozora Leadership') }}</x-footer-link>
                     </li>
                     <li class="mt-2">
-{{--                        <x-footer-link href="{{ route('misc.jobs') }}" class="hover:underline text-sm text-gray-400 hover:text-blue-500">{{ __('Job Opportunities') }}</x-footer-link>--}}
-                        <x-footer-link href="#" class="hover:underline text-sm text-gray-400 hover:text-blue-500">{{ __('Job Opportunities') }}</x-footer-link>
+{{--                        <x-footer-link href="{{ route('misc.jobs') }}">{{ __('Job Opportunities') }}</x-footer-link>--}}
+                        <x-footer-link href="#">{{ __('Job Opportunities') }}</x-footer-link>
                     </li>
                     <li class="mt-2">
-{{--                        <x-footer-link href="{{ route('misc.investors') }}" class="hover:underline text-sm text-gray-400 hover:text-blue-500">{{ __('Investors') }}</x-footer-link>--}}
-                        <x-footer-link href="#" class="hover:underline text-sm text-gray-400 hover:text-blue-500">{{ __('Investors') }}</x-footer-link>
+{{--                        <x-footer-link href="{{ route('misc.investors') }}">{{ __('Investors') }}</x-footer-link>--}}
+                        <x-footer-link href="#">{{ __('Investors') }}</x-footer-link>
                     </li>
                     <li class="mt-2">
-{{--                        <x-footer-link href="{{ route('misc.contact') }}" class="hover:underline text-sm text-gray-400 hover:text-blue-500">{{ __('Contact Kurozora') }}</x-footer-link>--}}
-                        <x-footer-link href="#" class="hover:underline text-sm text-gray-400 hover:text-blue-500">{{ __('Contact Kurozora') }}</x-footer-link>
+{{--                        <x-footer-link href="{{ route('misc.contact') }}">{{ __('Contact Kurozora') }}</x-footer-link>--}}
+                        <x-footer-link href="#">{{ __('Contact Kurozora') }}</x-footer-link>
                     </li>
                 </ul>
             </div>
@@ -39,10 +39,10 @@
                 <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('Legal') }}</h5>
                 <ul class="m-0 mb-4">
                     <li class="mt-2">
-                        <x-footer-link href="{{ route('legal.privacy-policy') }}" class="hover:underline text-sm text-gray-400 hover:text-blue-500">{{ __('Privacy Policy') }}</x-footer-link>
+                        <x-footer-link href="{{ route('legal.privacy-policy') }}">{{ __('Privacy Policy') }}</x-footer-link>
                     </li>
                     <li class="mt-2">
-                        <x-footer-link href="{{ route('legal.terms-of-use') }}" class="hover:underline text-sm text-gray-400 hover:text-blue-500">{{ __('Terms of Use') }}</x-footer-link>
+                        <x-footer-link href="{{ route('legal.terms-of-use') }}">{{ __('Terms of Use') }}</x-footer-link>
                     </li>
                 </ul>
             </div>
