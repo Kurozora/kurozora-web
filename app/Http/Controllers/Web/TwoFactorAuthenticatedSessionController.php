@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\TwoFactorSignInRequest;
 use Auth;
+use Browser;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -48,6 +49,23 @@ class TwoFactorAuthenticatedSessionController extends Controller
 
         Auth::login($user, $request->remember());
 
+        $this->prepareAuthenticatedSession();
+
         return redirect()->intended();
+    }
+
+    /**
+     * Prepares the authenticated session for the newly authenticated user.
+     */
+    protected function prepareAuthenticatedSession()
+    {
+        $browser = Browser::detect();
+
+        Auth::user()->createSession([
+            'platform'          => $browser->platformFamily(),
+            'platform_version'  => $browser->platformVersion(),
+            'device_vendor'     => $browser->deviceFamily(),
+            'device_model'      => $browser->deviceModel(),
+        ]);
     }
 }

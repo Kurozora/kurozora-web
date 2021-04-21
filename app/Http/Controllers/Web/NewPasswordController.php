@@ -24,7 +24,17 @@ class NewPasswordController extends Controller
      */
     public function create(Request $request): Application|Factory|View
     {
-        return view('auth.reset-password', ['request' => $request]);
+        // Obfuscate the email for privacy.
+        $em = explode('@', $request->email);
+        $name = implode('@', array_slice($em, 0, count($em) - 1));
+        $len = strlen($name);
+
+        $email = substr($name, 0, 1 - $len) . str_repeat('*', $len - 1) . '@' . end($em);
+
+        return view('auth.reset-password', [
+            'email' => $email,
+            'request' => $request
+        ]);
     }
 
     /**

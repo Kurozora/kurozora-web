@@ -1,23 +1,22 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
+const colors = require('tailwindcss/colors');
 
 module.exports = {
+    mode: 'jit',
+
     purge: {
         content: [
             './app/**/*.php',
-            './resources/**/*.html',
-            './resources/**/*.js',
-            './resources/**/*.jsx',
-            './resources/**/*.ts',
-            './resources/**/*.tsx',
-            './resources/**/*.php',
-            './resources/**/*.vue',
-            './resources/**/*.twig',
+            './public/**/*.html',
+            './resources/**/*.{html,js,jsx,md,php,ts,tsx,twig,vue}'
         ],
         options: {
             defaultExtractor: (content) => content.match(/[\w-/.:]+(?<!:)/g) || [],
             whitelistPatterns: [/-active$/, /-enter$/, /-leave-to$/, /show$/],
         },
     },
+
+    darkMode: 'class',
 
     theme: {
         pagination: theme => ({
@@ -28,45 +27,51 @@ module.exports = {
             linkLast: 'ml-6 border rounded',
         }),
 
-        extend: {
-            colors: {
-                grayBlue: {
-                    DEFAULT: '#353A50',
-                    '100': '#EBEBEE',
-                    '200': '#CDCED3',
-                    '300': '#AEB0B9',
-                    '400': '#727585',
-                    '500': '#353A50',
-                    '600': '#303448',
-                    '700': '#202330',
-                    '800': '#181A24',
-                    '900': '#101118',
-                },
-                orange: {
-                    DEFAULT: '#FF9300',
-                    '100': '#FFF4E6',
-                    '200': '#FFE4BF',
-                    '300': '#FFD499',
-                    '400': '#FFB34D',
-                    '500': '#FF9300',
-                    '600': '#dd6b20',
-                    '700': '#c05621',
-                    '800': '#9c4221',
-                    '900': '#7B341E',
-                },
+        colors: {
+            transparent: 'transparent',
+            current: 'currentColor',
+            black: colors.black,
+            white: colors.white,
+            rose: colors.rose,
+            pink: colors.pink,
+            fuchsia: colors.fuchsia,
+            purple: colors.purple,
+            violet: colors.violet,
+            indigo: colors.indigo,
+            blue: colors.blue,
+            lightBlue: colors.lightBlue,
+            cyan: colors.cyan,
+            teal: colors.teal,
+            emerald: colors.emerald,
+            green: colors.green,
+            lime: colors.lime,
+            yellow: colors.yellow,
+            amber: colors.amber,
+            orange: {
+                DEFAULT: '#FF9300',
+                '50': '#FFF4E5',
+                '100': '#FFE9CC',
+                '200': '#FFD499',
+                '300': '#FFBE66',
+                '400': '#FFA933',
+                '500': '#FF9300',
+                '600': '#E68400',
+                '700': '#CC7600',
+                '800': '#B36700',
+                '900': '#995800'
             },
+            red: colors.red,
+            warmGray: colors.warmGray,
+            trueGray: colors.trueGray,
+            gray: colors.gray,
+            coolGray: colors.coolGray,
+            blueGray: colors.blueGray
+        },
 
+        extend: {
             fontFamily: {
                 sans: ['Inter var', ...defaultTheme.fontFamily.sans],
             },
-        },
-    },
-
-    variants: {
-        opacity: ['responsive', 'hover', 'focus', 'disabled'],
-
-        extend: {
-            backgroundColor: ['active'],
         },
     },
 
