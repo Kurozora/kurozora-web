@@ -11,8 +11,8 @@
 
     <div class="profile-image" style="background-image: url('{{ $user->profile_image_url }}')"></div>
 
-    <h1 class="text-white font-bold mt-6">{{ $user->username }}</h1>
-    <h2 class="text-white mb-2">{{ $user->getFollowerCount() }} {{ __('followers') }}</h2>
+    <h1 class="font-bold mt-6">{{ $user->username }}</h1>
+    <h2 class="mb-2">{{ $user->getFollowerCount() }} {{ __('followers') }}</h2>
 
     <x-link-button href="{{ ios_app_url('profile/' . $user->id) }}" class="rounded-full">
         {{ __('Open in Kurozora App') }}

@@ -8,8 +8,8 @@
         <meta property="og:type" content="{{ $page['type'] }}" />
     </x-slot>
 
-    <h1 class="text-white font-bold">{{ $thread->title }}</h1>
-    <h2 class="text-white mb-2">{{ __('Posted') }} {{ $thread->created_at->diffForHumans() }}</h2>
+    <h1 class="font-bold">{{ $thread->title }}</h1>
+    <h2 class="mb-2">{{ __('Posted') }} {{ $thread->created_at->diffForHumans() }}</h2>
 
     <x-link-button href="{{ ios_app_url('thread/' . $thread->id) }}" class="rounded-full">
         {{ __('Open in Kurozora App') }}
