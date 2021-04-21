@@ -3,7 +3,7 @@
         <div class="flex flex-wrap">
             <div class="w-full md:w-1/5 text-center md:text-left">
                 <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('Account') }}</h5>
-                <ul class="m-0 mb-4">
+                <ul class="m-0 mb-4 list-none">
                     <li class="mt-2">
                         <x-footer-link href="{{ route('profile.settings') }}">{{ __('Hexarian Account') }}</x-footer-link>
                     </li>
@@ -15,7 +15,7 @@
 
             <div class="w-full md:w-1/5 text-center md:text-left">
                 <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('About Kurozora') }}</h5>
-                <ul class="m-0 mb-4">
+                <ul class="m-0 mb-4 list-none">
                     <li class="mt-2">
 {{--                        <x-footer-link href="{{ route('misc.leadership') }}">{{ __('Kurozora Leadership') }}</x-footer-link>--}}
                         <x-footer-link href="#">{{ __('Kurozora Leadership') }}</x-footer-link>
@@ -37,7 +37,7 @@
 
             <div class="w-full md:w-1/5 text-center md:text-left">
                 <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('Legal') }}</h5>
-                <ul class="m-0 mb-4">
+                <ul class="m-0 mb-4 list-none">
                     <li class="mt-2">
                         <x-footer-link href="{{ route('legal.privacy-policy') }}">{{ __('Privacy Policy') }}</x-footer-link>
                     </li>
