@@ -37,7 +37,7 @@ return [
     | the framework needs to place the application's version in a notification
     | or any other location as required by the application or its packages.
     */
-    'version' => '1.2.0-alpha.12',
+    'version' => '1.2.0-alpha.13',
 
     /*
     |--------------------------------------------------------------------------
@@ -248,6 +248,7 @@ return [
         'Lang' => Illuminate\Support\Facades\Lang::class,
         'Log' => Illuminate\Support\Facades\Log::class,
         'Mail' => Illuminate\Support\Facades\Mail::class,
+        'Markdown' => Illuminate\Mail\Markdown::class,
         'Notification' => Illuminate\Support\Facades\Notification::class,
         'Password' => Illuminate\Support\Facades\Password::class,
         'Queue' => Illuminate\Support\Facades\Queue::class,
