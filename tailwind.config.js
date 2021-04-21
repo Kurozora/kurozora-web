@@ -8,7 +8,7 @@ module.exports = {
         content: [
             './app/**/*.php',
             './public/**/*.html',
-            './resources/**/*.{html,js,jsx,php,ts,tsx,twig,vue}'
+            './resources/**/*.{html,js,jsx,md,php,ts,tsx,twig,vue}'
         ],
         options: {
             defaultExtractor: (content) => content.match(/[\w-/.:]+(?<!:)/g) || [],
