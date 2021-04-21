@@ -1,4 +1,4 @@
-<section style="padding-bottom: 22px;">
+<section class="prose prose-orange lg:prose-lg max-w-4xl" style="padding-bottom: 22px;">
 
 <div style="text-align: center;">
 
@@ -27,7 +27,7 @@ Please take a moment to familiarize yourself with our privacy practices.
 
 </section>
 
-<section style="margin: 2em 0;">
+<section class="prose prose-orange lg:prose-lg max-w-4xl">
 
 <div style="padding: 2em 0;">
 
@@ -38,7 +38,7 @@ Kurozora respects your privacy, It is _your_ data after all. Your privacy comes 
 * **Be Transparent:** Kurozora will clearly explain what data is processed and for what purpose it is used.
 * **Keep you Safe:** Kurozora secures your data properly and only uses them for its own services. Kurozora will not share your data with third parties unless your explicit permission is given.
 * **Give you Control:** Kurozora gives you the option to be forgotten and removed from its entire infrastructure. You can request this by reaching out to an administrator.	
-* **Stay Innovative:** Kurozora will always strive to improve its infrastructure to protect your data even better and we are always open to suggestions from our community.
+* **Stay Innovative:** Kurozora will always strive to improve its infrastructure to protect your data even better, and we are always open to suggestions from our community.
 <div></div>
 
 ## What personal information we collect and use?
@@ -56,11 +56,11 @@ Personal information is data that can be used to identify or contact a single pe
 We may process your personal information: for the purposes described in this Privacy Policy, with your consent, for compliance with a legal obligation to which Kurozora is subject, for the performance of a contract to which you are party, in order to protect your vital interests, or when we have assessed it is necessary for the purposes of the legitimate interests pursued by Kurozora or a third party to whom it may be necessary to disclose information.
 <div></div>
 
-* The personal information we collect allows us to keep you posted on Kurozora's latest product announcements, software updates, and upcoming events. If you don't want to be on our mailing list, you can opt-out anytime by updating your preferences.
+* The personal information we collect allows us to keep you posted on Kurozora’s latest product announcements, software updates, and upcoming events. If you don't want to be on our mailing list, you can opt-out anytime by updating your preferences.
 * We also use personal information to help us create, develop, operate, deliver, and improve our products, services, content, and for loss prevention and anti-fraud purposes. We may also use your personal information for account and network security purposes, including in order to protect our services for the benefit of all our users. We limit our uses of data for anti-fraud purposes to those which are strictly necessary and within our assessed legitimate interests to protect our users and our services.
 * We may use your personal information, including date of birth, to verify identity, assist with identification of users, and to determine appropriate services. For example, we may use date of birth to determine the age of Kurozora ID account holders.
 * From time to time, we may use your personal information to send important notices, such as communications about purchases and changes to our terms, conditions, and policies. Because this information is important to your interaction with Kurozora, you may not opt out of receiving these communications.
-* We may also use personal information for internal purposes such as auditing, data analysis, and research to improve Kurozora's products, services, and user communications.
+* We may also use personal information for internal purposes such as auditing, data analysis, and research to improve Kurozora’s products, services, and user communications.
 * If you enter into a sweepstake, contest, or similar promotion we may use the information you provide to administer those programs.
 <div></div>
 
@@ -79,7 +79,7 @@ If we do combine non-personal information with personal information the combined
 <div></div>
 
 ## Cookies and Other Technologies
-Kurozora's websites, online services, interactive applications, and email messages may use <q>cookies</q> and other technologies. These help us better understand user behavior, tell us which parts of our websites people have visited, and facilitate and measure the effectiveness of web searches. We treat information collected by cookies and other technologies as non‑personal information. However, to the extent that Internet Protocol (IP) addresses or similar identifiers are considered personal information by local law, we also treat these identifiers as personal information. Similarly, to the extent that non-personal information is combined with personal information, we treat the combined information as personal information for the purposes of this Privacy Policy.
+Kurozora’s websites, online services, interactive applications, and email messages may use <q>cookies</q> and other technologies. These help us better understand user behavior, tell us which parts of our websites people have visited, and facilitate and measure the effectiveness of web searches. We treat information collected by cookies and other technologies as non‑personal information. However, to the extent that Internet Protocol (IP) addresses or similar identifiers are considered personal information by local law, we also treat these identifiers as personal information. Similarly, to the extent that non-personal information is combined with personal information, we treat the combined information as personal information for the purposes of this Privacy Policy.
 <div></div>
 
 Kurozora also uses cookies and other technologies to remember personal information when you use our website, online services, and applications. Our goal in these cases is to make your experience with Kurozora more convenient and personal. For example, knowing your first name lets us welcome you the next time you visit the Kurozora website. Knowing your country and language helps us provide a customized and more useful localized experience. And knowing your contact information, hardware identifiers, and information about your computer or device helps us personalize your experience on our platforms.
@@ -109,7 +109,7 @@ When you use some Kurozora products, services, or applications or post on a Kuro
 If you log on to a device that is owned by a third party, your personal information —including email address, location, and service specific information— may be downloaded on to that third-party device thereby disclosing any such shared information.
 <div></div>
 
-We do our very best to protect your data as much as we can. However, as with any other infrastructure, we cannot be 100% bullet proof. This is why we cannot guarantee that our servers will never be breached. In the case of a data-leak or server breach, we will do our best to inform every single affected user as soon as possible.
+We do our very best to protect your data as much as we can. However, as with any other infrastructure, we cannot be 100% bulletproof. This is why we cannot guarantee that our servers will never be breached. In the case of a data-leak or server breach, we will do our best to inform every single affected user as soon as possible.
 <div></div>
 
 ## The Existence of Automated Decision-Making, Including Profiling
@@ -147,7 +147,7 @@ Information collected by third parties, which may include such things as locatio
 <div></div>
 
 ## Privacy Questions
-If you have any questions or suggestions about Kurozora's Privacy Policy or if you feel that Kurozora is not abiding this Privacy Policy, do not hesitate to contact us. You can always contact us through administrators and other relevant contact forms.
+If you have any questions or suggestions about Kurozora’s Privacy Policy or if you feel that Kurozora is not abiding this Privacy Policy, do not hesitate to contact us. You can always contact us through administrators and other relevant contact forms.
 <div></div>
 
 Kurozora may update its Privacy Policy from time to time. Thus, we advise you to review this page periodically for any changes. We will notify you of any changes by posting the new Privacy Policy on this page. These changes are effective immediately, after they are posted on this page.
