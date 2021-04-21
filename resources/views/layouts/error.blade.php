@@ -29,11 +29,7 @@
     </head>
 
     <body class="bg-white dark:bg-black">
-        @livewire('navigation-dropdown')
-
         {{ $slot }}
-
-        <x-footer />
 
         @livewireScripts
     </body>

@@ -4,19 +4,13 @@ const colors = require('tailwindcss/colors');
 module.exports = {
     mode: 'jit',
 
-    purge: {
-        content: [
-            './app/**/*.php',
-            './public/**/*.html',
-            './resources/**/*.{html,js,jsx,md,php,ts,tsx,twig,vue}'
-        ],
-        options: {
-            defaultExtractor: (content) => content.match(/[\w-/.:]+(?<!:)/g) || [],
-            whitelistPatterns: [/-active$/, /-enter$/, /-leave-to$/, /show$/],
-        },
-    },
-
     darkMode: 'class',
+
+    purge: [
+        './app/**/*.php',
+        './public/**/*.html',
+        './resources/**/*.{html,js,jsx,md,php,ts,tsx,twig,vue}'
+    ],
 
     theme: {
         pagination: theme => ({
