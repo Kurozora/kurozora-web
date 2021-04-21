@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\SignUpRequest;
 use App\Models\User;
 use Auth;
+use Browser;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -45,7 +46,11 @@ class SignUpUserController extends Controller
         $newUser = User::create([
             'username'              => $data['username'],
             'email'                 => $data['email'],
-            'password'              => User::hashPass($data['password'])
+            'password'              => User::hashPass($data['password']),
+            'settings'              => [
+                'can_change_username'   => false,
+                'tv_rating'             => -1
+            ]
         ]);
 
         if ($request->hasFile('profileImage') &&
@@ -58,6 +63,23 @@ class SignUpUserController extends Controller
 
         Auth::login($newUser);
 
+        $this->prepareAuthenticatedSession();
+
         return redirect('/');
+    }
+
+    /**
+     * Prepares the authenticated session for the newly authenticated user.
+     */
+    protected function prepareAuthenticatedSession()
+    {
+        $browser = Browser::detect();
+
+        Auth::user()->createSession([
+            'platform'          => $browser->platformFamily(),
+            'platform_version'  => $browser->platformVersion(),
+            'device_vendor'     => $browser->deviceFamily(),
+            'device_model'      => $browser->deviceModel(),
+        ]);
     }
 }
