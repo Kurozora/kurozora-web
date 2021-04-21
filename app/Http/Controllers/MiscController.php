@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
-use League\CommonMark\CommonMarkConverter;
+use Markdown;
 
 class MiscController extends Controller
 {
@@ -21,17 +21,17 @@ class MiscController extends Controller
     public function getPrivacyPolicy(): JsonResponse
     {
         // Get MarkDown content
-        $privacyPolicyText = $this->getContentOfFile('resources/static/privacy_policy.md');
+        $privacyPolicyMarkdown = $this->getContentOfFile('resources/static/privacy_policy.md');
 
         // Prepare for converting Markdown to HTML
-        $commonMarkConverter = new CommonMarkConverter();
+        $privacyPolicyText = Markdown::parse($privacyPolicyMarkdown);
 
         return JSONResult::success([
             'data' => [
                 'type'          => 'legal',
                 'href'          => route('api.legal.privacy-policy', [], false),
                 'attributes'    => [
-                    'text' => $commonMarkConverter->convertToHtml($privacyPolicyText)
+                    'text' => $privacyPolicyText->toHtml()
                 ]
             ]
         ]);
@@ -47,17 +47,17 @@ class MiscController extends Controller
     public function getTermsOfUse(): JsonResponse
     {
         // Get MarkDown content
-        $termsOfUseText = $this->getContentOfFile('resources/static/terms_of_use.md');
+        $termsOfUseMarkdown = $this->getContentOfFile('resources/static/terms_of_use.md');
 
         // Prepare for converting Markdown to HTML
-        $commonMarkConverter = new CommonMarkConverter();
+        $termsOfUseText = Markdown::parse($termsOfUseMarkdown);
 
         return JSONResult::success([
             'data' => [
                 'type'          => 'legal',
                 'href'          => route('api.legal.terms-of-use', [], false),
                 'attributes'    => [
-                    'text' => $commonMarkConverter->convertToHtml($termsOfUseText)
+                    'text' => $termsOfUseText->toHtml()
                 ]
             ]
         ]);
@@ -73,12 +73,10 @@ class MiscController extends Controller
      */
     protected function getContentOfFile(string $filePath): string
     {
-        // Get the privacy policy text
-        $termsOfUseText = null;
-
         // Create the file if it does not exist yet
-        if (!Storage::exists($filePath))
+        if (!Storage::exists($filePath)) {
             Storage::put($filePath, 'Page is empty. Please inform an administrator.');
+        }
 
         // Get the last update date
         $lastUpdateUnix = Carbon::createFromTimestamp(Storage::lastModified($filePath));

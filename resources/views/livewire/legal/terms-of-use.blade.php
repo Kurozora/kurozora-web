@@ -10,10 +10,14 @@
     </x-slot>
 
     <div class="text-center mt-16">
-        <h1>Terms of Use</h1>
+        <h1 class="text-xl font-bold">{{ __('Terms of Use') }}</h1>
     </div>
+
     {!! $termsOfUseText !!}
+
     <div>
-        <a href="{{ url('/') }}">Take me back</a>
+        <x-link-button href="{{ url('/') }}">
+            {{ __('Take me back') }}
+        </x-link-button>
     </div>
 </div>
