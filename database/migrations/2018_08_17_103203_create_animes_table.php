@@ -4,7 +4,7 @@ use App\Models\Anime;
 use App\Enums\AnimeSource;
 use App\Enums\AnimeStatus;
 use App\Enums\AnimeType;
-use App\Enums\WatchRating;
+use App\Models\TvRating;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -31,7 +31,7 @@ class CreateAnimesTable extends Migration
             $table->string('tagline')->nullable();
             $table->mediumText('synopsis')->nullable();
             $table->integer('type')->default(AnimeType::Unknown);
-            $table->integer('watch_rating')->default(WatchRating::Unknown);
+            $table->unsignedBigInteger('tv_rating_id')->nullable();
             $table->integer('adaptation_source')->default(AnimeSource::Unknown);
             $table->string('network')->nullable();
             $table->string('producer')->nullable();
@@ -61,6 +61,9 @@ class CreateAnimesTable extends Migration
         Schema::table(Anime::TABLE_NAME, function (Blueprint $table) {
             // Set unique index constraints
             $table->unique(['slug']);
+
+            // Set foreign key constraints
+            $table->foreign('tv_rating_id')->references('id')->on(TvRating::TABLE_NAME)->onDelete('set null');
         });
     }
 

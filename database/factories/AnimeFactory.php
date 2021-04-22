@@ -7,7 +7,7 @@ use App\Enums\AnimeSource;
 use App\Enums\AnimeStatus;
 use App\Enums\AnimeType;
 use App\Enums\DayOfWeek;
-use App\Enums\WatchRating;
+use App\Models\TvRating;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -42,7 +42,7 @@ class AnimeFactory extends Factory
             'producer'          => null,
             'synopsis'          => $this->faker->paragraph,
             'runtime'           => 25,
-            'watch_rating'      => WatchRating::getRandomValue(),
+            'tv_rating_id'      => TvRating::inRandomOrder()->first(),
             'air_status'        => AnimeStatus::getRandomValue(),
             'type'              => AnimeType::getRandomValue(),
             'adaptation_source' => AnimeSource::getRandomValue(),
