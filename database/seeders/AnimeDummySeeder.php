@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Anime;
 use App\Enums\AnimeType;
+use App\Models\TvRating;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
@@ -25,8 +26,6 @@ class AnimeDummySeeder extends Seeder
     public function run()
     {
         // Get the anime JSON
-        $animeJSON = null;
-
         if (!Storage::exists(self::ANIME_JSON_PATH)) {
             $this->command->info('Downloading anime JSON...');
             $animeJSON = self::downloadJSON();
@@ -63,7 +62,8 @@ class AnimeDummySeeder extends Seeder
                     'kitsu_id'      => $animeData->kitsu_id,
                     'mal_id'        => $animeData->mal_id,
                     'tvdb_id'       => $animeData->tvdb_id,
-                    'slug'          => $animeData->slug
+                    'slug'          => $animeData->slug,
+                    'tv_rating_id'  => TvRating::inRandomOrder()->first()->id,
                 ]);
 
                 // Print progress every 100 anime and at the last anime

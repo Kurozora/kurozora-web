@@ -78,7 +78,7 @@ class FetchAnimeDetails extends Command
 //
 //        // Watch rating
 //        $this->info('[Retrieving watch rating]');
-//        $anime->watch_rating = $details->watchRating;
+//        $anime->tv_rating = $details->watchRating;
 //        $this->info('[Watch rating retrieved]');
 //        $this->info('');
 //
