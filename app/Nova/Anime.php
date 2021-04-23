@@ -25,6 +25,7 @@ use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Anime extends Resource
 {
@@ -122,7 +123,7 @@ class Anime extends Resource
                 ->required()
                 ->help('The general type of the anime, such as TV, Movie, or Music.'),
 
-            BelongsTo::make('TV rating', 'tvRating')
+            BelongsTo::make('TV rating', 'tv_rating')
                 ->sortable()
                 ->required(),
 
@@ -337,6 +338,18 @@ class Anime extends Resource
         if ($modCount <= 0) return null;
 
         return '<span class="py-1 px-2 mr-1 inline-block rounded align-middle" style="background-color: #465161; color: #fff;">' . $modCount . ' ' . Str::plural('mod', $modCount) . '</span>';
+    }
+
+    /**
+     * Build an "index" query for the given resource.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public static function indexQuery(NovaRequest $request, $query)
+    {
+        return parent::indexQuery($request, $query)->withoutGlobalScope('tv_rating');
     }
 
     /**
