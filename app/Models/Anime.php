@@ -6,6 +6,7 @@ use App\Enums\AnimeImageType;
 use App\Traits\KuroSearchTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -411,5 +412,15 @@ class Anime extends KModel
         });
 
         return $query->whereIn(self::TABLE_NAME . '.id', $mostAddedIDs);
+    }
+
+    /**
+     * The anime's tv rating.
+     *
+     * @return BelongsTo
+     */
+    public function tvRating(): BelongsTo
+    {
+        return $this->belongsTo(TvRating::class);
     }
 }

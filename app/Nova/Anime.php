@@ -6,7 +6,6 @@ use App\Enums\AnimeSource;
 use App\Enums\AnimeStatus;
 use App\Enums\AnimeType;
 use App\Enums\DayOfWeek;
-use App\Enums\WatchRating;
 use App\Nova\Actions\FetchAnimeActors;
 use App\Nova\Actions\FetchAnimeDetails;
 use App\Nova\Actions\FetchAnimeImages;
@@ -15,6 +14,7 @@ use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Laraning\NovaTimeField\TimeField as Time;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
@@ -40,7 +40,7 @@ class Anime extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'title';
 
     /**
      * The columns that should be searched.
@@ -122,12 +122,9 @@ class Anime extends Resource
                 ->required()
                 ->help('The general type of the anime, such as TV, Movie, or Music.'),
 
-            Select::make('Watch rating')
-                ->options(WatchRating::asSelectArray())
-                ->displayUsingLabels()
+            BelongsTo::make('TV rating', 'tvRating')
                 ->sortable()
-                ->required()
-                ->help('Use `TV-Y7 (FV)` if the show exhibits more \'fantasy violence\', and/or is generally more intense or combative than other shows.'),
+                ->required(),
 
             Select::make('Adaptation Source')
                 ->options(AnimeSource::asSelectArray())
