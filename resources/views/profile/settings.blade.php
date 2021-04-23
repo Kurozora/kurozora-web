@@ -16,6 +16,12 @@
             <x-section-border />
 
             <div class="mt-10 sm:mt-0">
+                @livewire('profile.select-preferred-tv-rating-form')
+            </div>
+
+            <x-section-border />
+
+            <div class="mt-10 sm:mt-0">
                 @livewire('profile.update-password-form')
             </div>
 
