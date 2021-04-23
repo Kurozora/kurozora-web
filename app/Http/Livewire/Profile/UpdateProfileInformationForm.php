@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Profile;
 
 use App\Contracts\UpdatesUserProfileInformation;
-use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
