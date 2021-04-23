@@ -3,11 +3,13 @@
 namespace App\Providers;
 
 use Anaseqal\NovaSidebarIcons\NovaSidebarIcons;
+use App\Http\Controllers\Web\Nova\SignInController;
 use App\Nova\Metrics\ActivityLogCount;
 use App\Nova\Metrics\AnimeNSFWChart;
 use App\Nova\Metrics\NewUsers;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Actions\ActionEvent;
+use Laravel\Nova\Http\Controllers\LoginController;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
 use Vyuldashev\NovaPermission\NovaPermissionTool;
@@ -22,6 +24,8 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     public function boot()
     {
         parent::boot();
+
+        $this->app->alias(SignInController::class, LoginController::class);
     }
 
     /**
