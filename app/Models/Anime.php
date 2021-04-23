@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\Enums\AnimeImageType;
 use App\Traits\KuroSearchTrait;
+use Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -68,6 +70,26 @@ class Anime extends KModel
     // Table name
     const TABLE_NAME = 'animes';
     protected $table = self::TABLE_NAME;
+
+    /**
+     * Bootstrap the model and its traits.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('tv_rating', function (Builder $builder) {
+            if (Auth::user() != null) {
+                $tvRating = settings('tv_rating');
+
+                if ($tvRating != -1) {
+                    $builder->where('tv_rating_id', '<=', $tvRating);
+                }
+            }
+        });
+    }
 
     /**
      * Get the options for generating the slug.
@@ -411,5 +433,15 @@ class Anime extends KModel
         });
 
         return $query->whereIn(self::TABLE_NAME . '.id', $mostAddedIDs);
+    }
+
+    /**
+     * The anime's TV rating.
+     *
+     * @return BelongsTo
+     */
+    public function tv_rating(): BelongsTo
+    {
+        return $this->belongsTo(TvRating::class);
     }
 }

@@ -8,7 +8,6 @@ use App\Enums\AnimeStatus;
 use App\Enums\AnimeType;
 use App\Enums\DayOfWeek;
 use App\Enums\UserLibraryStatus;
-use App\Enums\WatchRating;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -49,7 +48,10 @@ class AnimeResourceBasic extends JsonResource
                 'tagline'               => $anime->tagline,
                 'synopsis'              => $anime->synopsis,
                 'type'                  => AnimeType::getDescription($anime->type),
-                'watchRating'           => WatchRating::getDescription($anime->watch_rating),
+                'tvRating'              => [
+                    'name'          => $anime->tv_rating->name,
+                    'description'   => $anime->tv_rating->description,
+                ],
                 'adaptationSource'      => AnimeSource::getDescription($anime->adaptation_source),
                 'network'               => $anime->network,
                 'producer'              => $anime->producer,

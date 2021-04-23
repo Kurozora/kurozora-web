@@ -10,9 +10,13 @@ use App\Models\AnimeEpisode;
 use App\Models\AnimeRelations;
 use App\Models\AnimeSeason;
 use App\Models\Character;
+use App\Models\TvRating;
 
 trait ProvidesTestAnime
 {
+    /** @var TvRating $tvRating */
+    public TvRating $tvRating;
+
     /** @var Anime $anime */
     public Anime $anime;
 
@@ -41,6 +45,8 @@ trait ProvidesTestAnime
      */
     protected function initializeTestAnime()
     {
+        $this->tvRating = TvRating::factory()->create();
+
         $this->anime = Anime::factory()->create();
 
         $this->relatedAnime = Anime::factory()->create();
