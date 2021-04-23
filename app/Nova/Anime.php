@@ -6,7 +6,6 @@ use App\Enums\AnimeSource;
 use App\Enums\AnimeStatus;
 use App\Enums\AnimeType;
 use App\Enums\DayOfWeek;
-use App\Enums\WatchRating;
 use App\Nova\Actions\FetchAnimeActors;
 use App\Nova\Actions\FetchAnimeDetails;
 use App\Nova\Actions\FetchAnimeImages;
@@ -15,6 +14,7 @@ use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Laraning\NovaTimeField\TimeField as Time;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
@@ -25,6 +25,7 @@ use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Anime extends Resource
 {
@@ -40,7 +41,7 @@ class Anime extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'title';
 
     /**
      * The columns that should be searched.
@@ -122,12 +123,9 @@ class Anime extends Resource
                 ->required()
                 ->help('The general type of the anime, such as TV, Movie, or Music.'),
 
-            Select::make('Watch rating')
-                ->options(WatchRating::asSelectArray())
-                ->displayUsingLabels()
+            BelongsTo::make('TV rating', 'tv_rating')
                 ->sortable()
-                ->required()
-                ->help('Use `TV-Y7 (FV)` if the show exhibits more \'fantasy violence\', and/or is generally more intense or combative than other shows.'),
+                ->required(),
 
             Select::make('Adaptation Source')
                 ->options(AnimeSource::asSelectArray())
@@ -340,6 +338,18 @@ class Anime extends Resource
         if ($modCount <= 0) return null;
 
         return '<span class="py-1 px-2 mr-1 inline-block rounded align-middle" style="background-color: #465161; color: #fff;">' . $modCount . ' ' . Str::plural('mod', $modCount) . '</span>';
+    }
+
+    /**
+     * Build an "index" query for the given resource.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public static function indexQuery(NovaRequest $request, $query)
+    {
+        return parent::indexQuery($request, $query)->withoutGlobalScope('tv_rating');
     }
 
     /**
