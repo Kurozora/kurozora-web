@@ -31,7 +31,7 @@ class SelectPreferredTvRatingForm extends Component
     }
 
     /**
-     * Update the user's preferred tv rating.
+     * Update the user's preferred TV rating.
      *
      * @param UpdatesUserPreferredTvRating $updater
      */

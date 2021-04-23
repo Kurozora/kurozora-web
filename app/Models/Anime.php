@@ -436,7 +436,7 @@ class Anime extends KModel
     }
 
     /**
-     * The anime's tv rating.
+     * The anime's TV rating.
      *
      * @return BelongsTo
      */

@@ -7,7 +7,7 @@ use App\Models\User;
 interface UpdatesUserPreferredTvRating
 {
     /**
-     * Validate and update the given user's preferred tv rating.
+     * Validate and update the given user's preferred TV rating.
      *
      * @param User  $user
      * @param array  $input

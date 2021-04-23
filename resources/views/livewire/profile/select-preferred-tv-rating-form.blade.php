@@ -10,7 +10,7 @@
     <x-slot name="form">
         <div class="col-span-12">
             <div class="max-w-xl text-sm text-gray-600">
-                {{ __('Depending on the chosen tv rating some shows might be hidden.') }}
+                {{ __('Depending on the chosen TV rating some shows might be hidden.') }}
             </div>
 
             <div class="mt-5">
