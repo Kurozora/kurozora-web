@@ -34,6 +34,12 @@ class AnimeFactory extends Factory
         $firstAired = Carbon::parse($this->faker->dateTime)->toDate();
         $lastAired = Carbon::parse($firstAired)->addWeeks($totalEpisodes)->toDate();
 
+        $tvRating = TvRating::inRandomOrder()->first();
+
+        if ($tvRating == null) {
+            $tvRating = TvRating::factory()->create();
+        }
+
         return [
             'title'             => $title,
             'tagline'           => $this->faker->sentence,
@@ -42,7 +48,7 @@ class AnimeFactory extends Factory
             'producer'          => null,
             'synopsis'          => $this->faker->paragraph,
             'runtime'           => 25,
-            'tv_rating_id'      => TvRating::inRandomOrder()->first(),
+            'tv_rating_id'      => $tvRating,
             'air_status'        => AnimeStatus::getRandomValue(),
             'type'              => AnimeType::getRandomValue(),
             'adaptation_source' => AnimeSource::getRandomValue(),
