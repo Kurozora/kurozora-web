@@ -1,4 +1,4 @@
-<footer class="bg-gray-100 mt-4">
+<footer class="bg-gray-100">
     <div class="max-w-7xl mx-auto px-6 pt-10 pb-6">
         <div class="flex flex-wrap">
             <div class="w-full md:w-1/5 text-center md:text-left">

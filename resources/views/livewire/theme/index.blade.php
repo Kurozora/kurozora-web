@@ -1,4 +1,4 @@
-<div>
+<div class="mb-4">
     <x-slot name="title">
         {{ __('Themes') }}
     </x-slot>
