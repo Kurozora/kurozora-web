@@ -1007,6 +1007,16 @@ main {
 	flex-direction: column;
 }
 
+picture::before {
+	position: absolute;
+	display: block;
+	height: 100%;
+	width: 100%;
+	background-color: transparent;
+
+  content: "";
+}
+
 /* Placeholder styles */
 /* Anime placeholders */
 .anime-poster {
@@ -1082,6 +1092,9 @@ main {
 .top-0 {
 	top: 0px;
 }
+.bottom-0 {
+	bottom: 0px;
+}
 .top-10 {
 	top: 2.5rem;
 }
@@ -1125,6 +1138,10 @@ main {
 	margin-top: 0.75rem;
 	margin-bottom: 0.75rem;
 }
+.mx-5 {
+	margin-left: 1.25rem;
+	margin-right: 1.25rem;
+}
 .my-8 {
 	margin-top: 2rem;
 	margin-bottom: 2rem;
@@ -1159,6 +1176,15 @@ main {
 .mb-2 {
 	margin-bottom: 0.5rem;
 }
+.ml-1 {
+	margin-left: 0.25rem;
+}
+.ml-0\.5 {
+	margin-left: 0.125rem;
+}
+.ml-0 {
+	margin-left: 0px;
+}
 .mr-2 {
 	margin-right: 0.5rem;
 }
@@ -1176,6 +1202,9 @@ main {
 }
 .mt-10 {
 	margin-top: 2.5rem;
+}
+.mb-0 {
+	margin-bottom: 0px;
 }
 .mt-6 {
 	margin-top: 1.5rem;
@@ -1225,6 +1254,12 @@ main {
 .h-4 {
 	height: 1rem;
 }
+.h-6 {
+	height: 1.5rem;
+}
+.h-8 {
+	height: 2rem;
+}
 .h-1 {
 	height: 0.25rem;
 }
@@ -1237,11 +1272,8 @@ main {
 .h-10 {
 	height: 2.5rem;
 }
-.h-8 {
-	height: 2rem;
-}
-.h-6 {
-	height: 1.5rem;
+.h-\[268px\] {
+	height: 268px;
 }
 .h-20 {
 	height: 5rem;
@@ -1270,6 +1302,9 @@ main {
 .w-48 {
 	width: 12rem;
 }
+.w-1\/2 {
+	width: 50%;
+}
 .w-16 {
 	width: 4rem;
 }
@@ -1284,6 +1319,9 @@ main {
 }
 .w-10 {
 	width: 2.5rem;
+}
+.w-\[180px\] {
+	width: 180px;
 }
 .w-20 {
 	width: 5rem;
@@ -1314,6 +1352,9 @@ main {
 }
 .flex-shrink-0 {
 	flex-shrink: 0;
+}
+.flex-grow {
+	flex-grow: 1;
 }
 .border-collapse {
 	border-collapse: collapse;
@@ -1381,11 +1422,21 @@ main {
 .grid-cols-1 {
 	grid-template-columns: repeat(1, minmax(0, 1fr));
 }
+.grid-rows-\[repeat\(2\2c minmax\(0\2c min-content\)\)\] {
+	grid-template-rows: repeat(2, minmax(0, -webkit-min-content));
+	grid-template-rows: repeat(2, minmax(0, min-content));
+}
 .flex-col {
 	flex-direction: column;
 }
+.flex-row {
+	flex-direction: row;
+}
 .flex-wrap {
 	flex-wrap: wrap;
+}
+.flex-nowrap {
+	flex-wrap: nowrap;
 }
 .items-center {
 	align-items: center;
@@ -1408,6 +1459,13 @@ main {
 .gap-5 {
 	gap: 1.25rem;
 }
+.gap-x-10 {
+	-moz-column-gap: 2.5rem;
+	     column-gap: 2.5rem;
+}
+.gap-y-4 {
+	row-gap: 1rem;
+}
 .space-x-8 > :not([hidden]) ~ :not([hidden]) {
 	--tw-space-x-reverse: 0;
 	margin-right: calc(2rem * var(--tw-space-x-reverse));
@@ -1428,6 +1486,12 @@ main {
 }
 .overflow-hidden {
 	overflow: hidden;
+}
+.overflow-x-scroll {
+	overflow-x: scroll;
+}
+.whitespace-nowrap {
+	white-space: nowrap;
 }
 .rounded {
 	border-radius: 0.25rem;
@@ -1455,6 +1519,9 @@ main {
 .border-2 {
 	border-width: 2px;
 }
+.border-b {
+	border-bottom-width: 1px;
+}
 .border-b-2 {
 	border-bottom-width: 2px;
 }
@@ -1464,8 +1531,11 @@ main {
 .border-t {
 	border-top-width: 1px;
 }
-.border-b {
-	border-bottom-width: 1px;
+.border-l-2 {
+	border-left-width: 2px;
+}
+.border-t-2 {
+	border-top-width: 2px;
 }
 .border-transparent {
 	border-color: transparent;
@@ -1501,6 +1571,9 @@ main {
 .border-gray-300 {
 	--tw-border-opacity: 1;
 	border-color: rgba(212, 212, 216, var(--tw-border-opacity));
+}
+.border-opacity-25 {
+	--tw-border-opacity: 0.25;
 }
 .bg-white {
 	--tw-bg-opacity: 1;
@@ -1552,6 +1625,9 @@ main {
 }
 .bg-cover {
 	background-size: cover;
+}
+.bg-center {
+	background-position: center;
 }
 .bg-no-repeat {
 	background-repeat: no-repeat;
@@ -1623,11 +1699,18 @@ main {
 	padding-top: 2.5rem;
 	padding-bottom: 2.5rem;
 }
+.px-12 {
+	padding-left: 3rem;
+	padding-right: 3rem;
+}
 .pt-10 {
 	padding-top: 2.5rem;
 }
 .pb-6 {
 	padding-bottom: 1.5rem;
+}
+.pb-4 {
+	padding-bottom: 1rem;
 }
 .pt-6 {
 	padding-top: 1.5rem;
@@ -1659,8 +1742,14 @@ main {
 .pb-1 {
 	padding-bottom: 0.25rem;
 }
-.pb-4 {
-	padding-bottom: 1rem;
+.pb-5 {
+	padding-bottom: 1.25rem;
+}
+.pt-5 {
+	padding-top: 1.25rem;
+}
+.pb-8 {
+	padding-bottom: 2rem;
 }
 .pt-0 {
 	padding-top: 0px;
@@ -1709,6 +1798,10 @@ main {
 	font-size: 2.25rem;
 	line-height: 2.5rem;
 }
+.text-6xl {
+	font-size: 3.75rem;
+	line-height: 1;
+}
 .font-semibold {
 	font-weight: 600;
 }
@@ -1736,6 +1829,9 @@ main {
 .leading-5 {
 	line-height: 1.25rem;
 }
+.leading-snug {
+	line-height: 1.375;
+}
 .leading-normal {
 	line-height: 1.5;
 }
@@ -1744,6 +1840,9 @@ main {
 }
 .tracking-widest {
 	letter-spacing: 0.1em;
+}
+.tracking-normal {
+	letter-spacing: 0em;
 }
 .text-gray-800 {
 	--tw-text-opacity: 1;
@@ -1899,6 +1998,20 @@ main {
 .ease-in {
 	transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
 }
+.line-clamp-5 {
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 5;
+}
+/* Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+.no-scrollbar {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
 
 /**
  * Here you would add any custom utilities you need that don't come out of the
@@ -1985,6 +2098,10 @@ main {
 .hover\:text-gray-800:hover {
 	--tw-text-opacity: 1;
 	color: rgba(39, 39, 42, var(--tw-text-opacity));
+}
+.hover\:text-orange-400:hover {
+	--tw-text-opacity: 1;
+	color: rgba(255, 169, 51, var(--tw-text-opacity));
 }
 .hover\:text-gray-500:hover {
 	--tw-text-opacity: 1;
@@ -2108,6 +2225,10 @@ main {
 	--tw-text-opacity: 1;
 	color: rgba(255, 255, 255, var(--tw-text-opacity));
 }
+.active\:text-orange-600:active {
+	--tw-text-opacity: 1;
+	color: rgba(230, 132, 0, var(--tw-text-opacity));
+}
 .active\:text-gray-700:active {
 	--tw-text-opacity: 1;
 	color: rgba(63, 63, 70, var(--tw-text-opacity));
@@ -2180,6 +2301,9 @@ main {
 	.sm\:hidden {
 		display: none;
 	}
+	.sm\:w-1\/3 {
+		width: 33.333333%;
+	}
 	.sm\:w-full {
 		width: 100%;
 	}
@@ -2224,6 +2348,9 @@ main {
 	.sm\:scale-100 {
 		--tw-scale-x: 1;
 		--tw-scale-y: 1;
+	}
+	.sm\:grid-cols-2 {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 	.sm\:grid-cols-1 {
 		grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -2503,14 +2630,30 @@ main {
 	.lg\:prose-lg > :last-child {
 		margin-bottom: 0;
 	}
+	.lg\:col-span-2 {
+		grid-column: span 2 / span 2;
+	}
+	.lg\:mb-0 {
+		margin-bottom: 0px;
+	}
+	.lg\:h-full {
+		height: 100%;
+	}
 	.lg\:max-w-sm {
 		max-width: 24rem;
 	}
 	.lg\:grid-cols-3 {
 		grid-template-columns: repeat(3, minmax(0, 1fr));
 	}
+	.lg\:grid-rows-none {
+		grid-template-rows: none;
+	}
 	.lg\:bg-center {
 		background-position: center;
+	}
+	.lg\:object-cover {
+		-o-object-fit: cover;
+		   object-fit: cover;
 	}
 	.lg\:px-8 {
 		padding-left: 2rem;
