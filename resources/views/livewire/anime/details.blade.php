@@ -21,6 +21,12 @@
         </div>
     </div>
 
+    <div class="mt-4 mx-5 lg:col-span-2 overflow-hidden">
+        <section class="pt-5 pb-2 border-t">
+            <p class="text-sm text-gray-400">{{ $anime->copyright }}</p>
+        </section>
+    </div>
+
 {{--    <div class="bg-center bg-cover bg-no-repeat border-2 border-gray-100 border-opacity-25 rounded-lg shadow-lg mt-3 mb-0 mx-auto w-[180px] h-[268px]" style="background-size: 180px 268px; background-image: url('{{ $anime->poster()->url ?? asset('images/static/placeholders/anime_poster.jpg') }}')"></div>--}}
 
 {{--    <h1 class="font-bold mt-6 mb-2">{{ $anime->title }}</h1>--}}
