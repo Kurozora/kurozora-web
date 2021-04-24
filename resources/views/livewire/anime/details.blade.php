@@ -83,6 +83,27 @@
             </div>
         </section>
 
+        <section class="pt-5 pb-8 border-t-2">
+            <x-section-nav>
+                <x-slot name="title">
+                    {{ __('Information') }}
+                </x-slot>
+            </x-section-nav>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-10 gap-y-4">
+                <x-information-list label="{{ __('Studio') }}" infromation="{{ $anime->studios()->first()->name ?? '-' }}" />
+                <x-information-list label="{{ __('Network') }}" infromation="{{ $anime->network ?? '-' }}" />
+                <x-information-list label="{{ __('Type') }}" infromation="{{ App\Enums\AnimeType::fromValue($anime->type ?? 0)->description }}" />
+                <x-information-list label="{{ __('Aired') }}" infromation="{{ $anime->first_aired ?? 'N/A' }} - {{ $anime->last_aired ?? 'N/A' }}" />
+                <x-information-list label="{{ __('Broadcast') }}" infromation="{{ $anime->broadcast }}" />
+                <x-information-list label="{{ __('Genres') }}" infromation="{{ $anime->genres ?? '-' }}" />
+                <x-information-list label="{{ __('Rating') }}" infromation="{{ $anime->tv_rating->full_name }}" />
+                <x-information-list label="{{ __('Seasons') }}" infromation="{{ $anime->seasons_count ?? '-' }}" />
+                <x-information-list label="{{ __('Episodes') }}" infromation="{{ $anime->episodes_count ?? '-' }}" />
+                <x-information-list label="{{ __('Duration') }}" infromation="{{ $anime->runtime ?? '-' }}" />
+            </div>
+        </section>
+
         <section class="pt-5 pb-2 border-t">
             <p class="text-sm text-gray-400">{{ $anime->copyright }}</p>
         </section>
