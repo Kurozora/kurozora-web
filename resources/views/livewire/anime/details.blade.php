@@ -22,6 +22,33 @@
     </div>
 
     <div class="mt-4 mx-5 lg:col-span-2 overflow-hidden">
+        <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between text-center pb-5 overflow-x-scroll no-scrollbar">
+            <div id="badge-1" class="flex-grow px-12">
+                <p class="inline-flex font-bold text-orange-500">
+                    2.5
+                    <x-star-rating star-size="sm" />
+                </p>
+                <p class="text-sm text-gray-500">187K {{ __('Ratings') }}</p>
+            </div>
+
+            <div id="badge-2" class="flex-grow px-12 border-l-2">
+                <p class="font-bold">#13</p>
+                <p class="text-sm text-gray-500">{{ __('Thriller') }}</p>
+            </div>
+
+            <div id="badge-2" class="flex-grow px-12 border-l-2">
+                <p class="font-bold">{{ $anime->tv_rating->name }}</p>
+                <p class="text-sm text-gray-500">{{ __('Rated') }}</p>
+            </div>
+
+            @if ($anime->studios()->count())
+                <div id="badge-2" class="flex-grow px-12 border-l-2">
+                    <p class="font-bold">{{ $anime->studios()->first()->name }}</p>
+                    <p class="text-sm text-gray-500">{{ __('Studio') }}</p>
+                </div>
+            @endif
+        </section>
+
         <section class="pt-5 pb-2 border-t">
             <p class="text-sm text-gray-400">{{ $anime->copyright }}</p>
         </section>
