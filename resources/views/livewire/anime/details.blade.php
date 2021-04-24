@@ -49,6 +49,20 @@
             @endif
         </section>
 
+        <section class="pt-5 pb-8 border-t-2">
+            <x-section-nav class="flex flex-no-wrap justify-between mb-5">
+                <x-slot name="title">
+                    {{ __('Synopsis') }}
+                </x-slot>
+            </x-section-nav>
+
+            <x-truncated-text>
+                <x-slot name="text">
+                    {!! nl2br($anime->synopsis) !!}
+                </x-slot>
+            </x-truncated-text>
+        </section>
+
         <section class="pt-5 pb-2 border-t">
             <p class="text-sm text-gray-400">{{ $anime->copyright }}</p>
         </section>
