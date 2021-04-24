@@ -63,6 +63,26 @@
             </x-truncated-text>
         </section>
 
+        <section class="pt-5 pb-8 border-t-2">
+            <x-section-nav>
+                <x-slot name="title">
+                    {{ __('Ratings') }}
+                </x-slot>
+            </x-section-nav>
+
+            <div class="flex flex-row justify-between">
+                <div class="text-center">
+                    <p class="font-bold text-6xl">2.5</p>
+                    <p class="font-bold text-sm text-gray-500">{{ __('out of') }} 5</p>
+                </div>
+
+                <div class="text-right">
+                    <x-star-rating star-size="lg" />
+                    <p class="text-sm text-gray-500">{{ __('Not enough ratings') }}</p>
+                </div>
+            </div>
+        </section>
+
         <section class="pt-5 pb-2 border-t">
             <p class="text-sm text-gray-400">{{ $anime->copyright }}</p>
         </section>
