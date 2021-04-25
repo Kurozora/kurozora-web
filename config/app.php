@@ -38,7 +38,7 @@ return [
     | or any other location as required by the application or its packages.
     */
 
-    'version' => '1.2.0-alpha.19',
+    'version' => '1.2.0-alpha.26',
 
     /*
     |--------------------------------------------------------------------------
@@ -49,7 +49,10 @@ return [
     |
     */
 
-    'ios_app_protocol' => 'kurozora://',
+    'ios' => [
+        'id'        => '1476153872',
+        'protocol'  => 'kurozora://',
+    ],
 
     /*
     |--------------------------------------------------------------------------

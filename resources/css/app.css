@@ -55,6 +55,16 @@ main {
   flex-grow;
 }
 
+picture::before {
+  @apply absolute
+  block
+  bg-transparent
+  h-full
+  w-full;
+
+  content: "";
+}
+
 /* Placeholder styles */
 /* Anime placeholders */
 .anime-poster {
@@ -93,6 +103,19 @@ main {
  * config file.
  */
 @tailwind utilities;
+@layer utilities {
+  @variants responsive {
+    /* Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
+  }
+}
 
 /**
  * Here you would add any custom utilities you need that don't come out of the

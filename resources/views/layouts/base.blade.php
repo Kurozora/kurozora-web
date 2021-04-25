@@ -5,6 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         {{ $meta ?? '' }}
 
+        @if (!empty($appArgument))
+            <meta name="apple-itunes-app" content="app-id={{ config('app.ios.id') }}, app-argument={{ config('app.ios.protocol') }}{{ $appArgument }}">
+        @endif
+
         @if (empty($title))
             <title>{{ config('app.name') }}</title>
         @else
