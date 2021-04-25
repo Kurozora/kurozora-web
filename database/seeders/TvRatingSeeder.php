@@ -14,7 +14,7 @@ class TvRatingSeeder extends Seeder
      */
     protected array $tvRatings = [
         [
-            'name'          => 'N',
+            'name'          => 'NR',
             'description'   => 'Not Rated',
         ],
         [
@@ -22,25 +22,17 @@ class TvRatingSeeder extends Seeder
             'description'   => 'All Ages',
         ],
         [
-            'name'          => 'PG'   ,
-            'description'   => 'Children',
+            'name'          => 'PG-12',
+            'description'   => 'Parental Guidance Suggested',
         ],
         [
-            'name'          => 'PG-13',
-            'description'   => 'Teens 13 or Older',
+            'name'          => 'R15+',
+            'description'   => 'Violence & Profanity',
         ],
         [
-            'name'          => 'R',
-            'description'   => '17+ (violence & profanity)',
-        ],
-        [
-            'name'          => 'R+',
-            'description'   => 'Mild Nudity',
-        ],
-        [
-            'name'          => 'Rx',
-            'description'   => 'Hentai',
-        ],
+            'name'          => 'R18+',
+            'description'   => 'Adults Only',
+        ]
     ];
 
     /**
