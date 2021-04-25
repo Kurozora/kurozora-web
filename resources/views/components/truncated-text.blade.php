@@ -11,7 +11,7 @@
         }
     }"
     x-init="isCollapsed = countNumberOfLines() >= 4.5"
-    @resize.window="isCollapsed = countNumberOfLines() >= 4.5; console.log(countNumberOfLines())"
+    @resize.window="if (isCollapsed) { isCollapsed = countNumberOfLines() >= 4.5; }"
     {{ $attributes->merge(['class' => 'relative']) }}
 >
     <span
