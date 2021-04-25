@@ -30,7 +30,7 @@
 
                     <div class="flex flex-col justify-between w-3/4">
                         <div>
-                            <p class="font-semibold text-lg leading-tight break-all">{{ $anime->title }} asdas dasd asd asda sdas dasdasdasdasdasdasdasdasdasdasdasdasdas asda sd a</p>
+                            <p class="font-semibold text-lg leading-tight break-all">{{ $anime->title }}</p>
                             <p class="text-sm leading-tight">{{ $anime->informationSummary }}</p>
                             @php
                                 $airingStatus = App\Enums\AnimeStatus::fromValue($anime->air_status);
