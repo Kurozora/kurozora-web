@@ -13,16 +13,49 @@
         anime/{{ $anime->id }}
     </x-slot>
 
-    <div class="grid grid-rows-[repeat(2,minmax(0,min-content))] lg:grid-rows-none lg:grid-cols-3 h-full mb-4 lg:mb-0">
+    <div class="grid grid-rows-[repeat(2,minmax(0,min-content))] mb-4 h-full lg:grid-rows-none lg:grid-cols-2 2xl:grid-cols-3 lg:mb-0">
         <div class="relative">
-            <picture>
-                <img class="lg:h-full lg:object-cover" src="{{ asset('images/static/star_bg_lg.jpg') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
-            </picture>
+            <div class="flex flex-no-wrap md:relative md:h-full">
+                <picture class="relative overflow-hidden">
+                    <img class="lg:h-full lg:object-cover" src="{{ asset('images/static/star_bg_lg.jpg') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
+                </picture>
+            </div>
+
+            <div class="md:absolute md:bottom-0 md:left-0 md:right-0 lg:px-4">
+                <div class="flex flex-no-wrap mx-5 pt-5 pb-8 md:mx-auto md:mb-8 md:p-6 md:max-w-lg md:bg-white md:bg-opacity-50 md:backdrop-filter md:backdrop-blur md:rounded-lg">
+                    <picture class="relative w-1/4 h-full mr-2 rounded-lg overflow-hidden">
+                        <img src="{{ $anime->poster()->url ?? asset('images/static/placeholders/anime_poster.jpg') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
+                        <div class="absolute top-0 left-0 h-full w-full ring-1 ring-gray-100 ring-opacity-25 ring-inset rounded-lg"></div>
+                    </picture>
+
+                    <div class="flex flex-col justify-between w-3/4">
+                        <div>
+                            <p class="font-semibold text-lg leading-tight break-all">{{ $anime->title }} asdas dasd asd asda sdas dasdasdasdasdasdasdasdasdasdasdasdasdas asda sd a</p>
+                            <p class="text-sm leading-tight">{{ $anime->informationSummary }}</p>
+                            @php
+                                $airingStatus = App\Enums\AnimeStatus::fromValue($anime->air_status);
+                            @endphp
+                            <x-pill color="{{ $airingStatus->color() }}" class="mt-2">{{ $airingStatus->description }}</x-pill>
+                        </div>
+                        <div class="flex justify-between mt-5 h-10">
+                            <x-button class="rounded-full shadow-md">{{ __('ADD') }}</x-button>
+                            <div>
+                                <x-button class="mr-2 !px-2 w-10 !bg-white text-yellow-300 rounded-full shadow-md hover:!bg-gray-50 active:!bg-gray-100">
+                                    @svg('bell_fill', 'fill-current')
+                                </x-button>
+                                <x-button class="!px-2 w-10 !bg-white text-red-500 rounded-full shadow-md hover:!bg-gray-50 active:!bg-gray-100">
+                                    @svg('heart_fill', 'fill-current')
+                                </x-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="mt-4 mx-5 lg:col-span-2 overflow-hidden">
+        <div class="mt-4 mx-5 2xl:col-span-2 lg:max-h-[calc(100vh-64px)] overflow-x-hidden overflow-y-scroll no-scrollbar">
             <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between text-center pb-5 overflow-x-scroll no-scrollbar">
-                <div id="badge-1" class="flex-grow px-12">
+                <div id="badge-1" class="flex-grow pr-12">
                     <p class="inline-flex font-bold text-orange-500">
                         2.5
                         <x-star-rating star-size="sm" />
@@ -53,10 +86,6 @@
                     <x-slot name="title">
                         {{ __('Synopsis') }}
                     </x-slot>
-
-{{--                    <x-slot name="action">--}}
-{{--                        <x-simple-button wire:click="working">{{ __('See All') }}</x-simple-button>--}}
-{{--                    </x-slot>--}}
                 </x-section-nav>
 
                 <x-truncated-text>
@@ -112,16 +141,4 @@
             </section>
         </div>
     </div>
-
-{{--    <div class="bg-center bg-cover bg-no-repeat border-2 border-gray-100 border-opacity-25 rounded-lg shadow-lg mt-3 mb-0 mx-auto w-[180px] h-[268px]" style="background-size: 180px 268px; background-image: url('{{ $anime->poster()->url ?? asset('images/static/placeholders/anime_poster.jpg') }}')"></div>--}}
-
-{{--    <h1 class="font-bold mt-6 mb-2">{{ $anime->title }}</h1>--}}
-
-{{--    @if ($anime->episode_count)--}}
-{{--        <h2>{{ $anime->episode_count }} {{ __('episodes') }}</h2>--}}
-{{--    @endif--}}
-
-{{--    <x-link-button href="{{ ios_app_url('anime/' . $anime->id) }}" class="rounded-full">--}}
-{{--        {{ __('Open in Kurozora App') }}--}}
-{{--    </x-link-button>--}}
 </main>
