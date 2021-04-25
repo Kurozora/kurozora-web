@@ -1017,14 +1017,6 @@ picture::before {
   content: "";
 }
 
-/**
- * Fix for Safari not correctly sizing SVG inside flex containers.
- */
-svg {
-	height: 100%;
-	width: 100%;
-}
-
 /* Placeholder styles */
 /* Anime placeholders */
 .anime-poster {
