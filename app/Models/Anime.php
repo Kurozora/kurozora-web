@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\AnimeImageType;
+use App\Enums\AnimeType;
 use App\Enums\DayOfWeek;
 use App\Traits\KuroSearchTrait;
 use Auth;
@@ -49,7 +50,8 @@ class Anime extends KModel
     ];
 
     protected $appends = [
-        'broadcast'
+        'broadcast',
+        'information_summary'
     ];
 
     // Maximum amount of returned search results
@@ -120,12 +122,38 @@ class Anime extends KModel
         if (!empty($airDay)) {
             $broadcast .= DayOfWeek::fromValue($airDay)->description ?? '-';
         }
-
         if (!empty($airTime)) {
             $broadcast .= __('at') . $airTime;
         }
 
         return $broadcast ?? '-';
+    }
+
+    /**
+     * A summary of the anime's information.
+     *
+     * Example: 'TV · TV-MA · 25eps · 25min · 2016'
+     *
+     * @return string
+     */
+    public function getInformationSummaryAttribute(): string
+    {
+        $informationSummary = AnimeType::fromValue($this->type)->description . ' · ' . $this->tv_rating->name;
+        $episodesCount = $this->episode_count ?? null;
+        $duration = $this->runtime ?? null;
+        $firstAiredYear = $this->first_aired;
+
+        if (!empty($episodesCount)) {
+            $informationSummary .= ' · ' . $episodesCount . 'eps';
+        }
+        if (!empty($duration)) {
+            $informationSummary .= ' · ' . $duration . 'min';
+        }
+        if (!empty($firstAiredYear)) {
+            $informationSummary .= ' · ' . $firstAiredYear->format('Y');
+        }
+
+        return $informationSummary;
     }
 
     /**
