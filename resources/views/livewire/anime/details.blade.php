@@ -41,10 +41,10 @@
                             <x-button class="rounded-full shadow-md">{{ __('ADD') }}</x-button>
                             <div>
                                 <x-button class="mr-2 !px-2 w-10 !bg-white text-yellow-300 rounded-full shadow-md hover:!bg-gray-50 active:!bg-gray-100">
-                                    @svg('bell_fill', 'fill-current')
+                                    @svg('bell_fill', 'fill-current', ['width' => '44'])
                                 </x-button>
                                 <x-button class="!px-2 w-10 !bg-white text-red-500 rounded-full shadow-md hover:!bg-gray-50 active:!bg-gray-100">
-                                    @svg('heart_fill', 'fill-current')
+                                    @svg('heart_fill', 'fill-current', ['width' => '44'])
                                 </x-button>
                             </div>
                         </div>
