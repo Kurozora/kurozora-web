@@ -1,16 +1,16 @@
 {
-  "openapi": "3.0.0",
+  "openapi": "3.0.3",
   "info": {
     "description": "Integrate tracking shows with Kurozora content.\n *** \nThe Kurozora API is a web service that lets you access information about the media found in the Kurozora&nbsp;Catalog and the user's personal Kurozora&nbsp;Library. Here's what each one includes:\n- The Kurozora&nbsp;Catalog includes all resources available in Kurozora.\n- The user's Kurozora&nbsp;Library contains only those resources that the user added to their personal library. For example, it contains shows added to their tracking list, and favorites.\n\nUse this service to retrieve information about actors, characters, episodes, genres, shows, studios, threads, users, and the users' library.\nWith proper authorization from the user, you can also create or modify their library, apply ratings to shows, create or modify threads and vote on replies.",
-    "version": "1.0.8",
+    "version": "1.2.0",
     "title": "Kurozora API",
-    "termsOfService": "http://swagger.io/terms/",
+    "termsOfService": "https://swagger.io/terms/",
     "contact": {
       "email": "kurozoraapp@gmail.com"
     },
     "license": {
       "name": "Apache 2.0",
-      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
   "servers": [
@@ -3376,11 +3376,29 @@
           "legal"
         ],
         "operationId": "getPrivacyPolicy",
-        "summary": "Retrieve latest privacy policy.",
-        "description": "This endpoint will retrieve the latest privacy policy.",
+        "summary": "Retrieve latest Privacy Policy.",
+        "description": "This endpoint will retrieve the latest Privacy Policy.",
         "responses": {
           "200": {
             "$ref": "#/components/responses/GetPrivacyPolicySuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/legal/terms-of-use": {
+      "get": {
+        "tags": [
+          "legal"
+        ],
+        "operationId": "getTermsOfUse",
+        "summary": "Retrieve latest Terms of Use.",
+        "description": "This endpoint will retrieve the latest Terms of Use.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetTermsOfUseSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -5773,7 +5791,7 @@
                       "logoURL": "https://lorempixel.com/640/480/?85310",
                       "about": "Eos repellat optio aut explicabo quod. Consequatur sit quasi aliquam sed modi aut. Perspiciatis et perferendis architecto voluptas eos quis iure. Corrupti ea reiciendis et quo sed itaque. Unde ipsa officia et veniam dicta ullam omnis modi. Consequuntur non possimus fugiat quaerat delectus ea. In voluptas dignissimos veniam reprehenderit a. Cum dolores aperiam et nihil. Veniam id rerum commodi quia assumenda at. Et velit iure eos aut. Et est praesentium id fugiat reprehenderit. Sunt dolorem aut ratione ipsam ipsum quo.",
                       "founded": "1983-09-30",
-                      "websiteURL": "http://rodriguez.com/eos-ut-earum-ut-eum-voluptas-iusto.html"
+                      "websiteURL": "https://rodriguez.com/eos-ut-earum-ut-eum-voluptas-iusto.html"
                     },
                     "relationships": {
                       "shows": {
@@ -6012,7 +6030,7 @@
                     "type": "themes",
                     "attributes": {
                       "name": "Watermelon",
-                      "screenshot": "http://kurozora-web.test/storage/1/Screenshot.jpeg",
+                      "screenshot": "https://kurozora.app/storage/1/Screenshot.jpeg",
                       "downloadLink": "/api/v1/themes/1/download"
                     }
                   },
@@ -6021,7 +6039,7 @@
                     "type": "themes",
                     "attributes": {
                       "name": "Blueberry",
-                      "screenshot": "http://kurozora-web.test/storage/2/Screenshot.jpeg",
+                      "screenshot": "https://kurozora.app/storage/2/Screenshot.jpeg",
                       "downloadLink": "/api/v1/themes/2/download"
                     }
                   }
@@ -6045,8 +6063,8 @@
                     "href": "/api/v1/themes/1",
                     "attributes": {
                       "name": "Tatum Orn",
-                      "screenshot": "http://kurozora-web.test/storage/1/Screenshot.jpeg",
-                      "downloadLink": "http://kurozora-web.test/api/v1/themes/1/download"
+                      "screenshot": "https://kurozora.app/storage/1/Screenshot.jpeg",
+                      "downloadLink": "https://kurozora.app/api/v1/themes/1/download"
                     }
                   }
                 ]
@@ -6066,7 +6084,26 @@
                   "type": "legal",
                   "href": "/api/v1/privacy-policy",
                   "attributes": {
-                    "text": "The privacy policy in HTML format."
+                    "text": "The Privacy Policy in HTML format."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetTermsOfUseSuccess": {
+        "description": "Successful GET Terms of Use JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": {
+                  "type": "legal",
+                  "href": "/api/v1/terms-of-use",
+                  "attributes": {
+                    "text": "The Terms of Use in HTML format."
                   }
                 }
               }
