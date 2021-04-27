@@ -13,11 +13,5 @@
         <h1 class="text-xl font-bold">{{ __('Terms of Use') }}</h1>
     </div>
 
-    {!! $termsOfUseText !!}
-
-    <div>
-        <x-link-button href="{{ url('/') }}">
-            {{ __('Take me back') }}
-        </x-link-button>
-    </div>
+    {!! $termsOfUse !!}
 </div>
