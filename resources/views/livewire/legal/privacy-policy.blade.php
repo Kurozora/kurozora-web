@@ -13,11 +13,5 @@
         <h1 class="text-xl font-bold">{{ __('Privacy Policy') }}</h1>
     </div>
 
-    {!! $privacyPolicyText !!}
-
-    <div>
-        <x-link-button href="{{ url('/') }}">
-            {{ __('Take me back') }}
-        </x-link-button>
-    </div>
+    {!! $privacyPolicy !!}
 </div>

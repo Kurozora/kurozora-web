@@ -2,15 +2,46 @@
 
 namespace App\Http\Livewire\Legal;
 
+use Carbon\Carbon;
+use File;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Livewire\Component;
+use Markdown;
 
 class TermsOfUse extends Component
 {
+    /**
+     * The terms of use text.
+     *
+     * @var string $termsOfUse
+     */
+    public string $termsOfUse = '';
+
+    /**
+     * Prepare the component.
+     *
+     * @throws FileNotFoundException
+     *
+     * @return void
+     */
+    public function mount()
+    {
+        $filePath = resource_path('docs/terms_of_use.md');
+
+        // Get the last update date.
+        $lastUpdateUnix = Carbon::createFromTimestamp(File::lastModified($filePath));
+        $lastUpdateStr = $lastUpdateUnix->format('F d, Y');
+
+        // Attach date.
+        $termsOfUseContent = str_replace('#UPDATE_DATE#', $lastUpdateStr, File::get($filePath));
+
+        // Convert Markdown to HTML.
+        $this->termsOfUse = Markdown::parse($termsOfUseContent);
+    }
+
     /**
      * Render the component.
      *
@@ -18,11 +49,6 @@ class TermsOfUse extends Component
      */
     public function render(): Application|Factory|View
     {
-        $privacyPolicyRequest = Request::create('/api/v1/legal/terms-of-use');
-        $responseData = (array) Route::dispatch($privacyPolicyRequest)->getData();
-
-        return view('livewire.legal.terms-of-use', [
-            'termsOfUseText'    => $responseData['data']->attributes->text
-        ]);
+        return view('livewire.legal.terms-of-use');
     }
 }
