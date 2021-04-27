@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
 use Carbon\Carbon;
+use File;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Storage;
 use Markdown;
 
 class MiscController extends Controller
@@ -21,7 +21,7 @@ class MiscController extends Controller
     public function getPrivacyPolicy(): JsonResponse
     {
         // Get MarkDown content
-        $privacyPolicyMarkdown = $this->getContentOfFile('resources/static/privacy_policy.md');
+        $privacyPolicyMarkdown = $this->getContentOfFile('privacy_policy.md');
 
         // Prepare for converting Markdown to HTML
         $privacyPolicyText = Markdown::parse($privacyPolicyMarkdown);
@@ -47,7 +47,7 @@ class MiscController extends Controller
     public function getTermsOfUse(): JsonResponse
     {
         // Get MarkDown content
-        $termsOfUseMarkdown = $this->getContentOfFile('resources/static/terms_of_use.md');
+        $termsOfUseMarkdown = $this->getContentOfFile('terms_of_use.md');
 
         // Prepare for converting Markdown to HTML
         $termsOfUseText = Markdown::parse($termsOfUseMarkdown);
@@ -64,25 +64,22 @@ class MiscController extends Controller
     }
 
     /**
-     * Get the content of the given file.
+     * Get the content of a file with the given name.
      *
-     * @param string $filePath
+     * @param string $fileName
      * @return string
      *
      * @throws FileNotFoundException
      */
-    protected function getContentOfFile(string $filePath): string
+    protected function getContentOfFile(string $fileName): string
     {
-        // Create the file if it does not exist yet
-        if (!Storage::exists($filePath)) {
-            Storage::put($filePath, 'Page is empty. Please inform an administrator.');
-        }
+        $filePath = resource_path('docs/'. $fileName);
 
         // Get the last update date
-        $lastUpdateUnix = Carbon::createFromTimestamp(Storage::lastModified($filePath));
+        $lastUpdateUnix = Carbon::createFromTimestamp(File::lastModified($filePath));
         $lastUpdateStr = $lastUpdateUnix->format('F d, Y');
 
         // Attach date and return file content
-        return str_replace('#UPDATE_DATE#', $lastUpdateStr, Storage::get($filePath));
+        return str_replace('#UPDATE_DATE#', $lastUpdateStr, File::get($filePath));
     }
 }
