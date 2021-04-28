@@ -20,7 +20,6 @@ Route::prefix('/sessions')
             ->name('.update');
 
         Route::post('/{session}/delete', [SessionController::class, 'delete'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:delete_session,session')
+            ->middleware(['kurozora.userauth', 'can:delete_session,session'])
             ->name('.delete');
     });

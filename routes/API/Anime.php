@@ -6,7 +6,8 @@ Route::prefix('/anime')
     ->name('.anime')
     ->group(function() {
         Route::get('/search', [AnimeController::class, 'search'])
-            ->middleware('kurozora.userauth:optional');
+            ->middleware('kurozora.userauth:optional')
+            ->name('.search');
 
         Route::get('/{anime}', [AnimeController::class, 'view'])
             ->middleware('kurozora.userauth:optional')
@@ -36,5 +37,6 @@ Route::prefix('/anime')
             ->name('.studios');
 
         Route::post('/{anime}/rate', [AnimeController::class, 'rateAnime'])
-            ->middleware('kurozora.userauth');
+            ->middleware('kurozora.userauth')
+            ->name('.rate');
     });
