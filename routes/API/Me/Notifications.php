@@ -14,9 +14,10 @@ Route::prefix('/notifications')
             ->name('.details');
 
         Route::post('/{notification}/delete', [NotificationController::class, 'delete'])
-            ->middleware('kurozora.userauth')
-            ->middleware('can:del_notification,notification');
+            ->middleware(['kurozora.userauth', 'can:del_notification,notification'])
+            ->name('.delete');
 
         Route::post('/update', [NotificationController::class, 'update'])
-            ->middleware('kurozora.userauth');
+            ->middleware('kurozora.userauth')
+            ->name('.update');
     });
