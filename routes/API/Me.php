@@ -9,13 +9,16 @@ Route::prefix('/me')
             ->middleware('kurozora.userauth');
 
         Route::post('/', [MeController::class, 'updateProfile'])
-            ->middleware('kurozora.userauth');
+            ->middleware('kurozora.userauth')
+            ->name('.update');
 
         Route::get('/followers', [MeController::class, 'getFollowers'])
-            ->middleware('kurozora.userauth:optional');
+            ->middleware('kurozora.userauth:optional')
+            ->name('.followers');
 
         Route::get('/following', [MeController::class, 'getFollowing'])
-            ->middleware('kurozora.userauth:optional');
+            ->middleware('kurozora.userauth:optional')
+            ->name('.following');
 
         require 'Me/Favorite-Anime.php';
         require 'Me/Feed-Messages.php';

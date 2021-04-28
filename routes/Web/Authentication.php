@@ -74,17 +74,22 @@ Route::name('two-factor')
             ->name('.update');
 
         Route::post('/user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'store'])
-            ->middleware(['auth', 'password.confirm']);
+            ->middleware(['auth', 'password.confirm'])
+            ->name('.two-factor-authentication.store');
 
         Route::delete('/user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'destroy'])
-            ->middleware(['auth', 'password.confirm']);
+            ->middleware(['auth', 'password.confirm'])
+            ->name('.two-factor-authentication.remove');
 
         Route::get('/user/two-factor-qr-code', [TwoFactorQrCodeController::class, 'show'])
-            ->middleware(['auth', 'password.confirm']);
+            ->middleware(['auth', 'password.confirm'])
+            ->name('.two-factor-qr-code');
 
         Route::get('/user/two-factor-recovery-codes', [RecoveryCodeController::class, 'index'])
-            ->middleware(['auth', 'password.confirm']);
+            ->middleware(['auth', 'password.confirm'])
+            ->name('.two-factor-recovery-codes');
 
         Route::post('/user/two-factor-recovery-codes', [RecoveryCodeController::class, 'store'])
-            ->middleware(['auth', 'password.confirm']);
+            ->middleware(['auth', 'password.confirm'])
+            ->name('.two-factor-recovery-codes.store');
     });
