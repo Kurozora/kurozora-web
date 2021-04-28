@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             StudioSeeder::class,
             TvRatingSeeder::class,
+            GenreSeeder::class,
             AnimeDummySeeder::class,
             AnimeRelationsSeeder::class,
             UserSeeder::class,
@@ -24,7 +25,6 @@ class DatabaseSeeder extends Seeder
             BadgeSeeder::class,
             ForumThreadSeeder::class,
             ForumReplySeeder::class,
-            GenreSeeder::class,
             AppThemeSeeder::class,
             ActorCharacterAnimeSeeder::class,
         ]);
