@@ -1,6 +1,6 @@
 <main>
     <x-slot name="title">
-        {{ $anime->title }}
+        {!! $anime->title !!}
     </x-slot>
 
     <x-slot name="meta">
@@ -129,7 +129,7 @@
                     <x-information-list label="{{ __('Aired') }}" infromation="{{ $anime->first_aired ?? 'N/A' }} - {{ $anime->last_aired ?? 'N/A' }}" />
                     <x-information-list label="{{ __('Broadcast') }}" infromation="{{ $anime->broadcast }}" />
                     <x-information-list label="{{ __('Genres') }}" infromation="{{ $anime->genres ?? '-' }}" />
-                    <x-information-list label="{{ __('Rating') }}" infromation="{{ $anime->tv_rating->full_name }}" />
+                    <x-information-list label="{{ __('Rating') }}" infromation="{!! $anime->tv_rating->full_name !!}" />
                     <x-information-list label="{{ __('Seasons') }}" infromation="{{ $anime->seasons_count ?? '-' }}" />
                     <x-information-list label="{{ __('Episodes') }}" infromation="{{ $anime->episodes_count ?? '-' }}" />
                     <x-information-list label="{{ __('Duration') }}" infromation="{{ $anime->runtime ?? '-' }}" />
