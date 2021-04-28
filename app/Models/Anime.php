@@ -89,10 +89,11 @@ class Anime extends KModel
 
         static::addGlobalScope('tv_rating', function (Builder $builder) {
             if (Auth::user() != null) {
-                $tvRating = settings('tv_rating');
+                $preferredTvRating = settings('tv_rating');
+                $tvRating = TvRating::firstWhere('weight', $preferredTvRating);
 
-                if ($tvRating != -1) {
-                    $builder->where('tv_rating_id', '<=', $tvRating);
+                if (!empty($tvRating)) {
+                    $builder->where('tv_rating_id', '<=', $tvRating->id);
                 }
             }
         });

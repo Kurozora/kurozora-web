@@ -16,22 +16,27 @@ class TvRatingSeeder extends Seeder
         [
             'name'          => 'NR',
             'description'   => 'Not Rated',
+            'weight'        => 1,
         ],
         [
             'name'          => 'G',
             'description'   => 'All Ages',
+            'weight'        => 2,
         ],
         [
             'name'          => 'PG-12',
             'description'   => 'Parental Guidance Suggested',
+            'weight'        => 3,
         ],
         [
             'name'          => 'R15+',
             'description'   => 'Violence & Profanity',
+            'weight'        => 4,
         ],
         [
             'name'          => 'R18+',
             'description'   => 'Adults Only',
+            'weight'        => 5,
         ]
     ];
 
@@ -43,10 +48,7 @@ class TvRatingSeeder extends Seeder
     public function run()
     {
         foreach ($this->tvRatings as $tvRating) {
-            TvRating::create([
-                'name'          => $tvRating['name'],
-                'description'   => $tvRating['description'],
-            ]);
+            TvRating::create($tvRating);
         }
     }
 }
