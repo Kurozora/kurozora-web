@@ -10,7 +10,8 @@ Route::prefix('/v1')
     ->group(function () {
         Route::get('/', ApiIndex::class);
 
-        Route::get('/info', [APIController::class, 'info']);
+        Route::get('/info', [APIController::class, 'info'])
+            ->name('.info');
 
         Route::get('/explore', [ExplorePageController::class, 'explore'])
             ->middleware('kurozora.userauth:optional')
@@ -33,5 +34,6 @@ Route::prefix('/v1')
         require 'API/Themes.php';
         require 'API/Users.php';
 
-        Route::fallback([APIController::class, 'error']);
+        Route::fallback([APIController::class, 'error'])
+            ->name('.fallback');
     });
