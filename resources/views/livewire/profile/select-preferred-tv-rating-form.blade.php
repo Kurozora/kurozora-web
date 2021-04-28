@@ -17,7 +17,7 @@
                 <x-select id="tv_rating" wire:model.defer="state.tv_rating">
                     <option value="-1">{{ __('Allow All Shows') }}</option>
                     @foreach (App\Models\TvRating::all()->where('id', '!=', 1) as $tvRating)
-                        <option value="{{ $tvRating->id }}">{{ $tvRating->full_name }}</option>
+                        <option value="{{ $tvRating->weight }}">{{ $tvRating->full_name }}</option>
                     @endforeach
                 </x-select>
                 <x-input-error for="tv_rating" class="mt-2" />

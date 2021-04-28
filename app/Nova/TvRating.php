@@ -5,6 +5,7 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 
 class TvRating extends Resource
@@ -56,6 +57,11 @@ class TvRating extends Resource
 
             Text::make('Description')
                 ->help('A very short description of the rating. E.g. Not Rated, All Ages, Children...')
+                ->required(),
+
+            Number::make('Weight')
+                ->help('The priority of the rating. E.g: if a TV rating with a weight of 5 is selected, all ratings that are less than, and equal to, 5 are accessible to the user.')
+                ->rules(['min:0', 'max:255'])
                 ->required(),
 
             HasMany::make('Anime'),
