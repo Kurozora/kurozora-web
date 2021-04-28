@@ -32,6 +32,7 @@ class TvRating extends Model
     protected $fillable = [
         'rating',
         'description',
+        'weight',
     ];
 
     /**
