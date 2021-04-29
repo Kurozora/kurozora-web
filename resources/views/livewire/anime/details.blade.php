@@ -125,7 +125,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-10 gap-y-4">
                     <x-information-list label="{{ __('Studio') }}" infromation="{{ $anime->studios()->first()->name ?? '-' }}" />
                     <x-information-list label="{{ __('Network') }}" infromation="{{ $anime->network ?? '-' }}" />
-                    <x-information-list label="{{ __('Type') }}" infromation="{{ App\Enums\AnimeType::fromValue($anime->type ?? 0)->description }}" />
+                    <x-information-list label="{{ __('Type') }}" infromation="{{ $anime->media_type->name }}" />
                     <x-information-list label="{{ __('Aired') }}" infromation="{{ $anime->first_aired ?? 'N/A' }} - {{ $anime->last_aired ?? 'N/A' }}" />
                     <x-information-list label="{{ __('Broadcast') }}" infromation="{{ $anime->broadcast }}" />
                     <x-information-list label="{{ __('Genres') }}" infromation="{{ $anime->genres ?? '-' }}" />
