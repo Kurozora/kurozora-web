@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\AnimeImageType;
-use App\Enums\AnimeType;
 use App\Enums\DayOfWeek;
 use App\Traits\KuroSearchTrait;
 use Auth;
@@ -139,7 +138,7 @@ class Anime extends KModel
      */
     public function getInformationSummaryAttribute(): string
     {
-        $informationSummary = AnimeType::fromValue($this->type)->description . ' · ' . $this->tv_rating->name;
+        $informationSummary = $this->media_type->name . ' · ' . $this->tv_rating->name;
         $episodesCount = $this->episode_count ?? null;
         $duration = $this->runtime ?? null;
         $firstAiredYear = $this->first_aired;
@@ -489,6 +488,16 @@ class Anime extends KModel
         });
 
         return $query->whereIn(self::TABLE_NAME . '.id', $mostAddedIDs);
+    }
+
+    /**
+     * The anime's media type.
+     *
+     * @return BelongsTo
+     */
+    public function media_type(): BelongsTo
+    {
+        return $this->belongsTo(MediaType::class);
     }
 
     /**

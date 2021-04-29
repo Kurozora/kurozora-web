@@ -22,7 +22,7 @@ class StudioFactory extends Factory
     public function definition()
     {
         return [
-            'name'          => $this->faker->company,
+            'name'          => $this->faker->unique()->company,
             'logo_url'      => $this->faker->imageUrl(),
             'about'         => $this->faker->paragraph(mt_rand(10, 30)),
             'founded'       => $this->faker->date(),

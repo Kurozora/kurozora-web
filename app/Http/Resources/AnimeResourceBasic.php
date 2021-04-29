@@ -5,7 +5,6 @@ namespace App\Http\Resources;
 use App\Models\Anime;
 use App\Enums\AnimeSource;
 use App\Enums\AnimeStatus;
-use App\Enums\AnimeType;
 use App\Enums\DayOfWeek;
 use App\Enums\UserLibraryStatus;
 use App\Models\User;
@@ -47,7 +46,10 @@ class AnimeResourceBasic extends JsonResource
                 'title'                 => $anime->title,
                 'tagline'               => $anime->tagline,
                 'synopsis'              => $anime->synopsis,
-                'type'                  => AnimeType::getDescription($anime->type),
+                'mediaType'             => [
+                    'name'          => $anime->media_type->name,
+                    'description'   => $anime->media_type->description,
+                ],
                 'tvRating'              => [
                     'name'          => $anime->tv_rating->name,
                     'description'   => $anime->tv_rating->description,

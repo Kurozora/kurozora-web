@@ -4,7 +4,6 @@ namespace App\Nova;
 
 use App\Enums\AnimeSource;
 use App\Enums\AnimeStatus;
-use App\Enums\AnimeType;
 use App\Enums\DayOfWeek;
 use App\Nova\Actions\FetchAnimeActors;
 use App\Nova\Actions\FetchAnimeDetails;
@@ -117,14 +116,14 @@ class Anime extends Resource
                 ->hideFromIndex()
                 ->help('A short description of the Anime.'),
 
-            Select::make('Type')
-                ->options(AnimeType::asSelectArray())
-                ->displayUsingLabels()
-                ->required()
-                ->help('The general type of the anime, such as TV, Movie, or Music.'),
+            BelongsTo::make('Media Type', 'media_type')
+                ->sortable()
+                ->help('The general type of the anime, such as TV, Movie, Music, etc.')
+                ->required(),
 
             BelongsTo::make('TV rating', 'tv_rating')
                 ->sortable()
+                ->help('The TV rating of the anime, such as NR, G, PG-12, etc.')
                 ->required(),
 
             Select::make('Adaptation Source')
@@ -358,7 +357,7 @@ class Anime extends Resource
      * @var string
      */
     public static $icon = '
-        <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+        <svg class="sidebar-icon" viewBox="0 0 640 512" xmlns="http://www.w3.org/2000/svg">
             <path fill="var(--sidebar-icon)" d="M528 464H112a16 16 0 0 0-16 16v16a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16v-16a16 16 0 0 0-16-16zM592 0H48A48 48 0 0 0 0 48v320a48 48 0 0 0 48 48h544a48 48 0 0 0 48-48V48a48 48 0 0 0-48-48zm0 368H48V48h544z"/>
         </svg>
     ';
