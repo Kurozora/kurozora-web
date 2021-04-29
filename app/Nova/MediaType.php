@@ -3,10 +3,12 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Validator;
 
 class MediaType extends Resource
 {
@@ -69,6 +71,32 @@ class MediaType extends Resource
                 ->help('An explanation of what the media type means.')
                 ->required(),
         ];
+    }
+
+    /**
+     * Handle any post-validation processing.
+     *
+     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
+     * @param \Illuminate\Validation\Validator $validator
+     * @return void
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected static function afterValidation(NovaRequest $request, $validator)
+    {
+        $type = $request->post('type');
+        $name = $request->post('name');
+
+        $unique = Rule::unique(\App\Models\MediaType::TABLE_NAME)->where(function ($query) use($type, $name) {
+            return $query->where('type', $type)->where('name', $name);
+        });
+
+        $uniqueValidator = Validator::make($request->only('name'), [
+            'name' => [$unique],
+        ], [
+            'name' => __('validation.unique')
+        ]);
+
+        $uniqueValidator->validate();
     }
 
     /**
