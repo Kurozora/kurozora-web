@@ -21,6 +21,11 @@ class CreateMediaTypesTable extends Migration
             $table->string('description');
             $table->timestamps();
         });
+
+        Schema::table(MediaType::TABLE_NAME, function (Blueprint $table) {
+            // Set unique index constraints
+            $table->unique(['type', 'name']);
+        });
     }
 
     /**
