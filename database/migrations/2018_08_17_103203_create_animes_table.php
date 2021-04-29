@@ -3,7 +3,7 @@
 use App\Models\Anime;
 use App\Enums\AnimeSource;
 use App\Enums\AnimeStatus;
-use App\Enums\AnimeType;
+use App\Models\MediaType;
 use App\Models\TvRating;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -30,7 +30,7 @@ class CreateAnimesTable extends Migration
             $table->string('title')->default('Unknown title');
             $table->string('tagline')->nullable();
             $table->mediumText('synopsis')->nullable();
-            $table->integer('type')->default(AnimeType::Unknown);
+            $table->unsignedBigInteger('media_type_id')->nullable();
             $table->unsignedBigInteger('tv_rating_id')->nullable();
             $table->integer('adaptation_source')->default(AnimeSource::Unknown);
             $table->string('network')->nullable();
@@ -63,6 +63,7 @@ class CreateAnimesTable extends Migration
             $table->unique(['slug']);
 
             // Set foreign key constraints
+            $table->foreign('media_type_id')->references('id')->on(MediaType::TABLE_NAME)->onDelete('set null');
             $table->foreign('tv_rating_id')->references('id')->on(TvRating::TABLE_NAME)->onDelete('set null');
         });
     }

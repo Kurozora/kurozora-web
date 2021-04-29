@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Anime;
-use App\Enums\AnimeType;
+use App\Models\MediaType;
 use App\Models\TvRating;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Seeder;
@@ -54,24 +54,23 @@ class AnimeDummySeeder extends Seeder
 
                 // Create the anime
                 Anime::create([
-                    'title'         => $animeData->title,
-                    'type'          => AnimeType::TV,
-                    'is_nsfw'       => $animeData->nsfw,
                     'anidb_id'      => $animeData->anidb_id,
                     'anilist_id'    => $animeData->anilist_id,
                     'kitsu_id'      => $animeData->kitsu_id,
                     'mal_id'        => $animeData->mal_id,
                     'tvdb_id'       => $animeData->tvdb_id,
                     'slug'          => $animeData->slug,
+                    'title'         => $animeData->title,
+                    'media_type_id' => MediaType::where('type', 'anime')->inRandomOrder()->first()->id,
                     'tv_rating_id'  => TvRating::inRandomOrder()->first()->id,
+                    'is_nsfw'       => $animeData->nsfw,
                 ]);
 
                 // Print progress every 100 anime and at the last anime
                 if ($count % 100 == 0 || $count == $total)
                     $this->command->info($count . '/' . $total . ' anime imported.');
             }
-        }
-        else {
+        } else {
             $this->command->info('No anime parsed.');
         }
 
@@ -83,12 +82,14 @@ class AnimeDummySeeder extends Seeder
      *
      * @return false|string
      */
-    static function downloadJSON() {
+    static function downloadJSON(): bool|string
+    {
         $pathToAnimeJSON = AnimeDummySeeder::ANIME_JSON_PATH;
 
         // Delete file if it exists
-        if (Storage::exists($pathToAnimeJSON))
+        if (Storage::exists($pathToAnimeJSON)) {
             Storage::delete($pathToAnimeJSON);
+        }
 
         // Download the file
         $animeJSON = file_get_contents(self::ANIME_JSON_FILE);
