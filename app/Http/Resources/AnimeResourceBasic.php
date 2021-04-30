@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use App\Models\Anime;
-use App\Enums\AnimeSource;
 use App\Enums\AnimeStatus;
 use App\Enums\DayOfWeek;
 use App\Enums\UserLibraryStatus;
@@ -22,16 +21,18 @@ class AnimeResourceBasic extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @param Anime $anime */
+        /** @var Anime $anime */
         $anime = $this->resource;
 
         $firstAired = $anime->first_aired;
-        if ($firstAired)
+        if ($firstAired) {
             $firstAired = $anime->first_aired->format('Y-m-d');
+        }
 
         $lastAired = $anime->last_aired;
-        if ($lastAired)
+        if ($lastAired) {
             $lastAired = $anime->last_aired->format('Y-m-d');
+        }
 
         $resource = [
             'id'            => $anime->id,
@@ -46,15 +47,9 @@ class AnimeResourceBasic extends JsonResource
                 'title'                 => $anime->title,
                 'tagline'               => $anime->tagline,
                 'synopsis'              => $anime->synopsis,
-                'mediaType'             => [
-                    'name'          => $anime->media_type->name,
-                    'description'   => $anime->media_type->description,
-                ],
-                'tvRating'              => [
-                    'name'          => $anime->tv_rating->name,
-                    'description'   => $anime->tv_rating->description,
-                ],
-                'adaptationSource'      => AnimeSource::getDescription($anime->adaptation_source),
+                'tvRating'              => $anime->tv_rating()->first(['name', 'description'])->makeHidden('full_name'),
+                'mediaType'             => $anime->media_type()->first(['name', 'description']),
+                'mediaSource'           => $anime->media_source()->first(['name', 'description']),
                 'network'               => $anime->network,
                 'producer'              => $anime->producer,
                 'episodeCount'          => $anime->episode_count,
@@ -75,8 +70,9 @@ class AnimeResourceBasic extends JsonResource
             ]
         ];
 
-        if (Auth::check())
+        if (Auth::check()) {
             $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
+        }
 
         return $resource;
     }
@@ -101,26 +97,30 @@ class AnimeResourceBasic extends JsonResource
             ->where('user_id', $user->id)
             ->first();
 
-        if ($foundRating)
+        if ($foundRating) {
             $userRating = $foundRating->rating;
+        }
 
         // Get the current library status
         $libraryEntry = $user->library()->where('anime_id', $anime->id)->first();
         $currentLibraryStatus = null;
 
-        if ($libraryEntry)
+        if ($libraryEntry) {
             $currentLibraryStatus = UserLibraryStatus::getDescription($libraryEntry->pivot->status);
+        }
 
         // Get the favorite status
         $isTrackingAnime = $user->isTracking($anime);
         $favoriteStatus = null;
-        if ($isTrackingAnime)
+        if ($isTrackingAnime) {
             $favoriteStatus = $user->favoriteAnime()->wherePivot('anime_id', $anime->id)->exists();
+        }
 
         // Get the reminder status
         $reminderStatus = null;
-        if ($isTrackingAnime)
+        if ($isTrackingAnime) {
             $reminderStatus = $user->reminderAnime()->wherePivot('anime_id', $anime->id)->exists();
+        }
 
         // Return the array
         return [

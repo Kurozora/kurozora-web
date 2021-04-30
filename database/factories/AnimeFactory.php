@@ -3,9 +3,9 @@
 namespace Database\Factories;
 
 use App\Models\Anime;
-use App\Enums\AnimeSource;
 use App\Enums\AnimeStatus;
 use App\Enums\DayOfWeek;
+use App\Models\MediaSource;
 use App\Models\MediaType;
 use App\Models\TvRating;
 use Carbon\Carbon;
@@ -34,14 +34,19 @@ class AnimeFactory extends Factory
         $firstAired = Carbon::parse($this->faker->dateTime)->toDate();
         $lastAired = Carbon::parse($firstAired)->addWeeks($totalEpisodes)->toDate();
 
+        $tvRating = TvRating::inRandomOrder()->first();
+        if ($tvRating == null) {
+            $tvRating = TvRating::factory()->create();
+        }
+
         $mediaType = MediaType::where('type', 'anime')->inRandomOrder()->first();
         if (empty($mediaType)) {
             $mediaType = MediaType::factory()->create();
         }
 
-        $tvRating = TvRating::inRandomOrder()->first();
-        if ($tvRating == null) {
-            $tvRating = TvRating::factory()->create();
+        $mediaSource = MediaSource::inRandomOrder()->first();
+        if (empty($mediaSource)) {
+            $mediaSource = MediaSource::factory()->create();
         }
 
         return [
@@ -49,9 +54,9 @@ class AnimeFactory extends Factory
             'title'             => $title,
             'tagline'           => $this->faker->sentence,
             'synopsis'          => $this->faker->paragraph,
-            'media_type_id'     => $mediaType,
             'tv_rating_id'      => $tvRating,
-            'adaptation_source' => AnimeSource::getRandomValue(),
+            'media_type_id'     => $mediaType,
+            'media_source_id'   => $mediaSource,
             'network'           => null,
             'producer'          => null,
             'first_aired'       => $firstAired,

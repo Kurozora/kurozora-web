@@ -10,14 +10,20 @@
             "imdbID": null,
             "malID": null,
             "title": "Awesome Show",
-            "tagline": "Et voluptatibus ut autem.",
-            "synopsis": "Voluptate asperiores consequatur quia voluptas molestiae tempore earum. Natus quasi qui placeat est autem praesentium veniam incidunt. Asperiores temporibus ea officiis molestiae voluptatibus.",
-            "type": "",
+            "tagline": "Officiis quasi culpa laudantium voluptatem.",
+            "synopsis": "Vitae quia ut eveniet vero. Distinctio harum labore molestiae ipsa occaecati et aliquam. Sed sunt qui quo architecto aspernatur maxime natus dolorum. Dolorem enim voluptatem odio maiores officiis non impedit.",
             "tvRating": {
-                "name": "z",
-                "description": "omnis dolores ut"
+                "name": "n",
+                "description": "quidem minus repellendus"
             },
-            "adaptationSource": "",
+            "mediaType": {
+                "name": "rerum",
+                "description": "nobis sit est"
+            },
+            "mediaSource": {
+                "name": "soluta",
+                "description": "hic dolorem delectus"
+            },
             "network": null,
             "producer": null,
             "episodeCount": "0",
@@ -27,14 +33,14 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "2008-06-12",
-            "lastAired": "2008-09-04",
-            "runtime": "25",
+            "firstAired": "2004-03-03",
+            "lastAired": "2004-05-26",
+            "runtime": "22",
             "airStatus": "",
-            "airTime": "13:12",
+            "airTime": "17:04",
             "airDay": "",
             "isNSFW": false,
-            "copyright": "\u2117 2009 Schuppe, Boehm and Waelchi",
+            "copyright": "\u2117 1990 Predovic, Ondricka and Upton",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
@@ -52,14 +58,20 @@
             "imdbID": null,
             "malID": null,
             "title": "Be a good person!",
-            "tagline": "Dolores ut laudantium et quisquam dolor.",
-            "synopsis": "Autem quis ipsa neque nisi. Veritatis fugit ut voluptates ad eligendi. Adipisci expedita minima non.",
-            "type": "",
+            "tagline": "Minus sunt saepe impedit.",
+            "synopsis": "Velit dicta veniam aut ut. Architecto ad ab molestiae error. Odit debitis quia maxime delectus sapiente et error. Corrupti eum non ratione praesentium.",
             "tvRating": {
-                "name": "z",
-                "description": "omnis dolores ut"
+                "name": "n",
+                "description": "quidem minus repellendus"
             },
-            "adaptationSource": "",
+            "mediaType": {
+                "name": "rerum",
+                "description": "nobis sit est"
+            },
+            "mediaSource": {
+                "name": "soluta",
+                "description": "hic dolorem delectus"
+            },
             "network": null,
             "producer": null,
             "episodeCount": "0",
@@ -69,14 +81,14 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "2004-02-06",
-            "lastAired": "2004-04-30",
-            "runtime": "25",
+            "firstAired": "2017-05-23",
+            "lastAired": "2017-08-15",
+            "runtime": "13",
             "airStatus": "",
-            "airTime": "08:55",
+            "airTime": "00:18",
             "airDay": "",
             "isNSFW": false,
-            "copyright": "\u00ae 1980 Hyatt, Adams and Hamill",
+            "copyright": "\u00a9 2010 Connelly-Hauck",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,
