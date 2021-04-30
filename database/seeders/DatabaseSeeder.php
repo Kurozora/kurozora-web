@@ -16,8 +16,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             StudioSeeder::class,
-            MediaTypeSeeder::class,
             TvRatingSeeder::class,
+            MediaTypeSeeder::class,
+            MediaSourceSeeder::class,
             GenreSeeder::class,
             AnimeDummySeeder::class,
             AnimeRelationsSeeder::class,

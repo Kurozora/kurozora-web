@@ -100,8 +100,10 @@ class Anime extends KModel
 
     /**
      * Get the options for generating the slug.
+     *
+     * @return SlugOptions
      */
-    public function getSlugOptions() : SlugOptions
+    public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom('title')
@@ -161,7 +163,7 @@ class Anime extends KModel
      *
      * @return BelongsToMany
      */
-    public function favoredBy()
+    public function favoredBy(): BelongsToMany
     {
         return $this->belongsToMany(User::class, UserFavoriteAnime::TABLE_NAME, 'anime_id', 'user_id');
     }
@@ -171,7 +173,7 @@ class Anime extends KModel
      *
      * @return BelongsToMany
      */
-    public function moderators()
+    public function moderators(): BelongsToMany
     {
         return $this->belongsToMany(User::class, AnimeModerator::TABLE_NAME, 'anime_id', 'user_id')
             ->withPivot('created_at');
@@ -182,7 +184,7 @@ class Anime extends KModel
      *
      * @return BelongsToMany
      */
-    public function studios()
+    public function studios(): BelongsToMany
     {
         return $this->belongsToMany(Studio::class);
     }
@@ -190,9 +192,9 @@ class Anime extends KModel
     /**
      * Retrieves the studios for an Anime item in an array
      *
-     * @return array
+     * @return mixed
      */
-    public function getStudios()
+    public function getStudios(): mixed
     {
         // Find location of cached data
         $cacheKey = self::cacheKey(['name' => 'anime.studios', 'id' => $this->id]);
@@ -208,7 +210,7 @@ class Anime extends KModel
      *
      * @return HasMany
      */
-    public function ratings()
+    public function ratings(): HasMany
     {
         return $this->hasMany(AnimeRating::class, 'anime_id', 'id');
     }
@@ -218,7 +220,7 @@ class Anime extends KModel
      *
      * @return HasMany
      */
-    public function anime_images()
+    public function anime_images(): HasMany
     {
         return $this->hasMany(AnimeImages::class);
     }
@@ -226,9 +228,9 @@ class Anime extends KModel
     /**
      * Get the Anime's poster
      *
-     * @return HasMany
+     * @return ?HasMany
      */
-    public function poster()
+    public function poster(): ?HasMany
     {
         return $this->hasMany(AnimeImages::class, 'anime_id', 'id')->firstWhere('type', '=', AnimeImageType::Poster);
     }
@@ -236,9 +238,9 @@ class Anime extends KModel
     /**
      * Get the Anime's banner
      *
-     * @return HasMany
+     * @return ?HasMany
      */
-    public function banner()
+    public function banner(): ?HasMany
     {
         return $this->hasMany(AnimeImages::class, 'anime_id', 'id')->firstWhere('type', '=', AnimeImageType::Banner);
     }
@@ -248,7 +250,7 @@ class Anime extends KModel
      *
      * @return HasManyDeep
      */
-    public function actors()
+    public function actors(): HasManyDeep
     {
         return $this->hasManyDeep(Actor::class, [ActorCharacterAnime::class, ActorCharacter::class], ['anime_id', 'id', 'id'], ['id', 'actor_character_id', 'actor_id'])->distinct();
     }
@@ -256,10 +258,10 @@ class Anime extends KModel
     /**
      * Retrieves the actors for an Anime item in an array
      *
-     * @param int|null $limit
-     * @return array
+     * @param ?int $limit
+     * @return mixed
      */
-    public function getActors(int $limit = null)
+    public function getActors(?int $limit = null): mixed
     {
         // Find location of cached data
         $cacheKey = self::cacheKey(['name' => 'anime.actors', 'id' => $this->id, 'limit' => $limit]);
@@ -275,7 +277,7 @@ class Anime extends KModel
      *
      * @return HasManyDeep
      */
-    public function characters()
+    public function characters(): HasManyDeep
     {
         return $this->hasManyDeep(Character::class, [ActorCharacterAnime::class, ActorCharacter::class], ['anime_id', 'id', 'id'], ['id', 'actor_character_id', 'character_id'])->distinct();
     }
@@ -283,10 +285,10 @@ class Anime extends KModel
     /**
      * Retrieves the characters for an Anime item in an array
      *
-     * @param int|null $limit
-     * @return array
+     * @param ?int $limit
+     * @return mixed
      */
-    public function getCharacters(int $limit = null)
+    public function getCharacters(?int $limit = null): mixed
     {
         // Find location of cached data
         $cacheKey = self::cacheKey(['name' => 'anime.characters', 'id' => $this->id, 'limit' => $limit]);
@@ -302,7 +304,7 @@ class Anime extends KModel
      *
      * @return BelongsToMany
      */
-    public function actor_characters()
+    public function actor_characters(): BelongsToMany
     {
         return $this->belongsToMany(ActorCharacter::class, ActorCharacterAnime::TABLE_NAME, 'anime_id', 'actor_character_id');
     }
@@ -310,10 +312,10 @@ class Anime extends KModel
     /**
      * Retrieves the actor-characters for an Anime item in an array
      *
-     * @param int|null $limit
-     * @return array
+     * @param ?int $limit
+     * @return mixed
      */
-    public function getActorCharacters(int $limit = null)
+    public function getActorCharacters(?int $limit = null): mixed
     {
         // Find location of cached data
         $cacheKey = self::cacheKey(['name' => 'anime.actor_characters', 'id' => $this->id, 'limit' => $limit]);
@@ -329,7 +331,7 @@ class Anime extends KModel
      *
      * @return HasMany
      */
-    public function actor_character_anime()
+    public function actor_character_anime(): HasMany
     {
         return $this->hasMany(ActorCharacterAnime::class);
     }
@@ -337,10 +339,10 @@ class Anime extends KModel
     /**
      * Retrieves the actor-characters-anime for an Anime item in an array
      *
-     * @param int|null $limit
-     * @return array
+     * @param ?int $limit
+     * @return mixed
      */
-    public function getActorCharacterAnime(int $limit = null)
+    public function getActorCharacterAnime(?int $limit = null): mixed
     {
         // Find location of cached data
         $cacheKey = self::cacheKey(['name' => 'anime.actor_character_anime', 'id' => $this->id, 'limit' => $limit]);
@@ -356,7 +358,7 @@ class Anime extends KModel
      *
      * @return HasManyThrough
      */
-    public function episodes()
+    public function episodes(): HasManyThrough
     {
         return $this->hasManyThrough(AnimeEpisode::class, AnimeSeason::class, 'anime_id', 'season_id');
     }
@@ -366,9 +368,9 @@ class Anime extends KModel
      *
      * @param array $whereBetween Array containing start and end date. [$startDate, $endDate]
      * @param int|null $limit The number of resources to fetch.
-     * @return object
+     * @return mixed
      */
-    public function getEpisodes(array $whereBetween = [], int $limit = null)
+    public function getEpisodes(array $whereBetween = [], ?int $limit = null): mixed
     {
         // Find location of cached data
         $cacheKey = self::cacheKey(['name' => 'anime.episodes', 'id' => $this->id, 'limit' => $limit, 'whereBetween' => $whereBetween]);
@@ -389,7 +391,7 @@ class Anime extends KModel
      *
      * @return HasMany
      */
-    public function seasons()
+    public function seasons(): HasMany
     {
         return $this->hasMany(AnimeSeason::class, 'anime_id');
     }
@@ -397,10 +399,10 @@ class Anime extends KModel
     /**
      * Returns this anime's seasons
      *
-     * @param int|null $limit
-     * @return array
+     * @param ?int $limit
+     * @return mixed
      */
-    public function getSeasons(int $limit = null)
+    public function getSeasons(?int $limit = null): mixed
     {
         // Find location of cached data
         $cacheKey = self::cacheKey(['name' => 'anime.seasons', 'id' => $this->id, 'limit' => $limit]);
@@ -416,7 +418,7 @@ class Anime extends KModel
      *
      * @return BelongsToMany
      */
-    public function genres()
+    public function genres(): BelongsToMany
     {
         return $this->belongsToMany(Genre::class, AnimeGenre::TABLE_NAME, 'anime_id', 'genre_id');
     }
@@ -424,9 +426,9 @@ class Anime extends KModel
     /**
      * Returns this anime's genres
      *
-     * @return array
+     * @return mixed
      */
-    public function getGenres()
+    public function getGenres(): mixed
     {
         // Find location of cached data
         $cacheKey = self::cacheKey(['name' => 'anime.genres', 'id' => $this->id]);
@@ -442,7 +444,7 @@ class Anime extends KModel
      *
      * @return HasMany
      */
-    public function anime_relations()
+    public function anime_relations(): HasMany
     {
         return $this->hasMany(AnimeRelations::class, 'anime_id', 'id');
     }
@@ -450,10 +452,10 @@ class Anime extends KModel
     /**
      * Returns this anime's related anime
      *
-     * @param int|null $limit
-     * @return array
+     * @param ?int $limit
+     * @return mixed
      */
-    public function getAnimeRelations(int $limit = null)
+    public function getAnimeRelations(?int $limit = null): mixed
     {
         // Find location of cached data
         $cacheKey = self::cacheKey(['name' => 'anime.anime_relations', 'id' => $this->id, 'limit' => $limit]);
@@ -472,7 +474,7 @@ class Anime extends KModel
      * @param int $limit
      * @return Builder
      */
-    public function scopeMostPopular(Builder $query, int $limit = 10)
+    public function scopeMostPopular(Builder $query, int $limit = 10): Builder
     {
         // Find the Anime that is most added to user libraries
         $mostAdded = DB::table(UserLibrary::TABLE_NAME)
@@ -491,6 +493,16 @@ class Anime extends KModel
     }
 
     /**
+     * The anime's TV rating.
+     *
+     * @return BelongsTo
+     */
+    public function tv_rating(): BelongsTo
+    {
+        return $this->belongsTo(TvRating::class);
+    }
+
+    /**
      * The anime's media type.
      *
      * @return BelongsTo
@@ -501,12 +513,12 @@ class Anime extends KModel
     }
 
     /**
-     * The anime's TV rating.
+     * The anime's adaptation source.
      *
      * @return BelongsTo
      */
-    public function tv_rating(): BelongsTo
+    public function media_source(): BelongsTo
     {
-        return $this->belongsTo(TvRating::class);
+        return $this->belongsTo(MediaSource::class);
     }
 }

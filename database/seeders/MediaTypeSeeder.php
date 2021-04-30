@@ -16,7 +16,7 @@ class MediaTypeSeeder extends Seeder
         [
             'type'          => 'anime',
             'name'          => 'Unknown',
-            'description'   => 'Unknown origin due to old age and other factors.',
+            'description'   => 'Type is unknown due to old age and other factors.',
         ],
         [
             'type'          => 'anime',
@@ -51,7 +51,7 @@ class MediaTypeSeeder extends Seeder
         [
             'type'          => 'manga',
             'name'          => 'Unknown',
-            'description'   => 'Unknown origin due to old age and other factors.',
+            'description'   => 'Type is unknown due to old age and other factors.',
         ],
         [
             'type'          => 'manga',
@@ -61,12 +61,12 @@ class MediaTypeSeeder extends Seeder
         [
             'type'          => 'manga',
             'name'          => 'Manhwa',
-            'description'   => 'Comics of Korean origin.',
+            'description'   => 'Comic strips of Korean origin.',
         ],
         [
             'type'          => 'manga',
             'name'          => 'Manhua',
-            'description'   => 'Comics of Chinese origin.',
+            'description'   => 'Comic strips of Chinese origin.',
         ],
         [
             'type'          => 'manga',
@@ -81,7 +81,7 @@ class MediaTypeSeeder extends Seeder
         [
             'type'          => 'manga',
             'name'          => 'Manga',
-            'description'   => 'Comics of Japanese origin.',
+            'description'   => 'Comic strips of Japanese origin.',
         ],
         [
             'type'          => 'manga',

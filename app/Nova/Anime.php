@@ -2,7 +2,6 @@
 
 namespace App\Nova;
 
-use App\Enums\AnimeSource;
 use App\Enums\AnimeStatus;
 use App\Enums\DayOfWeek;
 use App\Nova\Actions\FetchAnimeActors;
@@ -116,7 +115,12 @@ class Anime extends Resource
                 ->hideFromIndex()
                 ->help('A short description of the Anime.'),
 
-            BelongsTo::make('Media Type', 'media_type')
+            BelongsTo::make('Media Source')
+                ->sortable()
+                ->help('The adaptation source of the anime. For example Manga, Game, Original, etc. If no source is available, especially for older anime, then choose Unknown.')
+                ->required(),
+
+            BelongsTo::make('Media Type')
                 ->sortable()
                 ->help('The general type of the anime, such as TV, Movie, Music, etc.')
                 ->required(),
@@ -125,13 +129,6 @@ class Anime extends Resource
                 ->sortable()
                 ->help('The TV rating of the anime, such as NR, G, PG-12, etc.')
                 ->required(),
-
-            Select::make('Adaptation Source')
-                ->options(AnimeSource::asSelectArray())
-                ->displayUsingLabels()
-                ->sortable()
-                ->required()
-                ->help('The adaptation source of the anime. For example `Manga`, `Game` or `Original` if not adapted from other sources. If no source is available, especially for older anime, then choose `Unknown`.'),
 
             Text::make('Video URL', 'video_url')
                 ->rules('max:255')
