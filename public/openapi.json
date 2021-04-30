@@ -3675,9 +3675,18 @@
                       "title": "Molestias quibusdam voluptas non et cupiditate.",
                       "tagline": "Sed ipsum ducimus et expedita alias.",
                       "synopsis": "Atque vel voluptas rerum omnis asperiores. Animi laboriosam voluptatum rerum et optio quas. Suscipit quos numquam a non eos beatae ducimus. Dolore doloribus quasi voluptates libero.",
-                      "type": "Ova",
-                      "tvRating": "TV-Y7",
-                      "adaptationSource": "Music",
+                      "tvRating": {
+                        "name": "TV-Y7",
+                        "description": "facere culpa voluptatum"
+                      },
+                      "mediaType": {
+                        "name": "OVA",
+                        "description": "Original Video Animation in home video formats."
+                      },
+                      "mediaSource": {
+                        "name": "Music",
+                        "description": "Adapted from a music video."
+                      },
                       "network": null,
                       "producer": null,
                       "episodeCount": 0,
@@ -3714,9 +3723,18 @@
                       "title": "Quod consequatur corporis nihil qui et.",
                       "tagline": "Qui illum qui quia voluptatem repellat expedita occaecati quod.",
                       "synopsis": "Eum eos voluptas officia sed. Amet consequuntur iusto beatae culpa sequi pariatur ea. Provident quaerat laudantium repellendus iusto provident non autem. Nostrum aperiam in quae nulla iusto officia.",
-                      "type": "Ova",
-                      "tvRating": "TV-MA",
-                      "adaptationSource": "Visual novel",
+                      "tvRating": {
+                        "name": "NR",
+                        "description": "Not Rated"
+                      },
+                      "mediaType": {
+                        "name": "OVA",
+                        "description": "Original Video Animation in home video formats."
+                      },
+                      "mediaSource": {
+                        "name": "Visual Novel",
+                        "description": "Adapted from an interactive fiction video game which usually features a text-based story."
+                      },
                       "network": null,
                       "producer": null,
                       "episodeCount": 0,
@@ -3847,7 +3865,10 @@
                       "ratingCount": 0,
                       "synopsis": "Error ipsa eos et rem recusandae voluptate sunt corrupti. Qui est est autem sit pariatur laudantium. Suscipit laboriosam enim modi quae quia aperiam excepturi sunt. Temporibus est hic adipisci.",
                       "runtime": 25,
-                      "tvRating": "TV-14",
+                      "tvRating": {
+                        "name": "PG-12",
+                        "description": ""
+                      },
                       "tagline": "Voluptatem rerum quos quidem aut.",
                       "videoURL": null,
                       "poster": {
@@ -3870,7 +3891,7 @@
                         "textColor3": "#6d6d6d",
                         "textColor4": "#5c5c5c"
                       },
-                      "nsfw": false,
+                      "isNSFW": false,
                       "genres": [],
                       "firstAired": "1973-11-15",
                       "lastAired": "1974-02-07",
@@ -4113,14 +4134,26 @@
                               "type": "show",
                               "href": "/api/v1/anime/217",
                               "attributes": {
-                                "title": "Omnis odit hic dolorem itaque.",
-                                "type": "Special",
-                                "source": "4-Koma Manga",
                                 "anidbID": null,
                                 "anilistID": null,
                                 "kitsuID": null,
                                 "imdbID": null,
                                 "malID": null,
+                                "title": "Omnis odit hic dolorem itaque.",
+                                "synopsis": "Aspernatur aperiam corrupti similique voluptatibus qui. Voluptas eum ea doloribus qui inventore hic. Voluptas accusantium libero autem ipsum molestiae aut nobis. Aliquam unde voluptates corrupti ut temporibus eum.",
+                                "tagline": "Sunt error hic quod sint.",
+                                "tvRating": {
+                                  "name": "R18+",
+                                  "description": "Adults Only"
+                                },
+                                "type": {
+                                  "name": "Special",
+                                  "description": "A standalone series with a self-contained story."
+                                },
+                                "mediaSource": {
+                                  "name": "4-Koma Manga",
+                                  "description": "Adapted from comic strips that generally consists of four panels per page."
+                                },
                                 "network": null,
                                 "studio": [],
                                 "status": "Tba",
@@ -4128,14 +4161,11 @@
                                 "seasons": 0,
                                 "averageRating": 0,
                                 "ratingCount": 0,
-                                "synopsis": "Aspernatur aperiam corrupti similique voluptatibus qui. Voluptas eum ea doloribus qui inventore hic. Voluptas accusantium libero autem ipsum molestiae aut nobis. Aliquam unde voluptates corrupti ut temporibus eum.",
                                 "runtime": 25,
-                                "tvRating": "TV-Y7 (FV)",
-                                "tagline": "Sunt error hic quod sint.",
                                 "videoURL": null,
                                 "poster": null,
                                 "background": null,
-                                "nsfw": true,
+                                "isNSFW": true,
                                 "genres": [],
                                 "firstAired": "2014-12-10",
                                 "lastAired": "2015-05-27",
@@ -4175,12 +4205,15 @@
                                 "ratingCount": 0,
                                 "synopsis": "Rerum distinctio quibusdam porro et. Modi natus iusto ut qui praesentium dicta sed ratione. Porro excepturi et qui laudantium tenetur non iure.",
                                 "runtime": 25,
-                                "tvRating": "TV-Y7",
+                                "tvRating": {
+                                  "name": "G",
+                                  "description": "All Ages"
+                                },
                                 "tagline": "Expedita esse et cupiditate id impedit qui ut.",
                                 "videoURL": null,
                                 "poster": null,
                                 "background": null,
-                                "nsfw": false,
+                                "isNSFW": false,
                                 "genres": [],
                                 "firstAired": "2015-02-10",
                                 "lastAired": "2015-05-05",
@@ -4419,14 +4452,26 @@
                       "type": "show",
                       "href": "/api/v1/anime/217",
                       "attributes": {
-                        "title": "Omnis odit hic dolorem itaque.",
-                        "type": "Special",
-                        "source": "4-Koma Manga",
                         "anidbID": null,
                         "anilistID": null,
                         "kitsuID": null,
                         "imdbID": null,
                         "malID": null,
+                        "title": "Omnis odit hic dolorem itaque.",
+                        "synopsis": "Aspernatur aperiam corrupti similique voluptatibus qui. Voluptas eum ea doloribus qui inventore hic. Voluptas accusantium libero autem ipsum molestiae aut nobis. Aliquam unde voluptates corrupti ut temporibus eum.",
+                        "tagline": "Sunt error hic quod sint.",
+                        "tvRating": {
+                          "name": "R18+",
+                          "description": "Adults Only"
+                        },
+                        "mediaType": {
+                          "name": "Special",
+                          "description": "A standalone series with a self-contained story."
+                        },
+                        "mediaSource": {
+                          "name": "4-Koma Manga",
+                          "description": "Adapted from comic strips that generally consists of four panels per page."
+                        },
                         "network": null,
                         "studio": [],
                         "status": "Tba",
@@ -4434,14 +4479,11 @@
                         "seasons": 0,
                         "averageRating": 0,
                         "ratingCount": 0,
-                        "synopsis": "Aspernatur aperiam corrupti similique voluptatibus qui. Voluptas eum ea doloribus qui inventore hic. Voluptas accusantium libero autem ipsum molestiae aut nobis. Aliquam unde voluptates corrupti ut temporibus eum.",
                         "runtime": 25,
-                        "tvRating": "TV-Y7 (FV)",
-                        "tagline": "Sunt error hic quod sint.",
                         "videoURL": null,
                         "poster": null,
                         "background": null,
-                        "nsfw": true,
+                        "isNSFW": true,
                         "genres": [],
                         "firstAired": "2014-12-10",
                         "lastAired": "2015-05-27",
@@ -4481,12 +4523,16 @@
                         "ratingCount": 0,
                         "synopsis": "Rerum distinctio quibusdam porro et. Modi natus iusto ut qui praesentium dicta sed ratione. Porro excepturi et qui laudantium tenetur non iure.",
                         "runtime": 25,
-                        "tvRating": "TV-Y7",
+
+                        "tvRating": {
+                          "name": "G",
+                          "description": "All Ages"
+                        },
                         "tagline": "Expedita esse et cupiditate id impedit qui ut.",
                         "videoURL": null,
                         "poster": null,
                         "background": null,
-                        "nsfw": false,
+                        "isNSFW": false,
                         "genres": [],
                         "firstAired": "2015-02-10",
                         "lastAired": "2015-05-05",
@@ -4578,7 +4624,10 @@
                       "ratingCount": 0,
                       "synopsis": "Error ipsa eos et rem recusandae voluptate sunt corrupti. Qui est est autem sit pariatur laudantium. Suscipit laboriosam enim modi quae quia aperiam excepturi sunt. Temporibus est hic adipisci.",
                       "runtime": 25,
-                      "tvRating": "TV-14",
+                      "tvRating": {
+                        "name": "G",
+                        "description": "All Ages"
+                      },
                       "tagline": "Voluptatem rerum quos quidem aut.",
                       "videoURL": null,
                       "poster": {
@@ -4601,7 +4650,7 @@
                         "textColor3": "#6d6d6d",
                         "textColor4": "#5c5c5c"
                       },
-                      "nsfw": false,
+                      "isNSFW": false,
                       "genres": [
                         "Action",
                         "Adventure"
@@ -4648,12 +4697,15 @@
                       "ratingCount": 0,
                       "synopsis": "Totam ex non eaque rem. Suscipit eos recusandae et. Pariatur reprehenderit aliquid reprehenderit nisi quae. Fuga enim atque ratione occaecati sequi iste dignissimos.",
                       "runtime": 25,
-                      "tvRating": "TV-14",
+                      "tvRating": {
+                        "name": "G",
+                        "description": "All Ages"
+                      },
                       "tagline": "Vel facilis dignissimos suscipit veritatis enim nemo ut.",
                       "videoURL": null,
                       "poster": null,
                       "background": null,
-                      "nsfw": false,
+                      "isNSFW": false,
                       "genres": [],
                       "firstAired": "2014-09-28",
                       "lastAired": "2014-12-21",
@@ -4821,9 +4873,18 @@
                               "title": "Qui reprehenderit necessitatibus ad.",
                               "tagline": "Hic eligendi delectus quis doloribus in aperiam.",
                               "synopsis": "Vel et omnis a eligendi ad a odit. Iure ipsam et nulla expedita est. Provident et amet labore maiores nisi.",
-                              "type": "Tv",
-                              "tvRating": "TV-Y7",
-                              "adaptationSource": "4-Koma Manga",
+                              "tvRating": {
+                                "name": "R18+",
+                                "description": "Adults Only"
+                              },
+                              "mediaType": {
+                                "name": "TV",
+                                "description": "A show that aired on television."
+                              },
+                              "mediaSource": {
+                                "name": "4-Koma Manga",
+                                "description": "Adapted from comic strips that generally consists of four panels per page."
+                              },
                               "network": null,
                               "producer": null,
                               "episodeCount": 0,
@@ -4920,9 +4981,18 @@
                       "title": "Molestias quibusdam voluptas non et cupiditate.",
                       "tagline": "Sed ipsum ducimus et expedita alias.",
                       "synopsis": "Atque vel voluptas rerum omnis asperiores. Animi laboriosam voluptatum rerum et optio quas. Suscipit quos numquam a non eos beatae ducimus. Dolore doloribus quasi voluptates libero.",
-                      "type": "Ova",
-                      "tvRating": "TV-Y7",
-                      "adaptationSource": "Music",
+                      "tvRating": {
+                        "name": "G",
+                        "description": "All Ages"
+                      },
+                      "mediaType": {
+                        "name": "OVA",
+                        "description": "Original Video Animation in home video formats."
+                      },
+                      "mediaSource": {
+                        "name": "Music",
+                        "description": "Adapted from a music video."
+                      },
                       "network": null,
                       "producer": null,
                       "episodeCount": 0,
@@ -4959,9 +5029,18 @@
                       "title": "Quod consequatur corporis nihil qui et.",
                       "tagline": "Qui illum qui quia voluptatem repellat expedita occaecati quod.",
                       "synopsis": "Eum eos voluptas officia sed. Amet consequuntur iusto beatae culpa sequi pariatur ea. Provident quaerat laudantium repellendus iusto provident non autem. Nostrum aperiam in quae nulla iusto officia.",
-                      "type": "Ova",
-                      "tvRating": "TV-MA",
-                      "adaptationSource": "Visual novel",
+                      "tvRating": {
+                        "name": "G",
+                        "description": "All Ages"
+                      },
+                      "mediaType": {
+                        "name": "OVA",
+                        "description": "Original Video Animation in home video formats."
+                      },
+                      "mediaSource": {
+                        "name": "Visual Novel",
+                        "description": "Adapted from an interactive fiction video game which usually features a text-based story."
+                      },
                       "network": null,
                       "producer": null,
                       "episodeCount": 0,
@@ -5008,7 +5087,7 @@
                       "color": "#FFE4B9",
                       "symbol": "https://raw.githubusercontent.com/Kurozora/anime/master/genre-symbols/Action.png",
                       "description": "An action story is similar to adventure, and the protagonist usually takes a risky turn, which leads to desperate situations (including explosions, fight scenes, daring escapes, etc.).",
-                      "nsfw": false
+                      "isNSFW": false
                     }
                   },
                   {
@@ -5020,7 +5099,7 @@
                       "color": "#CAF0FF",
                       "symbol": "https://raw.githubusercontent.com/Kurozora/anime/master/genre-symbols/Adventure.png",
                       "description": "An adventure story is about a protagonist who journeys to epic or distant places to accomplish something.",
-                      "nsfw": false
+                      "isNSFW": false
                     }
                   }
                 ]
@@ -5046,7 +5125,7 @@
                       "color": "#FFE4B9",
                       "symbol": "https://raw.githubusercontent.com/Kurozora/anime/master/genre-symbols/Action.png",
                       "description": "An action story is similar to adventure, and the protagonist usually takes a risky turn, which leads to desperate situations (including explosions, fight scenes, daring escapes, etc.).",
-                      "nsfw": false
+                      "isNSFW": false
                     }
                   }
                 ]
@@ -5831,12 +5910,15 @@
                               "ratingCount": 0,
                               "synopsis": "Error ipsa eos et rem recusandae voluptate sunt corrupti. Qui est est autem sit pariatur laudantium. Suscipit laboriosam enim modi quae quia aperiam excepturi sunt. Temporibus est hic adipisci.",
                               "runtime": 25,
-                              "tvRating": "TV-14",
+                              "tvRating": {
+                                "name": "G",
+                                "description": "All Ages"
+                              },
                               "tagline": "Voluptatem rerum quos quidem aut.",
                               "videoURL": null,
                               "poster": null,
                               "background": null,
-                              "nsfw": false,
+                              "isNSFW": false,
                               "genres": [],
                               "firstAired": "1973-11-15",
                               "lastAired": "1974-02-07",
@@ -5880,12 +5962,15 @@
                               "ratingCount": 0,
                               "synopsis": "Totam ex non eaque rem. Suscipit eos recusandae et. Pariatur reprehenderit aliquid reprehenderit nisi quae. Fuga enim atque ratione occaecati sequi iste dignissimos.",
                               "runtime": 25,
-                              "tvRating": "TV-14",
+                              "tvRating": {
+                                "name": "G",
+                                "description": "All Ages"
+                              },
                               "tagline": "Vel facilis dignissimos suscipit veritatis enim nemo ut.",
                               "videoURL": null,
                               "poster": null,
                               "background": null,
-                              "nsfw": false,
+                              "isNSFW": false,
                               "genres": [],
                               "firstAired": "2014-09-28",
                               "lastAired": "2014-12-21",
@@ -5948,12 +6033,15 @@
                       "ratingCount": 0,
                       "synopsis": "Error ipsa eos et rem recusandae voluptate sunt corrupti. Qui est est autem sit pariatur laudantium. Suscipit laboriosam enim modi quae quia aperiam excepturi sunt. Temporibus est hic adipisci.",
                       "runtime": 25,
-                      "tvRating": "TV-14",
+                      "tvRating": {
+                        "name": "G",
+                        "description": "All Ages"
+                      },
                       "tagline": "Voluptatem rerum quos quidem aut.",
                       "videoURL": null,
                       "poster": null,
                       "background": null,
-                      "nsfw": false,
+                      "isNSFW": false,
                       "genres": [],
                       "firstAired": "1973-11-15",
                       "lastAired": "1974-02-07",
@@ -5997,12 +6085,15 @@
                       "ratingCount": 0,
                       "synopsis": "Totam ex non eaque rem. Suscipit eos recusandae et. Pariatur reprehenderit aliquid reprehenderit nisi quae. Fuga enim atque ratione occaecati sequi iste dignissimos.",
                       "runtime": 25,
-                      "tvRating": "TV-14",
+                      "tvRating": {
+                        "name": "G",
+                        "description": "All Ages"
+                      },
                       "tagline": "Vel facilis dignissimos suscipit veritatis enim nemo ut.",
                       "videoURL": null,
                       "poster": null,
                       "background": null,
-                      "nsfw": false,
+                      "isNSFW": false,
                       "genres": [],
                       "firstAired": "2014-09-28",
                       "lastAired": "2014-12-21",

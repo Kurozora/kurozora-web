@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Anime;
+use App\Models\MediaSource;
 use App\Models\MediaType;
 use App\Models\TvRating;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -54,16 +55,17 @@ class AnimeDummySeeder extends Seeder
 
                 // Create the anime
                 Anime::create([
-                    'anidb_id'      => $animeData->anidb_id,
-                    'anilist_id'    => $animeData->anilist_id,
-                    'kitsu_id'      => $animeData->kitsu_id,
-                    'mal_id'        => $animeData->mal_id,
-                    'tvdb_id'       => $animeData->tvdb_id,
-                    'slug'          => $animeData->slug,
-                    'title'         => $animeData->title,
-                    'media_type_id' => MediaType::where('type', 'anime')->inRandomOrder()->first()->id,
-                    'tv_rating_id'  => TvRating::inRandomOrder()->first()->id,
-                    'is_nsfw'       => $animeData->nsfw,
+                    'anidb_id'          => $animeData->anidb_id,
+                    'anilist_id'        => $animeData->anilist_id,
+                    'kitsu_id'          => $animeData->kitsu_id,
+                    'mal_id'            => $animeData->mal_id,
+                    'tvdb_id'           => $animeData->tvdb_id,
+                    'slug'              => $animeData->slug,
+                    'title'             => $animeData->title,
+                    'tv_rating_id'      => TvRating::inRandomOrder()->first()->id,
+                    'media_type_id'     => MediaType::where('type', 'anime')->inRandomOrder()->first()->id,
+                    'media_source_id'   => MediaSource::inRandomOrder()->first()->id,
+                    'is_nsfw'           => $animeData->nsfw,
                 ]);
 
                 // Print progress every 100 anime and at the last anime
