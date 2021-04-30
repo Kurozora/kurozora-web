@@ -81,19 +81,21 @@
                 @endif
             </section>
 
-            <section class="pt-5 pb-8 border-t-2">
-                <x-section-nav class="flex flex-no-wrap justify-between mb-5">
-                    <x-slot name="title">
-                        {{ __('Synopsis') }}
-                    </x-slot>
-                </x-section-nav>
+            @if (!empty($anime->synopsis))
+                <section class="pt-5 pb-8 border-t-2">
+                    <x-section-nav class="flex flex-no-wrap justify-between mb-5">
+                        <x-slot name="title">
+                            {{ __('Synopsis') }}
+                        </x-slot>
+                    </x-section-nav>
 
-                <x-truncated-text>
-                    <x-slot name="text">
-                        {!! nl2br($anime->synopsis) !!}
-                    </x-slot>
-                </x-truncated-text>
-            </section>
+                    <x-truncated-text>
+                        <x-slot name="text">
+                            {!! nl2br($anime->synopsis) !!}
+                        </x-slot>
+                    </x-truncated-text>
+                </section>
+            @endif
 
             <section class="pt-5 pb-8 border-t-2">
                 <x-section-nav>
@@ -126,6 +128,7 @@
                     <x-information-list label="{{ __('Studio') }}" infromation="{{ $anime->studios()->first()->name ?? '-' }}" />
                     <x-information-list label="{{ __('Network') }}" infromation="{{ $anime->network ?? '-' }}" />
                     <x-information-list label="{{ __('Type') }}" infromation="{{ $anime->media_type->name }}" />
+                    <x-information-list label="{{ __('Source') }}" infromation="{{ $anime->media_source->name }}" />
                     <x-information-list label="{{ __('Aired') }}" infromation="{{ $anime->first_aired ?? 'N/A' }} - {{ $anime->last_aired ?? 'N/A' }}" />
                     <x-information-list label="{{ __('Broadcast') }}" infromation="{{ $anime->broadcast }}" />
                     <x-information-list label="{{ __('Genres') }}" infromation="{{ $anime->genres ?? '-' }}" />
