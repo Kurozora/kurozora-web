@@ -452,10 +452,10 @@ class Anime extends KModel
     /**
      * Returns this anime's related anime
      *
-     * @param int|null $limit
-     * @return array
+     * @param ?int $limit
+     * @return mixed
      */
-    public function getAnimeRelations(?int $limit = null): array
+    public function getAnimeRelations(?int $limit = null): mixed
     {
         // Find location of cached data
         $cacheKey = self::cacheKey(['name' => 'anime.anime_relations', 'id' => $this->id, 'limit' => $limit]);
