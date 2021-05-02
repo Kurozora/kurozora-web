@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Anime;
 use App\Enums\DayOfWeek;
-use App\Models\MediaSource;
+use App\Models\Source;
 use App\Models\MediaType;
 use App\Models\Status;
 use App\Models\TvRating;
@@ -41,17 +41,21 @@ class AnimeFactory extends Factory
 
         $mediaType = MediaType::where('type', 'anime')->inRandomOrder()->first();
         if (empty($mediaType)) {
-            $mediaType = MediaType::factory()->create();
+            $mediaType = MediaType::factory()->create([
+                'type'  => 'anime'
+            ]);
         }
 
-        $mediaSource = MediaSource::inRandomOrder()->first();
-        if (empty($mediaSource)) {
-            $mediaSource = MediaSource::factory()->create();
+        $source = Source::inRandomOrder()->first();
+        if (empty($source)) {
+            $source = Source::factory()->create();
         }
 
-        $status = Status::inRandomOrder()->first();
+        $status = Status::where('type', 'anime')->inRandomOrder()->first();
         if (empty($status)) {
-            $status = Status::factory()->create();
+            $status = Status::factory()->create([
+                'type'  => 'anime'
+            ]);
         }
 
         return [
@@ -61,7 +65,7 @@ class AnimeFactory extends Factory
             'synopsis'          => $this->faker->paragraph,
             'tv_rating_id'      => $tvRating,
             'media_type_id'     => $mediaType,
-            'media_source_id'   => $mediaSource,
+            'source_id'         => $source,
             'status_id'         => $status,
             'network'           => null,
             'producer'          => null,
