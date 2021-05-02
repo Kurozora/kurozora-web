@@ -3,7 +3,7 @@
 namespace Tests\API;
 
 use Exception;
-use Illuminate\Auth\Notifications\ResetPassword;
+use App\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Notification;
 use Tests\TestCase;
