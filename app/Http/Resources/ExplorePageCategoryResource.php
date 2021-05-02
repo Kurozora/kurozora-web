@@ -51,7 +51,7 @@ class ExplorePageCategoryResource extends JsonResource
     private function getTypeSpecificData(Request $request, ExplorePageCategory $category): array
     {
         // Genres category
-        switch($category->type) {
+        switch ($category->type) {
             case ExplorePageCategoryTypes::Genres: {
                 return [
                     'genres' => [
@@ -75,9 +75,7 @@ class ExplorePageCategoryResource extends JsonResource
                     ]
                 ];
             }
+            default: return []; // Return nothing by default
         }
-
-        // Return nothing by default
-        return [];
     }
 }

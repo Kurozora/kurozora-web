@@ -20,12 +20,10 @@ final class ForumsVoteType extends Enum
      * @return ForumsVoteType
      */
     public function next(): ForumsVoteType {
-        switch($this) {
-            case self::Dislike():
-                return self::Like();
-            default:
-                return self::Dislike();
-        }
+        return match ($this) {
+            self::Dislike() => self::Like(),
+            default => self::Dislike(),
+        };
     }
 
     /**
@@ -34,11 +32,9 @@ final class ForumsVoteType extends Enum
      * @return ForumsVoteType
      */
     public function previous(): ForumsVoteType {
-        switch($this) {
-            case self::Like():
-                return self::Dislike();
-            default:
-                return self::Like();
-        }
+        return match ($this) {
+            self::Like() => self::Dislike(),
+            default => self::Like(),
+        };
     }
 }

@@ -35,7 +35,7 @@ class UserNotification extends KModel
      */
     public function getString(): string
     {
-        switch($this->type) {
+        switch ($this->type) {
             // Someone started following the user
             case self::TYPE_NEW_FOLLOWER: {
                 $followerName = $this->getDataVariable('follower_name');
@@ -59,9 +59,7 @@ class UserNotification extends KModel
                     $this->getDataVariable('failure_count') . ' failed imports)';
             }
             // Unknown type of notification
-            default: {
-                return 'Error retrieving this notification';
-            }
+            default: return 'Error retrieving this notification';
         }
     }
 
@@ -94,8 +92,9 @@ class UserNotification extends KModel
     {
         $decoded =  json_decode($this->data);
 
-        if ($decoded == null)
+        if ($decoded == null) {
             return [];
+        }
 
         return (array) $decoded;
     }
@@ -104,14 +103,15 @@ class UserNotification extends KModel
      * Returns the value of a variable from the data field of this notification
      *
      * @param $varName
-     * @return mixed|null
+     * @return mixed
      */
-    public function getDataVariable($varName)
+    public function getDataVariable($varName): mixed
     {
         $data = $this->getData();
 
-        if (isset($data[$varName]))
+        if (isset($data[$varName])) {
             return $data[$varName];
+        }
 
         return null;
     }

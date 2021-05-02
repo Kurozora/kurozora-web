@@ -16,12 +16,40 @@ class ProcessMALImport implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $tries = 1;
+    /**
+     * Number of tries.
+     *
+     * @var int
+     */
+    public int $tries = 1;
 
-    protected $user;
-    protected $xmlContent;
-    protected $behavior;
-    protected $results = [
+    /**
+     * The user to whose library the MAL data should be imported.
+     *
+     * @var User
+     */
+    protected User $user;
+
+    /**
+     * The XML content to be imported.
+     *
+     * @var string
+     */
+    protected string $xmlContent;
+
+    /**
+     * The behavior of the import action.
+     *
+     * @var string
+     */
+    protected string $behavior;
+
+    /**
+     * The results of the import action.
+     *
+     * @var array[]
+     */
+    protected array $results = [
         'successful'    => [],
         'failure'       => []
     ];
@@ -30,10 +58,10 @@ class ProcessMALImport implements ShouldQueue
      * Create a new job instance.
      *
      * @param User $user
-     * @param $xmlContent
-     * @param $behavior
+     * @param string $xmlContent
+     * @param string $behavior
      */
-    public function __construct(User $user, $xmlContent, $behavior)
+    public function __construct(User $user, string $xmlContent, string $behavior)
     {
         $this->user = $user;
         $this->xmlContent = $xmlContent;
@@ -69,10 +97,11 @@ class ProcessMALImport implements ShouldQueue
     /**
      * Handles the importing of a single anime from the XML file.
      *
-     * @param $malID
-     * @param $malStatus
+     * @param int $malID
+     * @param string $malStatus
      */
-    protected function handleXMLFileAnime($malID, $malStatus) {
+    protected function handleXMLFileAnime(int $malID, string $malStatus)
+    {
         // Try to find the Anime in our DB
         $animeMatch = Anime::where('mal_id', $malID)->first();
 
@@ -98,28 +127,30 @@ class ProcessMALImport implements ShouldQueue
     /**
      * Converts a MAL status string to our library status'.
      *
-     * @param $statusString
-     * @return int|null
+     * @param string $malStatus
+     * @return ?int
      */
-    protected function convertMALStatus($statusString) {
-        switch($statusString) {
-            case "Watching":        return UserLibraryStatus::Watching;
-            case "On-Hold":         return UserLibraryStatus::OnHold;
-            case "Plan to Watch":   return UserLibraryStatus::Planning;
-            case "Dropped":         return UserLibraryStatus::Dropped;
-            case "Completed":       return UserLibraryStatus::Completed;
-            default:                return null;
-        }
+    protected function convertMALStatus(string $malStatus): ?int
+    {
+        return match ($malStatus) {
+            'Watching' => UserLibraryStatus::Watching,
+            'On-Hold' => UserLibraryStatus::OnHold,
+            'Plan to Watch' => UserLibraryStatus::Planning,
+            'Dropped' => UserLibraryStatus::Dropped,
+            'Completed' => UserLibraryStatus::Completed,
+            default => null,
+        };
     }
 
     /**
      * Registers a success in the import process.
      *
-     * @param $animeID
-     * @param $malID
-     * @param $status
+     * @param int $animeID
+     * @param int $malID
+     * @param string $status
      */
-    protected function registerSuccess($animeID, $malID, $status) {
+    protected function registerSuccess(int $animeID, int $malID, string $status)
+    {
         $this->results['successful'][] = [
             'anime_id'  => $animeID,
             'mal_id'    => $malID,
@@ -130,10 +161,11 @@ class ProcessMALImport implements ShouldQueue
     /**
      * Registers a failure in the import process.
      *
-     * @param $malID
-     * @param $reason
+     * @param int $malID
+     * @param string $reason
      */
-    protected function registerFailure($malID, $reason) {
+    protected function registerFailure(int $malID, string $reason)
+    {
         $this->results['failure'][] = [
             'mal_id'    => $malID,
             'reason'    => $reason

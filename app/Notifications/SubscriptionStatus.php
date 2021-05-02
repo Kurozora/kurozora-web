@@ -31,7 +31,7 @@ class SubscriptionStatus extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    public function via($notifiable): array
+    public function via(mixed $notifiable): array
     {
         return ['database', ApnChannel::class];
     }
@@ -42,7 +42,7 @@ class SubscriptionStatus extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toDatabase($notifiable): array
+    public function toDatabase(mixed $notifiable): array
     {
         return [
             'subscriptionStatus' => $this->subscriptionStatus
@@ -75,30 +75,19 @@ class SubscriptionStatus extends Notification
      */
     static function getDescription(string $subscriptionStatus): string
     {
-        switch ($subscriptionStatus) {
-            case 'CANCEL':
-                return 'Your subscription has been successfully canceled.';
-            case 'DID_CHANGE_RENEWAL_PREF':
-                return 'Your subscription renewal preference has been successfully updated.';
-            case 'DID_CHANGE_RENEWAL_STATUS':
-                return 'Your subscription renewal status has been successfully changed.';
-            case 'DID_FAIL_TO_RENEW':
-                return 'Failed to renew subscription due to a billing issue.';
-            case 'DID_RECOVER':
-                return 'Your expired subscription has been successfully recovered.';
-            case 'DID_RENEW':
-                return 'Your subscription has been auto-renewed successfully for a new transaction period.';
-            case 'INITIAL_BUY':
-                return 'Your transaction has been successfully completed.';
-            case 'INTERACTIVE_RENEWAL':
-                return 'You have successfully renewed your subscription.';
-            case 'PRICE_INCREASE_CONSENT':
-                return 'The subscription price increase has been accepted.';
-            case 'REFUND':
-                return 'AppleCare has successfully refunded your subscription transaction.';
-            case 'REVOKE':
-                return 'Your subscription was revoked due to the purchaser disabling Family Sharing.';
-        }
-        return 'Your transaction has been completed.';
+        return match ($subscriptionStatus) {
+            'CANCEL' => 'Your subscription has been successfully canceled.',
+            'DID_CHANGE_RENEWAL_PREF' => 'Your subscription renewal preference has been successfully updated.',
+            'DID_CHANGE_RENEWAL_STATUS' => 'Your subscription renewal status has been successfully changed.',
+            'DID_FAIL_TO_RENEW' => 'Failed to renew subscription due to a billing issue.',
+            'DID_RECOVER' => 'Your expired subscription has been successfully recovered.',
+            'DID_RENEW' => 'Your subscription has been auto-renewed successfully for a new transaction period.',
+            'INITIAL_BUY' => 'Your transaction has been successfully completed.',
+            'INTERACTIVE_RENEWAL' => 'You have successfully renewed your subscription.',
+            'PRICE_INCREASE_CONSENT' => 'The subscription price increase has been accepted.',
+            'REFUND' => 'AppleCare has successfully refunded your subscription transaction.',
+            'REVOKE' => 'Your subscription was revoked due to the purchaser disabling Family Sharing.',
+            default => 'Your transaction has been completed.',
+        };
     }
 }

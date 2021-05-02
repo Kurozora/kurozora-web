@@ -26,14 +26,11 @@ class ActorResource extends JsonResource
 
             $relationships = [];
             foreach ($includes as $include) {
-                switch ($include) {
-                    case 'characters':
-                        $relationships = array_merge($relationships, $this->getCharactersRelationship());
-                        break;
-                    case 'shows':
-                        $relationships = array_merge($relationships, $this->getAnimeRelationship());
-                        break;
-                }
+                $relationships = match ($include) {
+                    'characters' => array_merge($relationships, $this->getCharactersRelationship()),
+                    'shows' => array_merge($relationships, $this->getAnimeRelationship()),
+                    default => $relationships,
+                };
             }
 
             $resource = array_merge($resource, ['relationships' => $relationships]);

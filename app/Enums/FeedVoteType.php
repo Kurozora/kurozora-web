@@ -19,12 +19,10 @@ final class FeedVoteType extends Enum
      * @return FeedVoteType
      */
     public function next(): FeedVoteType {
-        switch($this) {
-            case self::UnHeart():
-                return self::Heart();
-            default:
-                return self::UnHeart();
-        }
+        return match ($this) {
+            self::UnHeart() => self::Heart(),
+            default => self::UnHeart(),
+        };
     }
 
     /**
@@ -33,11 +31,9 @@ final class FeedVoteType extends Enum
      * @return FeedVoteType
      */
     public function previous(): FeedVoteType {
-        switch($this) {
-            case self::Heart():
-                return self::UnHeart();
-            default:
-                return self::Heart();
-        }
+        return match ($this) {
+            self::Heart() => self::UnHeart(),
+            default => self::Heart(),
+        };
     }
 }
