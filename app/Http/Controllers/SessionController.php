@@ -12,6 +12,7 @@ use App\Models\LoginAttempt;
 use App\Models\Session;
 use App\Models\User;
 use Exception;
+use Hash;
 use Illuminate\Http\JsonResponse;
 use Laravel\Nova\Exceptions\AuthenticationException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
@@ -31,14 +32,15 @@ class SessionController extends Controller
         $data = $request->validated();
 
         // Check if the request IP is not banned from logging in
-        if (!LoginAttempt::isIPAllowedToLogin($request->ip()))
+        if (!LoginAttempt::isIPAllowedToLogin($request->ip())) {
             throw new TooManyRequestsHttpException(300, 'You have failed to login too many times. Please grab yourself a snack and try again in a bit.');
+        }
 
         // Find the user
         $user = User::where('email', $data['email'])->first();
 
         // Compare the passwords
-        if (!User::checkPassHash($data['password'], $user->password)) {
+        if (!Hash::check($data['password'], $user->password)) {
             // Register the login attempt
             LoginAttempt::registerFailedLoginAttempt($request->ip());
 
@@ -47,8 +49,9 @@ class SessionController extends Controller
         }
 
         // Check if email is confirmed
-        if (!$user->hasVerifiedEmail())
+        if (!$user->hasVerifiedEmail()) {
             throw new AuthenticationException('You have not confirmed your email address yet. Please check your email inbox or spam folder.');
+        }
 
         // Create a new session
         $session = $user->createSession([
@@ -92,8 +95,9 @@ class SessionController extends Controller
         if (count($changedFields)) {
             $displayMessage .= 'You have updated: ' . join(', ', $changedFields) . '.';
             $session->save();
+        } else {
+            $displayMessage .= 'No information was updated.';
         }
-        else $displayMessage .= 'No information was updated.';
 
         return JSONResult::success([
             'message' => $displayMessage
