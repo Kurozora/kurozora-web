@@ -13,7 +13,11 @@ class NewFollower extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    /** @var User $follower */
+    /**
+     * The new user following the user receiving this notification.
+     *
+     * @var User $follower
+     */
     private User $follower;
 
     /**
@@ -32,7 +36,7 @@ class NewFollower extends Notification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return array
      */
-    public function via($notifiable): array
+    public function via(mixed $notifiable): array
     {
         return ['database', ApnChannel::class];
     }
@@ -43,7 +47,7 @@ class NewFollower extends Notification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toDatabase($notifiable): array
+    public function toDatabase(mixed $notifiable): array
     {
         return [
             'userID'            => $this->follower->id,

@@ -133,15 +133,15 @@ class ForumThreadController extends Controller
                 $replies->orderBy('created_at', 'desc');
                 break;
             case ForumOrderType::Old:
-                $replies->orderBy('created_at', 'asc');
+                $replies->orderBy('created_at');
                 break;
             case ForumOrderType::Poor:
                 $replies->joinReactionCounterOfType('Like')
-                        ->orderBy('reaction_like_count', 'asc');
+                        ->orderBy('reaction_like_count');
                 break;
             case ForumOrderType::Controversial:
                 $replies->joinReactionTotal()
-                        ->orderBy('reaction_total_weight', 'asc');
+                        ->orderBy('reaction_total_weight');
                 break;
         }
 

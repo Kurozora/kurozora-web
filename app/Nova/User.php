@@ -26,7 +26,7 @@ class User extends Resource
      *
      * @var string
      */
-    public static $model = 'App\Models\User';
+    public static string $model = 'App\Models\User';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -54,10 +54,10 @@ class User extends Resource
     /**
      * Get the fields displayed by the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function fields(Request $request)
+    public function fields(Request $request): array
     {
         return [
             ID::make()->sortable(),
@@ -137,7 +137,7 @@ class User extends Resource
      *
      * @return string
      */
-    public function title()
+    public function title(): string
     {
         return $this->username . ' (ID: ' . $this->id . ')';
     }
@@ -145,10 +145,10 @@ class User extends Resource
     /**
      * Get the cards available for the request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function cards(Request $request)
+    public function cards(Request $request): array
     {
         return [];
     }
@@ -156,10 +156,10 @@ class User extends Resource
     /**
      * Get the filters available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function filters(Request $request)
+    public function filters(Request $request): array
     {
         return [
             new UserRole
@@ -169,10 +169,10 @@ class User extends Resource
     /**
      * Get the lenses available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function lenses(Request $request)
+    public function lenses(Request $request): array
     {
         return [
             new UnconfirmedUsers
@@ -182,10 +182,10 @@ class User extends Resource
     /**
      * Get the actions available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function actions(Request $request)
+    public function actions(Request $request): array
     {
         return [];
     }
@@ -195,7 +195,7 @@ class User extends Resource
      *
      * @return bool
      */
-    public static function authorizable()
+    public static function authorizable(): bool
     {
         return false;
     }
@@ -205,7 +205,7 @@ class User extends Resource
      *
      * @var string
      */
-    public static $icon = '
+    public static string $icon = '
         <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path fill="var(--sidebar-icon)" d="M12 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm9 11a1 1 0 0 1-2 0v-2a3 3 0 0 0-3-3H8a3 3 0 0 0-3 3v2a1 1 0 0 1-2 0v-2a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v2z"/>
         </svg>
@@ -214,9 +214,10 @@ class User extends Resource
     /**
      * Renders all the user's roles for the index view.
      *
-     * @return string
+     * @return ?string
      */
-    private function displayRolesForIndex() {
+    private function displayRolesForIndex(): ?string
+    {
         // Get the role names of the user
         /** @var \App\Models\User $user */
         $user = $this->resource;
@@ -224,13 +225,16 @@ class User extends Resource
         $roles = $user->getRoleNames();
 
         // Return null when there are no roles to properly render an "empty" cell
-        if ($roles->isEmpty()) return null;
+        if ($roles->isEmpty()) {
+            return null;
+        }
 
         // Join all roles together and create the string
         $roleString = '';
 
-        foreach($roles as $role)
+        foreach($roles as $role) {
             $roleString .= '<span class="py-1 px-2 mr-1 inline-block rounded align-middle" style="background-color: #465161; color: #fff;">' . $role . '</span>';
+        }
 
         return $roleString;
     }

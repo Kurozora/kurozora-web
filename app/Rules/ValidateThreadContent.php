@@ -41,8 +41,9 @@ class ValidateThreadContent implements Rule
      */
     public function message(): string
     {
-        if ($this->errorType == 'short')
+        if ($this->errorType == 'short') {
             return __('validation.lt.string', ['value' => self::MINIMUM_THREAD_CONTENT_LENGTH]);
+        }
 
         return 'The :attribute is invalid.';
     }

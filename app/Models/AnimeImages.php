@@ -4,6 +4,7 @@ namespace App\Models;
 
 use ColorPalette;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AnimeImages extends Model
 {
@@ -35,9 +36,10 @@ class AnimeImages extends Model
     /**
      * Get the Anime belonging to the image
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function anime() {
+    public function anime(): BelongsTo
+    {
         return $this->belongsTo(Anime::class);
     }
 
@@ -46,10 +48,11 @@ class AnimeImages extends Model
      *
      * @param AnimeImages $animeImage
      */
-    static function generateColorsFor(AnimeImages $animeImage) {
-        $colors = ColorPalette::getPalette($animeImage->url, 5, 1, null);
+    static function generateColorsFor(AnimeImages $animeImage)
+    {
+        $colors = ColorPalette::getPalette($animeImage->url, 5, 1);
 
-        for($i = 0; $i < count($colors); $i++) {
+        for ($i = 0; $i < count($colors); $i++) {
             switch ($i) {
                 case 0:
                     $animeImage->background_color = $colors[$i];
@@ -75,7 +78,8 @@ class AnimeImages extends Model
      *
      * @param AnimeImages $animeImage
      */
-    static function generateDimensionsFor(AnimeImages $animeImage) {
+    static function generateDimensionsFor(AnimeImages $animeImage)
+    {
         list($width, $height) = getimagesize($animeImage->url);
 
         $animeImage->width = $width;

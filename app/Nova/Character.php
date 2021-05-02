@@ -21,7 +21,7 @@ class Character extends Resource
      *
      * @var string
      */
-    public static $model = 'App\Models\Character';
+    public static string $model = 'App\Models\Character';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -49,10 +49,10 @@ class Character extends Resource
     /**
      * Get the fields displayed by the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function fields(Request $request)
+    public function fields(Request $request): array
     {
         return [
             ID::make()->sortable(),
@@ -149,7 +149,7 @@ class Character extends Resource
      *
      * @return string
      */
-    public function title()
+    public function title(): string
     {
         $characterName = $this->name;
 
@@ -162,10 +162,10 @@ class Character extends Resource
     /**
      * Get the cards available for the request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function cards(Request $request)
+    public function cards(Request $request): array
     {
         return [];
     }
@@ -173,10 +173,10 @@ class Character extends Resource
     /**
      * Get the filters available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function filters(Request $request)
+    public function filters(Request $request): array
     {
         return [];
     }
@@ -184,10 +184,10 @@ class Character extends Resource
     /**
      * Get the lenses available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function lenses(Request $request)
+    public function lenses(Request $request): array
     {
         return [];
     }
@@ -195,10 +195,10 @@ class Character extends Resource
     /**
      * Get the actions available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function actions(Request $request)
+    public function actions(Request $request): array
     {
         return [];
     }
@@ -208,8 +208,8 @@ class Character extends Resource
      *
      * @var string
      */
-    public static $icon = '
-        <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+    public static string $icon = '
+        <svg class="sidebar-icon" viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg">
             <path fill="var(--sidebar-icon)" d="M32.01 256C49.68 256 64 243.44 64 227.94V0L.97 221.13C-4.08 238.84 11.2 256 32.01 256zm543.02-34.87L512 0v227.94c0 15.5 14.32 28.06 31.99 28.06 20.81 0 36.09-17.16 31.04-34.87zM480 210.82C480 90.35 288 0 288 0S96 90.35 96 210.82c0 82.76-22.86 145.9-31.13 180.71-3.43 14.43 3.59 29.37 16.32 35.24l161.54 78.76a64.01 64.01 0 0 0 28.05 6.47h34.46c9.72 0 19.31-2.21 28.05-6.47l161.54-78.76c12.73-5.87 19.75-20.81 16.32-35.24-8.29-34.81-31.15-97.95-31.15-180.71zM312 462.5V288l88-32v-32H176v32l88 32v174.5l-149.12-72.69c.77-2.82 1.58-5.77 2.43-8.86 10.63-38.59 26.69-96.9 26.69-170.13 0-63.44 91.88-127.71 144-156.76 52.12 29.05 144 93.32 144 156.76 0 73.23 16.06 131.54 26.69 170.12.85 3.08 1.66 6.04 2.43 8.85L312 462.5z"/>
         </svg>
     ';

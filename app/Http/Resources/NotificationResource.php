@@ -57,7 +57,7 @@ class NotificationResource extends JsonResource
      */
     static function getNotificationDescription(DatabaseNotification $notification): string
     {
-        switch($notification->type) {
+        switch ($notification->type) {
             case NewSession::class:
                 $body = 'A new client has logged in to your account.';
 
@@ -97,9 +97,9 @@ class NotificationResource extends JsonResource
      *
      * @param DatabaseNotification $notification
      * @param string $key
-     * @return mixed|null
+     * @return mixed
      */
-    private static function getData(DatabaseNotification $notification, string $key)
+    private static function getData(DatabaseNotification $notification, string $key): mixed
     {
         return self::hasData($notification, $key) ? $notification->data[$key] : null;
     }

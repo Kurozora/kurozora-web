@@ -21,13 +21,13 @@ class FetchAnimeDetails extends Action
      * @param Collection $models
      * @return mixed
      */
-    public function handle(ActionFields $fields, Collection $models)
+    public function handle(ActionFields $fields, Collection $models): mixed
     {
         $amountSuccess = 0;
         $amountFailed = 0;
 
         foreach($models as $model) {
-            // Skip the Anime if dtails were already fetched
+            // Skip the Anime if details were already fetched
             if ($model->fetched_details) {
                 $amountFailed++;
                 continue;
@@ -54,7 +54,7 @@ class FetchAnimeDetails extends Action
      *
      * @return array
      */
-    public function fields()
+    public function fields(): array
     {
         return [];
     }

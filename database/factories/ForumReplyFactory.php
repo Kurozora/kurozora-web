@@ -21,7 +21,7 @@ class ForumReplyFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         $forumThread = ForumThread::inRandomOrder()->first();
         $user = User::inRandomOrder()->first();

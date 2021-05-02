@@ -17,7 +17,8 @@ class CollectionLikeChecker {
      * @param $collection
      * @return CollectionLikeChecker
      */
-    static function retrieve($userID, $collection) {
+    static function retrieve($userID, $collection): CollectionLikeChecker
+    {
         // Get the type of collection
         $collectionType = $collection->getQueueableClass();
 
@@ -39,7 +40,8 @@ class CollectionLikeChecker {
      *
      * @return array
      */
-    protected function getCollectionIDs() {
+    protected function getCollectionIDs(): array
+    {
         $IDs = [];
 
         foreach($this->collection as $item)
@@ -65,10 +67,13 @@ class CollectionLikeChecker {
      * @param $item
      * @return bool
      */
-    function hasLiked($item) {
-        foreach($this->queryData as $queryItem)
-            if ($queryItem->likeable_id == $item->id && $queryItem->type_id == 'LIKE')
+    function hasLiked($item): bool
+    {
+        foreach($this->queryData as $queryItem) {
+            if ($queryItem->likeable_id == $item->id && $queryItem->type_id == 'LIKE') {
                 return true;
+            }
+        }
 
         return false;
     }
@@ -79,10 +84,13 @@ class CollectionLikeChecker {
      * @param $item
      * @return bool
      */
-    function hasDisliked($item) {
-        foreach($this->queryData as $queryItem)
-            if ($queryItem->likeable_id == $item->id && $queryItem->type_id == 'DISLIKE')
+    function hasDisliked($item): bool
+    {
+        foreach($this->queryData as $queryItem) {
+            if ($queryItem->likeable_id == $item->id && $queryItem->type_id == 'DISLIKE') {
                 return true;
+            }
+        }
 
         return false;
     }
@@ -96,12 +104,14 @@ class CollectionLikeChecker {
      * @param $item
      * @return int
      */
-    function getCurrentLikeAction($item) {
-        if ($this->hasLiked($item))
+    function getCurrentLikeAction($item): int
+    {
+        if ($this->hasLiked($item)) {
             return 1;
-        else if ($this->hasDisliked($item))
+        } else if ($this->hasDisliked($item)) {
             return -1;
-        else
+        } else {
             return 0;
+        }
     }
 }

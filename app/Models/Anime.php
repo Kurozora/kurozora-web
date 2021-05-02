@@ -26,6 +26,26 @@ class Anime extends KModel
         KuroSearchTrait,
         LogsActivity;
 
+    // Maximum amount of returned search results
+    const MAX_SEARCH_RESULTS = 10;
+
+    // Minimum ratings required to calculate average
+    const MINIMUM_RATINGS_REQUIRED = 30;
+
+    // Maximum relationships fetch limit
+    const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
+
+    // How long to cache certain responses
+    const CACHE_KEY_EXPLORE_SECONDS = 120 * 60;
+    const CACHE_KEY_ACTOR_CHARACTERS_SECONDS = 120 * 60;
+    const CACHE_KEY_ACTORS_SECONDS = 120 * 60;
+    const CACHE_KEY_CHARACTERS_SECONDS = 120 * 60;
+    const CACHE_KEY_EPISODES_SECONDS = 120 * 60;
+    const CACHE_KEY_RELATIONS_SECONDS = 120 * 60;
+    const CACHE_KEY_SEASONS_SECONDS = 120 * 60;
+    const CACHE_KEY_GENRES_SECONDS = 120 * 60;
+    const CACHE_KEY_STUDIOS_SECONDS = 120 * 60;
+
     /**
      * Searchable rules.
      *
@@ -52,26 +72,6 @@ class Anime extends KModel
         'broadcast',
         'information_summary'
     ];
-
-    // Maximum amount of returned search results
-    const MAX_SEARCH_RESULTS = 10;
-
-    // Minimum ratings required to calculate average
-    const MINIMUM_RATINGS_REQUIRED = 30;
-
-    // Maximum relationships fetch limit
-    const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
-
-    // How long to cache certain responses
-    const CACHE_KEY_EXPLORE_SECONDS = 120 * 60;
-    const CACHE_KEY_ACTOR_CHARACTERS_SECONDS = 120 * 60;
-    const CACHE_KEY_ACTORS_SECONDS = 120 * 60;
-    const CACHE_KEY_CHARACTERS_SECONDS = 120 * 60;
-    const CACHE_KEY_EPISODES_SECONDS = 120 * 60;
-    const CACHE_KEY_RELATIONS_SECONDS = 120 * 60;
-    const CACHE_KEY_SEASONS_SECONDS = 120 * 60;
-    const CACHE_KEY_GENRES_SECONDS = 120 * 60;
-    const CACHE_KEY_STUDIOS_SECONDS = 120 * 60;
 
     // Table name
     const TABLE_NAME = 'animes';

@@ -75,15 +75,15 @@ class ForumSectionController extends Controller
                 $threads->orderBy('created_at', 'desc');
                 break;
             case ForumOrderType::Old:
-                $threads->orderBy('created_at', 'asc');
+                $threads->orderBy('created_at');
                 break;
             case ForumOrderType::Poor:
                 $threads->joinReactionCounterOfType('Like')
-                        ->orderBy('reaction_like_count', 'asc');
+                        ->orderBy('reaction_like_count');
                 break;
             case ForumOrderType::Controversial:
                 $threads->joinReactionTotal()
-                        ->orderBy('reaction_total_weight', 'asc');
+                        ->orderBy('reaction_total_weight');
                 break;
         }
 

@@ -12,7 +12,7 @@ class KuroAuthToken {
      * @param string $sessionSecret
      * @return string
      */
-    public static function generate($userID, $sessionSecret)
+    public static function generate(int $userID, string $sessionSecret): string
     {
         return base64_encode($userID . ':' . $sessionSecret);
     }
@@ -23,21 +23,24 @@ class KuroAuthToken {
      * @param string $token
      * @return bool
      */
-    private static function tokenHasValidFormat($token)
+    private static function tokenHasValidFormat(string $token): bool
     {
-        if ($token === null)
+        if ($token === null) {
             return false;
+        }
 
         // Decode the token
         $decoded = base64_decode($token);
 
         // Could not decode token
-        if ($decoded === false)
+        if ($decoded === false) {
             return false;
+        }
 
         // Decoded token does not match regex
-        if (!preg_match(self::VALIDITY_REGEX, $decoded))
+        if (!preg_match(self::VALIDITY_REGEX, $decoded)) {
             return false;
+        }
 
         return true;
     }
@@ -48,11 +51,12 @@ class KuroAuthToken {
      * @param string $token
      * @return array|null
      */
-    public static function readToken($token)
+    public static function readToken(string $token): ?array
     {
         // Token is not of valid structure
-        if (!self::tokenHasValidFormat($token))
+        if (!self::tokenHasValidFormat($token)) {
             return null;
+        }
 
         // Decode the token
         $decoded = base64_decode($token);

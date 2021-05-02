@@ -14,7 +14,7 @@ class NewUsers extends Value
      * @param Request $request
      * @return mixed
      */
-    public function calculate(Request $request)
+    public function calculate(Request $request): mixed
     {
         return $this->count($request, User::class);
     }
@@ -24,7 +24,7 @@ class NewUsers extends Value
      *
      * @return array
      */
-    public function ranges()
+    public function ranges(): array
     {
         return [
             30 => '30 Days',
@@ -41,7 +41,7 @@ class NewUsers extends Value
      *
      * @return string
      */
-    public function uriKey()
+    public function uriKey(): string
     {
         return 'new-users-metric';
     }

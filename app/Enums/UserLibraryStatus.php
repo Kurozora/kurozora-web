@@ -20,10 +20,10 @@ final class UserLibraryStatus extends Enum
      */
     static function getDescription($value): string
     {
-        if ($value === self::OnHold)
-            return 'On-Hold';
-
-        return parent::getDescription($value);
+        return match ($value) {
+            self::OnHold => 'On-Hold',
+            default => parent::getDescription($value),
+        };
     }
 
     /**
@@ -31,7 +31,8 @@ final class UserLibraryStatus extends Enum
      *
      * @return string
      */
-    static function error() {
+    static function error(): string
+    {
         return 'Pick a valid library status: ' .
             implode(', ', self::getKeys())
         ;

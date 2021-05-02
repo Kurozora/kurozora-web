@@ -11,15 +11,32 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 class SendPasswordResetMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $user;
-    protected $passwordReset;
+    /**
+     * The number of tries.
+     *
+     * @var int
+     */
+    public int $tries = 1;
 
-    public $tries = 1;
+    /**
+     * The user to whom the password reset will be mailed.
+     *
+     * @var User
+     */
+    protected User $user;
+
+    /**
+     * The password reset to be mailed to the user.
+     *
+     * @var PasswordReset
+     */
+    protected PasswordReset $passwordReset;
 
     /**
      * Create a new job instance.
@@ -36,7 +53,7 @@ class SendPasswordResetMail implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function handle()
     {
@@ -47,9 +64,10 @@ class SendPasswordResetMail implements ShouldQueue
      * Sends the mail
      *
      * @return bool
-     * @throws \Throwable
+     * @throws Throwable
      */
-    protected function send() {
+    protected function send(): bool
+    {
         // Send the mail
         Mail::to($this->user->email)
             ->send(new ResetPassword($this->user, $this->passwordReset));

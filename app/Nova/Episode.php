@@ -19,7 +19,7 @@ class Episode extends Resource
      *
      * @var string
      */
-    public static $model = 'App\Models\AnimeEpisode';
+    public static string $model = 'App\Models\AnimeEpisode';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -47,10 +47,10 @@ class Episode extends Resource
     /**
      * Get the fields displayed by the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function fields(Request $request)
+    public function fields(Request $request): array
     {
         return [
             ID::make()->sortable(),
@@ -92,7 +92,7 @@ class Episode extends Resource
      *
      * @return string
      */
-    public function title()
+    public function title(): string
     {
         return $this->name . ' (ID: ' . $this->id . ')';
     }
@@ -100,10 +100,10 @@ class Episode extends Resource
     /**
      * Get the cards available for the request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function cards(Request $request)
+    public function cards(Request $request): array
     {
         return [];
     }
@@ -111,10 +111,10 @@ class Episode extends Resource
     /**
      * Get the filters available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function filters(Request $request)
+    public function filters(Request $request): array
     {
         return [];
     }
@@ -122,10 +122,10 @@ class Episode extends Resource
     /**
      * Get the lenses available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function lenses(Request $request)
+    public function lenses(Request $request): array
     {
         return [];
     }
@@ -133,10 +133,10 @@ class Episode extends Resource
     /**
      * Get the actions available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function actions(Request $request)
+    public function actions(Request $request): array
     {
         return [];
     }
@@ -146,7 +146,7 @@ class Episode extends Resource
      *
      * @var string
      */
-    public static $icon = '
+    public static string $icon = '
         <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
             <path fill="var(--sidebar-icon)" d="M488 64h-8v20c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12V64H96v20c0 6.6-5.4 12-12 12H44c-6.6 0-12-5.4-12-12V64h-8C10.7 64 0 74.7 0 88v336c0 13.3 10.7 24 24 24h8v-20c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v20h320v-20c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v20h8c13.3 0 24-10.7 24-24V88c0-13.3-10.7-24-24-24zM96 372c0 6.6-5.4 12-12 12H44c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40zm0-96c0 6.6-5.4 12-12 12H44c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40zm0-96c0 6.6-5.4 12-12 12H44c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40zm288 208c0 6.6-5.4 12-12 12H140c-6.6 0-12-5.4-12-12v-96c0-6.6 5.4-12 12-12h232c6.6 0 12 5.4 12 12v96zm0-168c0 6.6-5.4 12-12 12H140c-6.6 0-12-5.4-12-12v-96c0-6.6 5.4-12 12-12h232c6.6 0 12 5.4 12 12v96zm96 152c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40zm0-96c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40zm0-96c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40z"/>
         </svg>
