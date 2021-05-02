@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\MediaSource;
+use App\Models\Source;
 use Illuminate\Database\Seeder;
 
-class MediaSourceSeeder extends Seeder
+class SourceSeeder extends Seeder
 {
     /**
-     * The available media sources.
+     * The available sources.
      *
      * @var array
      */
-    protected array $mediaSources = [
+    protected array $sources = [
         [
             'name'          => 'Unknown',
             'description'   => 'Origin is unknown due to old age and other factors.',
@@ -82,8 +82,8 @@ class MediaSourceSeeder extends Seeder
      */
     public function run()
     {
-        foreach ($this->mediaSources as $mediaSource) {
-            MediaSource::create($mediaSource);
+        foreach ($this->sources as $source) {
+            Source::create($source);
         }
     }
 }

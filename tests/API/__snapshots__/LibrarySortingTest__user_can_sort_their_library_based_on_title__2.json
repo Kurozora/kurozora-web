@@ -10,23 +10,23 @@
             "imdbID": null,
             "malID": null,
             "title": "Be a good person!",
-            "tagline": "Ratione ut autem eveniet tempora.",
-            "synopsis": "Illo non laborum tenetur est aut. Aspernatur eligendi quidem rem fugiat. Numquam dolor qui porro minima inventore et nobis. Repellendus voluptas nemo perspiciatis ipsum.",
+            "tagline": "Quis quae ipsa fugit voluptates eligendi quia quidem rerum.",
+            "synopsis": "Ab qui architecto vel aspernatur eius facere excepturi. Illo rem quo laudantium quod vitae. Omnis modi nostrum enim reprehenderit. Similique et est molestias dolor sint. Consequatur velit deserunt excepturi quasi cum sed laudantium.",
             "tvRating": {
-                "name": "j",
-                "description": "quia odit in"
+                "name": "h",
+                "description": "atque voluptatem dolore"
             },
             "type": {
-                "name": "alias",
-                "description": "libero rerum voluptatibus"
+                "name": "maiores",
+                "description": "atque omnis alias"
             },
             "source": {
-                "name": "dicta",
-                "description": "amet fugit qui"
+                "name": "enim",
+                "description": "sint autem rerum"
             },
             "status": {
-                "name": "inventore quia",
-                "description": "sed aut itaque"
+                "name": "vel et",
+                "description": "aliquam sed sit"
             },
             "network": null,
             "producer": null,
@@ -37,13 +37,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "1987-05-16",
-            "lastAired": "1987-08-08",
-            "runtime": "20",
-            "airTime": "05:49",
+            "firstAired": "2018-09-19",
+            "lastAired": "2018-11-28",
+            "runtime": "15",
+            "airTime": "11:44",
             "airDay": "",
             "isNSFW": false,
-            "copyright": "\u00ae 1999 Emmerich, Keebler and DuBuque",
+            "copyright": "\u00ae 1998 Parisian-Weimann",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,
@@ -61,23 +61,23 @@
             "imdbID": null,
             "malID": null,
             "title": "Awesome Show",
-            "tagline": "Eligendi consequuntur aut voluptatem veniam in.",
-            "synopsis": "Accusantium consequuntur velit sit tempora. Voluptatem ut ut rerum. Rem impedit reiciendis illo cumque voluptatem nesciunt cupiditate quod.",
+            "tagline": "Debitis quibusdam cupiditate itaque.",
+            "synopsis": "Quia quae ex tempora minima consequatur animi. Consequatur adipisci in et sapiente possimus. Sed esse ea sunt aut. Expedita sit fugiat et.",
             "tvRating": {
-                "name": "j",
-                "description": "quia odit in"
+                "name": "h",
+                "description": "atque voluptatem dolore"
             },
             "type": {
-                "name": "alias",
-                "description": "libero rerum voluptatibus"
+                "name": "maiores",
+                "description": "atque omnis alias"
             },
             "source": {
-                "name": "dicta",
-                "description": "amet fugit qui"
+                "name": "enim",
+                "description": "sint autem rerum"
             },
             "status": {
-                "name": "inventore quia",
-                "description": "sed aut itaque"
+                "name": "vel et",
+                "description": "aliquam sed sit"
             },
             "network": null,
             "producer": null,
@@ -88,13 +88,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "1996-05-12",
-            "lastAired": "1996-07-21",
-            "runtime": "21",
-            "airTime": "04:09",
+            "firstAired": "2006-01-16",
+            "lastAired": "2006-03-27",
+            "runtime": "14",
+            "airTime": "12:19",
             "airDay": "",
-            "isNSFW": true,
-            "copyright": "\u2117 1974 Wolf-Kovacek",
+            "isNSFW": false,
+            "copyright": "\u2117 2011 Will-Nader",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
