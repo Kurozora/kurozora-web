@@ -10,19 +10,23 @@
             "imdbID": null,
             "malID": null,
             "title": "Awesome Show",
-            "tagline": "Voluptatem distinctio impedit voluptatibus.",
-            "synopsis": "Dolores quibusdam eos dolore facilis voluptatem tempora a dignissimos. Cum repellat iste suscipit nihil ut qui. Sed ut id impedit harum. Reprehenderit omnis itaque debitis rem alias dolor.",
+            "tagline": "Eligendi consequuntur aut voluptatem veniam in.",
+            "synopsis": "Accusantium consequuntur velit sit tempora. Voluptatem ut ut rerum. Rem impedit reiciendis illo cumque voluptatem nesciunt cupiditate quod.",
             "tvRating": {
-                "name": "v",
-                "description": "corporis voluptate porro"
+                "name": "j",
+                "description": "quia odit in"
             },
-            "mediaType": {
-                "name": "dolorum",
-                "description": "quis ullam delectus"
+            "type": {
+                "name": "alias",
+                "description": "libero rerum voluptatibus"
             },
-            "mediaSource": {
-                "name": "aut",
-                "description": "tempore aspernatur ab"
+            "source": {
+                "name": "dicta",
+                "description": "amet fugit qui"
+            },
+            "status": {
+                "name": "inventore quia",
+                "description": "sed aut itaque"
             },
             "network": null,
             "producer": null,
@@ -33,14 +37,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "2002-07-24",
-            "lastAired": "2002-10-16",
-            "runtime": "11",
-            "airStatus": "",
-            "airTime": "12:09",
+            "firstAired": "1996-05-12",
+            "lastAired": "1996-07-21",
+            "runtime": "21",
+            "airTime": "04:09",
             "airDay": "",
-            "isNSFW": false,
-            "copyright": "\u00a9 1975 Wilderman, Dooley and Hettinger",
+            "isNSFW": true,
+            "copyright": "\u2117 1974 Wolf-Kovacek",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
@@ -58,19 +61,23 @@
             "imdbID": null,
             "malID": null,
             "title": "Be a good person!",
-            "tagline": "Expedita quo hic perspiciatis.",
-            "synopsis": "Laboriosam assumenda a voluptatum modi occaecati similique. Hic ad et ut non fuga ullam voluptatibus. Quos est nisi officia enim. Atque est et aut quia voluptas veniam temporibus est. Aut quo veritatis exercitationem impedit dignissimos libero.",
+            "tagline": "Ratione ut autem eveniet tempora.",
+            "synopsis": "Illo non laborum tenetur est aut. Aspernatur eligendi quidem rem fugiat. Numquam dolor qui porro minima inventore et nobis. Repellendus voluptas nemo perspiciatis ipsum.",
             "tvRating": {
-                "name": "v",
-                "description": "corporis voluptate porro"
+                "name": "j",
+                "description": "quia odit in"
             },
-            "mediaType": {
-                "name": "libero",
-                "description": "dolor dolorem porro"
+            "type": {
+                "name": "alias",
+                "description": "libero rerum voluptatibus"
             },
-            "mediaSource": {
-                "name": "aut",
-                "description": "tempore aspernatur ab"
+            "source": {
+                "name": "dicta",
+                "description": "amet fugit qui"
+            },
+            "status": {
+                "name": "inventore quia",
+                "description": "sed aut itaque"
             },
             "network": null,
             "producer": null,
@@ -81,14 +88,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "2011-08-31",
-            "lastAired": "2011-11-23",
-            "runtime": "12",
-            "airStatus": "",
-            "airTime": "22:18",
+            "firstAired": "1987-05-16",
+            "lastAired": "1987-08-08",
+            "runtime": "20",
+            "airTime": "05:49",
             "airDay": "",
-            "isNSFW": true,
-            "copyright": "\u2117 2019 Padberg Group",
+            "isNSFW": false,
+            "copyright": "\u00ae 1999 Emmerich, Keebler and DuBuque",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,
