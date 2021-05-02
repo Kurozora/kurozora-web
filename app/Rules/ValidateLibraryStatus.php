@@ -17,7 +17,9 @@ class ValidateLibraryStatus implements Rule
     public function passes($attribute, $value): bool
     {
         // Empty string does not pass
-        if (!is_string($value) || !strlen($value)) return false;
+        if (!is_string($value) || !strlen($value)) {
+            return false;
+        }
 
         // Check if this status is valid
         return UserLibraryStatus::hasKey($value);

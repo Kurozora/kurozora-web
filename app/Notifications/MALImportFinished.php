@@ -13,10 +13,18 @@ class MALImportFinished extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    /** @var array $results */
+    /**
+     * The results of the import action.
+     *
+     * @var array $results
+     */
     private array $results;
 
-    /** @var string $behavior */
+    /**
+     * The behavior used when importing.
+     *
+     * @var string $behavior
+     */
     private string $behavior;
 
     /**
@@ -34,10 +42,10 @@ class MALImportFinished extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param  mixed $notifiable
      * @return array
      */
-    public function via($notifiable): array
+    public function via(mixed $notifiable): array
     {
         return ['database', ApnChannel::class];
     }
@@ -45,10 +53,10 @@ class MALImportFinished extends Notification implements ShouldQueue
     /**
      * Get the database representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param  mixed $notifiable
      * @return array
      */
-    public function toDatabase($notifiable): array
+    public function toDatabase(mixed $notifiable): array
     {
         return [
             'successful_count'  => count($this->results['successful']),

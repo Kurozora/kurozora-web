@@ -12,7 +12,11 @@ class SubscriptionStatus extends Notification
 {
     use Queueable;
 
-    /** @var string $subscriptionStatus */
+    /**
+     * The status of the user's subscription.
+     *
+     * @var string $subscriptionStatus
+     */
     private string $subscriptionStatus;
 
     /**

@@ -16,7 +16,7 @@ class ForumThread extends Resource
      *
      * @var string
      */
-    public static $model = 'App\Models\ForumThread';
+    public static string $model = 'App\Models\ForumThread';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -44,10 +44,10 @@ class ForumThread extends Resource
     /**
      * Get the fields displayed by the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function fields(Request $request)
+    public function fields(Request $request): array
     {
         return [
             ID::make()->sortable(),
@@ -83,7 +83,7 @@ class ForumThread extends Resource
      *
      * @return string
      */
-    public function title()
+    public function title(): string
     {
         return 'Title: "' . $this->title . '" (ID: ' . $this->id . ')';
     }
@@ -93,17 +93,18 @@ class ForumThread extends Resource
      *
      * @return string
      */
-    public static function label() {
+    public static function label(): string
+    {
         return 'Forum Threads';
     }
 
     /**
      * Get the cards available for the request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function cards(Request $request)
+    public function cards(Request $request): array
     {
         return [];
     }
@@ -111,10 +112,10 @@ class ForumThread extends Resource
     /**
      * Get the filters available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function filters(Request $request)
+    public function filters(Request $request): array
     {
         return [];
     }
@@ -122,10 +123,10 @@ class ForumThread extends Resource
     /**
      * Get the lenses available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function lenses(Request $request)
+    public function lenses(Request $request): array
     {
         return [];
     }
@@ -133,10 +134,10 @@ class ForumThread extends Resource
     /**
      * Get the actions available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function actions(Request $request)
+    public function actions(Request $request): array
     {
         return [];
     }
@@ -146,7 +147,7 @@ class ForumThread extends Resource
      *
      * @return bool
      */
-    public static function authorizable()
+    public static function authorizable(): bool
     {
         return false;
     }
@@ -156,7 +157,7 @@ class ForumThread extends Resource
      *
      * @var string
      */
-    public static $icon = '
+    public static string $icon = '
         <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path fill="var(--sidebar-icon)" d="M2 15V5c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v15a1 1 0 0 1-1.7.7L16.58 17H4a2 2 0 0 1-2-2zM20 5H4v10h13a1 1 0 0 1 .7.3l2.3 2.29V5z"/>
         </svg>

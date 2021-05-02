@@ -14,7 +14,7 @@ class BaseLayout extends Component
      *
      * @return Application|Factory|View
      */
-    public function render()
+    public function render(): Application|Factory|View
     {
         return view('layouts.base');
     }

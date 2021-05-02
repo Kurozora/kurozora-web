@@ -20,7 +20,7 @@ class GenerateColorsFromImage extends Action
      * @param Collection $models
      * @return mixed
      */
-    public function handle(ActionFields $fields, Collection $models)
+    public function handle(ActionFields $fields, Collection $models): mixed
     {
         $amountSuccess = 0;
 
@@ -46,7 +46,7 @@ class GenerateColorsFromImage extends Action
      *
      * @return array
      */
-    public function fields()
+    public function fields(): array
     {
         return [];
     }

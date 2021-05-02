@@ -26,11 +26,12 @@ class ValidateEmail implements Rule
      *
      * @param array $options
      */
-    function __construct($options = [])
+    function __construct(array $options = [])
     {
         // The `must-be-taken` and `must-be-available` options cannot be used simultaneously
-        if (isset($options['must-be-taken']) && isset($options['must-be-available']))
+        if (isset($options['must-be-taken']) && isset($options['must-be-available'])) {
             throw new InvalidArgumentException('The `must-be-taken` and `must-be-available` options cannot be used simultaneously.');
+        }
 
         // Set the options
         $this->options = new OptionsBag($options);
