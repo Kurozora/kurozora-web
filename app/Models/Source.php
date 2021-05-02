@@ -6,16 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class MediaSource extends Model
+class Source extends Model
 {
     use HasFactory;
 
     // Table name
-    const TABLE_NAME = 'media_sources';
+    const TABLE_NAME = 'sources';
     protected $table = self::TABLE_NAME;
 
     /**
-     * The anime that the media source has.
+     * The anime that the source has.
      *
      * @return HasMany
      */

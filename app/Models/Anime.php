@@ -527,8 +527,8 @@ class Anime extends KModel
      *
      * @return BelongsTo
      */
-    public function media_source(): BelongsTo
+    public function source(): BelongsTo
     {
-        return $this->belongsTo(MediaSource::class);
+        return $this->belongsTo(Source::class);
     }
 }

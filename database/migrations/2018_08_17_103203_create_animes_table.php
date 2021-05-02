@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Anime;
-use App\Models\MediaSource;
+use App\Models\Source;
 use App\Models\MediaType;
 use App\Models\Status;
 use App\Models\TvRating;
@@ -32,7 +32,7 @@ class CreateAnimesTable extends Migration
             $table->mediumText('synopsis')->nullable();
             $table->unsignedBigInteger('tv_rating_id')->nullable();
             $table->unsignedBigInteger('media_type_id')->nullable();
-            $table->unsignedBigInteger('media_source_id')->nullable();
+            $table->unsignedBigInteger('source_id')->nullable();
             $table->unsignedBigInteger('status_id')->nullable();
             $table->string('network')->nullable();
             $table->string('producer')->nullable();
@@ -65,7 +65,7 @@ class CreateAnimesTable extends Migration
             // Set foreign key constraints
             $table->foreign('tv_rating_id')->references('id')->on(TvRating::TABLE_NAME)->onDelete('set null');
             $table->foreign('media_type_id')->references('id')->on(MediaType::TABLE_NAME)->onDelete('set null');
-            $table->foreign('media_source_id')->references('id')->on(MediaSource::TABLE_NAME)->onDelete('set null');
+            $table->foreign('source_id')->references('id')->on(Source::TABLE_NAME)->onDelete('set null');
             $table->foreign('status_id')->references('id')->on(Status::TABLE_NAME)->onDelete('set null');
         });
     }
