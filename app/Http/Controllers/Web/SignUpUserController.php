@@ -7,6 +7,7 @@ use App\Http\Requests\Web\SignUpRequest;
 use App\Models\User;
 use Auth;
 use Browser;
+use Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -46,7 +47,7 @@ class SignUpUserController extends Controller
         $newUser = User::create([
             'username'              => $data['username'],
             'email'                 => $data['email'],
-            'password'              => User::hashPass($data['password']),
+            'password'              => Hash::make($data['password']),
             'settings'              => [
                 'can_change_username'   => false,
                 'tv_rating'             => -1
