@@ -125,7 +125,7 @@
                     <x-information-list label="{{ __('Studio') }}" infromation="{{ $anime->studios()->first()->name ?? '-' }}" />
                     <x-information-list label="{{ __('Network') }}" infromation="{{ $anime->network ?? '-' }}" />
                     <x-information-list label="{{ __('Type') }}" infromation="{{ $anime->media_type->name }}" />
-                    <x-information-list label="{{ __('Source') }}" infromation="{{ $anime->media_source->name }}" />
+                    <x-information-list label="{{ __('Source') }}" infromation="{{ $anime->source->name }}" />
                     <x-information-list label="{{ __('Aired') }}" infromation="{{ $anime->first_aired ?? 'N/A' }} - {{ $anime->last_aired ?? 'N/A' }}" />
                     <x-information-list label="{{ __('Broadcast') }}" infromation="{{ $anime->broadcast }}" />
                     <x-information-list label="{{ __('Genres') }}" infromation="{{ $anime->genres ?? '-' }}" />

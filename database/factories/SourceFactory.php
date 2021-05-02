@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\MediaSource;
+use App\Models\Source;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class MediaSourceFactory extends Factory
+class SourceFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = MediaSource::class;
+    protected $model = Source::class;
 
     /**
      * Define the model's default state.

@@ -3683,7 +3683,7 @@
                         "name": "OVA",
                         "description": "Original Video Animation in home video formats."
                       },
-                      "mediaSource": {
+                      "source": {
                         "name": "Music",
                         "description": "Adapted from a music video."
                       },
@@ -3731,7 +3731,7 @@
                         "name": "OVA",
                         "description": "Original Video Animation in home video formats."
                       },
-                      "mediaSource": {
+                      "source": {
                         "name": "Visual Novel",
                         "description": "Adapted from an interactive fiction video game which usually features a text-based story."
                       },
@@ -4150,7 +4150,7 @@
                                   "name": "Special",
                                   "description": "A standalone series with a self-contained story."
                                 },
-                                "mediaSource": {
+                                "source": {
                                   "name": "4-Koma Manga",
                                   "description": "Adapted from comic strips that generally consists of four panels per page."
                                 },
@@ -4468,7 +4468,7 @@
                           "name": "Special",
                           "description": "A standalone series with a self-contained story."
                         },
-                        "mediaSource": {
+                        "source": {
                           "name": "4-Koma Manga",
                           "description": "Adapted from comic strips that generally consists of four panels per page."
                         },
@@ -4881,7 +4881,7 @@
                                 "name": "TV",
                                 "description": "A show that aired on television."
                               },
-                              "mediaSource": {
+                              "source": {
                                 "name": "4-Koma Manga",
                                 "description": "Adapted from comic strips that generally consists of four panels per page."
                               },
@@ -4989,7 +4989,7 @@
                         "name": "OVA",
                         "description": "Original Video Animation in home video formats."
                       },
-                      "mediaSource": {
+                      "source": {
                         "name": "Music",
                         "description": "Adapted from a music video."
                       },
@@ -5037,7 +5037,7 @@
                         "name": "OVA",
                         "description": "Original Video Animation in home video formats."
                       },
-                      "mediaSource": {
+                      "source": {
                         "name": "Visual Novel",
                         "description": "Adapted from an interactive fiction video game which usually features a text-based story."
                       },

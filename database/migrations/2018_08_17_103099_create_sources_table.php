@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\MediaSource;
+use App\Models\Source;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMediaSourcesTable extends Migration
+class CreateSourcesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,14 +14,14 @@ class CreateMediaSourcesTable extends Migration
      */
     public function up()
     {
-        Schema::create(MediaSource::TABLE_NAME, function (Blueprint $table) {
+        Schema::create(Source::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('description');
             $table->timestamps();
         });
 
-        Schema::table(MediaSource::TABLE_NAME, function (Blueprint $table) {
+        Schema::table(Source::TABLE_NAME, function (Blueprint $table) {
             // Set unique index constraints
             $table->unique(['name']);
         });
@@ -34,6 +34,6 @@ class CreateMediaSourcesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(MediaSource::TABLE_NAME);
+        Schema::dropIfExists(Source::TABLE_NAME);
     }
 }
