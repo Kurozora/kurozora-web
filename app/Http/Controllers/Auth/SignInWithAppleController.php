@@ -10,6 +10,7 @@ use App\Http\Requests\SignInWithAppleRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Exception;
+use Hash;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 use Laravel\Nova\Exceptions\AuthenticationException;
@@ -146,7 +147,7 @@ class SignInWithAppleController extends Controller
             [
                 'email'     => $payload->get('email'),
                 'siwa_id'   => $payload->get('sub'),
-                'password'  => User::hashPass(Str::random(30)),
+                'password'  => Hash::make(Str::random(30)),
                 'settings'  => [
                     'can_change_username'   => true,
                     'tv_rating'             => -1

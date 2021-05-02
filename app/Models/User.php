@@ -9,13 +9,14 @@ use App\Notifications\NewSession;
 use App\Traits\HeartActionTrait;
 use App\Traits\KuroSearchTrait;
 use App\Traits\MediaLibraryExtensionTrait;
-use App\Traits\Web\Auth\TwoFactorAuthenticatable;
 use App\Traits\User\HasBannerImage;
 use App\Traits\User\HasProfileImage;
 use App\Traits\VoteActionTrait;
+use App\Traits\Web\Auth\TwoFactorAuthenticatable;
 use Carbon\Carbon;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
 use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
+use App\Notifications\ResetPassword as ResetPasswordNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -25,7 +26,6 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
 use RuntimeException;
@@ -171,13 +171,22 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         // Seen within the last 5 minutes
         if ($session->last_activity_at >= now()->subMinutes(5)) {
             return UserActivityStatus::Online();
-        }
-        // Seen within the last 15 minutes
+        } // Seen within the last 15 minutes
         else if ($session->last_activity_at >= now()->subMinutes(15)) {
             return UserActivityStatus::SeenRecently();
         }
 
         return UserActivityStatus::Offline();
+    }
+
+    /**
+     * Returns the associated sessions for the user
+     *
+     * @return HasMany
+     */
+    function sessions(): HasMany
+    {
+        return $this->hasMany(Session::class);
     }
 
     /**
@@ -202,16 +211,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     function favoriteAnime(): BelongsToMany
     {
         return $this->belongsToMany(Anime::class, UserFavoriteAnime::class, 'user_id', 'anime_id');
-    }
-
-    /**
-     * Returns the Anime that the user has added to their reminders.
-     *
-     * @return BelongsToMany
-     */
-    function reminderAnime(): BelongsToMany
-    {
-        return $this->belongsToMany(Anime::class, UserReminderAnime::class, 'user_id', 'anime_id');
     }
 
     /**
@@ -240,7 +239,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_CALENDAR_SECONDS, function() use ($animes) {
             $appName = Env('APP_NAME');
-            $productIdentifier = '-//Kurozora B.V.//' . $appName . '//'. strtoupper(config('app.locale'));
+            $productIdentifier = '-//Kurozora B.V.//' . $appName . '//' . strtoupper(config('app.locale'));
 
             $calendar = Calendar::create(UserReminderAnime::CAL_NAME);
             $calendar->description(UserReminderAnime::CAL_DESCRIPTION)
@@ -256,10 +255,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             $endDate = Carbon::now()->endOfWeek()->addWeeks(2);
             $whereBetween = [$startDate, $endDate];
 
-            foreach($animes as $anime) {
+            foreach ($animes as $anime) {
                 $episodes = $anime->getEpisodes($whereBetween);
 
-                foreach($episodes as $episode) {
+                foreach ($episodes as $episode) {
                     $uniqueIdentifier = Uuid::uuid4() . '@kurozora.app';
                     $eventName = $anime->title . ' Episode ' . $episode->number;
                     $startsAt = $episode->first_aired->setTimezone('Asia/Tokyo');
@@ -307,6 +306,16 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
+     * Returns the Anime that the user has added to their reminders.
+     *
+     * @return BelongsToMany
+     */
+    function reminderAnime(): BelongsToMany
+    {
+        return $this->belongsToMany(Anime::class, UserReminderAnime::class, 'user_id', 'anime_id');
+    }
+
+    /**
      * Returns a boolean indicating whether the user has the given anime in their library.
      *
      * @param Anime $anime The anime to be searched for in the user's library.
@@ -316,17 +325,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     function isTracking(Anime $anime): bool
     {
         return $this->library()->where('anime_id', $anime->id)->exists();
-    }
-
-    /**
-     * Returns the Anime that the user is moderating.
-     *
-     * @return BelongsToMany
-     */
-    function moderatingAnime(): BelongsToMany
-    {
-        return $this->belongsToMany(Anime::class, AnimeModerator::class, 'user_id', 'anime_id')
-            ->withPivot('created_at');
     }
 
     /**
@@ -341,13 +339,14 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
-     * Returns the watched Episode items.
+     * Returns the Anime that the user is moderating.
      *
      * @return BelongsToMany
      */
-    function watchedAnimeEpisodes(): BelongsToMany
+    function moderatingAnime(): BelongsToMany
     {
-        return $this->belongsToMany(AnimeEpisode::class, UserWatchedEpisode::class, 'user_id', 'episode_id');
+        return $this->belongsToMany(Anime::class, AnimeModerator::class, 'user_id', 'anime_id')
+            ->withPivot('created_at');
     }
 
     /**
@@ -363,6 +362,16 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
+     * Returns the watched Episode items.
+     *
+     * @return BelongsToMany
+     */
+    function watchedAnimeEpisodes(): BelongsToMany
+    {
+        return $this->belongsToMany(AnimeEpisode::class, UserWatchedEpisode::class, 'user_id', 'episode_id');
+    }
+
+    /**
      * Returns the associated badges for the user
      *
      * @return BelongsToMany
@@ -370,16 +379,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     function badges(): BelongsToMany
     {
         return $this->belongsToMany(Badge::class, UserBadge::class, 'user_id', 'badge_id');
-    }
-
-    /**
-     * Returns the associated sessions for the user
-     *
-     * @return HasMany
-     */
-    function sessions(): HasMany
-    {
-        return $this->hasMany(Session::class);
     }
 
     /**
@@ -397,7 +396,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      * @param array $options
      * @return Session
      */
-    function createSession($options = []): Session
+    function createSession(array $options = []): Session
     {
         $options = new OptionsBag($options);
 
@@ -485,25 +484,14 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_BADGES_SECONDS, function () {
-            return Badge::
-                join(UserBadge::TABLE_NAME, function ($join) {
-                    $join->on(UserBadge::TABLE_NAME . '.badge_id', '=', Badge::TABLE_NAME . '.id');
-                })
+            return Badge::join(UserBadge::TABLE_NAME, function ($join) {
+                $join->on(UserBadge::TABLE_NAME . '.badge_id', '=', Badge::TABLE_NAME . '.id');
+            })
                 ->where([
                     [UserBadge::TABLE_NAME . '.user_id', '=', $this->id]
                 ])
                 ->get();
         });
-    }
-
-    /**
-     * Get the user's followers
-     *
-     * @return BelongsToMany
-     */
-    public function followers(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, UserFollow::class, 'following_user_id', 'user_id');
     }
 
     /**
@@ -523,13 +511,13 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
-     * Get the user's following users.
+     * Get the user's followers
      *
      * @return BelongsToMany
      */
-    public function following(): BelongsToMany
+    public function followers(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, UserFollow::class, 'user_id', 'following_user_id');
+        return $this->belongsToMany(User::class, UserFollow::class, 'following_user_id', 'user_id');
     }
 
     /**
@@ -549,6 +537,16 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
+     * Get the user's following users.
+     *
+     * @return BelongsToMany
+     */
+    public function following(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, UserFollow::class, 'user_id', 'following_user_id');
+    }
+
+    /**
      * Returns the total amount of reputation the user has
      *
      * @return int
@@ -563,33 +561,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             $foundRep = UserReputation::where('given_user_id', $this->id)->sum('amount');
 
             if ($foundRep === null) return 0;
-            return (int) $foundRep;
+            return (int)$foundRep;
         });
 
-        return (int) $repCount;
-    }
-
-    /**
-     * Generates a password hash from a raw string
-     *
-     * @param $rawPass
-     * @return string
-     */
-    public static function hashPass($rawPass): string
-    {
-        return Hash::make($rawPass);
-    }
-
-    /**
-     * Compares a raw password with a password hash
-     *
-     * @param $rawPass
-     * @param $hash
-     * @return bool
-     */
-    public static function checkPassHash($rawPass, $hash): bool
-    {
-        return Hash::check($rawPass, $hash);
+        return (int)$repCount;
     }
 
     /**
@@ -629,5 +604,16 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     function receipt(): HasOne
     {
         return $this->hasOne(UserReceipt::class);
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 }

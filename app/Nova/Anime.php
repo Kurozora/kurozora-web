@@ -193,7 +193,7 @@ class Anime extends Resource
 
             Text::make('Copyright')
                 ->hideFromIndex()
-                ->help('For example: © 2020 Kurozora B.V.'),
+                ->help('For example: © ' . date('Y') . ' Kurozora B.V.'),
 
             Heading::make('Flags')
                 ->onlyOnForms(),

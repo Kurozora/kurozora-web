@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\JSONResult;
 use App\Http\Requests\Web\SignUpRequest;
 use App\Models\User;
+use Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -29,7 +30,7 @@ class RegistrationController extends Controller
         $newUser = User::create([
             'username'  => $data['username'],
             'email'     => $data['email'],
-            'password'  => User::hashPass($data['password']),
+            'password'  => Hash::make($data['password']),
             'settings'  => [
                 'can_change_username'   => false,
                 'tv_rating'             => -1,
