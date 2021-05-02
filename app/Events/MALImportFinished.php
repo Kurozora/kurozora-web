@@ -10,18 +10,35 @@ class MALImportFinished
 {
     use Dispatchable, SerializesModels;
 
-    public $user;
-    public $results;
-    public $behavior;
+    /**
+     * The user whose MAL import has finished.
+     *
+     * @var User
+     */
+    public User $user;
+
+    /**
+     * The results of the import.
+     *
+     * @var array
+     */
+    public array $results;
+
+    /**
+     * The behavior of the import.
+     *
+     * @var string
+     */
+    public string $behavior;
 
     /**
      * Create a new event instance.
      *
      * @param User $user
-     * @param $results
-     * @param $behavior
+     * @param array $results
+     * @param string $behavior
      */
-    public function __construct(User $user, $results, $behavior)
+    public function __construct(User $user, array $results, string $behavior)
     {
         $this->user = $user;
         $this->results = $results;

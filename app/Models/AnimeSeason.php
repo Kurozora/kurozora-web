@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class AnimeSeason extends KModel
 {
@@ -15,18 +18,20 @@ class AnimeSeason extends KModel
     /**
      * Returns the episodes associated with the season
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    function episodes() {
+    function episodes(): HasMany
+    {
         return $this->hasMany(AnimeEpisode::class, 'season_id');
     }
 
     /**
      * Returns the Anime that owns the season
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    function anime() {
+    function anime(): BelongsTo
+    {
         return $this->belongsTo(Anime::class);
     }
 
@@ -35,7 +40,8 @@ class AnimeSeason extends KModel
      *
      * @return string
      */
-    public function getTitle() {
+    public function getTitle(): string
+    {
         if ($this->number == 0)
             return 'Specials';
 
@@ -48,10 +54,11 @@ class AnimeSeason extends KModel
     /**
      * Gets the first aired date of the first aired episode in this season.
      *
-     * @return string|null
+     * @return ?string
      */
-    public function getFirstAired()
+    public function getFirstAired(): ?string
     {
+        /** @var ?AnimeEpisode $firstEpisode */
         $firstEpisode = $this->episodes->firstWhere('number', 1);
 
         if ($firstEpisode == null)
@@ -65,16 +72,18 @@ class AnimeSeason extends KModel
      *
      * @return int
      */
-    public function getEpisodeCount() {
+    public function getEpisodeCount(): int
+    {
         return AnimeEpisode::where('season_id', $this->id)->count();
     }
 
     /**
      * Gets the episodes for this season
      *
-     * @return array
+     * @return AnimeEpisode[]|array
      */
-    public function getEpisodes() {
+    public function getEpisodes(): Collection|array
+    {
         return AnimeEpisode::where('season_id', $this->id)->get();
     }
 }

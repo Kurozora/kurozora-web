@@ -17,12 +17,13 @@ class AnimeAgeSorter extends Sorter
      *
      * @return Builder
      */
-    public function apply(Request $request, Builder $builder, $direction): Builder
+    public function apply(Request $request, Builder $builder, string $direction): Builder
     {
-        if ($direction == 'newest')
+        if ($direction == 'newest') {
             $builder->orderBy('created_at', 'desc');
-        else
-            $builder->orderBy('created_at', 'asc');
+        } else {
+            $builder->orderBy('created_at');
+        }
 
         return $builder;
     }

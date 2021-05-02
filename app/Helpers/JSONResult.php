@@ -18,7 +18,7 @@ class JSONResult
      * @param APIError[] $apiError
      * @return JsonResponse
      */
-    static function error(array $apiError)
+    static function error(array $apiError): JsonResponse
     {
         $endResponse = array_merge(self::getDefaultResponseArray(), [
             'errors' => JSONErrorResource::collection($apiError)
@@ -37,7 +37,7 @@ class JSONResult
      * @param array $data
      * @return JsonResponse
      */
-    static function success($data = [])
+    static function success(array $data = []): JsonResponse
     {
         if (!is_array($data)) $data = [$data];
 
@@ -51,7 +51,7 @@ class JSONResult
      *
      * @return array
      */
-    private static function getDefaultResponseArray()
+    private static function getDefaultResponseArray(): array
     {
         return [
             'meta' => [

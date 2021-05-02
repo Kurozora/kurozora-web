@@ -15,9 +15,10 @@ class ForumSectionBan extends KModel
      *
      * @param $userID
      * @param $sectionID
-     * @return array|null
+     * @return ?array
      */
-    public static function getBanInfo($userID, $sectionID) {
+    public static function getBanInfo($userID, $sectionID): ?array
+    {
         // Find the section ban
         $foundBan = ForumSectionBan::where([
             ['user_id',     '=', $userID],
@@ -25,14 +26,16 @@ class ForumSectionBan extends KModel
         ])->first();
 
         // Not banned
-        if (!$foundBan)
+        if (!$foundBan) {
             return null;
+        }
 
         // Format the ban date
         $banDate = '(date unknown)';
 
-        if ($foundBan->created_at != null)
+        if ($foundBan->created_at != null) {
             $banDate = (new Carbon($foundBan->created_at))->format('d-m-Y');
+        }
 
         // Format ban reason
         $banReason = (strlen($foundBan->reason)) ? $foundBan->reason : 'No reason specified';

@@ -11,16 +11,27 @@ class SendNewPassword extends Mailable
 {
     use Queueable, SerializesModels;
 
-    protected $user;
-    protected $newPassword;
+    /**
+     * The user to whom the new password will be sent.
+     *
+     * @var User
+     */
+    protected User $user;
+
+    /**
+     * The new password of the user.
+     *
+     * @var string
+     */
+    protected string $newPassword;
 
     /**
      * Create a new message instance.
      *
      * @param User $user
-     * @param $newPassword
+     * @param string $newPassword
      */
-    public function __construct(User $user, $newPassword)
+    public function __construct(User $user, string $newPassword)
     {
         $this->user = $user;
         $this->newPassword = $newPassword;
@@ -31,7 +42,7 @@ class SendNewPassword extends Mailable
      *
      * @return $this
      */
-    public function build()
+    public function build(): static
     {
         return $this
             ->subject('Your new Kurozora password')

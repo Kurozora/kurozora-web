@@ -33,7 +33,12 @@ final class AstrologicalSign extends Enum
     const Aquarius      = 10;
     const Pisces        = 11;
 
-    protected static $signsEmoji = [
+    /**
+     * The emojis representing the astrological signs.
+     *
+     * @var array
+     */
+    protected static array $signsEmoji = [
         '♈️',
         '♉️',
         '♊️',

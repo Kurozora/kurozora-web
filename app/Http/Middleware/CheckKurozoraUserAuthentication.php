@@ -22,16 +22,17 @@ class CheckKurozoraUserAuthentication
      *
      * @param Request $request
      * @param Closure $next
-     * @param null|string $parameter
-     * @return JsonResponse|mixed
+     * @param ?string $parameter
+     * @return mixed
      * @throws AuthorizationException
      * @throws Exception
      */
-    public function handle(Request $request, Closure $next, $parameter = null)
+    public function handle(Request $request, Closure $next, ?string $parameter = null): mixed
     {
         // Check whether parameter value is valid
-        if (!in_array($parameter, [null, 'optional']))
+        if (!in_array($parameter, [null, 'optional'])) {
             throw new Exception('Middleware parameter value "' . $parameter . '" is not valid.');
+        }
 
         // Get kuro auth token from header
         $rawToken = $request->header('kuro-auth');
@@ -39,8 +40,9 @@ class CheckKurozoraUserAuthentication
         // Header is invalid
         if (!is_string($rawToken)) {
             // Continue with the request if authentication is optional
-            if ($parameter === 'optional')
+            if ($parameter === 'optional') {
                 return $next($request);
+            }
 
             throw new AuthorizationException('The request wasn’t accepted due to an issue with the kuro-auth token or because it’s using incorrect authentication.');
         }
@@ -48,8 +50,9 @@ class CheckKurozoraUserAuthentication
         // Read the authentication token
         $token = KuroAuthToken::readToken($rawToken);
 
-        if ($token === null)
+        if ($token === null) {
             throw new AuthorizationException('The request wasn’t accepted due to an issue with the kuro-auth token or because it’s using incorrect authentication.');
+        }
 
         // Fetch the variables
         $secret = $token['session_secret'];
@@ -65,11 +68,10 @@ class CheckKurozoraUserAuthentication
      * @param string $secret
      * @param Closure $next
      * @param Request $request
-     * @return JsonResponse|mixed
+     * @return mixed
      * @throws AuthorizationException
-     * @throws Exception
      */
-    private function authenticate(int $userID, string $secret, Closure $next, Request $request)
+    private function authenticate(int $userID, string $secret, Closure $next, Request $request): mixed
     {
         // Find the session
         /** @var Session $session */
@@ -79,8 +81,9 @@ class CheckKurozoraUserAuthentication
         ])->first();
 
         // Check whether the session exists
-        if ($session === null)
+        if ($session === null) {
             throw new AuthorizationException('The request wasn’t accepted due to an expired kuro-auth token.');
+        }
 
         if ($session->isExpired()) {
             $session->delete();
@@ -93,7 +96,7 @@ class CheckKurozoraUserAuthentication
 
         // Log the user in
         $request->request->add([
-            'user_id'           => (int) $userID,
+            'user_id'           => $userID,
             'session_secret'    => $secret,
             'session_id'        => $session->id
         ]);

@@ -26,9 +26,9 @@ final class WatchStatus extends Enum
     /**
      * The bool value of one of the enum members.
      *
-     * @var mixed
+     * @var ?bool
      */
-    public $boolValue;
+    public ?bool $boolValue;
 
     /**
      * Construct an Enum instance.
@@ -40,7 +40,8 @@ final class WatchStatus extends Enum
     public function __construct($enumValue)
     {
         parent::__construct($enumValue);
-        $this->boolValue = static::getBoolValue($enumValue);
+
+        $this->boolValue = WatchStatus::getBoolValue($enumValue);
     }
 
     /**
@@ -49,25 +50,23 @@ final class WatchStatus extends Enum
      * @param bool $bool The boolean value used to instantiate a WatchStatus instance.
      * @return WatchStatus
      */
-    public static function fromBool(bool $bool = null): self
+    public static function fromBool(bool $bool): self
     {
-        if ($bool == null)
-            return self::NotWatched();
-
         return $bool ? self::Watched() : self::NotWatched();
     }
 
     /**
      * Returns the bool or null value of one of the enum values.
      *
-     * @param mixed $enumValue
-     * @return bool|null
+     * @param int $enumValue
+     * @return ?bool
      */
-    public static function getBoolValue($enumValue)
+    public static function getBoolValue(int $enumValue): ?bool
     {
-        if ($enumValue === self::Disabled)
-            return null;
-
-        return $enumValue === self::Watched;
+        return match ($enumValue) {
+            self::Watched => true,
+            self::NotWatched => false,
+            default => null,
+        };
     }
 }

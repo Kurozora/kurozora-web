@@ -21,7 +21,7 @@ class FetchAnimeActors extends Action
      * @param Collection $models
      * @return mixed
      */
-    public function handle(ActionFields $fields, Collection $models)
+    public function handle(ActionFields $fields, Collection $models): mixed
     {
         $amountSuccess = 0;
         $amountFailed = 0;
@@ -40,8 +40,7 @@ class FetchAnimeActors extends Action
         if (!$amountSuccess) {
             if ($amountFailed > 1) {
                 return Action::danger('The actors for these anime were already fetched.');
-            }
-            else {
+            } else {
                 return Action::danger('The actors for this anime were already fetched.');
             }
         }
@@ -54,7 +53,7 @@ class FetchAnimeActors extends Action
      *
      * @return array
      */
-    public function fields()
+    public function fields(): array
     {
         return [];
     }

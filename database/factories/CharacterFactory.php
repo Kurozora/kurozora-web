@@ -19,7 +19,7 @@ class CharacterFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         $month = $this->faker->month;
         $isFemale = mt_rand(0, 1);

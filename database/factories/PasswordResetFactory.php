@@ -20,8 +20,9 @@ class PasswordResetFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
+        /** @var User $user */
         $user = User::inRandomOrder()->first();
 
         if ($user == null) {

@@ -27,11 +27,10 @@ class StudioResource extends JsonResource
 
             $relationships = [];
             foreach ($includes as $include) {
-                switch ($include) {
-                    case 'shows':
-                        $relationships = array_merge($relationships, $this->getAnimeRelationship($request->input('anime')));
-                        break;
-                }
+                $relationships = match ($include) {
+                    'shows' => array_merge($relationships, $this->getAnimeRelationship($request->input('anime'))),
+                    default => $relationships,
+                };
             }
 
             $resource = array_merge($resource, ['relationships' => $relationships]);
@@ -43,10 +42,10 @@ class StudioResource extends JsonResource
     /**
      * Returns the anime relationship for the resource.
      *
-     * @param Anime|null $excludingAnime
+     * @param ?Anime $excludingAnime
      * @return array
      */
-    protected function getAnimeRelationship(Anime $excludingAnime = null): array
+    protected function getAnimeRelationship(?Anime $excludingAnime = null): array
     {
         /** @param Studio $studio */
         $studio = $this->resource;

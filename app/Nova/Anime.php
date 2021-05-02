@@ -8,6 +8,7 @@ use App\Nova\Actions\FetchAnimeDetails;
 use App\Nova\Actions\FetchAnimeImages;
 use App\Nova\Lenses\UnmoderatedAnime;
 use Chaseconey\ExternalImage\ExternalImage;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Laraning\NovaTimeField\TimeField as Time;
@@ -31,7 +32,7 @@ class Anime extends Resource
      *
      * @var string
      */
-    public static $model = 'App\Models\Anime';
+    public static string $model = 'App\Models\Anime';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -59,10 +60,10 @@ class Anime extends Resource
     /**
      * Get the fields displayed by the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function fields(Request $request)
+    public function fields(Request $request): array
     {
         return [
             Heading::make('Identification'),
@@ -247,7 +248,7 @@ class Anime extends Resource
      *
      * @return string
      */
-    public function title()
+    public function title(): string
     {
         $animeName = $this->title;
 
@@ -262,17 +263,18 @@ class Anime extends Resource
      *
      * @return string
      */
-    public static function label() {
+    public static function label(): string
+    {
         return 'Anime';
     }
 
     /**
      * Get the cards available for the request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function cards(Request $request)
+    public function cards(Request $request): array
     {
         return [];
     }
@@ -280,10 +282,10 @@ class Anime extends Resource
     /**
      * Get the filters available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function filters(Request $request)
+    public function filters(Request $request): array
     {
         return [];
     }
@@ -291,10 +293,10 @@ class Anime extends Resource
     /**
      * Get the lenses available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function lenses(Request $request)
+    public function lenses(Request $request): array
     {
         return [
             new UnmoderatedAnime
@@ -304,10 +306,10 @@ class Anime extends Resource
     /**
      * Get the actions available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function actions(Request $request)
+    public function actions(Request $request): array
     {
         return [
             new FetchAnimeImages,
@@ -319,9 +321,9 @@ class Anime extends Resource
     /**
      * Returns an indication of whether the Anime is moderated.
      *
-     * @return string|null
+     * @return ?string
      */
-    private function displayModIndicatorForIndex()
+    private function displayModIndicatorForIndex(): ?string
     {
         // Get the anime and moderator count
         /** @var \App\Models\Anime $anime */
@@ -329,7 +331,9 @@ class Anime extends Resource
         $modCount = $anime->moderators->count();
 
         // Return null when there are no mods to properly format the empty value
-        if ($modCount <= 0) return null;
+        if ($modCount <= 0) {
+            return null;
+        }
 
         return '<span class="py-1 px-2 mr-1 inline-block rounded align-middle" style="background-color: #465161; color: #fff;">' . $modCount . ' ' . Str::plural('mod', $modCount) . '</span>';
     }
@@ -337,11 +341,11 @@ class Anime extends Resource
     /**
      * Build an "index" query for the given resource.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param NovaRequest $request
+     * @param  Builder  $query
+     * @return Builder
      */
-    public static function indexQuery(NovaRequest $request, $query)
+    public static function indexQuery(NovaRequest $request, $query): Builder
     {
         return parent::indexQuery($request, $query)->withoutGlobalScope('tv_rating');
     }
@@ -349,11 +353,11 @@ class Anime extends Resource
     /**
      * Build a "relatable" query for media types.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param NovaRequest $request
+     * @param Builder $query
+     * @return Builder
      */
-    public static function relatableMediaTypes(NovaRequest $request, $query)
+    public static function relatableMediaTypes(NovaRequest $request, Builder $query): Builder
     {
         return $query->where('type', 'anime');
     }
@@ -361,11 +365,11 @@ class Anime extends Resource
     /**
      * Build a "relatable" query for statuses.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param NovaRequest $request
+     * @param Builder $query
+     * @return Builder
      */
-    public static function relatableStatuses(NovaRequest $request, $query)
+    public static function relatableStatuses(NovaRequest $request, Builder $query): Builder
     {
         return $query->where('type', 'anime');
     }
@@ -375,7 +379,7 @@ class Anime extends Resource
      *
      * @var string
      */
-    public static $icon = '
+    public static string $icon = '
         <svg class="sidebar-icon" viewBox="0 0 640 512" xmlns="http://www.w3.org/2000/svg">
             <path fill="var(--sidebar-icon)" d="M528 464H112a16 16 0 0 0-16 16v16a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16v-16a16 16 0 0 0-16-16zM592 0H48A48 48 0 0 0 0 48v320a48 48 0 0 0 48 48h544a48 48 0 0 0 48-48V48a48 48 0 0 0-48-48zm0 368H48V48h544z"/>
         </svg>

@@ -32,7 +32,8 @@ class AppTheme extends KModel implements HasMedia
      *
      * @return string
      */
-    function pList() {
+    function pList(): string
+    {
         $view = View::make('plist.ios-theme', [
             'theme'       => $this
         ]);
