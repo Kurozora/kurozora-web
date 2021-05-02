@@ -35,7 +35,8 @@ class LoginAttempt extends KModel
      *
      * @param string $ipAddress
      */
-    public static function registerFailedLoginAttempt(string $ipAddress) {
+    public static function registerFailedLoginAttempt(string $ipAddress)
+    {
         LoginAttempt::create(['ip_address'=> $ipAddress]);
     }
 }

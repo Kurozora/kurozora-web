@@ -4,6 +4,7 @@ namespace App\Models;
 
 use ColorPalette;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AnimeImages extends Model
 {
@@ -35,9 +36,9 @@ class AnimeImages extends Model
     /**
      * Get the Anime belonging to the image
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function anime()
+    public function anime(): BelongsTo
     {
         return $this->belongsTo(Anime::class);
     }

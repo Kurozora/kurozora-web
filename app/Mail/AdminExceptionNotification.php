@@ -52,7 +52,8 @@ class AdminExceptionNotification extends Mailable
      *
      * @return string
      */
-    protected function makeSubject() {
+    protected function makeSubject(): string
+    {
         // Get date
         $curDate = Carbon::now();
         $formattedDate = $curDate->format('d-m-Y H:i');

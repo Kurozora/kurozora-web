@@ -17,9 +17,9 @@ class AppleAuthKeys
     /**
      * Returns an array of (string) PEM public keys.
      *
-     * @return string[]
+     * @return array
      */
-    static function get()
+    static function get(): array
     {
         return Cache::remember(self::KEYS_CACHE_KEY, self::CACHE_FOR_SECONDS, function() {
             $jwk = json_decode(file_get_contents(self::KEYS_ENDPOINT_URL));
@@ -46,7 +46,7 @@ class AppleAuthKeys
      *
      * @return bool
      */
-    static function areCached()
+    static function areCached(): bool
     {
         return Cache::has(self::KEYS_CACHE_KEY);
     }

@@ -15,10 +15,26 @@ class SendNewPasswordMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $tries = 1;
+    /**
+     * The number of tries.
+     *
+     * @var int
+     */
+    public int $tries = 1;
 
-    protected $user;
-    protected $newPassword;
+    /**
+     * The user to whom the new password will be sent.
+     *
+     * @var User
+     */
+    protected User $user;
+
+    /**
+     * The new password of the user.
+     *
+     * @var string
+     */
+    protected string $newPassword;
 
     /**
      * Create a new job instance.
@@ -26,7 +42,7 @@ class SendNewPasswordMail implements ShouldQueue
      * @param User $user
      * @param string $newPassword
      */
-    public function __construct(User $user, $newPassword)
+    public function __construct(User $user, string $newPassword)
     {
         $this->user = $user;
         $this->newPassword = $newPassword;
