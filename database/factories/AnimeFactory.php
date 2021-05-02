@@ -3,10 +3,10 @@
 namespace Database\Factories;
 
 use App\Models\Anime;
-use App\Enums\AnimeStatus;
 use App\Enums\DayOfWeek;
 use App\Models\MediaSource;
 use App\Models\MediaType;
+use App\Models\Status;
 use App\Models\TvRating;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -49,6 +49,11 @@ class AnimeFactory extends Factory
             $mediaSource = MediaSource::factory()->create();
         }
 
+        $status = Status::inRandomOrder()->first();
+        if (empty($status)) {
+            $status = Status::factory()->create();
+        }
+
         return [
             'slug'              => Str::slug($title),
             'title'             => $title,
@@ -57,12 +62,12 @@ class AnimeFactory extends Factory
             'tv_rating_id'      => $tvRating,
             'media_type_id'     => $mediaType,
             'media_source_id'   => $mediaSource,
+            'status_id'         => $status,
             'network'           => null,
             'producer'          => null,
             'first_aired'       => $firstAired,
             'last_aired'        => $lastAired,
             'runtime'           => $this->faker->numberBetween(10, 25),
-            'air_status'        => AnimeStatus::getRandomValue(),
             'air_time'          => $this->faker->time('H:i'),
             'air_day'           => DayOfWeek::getRandomValue(),
             'is_nsfw'           => $this->faker->boolean,

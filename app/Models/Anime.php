@@ -493,6 +493,16 @@ class Anime extends KModel
     }
 
     /**
+     * The anime's adaptation source.
+     *
+     * @return BelongsTo
+     */
+    public function status(): BelongsTo
+    {
+        return $this->belongsTo(Status::class)->where('type', 'anime');
+    }
+
+    /**
      * The anime's TV rating.
      *
      * @return BelongsTo

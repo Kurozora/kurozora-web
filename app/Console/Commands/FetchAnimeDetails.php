@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Enums\AnimeStatus;
 use App\Enums\DayOfWeek;
 use App\Models\Anime;
 use App\Models\AnimeGenre;
@@ -114,7 +113,7 @@ class FetchAnimeDetails extends Command
 //
 //        // Status
 //        $this->info('[Retrieving status]');
-//        $anime->status = (AnimeStatus::hasKey($details->status)) ? AnimeStatus::getValue($details->status) : AnimeStatus::TBA;
+//        $anime->status_id = Status::firstWhere([['type', 'anime'], ['name', $details->status]])->id ?? Status::firstWhere([['type', 'anime'], ['name', 'To Be Announced']])->id
 //        $this->info('[Status retrieved]');
 //        $this->info('');
 //

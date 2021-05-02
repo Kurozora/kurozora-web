@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use App\Models\Anime;
-use App\Enums\AnimeStatus;
 use App\Enums\DayOfWeek;
 use App\Enums\UserLibraryStatus;
 use App\Models\User;
@@ -47,9 +46,10 @@ class AnimeResourceBasic extends JsonResource
                 'title'                 => $anime->title,
                 'tagline'               => $anime->tagline,
                 'synopsis'              => $anime->synopsis,
-                'tvRating'              => $anime->tv_rating()->first(['name', 'description'])->makeHidden('full_name'),
-                'mediaType'             => $anime->media_type()->first(['name', 'description']),
-                'mediaSource'           => $anime->media_source()->first(['name', 'description']),
+                'tvRating'              => $anime->tv_rating->only(['name', 'description']),
+                'type'                  => $anime->media_type->only(['name', 'description']),
+                'source'                => $anime->media_source->only(['name', 'description']),
+                'status'                => $anime->status->only(['name', 'description']),
                 'network'               => $anime->network,
                 'producer'              => $anime->producer,
                 'episodeCount'          => $anime->episode_count,
@@ -62,7 +62,6 @@ class AnimeResourceBasic extends JsonResource
                 'firstAired'            => $firstAired,
                 'lastAired'             => $lastAired,
                 'runtime'               => $anime->runtime,
-                'airStatus'             => AnimeStatus::getDescription($anime->air_status),
                 'airTime'               => $anime->air_time,
                 'airDay'                => DayOfWeek::getDescription($anime->air_day),
                 'isNSFW'                => (bool) $anime->is_nsfw,

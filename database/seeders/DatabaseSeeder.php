@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             TvRatingSeeder::class,
             MediaTypeSeeder::class,
             MediaSourceSeeder::class,
+            StatusSeeder::class,
             GenreSeeder::class,
             AnimeDummySeeder::class,
             AnimeRelationsSeeder::class,

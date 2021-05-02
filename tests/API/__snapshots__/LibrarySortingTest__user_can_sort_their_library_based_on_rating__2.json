@@ -10,19 +10,23 @@
             "imdbID": null,
             "malID": null,
             "title": "Awesome Show",
-            "tagline": "Nam deleniti eos in.",
-            "synopsis": "Rerum occaecati hic vel aut id voluptas distinctio architecto. Exercitationem enim quisquam qui et aliquid quibusdam voluptate. Impedit quas facere rerum. Repellat magnam aut sit explicabo eveniet animi dolor qui.",
+            "tagline": "Nihil ut non aut voluptas ut ipsum iure.",
+            "synopsis": "Vel aut explicabo placeat. Saepe aliquid est exercitationem deleniti. Doloremque a qui blanditiis est.",
             "tvRating": {
-                "name": "f",
-                "description": "officia voluptas voluptatum"
+                "name": "o",
+                "description": "eveniet eligendi esse"
             },
-            "mediaType": {
-                "name": "rem",
-                "description": "nam saepe occaecati"
+            "type": {
+                "name": "qui",
+                "description": "ut necessitatibus qui"
             },
-            "mediaSource": {
-                "name": "et",
-                "description": "et quo ut"
+            "source": {
+                "name": "facere",
+                "description": "distinctio dicta possimus"
+            },
+            "status": {
+                "name": "accusantium voluptatem",
+                "description": "nobis alias id"
             },
             "network": null,
             "producer": null,
@@ -33,14 +37,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "1988-07-31",
-            "lastAired": "1989-01-15",
-            "runtime": "23",
-            "airStatus": "",
-            "airTime": "15:50",
+            "firstAired": "1983-10-05",
+            "lastAired": "1983-12-14",
+            "runtime": "17",
+            "airTime": "21:50",
             "airDay": "",
-            "isNSFW": false,
-            "copyright": "\u00ae 1986 Kuhic-Schowalter",
+            "isNSFW": true,
+            "copyright": "\u00ae 2005 Jaskolski, Williamson and West",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
@@ -58,19 +61,23 @@
             "imdbID": null,
             "malID": null,
             "title": "Be a good person!",
-            "tagline": "Sunt aperiam tenetur explicabo rerum.",
-            "synopsis": "Corporis ipsum fuga est adipisci. At eius doloribus totam necessitatibus. Quisquam quae qui laborum culpa aut voluptatem id enim.",
+            "tagline": "Reprehenderit quos porro neque repellendus tempora corporis aperiam.",
+            "synopsis": "Eos iusto ad qui commodi omnis doloremque maxime. Consequatur consectetur non assumenda exercitationem quia. Deleniti itaque qui saepe et. Quia inventore amet voluptas vel incidunt temporibus beatae eveniet.",
             "tvRating": {
-                "name": "f",
-                "description": "officia voluptas voluptatum"
+                "name": "o",
+                "description": "eveniet eligendi esse"
             },
-            "mediaType": {
-                "name": "magni",
-                "description": "officia magnam ullam"
+            "type": {
+                "name": "ullam",
+                "description": "et tenetur velit"
             },
-            "mediaSource": {
-                "name": "et",
-                "description": "et quo ut"
+            "source": {
+                "name": "facere",
+                "description": "distinctio dicta possimus"
+            },
+            "status": {
+                "name": "accusantium voluptatem",
+                "description": "nobis alias id"
             },
             "network": null,
             "producer": null,
@@ -81,14 +88,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "1994-10-08",
-            "lastAired": "1994-12-31",
-            "runtime": "16",
-            "airStatus": "",
-            "airTime": "20:25",
+            "firstAired": "2017-11-02",
+            "lastAired": "2018-04-19",
+            "runtime": "13",
+            "airTime": "21:30",
             "airDay": "",
-            "isNSFW": false,
-            "copyright": "\u00ae 1989 Quitzon-Mitchell",
+            "isNSFW": true,
+            "copyright": "\u2117 1994 Williamson-Boehm",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,

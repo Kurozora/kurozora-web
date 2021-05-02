@@ -10,19 +10,23 @@
             "imdbID": null,
             "malID": null,
             "title": "Be a good person!",
-            "tagline": "Minus sunt saepe impedit.",
-            "synopsis": "Velit dicta veniam aut ut. Architecto ad ab molestiae error. Odit debitis quia maxime delectus sapiente et error. Corrupti eum non ratione praesentium.",
+            "tagline": "Eos provident enim aut voluptates.",
+            "synopsis": "Nam laboriosam nostrum vel dolorum non quae. Et expedita saepe qui quia. Voluptate quam provident excepturi aut. Fugit dolor molestiae eos esse aperiam.",
             "tvRating": {
-                "name": "n",
-                "description": "quidem minus repellendus"
+                "name": "e",
+                "description": "quas sequi ut"
             },
-            "mediaType": {
-                "name": "rerum",
-                "description": "nobis sit est"
+            "type": {
+                "name": "aut",
+                "description": "at modi et"
             },
-            "mediaSource": {
-                "name": "soluta",
-                "description": "hic dolorem delectus"
+            "source": {
+                "name": "aliquid",
+                "description": "excepturi quibusdam ad"
+            },
+            "status": {
+                "name": "possimus harum",
+                "description": "in laborum placeat"
             },
             "network": null,
             "producer": null,
@@ -33,14 +37,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "2017-05-23",
-            "lastAired": "2017-08-15",
-            "runtime": "13",
-            "airStatus": "",
-            "airTime": "00:18",
+            "firstAired": "1975-06-23",
+            "lastAired": "1975-12-08",
+            "runtime": "10",
+            "airTime": "17:54",
             "airDay": "",
-            "isNSFW": false,
-            "copyright": "\u00a9 2010 Connelly-Hauck",
+            "isNSFW": true,
+            "copyright": "\u00a9 1975 Goldner-Boyle",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,
@@ -58,19 +61,23 @@
             "imdbID": null,
             "malID": null,
             "title": "Awesome Show",
-            "tagline": "Officiis quasi culpa laudantium voluptatem.",
-            "synopsis": "Vitae quia ut eveniet vero. Distinctio harum labore molestiae ipsa occaecati et aliquam. Sed sunt qui quo architecto aspernatur maxime natus dolorum. Dolorem enim voluptatem odio maiores officiis non impedit.",
+            "tagline": "Quia adipisci ipsa eaque reprehenderit.",
+            "synopsis": "Et sed et voluptate consequatur ea repellat qui. Odio odio qui aut quia expedita est perspiciatis. Odit magnam minus quia vitae voluptatem voluptatum rerum consequatur. Optio accusantium velit provident et non.",
             "tvRating": {
-                "name": "n",
-                "description": "quidem minus repellendus"
+                "name": "e",
+                "description": "quas sequi ut"
             },
-            "mediaType": {
-                "name": "rerum",
-                "description": "nobis sit est"
+            "type": {
+                "name": "aut",
+                "description": "at modi et"
             },
-            "mediaSource": {
-                "name": "soluta",
-                "description": "hic dolorem delectus"
+            "source": {
+                "name": "aliquid",
+                "description": "excepturi quibusdam ad"
+            },
+            "status": {
+                "name": "possimus harum",
+                "description": "in laborum placeat"
             },
             "network": null,
             "producer": null,
@@ -81,14 +88,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "2004-03-03",
-            "lastAired": "2004-05-26",
-            "runtime": "22",
-            "airStatus": "",
-            "airTime": "17:04",
+            "firstAired": "2006-04-02",
+            "lastAired": "2006-09-17",
+            "runtime": "21",
+            "airTime": "04:17",
             "airDay": "",
-            "isNSFW": false,
-            "copyright": "\u2117 1990 Predovic, Ondricka and Upton",
+            "isNSFW": true,
+            "copyright": "\u2117 1987 Pollich, Wolff and Herman",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,

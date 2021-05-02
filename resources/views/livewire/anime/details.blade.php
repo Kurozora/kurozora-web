@@ -32,10 +32,7 @@
                         <div>
                             <p class="font-semibold text-lg leading-tight break-all">{{ $anime->title }}</p>
                             <p class="text-sm leading-tight">{{ $anime->informationSummary }}</p>
-                            @php
-                                $airingStatus = App\Enums\AnimeStatus::fromValue($anime->air_status);
-                            @endphp
-                            <x-pill color="{{ $airingStatus->color() }}" class="mt-2">{{ $airingStatus->description }}</x-pill>
+                            <x-pill color="{{ $anime->status->color() }}" class="mt-2">{{ $anime->status->name }}</x-pill>
                         </div>
                         <div class="flex justify-between mt-5 h-10">
                             <x-button class="rounded-full shadow-md">{{ __('ADD') }}</x-button>
