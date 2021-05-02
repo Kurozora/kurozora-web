@@ -18,7 +18,8 @@ class KModel extends Model
      * @param array $options
      * @return string
      */
-    static function cacheKey($options = []) {
+    static function cacheKey(array $options = []): string
+    {
         // Start with the table name
         $key = get_called_class()::TABLE_NAME;
 

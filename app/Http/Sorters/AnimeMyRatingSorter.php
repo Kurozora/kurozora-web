@@ -19,17 +19,18 @@ class AnimeMyRatingSorter extends Sorter
      *
      * @return Builder
      */
-    public function apply(Request $request, Builder $builder, $direction): Builder
+    public function apply(Request $request, Builder $builder, string $direction): Builder
     {
         // Join the user ratings table
         $builder->join(AnimeRating::TABLE_NAME, AnimeRating::TABLE_NAME . '.anime_id', '=', Anime::TABLE_NAME . '.id')
             ->select(Anime::TABLE_NAME . '.*');
 
         // Order by the user rating
-        if ($direction == 'worst')
-            $builder->orderBy(AnimeRating::TABLE_NAME . '.rating', 'asc');
-        else
+        if ($direction == 'worst') {
+            $builder->orderBy(AnimeRating::TABLE_NAME . '.rating');
+        } else {
             $builder->orderBy(AnimeRating::TABLE_NAME . '.rating', 'desc');
+        }
 
         return $builder;
     }

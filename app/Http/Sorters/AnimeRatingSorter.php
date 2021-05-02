@@ -17,12 +17,13 @@ class AnimeRatingSorter extends Sorter
      *
      * @return Builder
      */
-    public function apply(Request $request, Builder $builder, $direction): Builder
+    public function apply(Request $request, Builder $builder, string $direction): Builder
     {
-        if ($direction == 'worst')
-            $builder->orderBy('average_rating', 'asc');
-        else
+        if ($direction == 'worst') {
+            $builder->orderBy('average_rating');
+        } else {
             $builder->orderBy('average_rating', 'desc');
+        }
 
         return $builder;
     }

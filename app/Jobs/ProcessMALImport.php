@@ -17,7 +17,7 @@ class ProcessMALImport implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * Number of tries.
+     * The number of tries.
      *
      * @var int
      */

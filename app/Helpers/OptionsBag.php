@@ -4,7 +4,12 @@ namespace App\Helpers;
 
 class OptionsBag
 {
-    private $data;
+    /**
+     * The data in the bag.
+     *
+     * @var array
+     */
+    private array $data;
 
     function __construct(array $data)
     {
@@ -16,13 +21,15 @@ class OptionsBag
      * .. value if the option is not present.
      *
      * @param string $key
-     * @param mixed $default
+     * @param mixed|null $default
      * @return mixed
      */
-    function get($key, $default = null)
+    function get(string $key, mixed $default = null): mixed
     {
-        if (isset($this->data[$key]))
+        if (isset($this->data[$key])) {
             return $this->data[$key];
-        else return $default;
+        } else {
+            return $default;
+        }
     }
 }

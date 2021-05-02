@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AnimeRelations extends KModel
 {
@@ -15,18 +16,20 @@ class AnimeRelations extends KModel
     /**
      * Returns the parent anime in the relationship.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function anime() {
+    public function anime(): BelongsTo
+    {
         return $this->belongsTo(Anime::class);
     }
 
     /**
      * Returns the anime related to the parent anime.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function related_anime() {
+    public function related_anime(): BelongsTo
+    {
         return $this->belongsTo(Anime::class, 'related_anime_id', 'id');
     }
 }

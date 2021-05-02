@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class ActorCharacter extends Pivot
@@ -23,27 +25,30 @@ class ActorCharacter extends Pivot
     /**
      * Get the ActorCharacter's actor
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function actor() {
+    public function actor(): BelongsTo
+    {
         return $this->belongsTo(Actor::class);
     }
 
     /**
      * Get the ActorCharacter's character
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function character() {
+    public function character(): BelongsTo
+    {
         return $this->belongsTo(Character::class);
     }
 
     /**
      * Get the ActorCharacter's anime
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
-    public function anime() {
+    public function anime(): BelongsToMany
+    {
         return $this->belongsToMany(Anime::class, ActorCharacterAnime::TABLE_NAME, 'actor_character_id', 'anime_id');
     }
 }

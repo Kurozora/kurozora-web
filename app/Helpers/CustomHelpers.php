@@ -1,10 +1,11 @@
 <?php
 
-// Create a deeplinked iOS URL
+// Create a deeplink iOS URL
 use App\Helpers\Settings;
 
 if (!function_exists('ios_app_url')) {
-    function ios_app_url($path) {
+    function ios_app_url($path): string
+    {
         return config('app.ios_app_protocol') . $path;
     }
 }
