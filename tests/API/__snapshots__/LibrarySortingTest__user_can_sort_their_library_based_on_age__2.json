@@ -10,19 +10,23 @@
             "imdbID": null,
             "malID": null,
             "title": "Be a good person!",
-            "tagline": "Totam numquam qui quo quaerat blanditiis et eaque.",
-            "synopsis": "Dicta et est qui deserunt eos. Consequatur aspernatur dolor laborum exercitationem. Minus iure qui sint sit.",
+            "tagline": "Id dolor et incidunt aspernatur aut.",
+            "synopsis": "Sed dolores esse sit assumenda ut. Veniam consequuntur aspernatur aut unde eligendi voluptates. Et soluta aut totam. Fugit earum explicabo enim corporis.",
             "tvRating": {
-                "name": "w",
-                "description": "odio sed nihil"
+                "name": "a",
+                "description": "aperiam optio et"
             },
-            "mediaType": {
-                "name": "repudiandae",
-                "description": "laborum dolor mollitia"
+            "type": {
+                "name": "omnis",
+                "description": "et iure reprehenderit"
             },
-            "mediaSource": {
-                "name": "dolorem",
-                "description": "inventore sint rerum"
+            "source": {
+                "name": "voluptas",
+                "description": "omnis ut nobis"
+            },
+            "status": {
+                "name": "cum molestias",
+                "description": "veniam consequatur modi"
             },
             "network": null,
             "producer": null,
@@ -33,14 +37,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "1990-06-13",
-            "lastAired": "1990-09-05",
-            "runtime": "19",
-            "airStatus": "",
-            "airTime": "22:05",
+            "firstAired": "1971-07-21",
+            "lastAired": "1971-09-29",
+            "runtime": "13",
+            "airTime": "16:04",
             "airDay": "",
-            "isNSFW": true,
-            "copyright": "\u00a9 1996 Morissette, Fadel and Klocko",
+            "isNSFW": false,
+            "copyright": "\u00a9 1970 Deckow-Bergstrom",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,
@@ -58,19 +61,23 @@
             "imdbID": null,
             "malID": null,
             "title": "Awesome Show",
-            "tagline": "Et aut molestias fuga ipsam cupiditate qui officia.",
-            "synopsis": "Ipsum velit minus ducimus. Corrupti ab sint autem rerum quia itaque. Aperiam quaerat ut id eius nam provident.",
+            "tagline": "Quaerat quos possimus et ut earum quia necessitatibus.",
+            "synopsis": "Aperiam similique et voluptatem deserunt et praesentium. Est quisquam sunt fugiat tempora praesentium.",
             "tvRating": {
-                "name": "w",
-                "description": "odio sed nihil"
+                "name": "a",
+                "description": "aperiam optio et"
             },
-            "mediaType": {
-                "name": "rerum",
-                "description": "nulla totam aut"
+            "type": {
+                "name": "voluptas",
+                "description": "quia ipsam inventore"
             },
-            "mediaSource": {
-                "name": "dolorem",
-                "description": "inventore sint rerum"
+            "source": {
+                "name": "voluptas",
+                "description": "omnis ut nobis"
+            },
+            "status": {
+                "name": "cum molestias",
+                "description": "veniam consequatur modi"
             },
             "network": null,
             "producer": null,
@@ -81,14 +88,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "1974-08-17",
-            "lastAired": "1974-11-09",
-            "runtime": "20",
-            "airStatus": "",
-            "airTime": "22:37",
+            "firstAired": "2019-01-26",
+            "lastAired": "2019-07-13",
+            "runtime": "14",
+            "airTime": "12:59",
             "airDay": "",
             "isNSFW": false,
-            "copyright": "\u2117 2013 Cassin-Kassulke",
+            "copyright": "\u00a9 1972 Marks, Wisoky and Dibbert",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
