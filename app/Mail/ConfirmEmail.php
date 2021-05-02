@@ -11,12 +11,15 @@ class ConfirmEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    protected $user;
+    /**
+     * @var User $user
+     */
+    protected User $user;
 
     /**
      * Create a new message instance.
      *
-     * @return void
+     * @param User $user
      */
     public function __construct(User $user)
     {
@@ -28,7 +31,7 @@ class ConfirmEmail extends Mailable
      *
      * @return $this
      */
-    public function build()
+    public function build(): static
     {
         return $this
             ->subject('Please confirm your email address')

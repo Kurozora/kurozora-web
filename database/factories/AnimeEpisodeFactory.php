@@ -20,7 +20,7 @@ class AnimeEpisodeFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         static $number = 1;
         $animeSeason = AnimeSeason::inRandomOrder()->first();

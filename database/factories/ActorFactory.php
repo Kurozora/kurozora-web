@@ -19,7 +19,7 @@ class ActorFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         $isFemale = mt_rand(0, 1);
         $genderString = $isFemale ? 'female' : 'male';

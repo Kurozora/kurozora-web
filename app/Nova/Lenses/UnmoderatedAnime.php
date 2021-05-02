@@ -2,6 +2,7 @@
 
 namespace App\Nova\Lenses;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
@@ -13,11 +14,11 @@ class UnmoderatedAnime extends Lens
     /**
      * Get the query builder / paginator for the lens.
      *
-     * @param  \Laravel\Nova\Http\Requests\LensRequest  $request
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param LensRequest $request
+     * @param  Builder  $query
      * @return mixed
      */
-    public static function query(LensRequest $request, $query)
+    public static function query(LensRequest $request, $query): mixed
     {
         return $request->withOrdering($request->withFilters(
             $query->doesntHave('moderators')
@@ -27,10 +28,10 @@ class UnmoderatedAnime extends Lens
     /**
      * Get the fields available to the lens.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function fields(Request $request)
+    public function fields(Request $request): array
     {
         return [
             ID::make('ID', 'id')->sortable(),
@@ -42,10 +43,10 @@ class UnmoderatedAnime extends Lens
     /**
      * Get the cards available on the lens.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function cards(Request $request)
+    public function cards(Request $request): array
     {
         return [];
     }
@@ -53,10 +54,10 @@ class UnmoderatedAnime extends Lens
     /**
      * Get the filters available for the lens.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function filters(Request $request)
+    public function filters(Request $request): array
     {
         return [];
     }
@@ -64,10 +65,10 @@ class UnmoderatedAnime extends Lens
     /**
      * Get the actions available on the lens.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function actions(Request $request)
+    public function actions(Request $request): array
     {
         return parent::actions($request);
     }
@@ -77,7 +78,7 @@ class UnmoderatedAnime extends Lens
      *
      * @return string
      */
-    public function uriKey()
+    public function uriKey(): string
     {
         return 'unmoderated-anime';
     }

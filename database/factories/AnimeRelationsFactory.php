@@ -21,7 +21,7 @@ class AnimeRelationsFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         $anime = Anime::inRandomOrder()->first();
         if ($anime == null) {

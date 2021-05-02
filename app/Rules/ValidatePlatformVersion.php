@@ -18,7 +18,7 @@ class ValidatePlatformVersion implements Rule
     public function passes($attribute, $value): bool
     {
         return
-            (bool) preg_match("#^(([0-9])+(\.{0,1}([0-9]))*)+$#", $value) &&
+            preg_match("#^(([0-9])+(\.{0,1}([0-9]))*)+$#", $value) &&
             strlen($value) <= self::MAX_VERSION_LENGTH;
     }
 

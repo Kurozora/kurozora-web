@@ -21,7 +21,7 @@ class ActorCharacterFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         $actor = Actor::inRandomOrder()->first();
         $character = Character::inRandomOrder()->first();

@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use Illuminate\Database\Eloquent\Collection;
 use Nicolaslopezj\Searchable\SearchableTrait;
 
 trait KuroSearchTrait {
@@ -12,9 +13,10 @@ trait KuroSearchTrait {
      *
      * @param $query
      * @param array $options
-     * @return mixed
+     * @return array|Collection
      */
-    public static function kuroSearch($query, $options = []) {
+    public static function kuroSearch($query, array $options = []): array|Collection
+    {
         // Set the limit
         $limit = (isset($options['limit'])) ? $options['limit'] : 10;
 

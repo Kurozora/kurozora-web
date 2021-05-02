@@ -18,11 +18,11 @@ class UnconfirmedUsers extends Lens
      * @param  Builder  $query
      * @return mixed
      */
-    public static function query(LensRequest $request, $query)
+    public static function query(LensRequest $request, $query): mixed
     {
         return $request->withOrdering($request->withFilters(
             $query->select(['users.id', 'users.username', 'users.email', 'users.created_at'])
-                ->where('email_verified_at', '!=', null)
+                ->where('email_verified_at')
         ));
     }
 
@@ -32,7 +32,7 @@ class UnconfirmedUsers extends Lens
      * @param Request $request
      * @return array
      */
-    public function fields(Request $request)
+    public function fields(Request $request): array
     {
         return [
             ID::make('ID', 'id')->sortable(),
@@ -42,8 +42,9 @@ class UnconfirmedUsers extends Lens
             Text::make('Email Address', 'email'),
 
             Text::make('Is not verified since', 'created_at', function($value) {
-                if ($value == null) return 'Unknown';
-                else {
+                if ($value == null) {
+                    return 'Unknown';
+                } else {
                     return $value->diffForHumans();
                 }
             }),
@@ -56,7 +57,7 @@ class UnconfirmedUsers extends Lens
      * @param Request $request
      * @return array
      */
-    public function filters(Request $request)
+    public function filters(Request $request): array
     {
         return [];
     }
@@ -67,7 +68,7 @@ class UnconfirmedUsers extends Lens
      * @param Request $request
      * @return array
      */
-    public function actions(Request $request)
+    public function actions(Request $request): array
     {
         return parent::actions($request);
     }
@@ -77,7 +78,7 @@ class UnconfirmedUsers extends Lens
      *
      * @return string
      */
-    public function uriKey()
+    public function uriKey(): string
     {
         return 'unconfirmed-users';
     }

@@ -2,6 +2,8 @@
 
 namespace App\Nova\Metrics;
 
+use DateInterval;
+use DateTimeInterface;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\Value;
 use Spatie\Activitylog\Models\Activity;
@@ -11,10 +13,10 @@ class ActivityLogCount extends Value
     /**
      * Calculate the value of the metric.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param NovaRequest $request
      * @return mixed
      */
-    public function calculate(NovaRequest $request)
+    public function calculate(NovaRequest $request): mixed
     {
         return $this->count($request, Activity::class);
     }
@@ -24,7 +26,7 @@ class ActivityLogCount extends Value
      *
      * @return array
      */
-    public function ranges()
+    public function ranges(): array
     {
         return [
             30 => '30 Days',
@@ -40,9 +42,9 @@ class ActivityLogCount extends Value
     /**
      * Determine for how many minutes the metric should be cached.
      *
-     * @return  \DateTimeInterface|\DateInterval|float|int
+     * @return DateTimeInterface|DateInterval|float|int
      */
-    public function cacheFor()
+    public function cacheFor(): DateTimeInterface|DateInterval|float|int
     {
         return now()->addMinutes(5);
     }
@@ -52,7 +54,7 @@ class ActivityLogCount extends Value
      *
      * @return string
      */
-    public function uriKey()
+    public function uriKey(): string
     {
         return 'activity-log-count';
     }
@@ -62,7 +64,7 @@ class ActivityLogCount extends Value
      *
      * @return string
      */
-    public function name()
+    public function name(): string
     {
         return 'Amount of activity logged';
     }

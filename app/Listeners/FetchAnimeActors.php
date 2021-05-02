@@ -13,7 +13,7 @@ class FetchAnimeActors implements ShouldQueue
      * @param $event
      * @return bool
      */
-    public function shouldQueue($event)
+    public function shouldQueue($event): bool
     {
         return !$event->anime->fetched_actors && $event->anime->tvdb_id !== null;
     }
@@ -21,10 +21,10 @@ class FetchAnimeActors implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  object  $event
+     * @param object $event
      * @return void
      */
-    public function handle($event)
+    public function handle(object $event)
     {
         Artisan::call('animes:fetch_actors', ['id' => $event->anime->id]);
     }

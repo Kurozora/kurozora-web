@@ -21,7 +21,7 @@ class FetchAnimeImages extends Action
      * @param Collection $models
      * @return mixed
      */
-    public function handle(ActionFields $fields, Collection $models)
+    public function handle(ActionFields $fields, Collection $models): mixed
     {
         $amountSuccess = 0;
         $amountFailed = 0;
@@ -54,7 +54,7 @@ class FetchAnimeImages extends Action
      *
      * @return array
      */
-    public function fields()
+    public function fields(): array
     {
         return [];
     }
