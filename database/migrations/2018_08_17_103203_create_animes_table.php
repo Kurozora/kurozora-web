@@ -1,9 +1,9 @@
 <?php
 
 use App\Models\Anime;
-use App\Enums\AnimeStatus;
 use App\Models\MediaSource;
 use App\Models\MediaType;
+use App\Models\Status;
 use App\Models\TvRating;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -33,6 +33,7 @@ class CreateAnimesTable extends Migration
             $table->unsignedBigInteger('tv_rating_id')->nullable();
             $table->unsignedBigInteger('media_type_id')->nullable();
             $table->unsignedBigInteger('media_source_id')->nullable();
+            $table->unsignedBigInteger('status_id')->nullable();
             $table->string('network')->nullable();
             $table->string('producer')->nullable();
             $table->integer('episode_count')->default(0);
@@ -43,7 +44,6 @@ class CreateAnimesTable extends Migration
             $table->date('first_aired')->nullable();
             $table->date('last_aired')->nullable();
             $table->unsignedTinyInteger('runtime')->default(0);
-            $table->integer('air_status')->default(AnimeStatus::TBA);
             $table->time('air_time')->nullable();
             $table->unsignedInteger('air_day')->nullable();
             $table->boolean('is_nsfw')->default(false);
@@ -66,6 +66,7 @@ class CreateAnimesTable extends Migration
             $table->foreign('tv_rating_id')->references('id')->on(TvRating::TABLE_NAME)->onDelete('set null');
             $table->foreign('media_type_id')->references('id')->on(MediaType::TABLE_NAME)->onDelete('set null');
             $table->foreign('media_source_id')->references('id')->on(MediaSource::TABLE_NAME)->onDelete('set null');
+            $table->foreign('status_id')->references('id')->on(Status::TABLE_NAME)->onDelete('set null');
         });
     }
 

@@ -2,7 +2,6 @@
 
 namespace App\Nova;
 
-use App\Enums\AnimeStatus;
 use App\Enums\DayOfWeek;
 use App\Nova\Actions\FetchAnimeActors;
 use App\Nova\Actions\FetchAnimeDetails;
@@ -122,12 +121,17 @@ class Anime extends Resource
 
             BelongsTo::make('Media Type')
                 ->sortable()
-                ->help('The general type of the anime, such as TV, Movie, Music, etc.')
+                ->help('The general type of the anime. For example TV, Movie, Music, etc.')
                 ->required(),
 
             BelongsTo::make('TV rating', 'tv_rating')
                 ->sortable()
-                ->help('The TV rating of the anime, such as NR, G, PG-12, etc.')
+                ->help('The TV rating of the anime. For example NR, G, PG-12, etc.')
+                ->required(),
+
+            BelongsTo::make('Status')
+                ->sortable()
+                ->help('The airing status of the anime such as.')
                 ->required(),
 
             Text::make('Video URL', 'video_url')
@@ -172,12 +176,6 @@ class Anime extends Resource
             Number::make('Runtime')
                 ->onlyOnForms()
                 ->help('For series: The average runtime in minutes of a single episode.<br />For movies: The amount of minutes the movie takes.'),
-
-            Select::make('Air status')
-                ->options(AnimeStatus::asSelectArray())
-                ->displayUsingLabels()
-                ->hideFromIndex()
-                ->help('For example: Ended'),
 
             Time::make('Air time')
                 ->withTwelveHourTime()
@@ -346,6 +344,30 @@ class Anime extends Resource
     public static function indexQuery(NovaRequest $request, $query)
     {
         return parent::indexQuery($request, $query)->withoutGlobalScope('tv_rating');
+    }
+
+    /**
+     * Build a "relatable" query for media types.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public static function relatableMediaTypes(NovaRequest $request, $query)
+    {
+        return $query->where('type', 'anime');
+    }
+
+    /**
+     * Build a "relatable" query for statuses.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public static function relatableStatuses(NovaRequest $request, $query)
+    {
+        return $query->where('type', 'anime');
     }
 
     /**
