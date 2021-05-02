@@ -16,16 +16,14 @@ class AnimeNSFWChart extends Partition
      * @param NovaRequest $request
      * @return mixed
      */
-    public function calculate(NovaRequest $request)
+    public function calculate(NovaRequest $request): mixed
     {
         return $this->count($request, Anime::class, 'is_nsfw')
             ->label(function ($value) {
-                switch ($value) {
-                    case false:
-                        return 'Safe For Work';
-                    default:
-                        return 'Not Safe For Work';
-                }
+                return match ($value) {
+                    false => 'Safe For Work',
+                    default => 'Not Safe For Work',
+                };
             })
             ->colors([
                 false   => '#3dd45e',
@@ -38,7 +36,7 @@ class AnimeNSFWChart extends Partition
      *
      * @return  DateTimeInterface|DateInterval|float|int
      */
-    public function cacheFor()
+    public function cacheFor(): DateInterval|DateTimeInterface|float|int
     {
         return now()->addMinutes(20);
     }
@@ -48,7 +46,7 @@ class AnimeNSFWChart extends Partition
      *
      * @return string
      */
-    public function uriKey()
+    public function uriKey(): string
     {
         return 'anime-nsfw-chart';
     }
@@ -58,7 +56,7 @@ class AnimeNSFWChart extends Partition
      *
      * @return string
      */
-    public function name()
+    public function name(): string
     {
         return 'Anime';
     }

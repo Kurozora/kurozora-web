@@ -15,17 +15,19 @@ final class UserActivityStatus extends Enum
     const SeenRecently = 1;
     const Offline = 2;
 
+    /**
+     * Get the description for an enum value
+     *
+     * @param  mixed  $value
+     * @return string
+     */
     public static function getDescription($value): string
     {
-        switch($value) {
-            case self::Online:
-                return 'Online';
-            case self::SeenRecently:
-                return 'Seen Recently';
-            case self::Offline:
-                return 'Offline';
-        }
-
-        return parent::getDescription($value);
+        return match ($value) {
+            self::Online => 'Online',
+            self::SeenRecently => 'Seen Recently',
+            self::Offline => 'Offline',
+            default => parent::getDescription($value),
+        };
     }
 }
