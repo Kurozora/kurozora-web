@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Anime;
-use App\Models\MediaSource;
+use App\Models\Source;
 use App\Models\MediaType;
 use App\Models\Status;
 use App\Models\TvRating;
@@ -65,7 +65,7 @@ class AnimeDummySeeder extends Seeder
                     'title'             => $animeData->title,
                     'tv_rating_id'      => TvRating::inRandomOrder()->first()->id,
                     'media_type_id'     => MediaType::where('type', 'anime')->inRandomOrder()->first()->id,
-                    'media_source_id'   => MediaSource::inRandomOrder()->first()->id,
+                    'source_id'         => Source::inRandomOrder()->first()->id,
                     'status_id'         => Status::where('type', 'anime')->inRandomOrder()->first()->id,
                     'is_nsfw'           => $animeData->nsfw,
                 ]);

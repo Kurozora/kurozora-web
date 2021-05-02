@@ -114,7 +114,7 @@ class Anime extends Resource
                 ->hideFromIndex()
                 ->help('A short description of the Anime.'),
 
-            BelongsTo::make('Media Source')
+            BelongsTo::make('Source')
                 ->sortable()
                 ->help('The adaptation source of the anime. For example Manga, Game, Original, etc. If no source is available, especially for older anime, then choose Unknown.')
                 ->required(),

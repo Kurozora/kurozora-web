@@ -10,23 +10,23 @@
             "imdbID": null,
             "malID": null,
             "title": "Awesome Show",
-            "tagline": "Quaerat quos possimus et ut earum quia necessitatibus.",
-            "synopsis": "Aperiam similique et voluptatem deserunt et praesentium. Est quisquam sunt fugiat tempora praesentium.",
+            "tagline": "Qui qui eveniet veritatis iusto et.",
+            "synopsis": "Non quam veritatis dolore optio amet sit. Autem tenetur animi et velit libero.",
             "tvRating": {
-                "name": "a",
-                "description": "aperiam optio et"
+                "name": "m",
+                "description": "vero pariatur possimus"
             },
             "type": {
-                "name": "voluptas",
-                "description": "quia ipsam inventore"
+                "name": "autem",
+                "description": "voluptates iusto rerum"
             },
             "source": {
-                "name": "voluptas",
-                "description": "omnis ut nobis"
+                "name": "provident",
+                "description": "sint in ipsam"
             },
             "status": {
-                "name": "cum molestias",
-                "description": "veniam consequatur modi"
+                "name": "ut explicabo",
+                "description": "hic vero enim"
             },
             "network": null,
             "producer": null,
@@ -37,13 +37,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "2019-01-26",
-            "lastAired": "2019-07-13",
-            "runtime": "14",
-            "airTime": "12:59",
+            "firstAired": "1996-05-06",
+            "lastAired": "1996-07-29",
+            "runtime": "21",
+            "airTime": "22:01",
             "airDay": "",
-            "isNSFW": false,
-            "copyright": "\u00a9 1972 Marks, Wisoky and Dibbert",
+            "isNSFW": true,
+            "copyright": "\u00a9 1988 Weissnat, Miller and Wiza",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
@@ -61,23 +61,23 @@
             "imdbID": null,
             "malID": null,
             "title": "Be a good person!",
-            "tagline": "Id dolor et incidunt aspernatur aut.",
-            "synopsis": "Sed dolores esse sit assumenda ut. Veniam consequuntur aspernatur aut unde eligendi voluptates. Et soluta aut totam. Fugit earum explicabo enim corporis.",
+            "tagline": "Doloribus tempore et asperiores numquam architecto ut omnis exercitationem.",
+            "synopsis": "Harum unde voluptatem voluptatem inventore ut quo. Harum cum similique porro dolor. Quod impedit voluptatum nihil omnis et sed rem. Iste et officia neque alias sint.",
             "tvRating": {
-                "name": "a",
-                "description": "aperiam optio et"
+                "name": "m",
+                "description": "vero pariatur possimus"
             },
             "type": {
-                "name": "omnis",
-                "description": "et iure reprehenderit"
+                "name": "autem",
+                "description": "voluptates iusto rerum"
             },
             "source": {
-                "name": "voluptas",
-                "description": "omnis ut nobis"
+                "name": "provident",
+                "description": "sint in ipsam"
             },
             "status": {
-                "name": "cum molestias",
-                "description": "veniam consequatur modi"
+                "name": "ut explicabo",
+                "description": "hic vero enim"
             },
             "network": null,
             "producer": null,
@@ -88,13 +88,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "1971-07-21",
-            "lastAired": "1971-09-29",
-            "runtime": "13",
-            "airTime": "16:04",
+            "firstAired": "1978-03-05",
+            "lastAired": "1978-05-14",
+            "runtime": "21",
+            "airTime": "17:41",
             "airDay": "",
-            "isNSFW": false,
-            "copyright": "\u00a9 1970 Deckow-Bergstrom",
+            "isNSFW": true,
+            "copyright": "\u2117 2015 Jacobson LLC",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,

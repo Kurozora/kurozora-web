@@ -10,23 +10,23 @@
             "imdbID": null,
             "malID": null,
             "title": "Awesome Show",
-            "tagline": "Nihil ut non aut voluptas ut ipsum iure.",
-            "synopsis": "Vel aut explicabo placeat. Saepe aliquid est exercitationem deleniti. Doloremque a qui blanditiis est.",
+            "tagline": "Expedita rem deleniti soluta repudiandae impedit.",
+            "synopsis": "Perspiciatis possimus voluptas possimus voluptate iure. Officiis quae soluta ut suscipit esse. Et et debitis fugit dolorem in autem. Aut laboriosam numquam voluptatibus enim sint quasi.",
             "tvRating": {
-                "name": "o",
-                "description": "eveniet eligendi esse"
+                "name": "z",
+                "description": "mollitia ut consequatur"
             },
             "type": {
-                "name": "qui",
-                "description": "ut necessitatibus qui"
+                "name": "distinctio",
+                "description": "et quaerat aperiam"
             },
             "source": {
-                "name": "facere",
-                "description": "distinctio dicta possimus"
+                "name": "quos",
+                "description": "sed voluptas sed"
             },
             "status": {
-                "name": "accusantium voluptatem",
-                "description": "nobis alias id"
+                "name": "et voluptatem",
+                "description": "soluta commodi atque"
             },
             "network": null,
             "producer": null,
@@ -37,13 +37,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "1983-10-05",
-            "lastAired": "1983-12-14",
-            "runtime": "17",
-            "airTime": "21:50",
+            "firstAired": "2021-02-12",
+            "lastAired": "2021-04-23",
+            "runtime": "11",
+            "airTime": "22:16",
             "airDay": "",
             "isNSFW": true,
-            "copyright": "\u00ae 2005 Jaskolski, Williamson and West",
+            "copyright": "\u00a9 1984 Goldner, Doyle and Smitham",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
@@ -61,23 +61,23 @@
             "imdbID": null,
             "malID": null,
             "title": "Be a good person!",
-            "tagline": "Reprehenderit quos porro neque repellendus tempora corporis aperiam.",
-            "synopsis": "Eos iusto ad qui commodi omnis doloremque maxime. Consequatur consectetur non assumenda exercitationem quia. Deleniti itaque qui saepe et. Quia inventore amet voluptas vel incidunt temporibus beatae eveniet.",
+            "tagline": "Velit consectetur officia soluta qui assumenda ab.",
+            "synopsis": "Praesentium inventore amet officia ut distinctio deserunt commodi. Ullam totam eveniet dolor numquam numquam beatae quo. Eligendi pariatur nisi quia voluptas iste.",
             "tvRating": {
-                "name": "o",
-                "description": "eveniet eligendi esse"
+                "name": "z",
+                "description": "mollitia ut consequatur"
             },
             "type": {
-                "name": "ullam",
-                "description": "et tenetur velit"
+                "name": "distinctio",
+                "description": "et quaerat aperiam"
             },
             "source": {
-                "name": "facere",
-                "description": "distinctio dicta possimus"
+                "name": "quos",
+                "description": "sed voluptas sed"
             },
             "status": {
-                "name": "accusantium voluptatem",
-                "description": "nobis alias id"
+                "name": "et voluptatem",
+                "description": "soluta commodi atque"
             },
             "network": null,
             "producer": null,
@@ -88,13 +88,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "2017-11-02",
-            "lastAired": "2018-04-19",
-            "runtime": "13",
-            "airTime": "21:30",
+            "firstAired": "1981-02-28",
+            "lastAired": "1981-08-15",
+            "runtime": "18",
+            "airTime": "01:02",
             "airDay": "",
-            "isNSFW": true,
-            "copyright": "\u2117 1994 Williamson-Boehm",
+            "isNSFW": false,
+            "copyright": "\u2117 1977 Beahan Group",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,

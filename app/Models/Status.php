@@ -30,7 +30,7 @@ class Status extends Model
     }
 
     /**
-     * The anime that the media source has.
+     * The anime that the source has.
      *
      * @return HasMany
      */
