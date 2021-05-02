@@ -8,14 +8,14 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class MediaSource extends Resource
+class Source extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\MediaSource::class;
+    public static $model = \App\Models\Source::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -53,13 +53,13 @@ class MediaSource extends Resource
 
             Text::make('Name')
                 ->sortable()
-                ->help('The name of the media source.')
-                ->rules('unique:' . \App\Models\MediaSource::TABLE_NAME . ',name')
+                ->help('The name of the source.')
+                ->rules('unique:' . \App\Models\Source::TABLE_NAME . ',name')
                 ->required(),
 
             Text::make('Description')
                 ->sortable()
-                ->help('An explanation of what the media source means.')
+                ->help('An explanation of what the source means.')
                 ->required(),
 
             HasMany::make('Anime'),

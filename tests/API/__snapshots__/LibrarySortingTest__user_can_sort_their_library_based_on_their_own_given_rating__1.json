@@ -10,23 +10,23 @@
             "imdbID": null,
             "malID": null,
             "title": "Awesome Show",
-            "tagline": "Quia adipisci ipsa eaque reprehenderit.",
-            "synopsis": "Et sed et voluptate consequatur ea repellat qui. Odio odio qui aut quia expedita est perspiciatis. Odit magnam minus quia vitae voluptatem voluptatum rerum consequatur. Optio accusantium velit provident et non.",
+            "tagline": "Provident dicta et ut reprehenderit officiis ipsa.",
+            "synopsis": "Ad voluptatem repudiandae quia modi placeat quidem vel. Ipsam mollitia reiciendis rerum sint sint. Nihil impedit et animi amet doloremque.",
             "tvRating": {
-                "name": "e",
-                "description": "quas sequi ut"
+                "name": "y",
+                "description": "occaecati quia quos"
             },
             "type": {
-                "name": "aut",
-                "description": "at modi et"
+                "name": "labore",
+                "description": "id ea molestiae"
             },
             "source": {
-                "name": "aliquid",
-                "description": "excepturi quibusdam ad"
+                "name": "laborum",
+                "description": "odio dolorum facere"
             },
             "status": {
-                "name": "possimus harum",
-                "description": "in laborum placeat"
+                "name": "voluptatibus animi",
+                "description": "sit et rem"
             },
             "network": null,
             "producer": null,
@@ -37,13 +37,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "2006-04-02",
-            "lastAired": "2006-09-17",
-            "runtime": "21",
-            "airTime": "04:17",
+            "firstAired": "2013-02-05",
+            "lastAired": "2013-04-16",
+            "runtime": "23",
+            "airTime": "00:18",
             "airDay": "",
-            "isNSFW": true,
-            "copyright": "\u2117 1987 Pollich, Wolff and Herman",
+            "isNSFW": false,
+            "copyright": "\u2117 1999 Schmidt Ltd",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
@@ -61,23 +61,23 @@
             "imdbID": null,
             "malID": null,
             "title": "Be a good person!",
-            "tagline": "Eos provident enim aut voluptates.",
-            "synopsis": "Nam laboriosam nostrum vel dolorum non quae. Et expedita saepe qui quia. Voluptate quam provident excepturi aut. Fugit dolor molestiae eos esse aperiam.",
+            "tagline": "Aut hic necessitatibus natus beatae dicta sapiente.",
+            "synopsis": "Sunt harum quas distinctio aperiam suscipit soluta. Rerum dolorem officiis rerum in. Tenetur vel sed commodi consectetur excepturi voluptatem vel.",
             "tvRating": {
-                "name": "e",
-                "description": "quas sequi ut"
+                "name": "y",
+                "description": "occaecati quia quos"
             },
             "type": {
-                "name": "aut",
-                "description": "at modi et"
+                "name": "labore",
+                "description": "id ea molestiae"
             },
             "source": {
-                "name": "aliquid",
-                "description": "excepturi quibusdam ad"
+                "name": "laborum",
+                "description": "odio dolorum facere"
             },
             "status": {
-                "name": "possimus harum",
-                "description": "in laborum placeat"
+                "name": "voluptatibus animi",
+                "description": "sit et rem"
             },
             "network": null,
             "producer": null,
@@ -88,13 +88,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "1975-06-23",
-            "lastAired": "1975-12-08",
-            "runtime": "10",
-            "airTime": "17:54",
+            "firstAired": "1997-05-12",
+            "lastAired": "1997-10-27",
+            "runtime": "16",
+            "airTime": "21:00",
             "airDay": "",
-            "isNSFW": true,
-            "copyright": "\u00a9 1975 Goldner-Boyle",
+            "isNSFW": false,
+            "copyright": "\u00a9 1996 Morar-Dibbert",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,
