@@ -12,7 +12,18 @@ class ResetPassword extends Mailable
 {
     use Queueable, SerializesModels;
 
+    /**
+     * The user receiving the password reset email.
+     *
+     * @var User $user
+     */
     protected User $user;
+
+    /**
+     * The password reset object.
+     *
+     * @var PasswordReset $passwordReset
+     */
     protected PasswordReset $passwordReset;
 
     /**
