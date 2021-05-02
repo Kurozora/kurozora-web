@@ -64,15 +64,10 @@ class UserController extends Controller
     {
         $data = $request->validated();
 
-        // Try to find the user with this email
-        /** @var User $user */
-        $user = User::where('email', $data['email'])->first();
-
-        // There is a user with this email the try to send a reset link.
-        // Request may be throttled if requested a lot.
-        if ($user) {
-            Password::sendResetLink(['email' => $data['email']]);
-        }
+        // We will send the password reset link to this user. Once we have attempted
+        // to send the link, we will examine the response then see the message we
+        // need to show to the user. Finally, we'll send out a proper response.
+        Password::sendResetLink(['email' => $data['email']]);
 
         // Show successful response
         return JSONResult::success();
