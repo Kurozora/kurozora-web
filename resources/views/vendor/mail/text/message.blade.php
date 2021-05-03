@@ -15,6 +15,7 @@
         @slot('subcopy')
             @component('mail::subcopy')
                 {{ $subcopy }}
+                <br>
             @endcomponent
         @endslot
     @endisset
