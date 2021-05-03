@@ -55,7 +55,7 @@ Route::name('password')
             ->name('.email');
 
         Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
-            ->middleware('guest')
+            ->middleware(['guest'])
             ->name('.reset');
 
         Route::post('/reset-password', [NewPasswordController::class, 'store'])
