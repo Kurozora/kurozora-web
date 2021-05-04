@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             StudioSeeder::class,
             TvRatingSeeder::class,
             MediaTypeSeeder::class,
+            RelationSeeder::class,
             SourceSeeder::class,
             StatusSeeder::class,
             GenreSeeder::class,

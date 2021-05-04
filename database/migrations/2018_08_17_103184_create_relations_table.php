@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\StaffRole;
+use App\Models\Relation;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStaffRolesTable extends Migration
+class CreateRelationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,13 +14,14 @@ class CreateStaffRolesTable extends Migration
      */
     public function up()
     {
-        Schema::create(StaffRole::TABLE_NAME, function (Blueprint $table) {
+        Schema::create(Relation::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->string('description');
             $table->timestamps();
         });
 
-        Schema::table(StaffRole::TABLE_NAME, function (Blueprint $table) {
+        Schema::table(Relation::TABLE_NAME, function (Blueprint $table) {
             // Set unique index constraints
             $table->unique(['name']);
         });
@@ -33,6 +34,6 @@ class CreateStaffRolesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(StaffRole::TABLE_NAME);
+        Schema::dropIfExists(Relation::TABLE_NAME);
     }
 }
