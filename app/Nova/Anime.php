@@ -145,9 +145,6 @@ class Anime extends Resource
 
             Heading::make('Production'),
 
-            BelongsToMany::make('Studios')
-                ->searchable(),
-
             Text::make('Network')
                 ->hideFromIndex()
                 ->help('The network that airs the Anime.'),
@@ -214,6 +211,16 @@ class Anime extends Resource
                 ->onlyOnForms()
                 ->help('Whether or not the details (information_ were retrieved from TVDB.<br />Untick and the system will do so once the Anime gets visited the next time.'),
 
+            HasMany::make('Anime Images'),
+
+            BelongsToMany::make('Genres')
+                ->searchable(),
+
+            HasMany::make('Seasons'),
+
+            BelongsToMany::make('Studios')
+                ->searchable(),
+
             HasMany::make('Cast', 'actor_character_anime')
                 ->sortable(),
 
@@ -221,14 +228,7 @@ class Anime extends Resource
 
             HasMany::make('Characters'),
 
-            HasMany::make('Anime Images'),
-
-            BelongsToMany::make('Genres')
-                ->searchable(),
-
-            HasMany::make('Anime Relations'),
-
-            HasMany::make('Seasons'),
+            HasMany::make('Anime Relations', 'anime_relations', MediaRelation::class),
 
             BelongsToMany::make('Moderators', 'moderators', User::class)
                 // @TODO

@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\AnimeRelations;
+use App\Models\MediaRelation;
 use Illuminate\Database\Seeder;
 
-class AnimeRelationsSeeder extends Seeder
+class MediaRelationSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,7 +14,7 @@ class AnimeRelationsSeeder extends Seeder
      */
     public function run()
     {
-        // 10 random anime-anime
-        AnimeRelations::factory(10)->create();
+        // 10 random media relations
+        MediaRelation::factory(10)->create();
     }
 }

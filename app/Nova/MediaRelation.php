@@ -2,20 +2,19 @@
 
 namespace App\Nova;
 
-use App\Enums\AnimeRelationType;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Select;
 
-class AnimeRelation extends Resource
+class MediaRelation extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static string $model = 'App\Models\AnimeRelations';
+    public static string $model = 'App\Models\MediaRelation';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -30,7 +29,8 @@ class AnimeRelation extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'media_type',
+        'related_type',
     ];
 
     /**
@@ -51,29 +51,25 @@ class AnimeRelation extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('Anime')
+            BelongsTo::make('Media', 'anime', Anime::class)
                 ->searchable()
                 ->sortable(),
 
-            BelongsTo::make('Anime', 'related_anime')
+            Select::make('Media Type')
+                ->options(['anime' => 'anime', 'manga' => 'manga'])
+                ->sortable(),
+
+            BelongsTo::make('Relation')
+                ->sortable(),
+
+            BelongsTo::make('Related Media', 'related_anime', Anime::class)
                 ->searchable()
                 ->sortable(),
 
-            Select::make('Type')
-                ->options(AnimeRelationType::asSelectArray())
-                ->displayUsingLabels()
+            Select::make('Related Type', 'related_type')
+                ->options(['anime' => 'anime', 'manga' => 'manga'])
                 ->sortable(),
         ];
-    }
-
-    /**
-     * Returns the user-friendly display name of the resource.
-     *
-     * @return string
-     */
-    public static function label(): string
-    {
-        return 'Related Shows';
     }
 
     /**
