@@ -16,7 +16,7 @@ class AnimeSeasonResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @param AnimeSeason $animeSeason */
+        /** @var AnimeSeason $animeSeason */
         $animeSeason = $this->resource;
 
         return [

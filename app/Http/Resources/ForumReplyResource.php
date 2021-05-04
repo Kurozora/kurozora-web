@@ -76,7 +76,7 @@ class ForumReplyResource extends JsonResource
      */
     protected function getPosterRelationship(): array
     {
-        /** @param ForumReply $forumReply */
+        /** @var ForumReply $forumReply */
         $forumReply = $this->resource;
 
         return [

@@ -79,7 +79,7 @@ class ForumThreadResource extends JsonResource
      */
     protected function getPosterRelationship(): array
     {
-        /** @param ForumThread $forumThread */
+        /** @var ForumThread $forumThread */
         $forumThread = $this->resource;
 
         return [

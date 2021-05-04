@@ -2,8 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Models\AnimeRelations;
-use App\Enums\AnimeRelationType;
+use App\Models\MediaRelation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,13 +16,13 @@ class AnimeRelatedShowsResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var AnimeRelations $animeRelation */
+        /** @var MediaRelation $animeRelation */
         $animeRelation = $this->resource;
 
         return [
             'show'          => AnimeResourceBasic::make($animeRelation->related_anime),
             'attributes'    => [
-                'type' => AnimeRelationType::getDescription($animeRelation->type)
+                $animeRelation->relation->only(['name', 'description']),
             ]
         ];
     }

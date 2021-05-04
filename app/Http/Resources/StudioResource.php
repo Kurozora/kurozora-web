@@ -47,7 +47,7 @@ class StudioResource extends JsonResource
      */
     protected function getAnimeRelationship(?Anime $excludingAnime = null): array
     {
-        /** @param Studio $studio */
+        /** @var Studio $studio */
         $studio = $this->resource;
 
         $whereRules = [];
