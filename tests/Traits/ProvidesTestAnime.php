@@ -7,7 +7,7 @@ use App\Models\ActorCharacter;
 use App\Models\ActorCharacterAnime;
 use App\Models\Anime;
 use App\Models\AnimeEpisode;
-use App\Models\AnimeRelations;
+use App\Models\MediaRelation;
 use App\Models\AnimeSeason;
 use App\Models\Character;
 use App\Models\TvRating;
@@ -52,7 +52,7 @@ trait ProvidesTestAnime
         $this->relatedAnime = Anime::factory()->create();
 
         $this->season = AnimeSeason::factory()->create([
-            'anime_id' => $this->anime->id
+            'anime_id' => $this->anime->id,
         ]);
 
         $this->episode = AnimeEpisode::factory()->create([
@@ -65,17 +65,19 @@ trait ProvidesTestAnime
 
         $this->actorCharacter = ActorCharacter::factory()->create([
             'actor_id' => $this->actor->id,
-            'character_id' => $this->character->id
+            'character_id' => $this->character->id,
         ]);
 
         ActorCharacterAnime::factory()->create([
             'actor_character_id' => $this->actorCharacter->id,
-            'anime_id' => $this->anime->id
+            'anime_id' => $this->anime->id,
         ]);
 
-        AnimeRelations::factory()->create([
-            'anime_id'          => $this->anime->id,
-            'related_anime_id'  => $this->relatedAnime->id
+        MediaRelation::factory()->create([
+            'media_id'      => $this->anime->id,
+            'media_type'    => 'anime',
+            'related_id'    => $this->relatedAnime->id,
+            'related_type'  => 'anime',
         ]);
     }
 }

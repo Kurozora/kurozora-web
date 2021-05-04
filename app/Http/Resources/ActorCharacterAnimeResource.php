@@ -50,7 +50,7 @@ class ActorCharacterAnimeResource extends JsonResource
      */
     protected function getActorsRelationship(): array
     {
-        /** @param ActorCharacterAnime $actorCharacterAnime */
+        /** @var ActorCharacterAnime $actorCharacterAnime */
         $actorCharacterAnime = $this->resource;
 
         $actorCharacter = $actorCharacterAnime->actor_character;
@@ -69,7 +69,7 @@ class ActorCharacterAnimeResource extends JsonResource
      */
     protected function getCharactersRelationship(): array
     {
-        /** @param ActorCharacterAnime $actorCharacterAnime */
+        /** @var ActorCharacterAnime $actorCharacterAnime */
         $actorCharacterAnime = $this->resource;
 
         $actorCharacter = $actorCharacterAnime->actor_character;

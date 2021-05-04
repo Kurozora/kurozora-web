@@ -8,6 +8,8 @@ class CreateActivityLogTable extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * @return void
      */
     public function up()
     {
@@ -30,7 +32,9 @@ class CreateActivityLogTable extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Run the migrations.
+     *
+     * @return void
      */
     public function down()
     {
