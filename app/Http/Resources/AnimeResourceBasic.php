@@ -83,7 +83,7 @@ class AnimeResourceBasic extends JsonResource
      */
     protected function getUserSpecificDetails(): array
     {
-        /** @param Anime $anime */
+        /** @var Anime $anime */
         $anime = $this->resource;
 
         /** @var User $user */

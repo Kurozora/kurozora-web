@@ -15,7 +15,7 @@ class StudioImageResource extends JsonResource
      */
     public function toArray($request)
     {
-        /** @param string $studioImage */
+        /** @var string $studioImage */
         $studioImage = $this->resource;
 
         return [
