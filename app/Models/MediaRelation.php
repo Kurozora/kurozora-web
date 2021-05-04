@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class AnimeRelations extends KModel
+class MediaRelation extends KModel
 {
     use HasFactory;
 
     // Table name
-    const TABLE_NAME = 'anime_relations';
+    const TABLE_NAME = 'media_relations';
     protected $table = self::TABLE_NAME;
 
     /**
@@ -20,7 +20,7 @@ class AnimeRelations extends KModel
      */
     public function anime(): BelongsTo
     {
-        return $this->belongsTo(Anime::class);
+        return $this->belongsTo(Anime::class, 'media_id');
     }
 
     /**
@@ -30,6 +30,16 @@ class AnimeRelations extends KModel
      */
     public function related_anime(): BelongsTo
     {
-        return $this->belongsTo(Anime::class, 'related_anime_id', 'id');
+        return $this->belongsTo(Anime::class, 'related_id');
+    }
+
+    /**
+     * Returns the relation between the media.
+     *
+     * @return BelongsTo
+     */
+    public function relation(): BelongsTo
+    {
+        return $this->belongsTo(Relation::class, 'relation_id');
     }
 }

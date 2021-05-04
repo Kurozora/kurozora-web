@@ -16,7 +16,7 @@ class AnimeResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @param Anime $anime */
+        /** @var Anime $anime */
         $anime = $this->resource;
 
         $resource = AnimeResourceBasic::make($anime)->toArray($request);
@@ -66,7 +66,7 @@ class AnimeResource extends JsonResource
      */
     protected function getActorsRelationship(): array
     {
-        /** @param Anime $anime */
+        /** @var Anime $anime */
         $anime = $this->resource;
 
         return [
@@ -84,7 +84,7 @@ class AnimeResource extends JsonResource
      */
     protected function getCastRelationship(): array
     {
-        /** @param Anime $anime */
+        /** @var Anime $anime */
         $anime = $this->resource;
 
         return [
@@ -102,7 +102,7 @@ class AnimeResource extends JsonResource
      */
     protected function getCharactersRelationship(): array
     {
-        /** @param Anime $anime */
+        /** @var Anime $anime */
         $anime = $this->resource;
 
         return [
@@ -120,7 +120,7 @@ class AnimeResource extends JsonResource
      */
     protected function getGenresRelationship(): array
     {
-        /** @param Anime $anime */
+        /** @var Anime $anime */
         $anime = $this->resource;
 
         return [
@@ -138,7 +138,7 @@ class AnimeResource extends JsonResource
      */
     protected function getRelatedShowsRelationship(): array
     {
-        /** @param Anime $anime */
+        /** @var Anime $anime */
         $anime = $this->resource;
 
         return [
@@ -156,7 +156,7 @@ class AnimeResource extends JsonResource
      */
     protected function getSeasonsRelationship(): array
     {
-        /** @param Anime $anime */
+        /** @var Anime $anime */
         $anime = $this->resource;
 
         return [
@@ -174,7 +174,7 @@ class AnimeResource extends JsonResource
      */
     protected function getStudiosRelationship(): array
     {
-        /** @param Anime $anime */
+        /** @var Anime $anime */
         $anime = $this->resource;
 
         return [

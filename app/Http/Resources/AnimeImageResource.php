@@ -16,7 +16,7 @@ class AnimeImageResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @param AnimeImages $animeImage */
+        /** @var AnimeImages $animeImage */
         $animeImage = $this->resource;
 
         return [

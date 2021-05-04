@@ -46,7 +46,7 @@ class CharacterResource extends JsonResource
      */
     protected function getActorsRelationship(): array
     {
-        /** @param Character $character */
+        /** @vra Character $character */
         $character = $this->resource;
 
         return [
@@ -64,7 +64,7 @@ class CharacterResource extends JsonResource
      */
     protected function getAnimeRelationship(): array
     {
-        /** @param Character $character */
+        /** @var Character $character */
         $character = $this->resource;
 
         return [
