@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\StaffRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 
 class StaffRoleFactory extends Factory
 {
@@ -23,9 +22,9 @@ class StaffRoleFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->jobTitle,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'name'          => $this->faker->jobTitle,
+            'created_at'    => now(),
+            'updated_at'    => now(),
         ];
     }
 }

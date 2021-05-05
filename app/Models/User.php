@@ -252,8 +252,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
                 ->appendProperty(TextProperty::create('ORGANIZER', 'kurozoraapp@gmail.app')
                     ->addParameter(Parameter::create('CN', 'Kurozora')));
 
-            $startDate = Carbon::now()->startOfWeek()->subWeeks(1);
-            $endDate = Carbon::now()->endOfWeek()->addWeeks(2);
+            $startDate = now()->startOfWeek()->subWeeks(1);
+            $endDate = now()->endOfWeek()->addWeeks(2);
             $whereBetween = [$startDate, $endDate];
 
             foreach ($animes as $anime) {

@@ -37,7 +37,7 @@ class Anime extends KModel
 
     // How long to cache certain responses
     const CACHE_KEY_EXPLORE_SECONDS = 120 * 60;
-    const CACHE_KEY_ACTOR_CHARACTERS_SECONDS = 120 * 60;
+    const CACHE_KEY_ANIME_CAST_SECONDS = 120 * 60;
     const CACHE_KEY_ACTORS_SECONDS = 120 * 60;
     const CACHE_KEY_CHARACTERS_SECONDS = 120 * 60;
     const CACHE_KEY_EPISODES_SECONDS = 120 * 60;
@@ -252,7 +252,7 @@ class Anime extends KModel
      */
     public function actors(): HasManyDeep
     {
-        return $this->hasManyDeep(Actor::class, [ActorCharacterAnime::class, ActorCharacter::class], ['anime_id', 'id', 'id'], ['id', 'actor_character_id', 'actor_id'])->distinct();
+        return $this->hasManyDeep(Actor::class, [AnimeCast::class], ['anime_id', 'id'], ['id', 'actor_id'])->distinct();
     }
 
     /**
@@ -279,7 +279,7 @@ class Anime extends KModel
      */
     public function characters(): HasManyDeep
     {
-        return $this->hasManyDeep(Character::class, [ActorCharacterAnime::class, ActorCharacter::class], ['anime_id', 'id', 'id'], ['id', 'actor_character_id', 'character_id'])->distinct();
+        return $this->hasManyDeep(Character::class, [AnimeCast::class], ['anime_id', 'id'], ['id', 'character_id'])->distinct();
     }
 
     /**
@@ -300,56 +300,29 @@ class Anime extends KModel
     }
 
     /**
-     * Get the Anime's actor characters
-     *
-     * @return BelongsToMany
-     */
-    public function actor_characters(): BelongsToMany
-    {
-        return $this->belongsToMany(ActorCharacter::class, ActorCharacterAnime::TABLE_NAME, 'anime_id', 'actor_character_id');
-    }
-
-    /**
-     * Retrieves the actor-characters for an Anime item in an array
-     *
-     * @param ?int $limit
-     * @return mixed
-     */
-    public function getActorCharacters(?int $limit = null): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.actor_characters', 'id' => $this->id, 'limit' => $limit]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_ACTOR_CHARACTERS_SECONDS, function () use ($limit) {
-            return $this->actor_characters()->limit($limit)->get();
-        });
-    }
-
-    /**
-     * Get the Anime's actor-character-anime
+     * Get the Anime's cast
      *
      * @return HasMany
      */
-    public function actor_character_anime(): HasMany
+    public function cast(): HasMany
     {
-        return $this->hasMany(ActorCharacterAnime::class);
+        return $this->hasMany(AnimeCast::class);
     }
 
     /**
-     * Retrieves the actor-characters-anime for an Anime item in an array
+     * Retrieves the cast for an Anime item in an array
      *
      * @param ?int $limit
      * @return mixed
      */
-    public function getActorCharacterAnime(?int $limit = null): mixed
+    public function getCast(?int $limit = null): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.actor_character_anime', 'id' => $this->id, 'limit' => $limit]);
+        $cacheKey = self::cacheKey(['name' => 'anime.cast', 'id' => $this->id, 'limit' => $limit]);
 
         // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_ACTOR_CHARACTERS_SECONDS, function () use ($limit) {
-            return $this->actor_character_anime()->limit($limit)->get();
+        return Cache::remember($cacheKey, self::CACHE_KEY_ANIME_CAST_SECONDS, function () use ($limit) {
+            return $this->cast()->limit($limit)->get();
         });
     }
 

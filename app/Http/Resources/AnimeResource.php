@@ -90,7 +90,7 @@ class AnimeResource extends JsonResource
         return [
             'cast' => [
                 'href' => route('api.anime.cast', $anime, false),
-                'data' => ActorCharacterAnimeResource::collection($anime->getActorCharacterAnime(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'data' => AnimeCastResource::collection($anime->getCast(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }

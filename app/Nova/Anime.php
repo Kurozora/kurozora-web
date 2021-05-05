@@ -221,8 +221,7 @@ class Anime extends Resource
             BelongsToMany::make('Studios')
                 ->searchable(),
 
-            HasMany::make('Cast', 'actor_character_anime')
-                ->sortable(),
+            HasMany::make('Cast'),
 
             HasMany::make('Actors'),
 

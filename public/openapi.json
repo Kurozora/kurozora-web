@@ -367,8 +367,8 @@
           "anime"
         ],
         "operationId": "getAnimeCast",
-        "summary": "Anime actor-character information.",
-        "description": "This endpoint will retrieve the actor-characters of an Anime item.",
+        "summary": "Anime cast information.",
+        "description": "This endpoint will retrieve the casts of an Anime item.",
         "parameters": [
           {
             "in": "path",

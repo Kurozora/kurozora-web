@@ -8,7 +8,7 @@ use App\Events\AnimeViewed;
 use App\Helpers\JSONResult;
 use App\Http\Requests\RateAnimeRequest;
 use App\Http\Requests\SearchAnimeRequest;
-use App\Http\Resources\ActorCharacterAnimeResource;
+use App\Http\Resources\AnimeCastResource;
 use App\Http\Resources\ActorResource;
 use App\Http\Resources\AnimeRelatedShowsResource;
 use App\Http\Resources\AnimeResource;
@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Auth;
 class AnimeController extends Controller
 {
     /**
-     * Returns detailed information about an Anime.
+     * Returns detailed information of an Anime.
      *
      * @param Anime $anime
      * @return JsonResponse
@@ -40,12 +40,12 @@ class AnimeController extends Controller
     }
 
     /**
-     * Returns actor information about an Anime.
+     * Returns actor information of an Anime.
      *
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function actorsAnime(Anime $anime): JsonResponse
+    public function actors(Anime $anime): JsonResponse
     {
         // Get the actors
         $actors = $anime->getActors();
@@ -56,12 +56,12 @@ class AnimeController extends Controller
     }
 
     /**
-     * Returns character information about an Anime.
+     * Returns character information of an Anime.
      *
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function charactersAnime(Anime $anime): JsonResponse
+    public function characters(Anime $anime): JsonResponse
     {
         // Get the actors
         $actors = $anime->getCharacters();
@@ -72,28 +72,28 @@ class AnimeController extends Controller
     }
 
     /**
-     * Returns actor-character-anime information about an Anime.
+     * Returns the cast information of an Anime.
      *
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function actorCharacterAnime(Anime $anime): JsonResponse
+    public function cast(Anime $anime): JsonResponse
     {
-        // Get the actor-character-anime
-        $actorCharacterAnime = $anime->getActorCharacterAnime();
+        // Get the anime cast
+        $animeCast = $anime->getCast();
 
         return JSONResult::success([
-            'data' => ActorCharacterAnimeResource::collection($actorCharacterAnime)
+            'data' => AnimeCastResource::collection($animeCast)
         ]);
     }
 
     /**
-     * Returns related-shows information about an Anime.
+     * Returns related-shows information of an Anime.
      *
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function relatedShowsAnime(Anime $anime): JsonResponse
+    public function relatedShows(Anime $anime): JsonResponse
     {
         // Get the related shows
         $relations = $anime->getAnimeRelations();
@@ -109,7 +109,7 @@ class AnimeController extends Controller
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function seasonsAnime(Anime $anime): JsonResponse
+    public function seasons(Anime $anime): JsonResponse
     {
         // Get the seasons
         $seasons = $anime->getSeasons();

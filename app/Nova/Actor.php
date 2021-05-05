@@ -4,7 +4,6 @@ namespace App\Nova;
 
 use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
@@ -71,10 +70,11 @@ class Actor extends Resource
                 ->rules('max:255')
                 ->sortable(),
 
-            BelongsToMany::make('Characters')
-                ->searchable(),
+            HasMany::make('Cast'),
 
             HasMany::make('Anime'),
+
+            HasMany::make('Characters'),
         ];
     }
 
