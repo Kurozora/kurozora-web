@@ -53,11 +53,9 @@ class ActorCharacterAnimeResource extends JsonResource
         /** @var ActorCharacterAnime $actorCharacterAnime */
         $actorCharacterAnime = $this->resource;
 
-        $actorCharacter = $actorCharacterAnime->actor_character;
-
         return [
             'actors' => [
-                'data' => ActorResource::collection([$actorCharacter->actor])
+                'data' => ActorResource::collection([$actorCharacterAnime->actor])
             ]
         ];
     }
@@ -72,11 +70,9 @@ class ActorCharacterAnimeResource extends JsonResource
         /** @var ActorCharacterAnime $actorCharacterAnime */
         $actorCharacterAnime = $this->resource;
 
-        $actorCharacter = $actorCharacterAnime->actor_character;
-
         return [
             'characters' => [
-                'data' => CharacterResourceBasic::collection([$actorCharacter->character])
+                'data' => CharacterResourceBasic::collection([$actorCharacterAnime->character])
             ]
         ];
     }

@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\ActorCharacter;
+use App\Models\Actor;
 use App\Models\ActorCharacterAnime;
 use App\Models\Anime;
 use App\Enums\CastRole;
+use App\Models\Character;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ActorCharacterAnimeFactory extends Factory
@@ -24,23 +25,27 @@ class ActorCharacterAnimeFactory extends Factory
      */
     public function definition(): array
     {
-        $actorCharacter = ActorCharacter::inRandomOrder()->first();
+        $actor = Actor::inRandomOrder()->first();
+        $character = Character::inRandomOrder()->first();
         $anime = Anime::inRandomOrder()->first();
 
-        if ($actorCharacter == null) {
-            $actorCharacter = ActorCharacter::factory()->create();
+        if ($actor == null) {
+            $actor = Actor::factory()->create();
+        }
+        if ($character == null) {
+            $character = Character::factory()->create();
         }
         if ($anime == null) {
             $anime = Anime::factory()->create();
         }
-        if (ActorCharacterAnime::where('anime_id', $anime->id)->exists()) {
-            $anime = Anime::whereNotIn('id', $anime->id)->inRandomOrder()->first();
-        }
 
         return [
-            'actor_character_id'    => $actorCharacter,
-            'anime_id'              => $anime,
-            'cast_role'             => array_rand(CastRole::getValues()),
+            'actor_id'      => $actor,
+            'character_id'  => $character,
+            'anime_id'      => $anime,
+            'cast_role'     => array_rand(CastRole::getValues()),
+            'created_at'    => now(),
+            'updated_at'    => now(),
         ];
     }
 }
