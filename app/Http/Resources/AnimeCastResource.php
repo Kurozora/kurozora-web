@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use App\Models\AnimeCast;
-use App\Enums\CastRole;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -25,7 +24,7 @@ class AnimeCastResource extends JsonResource
             'type'          => 'cast',
             'href'          => route('api.anime.cast', $animeCast, false),
             'attributes'    => [
-                'role' => CastRole::getDescription($animeCast->role)
+                $animeCast->cast_role->only(['name', 'description'])
             ]
         ];
 

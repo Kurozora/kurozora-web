@@ -34,7 +34,9 @@ class AnimeEpisodeFactory extends Factory
             'title'         => $this->faker->title,
             'number'        => $number++,
             'overview'      => $this->faker->realText(),
-            'first_aired'   => $this->faker->dateTime()
+            'first_aired'   => $this->faker->dateTime(),
+            'created_at'    => now(),
+            'updated_at'    => now(),
         ];
     }
 }

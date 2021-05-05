@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             StaffRoleSeeder::class,
+            CastRoleSeeder::class,
             StudioSeeder::class,
             TvRatingSeeder::class,
             MediaTypeSeeder::class,
@@ -24,14 +25,14 @@ class DatabaseSeeder extends Seeder
             StatusSeeder::class,
             GenreSeeder::class,
             AnimeDummySeeder::class,
+            AnimeCastSeeder::class,
             MediaRelationSeeder::class,
             UserSeeder::class,
-            ForumSectionSeeder::class,
             BadgeSeeder::class,
+            ForumSectionSeeder::class,
             ForumThreadSeeder::class,
             ForumReplySeeder::class,
             AppThemeSeeder::class,
-            AnimeCastSeeder::class,
         ]);
     }
 }

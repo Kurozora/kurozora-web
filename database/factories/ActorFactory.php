@@ -29,7 +29,9 @@ class ActorFactory extends Factory
             'last_name'     => $this->faker->lastName($genderString),
             'about'         => $this->faker->paragraph(mt_rand(10, 30)),
             'occupation'    => $this->faker->jobTitle,
-            'image'         => $this->faker->imageUrl()
+            'image'         => $this->faker->imageUrl(),
+            'created_at'    => now(),
+            'updated_at'    => now(),
         ];
     }
 }

@@ -53,6 +53,8 @@ class CharacterFactory extends Factory
             'birth_day'         => (int) $this->faker->dayOfMonth($month),
             'birth_month'       => (int) $month,
             'astrological_sign' => $this->faker->numberBetween(0, 11),
+            'created_at'        => now(),
+            'updated_at'        => now(),
         ];
     }
 }

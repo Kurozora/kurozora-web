@@ -76,6 +76,8 @@ class AnimeFactory extends Factory
             'air_day'           => DayOfWeek::getRandomValue(),
             'is_nsfw'           => $this->faker->boolean,
             'copyright'         => $this->faker->randomElement(['© ', '℗ ', '® ']) . $this->faker->year . ' ' . $this->faker->company,
+            'created_at'        => now(),
+            'updated_at'        => now(),
         ];
     }
 }

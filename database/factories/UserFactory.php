@@ -32,6 +32,8 @@ class UserFactory extends Factory
                 'can_change_username'   => false,
                 'tv_rating'             => -1
             ],
+            'created_at'        => now(),
+            'updated_at'        => now(),
         ];
     }
 }

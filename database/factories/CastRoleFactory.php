@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\MediaType;
+use App\Models\CastRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class MediaTypeFactory extends Factory
+class CastRoleFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = MediaType::class;
+    protected $model = CastRole::class;
 
     /**
      * Define the model's default state.
@@ -22,7 +22,6 @@ class MediaTypeFactory extends Factory
     public function definition(): array
     {
         return [
-            'type'          => $this->faker->randomElement(['anime', 'manga']),
             'name'          => $this->faker->name,
             'description'   => $this->faker->words(3, true),
             'created_at'    => now(),

@@ -2,26 +2,27 @@
 
 namespace App\Nova;
 
-use App\Models\AnimeCast;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Cast extends Resource
+class CastRole extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static string $model = 'App\Models\AnimeCast';
+    public static string $model = \App\Models\CastRole::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -29,7 +30,7 @@ class Cast extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'name',
     ];
 
     /**
@@ -48,42 +49,20 @@ class Cast extends Resource
     public function fields(Request $request): array
     {
         return [
-            ID::make()->sortable(),
+            ID::make(__('ID'), 'id')->sortable(),
 
-            BelongsTo::make('Anime')
-                ->searchable()
-                ->sortable(),
+            Text::make('Name')
+                ->sortable()
+                ->help('The name of the role.')
+                ->required(),
 
-            BelongsTo::make('Character')
-                ->searchable()
-                ->sortable(),
+            Text::make('Description')
+                ->sortable()
+                ->help('A short description of the role.')
+                ->required(),
 
-            BelongsTo::make('Actor')
-                ->searchable()
-                ->sortable(),
-
-            BelongsTo::make('Cast Role')
-                ->rules('required')
-                ->help('If you’re not sure what role the character has, choose "Supporting character".')
-                ->sortable(),
+            HasMany::make('Cast'),
         ];
-    }
-
-    /**
-     * Get the value that should be displayed to represent the resource.
-     *
-     * @return string
-     */
-    public function title(): string
-    {
-        /** @var AnimeCast $animeCast */
-        $animeCast = $this->resource;
-
-        $animeTitle = $animeCast->anime->title;
-        $characterName = $animeCast->character->name;
-        $actorName = $animeCast->actor->full_name;
-
-        return $actorName . ' as ' . $characterName . ' in ' . $animeTitle . ' (ID: ' . $animeCast->id . ')';
     }
 
     /**
