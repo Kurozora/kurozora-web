@@ -3,20 +3,20 @@
 namespace Database\Factories;
 
 use App\Models\Actor;
-use App\Models\ActorCharacterAnime;
+use App\Models\AnimeCast;
 use App\Models\Anime;
 use App\Enums\CastRole;
 use App\Models\Character;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ActorCharacterAnimeFactory extends Factory
+class AnimeCastFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = ActorCharacterAnime::class;
+    protected $model = AnimeCast::class;
 
     /**
      * Define the model's default state.
@@ -43,7 +43,7 @@ class ActorCharacterAnimeFactory extends Factory
             'actor_id'      => $actor,
             'character_id'  => $character,
             'anime_id'      => $anime,
-            'cast_role'     => array_rand(CastRole::getValues()),
+            'role'          => array_rand(CastRole::getValues()),
             'created_at'    => now(),
             'updated_at'    => now(),
         ];

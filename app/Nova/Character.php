@@ -136,7 +136,7 @@ class Character extends Resource
                 ->nullable(true)
                 ->sortable(),
 
-            HasMany::make('Actor Character Anime', 'actor_character_anime', Cast::class),
+            HasMany::make('Cast'),
 
             HasMany::make('Anime'),
 

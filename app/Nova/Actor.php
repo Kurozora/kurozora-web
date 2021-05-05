@@ -70,7 +70,7 @@ class Actor extends Resource
                 ->rules('max:255')
                 ->sortable(),
 
-            HasMany::make('Actor Character Anime', 'actor_character_anime', Cast::class),
+            HasMany::make('Cast'),
 
             HasMany::make('Anime'),
 

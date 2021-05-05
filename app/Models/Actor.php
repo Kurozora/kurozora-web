@@ -40,7 +40,7 @@ class Actor extends KModel
      */
     function anime(): HasManyDeep
     {
-        return $this->hasManyDeep(Anime::class, [ActorCharacterAnime::class], ['actor_id', 'id'], ['id', 'anime_id'])->distinct();
+        return $this->hasManyDeep(Anime::class, [AnimeCast::class], ['actor_id', 'id'], ['id', 'anime_id'])->distinct();
     }
 
     /**
@@ -67,7 +67,7 @@ class Actor extends KModel
      */
     function characters(): HasManyDeep
     {
-        return $this->hasManyDeep(Character::class, [ActorCharacterAnime::class], ['actor_id', 'id'], ['id', 'character_id'])->distinct();
+        return $this->hasManyDeep(Character::class, [AnimeCast::class], ['actor_id', 'id'], ['id', 'character_id'])->distinct();
     }
 
     /**
@@ -88,12 +88,12 @@ class Actor extends KModel
     }
 
     /**
-     * Returns the actor-character-anime relationship the character has.
+     * Returns the cast relationship the character has.
      *
      * @return HasMany
      */
-    public function actor_character_anime(): HasMany
+    public function cast(): HasMany
     {
-        return $this->hasMany(ActorCharacterAnime::class);
+        return $this->hasMany(AnimeCast::class);
     }
 }

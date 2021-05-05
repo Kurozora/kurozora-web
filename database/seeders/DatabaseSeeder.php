@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
             ForumThreadSeeder::class,
             ForumReplySeeder::class,
             AppThemeSeeder::class,
-            ActorCharacterAnimeSeeder::class,
+            AnimeCastSeeder::class,
         ]);
     }
 }
