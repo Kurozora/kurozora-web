@@ -136,6 +136,14 @@
                 </div>
             </section>
 
+            @if ($anime->cast->count())
+                @foreach ($anime->cast as $cast)
+                    @foreach ($cast->character->nicknames as $characterNickname)
+                        <p>{{ $characterNickname }}</p>
+                    @endforeach
+                @endforeach
+            @endif
+
             <section class="pt-5 pb-2 border-t">
                 <p class="text-sm text-gray-400">{{ $anime->copyright }}</p>
             </section>
