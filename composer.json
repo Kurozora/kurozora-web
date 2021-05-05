@@ -48,7 +48,6 @@
         "mockery/mockery": "^1.4",
         "nunomaduro/collision": "^5.3",
         "phpunit/phpunit": "^9.5",
-        "salopot/image-generator": "^1.1",
         "spatie/phpunit-snapshot-assertions": "^4.2"
     },
     "repositories": [

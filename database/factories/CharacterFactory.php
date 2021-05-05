@@ -27,6 +27,7 @@ class CharacterFactory extends Factory
         $bust = null;
         $waist = null;
         $hip = null;
+        $jpFaker = \Faker\Factory::create('ja_JP');
 
         if ($isFemale) {
             $bust = $this->faker->randomFloat(2, 20, 80);
@@ -36,6 +37,8 @@ class CharacterFactory extends Factory
 
         return [
             'name'              => $this->faker->name($genderString),
+            'japanese_name'     => $jpFaker->name($genderString),
+            'nicknames'         => $this->faker->words(mt_rand(0, 3)),
             'about'             => $this->faker->paragraph(mt_rand(10, 30)),
             'image'             => $this->faker->imageUrl(),
             'debut'             => $this->faker->numerify('Episode ##'),
