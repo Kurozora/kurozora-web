@@ -26,7 +26,9 @@ class StudioFactory extends Factory
             'logo_url'      => $this->faker->imageUrl(),
             'about'         => $this->faker->paragraph(mt_rand(10, 30)),
             'founded'       => $this->faker->date(),
-            'website_url'   => $this->faker->url
+            'website_url'   => $this->faker->url,
+            'created_at'    => now(),
+            'updated_at'    => now(),
         ];
     }
 }

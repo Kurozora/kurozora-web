@@ -5,7 +5,7 @@ namespace Database\Factories;
 use App\Models\Actor;
 use App\Models\AnimeCast;
 use App\Models\Anime;
-use App\Enums\CastRole;
+use App\Models\CastRole;
 use App\Models\Character;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -28,6 +28,7 @@ class AnimeCastFactory extends Factory
         $actor = Actor::inRandomOrder(mt_rand(1, 999))->first();
         $character = Character::inRandomOrder(mt_rand(1, 999))->first();
         $anime = Anime::inRandomOrder(mt_rand(1, 999))->first();
+        $castRole = CastRole::inRandomOrder()->first();
 
         if ($actor == null) {
             $actor = Actor::factory()->create();
@@ -38,12 +39,15 @@ class AnimeCastFactory extends Factory
         if ($anime == null) {
             $anime = Anime::factory()->create();
         }
+        if ($castRole == null) {
+            $castRole = CastRole::factory()->create();
+        }
 
         return [
             'actor_id'      => $actor,
             'character_id'  => $character,
             'anime_id'      => $anime,
-            'role'          => array_rand(CastRole::getValues()),
+            'cast_role_id'  => $castRole,
             'created_at'    => now(),
             'updated_at'    => now(),
         ];

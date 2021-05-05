@@ -37,7 +37,9 @@ class ForumReplyFactory extends Factory
             'thread_id'     => $forumThread,
             'user_id'       => $user,
             'ip_address'    => $this->faker->ipv4,
-            'content'       => $this->faker->paragraph()
+            'content'       => $this->faker->paragraph(),
+            'created_at'    => now(),
+            'updated_at'    => now(),
         ];
     }
 }

@@ -40,7 +40,9 @@ class SessionFactory extends Factory
             'region'            => $this->faker->state,
             'country'           => $this->faker->country,
             'latitude'          => $this->faker->latitude,
-            'longitude'         => $this->faker->longitude
+            'longitude'         => $this->faker->longitude,
+            'created_at'        => now(),
+            'updated_at'        => now(),
         ];
     }
 }

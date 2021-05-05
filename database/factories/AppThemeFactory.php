@@ -49,6 +49,8 @@ class AppThemeFactory extends Factory
             'table_view_cell_selected_sub_text_color'       => $this->faker->hexColor,
             'table_view_cell_selected_chevron_color'        => $this->faker->hexColor,
             'table_view_cell_action_default_color'          => $this->faker->hexColor,
+            'created_at'                                    => now(),
+            'updated_at'                                    => now(),
         ];
     }
 

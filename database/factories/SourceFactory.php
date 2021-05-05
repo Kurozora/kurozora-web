@@ -22,8 +22,10 @@ class SourceFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'          => $this->faker->word,
+            'name'          => $this->faker->name,
             'description'   => $this->faker->words(3, true),
+            'created_at'    => now(),
+            'updated_at'    => now(),
         ];
     }
 }
