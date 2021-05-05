@@ -4,8 +4,6 @@ namespace Database\Factories;
 
 use App\Models\AppTheme;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Salopot\ImageGenerator\ImageProvider;
-use Salopot\ImageGenerator\ImageSources\Remote\PicsumPhotosSource;
 
 class AppThemeFactory extends Factory
 {
@@ -62,11 +60,7 @@ class AppThemeFactory extends Factory
     public function configure(): AppThemeFactory
     {
         return $this->afterCreating(function (AppTheme $theme) {
-            $imageProvider = new ImageProvider($this->faker);
-            $imageProvider->addImageSource(new PicsumPhotosSource($imageProvider));
-            $this->faker->addProvider($imageProvider);
-
-            $theme->addMediaFromBase64($this->faker->imageGenerator(768, 1024)->getDataUrl())->toMediaCollection('screenshot');
+            $theme->addMediaFromUrl($this->faker->imageUrl(768, 1024))->toMediaCollection('screenshot');
         });
     }
 }

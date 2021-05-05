@@ -5,6 +5,7 @@ namespace App\Nova;
 use App\Enums\AstrologicalSign;
 use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
@@ -35,7 +36,7 @@ class Character extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name',
+        'id', 'name', 'japanese_name'
     ];
 
     /**
@@ -64,6 +65,20 @@ class Character extends Resource
             Text::make('Name')
                 ->rules('required')
                 ->sortable(),
+
+            Text::make('Japanese Name')
+                ->sortable(),
+
+            Number::make('Nicknames', function () {
+                return count($this->nicknames ?? []);
+            })
+                ->onlyOnIndex(),
+
+            Code::make('Nicknames')
+                ->json()
+                ->sortable()
+                ->help('Other names the character is known by. For example ["Pirate King", "Straw Hat"]')
+                ->rules(['nullable', 'json']),
 
             Textarea::make('About')
                 ->onlyOnForms()
