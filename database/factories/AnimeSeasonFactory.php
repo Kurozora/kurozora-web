@@ -30,9 +30,11 @@ class AnimeSeasonFactory extends Factory
         }
 
         return [
-            'anime_id'  => $anime,
-            'number'    => $number++,
-            'title'     => $this->faker->title
+            'anime_id'      => $anime,
+            'number'        => $number++,
+            'title'         => $this->faker->title,
+            'created_at'    => now(),
+            'updated_at'    => now(),
         ];
     }
 }

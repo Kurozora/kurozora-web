@@ -15,7 +15,7 @@ class AnimeCast extends Pivot
     protected $table = self::TABLE_NAME;
 
     /**
-     * Returns the anime relationship of the object.
+     * Returns the anime relationship of the cast.
      *
      * @return BelongsTo
      */
@@ -25,7 +25,7 @@ class AnimeCast extends Pivot
     }
 
     /**
-     * Returns the character relationship of the object.
+     * Returns the character relationship of the cast.
      *
      * @return BelongsTo
      */
@@ -35,12 +35,22 @@ class AnimeCast extends Pivot
     }
 
     /**
-     * Returns the actor relationship of the object.
+     * Returns the actor relationship of the cast.
      *
      * @return BelongsTo
      */
     function actor(): BelongsTo
     {
         return $this->belongsTo(Actor::class);
+    }
+
+    /**
+     * Returns the role relationship of the cast.
+     *
+     * @return BelongsTo
+     */
+    function cast_role(): BelongsTo
+    {
+        return $this->belongsTo(CastRole::class);
     }
 }

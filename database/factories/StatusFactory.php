@@ -25,6 +25,8 @@ class StatusFactory extends Factory
             'type'          => $this->faker->randomElement(['anime', 'manga']),
             'name'          => $this->faker->words(2, true),
             'description'   => $this->faker->words(3, true),
+            'created_at'    => now(),
+            'updated_at'    => now(),
         ];
     }
 }

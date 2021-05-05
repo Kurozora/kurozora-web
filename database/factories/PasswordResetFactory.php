@@ -32,7 +32,7 @@ class PasswordResetFactory extends Factory
         return [
             'email'         => $user->email,
             'token'         => PasswordReset::genToken(),
-            'created_at'    => now()
+            'created_at'    => now(),
         ];
     }
 }

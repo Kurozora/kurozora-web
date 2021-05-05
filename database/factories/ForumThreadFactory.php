@@ -39,7 +39,9 @@ class ForumThreadFactory extends Factory
             'ip_address'    => $this->faker->ipv4,
             'title'         => $this->faker->sentence(),
             'content'       => $this->faker->paragraph(),
-            'locked'        => $this->faker->boolean()
+            'locked'        => $this->faker->boolean(),
+            'created_at'    => now(),
+            'updated_at'    => now(),
         ];
     }
 }
