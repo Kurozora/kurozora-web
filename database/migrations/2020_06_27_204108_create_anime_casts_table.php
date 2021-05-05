@@ -3,7 +3,7 @@
 use App\Models\Actor;
 use App\Models\AnimeCast;
 use App\Models\Anime;
-use App\Enums\CastRole;
+use App\Models\CastRole;
 use App\Models\Character;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -23,7 +23,7 @@ class CreateAnimeCastsTable extends Migration
             $table->unsignedBigInteger('actor_id');
             $table->unsignedBigInteger('character_id');
             $table->unsignedBigInteger('anime_id');
-            $table->unsignedTinyInteger('role')->default(CastRole::SupportingCharacter);
+            $table->unsignedBigInteger('cast_role_id')->nullable();
             $table->timestamps();
         });
 
@@ -35,6 +35,7 @@ class CreateAnimeCastsTable extends Migration
             $table->foreign('actor_id')->references('id')->on(Actor::TABLE_NAME)->onDelete('cascade');
             $table->foreign('character_id')->references('id')->on(Character::TABLE_NAME)->onDelete('cascade');
             $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('cast_role_id')->references('id')->on(CastRole::TABLE_NAME)->onDelete('set null');
         });
     }
 

@@ -44,6 +44,8 @@ class MediaRelationFactory extends Factory
             'relation_id'   => $relation,
             'related_id'    => $relatedAnime,
             'related_type'  => $this->faker->randomElement(['anime', 'manga']),
+            'created_at'    => now(),
+            'updated_at'    => now(),
         ];
     }
 }
