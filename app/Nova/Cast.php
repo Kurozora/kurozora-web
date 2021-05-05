@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use App\Enums\CastRole;
+use App\Models\AnimeCast;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
@@ -15,7 +16,7 @@ class Cast extends Resource
      *
      * @var string
      */
-    public static string $model = 'App\Models\ActorCharacterAnime';
+    public static string $model = 'App\Models\AnimeCast';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -51,21 +52,42 @@ class Cast extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('Actor Character')
-                ->searchable()
-                ->sortable(),
-
             BelongsTo::make('Anime')
                 ->searchable()
                 ->sortable(),
 
-            Select::make('Cast Role')
+            BelongsTo::make('Character')
+                ->searchable()
+                ->sortable(),
+
+            BelongsTo::make('Actor')
+                ->searchable()
+                ->sortable(),
+
+            Select::make('Role')
                 ->options(CastRole::asSelectArray())
                 ->displayUsingLabels()
                 ->rules('required')
-                ->help('If you\'re not sure what role the character has, choose "Supporting character".')
+                ->help('If you’re not sure what role the character has, choose "Supporting character".')
                 ->sortable(),
         ];
+    }
+
+    /**
+     * Get the value that should be displayed to represent the resource.
+     *
+     * @return string
+     */
+    public function title(): string
+    {
+        /** @var AnimeCast $animeCast */
+        $animeCast = $this->resource;
+
+        $animeTitle = $animeCast->anime->title;
+        $characterName = $animeCast->character->name;
+        $actorName = $animeCast->actor->full_name;
+
+        return $actorName . ' as ' . $characterName . ' in ' . $animeTitle . ' (ID: ' . $animeCast->id . ')';
     }
 
     /**

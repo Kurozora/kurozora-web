@@ -2,12 +2,12 @@
 
 namespace App\Http\Resources;
 
-use App\Models\ActorCharacterAnime;
+use App\Models\AnimeCast;
 use App\Enums\CastRole;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ActorCharacterAnimeResource extends JsonResource
+class AnimeCastResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,15 +17,15 @@ class ActorCharacterAnimeResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var ActorCharacterAnime $actorCharacterAnime */
-        $actorCharacterAnime = $this->resource;
+        /** @var AnimeCast $animeCast */
+        $animeCast = $this->resource;
 
         $resource = [
-            'id'            => $actorCharacterAnime->id,
+            'id'            => $animeCast->id,
             'type'          => 'cast',
-            'href'          => route('api.anime.cast', $actorCharacterAnime, false),
+            'href'          => route('api.anime.cast', $animeCast, false),
             'attributes'    => [
-                'role' => CastRole::getDescription($actorCharacterAnime->cast_role)
+                'role' => CastRole::getDescription($animeCast->role)
             ]
         ];
 
@@ -50,14 +50,12 @@ class ActorCharacterAnimeResource extends JsonResource
      */
     protected function getActorsRelationship(): array
     {
-        /** @var ActorCharacterAnime $actorCharacterAnime */
-        $actorCharacterAnime = $this->resource;
-
-        $actorCharacter = $actorCharacterAnime->actor_character;
+        /** @var AnimeCast $animeCast */
+        $animeCast = $this->resource;
 
         return [
             'actors' => [
-                'data' => ActorResource::collection([$actorCharacter->actor])
+                'data' => ActorResource::collection([$animeCast->actor])
             ]
         ];
     }
@@ -69,14 +67,12 @@ class ActorCharacterAnimeResource extends JsonResource
      */
     protected function getCharactersRelationship(): array
     {
-        /** @var ActorCharacterAnime $actorCharacterAnime */
-        $actorCharacterAnime = $this->resource;
-
-        $actorCharacter = $actorCharacterAnime->actor_character;
+        /** @var AnimeCast $animeCast */
+        $animeCast = $this->resource;
 
         return [
             'characters' => [
-                'data' => CharacterResourceBasic::collection([$actorCharacter->character])
+                'data' => CharacterResourceBasic::collection([$animeCast->character])
             ]
         ];
     }

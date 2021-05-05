@@ -1,13 +1,15 @@
 <?php
 
 use App\Models\Actor;
-use App\Models\ActorCharacter;
+use App\Models\AnimeCast;
+use App\Models\Anime;
+use App\Enums\CastRole;
 use App\Models\Character;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateActorCharacterTable extends Migration
+class CreateAnimeCastsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,20 +18,23 @@ class CreateActorCharacterTable extends Migration
      */
     public function up()
     {
-        Schema::create(ActorCharacter::TABLE_NAME, function (Blueprint $table) {
+        Schema::create(AnimeCast::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('actor_id');
             $table->unsignedBigInteger('character_id');
+            $table->unsignedBigInteger('anime_id');
+            $table->unsignedTinyInteger('role')->default(CastRole::SupportingCharacter);
             $table->timestamps();
         });
 
-        Schema::table(ActorCharacter::TABLE_NAME, function(Blueprint $table) {
+        Schema::table(AnimeCast::TABLE_NAME, function(Blueprint $table) {
             // Set unique index constraints
-            $table->unique(['actor_id', 'character_id']);
+            $table->unique(['actor_id', 'character_id', 'anime_id']);
 
             // Set foreign key constraints
             $table->foreign('actor_id')->references('id')->on(Actor::TABLE_NAME)->onDelete('cascade');
             $table->foreign('character_id')->references('id')->on(Character::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
         });
     }
 
@@ -40,6 +45,6 @@ class CreateActorCharacterTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(ActorCharacter::TABLE_NAME);
+        Schema::dropIfExists(AnimeCast::TABLE_NAME);
     }
 }

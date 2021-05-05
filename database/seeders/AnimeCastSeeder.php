@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\ActorCharacter;
+use App\Models\AnimeCast;
 use Illuminate\Database\Seeder;
 
-class ActorCharacterSeeder extends Seeder
+class AnimeCastSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +14,6 @@ class ActorCharacterSeeder extends Seeder
      */
     public function run()
     {
-        ActorCharacter::factory(10)->create();
+        AnimeCast::factory(10)->create();
     }
 }
