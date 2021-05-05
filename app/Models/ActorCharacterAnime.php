@@ -32,12 +32,22 @@ class ActorCharacterAnime extends Pivot
     }
 
     /**
-     * Returns the actor_character relationship of the object.
+     * Returns the character relationship of the object.
      *
      * @return BelongsTo
      */
-    function actor_character(): BelongsTo
+    function character(): BelongsTo
     {
-        return $this->belongsTo(ActorCharacter::class);
+        return $this->belongsTo(Character::class);
+    }
+
+    /**
+     * Returns the actor relationship of the object.
+     *
+     * @return BelongsTo
+     */
+    function actor(): BelongsTo
+    {
+        return $this->belongsTo(Actor::class);
     }
 }

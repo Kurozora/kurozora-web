@@ -5,7 +5,6 @@ namespace App\Nova;
 use App\Enums\AstrologicalSign;
 use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
@@ -137,10 +136,11 @@ class Character extends Resource
                 ->nullable(true)
                 ->sortable(),
 
-            BelongsToMany::make('Actors')
-                ->searchable(),
+            HasMany::make('Actor Character Anime', 'actor_character_anime', Cast::class),
 
             HasMany::make('Anime'),
+
+            HasMany::make('Actors'),
         ];
     }
 

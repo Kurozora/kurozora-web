@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 
@@ -26,11 +26,11 @@ class Character extends KModel
     /**
      * Returns the actors the character belongs to.
      *
-     * @return BelongsToMany
+     * @return HasManyDeep
      */
-    function actors(): BelongsToMany
+    function actors(): HasManyDeep
     {
-        return $this->belongsToMany(Actor::class);
+        return $this->hasManyDeep(Actor::class, [ActorCharacterAnime::class], ['character_id', 'id'], ['id', 'actor_id'])->distinct();
     }
 
     /**
@@ -57,7 +57,7 @@ class Character extends KModel
      */
     function anime(): HasManyDeep
     {
-        return $this->hasManyDeep(Anime::class, [ActorCharacter::class, ActorCharacterAnime::class], ['character_id', 'actor_character_id', 'id'], ['id', 'id', 'anime_id'])->distinct();
+        return $this->hasManyDeep(Anime::class, [ActorCharacterAnime::class], ['character_id', 'id'], ['id', 'anime_id'])->distinct();
     }
 
     /**
@@ -75,5 +75,15 @@ class Character extends KModel
         return Cache::remember($cacheKey, self::CACHE_KEY_ANIME_SECONDS, function () use ($limit) {
             return $this->anime()->limit($limit)->get();
         });
+    }
+
+    /**
+     * Returns the actor-character-anime relationship the character has.
+     *
+     * @return HasMany
+     */
+    public function actor_character_anime(): HasMany
+    {
+        return $this->hasMany(ActorCharacterAnime::class);
     }
 }
