@@ -3,7 +3,7 @@
 namespace Tests\Traits;
 
 use App\Models\Actor;
-use App\Models\ActorCharacterAnime;
+use App\Models\AnimeCast;
 use App\Models\Anime;
 use App\Models\AnimeEpisode;
 use App\Models\MediaRelation;
@@ -34,8 +34,8 @@ trait ProvidesTestAnime
     /** @var Character $character */
     public Character $character;
 
-    /** @var ActorCharacterAnime $actorCharacterAnime */
-    public ActorCharacterAnime $actorCharacterAnime;
+    /** @var AnimeCast $animeCast */
+    public AnimeCast $animeCast;
 
     /**
      * Creates the test Anime data to be used in tests.
@@ -62,7 +62,7 @@ trait ProvidesTestAnime
 
         $this->character = Character::factory()->create();
 
-        $this->actorCharacterAnime = ActorCharacterAnime::factory()->create([
+        $this->animeCast = AnimeCast::factory()->create([
             'anime_id' => $this->anime->id,
             'character_id' => $this->character->id,
             'actor_id' => $this->actor->id,

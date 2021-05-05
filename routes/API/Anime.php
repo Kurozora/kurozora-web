@@ -13,23 +13,23 @@ Route::prefix('/anime')
             ->middleware('kurozora.userauth:optional')
             ->name('.view');
 
-        Route::get('/{anime}/actors', [AnimeController::class, 'actorsAnime'])
+        Route::get('/{anime}/actors', [AnimeController::class, 'actors'])
             ->name('.actors');
 
-        Route::get('/{anime}/characters', [AnimeController::class, 'charactersAnime'])
+        Route::get('/{anime}/characters', [AnimeController::class, 'characters'])
             ->name('.characters');
 
-        Route::get('/{anime}/cast', [AnimeController::class, 'actorCharacterAnime'])
+        Route::get('/{anime}/cast', [AnimeController::class, 'cast'])
             ->name('.cast');
 
         Route::get('/{anime}/genres', [AnimeController::class, 'genresAnime'])
             ->name('.genres');
 
-        Route::get('/{anime}/related-shows', [AnimeController::class, 'relatedShowsAnime'])
+        Route::get('/{anime}/related-shows', [AnimeController::class, 'relatedShows'])
             ->middleware('kurozora.userauth:optional')
             ->name('.related-shows');
 
-        Route::get('/{anime}/seasons', [AnimeController::class, 'seasonsAnime'])
+        Route::get('/{anime}/seasons', [AnimeController::class, 'seasons'])
             ->name('.seasons');
 
         Route::get('/{anime}/studios', [AnimeController::class, 'studiosAnime'])
