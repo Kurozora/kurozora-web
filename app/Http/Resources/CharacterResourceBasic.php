@@ -26,6 +26,8 @@ class CharacterResourceBasic extends JsonResource
             'href'          => route('api.characters.details', $character, false),
             'attributes'    => [
                 'name'              => $character->name,
+                'japaneseName'      => $character->japanese_name,
+                'nicknames'         => $character->nicknames,
                 'about'             => $character->about,
                 'imageURL'          => $character->image,
                 'debut'             => $character->debut,

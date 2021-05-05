@@ -17,6 +17,8 @@ class CreateCharactersTable extends Migration
         Schema::create(Character::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->string('japanese_name')->nullable();
+            $table->json('nicknames')->nullable();
             $table->mediumText('about')->nullable();
             $table->string('image')->nullable();
             $table->string('debut')->nullable();

@@ -25,9 +25,9 @@ class AnimeCastFactory extends Factory
      */
     public function definition(): array
     {
-        $actor = Actor::inRandomOrder()->first();
-        $character = Character::inRandomOrder()->first();
-        $anime = Anime::inRandomOrder()->first();
+        $actor = Actor::inRandomOrder(mt_rand(1, 999))->first();
+        $character = Character::inRandomOrder(mt_rand(1, 999))->first();
+        $anime = Anime::inRandomOrder(mt_rand(1, 999))->first();
 
         if ($actor == null) {
             $actor = Actor::factory()->create();
