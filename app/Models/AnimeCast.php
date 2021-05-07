@@ -53,4 +53,14 @@ class AnimeCast extends Pivot
     {
         return $this->belongsTo(CastRole::class);
     }
+
+    /**
+     * Returns the language relationship of the cast.
+     *
+     * @return BelongsTo
+     */
+    function language(): BelongsTo
+    {
+        return $this->belongsTo(Language::class);
+    }
 }
