@@ -66,6 +66,10 @@ class Cast extends Resource
                 ->rules('required')
                 ->help('If you’re not sure what role the character has, choose "Supporting character".')
                 ->sortable(),
+
+            BelongsTo::make('Language')
+                ->rules('required')
+                ->sortable(),
         ];
     }
 
