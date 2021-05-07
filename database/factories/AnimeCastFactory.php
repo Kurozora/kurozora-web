@@ -7,6 +7,7 @@ use App\Models\AnimeCast;
 use App\Models\Anime;
 use App\Models\CastRole;
 use App\Models\Character;
+use App\Models\Language;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AnimeCastFactory extends Factory
@@ -29,6 +30,7 @@ class AnimeCastFactory extends Factory
         $character = Character::inRandomOrder(mt_rand(1, 999))->first();
         $anime = Anime::inRandomOrder(mt_rand(1, 999))->first();
         $castRole = CastRole::inRandomOrder()->first();
+        $language = Language::inRandomOrder()->first();
 
         if ($actor == null) {
             $actor = Actor::factory()->create();
@@ -42,12 +44,16 @@ class AnimeCastFactory extends Factory
         if ($castRole == null) {
             $castRole = CastRole::factory()->create();
         }
+        if ($language == null) {
+            $language = Language::factory()->create();
+        }
 
         return [
             'actor_id'      => $actor,
             'character_id'  => $character,
             'anime_id'      => $anime,
             'cast_role_id'  => $castRole,
+            'language_id'   => $language,
             'created_at'    => now(),
             'updated_at'    => now(),
         ];
