@@ -45,7 +45,7 @@ class Anime extends KModel
     const CACHE_KEY_SEASONS_SECONDS = 120 * 60;
     const CACHE_KEY_GENRES_SECONDS = 120 * 60;
     const CACHE_KEY_STUDIOS_SECONDS = 120 * 60;
-
+    const TABLE_NAME = 'animes';
     /**
      * Searchable rules.
      *
@@ -57,7 +57,6 @@ class Anime extends KModel
             'synopsis' => 5
         ]
     ];
-
     /**
      * Casts rules.
      *
@@ -68,13 +67,11 @@ class Anime extends KModel
         'last_aired' => 'date'
     ];
 
+    // Table name
     protected $appends = [
         'broadcast',
         'information_summary'
     ];
-
-    // Table name
-    const TABLE_NAME = 'animes';
     protected $table = self::TABLE_NAME;
 
     /**
@@ -180,16 +177,6 @@ class Anime extends KModel
     }
 
     /**
-     * Get the Anime's studios
-     *
-     * @return BelongsToMany
-     */
-    public function studios(): BelongsToMany
-    {
-        return $this->belongsToMany(Studio::class);
-    }
-
-    /**
      * Retrieves the studios for an Anime item in an array
      *
      * @return mixed
@@ -203,6 +190,16 @@ class Anime extends KModel
         return Cache::remember($cacheKey, self::CACHE_KEY_STUDIOS_SECONDS, function () {
             return $this->studios()->get();
         });
+    }
+
+    /**
+     * Get the Anime's studios
+     *
+     * @return BelongsToMany
+     */
+    public function studios(): BelongsToMany
+    {
+        return $this->belongsToMany(Studio::class);
     }
 
     /**
@@ -246,16 +243,6 @@ class Anime extends KModel
     }
 
     /**
-     * Get the Anime's actors
-     *
-     * @return HasManyDeep
-     */
-    public function actors(): HasManyDeep
-    {
-        return $this->hasManyDeep(Actor::class, [AnimeCast::class], ['anime_id', 'id'], ['id', 'actor_id'])->distinct();
-    }
-
-    /**
      * Retrieves the actors for an Anime item in an array
      *
      * @param ?int $limit
@@ -277,9 +264,9 @@ class Anime extends KModel
      *
      * @return HasManyDeep
      */
-    public function characters(): HasManyDeep
+    public function actors(): HasManyDeep
     {
-        return $this->hasManyDeep(Character::class, [AnimeCast::class], ['anime_id', 'id'], ['id', 'character_id'])->distinct();
+        return $this->hasManyDeep(Actor::class, [AnimeCast::class], ['anime_id', 'id'], ['id', 'actor_id'])->distinct();
     }
 
     /**
@@ -300,13 +287,13 @@ class Anime extends KModel
     }
 
     /**
-     * Get the Anime's cast
+     * Get the Anime's actors
      *
-     * @return HasMany
+     * @return HasManyDeep
      */
-    public function cast(): HasMany
+    public function characters(): HasManyDeep
     {
-        return $this->hasMany(AnimeCast::class);
+        return $this->hasManyDeep(Character::class, [AnimeCast::class], ['anime_id', 'id'], ['id', 'character_id'])->distinct();
     }
 
     /**
@@ -327,13 +314,13 @@ class Anime extends KModel
     }
 
     /**
-     * Returns all episodes across all seasons in a flat list.
+     * Get the Anime's cast
      *
-     * @return HasManyThrough
+     * @return HasMany
      */
-    public function episodes(): HasManyThrough
+    public function cast(): HasMany
     {
-        return $this->hasManyThrough(AnimeEpisode::class, AnimeSeason::class, 'anime_id', 'season_id');
+        return $this->hasMany(AnimeCast::class);
     }
 
     /**
@@ -360,13 +347,13 @@ class Anime extends KModel
     }
 
     /**
-     * Get the Anime's seasons
+     * Returns all episodes across all seasons in a flat list.
      *
-     * @return HasMany
+     * @return HasManyThrough
      */
-    public function seasons(): HasMany
+    public function episodes(): HasManyThrough
     {
-        return $this->hasMany(AnimeSeason::class, 'anime_id');
+        return $this->hasManyThrough(AnimeEpisode::class, AnimeSeason::class, 'anime_id', 'season_id');
     }
 
     /**
@@ -384,6 +371,16 @@ class Anime extends KModel
         return Cache::remember($cacheKey, self::CACHE_KEY_SEASONS_SECONDS, function () use ($limit) {
             return $this->seasons()->limit($limit)->get();
         });
+    }
+
+    /**
+     * Get the Anime's seasons
+     *
+     * @return HasMany
+     */
+    public function seasons(): HasMany
+    {
+        return $this->hasMany(AnimeSeason::class, 'anime_id');
     }
 
     /**
@@ -414,16 +411,6 @@ class Anime extends KModel
     }
 
     /**
-     * The related anime of this Anime
-     *
-     * @return HasMany
-     */
-    public function anime_relations(): HasMany
-    {
-        return $this->hasMany(MediaRelation::class, 'media_id')->where('related_type', 'anime');
-    }
-
-    /**
      * Returns this anime's related anime
      *
      * @param ?int $limit
@@ -438,6 +425,16 @@ class Anime extends KModel
         return Cache::remember($cacheKey, self::CACHE_KEY_RELATIONS_SECONDS, function () use ($limit) {
             return $this->anime_relations()->limit($limit)->get();
         });
+    }
+
+    /**
+     * The related anime of this Anime
+     *
+     * @return HasMany
+     */
+    public function anime_relations(): HasMany
+    {
+        return $this->hasMany(MediaRelation::class, 'media_id')->where('related_type', 'anime');
     }
 
     /**
@@ -504,5 +501,15 @@ class Anime extends KModel
     public function source(): BelongsTo
     {
         return $this->belongsTo(Source::class);
+    }
+
+    /**
+     * The anime's anime-songs relationship.
+     *
+     * @return HasMany
+     */
+    public function anime_songs(): HasMany
+    {
+        return $this->hasMany(AnimeSong::class);
     }
 }

@@ -230,6 +230,8 @@ class Anime extends Resource
 
             HasMany::make('Anime Relations', 'anime_relations', MediaRelation::class),
 
+            HasMany::make('Songs', 'anime_songs', AnimeSong::class),
+
             BelongsToMany::make('Moderators', 'moderators', User::class)
                 // @TODO
                 // This has been commented out, because it conflicts with the favoriteAnime relationship.
