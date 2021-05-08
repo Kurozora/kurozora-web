@@ -51,7 +51,8 @@ class AnimeStudio extends Resource
 
             BelongsTo::make('Anime')
                 ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->required(),
 
             BelongsTo::make('Studio')
                 ->sortable()

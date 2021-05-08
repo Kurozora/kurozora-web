@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Enums\DayOfWeek;
 use App\Models\Anime;
-use App\Models\AnimeGenre;
+use App\Models\MediaGenre;
 use App\Models\Genre;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -145,7 +145,7 @@ class FetchAnimeDetails extends Command
 //            );
 //
 //            // Assign to this anime
-//            AnimeGenre::create([
+//            MediaGenre::create([
 //                'anime_id' => $anime->id,
 //                'genre_id' => $foundGenre->id
 //            ]);

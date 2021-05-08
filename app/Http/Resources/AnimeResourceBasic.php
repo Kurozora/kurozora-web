@@ -33,6 +33,8 @@ class AnimeResourceBasic extends JsonResource
             $lastAired = $anime->last_aired->format('Y-m-d');
         }
 
+        $airDay = DayOfWeek::getDescription($anime->air_day);
+
         $resource = [
             'id'            => $anime->id,
             'type'          => 'show',
@@ -63,7 +65,7 @@ class AnimeResourceBasic extends JsonResource
                 'lastAired'             => $lastAired,
                 'runtime'               => $anime->runtime,
                 'airTime'               => $anime->air_time,
-                'airDay'                => DayOfWeek::getDescription($anime->air_day),
+                'airDay'                => !empty($airDay) ? $airDay : null,
                 'isNSFW'                => (bool) $anime->is_nsfw,
                 'copyright'             => $anime->copyright
             ]

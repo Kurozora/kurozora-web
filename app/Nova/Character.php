@@ -60,7 +60,8 @@ class Character extends Resource
             Heading::make('Personal Information')
                 ->onlyOnForms(),
 
-            ExternalImage::make('Image'),
+            ExternalImage::make('Image')
+                ->width(128),
 
             Text::make('Name')
                 ->rules('required')

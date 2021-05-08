@@ -52,7 +52,8 @@ class Actor extends Resource
         return [
             ID::make()->sortable(),
 
-            ExternalImage::make('Image'),
+            ExternalImage::make('Image')
+                ->height(100),
 
             Text::make('First name')
                 ->rules('required', 'max:255')

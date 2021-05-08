@@ -128,7 +128,7 @@
                     <x-information-list label="{{ __('Source') }}" infromation="{{ $anime->source->name }}" />
                     <x-information-list label="{{ __('Aired') }}" infromation="{{ $anime->first_aired ?? 'N/A' }} - {{ $anime->last_aired ?? 'N/A' }}" />
                     <x-information-list label="{{ __('Broadcast') }}" infromation="{{ $anime->broadcast }}" />
-                    <x-information-list label="{{ __('Genres') }}" infromation="{{ $anime->genres ?? '-' }}" />
+                    <x-information-list label="{{ __('Genres') }}" infromation="{{ $anime->genres->implode('name', ', ') ?? '-' }}" />
                     <x-information-list label="{{ __('Rating') }}" infromation="{!! $anime->tv_rating->full_name !!}" />
                     <x-information-list label="{{ __('Seasons') }}" infromation="{{ $anime->seasons_count ?? '-' }}" />
                     <x-information-list label="{{ __('Episodes') }}" infromation="{{ $anime->episodes_count ?? '-' }}" />
