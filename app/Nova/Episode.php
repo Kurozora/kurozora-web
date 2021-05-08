@@ -60,6 +60,7 @@ class Episode extends Resource
                 ->sortable(),
 
             ExternalImage::make('Preview Image')
+                ->width(240)
                 ->help('A link to a preview image of the episode.'),
 
             Number::make('Number')

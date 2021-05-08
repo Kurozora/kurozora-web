@@ -53,7 +53,8 @@ class Studio extends Resource
         return [
             ID::make()->sortable(),
 
-            ExternalImage::make('Logo URL'),
+            ExternalImage::make('Logo URL')
+                ->width(100),
 
             Text::make('Name')
                 ->rules('required')
