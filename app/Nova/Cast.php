@@ -52,7 +52,8 @@ class Cast extends Resource
 
             BelongsTo::make('Anime')
                 ->searchable()
-                ->sortable(),
+                ->sortable()
+                ->required(),
 
             BelongsTo::make('Character')
                 ->searchable()

@@ -2,22 +2,23 @@
 
 namespace App\Nova;
 
-use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
-use Timothyasp\Color\Color;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Genre extends Resource
+class MediaGenre extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static string $model = 'App\Models\Genre';
+    public static string $model = \App\Models\MediaGenre::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -32,7 +33,7 @@ class Genre extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name'
+        'id',
     ];
 
     /**
@@ -51,41 +52,25 @@ class Genre extends Resource
     public function fields(Request $request): array
     {
         return [
-            ID::make()->sortable(),
+            ID::make(__('ID'), 'id')->sortable(),
 
-            ExternalImage::make('Symbol image URL', 'symbol')
-                ->width(100)
-                ->rules('max:255'),
+            Select::make('Type')
+                ->options([
+                    'anime' => 'anime',
+                    'manga' => 'manga'
+                ])
+                ->sortable()
+                ->required(),
 
-            Text::make('Name')
-                ->rules('required')
-                ->sortable(),
+            BelongsTo::make('Genre')
+                ->sortable()
+                ->required(),
 
-            Color::make('Color')
-                ->rules('required'),
-
-            Boolean::make('Is NSFW')
-                ->rules('required')
-                ->sortable(),
-
-            BelongsToMany::make('Animes')
-                ->searchable(),
+            BelongsTo::make('Media', 'anime', Anime::class)
+                ->sortable()
+                ->searchable()
+                ->required(),
         ];
-    }
-
-    /**
-     * Get the value that should be displayed to represent the resource.
-     *
-     * @return string
-     */
-    public function title(): string
-    {
-        $genreName = $this->name;
-
-        if (!is_string($genreName) || !strlen($genreName))
-            $genreName = 'No genre title';
-
-        return $genreName . ' (ID: ' . $this->id . ')';
     }
 
     /**

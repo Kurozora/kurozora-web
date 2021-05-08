@@ -57,9 +57,12 @@ class AnimeImage extends Resource
             ID::make()->sortable(),
 
             BelongsTo::make('Anime')
-                ->searchable(),
+                ->searchable()
+                ->sortable()
+                ->required(),
 
             ExternalImage::make('URL', 'url')
+                ->height(200)
                 ->radius(5)
                 ->rules('required')
                 ->help('The URL to request the image asset.'),
