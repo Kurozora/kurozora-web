@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             AnimeCastSeeder::class,
             MediaRelationSeeder::class,
             SongSeeder::class,
+            AnimeSongSeeder::class,
             UserSeeder::class,
             BadgeSeeder::class,
             ForumSectionSeeder::class,

@@ -5,6 +5,7 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -60,6 +61,8 @@ class Song extends Resource
             Text::make('Artist')
                 ->sortable()
                 ->required(),
+
+            HasMany::make('Anime', 'anime_songs', AnimeSong::class),
         ];
     }
 
