@@ -71,6 +71,7 @@ class Anime extends Resource
             ID::make()->sortable(),
 
             ExternalImage::make('Thumbnail', 'cached_poster_thumbnail')
+                ->height(100)
                 ->onlyOnIndex(),
 
             Number::make('AniDB ID')

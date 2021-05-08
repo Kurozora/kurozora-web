@@ -54,7 +54,8 @@ class Season extends Resource
 
             BelongsTo::make('Anime')
                 ->searchable()
-                ->sortable(),
+                ->sortable()
+                ->required(),
 
             Text::make('Season Title', 'title')
                 ->sortable(),
