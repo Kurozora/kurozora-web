@@ -30,7 +30,7 @@ class Character extends KModel
      * @var array
      */
     protected $casts = [
-        'nicknames' => AsArrayObject::class
+        'nicknames' => AsArrayObject::class,
     ];
 
     /**

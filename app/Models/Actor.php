@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 
-class Actor extends KModel
+class Actor extends Person
 {
     use HasFactory;
 
@@ -19,18 +19,18 @@ class Actor extends KModel
     const CACHE_KEY_ANIME_SECONDS = 120 * 60;
     const CACHE_KEY_CHARACTERS_SECONDS = 120 * 60;
 
-    // Table name
-    const TABLE_NAME = 'actors';
-    protected $table = self::TABLE_NAME;
-
     /**
-     * Returns the full name of the actor.
+     * Bootstrap the model and its traits.
      *
-     * @return string
+     * @return void
      */
-    public function getFullNameAttribute(): string
+    public static function boot()
     {
-        return $this->last_name . ', ' . $this->first_name;
+        parent::boot();
+
+//        static::addGlobalScope(function ($query) {
+//            $query->where('staff_role_id', 1);
+//        });
     }
 
     /**

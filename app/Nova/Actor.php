@@ -2,14 +2,10 @@
 
 namespace App\Nova;
 
-use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Textarea;
 
-class Actor extends Resource
+class Actor extends Person
 {
     /**
      * The model the resource corresponds to.
@@ -23,7 +19,7 @@ class Actor extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'full_name';
 
     /**
      * The columns that should be searched.
@@ -31,7 +27,7 @@ class Actor extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'first_name', 'last_name', 'occupation',
+        'id', 'first_name', 'last_name',
     ];
 
     /**
@@ -49,44 +45,15 @@ class Actor extends Resource
      */
     public function fields(Request $request): array
     {
-        return [
-            ID::make()->sortable(),
+        $parentFields = parent::fields($request);
 
-            ExternalImage::make('Image')
-                ->height(100),
-
-            Text::make('First name')
-                ->rules('required', 'max:255')
-                ->sortable(),
-
-            Text::make('Last name')
-                ->rules('required', 'max:255')
-                ->sortable(),
-
-            Textarea::make('About')
-                ->onlyOnForms()
-                ->help('A short description of the actor.'),
-
-            Text::make('Occupation')
-                ->rules('max:255')
-                ->sortable(),
-
+        return array_merge($parentFields, [
             HasMany::make('Cast'),
 
             HasMany::make('Anime'),
 
             HasMany::make('Characters'),
-        ];
-    }
-
-    /**
-     * Get the value that should be displayed to represent the resource.
-     *
-     * @return string
-     */
-    public function title(): string
-    {
-        return $this->full_name . ' (ID: ' . $this->id . ')';
+        ]);
     }
 
     /**
