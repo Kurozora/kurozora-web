@@ -17,7 +17,13 @@ class StaffRoleSeeder extends Seeder
             'name' => 'Other',
         ],
         [
+            'name' => 'ADR Director',
+        ],
+        [
             'name' => 'Animation Character Design',
+        ],
+        [
+            'name' => 'Animation Check',
         ],
         [
             'name' => 'Animation Director',
@@ -59,13 +65,25 @@ class StaffRoleSeeder extends Seeder
             'name' => 'Assistance',
         ],
         [
+            'name' => 'Assistant Animation Director',
+        ],
+        [
             'name' => 'Assistant Director',
+        ],
+        [
+            'name' => 'Assistant Engineer',
         ],
         [
             'name' => 'Assistant Episode Director',
         ],
         [
             'name' => 'Assistant Producer',
+        ],
+        [
+            'name' => 'Assistant Production Coordinator',
+        ],
+        [
+            'name' => 'Associate Casting Director',
         ],
         [
             'name' => 'Associate Producer',
@@ -95,6 +113,12 @@ class StaffRoleSeeder extends Seeder
             'name' => 'Background Art Processing',
         ],
         [
+            'name' => 'Casting Director',
+        ],
+        [
+            'name' => 'Cell Inspection',
+        ],
+        [
             'name' => 'CGI Director',
         ],
         [
@@ -108,9 +132,6 @@ class StaffRoleSeeder extends Seeder
         ],
         [
             'name' => 'CGI Production Manager Assistant',
-        ],
-        [
-            'name' => 'Cell Inspection',
         ],
         [
             'name' => 'Character Design',
@@ -134,10 +155,16 @@ class StaffRoleSeeder extends Seeder
             'name' => 'Chief Supervision',
         ],
         [
+            'name' => 'Co-Director',
+        ],
+        [
             'name' => 'Color Design',
         ],
         [
             'name' => 'Color Design Assistance',
+        ],
+        [
+            'name' => 'Color Setting',
         ],
         [
             'name' => 'Color Specification Inspection',
@@ -149,6 +176,9 @@ class StaffRoleSeeder extends Seeder
             'name' => 'Concept Design',
         ],
         [
+            'name' => 'Co-Producer',
+        ],
+        [
             'name' => 'Creative Producer',
         ],
         [
@@ -156,9 +186,6 @@ class StaffRoleSeeder extends Seeder
         ],
         [
             'name' => 'Creature Design',
-        ],
-        [
-            'name' => 'DVD Producer',
         ],
         [
             'name' => 'Design',
@@ -170,10 +197,16 @@ class StaffRoleSeeder extends Seeder
             'name' => 'Design Production',
         ],
         [
+            'name' => 'Dialogue Editing',
+        ],
+        [
             'name' => 'Digital Colouring',
         ],
         [
             'name' => 'Digital Director',
+        ],
+        [
+            'name' => 'Digital Paint',
         ],
         [
             'name' => 'Digital Photography',
@@ -189,6 +222,12 @@ class StaffRoleSeeder extends Seeder
         ],
         [
             'name' => 'Director Of Photography',
+        ],
+        [
+            'name' => 'DVD Producer',
+        ],
+        [
+            'name' => 'Editing',
         ],
         [
             'name' => 'Editor',
@@ -224,16 +263,19 @@ class StaffRoleSeeder extends Seeder
             'name' => 'Image Board',
         ],
         [
-            'name' => 'In Between Animation',
+            'name' => 'In-Between Animation',
         ],
         [
-            'name' => 'In Between Animation Assistance',
+            'name' => 'In-Between Animation Assistance',
         ],
         [
-            'name' => 'In Between Animation Check',
+            'name' => 'In-Between Animation Check',
         ],
         [
-            'name' => 'In Between Animation Inspection',
+            'name' => 'In-Between Animation Inspection',
+        ],
+        [
+            'name' => 'Inserted Song Performance',
         ],
         [
             'name' => 'Key Animation',
@@ -287,6 +329,9 @@ class StaffRoleSeeder extends Seeder
             'name' => 'Music Production Assistance',
         ],
         [
+            'name' => 'Online Editing Supervision',
+        ],
+        [
             'name' => 'Online Editor',
         ],
         [
@@ -323,13 +368,19 @@ class StaffRoleSeeder extends Seeder
             'name' => 'Planning Manager',
         ],
         [
+            'name' => 'Planning Producer',
+        ],
+        [
+            'name' => 'Post-Production Assistant',
+        ],
+        [
+            'name' => 'Principle Drawing',
+        ],
+        [
             'name' => 'Producer',
         ],
         [
             'name' => 'Production',
-        ],
-        [
-            'name' => 'Production Assistance',
         ],
         [
             'name' => 'Production Assistant',
@@ -338,13 +389,16 @@ class StaffRoleSeeder extends Seeder
             'name' => 'Production Control',
         ],
         [
+            'name' => 'Production Coordination',
+        ],
+        [
             'name' => 'Production Desk',
         ],
         [
             'name' => 'Production Manager',
         ],
         [
-            'name' => 'Production OfficeWork',
+            'name' => 'Production Office Work',
         ],
         [
             'name' => 'Production Studio',
@@ -365,7 +419,22 @@ class StaffRoleSeeder extends Seeder
             'name' => 'Publicity Assistance',
         ],
         [
+            'name' => 'Recording',
+        ],
+        [
+            'name' => 'Recording Assistant',
+        ],
+        [
+            'name' => 'Recording Engineer',
+        ],
+        [
+            'name' => 'Re-Recording Mixing',
+        ],
+        [
             'name' => 'Screenplay',
+        ],
+        [
+            'name' => 'Script',
         ],
         [
             'name' => 'Second Key Animator',
@@ -386,7 +455,16 @@ class StaffRoleSeeder extends Seeder
             'name' => 'Series Episode Director',
         ],
         [
+            'name' => 'Series Production Director',
+        ],
+        [
             'name' => 'Set Design',
+        ],
+        [
+            'name' => 'Setting',
+        ],
+        [
+            'name' => 'Setting Manager',
         ],
         [
             'name' => 'Setting Production',
@@ -401,10 +479,16 @@ class StaffRoleSeeder extends Seeder
             'name' => 'Sound Effects',
         ],
         [
+            'name' => 'Sound Manager',
+        ],
+        [
             'name' => 'Sound Mixer',
         ],
         [
             'name' => 'Sound Production',
+        ],
+        [
+            'name' => 'Sound Supervisor',
         ],
         [
             'name' => 'Sound Work Manager',
@@ -416,6 +500,15 @@ class StaffRoleSeeder extends Seeder
             'name' => 'Sponsor',
         ],
         [
+            'name' => 'Spotting',
+        ],
+        [
+            'name' => 'Story',
+        ],
+        [
+            'name' => 'Story & Art',
+        ],
+        [
             'name' => 'Story Composition',
         ],
         [
@@ -423,6 +516,18 @@ class StaffRoleSeeder extends Seeder
         ],
         [
             'name' => 'Supervision',
+        ],
+        [
+            'name' => 'Theme Song Arrangement',
+        ],
+        [
+            'name' => 'Theme Song Composition',
+        ],
+        [
+            'name' => 'Theme Song Lyrics',
+        ],
+        [
+            'name' => 'Theme Song Performance',
         ],
         [
             'name' => 'Titling',
