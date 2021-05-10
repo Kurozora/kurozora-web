@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Actor;
+use App\Models\Person;
 use Illuminate\Database\Seeder;
 
-class ActorSeeder extends Seeder
+class PersonSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,6 +15,6 @@ class ActorSeeder extends Seeder
     public function run()
     {
         // Create initial actors
-        Actor::factory(10)->create();
+        Person::factory(10)->create();
     }
 }

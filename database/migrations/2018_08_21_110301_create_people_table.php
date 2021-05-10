@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\Actor;
+use App\Models\Person;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateActorsTable extends Migration
+class CreatePeopleTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,13 +14,17 @@ class CreateActorsTable extends Migration
      */
     public function up()
     {
-        Schema::create(Actor::TABLE_NAME, function (Blueprint $table) {
+        Schema::create(Person::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('first_name');
-            $table->string('last_name');
+            $table->string('last_name')->nullable();
+            $table->string('family_name')->nullable();
+            $table->string('given_name')->nullable();
+            $table->json('alternative_names')->nullable();
             $table->mediumText('about')->nullable();
-            $table->string('occupation')->nullable();
+            $table->date('birth_date')->nullable();
             $table->string('image')->nullable();
+            $table->string('website_url')->nullable();
             $table->timestamps();
         });
     }
@@ -32,6 +36,6 @@ class CreateActorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(Actor::TABLE_NAME);
+        Schema::dropIfExists(Person::TABLE_NAME);
     }
 }
