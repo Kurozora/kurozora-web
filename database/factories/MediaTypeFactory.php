@@ -24,7 +24,7 @@ class MediaTypeFactory extends Factory
         return [
             'type'          => $this->faker->randomElement(['anime', 'manga']),
             'name'          => $this->faker->name,
-            'description'   => $this->faker->words(3, true),
+            'description'   => $this->faker->sentence(),
             'created_at'    => now(),
             'updated_at'    => now(),
         ];

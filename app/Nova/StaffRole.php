@@ -55,6 +55,11 @@ class StaffRole extends Resource
                 ->help('The name of the role. For example, Color Design, Voice Actor, etc.')
                 ->rules('unique:' . \App\Models\StaffRole::TABLE_NAME . ',name')
                 ->required(),
+
+            Text::make('Description')
+                ->sortable()
+                ->help('A short description of the role.')
+                ->required(),
         ];
     }
 
