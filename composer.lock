@@ -2904,16 +2904,16 @@
         },
         {
             "name": "laravel-notification-channels/apn",
-            "version": "v3.5.0",
+            "version": "v3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel-notification-channels/apn.git",
-                "reference": "2d55b511df98acd77bb3a56d3ed122175c2d427c"
+                "reference": "01defdb3bc341078af660ca06ff0ebdcd55223eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel-notification-channels/apn/zipball/2d55b511df98acd77bb3a56d3ed122175c2d427c",
-                "reference": "2d55b511df98acd77bb3a56d3ed122175c2d427c",
+                "url": "https://api.github.com/repos/laravel-notification-channels/apn/zipball/01defdb3bc341078af660ca06ff0ebdcd55223eb",
+                "reference": "01defdb3bc341078af660ca06ff0ebdcd55223eb",
                 "shasum": ""
             },
             "require": {
@@ -2961,22 +2961,22 @@
             "homepage": "https://github.com/laravel-notification-channels/apn",
             "support": {
                 "issues": "https://github.com/laravel-notification-channels/apn/issues",
-                "source": "https://github.com/laravel-notification-channels/apn/tree/v3.5.0"
+                "source": "https://github.com/laravel-notification-channels/apn/tree/v3.6.0"
             },
-            "time": "2021-04-15T02:23:22+00:00"
+            "time": "2021-05-06T02:34:58+00:00"
         },
         {
             "name": "laravel/framework",
-            "version": "v8.40.0",
+            "version": "v8.41.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "a654897ad7f97aea9d7ef292803939798c4a02a4"
+                "reference": "05417155d886df8710e55c84e12622b52d83c47c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/a654897ad7f97aea9d7ef292803939798c4a02a4",
-                "reference": "a654897ad7f97aea9d7ef292803939798c4a02a4",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/05417155d886df8710e55c84e12622b52d83c47c",
+                "reference": "05417155d886df8710e55c84e12622b52d83c47c",
                 "shasum": ""
             },
             "require": {
@@ -3084,7 +3084,7 @@
                 "phpunit/phpunit": "Required to use assertions and run tests (^8.5.8|^9.3.3).",
                 "predis/predis": "Required to use the predis connector (^1.1.2).",
                 "psr/http-message": "Required to allow Storage::put to accept a StreamInterface (^1.0).",
-                "pusher/pusher-php-server": "Required to use the Pusher broadcast driver (^4.0|^5.0).",
+                "pusher/pusher-php-server": "Required to use the Pusher broadcast driver (^4.0|^5.0|^6.0).",
                 "symfony/cache": "Required to PSR-6 cache bridge (^5.1.4).",
                 "symfony/filesystem": "Required to enable support for relative symbolic links (^5.1.4).",
                 "symfony/psr-http-message-bridge": "Required to use PSR-7 bridging features (^2.0).",
@@ -3131,7 +3131,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2021-04-28T14:38:56+00:00"
+            "time": "2021-05-11T14:00:02+00:00"
         },
         {
             "name": "laravel/nova",
@@ -3347,16 +3347,16 @@
         },
         {
             "name": "league/commonmark",
-            "version": "1.6.0",
+            "version": "1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "19a9673b833cc37770439097b381d86cd125bfe8"
+                "reference": "2651c497f005de305c7ba3f232cbd87b8c00ee8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/19a9673b833cc37770439097b381d86cd125bfe8",
-                "reference": "19a9673b833cc37770439097b381d86cd125bfe8",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/2651c497f005de305c7ba3f232cbd87b8c00ee8c",
+                "reference": "2651c497f005de305c7ba3f232cbd87b8c00ee8c",
                 "shasum": ""
             },
             "require": {
@@ -3444,7 +3444,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-01T19:00:49+00:00"
+            "time": "2021-05-08T16:08:00+00:00"
         },
         {
             "name": "league/flysystem",
@@ -5788,16 +5788,16 @@
         },
         {
             "name": "spatie/enum",
-            "version": "3.8.0",
+            "version": "3.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/enum.git",
-                "reference": "9da7dfe60deabeabee217125b505e28107ca4a84"
+                "reference": "5870275f3811dc63c08200b1536ab2f8618b6a52"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/enum/zipball/9da7dfe60deabeabee217125b505e28107ca4a84",
-                "reference": "9da7dfe60deabeabee217125b505e28107ca4a84",
+                "url": "https://api.github.com/repos/spatie/enum/zipball/5870275f3811dc63c08200b1536ab2f8618b6a52",
+                "reference": "5870275f3811dc63c08200b1536ab2f8618b6a52",
                 "shasum": ""
             },
             "require": {
@@ -5860,7 +5860,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-04-12T13:24:11+00:00"
+            "time": "2021-05-10T09:27:50+00:00"
         },
         {
             "name": "spatie/icalendar-generator",
@@ -6136,16 +6136,16 @@
         },
         {
             "name": "spatie/laravel-medialibrary",
-            "version": "9.5.6",
+            "version": "9.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-medialibrary.git",
-                "reference": "f2c3ed9a6a7420c27d76c68892f93bca8b5c99d5"
+                "reference": "c875ce4be6925f87011fb00a5e33c367fafcbdd6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/f2c3ed9a6a7420c27d76c68892f93bca8b5c99d5",
-                "reference": "f2c3ed9a6a7420c27d76c68892f93bca8b5c99d5",
+                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/c875ce4be6925f87011fb00a5e33c367fafcbdd6",
+                "reference": "c875ce4be6925f87011fb00a5e33c367fafcbdd6",
                 "shasum": ""
             },
             "require": {
@@ -6224,7 +6224,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-medialibrary/issues",
-                "source": "https://github.com/spatie/laravel-medialibrary/tree/9.5.6"
+                "source": "https://github.com/spatie/laravel-medialibrary/tree/9.6.1"
             },
             "funding": [
                 {
@@ -6236,7 +6236,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-04-20T06:17:46+00:00"
+            "time": "2021-05-06T11:20:40+00:00"
         },
         {
             "name": "spatie/laravel-permission",
@@ -6318,16 +6318,16 @@
         },
         {
             "name": "spatie/laravel-sluggable",
-            "version": "3.0.1",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-sluggable.git",
-                "reference": "a903398f766a3d44223c3db773bb117dbfc232ce"
+                "reference": "8f2090004f5f02072ed8dbc6fd27d461b8e559fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-sluggable/zipball/a903398f766a3d44223c3db773bb117dbfc232ce",
-                "reference": "a903398f766a3d44223c3db773bb117dbfc232ce",
+                "url": "https://api.github.com/repos/spatie/laravel-sluggable/zipball/8f2090004f5f02072ed8dbc6fd27d461b8e559fe",
+                "reference": "8f2090004f5f02072ed8dbc6fd27d461b8e559fe",
                 "shasum": ""
             },
             "require": {
@@ -6367,7 +6367,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-sluggable/issues",
-                "source": "https://github.com/spatie/laravel-sluggable/tree/3.0.1"
+                "source": "https://github.com/spatie/laravel-sluggable/tree/3.0.2"
             },
             "funding": [
                 {
@@ -6375,7 +6375,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-04-22T06:15:12+00:00"
+            "time": "2021-05-07T14:58:12+00:00"
         },
         {
             "name": "spatie/once",
