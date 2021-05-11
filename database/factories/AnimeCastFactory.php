@@ -49,7 +49,7 @@ class AnimeCastFactory extends Factory
         }
 
         return [
-            'actor_id'      => $person,
+            'person_id'     => $person,
             'character_id'  => $character,
             'anime_id'      => $anime,
             'cast_role_id'  => $castRole,

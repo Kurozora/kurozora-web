@@ -40,7 +40,7 @@ class Actor extends Person
      */
     function anime(): HasManyDeep
     {
-        return $this->hasManyDeep(Anime::class, [AnimeCast::class], ['actor_id', 'id'], ['id', 'anime_id'])->distinct();
+        return $this->hasManyDeep(Anime::class, [AnimeCast::class], ['person_id', 'id'], ['id', 'anime_id'])->distinct();
     }
 
     /**
@@ -67,7 +67,7 @@ class Actor extends Person
      */
     function characters(): HasManyDeep
     {
-        return $this->hasManyDeep(Character::class, [AnimeCast::class], ['actor_id', 'id'], ['id', 'character_id'])->distinct();
+        return $this->hasManyDeep(Character::class, [AnimeCast::class], ['person_id', 'id'], ['id', 'character_id'])->distinct();
     }
 
     /**
@@ -94,6 +94,6 @@ class Actor extends Person
      */
     public function cast(): HasMany
     {
-        return $this->hasMany(AnimeCast::class);
+        return $this->hasMany(AnimeCast::class, 'person_id');
     }
 }
