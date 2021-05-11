@@ -35,13 +35,13 @@ class AnimeCast extends Pivot
     }
 
     /**
-     * Returns the actor relationship of the cast.
+     * Returns the person relationship of the cast.
      *
      * @return BelongsTo
      */
-    public function actor(): BelongsTo
+    public function person(): BelongsTo
     {
-        return $this->belongsTo(Actor::class, 'person_id');
+        return $this->belongsTo(Person::class);
     }
 
     /**

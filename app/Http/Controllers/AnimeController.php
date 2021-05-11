@@ -9,7 +9,7 @@ use App\Helpers\JSONResult;
 use App\Http\Requests\RateAnimeRequest;
 use App\Http\Requests\SearchAnimeRequest;
 use App\Http\Resources\AnimeCastResource;
-use App\Http\Resources\ActorResource;
+use App\Http\Resources\PersonResource;
 use App\Http\Resources\AnimeRelatedShowsResource;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\AnimeResourceBasic;
@@ -40,18 +40,18 @@ class AnimeController extends Controller
     }
 
     /**
-     * Returns actor information of an Anime.
+     * Returns person information of an Anime.
      *
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function actors(Anime $anime): JsonResponse
+    public function people(Anime $anime): JsonResponse
     {
-        // Get the actors
-        $actors = $anime->getActors();
+        // Get the people
+        $people = $anime->getPeople();
 
         return JSONResult::success([
-            'data' => ActorResource::collection($actors)
+            'data' => PersonResource::collection($people)
         ]);
     }
 
@@ -63,11 +63,11 @@ class AnimeController extends Controller
      */
     public function characters(Anime $anime): JsonResponse
     {
-        // Get the actors
-        $actors = $anime->getCharacters();
+        // Get the characters
+        $characters = $anime->getCharacters();
 
         return JSONResult::success([
-            'data' => CharacterResourceBasic::collection($actors)
+            'data' => CharacterResourceBasic::collection($characters)
         ]);
     }
 

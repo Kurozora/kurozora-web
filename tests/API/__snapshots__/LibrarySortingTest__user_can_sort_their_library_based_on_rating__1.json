@@ -10,23 +10,23 @@
             "imdbID": null,
             "malID": null,
             "title": "Be a good person!",
-            "tagline": "Velit consectetur officia soluta qui assumenda ab.",
-            "synopsis": "Praesentium inventore amet officia ut distinctio deserunt commodi. Ullam totam eveniet dolor numquam numquam beatae quo. Eligendi pariatur nisi quia voluptas iste.",
+            "tagline": "Ea ad fugit iusto incidunt excepturi unde.",
+            "synopsis": "Quia dolorum aut ducimus tempora et repellendus. Expedita voluptatum molestias numquam suscipit aut culpa illum dolores.",
             "tvRating": {
-                "name": "z",
-                "description": "mollitia ut consequatur"
+                "name": "n",
+                "description": "adipisci dolorum eius"
             },
             "type": {
-                "name": "distinctio",
-                "description": "et quaerat aperiam"
+                "name": "Demarcus Murazik",
+                "description": "occaecati voluptatem architecto"
             },
             "source": {
-                "name": "quos",
-                "description": "sed voluptas sed"
+                "name": "Dee Nolan",
+                "description": "perferendis eius et"
             },
             "status": {
-                "name": "et voluptatem",
-                "description": "soluta commodi atque"
+                "name": "quod aut",
+                "description": "sit enim fugit"
             },
             "network": null,
             "producer": null,
@@ -37,13 +37,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "1981-02-28",
-            "lastAired": "1981-08-15",
-            "runtime": "18",
-            "airTime": "01:02",
-            "airDay": "",
+            "firstAired": "1999-03-05",
+            "lastAired": "1999-08-20",
+            "runtime": "22",
+            "airTime": "02:10",
+            "airDay": null,
             "isNSFW": false,
-            "copyright": "\u2117 1977 Beahan Group",
+            "copyright": "\u00a9 2011 Volkman, Goyette and Haag",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,
@@ -61,23 +61,23 @@
             "imdbID": null,
             "malID": null,
             "title": "Awesome Show",
-            "tagline": "Expedita rem deleniti soluta repudiandae impedit.",
-            "synopsis": "Perspiciatis possimus voluptas possimus voluptate iure. Officiis quae soluta ut suscipit esse. Et et debitis fugit dolorem in autem. Aut laboriosam numquam voluptatibus enim sint quasi.",
+            "tagline": "Dolor incidunt vitae voluptas et consequatur.",
+            "synopsis": "Aperiam laboriosam quod ut quia. Reprehenderit nulla nulla totam et quos. Ducimus ut eos omnis neque cumque ab dolorem sunt. Enim mollitia itaque consequuntur ratione.",
             "tvRating": {
-                "name": "z",
-                "description": "mollitia ut consequatur"
+                "name": "n",
+                "description": "adipisci dolorum eius"
             },
             "type": {
-                "name": "distinctio",
-                "description": "et quaerat aperiam"
+                "name": "Demarcus Murazik",
+                "description": "occaecati voluptatem architecto"
             },
             "source": {
-                "name": "quos",
-                "description": "sed voluptas sed"
+                "name": "Dee Nolan",
+                "description": "perferendis eius et"
             },
             "status": {
-                "name": "et voluptatem",
-                "description": "soluta commodi atque"
+                "name": "quod aut",
+                "description": "sit enim fugit"
             },
             "network": null,
             "producer": null,
@@ -88,13 +88,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "2021-02-12",
-            "lastAired": "2021-04-23",
-            "runtime": "11",
-            "airTime": "22:16",
-            "airDay": "",
+            "firstAired": "1979-11-30",
+            "lastAired": "1980-05-16",
+            "runtime": "23",
+            "airTime": "04:24",
+            "airDay": null,
             "isNSFW": true,
-            "copyright": "\u00a9 1984 Goldner, Doyle and Smitham",
+            "copyright": "\u00a9 1971 Boehm, Schuppe and Walker",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,

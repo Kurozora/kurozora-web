@@ -35,7 +35,7 @@ class CharactersTest extends TestCase
      */
     public function a_user_can_view_specific_character_details_including_relationships()
     {
-        $response = $this->get('/api/v1/characters/'.$this->character->id . '?include=shows,actors');
+        $response = $this->get('/api/v1/characters/'.$this->character->id . '?include=shows,people');
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
@@ -46,20 +46,20 @@ class CharactersTest extends TestCase
         // Check whether the response includes shows relationship
         $this->assertArrayHasKey('shows', $response->json()['data'][0]['relationships']);
 
-        // Check whether the response includes actors relationship
-        $this->assertArrayHasKey('actors', $response->json()['data'][0]['relationships']);
+        // Check whether the response includes people relationship
+        $this->assertArrayHasKey('people', $response->json()['data'][0]['relationships']);
     }
 
 
     /**
-     * A user can view specific character actors.
+     * A user can view specific character people.
      *
      * @return void
      * @test
      */
-    public function a_user_can_view_specific_character_actors()
+    public function a_user_can_view_specific_character_people()
     {
-        $response = $this->get('/api/v1/characters/'.$this->character->id.'/actors');
+        $response = $this->get('/api/v1/characters/'.$this->character->id.'/people');
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();

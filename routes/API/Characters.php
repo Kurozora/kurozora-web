@@ -9,8 +9,8 @@ Route::prefix('/characters')
             ->middleware('kurozora.userauth:optional')
             ->name('.details');
 
-        Route::get('/{character}/actors', [CharacterController::class, 'actors'])
-            ->name('.actors');
+        Route::get('/{character}/people', [CharacterController::class, 'people'])
+            ->name('.people');
 
         Route::get('/{character}/anime', [CharacterController::class, 'anime'])
             ->middleware('kurozora.userauth:optional')

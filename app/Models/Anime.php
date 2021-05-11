@@ -38,7 +38,7 @@ class Anime extends KModel
     // How long to cache certain responses
     const CACHE_KEY_EXPLORE_SECONDS = 120 * 60;
     const CACHE_KEY_ANIME_CAST_SECONDS = 120 * 60;
-    const CACHE_KEY_ACTORS_SECONDS = 120 * 60;
+    const CACHE_KEY_PEOPLE_SECONDS = 120 * 60;
     const CACHE_KEY_CHARACTERS_SECONDS = 120 * 60;
     const CACHE_KEY_EPISODES_SECONDS = 120 * 60;
     const CACHE_KEY_RELATIONS_SECONDS = 120 * 60;
@@ -243,30 +243,30 @@ class Anime extends KModel
     }
 
     /**
-     * Retrieves the actors for an Anime item in an array
+     * Retrieves the people for an Anime item in an array
      *
      * @param ?int $limit
      * @return mixed
      */
-    public function getActors(?int $limit = null): mixed
+    public function getPeople(?int $limit = null): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.actors', 'id' => $this->id, 'limit' => $limit]);
+        $cacheKey = self::cacheKey(['name' => 'anime.people', 'id' => $this->id, 'limit' => $limit]);
 
         // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_ACTORS_SECONDS, function () use ($limit) {
-            return $this->actors()->limit($limit)->get();
+        return Cache::remember($cacheKey, self::CACHE_KEY_PEOPLE_SECONDS, function () use ($limit) {
+            return $this->people()->limit($limit)->get();
         });
     }
 
     /**
-     * Get the Anime's actors
+     * Get the Anime's people.
      *
      * @return HasManyDeep
      */
-    public function actors(): HasManyDeep
+    public function people(): HasManyDeep
     {
-        return $this->hasManyDeep(Actor::class, [AnimeCast::class], ['anime_id', 'id'], ['id', 'person_id'])->distinct();
+        return $this->hasManyDeep(Person::class, [AnimeCast::class], ['anime_id', 'id'], ['id', 'person_id'])->distinct();
     }
 
     /**
@@ -287,7 +287,7 @@ class Anime extends KModel
     }
 
     /**
-     * Get the Anime's actors
+     * Get the Anime's characters.
      *
      * @return HasManyDeep
      */
