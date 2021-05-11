@@ -14,547 +14,728 @@ class StaffRoleSeeder extends Seeder
      */
     protected array $staffRoles = [
         [
-            'name' => 'Other',
+            'name'          => 'Other',
+            'description'   => '',
         ],
         [
-            'name' => 'ADR Director',
+            'name'          => 'ADR Director',
+            'description'   => '',
         ],
         [
-            'name' => 'Animation Character Design',
+            'name'          => 'Animation Character Design',
+            'description'   => '',
         ],
         [
-            'name' => 'Animation Check',
+            'name'          => 'Animation Check',
+            'description'   => '',
         ],
         [
-            'name' => 'Animation Director',
+            'name'          => 'Animation Director',
+            'description'   => '',
         ],
         [
-            'name' => 'Animation Director Assistant',
+            'name'          => 'Animation Director Assistant',
+            'description'   => '',
         ],
         [
-            'name' => 'Animation Producer',
+            'name'          => 'Animation Producer',
+            'description'   => '',
         ],
         [
-            'name' => 'Animation Production',
+            'name'          => 'Animation Production',
+            'description'   => '',
         ],
         [
-            'name' => 'Animation Production Assistance',
+            'name'          => 'Animation Production Assistance',
+            'description'   => '',
         ],
         [
-            'name' => 'Animation Supervision',
+            'name'          => 'Animation Supervision',
+            'description'   => '',
         ],
         [
-            'name' => 'Animator',
+            'name'          => 'Animator',
+            'description'   => '',
         ],
         [
-            'name' => 'Art',
+            'name'          => 'Art',
+            'description'   => '',
         ],
         [
-            'name' => 'Art Assistant',
+            'name'          => 'Art Assistant',
+            'description'   => '',
         ],
         [
-            'name' => 'Art Director',
+            'name'          => 'Art Director',
+            'description'   => '',
         ],
         [
-            'name' => 'Art Director Assistant',
+            'name'          => 'Art Director Assistant',
+            'description'   => '',
         ],
         [
-            'name' => 'Art Setting',
+            'name'          => 'Art Setting',
+            'description'   => '',
         ],
         [
-            'name' => 'Assistance',
+            'name'          => 'Assistance',
+            'description'   => '',
         ],
         [
-            'name' => 'Assistant Animation Director',
+            'name'          => 'Assistant Animation Director',
+            'description'   => '',
         ],
         [
-            'name' => 'Assistant Director',
+            'name'          => 'Assistant Director',
+            'description'   => '',
         ],
         [
-            'name' => 'Assistant Engineer',
+            'name'          => 'Assistant Engineer',
+            'description'   => '',
         ],
         [
-            'name' => 'Assistant Episode Director',
+            'name'          => 'Assistant Episode Director',
+            'description'   => '',
         ],
         [
-            'name' => 'Assistant Producer',
+            'name'          => 'Assistant Producer',
+            'description'   => '',
         ],
         [
-            'name' => 'Assistant Production Coordinator',
+            'name'          => 'Assistant Production Coordinator',
+            'description'   => '',
         ],
         [
-            'name' => 'Associate Casting Director',
+            'name'          => 'Associate Casting Director',
+            'description'   => '',
         ],
         [
-            'name' => 'Associate Producer',
+            'name'          => 'Associate Producer',
+            'description'   => '',
         ],
         [
-            'name' => 'Audio Recording',
+            'name'          => 'Audio Recording',
+            'description'   => '',
         ],
         [
-            'name' => 'Audio Recording Adjustment',
+            'name'          => 'Audio Recording Adjustment',
+            'description'   => '',
         ],
         [
-            'name' => 'Audio Recording Assistant',
+            'name'          => 'Audio Recording Assistant',
+            'description'   => '',
         ],
         [
-            'name' => 'Audio Recording Direction',
+            'name'          => 'Audio Recording Direction',
+            'description'   => '',
         ],
         [
-            'name' => 'Audio Recording Production',
+            'name'          => 'Audio Recording Production',
+            'description'   => '',
         ],
         [
-            'name' => 'Audio Recording Studio',
+            'name'          => 'Audio Recording Studio',
+            'description'   => '',
         ],
         [
-            'name' => 'Background Art',
+            'name'          => 'Background Art',
+            'description'   => '',
         ],
         [
-            'name' => 'Background Art Processing',
+            'name'          => 'Background Art Processing',
+            'description'   => '',
         ],
         [
-            'name' => 'Casting Director',
+            'name'          => 'Casting Director',
+            'description'   => '',
         ],
         [
-            'name' => 'Cell Inspection',
+            'name'          => 'Cell Inspection',
+            'description'   => '',
         ],
         [
-            'name' => 'CGI Director',
+            'name'          => 'CGI Director',
+            'description'   => '',
         ],
         [
-            'name' => 'CGI Producer',
+            'name'          => 'CGI Producer',
+            'description'   => '',
         ],
         [
-            'name' => 'CGI Production',
+            'name'          => 'CGI Production',
+            'description'   => '',
         ],
         [
-            'name' => 'CGI Production Desk',
+            'name'          => 'CGI Production Desk',
+            'description'   => '',
         ],
         [
-            'name' => 'CGI Production Manager Assistant',
+            'name'          => 'CGI Production Manager Assistant',
+            'description'   => '',
         ],
         [
-            'name' => 'Character Design',
+            'name'          => 'Character Design',
+            'description'   => '',
         ],
         [
-            'name' => 'Chief Animation Director',
+            'name'          => 'Chief Animation Director',
+            'description'   => '',
         ],
         [
-            'name' => 'Chief Animation Supervisor',
+            'name'          => 'Chief Animation Supervisor',
+            'description'   => '',
         ],
         [
-            'name' => 'Chief Director',
+            'name'          => 'Chief Director',
+            'description'   => '',
         ],
         [
-            'name' => 'Chief Producer',
+            'name'          => 'Chief Producer',
+            'description'   => '',
         ],
         [
-            'name' => 'Chief Production Advancement',
+            'name'          => 'Chief Production Advancement',
+            'description'   => '',
         ],
         [
-            'name' => 'Chief Supervision',
+            'name'          => 'Chief Supervision',
+            'description'   => '',
         ],
         [
-            'name' => 'Co-Director',
+            'name'          => 'Co-Director',
+            'description'   => '',
         ],
         [
-            'name' => 'Color Design',
+            'name'          => 'Color Design',
+            'description'   => '',
         ],
         [
-            'name' => 'Color Design Assistance',
+            'name'          => 'Color Design Assistance',
+            'description'   => '',
         ],
         [
-            'name' => 'Color Setting',
+            'name'          => 'Color Setting',
+            'description'   => '',
         ],
         [
-            'name' => 'Color Specification Inspection',
+            'name'          => 'Color Specification Inspection',
+            'description'   => '',
         ],
         [
-            'name' => 'Composer',
+            'name'          => 'Composer',
+            'description'   => '',
         ],
         [
-            'name' => 'Concept Design',
+            'name'          => 'Concept Design',
+            'description'   => '',
         ],
         [
-            'name' => 'Co-Producer',
+            'name'          => 'Co-Producer',
+            'description'   => '',
         ],
         [
-            'name' => 'Creative Producer',
+            'name'          => 'Creative Producer',
+            'description'   => '',
         ],
         [
-            'name' => 'Creator',
+            'name'          => 'Creator',
+            'description'   => '',
         ],
         [
-            'name' => 'Creature Design',
+            'name'          => 'Creature Design',
+            'description'   => '',
         ],
         [
-            'name' => 'Design',
+            'name'          => 'Design',
+            'description'   => '',
         ],
         [
-            'name' => 'Design Manager',
+            'name'          => 'Design Manager',
+            'description'   => '',
         ],
         [
-            'name' => 'Design Production',
+            'name'          => 'Design Production',
+            'description'   => '',
         ],
         [
-            'name' => 'Dialogue Editing',
+            'name'          => 'Dialogue Editing',
+            'description'   => '',
         ],
         [
-            'name' => 'Digital Colouring',
+            'name'          => 'Digital Colouring',
+            'description'   => '',
         ],
         [
-            'name' => 'Digital Director',
+            'name'          => 'Digital Director',
+            'description'   => '',
         ],
         [
-            'name' => 'Digital Paint',
+            'name'          => 'Digital Paint',
+            'description'   => '',
         ],
         [
-            'name' => 'Digital Photography',
+            'name'          => 'Digital Photography',
+            'description'   => '',
         ],
         [
-            'name' => 'Digital Production',
+            'name'          => 'Digital Production',
+            'description'   => '',
         ],
         [
-            'name' => 'Director',
+            'name'          => 'Director',
+            'description'   => '',
         ],
         [
-            'name' => 'Director Of Digital Photography',
+            'name'          => 'Director Of Digital Photography',
+            'description'   => '',
         ],
         [
-            'name' => 'Director Of Photography',
+            'name'          => 'Director Of Photography',
+            'description'   => '',
         ],
         [
-            'name' => 'DVD Producer',
+            'name'          => 'DVD Producer',
+            'description'   => '',
         ],
         [
-            'name' => 'Editing',
+            'name'          => 'Editing',
+            'description'   => '',
         ],
         [
-            'name' => 'Editor',
+            'name'          => 'Editor',
+            'description'   => '',
         ],
         [
-            'name' => 'Editor Assistant',
+            'name'          => 'Editor Assistant',
+            'description'   => '',
         ],
         [
-            'name' => 'Episode Director',
+            'name'          => 'Episode Director',
+            'description'   => '',
         ],
         [
-            'name' => 'Executive Producer',
+            'name'          => 'Executive Producer',
+            'description'   => '',
         ],
         [
-            'name' => 'Film',
+            'name'          => 'Film',
+            'description'   => '',
         ],
         [
-            'name' => 'Film Editing',
+            'name'          => 'Film Editing',
+            'description'   => '',
         ],
         [
-            'name' => 'Film Processing',
+            'name'          => 'Film Processing',
+            'description'   => '',
         ],
         [
-            'name' => 'Financial Production',
+            'name'          => 'Financial Production',
+            'description'   => '',
         ],
         [
-            'name' => 'General Manager',
+            'name'          => 'General Manager',
+            'description'   => '',
         ],
         [
-            'name' => 'HD Editor',
+            'name'          => 'HD Editor',
+            'description'   => '',
         ],
         [
-            'name' => 'Image Board',
+            'name'          => 'Image Board',
+            'description'   => '',
         ],
         [
-            'name' => 'In-Between Animation',
+            'name'          => 'In-Between Animation',
+            'description'   => '',
         ],
         [
-            'name' => 'In-Between Animation Assistance',
+            'name'          => 'In-Between Animation Assistance',
+            'description'   => '',
         ],
         [
-            'name' => 'In-Between Animation Check',
+            'name'          => 'In-Between Animation Check',
+            'description'   => '',
         ],
         [
-            'name' => 'In-Between Animation Inspection',
+            'name'          => 'In-Between Animation Inspection',
+            'description'   => '',
         ],
         [
-            'name' => 'Inserted Song Performance',
+            'name'          => 'Inserted Song Performance',
+            'description'   => '',
         ],
         [
-            'name' => 'Key Animation',
+            'name'          => 'Key Animation',
+            'description'   => '',
         ],
         [
-            'name' => 'Layout',
+            'name'          => 'Layout',
+            'description'   => '',
         ],
         [
-            'name' => 'Logo Design',
+            'name'          => 'Logo Design',
+            'description'   => '',
         ],
         [
-            'name' => 'Lyrics',
+            'name'          => 'Lyrics',
+            'description'   => '',
         ],
         [
-            'name' => 'Main Animator',
+            'name'          => 'Main Animator',
+            'description'   => '',
         ],
         [
-            'name' => 'Main Title Design',
+            'name'          => 'Main Title Design',
+            'description'   => '',
         ],
         [
-            'name' => 'Main Title Photography',
+            'name'          => 'Main Title Photography',
+            'description'   => '',
         ],
         [
-            'name' => 'Mechanical Design',
+            'name'          => 'Mechanical Design',
+            'description'   => '',
         ],
         [
-            'name' => 'Music',
+            'name'          => 'Music',
+            'description'   => '',
         ],
         [
-            'name' => 'Music Arrangement',
+            'name'          => 'Music Arrangement',
+            'description'   => '',
         ],
         [
-            'name' => 'Music Assistance',
+            'name'          => 'Music Assistance',
+            'description'   => '',
         ],
         [
-            'name' => 'Music Director',
+            'name'          => 'Music Director',
+            'description'   => '',
         ],
         [
-            'name' => 'Music Engineer',
+            'name'          => 'Music Engineer',
+            'description'   => '',
         ],
         [
-            'name' => 'Music Manager',
+            'name'          => 'Music Manager',
+            'description'   => '',
         ],
         [
-            'name' => 'Music Producer',
+            'name'          => 'Music Producer',
+            'description'   => '',
         ],
         [
-            'name' => 'Music Production',
+            'name'          => 'Music Production',
+            'description'   => '',
         ],
         [
-            'name' => 'Music Production Assistance',
+            'name'          => 'Music Production Assistance',
+            'description'   => '',
         ],
         [
-            'name' => 'Online Editing Supervision',
+            'name'          => 'Online Editing Supervision',
+            'description'   => '',
         ],
         [
-            'name' => 'Online Editor',
+            'name'          => 'Online Editor',
+            'description'   => '',
         ],
         [
-            'name' => 'Online Editor Manager',
+            'name'          => 'Online Editor Manager',
+            'description'   => '',
         ],
         [
-            'name' => 'Opening Animation',
+            'name'          => 'Opening Animation',
+            'description'   => '',
         ],
         [
-            'name' => 'Original Character Design',
+            'name'          => 'Original Character Design',
+            'description'   => '',
         ],
         [
-            'name' => 'Original Creator',
+            'name'          => 'Original Creator',
+            'description'   => '',
         ],
         [
-            'name' => 'Original Illustration',
+            'name'          => 'Original Illustration',
+            'description'   => '',
         ],
         [
-            'name' => 'Original Story',
+            'name'          => 'Original Story',
+            'description'   => '',
         ],
         [
-            'name' => 'Photography',
+            'name'          => 'Photography',
+            'description'   => '',
         ],
         [
-            'name' => 'Photography Assistance',
+            'name'          => 'Photography Assistance',
+            'description'   => '',
         ],
         [
-            'name' => 'Planning',
+            'name'          => 'Planning',
+            'description'   => '',
         ],
         [
-            'name' => 'Planning Cooperation',
+            'name'          => 'Planning Cooperation',
+            'description'   => '',
         ],
         [
-            'name' => 'Planning Manager',
+            'name'          => 'Planning Manager',
+            'description'   => '',
         ],
         [
-            'name' => 'Planning Producer',
+            'name'          => 'Planning Producer',
+            'description'   => '',
         ],
         [
-            'name' => 'Post-Production Assistant',
+            'name'          => 'Post-Production Assistant',
+            'description'   => '',
         ],
         [
-            'name' => 'Principle Drawing',
+            'name'          => 'Principle Drawing',
+            'description'   => '',
         ],
         [
-            'name' => 'Producer',
+            'name'          => 'Producer',
+            'description'   => '',
         ],
         [
-            'name' => 'Production',
+            'name'          => 'Production',
+            'description'   => '',
         ],
         [
-            'name' => 'Production Assistant',
+            'name'          => 'Production Assistant',
+            'description'   => '',
         ],
         [
-            'name' => 'Production Control',
+            'name'          => 'Production Control',
+            'description'   => '',
         ],
         [
-            'name' => 'Production Coordination',
+            'name'          => 'Production Coordination',
+            'description'   => '',
         ],
         [
-            'name' => 'Production Desk',
+            'name'          => 'Production Desk',
+            'description'   => '',
         ],
         [
-            'name' => 'Production Manager',
+            'name'          => 'Production Manager',
+            'description'   => '',
         ],
         [
-            'name' => 'Production Office Work',
+            'name'          => 'Production Office Work',
+            'description'   => '',
         ],
         [
-            'name' => 'Production Studio',
+            'name'          => 'Production Studio',
+            'description'   => '',
         ],
         [
-            'name' => 'Promotion',
+            'name'          => 'Promotion',
+            'description'   => '',
         ],
         [
-            'name' => 'Prop Design',
+            'name'          => 'Prop Design',
+            'description'   => '',
         ],
         [
-            'name' => 'Publication',
+            'name'          => 'Publication',
+            'description'   => '',
         ],
         [
-            'name' => 'Publicity',
+            'name'          => 'Publicity',
+            'description'   => '',
         ],
         [
-            'name' => 'Publicity Assistance',
+            'name'          => 'Publicity Assistance',
+            'description'   => '',
         ],
         [
-            'name' => 'Recording',
+            'name'          => 'Recording',
+            'description'   => '',
         ],
         [
-            'name' => 'Recording Assistant',
+            'name'          => 'Recording Assistant',
+            'description'   => '',
         ],
         [
-            'name' => 'Recording Engineer',
+            'name'          => 'Recording Engineer',
+            'description'   => '',
         ],
         [
-            'name' => 'Re-Recording Mixing',
+            'name'          => 'Re-Recording Mixing',
+            'description'   => '',
         ],
         [
-            'name' => 'Screenplay',
+            'name'          => 'Screenplay',
+            'description'   => '',
         ],
         [
-            'name' => 'Script',
+            'name'          => 'Script',
+            'description'   => '',
         ],
         [
-            'name' => 'Second Key Animator',
+            'name'          => 'Second Key Animator',
+            'description'   => '',
         ],
         [
-            'name' => 'Selling Agency',
+            'name'          => 'Selling Agency',
+            'description'   => '',
         ],
         [
-            'name' => 'Series Composition',
+            'name'          => 'Series Composition',
+            'description'   => '',
         ],
         [
-            'name' => 'Series Composition Assistant',
+            'name'          => 'Series Composition Assistant',
+            'description'   => '',
         ],
         [
-            'name' => 'Series Director',
+            'name'          => 'Series Director',
+            'description'   => '',
         ],
         [
-            'name' => 'Series Episode Director',
+            'name'          => 'Series Episode Director',
+            'description'   => '',
         ],
         [
-            'name' => 'Series Production Director',
+            'name'          => 'Series Production Director',
+            'description'   => '',
         ],
         [
-            'name' => 'Set Design',
+            'name'          => 'Set Design',
+            'description'   => '',
         ],
         [
-            'name' => 'Setting',
+            'name'          => 'Setting',
+            'description'   => '',
         ],
         [
-            'name' => 'Setting Manager',
+            'name'          => 'Setting Manager',
+            'description'   => '',
         ],
         [
-            'name' => 'Setting Production',
+            'name'          => 'Setting Production',
+            'description'   => '',
         ],
         [
-            'name' => 'Sound',
+            'name'          => 'Sound',
+            'description'   => '',
         ],
         [
-            'name' => 'Sound Director',
+            'name'          => 'Sound Director',
+            'description'   => '',
         ],
         [
-            'name' => 'Sound Effects',
+            'name'          => 'Sound Effects',
+            'description'   => '',
         ],
         [
-            'name' => 'Sound Manager',
+            'name'          => 'Sound Manager',
+            'description'   => '',
         ],
         [
-            'name' => 'Sound Mixer',
+            'name'          => 'Sound Mixer',
+            'description'   => '',
         ],
         [
-            'name' => 'Sound Production',
+            'name'          => 'Sound Production',
+            'description'   => '',
         ],
         [
-            'name' => 'Sound Supervisor',
+            'name'          => 'Sound Supervisor',
+            'description'   => '',
         ],
         [
-            'name' => 'Sound Work Manager',
+            'name'          => 'Sound Work Manager',
+            'description'   => '',
         ],
         [
-            'name' => 'Special Effects',
+            'name'          => 'Special Effects',
+            'description'   => '',
         ],
         [
-            'name' => 'Sponsor',
+            'name'          => 'Sponsor',
+            'description'   => '',
         ],
         [
-            'name' => 'Spotting',
+            'name'          => 'Spotting',
+            'description'   => '',
         ],
         [
-            'name' => 'Story',
+            'name'          => 'Story',
+            'description'   => '',
         ],
         [
-            'name' => 'Story & Art',
+            'name'          => 'Story & Art',
+            'description'   => '',
         ],
         [
-            'name' => 'Story Composition',
+            'name'          => 'Story Composition',
+            'description'   => '',
         ],
         [
-            'name' => 'Storyboard',
+            'name'          => 'Storyboard',
+            'description'   => '',
         ],
         [
-            'name' => 'Supervision',
+            'name'          => 'Supervision',
+            'description'   => '',
         ],
         [
-            'name' => 'Theme Song Arrangement',
+            'name'          => 'Theme Song Arrangement',
+            'description'   => '',
         ],
         [
-            'name' => 'Theme Song Composition',
+            'name'          => 'Theme Song Composition',
+            'description'   => '',
         ],
         [
-            'name' => 'Theme Song Lyrics',
+            'name'          => 'Theme Song Lyrics',
+            'description'   => '',
         ],
         [
-            'name' => 'Theme Song Performance',
+            'name'          => 'Theme Song Performance',
+            'description'   => '',
         ],
         [
-            'name' => 'Titling',
+            'name'          => 'Titling',
+            'description'   => '',
         ],
         [
-            'name' => 'Touch Up',
+            'name'          => 'Touch Up',
+            'description'   => '',
         ],
         [
-            'name' => 'Touch Up Assistance',
+            'name'          => 'Touch Up Assistance',
+            'description'   => '',
         ],
         [
-            'name' => 'Touch Up Inspection',
+            'name'          => 'Touch Up Inspection',
+            'description'   => '',
         ],
         [
-            'name' => 'Touch Up Manager',
+            'name'          => 'Touch Up Manager',
+            'description'   => '',
         ],
         [
-            'name' => 'Two Dimensional Effects',
+            'name'          => 'Two Dimensional Effects',
+            'description'   => '',
         ],
         [
-            'name' => 'Two Dimensional Effects Chief',
+            'name'          => 'Two Dimensional Effects Chief',
+            'description'   => '',
         ],
         [
-            'name' => 'Vocal',
+            'name'          => 'Vocal',
+            'description'   => '',
         ],
         [
-            'name' => 'Voice Actor',
+            'name'          => 'Voice Actor',
+            'description'   => '',
         ],
     ];
 

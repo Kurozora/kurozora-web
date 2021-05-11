@@ -17,6 +17,7 @@ class CreateStaffRolesTable extends Migration
         Schema::create(StaffRole::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->string('description');
             $table->timestamps();
         });
 

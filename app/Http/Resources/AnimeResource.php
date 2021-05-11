@@ -27,8 +27,8 @@ class AnimeResource extends JsonResource
             $relationships = [];
             foreach ($includes as $include) {
                 switch ($include) {
-                    case 'actors':
-                        $relationships = array_merge($relationships, $this->getActorsRelationship());
+                    case 'people':
+                        $relationships = array_merge($relationships, $this->getPeopleRelationship());
                         break;
                     case 'cast':
                         $relationships = array_merge($relationships, $this->getCastRelationship());
@@ -60,19 +60,19 @@ class AnimeResource extends JsonResource
     }
 
     /**
-     * Returns the actors relationship for the resource.
+     * Returns the people relationship for the resource.
      *
      * @return array
      */
-    protected function getActorsRelationship(): array
+    protected function getPeopleRelationship(): array
     {
         /** @var Anime $anime */
         $anime = $this->resource;
 
         return [
-            'actors' => [
-                'href' => route('api.anime.actors', $anime, false),
-                'data' => ActorResource::collection($anime->getActors(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
+            'people' => [
+                'href' => route('api.anime.people', $anime, false),
+                'data' => PersonResource::collection($anime->getPeople(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }

@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Actor;
+use App\Models\Person;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ActorResource extends JsonResource
+class PersonResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +16,10 @@ class ActorResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var Actor $actor */
-        $actor = $this->resource;
+        /** @var Person $person */
+        $person = $this->resource;
 
-        $resource = ActorResourceBasic::make($actor)->toArray($request);
+        $resource = PersonResourceBasic::make($person)->toArray($request);
 
         if ($request->input('include')) {
             $includes = array_unique(explode(',', $request->input('include')));
@@ -46,13 +46,13 @@ class ActorResource extends JsonResource
      */
     protected function getCharactersRelationship(): array
     {
-        /** @var Actor $actor */
-        $actor = $this->resource;
+        /** @var Person $person */
+        $person = $this->resource;
 
         return [
             'characters' => [
-                'href' => route('api.actors.characters', $actor, false),
-                'data' => CharacterResourceBasic::collection($actor->getCharacters(Actor::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'href' => route('api.people.characters', $person, false),
+                'data' => CharacterResourceBasic::collection($person->getCharacters(Person::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }
@@ -64,13 +64,13 @@ class ActorResource extends JsonResource
      */
     protected function getAnimeRelationship(): array
     {
-        /** @var Actor $actor */
-        $actor = $this->resource;
+        /** @var Person $person */
+        $person = $this->resource;
 
         return [
             'shows' => [
-                'href' => route('api.actors.anime', $actor, false),
-                'data' => AnimeResourceBasic::collection($actor->getAnime(Actor::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'href' => route('api.people.anime', $person, false),
+                'data' => AnimeResourceBasic::collection($person->getAnime(Person::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }

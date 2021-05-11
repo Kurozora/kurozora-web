@@ -2,12 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\Actor;
 use App\Models\AnimeCast;
 use App\Models\Anime;
 use App\Models\CastRole;
 use App\Models\Character;
 use App\Models\Language;
+use App\Models\Person;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AnimeCastFactory extends Factory
@@ -26,14 +26,14 @@ class AnimeCastFactory extends Factory
      */
     public function definition(): array
     {
-        $actor = Actor::inRandomOrder(mt_rand(1, 999))->first();
+        $person = Person::inRandomOrder(mt_rand(1, 999))->first();
         $character = Character::inRandomOrder(mt_rand(1, 999))->first();
         $anime = Anime::inRandomOrder(mt_rand(1, 999))->first();
         $castRole = CastRole::inRandomOrder()->first();
         $language = Language::inRandomOrder()->first();
 
-        if ($actor == null) {
-            $actor = Actor::factory()->create();
+        if ($person == null) {
+            $person = Person::factory()->create();
         }
         if ($character == null) {
             $character = Character::factory()->create();
@@ -49,7 +49,7 @@ class AnimeCastFactory extends Factory
         }
 
         return [
-            'actor_id'      => $actor,
+            'person_id'     => $person,
             'character_id'  => $character,
             'anime_id'      => $anime,
             'cast_role_id'  => $castRole,

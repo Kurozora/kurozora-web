@@ -10,23 +10,23 @@
             "imdbID": null,
             "malID": null,
             "title": "Awesome Show",
-            "tagline": "Debitis quibusdam cupiditate itaque.",
-            "synopsis": "Quia quae ex tempora minima consequatur animi. Consequatur adipisci in et sapiente possimus. Sed esse ea sunt aut. Expedita sit fugiat et.",
+            "tagline": "Aliquid dolorem blanditiis voluptate qui rerum placeat fugiat.",
+            "synopsis": "Qui harum accusamus similique debitis fuga labore et. Est ea quia fuga aliquid quos voluptas. Ratione ut nihil odit quo autem repellat asperiores dicta. Ut ut ipsum nisi facere alias numquam quo cum.",
             "tvRating": {
                 "name": "h",
-                "description": "atque voluptatem dolore"
+                "description": "officiis ut nostrum"
             },
             "type": {
-                "name": "maiores",
-                "description": "atque omnis alias"
+                "name": "Salvatore Olson",
+                "description": "alias qui ullam"
             },
             "source": {
-                "name": "enim",
-                "description": "sint autem rerum"
+                "name": "Alison Connelly",
+                "description": "tempore voluptatibus molestiae"
             },
             "status": {
-                "name": "vel et",
-                "description": "aliquam sed sit"
+                "name": "voluptates sit",
+                "description": "dolor vel enim"
             },
             "network": null,
             "producer": null,
@@ -37,13 +37,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "2006-01-16",
-            "lastAired": "2006-03-27",
-            "runtime": "14",
-            "airTime": "12:19",
-            "airDay": "",
+            "firstAired": "1974-12-24",
+            "lastAired": "1975-06-10",
+            "runtime": "16",
+            "airTime": "12:00",
+            "airDay": null,
             "isNSFW": false,
-            "copyright": "\u2117 2011 Will-Nader",
+            "copyright": "\u00a9 1988 Bashirian Ltd",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
@@ -61,23 +61,23 @@
             "imdbID": null,
             "malID": null,
             "title": "Be a good person!",
-            "tagline": "Quis quae ipsa fugit voluptates eligendi quia quidem rerum.",
-            "synopsis": "Ab qui architecto vel aspernatur eius facere excepturi. Illo rem quo laudantium quod vitae. Omnis modi nostrum enim reprehenderit. Similique et est molestias dolor sint. Consequatur velit deserunt excepturi quasi cum sed laudantium.",
+            "tagline": "Voluptas eligendi possimus consequatur.",
+            "synopsis": "Quo expedita provident ex qui facere ipsa nisi omnis. Non sunt fugit esse nam id est sit. Qui quas saepe voluptatem pariatur autem nisi consequatur.",
             "tvRating": {
                 "name": "h",
-                "description": "atque voluptatem dolore"
+                "description": "officiis ut nostrum"
             },
             "type": {
-                "name": "maiores",
-                "description": "atque omnis alias"
+                "name": "Salvatore Olson",
+                "description": "alias qui ullam"
             },
             "source": {
-                "name": "enim",
-                "description": "sint autem rerum"
+                "name": "Alison Connelly",
+                "description": "tempore voluptatibus molestiae"
             },
             "status": {
-                "name": "vel et",
-                "description": "aliquam sed sit"
+                "name": "voluptates sit",
+                "description": "dolor vel enim"
             },
             "network": null,
             "producer": null,
@@ -88,13 +88,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "2018-09-19",
-            "lastAired": "2018-11-28",
-            "runtime": "15",
-            "airTime": "11:44",
-            "airDay": "",
-            "isNSFW": false,
-            "copyright": "\u00ae 1998 Parisian-Weimann",
+            "firstAired": "1975-09-10",
+            "lastAired": "1975-12-03",
+            "runtime": "25",
+            "airTime": "10:46",
+            "airDay": null,
+            "isNSFW": true,
+            "copyright": "\u00ae 1992 Ward, Leannon and Stanton",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,

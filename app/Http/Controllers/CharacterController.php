@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Character;
 use App\Helpers\JSONResult;
-use App\Http\Resources\ActorResource;
+use App\Http\Resources\PersonResource;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Http\Resources\CharacterResource;
 use Illuminate\Http\JsonResponse;
@@ -26,19 +26,19 @@ class CharacterController extends Controller
     }
 
     /**
-     * Returns actor information about a character.
+     * Returns person information about a character.
      *
      * @param Character $character
      * @return JsonResponse
      */
-    public function actors(Character $character): JsonResponse
+    public function people(Character $character): JsonResponse
     {
-        // Get the actors
-        $actors = $character->getActors();
+        // Get the people
+        $people = $character->getPeople();
 
-        // Return character actors
+        // Return character people
         return JSONResult::success([
-            'data' => ActorResource::collection($actors)
+            'data' => PersonResource::collection($people)
         ]);
     }
 

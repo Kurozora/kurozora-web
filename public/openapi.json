@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "description": "Integrate tracking shows with Kurozora content.\n *** \nThe Kurozora API is a web service that lets you access information about the media found in the Kurozora&nbsp;Catalog and the user's personal Kurozora&nbsp;Library. Here's what each one includes:\n- The Kurozora&nbsp;Catalog includes all resources available in Kurozora.\n- The user's Kurozora&nbsp;Library contains only those resources that the user added to their personal library. For example, it contains shows added to their tracking list, and favorites.\n\nUse this service to retrieve information about actors, characters, episodes, genres, shows, studios, threads, users, and the users' library.\nWith proper authorization from the user, you can also create or modify their library, apply ratings to shows, create or modify threads and vote on replies.",
+    "description": "Integrate tracking shows with Kurozora content.\n *** \nThe Kurozora API is a web service that lets you access information about the media found in the Kurozora&nbsp;Catalog and the user's personal Kurozora&nbsp;Library. Here's what each one includes:\n- The Kurozora&nbsp;Catalog includes all resources available in Kurozora.\n- The user's Kurozora&nbsp;Library contains only those resources that the user added to their personal library. For example, it contains shows added to their tracking list, and favorites.\n\nUse this service to retrieve information about people, characters, episodes, genres, shows, studios, threads, users, and the users' library.\nWith proper authorization from the user, you can also create or modify their library, apply ratings to shows, create or modify threads and vote on replies.",
     "version": "1.2.0",
     "title": "Kurozora API",
     "termsOfService": "https://swagger.io/terms/",
@@ -29,10 +29,6 @@
       "description": "Everything explore page related"
     },
     {
-      "name": "actors",
-      "description": "Everything actor related"
-    },
-    {
       "name": "anime",
       "description": "Everything anime related"
     },
@@ -51,6 +47,10 @@
     {
       "name": "genres",
       "description": "Everything genre related"
+    },
+    {
+      "name": "people",
+      "description": "Everything people related"
     },
     {
       "name": "studios",
@@ -135,123 +135,6 @@
         }
       }
     },
-    "/actors/{actorID}": {
-      "get": {
-        "security": [
-          {
-          },
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "actors"
-        ],
-        "operationId": "getActorsDetails",
-        "summary": "Get actor details.",
-        "description": "This endpoint will retrieve the details for a actor.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "actorID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the actor."
-          },
-          {
-            "in": "query",
-            "name": "include",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "uniqueItems": true
-            },
-            "explode": false,
-            "required": false,
-            "description": "The relations to include in the response. Available relations are:\n- characters\n- shows"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetActorsDetailsSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/actors/{actorID}/anime": {
-      "get": {
-        "security": [
-          {
-          },
-          {
-            "kurozoraBearer": [
-            ]
-          }
-        ],
-        "tags": [
-          "actors"
-        ],
-        "operationId": "getActorsAnime",
-        "summary": "Get actor anime.",
-        "description": "This endpoint will retrieve the anime of a specific actor.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "actorID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the actor."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetActorsAnimeSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/actors/{actorID}/characters": {
-      "get": {
-        "tags": [
-          "actors"
-        ],
-        "operationId": "getActorsCharacters",
-        "summary": "Actor character information.",
-        "description": "This endpoint will retrieve the characters of an Actor item.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "actorID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the actor."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetActorsCharactersSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
     "/anime/{animeID}": {
       "get": {
         "security": [
@@ -290,7 +173,7 @@
             },
             "explode": false,
             "required": false,
-            "description": "The relations to include in the response. Available relations are:\n- actors\n- characters\n- cast\n- related-shows\n- seasons"
+            "description": "The relations to include in the response. Available relations are:\n- people\n- characters\n- cast\n- related-shows\n- seasons"
           }
         ],
         "responses": {
@@ -303,14 +186,14 @@
         }
       }
     },
-    "/anime/{animeID}/actors": {
+    "/anime/{animeID}/people": {
       "get": {
         "tags": [
           "anime"
         ],
-        "operationId": "getAnimeActors",
-        "summary": "Anime actor information.",
-        "description": "This endpoint will retrieve the actors of an Anime item.",
+        "operationId": "getAnimePeople",
+        "summary": "Anime person information.",
+        "description": "This endpoint will retrieve the people of an Anime item.",
         "parameters": [
           {
             "in": "path",
@@ -324,7 +207,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetAnimeActorsSuccess"
+            "$ref": "#/components/responses/GetAnimePeopleSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -724,7 +607,7 @@
             },
             "explode": false,
             "required": false,
-            "description": "The relations to include in the response. Available relations are:\n- shows\n- actors"
+            "description": "The relations to include in the response. Available relations are:\n- shows\n- people"
           }
         ],
         "responses": {
@@ -737,14 +620,14 @@
         }
       }
     },
-    "/characters/{characterID}/actors": {
+    "/characters/{characterID}/people": {
       "get": {
         "tags": [
           "characters"
         ],
-        "operationId": "getCharactersActors",
-        "summary": "Get character actors.",
-        "description": "This endpoint will retrieve the actors of a specific character.",
+        "operationId": "getCharactersPeople",
+        "summary": "Get character people.",
+        "description": "This endpoint will retrieve the people of a specific character.",
         "parameters": [
           {
             "in": "path",
@@ -758,7 +641,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetCharactersActorsSuccess"
+            "$ref": "#/components/responses/GetCharactersPeopleSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -843,6 +726,123 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/GetGenresDetailsSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/people/{personID}": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "people"
+        ],
+        "operationId": "getPeopleDetails",
+        "summary": "Get person details.",
+        "description": "This endpoint will retrieve the details for a person.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "personID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the person."
+          },
+          {
+            "in": "query",
+            "name": "include",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "uniqueItems": true
+            },
+            "explode": false,
+            "required": false,
+            "description": "The relations to include in the response. Available relations are:\n- characters\n- shows"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetPeopleDetailsSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/pepole/{personID}/anime": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "people"
+        ],
+        "operationId": "getPeopleAnime",
+        "summary": "Get person anime.",
+        "description": "This endpoint will retrieve the anime of a specific person.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "personID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the person."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetPeopleAnimeSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/people/{personID}/characters": {
+      "get": {
+        "tags": [
+          "people"
+        ],
+        "operationId": "getPeopleCharacters",
+        "summary": "Person character information.",
+        "description": "This endpoint will retrieve the characters of a Person item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "personID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the person."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetPepopleCharactersSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -3629,8 +3629,8 @@
           }
         }
       },
-      "GetActorsDetailsSuccess": {
-        "description": "Successful GET Actors Details JSON response",
+      "GetPeopleDetailsSuccess": {
+        "description": "Successful GET People Details JSON response",
         "content": {
           "application/json": {
             "schema": {
@@ -3639,13 +3639,19 @@
                 "data": [
                   {
                     "id": 1,
-                    "type": "actors",
-                    "href": "/api/v1/actors/1",
+                    "type": "people",
+                    "href": "/api/v1/people/1",
                     "attributes": {
-                      "firstName": "Aniyah",
-                      "lastName": "Waelchi",
-                      "occupation": "Government Property Inspector",
-                      "imageURL": "https://lorempixel.com/640/480/?66477"
+                      "firstName": "Alvera",
+                      "lastName": null,
+                      "givenName": null,
+                      "familyName": "中村",
+                      "alternativeNames": [
+                        "sunt"
+                      ],
+                      "about": null,
+                      "imageURL": "https://via.placeholder.com/640x480.png/009955?text=et",
+                      "websiteURL": null
                     }
                   }
                 ]
@@ -3654,8 +3660,8 @@
           }
         }
       },
-      "GetActorsAnimeSuccess": {
-        "description": "Successful GET Actors Anime JSON response",
+      "GetPeopleAnimeSuccess": {
+        "description": "Successful GET People Anime JSON response",
         "content": {
           "application/json": {
             "schema": {
@@ -3764,8 +3770,8 @@
           }
         }
       },
-      "GetActorsCharactersSuccess": {
-        "description": "Successful GET Actors Characters JSON response",
+      "GetPeopleCharactersSuccess": {
+        "description": "Successful GET People Characters JSON response",
         "content": {
           "application/json": {
             "schema": {
@@ -3904,12 +3910,12 @@
                       "isReminded": true
                     },
                     "relationships": {
-                      "actors": {
+                      "people": {
                         "data": [
                           {
                             "id": 10,
-                            "type": "actors",
-                            "href": "/api/v1/actors/10",
+                            "type": "people",
+                            "href": "/api/v1/people/10",
                             "attributes": {
                               "firstName": "Leatha",
                               "lastName": "Dietrich",
@@ -3919,8 +3925,8 @@
                           },
                           {
                             "id": 1,
-                            "type": "actors",
-                            "href": "/api/v1/actors/1",
+                            "type": "people",
+                            "href": "/api/v1/people/1",
                             "attributes": {
                               "firstName": "Aniyah",
                               "lastName": "Waelchi",
@@ -3930,8 +3936,8 @@
                           },
                           {
                             "id": 2,
-                            "type": "actors",
-                            "href": "/api/v1/actors/2",
+                            "type": "people",
+                            "href": "/api/v1/people/2",
                             "attributes": {
                               "firstName": "Ashley",
                               "lastName": "Carroll",
@@ -3940,7 +3946,7 @@
                             }
                           }
                         ],
-                        "href": "/api/v1/anime/1/actors"
+                        "href": "/api/v1/anime/1/people"
                       },
                       "characters": {
                         "data": [
@@ -4016,10 +4022,10 @@
                       "cast": {
                         "data": [
                           {
-                            "actor": {
+                            "person": {
                               "id": 10,
-                              "type": "actors",
-                              "href": "/api/v1/actors/10",
+                              "type": "people",
+                              "href": "/api/v1/people/10",
                               "attributes": {
                                 "firstName": "Leatha",
                                 "lastName": "Dietrich",
@@ -4052,10 +4058,10 @@
                             "role": "Protagonist"
                           },
                           {
-                            "actor": {
+                            "person": {
                               "id": 1,
-                              "type": "actors",
-                              "href": "/api/v1/actors/1",
+                              "type": "people",
+                              "href": "/api/v1/people/1",
                               "attributes": {
                                 "firstName": "Aniyah",
                                 "lastName": "Waelchi",
@@ -4088,10 +4094,10 @@
                             "role": "Deuteragonist"
                           },
                           {
-                            "actor": {
+                            "person": {
                               "id": 2,
-                              "type": "actors",
-                              "href": "/api/v1/actors/2",
+                              "type": "people",
+                              "href": "/api/v1/people/2",
                               "attributes": {
                                 "firstName": "Ashley",
                                 "lastName": "Carroll",
@@ -4258,8 +4264,8 @@
           }
         }
       },
-      "GetAnimeActorsSuccess": {
-        "description": "Successful GET Anime Actors JSON response",
+      "GetAnimePeopleSuccess": {
+        "description": "Successful GET Anime People JSON response",
         "content": {
           "application/json": {
             "schema": {
@@ -4268,8 +4274,8 @@
                 "data": [
                   {
                     "id": 10,
-                    "type": "actors",
-                    "href": "/api/v1/actors/10",
+                    "type": "people",
+                    "href": "/api/v1/people/10",
                     "attributes": {
                       "firstName": "Leatha",
                       "lastName": "Dietrich",
@@ -4279,8 +4285,8 @@
                   },
                   {
                     "id": 1,
-                    "type": "actors",
-                    "href": "/api/v1/actors/1",
+                    "type": "people",
+                    "href": "/api/v1/people/1",
                     "attributes": {
                       "firstName": "Aniyah",
                       "lastName": "Waelchi",
@@ -4361,10 +4367,10 @@
               "example": {
                 "data": [
                   {
-                    "actor": {
+                    "person": {
                       "id": 10,
-                      "type": "actors",
-                      "href": "/api/v1/actors/10",
+                      "type": "people",
+                      "href": "/api/v1/people/10",
                       "attributes": {
                         "firstName": "Leatha",
                         "lastName": "Dietrich",
@@ -4397,10 +4403,10 @@
                     "role": "Protagonist"
                   },
                   {
-                    "actor": {
+                    "person": {
                       "id": 1,
-                      "type": "actors",
-                      "href": "/api/v1/actors/1",
+                      "type": "people",
+                      "href": "/api/v1/people/1",
                       "attributes": {
                         "firstName": "Aniyah",
                         "lastName": "Waelchi",
@@ -4911,12 +4917,12 @@
                         ],
                         "href": "/api/v1/characters/1/anime"
                       },
-                      "actors": {
+                      "people": {
                         "data": [
                           {
                             "id": 1,
-                            "type": "actors",
-                            "href": "/api/v1/actors/1",
+                            "type": "people",
+                            "href": "/api/v1/people/1",
                             "attributes": {
                               "firstName": "Aniyah",
                               "lastName": "Waelchi",
@@ -4925,7 +4931,7 @@
                             }
                           }
                         ],
-                        "href": "/api/v1/characters/1/actors"
+                        "href": "/api/v1/characters/1/people"
                       }
                     }
                   }
@@ -4935,8 +4941,8 @@
           }
         }
       },
-      "GetCharactersActorsSuccess": {
-        "description": "Successful GET Characters Actors JSON response",
+      "GetCharactersPeopleSuccess": {
+        "description": "Successful GET Characters People JSON response",
         "content": {
           "application/json": {
             "schema": {
@@ -4945,8 +4951,8 @@
                 "data": [
                   {
                     "id": 1,
-                    "type": "actors",
-                    "href": "/api/v1/actors/1",
+                    "type": "people",
+                    "href": "/api/v1/people/1",
                     "attributes": {
                       "firstName": "Aniyah",
                       "lastName": "Waelchi",
