@@ -2,7 +2,7 @@
     "name": "musa11971/kurozora-web",
     "type": "project",
     "description": "Kurozora web application.",
-    "keywords": ["kurozora", "anime", "manga", "character", "actor", "studio", "hentai", "song", "track", "watch"],
+    "keywords": ["kurozora", "anime", "manga", "character", "actor", "people", "studio", "hentai", "song", "track", "watch"],
     "require": {
         "php": "^8.0",
         "ext-json": "*",

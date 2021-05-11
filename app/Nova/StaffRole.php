@@ -37,7 +37,7 @@ class StaffRole extends Resource
      *
      * @var string
      */
-    public static $group = 'Staff';
+    public static $group = 'People';
 
     /**
      * Get the fields displayed by the resource.
@@ -54,6 +54,11 @@ class StaffRole extends Resource
                 ->sortable()
                 ->help('The name of the role. For example, Color Design, Voice Actor, etc.')
                 ->rules('unique:' . \App\Models\StaffRole::TABLE_NAME . ',name')
+                ->required(),
+
+            Text::make('Description')
+                ->sortable()
+                ->help('A short description of the role.')
                 ->required(),
         ];
     }

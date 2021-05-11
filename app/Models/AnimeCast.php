@@ -19,7 +19,7 @@ class AnimeCast extends Pivot
      *
      * @return BelongsTo
      */
-    function anime(): BelongsTo
+    public function anime(): BelongsTo
     {
         return $this->belongsTo(Anime::class);
     }
@@ -29,19 +29,19 @@ class AnimeCast extends Pivot
      *
      * @return BelongsTo
      */
-    function character(): BelongsTo
+    public function character(): BelongsTo
     {
         return $this->belongsTo(Character::class);
     }
 
     /**
-     * Returns the actor relationship of the cast.
+     * Returns the person relationship of the cast.
      *
      * @return BelongsTo
      */
-    function actor(): BelongsTo
+    public function person(): BelongsTo
     {
-        return $this->belongsTo(Actor::class);
+        return $this->belongsTo(Person::class);
     }
 
     /**
@@ -49,7 +49,7 @@ class AnimeCast extends Pivot
      *
      * @return BelongsTo
      */
-    function cast_role(): BelongsTo
+    public function cast_role(): BelongsTo
     {
         return $this->belongsTo(CastRole::class);
     }
@@ -59,7 +59,7 @@ class AnimeCast extends Pivot
      *
      * @return BelongsTo
      */
-    function language(): BelongsTo
+    public function language(): BelongsTo
     {
         return $this->belongsTo(Language::class);
     }

@@ -31,31 +31,29 @@ class AnimeCastResource extends JsonResource
 
         $relationships = [];
 
-        // Include actors
-        $relationships = array_merge($relationships, $this->getActorsRelationship());
+        // Include people
+        $relationships = array_merge($relationships, $this->getPeopleRelationship());
 
         // Include characters
         $relationships = array_merge($relationships, $this->getCharactersRelationship());
 
         // Merge relationships with resource
-        $resource = array_merge($resource, ['relationships' => $relationships]);
-
-        return $resource;
+        return array_merge($resource, ['relationships' => $relationships]);
     }
 
     /**
-     * Returns the actors relationship for the resource.
+     * Returns the people relationship for the resource.
      *
      * @return array
      */
-    protected function getActorsRelationship(): array
+    protected function getPeopleRelationship(): array
     {
         /** @var AnimeCast $animeCast */
         $animeCast = $this->resource;
 
         return [
-            'actors' => [
-                'data' => ActorResource::collection([$animeCast->actor])
+            'people' => [
+                'data' => PersonResource::collection([$animeCast->person])
             ]
         ];
     }

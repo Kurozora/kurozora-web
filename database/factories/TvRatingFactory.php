@@ -23,7 +23,7 @@ class TvRatingFactory extends Factory
     {
         return [
             'name'          => $this->faker->randomLetter,
-            'description'   => $this->faker->words(3, true),
+            'description'   => $this->faker->sentence(),
             'weight'        => $this->faker->unique()->numberBetween(1, 10),
             'created_at'    => now(),
             'updated_at'    => now(),

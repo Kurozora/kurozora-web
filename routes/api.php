@@ -17,7 +17,6 @@ Route::prefix('/v1')
             ->middleware('kurozora.userauth:optional')
             ->name('.explore');
 
-        require 'API/Actors.php';
         require 'API/Anime.php';
         require 'API/Anime-Episodes.php';
         require 'API/Anime-Seasons.php';
@@ -29,6 +28,7 @@ Route::prefix('/v1')
         require 'API/Forum-Threads.php';
         require 'API/Legal.php';
         require 'API/Me.php';
+        require 'API/People.php';
         require 'API/Studios.php';
         require 'API/Store.php';
         require 'API/Themes.php';

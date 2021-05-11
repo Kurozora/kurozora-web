@@ -2,21 +2,22 @@
 
 namespace App\Nova;
 
-use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\HasMany;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Validator;
 
-class Actor extends Resource
+class AnimeStaff extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static string $model = 'App\Models\Actor';
+    public static string $model = \App\Models\AnimeStaff::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -31,7 +32,7 @@ class Actor extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'first_name', 'last_name', 'occupation',
+        'id',
     ];
 
     /**
@@ -50,43 +51,48 @@ class Actor extends Resource
     public function fields(Request $request): array
     {
         return [
-            ID::make()->sortable(),
+            ID::make(__('ID'), 'id')->sortable(),
 
-            ExternalImage::make('Image')
-                ->height(100),
+            BelongsTo::make('Anime')
+                ->searchable()
+                ->sortable()
+                ->required(),
 
-            Text::make('First name')
-                ->rules('required', 'max:255')
+            BelongsTo::make('Person')
+                ->searchable()
+                ->sortable()
+                ->required(),
+
+            BelongsTo::make('Staff Role')
+                ->searchable()
                 ->sortable(),
-
-            Text::make('Last name')
-                ->rules('required', 'max:255')
-                ->sortable(),
-
-            Textarea::make('About')
-                ->onlyOnForms()
-                ->help('A short description of the actor.'),
-
-            Text::make('Occupation')
-                ->rules('max:255')
-                ->sortable(),
-
-            HasMany::make('Cast'),
-
-            HasMany::make('Anime'),
-
-            HasMany::make('Characters'),
         ];
     }
 
     /**
-     * Get the value that should be displayed to represent the resource.
+     * Handle any post-validation processing.
      *
-     * @return string
+     * @param NovaRequest $request
+     * @param \Illuminate\Validation\Validator $validator
+     * @return void
+     * @throws ValidationException
      */
-    public function title(): string
+    protected static function afterValidation(NovaRequest $request, $validator)
     {
-        return $this->full_name . ' (ID: ' . $this->id . ')';
+        $anime = $request->post('anime');
+        $person = $request->post('person');
+
+        $unique = Rule::unique(\App\Models\AnimeStaff::TABLE_NAME, 'person_id')->where(function ($query) use($anime, $person) {
+            return $query->where('anime_id', $anime)->where('person_id', $person);
+        });
+
+        $uniqueValidator = Validator::make($request->only('person'), [
+            'person' => [$unique],
+        ], [
+            'person' => __('validation.unique')
+        ]);
+
+        $uniqueValidator->validate();
     }
 
     /**
@@ -132,15 +138,4 @@ class Actor extends Resource
     {
         return [];
     }
-
-    /**
-     * The icon of the resource.
-     *
-     * @var string
-     */
-    public static string $icon = '
-        <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path fill="var(--sidebar-icon)" d="M12 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm9 11a1 1 0 0 1-2 0v-2a3 3 0 0 0-3-3H8a3 3 0 0 0-3 3v2a1 1 0 0 1-2 0v-2a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v2z"/>
-        </svg>
-    ';
 }
