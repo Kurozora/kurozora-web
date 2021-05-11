@@ -65,7 +65,7 @@ trait ProvidesTestAnime
         $this->animeCast = AnimeCast::factory()->create([
             'anime_id' => $this->anime->id,
             'character_id' => $this->character->id,
-            'actor_id' => $this->actor->id,
+            'person_id' => $this->actor->id,
         ]);
 
         MediaRelation::factory()->create([

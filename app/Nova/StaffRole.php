@@ -37,7 +37,7 @@ class StaffRole extends Resource
      *
      * @var string
      */
-    public static $group = 'Staff';
+    public static $group = 'People';
 
     /**
      * Get the fields displayed by the resource.

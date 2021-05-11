@@ -7,10 +7,8 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
-use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Person extends Resource
 {
@@ -26,7 +24,7 @@ class Person extends Resource
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'full_name';
 
     /**
      * The columns that should be searched.

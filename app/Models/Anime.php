@@ -266,7 +266,7 @@ class Anime extends KModel
      */
     public function actors(): HasManyDeep
     {
-        return $this->hasManyDeep(Actor::class, [AnimeCast::class], ['anime_id', 'id'], ['id', 'actor_id'])->distinct();
+        return $this->hasManyDeep(Actor::class, [AnimeCast::class], ['anime_id', 'id'], ['id', 'person_id'])->distinct();
     }
 
     /**
