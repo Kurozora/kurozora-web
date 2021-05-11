@@ -3,7 +3,6 @@
 namespace App\Nova;
 
 use App\Enums\DayOfWeek;
-use App\Nova\Actions\FetchAnimeActors;
 use App\Nova\Actions\FetchAnimeDetails;
 use App\Nova\Actions\FetchAnimeImages;
 use App\Nova\Lenses\UnmoderatedAnime;
@@ -224,7 +223,7 @@ class Anime extends Resource
 
             HasMany::make('Cast'),
 
-            HasMany::make('Actors'),
+            HasMany::make('People'),
 
             HasMany::make('Characters'),
 
@@ -316,7 +315,6 @@ class Anime extends Resource
         return [
             new FetchAnimeImages,
             new FetchAnimeDetails,
-            new FetchAnimeActors
         ];
     }
 

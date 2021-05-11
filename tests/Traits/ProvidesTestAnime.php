@@ -2,13 +2,13 @@
 
 namespace Tests\Traits;
 
-use App\Models\Actor;
 use App\Models\AnimeCast;
 use App\Models\Anime;
 use App\Models\AnimeEpisode;
 use App\Models\MediaRelation;
 use App\Models\AnimeSeason;
 use App\Models\Character;
+use App\Models\Person;
 use App\Models\TvRating;
 
 trait ProvidesTestAnime
@@ -28,8 +28,8 @@ trait ProvidesTestAnime
     /** @var AnimeEpisode $episode */
     public AnimeEpisode $episode;
 
-    /** @var Actor $actor */
-    public Actor $actor;
+    /** @var Person $person */
+    public Person $person;
 
     /** @var Character $character */
     public Character $character;
@@ -58,14 +58,14 @@ trait ProvidesTestAnime
             'season_id' => $this->season->id,
         ]);
 
-        $this->actor = Actor::factory()->create();
+        $this->person = Person::factory()->create();
 
         $this->character = Character::factory()->create();
 
         $this->animeCast = AnimeCast::factory()->create([
             'anime_id' => $this->anime->id,
             'character_id' => $this->character->id,
-            'person_id' => $this->actor->id,
+            'person_id' => $this->person->id,
         ]);
 
         MediaRelation::factory()->create([

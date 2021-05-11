@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Events\AnimeViewed;
 use App\Events\Event;
 use App\Listeners\EventListener;
-use App\Listeners\FetchAnimeActors;
 use App\Listeners\FetchAnimeDetails;
 use App\Listeners\FetchAnimeImages;
 use App\Listeners\FetchBaseAnimeEpisodes;
@@ -33,7 +32,6 @@ class EventServiceProvider extends ServiceProvider
 //            FetchAnimeDetails::class,
 //            FetchBaseAnimeEpisodes::class,
 //            FetchAnimeImages::class,
-//            FetchAnimeActors::class,
         ],
     ];
 

@@ -17,7 +17,7 @@ class Character extends KModel
     const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
 
     // How long to cache certain responses
-    const CACHE_KEY_ACTORS_SECONDS = 120 * 60;
+    const CACHE_KEY_PEOPLE_SECONDS = 120 * 60;
     const CACHE_KEY_ANIME_SECONDS = 120 * 60;
 
     // Table name
@@ -34,29 +34,29 @@ class Character extends KModel
     ];
 
     /**
-     * Returns the actors the character belongs to.
+     * Returns the people the character belongs to.
      *
      * @return HasManyDeep
      */
-    function actors(): HasManyDeep
+    function people(): HasManyDeep
     {
-        return $this->hasManyDeep(Actor::class, [AnimeCast::class], ['character_id', 'id'], ['id', 'person_id'])->distinct();
+        return $this->hasManyDeep(Person::class, [AnimeCast::class], ['character_id', 'id'], ['id', 'person_id'])->distinct();
     }
 
     /**
-     * Retrieves the actors for a character item in an array.
+     * Retrieves the people for a character item in an array.
      *
      * @param int|null $limit
      * @return Collection
      */
-    public function getActors(int $limit = null): Collection
+    public function getPeople(int $limit = null): Collection
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'character.actors', 'id' => $this->id, 'limit' => $limit]);
+        $cacheKey = self::cacheKey(['name' => 'character.people', 'id' => $this->id, 'limit' => $limit]);
 
         // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_ACTORS_SECONDS, function () use ($limit) {
-            return $this->actors()->limit($limit)->get();
+        return Cache::remember($cacheKey, self::CACHE_KEY_PEOPLE_SECONDS, function () use ($limit) {
+            return $this->people()->limit($limit)->get();
         });
     }
 

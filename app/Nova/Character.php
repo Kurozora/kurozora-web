@@ -156,7 +156,7 @@ class Character extends Resource
 
             HasMany::make('Anime'),
 
-            HasMany::make('Actors'),
+            HasMany::make('People'),
         ];
     }
 

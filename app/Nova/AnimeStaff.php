@@ -58,7 +58,7 @@ class AnimeStaff extends Resource
                 ->sortable()
                 ->required(),
 
-            BelongsTo::make('Person', 'person', Actor::class)
+            BelongsTo::make('Person')
                 ->searchable()
                 ->sortable()
                 ->required(),

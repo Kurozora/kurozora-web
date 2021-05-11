@@ -14,7 +14,7 @@ class PersonSeeder extends Seeder
      */
     public function run()
     {
-        // Create initial actors
+        // Create initial people
         Person::factory(10)->create();
     }
 }

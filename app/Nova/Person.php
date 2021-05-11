@@ -6,6 +6,7 @@ use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
@@ -96,6 +97,12 @@ class Person extends Resource
                 ->help('The URL to the official website of the studio.')
                 ->rules(['nullable'])
                 ->sortable(),
+
+            HasMany::make('Cast'),
+
+            HasMany::make('Anime'),
+
+            HasMany::make('Characters'),
         ];
     }
 

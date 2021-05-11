@@ -59,7 +59,7 @@ class Cast extends Resource
                 ->searchable()
                 ->sortable(),
 
-            BelongsTo::make('Actor')
+            BelongsTo::make('Person')
                 ->searchable()
                 ->sortable(),
 
@@ -86,9 +86,9 @@ class Cast extends Resource
 
         $animeTitle = $animeCast->anime->title;
         $characterName = $animeCast->character->name;
-        $actorName = $animeCast->actor->full_name;
+        $personName = $animeCast->person->full_name;
 
-        return $actorName . ' as ' . $characterName . ' in ' . $animeTitle . ' (ID: ' . $animeCast->id . ')';
+        return $personName . ' as ' . $characterName . ' in ' . $animeTitle . ' (ID: ' . $animeCast->id . ')';
     }
 
     /**

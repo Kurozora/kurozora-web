@@ -13,8 +13,8 @@ Route::prefix('/anime')
             ->middleware('kurozora.userauth:optional')
             ->name('.view');
 
-        Route::get('/{anime}/actors', [AnimeController::class, 'actors'])
-            ->name('.actors');
+        Route::get('/{anime}/people', [AnimeController::class, 'people'])
+            ->name('.people');
 
         Route::get('/{anime}/characters', [AnimeController::class, 'characters'])
             ->name('.characters');
