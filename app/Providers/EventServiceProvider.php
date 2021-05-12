@@ -5,9 +5,6 @@ namespace App\Providers;
 use App\Events\AnimeViewed;
 use App\Events\Event;
 use App\Listeners\EventListener;
-use App\Listeners\FetchAnimeDetails;
-use App\Listeners\FetchAnimeImages;
-use App\Listeners\FetchBaseAnimeEpisodes;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -29,9 +26,6 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         AnimeViewed::class => [
-//            FetchAnimeDetails::class,
-//            FetchBaseAnimeEpisodes::class,
-//            FetchAnimeImages::class,
         ],
     ];
 
