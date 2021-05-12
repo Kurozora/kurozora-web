@@ -5,7 +5,6 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
 
 class StaffRole extends Resource
 {
@@ -52,7 +51,7 @@ class StaffRole extends Resource
 
             Text::make('Name')
                 ->sortable()
-                ->help('The name of the role. For example, Color Design, Voice Actor, etc.')
+                ->help('The name of the role. For example, Color Design, Sound Effect, Titling, etc.')
                 ->rules('unique:' . \App\Models\StaffRole::TABLE_NAME . ',name')
                 ->required(),
 
