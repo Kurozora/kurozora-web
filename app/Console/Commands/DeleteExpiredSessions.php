@@ -37,7 +37,7 @@ class DeleteExpiredSessions extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         Session::where('expires_at', '<', Carbon::now())->delete();
 

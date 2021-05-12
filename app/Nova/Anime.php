@@ -3,8 +3,6 @@
 namespace App\Nova;
 
 use App\Enums\DayOfWeek;
-use App\Nova\Actions\FetchAnimeDetails;
-use App\Nova\Actions\FetchAnimeImages;
 use App\Nova\Lenses\UnmoderatedAnime;
 use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Database\Eloquent\Builder;
@@ -192,44 +190,22 @@ class Anime extends Resource
                 ->hideFromIndex()
                 ->help('For example: © ' . date('Y') . ' Kurozora B.V.'),
 
-            Heading::make('Flags')
-                ->onlyOnForms(),
-
-            Boolean::make('Actors Fetched?', 'fetched_actors')
-                ->onlyOnForms()
-                ->help('Whether or not the actors were retrieved from TVDB.<br />Untick and the system will do so once the Anime gets visited the next time.'),
-
-            Boolean::make('Base Episodes Fetched?', 'fetched_base_episodes')
-                ->onlyOnForms()
-                ->help('Whether or not the base episodes were retrieved from TVDB.<br />Untick and the system will do so once the Anime gets visited the next time.'),
-
-            Boolean::make('Images Fetched?', 'fetched_images')
-                ->onlyOnForms()
-                ->help('Whether or not the images were retrieved from TVDB.<br />Untick and the system will do so once the Anime gets visited the next time.'),
-
-            Boolean::make('Details Fetched?', 'fetched_details')
-                ->onlyOnForms()
-                ->help('Whether or not the details (information_ were retrieved from TVDB.<br />Untick and the system will do so once the Anime gets visited the next time.'),
-
             HasMany::make('Anime Images'),
 
-            BelongsToMany::make('Genres')
-                ->searchable(),
+            HasMany::make('Genres', 'media_genres', MediaGenre::class),
 
             HasMany::make('Seasons'),
 
-            BelongsToMany::make('Studios')
-                ->searchable(),
-
             HasMany::make('Cast'),
 
-            HasMany::make('People'),
+            HasMany::make('Songs', 'songs', AnimeSong::class),
 
-            HasMany::make('Characters'),
+            HasMany::make('Relations', 'relations', MediaRelation::class),
 
-            HasMany::make('Anime Relations', 'anime_relations', MediaRelation::class),
+            HasMany::make('Staff', 'staff', AnimeStaff::class),
 
-            HasMany::make('Songs', 'anime_songs', AnimeSong::class),
+            BelongsToMany::make('Studios')
+                ->searchable(),
 
             BelongsToMany::make('Moderators', 'moderators', User::class)
                 // @TODO
@@ -312,10 +288,7 @@ class Anime extends Resource
      */
     public function actions(Request $request): array
     {
-        return [
-            new FetchAnimeImages,
-            new FetchAnimeDetails,
-        ];
+        return [];
     }
 
     /**
@@ -380,8 +353,8 @@ class Anime extends Resource
      * @var string
      */
     public static string $icon = '
-        <svg class="sidebar-icon" viewBox="0 0 640 512" xmlns="http://www.w3.org/2000/svg">
-            <path fill="var(--sidebar-icon)" d="M528 464H112a16 16 0 0 0-16 16v16a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16v-16a16 16 0 0 0-16-16zM592 0H48A48 48 0 0 0 0 48v320a48 48 0 0 0 48 48h544a48 48 0 0 0 48-48V48a48 48 0 0 0-48-48zm0 368H48V48h544z"/>
+        <svg class="sidebar-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path fill="var(--sidebar-icon)" d="M82.5,82.5 L17.5,82.5 C16.1192881,82.5 15,83.6192881 15,85 L15,87.5 C15,88.8807119 16.1192881,90 17.5,90 L82.5,90 C83.8807119,90 85,88.8807119 85,87.5 L85,85 C85,83.6192881 83.8807119,82.5 82.5,82.5 Z M92.5,10 L7.5,10 C3.35786438,10 0,13.3578644 0,17.5 L0,67.5 C0,71.6421356 3.35786438,75 7.5,75 L92.5,75 C96.6421356,75 100,71.6421356 100,67.5 L100,17.5 C100,13.3578644 96.6421356,10 92.5,10 Z M92.5,67.5 L7.5,67.5 L7.5,17.5 L92.5,17.5 L92.5,67.5 Z"/>
         </svg>
     ';
 }
