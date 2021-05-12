@@ -386,12 +386,11 @@ class Anime extends KModel
     /**
      * The genres of this Anime
      *
-     * @return BelongsToMany
+     * @return HasManyThrough
      */
-    public function genres(): BelongsToMany
+    public function genres(): HasManyThrough
     {
-        return $this->belongsToMany(Genre::class, MediaGenre::TABLE_NAME, 'media_id', 'genre_id')
-            ->where('type', 'anime');
+        return $this->hasManyThrough(Genre::class, MediaGenre::class, 'media_id', 'id', 'id', 'genre_id');
     }
 
     /**
@@ -411,7 +410,33 @@ class Anime extends KModel
     }
 
     /**
-     * Returns this anime's related anime
+     * The genres of this Anime
+     *
+     * @return HasMany
+     */
+    public function media_genres(): HasMany
+    {
+        return $this->hasMany(MediaGenre::class, 'media_id');
+    }
+
+    /**
+     * Returns this anime's genres
+     *
+     * @return mixed
+     */
+    public function getMediaGenres(): mixed
+    {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'anime.media_genres', 'id' => $this->id]);
+
+        // Retrieve or save cached result
+        return Cache::remember($cacheKey, self::CACHE_KEY_GENRES_SECONDS, function () {
+            return $this->media_genres;
+        });
+    }
+
+    /**
+     * Returns the anime relations.
      *
      * @param ?int $limit
      * @return mixed
@@ -428,13 +453,40 @@ class Anime extends KModel
     }
 
     /**
-     * The related anime of this Anime
+     * The related anime of this anime.
      *
      * @return HasMany
      */
     public function anime_relations(): HasMany
     {
         return $this->hasMany(MediaRelation::class, 'media_id')->where('related_type', 'anime');
+    }
+
+    /**
+     * Returns the media relations.
+     *
+     * @param ?int $limit
+     * @return mixed
+     */
+    public function getRelations(?int $limit = null): mixed
+    {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'anime.relations', 'id' => $this->id, 'limit' => $limit]);
+
+        // Retrieve or save cached result
+        return Cache::remember($cacheKey, self::CACHE_KEY_RELATIONS_SECONDS, function () use ($limit) {
+            return $this->relations()->limit($limit)->get();
+        });
+    }
+
+    /**
+     * The media relations of this anime.
+     *
+     * @return HasMany
+     */
+    public function relations(): HasMany
+    {
+        return $this->hasMany(MediaRelation::class, 'media_id');
     }
 
     /**
@@ -494,6 +546,16 @@ class Anime extends KModel
     }
 
     /**
+     * The anime's songs relationship.
+     *
+     * @return HasMany
+     */
+    public function songs(): HasMany
+    {
+        return $this->hasMany(AnimeSong::class);
+    }
+
+    /**
      * The anime's adaptation source.
      *
      * @return BelongsTo
@@ -504,12 +566,12 @@ class Anime extends KModel
     }
 
     /**
-     * The anime's anime-songs relationship.
+     * The anime's staff relationship.
      *
      * @return HasMany
      */
-    public function anime_songs(): HasMany
+    public function staff(): HasMany
     {
-        return $this->hasMany(AnimeSong::class);
+        return $this->hasMany(AnimeStaff::class);
     }
 }

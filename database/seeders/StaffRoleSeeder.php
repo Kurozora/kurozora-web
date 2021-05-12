@@ -733,10 +733,6 @@ class StaffRoleSeeder extends Seeder
             'name'          => 'Vocal',
             'description'   => '',
         ],
-        [
-            'name'          => 'Voice Actor',
-            'description'   => '',
-        ],
     ];
 
     /**

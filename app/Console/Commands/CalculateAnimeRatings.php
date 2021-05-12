@@ -37,7 +37,7 @@ class CalculateAnimeRatings extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         // Mean score of all Anime
         $meanAverageRating = AnimeRating::avg('rating');
@@ -45,7 +45,7 @@ class CalculateAnimeRatings extends Command
         // Start looping through Anime
         $animes = Anime::all();
 
-        foreach($animes as $anime) {
+        foreach ($animes as $anime) {
             // Total amount of ratings this Anime has
             $totalRatingCount = $anime->ratings()->count();
 
@@ -62,9 +62,9 @@ class CalculateAnimeRatings extends Command
 
                 $this->info('Calculated weighted rating: '. $weightedRating);
                 $this->info('');
+            } else { // This Anime does not have enough ratings
+                $this->error('Anime ' . $anime->id . ' does not have enough ratings. (' . $totalRatingCount . '/' . Anime::MINIMUM_RATINGS_REQUIRED . ')');
             }
-            // This Anime does not have enough ratings
-            else $this->error('Anime ' . $anime->id . ' does not have enough ratings. (' . $totalRatingCount . '/' . Anime::MINIMUM_RATINGS_REQUIRED . ')');
         }
 
         return 1;
