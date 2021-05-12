@@ -132,8 +132,8 @@ class ForumSection extends Resource
      * @var string
      */
     public static string $icon = '
-        <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path fill="var(--sidebar-icon)" d="M2 15V5c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v15a1 1 0 0 1-1.7.7L16.58 17H4a2 2 0 0 1-2-2zM20 5H4v10h13a1 1 0 0 1 .7.3l2.3 2.29V5z"/>
+        <svg class="sidebar-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path fill="var(--sidebar-icon)" d="M0,65 L0,15 C0,9.5 4.5,5 10,5 L90,5 C95.5228475,5 100,9.4771525 100,15 L100,90 C99.9718997,92.0003758 98.7541285,93.791442 96.9042423,94.5531598 C95.0543561,95.3148777 92.9285015,94.9005986 91.5,93.5 L72.9,75 L10,75 C4.4771525,75 0,70.5228475 0,65 Z M90,15 L10,15 L10,65 L75,65 C76.3188463,65.0187852 77.5768477,65.5579287 78.5,66.5 L90,77.95 L90,15 Z"/>
         </svg>
     ';
 }
