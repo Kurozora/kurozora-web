@@ -190,44 +190,22 @@ class Anime extends Resource
                 ->hideFromIndex()
                 ->help('For example: © ' . date('Y') . ' Kurozora B.V.'),
 
-            Heading::make('Flags')
-                ->onlyOnForms(),
-
-            Boolean::make('Actors Fetched?', 'fetched_actors')
-                ->onlyOnForms()
-                ->help('Whether or not the actors were retrieved from TVDB.<br />Untick and the system will do so once the Anime gets visited the next time.'),
-
-            Boolean::make('Base Episodes Fetched?', 'fetched_base_episodes')
-                ->onlyOnForms()
-                ->help('Whether or not the base episodes were retrieved from TVDB.<br />Untick and the system will do so once the Anime gets visited the next time.'),
-
-            Boolean::make('Images Fetched?', 'fetched_images')
-                ->onlyOnForms()
-                ->help('Whether or not the images were retrieved from TVDB.<br />Untick and the system will do so once the Anime gets visited the next time.'),
-
-            Boolean::make('Details Fetched?', 'fetched_details')
-                ->onlyOnForms()
-                ->help('Whether or not the details (information_ were retrieved from TVDB.<br />Untick and the system will do so once the Anime gets visited the next time.'),
-
             HasMany::make('Anime Images'),
 
-            BelongsToMany::make('Genres')
-                ->searchable(),
+            HasMany::make('Genres', 'media_genres', MediaGenre::class),
 
             HasMany::make('Seasons'),
 
-            BelongsToMany::make('Studios')
-                ->searchable(),
-
             HasMany::make('Cast'),
 
-            HasMany::make('People'),
+            HasMany::make('Songs', 'songs', AnimeSong::class),
 
-            HasMany::make('Characters'),
+            HasMany::make('Relations', 'relations', MediaRelation::class),
 
-            HasMany::make('Anime Relations', 'anime_relations', MediaRelation::class),
+            HasMany::make('Staff', 'staff', AnimeStaff::class),
 
-            HasMany::make('Songs', 'anime_songs', AnimeSong::class),
+            BelongsToMany::make('Studios')
+                ->searchable(),
 
             BelongsToMany::make('Moderators', 'moderators', User::class)
                 // @TODO

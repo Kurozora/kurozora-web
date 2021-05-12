@@ -3,13 +3,13 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Select;
-use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Validator;
 
 class MediaGenre extends Resource
 {
@@ -71,6 +71,32 @@ class MediaGenre extends Resource
                 ->searchable()
                 ->required(),
         ];
+    }
+
+    /**
+     * Handle any post-validation processing.
+     *
+     * @param NovaRequest $request
+     * @param \Illuminate\Validation\Validator $validator
+     * @return void
+     * @throws ValidationException
+     */
+    protected static function afterValidation(NovaRequest $request, $validator)
+    {
+        $anime = $request->post('anime');
+        $genre = $request->post('genre');
+
+        $unique = Rule::unique(\App\Models\MediaGenre::TABLE_NAME, 'genre_id')->where(function ($query) use($anime, $genre) {
+            return $query->where('media_id', $anime)->where('genre_id', $genre);
+        });
+
+        $uniqueValidator = Validator::make($request->only('genre'), [
+            'genre' => [$unique],
+        ], [
+            'genre' => __('validation.unique')
+        ]);
+
+        $uniqueValidator->validate();
     }
 
     /**
