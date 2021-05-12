@@ -18,8 +18,9 @@ class FreshCommand extends BaseFreshCommand
      */
     public function handle()
     {
-        if ($this->needsRedownloading())
-            $this->runRedownload();
+        if ($this->needsReDownloading()) {
+            $this->runReDownload();
+        }
 
         parent::handle();
     }
@@ -29,7 +30,7 @@ class FreshCommand extends BaseFreshCommand
      *
      * @return bool
      */
-    protected function needsRedownloading()
+    protected function needsReDownloading(): bool
     {
         return $this->option('redownload');
     }
@@ -39,13 +40,14 @@ class FreshCommand extends BaseFreshCommand
      *
      * @return void
      */
-    protected function runRedownload() {
+    protected function runReDownload()
+    {
         $this->info('Downloading anime JSON...');
         AnimeDummySeeder::downloadJSON();
         $this->info('Anime JSON downloaded.');
     }
 
-    protected function getOptions()
+    protected function getOptions(): array
     {
         $options = parent::getOptions();
         array_push($options, ['redownload', null, InputOption::VALUE_NONE, 'Indicates if the anime.json should be re-downloaded.']);

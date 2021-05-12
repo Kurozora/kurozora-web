@@ -48,13 +48,6 @@ class CreateAnimesTable extends Migration
             $table->unsignedInteger('air_day')->nullable();
             $table->boolean('is_nsfw')->default(false);
             $table->string('copyright')->nullable();
-
-            // Flags for fetched data
-            $table->boolean('fetched_actors')->default(false);
-            $table->boolean('fetched_base_episodes')->default(false);
-            $table->boolean('fetched_images')->default(false);
-            $table->boolean('fetched_details')->default(false);
-
             $table->timestamps();
         });
 

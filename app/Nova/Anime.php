@@ -3,8 +3,6 @@
 namespace App\Nova;
 
 use App\Enums\DayOfWeek;
-use App\Nova\Actions\FetchAnimeDetails;
-use App\Nova\Actions\FetchAnimeImages;
 use App\Nova\Lenses\UnmoderatedAnime;
 use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Database\Eloquent\Builder;
@@ -312,10 +310,7 @@ class Anime extends Resource
      */
     public function actions(Request $request): array
     {
-        return [
-            new FetchAnimeImages,
-            new FetchAnimeDetails,
-        ];
+        return [];
     }
 
     /**

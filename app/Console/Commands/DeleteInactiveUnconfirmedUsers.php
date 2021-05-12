@@ -37,7 +37,7 @@ class DeleteInactiveUnconfirmedUsers extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         User::where([
                 ['email_verified_at', '!=', null],
