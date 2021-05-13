@@ -7,9 +7,9 @@ Route::prefix('/favorite-anime')
     ->name('.favorite-anime')
     ->group(function() {
         Route::get('/', [MeController::class, 'getFavorites'])
-            ->middleware('kurozora.userauth');
+            ->middleware('auth.kurozora');
 
         Route::post('/', [FavoriteAnimeController::class, 'addFavorite'])
-            ->middleware('kurozora.userauth')
+            ->middleware('auth.kurozora')
             ->name('.create');
     });

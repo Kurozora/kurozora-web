@@ -14,7 +14,7 @@ Route::prefix('/v1')
             ->name('.info');
 
         Route::get('/explore', [ExplorePageController::class, 'explore'])
-            ->middleware('kurozora.userauth:optional')
+            ->middleware('auth.kurozora:optional')
             ->name('.explore');
 
         require 'API/Anime.php';
