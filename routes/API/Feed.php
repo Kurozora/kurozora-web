@@ -6,14 +6,14 @@ Route::prefix('/feed')
     ->name('.feed')
     ->group(function() {
         Route::post('/', [FeedController::class, 'post'])
-            ->middleware('kurozora.userauth');
+            ->middleware('auth.kurozora');
 
         Route::get('/home', [FeedController::class, 'home'])
-            ->middleware('kurozora.userauth')
+            ->middleware('auth.kurozora')
             ->name('.home');
 
         Route::get('/explore', [FeedController::class, 'explore'])
-            ->middleware('kurozora.userauth:optional')
+            ->middleware('auth.kurozora:optional')
             ->name('.global');
 
         require 'Feed/Messages.php';
