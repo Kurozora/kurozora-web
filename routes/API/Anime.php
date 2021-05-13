@@ -26,8 +26,11 @@ Route::prefix('/anime')
         Route::get('/{anime}/seasons', [AnimeController::class, 'seasons'])
             ->name('.seasons');
 
-        Route::get('/{anime}/studios', [AnimeController::class, 'studiosAnime'])
-            ->middleware('kurozora.userauth:optional')
+        Route::get('/{anime}/staff', [AnimeController::class, 'staff'])
+            ->name('.staff');
+
+        Route::get('/{anime}/studios', [AnimeController::class, 'studios'])
+            ->middleware('auth.kurozora:optional')
             ->name('.studios');
 
         Route::post('/{anime}/rate', [AnimeController::class, 'rateAnime'])
