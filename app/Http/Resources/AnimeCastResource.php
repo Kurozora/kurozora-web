@@ -22,7 +22,7 @@ class AnimeCastResource extends JsonResource
         $resource = [
             'id'            => $animeCast->id,
             'type'          => 'cast',
-            'href'          => route('api.anime.cast', $animeCast, false),
+            'href'          => route('api.anime.cast', $animeCast->anime, false),
             'attributes'    => [
                 'role'      => $animeCast->cast_role->only(['name', 'description']),
                 'language'  => $animeCast->language->only('name'),
