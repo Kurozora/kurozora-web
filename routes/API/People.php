@@ -6,11 +6,11 @@ Route::prefix('/people')
     ->name('.people')
     ->group(function() {
         Route::get('/{person}', [PersonController::class, 'details'])
-            ->middleware('kurozora.userauth:optional')
+            ->middleware('auth.kurozora:optional')
             ->name('.details');
 
         Route::get('/{person}/anime', [PersonController::class, 'anime'])
-            ->middleware('kurozora.userauth:optional')
+            ->middleware('auth.kurozora:optional')
             ->name('.anime');
 
         Route::get('/{person}/characters', [PersonController::class, 'characters'])

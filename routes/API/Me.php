@@ -6,18 +6,18 @@ Route::prefix('/me')
     ->name('.me')
     ->group(function() {
         Route::get('/', [MeController::class, 'me'])
-            ->middleware('kurozora.userauth');
+            ->middleware('auth.kurozora');
 
         Route::post('/', [MeController::class, 'updateProfile'])
-            ->middleware('kurozora.userauth')
+            ->middleware('auth.kurozora')
             ->name('.update');
 
         Route::get('/followers', [MeController::class, 'getFollowers'])
-            ->middleware('kurozora.userauth:optional')
+            ->middleware('auth.kurozora:optional')
             ->name('.followers');
 
         Route::get('/following', [MeController::class, 'getFollowing'])
-            ->middleware('kurozora.userauth:optional')
+            ->middleware('auth.kurozora:optional')
             ->name('.following');
 
         require 'Me/Favorite-Anime.php';

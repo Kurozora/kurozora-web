@@ -4,8 +4,13 @@ namespace App\Nova;
 
 use App\Models\AnimeCast;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Unique;
+use Illuminate\Validation\ValidationException;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Validator;
 
 class Cast extends Resource
 {
@@ -14,7 +19,7 @@ class Cast extends Resource
      *
      * @var string
      */
-    public static string $model = 'App\Models\AnimeCast';
+    public static string $model = AnimeCast::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -64,14 +69,45 @@ class Cast extends Resource
                 ->sortable(),
 
             BelongsTo::make('Cast Role')
-                ->rules('required')
                 ->help('If you’re not sure what role the character has, choose "Supporting character".')
                 ->sortable(),
 
             BelongsTo::make('Language')
-                ->rules('required')
                 ->sortable(),
         ];
+    }
+
+    /**
+     * Handle any post-validation processing.
+     *
+     * @param NovaRequest $request
+     * @param \Illuminate\Validation\Validator $validator
+     * @return void
+     * @throws ValidationException
+     */
+    protected static function afterValidation(NovaRequest $request, $validator)
+    {
+        $anime = $request->post('anime');
+        $character = $request->post('character');
+        $person = $request->post('person');
+        $castRole = $request->post('cast_role');
+        $language = $request->post('language');
+
+        $unique = Rule::unique(AnimeCast::TABLE_NAME, 'language_id')->where(function ($query) use ($anime, $character, $person, $castRole, $language) {
+            return $query->where([
+                ['anime_id', $anime],
+                ['character_id', $character],
+                ['person_id', $person],
+                ['cast_role_id', $castRole],
+                ['language_id', $language],
+            ]);
+        });
+
+        $uniqueValidator = Validator::make($request->only('language'), [
+            'language'  => [$unique],
+        ]);
+
+        $uniqueValidator->validate();
     }
 
     /**

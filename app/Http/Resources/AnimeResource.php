@@ -27,23 +27,20 @@ class AnimeResource extends JsonResource
             $relationships = [];
             foreach ($includes as $include) {
                 switch ($include) {
-                    case 'people':
-                        $relationships = array_merge($relationships, $this->getPeopleRelationship());
-                        break;
                     case 'cast':
                         $relationships = array_merge($relationships, $this->getCastRelationship());
                         break;
                     case 'characters':
                         $relationships = array_merge($relationships, $this->getCharactersRelationship());
                         break;
-                    case 'genres':
-                        $relationships = array_merge($relationships, $this->getGenresRelationship());
-                        break;
                     case 'related-shows':
                         $relationships = array_merge($relationships, $this->getRelatedShowsRelationship());
                         break;
                     case 'seasons':
                         $relationships = array_merge($relationships, $this->getSeasonsRelationship());
+                        break;
+                    case 'staff':
+                        $relationships = array_merge($relationships, $this->getStaffRelationship());
                         break;
                     case 'studios':
                         $request->merge(['include' => 'shows']);
@@ -57,24 +54,6 @@ class AnimeResource extends JsonResource
         }
 
         return $resource;
-    }
-
-    /**
-     * Returns the people relationship for the resource.
-     *
-     * @return array
-     */
-    protected function getPeopleRelationship(): array
-    {
-        /** @var Anime $anime */
-        $anime = $this->resource;
-
-        return [
-            'people' => [
-                'href' => route('api.anime.people', $anime, false),
-                'data' => PersonResource::collection($anime->getPeople(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
-            ]
-        ];
     }
 
     /**
@@ -114,24 +93,6 @@ class AnimeResource extends JsonResource
     }
 
     /**
-     * Returns the genres relationship for the resource.
-     *
-     * @return array
-     */
-    protected function getGenresRelationship(): array
-    {
-        /** @var Anime $anime */
-        $anime = $this->resource;
-
-        return [
-            'genres' => [
-                'href' => route('api.anime.genres', $anime, false),
-                'data' => GenreResource::collection($anime->getGenres(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
-            ]
-        ];
-    }
-
-    /**
      * Returns the related-shows relationship for the resource.
      *
      * @return array
@@ -163,6 +124,24 @@ class AnimeResource extends JsonResource
             'seasons' => [
                 'href' => route('api.anime.seasons', $anime, false),
                 'data' => AnimeSeasonResource::collection($anime->getSeasons(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
+            ]
+        ];
+    }
+
+    /**
+     * Returns the people relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getStaffRelationship(): array
+    {
+        /** @var Anime $anime */
+        $anime = $this->resource;
+
+        return [
+            'staff' => [
+                'href' => route('api.anime.staff', $anime, false),
+                'data' => AnimeStaffResource::collection($anime->getStaff(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }

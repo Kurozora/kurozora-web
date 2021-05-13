@@ -6,10 +6,10 @@ Route::prefix('/studios')
     ->name('.studios')
     ->group(function() {
         Route::get('/{studio}', [StudioController::class, 'details'])
-            ->middleware('kurozora.userauth:optional')
+            ->middleware('auth.kurozora:optional')
             ->name('.details');
 
         Route::get('/{studio}/anime', [StudioController::class, 'anime'])
-            ->middleware('kurozora.userauth:optional')
+            ->middleware('auth.kurozora:optional')
             ->name('.anime');
     });

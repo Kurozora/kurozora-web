@@ -12,9 +12,9 @@ Route::prefix('/forum-sections')
             ->name('.details');
 
         Route::get('/{section}/threads', [ForumSectionController::class, 'threads'])
-            ->middleware('kurozora.userauth:optional')
+            ->middleware('auth.kurozora:optional')
             ->name('.threads');
 
         Route::post('/{section}/threads', [ForumSectionController::class, 'postThread'])
-            ->middleware('kurozora.userauth');
+            ->middleware('auth.kurozora');
     });

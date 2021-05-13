@@ -38,14 +38,18 @@ class Anime extends KModel
     // How long to cache certain responses
     const CACHE_KEY_EXPLORE_SECONDS = 120 * 60;
     const CACHE_KEY_ANIME_CAST_SECONDS = 120 * 60;
-    const CACHE_KEY_PEOPLE_SECONDS = 120 * 60;
     const CACHE_KEY_CHARACTERS_SECONDS = 120 * 60;
     const CACHE_KEY_EPISODES_SECONDS = 120 * 60;
+    const CACHE_KEY_GENRES_SECONDS = 120 * 60;
     const CACHE_KEY_RELATIONS_SECONDS = 120 * 60;
     const CACHE_KEY_SEASONS_SECONDS = 120 * 60;
-    const CACHE_KEY_GENRES_SECONDS = 120 * 60;
+    const CACHE_KEY_STAFF_SECONDS = 120 * 60;
     const CACHE_KEY_STUDIOS_SECONDS = 120 * 60;
+
+    // Table name
     const TABLE_NAME = 'animes';
+    protected $table = self::TABLE_NAME;
+
     /**
      * Searchable rules.
      *
@@ -57,6 +61,7 @@ class Anime extends KModel
             'synopsis' => 5
         ]
     ];
+
     /**
      * Casts rules.
      *
@@ -67,12 +72,15 @@ class Anime extends KModel
         'last_aired' => 'date'
     ];
 
-    // Table name
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
     protected $appends = [
         'broadcast',
         'information_summary'
     ];
-    protected $table = self::TABLE_NAME;
 
     /**
      * Bootstrap the model and its traits.
@@ -179,16 +187,17 @@ class Anime extends KModel
     /**
      * Retrieves the studios for an Anime item in an array
      *
+     * @param ?int $limit
      * @return mixed
      */
-    public function getStudios(): mixed
+    public function getStudios(?int $limit = null): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.studios', 'id' => $this->id]);
+        $cacheKey = self::cacheKey(['name' => 'anime.studios', 'id' => $this->id, 'limit' => $limit]);
 
         // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_STUDIOS_SECONDS, function () {
-            return $this->studios()->get();
+        return Cache::remember($cacheKey, self::CACHE_KEY_STUDIOS_SECONDS, function () use ($limit) {
+            return $this->studios()->limit($limit)->get();
         });
     }
 
@@ -240,33 +249,6 @@ class Anime extends KModel
     public function banner(): ?HasMany
     {
         return $this->hasMany(AnimeImages::class, 'anime_id', 'id')->firstWhere('type', '=', AnimeImageType::Banner);
-    }
-
-    /**
-     * Retrieves the people for an Anime item in an array
-     *
-     * @param ?int $limit
-     * @return mixed
-     */
-    public function getPeople(?int $limit = null): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.people', 'id' => $this->id, 'limit' => $limit]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_PEOPLE_SECONDS, function () use ($limit) {
-            return $this->people()->limit($limit)->get();
-        });
-    }
-
-    /**
-     * Get the Anime's people.
-     *
-     * @return HasManyDeep
-     */
-    public function people(): HasManyDeep
-    {
-        return $this->hasManyDeep(Person::class, [AnimeCast::class], ['anime_id', 'id'], ['id', 'person_id'])->distinct();
     }
 
     /**
@@ -573,5 +555,22 @@ class Anime extends KModel
     public function staff(): HasMany
     {
         return $this->hasMany(AnimeStaff::class);
+    }
+
+    /**
+     * Returns the staff relations.
+     *
+     * @param ?int $limit
+     * @return mixed
+     */
+    public function getStaff(?int $limit = null): mixed
+    {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'anime.staff', 'id' => $this->id, 'limit' => $limit]);
+
+        // Retrieve or save cached result
+        return Cache::remember($cacheKey, self::CACHE_KEY_STAFF_SECONDS, function () use ($limit) {
+            return $this->staff()->limit($limit)->get();
+        });
     }
 }

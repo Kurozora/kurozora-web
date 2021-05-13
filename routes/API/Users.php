@@ -22,30 +22,30 @@ Route::prefix('/users')
             ->name('.reset-password');
 
         Route::get('/{user}/favorite-anime', [FavoriteAnimeController::class, 'getFavorites'])
-            ->middleware(['kurozora.userauth', 'can:get_anime_favorites,user'])
+            ->middleware(['auth.kurozora', 'can:get_anime_favorites,user'])
             ->name('.favorite-anime');
 
         Route::get('/{user}/feed-messages', [UserController::class, 'getFeedMessages'])
-            ->middleware('kurozora.userauth:optional')
+            ->middleware('auth.kurozora:optional')
             ->name('.feed-messages');
 
         Route::post('/{user}/follow', [FollowingController::class, 'followUser'])
-            ->middleware(['kurozora.userauth', 'can:follow,user'])
+            ->middleware(['auth.kurozora', 'can:follow,user'])
             ->name('.follow');
 
         Route::get('/{user}/followers', [FollowingController::class, 'getFollowers'])
-            ->middleware('kurozora.userauth:optional')
+            ->middleware('auth.kurozora:optional')
             ->name('.followers');
 
         Route::get('/{user}/following', [FollowingController::class, 'getFollowing'])
-            ->middleware('kurozora.userauth:optional')
+            ->middleware('auth.kurozora:optional')
             ->name('.following');
 
         Route::get('/{user}/profile', [UserController::class, 'profile'])
-            ->middleware('kurozora.userauth:optional')
+            ->middleware('auth.kurozora:optional')
             ->name('.profile');
 
         Route::get('/search', [UserController::class, 'search'])
-            ->middleware('kurozora.userauth:optional')
+            ->middleware('auth.kurozora:optional')
             ->name('.search');
     });
