@@ -77,6 +77,7 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'auth' => KAuthenticate::class,
         'auth.basic' => AuthenticateWithBasicAuth::class,
+        'auth.kurozora' => CheckKurozoraUserAuthentication::class,
         'cache.headers' => SetCacheHeaders::class,
         'can' => Authorize::class,
         'guest' => RedirectIfAuthenticated::class,
@@ -84,6 +85,5 @@ class Kernel extends HttpKernel
         'signed' => ValidateSignature::class,
         'throttle' => ThrottleRequests::class,
         'verified' => EnsureEmailIsVerified::class,
-        'kurozora.userauth' => CheckKurozoraUserAuthentication::class,
     ];
 }

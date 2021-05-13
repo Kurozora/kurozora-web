@@ -6,11 +6,11 @@ Route::prefix('/themes')
     ->name('.themes')
     ->group(function() {
         Route::get('/', [AppThemeController::class, 'overview'])
-            ->middleware('kurozora.userauth:optional')
+            ->middleware('auth.kurozora:optional')
             ->name('.overview');
 
         Route::get('/{theme}', [AppThemeController::class, 'details'])
-            ->middleware('kurozora.userauth:optional')
+            ->middleware('auth.kurozora:optional')
             ->name('.details');
 
         Route::get('/{theme}/download', [AppThemeController::class, 'download'])

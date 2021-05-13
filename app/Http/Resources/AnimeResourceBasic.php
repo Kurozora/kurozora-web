@@ -48,6 +48,7 @@ class AnimeResourceBasic extends JsonResource
                 'title'                 => $anime->title,
                 'tagline'               => $anime->tagline,
                 'synopsis'              => $anime->synopsis,
+                'genres'                => $anime->genres->pluck('name'),
                 'tvRating'              => $anime->tv_rating->only(['name', 'description']),
                 'type'                  => $anime->media_type->only(['name', 'description']),
                 'source'                => $anime->source->only(['name', 'description']),

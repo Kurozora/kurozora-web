@@ -173,70 +173,12 @@
             },
             "explode": false,
             "required": false,
-            "description": "The relations to include in the response. Available relations are:\n- people\n- characters\n- cast\n- related-shows\n- seasons"
+            "description": "The relations to include in the response. Available relations are:\n- cast\n- characters\n- related-shows\n- seasons\n- staff\n-studios"
           }
         ],
         "responses": {
           "200": {
             "$ref": "#/components/responses/GetAnimeSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/anime/{animeID}/people": {
-      "get": {
-        "tags": [
-          "anime"
-        ],
-        "operationId": "getAnimePeople",
-        "summary": "Anime person information.",
-        "description": "This endpoint will retrieve the people of an Anime item.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "animeID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the anime."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetAnimePeopleSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/anime/{animeID}/characters": {
-      "get": {
-        "tags": [
-          "anime"
-        ],
-        "operationId": "getAnimeCharacters",
-        "summary": "Anime character information.",
-        "description": "This endpoint will retrieve the characters of an Anime item.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "animeID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the anime."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetAnimeCharactersSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -273,6 +215,35 @@
         }
       }
     },
+    "/anime/{animeID}/characters": {
+      "get": {
+        "tags": [
+          "anime"
+        ],
+        "operationId": "getAnimeCharacters",
+        "summary": "Anime character information.",
+        "description": "This endpoint will retrieve the characters of an Anime item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "animeID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the anime."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetAnimeCharactersSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/anime/{animeID}/related-shows": {
       "get": {
         "security": [
@@ -301,35 +272,6 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/GetAnimeRelatedShowsSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
-    "/anime/{animeID}/seasons": {
-      "get": {
-        "tags": [
-          "anime"
-        ],
-        "operationId": "getAnimeSeasons",
-        "summary": "Anime all seasons information.",
-        "description": "This endpoint will retrieve the seasons of an Anime item.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "animeID",
-            "schema": {
-              "type": "integer"
-            },
-            "required": true,
-            "description": "ID of the anime."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/GetAnimeSeasonsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -387,6 +329,93 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/anime/{animeID}/seasons": {
+      "get": {
+        "tags": [
+          "anime"
+        ],
+        "operationId": "getAnimeSeasons",
+        "summary": "Anime all seasons information.",
+        "description": "This endpoint will retrieve the seasons of an Anime item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "animeID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the anime."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetAnimeSeasonsSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/anime/{animeID}/staff": {
+      "get": {
+        "tags": [
+          "anime"
+        ],
+        "operationId": "getAnimeStaff",
+        "summary": "Anime staff information.",
+        "description": "This endpoint will retrieve the staff of an Anime item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "animeID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the anime."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetAnimeStaffSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/anime/{animeID}/studios": {
+      "get": {
+        "tags": [
+          "anime"
+        ],
+        "operationId": "getAnimeStudios",
+        "summary": "Anime studio information.",
+        "description": "This endpoint will retrieve the studios of an Anime item.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "animeID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the anime."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetAnimeStudiosSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -842,7 +871,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetPepopleCharactersSuccess"
+            "$ref": "#/components/responses/GetPeopleCharactersSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -4264,100 +4293,6 @@
           }
         }
       },
-      "GetAnimePeopleSuccess": {
-        "description": "Successful GET Anime People JSON response",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "example": {
-                "data": [
-                  {
-                    "id": 10,
-                    "type": "people",
-                    "href": "/api/v1/people/10",
-                    "attributes": {
-                      "firstName": "Leatha",
-                      "lastName": "Dietrich",
-                      "occupation": "Installation and Repair Technician",
-                      "imageURL": "https://lorempixel.com/640/480/?22657"
-                    }
-                  },
-                  {
-                    "id": 1,
-                    "type": "people",
-                    "href": "/api/v1/people/1",
-                    "attributes": {
-                      "firstName": "Aniyah",
-                      "lastName": "Waelchi",
-                      "occupation": "Government Property Inspector",
-                      "imageURL": "https://lorempixel.com/640/480/?66477"
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        }
-      },
-      "GetAnimeCharactersSuccess": {
-        "description": "Successful GET Anime Characters JSON response",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "example": {
-                "data": [
-                  {
-                    "id": 1,
-                    "type": "characters",
-                    "href": "/api/v1/characters/1",
-                    "attributes": {
-                      "name": "Tyra Armstrong IV",
-                      "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
-                      "imageURL": "https://lorempixel.com/640/480/?46141",
-                      "debut": "Episode 05",
-                      "status": "Deceased",
-                      "bloodType": "W",
-                      "favoriteFood": "numquam",
-                      "bust": "27.70",
-                      "waist": "78.44",
-                      "hip": "53.99",
-                      "height": "875",
-                      "age": 265,
-                      "birthDay": 1,
-                      "birthMonth": 7,
-                      "astrologicalSign": "Virgo ♍️"
-                    }
-                  },
-                  {
-                    "id": 2,
-                    "type": "characters",
-                    "href": "/api/v1/characters/2",
-                    "attributes": {
-                      "name": "Lorna Pollich",
-                      "about": "Est vitae et voluptas ullam unde id ea. Quo non distinctio ipsa blanditiis aspernatur. Perferendis aut officia sit similique soluta odit eum. Sunt quo delectus est quis sapiente. A natus voluptatem omnis distinctio quis quas. Molestiae ut aut voluptas incidunt necessitatibus nihil culpa. Molestiae dolores illo dignissimos amet sit. Sit non et enim doloremque ratione exercitationem. Hic voluptas ab eos quia quia quia. Hic expedita est distinctio quaerat accusamus.",
-                      "imageURL": "https://lorempixel.com/640/480/?51170",
-                      "debut": "Episode 82",
-                      "status": "Deceased",
-                      "bloodType": "A",
-                      "favoriteFood": "hic",
-                      "bust": "22.62",
-                      "waist": "33.46",
-                      "hip": "37.65",
-                      "height": "704",
-                      "age": 292,
-                      "birthDay": 1,
-                      "birthMonth": 2,
-                      "astrologicalSign": "Cancer ♋️"
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        }
-      },
       "GetAnimeCastSuccess": {
         "description": "Successful GET Anime Cast JSON response",
         "content": {
@@ -4437,6 +4372,64 @@
                       }
                     },
                     "role": "Deuteragonist"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetAnimeCharactersSuccess": {
+        "description": "Successful GET Anime Characters JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "characters",
+                    "href": "/api/v1/characters/1",
+                    "attributes": {
+                      "name": "Tyra Armstrong IV",
+                      "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
+                      "imageURL": "https://lorempixel.com/640/480/?46141",
+                      "debut": "Episode 05",
+                      "status": "Deceased",
+                      "bloodType": "W",
+                      "favoriteFood": "numquam",
+                      "bust": "27.70",
+                      "waist": "78.44",
+                      "hip": "53.99",
+                      "height": "875",
+                      "age": 265,
+                      "birthDay": 1,
+                      "birthMonth": 7,
+                      "astrologicalSign": "Virgo ♍️"
+                    }
+                  },
+                  {
+                    "id": 2,
+                    "type": "characters",
+                    "href": "/api/v1/characters/2",
+                    "attributes": {
+                      "name": "Lorna Pollich",
+                      "about": "Est vitae et voluptas ullam unde id ea. Quo non distinctio ipsa blanditiis aspernatur. Perferendis aut officia sit similique soluta odit eum. Sunt quo delectus est quis sapiente. A natus voluptatem omnis distinctio quis quas. Molestiae ut aut voluptas incidunt necessitatibus nihil culpa. Molestiae dolores illo dignissimos amet sit. Sit non et enim doloremque ratione exercitationem. Hic voluptas ab eos quia quia quia. Hic expedita est distinctio quaerat accusamus.",
+                      "imageURL": "https://lorempixel.com/640/480/?51170",
+                      "debut": "Episode 82",
+                      "status": "Deceased",
+                      "bloodType": "A",
+                      "favoriteFood": "hic",
+                      "bust": "22.62",
+                      "waist": "33.46",
+                      "hip": "37.65",
+                      "height": "704",
+                      "age": 292,
+                      "birthDay": 1,
+                      "birthMonth": 2,
+                      "astrologicalSign": "Cancer ♋️"
+                    }
                   }
                 ]
               }
@@ -4579,6 +4572,81 @@
                       "number": 1,
                       "episodeCount": 2,
                       "firstAired": "2020-07-29 10:00:00"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetAnimeStaffSuccess": {
+        "description": "Successful GET Anime Staff JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 10,
+                    "type": "staff",
+                    "href": "/api/v1/anime/138/staff",
+                    "attributes": {
+                      "role": {
+                        "name": "Digital Colouring",
+                        "description": ""
+                      }
+                    },
+                    "relationships": {
+                      "person": {
+                        "href": "/api/v1/people/10",
+                        "data": {
+                          "id": 1,
+                          "type": "people",
+                          "href": "/api/v1/people/1",
+                          "attributes": {
+                            "firstName": "Aubrey",
+                            "lastName": "Littel",
+                            "givenName": "結衣",
+                            "familyName": null,
+                            "alternativeNames": [
+                              "Suki"
+                            ],
+                            "about": "Eveniet voluptatibus atque commodi reprehenderit voluptate enim. Non distinctio qui et corporis quae et aut. Ullam qui aperiam similique aperiam. Quibusdam incidunt nemo ut laboriosam sapiente. Assumenda autem placeat quia quo. Velit occaecati sit tempora doloremque reiciendis ea. Et molestiae id id minus. Similique qui sed molestiae velit voluptas. Ut atque illum harum. Voluptatum aut ea ab dignissimos. Corporis assumenda omnis sequi aut deleniti. Laudantium nobis sit ea tenetur quo rerum. Fugiat soluta vel sed adipisci corporis quaerat aut quibusdam. Reiciendis porro alias labore est nesciunt. Omnis reprehenderit corporis voluptas nemo aspernatur id. Aut provident explicabo voluptatem sunt accusantium. Repellendus consequatur laudantium incidunt voluptas reprehenderit cupiditate vel. Excepturi ut ea et fuga totam. Ut voluptas eum voluptatem. Placeat in tempora sunt exercitationem qui inventore quibusdam est. Dolores et voluptas quia qui saepe. Est corporis quas iusto et sint. Ut dignissimos nostrum quia. Qui hic et est autem. Cum libero magni animi odit vero molestiae nobis molestiae.",
+                            "imageURL": null,
+                            "websiteURL": null
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetAnimeStudiosSuccess": {
+        "description": "Successful GET Anime Studios JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id":8,
+                    "type": "studios",
+                    "href": "/api/v1/studios/8",
+                    "attributes": {
+                      "name": "Bogan, Medhurst and Stamm",
+                      "logo": {
+                        "url": "https://via.placeholder.com/640x480.png/006655?text=ratione"
+                      },
+                      "about": "Corporis quia ducimus eveniet beatae. Aut repellat voluptates porro esse ea. Similique quos nemo voluptas beatae enim molestias. Qui perspiciatis unde ipsa ipsam rerum veniam. Non explicabo hic incidunt quibusdam nobis accusantium. Voluptatum vero vel et animi et amet. Quis autem quod enim ut incidunt odio. Tenetur omnis amet qui delectus. Temporibus cupiditate ullam similique harum voluptas. Nostrum deserunt eum voluptas ex ut similique omnis. Ipsa illo voluptates nobis quisquam fugit rerum voluptatem dolore. Voluptatem ratione ut veritatis illum eveniet aliquam. Eaque maxime nemo maiores dolor hic.",
+                      "founded": "2007-02-25",
+                      "websiteUrl": "https://streich.net/blanditiis-tempora-molestiae-in-aut"
                     }
                   }
                 ]

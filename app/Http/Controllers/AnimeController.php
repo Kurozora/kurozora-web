@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AnimeStaffResource;
+use App\Http\Resources\StudioResource;
 use App\Models\Anime;
 use App\Models\AnimeRating;
 use App\Events\AnimeViewed;
@@ -9,7 +11,6 @@ use App\Helpers\JSONResult;
 use App\Http\Requests\RateAnimeRequest;
 use App\Http\Requests\SearchAnimeRequest;
 use App\Http\Resources\AnimeCastResource;
-use App\Http\Resources\PersonResource;
 use App\Http\Resources\AnimeRelatedShowsResource;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\AnimeResourceBasic;
@@ -36,22 +37,6 @@ class AnimeController extends Controller
         // Show the Anime details response
         return JSONResult::success([
             'data' => AnimeResource::collection([$anime])
-        ]);
-    }
-
-    /**
-     * Returns person information of an Anime.
-     *
-     * @param Anime $anime
-     * @return JsonResponse
-     */
-    public function people(Anime $anime): JsonResponse
-    {
-        // Get the people
-        $people = $anime->getPeople();
-
-        return JSONResult::success([
-            'data' => PersonResource::collection($people)
         ]);
     }
 
@@ -116,6 +101,38 @@ class AnimeController extends Controller
 
         return JSONResult::success([
             'data' => AnimeSeasonResource::collection($seasons)
+        ]);
+    }
+
+    /**
+     * Returns staff information of an Anime.
+     *
+     * @param Anime $anime
+     * @return JsonResponse
+     */
+    public function staff(Anime $anime): JsonResponse
+    {
+        // Get the staff
+        $staff = $anime->getStaff();
+
+        return JSONResult::success([
+            'data' => AnimeStaffResource::collection($staff)
+        ]);
+    }
+
+    /**
+     * Returns the studios information of an Anime.
+     *
+     * @param Anime $anime
+     * @return JsonResponse
+     */
+    public function studios(Anime $anime): JsonResponse
+    {
+        // Get the anime studios
+        $animeStudios = $anime->getStudios();
+
+        return JSONResult::success([
+            'data' => StudioResource::collection($animeStudios)
         ]);
     }
 

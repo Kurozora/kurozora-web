@@ -6,10 +6,10 @@ Route::prefix('/reminder-anime')
     ->name('.reminder-anime')
     ->group(function() {
         Route::get('/', [ReminderAnimeController::class, 'getReminders'])
-            ->middleware('kurozora.userauth');
+            ->middleware('auth.kurozora');
 
         Route::post('/', [ReminderAnimeController::class, 'addReminder'])
-            ->middleware('kurozora.userauth')
+            ->middleware('auth.kurozora')
             ->name('.create');
 
         Route::get('/download', [ReminderAnimeController::class, 'download'])

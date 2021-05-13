@@ -6,26 +6,26 @@ Route::prefix('/forum-threads')
     ->name('.forum-threads')
     ->group(function() {
         Route::get('/search', [ForumThreadController::class, 'search'])
-            ->middleware('kurozora.userauth:optional')
+            ->middleware('auth.kurozora:optional')
             ->name('.search');
 
         Route::get('/{thread}', [ForumThreadController::class, 'details'])
-            ->middleware('kurozora.userauth:optional')
+            ->middleware('auth.kurozora:optional')
             ->name('.details');
 
         Route::post('/{thread}/vote', [ForumThreadController::class, 'vote'])
-            ->middleware('kurozora.userauth')
+            ->middleware('auth.kurozora')
             ->name('.vote');
 
         Route::get('/{thread}/replies', [ForumThreadController::class, 'replies'])
-            ->middleware('kurozora.userauth:optional')
+            ->middleware('auth.kurozora:optional')
             ->name('.replies');
 
         Route::post('/{thread}/replies', [ForumThreadController::class, 'postReply'])
-            ->middleware('kurozora.userauth')
+            ->middleware('auth.kurozora')
             ->name('.reply');
 
         Route::post('/{thread}/lock', [ForumThreadController::class, 'lock'])
-            ->middleware(['kurozora.userauth', 'can:lock_thread,thread'])
+            ->middleware(['auth.kurozora', 'can:lock_thread,thread'])
             ->name('.lock');
     });

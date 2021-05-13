@@ -6,6 +6,6 @@ Route::prefix('/feed-messages')
     ->name('.feed-messages')
     ->group(function() {
         Route::get('/', [MeController::class, 'getFeedMessages'])
-            ->middleware('kurozora.userauth')
+            ->middleware('auth.kurozora')
             ->name('.details');
     });

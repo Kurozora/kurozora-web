@@ -6,9 +6,9 @@ Route::prefix('/anime-episodes')
     ->name('.episodes')
     ->group(function() {
         Route::get('/{episode}', [AnimeEpisodeController::class, 'details'])
-            ->middleware('kurozora.userauth:optional')
+            ->middleware('auth.kurozora:optional')
             ->name('.details');
 
         Route::post('/{episode}/watched', [AnimeEpisodeController::class, 'watched'])
-            ->middleware('kurozora.userauth');
+            ->middleware('auth.kurozora');
     });
