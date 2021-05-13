@@ -107,6 +107,19 @@ class Person extends Resource
     }
 
     /**
+     * Get the value that should be displayed to represent the resource.
+     *
+     * @return string
+     */
+    public function title(): string
+    {
+        /** @var \App\Models\Person $person */
+        $person = $this->resource;
+
+        return $person->full_name . ' (ID: ' . $person->id . ')';
+    }
+
+    /**
      * Get the cards available for the request.
      *
      * @param Request $request
