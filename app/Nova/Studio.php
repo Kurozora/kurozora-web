@@ -24,7 +24,7 @@ class Studio extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -32,7 +32,7 @@ class Studio extends Resource
      * @var array
      */
     public static $search = [
-        'name'
+        'id', 'name'
     ];
 
     /**

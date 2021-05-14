@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class AnimeStudio extends Model
+class AnimeStudio extends KModel
 {
     // Table name
     const TABLE_NAME = 'anime_studio';
