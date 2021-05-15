@@ -21,7 +21,7 @@ class AnimeStudioResource extends JsonResource
 
         $resource = [
             'id'            => $animeStudio->id,
-            'type'          => 'studio',
+            'type'          => 'studios',
             'href'          => route('api.anime.studios', $animeStudio->anime, false),
             'attributes'    => $animeStudio->only(['is_licensor', 'is_producer', 'is_studio']),
         ];
