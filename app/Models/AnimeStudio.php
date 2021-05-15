@@ -10,6 +10,12 @@ class AnimeStudio extends KModel
     const TABLE_NAME = 'anime_studio';
     protected $table = self::TABLE_NAME;
 
+    protected $casts = [
+        'is_licensor'   => 'boolean',
+        'is_producer'   => 'boolean',
+        'is_studio'     => 'boolean',
+    ];
+
     /**
      * Returns the anime belonging to the studio.
      *

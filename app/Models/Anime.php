@@ -212,6 +212,33 @@ class Anime extends KModel
     }
 
     /**
+     * Retrieves the studios for an Anime item in an array
+     *
+     * @param ?int $limit
+     * @return mixed
+     */
+    public function getAnimeStudios(?int $limit = null): mixed
+    {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'anime.anime_studios', 'id' => $this->id, 'limit' => $limit]);
+
+        // Retrieve or save cached result
+        return Cache::remember($cacheKey, self::CACHE_KEY_STUDIOS_SECONDS, function () use ($limit) {
+            return $this->anime_studios()->limit($limit)->get();
+        });
+    }
+
+    /**
+     * Get the Anime's studios
+     *
+     * @return HasMany
+     */
+    public function anime_studios(): HasMany
+    {
+        return $this->hasMany(AnimeStudio::class);
+    }
+
+    /**
      * Get the Anime's ratings
      *
      * @return HasMany

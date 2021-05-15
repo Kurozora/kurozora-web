@@ -41,7 +41,7 @@ class AnimeStaffFactory extends Factory
         return [
             'anime_id'      => $anime,
             'person_id'     => $person,
-            'staff_role_id' => $this->faker->randomElement([$staffRole, null])
+            'staff_role_id' => $staffRole, null,
         ];
     }
 }
