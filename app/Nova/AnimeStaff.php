@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -79,17 +80,28 @@ class AnimeStaff extends Resource
      */
     protected static function afterValidation(NovaRequest $request, $validator)
     {
+        $resourceID = $request->resourceId;
         $anime = $request->post('anime');
         $person = $request->post('person');
+        $staffRole = $request->post('staff_role');
 
-        $unique = Rule::unique(\App\Models\AnimeStaff::TABLE_NAME, 'person_id')->where(function ($query) use($anime, $person) {
-            return $query->where('anime_id', $anime)->where('person_id', $person);
+        $unique = Rule::unique(\App\Models\AnimeStaff::TABLE_NAME, 'staff_role_id')->where(function ($query) use($resourceID, $anime, $person, $staffRole) {
+            if ($resourceID) {
+                $query->whereNotIn('id', [$resourceID]);
+            }
+
+            return $query
+                ->where([
+                    ['anime_id', $anime],
+                    ['person_id', $person],
+                    ['staff_role_id', $staffRole]
+                ]);
         });
 
-        $uniqueValidator = Validator::make($request->only('person'), [
-            'person' => [$unique],
+        $uniqueValidator = Validator::make($request->only('staff_role'), [
+            'staff_role' => [$unique],
         ], [
-            'person' => __('validation.unique')
+            'staff_role' => __('validation.unique')
         ]);
 
         $uniqueValidator->validate();

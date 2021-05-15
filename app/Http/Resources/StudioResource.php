@@ -51,8 +51,9 @@ class StudioResource extends JsonResource
         $studio = $this->resource;
 
         $whereRules = [];
-        if ($excludingAnime)
+        if ($excludingAnime) {
             array_push($whereRules, ['animes.id', '!=', $excludingAnime->id]);
+        }
 
         return [
             'shows' => [

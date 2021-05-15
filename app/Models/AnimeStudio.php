@@ -2,14 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class AnimeStudio extends Model
+class AnimeStudio extends KModel
 {
     // Table name
     const TABLE_NAME = 'anime_studio';
     protected $table = self::TABLE_NAME;
+
+    protected $casts = [
+        'is_licensor'   => 'boolean',
+        'is_producer'   => 'boolean',
+        'is_studio'     => 'boolean',
+    ];
 
     /**
      * Returns the anime belonging to the studio.

@@ -14,7 +14,7 @@ class MediaRelation extends Resource
      *
      * @var string
      */
-    public static string $model = 'App\Models\MediaRelation';
+    public static string $model = \App\Models\MediaRelation::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -29,8 +29,7 @@ class MediaRelation extends Resource
      * @var array
      */
     public static $search = [
-        'media_type',
-        'related_type',
+        'id', 'media_type', 'related_type',
     ];
 
     /**

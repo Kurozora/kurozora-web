@@ -173,7 +173,7 @@
             },
             "explode": false,
             "required": false,
-            "description": "The relations to include in the response. Available relations are:\n- cast\n- characters\n- related-shows\n- seasons\n- staff\n-studios"
+            "description": "The relations to include in the response. Available relations are:\n- cast\n- characters\n- related-shows\n- seasons\n- staff\n- studios"
           }
         ],
         "responses": {

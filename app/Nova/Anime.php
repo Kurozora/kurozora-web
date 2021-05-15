@@ -29,7 +29,7 @@ class Anime extends Resource
      *
      * @var string
      */
-    public static string $model = 'App\Models\Anime';
+    public static string $model = \App\Models\Anime::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -204,8 +204,7 @@ class Anime extends Resource
 
             HasMany::make('Staff', 'staff', AnimeStaff::class),
 
-            BelongsToMany::make('Studios')
-                ->searchable(),
+            HasMany::make('Studios', 'anime_studios', AnimeStudio::class),
 
             BelongsToMany::make('Moderators', 'moderators', User::class)
                 // @TODO
@@ -229,8 +228,9 @@ class Anime extends Resource
     {
         $animeName = $this->title;
 
-        if (!is_string($animeName) || !strlen($animeName))
+        if (!is_string($animeName) || !strlen($animeName)) {
             $animeName = 'No Anime title';
+        }
 
         return $animeName . ' (ID: ' . $this->id . ')';
     }

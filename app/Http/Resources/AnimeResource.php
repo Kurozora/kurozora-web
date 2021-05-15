@@ -159,7 +159,7 @@ class AnimeResource extends JsonResource
         return [
             'studios' => [
                 'href' => route('api.anime.studios', $anime, false),
-                'data' => StudioResource::collection($anime->getStudios(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'data' => AnimeStudioResource::collection($anime->getAnimeStudios(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }

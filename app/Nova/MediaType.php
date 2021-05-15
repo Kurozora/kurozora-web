@@ -34,7 +34,7 @@ class MediaType extends Resource
      * @var array
      */
     public static $search = [
-        'name',
+        'id', 'name',
     ];
 
     /**
@@ -78,6 +78,16 @@ class MediaType extends Resource
     }
 
     /**
+     * Get the value that should be displayed to represent the resource.
+     *
+     * @return string
+     */
+    public function title(): string
+    {
+        return $this->name . ' (ID: ' . $this->id . ')';
+    }
+
+    /**
      * Handle any post-validation processing.
      *
      * @param NovaRequest $request
@@ -87,10 +97,15 @@ class MediaType extends Resource
      */
     protected static function afterValidation(NovaRequest $request, $validator)
     {
+        $resourceID = $request->resourceId;
         $type = $request->post('type');
         $name = $request->post('name');
 
-        $unique = Rule::unique(\App\Models\MediaType::TABLE_NAME)->where(function ($query) use($type, $name) {
+        $unique = Rule::unique(\App\Models\MediaType::TABLE_NAME)->where(function ($query) use($resourceID, $type, $name) {
+            if ($resourceID) {
+                $query->whereNotIn('id', [$resourceID]);
+            }
+
             return $query->where('type', $type)->where('name', $name);
         });
 

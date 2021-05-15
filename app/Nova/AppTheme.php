@@ -16,7 +16,7 @@ class AppTheme extends Resource
      *
      * @var string
      */
-    public static string $model = 'App\Models\AppTheme';
+    public static string $model = \App\Models\AppTheme::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -26,13 +26,6 @@ class AppTheme extends Resource
     public static $title = 'id';
 
     /**
-     * The logical group associated with the resource.
-     *
-     * @var string
-     */
-    public static $group = 'Cosmetics';
-
-    /**
      * The columns that should be searched.
      *
      * @var array
@@ -40,6 +33,13 @@ class AppTheme extends Resource
     public static $search = [
         'id', 'name'
     ];
+
+    /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = 'Cosmetics';
 
     /**
      * Get the fields displayed by the resource.
@@ -179,6 +179,16 @@ class AppTheme extends Resource
     }
 
     /**
+     * Get the value that should be displayed to represent the resource.
+     *
+     * @return string
+     */
+    public function title(): string
+    {
+        return 'Name: "' . $this->name . '" (ID: ' . $this->id . ')';
+    }
+
+    /**
      * Get the cards available for the request.
      *
      * @param Request $request
@@ -221,17 +231,6 @@ class AppTheme extends Resource
     {
         return [];
     }
-
-    /**
-     * Get the value that should be displayed to represent the resource.
-     *
-     * @return string
-     */
-    public function title(): string
-    {
-        return 'Name: "' . $this->name . '" (ID: ' . $this->id . ')';
-    }
-
     /**
      * Returns the user-friendly display name of the resource.
      *

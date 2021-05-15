@@ -17,7 +17,7 @@ class Genre extends Resource
      *
      * @var string
      */
-    public static string $model = 'App\Models\Genre';
+    public static string $model = \App\Models\Genre::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -82,8 +82,9 @@ class Genre extends Resource
     {
         $genreName = $this->name;
 
-        if (!is_string($genreName) || !strlen($genreName))
+        if (!is_string($genreName) || !strlen($genreName)) {
             $genreName = 'No genre title';
+        }
 
         return $genreName . ' (ID: ' . $this->id . ')';
     }

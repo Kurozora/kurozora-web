@@ -18,7 +18,7 @@ class ExplorePageCategory extends Resource
      *
      * @var string
      */
-    public static string $model = 'App\Models\ExplorePageCategory';
+    public static string $model = \App\Models\ExplorePageCategory::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
