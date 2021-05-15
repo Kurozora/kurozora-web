@@ -30,7 +30,7 @@ class CastRole extends Resource
      * @var array
      */
     public static $search = [
-        'name',
+        'id', 'name',
     ];
 
     /**
@@ -63,6 +63,16 @@ class CastRole extends Resource
 
             HasMany::make('Cast'),
         ];
+    }
+
+    /**
+     * Get the value that should be displayed to represent the resource.
+     *
+     * @return string
+     */
+    public function title(): string
+    {
+        return $this->name . ' (ID: ' . $this->id . ')';
     }
 
     /**

@@ -31,7 +31,7 @@ class Status extends Resource
      * @var array
      */
     public static $search = [
-        'name',
+        'id', 'name',
     ];
 
     /**
@@ -72,6 +72,16 @@ class Status extends Resource
 
             HasMany::make('Anime'),
         ];
+    }
+
+    /**
+     * Get the value that should be displayed to represent the resource.
+     *
+     * @return string
+     */
+    public function title(): string
+    {
+        return $this->name . ' (ID: ' . $this->id . ')';
     }
 
     /**

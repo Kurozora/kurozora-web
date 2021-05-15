@@ -16,7 +16,7 @@ class Badge extends Resource
      *
      * @var string
      */
-    public static string $model = 'App\Models\Badge';
+    public static string $model = \App\Models\Badge::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -65,6 +65,16 @@ class Badge extends Resource
             BelongsToMany::make('Users')
                 ->searchable(),
         ];
+    }
+
+    /**
+     * Get the value that should be displayed to represent the resource.
+     *
+     * @return string
+     */
+    public function title(): string
+    {
+        return $this->text . ' (ID: ' . $this->id . ')';
     }
 
     /**

@@ -5,7 +5,6 @@ namespace App\Nova;
 use App\Models\AnimeCast;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Unique;
 use Illuminate\Validation\ValidationException;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
@@ -78,6 +77,23 @@ class Cast extends Resource
     }
 
     /**
+     * Get the value that should be displayed to represent the resource.
+     *
+     * @return string
+     */
+    public function title(): string
+    {
+        /** @var AnimeCast $animeCast */
+        $animeCast = $this->resource;
+
+        $animeTitle = $animeCast->anime->title;
+        $characterName = $animeCast->character->name;
+        $personName = $animeCast->person->full_name;
+
+        return $personName . ' as ' . $characterName . ' in ' . $animeTitle . ' (ID: ' . $animeCast->id . ')';
+    }
+
+    /**
      * Handle any post-validation processing.
      *
      * @param NovaRequest $request
@@ -87,13 +103,18 @@ class Cast extends Resource
      */
     protected static function afterValidation(NovaRequest $request, $validator)
     {
+        $resourceID = $request->resourceId;
         $anime = $request->post('anime');
         $character = $request->post('character');
         $person = $request->post('person');
         $castRole = $request->post('cast_role');
         $language = $request->post('language');
 
-        $unique = Rule::unique(AnimeCast::TABLE_NAME, 'language_id')->where(function ($query) use ($anime, $character, $person, $castRole, $language) {
+        $unique = Rule::unique(AnimeCast::TABLE_NAME, 'language_id')->where(function ($query) use ($resourceID, $anime, $character, $person, $castRole, $language) {
+            if ($resourceID) {
+                $query->whereNotIn('id', [$resourceID]);
+            }
+
             return $query->where([
                 ['anime_id', $anime],
                 ['character_id', $character],
@@ -110,22 +131,6 @@ class Cast extends Resource
         $uniqueValidator->validate();
     }
 
-    /**
-     * Get the value that should be displayed to represent the resource.
-     *
-     * @return string
-     */
-    public function title(): string
-    {
-        /** @var AnimeCast $animeCast */
-        $animeCast = $this->resource;
-
-        $animeTitle = $animeCast->anime->title;
-        $characterName = $animeCast->character->name;
-        $personName = $animeCast->person->full_name;
-
-        return $personName . ' as ' . $characterName . ' in ' . $animeTitle . ' (ID: ' . $animeCast->id . ')';
-    }
 
     /**
      * Get the cards available for the request.

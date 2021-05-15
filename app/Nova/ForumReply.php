@@ -15,7 +15,7 @@ class ForumReply extends Resource
      *
      * @var string
      */
-    public static string $model = 'App\Models\ForumReply';
+    public static string $model = \App\Models\ForumReply::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.

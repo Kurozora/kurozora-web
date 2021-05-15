@@ -3,8 +3,13 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Validator;
 
 class AnimeStudio extends Resource
 {
@@ -13,7 +18,7 @@ class AnimeStudio extends Resource
      *
      * @var string
      */
-    public static string $model = 'App\Models\AnimeStudio';
+    public static string $model = \App\Models\AnimeStudio::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -57,7 +62,56 @@ class AnimeStudio extends Resource
             BelongsTo::make('Studio')
                 ->sortable()
                 ->searchable(),
+
+            Boolean::make('Is Licensor')
+                ->sortable()
+                ->help('The studio is responsible for licensing the anime.')
+                ->required(),
+
+            Boolean::make('Is Producer')
+                ->sortable()
+                ->help('The studio is responsible for producing the anime. Usually sponsors.')
+                ->required(),
+
+            Boolean::make('Is Studio')
+                ->sortable()
+                ->help('The studio responsible for creating (drawing) the anime.')
+                ->required(),
         ];
+    }
+
+    /**
+     * Handle any post-validation processing.
+     *
+     * @param NovaRequest $request
+     * @param \Illuminate\Validation\Validator $validator
+     * @return void
+     * @throws ValidationException
+     */
+    protected static function afterValidation(NovaRequest $request, $validator)
+    {
+        $resourceID = $request->resourceId;
+        $anime = $request->post('anime');
+        $studio = $request->post('studio');
+
+        $unique = Rule::unique(\App\Models\AnimeStudio::TABLE_NAME, 'studio_id')->where(function ($query) use($resourceID, $anime, $studio) {
+            if ($resourceID) {
+                $query->whereNotIn('id', [$resourceID]);
+            }
+
+            return $query->where([
+                ['anime_id', $anime],
+                ['studio_id', $studio]
+            ]);
+        });
+
+        $uniqueValidator = Validator::make($request->only('studio'), [
+            'studio' => [$unique],
+        ], [
+            'studio' => __('validation.unique')
+        ]);
+
+        $uniqueValidator->validate();
     }
 
     /**

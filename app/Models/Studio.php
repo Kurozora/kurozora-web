@@ -57,7 +57,7 @@ class Studio extends KModel
     public function getAnime(array $where = []): Collection
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'studios', 'id' => $this->id, 'where' => $where]);
+        $cacheKey = self::cacheKey(['name' => 'studios.anime', 'id' => $this->id, 'where' => $where]);
 
         // Retrieve or save cached result
         $animeInfo = Cache::remember($cacheKey, self::CACHE_KEY_ANIME_SECONDS, function () use ($where) {

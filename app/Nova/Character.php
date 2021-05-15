@@ -21,7 +21,7 @@ class Character extends Resource
      *
      * @var string
      */
-    public static string $model = 'App\Models\Character';
+    public static string $model = \App\Models\Character::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -169,8 +169,9 @@ class Character extends Resource
     {
         $characterName = $this->name;
 
-        if (!is_string($characterName) || !strlen($characterName))
+        if (!is_string($characterName) || !strlen($characterName)) {
             $characterName = 'No character title';
+        }
 
         return $characterName . ' (ID: ' . $this->id . ')';
     }
