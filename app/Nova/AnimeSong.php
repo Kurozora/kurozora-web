@@ -32,7 +32,7 @@ class AnimeSong extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'id', 'type', 'position', 'episodes'
     ];
 
     /**
