@@ -15,7 +15,7 @@ class ForumSection extends Resource
      *
      * @var string
      */
-    public static string $model = 'App\Models\ForumSection';
+    public static string $model = \App\Models\ForumSection::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.

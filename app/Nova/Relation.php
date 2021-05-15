@@ -30,7 +30,7 @@ class Relation extends Resource
      * @var array
      */
     public static $search = [
-        'name',
+        'id', 'name',
     ];
 
     /**
@@ -63,6 +63,16 @@ class Relation extends Resource
 
             HasMany::make('Anime', 'anime', MediaRelation::class),
         ];
+    }
+
+    /**
+     * Get the value that should be displayed to represent the resource.
+     *
+     * @return string
+     */
+    public function title(): string
+    {
+        return $this->name . ' (ID: ' . $this->id . ')';
     }
 
     /**

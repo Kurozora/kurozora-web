@@ -83,10 +83,15 @@ class MediaGenre extends Resource
      */
     protected static function afterValidation(NovaRequest $request, $validator)
     {
+        $resourceID = $request->resourceId;
         $anime = $request->post('anime');
         $genre = $request->post('genre');
 
-        $unique = Rule::unique(\App\Models\MediaGenre::TABLE_NAME, 'genre_id')->where(function ($query) use($anime, $genre) {
+        $unique = Rule::unique(\App\Models\MediaGenre::TABLE_NAME, 'genre_id')->where(function ($query) use($resourceID, $anime, $genre) {
+            if ($resourceID) {
+                $query->whereNotIn('id', [$resourceID]);
+            }
+
             return $query->where('media_id', $anime)->where('genre_id', $genre);
         });
 

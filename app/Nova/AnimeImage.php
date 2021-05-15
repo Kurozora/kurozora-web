@@ -20,7 +20,7 @@ class AnimeImage extends Resource
      *
      * @var string
      */
-    public static string $model = 'App\Models\AnimeImages';
+    public static string $model = \App\Models\AnimeImages::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.

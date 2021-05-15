@@ -33,7 +33,7 @@ class Song extends Resource
      * @var array
      */
     public static $search = [
-        'title', 'artist'
+        'id', 'title', 'artist'
     ];
 
     /**
@@ -67,6 +67,16 @@ class Song extends Resource
     }
 
     /**
+     * Get the value that should be displayed to represent the resource.
+     *
+     * @return string
+     */
+    public function title(): string
+    {
+        return $this->title . ' by ' . $this->artist . ' (ID: ' . $this->id . ')';
+    }
+
+    /**
      * Handle any post-validation processing.
      *
      * @param NovaRequest $request
@@ -76,10 +86,15 @@ class Song extends Resource
      */
     protected static function afterValidation(NovaRequest $request, $validator)
     {
+        $resourceID = $request->resourceId;
         $title = $request->post('title');
         $artist = $request->post('artist');
 
-        $unique = Rule::unique(\App\Models\Song::TABLE_NAME)->where(function ($query) use($title, $artist) {
+        $unique = Rule::unique(\App\Models\Song::TABLE_NAME)->where(function ($query) use($resourceID, $title, $artist) {
+            if ($resourceID) {
+                $query->whereNotIn('id', [$resourceID]);
+            }
+
             return $query->where('title', $title)->where('artist', $artist);
         });
 

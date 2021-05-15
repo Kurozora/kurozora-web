@@ -28,7 +28,7 @@ class StaffRole extends Resource
      * @var array
      */
     public static $search = [
-        'name',
+        'id', 'name',
     ];
 
     /**
@@ -60,6 +60,16 @@ class StaffRole extends Resource
                 ->help('A short description of the role.')
                 ->required(),
         ];
+    }
+
+    /**
+     * Get the value that should be displayed to represent the resource.
+     *
+     * @return string
+     */
+    public function title(): string
+    {
+        return $this->name . ' (ID: ' . $this->id . ')';
     }
 
     /**

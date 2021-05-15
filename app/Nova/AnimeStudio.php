@@ -18,7 +18,7 @@ class AnimeStudio extends Resource
      *
      * @var string
      */
-    public static string $model = 'App\Models\AnimeStudio';
+    public static string $model = \App\Models\AnimeStudio::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -90,11 +90,19 @@ class AnimeStudio extends Resource
      */
     protected static function afterValidation(NovaRequest $request, $validator)
     {
+        $resourceID = $request->resourceId;
         $anime = $request->post('anime');
         $studio = $request->post('studio');
 
-        $unique = Rule::unique(\App\Models\AnimeStudio::TABLE_NAME, 'studio_id')->where(function ($query) use($anime, $studio) {
-            return $query->where('anime_id', $anime)->where('studio_id', $studio);
+        $unique = Rule::unique(\App\Models\AnimeStudio::TABLE_NAME, 'studio_id')->where(function ($query) use($resourceID, $anime, $studio) {
+            if ($resourceID) {
+                $query->whereNotIn('id', [$resourceID]);
+            }
+
+            return $query->where([
+                ['anime_id', $anime],
+                ['studio_id', $studio]
+            ]);
         });
 
         $uniqueValidator = Validator::make($request->only('studio'), [

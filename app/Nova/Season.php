@@ -16,7 +16,7 @@ class Season extends Resource
      *
      * @var string
      */
-    public static string $model = 'App\Models\AnimeSeason';
+    public static string $model = \App\Models\AnimeSeason::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -78,8 +78,9 @@ class Season extends Resource
     {
         $seasonName = $this->title;
 
-        if (!is_string($seasonName) || !strlen($seasonName))
+        if (!is_string($seasonName) || !strlen($seasonName)) {
             $seasonName = 'No season title';
+        }
 
         return $seasonName . ' (ID: ' . $this->id . ')';
     }

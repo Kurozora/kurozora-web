@@ -30,7 +30,7 @@ class TvRating extends Resource
      * @var array
      */
     public static $search = [
-        'name'
+        'id', 'name'
     ];
 
     /**
@@ -66,6 +66,16 @@ class TvRating extends Resource
 
             HasMany::make('Anime'),
         ];
+    }
+
+    /**
+     * Get the value that should be displayed to represent the resource.
+     *
+     * @return string
+     */
+    public function title(): string
+    {
+        return $this->full_name . ' (ID: ' . $this->id . ')';
     }
 
     /**
@@ -110,16 +120,6 @@ class TvRating extends Resource
     public function actions(Request $request): array
     {
         return [];
-    }
-
-    /**
-     * Get the value that should be displayed to represent the resource.
-     *
-     * @return string
-     */
-    public function title(): string
-    {
-        return $this->full_name;
     }
 
     /**
