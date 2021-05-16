@@ -40,7 +40,7 @@ class Studio extends Resource
      *
      * @var string
      */
-    public static $group = 'Anime';
+    public static $group = 'Studios';
 
     /**
      * Get the fields displayed by the resource.

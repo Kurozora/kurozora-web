@@ -44,7 +44,7 @@ class Character extends Resource
      *
      * @var string
      */
-    public static $group = 'Anime';
+    public static $group = 'Characters';
 
     /**
      * Get the fields displayed by the resource.
