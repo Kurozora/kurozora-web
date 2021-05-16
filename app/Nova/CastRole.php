@@ -38,7 +38,7 @@ class CastRole extends Resource
      *
      * @var string
      */
-    public static $group = 'Anime';
+    public static $group = 'Anime Cast';
 
     /**
      * Get the fields displayed by the resource.

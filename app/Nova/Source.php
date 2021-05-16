@@ -38,7 +38,7 @@ class Source extends Resource
      *
      * @var string
      */
-    public static $group = 'Anime';
+    public static $group = 'Media';
 
     /**
      * Get the fields displayed by the resource.

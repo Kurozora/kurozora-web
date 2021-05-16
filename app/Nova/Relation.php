@@ -38,7 +38,7 @@ class Relation extends Resource
      *
      * @var string
      */
-    public static $group = 'Anime';
+    public static $group = 'Relations';
 
     /**
      * Get the fields displayed by the resource.

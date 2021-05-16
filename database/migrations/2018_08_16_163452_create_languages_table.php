@@ -23,7 +23,7 @@ class CreateLanguagesTable extends Migration
 
         Schema::table(Language::TABLE_NAME, function (Blueprint $table) {
             // Set unique index constraints
-            $table->unique(['name', 'code']);
+            $table->unique(['code']);
         });
     }
 

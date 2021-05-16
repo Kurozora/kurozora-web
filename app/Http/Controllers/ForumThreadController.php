@@ -169,7 +169,7 @@ class ForumThreadController extends Controller
         $searchQuery = $request->input('query');
 
         // Search for the thread
-        $threads = ForumThread::kuroSearch($searchQuery, [
+        $threads = ForumThread::kSearch($searchQuery, [
             'limit' => ForumThread::MAX_SEARCH_RESULTS
         ]);
 

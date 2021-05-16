@@ -63,6 +63,8 @@ class AnimeDummySeeder extends Seeder
                     'tvdb_id'           => $animeData->tvdb_id,
                     'slug'              => $animeData->slug,
                     'title'             => $animeData->title,
+                    'original_title'    => $animeData->title,
+                    'synopsis'          => '',
                     'tv_rating_id'      => TvRating::inRandomOrder()->first()->id,
                     'media_type_id'     => MediaType::where('type', 'anime')->inRandomOrder()->first()->id,
                     'source_id'         => Source::inRandomOrder()->first()->id,
