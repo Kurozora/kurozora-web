@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Traits\KuroSearchTrait;
+use App\Traits\Searchable;
 use Carbon\Carbon;
 use Cog\Contracts\Love\Reactable\Models\Reactable as ReactableContract;
 use Cog\Laravel\Love\Reactable\Models\Traits\Reactable;
@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class ForumThread extends KModel implements ReactableContract
 {
     use HasFactory,
-        KuroSearchTrait,
-        Reactable;
+        Reactable,
+        Searchable;
 
     /**
      * Searchable rules.

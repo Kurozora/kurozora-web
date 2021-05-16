@@ -60,8 +60,9 @@ class AnimeFactory extends Factory
 
         return [
             'slug'              => Str::slug($title),
-            'title'             => $title,
+            'original_title'    => $title,
             'tagline'           => $this->faker->sentence,
+            'title'             => $title,
             'synopsis'          => $this->faker->paragraph,
             'tv_rating_id'      => $tvRating,
             'media_type_id'     => $mediaType,

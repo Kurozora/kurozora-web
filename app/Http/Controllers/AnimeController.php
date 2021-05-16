@@ -197,7 +197,7 @@ class AnimeController extends Controller
         $searchQuery = $request->input('query');
 
         // Search for the Anime
-        $resultArr = Anime::kuroSearch($searchQuery, [
+        $resultArr = Anime::kSearch($searchQuery, [
             'limit' => Anime::MAX_SEARCH_RESULTS
         ]);
 

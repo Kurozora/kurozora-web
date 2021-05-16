@@ -10,23 +10,24 @@
             "imdbID": null,
             "malID": null,
             "title": "Be a good person!",
-            "tagline": "Pariatur similique vel voluptas atque accusantium perspiciatis temporibus quia.",
-            "synopsis": "Veniam est qui et numquam quae. Distinctio modi error corporis. Iure ullam suscipit eum beatae fugit et ullam possimus. Nobis dolor voluptatum sint numquam beatae aut.",
+            "tagline": "Ipsum a natus itaque doloribus expedita aspernatur.",
+            "synopsis": "A story about being a good person.",
+            "genres": [],
             "tvRating": {
-                "name": "y",
-                "description": "ut ut blanditiis"
+                "name": "t",
+                "description": "Et facilis sit fugit eos."
             },
             "type": {
-                "name": "Lydia Larkin Sr.",
-                "description": "unde debitis unde"
+                "name": "Sydnee Prohaska",
+                "description": "Sed aut recusandae natus molestias nostrum sit sed."
             },
             "source": {
-                "name": "Prof. Lexus Quigley",
-                "description": "voluptatem vel nulla"
+                "name": "Estella Halvorson",
+                "description": "Porro numquam omnis quia assumenda accusamus fugiat."
             },
             "status": {
-                "name": "unde aut",
-                "description": "ut nostrum deserunt"
+                "name": "magni recusandae",
+                "description": "Soluta necessitatibus dolor rerum asperiores est repellat optio delectus."
             },
             "network": null,
             "producer": null,
@@ -37,13 +38,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "1972-11-01",
-            "lastAired": "1973-01-10",
-            "runtime": "11",
-            "airTime": "09:50",
+            "firstAired": "1985-07-07",
+            "lastAired": "1985-12-22",
+            "runtime": "16",
+            "airTime": "02:55",
             "airDay": null,
             "isNSFW": false,
-            "copyright": "\u00ae 2021 Krajcik-Bauch",
+            "copyright": "\u00a9 2006 Johnson-Fadel",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,
@@ -61,23 +62,24 @@
             "imdbID": null,
             "malID": null,
             "title": "Awesome Show",
-            "tagline": "Vel et id assumenda aut.",
-            "synopsis": "Vitae qui voluptatem sed est. Qui soluta nesciunt iusto laborum unde sint.",
+            "tagline": "Dolorum minus harum molestiae aut aut aperiam.",
+            "synopsis": "A very awesome show.",
+            "genres": [],
             "tvRating": {
-                "name": "y",
-                "description": "ut ut blanditiis"
+                "name": "t",
+                "description": "Et facilis sit fugit eos."
             },
             "type": {
-                "name": "Lydia Larkin Sr.",
-                "description": "unde debitis unde"
+                "name": "Sydnee Prohaska",
+                "description": "Sed aut recusandae natus molestias nostrum sit sed."
             },
             "source": {
-                "name": "Prof. Lexus Quigley",
-                "description": "voluptatem vel nulla"
+                "name": "Estella Halvorson",
+                "description": "Porro numquam omnis quia assumenda accusamus fugiat."
             },
             "status": {
-                "name": "unde aut",
-                "description": "ut nostrum deserunt"
+                "name": "magni recusandae",
+                "description": "Soluta necessitatibus dolor rerum asperiores est repellat optio delectus."
             },
             "network": null,
             "producer": null,
@@ -88,13 +90,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "1994-09-18",
-            "lastAired": "1994-12-11",
-            "runtime": "15",
-            "airTime": "19:13",
+            "firstAired": "2015-11-18",
+            "lastAired": "2016-01-27",
+            "runtime": "21",
+            "airTime": "12:20",
             "airDay": null,
             "isNSFW": false,
-            "copyright": "\u2117 2015 Bogisich, Dietrich and Fisher",
+            "copyright": "\u2117 1993 Bogan, Pfannerstill and Lubowitz",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
