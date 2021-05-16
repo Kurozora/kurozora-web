@@ -41,7 +41,7 @@ class MediaGenre extends Resource
      *
      * @var string
      */
-    public static $group = 'Anime';
+    public static $group = 'Genre';
 
     /**
      * Get the fields displayed by the resource.
