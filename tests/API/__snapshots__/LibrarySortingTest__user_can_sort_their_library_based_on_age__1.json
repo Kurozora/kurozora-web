@@ -10,23 +10,24 @@
             "imdbID": null,
             "malID": null,
             "title": "Awesome Show",
-            "tagline": "Veritatis et fugiat maiores.",
-            "synopsis": "Dolores rem unde qui non nam. Autem eius voluptatem ipsum voluptas molestiae fugiat. Possimus voluptatem distinctio qui. Consequatur dolore illo dolorum blanditiis sunt.",
+            "tagline": "Aut quos consequuntur molestias est adipisci deleniti.",
+            "synopsis": "A very awesome show.",
+            "genres": [],
             "tvRating": {
-                "name": "g",
-                "description": "sed ut est"
+                "name": "j",
+                "description": "Corrupti repudiandae fugiat pariatur mollitia ut architecto voluptatum."
             },
             "type": {
-                "name": "Roberto Nitzsche IV",
-                "description": "aliquid et dolor"
+                "name": "Dr. Ottis Purdy",
+                "description": "Dignissimos natus eos doloremque esse itaque."
             },
             "source": {
-                "name": "Candice Cremin",
-                "description": "cupiditate illo quidem"
+                "name": "Josefa Kshlerin",
+                "description": "Saepe odio rerum et officia eum laborum."
             },
             "status": {
-                "name": "est voluptatum",
-                "description": "occaecati qui optio"
+                "name": "fugit nesciunt",
+                "description": "Placeat quidem rerum atque."
             },
             "network": null,
             "producer": null,
@@ -37,13 +38,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "1976-06-08",
-            "lastAired": "1976-08-17",
-            "runtime": "17",
-            "airTime": "00:24",
+            "firstAired": "1977-06-03",
+            "lastAired": "1977-08-12",
+            "runtime": "23",
+            "airTime": "03:34",
             "airDay": null,
             "isNSFW": false,
-            "copyright": "\u00ae 1975 Wisozk and Sons",
+            "copyright": "\u00ae 1976 Waelchi-Kessler",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
@@ -61,23 +62,24 @@
             "imdbID": null,
             "malID": null,
             "title": "Be a good person!",
-            "tagline": "Ad doloribus vitae dolores aut et omnis.",
-            "synopsis": "Illum at et nesciunt iusto. Aut numquam sunt itaque aliquam iure sequi in.",
+            "tagline": "Et tempora saepe inventore animi quo ab voluptatem enim.",
+            "synopsis": "A story about being a good person.",
+            "genres": [],
             "tvRating": {
-                "name": "g",
-                "description": "sed ut est"
+                "name": "j",
+                "description": "Corrupti repudiandae fugiat pariatur mollitia ut architecto voluptatum."
             },
             "type": {
-                "name": "Roberto Nitzsche IV",
-                "description": "aliquid et dolor"
+                "name": "Dr. Ottis Purdy",
+                "description": "Dignissimos natus eos doloremque esse itaque."
             },
             "source": {
-                "name": "Candice Cremin",
-                "description": "cupiditate illo quidem"
+                "name": "Josefa Kshlerin",
+                "description": "Saepe odio rerum et officia eum laborum."
             },
             "status": {
-                "name": "est voluptatum",
-                "description": "occaecati qui optio"
+                "name": "fugit nesciunt",
+                "description": "Placeat quidem rerum atque."
             },
             "network": null,
             "producer": null,
@@ -88,13 +90,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "2009-08-10",
-            "lastAired": "2009-10-19",
-            "runtime": "21",
-            "airTime": "05:53",
+            "firstAired": "2013-04-18",
+            "lastAired": "2013-10-03",
+            "runtime": "22",
+            "airTime": "16:30",
             "airDay": null,
-            "isNSFW": true,
-            "copyright": "\u2117 1975 Cremin-Hill",
+            "isNSFW": false,
+            "copyright": "\u00ae 1986 Lesch-Rippin",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,

@@ -4,9 +4,11 @@ namespace App\Models;
 
 use App\Enums\AnimeImageType;
 use App\Enums\DayOfWeek;
-use App\Traits\KuroSearchTrait;
+use App\Traits\Searchable;
+use Astrotomic\Translatable\Translatable;
 use Auth;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -23,8 +25,9 @@ class Anime extends KModel
 {
     use HasFactory,
         HasSlug,
-        KuroSearchTrait,
-        LogsActivity;
+        LogsActivity,
+        Searchable,
+        Translatable;
 
     // Maximum amount of returned search results
     const MAX_SEARCH_RESULTS = 10;
@@ -51,6 +54,16 @@ class Anime extends KModel
     protected $table = self::TABLE_NAME;
 
     /**
+     * Translatable attributes.
+     *
+     * @var array
+     */
+    public array $translatedAttributes = [
+        'title',
+        'synopsis',
+    ];
+
+    /**
      * Searchable rules.
      *
      * @var array
@@ -58,8 +71,14 @@ class Anime extends KModel
     protected $searchable = [
         'columns' => [
             'title' => 10,
-            'synopsis' => 5
-        ]
+            'synopsis' => 5,
+        ],
+        'joins' => [
+            'anime_translations' => [
+                'animes.id',
+                'anime_translations.anime_id'
+            ],
+        ],
     ];
 
     /**
@@ -68,8 +87,9 @@ class Anime extends KModel
      * @var array
      */
     protected $casts = [
+        'synonym_title' => AsArrayObject::class,
         'first_aired' => 'date',
-        'last_aired' => 'date'
+        'last_aired' => 'date',
     ];
 
     /**
@@ -79,7 +99,7 @@ class Anime extends KModel
      */
     protected $appends = [
         'broadcast',
-        'information_summary'
+        'information_summary',
     ];
 
     /**
@@ -111,7 +131,7 @@ class Anime extends KModel
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('title')
+            ->generateSlugsFrom('original_title')
             ->saveSlugsTo('slug');
     }
 
@@ -599,5 +619,15 @@ class Anime extends KModel
         return Cache::remember($cacheKey, self::CACHE_KEY_STAFF_SECONDS, function () use ($limit) {
             return $this->staff()->limit($limit)->get();
         });
+    }
+
+    /**
+     * The anime's translation relationship.
+     *
+     * @return HasMany
+     */
+    public function anime_translations(): HasMany
+    {
+        return $this->hasMany(AnimeTranslation::class);
     }
 }

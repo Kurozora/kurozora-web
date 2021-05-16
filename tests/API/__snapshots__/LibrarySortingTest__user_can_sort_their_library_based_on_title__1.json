@@ -10,23 +10,24 @@
             "imdbID": null,
             "malID": null,
             "title": "Awesome Show",
-            "tagline": "Aliquid dolorem blanditiis voluptate qui rerum placeat fugiat.",
-            "synopsis": "Qui harum accusamus similique debitis fuga labore et. Est ea quia fuga aliquid quos voluptas. Ratione ut nihil odit quo autem repellat asperiores dicta. Ut ut ipsum nisi facere alias numquam quo cum.",
+            "tagline": "Veritatis minus et doloribus eligendi omnis.",
+            "synopsis": "A very awesome show.",
+            "genres": [],
             "tvRating": {
-                "name": "h",
-                "description": "officiis ut nostrum"
+                "name": "g",
+                "description": "Voluptatem et velit pariatur sint optio."
             },
             "type": {
-                "name": "Salvatore Olson",
-                "description": "alias qui ullam"
+                "name": "Alden Grimes Jr.",
+                "description": "Sint ullam assumenda assumenda velit et ut dignissimos."
             },
             "source": {
-                "name": "Alison Connelly",
-                "description": "tempore voluptatibus molestiae"
+                "name": "Mrs. Velva Stanton DVM",
+                "description": "Magnam repellendus voluptatem ut et labore."
             },
             "status": {
-                "name": "voluptates sit",
-                "description": "dolor vel enim"
+                "name": "sequi doloribus",
+                "description": "Possimus perferendis ad est recusandae."
             },
             "network": null,
             "producer": null,
@@ -37,13 +38,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "1974-12-24",
-            "lastAired": "1975-06-10",
-            "runtime": "16",
-            "airTime": "12:00",
+            "firstAired": "1976-02-03",
+            "lastAired": "1976-04-27",
+            "runtime": "14",
+            "airTime": "00:45",
             "airDay": null,
-            "isNSFW": false,
-            "copyright": "\u00a9 1988 Bashirian Ltd",
+            "isNSFW": true,
+            "copyright": "\u00ae 2014 Thompson and Sons",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
@@ -61,23 +62,24 @@
             "imdbID": null,
             "malID": null,
             "title": "Be a good person!",
-            "tagline": "Voluptas eligendi possimus consequatur.",
-            "synopsis": "Quo expedita provident ex qui facere ipsa nisi omnis. Non sunt fugit esse nam id est sit. Qui quas saepe voluptatem pariatur autem nisi consequatur.",
+            "tagline": "Quis at distinctio dolor.",
+            "synopsis": "A story about being a good person.",
+            "genres": [],
             "tvRating": {
-                "name": "h",
-                "description": "officiis ut nostrum"
+                "name": "g",
+                "description": "Voluptatem et velit pariatur sint optio."
             },
             "type": {
-                "name": "Salvatore Olson",
-                "description": "alias qui ullam"
+                "name": "Alden Grimes Jr.",
+                "description": "Sint ullam assumenda assumenda velit et ut dignissimos."
             },
             "source": {
-                "name": "Alison Connelly",
-                "description": "tempore voluptatibus molestiae"
+                "name": "Mrs. Velva Stanton DVM",
+                "description": "Magnam repellendus voluptatem ut et labore."
             },
             "status": {
-                "name": "voluptates sit",
-                "description": "dolor vel enim"
+                "name": "sequi doloribus",
+                "description": "Possimus perferendis ad est recusandae."
             },
             "network": null,
             "producer": null,
@@ -88,13 +90,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "1975-09-10",
-            "lastAired": "1975-12-03",
-            "runtime": "25",
-            "airTime": "10:46",
+            "firstAired": "1975-06-01",
+            "lastAired": "1975-11-16",
+            "runtime": "17",
+            "airTime": "14:33",
             "airDay": null,
             "isNSFW": true,
-            "copyright": "\u00ae 1992 Ward, Leannon and Stanton",
+            "copyright": "\u2117 2009 Crist-Bins",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,

@@ -132,6 +132,7 @@ class LibrarySortingTest extends TestCase
         // Add the first Anime
         $anime = Anime::factory()->create([
             'title'             => 'Awesome Show',
+            'synopsis'          => 'A very awesome show.',
             'created_at'        => now(),
             'average_rating'    => 2.5
         ]);
@@ -146,6 +147,7 @@ class LibrarySortingTest extends TestCase
         // Add the second Anime
         $anime = Anime::factory()->create([
             'title'             => 'Be a good person!',
+            'synopsis'          => 'A story about being a good person.',
             'created_at'        => now()->subDay(),
             'average_rating'    => 4.0
         ]);
