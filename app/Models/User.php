@@ -7,13 +7,12 @@ use App\Helpers\OptionsBag;
 use App\Jobs\FetchSessionLocation;
 use App\Notifications\NewSession;
 use App\Traits\HeartActionTrait;
-use App\Traits\KuroSearchTrait;
 use App\Traits\MediaLibraryExtensionTrait;
+use App\Traits\Searchable;
 use App\Traits\User\HasBannerImage;
 use App\Traits\User\HasProfileImage;
 use App\Traits\VoteActionTrait;
 use App\Traits\Web\Auth\TwoFactorAuthenticatable;
-use Carbon\Carbon;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
 use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
 use App\Notifications\ResetPassword as ResetPasswordNotification;
@@ -49,11 +48,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         HasRoles,
         HeartActionTrait,
         InteractsWithMedia,
-        KuroSearchTrait,
         LogsActivity,
         MediaLibraryExtensionTrait,
         Notifiable,
         Reacterable,
+        Searchable,
         TwoFactorAuthenticatable,
         VoteActionTrait;
 

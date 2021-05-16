@@ -12,6 +12,7 @@ use Laraning\NovaTimeField\TimeField as Time;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Heading;
@@ -101,17 +102,30 @@ class Anime extends Resource
                 ->onlyOnForms()
                 ->help('Used to identify the Anime in a URL: https://kurozora.app/anime/<strong>wolf-children</strong>. Leave empty to auto-generate from title.'),
 
-            Text::make('Title')
+            Text::make('Title', 'original_title')
+                ->sortable()
+                ->required(),
+
+            Code::make('Synonym Titles')
+                ->json()
+                ->sortable()
+                ->help('Other names the anime is known by globally.')
+                ->rules(['nullable', 'json']),
+
+            Text::make('Title Translations', 'title')
+                ->hideFromIndex()
+                ->sortable()
                 ->rules('required')
-                ->sortable(),
+                ->translatable(),
+
+            Textarea::make('Synopsis Translations')
+                ->help('A short description of the Anime.')
+                ->rules('required')
+                ->translatable(),
 
             Text::make('Tagline')
                 ->rules('max:255')
                 ->hideFromIndex(),
-
-            Textarea::make('Synopsis')
-                ->hideFromIndex()
-                ->help('A short description of the Anime.'),
 
             BelongsTo::make('Source')
                 ->sortable()
@@ -176,7 +190,8 @@ class Anime extends Resource
             Time::make('Air time')
                 ->withTwelveHourTime()
                 ->hideFromIndex()
-                ->help('The exact time the show airs at. For example: 1:30 PM (13:30)'),
+                ->help('The exact time the show airs at. For example: 1:30 PM (13:30)')
+                ->nullable(),
 
             Select::make('Air day')
                 ->options(DayOfWeek::asSelectArray())
@@ -190,7 +205,9 @@ class Anime extends Resource
                 ->hideFromIndex()
                 ->help('For example: © ' . date('Y') . ' Kurozora B.V.'),
 
-            HasMany::make('Anime Images'),
+            HasMany::make('Translations', 'anime_translations', AnimeTranslation::class),
+
+            HasMany::make('Images', 'anime_images', AnimeImage::class),
 
             HasMany::make('Genres', 'media_genres', MediaGenre::class),
 
@@ -226,13 +243,7 @@ class Anime extends Resource
      */
     public function title(): string
     {
-        $animeName = $this->title;
-
-        if (!is_string($animeName) || !strlen($animeName)) {
-            $animeName = 'No Anime title';
-        }
-
-        return $animeName . ' (ID: ' . $this->id . ')';
+        return $this->original_title . ' (ID: ' . $this->id . ')';
     }
 
     /**

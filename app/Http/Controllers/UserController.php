@@ -84,7 +84,7 @@ class UserController extends Controller
         $searchQuery = $request->input('query');
 
         // Search for the users
-        $users = User::kuroSearch($searchQuery, [
+        $users = User::kSearch($searchQuery, [
             'limit' => User::MAX_SEARCH_RESULTS
         ]);
 

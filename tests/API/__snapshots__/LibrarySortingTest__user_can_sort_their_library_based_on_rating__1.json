@@ -10,23 +10,24 @@
             "imdbID": null,
             "malID": null,
             "title": "Be a good person!",
-            "tagline": "Ea ad fugit iusto incidunt excepturi unde.",
-            "synopsis": "Quia dolorum aut ducimus tempora et repellendus. Expedita voluptatum molestias numquam suscipit aut culpa illum dolores.",
+            "tagline": "Eveniet et et dolor iusto vitae.",
+            "synopsis": "A story about being a good person.",
+            "genres": [],
             "tvRating": {
-                "name": "n",
-                "description": "adipisci dolorum eius"
+                "name": "y",
+                "description": "Tempore nesciunt ut fugiat libero iure."
             },
             "type": {
-                "name": "Demarcus Murazik",
-                "description": "occaecati voluptatem architecto"
+                "name": "Ova Kuvalis",
+                "description": "Debitis corporis tempora non deleniti voluptatem doloremque eius nemo."
             },
             "source": {
-                "name": "Dee Nolan",
-                "description": "perferendis eius et"
+                "name": "Jeffrey Gislason",
+                "description": "Sed possimus non consequatur laboriosam cumque facere doloremque."
             },
             "status": {
-                "name": "quod aut",
-                "description": "sit enim fugit"
+                "name": "rerum quod",
+                "description": "Laboriosam rerum odio officiis et."
             },
             "network": null,
             "producer": null,
@@ -37,13 +38,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "1999-03-05",
-            "lastAired": "1999-08-20",
-            "runtime": "22",
-            "airTime": "02:10",
+            "firstAired": "2019-01-24",
+            "lastAired": "2019-04-18",
+            "runtime": "15",
+            "airTime": "05:04",
             "airDay": null,
             "isNSFW": false,
-            "copyright": "\u00a9 2011 Volkman, Goyette and Haag",
+            "copyright": "\u00ae 2006 Hessel-Kerluke",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,
@@ -61,23 +62,24 @@
             "imdbID": null,
             "malID": null,
             "title": "Awesome Show",
-            "tagline": "Dolor incidunt vitae voluptas et consequatur.",
-            "synopsis": "Aperiam laboriosam quod ut quia. Reprehenderit nulla nulla totam et quos. Ducimus ut eos omnis neque cumque ab dolorem sunt. Enim mollitia itaque consequuntur ratione.",
+            "tagline": "Architecto recusandae cupiditate qui inventore dolores doloribus voluptas.",
+            "synopsis": "A very awesome show.",
+            "genres": [],
             "tvRating": {
-                "name": "n",
-                "description": "adipisci dolorum eius"
+                "name": "y",
+                "description": "Tempore nesciunt ut fugiat libero iure."
             },
             "type": {
-                "name": "Demarcus Murazik",
-                "description": "occaecati voluptatem architecto"
+                "name": "Ova Kuvalis",
+                "description": "Debitis corporis tempora non deleniti voluptatem doloremque eius nemo."
             },
             "source": {
-                "name": "Dee Nolan",
-                "description": "perferendis eius et"
+                "name": "Jeffrey Gislason",
+                "description": "Sed possimus non consequatur laboriosam cumque facere doloremque."
             },
             "status": {
-                "name": "quod aut",
-                "description": "sit enim fugit"
+                "name": "rerum quod",
+                "description": "Laboriosam rerum odio officiis et."
             },
             "network": null,
             "producer": null,
@@ -88,13 +90,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "1979-11-30",
-            "lastAired": "1980-05-16",
-            "runtime": "23",
-            "airTime": "04:24",
+            "firstAired": "1995-01-13",
+            "lastAired": "1995-06-30",
+            "runtime": "14",
+            "airTime": "00:45",
             "airDay": null,
             "isNSFW": true,
-            "copyright": "\u00a9 1971 Boehm, Schuppe and Walker",
+            "copyright": "\u2117 2013 Bogisich, Russel and Abernathy",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,

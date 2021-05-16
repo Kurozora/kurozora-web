@@ -325,7 +325,7 @@ class LibraryTest extends TestCase
 
         // Send the request
         $response = $this->auth()->json('GET', '/api/v1/me/library/search', [
-            'query' => $shows->first()->title
+            'query' => $shows->first()->original_title
         ]);
 
         // Check whether the response was successful
