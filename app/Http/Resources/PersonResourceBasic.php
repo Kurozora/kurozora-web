@@ -31,7 +31,7 @@ class PersonResourceBasic extends JsonResource
                 'alternativeNames'  => $person->alternative_names,
                 'about'             => $person->about,
                 'imageURL'          => $person->image,
-                'websiteURL'        => $person->website_url,
+                'websiteURLs'       => $person->website_url,
             ]
         ];
     }

@@ -32,6 +32,7 @@ class Person extends KModel
     protected $casts = [
         'alternative_names' => AsArrayObject::class,
         'birth_date'        => 'date',
+        'website_urls'      => AsArrayObject::class,
     ];
 
     /**

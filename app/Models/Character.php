@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Traits\Searchable;
+use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,7 +13,12 @@ use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 
 class Character extends KModel
 {
-    use HasFactory;
+    use HasFactory,
+        Searchable,
+        Translatable;
+
+    // Maximum amount of returned search results
+    const MAX_SEARCH_RESULTS = 10;
 
     // Maximum relationships fetch limit
     const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
@@ -23,6 +30,34 @@ class Character extends KModel
     // Table name
     const TABLE_NAME = 'characters';
     protected $table = self::TABLE_NAME;
+
+    /**
+     * Translatable attributes.
+     *
+     * @var array
+     */
+    public array $translatedAttributes = [
+        'name',
+        'about',
+    ];
+
+    /**
+     * Searchable rules.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'name' => 10,
+            'about' => 5,
+        ],
+        'joins' => [
+            'character_translations' => [
+                'characters.id',
+                'character_translations.character_id'
+            ],
+        ],
+    ];
 
     /**
      * The attributes that should be cast.
@@ -95,5 +130,15 @@ class Character extends KModel
     public function cast(): HasMany
     {
         return $this->hasMany(AnimeCast::class);
+    }
+
+    /**
+     * The character's translation relationship.
+     *
+     * @return HasMany
+     */
+    public function character_translations(): HasMany
+    {
+        return $this->hasMany(CharacterTranslation::class);
     }
 }
