@@ -5,22 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class AnimeTranslation extends KModel
+class CharacterTranslation extends KModel
 {
     use HasFactory;
 
     // Table name
-    const TABLE_NAME = 'anime_translations';
+    const TABLE_NAME = 'character_translations';
     protected $table = self::TABLE_NAME;
 
     /**
-     * The anime the translations belongs to.
+     * The character the translations belongs to.
      *
      * @return BelongsTo
      */
-    public function anime(): BelongsTo
+    public function character(): BelongsTo
     {
-        return $this->belongsTo(Anime::class);
+        return $this->belongsTo(Character::class);
     }
 
     /**
