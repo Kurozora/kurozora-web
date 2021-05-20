@@ -315,7 +315,7 @@ class Action implements JsonSerializable
      * Handle any post-validation processing.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @param  \Illuminate\Validation\Validator  $validator
+     * @param  \Illuminate\Contracts\Validation\Validator  $validator
      * @return void
      */
     protected function afterValidation(NovaRequest $request, $validator)
@@ -360,7 +360,9 @@ class Action implements JsonSerializable
      * Validate the given request.
      *
      * @param  \Laravel\Nova\Http\Requests\ActionRequest  $request
-     * @return void
+     * @return array
+     *
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function validateFields(ActionRequest $request)
     {
@@ -387,6 +389,8 @@ class Action implements JsonSerializable
      *
      * @param  bool  $value
      * @return $this
+     *
+     * @deprecated
      */
     public function availableForEntireResource($value = true)
     {
@@ -751,7 +755,6 @@ class Action implements JsonSerializable
      * Prepare the instance for serialization.
      *
      * @return array
-     * @throws \ReflectionException
      */
     public function __sleep()
     {

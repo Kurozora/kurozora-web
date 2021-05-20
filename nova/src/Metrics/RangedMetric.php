@@ -21,7 +21,7 @@ abstract class RangedMetric extends Metric
     /**
      * Get the ranges available for the metric.
      *
-     * @return array
+     * @return \Illuminate\Support\Collection|array
      */
     public function ranges()
     {

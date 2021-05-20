@@ -131,6 +131,10 @@ export default {
         from.params.resourceId !== to.params.resourceId
       ) {
         this.getFields()
+        this.validationErrors = new Errors()
+        this.submittedViaUpdateResource = false
+        this.submittedViaUpdateResourceAndContinueEditing = false
+        this.isWorking = false
       }
     },
   },
@@ -199,7 +203,7 @@ export default {
       if (this.$refs.form.reportValidity()) {
         try {
           const {
-            data: { redirect },
+            data: { redirect, id },
           } = await this.updateRequest()
 
           Nova.success(
@@ -215,12 +219,23 @@ export default {
               window.scrollTo(0, 0)
             })
           } else {
-            // Reset the form by refetching the fields
-            this.getFields()
-            this.validationErrors = new Errors()
-            this.submittedViaUpdateResource = false
-            this.submittedViaUpdateResourceAndContinueEditing = false
-            this.isWorking = false
+            if (id != this.resourceId) {
+              this.$router.push({
+                name: 'edit',
+                params: {
+                  resourceId: id,
+                  resourceName: this.resourceName,
+                },
+              })
+            } else {
+              // Reset the form by refetching the fields
+              this.getFields()
+
+              this.validationErrors = new Errors()
+              this.submittedViaUpdateResource = false
+              this.submittedViaUpdateResourceAndContinueEditing = false
+              this.isWorking = false
+            }
 
             return
           }

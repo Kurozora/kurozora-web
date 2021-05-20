@@ -6,6 +6,7 @@ use Cake\Chronos\Chronos;
 use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Expression;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 use Laravel\Nova\Nova;
@@ -536,7 +537,7 @@ abstract class Trend extends RangedMetric
             array_shift($results);
         }
 
-        return $this->result()->trend(
+        return $this->result(Arr::last($results))->trend(
             $results
         );
     }
@@ -553,7 +554,7 @@ abstract class Trend extends RangedMetric
         $now = Chronos::now();
 
         $range = $request->range;
-        $ranges = array_keys($this->ranges());
+        $ranges = collect($this->ranges())->keys()->values()->all();
 
         if (count($ranges) > 0 && ! in_array($range, $ranges)) {
             $range = min($range, max($ranges));

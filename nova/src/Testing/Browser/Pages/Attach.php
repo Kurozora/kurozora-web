@@ -40,6 +40,10 @@ class Attach extends Page
 
     /**
      * Select the attachable resource with the given ID.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @param  string|int  $id
+     * @return void
      */
     public function selectAttachable(Browser $browser, $id)
     {
@@ -48,6 +52,9 @@ class Attach extends Page
 
     /**
      * Click the attach button.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
      */
     public function clickAttach(Browser $browser)
     {
@@ -57,7 +64,7 @@ class Attach extends Page
     /**
      * Assert that the browser is on the page.
      *
-     * @param  Browser  $browser
+     * @param  \Laravel\Dusk\Browser  $browser
      * @return void
      */
     public function assert(Browser $browser)

@@ -35,10 +35,17 @@ class Detail extends Page
 
     /**
      * Run the action with the given URI key.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @param  string  $uriKey
+     * @return void
+     *
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function runAction(Browser $browser, $uriKey)
     {
-        $browser->select('@action-select', $uriKey)
+        $browser->waitFor('@action-select', 25)
+                    ->select('@action-select', $uriKey)
                     ->pause(100)
                     ->click('@run-action-button')
                     ->pause(250)
@@ -48,10 +55,17 @@ class Detail extends Page
 
     /**
      * Run the action with the given URI key.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @param  string  $uriKey
+     * @return void
+     *
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function runInstantAction(Browser $browser, $uriKey)
     {
-        $browser->select('@action-select', $uriKey)
+        $browser->waitFor('@action-select', 25)
+                    ->select('@action-select', $uriKey)
                     ->pause(100)
                     ->click('@run-action-button')
                     ->assertDontSee('@cancel-action-button')
@@ -60,10 +74,17 @@ class Detail extends Page
 
     /**
      * Open the action modal but cancel the action.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @param  string  $uriKey
+     * @return void
+     *
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function cancelAction(Browser $browser, $uriKey)
     {
-        $browser->select('@action-select', 'mark-as-active')
+        $browser->waitFor('@action-select', 25)
+                    ->select('@action-select', 'mark-as-active')
                     ->pause(100)
                     ->click('@run-action-button')
                     ->pause(250)
@@ -72,11 +93,31 @@ class Detail extends Page
     }
 
     /**
+     * Edit the resource.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
+     *
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
+     */
+    public function edit(Browser $browser)
+    {
+        $browser->waitFor('@edit-resource-button')
+                    ->click('@edit-resource-button');
+    }
+
+    /**
      * Delete the resource.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
+     *
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function delete(Browser $browser)
     {
-        $browser->click('@open-delete-modal-button')
+        $browser->waitFor('@open-delete-modal-button')
+                    ->click('@open-delete-modal-button')
                     ->elsewhere('', function ($browser) {
                         $browser->whenAvailable('.modal', function ($browser) {
                             $browser->click('#confirm-delete-button');
@@ -86,10 +127,16 @@ class Detail extends Page
 
     /**
      * Restore the resource.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
+     *
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function restore(Browser $browser)
     {
-        $browser->click('@open-restore-modal-button')
+        $browser->waitFor('@open-restore-modal-button')
+                    ->click('@open-restore-modal-button')
                     ->elsewhere('', function ($browser) {
                         $browser->whenAvailable('.modal', function ($browser) {
                             $browser->click('#confirm-restore-button');
@@ -99,10 +146,16 @@ class Detail extends Page
 
     /**
      * Force delete the resource.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
+     *
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function forceDelete(Browser $browser)
     {
-        $browser->click('@open-force-delete-modal-button')
+        $browser->waitFor('@open-force-delete-modal-button')
+                    ->click('@open-force-delete-modal-button')
                     ->elsewhere('', function ($browser) {
                         $browser->whenAvailable('.modal', function ($browser) {
                             $browser->click('#confirm-delete-button');
@@ -113,7 +166,7 @@ class Detail extends Page
     /**
      * Assert that the browser is on the page.
      *
-     * @param  Browser  $browser
+     * @param  \Laravel\Dusk\Browser  $browser
      * @return void
      */
     public function assert(Browser $browser)

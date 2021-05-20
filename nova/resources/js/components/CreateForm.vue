@@ -366,7 +366,7 @@ export default {
     shouldShowAddAnotherButton() {
       return (
         Boolean(this.inFormMode && !this.alreadyFilled) &&
-        Boolean(!this.isHasOneRelationship || !this.isHasOneThroughRelationship)
+        !Boolean(this.isHasOneRelationship || this.isHasOneThroughRelationship)
       )
     },
   },

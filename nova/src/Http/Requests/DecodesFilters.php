@@ -9,7 +9,7 @@ trait DecodesFilters
     /**
      * Get the filters for the request.
      *
-     * @return array
+     * @return \Illuminate\Support\Collection
      */
     public function filters()
     {

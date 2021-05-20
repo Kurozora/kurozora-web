@@ -93,6 +93,7 @@ export default [
         relatedResourceName: route.params.relatedResourceName,
         relatedResourceId: route.params.relatedResourceId,
         viaRelationship: route.query.viaRelationship,
+        viaPivotId: route.query.viaPivotId,
       }
     },
   },

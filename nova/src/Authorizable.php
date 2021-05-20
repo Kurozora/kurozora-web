@@ -24,7 +24,9 @@ trait Authorizable
      * Determine if the resource should be available for the given request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return bool
+     * @return void
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function authorizeToViewAny(Request $request)
     {

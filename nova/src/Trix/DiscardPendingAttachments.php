@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class DiscardPendingAttachments
 {
     /**
-     * Discard pendings attachments on the field.
+     * Discard pending attachments on the field.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return void

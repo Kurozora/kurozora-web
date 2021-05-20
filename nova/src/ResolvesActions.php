@@ -21,6 +21,34 @@ trait ResolvesActions
     }
 
     /**
+     * Get the actions that are available for the given index request.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @return \Illuminate\Support\Collection
+     */
+    public function availableActionsOnIndex(NovaRequest $request)
+    {
+        return $this->resolveActions($request)
+                    ->filter->shownOnIndex()
+                    ->filter->authorizedToSee($request)
+                    ->values();
+    }
+
+    /**
+     * Get the actions that are available for the given detail request.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @return \Illuminate\Support\Collection
+     */
+    public function availableActionsOnDetail(NovaRequest $request)
+    {
+        return $this->resolveActions($request)
+                    ->filter->shownOnDetail()
+                    ->filter->authorizedToSee($request)
+                    ->values();
+    }
+
+    /**
      * Get the actions for the given request.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request

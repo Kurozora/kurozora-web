@@ -29,6 +29,7 @@ export default class Nova {
     this.bus = new Vue()
     this.bootingCallbacks = []
     this.config = config
+    this.useShortcuts = true
   }
 
   /**
@@ -62,6 +63,18 @@ export default class Nova {
    */
   liftOff() {
     let _this = this
+
+    let mousetrapDefaultStopCallback = Mousetrap.prototype.stopCallback
+
+    Mousetrap.prototype.stopCallback = function (e, element, combo) {
+      if (!_this.useShortcuts) {
+        return true
+      }
+
+      return mousetrapDefaultStopCallback.call(this, e, element, combo)
+    }
+
+    Mousetrap.init()
 
     this.boot()
     this.registerStoreModules()
@@ -193,7 +206,21 @@ export default class Nova {
   /**
    * Unbind a keyboard shortcut.
    */
-  removeShortcut(keys) {
+  disableShortcut(keys) {
     Mousetrap.unbind(keys)
+  }
+
+  /**
+   * Pause all keyboard shortcuts.
+   */
+  pauseShortcuts() {
+    this.useShortcuts = false
+  }
+
+  /**
+   * Resume all keyboard shortcuts.
+   */
+  resumeShortcuts() {
+    this.useShortcuts = true
   }
 }

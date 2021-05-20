@@ -134,7 +134,7 @@ export default {
         'rounded-b-lg',
         'ct-chart',
         'mr-4',
-        this.formattedTotal <= 0 ? 'invisible' : '',
+        this.currentTotal <= 0 ? 'invisible' : '',
       ]
     },
 
@@ -150,10 +150,10 @@ export default {
             value: item.value,
             color: this.getItemColor(item, index),
             percentage:
-              this.formattedTotal > 0
+              this.currentTotal > 0
                 ? Nova.formatNumber(
                     new String(
-                      ((item.value * 100) / this.formattedTotal).toFixed(2)
+                      ((item.value * 100) / this.currentTotal).toFixed(2)
                     )
                   )
                 : '0',
@@ -180,6 +180,17 @@ export default {
     },
 
     formattedTotal() {
+      let total = this.currentTotal.toFixed(2)
+      let roundedTotal = Math.round(total)
+
+      if (roundedTotal.toFixed(2) == total) {
+        return Nova.formatNumber(new String(roundedTotal))
+      }
+
+      return Nova.formatNumber(new String(total))
+    },
+
+    currentTotal() {
       return _.sumBy(this.chartData, 'value')
     },
   },

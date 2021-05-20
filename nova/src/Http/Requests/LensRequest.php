@@ -135,4 +135,22 @@ class LensRequest extends NovaRequest
             ? $relation->getForeignKeyName()
             : $relation->getForeignKey();
     }
+
+    /**
+     * Get per page.
+     *
+     * @return int
+     */
+    public function perPage()
+    {
+        $resource = $this->resource();
+
+        $perPageOptions = $resource::perPageOptions();
+
+        if (empty($perPageOptions)) {
+            $perPageOptions = [$resource::newModel()->getPerPage()];
+        }
+
+        return (int) in_array($this->perPage, $perPageOptions) ? $this->perPage : $perPageOptions[0];
+    }
 }

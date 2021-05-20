@@ -493,10 +493,11 @@ export default {
             viaResourceId: this.viaResourceId,
             viaRelationship: this.viaRelationship,
             relationshipType: this.relationshipType,
+            display: 'index',
           },
         })
         .then(response => {
-          this.actions = _.filter(response.data.actions, a => a.showOnIndex)
+          this.actions = response.data.actions
           this.pivotActions = response.data.pivotActions
         })
     },

@@ -9,15 +9,22 @@ class IndexComponent extends BaseComponent
 {
     public $resourceName;
 
+    public $viaRelationship;
+
     /**
      * Create a new component instance.
      *
      * @param  string  $resourceName
+     * @param  string|null  $viaRelationship
      * @return void
      */
-    public function __construct($resourceName)
+    public function __construct($resourceName, $viaRelationship = null)
     {
         $this->resourceName = $resourceName;
+
+        if (! is_null($viaRelationship) && $resourceName !== $viaRelationship) {
+            $this->viaRelationship = $viaRelationship;
+        }
     }
 
     /**
@@ -27,11 +34,21 @@ class IndexComponent extends BaseComponent
      */
     public function selector()
     {
-        return '@'.$this->resourceName.'-index-component';
+        $selector = '[dusk="'.$this->resourceName.'-index-component"]';
+
+        return sprintf(
+           (! is_null($this->viaRelationship) ? '%s[data-relationship="%s"]' : '%s'), $selector, $this->viaRelationship
+        );
     }
 
     /**
      * Wait for table to be ready.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @param  int|null  $seconds
+     * @return void
+     *
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function waitForTable(Browser $browser, $seconds = null)
     {
@@ -40,6 +57,10 @@ class IndexComponent extends BaseComponent
 
     /**
      * Search for the given string.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @param  string  $search
+     * @return void
      */
     public function searchFor(Browser $browser, $search)
     {
@@ -48,6 +69,9 @@ class IndexComponent extends BaseComponent
 
     /**
      * Clear the search field.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
      */
     public function clearSearch(Browser $browser)
     {
@@ -56,14 +80,43 @@ class IndexComponent extends BaseComponent
 
     /**
      * Click the sortable icon for the given attribute.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @param  string  $attribute
+     * @return void
      */
     public function sortBy(Browser $browser, $attribute)
     {
-        $browser->click('@sort-'.$attribute)->pause(500);
+        $browser->click('@sort-'.$attribute)->waitForTable();
+    }
+
+    /**
+     * Paginate to the next page of resources.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
+     */
+    public function nextPage(Browser $browser)
+    {
+        return $browser->click('@next')->waitForTable();
+    }
+
+    /**
+     * Paginate to the previous page of resources.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
+     */
+    public function previousPage(Browser $browser)
+    {
+        return $browser->click('@previous')->waitForTable();
     }
 
     /**
      * Select all the matching resources.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
      */
     public function selectAllMatching(Browser $browser)
     {
@@ -78,11 +131,29 @@ class IndexComponent extends BaseComponent
     }
 
     /**
+     * Open the filter selector.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
+     *
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
+     */
+    public function openFilterSelector(Browser $browser)
+    {
+        $browser->waitFor('@filter-selector')
+                    ->click('@filter-selector')
+                    ->pause(100);
+    }
+
+    /**
      * Set the per page value for the index.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
      */
     public function setPerPage(Browser $browser, $value)
     {
-        $browser->click('@filter-selector')
+        $browser->openFilterSelector()
                     ->elsewhere('', function ($browser) use ($value) {
                         $browser->whenAvailable('@per-page-select', function ($browser) use ($value) {
                             $browser->select('', $value);
@@ -92,27 +163,16 @@ class IndexComponent extends BaseComponent
     }
 
     /**
-     * Paginate to the next page of resources.
-     */
-    public function nextPage(Browser $browser)
-    {
-        return $browser->click('@next')->pause(500);
-    }
-
-    /**
-     * Paginate to the previous page of resources.
-     */
-    public function previousPage(Browser $browser)
-    {
-        return $browser->click('@previous')->pause(500);
-    }
-
-    /**
      * Set the given filter and filter value for the index.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @param  string  $name
+     * @param  string  $value
+     * @return void
      */
     public function applyFilter(Browser $browser, $name, $value)
     {
-        $browser->click('@filter-selector')
+        $browser->openFilterSelector()
                     ->pause(500)
                     ->elsewhere('', function ($browser) use ($name, $value) {
                         $browser->select('[dusk="'.$name.'-filter-select"]', $value);
@@ -121,10 +181,13 @@ class IndexComponent extends BaseComponent
 
     /**
      * Indicate that trashed records should not be displayed.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
      */
     public function withoutTrashed(Browser $browser)
     {
-        $browser->click('@filter-selector')
+        $browser->openFilterSelector()
                 ->elsewhere('', function ($browser) {
                     $browser->whenAvailable('[dusk="filter-soft-deletes"]', function ($browser) {
                         $browser->select('[dusk="trashed-select"]', '');
@@ -134,10 +197,13 @@ class IndexComponent extends BaseComponent
 
     /**
      * Indicate that only trashed records should be displayed.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
      */
     public function onlyTrashed(Browser $browser)
     {
-        $browser->click('@filter-selector')
+        $browser->openFilterSelector()
                 ->elsewhere('', function ($browser) {
                     $browser->whenAvailable('[dusk="filter-soft-deletes"]', function ($browser) {
                         $browser->select('[dusk="trashed-select"]', 'only');
@@ -147,10 +213,13 @@ class IndexComponent extends BaseComponent
 
     /**
      * Indicate that trashed records should be displayed.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
      */
     public function withTrashed(Browser $browser)
     {
-        $browser->click('@filter-selector')
+        $browser->openFilterSelector()
                 ->elsewhere('', function ($browser) {
                     $browser->whenAvailable('[dusk="filter-soft-deletes"]', function ($browser) {
                         $browser->select('[dusk="trashed-select"]', 'with');
@@ -160,19 +229,31 @@ class IndexComponent extends BaseComponent
 
     /**
      * Open the action selector.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
+     *
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function openActionSelector(Browser $browser)
     {
-        $browser->click('@action-select')
+        $browser->waitFor('@action-select')
+                    ->click('@action-select')
                     ->pause(100);
     }
 
     /**
      * Run the action with the given URI key.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
+     *
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function runAction(Browser $browser, $uriKey, $fieldCallback = null)
     {
-        $browser->select('@action-select', $uriKey)
+        $browser->waitFor('@action-select')
+                    ->select('@action-select', $uriKey)
                     ->pause(100)
                     ->click('@run-action-button');
 
@@ -189,6 +270,12 @@ class IndexComponent extends BaseComponent
 
     /**
      * Run the action with the given URI key.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @param  int|string  $id
+     * @param  string  $uriKey
+     * @param  callable  $fieldCallback
+     * @return void
      */
     public function runInlineAction(Browser $browser, $id, $uriKey, $fieldCallback = null)
     {
@@ -209,6 +296,10 @@ class IndexComponent extends BaseComponent
 
     /**
      * Check the user at the given resource table row index.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @param  int|string  $id
+     * @return void
      */
     public function clickCheckboxForId(Browser $browser, $id)
     {
@@ -218,6 +309,10 @@ class IndexComponent extends BaseComponent
 
     /**
      * Delete the user at the given resource table row index.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @param  int|string  $id
+     * @return void
      */
     public function deleteResourceById(Browser $browser, $id)
     {
@@ -231,6 +326,10 @@ class IndexComponent extends BaseComponent
 
     /**
      * Restore the user at the given resource table row index.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @param  int|string  $id
+     * @return void
      */
     public function restoreResourceById(Browser $browser, $id)
     {
@@ -244,6 +343,9 @@ class IndexComponent extends BaseComponent
 
     /**
      * Delete the resources selected via checkboxes.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
      */
     public function deleteSelected(Browser $browser)
     {
@@ -259,6 +361,9 @@ class IndexComponent extends BaseComponent
 
     /**
      * Restore the resources selected via checkboxes.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
      */
     public function restoreSelected(Browser $browser)
     {
@@ -274,6 +379,9 @@ class IndexComponent extends BaseComponent
 
     /**
      * Restore the resources selected via checkboxes.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
      */
     public function forceDeleteSelected(Browser $browser)
     {
@@ -290,8 +398,10 @@ class IndexComponent extends BaseComponent
     /**
      * Assert that the browser page contains the component.
      *
-     * @param  Browser  $browser
+     * @param  \Laravel\Dusk\Browser  $browser
      * @return void
+     *
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function assert(Browser $browser)
     {
@@ -305,6 +415,10 @@ class IndexComponent extends BaseComponent
 
     /**
      * Assert that the given resource is visible.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @param  int|string  $id
+     * @return void
      */
     public function assertSeeResource(Browser $browser, $id)
     {
@@ -313,6 +427,10 @@ class IndexComponent extends BaseComponent
 
     /**
      * Assert that the given resource is not visible.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @param  int|string  $id
+     * @return void
      */
     public function assertDontSeeResource(Browser $browser, $id)
     {
@@ -321,6 +439,10 @@ class IndexComponent extends BaseComponent
 
     /**
      * Assert on the matching total matching count text.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @param  int  $count
+     * @return void
      */
     public function assertSelectAllMatchingCount(Browser $browser, $count)
     {

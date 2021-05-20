@@ -46,6 +46,13 @@ class Update extends Page
 
     /**
      * Run the inline create relation.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @param  string  $uriKey
+     * @param  callable  $fieldCallback
+     * @return void
+     *
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function runInlineCreate(Browser $browser, $uriKey, callable $fieldCallback)
     {
@@ -63,24 +70,38 @@ class Update extends Page
 
     /**
      * Click the update button.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
+     *
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function update(Browser $browser)
     {
-        $browser->click('@update-button')->pause(500);
+        $browser->waitFor('@update-button')
+                ->click('@update-button')
+                ->pause(500);
     }
 
     /**
      * Click the update and continue editing button.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
+     *
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function updateAndContinueEditing(Browser $browser)
     {
-        $browser->click('@update-and-continue-editing-button')->pause(500);
+        $browser->waitFor('@update-and-continue-editing-button')
+                ->click('@update-and-continue-editing-button')
+                ->pause(500);
     }
 
     /**
      * Assert that the browser is on the page.
      *
-     * @param  Browser  $browser
+     * @param  \Laravel\Dusk\Browser  $browser
      * @return void
      */
     public function assert(Browser $browser)

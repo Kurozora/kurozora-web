@@ -41,6 +41,9 @@ class UpdateAttached extends Page
 
     /**
      * Click the update button.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
      */
     public function update(Browser $browser)
     {
@@ -49,6 +52,9 @@ class UpdateAttached extends Page
 
     /**
      * Click the update and continue editing button.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
      */
     public function updateAndContinueEditing(Browser $browser)
     {
@@ -58,8 +64,10 @@ class UpdateAttached extends Page
     /**
      * Assert that the browser is on the page.
      *
-     * @param  Browser  $browser
+     * @param  \Laravel\Dusk\Browser  $browser
      * @return void
+     *
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function assert(Browser $browser)
     {

@@ -11,6 +11,7 @@ use Laravel\Nova\Http\Requests\ResourceIndexRequest;
 use Laravel\Nova\Query\Builder;
 use Laravel\Nova\Rules\Relatable;
 use Laravel\Nova\TrashedStatus;
+use Laravel\Nova\Util;
 
 class BelongsTo extends Field implements RelatableField
 {
@@ -161,7 +162,7 @@ class BelongsTo extends Field implements RelatableField
         if ($value) {
             $resource = new $this->resourceClass($value);
 
-            $this->belongsToId = optional(ID::forResource($resource))->value ?? $value->getKey();
+            $this->belongsToId = Util::safeInt($value->getKey());
 
             $this->value = $this->formatDisplayValue($resource);
 
@@ -319,7 +320,7 @@ class BelongsTo extends Field implements RelatableField
             'avatar' => $resource->resolveAvatarUrl($request),
             'display' => $this->formatDisplayValue($resource),
             'subtitle' => $resource->subtitle(),
-            'value' => $resource->getKey(),
+            'value' => Util::safeInt($resource->getKey()),
         ]);
     }
 

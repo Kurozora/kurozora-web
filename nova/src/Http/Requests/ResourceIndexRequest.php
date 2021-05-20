@@ -11,23 +11,16 @@ class ResourceIndexRequest extends NovaRequest
     /**
      * Get the paginator instance for the index request.
      *
-     * @param  \Laravel\Nova\Http\Requests\ResourceIndexRequest  $request
-     * @param  string  $resource
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return array
      */
     public function searchIndex()
     {
         $resource = $this->resource();
 
-        $perPage = $this->viaRelationship()
-                        ? $resource::$perPageViaRelationship
-                        : ($this->perPage ?? $resource::perPageOptions()[0]);
-
         return (new QueryBuilder($resource))->search(
             $this, $this->newQuery(), $this->search,
             $this->filters()->all(), $this->orderings(), $this->trashed()
-        )->paginate((int) $perPage);
+        )->paginate((int) $this->perPage());
     }
 
     /**
@@ -38,5 +31,27 @@ class ResourceIndexRequest extends NovaRequest
     public function toCount()
     {
         return $this->toQuery()->toBase()->getCountForPagination();
+    }
+
+    /**
+     * Get per page.
+     *
+     * @return int
+     */
+    public function perPage()
+    {
+        $resource = $this->resource();
+
+        if ($this->viaRelationship()) {
+            return (int) $resource::$perPageViaRelationship;
+        }
+
+        $perPageOptions = $resource::perPageOptions();
+
+        if (empty($perPageOptions)) {
+            $perPageOptions = [$resource::newModel()->getPerPage()];
+        }
+
+        return (int) in_array($this->perPage, $perPageOptions) ? $this->perPage : $perPageOptions[0];
     }
 }

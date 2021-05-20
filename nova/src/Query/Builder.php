@@ -173,7 +173,7 @@ class Builder
     {
         $queryBuilder = $this->applyQueryCallbacks($this->queryBuilder);
 
-        if ($queryBuilder instanceof EloquentBuilder) {
+        if (method_exists($queryBuilder, 'cursor')) {
             return $queryBuilder->cursor();
         }
 

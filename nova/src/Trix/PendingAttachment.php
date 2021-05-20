@@ -47,7 +47,7 @@ class PendingAttachment extends Model
         $disk = $field->getStorageDisk();
 
         Attachment::create([
-            'attachable_type' => get_class($model),
+            'attachable_type' => $model->getMorphClass(),
             'attachable_id' => $model->getKey(),
             'attachment' => $this->attachment,
             'disk' => $disk,

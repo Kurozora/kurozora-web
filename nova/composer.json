@@ -30,7 +30,7 @@
     "laravel/legacy-factories": "^1.0",
     "laravel/nova-dusk-suite": "8.x-dev",
     "mockery/mockery": "^1.3.3|^1.4.2",
-    "orchestra/testbench-dusk": "^6.5",
+    "orchestra/testbench-dusk": "^6.17",
     "phpunit/phpunit": "^8.4",
     "predis/predis": "^1.1"
   },
@@ -64,7 +64,8 @@
     "dusk:prepare": [
       "./vendor/bin/dusk-updater detect --auto-update",
       "@php -r \"file_exists('phpunit.dusk.xml') || copy('phpunit.dusk.xml.dist', 'phpunit.dusk.xml'); \"",
-      "@php -r \"if (file_exists('.env.dusk')) { copy('.env.dusk', 'vendor/laravel/nova-dusk-suite/.env'); } else { copy('.env.dusk.example', 'vendor/laravel/nova-dusk-suite/.env'); }\""
+      "@php -r \"if (file_exists('.env.dusk')) { copy('.env.dusk', 'vendor/laravel/nova-dusk-suite/.env'); } else { copy('.env.dusk.example', 'vendor/laravel/nova-dusk-suite/.env'); }\"",
+      "./vendor/bin/testbench-dusk package:discover"
     ],
     "dusk:assets": [
       "yarn install",
@@ -83,5 +84,5 @@
   ],
   "minimum-stability": "dev",
   "prefer-stable": true,
-  "version": "3.22.0"
+  "version": "3.25.0"
 }

@@ -134,7 +134,7 @@ export default {
   /**
    * Prepare the component to tbe destroyed.
    */
-  destroyed() {
+  beforeDestroy() {
     document.removeEventListener('keydown', this.handleEscape)
 
     Nova.$off('close-dropdowns')

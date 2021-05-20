@@ -8,8 +8,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Nova\Events\ServingNova;
-use Laravel\Nova\Tools\Dashboard;
-use Laravel\Nova\Tools\ResourceManager;
 
 class NovaServiceProvider extends ServiceProvider
 {
@@ -24,14 +22,10 @@ class NovaServiceProvider extends ServiceProvider
             $this->registerPublishing();
         }
 
-        $this->registerDashboards();
         $this->registerResources();
-        $this->registerTools();
         $this->registerCarbonMacros();
         $this->registerCollectionMacros();
         $this->registerJsonVariables();
-
-        Nova::resources([config('nova.actions.resource')]);
     }
 
     /**
@@ -64,18 +58,6 @@ class NovaServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../database/migrations' => database_path('migrations'),
         ], 'nova-migrations');
-    }
-
-    /**
-     * Register the dashboards used by Nova.
-     *
-     * @return void
-     */
-    protected function registerDashboards()
-    {
-        Nova::serving(function (ServingNova $event) {
-            Nova::copyDefaultDashboardCards();
-        });
     }
 
     /**
@@ -125,19 +107,6 @@ class NovaServiceProvider extends ServiceProvider
     }
 
     /**
-     * Boot the standard Nova tools.
-     *
-     * @return void
-     */
-    protected function registerTools()
-    {
-        Nova::tools([
-            new Dashboard,
-            new ResourceManager,
-        ]);
-    }
-
-    /**
      * Register the Nova Carbon macros.
      *
      * @return void
@@ -162,7 +131,7 @@ class NovaServiceProvider extends ServiceProvider
             );
 
             Nova::provideToScript([
-                'appName' => config('app.name', 'Laravel Nova'),
+                'appName' => Nova::name() ?? config('app.name', 'Laravel Nova'),
                 'timezone' => config('app.timezone', 'UTC'),
                 'translations' => Nova::allTranslations(),
                 'userTimezone' => Nova::resolveUserTimezone($event->request),

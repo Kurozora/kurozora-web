@@ -309,6 +309,7 @@ export default {
             params: {
               editing: true,
               editMode: 'attach',
+              viaRelationship: this.viaRelationship,
             },
           }
         )

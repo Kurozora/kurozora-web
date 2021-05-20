@@ -1,6 +1,6 @@
 <template>
   <router-link
-    v-if="field.value && !isResourceBeingViewed"
+    v-if="field.viewable && field.value && !isResourceBeingViewed"
     :to="{
       name: 'detail',
       params: {
@@ -13,7 +13,9 @@
   >
     {{ field.resourceLabel }}: {{ field.value }}
   </router-link>
-
+  <span v-else-if="field.value">
+    {{ field.resourceLabel || field.morphToType }}: {{ field.value }}
+  </span>
   <span v-else> - </span>
 </template>
 

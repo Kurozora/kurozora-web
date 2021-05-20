@@ -130,7 +130,7 @@ export default {
   },
 
   destroyed() {
-    Nova.removeShortcut('/')
+    Nova.disableShortcut('/')
   },
 
   methods: {

@@ -5,7 +5,6 @@ namespace Laravel\Nova\Http\Middleware;
 use Illuminate\Support\Str;
 use Laravel\Nova\Events\NovaServiceProviderRegistered;
 use Laravel\Nova\Nova;
-use Laravel\Nova\NovaServiceProvider;
 
 class ServeNova
 {
@@ -19,8 +18,6 @@ class ServeNova
     public function handle($request, $next)
     {
         if ($this->isNovaRequest($request)) {
-            app()->register(NovaServiceProvider::class);
-
             NovaServiceProviderRegistered::dispatch();
         }
 
@@ -41,6 +38,10 @@ class ServeNova
         if (! is_null($domain) && $domain !== config('app.url') && $path === '/') {
             if (! Str::startsWith($domain, ['http://', 'https://', '://'])) {
                 $domain = $request->getScheme().'://'.$domain;
+            }
+
+            if (! in_array($port = $request->getPort(), [443, 80]) && ! Str::endsWith($domain, ":{$port}")) {
+                $domain = $domain.':'.$port;
             }
 
             $uri = parse_url($domain);

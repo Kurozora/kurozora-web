@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-20 p-3 text-center rounded-b flex justify-between">
+  <div class="bg-20 p-3 text-center rounded-b-lg flex justify-between">
     <p class="leading-normal text-sm text-80">{{ resourceCountLabel }}</p>
 
     <p v-if="allResourcesLoaded" class="leading-normal text-sm text-80">

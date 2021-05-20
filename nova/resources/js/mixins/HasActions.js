@@ -9,30 +9,14 @@ export default {
      * Determine whether there are any standalone actions.
      */
     haveStandaloneActions() {
-      return this.standaloneActions.length > 0
+      return _.filter(this.allActions, a => a.standalone == true).length > 0
     },
 
     /**
-     * Filter actions to non-standalone actions.
-     */
-    nonStandaloneActions() {
-      return _.filter(this.allActions, a => a.standalone == false)
-    },
-
-    /**
-     * Filter actions to only standalone actions.
-     */
-    standaloneActions() {
-      return _.filter(this.allActions, a => a.standalone == true)
-    },
-
-    /**
-     * Return the available actions depending on if any resources are selected.
+     * Return the available actions.
      */
     availableActions() {
-      return this.selectedResources.length > 0
-        ? this.nonStandaloneActions
-        : this.standaloneActions
+      return this.actions
     },
 
     /**

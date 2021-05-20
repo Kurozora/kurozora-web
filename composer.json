@@ -6,6 +6,7 @@
     "require": {
         "php": "^8.0",
         "ext-json": "*",
+        "ext-pdo": "*",
         "ext-simplexml": "*",
         "anaseqal/nova-sidebar-icons": "^0.0",
         "astrotomic/laravel-translatable": "^11.9",

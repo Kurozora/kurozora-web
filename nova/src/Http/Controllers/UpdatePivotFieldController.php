@@ -21,11 +21,19 @@ class UpdatePivotFieldController extends Controller
 
         $model = $resource->model();
 
-        $accessor = $model->{$request->viaRelationship}()->getPivotAccessor();
+        $relation = $model->{$request->viaRelationship}();
+
+        $accessor = $relation->getPivotAccessor();
+
+        if ($request->viaPivotId) {
+            tap($relation->getPivotClass(), function ($pivotClass) use ($relation, $request) {
+                $relation->wherePivot((new $pivotClass())->getKeyName(), $request->viaPivotId);
+            });
+        }
 
         $model->setRelation(
             $accessor,
-            $model->{$request->viaRelationship}()->withoutGlobalScopes()->findOrFail($request->relatedResourceId)->{$accessor}
+            $relation->withoutGlobalScopes()->findOrFail($request->relatedResourceId)->{$accessor}
         );
 
         return response()->json([
