@@ -21,10 +21,10 @@ class CreatePeopleTable extends Migration
             $table->string('family_name')->nullable();
             $table->string('given_name')->nullable();
             $table->json('alternative_names')->nullable();
-            $table->mediumText('about')->nullable();
+            $table->text('about')->nullable();
             $table->date('birth_date')->nullable();
             $table->string('image')->nullable();
-            $table->string('website_url')->nullable();
+            $table->json('website_urls')->nullable();
             $table->timestamps();
         });
     }
