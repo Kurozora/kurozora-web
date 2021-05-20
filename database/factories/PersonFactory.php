@@ -34,7 +34,7 @@ class PersonFactory extends Factory
             'birth_date'        => $this->faker->randomElement([$this->faker->date(), null]),
             'about'             => $this->faker->randomElement([$this->faker->paragraph(mt_rand(10, 30)), null]),
             'image'             => $this->faker->randomElement([$this->faker->imageUrl(), null]),
-            'website_url'       => $this->faker->randomElement([$this->faker->url, null]),
+            'website_urls'      => $this->faker->randomElement([[$this->faker->url], null]),
             'created_at'        => now(),
             'updated_at'        => now(),
         ];
