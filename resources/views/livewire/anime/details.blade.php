@@ -1,6 +1,6 @@
 <main>
     <x-slot name="title">
-        {!! $anime->title !!}
+        {!! $anime->original_title !!}
     </x-slot>
 
     <x-slot name="meta">
@@ -17,21 +17,21 @@
         <div class="relative">
             <div class="flex flex-no-wrap md:relative md:h-full">
                 <picture class="relative overflow-hidden">
-                    <img class="lg:h-full lg:object-cover" src="{{ asset('images/static/star_bg_lg.jpg') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
+                    <img class="lg:h-full lg:object-cover" src="{{ asset('images/static/star_bg_lg.jpg') }}" alt="{{ $anime->original_title }} Banner" title="{{ $anime->original_title }}">
                 </picture>
             </div>
 
             <div class="md:absolute md:bottom-0 md:left-0 md:right-0 lg:px-4">
                 <div class="flex flex-no-wrap mx-5 pt-5 pb-8 md:mx-auto md:mb-8 md:p-6 md:max-w-lg md:bg-white md:bg-opacity-50 md:backdrop-filter md:backdrop-blur md:rounded-lg">
                     <picture class="relative w-1/4 h-full mr-2 rounded-lg overflow-hidden">
-                        <img src="{{ $anime->poster()->url ?? asset('images/static/placeholders/anime_poster.jpg') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
+                        <img src="{{ $anime->poster()->url ?? asset('images/static/placeholders/anime_poster.jpg') }}" alt="{{ $anime->original_title }} Poster" title="{{ $anime->original_title }}">
                         <div class="absolute top-0 left-0 h-full w-full ring-1 ring-gray-100 ring-opacity-25 ring-inset rounded-lg"></div>
                     </picture>
 
                     <div class="flex flex-col justify-between w-3/4">
                         <div>
-                            <p class="font-semibold text-lg leading-tight break-all">{{ $anime->title }}</p>
-                            <p class="text-sm leading-tight">{{ $anime->informationSummary }}</p>
+                            <p class="font-semibold text-lg leading-tight break-all">{{ $anime->original_title }}</p>
+                            <p class="text-sm leading-tight">{{ $anime->information_summary }}</p>
                             <x-pill color="{{ $anime->status->color() }}" class="mt-2">{{ $anime->status->name }}</x-pill>
                         </div>
                         <div class="flex justify-between mt-5 h-10">
@@ -59,6 +59,13 @@
                     </p>
                     <p class="text-sm text-gray-500">187K {{ __('Ratings') }}</p>
                 </div>
+
+                @if ($anime->air_season)
+                    <div id="badge-2" class="flex-grow px-12 border-l-2">
+                        <p class="font-bold">{{ $anime->air_season }}</p>
+                        <p class="text-sm text-gray-500">{{ __('Season') }}</p>
+                    </div>
+                @endif
 
                 <div id="badge-2" class="flex-grow px-12 border-l-2">
                     <p class="font-bold">#13</p>
@@ -122,17 +129,17 @@
                 </x-section-nav>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-10 gap-y-4">
-                    <x-information-list label="{{ __('Studio') }}" infromation="{{ $anime->studios()->first()->name ?? '-' }}" />
-                    <x-information-list label="{{ __('Network') }}" infromation="{{ $anime->network ?? '-' }}" />
                     <x-information-list label="{{ __('Type') }}" infromation="{{ $anime->media_type->name }}" />
                     <x-information-list label="{{ __('Source') }}" infromation="{{ $anime->source->name }}" />
-                    <x-information-list label="{{ __('Aired') }}" infromation="{{ $anime->first_aired ?? 'N/A' }} - {{ $anime->last_aired ?? 'N/A' }}" />
-                    <x-information-list label="{{ __('Broadcast') }}" infromation="{{ $anime->broadcast }}" />
-                    <x-information-list label="{{ __('Genres') }}" infromation="{{ $anime->genres->implode('name', ', ') ?? '-' }}" />
-                    <x-information-list label="{{ __('Rating') }}" infromation="{!! $anime->tv_rating->full_name !!}" />
+                    <x-information-list label="{{ __('Genres') }}" infromation="{{ $anime->genres->implode('name', ', ') ?: '-' }}" />
                     <x-information-list label="{{ __('Seasons') }}" infromation="{{ $anime->seasons_count ?? '-' }}" />
-                    <x-information-list label="{{ __('Episodes') }}" infromation="{{ $anime->episodes_count ?? '-' }}" />
-                    <x-information-list label="{{ __('Duration') }}" infromation="{{ $anime->runtime ?? '-' }}" />
+                    <x-information-list label="{{ __('Episodes') }}" infromation="{{ $anime->episode_count ?: '-' }}" />
+                    <x-information-list label="{{ __('Duration') }}" infromation="{{ $anime->runtime_string ?? '-' }}" />
+                    <x-information-list label="{{ __('Broadcast') }}" infromation="{{ $anime->broadcast }}" />
+                    <x-information-list label="{{ __('Aired') }}" infromation="{{ $anime->first_aired ? $anime->first_aired->format('Y-m-d') : 'N/A' }} - {{ $anime->last_aired ? $anime->last_aired->format('Y-m-d'): 'N/A' }}" />
+                    <x-information-list label="{{ __('Rating') }}" infromation="{!! $anime->tv_rating->full_name !!}" />
+                    <x-information-list label="{{ __('Studio') }}" infromation="{{ $anime->studios()->first()->name ?? '-' }}" />
+                    <x-information-list label="{{ __('Network') }}" infromation="{{ $anime->studios()->first()->name ?? '-' }}" />
                 </div>
             </section>
 
