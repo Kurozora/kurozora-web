@@ -13,9 +13,9 @@ class Details extends Component
     /**
      * The object containing the anime data.
      *
-     * @var ?Anime $anime
+     * @var Anime $anime
      */
-    public ?Anime $anime;
+    public Anime $anime;
 
     /**
      * The page's data.
@@ -39,7 +39,7 @@ class Details extends Component
     {
         $this->anime = $anime;
 
-        $this->page['title'] = $anime->title;
+        $this->page['title'] = $anime->original_title;
         $this->page['image'] = $anime->poster()->url ?? asset('images/static/placeholders/anime_poster.jpg');
     }
 

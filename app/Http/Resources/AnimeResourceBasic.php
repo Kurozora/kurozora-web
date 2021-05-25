@@ -53,8 +53,6 @@ class AnimeResourceBasic extends JsonResource
                 'type'                  => $anime->media_type->only(['name', 'description']),
                 'source'                => $anime->source->only(['name', 'description']),
                 'status'                => $anime->status->only(['name', 'description']),
-                'network'               => $anime->network,
-                'producer'              => $anime->producer,
                 'episodeCount'          => $anime->episode_count,
                 'seasonCount'           => $anime->season_count,
                 'averageRating'         => $anime->average_rating,

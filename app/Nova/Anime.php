@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use App\Enums\DayOfWeek;
+use App\Enums\SeasonOfYear;
 use App\Nova\Lenses\UnmoderatedAnime;
 use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Database\Eloquent\Builder;
@@ -45,7 +46,7 @@ class Anime extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'title', 'tvdb_id', 'mal_id'
+        'id', 'tvdb_id', 'mal_id', 'title', 'season',
     ];
 
     /**
@@ -155,16 +156,6 @@ class Anime extends Resource
                 ->sortable()
                 ->help('NSFW: Not Safe For Work (not suitable for watchers under the age of 18).'),
 
-            Heading::make('Production'),
-
-            Text::make('Network')
-                ->hideFromIndex()
-                ->help('The network that airs the Anime.'),
-
-            Text::make('Producer')
-                ->hideFromIndex()
-                ->help('The producer that produces the Anime.'),
-
             // Display moderation indicator on index
             Text::make('Moderated by', function() { return $this->displayModIndicatorForIndex(); })
                 ->asHtml()
@@ -198,6 +189,11 @@ class Anime extends Resource
                 ->displayUsingLabels()
                 ->hideFromIndex()
                 ->help('The day of the week the show airs at. For example: Thursday'),
+
+            Select::make('Air season')
+                ->options(SeasonOfYear::asSelectArray())
+                ->displayUsingLabels()
+                ->help('The season of the year the show airs in.<br />Jan-Mar: Winter<br />Apr-Jun: Spring<br />Jul-Sep: Summer<br />Oct-Dec: Fall'),
 
             Heading::make('Legal'),
 
