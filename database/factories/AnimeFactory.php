@@ -68,8 +68,6 @@ class AnimeFactory extends Factory
             'media_type_id'     => $mediaType,
             'source_id'         => $source,
             'status_id'         => $status,
-            'network'           => null,
-            'producer'          => null,
             'first_aired'       => $firstAired,
             'last_aired'        => $lastAired,
             'runtime'           => $this->faker->numberBetween(10, 25),

@@ -34,8 +34,6 @@ class CreateAnimesTable extends Migration
             $table->unsignedBigInteger('media_type_id')->nullable();
             $table->unsignedBigInteger('source_id')->nullable();
             $table->unsignedBigInteger('status_id')->nullable();
-            $table->string('network')->nullable();
-            $table->string('producer')->nullable();
             $table->integer('episode_count')->default(0);
             $table->integer('season_count')->default(0);
             $table->integer('rating_count')->default(0);
@@ -43,9 +41,10 @@ class CreateAnimesTable extends Migration
             $table->string('video_url')->nullable();
             $table->date('first_aired')->nullable();
             $table->date('last_aired')->nullable();
-            $table->unsignedTinyInteger('runtime')->default(0);
+            $table->unsignedMediumInteger('runtime')->default(0);
             $table->time('air_time')->nullable();
-            $table->unsignedInteger('air_day')->nullable();
+            $table->unsignedTinyInteger('air_day')->nullable();
+            $table->unsignedTinyInteger('air_season')->nullable();
             $table->boolean('is_nsfw')->default(false);
             $table->string('copyright')->nullable();
             $table->timestamps();

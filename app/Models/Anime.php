@@ -87,7 +87,7 @@ class Anime extends KModel
      * @var array
      */
     protected $casts = [
-        'synonym_title' => AsArrayObject::class,
+        'synonym_titles' => AsArrayObject::class,
         'first_aired' => 'date',
         'last_aired' => 'date',
     ];

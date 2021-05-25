@@ -4,6 +4,15 @@ namespace App\Enums;
 
 use BenSampo\Enum\Enum;
 
+/**
+ * @method static DayOfWeek Sunday()
+ * @method static DayOfWeek Monday()
+ * @method static DayOfWeek Tuesday()
+ * @method static DayOfWeek Wednesday()
+ * @method static DayOfWeek Thursday()
+ * @method static DayOfWeek Friday()
+ * @method static DayOfWeek Saturday()
+ */
 final class DayOfWeek extends Enum
 {
     const Sunday    = 1;
