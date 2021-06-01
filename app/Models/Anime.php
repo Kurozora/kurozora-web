@@ -226,12 +226,15 @@ class Anime extends KModel
         $broadcast = null;
         $airDay = $this->air_day;
         $airTime = $this->air_time;
+        $dayTime = now('Asia/Tokyo')->next($airDay)
+            ->setTimeFromTimeString($airTime ?? '00:00')
+            ->setTimezone('UTC');
 
-        if (!empty($airDay)) {
-            $broadcast .= DayOfWeek::fromValue($airDay)->description ?? '-';
+        if (!empty($airDay) || $airDay == DayOfWeek::Sunday) {
+            $broadcast .= $dayTime->getTranslatedDayName();
         }
         if (!empty($airTime)) {
-            $broadcast .= ' ' . __('at') . ' ' . $airTime;
+            $broadcast .= ' ' . __('at') . ' ' . $dayTime->format('H:i e');
         }
 
         return $broadcast ?? '-';
