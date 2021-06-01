@@ -136,7 +136,7 @@
                     <x-information-list label="{{ __('Episodes') }}" infromation="{{ $anime->episode_count ?: '-' }}" />
                     <x-information-list label="{{ __('Duration') }}" infromation="{{ $anime->runtime_string ?? '-' }}" />
                     <x-information-list label="{{ __('Broadcast') }}" infromation="{{ $anime->broadcast }}" />
-                    <x-information-list label="{{ __('Aired') }}" infromation="{{ $anime->first_aired ? $anime->first_aired->format('Y-m-d') : 'N/A' }} - {{ $anime->last_aired ? $anime->last_aired->format('Y-m-d'): 'N/A' }}" />
+                    <x-information-list label="{{ __('Aired') }}" infromation="{{ $anime->first_aired?->format('Y-m-d') ?? 'N/A' }} - {{ $anime->last_aired?->format('Y-m-d') ?? 'N/A' }}" />
                     <x-information-list label="{{ __('Rating') }}" infromation="{!! $anime->tv_rating->full_name !!}" />
                     <x-information-list label="{{ __('Studio') }}" infromation="{{ $anime->studios()->first()->name ?? '-' }}" />
                     <x-information-list label="{{ __('Network') }}" infromation="{{ $anime->studios()->first()->name ?? '-' }}" />
