@@ -410,8 +410,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         try {
             $sessionID = request()->session()->getId();
         } catch (RuntimeException $e) {
-            // Laravel session doesn't exist on API requests, so null is used instead.
-            $sessionID = null;
+            // Laravel session doesn't exist on API requests, so empty string is used instead.
+            $sessionID = '';
         }
 
         $session = Session::create([
