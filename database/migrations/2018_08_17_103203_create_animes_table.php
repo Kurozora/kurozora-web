@@ -20,12 +20,12 @@ class CreateAnimesTable extends Migration
     {
         Schema::create(Anime::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('anidb_id')->nullable();
-            $table->unsignedInteger('anilist_id')->nullable();
-            $table->string('imdb_id')->nullable();
-            $table->unsignedInteger('kitsu_id')->nullable();
-            $table->unsignedInteger('mal_id')->nullable();
-            $table->unsignedInteger('tvdb_id')->nullable();
+            $table->unsignedInteger('anidb_id')->unique()->nullable();
+            $table->unsignedInteger('anilist_id')->unique()->nullable();
+            $table->string('imdb_id')->unique()->nullable();
+            $table->unsignedInteger('kitsu_id')->unique()->nullable();
+            $table->unsignedInteger('mal_id')->unique()->nullable();
+            $table->unsignedInteger('tvdb_id')->unique()->nullable();
             $table->string('slug');
             $table->string('original_title');
             $table->json('synonym_titles')->nullable();
