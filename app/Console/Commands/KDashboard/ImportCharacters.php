@@ -2,9 +2,10 @@
 
 namespace App\Console\Commands\KDashboard;
 
-use App\Models\Character;
+use App\Jobs\ProcessImportCharacter;
 use App\Models\KDashboard\Character as KCharacter;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Collection;
 
 class ImportCharacters extends Command
 {
@@ -13,7 +14,7 @@ class ImportCharacters extends Command
      *
      * @var string
      */
-    protected $signature = 'import:character';
+    protected $signature = 'import:characters';
 
     /**
      * The console command description.
@@ -39,44 +40,9 @@ class ImportCharacters extends Command
      */
     public function handle(): int
     {
-        $kCharacters = KCharacter::all();
-        $oldCount = Character::count('id');
-
-        $this->info('Total old characters: ' . $oldCount);
-
-        $this->withProgressBar($kCharacters, function (KCharacter $kCharacter) {
-            $character = Character::where([
-                ['mal_id', $kCharacter->id],
-            ])->first();
-
-            if ($character) {
-                return;
-            }
-
-            $japaneseName = [];
-            if (!empty($kCharacter->japanese_name)) {
-                $japaneseName = [
-                    'ja' => [
-                        'name' => $kCharacter->japanese_name,
-                        'about' => '',
-                    ],
-                ];
-            }
-
-            Character::create(array_merge($japaneseName, [
-                'mal_id'    => $kCharacter->id,
-                'nicknames' => empty($kCharacter->nickname) ? null : explode(', ', $kCharacter->nickname),
-                'name'      => $kCharacter->name,
-                'about'     => $kCharacter->about,
-                'image'     => $kCharacter->image_url,
-            ]));
+        KCharacter::chunk(1000, function (Collection $kCharacters) {
+            ProcessImportCharacter::dispatch($kCharacters);
         });
-
-        $newCount = Character::count('id');
-
-        $this->newLine();
-        $this->info('Total new characters added: ' . $newCount - $oldCount);
-        $this->info('Total characters: ' . $newCount);
 
         return 1;
     }
