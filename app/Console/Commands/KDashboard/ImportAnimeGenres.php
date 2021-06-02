@@ -2,11 +2,10 @@
 
 namespace App\Console\Commands\KDashboard;
 
-use App\Models\Anime;
-use App\Models\Genre;
+use App\Jobs\ProcessImportAnimeGenre;
 use App\Models\KDashboard\MediaGenre as KMediaGenre;
-use App\Models\MediaGenre;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Collection;
 
 class ImportAnimeGenres extends Command
 {
@@ -41,38 +40,9 @@ class ImportAnimeGenres extends Command
      */
     public function handle(): int
     {
-        $kMediaGenres = KMediaGenre::where('type', 'anime')->get();
-        $oldCount = MediaGenre::count('id');
-        $this->info('Total old anime genres: ' . $oldCount);
-
-        $this->withProgressBar($kMediaGenres, function (KMediaGenre $kMediaGenre) {
-            $anime = Anime::firstWhere('mal_id', $kMediaGenre->media_id);
-            $genre = Genre::firstWhere([
-                ['name', $kMediaGenre->genre->genre],
-            ]);
-
-            $mediaGenre = MediaGenre::where([
-                ['type', 'anime'],
-                ['media_id', $anime->id],
-                ['genre_id', $genre->id],
-            ])->first();
-
-            if ($mediaGenre) {
-                return;
-            }
-
-            MediaGenre::create([
-                'media_id' => $anime->id,
-                'genre_id' => $genre->id,
-                'type' => 'anime',
-            ]);
+        KMediaGenre::chunk(1000, function (Collection $kAnimes) {
+            ProcessImportAnimeGenre::dispatch($kAnimes);
         });
-
-        $newCount = MediaGenre::count('id');
-
-        $this->newLine();
-        $this->info('Total new anime genres added: ' . $newCount - $oldCount);
-        $this->info('Total anime genres: ' . $newCount);
 
         return 1;
     }
