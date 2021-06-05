@@ -40,7 +40,7 @@ class ImportAnimeGenres extends Command
      */
     public function handle(): int
     {
-        KMediaGenre::chunk(1000, function (Collection $kAnimes) {
+        KMediaGenre::where('type', 'anime')->chunk(1000, function (Collection $kAnimes) {
             ProcessImportAnimeGenre::dispatch($kAnimes);
         });
 

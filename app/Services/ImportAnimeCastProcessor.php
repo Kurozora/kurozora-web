@@ -22,31 +22,30 @@ class ImportAnimeCastProcessor
     public function process(Collection|array $kAnimeCasts)
     {
         foreach ($kAnimeCasts as $kAnimeCast) {
-            $kCastRole = match ($kAnimeCast->role) {
-                'main' => 'Protagonist',
-                default => 'Supporting Character'
-            };
-            $kLanguage = $kAnimeCast->language ? match ($kAnimeCast->language->language) {
-                'Mandarin' => 'Chinese',
-                'Brazilian' => 'Portuguese',
-                default => $kAnimeCast->language->language
-            } : null;
-
             $animeId = Anime::firstWhere('mal_id', $kAnimeCast->anime_id)->id;
             $characterId = Character::firstWhere('mal_id' , $kAnimeCast->character_id)->id;
-            $personId = $kAnimeCast->people_id ? Person::firstWhere('mal_id', $kAnimeCast->people_id)->id : null;
-            $castRoleId = CastRole::firstWhere('name', $kCastRole)->id;
-            $languageId = $kLanguage ? Language::firstWhere('name', $kLanguage)->id : null;
+            $personId = Person::firstWhere('mal_id', $kAnimeCast->people_id)?->id;
 
             $animeCast = AnimeCast::where([
                 ['anime_id', $animeId],
                 ['character_id', $characterId],
                 ['person_id', $personId],
-                ['cast_role_id', $castRoleId],
-                ['language_id', $languageId],
             ])->first();
 
             if (empty($animeCast)) {
+                $kCastRole = match ($kAnimeCast->role) {
+                    'main' => 'Protagonist',
+                    default => 'Supporting Character'
+                };
+                $kLanguage = match ($kAnimeCast->language?->language) {
+                    'Mandarin' => 'Chinese',
+                    'Brazilian' => 'Portuguese',
+                    default => $kAnimeCast->language?->language
+                };
+
+                $castRoleId = CastRole::firstWhere('name', $kCastRole)->id;
+                $languageId = Language::firstWhere('name', $kLanguage)?->id;
+
                 AnimeCast::create([
                     'anime_id' => $animeId,
                     'character_id' => $characterId,
