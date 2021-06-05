@@ -12,8 +12,8 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link href="{{ route('themes') }}" :active="request()->routeIs('themes')">
-                        {{ __('Themes') }}
+                    <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
+                        {{ __('Explore') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -42,6 +42,17 @@
                     </x-slot>
 
                     <x-slot name="content">
+                        <!-- More Pages -->
+                        <div class="block px-4 py-2 text-xs text-gray-400">
+                            {{ __('More') }}
+                        </div>
+
+                        <x-dropdown-link href="{{ route('themes') }}">
+                            {{ __('Themes') }}
+                        </x-dropdown-link>
+
+                        <div class="border-t border-gray-100"></div>
+
                         @auth
                             <!-- Account Management -->
                             <div class="block px-4 py-2 text-xs text-gray-400">
@@ -99,8 +110,8 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link href="{{ route('themes') }}" :active="request()->routeIs('themes')">
-                {{ __('Themes') }}
+            <x-responsive-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
+                {{ __('Explore') }}
             </x-responsive-nav-link>
         </div>
 
@@ -118,12 +129,28 @@
                         <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
                     </div>
                 </div>
+            @endauth
 
-                <!-- Account Management -->
-                <x-responsive-nav-link href="{{ route('profile.settings') }}"
-                                       :active="request()->routeIs('profile.settings')">
-                    {{ __('Settings') }}
+            <!-- Themes -->
+            <div class="space-y-1">
+                <x-responsive-nav-link href="{{ route('themes') }}"
+                                       :active="request()->routeIs('themes')">
+                    {{ __('Themes') }}
                 </x-responsive-nav-link>
+
+                <div class="border-t border-gray-100"></div>
+            </div>
+
+            <!-- Account Management -->
+            @auth
+                <div class="space-y-1">
+                    <x-responsive-nav-link href="{{ route('profile.settings') }}"
+                                           :active="request()->routeIs('profile.settings')">
+                        {{ __('Settings') }}
+                    </x-responsive-nav-link>
+
+                    <div class="border-t border-gray-100"></div>
+                </div>
             @endauth
 
             <!-- Authentication -->
