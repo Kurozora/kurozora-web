@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Models\KDashboard\People as KPerson;
-use App\Services\ImportPersonProcessor;
+use App\Models\KDashboard\Song as KSong;
+use App\Services\ImportSongProcessor;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Collection;
@@ -11,35 +11,34 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ProcessImportPerson implements ShouldQueue
+class ProcessImportSong implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * The list of people to process.
      *
-     * @var Collection|KPerson[] $kPeople
+     * @var Collection|KSong[] $kSongs
      */
-    protected Collection|array $kPeople;
+    protected Collection|array $kSongs;
 
     /**
      * Create a new job instance.
      *
-     * @param Collection|KPerson[] $kPeople
+     * @param Collection|array $kSongs
      */
-    public function __construct(Collection|array $kPeople)
+    public function __construct(Collection|array $kSongs)
     {
-        $this->kPeople = $kPeople;
+        $this->kSongs = $kSongs;
     }
 
     /**
      * Execute the job.
      *
-     * @param ImportPersonProcessor $importPersonProcessor
      * @return void
      */
-    public function handle(ImportPersonProcessor $importPersonProcessor)
+    public function handle(ImportSongProcessor $importSongProcessor)
     {
-        $importPersonProcessor->process($this->kPeople);
+        $importSongProcessor->process($this->kSongs);
     }
 }
