@@ -40,8 +40,8 @@ class ImportSongs extends Command
      */
     public function handle(): int
     {
-        KSong::chunk(1000, function (Collection $kPeople) {
-            ProcessImportSong::dispatch($kPeople);
+        KSong::chunk(1000, function (Collection $kSongs) {
+            ProcessImportSong::dispatch($kSongs);
         });
 
         return 1;
