@@ -41,4 +41,14 @@ class AnimeProducer extends Model
         return $this->belongsTo(ProducerMagazine::class, 'producer_id', 'id')
             ->where('type', 'anime');
     }
+
+    /**
+     * Returns whether the given anime producer is in fact a producer.
+     *
+     * @return bool
+     */
+    public function getIsProducer(): bool
+    {
+        return !$this->is_licensor && !$this->is_studio;
+    }
 }
