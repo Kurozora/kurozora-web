@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Enums\SongType;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
@@ -54,28 +55,28 @@ class AnimeSong extends Resource
             ID::make(__('ID'), 'id')->sortable(),
 
             BelongsTo::make('Anime')
+                ->searchable()
+                ->sortable()
                 ->required(),
 
             BelongsTo::make('Song')
+                ->searchable()
+                ->sortable()
                 ->required(),
 
             Select::make('Type')
-                ->options([
-                    'Opening' => 'Opening',
-                    'Ending' => 'Ending',
-                    'Background' => 'Background'
-                ])
+                ->options(SongType::asSelectArray())
+                ->displayUsingLabels()
                 ->sortable()
                 ->help('Choose the type depending on when the song is played.')
                 ->required(),
 
             Number::make('Position')
-                ->help('In which order the same type was played? For example opening 1, opening 2, background 5 etc.')
+                ->help('In which order the same type was played? For example opening 1, opening 2, background 5 etc. When in doubt, use 1.')
                 ->required(),
 
             Text::make('Episodes')
-                ->help('For example: 1-12; or 1-12, 14-24; or even 14, 16, 19')
-                ->required(),
+                ->help('For example: 1-12; or 1-12, 14-24; or even 14, 16, 19'),
         ];
     }
 

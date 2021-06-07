@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\KDashboard\Song as KSong;
 use App\Models\Song;
 use Illuminate\Database\Eloquent\Collection;
-use Str;
 
 class ImportSongProcessor
 {
@@ -55,9 +54,11 @@ class ImportSongProcessor
         $song = $kSong->song;
         $matchCount = preg_match('/"([^"]+)"/', $song, $songTitleMatches);
         $songTitle = null;
+
         if ($matchCount) {
             $songTitle = trim($songTitleMatches[1]);
         }
+
         return $songTitle;
     }
 
@@ -72,9 +73,11 @@ class ImportSongProcessor
         $song = $kSong->song;
         $matchCount = preg_match('/" by.*/i', $song, $songArtistMatches);
         $songArtist = null;
+
         if ($matchCount) {
             $songArtist = $this->cleanSongArtist($songArtistMatches[0]);
         }
+
         return $songArtist;
     }
 
@@ -89,9 +92,10 @@ class ImportSongProcessor
         $cleanSongArtist = $uncleanSongArtist;
         $searchRegex = [
             '/" by /i',
-            '/\(eps .*\)/i',
             '/\(ep .*\)/i',
-            '/\(episode.*\)/i',
+            '/\(eps .*\)/i',
+            '/\(episode .*\)/i',
+            '/\(episodes .*\)/i',
         ];
 
         foreach ($searchRegex as $regex) {
