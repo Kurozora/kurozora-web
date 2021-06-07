@@ -35,6 +35,7 @@ class ProcessImportAnimeSong implements ShouldQueue
     /**
      * Execute the job.
      *
+     * @param ImportAnimeSongProcessor $importAnimeSongProcessor
      * @return void
      */
     public function handle(ImportAnimeSongProcessor $importAnimeSongProcessor)
