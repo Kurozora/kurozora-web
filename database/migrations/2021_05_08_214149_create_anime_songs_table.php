@@ -20,15 +20,15 @@ class CreateAnimeSongsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('anime_id');
             $table->unsignedBigInteger('song_id');
-            $table->string('type');
-            $table->integer('position');
-            $table->string('episodes');
+            $table->tinyInteger('type');
+            $table->integer('position')->nullable();
+            $table->string('episodes')->nullable();
             $table->timestamps();
         });
 
         Schema::table(AnimeSong::TABLE_NAME, function (Blueprint $table) {
             // Set unique key constraints
-            $table->unique(['anime_id', 'song_id', 'type', 'position']);
+            $table->unique(['anime_id', 'song_id', 'type']);
 
             // Set foreign key constraints
             $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');

@@ -59,8 +59,7 @@ class Song extends Resource
                 ->required(),
 
             Text::make('Artist')
-                ->sortable()
-                ->required(),
+                ->sortable(),
 
             HasMany::make('Anime', 'anime_songs', AnimeSong::class),
         ];
@@ -73,7 +72,7 @@ class Song extends Resource
      */
     public function title(): string
     {
-        return $this->title . ' by ' . $this->artist . ' (ID: ' . $this->id . ')';
+        return $this->title . ' by ' . $this->artist ?? 'Unknown' . ' (ID: ' . $this->id . ')';
     }
 
     /**
