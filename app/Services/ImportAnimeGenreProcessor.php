@@ -30,15 +30,13 @@ class ImportAnimeGenreProcessor
                 ['genre_id', $genre->id],
             ])->first();
 
-            if ($mediaGenre) {
-                return;
+            if (empty($mediaGenre)) {
+                MediaGenre::create([
+                    'media_id' => $anime->id,
+                    'genre_id' => $genre->id,
+                    'type' => 'anime',
+                ]);
             }
-
-            MediaGenre::create([
-                'media_id' => $anime->id,
-                'genre_id' => $genre->id,
-                'type' => 'anime',
-            ]);
         }
     }
 }

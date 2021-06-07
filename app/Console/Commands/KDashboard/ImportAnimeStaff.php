@@ -42,8 +42,8 @@ class ImportAnimeStaff extends Command
     {
         KAnimeStaff::where([
             ['id', '>', 150000],
-        ])->chunk(1000, function (Collection $kAnimeCasts) {
-            ProcessImportAnimeStaff::dispatch($kAnimeCasts);
+        ])->chunk(1000, function (Collection $kAnimeStaff) {
+            ProcessImportAnimeStaff::dispatch($kAnimeStaff);
         });
 
         return 1;
