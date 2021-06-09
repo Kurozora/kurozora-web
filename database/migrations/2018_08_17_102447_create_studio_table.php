@@ -16,12 +16,19 @@ class CreateStudioTable extends Migration
     {
         Schema::create(Studio::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name')->unique();
+            $table->unsignedInteger('mal_id')->nullable();
+            $table->string('type');
+            $table->string('name');
             $table->string('logo_url')->nullable();
             $table->mediumText('about')->nullable();
             $table->date('founded')->nullable();
             $table->string('website_url')->nullable();
             $table->timestamps();
+        });
+
+        Schema::table(Studio::TABLE_NAME, function (Blueprint $table) {
+            // Set unique key constraints
+            $table->unique(['mal_id', 'type', 'name']);
         });
     }
 
