@@ -20,6 +20,7 @@
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.3",
+        "halaxa/json-machine": "^0.7.0",
         "hisorange/browser-detect": "^4.4",
         "imdhemy/laravel-purchases": "^0.10.2",
         "kraenkvisuell/nova-astrotranslatable": "^2.0",
