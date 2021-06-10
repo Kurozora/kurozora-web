@@ -25,6 +25,7 @@ class CreateAnimesTable extends Migration
             $table->string('imdb_id')->unique()->nullable();
             $table->unsignedInteger('kitsu_id')->unique()->nullable();
             $table->unsignedInteger('mal_id')->unique()->nullable();
+            $table->string('notify_id')->unique()->nullable();
             $table->unsignedInteger('tvdb_id')->unique()->nullable();
             $table->string('slug');
             $table->string('original_title');
