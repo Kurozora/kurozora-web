@@ -33,6 +33,18 @@
                 <div class="mt-4">
                     {!! Auth::user()->twoFactorQrCodeSvg() !!}
                 </div>
+
+                @browser('isSafari')
+                    <div class="mt-4 max-w-xl text-sm text-gray-600">
+                        <p class="font-semibold">
+                            {{ __('Or click on the button below to setup using iCloud Keychain.') }}
+                        </p>
+                    </div>
+
+                    <div class="mt-4">
+                        <x-link-button href="apple-{{ Auth::user()->twoFactorQrCodeUrl() }}">{{ __('Setup in iCloud Keychain') }}</x-link-button>
+                    </div>
+                @endbrowser
             @endif
 
             @if ($showingRecoveryCodes)
