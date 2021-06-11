@@ -14,7 +14,7 @@ class AnimeTranslation extends KModel
     protected $table = self::TABLE_NAME;
 
     /**
-     * The language the translations belongs to.
+     * The anime the translations belongs to.
      *
      * @return BelongsTo
      */

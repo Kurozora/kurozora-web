@@ -14,6 +14,21 @@
             </div>
 
             <div class="w-1/2 md:w-1/5 sm:w-1/3 text-center md:text-left">
+                <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('Services') }}</h5>
+                <ul class="m-0 mb-4 list-none">
+                    <li class="mt-2">
+                        <x-footer-link href="#">{{ __('Kurozora+') }}</x-footer-link>
+                    </li>
+                    <li class="mt-2">
+                        <x-footer-link href="#">{{ __('Kurozora App') }}</x-footer-link>
+                    </li>
+                    <li class="mt-2">
+                        <x-footer-link href="{{ route('api') }}">{{ __('Kurozora API') }}</x-footer-link>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="w-1/2 md:w-1/5 sm:w-1/3 text-center md:text-left">
                 <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('About Kurozora') }}</h5>
                 <ul class="m-0 mb-4 list-none">
                     <li class="mt-2">
@@ -46,7 +61,9 @@
                     </li>
                 </ul>
             </div>
+
             <hr class="w-full mb-2" />
+
             <div class="w-full text-center md:text-left">
                 <p class="text-sm text-gray-500">Copyright © {{ now()->year }} Kurozora B.V. {{ __('All rights reserved') }}</p>
             </div>

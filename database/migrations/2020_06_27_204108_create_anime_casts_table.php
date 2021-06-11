@@ -21,11 +21,11 @@ class CreateAnimeCastsTable extends Migration
     {
         Schema::create(AnimeCast::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('person_id');
-            $table->unsignedBigInteger('character_id');
             $table->unsignedBigInteger('anime_id');
+            $table->unsignedBigInteger('character_id');
+            $table->unsignedBigInteger('person_id')->nullable();
             $table->unsignedBigInteger('cast_role_id');
-            $table->unsignedBigInteger('language_id');
+            $table->unsignedBigInteger('language_id')->nullable();
             $table->timestamps();
         });
 

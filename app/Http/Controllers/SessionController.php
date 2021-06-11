@@ -8,10 +8,12 @@ use App\Http\Requests\CreateSessionRequest;
 use App\Http\Requests\UpdateSessionRequest;
 use App\Http\Resources\SessionResource;
 use App\Http\Resources\UserResource;
+use App\Models\APIError;
 use App\Models\LoginAttempt;
 use App\Models\Session;
 use App\Models\User;
 use Exception;
+use File;
 use Hash;
 use Illuminate\Http\JsonResponse;
 use Laravel\Nova\Exceptions\AuthenticationException;
@@ -113,6 +115,21 @@ class SessionController extends Controller
      */
     public function delete(Session $session): JsonResponse
     {
+        if ($session->session_id) {
+            if (File::delete(storage_path('framework/sessions/') . $session->session_id)) {
+                // Delete the session
+                $session->delete();
+                return JSONResult::success();
+            }
+
+            $apiError = new APIError();
+            $apiError->id = 40009;
+            $apiError->status = 409;
+            $apiError->title = 'Unauthorized';
+            $apiError->detail = 'There was an error when deleting the session.';
+            return JSONResult::error([$apiError]);
+        }
+
         // Delete the session
         $session->delete();
 

@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Jobs;
+
+use App\Models\KDashboard\Song as KSong;
+use App\Services\ImportAnimeSongProcessor;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+
+class ProcessImportAnimeSong implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    /**
+     * The list of people to process.
+     *
+     * @var Collection|KSong[] $kSongs
+     */
+    protected Collection|array $kSongs;
+
+    /**
+     * Create a new job instance.
+     *
+     * @param Collection|array $kSongs
+     */
+    public function __construct(Collection|array $kSongs)
+    {
+        $this->kSongs = $kSongs;
+    }
+
+    /**
+     * Execute the job.
+     *
+     * @param ImportAnimeSongProcessor $importAnimeSongProcessor
+     * @return void
+     */
+    public function handle(ImportAnimeSongProcessor $importAnimeSongProcessor)
+    {
+        $importAnimeSongProcessor->process($this->kSongs);
+    }
+}

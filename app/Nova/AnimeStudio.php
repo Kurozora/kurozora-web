@@ -60,8 +60,8 @@ class AnimeStudio extends Resource
                 ->required(),
 
             BelongsTo::make('Studio')
-                ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->sortable(),
 
             Boolean::make('Is Licensor')
                 ->sortable()

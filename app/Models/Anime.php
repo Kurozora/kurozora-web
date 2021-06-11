@@ -4,9 +4,13 @@ namespace App\Models;
 
 use App\Enums\AnimeImageType;
 use App\Enums\DayOfWeek;
+use App\Enums\SeasonOfYear;
 use App\Traits\Searchable;
 use Astrotomic\Translatable\Translatable;
 use Auth;
+use Carbon\Carbon;
+use Carbon\CarbonInterval;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Request;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -87,7 +92,7 @@ class Anime extends KModel
      * @var array
      */
     protected $casts = [
-        'synonym_title' => AsArrayObject::class,
+        'synonym_titles' => AsArrayObject::class,
         'first_aired' => 'date',
         'last_aired' => 'date',
     ];
@@ -100,6 +105,7 @@ class Anime extends KModel
     protected $appends = [
         'broadcast',
         'information_summary',
+        'runtime_string',
     ];
 
     /**
@@ -121,6 +127,38 @@ class Anime extends KModel
                 }
             }
         });
+
+        static::creating(function (Anime $anime) {
+            if (empty($anime->air_season)) {
+                $anime->air_season = $anime->generateAiringSeason();
+            }
+        });
+    }
+
+    /**
+     * The season in which the anime aired.
+     *
+     * @return ?int
+     */
+    protected function generateAiringSeason(): ?int
+    {
+        $firstAired = $this->first_aired;
+
+        if (empty($firstAired)) {
+            return null;
+        }
+
+        $winter = Carbon::createFromDate(null, 1, 1);
+        $spring = Carbon::createFromDate(null, 4, 4);
+        $summer = Carbon::createFromDate(null, 7, 7);
+        $fall = Carbon::createFromDate(null, 10, 10);
+
+        return match (true) {
+            $firstAired >= $spring && $firstAired < $summer => SeasonOfYear::Spring,
+            $firstAired >= $summer && $firstAired < $fall => SeasonOfYear::Summer,
+            $firstAired >= $fall && $firstAired < $winter => SeasonOfYear::Fall,
+            default => SeasonOfYear::Winter,
+        };
     }
 
     /**
@@ -136,6 +174,49 @@ class Anime extends KModel
     }
 
     /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName(): string
+    {
+        if (Request::wantsJson()) {
+            return parent::getRouteKeyName();
+        }
+        return 'slug';
+    }
+
+    /**
+     * The season in which the anime aired.
+     *
+     * @param $value
+     * @return string|null
+     */
+    public function getAirSeasonAttribute($value): ?string
+    {
+        if ($value == null) {
+            return null;
+        }
+        return SeasonOfYear::fromValue($value)->description;
+    }
+
+    /**
+     * The air time of the anime.
+     *
+     * @param $value
+     * @return string|null
+     */
+    public function getAirTimeAttribute($value): ?string
+    {
+        if ($value != '00:00:00') {
+            return Carbon::createFromFormat('H:i:s', $value, 'Asia/Tokyo')
+                ->timezone('UTC')
+                ->format('H:i T');
+        }
+        return null;
+    }
+
+    /**
      * The broadcast date and time of the anime.
      *
      * @return string
@@ -145,12 +226,15 @@ class Anime extends KModel
         $broadcast = null;
         $airDay = $this->air_day;
         $airTime = $this->air_time;
+        $dayTime = now('Asia/Tokyo')->next($airDay)
+            ->setTimeFromTimeString($airTime ?? '00:00')
+            ->setTimezone('UTC');
 
-        if (!empty($airDay)) {
-            $broadcast .= DayOfWeek::fromValue($airDay)->description ?? '-';
+        if (!empty($airDay) || $airDay == DayOfWeek::Sunday) {
+            $broadcast .= $dayTime->getTranslatedDayName();
         }
         if (!empty($airTime)) {
-            $broadcast .= __('at') . $airTime;
+            $broadcast .= ' ' . __('at') . ' ' . $dayTime->format('H:i e');
         }
 
         return $broadcast ?? '-';
@@ -169,18 +253,34 @@ class Anime extends KModel
         $episodesCount = $this->episode_count ?? null;
         $duration = $this->runtime ?? null;
         $firstAiredYear = $this->first_aired;
+        $airSeason = $this->air_season;
 
         if (!empty($episodesCount)) {
-            $informationSummary .= ' · ' . $episodesCount . 'eps';
+            $informationSummary .= ' · ' . $episodesCount . match ($episodesCount) {
+                1 => 'ep',
+                default => 'eps',
+            };
         }
         if (!empty($duration)) {
-            $informationSummary .= ' · ' . $duration . 'min';
+            $informationSummary .= ' · ' . $duration / 60 . 'min';
         }
         if (!empty($firstAiredYear)) {
-            $informationSummary .= ' · ' . $firstAiredYear->format('Y');
+            $informationSummary .= ' · ' . $airSeason . ' ' . $firstAiredYear->format('Y');
         }
 
         return $informationSummary;
+    }
+
+    /**
+     * Ge the anime's duration as a humanly readable string.
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function getRuntimeStringAttribute(): string
+    {
+        $runtime = $this->runtime ?? 0;
+        return CarbonInterval::seconds($runtime)->cascade()->forHumans();
     }
 
     /**

@@ -20,12 +20,13 @@ class CreateAnimesTable extends Migration
     {
         Schema::create(Anime::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('anidb_id')->nullable();
-            $table->unsignedInteger('anilist_id')->nullable();
-            $table->string('imdb_id')->nullable();
-            $table->unsignedInteger('kitsu_id')->nullable();
-            $table->unsignedInteger('mal_id')->nullable();
-            $table->unsignedInteger('tvdb_id')->nullable();
+            $table->unsignedInteger('anidb_id')->unique()->nullable();
+            $table->unsignedInteger('anilist_id')->unique()->nullable();
+            $table->string('imdb_id')->unique()->nullable();
+            $table->unsignedInteger('kitsu_id')->unique()->nullable();
+            $table->unsignedInteger('mal_id')->unique()->nullable();
+            $table->string('notify_id')->unique()->nullable();
+            $table->unsignedInteger('tvdb_id')->unique()->nullable();
             $table->string('slug');
             $table->string('original_title');
             $table->json('synonym_titles')->nullable();
@@ -34,8 +35,6 @@ class CreateAnimesTable extends Migration
             $table->unsignedBigInteger('media_type_id')->nullable();
             $table->unsignedBigInteger('source_id')->nullable();
             $table->unsignedBigInteger('status_id')->nullable();
-            $table->string('network')->nullable();
-            $table->string('producer')->nullable();
             $table->integer('episode_count')->default(0);
             $table->integer('season_count')->default(0);
             $table->integer('rating_count')->default(0);
@@ -43,9 +42,10 @@ class CreateAnimesTable extends Migration
             $table->string('video_url')->nullable();
             $table->date('first_aired')->nullable();
             $table->date('last_aired')->nullable();
-            $table->unsignedTinyInteger('runtime')->default(0);
+            $table->unsignedMediumInteger('runtime')->default(0);
             $table->time('air_time')->nullable();
-            $table->unsignedInteger('air_day')->nullable();
+            $table->unsignedTinyInteger('air_day')->nullable();
+            $table->unsignedTinyInteger('air_season')->nullable();
             $table->boolean('is_nsfw')->default(false);
             $table->string('copyright')->nullable();
             $table->timestamps();
