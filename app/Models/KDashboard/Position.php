@@ -14,7 +14,7 @@ class Position extends Model
      *
      * @var string|null
      */
-    protected $connection = 'pgsql';
+    protected $connection = 'KDashboard';
 
     // Table name
     const TABLE_NAME = 'position';
