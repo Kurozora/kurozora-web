@@ -38,7 +38,7 @@ return [
     | or any other location as required by the application or its packages.
     */
 
-    'version' => '1.2.0-alpha.84',
+    'version' => '1.2.0-alpha.85',
 
     /*
     |--------------------------------------------------------------------------
@@ -89,7 +89,9 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://kurozora.app'),
+    'domain' => env('DOMAIN_NAME', 'kurozora.app'),
+
+    'url' => env('APP_URL', 'https://'.config('app.domain')),
 
     'asset_url' => env('ASSET_URL', null),
 

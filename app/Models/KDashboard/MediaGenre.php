@@ -15,7 +15,7 @@ class MediaGenre extends Model
      *
      * @var string|null
      */
-    protected $connection = 'pgsql';
+    protected $connection = 'KDashboard';
 
     const TABLE_NAME = 'media_genre';
     protected $table = self::TABLE_NAME;
