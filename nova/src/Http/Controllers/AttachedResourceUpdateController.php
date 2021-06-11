@@ -91,12 +91,20 @@ class AttachedResourceUpdateController extends Controller
      */
     protected function findPivot(NovaRequest $request, $model)
     {
-        $pivot = $model->{$request->viaRelationship}()->getPivotAccessor();
+        $relation = $model->{$request->viaRelationship}();
 
-        return $model->{$request->viaRelationship}()
+        if ($request->viaPivotId) {
+            tap($relation->getPivotClass(), function ($pivotClass) use ($relation, $request) {
+                $relation->wherePivot((new $pivotClass())->getKeyName(), $request->viaPivotId);
+            });
+        }
+
+        $accessor = $relation->getPivotAccessor();
+
+        return $relation
                     ->withoutGlobalScopes()
                     ->lockForUpdate()
-                    ->findOrFail($request->relatedResourceId)->{$pivot};
+                    ->findOrFail($request->relatedResourceId)->{$accessor};
     }
 
     /**

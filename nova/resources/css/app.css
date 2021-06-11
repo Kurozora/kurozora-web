@@ -717,6 +717,12 @@ textarea.form-input:read-only,
   transform: perspective(1px) translateY(-50%);
 }
 
+/* Override Place Field Positioning For Modal
+-----------------------------------------------------------------------------*/
+.modal .ap-dropdown-menu {
+  position: relative !important;
+}
+
 /* Override Form Field Widths For ConfirmActionModal
 -----------------------------------------------------------------------------*/
 .action .w-1\/5 {

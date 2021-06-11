@@ -33,7 +33,7 @@ class LensController extends Controller
         $paginator = $lens->query($request, $request->newQuery());
 
         if ($paginator instanceof Builder) {
-            $paginator = $paginator->simplePaginate($request->perPage ?? $request->resource()::perPageOptions()[0]);
+            $paginator = $paginator->simplePaginate($request->perPage());
         }
 
         return response()->json([

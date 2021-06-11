@@ -43,6 +43,13 @@ class Create extends Page
 
     /**
      * Run the inline create relation.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @param  string  $uriKey
+     * @param  callable  $fieldCallback
+     * @return void
+     *
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
     public function runInlineCreate(Browser $browser, $uriKey, callable $fieldCallback)
     {
@@ -60,6 +67,9 @@ class Create extends Page
 
     /**
      * Click the create button.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
      */
     public function create(Browser $browser)
     {
@@ -68,6 +78,9 @@ class Create extends Page
 
     /**
      * Click the create and add another button.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
      */
     public function createAndAddAnother(Browser $browser)
     {
@@ -77,7 +90,7 @@ class Create extends Page
     /**
      * Assert that the browser is on the page.
      *
-     * @param  Browser  $browser
+     * @param  \Laravel\Dusk\Browser  $browser
      * @return void
      */
     public function assert(Browser $browser)
@@ -87,6 +100,10 @@ class Create extends Page
 
     /**
      * Assert that there are no search results.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @param  string  $resourceName
+     * @return void
      */
     public function assertNoRelationSearchResults(Browser $browser, $resourceName)
     {

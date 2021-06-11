@@ -30,7 +30,7 @@ class StorePendingAttachment
      * Attach a pending attachment to the field.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return void
+     * @return string
      */
     public function __invoke(Request $request)
     {

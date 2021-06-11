@@ -329,7 +329,7 @@ export default {
     },
 
     /**
-     * Determing if the field is a Vapor field.
+     * Determining if the field is a Vapor field.
      */
     isVaporField() {
       return this.field.component == 'vapor-file-field'

@@ -62,7 +62,7 @@ class ActionEvent extends Model
      *
      * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return static
      */
     public static function forResourceCreate($user, $model)
     {
@@ -89,7 +89,7 @@ class ActionEvent extends Model
      *
      * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return static
      */
     public static function forResourceUpdate($user, $model)
     {
@@ -117,7 +117,7 @@ class ActionEvent extends Model
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @param  \Illuminate\Database\Eloquent\Model  $parent
      * @param  \Illuminate\Database\Eloquent\Model  $pivot
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return static
      */
     public static function forAttachedResource(NovaRequest $request, $parent, $pivot)
     {
@@ -145,7 +145,7 @@ class ActionEvent extends Model
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @param  \Illuminate\Database\Eloquent\Model  $parent
      * @param  \Illuminate\Database\Eloquent\Model  $pivot
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return static
      */
     public static function forAttachedResourceUpdate(NovaRequest $request, $parent, $pivot)
     {

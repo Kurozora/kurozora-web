@@ -10,13 +10,16 @@ use Laravel\Nova\Contracts\PivotableField;
 use Laravel\Nova\Contracts\RelatableField;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Query\Builder;
-use Laravel\Nova\Rules\NotAttached;
 use Laravel\Nova\Rules\RelatableAttachment;
 use Laravel\Nova\TrashedStatus;
 
 class BelongsToMany extends Field implements DeletableContract, ListableField, PivotableField, RelatableField
 {
-    use Deletable, DetachesPivotModels, FormatsRelatableDisplayValues, Searchable;
+    use Deletable,
+        DetachesPivotModels,
+        FormatsRelatableDisplayValues,
+        ManyToManyCreationRules,
+        Searchable;
 
     /**
      * The field's component.
@@ -107,6 +110,8 @@ class BelongsToMany extends Field implements DeletableContract, ListableField, P
         $this->actionsCallback = function () {
             return [];
         };
+
+        $this->noDuplicateRelations();
     }
 
     /**
@@ -160,9 +165,7 @@ class BelongsToMany extends Field implements DeletableContract, ListableField, P
     public function getCreationRules(NovaRequest $request)
     {
         return array_merge_recursive(parent::getCreationRules($request), [
-            $this->attribute => [
-                new NotAttached($request, $request->findModelOrFail()),
-            ],
+            $this->attribute => array_filter($this->getManyToManyCreationRules($request)),
         ]);
     }
 

@@ -394,6 +394,13 @@ trait ResolvesFields
             ->authorized($request);
     }
 
+    /**
+     * Resolve the detail fields for the resource.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param  \Closure  $filter
+     * @return \Laravel\Nova\Fields\FieldCollection
+     */
     protected function resolveFieldsForDetail(NovaRequest $request, Closure $filter)
     {
         $fields = $this->resolveNonPivotFields($request);
@@ -652,11 +659,17 @@ trait ResolvesFields
      */
     protected function pivotFieldsFor(NovaRequest $request, $relatedResource)
     {
-        $field = $this->availableFields($request)->first(function ($field) use ($relatedResource) {
-            return isset($field->resourceName) &&
-                   $field->resourceName == $relatedResource &&
-                   ($field instanceof BelongsToMany || $field instanceof MorphToMany);
+        $fields = $this->availableFields($request)->filter(function ($field) use ($relatedResource) {
+            return ($field instanceof BelongsToMany || $field instanceof MorphToMany) &&
+                        isset($field->resourceName) && $field->resourceName == $relatedResource;
         });
+
+        $field = $fields->count() === 1
+                ? $fields->first(function ($field) {
+                    return $field;
+                }) : $fields->first(function ($field) use ($request) {
+                    return $field->manyToManyRelationship === $request->viaRelationship;
+                });
 
         if ($field && isset($field->fieldsCallback)) {
             return FieldCollection::make(array_values(
@@ -678,11 +691,17 @@ trait ResolvesFields
      */
     public function pivotAccessorFor(NovaRequest $request, $relatedResource)
     {
-        $field = $this->availableFields($request)->first(function ($field) use ($relatedResource) {
-            return ($field instanceof BelongsToMany ||
-                    $field instanceof MorphToMany) &&
-                   $field->resourceName == $relatedResource;
+        $fields = $this->availableFields($request)->filter(function ($field) use ($relatedResource) {
+            return ($field instanceof BelongsToMany || $field instanceof MorphToMany) &&
+                        isset($field->resourceName) && $field->resourceName == $relatedResource;
         });
+
+        $field = $fields->count() === 1
+                ? $fields->first(function ($field) {
+                    return $field;
+                }) : $fields->first(function ($field) use ($request) {
+                    return $field->manyToManyRelationship === $request->viaRelationship;
+                });
 
         return $this->resource->{$field->manyToManyRelationship}()->getPivotAccessor();
     }

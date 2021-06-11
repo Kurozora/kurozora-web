@@ -14,6 +14,7 @@ use Laravel\Nova\Query\Builder;
 use Laravel\Nova\Resource;
 use Laravel\Nova\Rules\Relatable;
 use Laravel\Nova\TrashedStatus;
+use Laravel\Nova\Util;
 
 class MorphTo extends Field implements RelatableField
 {
@@ -192,7 +193,7 @@ class MorphTo extends Field implements RelatableField
             } else {
                 $resource = new $this->resourceClass($value);
 
-                $this->morphToId = optional(ID::forResource($resource))->value ?? $this->morphToId;
+                $this->morphToId = Util::safeInt($this->morphToId);
 
                 $this->value = $this->formatDisplayValue(
                     $value, Nova::resourceForModel($value)
@@ -393,7 +394,7 @@ class MorphTo extends Field implements RelatableField
             'avatar' => $resource->resolveAvatarUrl($request),
             'display' => $this->formatDisplayValue($resource, $relatedResource),
             'subtitle' => $resource->subtitle(),
-            'value' => $resource->getKey(),
+            'value' => Util::safeInt($resource->getKey()),
         ]);
     }
 

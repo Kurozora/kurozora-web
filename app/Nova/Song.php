@@ -7,6 +7,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Validator;
@@ -54,13 +55,16 @@ class Song extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
 
+            Number::make('MAL ID')
+                ->hideFromIndex()
+                ->help('The ID of the Song as noted on MyAnimeList.'),
+
             Text::make('Title')
                 ->sortable()
                 ->required(),
 
             Text::make('Artist')
-                ->sortable()
-                ->required(),
+                ->sortable(),
 
             HasMany::make('Anime', 'anime_songs', AnimeSong::class),
         ];
@@ -73,7 +77,7 @@ class Song extends Resource
      */
     public function title(): string
     {
-        return $this->title . ' by ' . $this->artist . ' (ID: ' . $this->id . ')';
+        return $this->title . ' by ' . $this->artist ?? 'Unknown' . ' (ID: ' . $this->id . ')';
     }
 
     /**

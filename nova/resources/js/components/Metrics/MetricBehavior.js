@@ -1,16 +1,19 @@
 export default {
   created() {
-    Nova.$on('metric-refresh', () => {
-      this.fetch()
-    })
+    Nova.$on('metric-refresh', this.fetch)
+
+    Nova.$on('resources-deleted', this.fetch)
+    Nova.$on('resources-restored', this.fetch)
 
     if (this.card.refreshWhenActionRuns) {
-      Nova.$on('action-executed', () => this.fetch())
+      Nova.$on('action-executed', this.fetch)
     }
   },
 
   destroyed() {
-    Nova.$off('metric-refresh')
-    Nova.$off('action-executed')
+    Nova.$off('metric-refresh', this.fetch)
+    Nova.$off('resources-deleted', this.fetch)
+    Nova.$off('resources-restored', this.fetch)
+    Nova.$off('action-executed', this.fetch)
   },
 }

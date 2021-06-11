@@ -60,6 +60,7 @@
               :options="availableResources"
               :label="'display'"
               :selected="selectedResourceId"
+              :value="selectedResourceId"
             >
               <option value="" disabled selected>
                 {{ __('Choose :field', { field: field.name }) }}
@@ -163,6 +164,9 @@ export default {
     viaRelationship: {
       default: '',
     },
+    viaPivotId: {
+      default: null,
+    },
     polymorphic: {
       default: false,
     },
@@ -255,6 +259,7 @@ export default {
               editing: true,
               editMode: 'update-attached',
               viaRelationship: this.viaRelationship,
+              viaPivotId: this.viaPivotId,
             },
           }
         )
@@ -405,6 +410,7 @@ export default {
           params: {
             editing: true,
             editMode: 'update-attached',
+            viaPivotId: this.viaPivotId,
           },
         }
       )

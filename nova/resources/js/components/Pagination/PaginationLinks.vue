@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-20 rounded-b">
+  <div class="bg-20 rounded-b-lg">
     <nav class="flex items-center">
       <div class="flex text-sm">
         <!-- First Link -->

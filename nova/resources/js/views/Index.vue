@@ -2,6 +2,7 @@
   <loading-view
     :loading="initialLoading"
     :dusk="resourceName + '-index-component'"
+    :data-relationship="viaRelationship"
   >
     <custom-index-header
       v-if="!viaResource"
@@ -449,7 +450,7 @@ export default {
     // Bind the keydown even listener when the router is visited if this
     // component is not a relation on a Detail page
     if (!this.viaResource && !this.viaResourceId) {
-      document.addEventListener('keydown', this.handleKeydown)
+      Nova.addShortcut('c', this.handleKeydown)
     }
 
     this.initializeSearchFromQueryString()
@@ -498,14 +499,16 @@ export default {
   },
 
   /**
-   * Unbind the keydown even listener when the component is destroyed
+   * Unbind the keydown even listener when the before component is destroyed
    */
-  destroyed() {
+  beforeDestroy() {
     if (this.pollingListener) {
       clearInterval(this.pollingListener)
     }
 
-    document.removeEventListener('keydown', this.handleKeydown)
+    if (!this.viaResource && !this.viaResourceId) {
+      Nova.disableShortcut('c')
+    }
   },
 
   watch: {
@@ -523,11 +526,6 @@ export default {
       // `c`
       if (
         this.authorizedToCreate &&
-        !e.ctrlKey &&
-        !e.altKey &&
-        !e.metaKey &&
-        !e.shiftKey &&
-        e.keyCode == 67 &&
         e.target.tagName != 'INPUT' &&
         e.target.tagName != 'TEXTAREA' &&
         e.target.contentEditable != 'true'
@@ -685,10 +683,11 @@ export default {
             viaResourceId: this.viaResourceId,
             viaRelationship: this.viaRelationship,
             relationshipType: this.relationshipType,
+            display: 'index',
           },
         })
         .then(response => {
-          this.actions = _.filter(response.data.actions, a => a.showOnIndex)
+          this.actions = response.data.actions
           this.pivotActions = response.data.pivotActions
         })
     },

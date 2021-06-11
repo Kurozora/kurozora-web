@@ -3,6 +3,7 @@
 namespace Laravel\Nova\Fields;
 
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Util;
 
 class ID extends Field
 {
@@ -12,6 +13,13 @@ class ID extends Field
      * @var string
      */
     public $component = 'id-field';
+
+    /**
+     * The field's resolved pivot value.
+     *
+     * @var mixed
+     */
+    public $pivotValue = null;
 
     /**
      * Create a new field.
@@ -84,13 +92,17 @@ class ID extends Field
      */
     protected function resolveAttribute($resource, $attribute)
     {
-        $value = parent::resolveAttribute($resource, $attribute);
+        if (! is_null($resource)) {
+            $pivotValue = optional($resource->pivot)->getKey();
 
-        if (is_int($value) && $value >= 9007199254740991) {
-            return (string) $value;
+            if (is_int($pivotValue) || is_string($pivotValue)) {
+                $this->pivotValue = $pivotValue;
+            }
         }
 
-        return $value;
+        return Util::safeInt(
+            parent::resolveAttribute($resource, $attribute)
+        );
     }
 
     /**
@@ -120,5 +132,17 @@ class ID extends Field
         $this->showOnUpdate = false;
 
         return $this;
+    }
+
+    /**
+     * Prepare the field for JSON serialization.
+     *
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return array_merge(parent::jsonSerialize(), array_filter([
+            'pivotValue' => $this->pivotValue ?? null,
+        ]));
     }
 }

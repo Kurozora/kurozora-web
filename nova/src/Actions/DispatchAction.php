@@ -14,12 +14,14 @@ class DispatchAction
     /**
      * Dispatch the given action.
      *
-     * @param  \Laravel\Nova\Http\Requests\ActionRequest $request
-     * @param  \Laravel\Nova\Actions\Action $action
-     * @param  string $method
-     * @param  \Illuminate\Support\Collection $models
-     * @param  \Laravel\Nova\Fields\ActionFields $fields
+     * @param  \Laravel\Nova\Http\Requests\ActionRequest  $request
+     * @param  \Laravel\Nova\Actions\Action  $action
+     * @param  string  $method
+     * @param  \Illuminate\Support\Collection  $models
+     * @param  \Laravel\Nova\Fields\ActionFields  $fields
      * @return mixed
+     *
+     * @throws \Throwable
      */
     public static function forModels(
         ActionRequest $request,
@@ -55,6 +57,8 @@ class DispatchAction
      * @param  string  $method
      * @param  \Illuminate\Support\Collection  $models
      * @return void
+     *
+     * @throws \Throwable
      */
     protected static function queueForModels(ActionRequest $request, Action $action, $method, Collection $models)
     {

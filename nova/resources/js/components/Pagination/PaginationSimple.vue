@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-20 rounded-b">
+  <div class="bg-20 rounded-b-lg">
     <nav class="flex justify-between items-center">
       <!-- Previous Link -->
       <button

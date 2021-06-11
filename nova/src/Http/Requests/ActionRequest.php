@@ -20,9 +20,14 @@ class ActionRequest extends NovaRequest
     public function action()
     {
         return once(function () {
-            return $this->availableActions()->first(function ($action) {
-                return $action->uriKey() == $this->query('action');
-            }) ?: abort($this->actionExists() ? 403 : 404);
+            $hasResources = ! empty($this->resources);
+
+            return $this->availableActions()
+                        ->filter(function ($action) use ($hasResources) {
+                            return $hasResources ? true : $action->isStandalone();
+                        })->first(function ($action) {
+                            return $action->uriKey() == $this->query('action');
+                        }) ?: abort($this->actionExists() ? 403 : 404);
         });
     }
 
@@ -84,7 +89,9 @@ class ActionRequest extends NovaRequest
         $this->toSelectedResourceQuery()->when(! $this->forAllMatchingResources(), function ($query) {
             $query->whereKey(explode(',', $this->resources))
                 ->latest($this->model()->getQualifiedKeyName());
-        })->chunk($count, function ($chunk) use ($callback, &$output) {
+        })->cursor()
+        ->chunk($count)
+        ->each(function ($chunk) use ($callback, &$output) {
             $output[] = $callback($this->mapChunk($chunk));
         });
 

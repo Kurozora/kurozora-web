@@ -15,9 +15,9 @@
           {{ field.resourceLabel }}: {{ field.value }}
         </router-link>
       </span>
-      <span v-else-if="field.value"
-        >{{ field.resourceLabel || field.morphToType }}: {{ field.value }}</span
-      >
+      <span v-else-if="field.value">
+        {{ field.resourceLabel || field.morphToType }}: {{ field.value }}
+      </span>
       <span v-else>-</span>
     </span>
   </div>

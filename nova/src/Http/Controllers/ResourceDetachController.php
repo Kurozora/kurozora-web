@@ -23,23 +23,52 @@ class ResourceDetachController extends Controller
             abort_unless($resource->hasRelatableField($request, $request->viaRelationship), 409);
         })->model();
 
-        $request->chunks(150, function ($models) use ($request, $parent) {
+        $relation = $parent->{$request->viaRelationship}();
+
+        $accessor = $relation->getPivotAccessor();
+
+        $accessorKeyName = transform($relation->getPivotClass(), function ($pivotClass) {
+            return (new $pivotClass())->getKeyName();
+        });
+
+        $inPivots = $request->resources !== 'all' ? $request->pivots : null;
+
+        $request->chunks(150, function ($models) use ($accessor, $accessorKeyName, $inPivots, $parent, $request) {
             foreach ($models as $model) {
-                $this->deletePivotFields(
-                    $request, $resource = $request->newResourceWith($model),
-                    $pivot = $model->{$parent->{$request->viaRelationship}()->getPivotAccessor()}
-                );
+                $pivot = $model->{$accessor};
 
-                $pivot->delete();
-
-                tap(Nova::actionEvent(), function ($actionEvent) use ($pivot, $model, $parent, $request) {
-                    DB::connection($actionEvent->getConnectionName())->table('action_events')->insert(
-                        $actionEvent->forResourceDetach(
-                            $request->user(), $parent, collect([$model]), $pivot->getMorphClass()
-                        )->map->getAttributes()->all()
+                if (empty($inPivots) || in_array($pivot->getAttribute($accessorKeyName), $inPivots)) {
+                    $this->deletePivot(
+                        $request, $pivot, $model, $parent,
                     );
-                });
+                }
             }
+        });
+    }
+
+    /**
+     * Delete pivot relations from model.
+     *
+     * @param  \Laravel\Nova\Http\Requests\DetachResourceRequest  $request
+     * @param  \Illuminate\Database\Eloquent\Model  $pivot
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param  \Illuminate\Database\Eloquent\Model  $parent
+     * @return void
+     */
+    protected function deletePivot(DetachResourceRequest $request, $pivot, $model, $parent)
+    {
+        $this->deletePivotFields(
+            $request, $resource = $request->newResourceWith($model), $pivot
+        );
+
+        $pivot->delete();
+
+        tap(Nova::actionEvent(), function ($actionEvent) use ($pivot, $model, $parent, $request) {
+            DB::connection($actionEvent->getConnectionName())->table('action_events')->insert(
+                $actionEvent->forResourceDetach(
+                    $request->user(), $parent, collect([$model]), $pivot->getMorphClass()
+                )->map->getAttributes()->all()
+            );
         });
     }
 
@@ -48,7 +77,7 @@ class ResourceDetachController extends Controller
      *
      * @param  \Laravel\Nova\Http\Requests\DetachResourceRequest  $request
      * @param  \Laravel\Nova\Resource  $resource
-     * @param  \Illuminate\Database\Eloquent\Model
+     * @param  \Illuminate\Database\Eloquent\Model  $pivot
      * @return void
      */
     protected function deletePivotFields(DetachResourceRequest $request, $resource, $pivot)

@@ -11,7 +11,7 @@
       }"
       class="no-underline dim text-primary font-bold"
     >
-      {{ field.value }}
+      {{ field.pivotValue || field.value }}
     </router-link>
     <p v-else>&mdash;</p>
   </div>

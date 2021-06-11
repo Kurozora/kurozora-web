@@ -35,7 +35,7 @@ class FilterDecoder
     /**
      * Decode the given filters.
      *
-     * @return array
+     * @return \Illuminate\Support\Collection
      */
     public function filters()
     {

@@ -31,10 +31,16 @@ export default {
     document.body.appendChild(this.modalBg)
   },
 
+  mounted() {
+    Nova.pauseShortcuts()
+  },
+
   destroyed() {
     document.removeEventListener('keydown', this.handleEscape)
     document.body.classList.remove('overflow-hidden')
     document.body.removeChild(this.modalBg)
+
+    Nova.resumeShortcuts()
   },
 
   data: () => ({ modalBg: null }),

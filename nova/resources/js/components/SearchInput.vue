@@ -187,14 +187,21 @@ export default {
   },
 
   mounted() {
-    document.addEventListener('keydown', e => {
-      if (this.show && (e.keyCode == 9 || e.keyCode == 27)) {
-        setTimeout(() => this.close(), 50)
-      }
-    })
+    document.addEventListener('keydown', this.handleEscape)
+  },
+
+  beforeDestroy() {
+    document.removeEventListener('keydown', this.handleEscape)
   },
 
   methods: {
+    handleEscape(e) {
+      // 'tab' or 'escape'
+      if (this.show && (e.keyCode == 9 || e.keyCode == 27)) {
+        setTimeout(() => this.close(), 50)
+      }
+    },
+
     getTrackedByKey(option) {
       return _.get(option, this.trackBy)
     },
