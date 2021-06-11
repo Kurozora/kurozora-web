@@ -15,7 +15,7 @@ class AnimeStaff extends Model
      *
      * @var string|null
      */
-    protected $connection = 'pgsql';
+    protected $connection = 'KDashboard';
 
     // Table name
     const TABLE_NAME = 'anime_staff';
