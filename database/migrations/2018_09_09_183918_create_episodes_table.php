@@ -20,7 +20,7 @@ class CreateEpisodesTable extends Migration
             $table->unsignedBigInteger('season_id');
             $table->unsignedInteger('number');
             $table->string('preview_image')->nullable();
-            $table->unsignedTinyInteger('duration')->default(0);
+            $table->unsignedMediumInteger('duration')->default(0);
             $table->dateTime('first_aired')->nullable();
             $table->boolean('verified')->default(false);
             $table->timestamps();

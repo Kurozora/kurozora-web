@@ -34,10 +34,10 @@ class EpisodeFactory extends Factory
             'season_id'     => $animeSeason,
             'number'        => $number++,
             'title'         => $this->faker->sentence,
-            'overview'      => $this->faker->realText(),
+            'synopsis'      => $this->faker->realText(),
             'ja'            => [
                 'title'     => $jaFaker->sentence,
-                'overview'  => $jaFaker->realText(),
+                'synopsis'  => $jaFaker->realText(),
             ],
             'first_aired'   => $this->faker->dateTime(),
             'created_at'    => now(),

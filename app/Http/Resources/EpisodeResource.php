@@ -35,7 +35,7 @@ class EpisodeResource extends JsonResource
             'attributes'    => [
                 'number'        => $episode->number,
                 'title'         => $episode->title,
-                'overview'      => $episode->overview,
+                'synopsis'      => $episode->synopsis,
                 'previewImage'  => $episode->preview_image,
                 'firstAired'    => $firstAired,
                 'duration'      => $episode->duration,
