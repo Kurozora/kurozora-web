@@ -19,8 +19,6 @@ class CreateEpisodesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('season_id');
             $table->unsignedInteger('number');
-            $table->string('title');
-            $table->text('overview')->nullable();
             $table->string('preview_image')->nullable();
             $table->unsignedTinyInteger('duration')->default(0);
             $table->dateTime('first_aired')->nullable();
