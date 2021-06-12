@@ -2,7 +2,7 @@
     {
         "id": 2,
         "type": "show",
-        "href": "\/api\/v1\/anime\/2",
+        "href": "\/v1\/anime\/2",
         "attributes": {
             "anidbID": null,
             "anilistID": null,
@@ -10,27 +10,25 @@
             "imdbID": null,
             "malID": null,
             "title": "Be a good person!",
-            "tagline": "Ipsum a natus itaque doloribus expedita aspernatur.",
+            "tagline": "Voluptatum et ab quo veritatis eveniet.",
             "synopsis": "A story about being a good person.",
             "genres": [],
             "tvRating": {
-                "name": "t",
-                "description": "Et facilis sit fugit eos."
+                "name": "j",
+                "description": "Eaque et veritatis sit molestiae voluptates cum deleniti."
             },
             "type": {
-                "name": "Sydnee Prohaska",
-                "description": "Sed aut recusandae natus molestias nostrum sit sed."
+                "name": "Dr. Leonard Bahringer",
+                "description": "Voluptatem minus quos assumenda nemo quasi."
             },
             "source": {
-                "name": "Estella Halvorson",
-                "description": "Porro numquam omnis quia assumenda accusamus fugiat."
+                "name": "Reid Cummerata",
+                "description": "Id est provident quae sit."
             },
             "status": {
-                "name": "magni recusandae",
-                "description": "Soluta necessitatibus dolor rerum asperiores est repellat optio delectus."
+                "name": "voluptate eligendi",
+                "description": "Numquam non voluptates dolore architecto."
             },
-            "network": null,
-            "producer": null,
             "episodeCount": "0",
             "seasonCount": "0",
             "averageRating": "4.0",
@@ -38,13 +36,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "1985-07-07",
-            "lastAired": "1985-12-22",
-            "runtime": "16",
-            "airTime": "02:55",
+            "firstAired": "2019-12-13",
+            "lastAired": "2020-03-06",
+            "runtime": "22",
+            "airTime": "10:14 UTC",
             "airDay": null,
-            "isNSFW": false,
-            "copyright": "\u00a9 2006 Johnson-Fadel",
+            "isNSFW": true,
+            "copyright": "\u00ae 1993 Sipes-Weber",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,
@@ -54,7 +52,7 @@
     {
         "id": 1,
         "type": "show",
-        "href": "\/api\/v1\/anime\/1",
+        "href": "\/v1\/anime\/1",
         "attributes": {
             "anidbID": null,
             "anilistID": null,
@@ -62,27 +60,25 @@
             "imdbID": null,
             "malID": null,
             "title": "Awesome Show",
-            "tagline": "Dolorum minus harum molestiae aut aut aperiam.",
+            "tagline": "Unde voluptatem perferendis quaerat aut et.",
             "synopsis": "A very awesome show.",
             "genres": [],
             "tvRating": {
-                "name": "t",
-                "description": "Et facilis sit fugit eos."
+                "name": "j",
+                "description": "Eaque et veritatis sit molestiae voluptates cum deleniti."
             },
             "type": {
-                "name": "Sydnee Prohaska",
-                "description": "Sed aut recusandae natus molestias nostrum sit sed."
+                "name": "Dr. Leonard Bahringer",
+                "description": "Voluptatem minus quos assumenda nemo quasi."
             },
             "source": {
-                "name": "Estella Halvorson",
-                "description": "Porro numquam omnis quia assumenda accusamus fugiat."
+                "name": "Reid Cummerata",
+                "description": "Id est provident quae sit."
             },
             "status": {
-                "name": "magni recusandae",
-                "description": "Soluta necessitatibus dolor rerum asperiores est repellat optio delectus."
+                "name": "voluptate eligendi",
+                "description": "Numquam non voluptates dolore architecto."
             },
-            "network": null,
-            "producer": null,
             "episodeCount": "0",
             "seasonCount": "0",
             "averageRating": "2.5",
@@ -90,13 +86,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "2015-11-18",
-            "lastAired": "2016-01-27",
-            "runtime": "21",
-            "airTime": "12:20",
+            "firstAired": "1978-03-21",
+            "lastAired": "1978-06-13",
+            "runtime": "17",
+            "airTime": "13:18 UTC",
             "airDay": null,
-            "isNSFW": false,
-            "copyright": "\u2117 1993 Bogan, Pfannerstill and Lubowitz",
+            "isNSFW": true,
+            "copyright": "\u00a9 2014 Lehner-Graham",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,

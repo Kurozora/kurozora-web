@@ -23,6 +23,7 @@ class StudioFactory extends Factory
     {
         return [
             'name'          => $this->faker->unique()->company,
+            'type'          => 'anime',
             'logo_url'      => $this->faker->imageUrl(),
             'about'         => $this->faker->paragraph(mt_rand(10, 30)),
             'founded'       => $this->faker->date(),

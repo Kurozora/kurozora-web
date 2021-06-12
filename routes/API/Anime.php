@@ -9,31 +9,34 @@ Route::prefix('/anime')
             ->middleware('auth.kurozora:optional')
             ->name('.search');
 
-        Route::get('/{anime}', [AnimeController::class, 'view'])
-            ->middleware('auth.kurozora:optional')
-            ->name('.view');
+        Route::prefix('{anime}')
+            ->group(function () {
+                Route::get('/', [AnimeController::class, 'view'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.view');
 
-        Route::get('/{anime}/characters', [AnimeController::class, 'characters'])
-            ->name('.characters');
+                Route::get('/characters', [AnimeController::class, 'characters'])
+                    ->name('.characters');
 
-        Route::get('/{anime}/cast', [AnimeController::class, 'cast'])
-            ->name('.cast');
+                Route::get('/cast', [AnimeController::class, 'cast'])
+                    ->name('.cast');
 
-        Route::get('/{anime}/related-shows', [AnimeController::class, 'relatedShows'])
-            ->middleware('auth.kurozora:optional')
-            ->name('.related-shows');
+                Route::get('/related-shows', [AnimeController::class, 'relatedShows'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.related-shows');
 
-        Route::get('/{anime}/seasons', [AnimeController::class, 'seasons'])
-            ->name('.seasons');
+                Route::get('/seasons', [AnimeController::class, 'seasons'])
+                    ->name('.seasons');
 
-        Route::get('/{anime}/staff', [AnimeController::class, 'staff'])
-            ->name('.staff');
+                Route::get('/staff', [AnimeController::class, 'staff'])
+                    ->name('.staff');
 
-        Route::get('/{anime}/studios', [AnimeController::class, 'studios'])
-            ->middleware('auth.kurozora:optional')
-            ->name('.studios');
+                Route::get('/studios', [AnimeController::class, 'studios'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.studios');
 
-        Route::post('/{anime}/rate', [AnimeController::class, 'rateAnime'])
-            ->middleware('auth.kurozora')
-            ->name('.rate');
+                Route::post('/rate', [AnimeController::class, 'rateAnime'])
+                    ->middleware('auth.kurozora')
+                ->name('.rate');
+            });
     });

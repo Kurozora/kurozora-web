@@ -32,7 +32,7 @@ class ResetPasswordTest extends TestCase
      */
     function password_reset_cannot_be_requested_with_an_invalid_email_address_format()
     {
-        $response = $this->json('POST', '/api/v1/users/reset-password', [
+        $response = $this->json('POST', 'v1/users/reset-password', [
             'email' => 'not_an_email'
         ]);
         $response->assertUnsuccessfulAPIResponse();
@@ -46,7 +46,7 @@ class ResetPasswordTest extends TestCase
      */
     function password_request_can_be_requested_with_known_email_address()
     {
-        $response = $this->json('POST', '/api/v1/users/reset-password', [
+        $response = $this->json('POST', 'v1/users/reset-password', [
             'email' => $this->user->email
         ]);
         $response->assertSuccessfulAPIResponse();
@@ -62,7 +62,7 @@ class ResetPasswordTest extends TestCase
     function password_reset_email_is_sent_to_known_email_address()
     {
         // Attempt to request password reset
-        $response = $this->json('POST', '/api/v1/users/reset-password', [
+        $response = $this->json('POST', 'v1/users/reset-password', [
             'email' => $this->user->email
         ]);
         $response->assertSuccessfulAPIResponse();
@@ -81,7 +81,7 @@ class ResetPasswordTest extends TestCase
      */
     function password_request_can_be_requested_with_unknown_email_address()
     {
-        $response = $this->json('POST', '/api/v1/users/reset-password', [
+        $response = $this->json('POST', 'v1/users/reset-password', [
             'email' => 'unknown@example.com'
         ]);
         $response->assertSuccessfulAPIResponse();
@@ -97,7 +97,7 @@ class ResetPasswordTest extends TestCase
     function password_reset_email_is_not_sent_to_unknown_email_address()
     {
         // Attempt to request password reset
-        $response = $this->json('POST', '/api/v1/users/reset-password', [
+        $response = $this->json('POST', 'v1/users/reset-password', [
             'email' => 'unknown@example.com'
         ]);
         $response->assertSuccessfulAPIResponse();

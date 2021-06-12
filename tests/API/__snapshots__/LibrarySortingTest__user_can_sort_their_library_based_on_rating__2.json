@@ -2,7 +2,7 @@
     {
         "id": 1,
         "type": "show",
-        "href": "\/api\/v1\/anime\/1",
+        "href": "\/v1\/anime\/1",
         "attributes": {
             "anidbID": null,
             "anilistID": null,
@@ -10,27 +10,25 @@
             "imdbID": null,
             "malID": null,
             "title": "Awesome Show",
-            "tagline": "Architecto recusandae cupiditate qui inventore dolores doloribus voluptas.",
+            "tagline": "Quis voluptate officiis est voluptas aut.",
             "synopsis": "A very awesome show.",
             "genres": [],
             "tvRating": {
-                "name": "y",
-                "description": "Tempore nesciunt ut fugiat libero iure."
+                "name": "v",
+                "description": "Voluptatem suscipit maxime ipsam sequi iste quaerat."
             },
             "type": {
-                "name": "Ova Kuvalis",
-                "description": "Debitis corporis tempora non deleniti voluptatem doloremque eius nemo."
+                "name": "Kristofer Bergnaum",
+                "description": "Accusamus rerum alias est ut laudantium perferendis veritatis occaecati."
             },
             "source": {
-                "name": "Jeffrey Gislason",
-                "description": "Sed possimus non consequatur laboriosam cumque facere doloremque."
+                "name": "Mr. Carey Champlin",
+                "description": "Sint dolores facilis laborum provident beatae porro fugiat laudantium."
             },
             "status": {
-                "name": "rerum quod",
-                "description": "Laboriosam rerum odio officiis et."
+                "name": "architecto fugiat",
+                "description": "Non officiis ipsam corrupti ipsum modi."
             },
-            "network": null,
-            "producer": null,
             "episodeCount": "0",
             "seasonCount": "0",
             "averageRating": "2.5",
@@ -38,13 +36,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "1995-01-13",
-            "lastAired": "1995-06-30",
-            "runtime": "14",
-            "airTime": "00:45",
+            "firstAired": "2021-04-20",
+            "lastAired": "2021-07-13",
+            "runtime": "24",
+            "airTime": "23:48 UTC",
             "airDay": null,
             "isNSFW": true,
-            "copyright": "\u2117 2013 Bogisich, Russel and Abernathy",
+            "copyright": "\u00ae 1970 Mayert Ltd",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
@@ -54,7 +52,7 @@
     {
         "id": 2,
         "type": "show",
-        "href": "\/api\/v1\/anime\/2",
+        "href": "\/v1\/anime\/2",
         "attributes": {
             "anidbID": null,
             "anilistID": null,
@@ -62,27 +60,25 @@
             "imdbID": null,
             "malID": null,
             "title": "Be a good person!",
-            "tagline": "Eveniet et et dolor iusto vitae.",
+            "tagline": "Modi consequatur odio et qui inventore.",
             "synopsis": "A story about being a good person.",
             "genres": [],
             "tvRating": {
-                "name": "y",
-                "description": "Tempore nesciunt ut fugiat libero iure."
+                "name": "v",
+                "description": "Voluptatem suscipit maxime ipsam sequi iste quaerat."
             },
             "type": {
-                "name": "Ova Kuvalis",
-                "description": "Debitis corporis tempora non deleniti voluptatem doloremque eius nemo."
+                "name": "Kristofer Bergnaum",
+                "description": "Accusamus rerum alias est ut laudantium perferendis veritatis occaecati."
             },
             "source": {
-                "name": "Jeffrey Gislason",
-                "description": "Sed possimus non consequatur laboriosam cumque facere doloremque."
+                "name": "Mr. Carey Champlin",
+                "description": "Sint dolores facilis laborum provident beatae porro fugiat laudantium."
             },
             "status": {
-                "name": "rerum quod",
-                "description": "Laboriosam rerum odio officiis et."
+                "name": "architecto fugiat",
+                "description": "Non officiis ipsam corrupti ipsum modi."
             },
-            "network": null,
-            "producer": null,
             "episodeCount": "0",
             "seasonCount": "0",
             "averageRating": "4.0",
@@ -90,13 +86,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "2019-01-24",
-            "lastAired": "2019-04-18",
-            "runtime": "15",
-            "airTime": "05:04",
+            "firstAired": "1975-04-02",
+            "lastAired": "1975-06-25",
+            "runtime": "16",
+            "airTime": "10:12 UTC",
             "airDay": null,
-            "isNSFW": false,
-            "copyright": "\u00ae 2006 Hessel-Kerluke",
+            "isNSFW": true,
+            "copyright": "\u00ae 2011 Champlin-Weber",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,

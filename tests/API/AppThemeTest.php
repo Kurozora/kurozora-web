@@ -20,7 +20,7 @@ class AppThemeTest extends TestCase
     {
         AppTheme::factory(2)->create();
 
-        $response = $this->json('GET', '/api/v1/themes', []);
+        $response = $this->json('GET', 'v1/themes', []);
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
@@ -40,7 +40,7 @@ class AppThemeTest extends TestCase
         /** @var AppTheme $theme */
         $theme = AppTheme::factory()->create();
 
-        $response = $this->get('/api/v1/themes/'.$theme->id);
+        $response = $this->get('v1/themes/'.$theme->id);
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();

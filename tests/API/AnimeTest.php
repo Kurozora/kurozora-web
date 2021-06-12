@@ -19,7 +19,7 @@ class AnimeTest extends TestCase
      */
      public function a_user_can_view_the_cast_of_an_anime()
      {
-        $response = $this->json('GET', '/api/v1/anime/' . $this->anime->id . '/cast', []);
+        $response = $this->json('GET', 'v1/anime/' . $this->anime->id . '/cast', []);
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
@@ -36,7 +36,7 @@ class AnimeTest extends TestCase
      */
     public function a_user_can_view_the_related_anime_of_an_anime()
     {
-        $response = $this->json('GET', '/api/v1/anime/' . $this->anime->id . '/related-shows');
+        $response = $this->json('GET', 'v1/anime/' . $this->anime->id . '/related-shows');
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
@@ -53,7 +53,7 @@ class AnimeTest extends TestCase
      */
     public function an_authenticated_user_can_view_the_related_anime_of_an_anime_with_personal_information()
     {
-        $response = $this->auth()->json('GET', '/api/v1/anime/' . $this->anime->id . '/related-shows');
+        $response = $this->auth()->json('GET', 'v1/anime/' . $this->anime->id . '/related-shows');
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
