@@ -25,7 +25,7 @@ class LibrarySortingTest extends TestCase
         $this->addTestingAnimeToLibrary($this->user);
 
         // Send the request and sort by title ascending
-        $response = $this->auth()->json('GET', '/api/v1/me/library', [
+        $response = $this->auth()->json('GET', 'v1/me/library', [
             'status'    => 'Watching',
             'sort'      => 'title(asc)'
         ]);
@@ -33,7 +33,7 @@ class LibrarySortingTest extends TestCase
         $this->assertMatchesJsonSnapshot($response->json()['data']);
 
         // Send the request and sort by title descending
-        $response = $this->auth()->json('GET', '/api/v1/me/library', [
+        $response = $this->auth()->json('GET', 'v1/me/library', [
             'status'    => 'Watching',
             'sort'      => 'title(desc)'
         ]);
@@ -52,7 +52,7 @@ class LibrarySortingTest extends TestCase
         $this->addTestingAnimeToLibrary($this->user);
 
         // Send the request and sort by age newest
-        $response = $this->auth()->json('GET', '/api/v1/me/library', [
+        $response = $this->auth()->json('GET', 'v1/me/library', [
             'status'    => 'Watching',
             'sort'      => 'age(newest)'
         ]);
@@ -60,7 +60,7 @@ class LibrarySortingTest extends TestCase
         $this->assertMatchesJsonSnapshot($response->json()['data']);
 
         // Send the request and sort by age oldest
-        $response = $this->auth()->json('GET', '/api/v1/me/library', [
+        $response = $this->auth()->json('GET', 'v1/me/library', [
             'status'    => 'Watching',
             'sort'      => 'age(oldest)'
         ]);
@@ -79,7 +79,7 @@ class LibrarySortingTest extends TestCase
         $this->addTestingAnimeToLibrary($this->user);
 
         // Send the request and sort by rating best
-        $response = $this->auth()->json('GET', '/api/v1/me/library', [
+        $response = $this->auth()->json('GET', 'v1/me/library', [
             'status'    => 'Watching',
             'sort'      => 'rating(best)'
         ]);
@@ -87,7 +87,7 @@ class LibrarySortingTest extends TestCase
         $this->assertMatchesJsonSnapshot($response->json()['data']);
 
         // Send the request and sort by rating worst
-        $response = $this->auth()->json('GET', '/api/v1/me/library', [
+        $response = $this->auth()->json('GET', 'v1/me/library', [
             'status'    => 'Watching',
             'sort'      => 'rating(worst)'
         ]);
@@ -106,7 +106,7 @@ class LibrarySortingTest extends TestCase
         $this->addTestingAnimeToLibrary($this->user);
 
         // Send the request and sort by my rating best
-        $response = $this->auth()->json('GET', '/api/v1/me/library', [
+        $response = $this->auth()->json('GET', 'v1/me/library', [
             'status'    => 'Watching',
             'sort'      => 'my-rating(best)'
         ]);
@@ -114,7 +114,7 @@ class LibrarySortingTest extends TestCase
         $this->assertMatchesJsonSnapshot($response->json()['data']);
 
         // Send the request and sort by my rating worst
-        $response = $this->auth()->json('GET', '/api/v1/me/library', [
+        $response = $this->auth()->json('GET', 'v1/me/library', [
             'status'    => 'Watching',
             'sort'      => 'my-rating(worst)'
         ]);

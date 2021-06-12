@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Livewire\Misc\ApiIndex;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/', [APIController::class, 'index'])
+    ->name('api.index');
+
 Route::prefix('/v1')
     ->name('api')
     ->group(function () {

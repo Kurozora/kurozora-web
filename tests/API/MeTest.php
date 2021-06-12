@@ -26,7 +26,7 @@ class MeTest extends TestCase
     public function user_can_get_own_details_with_authentication_token()
     {
         // Send request
-        $response = $this->auth()->json('GET', '/api/v1/me');
+        $response = $this->auth()->json('GET', 'v1/me');
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
@@ -44,7 +44,7 @@ class MeTest extends TestCase
     public function user_cannot_get_own_details_without_authentication_token()
     {
         // Send request
-        $response = $this->json('GET', '/api/v1/me', []);
+        $response = $this->json('GET', 'v1/me', []);
 
         // Check whether the response was unsuccessful
         $response->assertUnsuccessfulAPIResponse();
@@ -63,7 +63,7 @@ class MeTest extends TestCase
         $this->user->update(['biography' => null]);
 
         // Send the update request
-        $response = $this->auth()->json('POST', '/api/v1/me', [
+        $response = $this->auth()->json('POST', 'v1/me', [
             'biography' => 'I love Kurozora!'
         ]);
 
@@ -87,7 +87,7 @@ class MeTest extends TestCase
         $this->user->update(['biography' => 'I love Kurozora!']);
 
         // Send the update request
-        $response = $this->auth()->json('POST', '/api/v1/me', [
+        $response = $this->auth()->json('POST', 'v1/me', [
             'biography' => null
         ]);
 
@@ -114,7 +114,7 @@ class MeTest extends TestCase
         $uploadFile = UploadedFile::fake()->image('ProfileImage.jpg', 250, 250)->size(100);
 
         // Send the update request
-        $response = $this->auth()->json('POST', '/api/v1/me', [
+        $response = $this->auth()->json('POST', 'v1/me', [
             'profileImage' => $uploadFile
         ]);
 
@@ -150,7 +150,7 @@ class MeTest extends TestCase
         $this->user->updateProfileImage($uploadFile);
 
         // Send the update request
-        $response = $this->auth()->json('POST', '/api/v1/me', [
+        $response = $this->auth()->json('POST', 'v1/me', [
             'profileImage' => null
         ]);
 
@@ -178,7 +178,7 @@ class MeTest extends TestCase
         $uploadFile = UploadedFile::fake()->image('banner.jpg', 250, 250)->size(100);
 
         // Send the update request
-        $response = $this->auth()->json('POST', '/api/v1/me', [
+        $response = $this->auth()->json('POST', 'v1/me', [
             'bannerImage' => $uploadFile
         ]);
 
@@ -214,7 +214,7 @@ class MeTest extends TestCase
         $this->user->updateBannerImage($uploadFile);
 
         // Send the update request
-        $response = $this->auth()->json('POST', '/api/v1/me', [
+        $response = $this->auth()->json('POST', 'v1/me', [
             'bannerImage' => null
         ]);
 
@@ -243,7 +243,7 @@ class MeTest extends TestCase
             $this->user->favoriteAnime()->attach($anime->id);
 
         // Send request for the list of anime
-        $response = $this->auth()->json('GET', '/api/v1/me/favorite-anime');
+        $response = $this->auth()->json('GET', 'v1/me/favorite-anime');
 
         // Check whether the request was successful
         $response->assertSuccessfulAPIResponse();
@@ -268,7 +268,7 @@ class MeTest extends TestCase
         $this->user->followers()->attach($anotherUser);
 
         // Request the list of followers
-        $response = $this->auth()->json('GET', '/api/v1/me/followers');
+        $response = $this->auth()->json('GET', 'v1/me/followers');
 
         // Check that the response is successful
         $response->assertSuccessfulAPIResponse();
@@ -292,7 +292,7 @@ class MeTest extends TestCase
         $this->user->following()->attach($anotherUser);
 
         // Request the list of following
-        $response = $this->auth()->json('GET', '/api/v1/me/following');
+        $response = $this->auth()->json('GET', 'v1/me/following');
 
         // Check that the response is successful
         $response->assertSuccessfulAPIResponse();
@@ -313,7 +313,7 @@ class MeTest extends TestCase
         Session::factory(25)->create(['user_id' => $this->user->id]);
 
         // Send the request
-        $response = $this->auth()->json('GET', '/api/v1/me/sessions');
+        $response = $this->auth()->json('GET', 'v1/me/sessions');
 
         // Check whether the request was successful
         $response->assertSuccessfulAPIResponse();

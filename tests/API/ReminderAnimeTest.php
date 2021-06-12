@@ -25,7 +25,7 @@ class ReminderAnimeTest extends TestCase
 
         $this->user->library()->attach($anime);
 
-        $response = $this->auth()->json('POST', '/api/v1/me/reminder-anime', [
+        $response = $this->auth()->json('POST', 'v1/me/reminder-anime', [
             'anime_id'      => $anime->id,
             'is_reminded'   => 1
         ]);
@@ -63,7 +63,7 @@ class ReminderAnimeTest extends TestCase
         ]);
 
         // Send request to add the anime from the user's reminders
-        $response = $this->auth()->json('POST', '/api/v1/me/reminder-anime', [
+        $response = $this->auth()->json('POST', 'v1/me/reminder-anime', [
             'anime_id'      => $anime->id,
             'is_reminded'   => 1
         ]);
@@ -102,7 +102,7 @@ class ReminderAnimeTest extends TestCase
         ]);
 
         // Send request to remove the anime from the user's reminders
-        $response = $this->auth()->json('POST', '/api/v1/me/reminder-anime', [
+        $response = $this->auth()->json('POST', 'v1/me/reminder-anime', [
             'anime_id'      => $anime->id,
             'is_reminded'   => 0
         ]);
@@ -130,7 +130,7 @@ class ReminderAnimeTest extends TestCase
             $this->user->reminderAnime()->attach($anime->id);
 
         // Send request for the list of anime
-        $response = $this->auth()->json('GET', '/api/v1/me/reminder-anime');
+        $response = $this->auth()->json('GET', 'v1/me/reminder-anime');
 
         // Check whether the request was successful
         $response->assertSuccessfulAPIResponse();

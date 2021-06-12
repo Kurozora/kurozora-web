@@ -38,7 +38,7 @@ return [
     | or any other location as required by the application or its packages.
     */
 
-    'version' => '1.2.0-alpha.85',
+    'version' => '1.2.0-alpha.86',
 
     /*
     |--------------------------------------------------------------------------
@@ -211,7 +211,6 @@ return [
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
-        App\Providers\MigrationServiceProvider::class,
         App\Providers\NovaServiceProvider::class,
         App\Providers\ProfileServiceProvider::class,
         App\Providers\RouteServiceProvider::class,

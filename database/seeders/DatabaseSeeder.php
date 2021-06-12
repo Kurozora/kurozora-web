@@ -25,7 +25,6 @@ class DatabaseSeeder extends Seeder
             StatusSeeder::class,
             GenreSeeder::class,
 //            StudioSeeder::class,
-//            AnimeDummySeeder::class,
 //            AnimeCastSeeder::class,
 //            MediaRelationSeeder::class,
 //            AnimeStaffSeeder::class,

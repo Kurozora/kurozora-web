@@ -26,7 +26,7 @@ class SessionTest extends TestCase
         $session = Session::factory()->create(['user_id' => $this->user->id]);
 
         // Send the request
-        $response = $this->auth()->json('GET', '/api/v1/me/sessions/' . $session->id);
+        $response = $this->auth()->json('GET', 'v1/me/sessions/' . $session->id);
 
         // Check whether the request was successful
         $response->assertSuccessfulAPIResponse();
@@ -51,7 +51,7 @@ class SessionTest extends TestCase
         $session = Session::factory()->create(['user_id' => $anotherUser->id]);
 
         // Send the request
-        $response = $this->auth()->json('GET', '/api/v1/me/sessions/' . $session->id);
+        $response = $this->auth()->json('GET', 'v1/me/sessions/' . $session->id);
 
         // Check whether the request was unsuccessful
         $response->assertUnsuccessfulAPIResponse();
@@ -70,7 +70,7 @@ class SessionTest extends TestCase
         $session = Session::factory()->create(['user_id' => $this->user->id]);
 
         // Send the request
-        $response = $this->auth()->json('POST', '/api/v1/me/sessions/' . $session->id . '/delete');
+        $response = $this->auth()->json('POST', 'v1/me/sessions/' . $session->id . '/delete');
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
@@ -95,7 +95,7 @@ class SessionTest extends TestCase
         $session = Session::factory()->create(['user_id' => $anotherUser->id]);
 
         // Send the request
-        $response = $this->auth()->json('POST', '/api/v1/me/sessions/' . $session->id . '/delete');
+        $response = $this->auth()->json('POST', 'v1/me/sessions/' . $session->id . '/delete');
 
         // Check whether the response was unsuccessful
         $response->assertUnsuccessfulAPIResponse();
@@ -120,7 +120,7 @@ class SessionTest extends TestCase
         $newToken = Str::random(64);
 
         // Send the request
-        $response = $this->auth()->json('POST', '/api/v1/me/sessions/' . $session->id . '/update', [
+        $response = $this->auth()->json('POST', 'v1/me/sessions/' . $session->id . '/update', [
             'apn_device_token' => $newToken
         ]);
 
@@ -151,7 +151,7 @@ class SessionTest extends TestCase
         $newToken = Str::random(64);
 
         // Send the request
-        $response = $this->auth()->json('POST', '/api/v1/me/sessions/' . $session->id . '/update', [
+        $response = $this->auth()->json('POST', 'v1/me/sessions/' . $session->id . '/update', [
             'apn_device_token' => $newToken
         ]);
 

@@ -26,7 +26,7 @@ class FavoriteAnimeTest extends TestCase
 
         $this->user->library()->attach($anime);
 
-        $response = $this->auth()->json('POST', '/api/v1/me/favorite-anime', [
+        $response = $this->auth()->json('POST', 'v1/me/favorite-anime', [
             'anime_id'      => $anime->id,
             'is_favorite'   => 1
         ]);
@@ -54,7 +54,7 @@ class FavoriteAnimeTest extends TestCase
         $this->user->favoriteAnime()->attach($anime->id);
 
         // Send request to remove the anime from the user's favorites
-        $response = $this->auth()->json('POST', '/api/v1/me/favorite-anime', [
+        $response = $this->auth()->json('POST', 'v1/me/favorite-anime', [
             'anime_id'      => $anime->id,
             'is_favorite'   => 0
         ]);
@@ -86,7 +86,7 @@ class FavoriteAnimeTest extends TestCase
 //        /** @var User $anotherUser */
 //        //$anotherUser = User::factory()->create();
 //
-//        //$response = $this->auth()->json('GET', '/api/v1/users/' . $anotherUser->id . '/favorite-anime');
+//        //$response = $this->auth()->json('GET', 'v1/users/' . $anotherUser->id . '/favorite-anime');
 //
 //        // Check whether the request was unsuccessful
 //        //$response->assertUnsuccessfulAPIResponse();

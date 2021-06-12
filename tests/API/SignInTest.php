@@ -19,7 +19,7 @@ class SignInTest extends TestCase
      */
     function a_user_can_sign_in()
     {
-        $this->json('POST', '/api/v1/users/signin', [
+        $this->json('POST', 'v1/users/signin', [
             'email'             => $this->user->email,
             'password'          => $this->userPassword,
             'platform'          => 'iOS',
@@ -40,7 +40,7 @@ class SignInTest extends TestCase
      */
     function a_user_cannot_sign_in_with_an_incorrect_password()
     {
-        $this->json('POST', '/api/v1/users/signin', [
+        $this->json('POST', 'v1/users/signin', [
             'email'     => $this->user->email,
             'password'  => $this->userPassword . 'invalid',
             'platform'          => 'iOS',
@@ -61,7 +61,7 @@ class SignInTest extends TestCase
      */
     function a_user_cannot_sign_in_with_an_unknown_email()
     {
-        $this->json('POST', '/api/v1/users/signin', [
+        $this->json('POST', 'v1/users/signin', [
             'email'     => 'invalidemail@example.com',
             'password'  => $this->userPassword,
             'platform'          => 'iOS',
@@ -81,7 +81,7 @@ class SignInTest extends TestCase
     {
         // Make 3 sign in attempts with wrong password
         for($i = 0; $i < 3; $i++)
-            $this->json('POST', '/api/v1/users/signin', [
+            $this->json('POST', 'v1/users/signin', [
                 'email'     => $this->user->email,
                 'password'  => $this->userPassword . 'invalid',
                 'platform'          => 'iOS',
@@ -91,7 +91,7 @@ class SignInTest extends TestCase
             ])->assertUnsuccessfulAPIResponse();
 
         // 4th attempt with correct password should fail
-        $this->json('POST', '/api/v1/users/signin', [
+        $this->json('POST', 'v1/users/signin', [
             'email'     => $this->user->email,
             'password'  => $this->userPassword,
             'platform'          => 'iOS',
@@ -104,7 +104,7 @@ class SignInTest extends TestCase
         Carbon::setTestNow(now()->addMinutes(6));
 
         // Should now be able to sign in, because cooldown is over
-        $this->json('POST', '/api/v1/users/signin', [
+        $this->json('POST', 'v1/users/signin', [
             'email'     => $this->user->email,
             'password'  => $this->userPassword,
             'platform'          => 'iOS',
@@ -122,7 +122,7 @@ class SignInTest extends TestCase
      */
     function a_user_receives_a_notification_when_someone_logs_into_their_account()
     {
-        $this->json('POST', '/api/v1/users/signin', [
+        $this->json('POST', 'v1/users/signin', [
             'email'     => $this->user->email,
             'password'  => $this->userPassword,
             'platform'          => 'iOS',
