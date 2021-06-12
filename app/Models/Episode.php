@@ -22,7 +22,7 @@ class Episode extends KModel
      */
     public array $translatedAttributes = [
         'title',
-        'overview',
+        'synopsis',
     ];
 
     /**

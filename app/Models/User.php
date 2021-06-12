@@ -266,7 +266,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
 
                     // Create event
                     $calendarEvent = Event::create($eventName)
-                        ->description($episode->overview)
+                        ->description($episode->synopsis)
                         ->organizer('kurozoraapp@gmail.com', 'Kurozora')
                         ->startsAt($startsAt)
                         ->endsAt($endsAt)

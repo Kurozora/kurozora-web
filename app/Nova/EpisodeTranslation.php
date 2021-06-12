@@ -62,7 +62,7 @@ class EpisodeTranslation extends Resource
                 ->sortable()
                 ->required(),
 
-            Textarea::make('Overview')
+            Textarea::make('Synopsis')
                 ->required(),
         ];
     }
