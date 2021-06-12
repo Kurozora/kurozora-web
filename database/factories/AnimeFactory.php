@@ -28,6 +28,7 @@ class AnimeFactory extends Factory
      */
     public function definition(): array
     {
+        $jaFaker = \Faker\Factory::create('ja_JP');
         $title = $this->faker->sentence;
         $totalEpisodesArray = [10, 12, 24];
         $totalEpisodes = $totalEpisodesArray[array_rand($totalEpisodesArray)];
@@ -64,6 +65,11 @@ class AnimeFactory extends Factory
             'tagline'           => $this->faker->sentence,
             'title'             => $title,
             'synopsis'          => $this->faker->paragraph,
+            'ja'                => [
+                'title'         => $jaFaker->sentence,
+                'synopsis'      => $jaFaker->paragraph,
+            ],
+            'synonym_titles'    => $this->faker->sentences(),
             'tv_rating_id'      => $tvRating,
             'media_type_id'     => $mediaType,
             'source_id'         => $source,
@@ -71,7 +77,7 @@ class AnimeFactory extends Factory
             'first_aired'       => $firstAired,
             'last_aired'        => $lastAired,
             'runtime'           => $this->faker->numberBetween(10, 25),
-            'air_time'          => $this->faker->time('H:i'),
+            'air_time'          => $this->faker->time(),
             'air_day'           => DayOfWeek::getRandomValue(),
             'is_nsfw'           => $this->faker->boolean,
             'copyright'         => $this->faker->randomElement(['© ', '℗ ', '® ']) . $this->faker->year . ' ' . $this->faker->company,

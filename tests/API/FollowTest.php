@@ -22,7 +22,7 @@ class FollowTest extends TestCase
         /** @var User $anotherUser */
         $anotherUser = User::factory()->create();
 
-        $this->auth()->json('POST', '/api/v1/users/' . $anotherUser->id . '/follow')->assertSuccessfulAPIResponse();
+        $this->auth()->json('POST', 'v1/users/' . $anotherUser->id . '/follow')->assertSuccessfulAPIResponse();
 
         // Check that the user is now following one person
         $this->assertEquals(1, $this->user->following()->count());
@@ -46,7 +46,7 @@ class FollowTest extends TestCase
         $this->user->following()->attach($anotherUser);
 
         // Send the unfollow API request
-        $this->auth()->json('POST', '/api/v1/users/' . $anotherUser->id . '/follow')->assertSuccessfulAPIResponse();
+        $this->auth()->json('POST', 'v1/users/' . $anotherUser->id . '/follow')->assertSuccessfulAPIResponse();
 
         // Check that the user is now following no-one
         $this->assertEquals(0, $this->user->following()->count());
@@ -63,7 +63,7 @@ class FollowTest extends TestCase
      */
     function a_user_cannot_follow_an_invalid_user()
     {
-        $this->auth()->json('POST', '/api/v1/users/' . 99999 . '/follow')->assertNotFound();
+        $this->auth()->json('POST', 'v1/users/' . 99999 . '/follow')->assertNotFound();
 
         // Check that the user is still following no-one
         $this->assertEquals(0, $this->user->following()->count());
@@ -84,7 +84,7 @@ class FollowTest extends TestCase
         $anotherUser ->followers()->attach($this->user);
 
         // Request the list of followers
-        $response = $this->auth()->json('GET', '/api/v1/users/'.$anotherUser->id.'/followers');
+        $response = $this->auth()->json('GET', 'v1/users/'.$anotherUser->id.'/followers');
 
         // Check that the response is successful
         $response->assertSuccessfulAPIResponse();
@@ -108,7 +108,7 @@ class FollowTest extends TestCase
         $anotherUser->following()->attach($this->user);
 
         // Request the list of following
-        $response = $this->auth()->json('GET', '/api/v1/users/'.$anotherUser->id.'/following');
+        $response = $this->auth()->json('GET', 'v1/users/'.$anotherUser->id.'/following');
 
         // Check that the response is successful
         $response->assertSuccessfulAPIResponse();
@@ -128,7 +128,7 @@ class FollowTest extends TestCase
         /** @var User $anotherUser */
         $anotherUser = User::factory()->create();
 
-        $this->auth()->json('POST', '/api/v1/users/' . $anotherUser->id . '/follow', [
+        $this->auth()->json('POST', 'v1/users/' . $anotherUser->id . '/follow', [
             'follow' => 1
         ])->assertSuccessfulAPIResponse();
 

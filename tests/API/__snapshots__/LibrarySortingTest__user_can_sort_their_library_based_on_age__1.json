@@ -2,7 +2,7 @@
     {
         "id": 1,
         "type": "show",
-        "href": "\/api\/v1\/anime\/1",
+        "href": "\/v1\/anime\/1",
         "attributes": {
             "anidbID": null,
             "anilistID": null,
@@ -10,27 +10,25 @@
             "imdbID": null,
             "malID": null,
             "title": "Awesome Show",
-            "tagline": "Aut quos consequuntur molestias est adipisci deleniti.",
+            "tagline": "Quis a molestias ea natus distinctio.",
             "synopsis": "A very awesome show.",
             "genres": [],
             "tvRating": {
-                "name": "j",
-                "description": "Corrupti repudiandae fugiat pariatur mollitia ut architecto voluptatum."
+                "name": "e",
+                "description": "Qui optio laborum soluta distinctio dolore est."
             },
             "type": {
-                "name": "Dr. Ottis Purdy",
-                "description": "Dignissimos natus eos doloremque esse itaque."
+                "name": "Ellie Mohr DVM",
+                "description": "Non magni quod provident quo sit praesentium."
             },
             "source": {
-                "name": "Josefa Kshlerin",
-                "description": "Saepe odio rerum et officia eum laborum."
+                "name": "Gabe Ondricka",
+                "description": "Quaerat quam est rerum."
             },
             "status": {
-                "name": "fugit nesciunt",
-                "description": "Placeat quidem rerum atque."
+                "name": "neque et",
+                "description": "Repellendus est molestias laborum sit quia commodi perspiciatis."
             },
-            "network": null,
-            "producer": null,
             "episodeCount": "0",
             "seasonCount": "0",
             "averageRating": "2.5",
@@ -38,13 +36,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "1977-06-03",
-            "lastAired": "1977-08-12",
-            "runtime": "23",
-            "airTime": "03:34",
+            "firstAired": "1971-09-04",
+            "lastAired": "1971-11-13",
+            "runtime": "12",
+            "airTime": "23:18 UTC",
             "airDay": null,
             "isNSFW": false,
-            "copyright": "\u00ae 1976 Waelchi-Kessler",
+            "copyright": "\u00a9 2008 Fisher and Sons",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
@@ -54,7 +52,7 @@
     {
         "id": 2,
         "type": "show",
-        "href": "\/api\/v1\/anime\/2",
+        "href": "\/v1\/anime\/2",
         "attributes": {
             "anidbID": null,
             "anilistID": null,
@@ -62,27 +60,25 @@
             "imdbID": null,
             "malID": null,
             "title": "Be a good person!",
-            "tagline": "Et tempora saepe inventore animi quo ab voluptatem enim.",
+            "tagline": "Maxime rerum soluta quo distinctio.",
             "synopsis": "A story about being a good person.",
             "genres": [],
             "tvRating": {
-                "name": "j",
-                "description": "Corrupti repudiandae fugiat pariatur mollitia ut architecto voluptatum."
+                "name": "e",
+                "description": "Qui optio laborum soluta distinctio dolore est."
             },
             "type": {
-                "name": "Dr. Ottis Purdy",
-                "description": "Dignissimos natus eos doloremque esse itaque."
+                "name": "Ellie Mohr DVM",
+                "description": "Non magni quod provident quo sit praesentium."
             },
             "source": {
-                "name": "Josefa Kshlerin",
-                "description": "Saepe odio rerum et officia eum laborum."
+                "name": "Gabe Ondricka",
+                "description": "Quaerat quam est rerum."
             },
             "status": {
-                "name": "fugit nesciunt",
-                "description": "Placeat quidem rerum atque."
+                "name": "neque et",
+                "description": "Repellendus est molestias laborum sit quia commodi perspiciatis."
             },
-            "network": null,
-            "producer": null,
             "episodeCount": "0",
             "seasonCount": "0",
             "averageRating": "4.0",
@@ -90,13 +86,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "2013-04-18",
-            "lastAired": "2013-10-03",
-            "runtime": "22",
-            "airTime": "16:30",
+            "firstAired": "2015-11-11",
+            "lastAired": "2016-01-20",
+            "runtime": "12",
+            "airTime": "08:25 UTC",
             "airDay": null,
-            "isNSFW": false,
-            "copyright": "\u00ae 1986 Lesch-Rippin",
+            "isNSFW": true,
+            "copyright": "\u00ae 2005 Veum, Jenkins and Herman",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,

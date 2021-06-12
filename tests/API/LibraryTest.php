@@ -26,7 +26,7 @@ class LibraryTest extends TestCase
         $this->user->library()->attach($this->anime->id, ['status' => UserLibraryStatus::Watching]);
 
         // Send the request
-        $response = $this->auth()->json('GET', '/api/v1/me/library', [
+        $response = $this->auth()->json('GET', 'v1/me/library', [
             'status' => 'Watching'
         ]);
 
@@ -49,7 +49,7 @@ class LibraryTest extends TestCase
         $this->user->library()->attach($this->anime->id, ['status' => UserLibraryStatus::Dropped]);
 
         // Send the request
-        $response = $this->auth()->json('GET', '/api/v1/me/library', [
+        $response = $this->auth()->json('GET', 'v1/me/library', [
             'status' => 'Dropped'
         ]);
 
@@ -72,7 +72,7 @@ class LibraryTest extends TestCase
         $this->user->library()->attach($this->anime->id, ['status' => UserLibraryStatus::Planning]);
 
         // Send the request
-        $response = $this->auth()->json('GET', '/api/v1/me/library', [
+        $response = $this->auth()->json('GET', 'v1/me/library', [
             'status' => 'Planning'
         ]);
 
@@ -95,7 +95,7 @@ class LibraryTest extends TestCase
         $this->user->library()->attach($this->anime->id, ['status' => UserLibraryStatus::Completed]);
 
         // Send the request
-        $response = $this->auth()->json('GET', '/api/v1/me/library', [
+        $response = $this->auth()->json('GET', 'v1/me/library', [
             'status' => 'Completed'
         ]);
 
@@ -118,7 +118,7 @@ class LibraryTest extends TestCase
         $this->user->library()->attach($this->anime->id, ['status' => UserLibraryStatus::OnHold]);
 
         // Send the request
-        $response = $this->auth()->json('GET', '/api/v1/me/library', [
+        $response = $this->auth()->json('GET', 'v1/me/library', [
             'status' => 'OnHold'
         ]);
 
@@ -138,7 +138,7 @@ class LibraryTest extends TestCase
     function user_cannot_get_the_anime_in_their_library_with_an_invalid_status()
     {
         // Send the request
-        $response = $this->auth()->json('GET', '/api/v1/me/library', [
+        $response = $this->auth()->json('GET', 'v1/me/library', [
             'status' => 'Invalid Status'
         ]);
 
@@ -295,7 +295,7 @@ class LibraryTest extends TestCase
         $this->user->library()->attach($this->anime->id, ['status' => UserLibraryStatus::Watching]);
 
         // Send the request
-        $response = $this->auth()->json('POST', '/api/v1/me/library/delete', [
+        $response = $this->auth()->json('POST', 'v1/me/library/delete', [
             'anime_id' => 1
         ]);
 
@@ -324,7 +324,7 @@ class LibraryTest extends TestCase
             $this->user->library()->attach($show->id, ['status' => UserLibraryStatus::Watching]);
 
         // Send the request
-        $response = $this->auth()->json('GET', '/api/v1/me/library/search', [
+        $response = $this->auth()->json('GET', 'v1/me/library/search', [
             'query' => $shows->first()->original_title
         ]);
 
@@ -344,7 +344,7 @@ class LibraryTest extends TestCase
      */
     private function addAnimeToLibraryAPIRequest(int $animeID, string $status): TestResponse
     {
-        return $this->auth()->json('POST', '/api/v1/me/library', [
+        return $this->auth()->json('POST', 'v1/me/library', [
             'anime_id'  => $animeID,
             'status'    => $status
         ]);

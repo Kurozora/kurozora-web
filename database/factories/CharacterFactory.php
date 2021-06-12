@@ -21,13 +21,13 @@ class CharacterFactory extends Factory
      */
     public function definition(): array
     {
+        $jaFaker = \Faker\Factory::create('ja_JP');
         $month = $this->faker->month;
         $isFemale = mt_rand(0, 1);
         $genderString = $isFemale ? 'female' : 'male';
         $bust = null;
         $waist = null;
         $hip = null;
-        $jpFaker = \Faker\Factory::create('ja_JP');
 
         if ($isFemale) {
             $bust = $this->faker->randomFloat(2, 20, 80);
@@ -37,9 +37,12 @@ class CharacterFactory extends Factory
 
         return [
             'name'              => $this->faker->name($genderString),
-            'japanese_name'     => $jpFaker->name($genderString),
             'nicknames'         => $this->faker->words(mt_rand(0, 3)),
             'about'             => $this->faker->paragraph(mt_rand(10, 30)),
+            'ja'                => [
+                'name'  => $jaFaker->name($genderString),
+                'about' => $jaFaker->paragraph
+            ],
             'image'             => $this->faker->imageUrl(),
             'debut'             => $this->faker->numerify('Episode ##'),
             'status'            => $this->faker->randomElement(['Alive', 'Deceased']),

@@ -28,7 +28,7 @@ class StudioTest extends TestCase
      */
     public function a_user_can_view_specific_studio_details()
     {
-        $response = $this->get('/api/v1/studios/'.$this->studio->id);
+        $response = $this->get('v1/studios/'.$this->studio->id);
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
@@ -45,7 +45,7 @@ class StudioTest extends TestCase
      */
     public function a_user_can_view_specific_studio_details_including_relationships()
     {
-        $response = $this->get('/api/v1/studios/'.$this->studio->id.'?include=shows');
+        $response = $this->get('v1/studios/'.$this->studio->id.'?include=shows');
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
@@ -66,7 +66,7 @@ class StudioTest extends TestCase
      */
     public function a_user_can_view_specific_studio_anime()
     {
-        $response = $this->get('/api/v1/studios/'.$this->studio->id.'/anime');
+        $response = $this->get('v1/studios/'.$this->studio->id.'/anime');
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
