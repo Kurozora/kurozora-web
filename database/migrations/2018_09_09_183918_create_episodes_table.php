@@ -1,12 +1,12 @@
 <?php
 
-use App\Models\AnimeEpisode;
+use App\Models\Episode;
 use App\Models\AnimeSeason;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAnimeEpisodesTable extends Migration
+class CreateEpisodesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,20 +15,20 @@ class CreateAnimeEpisodesTable extends Migration
      */
     public function up()
     {
-        Schema::create(AnimeEpisode::TABLE_NAME, function (Blueprint $table) {
+        Schema::create(Episode::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('season_id');
             $table->unsignedInteger('number');
             $table->string('title');
             $table->text('overview')->nullable();
             $table->string('preview_image')->nullable();
-            $table->dateTime('first_aired')->nullable();
             $table->unsignedTinyInteger('duration')->default(0);
+            $table->dateTime('first_aired')->nullable();
             $table->boolean('verified')->default(false);
             $table->timestamps();
         });
 
-        Schema::table(AnimeEpisode::TABLE_NAME, function (Blueprint $table) {
+        Schema::table(Episode::TABLE_NAME, function (Blueprint $table) {
             // Set foreign key constraints
             $table->foreign('season_id')->references('id')->on(AnimeSeason::TABLE_NAME)->onDelete('cascade');
         });
@@ -41,6 +41,6 @@ class CreateAnimeEpisodesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(AnimeEpisode::TABLE_NAME);
+        Schema::dropIfExists(Episode::TABLE_NAME);
     }
 }

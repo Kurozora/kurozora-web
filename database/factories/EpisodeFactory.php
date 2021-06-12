@@ -2,18 +2,18 @@
 
 namespace Database\Factories;
 
-use App\Models\AnimeEpisode;
+use App\Models\Episode;
 use App\Models\AnimeSeason;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class AnimeEpisodeFactory extends Factory
+class EpisodeFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = AnimeEpisode::class;
+    protected $model = Episode::class;
 
     /**
      * Define the model's default state.
@@ -31,7 +31,6 @@ class AnimeEpisodeFactory extends Factory
 
         return [
             'season_id'     => $animeSeason,
-            'title'         => $this->faker->title,
             'number'        => $number++,
             'overview'      => $this->faker->realText(),
             'first_aired'   => $this->faker->dateTime(),

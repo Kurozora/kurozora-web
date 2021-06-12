@@ -19,7 +19,7 @@ class Episode extends Resource
      *
      * @var string
      */
-    public static string $model = \App\Models\AnimeEpisode::class;
+    public static string $model = \App\Models\Episode::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -42,7 +42,7 @@ class Episode extends Resource
      *
      * @var string
      */
-    public static $group = 'Anime Episodes';
+    public static $group = 'Episode';
 
     /**
      * Get the fields displayed by the resource.

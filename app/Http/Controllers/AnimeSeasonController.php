@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AnimeSeason;
 use App\Helpers\JSONResult;
-use App\Http\Resources\AnimeEpisodeResource;
+use App\Http\Resources\EpisodeResource;
 use App\Http\Resources\AnimeSeasonResource;
 use Illuminate\Http\JsonResponse;
 
@@ -35,7 +35,7 @@ class AnimeSeasonController extends Controller
         $episodes = $season->getEpisodes();
 
         return JSONResult::success([
-            'data'  => AnimeEpisodeResource::collection($episodes)
+            'data'  => EpisodeResource::collection($episodes)
         ]);
     }
 }

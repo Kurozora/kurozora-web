@@ -37,12 +37,12 @@
       "description": "Everything anime seasons related"
     },
     {
-      "name": "anime-episodes",
-      "description": "Everything anime episodes related"
-    },
-    {
       "name": "characters",
       "description": "Everything character related"
+    },
+    {
+      "name": "episodes",
+      "description": "Everything episodes related"
     },
     {
       "name": "genres",
@@ -526,7 +526,7 @@
         }
       }
     },
-    "/anime-episodes/{episodeID}": {
+    "/episodes/{episodeID}": {
       "get": {
         "security": [
           {
@@ -537,9 +537,9 @@
           }
         ],
         "tags": [
-          "anime-episodes"
+          "episodes"
         ],
-        "operationId": "getAnimeEpisodesDetails",
+        "operationId": "getEpisodesDetails",
         "summary": "Get specific episode details.",
         "description": "This endpoint will retrieve the details of a specific episode.",
         "parameters": [
@@ -555,7 +555,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetAnimeEpisodesDetailsSuccess"
+            "$ref": "#/components/responses/GetEpisodesDetailsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -563,7 +563,7 @@
         }
       }
     },
-    "/anime-episodes/{episodeID}/watched": {
+    "/episodes/{episodeID}/watched": {
       "post": {
         "security": [
           {
@@ -572,9 +572,9 @@
           }
         ],
         "tags": [
-          "anime-episodes"
+          "episodes"
         ],
-        "operationId": "postAnimeEpisodesWatched",
+        "operationId": "postEpisodesWatched",
         "summary": "Marks an episode as \"watched\" or \"not watched\".",
         "description": "This endpoint will updated the watched status for an episode.",
         "parameters": [
@@ -590,7 +590,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/PostAnimeEpisodesWatchedSuccess"
+            "$ref": "#/components/responses/PostEpisodesWatchedSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -3625,7 +3625,7 @@
                 "data": {
                   "id": "1094845f-c175-462d-8aec-9bbad4af232f",
                   "type": "notifications",
-                  "href": "/api/v1/me/notifications/1094845f-c175-462d-8aec-9bbad4af232f",
+                  "href": "/v1/me/notifications/1094845f-c175-462d-8aec-9bbad4af232f",
                   "attributes": {
                     "type": "NewSession",
                     "isRead": true,
@@ -3669,7 +3669,7 @@
                   {
                     "id": 1,
                     "type": "people",
-                    "href": "/api/v1/people/1",
+                    "href": "/v1/people/1",
                     "attributes": {
                       "firstName": "Alvera",
                       "lastName": null,
@@ -3700,7 +3700,7 @@
                   {
                     "id": 227,
                     "type": "show",
-                    "href": "/api/v1/anime/227",
+                    "href": "/v1/anime/227",
                     "attributes": {
                       "anidbID": null,
                       "anilistID": null,
@@ -3748,7 +3748,7 @@
                   {
                     "id": 229,
                     "type": "show",
-                    "href": "/api/v1/anime/229",
+                    "href": "/v1/anime/229",
                     "attributes": {
                       "anidbID": null,
                       "anilistID": null,
@@ -3810,7 +3810,7 @@
                   {
                     "id": 1,
                     "type": "characters",
-                    "href": "/api/v1/characters/1",
+                    "href": "/v1/characters/1",
                     "attributes": {
                       "name": "Tyra Armstrong IV",
                       "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
@@ -3832,7 +3832,7 @@
                   {
                     "id": 2,
                     "type": "characters",
-                    "href": "/api/v1/characters/2",
+                    "href": "/v1/characters/2",
                     "attributes": {
                       "name": "Lorna Pollich",
                       "about": "Est vitae et voluptas ullam unde id ea. Quo non distinctio ipsa blanditiis aspernatur. Perferendis aut officia sit similique soluta odit eum. Sunt quo delectus est quis sapiente. A natus voluptatem omnis distinctio quis quas. Molestiae ut aut voluptas incidunt necessitatibus nihil culpa. Molestiae dolores illo dignissimos amet sit. Sit non et enim doloremque ratione exercitationem. Hic voluptas ab eos quia quia quia. Hic expedita est distinctio quaerat accusamus.",
@@ -3868,7 +3868,7 @@
                   {
                     "id": 1,
                     "type": "show",
-                    "href": "/api/v1/anime/1",
+                    "href": "/v1/anime/1",
                     "attributes": {
                       "title": "\"0\"",
                       "type": "Tv",
@@ -3883,7 +3883,7 @@
                         {
                           "id": 1,
                           "type": "studios",
-                          "href": "/api/v1/studios/1",
+                          "href": "/v1/studios/1",
                           "attributes": {
                             "name": null,
                             "logoURL": null,
@@ -3944,7 +3944,7 @@
                           {
                             "id": 10,
                             "type": "people",
-                            "href": "/api/v1/people/10",
+                            "href": "/v1/people/10",
                             "attributes": {
                               "firstName": "Leatha",
                               "lastName": "Dietrich",
@@ -3955,7 +3955,7 @@
                           {
                             "id": 1,
                             "type": "people",
-                            "href": "/api/v1/people/1",
+                            "href": "/v1/people/1",
                             "attributes": {
                               "firstName": "Aniyah",
                               "lastName": "Waelchi",
@@ -3966,7 +3966,7 @@
                           {
                             "id": 2,
                             "type": "people",
-                            "href": "/api/v1/people/2",
+                            "href": "/v1/people/2",
                             "attributes": {
                               "firstName": "Ashley",
                               "lastName": "Carroll",
@@ -3975,14 +3975,14 @@
                             }
                           }
                         ],
-                        "href": "/api/v1/anime/1/people"
+                        "href": "/v1/anime/1/people"
                       },
                       "characters": {
                         "data": [
                           {
                             "id": 10,
                             "type": "characters",
-                            "href": "/api/v1/characters/10",
+                            "href": "/v1/characters/10",
                             "attributes": {
                               "name": "Savion Strosin",
                               "about": "Quae rerum delectus neque et officiis fuga incidunt et. Exercitationem et consequatur quae sunt molestias repellat dolorem. Necessitatibus iusto voluptatem ea dolor quasi. Rerum voluptas vel voluptate. Aut est dignissimos et molestias dolores sed perspiciatis. Aperiam eveniet omnis quo vel ipsum incidunt earum. Maxime veritatis eligendi sit. Quae et placeat earum quos. Et ut possimus in cumque. Omnis veniam distinctio officia minus. Et aut quia vel pariatur. Sint ut natus quia vitae sed quia. Numquam voluptatem quis beatae optio facere animi voluptatem. Quidem ullam ipsa velit totam debitis enim. Eos nesciunt aut dolores vitae consequuntur voluptas. Molestiae illo repellendus necessitatibus voluptatem. Optio labore necessitatibus incidunt. Non quia molestiae dolores repudiandae. Quam sapiente ea sed delectus molestiae deleniti maiores.",
@@ -4004,7 +4004,7 @@
                           {
                             "id": 1,
                             "type": "characters",
-                            "href": "/api/v1/characters/1",
+                            "href": "/v1/characters/1",
                             "attributes": {
                               "name": "Tyra Armstrong IV",
                               "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
@@ -4026,7 +4026,7 @@
                           {
                             "id": 2,
                             "type": "characters",
-                            "href": "/api/v1/characters/2",
+                            "href": "/v1/characters/2",
                             "attributes": {
                               "name": "Lorna Pollich",
                               "about": "Est vitae et voluptas ullam unde id ea. Quo non distinctio ipsa blanditiis aspernatur. Perferendis aut officia sit similique soluta odit eum. Sunt quo delectus est quis sapiente. A natus voluptatem omnis distinctio quis quas. Molestiae ut aut voluptas incidunt necessitatibus nihil culpa. Molestiae dolores illo dignissimos amet sit. Sit non et enim doloremque ratione exercitationem. Hic voluptas ab eos quia quia quia. Hic expedita est distinctio quaerat accusamus.",
@@ -4046,7 +4046,7 @@
                             }
                           }
                         ],
-                        "href": "/api/v1/anime/1/characters"
+                        "href": "/v1/anime/1/characters"
                       },
                       "cast": {
                         "data": [
@@ -4054,7 +4054,7 @@
                             "person": {
                               "id": 10,
                               "type": "people",
-                              "href": "/api/v1/people/10",
+                              "href": "/v1/people/10",
                               "attributes": {
                                 "firstName": "Leatha",
                                 "lastName": "Dietrich",
@@ -4065,7 +4065,7 @@
                             "character": {
                               "id": 10,
                               "type": "characters",
-                              "href": "/api/v1/characters/10",
+                              "href": "/v1/characters/10",
                               "attributes": {
                                 "name": "Savion Strosin",
                                 "about": "Quae rerum delectus neque et officiis fuga incidunt et. Exercitationem et consequatur quae sunt molestias repellat dolorem. Necessitatibus iusto voluptatem ea dolor quasi. Rerum voluptas vel voluptate. Aut est dignissimos et molestias dolores sed perspiciatis. Aperiam eveniet omnis quo vel ipsum incidunt earum. Maxime veritatis eligendi sit. Quae et placeat earum quos. Et ut possimus in cumque. Omnis veniam distinctio officia minus. Et aut quia vel pariatur. Sint ut natus quia vitae sed quia. Numquam voluptatem quis beatae optio facere animi voluptatem. Quidem ullam ipsa velit totam debitis enim. Eos nesciunt aut dolores vitae consequuntur voluptas. Molestiae illo repellendus necessitatibus voluptatem. Optio labore necessitatibus incidunt. Non quia molestiae dolores repudiandae. Quam sapiente ea sed delectus molestiae deleniti maiores.",
@@ -4090,7 +4090,7 @@
                             "person": {
                               "id": 1,
                               "type": "people",
-                              "href": "/api/v1/people/1",
+                              "href": "/v1/people/1",
                               "attributes": {
                                 "firstName": "Aniyah",
                                 "lastName": "Waelchi",
@@ -4101,7 +4101,7 @@
                             "character": {
                               "id": 1,
                               "type": "characters",
-                              "href": "/api/v1/characters/1",
+                              "href": "/v1/characters/1",
                               "attributes": {
                                 "name": "Tyra Armstrong IV",
                                 "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
@@ -4126,7 +4126,7 @@
                             "person": {
                               "id": 2,
                               "type": "people",
-                              "href": "/api/v1/people/2",
+                              "href": "/v1/people/2",
                               "attributes": {
                                 "firstName": "Ashley",
                                 "lastName": "Carroll",
@@ -4137,7 +4137,7 @@
                             "character": {
                               "id": 2,
                               "type": "characters",
-                              "href": "/api/v1/characters/2",
+                              "href": "/v1/characters/2",
                               "attributes": {
                                 "name": "Lorna Pollich",
                                 "about": "Est vitae et voluptas ullam unde id ea. Quo non distinctio ipsa blanditiis aspernatur. Perferendis aut officia sit similique soluta odit eum. Sunt quo delectus est quis sapiente. A natus voluptatem omnis distinctio quis quas. Molestiae ut aut voluptas incidunt necessitatibus nihil culpa. Molestiae dolores illo dignissimos amet sit. Sit non et enim doloremque ratione exercitationem. Hic voluptas ab eos quia quia quia. Hic expedita est distinctio quaerat accusamus.",
@@ -4159,7 +4159,7 @@
                             "role": "Tritagonist"
                           }
                         ],
-                        "href": "/api/v1/anime/1/cast"
+                        "href": "/v1/anime/1/cast"
                       },
                       "relatedShows": {
                         "data": [
@@ -4167,7 +4167,7 @@
                             "show": {
                               "id": 217,
                               "type": "show",
-                              "href": "/api/v1/anime/217",
+                              "href": "/v1/anime/217",
                               "attributes": {
                                 "anidbID": null,
                                 "anilistID": null,
@@ -4221,7 +4221,7 @@
                             "show": {
                               "id": 219,
                               "type": "show",
-                              "href": "/api/v1/anime/219",
+                              "href": "/v1/anime/219",
                               "attributes": {
                                 "title": "Nam voluptatum voluptas optio qui.",
                                 "type": "Unknown",
@@ -4266,14 +4266,14 @@
                             }
                           }
                         ],
-                        "href": "/api/v1/anime/1/related-shows"
+                        "href": "/v1/anime/1/related-shows"
                       },
                       "seasons": {
                         "data": [
                           {
                             "id": 1,
                             "type": "seasons",
-                            "href": "/api/v1/anime-seasons/1",
+                            "href": "/v1/anime-seasons/1",
                             "attributes": {
                               "animeID": 1,
                               "title": "Season 1",
@@ -4283,7 +4283,7 @@
                             }
                           }
                         ],
-                        "href": "/api/v1/anime/1/seasons"
+                        "href": "/v1/anime/1/seasons"
                       }
                     }
                   }
@@ -4305,7 +4305,7 @@
                     "person": {
                       "id": 10,
                       "type": "people",
-                      "href": "/api/v1/people/10",
+                      "href": "/v1/people/10",
                       "attributes": {
                         "firstName": "Leatha",
                         "lastName": "Dietrich",
@@ -4316,7 +4316,7 @@
                     "character": {
                       "id": 10,
                       "type": "characters",
-                      "href": "/api/v1/characters/10",
+                      "href": "/v1/characters/10",
                       "attributes": {
                         "name": "Savion Strosin",
                         "about": "Quae rerum delectus neque et officiis fuga incidunt et. Exercitationem et consequatur quae sunt molestias repellat dolorem. Necessitatibus iusto voluptatem ea dolor quasi. Rerum voluptas vel voluptate. Aut est dignissimos et molestias dolores sed perspiciatis. Aperiam eveniet omnis quo vel ipsum incidunt earum. Maxime veritatis eligendi sit. Quae et placeat earum quos. Et ut possimus in cumque. Omnis veniam distinctio officia minus. Et aut quia vel pariatur. Sint ut natus quia vitae sed quia. Numquam voluptatem quis beatae optio facere animi voluptatem. Quidem ullam ipsa velit totam debitis enim. Eos nesciunt aut dolores vitae consequuntur voluptas. Molestiae illo repellendus necessitatibus voluptatem. Optio labore necessitatibus incidunt. Non quia molestiae dolores repudiandae. Quam sapiente ea sed delectus molestiae deleniti maiores.",
@@ -4341,7 +4341,7 @@
                     "person": {
                       "id": 1,
                       "type": "people",
-                      "href": "/api/v1/people/1",
+                      "href": "/v1/people/1",
                       "attributes": {
                         "firstName": "Aniyah",
                         "lastName": "Waelchi",
@@ -4352,7 +4352,7 @@
                     "character": {
                       "id": 1,
                       "type": "characters",
-                      "href": "/api/v1/characters/1",
+                      "href": "/v1/characters/1",
                       "attributes": {
                         "name": "Tyra Armstrong IV",
                         "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
@@ -4390,7 +4390,7 @@
                   {
                     "id": 1,
                     "type": "characters",
-                    "href": "/api/v1/characters/1",
+                    "href": "/v1/characters/1",
                     "attributes": {
                       "name": "Tyra Armstrong IV",
                       "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
@@ -4412,7 +4412,7 @@
                   {
                     "id": 2,
                     "type": "characters",
-                    "href": "/api/v1/characters/2",
+                    "href": "/v1/characters/2",
                     "attributes": {
                       "name": "Lorna Pollich",
                       "about": "Est vitae et voluptas ullam unde id ea. Quo non distinctio ipsa blanditiis aspernatur. Perferendis aut officia sit similique soluta odit eum. Sunt quo delectus est quis sapiente. A natus voluptatem omnis distinctio quis quas. Molestiae ut aut voluptas incidunt necessitatibus nihil culpa. Molestiae dolores illo dignissimos amet sit. Sit non et enim doloremque ratione exercitationem. Hic voluptas ab eos quia quia quia. Hic expedita est distinctio quaerat accusamus.",
@@ -4449,7 +4449,7 @@
                     "show": {
                       "id": 217,
                       "type": "show",
-                      "href": "/api/v1/anime/217",
+                      "href": "/v1/anime/217",
                       "attributes": {
                         "anidbID": null,
                         "anilistID": null,
@@ -4503,7 +4503,7 @@
                     "show": {
                       "id": 219,
                       "type": "show",
-                      "href": "/api/v1/anime/219",
+                      "href": "/v1/anime/219",
                       "attributes": {
                         "title": "Nam voluptatum voluptas optio qui.",
                         "type": "Unknown",
@@ -4565,7 +4565,7 @@
                   {
                     "id": 1,
                     "type": "seasons",
-                    "href": "/api/v1/anime-seasons/1",
+                    "href": "/v1/anime-seasons/1",
                     "attributes": {
                       "animeID": 1,
                       "title": "Season 1",
@@ -4591,7 +4591,7 @@
                   {
                     "id": 10,
                     "type": "staff",
-                    "href": "/api/v1/anime/138/staff",
+                    "href": "/v1/anime/138/staff",
                     "attributes": {
                       "role": {
                         "name": "Digital Colouring",
@@ -4600,11 +4600,11 @@
                     },
                     "relationships": {
                       "person": {
-                        "href": "/api/v1/people/10",
+                        "href": "/v1/people/10",
                         "data": {
                           "id": 1,
                           "type": "people",
-                          "href": "/api/v1/people/1",
+                          "href": "/v1/people/1",
                           "attributes": {
                             "firstName": "Aubrey",
                             "lastName": "Littel",
@@ -4638,7 +4638,7 @@
                   {
                     "id":8,
                     "type": "studios",
-                    "href": "/api/v1/studios/8",
+                    "href": "/v1/studios/8",
                     "attributes": {
                       "name": "Bogan, Medhurst and Stamm",
                       "logo": {
@@ -4666,7 +4666,7 @@
                   {
                     "id": 1,
                     "type": "show",
-                    "href": "/api/v1/anime/1",
+                    "href": "/v1/anime/1",
                     "attributes": {
                       "title": "\"0\"",
                       "type": "Tv",
@@ -4681,7 +4681,7 @@
                         {
                           "id": 1,
                           "type": "studios",
-                          "href": "/api/v1/studios/1",
+                          "href": "/v1/studios/1",
                           "attributes": {
                             "name": "Watsica-Kling",
                             "logoURL": "https://place-hold.it/512x512",
@@ -4739,7 +4739,7 @@
                   {
                     "id": 2,
                     "type": "show",
-                    "href": "/api/v1/anime/2",
+                    "href": "/v1/anime/2",
                     "attributes": {
                       "title": "\"Aesop\" no Ohanashi yori: Ushi to Kaeru, Yokubatta Inu",
                       "type": "Tv",
@@ -4754,7 +4754,7 @@
                         {
                           "id": 2,
                           "type": "studios",
-                          "href": "/api/v1/studios/2",
+                          "href": "/v1/studios/2",
                           "attributes": {
                             "name": null,
                             "logoURL": null,
@@ -4805,7 +4805,7 @@
                   {
                     "id": 1,
                     "type": "seasons",
-                    "href": "/api/v1/anime-seasons/1",
+                    "href": "/v1/anime-seasons/1",
                     "attributes": {
                       "animeID": 1,
                       "title": "Season 1",
@@ -4831,7 +4831,7 @@
                   {
                     "id": 1,
                     "type": "episodes",
-                    "href": "/api/v1/anime-seasons/1/episodes",
+                    "href": "/v1/anime-seasons/1/episodes",
                     "attributes": {
                       "number": 1,
                       "title": "Episode 1",
@@ -4844,7 +4844,7 @@
                   {
                     "id": 2,
                     "type": "episodes",
-                    "href": "/api/v1/anime-seasons/2/episodes",
+                    "href": "/v1/anime-seasons/2/episodes",
                     "attributes": {
                       "number": 2,
                       "title": "Episode 2",
@@ -4860,8 +4860,8 @@
           }
         }
       },
-      "GetAnimeEpisodesDetailsSuccess": {
-        "description": "Successful GET Anime Episodes Details JSON response",
+      "GetEpisodesDetailsSuccess": {
+        "description": "Successful GET Episodes Details JSON response",
         "content": {
           "application/json": {
             "schema": {
@@ -4871,7 +4871,7 @@
                   {
                     "id": 1,
                     "type": "episodes",
-                    "href": "/api/v1/anime-episodes/1",
+                    "href": "/v1/episodes/1",
                     "attributes": {
                       "number": 1,
                       "title": "Episode 1",
@@ -4887,8 +4887,8 @@
           }
         }
       },
-      "PostAnimeEpisodesWatchedSuccess": {
-        "description": "Successful POST Anime Episodes Watched JSON response",
+      "PostEpisodesWatchedSuccess": {
+        "description": "Successful POST Episodes Watched JSON response",
         "content": {
           "application/json": {
             "schema": {
@@ -4913,7 +4913,7 @@
                   {
                     "id": 1,
                     "type": "characters",
-                    "href": "/api/v1/characters/1",
+                    "href": "/v1/characters/1",
                     "attributes": {
                       "name": "Tyra Armstrong IV",
                       "about": "Aspernatur odio ab laborum neque voluptatem quia amet aliquam. Quaerat autem quo quis reprehenderit iure nostrum. Explicabo nam dignissimos ut consequatur. Veniam sapiente explicabo laborum sit harum optio enim sed. Ex corrupti fuga esse quia voluptatibus. Sit in qui ut saepe adipisci reiciendis. Consequatur aspernatur molestiae est saepe mollitia qui. Laudantium eligendi odio adipisci illo. Culpa delectus maxime aperiam nemo impedit eos. Dicta et aliquid ratione est alias autem possimus. Aut repellendus beatae ipsum ipsum numquam animi. Nam et et est pariatur. Facilis sed et sit quia quam quo. A quae repudiandae pariatur mollitia. Exercitationem earum deserunt voluptate dolore facilis impedit fuga. Hic delectus consequatur quidem. Quia dolorum et voluptatum consectetur quis. Voluptatum hic in deleniti voluptates sunt. Qui perspiciatis rerum et porro.",
@@ -4937,7 +4937,7 @@
                           {
                             "id": 220,
                             "type": "show",
-                            "href": "/api/v1/anime/220",
+                            "href": "/v1/anime/220",
                             "attributes": {
                               "anidbID": null,
                               "anilistID": null,
@@ -4983,14 +4983,14 @@
                             }
                           }
                         ],
-                        "href": "/api/v1/characters/1/anime"
+                        "href": "/v1/characters/1/anime"
                       },
                       "people": {
                         "data": [
                           {
                             "id": 1,
                             "type": "people",
-                            "href": "/api/v1/people/1",
+                            "href": "/v1/people/1",
                             "attributes": {
                               "firstName": "Aniyah",
                               "lastName": "Waelchi",
@@ -4999,7 +4999,7 @@
                             }
                           }
                         ],
-                        "href": "/api/v1/characters/1/people"
+                        "href": "/v1/characters/1/people"
                       }
                     }
                   }
@@ -5020,7 +5020,7 @@
                   {
                     "id": 1,
                     "type": "people",
-                    "href": "/api/v1/people/1",
+                    "href": "/v1/people/1",
                     "attributes": {
                       "firstName": "Aniyah",
                       "lastName": "Waelchi",
@@ -5045,7 +5045,7 @@
                   {
                     "id": 227,
                     "type": "show",
-                    "href": "/api/v1/anime/227",
+                    "href": "/v1/anime/227",
                     "attributes": {
                       "anidbID": null,
                       "anilistID": null,
@@ -5093,7 +5093,7 @@
                   {
                     "id": 229,
                     "type": "show",
-                    "href": "/api/v1/anime/229",
+                    "href": "/v1/anime/229",
                     "attributes": {
                       "anidbID": null,
                       "anilistID": null,
@@ -5155,7 +5155,7 @@
                   {
                     "id": 1,
                     "type": "genres",
-                    "href": "/api/v1/genres/1",
+                    "href": "/v1/genres/1",
                     "attributes": {
                       "name": "Action",
                       "color": "#FFE4B9",
@@ -5167,7 +5167,7 @@
                   {
                     "id": 2,
                     "type": "genres",
-                    "href": "/api/v1/genres/2",
+                    "href": "/v1/genres/2",
                     "attributes": {
                       "name": "Adventure",
                       "color": "#CAF0FF",
@@ -5193,7 +5193,7 @@
                   {
                     "id": 1,
                     "type": "genres",
-                    "href": "/api/v1/genres/1",
+                    "href": "/v1/genres/1",
                     "attributes": {
                       "name": "Action",
                       "color": "#FFE4B9",
@@ -5219,7 +5219,7 @@
                   {
                     "id": 1,
                     "type": "sections",
-                    "href": "/api/v1/forum-sections/1",
+                    "href": "/v1/forum-sections/1",
                     "attributes": {
                       "name": "Anime",
                       "isLocked": false
@@ -5228,7 +5228,7 @@
                   {
                     "id": 2,
                     "type": "sections",
-                    "href": "/api/v1/forum-sections/2",
+                    "href": "/v1/forum-sections/2",
                     "attributes": {
                       "name": "Real Life",
                       "isLocked": true
@@ -5251,7 +5251,7 @@
                   {
                     "id": 1,
                     "type": "sections",
-                    "href": "/api/v1/forum-sections/1",
+                    "href": "/v1/forum-sections/1",
                     "attributes": {
                       "name": "Anime",
                       "isLocked": false
@@ -5274,7 +5274,7 @@
                   {
                     "id": 1,
                     "type": "threads",
-                    "href": "/api/v1/forum-threads/1",
+                    "href": "/v1/forum-threads/1",
                     "attributes": {
                       "title": "Enim quia molestiae.",
                       "content": "Fuga repellendus blanditiis quaerat provident et doloremque. Ad ullam nulla at optio ipsa ipsum.",
@@ -5295,7 +5295,7 @@
                           {
                             "id": 29,
                             "type": "users",
-                            "href": "/api/v1/users/29/profile",
+                            "href": "/v1/users/29/profile",
                             "attributes": {
                               "username": "reynold71",
                               "activityStatus": "Offline",
@@ -5315,7 +5315,7 @@
                   {
                     "id": 2,
                     "type": "threads",
-                    "href": "/api/v1/forum-threads/2",
+                    "href": "/v1/forum-threads/2",
                     "attributes": {
                       "title": "Voluptatem possimus sunt.",
                       "content": "Cupiditate voluptatem quaerat eaque veniam atque. Id et fugiat dolore nihil necessitatibus ut quia tempore. Natus aspernatur consequatur dolores dolore ea consequatur rerum possimus.",
@@ -5336,7 +5336,7 @@
                           {
                             "id": 29,
                             "type": "users",
-                            "href": "/api/v1/users/29/profile",
+                            "href": "/v1/users/29/profile",
                             "attributes": {
                               "username": "reynold71",
                               "activityStatus": "Offline",
@@ -5370,7 +5370,7 @@
                   {
                     "id": 52,
                     "type": "threads",
-                    "href": "/api/v1/forum-threads/52",
+                    "href": "/v1/forum-threads/52",
                     "attributes": {
                       "title": "Re:Zero",
                       "content": "Good anime to watch.",
@@ -5391,7 +5391,7 @@
                           {
                             "id": 2,
                             "type": "users",
-                            "href": "/api/v1/users/2/profile",
+                            "href": "/v1/users/2/profile",
                             "attributes": {
                               "username": "Kirito",
                               "activityStatus": "Online",
@@ -5425,7 +5425,7 @@
                   {
                     "id": 1,
                     "type": "threads",
-                    "href": "/api/v1/forum-threads/1",
+                    "href": "/v1/forum-threads/1",
                     "attributes": {
                       "title": "Enim quia molestiae.",
                       "content": "Fuga repellendus blanditiis quaerat provident et doloremque. Ad ullam nulla at optio ipsa ipsum.",
@@ -5446,7 +5446,7 @@
                           {
                             "id": 29,
                             "type": "users",
-                            "href": "/api/v1/users/29/profile",
+                            "href": "/v1/users/29/profile",
                             "attributes": {
                               "username": "reynold71",
                               "activityStatus": "Offline",
@@ -5495,7 +5495,7 @@
                   {
                     "id": 56,
                     "type": "replies",
-                    "href": "/api/v1/forum-threads/56/replies",
+                    "href": "/v1/forum-threads/56/replies",
                     "attributes": {
                       "content": "Ipsum aliquid quasi hic accusamus. Dolor incidunt repellendus voluptatum modi temporibus cum totam.",
                       "metrics": {
@@ -5513,7 +5513,7 @@
                           {
                             "id": 45,
                             "type": "users",
-                            "href": "/api/v1/users/45/profile",
+                            "href": "/v1/users/45/profile",
                             "attributes": {
                               "username": "mattie47",
                               "activityStatus": "Offline",
@@ -5533,7 +5533,7 @@
                   {
                     "id": 97,
                     "type": "replies",
-                    "href": "/api/v1/forum-threads/97/replies",
+                    "href": "/v1/forum-threads/97/replies",
                     "attributes": {
                       "content": "Tenetur dignissimos exercitationem qui dolores doloremque labore. Nobis non in iste qui est exercitationem.",
                       "metrics": {
@@ -5551,7 +5551,7 @@
                           {
                             "id": 14,
                             "type": "users",
-                            "href": "/api/v1/users/14/profile",
+                            "href": "/v1/users/14/profile",
                             "attributes": {
                               "username": "neal.green",
                               "activityStatus": "Offline",
@@ -5586,7 +5586,7 @@
                   {
                     "id": 210,
                     "type": "replies",
-                    "href": "/api/v1/forum-threads/209/replies",
+                    "href": "/v1/forum-threads/209/replies",
                     "attributes": {
                       "content": "New reply content.",
                       "metrics": {
@@ -5604,7 +5604,7 @@
                           {
                             "id": 2,
                             "type": "users",
-                            "href": "/api/v1/users/2/profile",
+                            "href": "/v1/users/2/profile",
                             "attributes": {
                               "username": "Kirito",
                               "activityStatus": "Online",
@@ -5638,7 +5638,7 @@
                   {
                     "id": 31,
                     "type": "threads",
-                    "href": "/api/v1/forum-threads/31",
+                    "href": "/v1/forum-threads/31",
                     "attributes": {
                       "title": "Saepe voluptas sunt itaque.",
                       "content": "Beatae eos quisquam voluptatem id non. Inventore quam ea voluptatem laboriosam fuga quia enim qui. Illo blanditiis hic aperiam perspiciatis et id veniam.",
@@ -5659,7 +5659,7 @@
                           {
                             "id": 36,
                             "type": "users",
-                            "href": "/api/v1/users/36/profile",
+                            "href": "/v1/users/36/profile",
                             "attributes": {
                               "username": "iliana.jacobs",
                               "activityStatus": "Offline",
@@ -5679,7 +5679,7 @@
                   {
                     "id": 43,
                     "type": "threads",
-                    "href": "/api/v1/forum-threads/43",
+                    "href": "/v1/forum-threads/43",
                     "attributes": {
                       "title": "Sunt harum quo fuga.",
                       "content": "Exercitationem alias nemo nobis omnis deserunt sit. Quidem ab accusamus non nemo. Aut rerum officiis dignissimos nulla dolorem hic fugiat.",
@@ -5700,7 +5700,7 @@
                           {
                             "id": 44,
                             "type": "users",
-                            "href": "/api/v1/users/44/profile",
+                            "href": "/v1/users/44/profile",
                             "attributes": {
                               "username": "lilliana45",
                               "activityStatus": "Offline",
@@ -5720,7 +5720,7 @@
                   {
                     "id": 47,
                     "type": "threads",
-                    "href": "/api/v1/forum-threads/47",
+                    "href": "/v1/forum-threads/47",
                     "attributes": {
                       "title": "Sit possimus incidunt.",
                       "content": "Vero hic ea explicabo iure aut. Maiores voluptates reprehenderit vel perferendis.",
@@ -5741,7 +5741,7 @@
                           {
                             "id": 53,
                             "type": "users",
-                            "href": "/api/v1/users/53/profile",
+                            "href": "/v1/users/53/profile",
                             "attributes": {
                               "username": "maximilian.glover",
                               "activityStatus": "Offline",
@@ -5805,7 +5805,7 @@
                   {
                     "id": 24,
                     "type": "sessions",
-                    "href": "/api/v1/sessions/24",
+                    "href": "/v1/sessions/24",
                     "attributes": {
                       "ip": "127.0.0.1",
                       "lastValidatedAt": "2020-08-04 22:51:58"
@@ -5817,7 +5817,7 @@
                           {
                             "id": 2,
                             "type": "users",
-                            "href": "/api/v1/users/2/profile",
+                            "href": "/v1/users/2/profile",
                             "attributes": {
                               "username": "Kirito",
                               "activityStatus": "Online",
@@ -5871,7 +5871,7 @@
                 "data": {
                   "id": 3,
                   "type": "sessions",
-                  "href": "/api/v1/sessions/3",
+                  "href": "/v1/sessions/3",
                   "attributes": {
                     "ip": "127.0.0.1",
                     "lastValidatedAt": "2020-07-28 02:43:50",
@@ -5938,7 +5938,7 @@
                   {
                     "id": 1,
                     "type": "studios",
-                    "href": "/api/v1/studios/1",
+                    "href": "/v1/studios/1",
                     "attributes": {
                       "name": "Considine-Tillman",
                       "logoURL": "https://lorempixel.com/640/480/?85310",
@@ -5952,7 +5952,7 @@
                           {
                             "id": 1,
                             "type": "show",
-                            "href": "/api/v1/anime/1",
+                            "href": "/v1/anime/1",
                             "attributes": {
                               "title": "\"0\"",
                               "type": "Tv",
@@ -5967,7 +5967,7 @@
                                 {
                                   "id": 1,
                                   "type": "studios",
-                                  "href": "/api/v1/studios/1",
+                                  "href": "/v1/studios/1",
                                   "attributes": {
                                     "name": null,
                                     "logoURL": null,
@@ -6004,7 +6004,7 @@
                           {
                             "id": 2,
                             "type": "show",
-                            "href": "/api/v1/anime/2",
+                            "href": "/v1/anime/2",
                             "attributes": {
                               "title": "\"Aesop\" no Ohanashi yori: Ushi to Kaeru, Yokubatta Inu",
                               "type": "Tv",
@@ -6019,7 +6019,7 @@
                                 {
                                   "id": 2,
                                   "type": "studios",
-                                  "href": "/api/v1/studios/2",
+                                  "href": "/v1/studios/2",
                                   "attributes": {
                                     "name": null,
                                     "logoURL": null,
@@ -6054,7 +6054,7 @@
                             }
                           }
                         ],
-                        "href": "/api/v1/studios/1/anime"
+                        "href": "/v1/studios/1/anime"
                       }
                     }
                   }
@@ -6075,7 +6075,7 @@
                   {
                     "id": 1,
                     "type": "show",
-                    "href": "/api/v1/anime/1",
+                    "href": "/v1/anime/1",
                     "attributes": {
                       "title": "\"0\"",
                       "type": "Tv",
@@ -6090,7 +6090,7 @@
                         {
                           "id": 1,
                           "type": "studios",
-                          "href": "/api/v1/studios/1",
+                          "href": "/v1/studios/1",
                           "attributes": {
                             "name": null,
                             "logoURL": null,
@@ -6127,7 +6127,7 @@
                   {
                     "id": 2,
                     "type": "show",
-                    "href": "/api/v1/anime/2",
+                    "href": "/v1/anime/2",
                     "attributes": {
                       "title": "\"Aesop\" no Ohanashi yori: Ushi to Kaeru, Yokubatta Inu",
                       "type": "Tv",
@@ -6142,7 +6142,7 @@
                         {
                           "id": 2,
                           "type": "studios",
-                          "href": "/api/v1/studios/2",
+                          "href": "/v1/studios/2",
                           "attributes": {
                             "name": null,
                             "logoURL": null,
@@ -6225,7 +6225,7 @@
                   {
                     "id": 1,
                     "type": "themes",
-                    "href": "/api/v1/themes/1",
+                    "href": "/v1/themes/1",
                     "attributes": {
                       "name": "Tatum Orn",
                       "screenshot": "https://kurozora.app/storage/1/Screenshot.jpeg",
@@ -6247,7 +6247,7 @@
               "example": {
                 "data": {
                   "type": "legal",
-                  "href": "/api/v1/privacy-policy",
+                  "href": "/v1/privacy-policy",
                   "attributes": {
                     "text": "The Privacy Policy in HTML format."
                   }
@@ -6266,7 +6266,7 @@
               "example": {
                 "data": {
                   "type": "legal",
-                  "href": "/api/v1/terms-of-use",
+                  "href": "/v1/terms-of-use",
                   "attributes": {
                     "text": "The Terms of Use in HTML format."
                   }
