@@ -2,16 +2,28 @@
 
 namespace App\Models;
 
+use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class AnimeEpisode extends KModel
+class Episode extends KModel
 {
-    use HasFactory;
+    use HasFactory,
+        Translatable;
 
     // Table name
-    const TABLE_NAME = 'anime_episodes';
+    const TABLE_NAME = 'episodes';
     protected $table = self::TABLE_NAME;
+
+    /**
+     * Translatable attributes.
+     *
+     * @var array
+     */
+    public array $translatedAttributes = [
+        'title',
+        'synopsis',
+    ];
 
     /**
      * The attributes that should be mutated to dates.

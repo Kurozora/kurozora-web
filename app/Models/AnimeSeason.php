@@ -22,7 +22,7 @@ class AnimeSeason extends KModel
      */
     function episodes(): HasMany
     {
-        return $this->hasMany(AnimeEpisode::class, 'season_id');
+        return $this->hasMany(Episode::class, 'season_id');
     }
 
     /**
@@ -58,7 +58,7 @@ class AnimeSeason extends KModel
      */
     public function getFirstAired(): ?string
     {
-        /** @var ?AnimeEpisode $firstEpisode */
+        /** @var ?Episode $firstEpisode */
         $firstEpisode = $this->episodes->firstWhere('number', 1);
 
         if ($firstEpisode == null)
@@ -74,16 +74,16 @@ class AnimeSeason extends KModel
      */
     public function getEpisodeCount(): int
     {
-        return AnimeEpisode::where('season_id', $this->id)->count();
+        return Episode::where('season_id', $this->id)->count();
     }
 
     /**
      * Gets the episodes for this season
      *
-     * @return AnimeEpisode[]|array
+     * @return Episode[]|array
      */
     public function getEpisodes(): Collection|array
     {
-        return AnimeEpisode::where('season_id', $this->id)->get();
+        return Episode::where('season_id', $this->id)->get();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Tests\API;
 
-use App\Models\AnimeEpisode;
+use App\Models\Episode;
 use App\Enums\UserLibraryStatus;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
@@ -21,10 +21,10 @@ class EpisodeTest extends TestCase
      */
     public function a_user_can_view_specific_episode_details()
     {
-        /** @var AnimeEpisode $episode */
-        $episode = AnimeEpisode::factory()->create();
+        /** @var Episode $episode */
+        $episode = Episode::factory()->create();
 
-        $response = $this->get('v1/anime-episodes/'.$episode->id);
+        $response = $this->get('v1/episodes/'.$episode->id);
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
@@ -41,10 +41,10 @@ class EpisodeTest extends TestCase
      */
     public function an_authenticated_user_can_view_specific_episode_details()
     {
-        /** @var AnimeEpisode $episode */
-        $episode = AnimeEpisode::factory()->create();
+        /** @var Episode $episode */
+        $episode = Episode::factory()->create();
 
-        $response = $this->auth()->json('GET', 'v1/anime-episodes/'.$episode->id);
+        $response = $this->auth()->json('GET', 'v1/episodes/'.$episode->id);
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
@@ -61,7 +61,7 @@ class EpisodeTest extends TestCase
      */
     function an_episode_can_not_be_watched_if_anime_not_in_library()
     {
-        $response = $this->auth()->json('POST', 'v1/anime-episodes/' . $this->episode->id . '/watched');
+        $response = $this->auth()->json('POST', 'v1/episodes/' . $this->episode->id . '/watched');
 
         // Check whether the request was unsuccessful
         $response->assertUnsuccessfulAPIResponse();
@@ -78,7 +78,7 @@ class EpisodeTest extends TestCase
      */
     function an_episode_can_not_be_unwatched_if_anime_not_in_library()
     {
-        $response = $this->auth()->json('POST', 'v1/anime-episodes/' . $this->episode->id . '/watched');
+        $response = $this->auth()->json('POST', 'v1/episodes/' . $this->episode->id . '/watched');
 
         // Check whether the request was unsuccessful
         $response->assertUnsuccessfulAPIResponse();
@@ -99,7 +99,7 @@ class EpisodeTest extends TestCase
         $this->user->library()->attach($this->anime, ['status' => UserLibraryStatus::Watching]);
 
         // Mark episode as watched
-        $response = $this->auth()->json('POST', 'v1/anime-episodes/' . $this->episode->id . '/watched');
+        $response = $this->auth()->json('POST', 'v1/episodes/' . $this->episode->id . '/watched');
 
         // Check whether the request was successful
         $response->assertSuccessfulAPIResponse();
@@ -118,10 +118,10 @@ class EpisodeTest extends TestCase
     {
         // Add the Anime to the library and mark episode as watched
         $this->user->library()->attach($this->anime, ['status' => UserLibraryStatus::Watching]);
-        $this->auth()->json('POST', 'v1/anime-episodes/' . $this->episode->id . '/watched');
+        $this->auth()->json('POST', 'v1/episodes/' . $this->episode->id . '/watched');
 
         // Mark episode as unwatched.
-        $response = $this->auth()->json('POST', 'v1/anime-episodes/' . $this->episode->id . '/watched');
+        $response = $this->auth()->json('POST', 'v1/episodes/' . $this->episode->id . '/watched');
 
         // Check whether the request was successful
         $response->assertSuccessfulAPIResponse();
@@ -134,11 +134,11 @@ class EpisodeTest extends TestCase
      * Asserts whether the given episode is watched by the user or not.
      *
      * @param bool $expected
-     * @param AnimeEpisode $episode
+     * @param Episode $episode
      */
-    private function assertEpisodeWatched(bool $expected, AnimeEpisode $episode)
+    private function assertEpisodeWatched(bool $expected, Episode $episode)
     {
-        $exists = $this->user->watchedAnimeEpisodes()->where('episode_id', $episode->id)->exists();
+        $exists = $this->user->watchedEpisodes()->where('episode_id', $episode->id)->exists();
 
         $message = 'Episode ID ' . $episode->id .' was ' . ($exists ? 'found' : 'not found') . ' in the user\'s watch list.';
 

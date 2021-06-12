@@ -64,10 +64,10 @@ class AnimeFactory extends Factory
             'original_title'    => $title,
             'tagline'           => $this->faker->sentence,
             'title'             => $title,
-            'synopsis'          => $this->faker->paragraph,
+            'synopsis'          => $this->faker->realText(),
             'ja'                => [
                 'title'         => $jaFaker->sentence,
-                'synopsis'      => $jaFaker->paragraph,
+                'synopsis'      => $jaFaker->realText(),
             ],
             'synonym_titles'    => $this->faker->sentences(),
             'tv_rating_id'      => $tvRating,

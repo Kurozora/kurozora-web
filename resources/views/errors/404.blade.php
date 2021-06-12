@@ -12,9 +12,9 @@
 
                 <p class="text-grey-500 text-2xl md:text-3xl font-light mb-8 leading-normal">{{ __('You seem to be lost on the path of life...') }}</p>
 
-                <x-outlined-button href="{{ url('/') }}" class="text-base font-bold py-3 px-6 border-2">
+                <x-outlined-link-button href="{{ url('/') }}" class="text-base font-bold py-3 px-6 border-2">
                     {{ __('Go Home?') }}
-                </x-outlined-button>
+                </x-outlined-link-button>
             </div>
         </div>
 

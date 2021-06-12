@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Anime;
-use App\Models\AnimeEpisode;
+use App\Models\Episode;
 use App\Models\AnimeSeason;
 use App\Enums\WatchStatus;
 use App\Models\User;
@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
-class AnimeEpisodeResource extends JsonResource
+class EpisodeResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -21,30 +21,31 @@ class AnimeEpisodeResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var AnimeEpisode $animeEpisode */
-        $animeEpisode = $this->resource;
+        /** @var Episode $episode */
+        $episode = $this->resource;
 
-        $firstAired = $animeEpisode->first_aired;
+        $firstAired = $episode->first_aired;
         if ($firstAired)
             $firstAired = $firstAired->format('j M, Y');
 
         $resource = [
-            'id'            => $animeEpisode->id,
+            'id'            => $episode->id,
             'type'          => 'episodes',
-            'href'          => route('api.episodes.details', $animeEpisode, false),
+            'href'          => route('api.episodes.details', $episode, false),
             'attributes'    => [
-                'number'        => $animeEpisode->number,
-                'title'         => $animeEpisode->title,
-                'overview'      => $animeEpisode->overview,
-                'previewImage'  => $animeEpisode->preview_image,
+                'number'        => $episode->number,
+                'title'         => $episode->title,
+                'synopsis'      => $episode->synopsis,
+                'previewImage'  => $episode->preview_image,
                 'firstAired'    => $firstAired,
-                'duration'      => $animeEpisode->duration,
-                'isVerified'    => (bool) $animeEpisode->verified
+                'duration'      => $episode->duration,
+                'isVerified'    => (bool) $episode->verified
             ]
         ];
 
-        if (Auth::check())
+        if (Auth::check()) {
             $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
+        }
 
         return $resource;
     }
@@ -56,21 +57,22 @@ class AnimeEpisodeResource extends JsonResource
      */
     protected function getUserSpecificDetails(): array
     {
-        /** @var AnimeEpisode $animeEpisode */
-        $animeEpisode = $this->resource;
+        /** @var Episode $episode */
+        $episode = $this->resource;
 
         /** @var User $user */
         $user = Auth::user();
 
         /** @var AnimeSeason $user */
-        $season = AnimeSeason::where('id', $animeEpisode->season_id)->first();
+        $season = AnimeSeason::where('id', $episode->season_id)->first();
 
         /** @var Anime $anime */
         $anime = $season->anime()->first();
 
         $watchStatus = WatchStatus::Disabled();
-        if ($user->isTracking($anime))
-            $watchStatus = WatchStatus::fromBool($user->watchedAnimeEpisodes()->where('episode_id', $animeEpisode->id)->exists());
+        if ($user->isTracking($anime)) {
+            $watchStatus = WatchStatus::fromBool($user->watchedEpisodes()->where('episode_id', $episode->id)->exists());
+        }
 
         // Return the array
         return [
