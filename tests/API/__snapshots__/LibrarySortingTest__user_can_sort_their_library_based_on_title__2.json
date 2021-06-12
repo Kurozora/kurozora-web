@@ -2,7 +2,7 @@
     {
         "id": 1,
         "type": "show",
-        "href": "\/api\/v1\/anime\/1",
+        "href": "\/v1\/anime\/1",
         "attributes": {
             "anidbID": null,
             "anilistID": null,
@@ -10,27 +10,25 @@
             "imdbID": null,
             "malID": null,
             "title": "Awesome Show",
-            "tagline": "Veritatis minus et doloribus eligendi omnis.",
+            "tagline": "Saepe reprehenderit est rerum repellat aliquid perferendis.",
             "synopsis": "A very awesome show.",
             "genres": [],
             "tvRating": {
-                "name": "g",
-                "description": "Voluptatem et velit pariatur sint optio."
+                "name": "x",
+                "description": "Nemo eos sint inventore deleniti enim et ut."
             },
             "type": {
-                "name": "Alden Grimes Jr.",
-                "description": "Sint ullam assumenda assumenda velit et ut dignissimos."
+                "name": "Mrs. Opal Prohaska MD",
+                "description": "Officia saepe neque quis."
             },
             "source": {
-                "name": "Mrs. Velva Stanton DVM",
-                "description": "Magnam repellendus voluptatem ut et labore."
+                "name": "Kevin Heathcote",
+                "description": "In veritatis eum repudiandae quibusdam et voluptatem."
             },
             "status": {
-                "name": "sequi doloribus",
-                "description": "Possimus perferendis ad est recusandae."
+                "name": "neque laudantium",
+                "description": "Est nihil vel dolore enim iure nisi vero minima."
             },
-            "network": null,
-            "producer": null,
             "episodeCount": "0",
             "seasonCount": "0",
             "averageRating": "2.5",
@@ -38,13 +36,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "1976-02-03",
-            "lastAired": "1976-04-27",
-            "runtime": "14",
-            "airTime": "00:45",
+            "firstAired": "1986-06-25",
+            "lastAired": "1986-12-10",
+            "runtime": "15",
+            "airTime": "09:34 UTC",
             "airDay": null,
             "isNSFW": true,
-            "copyright": "\u00ae 2014 Thompson and Sons",
+            "copyright": "\u2117 2019 Will, Lindgren and Lynch",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
@@ -54,7 +52,7 @@
     {
         "id": 2,
         "type": "show",
-        "href": "\/api\/v1\/anime\/2",
+        "href": "\/v1\/anime\/2",
         "attributes": {
             "anidbID": null,
             "anilistID": null,
@@ -62,27 +60,25 @@
             "imdbID": null,
             "malID": null,
             "title": "Be a good person!",
-            "tagline": "Quis at distinctio dolor.",
+            "tagline": "Sit aut reprehenderit aut sit.",
             "synopsis": "A story about being a good person.",
             "genres": [],
             "tvRating": {
-                "name": "g",
-                "description": "Voluptatem et velit pariatur sint optio."
+                "name": "x",
+                "description": "Nemo eos sint inventore deleniti enim et ut."
             },
             "type": {
-                "name": "Alden Grimes Jr.",
-                "description": "Sint ullam assumenda assumenda velit et ut dignissimos."
+                "name": "Mrs. Opal Prohaska MD",
+                "description": "Officia saepe neque quis."
             },
             "source": {
-                "name": "Mrs. Velva Stanton DVM",
-                "description": "Magnam repellendus voluptatem ut et labore."
+                "name": "Kevin Heathcote",
+                "description": "In veritatis eum repudiandae quibusdam et voluptatem."
             },
             "status": {
-                "name": "sequi doloribus",
-                "description": "Possimus perferendis ad est recusandae."
+                "name": "neque laudantium",
+                "description": "Est nihil vel dolore enim iure nisi vero minima."
             },
-            "network": null,
-            "producer": null,
             "episodeCount": "0",
             "seasonCount": "0",
             "averageRating": "4.0",
@@ -90,13 +86,13 @@
             "videoUrl": null,
             "poster": null,
             "background": null,
-            "firstAired": "1975-06-01",
-            "lastAired": "1975-11-16",
-            "runtime": "17",
-            "airTime": "14:33",
+            "firstAired": "2020-06-05",
+            "lastAired": "2020-11-20",
+            "runtime": "19",
+            "airTime": "05:25 UTC",
             "airDay": null,
             "isNSFW": true,
-            "copyright": "\u2117 2009 Crist-Bins",
+            "copyright": "\u00ae 2013 Frami Ltd",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,

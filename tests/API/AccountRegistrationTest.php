@@ -21,7 +21,7 @@ class AccountRegistrationTest extends TestCase
      */
     function an_account_can_be_signed_up()
     {
-        $this->json('POST', '/api/v1/users', [
+        $this->json('POST', 'v1/users', [
             'username'  => 'KurozoraTester',
             'password'  => 'StrongPassword909@!',
             'email'     => 'tester@kurozora.app'
@@ -46,7 +46,7 @@ class AccountRegistrationTest extends TestCase
         $uploadFile = UploadedFile::fake()->image('ProfileImage.jpg', 250, 250)->size(100);
 
         // Attempt to signup the user
-        $response = $this->json('POST', '/api/v1/users', [
+        $response = $this->json('POST', 'v1/users', [
             'username'      => 'KurozoraTester',
             'password'      => 'StrongPassword909@!',
             'email'         => 'tester@kurozora.app',
@@ -86,7 +86,7 @@ class AccountRegistrationTest extends TestCase
         $uploadFile = UploadedFile::fake()->image('ProfileImage.jpg', 250, 250)->size(1200);
 
         // Attempt to signup the user
-        $this->json('POST', '/api/v1/users', [
+        $this->json('POST', 'v1/users', [
             'username'      => 'KurozoraTester',
             'password'      => 'StrongPassword909@!',
             'email'         => 'tester@kurozora.app',
@@ -112,7 +112,7 @@ class AccountRegistrationTest extends TestCase
         $uploadFile = UploadedFile::fake()->create('document.pdf', 100);
 
         // Attempt to signup the user
-        $this->json('POST', '/api/v1/users', [
+        $this->json('POST', 'v1/users', [
             'username'      => 'KurozoraTester',
             'password'      => 'StrongPassword909@!',
             'email'         => 'tester@kurozora.app',
@@ -138,7 +138,7 @@ class AccountRegistrationTest extends TestCase
         $uploadFile = UploadedFile::fake()->image('ProfileImage.gif', 250, 250)->size(100);
 
         // Attempt to sign up the user
-        $this->json('POST', '/api/v1/users', [
+        $this->json('POST', 'v1/users', [
             'username'      => 'KurozoraTester',
             'password'      => 'StrongPassword909@!',
             'email'         => 'tester@kurozora.app',
@@ -158,7 +158,7 @@ class AccountRegistrationTest extends TestCase
     function an_account_cannot_be_signed_up_with_a_username_that_is_already_in_use()
     {
         // Create the first account
-        $this->json('POST', '/api/v1/users', [
+        $this->json('POST', 'v1/users', [
             'username'  => 'KurozoraTester',
             'password'  => 'StrongPassword909@!',
             'email'     => 'tester@kurozora.app'
@@ -168,7 +168,7 @@ class AccountRegistrationTest extends TestCase
         $this->assertEquals(1, User::count());
 
         // Attempt to create the second account
-        $this->json('POST', '/api/v1/users', [
+        $this->json('POST', 'v1/users', [
             'username'  => 'KurozoraTester',
             'password'  => 'StrongPassword909@!',
             'email'     => 'unique@kurozora.app'
@@ -187,7 +187,7 @@ class AccountRegistrationTest extends TestCase
     function an_account_cannot_be_signed_up_with_an_email_that_is_already_in_use()
     {
         // Create the first account
-        $this->json('POST', '/api/v1/users', [
+        $this->json('POST', 'v1/users', [
             'username'  => 'KurozoraTester',
             'password'  => 'StrongPassword909@!',
             'email'     => 'tester@kurozora.app'
@@ -197,7 +197,7 @@ class AccountRegistrationTest extends TestCase
         $this->assertEquals(1, User::count());
 
         // Attempt to create the second account
-        $this->json('POST', '/api/v1/users', [
+        $this->json('POST', 'v1/users', [
             'username'  => 'UniqueUsername',
             'password'  => 'StrongPassword909@!',
             'email'     => 'tester@kurozora.app'
@@ -219,7 +219,7 @@ class AccountRegistrationTest extends TestCase
         $longPassword = Str::random(256);
 
         // Attempt to signup the account
-        $this->json('POST', '/api/v1/users', [
+        $this->json('POST', 'v1/users', [
             'username'  => 'UniqueUsername',
             'password'  => $longPassword,
             'email'     => 'tester@kurozora.app'
@@ -238,7 +238,7 @@ class AccountRegistrationTest extends TestCase
     function an_account_cannot_be_signed_up_with_a_short_password()
     {
         // Attempt to signup the account
-        $this->json('POST', '/api/v1/users', [
+        $this->json('POST', 'v1/users', [
             'username'  => 'UniqueUsername',
             'password'  => 'hi',
             'email'     => 'tester@kurozora.app'

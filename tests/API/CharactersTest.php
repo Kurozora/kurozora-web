@@ -18,7 +18,7 @@ class CharactersTest extends TestCase
      */
     public function a_user_can_view_specific_character_details()
     {
-        $response = $this->get('/api/v1/characters/'.$this->character->id);
+        $response = $this->get('v1/characters/'.$this->character->id);
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
@@ -35,7 +35,7 @@ class CharactersTest extends TestCase
      */
     public function a_user_can_view_specific_character_details_including_relationships()
     {
-        $response = $this->get('/api/v1/characters/'.$this->character->id . '?include=shows,people');
+        $response = $this->get('v1/characters/'.$this->character->id . '?include=shows,people');
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
@@ -59,7 +59,7 @@ class CharactersTest extends TestCase
      */
     public function a_user_can_view_specific_character_people()
     {
-        $response = $this->get('/api/v1/characters/'.$this->character->id.'/people');
+        $response = $this->get('v1/characters/'.$this->character->id.'/people');
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
@@ -76,7 +76,7 @@ class CharactersTest extends TestCase
      */
     public function a_user_can_view_specific_character_anime()
     {
-        $response = $this->get('/api/v1/characters/'.$this->character->id.'/anime');
+        $response = $this->get('v1/characters/'.$this->character->id.'/anime');
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();

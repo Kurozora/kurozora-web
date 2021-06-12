@@ -15,11 +15,11 @@
   },
   "servers": [
     {
-      "url": "https://kurozora.app/api/v1",
+      "url": "https://api.kurozora.app/v1",
       "description": "Kurozora LIVE"
     },
     {
-      "url": "http://kurozora-web.test/api/v1",
+      "url": "https://api.kurozora-web.test/v1",
       "description": "Kurozora LOCAL"
     }
   ],
