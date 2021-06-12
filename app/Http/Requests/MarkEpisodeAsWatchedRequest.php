@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\AnimeEpisode;
+use App\Models\Episode;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MarkEpisodeAsWatchedRequest extends FormRequest
@@ -14,7 +14,7 @@ class MarkEpisodeAsWatchedRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        /** @var AnimeEpisode $episode */
+        /** @var Episode $episode */
         $episode = $this->route('episode');
 
         return $this->user()->can('mark_as_watched', $episode);

@@ -482,7 +482,7 @@ class Anime extends KModel
      */
     public function episodes(): HasManyThrough
     {
-        return $this->hasManyThrough(AnimeEpisode::class, AnimeSeason::class, 'anime_id', 'season_id');
+        return $this->hasManyThrough(Episode::class, AnimeSeason::class, 'anime_id', 'season_id');
     }
 
     /**

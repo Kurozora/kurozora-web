@@ -4,7 +4,7 @@ namespace Tests\Traits;
 
 use App\Models\AnimeCast;
 use App\Models\Anime;
-use App\Models\AnimeEpisode;
+use App\Models\Episode;
 use App\Models\MediaRelation;
 use App\Models\AnimeSeason;
 use App\Models\Character;
@@ -25,8 +25,8 @@ trait ProvidesTestAnime
     /** @var AnimeSeason $season */
     public AnimeSeason $season;
 
-    /** @var AnimeEpisode $episode */
-    public AnimeEpisode $episode;
+    /** @var Episode $episode */
+    public Episode $episode;
 
     /** @var Person $person */
     public Person $person;
@@ -54,7 +54,7 @@ trait ProvidesTestAnime
             'anime_id' => $this->anime->id,
         ]);
 
-        $this->episode = AnimeEpisode::factory()->create([
+        $this->episode = Episode::factory()->create([
             'season_id' => $this->season->id,
         ]);
 
