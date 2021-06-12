@@ -266,7 +266,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
 
                     // Create event
                     $calendarEvent = Event::create($eventName)
-                        ->description($episode->overview)
+                        ->description($episode->synopsis)
                         ->organizer('kurozoraapp@gmail.com', 'Kurozora')
                         ->startsAt($startsAt)
                         ->endsAt($endsAt)
@@ -352,13 +352,13 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     /**
      * Returns a boolean indicating whether the user has watched the given episode.
      *
-     * @param AnimeEpisode $episode
+     * @param Episode $episode
      *
      * @return bool
      */
-    function hasWatched(AnimeEpisode $episode): bool
+    function hasWatched(Episode $episode): bool
     {
-        return $this->watchedAnimeEpisodes()->where('episode_id', $episode->id)->exists();
+        return $this->watchedEpisodes()->where('episode_id', $episode->id)->exists();
     }
 
     /**
@@ -366,9 +366,9 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return BelongsToMany
      */
-    function watchedAnimeEpisodes(): BelongsToMany
+    function watchedEpisodes(): BelongsToMany
     {
-        return $this->belongsToMany(AnimeEpisode::class, UserWatchedEpisode::class, 'user_id', 'episode_id');
+        return $this->belongsToMany(Episode::class, UserWatchedEpisode::class, 'user_id', 'episode_id');
     }
 
     /**

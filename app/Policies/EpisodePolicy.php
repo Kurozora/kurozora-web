@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\AnimeEpisode;
+use App\Models\Episode;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class AnimeEpisodePolicy
+class EpisodePolicy
 {
     use HandlesAuthorization;
 
@@ -14,10 +14,10 @@ class AnimeEpisodePolicy
      * Determine whether the user can mark the episode as watched.
      *
      * @param User $user
-     * @param AnimeEpisode $episode
+     * @param Episode $episode
      * @return bool
      */
-    public function mark_as_watched(User $user, AnimeEpisode $episode): bool
+    public function mark_as_watched(User $user, Episode $episode): bool
     {
         return $user->isTracking($episode->season->anime);
     }

@@ -19,7 +19,7 @@ class Episode extends Resource
      *
      * @var string
      */
-    public static string $model = \App\Models\AnimeEpisode::class;
+    public static string $model = \App\Models\Episode::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -42,7 +42,7 @@ class Episode extends Resource
      *
      * @var string
      */
-    public static $group = 'Anime Episodes';
+    public static $group = 'Episode';
 
     /**
      * Get the fields displayed by the resource.
@@ -68,11 +68,15 @@ class Episode extends Resource
                 ->help('The episode number of the episode.'),
 
             Text::make('Title')
-                ->rules('required', 'max:255'),
+                ->required()
+                ->help('The real title of the episode. If unknown, then use "Episode #" as the title in the respective locale.')
+                ->translatable(),
 
-            Textarea::make('Overview')
+            Textarea::make('Synopsis')
+                ->required()
                 ->hideFromIndex()
-                ->help('A short description of the Episode.'),
+                ->help('A short description of the episode.')
+                ->translatable(),
 
             DateTime::make('First Aired')
                 ->sortable()
@@ -81,7 +85,7 @@ class Episode extends Resource
             Number::make('Duration')
                 ->rules('required')
                 ->sortable()
-                ->help('The duration of the episode in minutes.'),
+                ->help('The duration of the episode in minutes. Usually the same as the duration of the anime, but can be different in special cases.'),
 
             Boolean::make('Verified')
                 ->help('Check the box if the information is correct.'),
