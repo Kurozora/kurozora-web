@@ -28,10 +28,9 @@ class CheckKurozoraUserAuthenticationTest extends TestCase
     /** @test */
     function routes_that_require_authentication_cannot_be_accessed_without_being_authenticated()
     {
-        $this->expectException(AuthorizationException::class);
-
         $response = $this->get('/auth-required');
-        $response->json();
+
+        $this->assertEquals($response->json('errors.0.status'), 403);
     }
 
     /** @test */

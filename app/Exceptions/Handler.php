@@ -9,10 +9,10 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Foundation\Http\Exceptions\MaintenanceModeException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Str;
 use Swift_TransportException;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Console\Exception\RuntimeException;
@@ -66,7 +66,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e): Response
     {
-        if (str_starts_with($request->path(), 'api')) {
+        if (Str::startsWith($request->root(), $request->getScheme().'://api.')) {
             // Custom render for authentication
             if ($e instanceof AuthenticationException) {
                 $apiError = new APIError();
@@ -120,16 +120,8 @@ class Handler extends ExceptionHandler
                 $apiError = new APIError();
                 $apiError->id = 50003;
                 $apiError->status = 503;
-                $apiError->title = 'Service Unavailable';
+                $apiError->title = 'The service is currently unavailable to process requests.';
                 $apiError->detail = $e->getMessage();
-                return JSONResult::error([$apiError]);
-            } // Custom render for maintenance mode
-            else if ($e instanceof MaintenanceModeException) {
-                $apiError = new APIError();
-                $apiError->id = 50003;
-                $apiError->status = 503;
-                $apiError->title = 'Service Unavailable';
-                $apiError->detail = 'The service is currently unavailable to process requests.';
                 return JSONResult::error([$apiError]);
             }
         }
