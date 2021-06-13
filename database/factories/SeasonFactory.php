@@ -33,10 +33,14 @@ class SeasonFactory extends Factory
         return [
             'anime_id'      => $anime,
             'number'        => $number++,
+            'poster_url'    => $this->faker->randomElement([$this->faker->imageUrl(), null]),
             'title'         => $this->faker->sentence,
+            'synopsis'      => $this->faker->realText(),
             'ja'            => [
                 'title'     => $jaFaker->sentence,
+                'synopsis'  => $jaFaker->realText(),
             ],
+            'first_aired'   => $this->faker->dateTime,
             'created_at'    => now(),
             'updated_at'    => now(),
         ];
