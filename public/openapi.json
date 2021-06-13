@@ -33,10 +33,6 @@
       "description": "Everything anime related"
     },
     {
-      "name": "anime-seasons",
-      "description": "Everything anime seasons related"
-    },
-    {
       "name": "characters",
       "description": "Everything character related"
     },
@@ -51,6 +47,10 @@
     {
       "name": "people",
       "description": "Everything people related"
+    },
+    {
+      "name": "seasons",
+      "description": "Everything seasons related"
     },
     {
       "name": "studios",
@@ -341,7 +341,7 @@
         "tags": [
           "anime"
         ],
-        "operationId": "getAnimeSeasons",
+        "operationId": "getSeasons",
         "summary": "Anime all seasons information.",
         "description": "This endpoint will retrieve the seasons of an Anime item.",
         "parameters": [
@@ -357,7 +357,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetAnimeSeasonsSuccess"
+            "$ref": "#/components/responses/GetSeasonsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -460,12 +460,12 @@
         }
       }
     },
-    "/anime-seasons/{seasonID}": {
+    "/seasons/{seasonID}": {
       "get": {
         "tags": [
-          "anime-seasons"
+          "seasons"
         ],
-        "operationId": "getAnimeSeasonsDetails",
+        "operationId": "getSeasonsDetails",
         "summary": "Get specific season details.",
         "description": "This endpoint will retrieve the details of a specific season.",
         "parameters": [
@@ -481,7 +481,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetAnimeSeasonsDetailsSuccess"
+            "$ref": "#/components/responses/GetSeasonsDetailsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -489,7 +489,7 @@
         }
       }
     },
-    "/anime-seasons/{seasonID}/episodes": {
+    "/seasons/{seasonID}/episodes": {
       "get": {
         "security": [
           {
@@ -500,9 +500,9 @@
           }
         ],
         "tags": [
-          "anime-seasons"
+          "seasons"
         ],
-        "operationId": "getAnimeSeasonsEpisodes",
+        "operationId": "getSeasonsEpisodes",
         "summary": "Retrieve season episodes.",
         "description": "This endpoint will retrieve the episodes in a certain season.",
         "parameters": [
@@ -518,7 +518,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetAnimeSeasonsEpisodesSuccess"
+            "$ref": "#/components/responses/GetSeasonsEpisodesSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -4273,7 +4273,7 @@
                           {
                             "id": 1,
                             "type": "seasons",
-                            "href": "/v1/anime-seasons/1",
+                            "href": "/v1/seasons/1",
                             "attributes": {
                               "animeID": 1,
                               "title": "Season 1",
@@ -4554,8 +4554,8 @@
           }
         }
       },
-      "GetAnimeSeasonsSuccess": {
-        "description": "Successful GET Anime Seasons JSON response",
+      "GetSeasonsSuccess": {
+        "description": "Successful GET Seasons JSON response",
         "content": {
           "application/json": {
             "schema": {
@@ -4565,7 +4565,7 @@
                   {
                     "id": 1,
                     "type": "seasons",
-                    "href": "/v1/anime-seasons/1",
+                    "href": "/v1/seasons/1",
                     "attributes": {
                       "animeID": 1,
                       "title": "Season 1",
@@ -4794,8 +4794,8 @@
           }
         }
       },
-      "GetAnimeSeasonsDetailsSuccess": {
-        "description": "Successful GET Anime Seasons Details JSON response",
+      "GetSeasonsDetailsSuccess": {
+        "description": "Successful GET Seasons Details JSON response",
         "content": {
           "application/json": {
             "schema": {
@@ -4805,7 +4805,7 @@
                   {
                     "id": 1,
                     "type": "seasons",
-                    "href": "/v1/anime-seasons/1",
+                    "href": "/v1/seasons/1",
                     "attributes": {
                       "animeID": 1,
                       "title": "Season 1",
@@ -4820,8 +4820,8 @@
           }
         }
       },
-      "GetAnimeSeasonsEpisodesSuccess": {
-        "description": "Successful GET Anime Seasons Episodes JSON response",
+      "GetSeasonsEpisodesSuccess": {
+        "description": "Successful GET Seasons Episodes JSON response",
         "content": {
           "application/json": {
             "schema": {
@@ -4831,7 +4831,7 @@
                   {
                     "id": 1,
                     "type": "episodes",
-                    "href": "/v1/anime-seasons/1/episodes",
+                    "href": "/v1/seasons/1/episodes",
                     "attributes": {
                       "number": 1,
                       "title": "Episode 1",
@@ -4844,7 +4844,7 @@
                   {
                     "id": 2,
                     "type": "episodes",
-                    "href": "/v1/anime-seasons/2/episodes",
+                    "href": "/v1/seasons/2/episodes",
                     "attributes": {
                       "number": 2,
                       "title": "Episode 2",

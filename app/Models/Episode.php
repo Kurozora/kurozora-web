@@ -41,6 +41,6 @@ class Episode extends KModel
      */
     function season(): BelongsTo
     {
-        return $this->belongsTo(AnimeSeason::class);
+        return $this->belongsTo(Season::class);
     }
 }

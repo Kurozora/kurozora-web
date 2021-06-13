@@ -6,7 +6,7 @@ use App\Models\AnimeCast;
 use App\Models\Anime;
 use App\Models\Episode;
 use App\Models\MediaRelation;
-use App\Models\AnimeSeason;
+use App\Models\Season;
 use App\Models\Character;
 use App\Models\Person;
 use App\Models\TvRating;
@@ -22,8 +22,8 @@ trait ProvidesTestAnime
     /** @var Anime $relatedAnime */
     public Anime $relatedAnime;
 
-    /** @var AnimeSeason $season */
-    public AnimeSeason $season;
+    /** @var Season $season */
+    public Season $season;
 
     /** @var Episode $episode */
     public Episode $episode;
@@ -50,7 +50,7 @@ trait ProvidesTestAnime
 
         $this->relatedAnime = Anime::factory()->create();
 
-        $this->season = AnimeSeason::factory()->create([
+        $this->season = Season::factory()->create([
             'anime_id' => $this->anime->id,
         ]);
 

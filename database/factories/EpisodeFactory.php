@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Episode;
-use App\Models\AnimeSeason;
+use App\Models\Season;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class EpisodeFactory extends Factory
@@ -24,14 +24,14 @@ class EpisodeFactory extends Factory
     {
         static $number = 1;
         $jaFaker = \Faker\Factory::create('ja_JP');
-        $animeSeason = AnimeSeason::inRandomOrder()->first();
+        $season = Season::inRandomOrder()->first();
 
-        if ($animeSeason == null) {
-            $animeSeason = AnimeSeason::factory()->create();
+        if ($season == null) {
+            $season = Season::factory()->create();
         }
 
         return [
-            'season_id'     => $animeSeason,
+            'season_id'     => $season,
             'number'        => $number++,
             'title'         => $this->faker->sentence,
             'synopsis'      => $this->faker->realText(),
