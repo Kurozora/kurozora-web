@@ -19,10 +19,15 @@ class CreateSeasonsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('anime_id');
             $table->integer('number');
+            $table->string('poster_url')->nullable();
+            $table->dateTime('first_aired')->nullable();
             $table->timestamps();
         });
 
         Schema::table(Season::TABLE_NAME, function (Blueprint $table) {
+            // Set unique key constraints
+            $table->unique(['anime_id', 'number']);
+
             // Set foreign key constraints
             $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
         });

@@ -32,7 +32,7 @@ class PersonFactory extends Factory
             'family_name'       => $this->faker->randomElement([$jpFaker->lastName, null]),
             'alternative_names' => $this->faker->randomElement([$this->faker->words(mt_rand(0, 3)), null]),
             'birth_date'        => $this->faker->randomElement([$this->faker->date(), null]),
-            'about'             => $this->faker->randomElement([$this->faker->paragraph(mt_rand(10, 30)), null]),
+            'about'             => $this->faker->randomElement([$this->faker->realText(), null]),
             'image'             => $this->faker->randomElement([$this->faker->imageUrl(), null]),
             'website_urls'      => $this->faker->randomElement([[$this->faker->url], null]),
             'created_at'        => now(),
