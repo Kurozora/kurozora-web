@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
 
 class SeasonTranslation extends Resource
 {
@@ -59,6 +60,9 @@ class SeasonTranslation extends Resource
 
             Text::make('Title')
                 ->sortable()
+                ->required(),
+
+            Textarea::make('Synopsis')
                 ->required(),
         ];
     }

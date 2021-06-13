@@ -38,7 +38,7 @@ class CharacterFactory extends Factory
         return [
             'name'              => $this->faker->name($genderString),
             'nicknames'         => $this->faker->words(mt_rand(0, 3)),
-            'about'             => $this->faker->paragraph(mt_rand(10, 30)),
+            'about'             => $this->faker->realText(),
             'ja'                => [
                 'name'  => $jaFaker->name($genderString),
                 'about' => $jaFaker->paragraph

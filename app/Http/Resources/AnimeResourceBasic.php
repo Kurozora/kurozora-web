@@ -23,16 +23,6 @@ class AnimeResourceBasic extends JsonResource
         /** @var Anime $anime */
         $anime = $this->resource;
 
-        $firstAired = $anime->first_aired;
-        if ($firstAired) {
-            $firstAired = $anime->first_aired->format('Y-m-d');
-        }
-
-        $lastAired = $anime->last_aired;
-        if ($lastAired) {
-            $lastAired = $anime->last_aired->format('Y-m-d');
-        }
-
         $airDay = DayOfWeek::getDescription($anime->air_day);
 
         $resource = [
@@ -60,8 +50,8 @@ class AnimeResourceBasic extends JsonResource
                 'videoUrl'              => $anime->video_url,
                 'poster'                => AnimeImageResource::make($anime->poster()),
                 'background'            => AnimeImageResource::make($anime->banner()),
-                'firstAired'            => $firstAired,
-                'lastAired'             => $lastAired,
+                'firstAired'            => $anime->first_aired?->format('Y-m-d'),
+                'lastAired'             => $anime->last_aired?->format('Y-m-d'),
                 'runtime'               => $anime->runtime,
                 'airTime'               => $anime->air_time,
                 'airDay'                => !empty($airDay) ? $airDay : null,

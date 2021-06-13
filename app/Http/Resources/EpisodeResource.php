@@ -24,21 +24,17 @@ class EpisodeResource extends JsonResource
         /** @var Episode $episode */
         $episode = $this->resource;
 
-        $firstAired = $episode->first_aired;
-        if ($firstAired)
-            $firstAired = $firstAired->format('j M, Y');
-
         $resource = [
             'id'            => $episode->id,
             'type'          => 'episodes',
             'href'          => route('api.episodes.details', $episode, false),
             'attributes'    => [
+                'previewImage'  => $episode->preview_image,
                 'number'        => $episode->number,
                 'title'         => $episode->title,
                 'synopsis'      => $episode->synopsis,
-                'previewImage'  => $episode->preview_image,
-                'firstAired'    => $firstAired,
                 'duration'      => $episode->duration,
+                'firstAired'    => $episode->first_aired->format('j M, Y'),
                 'isVerified'    => (bool) $episode->verified
             ]
         ];

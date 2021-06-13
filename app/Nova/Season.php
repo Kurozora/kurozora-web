@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\HasMany;
@@ -51,6 +52,10 @@ class Season extends Resource
     {
         return [
             ID::make()->sortable(),
+
+            ExternalImage::make('Poster URL')
+                ->width(240)
+                ->help('A link to a poster image of the season.'),
 
             BelongsTo::make('Anime')
                 ->searchable()

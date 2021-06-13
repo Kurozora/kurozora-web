@@ -25,9 +25,11 @@ class SeasonResource extends JsonResource
             'href'          => route('api.seasons.details', $season, false),
             'attributes'    => [
                 'number'        => $season->number,
-                'title'         => $season->getTitle(),
-                'episodeCount'  => $season->getEpisodeCount(),
-                'firstAired'    => $season->getFirstAired(),
+                'posterURL'     => $season->poster_url,
+                'title'         => $season->title,
+                'synopsis'      => $season->synopsis,
+                'episodeCount'  => $season->episodes()->count(),
+                'firstAired'    => $season->first_aired?->format('Y-m-d'),
             ]
         ];
     }

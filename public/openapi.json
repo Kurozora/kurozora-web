@@ -4276,10 +4276,12 @@
                             "href": "/v1/seasons/1",
                             "attributes": {
                               "animeID": 1,
-                              "title": "Season 1",
                               "number": 1,
+                              "posterURL": "https://via.placeholder.com/640x480.png/006655?text=ratione",
+                              "title": "Season 1",
+                              "synopsis": "This is a short description of the season's story.",
                               "episodeCount": 2,
-                              "firstAired": "2020-07-29 10:00:00"
+                              "firstAired": "2020-07-29"
                             }
                           }
                         ],
@@ -4568,10 +4570,12 @@
                     "href": "/v1/seasons/1",
                     "attributes": {
                       "animeID": 1,
-                      "title": "Season 1",
                       "number": 1,
+                      "posterURL": "https://via.placeholder.com/640x480.png/006655?text=ratione",
+                      "title": "Season 1",
+                      "synopsis": "This is a short description of the season's story.",
                       "episodeCount": 2,
-                      "firstAired": "2020-07-29 10:00:00"
+                      "firstAired": "2020-07-29"
                     }
                   }
                 ]
@@ -4808,10 +4812,12 @@
                     "href": "/v1/seasons/1",
                     "attributes": {
                       "animeID": 1,
-                      "title": "Season 1",
                       "number": 1,
-                      "firstAired": "6-29-2020 2020-07-29 12:00:00",
-                      "episodeCount": 2
+                      "posterURL": "https://via.placeholder.com/640x480.png/006655?text=ratione",
+                      "title": "Season 1",
+                      "synopsis": "This is a short description of the season's story.",
+                      "episodeCount": 2,
+                      "firstAired": "6-29-2020 2020-07-29 12:00:00"
                     }
                   }
                 ]
