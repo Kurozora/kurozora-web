@@ -2,18 +2,29 @@
 
 namespace App\Models;
 
+use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class AnimeSeason extends KModel
+class Season extends KModel
 {
-    use HasFactory;
+    use HasFactory,
+        Translatable;
 
     // Table name
-    const TABLE_NAME = 'anime_seasons';
+    const TABLE_NAME = 'seasons';
     protected $table = self::TABLE_NAME;
+
+    /**
+     * Translatable attributes.
+     *
+     * @var array
+     */
+    public array $translatedAttributes = [
+        'title',
+    ];
 
     /**
      * Returns the episodes associated with the season

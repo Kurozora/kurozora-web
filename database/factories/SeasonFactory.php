@@ -3,17 +3,17 @@
 namespace Database\Factories;
 
 use App\Models\Anime;
-use App\Models\AnimeSeason;
+use App\Models\Season;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class AnimeSeasonFactory extends Factory
+class SeasonFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = AnimeSeason::class;
+    protected $model = Season::class;
 
     /**
      * Define the model's default state.
@@ -23,6 +23,7 @@ class AnimeSeasonFactory extends Factory
     public function definition(): array
     {
         static $number = 1;
+        $jaFaker = \Faker\Factory::create('ja_JP');
         $anime = Anime::inRandomOrder()->first();
 
         if ($anime == null) {
@@ -32,7 +33,10 @@ class AnimeSeasonFactory extends Factory
         return [
             'anime_id'      => $anime,
             'number'        => $number++,
-            'title'         => $this->faker->title,
+            'title'         => $this->faker->sentence,
+            'ja'            => [
+                'title'     => $jaFaker->sentence,
+            ],
             'created_at'    => now(),
             'updated_at'    => now(),
         ];

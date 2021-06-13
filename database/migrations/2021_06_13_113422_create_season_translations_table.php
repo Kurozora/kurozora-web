@@ -1,12 +1,13 @@
 <?php
 
-use App\Models\Episode;
+use App\Models\Language;
 use App\Models\Season;
+use App\Models\SeasonTranslation;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEpisodesTable extends Migration
+class CreateSeasonTranslationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,20 +16,21 @@ class CreateEpisodesTable extends Migration
      */
     public function up()
     {
-        Schema::create(Episode::TABLE_NAME, function (Blueprint $table) {
+        Schema::create(SeasonTranslation::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('season_id');
-            $table->unsignedInteger('number');
-            $table->string('preview_image')->nullable();
-            $table->unsignedMediumInteger('duration')->default(0);
-            $table->dateTime('first_aired')->nullable();
-            $table->boolean('verified')->default(false);
+            $table->string('locale', 2)->index();
+            $table->string('title');
             $table->timestamps();
         });
 
-        Schema::table(Episode::TABLE_NAME, function (Blueprint $table) {
+        Schema::table(SeasonTranslation::TABLE_NAME, function (Blueprint $table) {
+            // Set unique index constraints
+            $table->unique(['season_id', 'locale']);
+
             // Set foreign key constraints
             $table->foreign('season_id')->references('id')->on(Season::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('locale')->references('code')->on(Language::TABLE_NAME)->onDelete('cascade');
         });
     }
 
@@ -39,6 +41,6 @@ class CreateEpisodesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(Episode::TABLE_NAME);
+        Schema::dropIfExists(SeasonTranslation::TABLE_NAME);
     }
 }

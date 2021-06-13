@@ -123,7 +123,7 @@ class AnimeResource extends JsonResource
         return [
             'seasons' => [
                 'href' => route('api.anime.seasons', $anime, false),
-                'data' => AnimeSeasonResource::collection($anime->getSeasons(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'data' => SeasonResource::collection($anime->getSeasons(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }

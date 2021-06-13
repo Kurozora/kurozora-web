@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\Anime;
 use App\Models\Episode;
-use App\Models\AnimeSeason;
+use App\Models\Season;
 use App\Enums\WatchStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -63,8 +63,8 @@ class EpisodeResource extends JsonResource
         /** @var User $user */
         $user = Auth::user();
 
-        /** @var AnimeSeason $user */
-        $season = AnimeSeason::where('id', $episode->season_id)->first();
+        /** @var Season $user */
+        $season = Season::where('id', $episode->season_id)->first();
 
         /** @var Anime $anime */
         $anime = $season->anime()->first();
