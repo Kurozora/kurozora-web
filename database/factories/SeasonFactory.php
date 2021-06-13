@@ -23,6 +23,7 @@ class SeasonFactory extends Factory
     public function definition(): array
     {
         static $number = 1;
+        $jaFaker = \Faker\Factory::create('ja_JP');
         $anime = Anime::inRandomOrder()->first();
 
         if ($anime == null) {
@@ -32,7 +33,10 @@ class SeasonFactory extends Factory
         return [
             'anime_id'      => $anime,
             'number'        => $number++,
-            'title'         => $this->faker->title,
+            'title'         => $this->faker->sentence,
+            'ja'            => [
+                'title'     => $jaFaker->sentence,
+            ],
             'created_at'    => now(),
             'updated_at'    => now(),
         ];
