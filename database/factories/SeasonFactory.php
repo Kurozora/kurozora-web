@@ -3,17 +3,17 @@
 namespace Database\Factories;
 
 use App\Models\Anime;
-use App\Models\AnimeSeason;
+use App\Models\Season;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class AnimeSeasonFactory extends Factory
+class SeasonFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = AnimeSeason::class;
+    protected $model = Season::class;
 
     /**
      * Define the model's default state.
