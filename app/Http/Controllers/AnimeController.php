@@ -14,7 +14,7 @@ use App\Http\Resources\AnimeCastResource;
 use App\Http\Resources\AnimeRelatedShowsResource;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\AnimeResourceBasic;
-use App\Http\Resources\AnimeSeasonResource;
+use App\Http\Resources\SeasonResource;
 use App\Http\Resources\CharacterResourceBasic;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -100,7 +100,7 @@ class AnimeController extends Controller
         $seasons = $anime->getSeasons();
 
         return JSONResult::success([
-            'data' => AnimeSeasonResource::collection($seasons)
+            'data' => SeasonResource::collection($seasons)
         ]);
     }
 

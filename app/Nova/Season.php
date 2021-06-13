@@ -16,7 +16,7 @@ class Season extends Resource
      *
      * @var string
      */
-    public static string $model = \App\Models\AnimeSeason::class;
+    public static string $model = \App\Models\Season::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -39,7 +39,7 @@ class Season extends Resource
      *
      * @var string
      */
-    public static $group = 'Anime';
+    public static $group = 'Season';
 
     /**
      * Get the fields displayed by the resource.
@@ -57,13 +57,15 @@ class Season extends Resource
                 ->sortable()
                 ->required(),
 
-            Text::make('Season Title', 'title')
-                ->sortable(),
-
             Number::make('Season Number', 'number')
-                ->rules('required', 'min:0')
+                ->rules('required', 'min:1')
                 ->hideFromIndex()
-                ->help('You should use season number <strong>0</strong> for "Specials".'),
+                ->help('The sequence in which the season starts.'),
+
+            Text::make('Title', 'title')
+                ->sortable()
+                ->required()
+                ->translatable('Usually the name of the arc of the story. If unknown, use "Season #" as the title.'),
 
             HasMany::make('Episodes'),
         ];

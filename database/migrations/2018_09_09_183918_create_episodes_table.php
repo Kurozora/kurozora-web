@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Episode;
-use App\Models\AnimeSeason;
+use App\Models\Season;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -28,7 +28,7 @@ class CreateEpisodesTable extends Migration
 
         Schema::table(Episode::TABLE_NAME, function (Blueprint $table) {
             // Set foreign key constraints
-            $table->foreign('season_id')->references('id')->on(AnimeSeason::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('season_id')->references('id')->on(Season::TABLE_NAME)->onDelete('cascade');
         });
     }
 
