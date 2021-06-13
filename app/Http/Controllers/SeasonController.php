@@ -32,7 +32,7 @@ class SeasonController extends Controller
     public function episodes(Season $season): JsonResponse
     {
         // Get the episodes
-        $episodes = $season->getEpisodes();
+        $episodes = $season->episodes();
 
         return JSONResult::success([
             'data'  => EpisodeResource::collection($episodes)
