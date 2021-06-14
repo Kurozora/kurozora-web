@@ -3491,12 +3491,13 @@
         "description": "The lock status used to lock or unlock a thread.\n- 0 = unlock\n- 1 = lock"
       },
       "MALImportBehavior": {
-        "type": "string",
+        "type": "integer",
         "enum": [
-          "overwrite"
+          0,
+          1
         ],
-        "default": "overwrite",
-        "description": "The set of available MAL import behavior types."
+        "default": 1,
+        "description": "The set of available MAL import behavior types.\n- 0 = overwrite\n- 1 = merge"
       },
       "NotificationReadStatus": {
         "type": "integer",

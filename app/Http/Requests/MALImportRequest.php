@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\MALImportBehavior;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MALImportRequest extends FormRequest
@@ -25,7 +26,7 @@ class MALImportRequest extends FormRequest
     {
         return [
             'file'      => ['required', 'file', 'mimes:xml', 'max:' . config('mal-import.max_xml_file_size')],
-            'behavior'  => ['required', 'string', 'in:overwrite']
+            'behavior'  => ['required', 'integer', 'in:' . implode(',', MALImportBehavior::getValues())]
         ];
     }
 }

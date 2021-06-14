@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Enums\MALImportBehavior;
 use App\Models\User;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -27,18 +28,18 @@ class MALImportFinished
     /**
      * The behavior of the import.
      *
-     * @var string
+     * @var MALImportBehavior
      */
-    public string $behavior;
+    public MALImportBehavior $behavior;
 
     /**
      * Create a new event instance.
      *
      * @param User $user
      * @param array $results
-     * @param string $behavior
+     * @param MALImportBehavior $behavior
      */
-    public function __construct(User $user, array $results, string $behavior)
+    public function __construct(User $user, array $results, MALImportBehavior $behavior)
     {
         $this->user = $user;
         $this->results = $results;
