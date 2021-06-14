@@ -25,6 +25,9 @@ class CreateAnimeRatingsTable extends Migration
         });
 
         Schema::table(AnimeRating::TABLE_NAME, function(Blueprint $table) {
+            // Set unique key constraints
+            $table->unique(['anime_id', 'user_id']);
+
             // Set foreign key constraints
             $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');

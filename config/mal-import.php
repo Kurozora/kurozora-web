@@ -10,11 +10,11 @@ return [
     | This option controls the cooldown in days for users between importing
     | a MAL export file.
     |
-    | Default: 7
+    | Default: 3
     |
     */
 
-    'cooldown_in_days' => 7,
+    'cooldown_in_days' => 3,
 
     /*
     |--------------------------------------------------------------------------
@@ -24,10 +24,10 @@ return [
     | This option controls the maximum allowed file size for a MAL export file
     | in kilobytes.
     |
-    | Default: 5000
+    | Default: 10000
     |
     */
 
-    'max_xml_file_size' => 5000
+    'max_xml_file_size' => 10000
 
 ];
