@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Anime;
+use Http;
 use Illuminate\Console\Command;
 use JsonMachine\JsonDecoder\ExtJsonDecoder;
 use JsonMachine\JsonMachine;
@@ -48,20 +49,22 @@ class ImportAnimeID extends Command
         $progressBar->start();
 
         foreach ($animes as $data) {
-            $sources = $this->filterSources($data->sources);
+            if ($animes->getPosition() > 10111900) {
+                $sources = $this->filterSources($data->sources);
 
-            if (array_key_exists('mal_id', $sources)) {
-                $anime = Anime::firstWhere([
-                    ['mal_id', $sources['mal_id']],
-                ]);
+                if (array_key_exists('mal_id', $sources) && array_key_exists('notify_id', $sources)) {
+                    $anime = Anime::firstWhere([
+                        ['mal_id', $sources['mal_id']],
+                    ]);
 
-                if (!empty($anime)) {
-                    $anime->update($sources);
+                    if (!empty($anime)) {
+                        $anime->update($sources);
+                    }
                 }
-            }
 
-            $progress = $animes->getPosition();
-            $progressBar->setProgress($progress);
+                $progress = $animes->getPosition();
+                $progressBar->setProgress($progress);
+            }
         }
 
         $progressBar->finish();
@@ -79,6 +82,7 @@ class ImportAnimeID extends Command
         if (empty($sources)) {
             return $sources;
         }
+
         $regexSearch = [
             'anidb_id' => '#https:\/\/anidb.net\/anime\/(\w+)$#i',
             'anilist_id' => '#https:\/\/anilist.co\/anime\/(\w+)$#i',
@@ -99,9 +103,69 @@ class ImportAnimeID extends Command
                         $matchedSources[$key] = $match[1];
                     }
                 }
+
+                if (array_key_exists('notify_id', $matchedSources)) {
+                    $matchedSources = array_merge($matchedSources, $this->getIDsFromNotify($matchedSources['notify_id']));
+                }
             }
         }
 
         return $matchedSources;
+    }
+
+    /**
+     * Returns an array of the IDs from the notify API.
+     *
+     * @param string $notifyID
+     * @return array
+     */
+    protected function getIDsFromNotify(string $notifyID): array
+    {
+        $response = Http::get('https://notify.moe/api/anime/' . $notifyID);
+        $cleanSources = [];
+
+        if ($response->failed()) {
+            return $cleanSources;
+        }
+
+        $sources = $response->json('mappings');
+
+        foreach ($sources as $source) {
+            switch ($source['service']) {
+                case 'imdb/anime':
+                    $cleanSources['imdb_id'] = $source['serviceId'];
+                    break;
+                case 'thetvdb/anime':
+                    $cleanSources['tvdb_id'] = $this->getTVDBId($source['serviceId']);
+                    break;
+                case 'shoboi/anime':
+                    $cleanSources['syoboi_id'] = $source['serviceId'];
+                    break;
+                case 'trakt/anime':
+                    $cleanSources['trakt_id'] = $source['serviceId'];
+                    break;
+                default: break;
+            }
+        }
+
+        return $cleanSources;
+    }
+
+
+    /**
+     * Cleans and returns the TVDB ID from the given string.
+     *
+     * @param string $id
+     * @return string
+     */
+    protected function getTVDBId(string $id): string
+    {
+        $matchCount = preg_match('/^(\d+)\/.*/i', $id, $tvdbId);
+
+        if ($matchCount) {
+            return $tvdbId[1];
+        }
+
+        return $id;
     }
 }
