@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\MALImportBehavior;
 use App\Models\Anime;
 use App\Enums\UserLibraryStatus;
 use App\Notifications\MALImportFinished;
@@ -40,9 +41,9 @@ class ProcessMALImport implements ShouldQueue
     /**
      * The behavior of the import action.
      *
-     * @var string
+     * @var MALImportBehavior
      */
-    protected string $behavior;
+    protected MALImportBehavior $behavior;
 
     /**
      * The results of the import action.
@@ -59,9 +60,9 @@ class ProcessMALImport implements ShouldQueue
      *
      * @param User $user
      * @param string $xmlContent
-     * @param string $behavior
+     * @param MALImportBehavior $behavior
      */
-    public function __construct(User $user, string $xmlContent, string $behavior)
+    public function __construct(User $user, string $xmlContent, MALImportBehavior $behavior)
     {
         $this->user = $user;
         $this->xmlContent = $xmlContent;
@@ -74,7 +75,7 @@ class ProcessMALImport implements ShouldQueue
     public function handle()
     {
         // Wipe current library if behavior is set to overwrite
-        if ($this->behavior === 'overwrite') {
+        if ($this->behavior->value === MALImportBehavior::Overwrite) {
             $this->user->library()->detach();
         }
 
