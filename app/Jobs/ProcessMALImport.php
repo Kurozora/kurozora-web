@@ -5,6 +5,8 @@ namespace App\Jobs;
 use App\Enums\MALImportBehavior;
 use App\Models\Anime;
 use App\Enums\UserLibraryStatus;
+use App\Models\AnimeRating;
+use App\Models\UserLibrary;
 use App\Notifications\MALImportFinished;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
@@ -77,6 +79,7 @@ class ProcessMALImport implements ShouldQueue
         // Wipe current library if behavior is set to overwrite
         if ($this->behavior->value === MALImportBehavior::Overwrite) {
             $this->user->library()->detach();
+            $this->user->animeRating()->delete();
         }
 
         // Create XML object
@@ -88,7 +91,7 @@ class ProcessMALImport implements ShouldQueue
 
         // Loop through the anime in the export file
         foreach($json['anime'] as $anime) {
-            $this->handleXMLFileAnime($anime['series_animedb_id'], $anime['my_status']);
+            $this->handleXMLFileAnime($anime['series_animedb_id'], $anime['my_status'], $anime['my_score']);
         }
 
         // Notify the user that the MAL import was finished
@@ -100,16 +103,18 @@ class ProcessMALImport implements ShouldQueue
      *
      * @param int $malID
      * @param string $malStatus
+     * @param int $malRating
      */
-    protected function handleXMLFileAnime(int $malID, string $malStatus)
+    protected function handleXMLFileAnime(int $malID, string $malStatus, int $malRating)
     {
         // Try to find the Anime in our DB
-        $animeMatch = Anime::where('mal_id', $malID)->first();
+        $anime = Anime::firstWhere('mal_id', $malID);
 
         // If a match was found
-        if ($animeMatch) {
-            // Convert the MAL status to one of our own
+        if (!empty($anime)) {
+            // Convert the MAL data to our own
             $status = $this->convertMALStatus($malStatus);
+            $rating = $this->convertMALRating($malRating);
 
             // Status not found
             if ($status === null) {
@@ -118,11 +123,25 @@ class ProcessMALImport implements ShouldQueue
             }
 
             // Add the anime to their library
-            $this->user->library()->attach($animeMatch, ['status' => $status]);
+            UserLibrary::updateOrCreate([
+                'user_id' => $this->user->id,
+                'anime_id' => $anime->id,
+            ], [
+                'status' => $status
+            ]);
 
-            $this->registerSuccess($animeMatch->id, $malID, $status);
+            // Updated their anime score
+            AnimeRating::updateOrCreate([
+                'user_id' => $this->user->id,
+                'anime_id' => $anime->id,
+            ], [
+                'rating' => $rating,
+            ]);
+
+            $this->registerSuccess($anime->id, $malID, $status, $rating);
+        } else {
+            $this->registerFailure($malID, 'MAL ID could not be found.');
         }
-        else $this->registerFailure($malID, 'MAL ID could not be found.');
     }
 
     /**
@@ -144,18 +163,35 @@ class ProcessMALImport implements ShouldQueue
     }
 
     /**
+     * Converts and returns Kurozora specific rating.
+     *
+     * @param int $malRating
+     * @return int
+     */
+    protected function convertMALRating(int $malRating): int
+    {
+        if ($malRating == 0) {
+            return $malRating;
+        }
+
+        return round($malRating) * 0.5;
+    }
+
+    /**
      * Registers a success in the import process.
      *
      * @param int $animeID
      * @param int $malID
      * @param string $status
+     * @param int $rating
      */
-    protected function registerSuccess(int $animeID, int $malID, string $status)
+    protected function registerSuccess(int $animeID, int $malID, string $status, int $rating)
     {
         $this->results['successful'][] = [
             'anime_id'  => $animeID,
             'mal_id'    => $malID,
-            'status'    => $status
+            'status'    => $status,
+            'rating'    => $rating,
         ];
     }
 
