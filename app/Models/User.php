@@ -144,6 +144,16 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     protected string $profileImageCollectionName = 'profile';
 
     /**
+     * Returns the anime ratings the user has.
+     *
+     * @return HasMany
+     */
+    public function animeRating(): HasMany
+    {
+        return $this->hasMany(AnimeRating::class);
+    }
+
+    /**
      * Returns the associated feed messages for the user.
      *
      * @return HasMany
