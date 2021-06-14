@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Enums\MALImportBehavior;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -23,17 +24,17 @@ class MALImportFinished extends Notification implements ShouldQueue
     /**
      * The behavior used when importing.
      *
-     * @var string $behavior
+     * @var MALImportBehavior $behavior
      */
-    private string $behavior;
+    private MALImportBehavior $behavior;
 
     /**
      * Create a new notification instance.
      *
      * @param array $results
-     * @param string $behavior
+     * @param MALImportBehavior $behavior
      */
-    public function __construct(array $results, string $behavior)
+    public function __construct(array $results, MALImportBehavior $behavior)
     {
         $this->results = $results;
         $this->behavior = $behavior;
@@ -61,7 +62,7 @@ class MALImportFinished extends Notification implements ShouldQueue
         return [
             'successful_count'  => count($this->results['successful']),
             'failure_count'     => count($this->results['failure']),
-            'behavior'          => $this->behavior
+            'behavior'          => $this->behavior->description
         ];
     }
 

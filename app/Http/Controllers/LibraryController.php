@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MALImportBehavior;
 use App\Models\Anime;
 use App\Enums\UserLibraryStatus;
 use App\Helpers\JSONResult;
@@ -153,8 +154,11 @@ class LibraryController extends Controller
         // Read XML file
         $xmlContent = File::get($data['file']->getRealPath());
 
+        // Get import behavior
+        $behavior = MALImportBehavior::fromValue((int) $data['behavior']);
+
         // Dispatch job
-        dispatch(new ProcessMALImport($user, $xmlContent, $data['behavior']));
+        dispatch(new ProcessMALImport($user, $xmlContent, $behavior));
 
         // Update last MAL import date for user
         $user->last_mal_import_at = now();
