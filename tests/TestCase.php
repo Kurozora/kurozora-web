@@ -10,6 +10,7 @@ use Illuminate\Testing\Assert as PHPUnit;
 use Illuminate\Testing\TestResponse;
 use Spatie\Snapshots\MatchesSnapshots;
 use Tests\Traits\ProvidesTestAnime;
+use Tests\Traits\ProvidesTestMultipleAnime;
 use Tests\Traits\ProvidesTestUser;
 
 abstract class TestCase extends BaseTestCase
@@ -59,6 +60,9 @@ abstract class TestCase extends BaseTestCase
         }
         if (isset($uses[ProvidesTestAnime::class])) {
             $this->initializeTestAnime();
+        }
+        if (isset($uses[ProvidesTestMultipleAnime::class])) {
+            $this->initializeTestMultipleAnime();
         }
 
         return $uses;
