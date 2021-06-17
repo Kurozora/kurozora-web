@@ -46,7 +46,7 @@ class Anime extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'tvdb_id', 'mal_id', 'title', 'season',
+        'id', 'tvdb_id', 'mal_id', 'original_title', 'air_season',
     ];
 
     /**
@@ -115,18 +115,16 @@ class Anime extends Resource
 
             Text::make('Title Translations', 'title')
                 ->hideFromIndex()
-                ->sortable()
                 ->rules('required')
                 ->translatable(),
 
             Textarea::make('Synopsis Translations')
                 ->help('A short description of the Anime.')
-                ->rules('required')
                 ->translatable(),
 
-            Text::make('Tagline')
-                ->rules('max:255')
-                ->hideFromIndex(),
+            Text::make('Tagline Translations', 'tagline')
+                ->hideFromIndex()
+                ->translatable(),
 
             BelongsTo::make('Source')
                 ->sortable()
@@ -180,8 +178,9 @@ class Anime extends Resource
 
             Time::make('Air time')
                 ->withTwelveHourTime()
+                ->withTimezoneAdjustments()
                 ->hideFromIndex()
-                ->help('The exact time the show airs at. For example: 1:30 PM (13:30)')
+                ->help('The exact time the show airs at in JST timezone. For example: 1:30 PM (13:30)')
                 ->nullable(),
 
             Select::make('Air day')
