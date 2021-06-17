@@ -75,7 +75,7 @@ class TvRating extends Resource
      */
     public function title(): string
     {
-        return $this->full_name . ' (ID: ' . $this->id . ')';
+        return $this->name . ' (ID: ' . $this->id . ')';
     }
 
     /**
