@@ -21,7 +21,8 @@ class CreateAnimeTranslationsTable extends Migration
             $table->unsignedBigInteger('anime_id');
             $table->string('locale', 2)->index();
             $table->string('title');
-            $table->text('synopsis');
+            $table->text('synopsis')->nullable();
+            $table->string('tagline')->nullable();
             $table->timestamps();
         });
 

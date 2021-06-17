@@ -44,16 +44,15 @@ class FavoriteAnimeController extends Controller
     function addFavorite(AddAnimeFavoriteRequest $request): JsonResponse
     {
         $animeID = $request->input('anime_id');
-
-        /** @var User $user */
         $user = Auth::user();
 
         $isAlreadyFavorited = $user->favoriteAnime()->where('anime_id', $animeID)->exists();
 
-        if ($isAlreadyFavorited) // Unfavorite the show
+        if ($isAlreadyFavorited) { // Unfavorite the show
             $user->favoriteAnime()->detach($animeID);
-        else // Favorite the show
+        } else { // Favorite the show
             $user->favoriteAnime()->attach($animeID);
+        }
 
         return JSONResult::success([
             'data' => [
