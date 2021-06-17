@@ -25,6 +25,12 @@ class CreateUserLibrariesTable extends Migration
         });
 
         Schema::table(UserLibrary::TABLE_NAME, function (Blueprint $table) {
+            // Set index key constraints
+            $table->index(['user_id', 'anime_id']);
+
+            // Set unique key constraints
+            $table->unique(['user_id', 'anime_id']);
+
             // Set foreign key constraints
             $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
             $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
