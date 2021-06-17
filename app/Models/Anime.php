@@ -66,6 +66,7 @@ class Anime extends KModel
     public array $translatedAttributes = [
         'title',
         'synopsis',
+        'tagline',
     ];
 
     /**
