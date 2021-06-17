@@ -60,9 +60,9 @@
                     <p class="text-sm text-gray-500">187K {{ __('Ratings') }}</p>
                 </div>
 
-                @if ($anime->air_season)
+                @if ($anime->air_season_string)
                     <div id="badge-2" class="flex-grow px-12 border-l-2">
-                        <p class="font-bold">{{ $anime->air_season }}</p>
+                        <p class="font-bold">{{ $anime->air_season_string }}</p>
                         <p class="text-sm text-gray-500">{{ __('Season') }}</p>
                     </div>
                 @endif
@@ -128,18 +128,116 @@
                     </x-slot>
                 </x-section-nav>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-10 gap-y-4">
-                    <x-information-list label="{{ __('Type') }}" infromation="{{ $anime->media_type->name }}" />
-                    <x-information-list label="{{ __('Source') }}" infromation="{{ $anime->source->name }}" />
-                    <x-information-list label="{{ __('Genres') }}" infromation="{{ $anime->genres->implode('name', ', ') ?: '-' }}" />
-                    <x-information-list label="{{ __('Seasons') }}" infromation="{{ $anime->seasons_count ?? '-' }}" />
-                    <x-information-list label="{{ __('Episodes') }}" infromation="{{ $anime->episode_count ?: '-' }}" />
-                    <x-information-list label="{{ __('Duration') }}" infromation="{{ $anime->runtime_string ?? '-' }}" />
-                    <x-information-list label="{{ __('Broadcast') }}" infromation="{{ $anime->broadcast }}" />
-                    <x-information-list label="{{ __('Aired') }}" infromation="{{ $anime->first_aired?->format('Y-m-d') ?? 'N/A' }} - {{ $anime->last_aired?->format('Y-m-d') ?? 'N/A' }}" />
-                    <x-information-list label="{{ __('Rating') }}" infromation="{!! $anime->tv_rating->full_name !!}" />
-                    <x-information-list label="{{ __('Studio') }}" infromation="{{ $anime->studios()->first()->name ?? '-' }}" />
-                    <x-information-list label="{{ __('Network') }}" infromation="{{ $anime->studios()->first()->name ?? '-' }}" />
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-4">
+                    <x-information-list title="{{ __('Type') }}" icon="{{ asset('images/symbols/tv_and_mediabox.svg') }}">
+                        <x-slot name="information">
+                            {{ $anime->media_type->name }}
+                        </x-slot>
+
+                        <x-slot name="footer">
+                            {{ $anime->media_type->description }}
+                        </x-slot>
+                    </x-information-list>
+
+                    <x-information-list title="{{ __('Source') }}" icon="{{ asset('images/symbols/target.svg') }}">
+                        <x-slot name="information">
+                            {{ $anime->source->name }}
+                        </x-slot>
+
+                        <x-slot name="footer">
+                            {{ $anime->source->description }}
+                        </x-slot>
+                    </x-information-list>
+
+                    <x-information-list title="{{ __('Genres') }}" icon="{{ asset('images/symbols/theatermasks.svg') }}">
+                        <x-slot name="information">
+                            {{ $anime->genres->implode('name', ', ') ?: '-' }}
+                        </x-slot>
+                    </x-information-list>
+
+                    @if (in_array($anime->media_type->name, ['Unknown', 'TV', 'ONA']))
+                        <x-information-list title="{{ __('Episodes') }}" icon="{{ asset('images/symbols/film.svg') }}">
+                            <x-slot name="information">
+                                {{ $anime->episode_count }}
+                            </x-slot>
+
+                            <x-slot name="footer">
+                                <p class="text-sm">{{ trans_choice('[0,1] Across one season.|[2,*] Across :count seasons.', $anime->season_count, ['count' => $anime->season_count]) }}</p>
+                            </x-slot>
+                        </x-information-list>
+                    @endif
+
+                    <x-information-list title="{{ __('Duration') }}" icon="{{ asset('images/symbols/hourglass.svg') }}">
+                        <x-slot name="information">
+                            {{ $anime->runtime_string ?? '-' }}
+                        </x-slot>
+
+                        <x-slot name="footer">
+                            <p class="text-sm">{{ __('With a total of :count.', ['count' => $anime->runtime_total]) }}</p>
+                        </x-slot>
+                    </x-information-list>
+
+                    <x-information-list title="{{ __('Broadcast') }}" icon="{{ asset('images/symbols/calendar_badge_clock.svg') }}">
+                        <x-slot name="information">
+                            {{ $anime->broadcast }}
+                        </x-slot>
+
+                        @if (empty($anime->broadcast))
+                            {{ __('No broadcast data available at the moment.') }}
+                        @else
+                            <div class="flex flex-col align-center mt-1">
+                                <p class="font-black text-2xl" wire:poll.1000ms>
+                                    {{ $anime->time_until_broadcast }}
+                                </p>
+                            </div>
+                        @endif
+                    </x-information-list>
+
+                    <x-information-list title="{{ __('Aired') }}" icon="{{ asset('images/symbols/calendar.svg') }}">
+                        @if (!empty($anime->first_aired))
+                            @if (empty($anime->last_aired))
+                                <x-slot name="information">
+                                    🚀 {{ $anime->first_aired->toFormattedDateString() }}
+                                </x-slot>
+
+                                <x-slot name="footer">
+                                    {{ __('The show is :status.', ['status' => strtolower($anime->status->name)]) }}
+                                </x-slot>
+                            @else
+                                <div class="flex flex-col">
+                                        <p class="font-semibold text-2xl">🚀 {{ $anime->first_aired->toFormattedDateString() }}</p>
+
+                                        @svg('dotted_line', 'fill-current', ['width' => '100%'])
+
+                                        <p class="font-semibold text-2xl text-right">🏁 {{ $anime->last_aired?->toFormattedDateString() }}</p>
+                                </div>
+                            @endif
+                        @else
+                            {{ __('Airing dates are unknown.') }}
+                        @endif
+                    </x-information-list>
+
+                    <x-information-list title="{{ __('Rating') }}" icon="{{ asset('images/symbols/tv_rating.svg') }}">
+                        <x-slot name="information">
+                            {{ $anime->tv_rating->name }}
+                        </x-slot>
+
+                        <x-slot name="footer">
+                            <p class="text-sm">{{ $anime->tv_rating->description }}.</p>
+                        </x-slot>
+                    </x-information-list>
+
+{{--                    <x-information-list title="{{ __('Studio') }}" icon="{{ asset('images/symbols/building_2.svg') }}">--}}
+{{--                        <x-slot name="information">--}}
+{{--                            {{ $anime->studios()->first()->name ?? '-' }}--}}
+{{--                        </x-slot>--}}
+{{--                    </x-information-list>--}}
+
+{{--                    <x-information-list title="{{ __('Network') }}" icon="{{ asset('images/symbols/dot_radiowaves_left_and_right.svg') }}">--}}
+{{--                        <x-slot name="information">--}}
+{{--                            {{ $anime->studios()->first()->name ?? '-' }}--}}
+{{--                        </x-slot>--}}
+{{--                    </x-information-list>--}}
                 </div>
             </section>
 
