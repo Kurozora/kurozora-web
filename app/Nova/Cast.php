@@ -61,18 +61,23 @@ class Cast extends Resource
 
             BelongsTo::make('Character')
                 ->searchable()
-                ->sortable(),
+                ->sortable()
+                ->required(),
 
             BelongsTo::make('Person')
                 ->searchable()
-                ->sortable(),
+                ->sortable()
+                ->nullable()
+                ->help('Sometimes unknown if the anime is a hentai. Leave empty in that case.'),
 
             BelongsTo::make('Cast Role')
-                ->help('If you’re not sure what role the character has, choose "Supporting character".')
-                ->sortable(),
+                ->sortable()
+                ->help('If you’re not sure what role the character has, choose "Supporting Character".'),
 
             BelongsTo::make('Language')
-                ->sortable(),
+                ->sortable()
+                ->nullable()
+                ->help('Usually Japanese or English. Leave empty if unknown.'),
         ];
     }
 
@@ -88,7 +93,7 @@ class Cast extends Resource
 
         $animeTitle = $animeCast->anime->title;
         $characterName = $animeCast->character->name;
-        $personName = $animeCast->person->full_name;
+        $personName = $animeCast->person?->full_name ?? 'Unknown';
 
         return $personName . ' as ' . $characterName . ' in ' . $animeTitle . ' (ID: ' . $animeCast->id . ')';
     }

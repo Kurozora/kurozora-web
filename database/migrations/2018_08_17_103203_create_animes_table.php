@@ -32,7 +32,6 @@ class CreateAnimesTable extends Migration
             $table->string('slug');
             $table->string('original_title');
             $table->json('synonym_titles')->nullable();
-            $table->string('tagline')->nullable();
             $table->unsignedBigInteger('tv_rating_id')->nullable();
             $table->unsignedBigInteger('media_type_id')->nullable();
             $table->unsignedBigInteger('source_id')->nullable();

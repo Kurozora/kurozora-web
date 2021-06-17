@@ -48,11 +48,11 @@ class ImportAnimeProcessor
                     'mal_id' => $kAnime->id,
                     'original_title' => $kAnime->title,
                     'synonym_titles' => empty($kAnime->title_synonym) ? null : explode(', ', $kAnime->title_synonym),
-                    'title' => $kAnime->title_english,
+                    'title' => $this->getEnglishTitle($kAnime),
                     'synopsis' => $this->getAnimeSynopsis($kAnime),
                     'ja' => [
                         'title' => $kAnime->title_japanese,
-                        'synopsis' => ''
+                        'synopsis' => null,
                     ],
                     'tv_rating_id' => $this->getTVRating($kAnime)->id,
                     'media_type_id' => $this->getMediaType($kAnime)->id,
@@ -74,15 +74,30 @@ class ImportAnimeProcessor
     }
 
     /**
-     * The synopsis of the anime.
+     * The English title of the anime.
      *
      * @param KAnime $kAnime
      * @return string
      */
-    protected function getAnimeSynopsis(KAnime $kAnime): string
+    protected function getEnglishTitle(KAnime $kAnime): string
+    {
+        if (empty(trim($kAnime->title_english))) {
+            return $kAnime->title;
+        }
+
+        return $kAnime->title_english;
+    }
+
+    /**
+     * The synopsis of the anime.
+     *
+     * @param KAnime $kAnime
+     * @return ?string
+     */
+    protected function getAnimeSynopsis(KAnime $kAnime): ?string
     {
         $kSynopsis = $kAnime->synopsis;
-        $synopsis = empty($kSynopsis) ? '': $kSynopsis;
+        $synopsis = empty(trim($kSynopsis)) ? null: $kSynopsis;
 
         if (!empty($synopsis)) {
             if (Str::contains($synopsis, ['[Written by MAL Rewrite]'])) {

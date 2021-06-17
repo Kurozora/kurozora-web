@@ -220,7 +220,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     function favoriteAnime(): BelongsToMany
     {
-        return $this->belongsToMany(Anime::class, UserFavoriteAnime::class, 'user_id', 'anime_id');
+        return $this->belongsToMany(Anime::class, UserFavoriteAnime::class, 'user_id', 'anime_id')
+            ->withTimestamps();
     }
 
     /**
@@ -322,7 +323,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     function reminderAnime(): BelongsToMany
     {
-        return $this->belongsToMany(Anime::class, UserReminderAnime::class, 'user_id', 'anime_id');
+        return $this->belongsToMany(Anime::class, UserReminderAnime::class, 'user_id', 'anime_id')
+            ->withTimestamps();
     }
 
     /**
@@ -345,7 +347,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     function library(): BelongsToMany
     {
         return $this->belongsToMany(Anime::class, UserLibrary::class, 'user_id', 'anime_id')
-            ->withPivot('status');
+            ->withPivot('status')
+            ->withTimestamps();
     }
 
     /**
@@ -356,7 +359,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     function moderatingAnime(): BelongsToMany
     {
         return $this->belongsToMany(Anime::class, AnimeModerator::class, 'user_id', 'anime_id')
-            ->withPivot('created_at');
+            ->withPivot('created_at')
+            ->withTimestamps();
     }
 
     /**
@@ -378,7 +382,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     function watchedEpisodes(): BelongsToMany
     {
-        return $this->belongsToMany(Episode::class, UserWatchedEpisode::class, 'user_id', 'episode_id');
+        return $this->belongsToMany(Episode::class, UserWatchedEpisode::class, 'user_id', 'episode_id')
+            ->withTimestamps();
     }
 
     /**
@@ -388,7 +393,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     function badges(): BelongsToMany
     {
-        return $this->belongsToMany(Badge::class, UserBadge::class, 'user_id', 'badge_id');
+        return $this->belongsToMany(Badge::class, UserBadge::class, 'user_id', 'badge_id')
+            ->withTimestamps();
     }
 
     /**
