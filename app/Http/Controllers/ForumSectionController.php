@@ -11,9 +11,9 @@ use App\Http\Requests\GetThreadsRequest;
 use App\Http\Requests\PostThreadRequest;
 use App\Http\Resources\ForumSectionResource;
 use App\Http\Resources\ForumThreadResource;
+use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class ForumSectionController extends Controller

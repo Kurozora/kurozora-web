@@ -16,10 +16,10 @@ use App\Http\Resources\AnimeResource;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Http\Resources\SeasonResource;
 use App\Http\Resources\CharacterResourceBasic;
+use Auth;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 
 class AnimeController extends Controller
 {
