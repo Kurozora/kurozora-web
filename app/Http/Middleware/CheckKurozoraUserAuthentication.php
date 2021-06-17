@@ -4,12 +4,11 @@ namespace App\Http\Middleware;
 
 use App\Helpers\KuroAuthToken;
 use App\Models\Session;
+use Auth;
 use Closure;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 /*
  * This middleware checks the Kurozora user's authentication details before

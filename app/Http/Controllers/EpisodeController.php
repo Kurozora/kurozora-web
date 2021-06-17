@@ -6,9 +6,9 @@ use App\Models\Episode;
 use App\Helpers\JSONResult;
 use App\Http\Requests\MarkEpisodeAsWatchedRequest;
 use App\Http\Resources\EpisodeResource;
+use Auth;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 
 class EpisodeController extends Controller
 {

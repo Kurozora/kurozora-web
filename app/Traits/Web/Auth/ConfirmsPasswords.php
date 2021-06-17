@@ -2,8 +2,8 @@
 
 namespace App\Traits\Web\Auth;
 
+use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 trait ConfirmsPasswords

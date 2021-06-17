@@ -7,9 +7,9 @@ use App\Models\Episode;
 use App\Models\Season;
 use App\Enums\WatchStatus;
 use App\Models\User;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
 
 class EpisodeResource extends JsonResource
 {

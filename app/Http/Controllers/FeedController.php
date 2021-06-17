@@ -9,9 +9,9 @@ use App\Http\Requests\GetFeedMessagesHomeRequest;
 use App\Http\Requests\PostFeedRequest;
 use App\Http\Resources\FeedMessageResource;
 use App\Models\User;
+use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 
 class FeedController extends Controller
 {
