@@ -28,22 +28,33 @@
                         <div class="absolute top-0 left-0 h-full w-full ring-1 ring-gray-100 ring-opacity-25 ring-inset rounded-lg"></div>
                     </picture>
 
-                    <div class="flex flex-col justify-between w-3/4">
+                    <div class="flex flex-col gap-2 justify-between w-3/4">
                         <div>
                             <p class="font-semibold text-lg leading-tight break-all">{{ $anime->original_title }}</p>
                             <p class="text-sm leading-tight">{{ $anime->information_summary }}</p>
                             <x-pill color="{{ $anime->status->color() }}" class="mt-2">{{ $anime->status->name }}</x-pill>
                         </div>
-                        <div class="flex justify-between mt-5 h-10">
-                            <x-button class="rounded-full shadow-md">{{ __('ADD') }}</x-button>
-                            <div>
-                                <x-button class="mr-2 !px-2 w-10 !bg-white text-yellow-300 rounded-full shadow-md hover:!bg-gray-50 active:!bg-gray-100">
-                                    @svg('bell_fill', 'fill-current', ['width' => '44'])
-                                </x-button>
-                                <x-button class="!px-2 w-10 !bg-white text-red-500 rounded-full shadow-md hover:!bg-gray-50 active:!bg-gray-100">
-                                    @svg('heart_fill', 'fill-current', ['width' => '44'])
-                                </x-button>
-                            </div>
+
+                        <div class="flex flex-wrap gap-2 justify-between mt-5 h-10">
+                            <livewire:anime.library-button :anime="$anime" />
+                            @if($isTracking)
+                                <div class="flex gap-2">
+                                    <x-button class="!px-2 w-10 !bg-white text-yellow-300 rounded-full shadow-md hover:!bg-gray-100 hover:text-yellow-500 active:!bg-white active:text-yellow-300" wire:click="remindAnime">
+                                        @if($isReminded)
+                                            @svg('bell_fill', 'fill-current', ['width' => '44'])
+                                        @else
+                                            @svg('bell', 'fill-current', ['width' => '44'])
+                                        @endif
+                                    </x-button>
+                                    <x-button class="!px-2 w-10 !bg-white text-red-500 rounded-full shadow-md hover:!bg-gray-100 hover:text-red-600 active:!bg-white active:text-red-500" wire:click="favoriteAnime">
+                                        @if($isFavorited)
+                                            @svg('heart_fill', 'fill-current', ['width' => '44'])
+                                        @else
+                                            @svg('heart', 'fill-current', ['width' => '44'])
+                                        @endif
+                                    </x-button>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -244,6 +255,18 @@
             <section class="pt-5 pb-2 border-t">
                 <p class="text-sm text-gray-400">{{ $anime->copyright }}</p>
             </section>
+
+            <x-dialog-modal maxWidth="md" wire:model="showPopup">
+                <x-slot name="title">
+                    {{ $popupData['title'] }}
+                </x-slot>
+                <x-slot name="content">
+                    <p class="">{{ $popupData['message'] }}</p>
+                </x-slot>
+                <x-slot name="footer">
+                    <x-button wire:click="$toggle('showPopup')">{{ __('Ok') }}</x-button>
+                </x-slot>
+            </x-dialog-modal>
         </div>
     </div>
 </main>
