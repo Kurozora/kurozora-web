@@ -9,7 +9,9 @@ use App\Traits\Searchable;
 use Astrotomic\Translatable\Translatable;
 use Auth;
 use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Carbon\CarbonInterval;
+use Carbon\Exceptions\InvalidFormatException;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
@@ -104,9 +106,12 @@ class Anime extends KModel
      * @var array
      */
     protected $appends = [
+        'air_season_string',
+        'air_time_utc',
         'broadcast',
         'information_summary',
         'runtime_string',
+        'time_until_broadcast',
     ];
 
     /**
@@ -190,39 +195,46 @@ class Anime extends KModel
     /**
      * The season in which the anime aired.
      *
-     * @param $value
      * @return string|null
      */
-    public function getAirSeasonAttribute($value): ?string
+    public function getAirSeasonStringAttribute(): ?string
     {
-        if ($value == null) {
+        if ($this->air_season == null) {
             return null;
         }
-        return SeasonOfYear::fromValue($value)->description;
+        return SeasonOfYear::fromValue($this->air_season)->description;
     }
 
     /**
-     * The air time of the anime.
+     * The air time of the anime in UTC timezone.
      *
-     * @param $value
      * @return string|null
      */
-    public function getAirTimeAttribute($value): ?string
+    public function getAirTimeUtcAttribute(): ?string
     {
-        if ($value != '00:00:00') {
-            return Carbon::createFromFormat('H:i:s', $value, 'Asia/Tokyo')
-                ->timezone('UTC')
-                ->format('H:i T');
+        if ($this->air_time == '00:00:00' || $this->air_time == '00:00') {
+            return null;
         }
-        return null;
+
+        try {
+            $airTime = Carbon::createFromFormat('H:i:s', $this->air_time, 'Asia/Tokyo');
+        } catch (InvalidFormatException $invalidFormatException) {
+            try {
+                $airTime = Carbon::createFromFormat('H:i', $this->air_time, 'Asia/Tokyo');
+            } catch (InvalidFormatException $invalidFormatException) {
+                return null;
+            }
+        }
+
+        return $airTime->timezone('UTC')->format('H:i');
     }
 
     /**
      * The broadcast date and time of the anime.
      *
-     * @return string
+     * @return null|string
      */
-    public function getBroadcastAttribute(): string
+    public function getBroadcastAttribute(): ?string
     {
         $broadcast = null;
         $airDay = $this->air_day;
@@ -231,6 +243,7 @@ class Anime extends KModel
             ->setTimeFromTimeString($airTime ?? '00:00')
             ->setTimezone('UTC');
 
+        // Check if air day is not empty or is Sunday, since Sunday has a value of 0.
         if (!empty($airDay) || $airDay == DayOfWeek::Sunday) {
             $broadcast .= $dayTime->getTranslatedDayName();
         }
@@ -238,7 +251,21 @@ class Anime extends KModel
             $broadcast .= ' ' . __('at') . ' ' . $dayTime->format('H:i e');
         }
 
-        return $broadcast ?? '-';
+        return $broadcast;
+    }
+
+    /**
+     * The time from now until the broadcast.
+     *
+     * @return string
+     */
+    public function getTimeUntilBroadcastAttribute(): string
+    {
+        if (empty($this->broadcast)){
+            return '';
+        }
+
+        return now('UTC')->until($this->broadcast, CarbonInterface::DIFF_RELATIVE_TO_NOW, true, 3);
     }
 
     /**
@@ -252,9 +279,9 @@ class Anime extends KModel
     {
         $informationSummary = $this->media_type->name . ' · ' . $this->tv_rating->name;
         $episodesCount = $this->episode_count ?? null;
-        $duration = $this->runtime ?? null;
+        $duration = $this->runtime_string;
         $firstAiredYear = $this->first_aired;
-        $airSeason = $this->air_season;
+        $airSeason = $this->air_season_string;
 
         if (!empty($episodesCount)) {
             $informationSummary .= ' · ' . $episodesCount . match ($episodesCount) {
@@ -263,7 +290,7 @@ class Anime extends KModel
             };
         }
         if (!empty($duration)) {
-            $informationSummary .= ' · ' . $duration / 60 . 'min';
+            $informationSummary .= ' · ' . $duration;
         }
         if (!empty($firstAiredYear)) {
             $informationSummary .= ' · ' . $airSeason . ' ' . $firstAiredYear->format('Y');
@@ -282,6 +309,21 @@ class Anime extends KModel
     {
         $runtime = $this->runtime ?? 0;
         return CarbonInterval::seconds($runtime)->cascade()->forHumans();
+    }
+
+    /**
+     * Get the total runtime of the anime. (runtime * episodes)
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function getRuntimeTotalAttribute(): string
+    {
+        if (empty($this->episode_count)) {
+            return $this->runtime_string;
+        }
+
+        return CarbonInterval::seconds($this->runtime * $this->episode_count)->cascade()->forHumans();
     }
 
     /**
@@ -329,7 +371,7 @@ class Anime extends KModel
      */
     public function studios(): BelongsToMany
     {
-        return $this->belongsToMany(Studio::class);
+        return $this->belongsToMany(Studio::class);//->withPivot('is_licensor', 'is_producer', 'is_studio');
     }
 
     /**
