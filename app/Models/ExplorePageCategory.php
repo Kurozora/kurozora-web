@@ -17,7 +17,8 @@ class ExplorePageCategory extends KModel
      */
     function animes(): BelongsToMany
     {
-        return $this->belongsToMany(Anime::class, ExplorePageCategoryAnime::class, 'explore_page_category_id', 'anime_id');
+        return $this->belongsToMany(Anime::class, ExplorePageCategoryAnime::class, 'explore_page_category_id', 'anime_id')
+            ->withTimestamps();
     }
 
     /**
@@ -27,6 +28,7 @@ class ExplorePageCategory extends KModel
      */
     function genres(): BelongsToMany
     {
-        return $this->belongsToMany(Genre::class, ExplorePageCategoryGenre::class, 'explore_page_category_id', 'genre_id');
+        return $this->belongsToMany(Genre::class, ExplorePageCategoryGenre::class, 'explore_page_category_id', 'genre_id')
+            ->withTimestamps();
     }
 }

@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-class UserLibrary extends KModel
+use Illuminate\Database\Eloquent\Relations\Pivot;
+
+class UserLibrary extends Pivot
 {
     // Table name
     const TABLE_NAME = 'user_libraries';

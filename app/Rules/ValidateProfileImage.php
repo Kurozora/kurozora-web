@@ -19,7 +19,6 @@ class ValidateProfileImage implements Rule
      */
     public function passes($attribute, $value): bool
     {
-//        /** @var User $user */
 //        $user = Auth::user();
 //        $userReceipt = $user->receipt;
 
@@ -36,6 +35,7 @@ class ValidateProfileImage implements Rule
             $this->error = $imgValidator->errors()->first();
             return false;
         }
+
         return true;
     }
 

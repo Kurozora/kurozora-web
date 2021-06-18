@@ -2,10 +2,10 @@
 
 namespace App\Http\Livewire\Profile;
 
+use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Auth;
 use App\Contracts\UpdatesUserPasswords;
 use Livewire\Component;
 

@@ -3,9 +3,9 @@
 namespace App\Http\Resources;
 
 use App\Models\User;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
 
 class UserResourceBasic extends JsonResource
 {
@@ -48,11 +48,13 @@ class UserResourceBasic extends JsonResource
             ]
         ];
 
-        if (Auth::check())
+        if (Auth::check()) {
             $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
+        }
 
-        if ($this->includePrivateDetails)
+        if ($this->includePrivateDetails) {
             $resource = array_merge($resource, $this->getPrivateDetails());
+        }
 
         return $resource;
     }
@@ -66,13 +68,12 @@ class UserResourceBasic extends JsonResource
     {
         /** @var User $followedUser */
         $followedUser = $this->resource;
-
-        /** @var User $user */
         $user = Auth::user();
 
         $isFollowed = null;
-        if ($followedUser->id != $user->id)
+        if ($followedUser->id != $user->id) {
             $isFollowed = $this->resource->followers()->where('user_id', $user->id)->exists();
+        }
 
         return [
             'isFollowed' => $isFollowed

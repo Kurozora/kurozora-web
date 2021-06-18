@@ -61,6 +61,10 @@ final class AstrologicalSign extends Enum
      */
     public static function getDescription($value): string
     {
+        if (is_null($value)) {
+            return '';
+        }
+
         return parent::getDescription($value) . ' ' . self::$signsEmoji[$value];
     }
 }

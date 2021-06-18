@@ -8,8 +8,8 @@ use App\Http\Requests\GetFollowingRequest;
 use App\Http\Resources\UserResourceBasic;
 use App\Notifications\NewFollower;
 use App\Models\User;
+use Auth;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 
 class FollowingController extends Controller
 {
@@ -21,7 +21,6 @@ class FollowingController extends Controller
      */
     function followUser(User $user): JsonResponse
     {
-        /** @var User $authUser */
         $authUser = Auth::user();
 
         $isAlreadyFollowing = $user->followers()->where('user_id', $authUser->id)->exists();

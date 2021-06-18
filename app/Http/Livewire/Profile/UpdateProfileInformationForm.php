@@ -3,10 +3,10 @@
 namespace App\Http\Livewire\Profile;
 
 use App\Contracts\UpdatesUserProfileInformation;
+use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Livewire\Component;
 use Livewire\WithFileUploads;
