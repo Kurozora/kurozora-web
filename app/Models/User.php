@@ -347,6 +347,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     function library(): BelongsToMany
     {
         return $this->belongsToMany(Anime::class, UserLibrary::class, 'user_id', 'anime_id')
+            ->using(UserLibrary::class)
             ->withPivot('status')
             ->withTimestamps();
     }
@@ -533,7 +534,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     public function followers(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, UserFollow::class, 'following_user_id', 'user_id');
+        return $this->belongsToMany(User::class, UserFollow::class, 'following_user_id', 'user_id')
+            ->withTimestamps();
     }
 
     /**
@@ -559,7 +561,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     public function following(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, UserFollow::class, 'user_id', 'following_user_id');
+        return $this->belongsToMany(User::class, UserFollow::class, 'user_id', 'following_user_id')
+            ->withTimestamps();
     }
 
     /**
