@@ -3,13 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class AnimeStudio extends KModel
+class AnimeStudio extends Pivot
 {
     // Table name
     const TABLE_NAME = 'anime_studio';
     protected $table = self::TABLE_NAME;
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
     protected $casts = [
         'is_licensor'   => 'boolean',
         'is_producer'   => 'boolean',
@@ -33,6 +39,6 @@ class AnimeStudio extends KModel
      */
     public function studio(): BelongsTo
     {
-        return $this->belongsTo(Studio::class);
+        return $this->belongsTo(Studio::class)->where('type', 'anime');
     }
 }
