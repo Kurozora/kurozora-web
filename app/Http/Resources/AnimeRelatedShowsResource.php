@@ -9,6 +9,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class AnimeRelatedShowsResource extends JsonResource
 {
     /**
+     * The resource instance.
+     *
+     * @var MediaRelation
+     */
+    public $resource;
+
+    /**
      * Transform the resource into an array.
      *
      * @param  Request  $request
@@ -16,14 +23,11 @@ class AnimeRelatedShowsResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var MediaRelation $animeRelation */
-        $animeRelation = $this->resource;
-
         return [
-            'show'          => AnimeResourceBasic::make($animeRelation->related_anime),
+            'show'          => AnimeResourceBasic::make($this->resource->related_anime),
             'attributes'    => [
-                $animeRelation->relation->only(['name', 'description']),
-            ]
+                'relation'  => $this->resource->relation->only(['name', 'description']),
+            ],
         ];
     }
 }

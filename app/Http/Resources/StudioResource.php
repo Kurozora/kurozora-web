@@ -10,6 +10,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class StudioResource extends JsonResource
 {
     /**
+     * The resource instance.
+     *
+     * @var Studio $resource
+     */
+    public $resource;
+
+    /**
      * Transform the resource into an array.
      *
      * @param  Request  $request
@@ -17,10 +24,7 @@ class StudioResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var Studio $studio */
-        $studio = $this->resource;
-
-        $resource = StudioResourceBasic::make($studio)->toArray($request);
+        $resource = StudioResourceBasic::make($this->resource)->toArray($request);
 
         if ($request->input('include')) {
             $includes = array_unique(explode(',', $request->input('include')));
@@ -47,9 +51,6 @@ class StudioResource extends JsonResource
      */
     protected function getAnimeRelationship(?Anime $excludingAnime = null): array
     {
-        /** @var Studio $studio */
-        $studio = $this->resource;
-
         $whereRules = [];
         if ($excludingAnime) {
             array_push($whereRules, ['animes.id', '!=', $excludingAnime->id]);
@@ -57,8 +58,8 @@ class StudioResource extends JsonResource
 
         return [
             'shows' => [
-                'href' => route('api.studios.anime', $studio, false),
-                'data' => AnimeResourceBasic::collection($studio->getAnime($whereRules))
+                'href' => route('api.studios.anime', $this->resource, false),
+                'data' => AnimeResourceBasic::collection($this->resource->getAnime($whereRules))
             ]
         ];
     }

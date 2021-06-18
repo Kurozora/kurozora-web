@@ -10,6 +10,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class CharacterResourceBasic extends JsonResource
 {
     /**
+     * The resource instance.
+     *
+     * @var Character $resource
+     */
+    public $resource;
+
+    /**
      * Transform the resource into an array.
      *
      * @param  Request  $request
@@ -17,31 +24,28 @@ class CharacterResourceBasic extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var Character $character */
-        $character = $this->resource;
-
         return [
-            'id'            => $character->id,
+            'id'            => $this->resource->id,
             'type'          => 'characters',
-            'href'          => route('api.characters.details', $character, false),
+            'href'          => route('api.characters.details', $this->resource, false),
             'attributes'    => [
-                'name'              => $character->name,
-                'japaneseName'      => $character->japanese_name,
-                'nicknames'         => $character->nicknames,
-                'about'             => $character->about,
-                'imageURL'          => $character->image,
-                'debut'             => $character->debut,
-                'status'            => $character->status,
-                'bloodType'         => $character->blood_type,
-                'favoriteFood'      => $character->favorite_food,
-                'bust'              => $character->bust,
-                'waist'             => $character->waist,
-                'hip'               => $character->hip,
-                'height'            => $character->height,
-                'age'               => $character->age,
-                'birthDay'          => $character->birth_day,
-                'birthMonth'        => $character->birth_month,
-                'astrologicalSign'  => AstrologicalSign::getDescription($character->astrological_sign)
+                'name'              => $this->resource->name,
+                'japaneseName'      => $this->resource->getTranslation('ja')->name,
+                'nicknames'         => $this->resource->nicknames,
+                'about'             => $this->resource->about,
+                'imageURL'          => $this->resource->image,
+                'debut'             => $this->resource->debut,
+                'status'            => $this->resource->status,
+                'bloodType'         => $this->resource->blood_type,
+                'favoriteFood'      => $this->resource->favorite_food,
+                'bust'              => $this->resource->bust,
+                'waist'             => $this->resource->waist,
+                'hip'               => $this->resource->hip,
+                'height'            => $this->resource->height,
+                'age'               => $this->resource->age,
+                'birthDay'          => $this->resource->birth_day,
+                'birthMonth'        => $this->resource->birth_month,
+                'astrologicalSign'  => AstrologicalSign::getDescription($this->resource->astrological_sign) ?: null
             ]
         ];
     }

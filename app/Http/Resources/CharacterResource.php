@@ -9,6 +9,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class CharacterResource extends JsonResource
 {
     /**
+     * The resource instance.
+     *
+     * @var Character $resource
+     */
+    public $resource;
+
+    /**
      * Transform the resource into an array.
      *
      * @param  Request  $request
@@ -16,10 +23,7 @@ class CharacterResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var Character $character */
-        $character = $this->resource;
-
-        $resource = CharacterResourceBasic::make($character)->toArray($request);
+        $resource = CharacterResourceBasic::make($this->resource)->toArray($request);
 
         if ($request->input('include')) {
             $includes = array_unique(explode(',', $request->input('include')));
@@ -46,13 +50,10 @@ class CharacterResource extends JsonResource
      */
     protected function getPeopleRelationship(): array
     {
-        /** @vra Character $character */
-        $character = $this->resource;
-
         return [
             'people' => [
-                'href' => route('api.characters.people', $character, false),
-                'data' => PersonResource::collection($character->getPeople(Character::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'href' => route('api.characters.people', $this->resource, false),
+                'data' => PersonResource::collection($this->resource->getPeople(Character::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }
@@ -64,13 +65,10 @@ class CharacterResource extends JsonResource
      */
     protected function getAnimeRelationship(): array
     {
-        /** @var Character $character */
-        $character = $this->resource;
-
         return [
             'shows' => [
-                'href' => route('api.characters.anime', $character, false),
-                'data' => AnimeResourceBasic::collection($character->getAnime(Character::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'href' => route('api.characters.anime', $this->resource, false),
+                'data' => AnimeResourceBasic::collection($this->resource->getAnime(Character::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }
