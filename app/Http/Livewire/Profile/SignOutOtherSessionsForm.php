@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Profile;
 
 use App\Models\Session;
+use Auth;
 use Browser;
 use Carbon\Carbon;
 use Illuminate\Auth\AuthenticationException;
@@ -10,7 +11,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;

@@ -4,9 +4,9 @@ namespace App\Http\Resources;
 
 use App\Enums\ForumsVoteType;
 use App\Models\ForumThread;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
 
 class ForumThreadResource extends JsonResource
 {
@@ -49,8 +49,9 @@ class ForumThreadResource extends JsonResource
         $relationships = array_merge($relationships, $this->getPosterRelationship());
         $resource = array_merge($resource, ['relationships' => $relationships]);
 
-        if (Auth::check())
+        if (Auth::check()) {
             $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
+        }
 
         return $resource;
     }

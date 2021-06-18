@@ -5,13 +5,19 @@ namespace App\Http\Resources;
 use App\Models\Anime;
 use App\Enums\DayOfWeek;
 use App\Enums\UserLibraryStatus;
-use App\Models\User;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
 
 class AnimeResourceBasic extends JsonResource
 {
+    /**
+     * The resource instance.
+     *
+     * @var Anime $resource
+     */
+    public $resource;
+
     /**
      * Transform the resource into an array.
      *
@@ -20,43 +26,53 @@ class AnimeResourceBasic extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var Anime $anime */
-        $anime = $this->resource;
-
-        $airDay = DayOfWeek::getDescription($anime->air_day);
-
         $resource = [
-            'id'            => $anime->id,
+            'id'            => $this->resource->id,
             'type'          => 'show',
-            'href'          => route('api.anime.view', $anime, false),
+            'href'          => route('api.anime.view', $this->resource, false),
             'attributes'    => [
-                'anidbID'               => $anime->anidb_id,
-                'anilistID'             => $anime->anilist_id,
-                'kitsuID'               => $anime->kitsu_id,
-                'imdbID'                => $anime->imdb_id,
-                'malID'                 => $anime->mal_id,
-                'title'                 => $anime->title,
-                'tagline'               => $anime->tagline,
-                'synopsis'              => $anime->synopsis,
-                'genres'                => $anime->genres->pluck('name'),
-                'tvRating'              => $anime->tv_rating->only(['name', 'description']),
-                'type'                  => $anime->media_type->only(['name', 'description']),
-                'source'                => $anime->source->only(['name', 'description']),
-                'status'                => $anime->status->only(['name', 'description']),
-                'episodeCount'          => $anime->episode_count,
-                'seasonCount'           => $anime->season_count,
-                'averageRating'         => $anime->average_rating,
-                'ratingCount'           => $anime->rating_count,
-                'videoUrl'              => $anime->video_url,
-                'poster'                => AnimeImageResource::make($anime->poster()),
-                'background'            => AnimeImageResource::make($anime->banner()),
-                'firstAired'            => $anime->first_aired?->format('Y-m-d'),
-                'lastAired'             => $anime->last_aired?->format('Y-m-d'),
-                'runtime'               => $anime->runtime,
-                'airTime'               => $anime->air_time,
-                'airDay'                => !empty($airDay) ? $airDay : null,
-                'isNSFW'                => (bool) $anime->is_nsfw,
-                'copyright'             => $anime->copyright
+                'anidbID'               => $this->resource->anidb_id,
+                'anilistID'             => $this->resource->anilist_id,
+                'imdbID'                => $this->resource->imdb_id,
+                'kitsuID'               => $this->resource->kitsu_id,
+                'malID'                 => $this->resource->mal_id,
+                'notifyID'              => $this->resource->notify_id,
+                'syoboiID'              => $this->resource->syoboi_id,
+                'traktID'               => $this->resource->trakt_id,
+                'tvdbID'                => $this->resource->tvdb_id,
+                'videoUrl'              => $this->resource->video_url,
+                'poster'                => AnimeImageResource::make($this->resource->poster()),
+                'banner'                => AnimeImageResource::make($this->resource->banner()),
+                'originalTitle'         => $this->resource->original_title,
+                'title'                 => $this->resource->title,
+                'tagline'               => $this->resource->tagline,
+                'synopsis'              => $this->resource->synopsis,
+                'genres'                => $this->resource->genres->pluck('name'),
+                'tvRating'              => $this->resource->tv_rating->only(['name', 'description']),
+                'type'                  => $this->resource->media_type->only(['name', 'description']),
+                'source'                => $this->resource->source->only(['name', 'description']),
+                'status'                => $this->resource->status->only(['name', 'description']),
+                'episodeCount'          => $this->resource->episode_count,
+                'seasonCount'           => $this->resource->season_count,
+                'userRating'            => [
+                    'ratingCountList'   => [
+//                        80, // 1 star
+//                        68, // 2 stars
+//                        187, // 3 stars
+//                        530, // 4 stars
+//                        4110 // 5 stars
+                    ],
+                    'averageRating'     => $this->resource->average_rating,
+                    'ratingCount'       => $this->resource->rating_count,
+                ],
+                'firstAired'            => $this->resource->first_aired?->format('Y-m-d'),
+                'lastAired'             => $this->resource->last_aired?->format('Y-m-d'),
+                'runtime'               => $this->resource->runtime_string,
+                'runtimeTotal'          => $this->resource->runtime_total,
+                'airTime'               => $this->resource->air_time_utc,
+                'airDay'                => DayOfWeek::getDescription($this->resource->air_day) ?: null,
+                'isNSFW'                => (bool) $this->resource->is_nsfw,
+                'copyright'             => $this->resource->copyright,
             ]
         ];
 
@@ -74,47 +90,35 @@ class AnimeResourceBasic extends JsonResource
      */
     protected function getUserSpecificDetails(): array
     {
-        /** @var Anime $anime */
-        $anime = $this->resource;
-
-        /** @var User $user */
         $user = Auth::user();
 
         // Get the user rating for this Anime
-        $userRating = null;
-
-        $foundRating = $anime->ratings()
-            ->where('user_id', $user->id)
-            ->first();
-
-        if ($foundRating) {
-            $userRating = $foundRating->rating;
-        }
+        $givenRating = $this->resource->ratings()
+            ->firstWhere('user_id', $user->id);
 
         // Get the current library status
-        $libraryEntry = $user->library()->where('anime_id', $anime->id)->first();
+        $libraryEntry = $user->library()->firstWhere('anime_id', $this->resource->id);
         $currentLibraryStatus = null;
-
         if ($libraryEntry) {
             $currentLibraryStatus = UserLibraryStatus::getDescription($libraryEntry->pivot->status);
         }
 
         // Get the favorite status
-        $isTrackingAnime = $user->isTracking($anime);
+        $isTrackingAnime = $user->isTracking($this->resource);
         $favoriteStatus = null;
         if ($isTrackingAnime) {
-            $favoriteStatus = $user->favoriteAnime()->wherePivot('anime_id', $anime->id)->exists();
+            $favoriteStatus = $user->favoriteAnime()->wherePivot('anime_id', $this->resource->id)->exists();
         }
 
         // Get the reminder status
         $reminderStatus = null;
         if ($isTrackingAnime) {
-            $reminderStatus = $user->reminderAnime()->wherePivot('anime_id', $anime->id)->exists();
+            $reminderStatus = $user->reminderAnime()->wherePivot('anime_id', $this->resource->id)->exists();
         }
 
         // Return the array
         return [
-            'givenRating'       => (double) $userRating,
+            'givenRating'       => (double) $givenRating?->rating,
             'libraryStatus'     => $currentLibraryStatus,
             'isFavorited'       => $favoriteStatus,
             'isReminded'        => $reminderStatus

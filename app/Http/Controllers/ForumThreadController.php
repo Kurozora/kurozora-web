@@ -15,9 +15,9 @@ use App\Http\Requests\SearchThreadRequest;
 use App\Http\Requests\VoteThreadRequest;
 use App\Http\Resources\ForumReplyResource;
 use App\Http\Resources\ForumThreadResource;
+use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 

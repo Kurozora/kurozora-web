@@ -9,6 +9,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class PlatformResource extends JsonResource
 {
     /**
+     * The resource instance.
+     *
+     * @var Session
+     */
+    public $resource;
+
+    /**
      * Transform the resource into an array.
      *
      * @param  Request  $request
@@ -16,17 +23,14 @@ class PlatformResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var Session $session */
-        $session = $this->resource;
-
         return [
             'type'          => 'platforms',
             'attributes'    => [
-                'description'       => $session->humanReadablePlatform(),
-                'systemName'        => $session->platform,
-                'systemVersion'     => $session->platform_version,
-                'deviceVendor'      => $session->device_vendor,
-                'deviceModel'       => $session->device_model
+                'description'       => $this->resource->humanReadablePlatform(),
+                'systemName'        => $this->resource->platform,
+                'systemVersion'     => $this->resource->platform_version,
+                'deviceVendor'      => $this->resource->device_vendor,
+                'deviceModel'       => $this->resource->device_model
             ]
         ];
     }

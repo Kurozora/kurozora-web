@@ -45,7 +45,8 @@ class Studio extends KModel
      */
     public function anime(): BelongsToMany
     {
-        return $this->belongsToMany(Anime::class);
+        return $this->belongsToMany(Anime::class)
+            ->withTimestamps();
     }
 
     /**

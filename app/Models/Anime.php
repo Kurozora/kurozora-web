@@ -124,7 +124,7 @@ class Anime extends KModel
         parent::boot();
 
         static::addGlobalScope('tv_rating', function (Builder $builder) {
-            if (Auth::user() != null) {
+            if (Auth::check()) {
                 $preferredTvRating = settings('tv_rating');
                 $tvRating = TvRating::firstWhere('weight', $preferredTvRating);
 
@@ -333,7 +333,8 @@ class Anime extends KModel
      */
     public function favoredBy(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, UserFavoriteAnime::TABLE_NAME, 'anime_id', 'user_id');
+        return $this->belongsToMany(User::class, UserFavoriteAnime::TABLE_NAME, 'anime_id', 'user_id')
+            ->withTimestamps();
     }
 
     /**
@@ -344,7 +345,9 @@ class Anime extends KModel
     public function moderators(): BelongsToMany
     {
         return $this->belongsToMany(User::class, AnimeModerator::TABLE_NAME, 'anime_id', 'user_id')
-            ->withPivot('created_at');
+            ->using(AnimeModerator::class)
+            ->withPivot('created_at')
+            ->withTimestamps();
     }
 
     /**
@@ -371,7 +374,10 @@ class Anime extends KModel
      */
     public function studios(): BelongsToMany
     {
-        return $this->belongsToMany(Studio::class);//->withPivot('is_licensor', 'is_producer', 'is_studio');
+        return $this->belongsToMany(Studio::class)
+            ->using(AnimeStudio::class)
+            ->withPivot('is_licensor', 'is_producer', 'is_studio')
+            ->withTimestamps();
     }
 
     /**

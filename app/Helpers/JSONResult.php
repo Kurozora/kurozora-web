@@ -5,8 +5,8 @@ namespace App\Helpers;
 use App\Models\APIError;
 use App\Http\Resources\JSONErrorResource;
 use App\Providers\AppServiceProvider;
+use Auth;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 

@@ -9,6 +9,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class AnimeCastResource extends JsonResource
 {
     /**
+     * The resource instance.
+     *
+     * @var AnimeCast $resource
+     */
+    public $resource;
+
+    /**
      * Transform the resource into an array.
      *
      * @param  Request  $request
@@ -16,16 +23,13 @@ class AnimeCastResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var AnimeCast $animeCast */
-        $animeCast = $this->resource;
-
         $resource = [
-            'id'            => $animeCast->id,
+            'id'            => $this->resource->id,
             'type'          => 'cast',
-            'href'          => route('api.anime.cast', $animeCast->anime, false),
+            'href'          => route('api.anime.cast', $this->resource->anime, false),
             'attributes'    => [
-                'role'      => $animeCast->cast_role->only(['name', 'description']),
-                'language'  => $animeCast->language->only('name'),
+                'role'      => $this->resource->cast_role->only(['name', 'description']),
+                'language'  => $this->resource->language?->name,
             ]
         ];
 
@@ -48,12 +52,15 @@ class AnimeCastResource extends JsonResource
      */
     protected function getPeopleRelationship(): array
     {
-        /** @var AnimeCast $animeCast */
-        $animeCast = $this->resource;
+        // Since some cast can only contain a character, check if the person exists before creating a collection.
+        $people = [];
+        if ($this->resource->person) {
+            array_push($people, $this->resource->person);
+        }
 
         return [
             'people' => [
-                'data' => PersonResource::collection([$animeCast->person])
+                'data' => PersonResource::collection($people)
             ]
         ];
     }
@@ -65,12 +72,9 @@ class AnimeCastResource extends JsonResource
      */
     protected function getCharactersRelationship(): array
     {
-        /** @var AnimeCast $animeCast */
-        $animeCast = $this->resource;
-
         return [
             'characters' => [
-                'data' => CharacterResourceBasic::collection([$animeCast->character])
+                'data' => CharacterResourceBasic::collection([$this->resource->character])
             ]
         ];
     }

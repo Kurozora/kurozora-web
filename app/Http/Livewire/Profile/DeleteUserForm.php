@@ -2,13 +2,12 @@
 
 namespace App\Http\Livewire\Profile;
 
-use Illuminate\Contracts\Auth\StatefulGuard;
+use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Contracts\DeletesUsers;
