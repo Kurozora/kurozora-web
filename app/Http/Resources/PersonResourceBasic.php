@@ -9,6 +9,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class PersonResourceBasic extends JsonResource
 {
     /**
+     * The resource instance.
+     *
+     * @var Person $resource
+     */
+    public $resource;
+
+    /**
      * Transform the resource into an array.
      *
      * @param  Request  $request
@@ -16,22 +23,19 @@ class PersonResourceBasic extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var Person $person */
-        $person = $this->resource;
-
         return [
-            'id'            => $person->id,
+            'id'            => $this->resource->id,
             'type'          => 'people',
-            'href'          => route('api.people.details', $person, false),
+            'href'          => route('api.people.details', $this->resource, false),
             'attributes'    => [
-                'firstName'         => $person->first_name,
-                'lastName'          => $person->last_name,
-                'givenName'         => $person->given_name,
-                'familyName'        => $person->family_name,
-                'alternativeNames'  => $person->alternative_names,
-                'about'             => $person->about,
-                'imageURL'          => $person->image,
-                'websiteURLs'       => $person->website_url,
+                'firstName'         => $this->resource->first_name,
+                'lastName'          => $this->resource->last_name,
+                'givenName'         => $this->resource->given_name,
+                'familyName'        => $this->resource->family_name,
+                'alternativeNames'  => $this->resource->alternative_names,
+                'about'             => $this->resource->about,
+                'imageURL'          => $this->resource->image,
+                'websiteURLs'       => $this->resource->website_urls,
             ]
         ];
     }

@@ -9,6 +9,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class AnimeResource extends JsonResource
 {
     /**
+     * The resource instance.
+     *
+     * @var Anime $resource
+     */
+    public $resource;
+
+    /**
      * Transform the resource into an array.
      *
      * @param  Request  $request
@@ -16,10 +23,7 @@ class AnimeResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var Anime $anime */
-        $anime = $this->resource;
-
-        $resource = AnimeResourceBasic::make($anime)->toArray($request);
+        $resource = AnimeResourceBasic::make($this->resource)->toArray($request);
 
         if ($request->input('include')) {
             $includes = array_unique(explode(',', $request->input('include')));
@@ -44,7 +48,7 @@ class AnimeResource extends JsonResource
                         break;
                     case 'studios':
                         $request->merge(['include' => 'shows']);
-                        $request->merge(['anime' => $anime]);
+                        $request->merge(['anime' => $this->resource]);
                         $relationships = array_merge($relationships, $this->getStudiosRelationship());
                         break;
                 }
@@ -63,13 +67,10 @@ class AnimeResource extends JsonResource
      */
     protected function getCastRelationship(): array
     {
-        /** @var Anime $anime */
-        $anime = $this->resource;
-
         return [
             'cast' => [
-                'href' => route('api.anime.cast', $anime, false),
-                'data' => AnimeCastResource::collection($anime->getCast(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'href' => route('api.anime.cast', $this->resource, false),
+                'data' => AnimeCastResource::collection($this->resource->getCast(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }
@@ -81,13 +82,10 @@ class AnimeResource extends JsonResource
      */
     protected function getCharactersRelationship(): array
     {
-        /** @var Anime $anime */
-        $anime = $this->resource;
-
         return [
             'characters' => [
-                'href' => route('api.anime.characters', $anime, false),
-                'data' => CharacterResourceBasic::collection($anime->getCharacters(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'href' => route('api.anime.characters', $this->resource, false),
+                'data' => CharacterResourceBasic::collection($this->resource->getCharacters(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }
@@ -99,13 +97,10 @@ class AnimeResource extends JsonResource
      */
     protected function getRelatedShowsRelationship(): array
     {
-        /** @var Anime $anime */
-        $anime = $this->resource;
-
         return [
             'relatedShows' => [
-                'href' => route('api.anime.related-shows', $anime, false),
-                'data' => AnimeRelatedShowsResource::collection($anime->getAnimeRelations(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'href' => route('api.anime.related-shows', $this->resource, false),
+                'data' => AnimeRelatedShowsResource::collection($this->resource->getAnimeRelations(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }
@@ -117,13 +112,10 @@ class AnimeResource extends JsonResource
      */
     protected function getSeasonsRelationship(): array
     {
-        /** @var Anime $anime */
-        $anime = $this->resource;
-
         return [
             'seasons' => [
-                'href' => route('api.anime.seasons', $anime, false),
-                'data' => SeasonResource::collection($anime->getSeasons(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'href' => route('api.anime.seasons', $this->resource, false),
+                'data' => SeasonResource::collection($this->resource->getSeasons(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }
@@ -135,13 +127,10 @@ class AnimeResource extends JsonResource
      */
     protected function getStaffRelationship(): array
     {
-        /** @var Anime $anime */
-        $anime = $this->resource;
-
         return [
             'staff' => [
-                'href' => route('api.anime.staff', $anime, false),
-                'data' => AnimeStaffResource::collection($anime->getStaff(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'href' => route('api.anime.staff', $this->resource, false),
+                'data' => AnimeStaffResource::collection($this->resource->getStaff(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }
@@ -153,13 +142,10 @@ class AnimeResource extends JsonResource
      */
     protected function getStudiosRelationship(): array
     {
-        /** @var Anime $anime */
-        $anime = $this->resource;
-
         return [
             'studios' => [
-                'href' => route('api.anime.studios', $anime, false),
-                'data' => AnimeStudioResource::collection($anime->getAnimeStudios(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'href' => route('api.anime.studios', $this->resource, false),
+                'data' => StudioResourceBasic::collection($this->resource->getStudios(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }

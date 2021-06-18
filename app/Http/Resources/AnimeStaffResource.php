@@ -9,6 +9,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class AnimeStaffResource extends JsonResource
 {
     /**
+     * The resource instance.
+     *
+     * @var AnimeStaff $resource
+     */
+    public $resource;
+
+    /**
      * Transform the resource into an array.
      *
      * @param  Request  $request
@@ -16,15 +23,12 @@ class AnimeStaffResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var AnimeStaff $animeStaff */
-        $animeStaff = $this->resource;
-
         $resource = [
-            'id'            => $animeStaff->id,
+            'id'            => $this->resource->id,
             'type'          => 'staff',
-            'href'          => route('api.anime.staff', $animeStaff->anime, false),
+            'href'          => route('api.anime.staff', $this->resource->anime, false),
             'attributes'    => [
-                'role'      => $animeStaff->staff_role->only(['name', 'description']),
+                'role'      => $this->resource->staff_role->only(['name', 'description']),
             ]
         ];
 
@@ -44,13 +48,10 @@ class AnimeStaffResource extends JsonResource
      */
     protected function getPersonRelationship(): array
     {
-        /** @var AnimeStaff $animeStaff */
-        $animeStaff = $this->resource;
-
         return [
             'person' => [
-                'href' => route('api.people.details', $animeStaff, false),
-                'data' => PersonResourceBasic::make($animeStaff->person),
+                'href' => route('api.people.details', $this->resource, false),
+                'data' => PersonResourceBasic::collection([$this->resource->person]),
             ]
         ];
     }
