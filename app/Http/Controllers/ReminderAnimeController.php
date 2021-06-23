@@ -25,7 +25,7 @@ class ReminderAnimeController extends Controller
     {
         $data = $request->validated();
 
-        /** @var User $user */
+        // Get the authenticated user
         $user = Auth::user();
 
         // Paginate the reminder anime

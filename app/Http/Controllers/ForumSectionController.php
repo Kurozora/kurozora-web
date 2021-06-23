@@ -54,13 +54,12 @@ class ForumSectionController extends Controller
      */
     public function threads(GetThreadsRequest $request, ForumSection $section): JsonResponse
     {
-        // Fetch the variables
-        $givenOrder = $request->input('order');
+        $data = $request->validated();
 
         // Get the threads
         /** @var ForumThread $threads */
         $threads = $section->forum_threads();
-        $forumOrder = ForumOrderType::fromValue($givenOrder);
+        $forumOrder = ForumOrderType::fromValue($data['order']);
 
         switch ($forumOrder) {
             case ForumOrderType::Best:

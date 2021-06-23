@@ -112,13 +112,12 @@ class ForumThreadController extends Controller
      */
     public function replies(GetRepliesRequest $request, ForumThread $thread): JsonResponse
     {
-        // Fetch the variables
-        $givenOrder = $request->input('order');
+        $data = $request->validated();
 
         // Get the replies
         /** @var ForumReply $replies */
         $replies = $thread->replies();
-        $forumOrder = ForumOrderType::fromValue($givenOrder);
+        $forumOrder = ForumOrderType::fromValue($data['order']);
 
         switch ($forumOrder) {
             case ForumOrderType::Best:
