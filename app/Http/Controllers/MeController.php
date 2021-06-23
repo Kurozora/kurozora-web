@@ -139,7 +139,7 @@ class MeController extends Controller
     {
         $data = $request->validated();
 
-        /** @var User $user */
+        // Get the authenticated user
         $user = Auth::user();
 
         // Paginate the favorite anime
@@ -165,7 +165,7 @@ class MeController extends Controller
     {
         $data = $request->validated();
 
-        /** @var User $user */
+        // Get the authenticated user
         $user = Auth::user();
 
         // Get the feed messages
@@ -190,7 +190,9 @@ class MeController extends Controller
      */
     function getFollowers(GetFollowersRequest $request): JsonResponse
     {
-        /** @var User $user */
+        $data = $request->validated();
+
+        // Get the authenticated user
         $user = Auth::user();
 
         // Get the followers
@@ -215,7 +217,7 @@ class MeController extends Controller
     {
         $data = $request->validated();
 
-        /** @var User $user */
+        // Get the authenticated user
         $user = Auth::user();
 
         // Get the following
@@ -240,7 +242,7 @@ class MeController extends Controller
     {
         $data = $request->validated();
 
-        /** @var User $user */
+        // Get the authenticated user
         $user = Auth::user();
 
         // Get paginated sessions except current session
