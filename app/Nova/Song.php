@@ -22,6 +22,13 @@ class Song extends Resource
     public static string $model = \App\Models\Song::class;
 
     /**
+     * The underlying model resource instance.
+     *
+     * @var \App\Models\Song|null
+     */
+    public $resource;
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -77,7 +84,9 @@ class Song extends Resource
      */
     public function title(): string
     {
-        return $this->title . ' by ' . $this->artist ?? 'Unknown' . ' (ID: ' . $this->id . ')';
+        $song = $this->resource;
+
+        return $song->title . ' by ' . $song->artist ?? 'Unknown' . ' (ID: ' . $song->id . ')';
     }
 
     /**

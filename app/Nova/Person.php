@@ -4,6 +4,7 @@ namespace App\Nova;
 
 use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
@@ -19,6 +20,13 @@ class Person extends Resource
      * @var string
      */
     public static string $model = \App\Models\Person::class;
+
+    /**
+     * The underlying model resource instance.
+     *
+     * @var \App\Models\Person|null
+     */
+    public $resource;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -100,9 +108,9 @@ class Person extends Resource
 
             HasMany::make('Cast'),
 
-            HasMany::make('Anime'),
+            BelongsToMany::make('Anime'),
 
-            HasMany::make('Characters'),
+            BelongsToMany::make('Characters'),
         ];
     }
 
@@ -113,7 +121,6 @@ class Person extends Resource
      */
     public function title(): string
     {
-        /** @var \App\Models\Person $person */
         $person = $this->resource;
 
         return $person->full_name . ' (ID: ' . $person->id . ')';

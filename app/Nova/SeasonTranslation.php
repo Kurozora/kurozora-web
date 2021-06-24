@@ -18,6 +18,13 @@ class SeasonTranslation extends Resource
     public static string $model = \App\Models\SeasonTranslation::class;
 
     /**
+     * The underlying model resource instance.
+     *
+     * @var \App\Models\SeasonTranslation|null
+     */
+    public $resource;
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -74,7 +81,9 @@ class SeasonTranslation extends Resource
      */
     public function title(): string
     {
-        return $this->title . ' (ID: ' . $this->id . ')';
+        $seasonTranslation = $this->resource;
+
+        return $seasonTranslation->title . ' (ID: ' . $seasonTranslation->id . ')';
     }
 
     /**

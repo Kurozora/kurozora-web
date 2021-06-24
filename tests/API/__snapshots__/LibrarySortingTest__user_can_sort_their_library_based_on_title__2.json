@@ -1,48 +1,120 @@
 [
     {
+        "id": 2,
+        "type": "show",
+        "href": "\/v1\/anime\/2",
+        "attributes": {
+            "anidbID": null,
+            "anilistID": null,
+            "imdbID": null,
+            "kitsuID": null,
+            "malID": null,
+            "notifyID": null,
+            "syoboiID": null,
+            "traktID": null,
+            "tvdbID": null,
+            "videoUrl": null,
+            "poster": null,
+            "banner": null,
+            "originalTitle": "Quasi culpa eius itaque illo eaque sit fuga.",
+            "title": "Be a good person!",
+            "tagline": "Dolore sed expedita vel corrupti.",
+            "synopsis": "A story about being a good person.",
+            "genres": [],
+            "tvRating": {
+                "name": "h",
+                "description": "Est quia sint doloremque."
+            },
+            "type": {
+                "name": "Myah Waters",
+                "description": "Officia unde sit qui et nihil neque deserunt."
+            },
+            "source": {
+                "name": "Dr. Anastasia Koepp",
+                "description": "Rerum nihil sed provident repellat veniam nihil rem laborum."
+            },
+            "status": {
+                "name": "eum cumque",
+                "description": "Atque officia necessitatibus sint a.",
+                "color": "#19a911"
+            },
+            "episodeCount": "0",
+            "seasonCount": "0",
+            "userRating": {
+                "ratingCountList": [],
+                "averageRating": "4.0",
+                "ratingCount": "0"
+            },
+            "firstAired": "1985-12-18",
+            "lastAired": "1986-03-12",
+            "runtime": "25 seconds",
+            "runtimeTotal": "25 seconds",
+            "airSeason": "Winter",
+            "airTime": "15:10",
+            "airDay": null,
+            "isNSFW": true,
+            "copyright": "\u00a9 1992 Bauch-Heaney",
+            "givenRating": 1.2,
+            "libraryStatus": "",
+            "isFavorited": false,
+            "isReminded": false
+        }
+    },
+    {
         "id": 1,
         "type": "show",
         "href": "\/v1\/anime\/1",
         "attributes": {
             "anidbID": null,
             "anilistID": null,
-            "kitsuID": null,
             "imdbID": null,
+            "kitsuID": null,
             "malID": null,
+            "notifyID": null,
+            "syoboiID": null,
+            "traktID": null,
+            "tvdbID": null,
+            "videoUrl": null,
+            "poster": null,
+            "banner": null,
+            "originalTitle": "Illo aut impedit totam ex ducimus quia.",
             "title": "Awesome Show",
-            "tagline": "Saepe reprehenderit est rerum repellat aliquid perferendis.",
+            "tagline": "Vitae rerum ut perferendis totam ad quos et doloremque.",
             "synopsis": "A very awesome show.",
             "genres": [],
             "tvRating": {
-                "name": "x",
-                "description": "Nemo eos sint inventore deleniti enim et ut."
+                "name": "h",
+                "description": "Est quia sint doloremque."
             },
             "type": {
-                "name": "Mrs. Opal Prohaska MD",
-                "description": "Officia saepe neque quis."
+                "name": "Myah Waters",
+                "description": "Officia unde sit qui et nihil neque deserunt."
             },
             "source": {
-                "name": "Kevin Heathcote",
-                "description": "In veritatis eum repudiandae quibusdam et voluptatem."
+                "name": "Dr. Anastasia Koepp",
+                "description": "Rerum nihil sed provident repellat veniam nihil rem laborum."
             },
             "status": {
-                "name": "neque laudantium",
-                "description": "Est nihil vel dolore enim iure nisi vero minima."
+                "name": "eum cumque",
+                "description": "Atque officia necessitatibus sint a.",
+                "color": "#19a911"
             },
             "episodeCount": "0",
             "seasonCount": "0",
-            "averageRating": "2.5",
-            "ratingCount": "0",
-            "videoUrl": null,
-            "poster": null,
-            "background": null,
-            "firstAired": "1986-06-25",
-            "lastAired": "1986-12-10",
-            "runtime": "15",
-            "airTime": "09:34 UTC",
+            "userRating": {
+                "ratingCountList": [],
+                "averageRating": "2.5",
+                "ratingCount": "0"
+            },
+            "firstAired": "2015-04-03",
+            "lastAired": "2015-06-12",
+            "runtime": "19 seconds",
+            "runtimeTotal": "19 seconds",
+            "airSeason": "Winter",
+            "airTime": "15:02",
             "airDay": null,
             "isNSFW": true,
-            "copyright": "\u2117 2019 Will, Lindgren and Lynch",
+            "copyright": "\u00a9 2019 Reinger-West",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
@@ -56,44 +128,116 @@
         "attributes": {
             "anidbID": null,
             "anilistID": null,
-            "kitsuID": null,
             "imdbID": null,
+            "kitsuID": null,
             "malID": null,
+            "notifyID": null,
+            "syoboiID": null,
+            "traktID": null,
+            "tvdbID": null,
+            "videoUrl": null,
+            "poster": null,
+            "banner": null,
+            "originalTitle": "Quasi culpa eius itaque illo eaque sit fuga.",
             "title": "Be a good person!",
-            "tagline": "Sit aut reprehenderit aut sit.",
+            "tagline": "Dolore sed expedita vel corrupti.",
             "synopsis": "A story about being a good person.",
             "genres": [],
             "tvRating": {
-                "name": "x",
-                "description": "Nemo eos sint inventore deleniti enim et ut."
+                "name": "h",
+                "description": "Est quia sint doloremque."
             },
             "type": {
-                "name": "Mrs. Opal Prohaska MD",
-                "description": "Officia saepe neque quis."
+                "name": "Myah Waters",
+                "description": "Officia unde sit qui et nihil neque deserunt."
             },
             "source": {
-                "name": "Kevin Heathcote",
-                "description": "In veritatis eum repudiandae quibusdam et voluptatem."
+                "name": "Dr. Anastasia Koepp",
+                "description": "Rerum nihil sed provident repellat veniam nihil rem laborum."
             },
             "status": {
-                "name": "neque laudantium",
-                "description": "Est nihil vel dolore enim iure nisi vero minima."
+                "name": "eum cumque",
+                "description": "Atque officia necessitatibus sint a.",
+                "color": "#19a911"
             },
             "episodeCount": "0",
             "seasonCount": "0",
-            "averageRating": "4.0",
-            "ratingCount": "0",
-            "videoUrl": null,
-            "poster": null,
-            "background": null,
-            "firstAired": "2020-06-05",
-            "lastAired": "2020-11-20",
-            "runtime": "19",
-            "airTime": "05:25 UTC",
+            "userRating": {
+                "ratingCountList": [],
+                "averageRating": "4.0",
+                "ratingCount": "0"
+            },
+            "firstAired": "1985-12-18",
+            "lastAired": "1986-03-12",
+            "runtime": "25 seconds",
+            "runtimeTotal": "25 seconds",
+            "airSeason": "Winter",
+            "airTime": "15:10",
             "airDay": null,
             "isNSFW": true,
-            "copyright": "\u00ae 2013 Frami Ltd",
+            "copyright": "\u00a9 1992 Bauch-Heaney",
             "givenRating": 1.2,
+            "libraryStatus": "",
+            "isFavorited": false,
+            "isReminded": false
+        }
+    },
+    {
+        "id": 1,
+        "type": "show",
+        "href": "\/v1\/anime\/1",
+        "attributes": {
+            "anidbID": null,
+            "anilistID": null,
+            "imdbID": null,
+            "kitsuID": null,
+            "malID": null,
+            "notifyID": null,
+            "syoboiID": null,
+            "traktID": null,
+            "tvdbID": null,
+            "videoUrl": null,
+            "poster": null,
+            "banner": null,
+            "originalTitle": "Illo aut impedit totam ex ducimus quia.",
+            "title": "Awesome Show",
+            "tagline": "Vitae rerum ut perferendis totam ad quos et doloremque.",
+            "synopsis": "A very awesome show.",
+            "genres": [],
+            "tvRating": {
+                "name": "h",
+                "description": "Est quia sint doloremque."
+            },
+            "type": {
+                "name": "Myah Waters",
+                "description": "Officia unde sit qui et nihil neque deserunt."
+            },
+            "source": {
+                "name": "Dr. Anastasia Koepp",
+                "description": "Rerum nihil sed provident repellat veniam nihil rem laborum."
+            },
+            "status": {
+                "name": "eum cumque",
+                "description": "Atque officia necessitatibus sint a.",
+                "color": "#19a911"
+            },
+            "episodeCount": "0",
+            "seasonCount": "0",
+            "userRating": {
+                "ratingCountList": [],
+                "averageRating": "2.5",
+                "ratingCount": "0"
+            },
+            "firstAired": "2015-04-03",
+            "lastAired": "2015-06-12",
+            "runtime": "19 seconds",
+            "runtimeTotal": "19 seconds",
+            "airSeason": "Winter",
+            "airTime": "15:02",
+            "airDay": null,
+            "isNSFW": true,
+            "copyright": "\u00a9 2019 Reinger-West",
+            "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
             "isReminded": false

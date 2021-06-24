@@ -34,6 +34,13 @@ class Anime extends Resource
     public static string $model = \App\Models\Anime::class;
 
     /**
+     * The underlying model resource instance.
+     *
+     * @var \App\Models\Anime|null
+     */
+    public $resource;
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -238,7 +245,9 @@ class Anime extends Resource
      */
     public function title(): string
     {
-        return $this->original_title . ' (ID: ' . $this->id . ')';
+        $anime = $this->resource;
+
+        return $anime->original_title . ' (ID: ' . $anime->id . ')';
     }
 
     /**
