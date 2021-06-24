@@ -19,6 +19,13 @@ class Badge extends Resource
     public static string $model = \App\Models\Badge::class;
 
     /**
+     * The underlying model resource instance.
+     *
+     * @var \App\Models\Badge|null
+     */
+    public $resource;
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -74,7 +81,9 @@ class Badge extends Resource
      */
     public function title(): string
     {
-        return $this->text . ' (ID: ' . $this->id . ')';
+        $badge = $this->resource;
+
+        return $badge->text . ' (ID: ' . $badge->id . ')';
     }
 
     /**

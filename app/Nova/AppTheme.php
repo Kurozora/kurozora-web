@@ -19,6 +19,13 @@ class AppTheme extends Resource
     public static string $model = \App\Models\AppTheme::class;
 
     /**
+     * The underlying model resource instance.
+     *
+     * @var \App\Models\AppTheme|null
+     */
+    public $resource;
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -53,10 +60,10 @@ class AppTheme extends Resource
             ID::make()->sortable(),
 
             Images::make('Screenshot')
-                ->setFileName(function($originalFilename, $extension, $model){
+                ->setFileName(function($originalFilename, $extension, $model) {
                     return md5($originalFilename) . '.' . $extension;
                 })
-                ->setName(function($originalFilename, $model){
+                ->setName(function($originalFilename, $model) {
                     return md5($originalFilename);
                 })
                 ->required()
@@ -68,7 +75,7 @@ class AppTheme extends Resource
 
             Text::make('Download link', function () {
                 return '
-                    <a href="' . route('api.themes.download', ['theme' => $this->id]) . '" target="_blank" class="btn btn-default btn-primary">Download</a>
+                    <a href="' . route('api.themes.download', ['theme' => $this->resource->id]) . '" target="_blank" class="btn btn-default btn-primary">Download</a>
                 ';
             })
                 ->asHtml()
@@ -185,7 +192,9 @@ class AppTheme extends Resource
      */
     public function title(): string
     {
-        return 'Name: "' . $this->name . '" (ID: ' . $this->id . ')';
+        $appTheme = $this->resource;
+
+        return 'Name: "' . $appTheme->name . '" (ID: ' . $appTheme->id . ')';
     }
 
     /**

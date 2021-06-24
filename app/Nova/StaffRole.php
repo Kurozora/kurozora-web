@@ -16,6 +16,13 @@ class StaffRole extends Resource
     public static string $model = \App\Models\StaffRole::class;
 
     /**
+     * The underlying model resource instance.
+     *
+     * @var \App\Models\StaffRole|null
+     */
+    public $resource;
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -69,7 +76,9 @@ class StaffRole extends Resource
      */
     public function title(): string
     {
-        return $this->name . ' (ID: ' . $this->id . ')';
+        $staffRole = $this->resource;
+
+        return $staffRole->name . ' (ID: ' . $staffRole->id . ')';
     }
 
     /**

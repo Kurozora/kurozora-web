@@ -20,6 +20,13 @@ class Genre extends Resource
     public static string $model = \App\Models\Genre::class;
 
     /**
+     * The underlying model resource instance.
+     *
+     * @var \App\Models\Genre|null
+     */
+    public $resource;
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -80,13 +87,14 @@ class Genre extends Resource
      */
     public function title(): string
     {
-        $genreName = $this->name;
+        $genre = $this->resource;
+        $genreName = $genre->name;
 
         if (!is_string($genreName) || !strlen($genreName)) {
             $genreName = 'No genre title';
         }
 
-        return $genreName . ' (ID: ' . $this->id . ')';
+        return $genreName . ' (ID: ' . $genre->id . ')';
     }
 
     /**

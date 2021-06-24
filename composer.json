@@ -40,7 +40,6 @@
         "spatie/laravel-medialibrary": "^9.0",
         "spatie/laravel-permission": "^4.0",
         "spatie/laravel-sluggable": "^3.0",
-        "staudenmeir/eloquent-has-many-deep": "^1.11",
         "timothyasp/nova-color-field": "^1.0",
         "vyuldashev/nova-permission": "^2.5"
     },

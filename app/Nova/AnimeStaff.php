@@ -21,6 +21,13 @@ class AnimeStaff extends Resource
     public static string $model = \App\Models\AnimeStaff::class;
 
     /**
+     * The underlying model resource instance.
+     *
+     * @var \App\Models\AnimeStaff|null
+     */
+    public $resource;
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string

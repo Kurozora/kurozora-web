@@ -18,6 +18,13 @@ class StoreProduct extends Resource
     public static string $model = \App\Models\StoreProduct::class;
 
     /**
+     * The underlying model resource instance.
+     *
+     * @var \App\Models\StoreProduct|null
+     */
+    public $resource;
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string

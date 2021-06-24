@@ -71,11 +71,11 @@ class Character extends KModel
     /**
      * Returns the people the character belongs to.
      *
-     * @return HasManyDeep
+     * @return BelongsToMany
      */
-    function people(): HasManyDeep
+    function people(): BelongsToMany
     {
-        return $this->hasManyDeep(Person::class, [AnimeCast::class], ['character_id', 'id'], ['id', 'person_id'])->distinct();
+        return $this->belongsToMany(Person::class, AnimeCast::class)->distinct();
     }
 
     /**
@@ -98,11 +98,11 @@ class Character extends KModel
     /**
      * Returns the anime the character belongs to.
      *
-     * @return HasManyDeep
+     * @return BelongsToMany
      */
-    function anime(): HasManyDeep
+    function anime(): BelongsToMany
     {
-        return $this->hasManyDeep(Anime::class, [AnimeCast::class], ['character_id', 'id'], ['id', 'anime_id'])->distinct();
+        return $this->belongsToMany(Anime::class, AnimeCast::class)->distinct();
     }
 
     /**

@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
-use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 
 class Person extends KModel
 {
@@ -90,11 +90,11 @@ class Person extends KModel
     /**
      * Returns the anime the character belongs to.
      *
-     * @return HasManyDeep
+     * @return BelongsToMany
      */
-    function anime(): HasManyDeep
+    function anime(): BelongsToMany
     {
-        return $this->hasManyDeep(Anime::class, [AnimeCast::class], ['person_id', 'id'], ['id', 'anime_id'])->distinct();
+        return $this->belongsToMany(Anime::class, AnimeCast::class)->distinct();
     }
 
     /**
@@ -117,11 +117,11 @@ class Person extends KModel
     /**
      * Returns the characters the person belongs to.
      *
-     * @return HasManyDeep
+     * @return BelongsToMany
      */
-    function characters(): HasManyDeep
+    function characters(): BelongsToMany
     {
-        return $this->hasManyDeep(Character::class, [AnimeCast::class], ['person_id', 'id'], ['id', 'character_id'])->distinct();
+        return $this->belongsToMany(Character::class, AnimeCast::class)->distinct();
     }
 
     /**

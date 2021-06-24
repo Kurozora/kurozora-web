@@ -29,6 +29,13 @@ class User extends Resource
     public static string $model = \App\Models\User::class;
 
     /**
+     * The underlying model resource instance.
+     *
+     * @var \App\Models\User|null
+     */
+    public $resource;
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -139,7 +146,9 @@ class User extends Resource
      */
     public function title(): string
     {
-        return $this->username . ' (ID: ' . $this->id . ')';
+        $user = $this->resource;
+
+        return $user->username . ' (ID: ' . $user->id . ')';
     }
 
     /**
@@ -208,7 +217,6 @@ class User extends Resource
     private function displayRolesForIndex(): ?string
     {
         // Get the role names of the user
-        /** @var \App\Models\User $user */
         $user = $this->resource;
 
         $roles = $user->getRoleNames();

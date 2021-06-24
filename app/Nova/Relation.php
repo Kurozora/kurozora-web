@@ -18,6 +18,13 @@ class Relation extends Resource
     public static string $model = \App\Models\Relation::class;
 
     /**
+     * The underlying model resource instance.
+     *
+     * @var \App\Models\Relation|null
+     */
+    public $resource;
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -72,7 +79,9 @@ class Relation extends Resource
      */
     public function title(): string
     {
-        return $this->name . ' (ID: ' . $this->id . ')';
+        $relation = $this->resource;
+
+        return $relation->name . ' (ID: ' . $relation->id . ')';
     }
 
     /**
