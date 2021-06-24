@@ -18,6 +18,13 @@ class TvRating extends Resource
     public static string $model = \App\Models\TvRating::class;
 
     /**
+     * The underlying model resource instance.
+     *
+     * @var \App\Models\TvRating|null
+     */
+    public $resource;
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -75,7 +82,9 @@ class TvRating extends Resource
      */
     public function title(): string
     {
-        return $this->name . ' (ID: ' . $this->id . ')';
+        $tvRating = $this->resource;
+
+        return $tvRating->name . ' (ID: ' . $tvRating->id . ')';
     }
 
     /**

@@ -18,6 +18,13 @@ class EpisodeTranslation extends Resource
     public static string $model = \App\Models\EpisodeTranslation::class;
 
     /**
+     * The underlying model resource instance.
+     *
+     * @var \App\Models\EpisodeTranslation|null
+     */
+    public $resource;
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -74,7 +81,9 @@ class EpisodeTranslation extends Resource
      */
     public function title(): string
     {
-        return $this->title . ' (ID: ' . $this->id . ')';
+        $episodeTranslation = $this->resource;
+
+        return $episodeTranslation->title . ' (ID: ' . $episodeTranslation->id . ')';
     }
 
     /**

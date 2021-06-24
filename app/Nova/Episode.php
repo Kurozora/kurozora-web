@@ -22,6 +22,13 @@ class Episode extends Resource
     public static string $model = \App\Models\Episode::class;
 
     /**
+     * The underlying model resource instance.
+     *
+     * @var \App\Models\Episode|null
+     */
+    public $resource;
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -34,7 +41,7 @@ class Episode extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'title'
+        'id'
     ];
 
     /**
@@ -99,7 +106,9 @@ class Episode extends Resource
      */
     public function title(): string
     {
-        return $this->name . ' (ID: ' . $this->id . ')';
+        $episode = $this->resource;
+
+        return $episode->title . ' (ID: ' . $episode->id . ')';
     }
 
     /**

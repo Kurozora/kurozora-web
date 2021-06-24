@@ -9,7 +9,6 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
-use NovaConditionalFields\Condition;
 
 class ExplorePageCategory extends Resource
 {
@@ -19,6 +18,13 @@ class ExplorePageCategory extends Resource
      * @var string
      */
     public static string $model = \App\Models\ExplorePageCategory::class;
+
+    /**
+     * The underlying model resource instance.
+     *
+     * @var \App\Models\ExplorePageCategory|null
+     */
+    public $resource;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -96,7 +102,9 @@ class ExplorePageCategory extends Resource
      */
     public function title(): string
     {
-        return $this->title . ' (ID: ' . $this->id . ')';
+        $explorePageCategory = $this->resource;
+
+        return $explorePageCategory->title . ' (ID: ' . $explorePageCategory->id . ')';
     }
 
     /**

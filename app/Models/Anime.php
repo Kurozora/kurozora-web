@@ -26,7 +26,6 @@ use Request;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
-use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 
 class Anime extends KModel
 {
@@ -469,11 +468,11 @@ class Anime extends KModel
     /**
      * Get the Anime's characters.
      *
-     * @return HasManyDeep
+     * @return BelongsToMany
      */
-    public function characters(): HasManyDeep
+    public function characters(): BelongsToMany
     {
-        return $this->hasManyDeep(Character::class, [AnimeCast::class], ['anime_id', 'id'], ['id', 'character_id'])->distinct();
+        return $this->belongsToMany(Character::class, AnimeCast::class)->distinct();
     }
 
     /**

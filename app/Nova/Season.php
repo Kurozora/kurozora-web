@@ -20,6 +20,13 @@ class Season extends Resource
     public static string $model = \App\Models\Season::class;
 
     /**
+     * The underlying model resource instance.
+     *
+     * @var \App\Models\Season|null
+     */
+    public $resource;
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -32,7 +39,7 @@ class Season extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'title'
+        'id'
     ];
 
     /**
@@ -83,13 +90,14 @@ class Season extends Resource
      */
     public function title(): string
     {
-        $seasonName = $this->title;
+        $season = $this->resource;
+        $seasonName = $season->title;
 
         if (!is_string($seasonName) || !strlen($seasonName)) {
             $seasonName = 'No season title';
         }
 
-        return $seasonName . ' (ID: ' . $this->id . ')';
+        return $seasonName . ' (ID: ' . $season->id . ')';
     }
 
     /**
