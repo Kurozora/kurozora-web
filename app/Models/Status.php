@@ -15,21 +15,6 @@ class Status extends Model
     protected $table = self::TABLE_NAME;
 
     /**
-     * The color class of the anime status.
-     *
-     * @return string
-     */
-    public function color(): string
-    {
-        return match ($this->name) {
-            'To Be Announced' => 'amber',
-            'Finished Airing' => 'red',
-            'Currently Airing' => 'green',
-            default => 'gray',
-        };
-    }
-
-    /**
      * The anime that the source has.
      *
      * @return HasMany
