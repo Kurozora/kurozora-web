@@ -32,7 +32,7 @@
                         <div>
                             <p class="font-semibold text-lg leading-tight break-all">{{ $anime->original_title }}</p>
                             <p class="text-sm leading-tight">{{ $anime->information_summary }}</p>
-                            <x-pill color="{{ $anime->status->color() }}" class="mt-2">{{ $anime->status->name }}</x-pill>
+                            <x-pill color="{{ $anime->status->color }}" class="mt-2">{{ $anime->status->name }}</x-pill>
                         </div>
 
                         <div class="flex flex-wrap gap-2 justify-between mt-5 h-10">
