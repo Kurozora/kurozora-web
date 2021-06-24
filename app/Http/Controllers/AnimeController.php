@@ -6,8 +6,8 @@ use App\Http\Requests\GetAnimeCharactersRequest;
 use App\Http\Requests\GetAnimeSeasonsRequest;
 use App\Http\Requests\GetAnimeStaffRequest;
 use App\Http\Requests\GetAnimeStudiosRequest;
-use App\Http\Requests\GetCastRequest;
-use App\Http\Requests\GetRelatedShowsRequest;
+use App\Http\Requests\GetAnimeCastRequest;
+use App\Http\Requests\GetAnimeRelatedShowsRequest;
 use App\Http\Resources\AnimeStaffResource;
 use App\Http\Resources\StudioResource;
 use App\Models\Anime;
@@ -72,11 +72,11 @@ class AnimeController extends Controller
     /**
      * Returns the cast information of an Anime.
      *
-     * @param GetCastRequest $request
+     * @param GetAnimeCastRequest $request
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function cast(GetCastRequest $request, Anime $anime): JsonResponse
+    public function cast(GetAnimeCastRequest $request, Anime $anime): JsonResponse
     {
         $data = $request->validated();
 
@@ -95,11 +95,11 @@ class AnimeController extends Controller
     /**
      * Returns related-shows information of an Anime.
      *
-     * @param GetRelatedShowsRequest $request
+     * @param GetAnimeRelatedShowsRequest $request
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function relatedShows(GetRelatedShowsRequest $request, Anime $anime): JsonResponse
+    public function relatedShows(GetAnimeRelatedShowsRequest $request, Anime $anime): JsonResponse
     {
         $data = $request->validated();
 
