@@ -13,7 +13,6 @@ use App\Http\Requests\MALImportRequest;
 use App\Http\Requests\SearchLibraryRequest;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Jobs\ProcessMALImport;
-use App\Models\User;
 use Auth;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -35,7 +34,6 @@ class LibraryController extends Controller
         $data = $request->validated();
 
         // Get the authenticated user
-        /** @var User $user */
         $user = Auth::user();
 
         // Get the status
@@ -45,10 +43,14 @@ class LibraryController extends Controller
         $anime = $user->library()
             ->sortViaRequest($request)
             ->wherePivot('status', $foundStatus)
-            ->get();
+            ->paginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
 
         return JSONResult::success([
-            'data' => AnimeResourceBasic::collection($anime)
+            'data' => AnimeResourceBasic::collection($anime),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 
@@ -65,7 +67,6 @@ class LibraryController extends Controller
         $animeID = $data['anime_id'];
 
         // Get the authenticated user
-        /** @var User $user */
         $user = Auth::user();
 
         // Get the Anime
@@ -104,7 +105,6 @@ class LibraryController extends Controller
         $animeID = $data['anime_id'];
 
         // Get the authenticated user
-        /** @var User $user */
         $user = Auth::user();
 
         // Remove this Anime from their library if it can be found
@@ -142,7 +142,6 @@ class LibraryController extends Controller
         $data = $request->validated();
 
         // Get the authenticated user
-        /** @var User $user */
         $user = Auth::user();
 
         if (!$user->canDoMALImport()) {
@@ -161,8 +160,9 @@ class LibraryController extends Controller
         dispatch(new ProcessMALImport($user, $xmlContent, $behavior));
 
         // Update last MAL import date for user
-        $user->last_mal_import_at = now();
-        $user->save();
+        $user->update([
+          'last_mal_import_at' => now()
+        ]);
 
         return JSONResult::success([
             'message' => 'Your MAL import request has been submitted. You will be notified once it has been processed!'
@@ -180,12 +180,13 @@ class LibraryController extends Controller
         $searchQuery = $request->input('query');
 
         // Get the authenticated user
-        /** @var User $user */
         $user = Auth::user();
 
         // Search for the anime
         $library = $user->library()
-            ->search($searchQuery)->limit(Anime::MAX_SEARCH_RESULTS)->get();
+            ->search($searchQuery)
+            ->limit(Anime::MAX_SEARCH_RESULTS)
+            ->get();
 
         // Show response
         return JSONResult::success([

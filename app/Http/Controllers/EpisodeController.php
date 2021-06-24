@@ -41,11 +41,12 @@ class EpisodeController extends Controller
         // Find if the user has watched the episode
         $isAlreadyWatched = $user->hasWatched($episode);
 
-        // Attach or detach the watched episode
-        if ($isAlreadyWatched) // Unwatch the episode
+        // If the episode's current status is watched then detach (unwatch) it, otherwise attach (watch) it.
+        if ($isAlreadyWatched) {
             $user->watchedEpisodes()->detach($episode);
-        else // Watch the episode
+        } else {
             $user->watchedEpisodes()->attach($episode);
+        }
 
         return JSONResult::success([
             'data' => [

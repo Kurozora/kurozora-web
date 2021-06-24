@@ -32,6 +32,8 @@ class GetLibraryRequest extends FormRequest
     {
         return array_merge([
             'status'    => ['bail', 'required', new ValidateLibraryStatus],
+            'limit'     => ['bail', 'integer', 'min:1', 'max:100'],
+            'page'      => ['bail', 'integer', 'min:1']
         ], $this->sortingRules());
     }
 

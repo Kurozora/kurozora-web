@@ -19,7 +19,7 @@ class FeedMessageController extends Controller
      * @param FeedMessage $feedMessage
      * @return JsonResponse
      */
-    function details(FeedMessage $feedMessage)
+    function details(FeedMessage $feedMessage): JsonResponse
     {
         return JSONResult::success([
             'data' => FeedMessageResource::collection([$feedMessage])
@@ -33,7 +33,8 @@ class FeedMessageController extends Controller
      * @param FeedMessage $feedMessage
      * @return JsonResponse
      */
-    function replies(FeedMessageRepliesRequest $request, FeedMessage $feedMessage) {
+    function replies(FeedMessageRepliesRequest $request, FeedMessage $feedMessage): JsonResponse
+    {
         $data = $request->validated();
 
         // Get the feed message replies
@@ -56,9 +57,9 @@ class FeedMessageController extends Controller
      * @param FeedMessage $feedMessage
      * @return JsonResponse
      */
-    function heart(FeedMessage $feedMessage)
+    function heart(FeedMessage $feedMessage): JsonResponse
     {
-        /** @var User $user */
+        // Get the authenticated user
         $user = Auth::user();
 
         // Get the vote
