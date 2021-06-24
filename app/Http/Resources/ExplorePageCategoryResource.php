@@ -11,6 +11,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class ExplorePageCategoryResource extends JsonResource
 {
     /**
+     * The resource instance.
+     *
+     * @var ExplorePageCategory
+     */
+    public $resource;
+
+    /**
      * Transform the resource into an array.
      *
      * @param  Request  $request
@@ -18,23 +25,20 @@ class ExplorePageCategoryResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var ExplorePageCategory $category */
-        $category = $this->resource;
-
         $resource = [
             'type'          => 'explore',
-            'href'          => route('api.explore', [], false),
+            'href'          => route('api.explore', absolute: false),
             'attributes'    => [
-                'title'     => $category->title,
-                'position'  => $category->position,
-                'type'      => $category->type,
-                'size'      => $category->size
+                'title'     => $this->resource->title,
+                'position'  => $this->resource->position,
+                'type'      => $this->resource->type,
+                'size'      => $this->resource->size
             ]
         ];
 
         $relationships = [];
         // Add specific data per type
-        $relationships = array_merge($relationships, $this->getTypeSpecificData($request, $category));
+        $relationships = array_merge($relationships, $this->getTypeSpecificData($request));
 
         // Merge relationships and return
         return array_merge($resource, ['relationships' => $relationships]);
@@ -45,30 +49,27 @@ class ExplorePageCategoryResource extends JsonResource
      * category.
      *
      * @param Request $request
-     * @param ExplorePageCategory $category
      * @return array
      */
-    private function getTypeSpecificData(Request $request, ExplorePageCategory $category): array
+    private function getTypeSpecificData(Request $request): array
     {
         // Genres category
-        switch ($category->type) {
+        switch ($this->resource->type) {
             case ExplorePageCategoryTypes::Genres: {
                 return [
                     'genres' => [
-                        'data' => GenreResource::collection($category->genres)
+                        'data' => GenreResource::collection($this->resource->genres)
                     ]
                 ];
             }
             case ExplorePageCategoryTypes::Shows: {
-                $request->merge(['include' => 'genres']);
                 return [
                     'shows' => [
-                        'data' => AnimeResource::collection($category->animes)
+                        'data' => AnimeResource::collection($this->resource->animes)
                     ]
                 ];
             }
             case ExplorePageCategoryTypes::MostPopularShows: {
-                $request->merge(['include' => 'genres']);
                 return [
                     'shows' => [
                         'data' => AnimeResource::collection(Anime::mostPopular()->get())
