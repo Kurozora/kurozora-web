@@ -989,7 +989,7 @@
         }
       }
     },
-    "/pepole/{personID}/anime": {
+    "/people/{personID}/anime": {
       "get": {
         "security": [
           {

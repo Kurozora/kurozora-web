@@ -59,7 +59,7 @@ class StudioResource extends JsonResource
         return [
             'shows' => [
                 'href' => route('api.studios.anime', $this->resource, false),
-                'data' => AnimeResourceBasic::collection($this->resource->getAnime($whereRules))
+                'data' => AnimeResourceBasic::collection($this->resource->getAnime(where: $whereRules))
             ]
         ];
     }

@@ -6,43 +6,54 @@
         "attributes": {
             "anidbID": null,
             "anilistID": null,
-            "kitsuID": null,
             "imdbID": null,
+            "kitsuID": null,
             "malID": null,
+            "notifyID": null,
+            "syoboiID": null,
+            "traktID": null,
+            "tvdbID": null,
+            "videoUrl": null,
+            "poster": null,
+            "banner": null,
+            "originalTitle": "Qui nemo nesciunt ex est.",
             "title": "Be a good person!",
-            "tagline": "Maxime rerum soluta quo distinctio.",
+            "tagline": "Sint tempore voluptas assumenda quibusdam non quisquam.",
             "synopsis": "A story about being a good person.",
             "genres": [],
             "tvRating": {
-                "name": "e",
-                "description": "Qui optio laborum soluta distinctio dolore est."
+                "name": "c",
+                "description": "Laudantium perspiciatis quibusdam rem ut."
             },
             "type": {
-                "name": "Ellie Mohr DVM",
-                "description": "Non magni quod provident quo sit praesentium."
+                "name": "Mohammad Graham",
+                "description": "Dignissimos culpa nulla non incidunt."
             },
             "source": {
-                "name": "Gabe Ondricka",
-                "description": "Quaerat quam est rerum."
+                "name": "Jadyn Hintz",
+                "description": "Iste voluptatem et tempore similique dolores ab blanditiis."
             },
             "status": {
-                "name": "neque et",
-                "description": "Repellendus est molestias laborum sit quia commodi perspiciatis."
+                "name": "dolor labore",
+                "description": "Consequatur voluptatem error asperiores tempora minus nihil ratione.",
+                "color": "#54e0cc"
             },
             "episodeCount": "0",
             "seasonCount": "0",
-            "averageRating": "4.0",
-            "ratingCount": "0",
-            "videoUrl": null,
-            "poster": null,
-            "background": null,
-            "firstAired": "2015-11-11",
-            "lastAired": "2016-01-20",
-            "runtime": "12",
-            "airTime": "08:25 UTC",
+            "userRating": {
+                "ratingCountList": [],
+                "averageRating": "4.0",
+                "ratingCount": "0"
+            },
+            "firstAired": "1979-06-20",
+            "lastAired": "1979-12-05",
+            "runtime": "14 seconds",
+            "runtimeTotal": "14 seconds",
+            "airSeason": "Winter",
+            "airTime": "05:01",
             "airDay": null,
-            "isNSFW": true,
-            "copyright": "\u00ae 2005 Veum, Jenkins and Herman",
+            "isNSFW": false,
+            "copyright": "\u2117 2007 Senger, Heidenreich and Baumbach",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,
@@ -56,43 +67,54 @@
         "attributes": {
             "anidbID": null,
             "anilistID": null,
-            "kitsuID": null,
             "imdbID": null,
+            "kitsuID": null,
             "malID": null,
+            "notifyID": null,
+            "syoboiID": null,
+            "traktID": null,
+            "tvdbID": null,
+            "videoUrl": null,
+            "poster": null,
+            "banner": null,
+            "originalTitle": "Id sint laborum amet architecto.",
             "title": "Awesome Show",
-            "tagline": "Quis a molestias ea natus distinctio.",
+            "tagline": "Libero eum in illo ipsum consectetur modi sed.",
             "synopsis": "A very awesome show.",
             "genres": [],
             "tvRating": {
-                "name": "e",
-                "description": "Qui optio laborum soluta distinctio dolore est."
+                "name": "c",
+                "description": "Laudantium perspiciatis quibusdam rem ut."
             },
             "type": {
-                "name": "Ellie Mohr DVM",
-                "description": "Non magni quod provident quo sit praesentium."
+                "name": "Mohammad Graham",
+                "description": "Dignissimos culpa nulla non incidunt."
             },
             "source": {
-                "name": "Gabe Ondricka",
-                "description": "Quaerat quam est rerum."
+                "name": "Jadyn Hintz",
+                "description": "Iste voluptatem et tempore similique dolores ab blanditiis."
             },
             "status": {
-                "name": "neque et",
-                "description": "Repellendus est molestias laborum sit quia commodi perspiciatis."
+                "name": "dolor labore",
+                "description": "Consequatur voluptatem error asperiores tempora minus nihil ratione.",
+                "color": "#54e0cc"
             },
             "episodeCount": "0",
             "seasonCount": "0",
-            "averageRating": "2.5",
-            "ratingCount": "0",
-            "videoUrl": null,
-            "poster": null,
-            "background": null,
-            "firstAired": "1971-09-04",
-            "lastAired": "1971-11-13",
-            "runtime": "12",
-            "airTime": "23:18 UTC",
+            "userRating": {
+                "ratingCountList": [],
+                "averageRating": "2.5",
+                "ratingCount": "0"
+            },
+            "firstAired": "1991-09-03",
+            "lastAired": "1991-11-26",
+            "runtime": "22 seconds",
+            "runtimeTotal": "22 seconds",
+            "airSeason": "Winter",
+            "airTime": "17:05",
             "airDay": null,
-            "isNSFW": false,
-            "copyright": "\u00a9 2008 Fisher and Sons",
+            "isNSFW": true,
+            "copyright": "\u2117 1997 Legros, Price and Mueller",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,

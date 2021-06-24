@@ -201,7 +201,8 @@ class Anime extends KModel
         if ($this->air_season == null) {
             return null;
         }
-        return SeasonOfYear::fromValue($this->air_season)->description;
+        // For some reason air season is sometimes seen as a string, so force cast to int.
+        return SeasonOfYear::fromValue((int) $this->air_season)->description;
     }
 
     /**
