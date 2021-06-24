@@ -32,6 +32,9 @@ class KModel extends Model
         // Add a limit
         if (isset($options['limit'])) $key .= '-' . $options['limit'];
 
+        // Add a page
+        if (isset($options['page'])) $key .= '-' . $options['page'];
+
         // Add a where
         if (isset($options['where'])) $key .= '-' . implode(',', array_map('implode', $options['where']));
 

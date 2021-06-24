@@ -477,17 +477,18 @@ class Anime extends KModel
     /**
      * Retrieves the cast for an Anime item in an array
      *
-     * @param ?int $limit
+     * @param int $limit
+     * @param int $page
      * @return mixed
      */
-    public function getCast(?int $limit = null): mixed
+    public function getCast(int $limit = 25, int $page = 1): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.cast', 'id' => $this->id, 'limit' => $limit]);
+        $cacheKey = self::cacheKey(['name' => 'anime.cast', 'id' => $this->id, 'limit' => $limit, 'page' => $page]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_ANIME_CAST_SECONDS, function () use ($limit) {
-            return $this->cast()->limit($limit)->get();
+            return $this->cast()->paginate($limit);
         });
     }
 
