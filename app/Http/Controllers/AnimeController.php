@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\GetCastRequest;
+use App\Http\Requests\GetAnimeCharactersRequest;
+use App\Http\Requests\GetAnimeSeasonsRequest;
+use App\Http\Requests\GetAnimeStaffRequest;
+use App\Http\Requests\GetAnimeStudiosRequest;
+use App\Http\Requests\GetAnimeCastRequest;
+use App\Http\Requests\GetAnimeRelatedShowsRequest;
 use App\Http\Resources\AnimeStaffResource;
 use App\Http\Resources\StudioResource;
 use App\Models\Anime;
@@ -44,27 +49,34 @@ class AnimeController extends Controller
     /**
      * Returns character information of an Anime.
      *
+     * @param GetAnimeCharactersRequest $request
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function characters(Anime $anime): JsonResponse
+    public function characters(GetAnimeCharactersRequest $request, Anime $anime): JsonResponse
     {
+        $data = $request->validated();
+
         // Get the characters
-        $characters = $anime->getCharacters();
+        $characters = $anime->getCharacters($data['limit'] ?? 25, $data['page'] ?? 1);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $characters->nextPageUrl());
 
         return JSONResult::success([
-            'data' => CharacterResourceBasic::collection($characters)
+            'data' => CharacterResourceBasic::collection($characters),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 
     /**
      * Returns the cast information of an Anime.
      *
-     * @param GetCastRequest $request
+     * @param GetAnimeCastRequest $request
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function cast(GetCastRequest $request, Anime $anime): JsonResponse
+    public function cast(GetAnimeCastRequest $request, Anime $anime): JsonResponse
     {
         $data = $request->validated();
 
@@ -83,64 +95,92 @@ class AnimeController extends Controller
     /**
      * Returns related-shows information of an Anime.
      *
+     * @param GetAnimeRelatedShowsRequest $request
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function relatedShows(Anime $anime): JsonResponse
+    public function relatedShows(GetAnimeRelatedShowsRequest $request, Anime $anime): JsonResponse
     {
+        $data = $request->validated();
+
         // Get the related shows
-        $relations = $anime->getAnimeRelations();
+        $relatedShows = $anime->getAnimeRelations($data['limit'] ?? 25, $data['page'] ?? 1);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $relatedShows->nextPageUrl());
 
         return JSONResult::success([
-            'data' => AnimeRelatedShowsResource::collection($relations)
+            'data' => AnimeRelatedShowsResource::collection($relatedShows),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 
     /**
      * Returns season information for an Anime
      *
+     * @param GetAnimeSeasonsRequest $request
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function seasons(Anime $anime): JsonResponse
+    public function seasons(GetAnimeSeasonsRequest $request, Anime $anime): JsonResponse
     {
+        $data = $request->validated();
+
         // Get the seasons
-        $seasons = $anime->getSeasons();
+        $seasons = $anime->getSeasons($data['limit'] ?? 25, $data['page'] ?? 1);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $seasons->nextPageUrl());
 
         return JSONResult::success([
-            'data' => SeasonResource::collection($seasons)
+            'data' => SeasonResource::collection($seasons),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 
     /**
      * Returns staff information of an Anime.
      *
+     * @param GetAnimeStaffRequest $request
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function staff(Anime $anime): JsonResponse
+    public function staff(GetAnimeStaffRequest $request, Anime $anime): JsonResponse
     {
+        $data = $request->validated();
+
         // Get the staff
-        $staff = $anime->getStaff();
+        $staff = $anime->getStaff($data['limit'] ?? 25, $data['page'] ?? 1);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $staff->nextPageUrl());
 
         return JSONResult::success([
-            'data' => AnimeStaffResource::collection($staff)
+            'data' => AnimeStaffResource::collection($staff),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 
     /**
      * Returns the studios information of an Anime.
      *
+     * @param GetAnimeStudiosRequest $request
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function studios(Anime $anime): JsonResponse
+    public function studios(GetAnimeStudiosRequest $request, Anime $anime): JsonResponse
     {
+        $data = $request->validated();
+
         // Get the anime studios
-        $animeStudios = $anime->getStudios();
+        $animeStudios = $anime->getStudios($data['limit'] ?? 25, $data['page'] ?? 1);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $animeStudios->nextPageUrl());
 
         return JSONResult::success([
-            'data' => StudioResource::collection($animeStudios)
+            'data' => StudioResource::collection($animeStudios),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 

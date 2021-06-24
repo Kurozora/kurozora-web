@@ -52,19 +52,19 @@ class Studio extends KModel
     /**
      * Retrieves the anime for a Studio item in an array
      *
+     * @param int $limit
+     * @param int $page
      * @param array $where
-     * @return Collection
+     * @return mixed
      */
-    public function getAnime(array $where = []): Collection
+    public function getAnime(int $limit = 25, int $page = 1, array $where = []): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'studios.anime', 'id' => $this->id, 'where' => $where]);
+        $cacheKey = self::cacheKey(['name' => 'studios.anime', 'id' => $this->id, 'limit' => $limit, 'page' => $page, 'where' => $where]);
 
         // Retrieve or save cached result
-        $animeInfo = Cache::remember($cacheKey, self::CACHE_KEY_ANIME_SECONDS, function () use ($where) {
-            return $this->anime()->where($where)->get();
+        return Cache::remember($cacheKey, self::CACHE_KEY_ANIME_SECONDS, function () use ($limit, $where) {
+            return $this->anime()->where($where)->paginate($limit);
         });
-
-        return $animeInfo;
     }
 }

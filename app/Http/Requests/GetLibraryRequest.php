@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Http\Sorters\AnimeAgeSorter;
 use App\Http\Sorters\AnimeMyRatingSorter;
 use App\Http\Sorters\AnimeRatingSorter;
+use App\Http\Sorters\AnimeTitleSorter;
 use App\Rules\ValidateLibraryStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use musa11971\SortRequest\Traits\SortsViaRequest;
@@ -45,7 +46,7 @@ class GetLibraryRequest extends FormRequest
     function getSortableColumns(): array
     {
         return [
-            'title',
+            'title'     => AnimeTitleSorter::class,
             'age'       => AnimeAgeSorter::class,
             'rating'    => AnimeRatingSorter::class,
             'my-rating' => AnimeMyRatingSorter::class

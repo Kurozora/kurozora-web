@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
-use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 
 class Person extends KModel
 {
@@ -90,54 +90,56 @@ class Person extends KModel
     /**
      * Returns the anime the character belongs to.
      *
-     * @return HasManyDeep
+     * @return BelongsToMany
      */
-    function anime(): HasManyDeep
+    function anime(): BelongsToMany
     {
-        return $this->hasManyDeep(Anime::class, [AnimeCast::class], ['person_id', 'id'], ['id', 'anime_id'])->distinct();
+        return $this->belongsToMany(Anime::class, AnimeCast::class)->distinct();
     }
 
     /**
      * Retrieves the anime for a character item in an array.
      *
-     * @param int|null $limit
+     * @param int $limit
+     * @param int $page
      * @return Collection
      */
-    public function getAnime(int $limit = null): Collection
+    public function getAnime(int $limit = 25, int $page = 1): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'person.anime', 'id' => $this->id, 'limit' => $limit]);
+        $cacheKey = self::cacheKey(['name' => 'person.anime', 'id' => $this->id, 'limit' => $limit, 'page' => $page]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_ANIME_SECONDS, function () use ($limit) {
-            return $this->anime()->limit($limit)->get();
+            return $this->anime()->paginate($limit);
         });
     }
 
     /**
      * Returns the characters the person belongs to.
      *
-     * @return HasManyDeep
+     * @return BelongsToMany
      */
-    function characters(): HasManyDeep
+    function characters(): BelongsToMany
     {
-        return $this->hasManyDeep(Character::class, [AnimeCast::class], ['person_id', 'id'], ['id', 'character_id'])->distinct();
+        return $this->belongsToMany(Character::class, AnimeCast::class)->distinct();
     }
 
     /**
      * Retrieves the characters for a person item in an array.
      *
-     * @param int|null $limit
+     * @param int $limit
+     * @param int $page
      * @return Collection
      */
-    public function getCharacters(int $limit = null): Collection
+    public function getCharacters(int $limit = 25, int $page = 1): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'person.characters', 'id' => $this->id, 'limit' => $limit]);
+        $cacheKey = self::cacheKey(['name' => 'person.characters', 'id' => $this->id, 'limit' => $limit, 'page' => $page]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_CHARACTERS_SECONDS, function () use ($limit) {
-            return $this->characters()->limit($limit)->get();
+            return $this->characters()->paginate($limit);
         });
     }
 

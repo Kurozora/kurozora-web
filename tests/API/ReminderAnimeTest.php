@@ -123,11 +123,12 @@ class ReminderAnimeTest extends TestCase
     function a_user_can_get_a_list_of_the_anime_in_their_reminders()
     {
         // Add some anime to the user's reminders
-        /** @var Anime[] $anime */
+        /** @var Anime[] $animeList */
         $animeList = Anime::factory(25)->create();
 
-        foreach($animeList as $anime)
+        foreach($animeList as $anime) {
             $this->user->reminderAnime()->attach($anime->id);
+        }
 
         // Send request for the list of anime
         $response = $this->auth()->json('GET', 'v1/me/reminder-anime');

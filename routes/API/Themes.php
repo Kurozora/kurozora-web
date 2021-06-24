@@ -9,10 +9,13 @@ Route::prefix('/themes')
             ->middleware('auth.kurozora:optional')
             ->name('.overview');
 
-        Route::get('/{theme}', [AppThemeController::class, 'details'])
-            ->middleware('auth.kurozora:optional')
-            ->name('.details');
+        Route::prefix('{theme}')
+            ->group(function () {
+                Route::get('/', [AppThemeController::class, 'details'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.details');
 
-        Route::get('/{theme}/download', [AppThemeController::class, 'download'])
-            ->name('.download');
+                Route::get('/download', [AppThemeController::class, 'download'])
+                    ->name('.download');
+            });
     });

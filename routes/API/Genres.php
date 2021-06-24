@@ -8,6 +8,9 @@ Route::prefix('/genres')
         Route::get('/', [GenreController::class, 'overview'])
             ->name('.overview');
 
-        Route::get('/{genre}', [GenreController::class, 'details'])
-            ->name('.details');
+        Route::prefix('{genre}')
+            ->group(function () {
+                Route::get('/', [GenreController::class, 'details'])
+                    ->name('.details');
+            });
     });

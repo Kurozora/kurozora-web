@@ -22,6 +22,13 @@ class MediaType extends Resource
     public static string $model = \App\Models\MediaType::class;
 
     /**
+     * The underlying model resource instance.
+     *
+     * @var \App\Models\MediaType|null
+     */
+    public $resource;
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -84,7 +91,9 @@ class MediaType extends Resource
      */
     public function title(): string
     {
-        return $this->name . ' (ID: ' . $this->id . ')';
+        $mediaType = $this->resource;
+
+        return $mediaType->name . ' (ID: ' . $mediaType->id . ')';
     }
 
     /**

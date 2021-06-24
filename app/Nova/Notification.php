@@ -21,6 +21,13 @@ class Notification extends Resource
     public static $model = DatabaseNotification::class;
 
     /**
+     * The underlying model resource instance.
+     *
+     * @var DatabaseNotification|null
+     */
+    public $resource;
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -51,7 +58,6 @@ class Notification extends Resource
      */
     public function fields(Request $request): array
     {
-        /** @var DatabaseNotification $notification */
         $notification = $this->resource;
 
         return [

@@ -5,6 +5,7 @@ namespace App\Nova;
 use App\Enums\AstrologicalSign;
 use Chaseconey\ExternalImage\ExternalImage;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Heading;
@@ -24,6 +25,13 @@ class Character extends Resource
     public static string $model = \App\Models\Character::class;
 
     /**
+     * The underlying model resource instance.
+     *
+     * @var \App\Models\Character|null
+     */
+    public $resource;
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -36,7 +44,7 @@ class Character extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'japanese_name'
+        'id'
     ];
 
     /**
@@ -154,9 +162,9 @@ class Character extends Resource
 
             HasMany::make('Cast'),
 
-            HasMany::make('Anime'),
+            BelongsToMany::make('Anime'),
 
-            HasMany::make('People'),
+            BelongsToMany::make('People'),
         ];
     }
 
@@ -167,13 +175,14 @@ class Character extends Resource
      */
     public function title(): string
     {
-        $characterName = $this->name;
+        $character = $this->resource;
+        $characterName = $character->name;
 
         if (!is_string($characterName) || !strlen($characterName)) {
             $characterName = 'No character title';
         }
 
-        return $characterName . ' (ID: ' . $this->id . ')';
+        return $characterName . ' (ID: ' . $character->id . ')';
     }
 
     /**

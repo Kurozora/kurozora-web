@@ -6,43 +6,54 @@
         "attributes": {
             "anidbID": null,
             "anilistID": null,
-            "kitsuID": null,
             "imdbID": null,
+            "kitsuID": null,
             "malID": null,
+            "notifyID": null,
+            "syoboiID": null,
+            "traktID": null,
+            "tvdbID": null,
+            "videoUrl": null,
+            "poster": null,
+            "banner": null,
+            "originalTitle": "Odit magni debitis consequatur iure.",
             "title": "Be a good person!",
-            "tagline": "Voluptatum et ab quo veritatis eveniet.",
+            "tagline": "Eligendi est quam iusto id aut exercitationem.",
             "synopsis": "A story about being a good person.",
             "genres": [],
             "tvRating": {
-                "name": "j",
-                "description": "Eaque et veritatis sit molestiae voluptates cum deleniti."
+                "name": "b",
+                "description": "Corrupti esse quis expedita sed consectetur."
             },
             "type": {
-                "name": "Dr. Leonard Bahringer",
-                "description": "Voluptatem minus quos assumenda nemo quasi."
+                "name": "Larue Connelly",
+                "description": "Aut doloribus nam voluptatibus quo."
             },
             "source": {
-                "name": "Reid Cummerata",
-                "description": "Id est provident quae sit."
+                "name": "Dr. Raoul Hahn V",
+                "description": "Quas et voluptatem consequatur aliquam omnis."
             },
             "status": {
-                "name": "voluptate eligendi",
-                "description": "Numquam non voluptates dolore architecto."
+                "name": "tempore blanditiis",
+                "description": "Atque excepturi voluptatem dolores exercitationem repudiandae laboriosam sit.",
+                "color": "#f6a120"
             },
             "episodeCount": "0",
             "seasonCount": "0",
-            "averageRating": "4.0",
-            "ratingCount": "0",
-            "videoUrl": null,
-            "poster": null,
-            "background": null,
-            "firstAired": "2019-12-13",
-            "lastAired": "2020-03-06",
-            "runtime": "22",
-            "airTime": "10:14 UTC",
+            "userRating": {
+                "ratingCountList": [],
+                "averageRating": "4.0",
+                "ratingCount": "0"
+            },
+            "firstAired": "1985-07-17",
+            "lastAired": "1986-01-01",
+            "runtime": "23 seconds",
+            "runtimeTotal": "23 seconds",
+            "airSeason": "Winter",
+            "airTime": "01:22",
             "airDay": null,
-            "isNSFW": true,
-            "copyright": "\u00ae 1993 Sipes-Weber",
+            "isNSFW": false,
+            "copyright": "\u00a9 2006 Douglas PLC",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,
@@ -56,43 +67,54 @@
         "attributes": {
             "anidbID": null,
             "anilistID": null,
-            "kitsuID": null,
             "imdbID": null,
+            "kitsuID": null,
             "malID": null,
+            "notifyID": null,
+            "syoboiID": null,
+            "traktID": null,
+            "tvdbID": null,
+            "videoUrl": null,
+            "poster": null,
+            "banner": null,
+            "originalTitle": "Omnis mollitia illum vel et.",
             "title": "Awesome Show",
-            "tagline": "Unde voluptatem perferendis quaerat aut et.",
+            "tagline": "Eaque maxime non dicta et dignissimos aspernatur sit.",
             "synopsis": "A very awesome show.",
             "genres": [],
             "tvRating": {
-                "name": "j",
-                "description": "Eaque et veritatis sit molestiae voluptates cum deleniti."
+                "name": "b",
+                "description": "Corrupti esse quis expedita sed consectetur."
             },
             "type": {
-                "name": "Dr. Leonard Bahringer",
-                "description": "Voluptatem minus quos assumenda nemo quasi."
+                "name": "Larue Connelly",
+                "description": "Aut doloribus nam voluptatibus quo."
             },
             "source": {
-                "name": "Reid Cummerata",
-                "description": "Id est provident quae sit."
+                "name": "Dr. Raoul Hahn V",
+                "description": "Quas et voluptatem consequatur aliquam omnis."
             },
             "status": {
-                "name": "voluptate eligendi",
-                "description": "Numquam non voluptates dolore architecto."
+                "name": "tempore blanditiis",
+                "description": "Atque excepturi voluptatem dolores exercitationem repudiandae laboriosam sit.",
+                "color": "#f6a120"
             },
             "episodeCount": "0",
             "seasonCount": "0",
-            "averageRating": "2.5",
-            "ratingCount": "0",
-            "videoUrl": null,
-            "poster": null,
-            "background": null,
-            "firstAired": "1978-03-21",
-            "lastAired": "1978-06-13",
-            "runtime": "17",
-            "airTime": "13:18 UTC",
+            "userRating": {
+                "ratingCountList": [],
+                "averageRating": "2.5",
+                "ratingCount": "0"
+            },
+            "firstAired": "2000-09-17",
+            "lastAired": "2000-12-10",
+            "runtime": "23 seconds",
+            "runtimeTotal": "23 seconds",
+            "airSeason": "Winter",
+            "airTime": "00:58",
             "airDay": null,
             "isNSFW": true,
-            "copyright": "\u00a9 2014 Lehner-Graham",
+            "copyright": "\u00a9 1999 Hegmann, Hill and Halvorson",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,

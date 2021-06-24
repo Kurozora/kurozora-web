@@ -20,6 +20,13 @@ class Studio extends Resource
     public static string $model = \App\Models\Studio::class;
 
     /**
+     * The underlying model resource instance.
+     *
+     * @var \App\Models\Studio|null
+     */
+    public $resource;
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -88,12 +95,14 @@ class Studio extends Resource
      */
     public function title(): string
     {
-        $studioName = $this->name;
+        $studio = $this->resource;
+        $studioName = $studio->name;
 
-        if (!is_string($studioName) || !strlen($studioName))
+        if (!is_string($studioName) || !strlen($studioName)) {
             $studioName = 'No Studio name';
+        }
 
-        return $studioName . ' (ID: ' . $this->id . ')';
+        return $studioName . ' (ID: ' . $studio->id . ')';
     }
 
     /**

@@ -101,7 +101,9 @@ class SignOutOtherSessionsForm extends Component
 
         return collect(
             $otherSessions->prepend($currentSession)
-        )->map(function (Session $session) {
+        )
+            ->where('session_id', '!=', null)
+            ->map(function (Session $session) {
             return (object) [
                 'browser'           => Browser::detect(),
                 'platform'          => $session->platform,

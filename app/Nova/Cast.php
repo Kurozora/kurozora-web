@@ -21,6 +21,13 @@ class Cast extends Resource
     public static string $model = AnimeCast::class;
 
     /**
+     * The underlying model resource instance.
+     *
+     * @var AnimeCast|null
+     */
+    public $resource;
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -88,7 +95,6 @@ class Cast extends Resource
      */
     public function title(): string
     {
-        /** @var AnimeCast $animeCast */
         $animeCast = $this->resource;
 
         $animeTitle = $animeCast->anime->title;
