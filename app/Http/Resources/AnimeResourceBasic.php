@@ -51,7 +51,7 @@ class AnimeResourceBasic extends JsonResource
                 'tvRating'              => $this->resource->tv_rating->only(['name', 'description']),
                 'type'                  => $this->resource->media_type->only(['name', 'description']),
                 'source'                => $this->resource->source->only(['name', 'description']),
-                'status'                => $this->resource->status->only(['name', 'description']),
+                'status'                => $this->resource->status->only(['name', 'description', 'color']),
                 'episodeCount'          => $this->resource->episode_count,
                 'seasonCount'           => $this->resource->season_count,
                 'userRating'            => [
@@ -69,6 +69,7 @@ class AnimeResourceBasic extends JsonResource
                 'lastAired'             => $this->resource->last_aired?->format('Y-m-d'),
                 'runtime'               => $this->resource->runtime_string,
                 'runtimeTotal'          => $this->resource->runtime_total,
+                'airSeason'             => $this->resource->air_season_string,
                 'airTime'               => $this->resource->air_time_utc,
                 'airDay'                => DayOfWeek::getDescription($this->resource->air_day) ?: null,
                 'isNSFW'                => (bool) $this->resource->is_nsfw,

@@ -8,6 +8,7 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Timothyasp\Color\Color;
 
 class Status extends Resource
 {
@@ -69,6 +70,9 @@ class Status extends Resource
                 ->sortable()
                 ->help('An explanation of what the source means.')
                 ->required(),
+
+            Color::make('Color')
+                ->help('The color associated with the status. Should be unique and make the status identifiable just by looking at the color.'),
 
             HasMany::make('Anime'),
         ];
