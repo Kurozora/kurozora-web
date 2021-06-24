@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
+use App\Http\Requests\GetPersonAnimeRequest;
+use App\Http\Requests\GetPersonCharactersRequest;
 use App\Http\Resources\PersonResource;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Http\Resources\CharacterResourceBasic;
@@ -28,34 +30,48 @@ class PersonController extends Controller
     /**
      * Returns anime information of the person.
      *
+     * @param GetPersonAnimeRequest $request
      * @param Person $person
      * @return JsonResponse
      */
-    public function anime(Person $person): JsonResponse
+    public function anime(GetPersonAnimeRequest $request, Person $person): JsonResponse
     {
-        // Get the anime
-        $anime = $person->getAnime();
+        $data = $request->validated();
 
-        // Return person shows
+        // Get the anime
+        $anime = $person->getAnime($data['limit'] ?? 25, $data['page'] ?? 1);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
+
+        // Return character anime
         return JSONResult::success([
-            'data' => AnimeResourceBasic::collection($anime)
+            'data' => AnimeResourceBasic::collection($anime),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 
     /**
      * Returns character information of the person.
      *
+     * @param GetPersonCharactersRequest $request
      * @param Person $person
      * @return JsonResponse
      */
-    public function characters(Person $person): JsonResponse
+    public function characters(GetPersonCharactersRequest $request, Person $person): JsonResponse
     {
+        $data = $request->validated();
+
         // Get the characters
-        $characters = $person->getCharacters();
+        $characters = $person->getCharacters($data['limit'] ?? 25, $data['page'] ?? 1);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $characters->nextPageUrl());
 
         // Return person characters
         return JSONResult::success([
-            'data' => CharacterResourceBasic::collection($characters)
+            'data' => CharacterResourceBasic::collection($characters),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 }

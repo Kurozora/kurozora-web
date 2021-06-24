@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GetCharacterAnimeRequest;
+use App\Http\Requests\GetCharacterPeopleRequest;
 use App\Models\Character;
 use App\Helpers\JSONResult;
 use App\Http\Resources\PersonResource;
@@ -28,34 +30,48 @@ class CharacterController extends Controller
     /**
      * Returns person information about a character.
      *
+     * @param GetCharacterPeopleRequest $request
      * @param Character $character
      * @return JsonResponse
      */
-    public function people(Character $character): JsonResponse
+    public function people(GetCharacterPeopleRequest $request, Character $character): JsonResponse
     {
+        $data = $request->validated();
+
         // Get the people
-        $people = $character->getPeople();
+        $people = $character->getPeople($data['limit'] ?? 25, $data['page'] ?? 1);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $people->nextPageUrl());
 
         // Return character people
         return JSONResult::success([
-            'data' => PersonResource::collection($people)
+            'data' => PersonResource::collection($people),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 
     /**
      * Returns anime information about a character.
      *
+     * @param GetCharacterAnimeRequest $request
      * @param Character $character
      * @return JsonResponse
      */
-    public function anime(Character $character): JsonResponse
+    public function anime(GetCharacterAnimeRequest $request, Character $character): JsonResponse
     {
+        $data = $request->validated();
+
         // Get the anime
-        $anime = $character->getAnime();
+        $anime = $character->getAnime($data['limit'] ?? 25, $data['page'] ?? 1);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
 
         // Return character anime
         return JSONResult::success([
-            'data' => AnimeResourceBasic::collection($anime)
+            'data' => AnimeResourceBasic::collection($anime),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 }

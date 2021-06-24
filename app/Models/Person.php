@@ -100,17 +100,18 @@ class Person extends KModel
     /**
      * Retrieves the anime for a character item in an array.
      *
-     * @param int|null $limit
+     * @param int $limit
+     * @param int $page
      * @return Collection
      */
-    public function getAnime(int $limit = null): Collection
+    public function getAnime(int $limit = 25, int $page = 1): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'person.anime', 'id' => $this->id, 'limit' => $limit]);
+        $cacheKey = self::cacheKey(['name' => 'person.anime', 'id' => $this->id, 'limit' => $limit, 'page' => $page]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_ANIME_SECONDS, function () use ($limit) {
-            return $this->anime()->limit($limit)->get();
+            return $this->anime()->paginate($limit);
         });
     }
 
@@ -127,17 +128,18 @@ class Person extends KModel
     /**
      * Retrieves the characters for a person item in an array.
      *
-     * @param int|null $limit
+     * @param int $limit
+     * @param int $page
      * @return Collection
      */
-    public function getCharacters(int $limit = null): Collection
+    public function getCharacters(int $limit = 25, int $page = 1): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'person.characters', 'id' => $this->id, 'limit' => $limit]);
+        $cacheKey = self::cacheKey(['name' => 'person.characters', 'id' => $this->id, 'limit' => $limit, 'page' => $page]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_CHARACTERS_SECONDS, function () use ($limit) {
-            return $this->characters()->limit($limit)->get();
+            return $this->characters()->paginate($limit);
         });
     }
 
