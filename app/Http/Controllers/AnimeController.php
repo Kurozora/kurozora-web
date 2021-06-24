@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GetCastRequest;
 use App\Http\Resources\AnimeStaffResource;
 use App\Http\Resources\StudioResource;
 use App\Models\Anime;
@@ -59,16 +60,23 @@ class AnimeController extends Controller
     /**
      * Returns the cast information of an Anime.
      *
+     * @param GetCastRequest $request
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function cast(Anime $anime): JsonResponse
+    public function cast(GetCastRequest $request, Anime $anime): JsonResponse
     {
+        $data = $request->validated();
+
         // Get the anime cast
-        $animeCast = $anime->getCast();
+        $animeCast = $anime->getCast($data['limit'] ?? 25, $data['page'] ?? 1);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $animeCast->nextPageUrl());
 
         return JSONResult::success([
-            'data' => AnimeCastResource::collection($animeCast)
+            'data' => AnimeCastResource::collection($animeCast),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 
