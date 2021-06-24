@@ -8,14 +8,17 @@ Route::prefix('/notifications')
         Route::get('/', [NotificationController::class, 'index'])
             ->middleware('auth.kurozora');
 
-        Route::get('/{notification}', [NotificationController::class, 'details'])
-            ->middleware('auth.kurozora')
-            ->middleware('can:get_notification,notification')
-            ->name('.details');
+        Route::prefix('{notification}')
+            ->group(function () {
+                Route::get('/', [NotificationController::class, 'details'])
+                    ->middleware('auth.kurozora')
+                    ->middleware('can:get_notification,notification')
+                    ->name('.details');
 
-        Route::post('/{notification}/delete', [NotificationController::class, 'delete'])
-            ->middleware(['auth.kurozora', 'can:del_notification,notification'])
-            ->name('.delete');
+                Route::post('/delete', [NotificationController::class, 'delete'])
+                    ->middleware(['auth.kurozora', 'can:del_notification,notification'])
+                    ->name('.delete');
+            });
 
         Route::post('/update', [NotificationController::class, 'update'])
             ->middleware('auth.kurozora')

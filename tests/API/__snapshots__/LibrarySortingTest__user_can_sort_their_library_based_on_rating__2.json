@@ -6,43 +6,54 @@
         "attributes": {
             "anidbID": null,
             "anilistID": null,
-            "kitsuID": null,
             "imdbID": null,
+            "kitsuID": null,
             "malID": null,
+            "notifyID": null,
+            "syoboiID": null,
+            "traktID": null,
+            "tvdbID": null,
+            "videoUrl": null,
+            "poster": null,
+            "banner": null,
+            "originalTitle": "Totam repellendus hic quaerat totam alias animi.",
             "title": "Awesome Show",
-            "tagline": "Quis voluptate officiis est voluptas aut.",
+            "tagline": "Est velit odit dignissimos temporibus quo deleniti.",
             "synopsis": "A very awesome show.",
             "genres": [],
             "tvRating": {
-                "name": "v",
-                "description": "Voluptatem suscipit maxime ipsam sequi iste quaerat."
+                "name": "k",
+                "description": "Sint qui voluptatem eligendi dolores rem et unde."
             },
             "type": {
-                "name": "Kristofer Bergnaum",
-                "description": "Accusamus rerum alias est ut laudantium perferendis veritatis occaecati."
+                "name": "Connor Monahan MD",
+                "description": "Consequatur veniam doloribus aut eum."
             },
             "source": {
-                "name": "Mr. Carey Champlin",
-                "description": "Sint dolores facilis laborum provident beatae porro fugiat laudantium."
+                "name": "Miss Shanel Williamson",
+                "description": "Et et aut omnis totam ipsum."
             },
             "status": {
-                "name": "architecto fugiat",
-                "description": "Non officiis ipsam corrupti ipsum modi."
+                "name": "ea fugit",
+                "description": "Ab repellendus debitis voluptatem iste dolores ab.",
+                "color": "#a3c99b"
             },
             "episodeCount": "0",
             "seasonCount": "0",
-            "averageRating": "2.5",
-            "ratingCount": "0",
-            "videoUrl": null,
-            "poster": null,
-            "background": null,
-            "firstAired": "2021-04-20",
-            "lastAired": "2021-07-13",
-            "runtime": "24",
-            "airTime": "23:48 UTC",
+            "userRating": {
+                "ratingCountList": [],
+                "averageRating": "2.5",
+                "ratingCount": "0"
+            },
+            "firstAired": "1972-01-11",
+            "lastAired": "1972-06-27",
+            "runtime": "11 seconds",
+            "runtimeTotal": "11 seconds",
+            "airSeason": "Winter",
+            "airTime": "19:43",
             "airDay": null,
-            "isNSFW": true,
-            "copyright": "\u00ae 1970 Mayert Ltd",
+            "isNSFW": false,
+            "copyright": "\u2117 1986 Flatley Ltd",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
@@ -56,43 +67,54 @@
         "attributes": {
             "anidbID": null,
             "anilistID": null,
-            "kitsuID": null,
             "imdbID": null,
+            "kitsuID": null,
             "malID": null,
+            "notifyID": null,
+            "syoboiID": null,
+            "traktID": null,
+            "tvdbID": null,
+            "videoUrl": null,
+            "poster": null,
+            "banner": null,
+            "originalTitle": "Libero voluptatum eos et sint ipsam sunt quibusdam.",
             "title": "Be a good person!",
-            "tagline": "Modi consequatur odio et qui inventore.",
+            "tagline": "Velit cumque inventore in at modi ut eum magni.",
             "synopsis": "A story about being a good person.",
             "genres": [],
             "tvRating": {
-                "name": "v",
-                "description": "Voluptatem suscipit maxime ipsam sequi iste quaerat."
+                "name": "k",
+                "description": "Sint qui voluptatem eligendi dolores rem et unde."
             },
             "type": {
-                "name": "Kristofer Bergnaum",
-                "description": "Accusamus rerum alias est ut laudantium perferendis veritatis occaecati."
+                "name": "Connor Monahan MD",
+                "description": "Consequatur veniam doloribus aut eum."
             },
             "source": {
-                "name": "Mr. Carey Champlin",
-                "description": "Sint dolores facilis laborum provident beatae porro fugiat laudantium."
+                "name": "Miss Shanel Williamson",
+                "description": "Et et aut omnis totam ipsum."
             },
             "status": {
-                "name": "architecto fugiat",
-                "description": "Non officiis ipsam corrupti ipsum modi."
+                "name": "ea fugit",
+                "description": "Ab repellendus debitis voluptatem iste dolores ab.",
+                "color": "#a3c99b"
             },
             "episodeCount": "0",
             "seasonCount": "0",
-            "averageRating": "4.0",
-            "ratingCount": "0",
-            "videoUrl": null,
-            "poster": null,
-            "background": null,
-            "firstAired": "1975-04-02",
-            "lastAired": "1975-06-25",
-            "runtime": "16",
-            "airTime": "10:12 UTC",
+            "userRating": {
+                "ratingCountList": [],
+                "averageRating": "4.0",
+                "ratingCount": "0"
+            },
+            "firstAired": "2006-10-12",
+            "lastAired": "2006-12-21",
+            "runtime": "24 seconds",
+            "runtimeTotal": "24 seconds",
+            "airSeason": "Winter",
+            "airTime": "00:52",
             "airDay": null,
             "isNSFW": true,
-            "copyright": "\u00ae 2011 Champlin-Weber",
+            "copyright": "\u2117 1974 Kiehn Ltd",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,
