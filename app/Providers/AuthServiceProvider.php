@@ -3,10 +3,8 @@
 namespace App\Providers;
 
 use App\Models\Episode;
-use App\Models\ForumThread;
 use App\Policies\EpisodePolicy;
 use App\Policies\DatabaseNotificationPolicy;
-use App\Policies\ForumThreadPolicy;
 use App\Policies\SessionPolicy;
 use App\Policies\UserPolicy;
 use App\Models\Session;
@@ -27,7 +25,6 @@ class AuthServiceProvider extends ServiceProvider
         DatabaseNotification::class => DatabaseNotificationPolicy::class,
         User::class                 => UserPolicy::class,
         Session::class              => SessionPolicy::class,
-        ForumThread::class          => ForumThreadPolicy::class,
         Episode::class              => EpisodePolicy::class
     ];
 

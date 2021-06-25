@@ -14,7 +14,6 @@ require 'Web/Authentication.php';
 require 'Web/Anime.php';
 require 'Web/Profile.php';
 require 'Web/Theme.php';
-require 'Web/Thread.php';
 
 // Legal pages
 require 'Web/Legal.php';

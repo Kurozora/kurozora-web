@@ -11,7 +11,6 @@ use App\Traits\MediaLibraryExtensionTrait;
 use App\Traits\Searchable;
 use App\Traits\User\HasBannerImage;
 use App\Traits\User\HasProfileImage;
-use App\Traits\VoteActionTrait;
 use App\Traits\Web\Auth\TwoFactorAuthenticatable;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
 use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
@@ -53,8 +52,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         Notifiable,
         Reacterable,
         Searchable,
-        TwoFactorAuthenticatable,
-        VoteActionTrait;
+        TwoFactorAuthenticatable;
 
     // Maximum amount of returned search results
     const MAX_SEARCH_RESULTS = 10;
@@ -477,16 +475,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         return $this->sessions()
             ->where('session_id', $sessionID)
             ->delete();
-    }
-
-    /**
-     * Returns the associated threads for the user
-     *
-     * @return HasMany
-     */
-    function threads(): HasMany
-    {
-        return $this->hasMany(ForumThread::class);
     }
 
     /**

@@ -49,7 +49,7 @@ Personal information is data that can be used to identify or contact a single pe
 <div></div>
 
 * When you create a Kurozora ID, connect to our services, contact us including by social media or participate in an online survey, we may collect a variety of information, including your name, phone number, email address, contact preferences, device identifiers, IP address, location information, and profile information where the contact is via social media.
-* When you share your content with family and friends using Kurozora services, send gift certificates, or invite others to participate in Kurozora services or forums, Kurozora may collect the information you provide about those people such as name, email address, and phone number. Kurozora will use such information to fulfil your requests, provide the relevant service, or for anti-fraud purposes.
+* When you share your content with family and friends using Kurozora services, send gift certificates, or invite others to participate in Kurozora services or feeds, Kurozora may collect the information you provide about those people such as name, email address, and phone number. Kurozora will use such information to fulfil your requests, provide the relevant service, or for anti-fraud purposes.
 <div></div>
 
 ### How we use your personal information
@@ -65,7 +65,7 @@ We may process your personal information: for the purposes described in this Pri
 <div></div>
 
 ### Source of your personal information where they are not collected from you
-We may have received your personal information from other persons if that person has shared their content with you using Kurozora products, sent gift codes, or invited you to participate in Kurozora services or forums.
+We may have received your personal information from other persons if that person has shared their content with you using Kurozora products, sent gift codes, or invited you to participate in Kurozora services or feeds.
 <div></div>
 
 ## Collection and Use of Non-Personal Information
@@ -103,7 +103,7 @@ It may be necessary —by law, legal process, litigation, and/or requests from p
 Kurozora takes the security of your personal information very seriously. Kurozora applications and online services protect your personal information during transit using encryption such as Secure Sockets Layer (SSL). When your personal data is stored by Kurozora, we use computer systems with limited access. User passwords are always encrypted and are not readable by anyone —not even a full-access administrator.
 <div></div>
 
-When you use some Kurozora products, services, or applications or post on a Kurozora forum, chat room, or social networking service, the personal information and content you share is visible to other users and can be read, collected, or used by them. You are responsible for the personal information you choose to share or submit in these instances. For example, if you list your name and email address in a forum posting, that information is public. Please take care when using these features.
+When you use some Kurozora products, services, or applications or post on a Kurozora feeds, chat room, or social networking service, the personal information and content you share is visible to other users and can be read, collected, or used by them. You are responsible for the personal information you choose to share or submit in these instances. For example, if you list your name and email address in a feed message, that information is public. Please take care when using these features.
 <div></div>
 
 If you log on to a device that is owned by a third party, your personal information —including email address, location, and service specific information— may be downloaded on to that third-party device thereby disclosing any such shared information.
