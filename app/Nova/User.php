@@ -115,8 +115,6 @@ class User extends Resource
                 ->readonly()
                 ->onlyOnIndex(),
 
-            HasMany::make('Forum Threads', 'threads'),
-
             MorphMany::make('Notifications'),
 
             BelongsToMany::make('Moderating Anime', 'moderatingAnime', Anime::class)

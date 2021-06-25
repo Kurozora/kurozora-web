@@ -33,9 +33,6 @@ class DatabaseSeeder extends Seeder
 //            PersonSeeder::class,
             UserSeeder::class,
             BadgeSeeder::class,
-            ForumSectionSeeder::class,
-            ForumThreadSeeder::class,
-            ForumReplySeeder::class,
             AppThemeSeeder::class,
         ]);
     }
