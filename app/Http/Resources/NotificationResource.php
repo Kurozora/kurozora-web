@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Events\MALImportFinished;
+use App\Notifications\MALImportFinished;
 use App\Notifications\NewFollower;
 use App\Notifications\NewSession;
 use App\Notifications\SubscriptionStatus;

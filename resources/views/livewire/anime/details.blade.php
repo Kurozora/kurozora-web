@@ -65,10 +65,10 @@
             <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between text-center pb-5 overflow-x-scroll no-scrollbar">
                 <div id="badge-1" class="flex-grow pr-12">
                     <p class="inline-flex font-bold text-orange-500">
-                        2.5
-                        <x-star-rating star-size="sm" />
+                        {{ number_format($anime->average_rating, 1) }}
+                        <livewire:anime.star-rating :rating="$anime->average_rating" :star-size="'sm'" :disabled="true" />
                     </p>
-                    <p class="text-sm text-gray-500">187K {{ __('Ratings') }}</p>
+                    <p class="text-sm text-gray-500">{{ __('Not enough ratings') }}</p>
                 </div>
 
                 @if ($anime->air_season_string)
@@ -115,20 +115,22 @@
             <section class="pt-5 pb-8 border-t-2">
                 <x-section-nav>
                     <x-slot name="title">
-                        {{ __('Ratings') }}
+                        {{ __('Ratings & Reviews') }}
                     </x-slot>
                 </x-section-nav>
 
                 <div class="flex flex-row justify-between">
                     <div class="text-center">
-                        <p class="font-bold text-6xl">2.5</p>
+                        <p class="font-bold text-6xl">{{ number_format($anime->average_rating, 1) }}</p>
                         <p class="font-bold text-sm text-gray-500">{{ __('out of') }} 5</p>
                     </div>
 
-                    <div class="text-right">
-                        <x-star-rating star-size="lg" />
-                        <p class="text-sm text-gray-500">{{ __('Not enough ratings') }}</p>
-                    </div>
+                    @auth
+                        <div class="text-right">
+                            <livewire:anime.star-rating :anime="$anime" :rating="Auth::user()->animeRating()->firstWhere('anime_id', $anime->id)?->rating" :star-size="'lg'" />
+                            <p class="text-sm text-gray-500">{{ __('Not enough ratings') }}</p>
+                        </div>
+                    @endif
                 </div>
             </section>
 
