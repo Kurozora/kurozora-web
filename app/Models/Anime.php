@@ -501,7 +501,7 @@ class Anime extends KModel
      */
     public function cast(): HasMany
     {
-        return $this->hasMany(AnimeCast::class);
+        return $this->hasMany(AnimeCast::class)->where('language_id', 73); // Only japanese cast for now
     }
 
     /**
