@@ -63,37 +63,54 @@
 
         <div class="mt-4 mx-5 2xl:col-span-2 lg:max-h-[calc(100vh-64px)] overflow-x-hidden overflow-y-scroll no-scrollbar">
             <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between text-center pb-5 overflow-x-scroll no-scrollbar">
-                <div id="badge-1" class="flex-grow pr-12">
-                    <p class="inline-flex font-bold text-orange-500">
-                        {{ number_format($anime->average_rating, 1) }}
-                        <livewire:anime.star-rating :rating="$anime->average_rating" :star-size="'sm'" :disabled="true" />
-                    </p>
-                    <p class="text-sm text-gray-500">{{ __('Not enough ratings') }}</p>
+                <div id="ratingBadge" class="flex-grow pr-12">
+                    <a href="#ratingsAndReviews">
+                        <p class="inline-flex font-bold text-orange-500">
+                            {{ number_format($anime->average_rating, 1) }}
+                            <livewire:anime.star-rating :rating="$anime->average_rating" :star-size="'sm'" :disabled="true" />
+                        </p>
+                        <p class="text-sm text-gray-500">{{ __('Not enough ratings') }}</p>
+                    </a>
                 </div>
 
                 @if ($anime->air_season_string)
-                    <div id="badge-2" class="flex-grow px-12 border-l-2">
-                        <p class="font-bold">{{ $anime->air_season_string }}</p>
-                        <p class="text-sm text-gray-500">{{ __('Season') }}</p>
+                    <div id="seasonBadge" class="flex-grow px-12 border-l-2">
+                        <a href="#aired">
+                            <p class="font-bold">{{ $anime->air_season_string }}</p>
+                            <p class="text-sm text-gray-500">{{ __('Season') }}</p>
+                        </a>
                     </div>
                 @endif
 
-                <div id="badge-2" class="flex-grow px-12 border-l-2">
-                    <p class="font-bold">#13</p>
-                    <p class="text-sm text-gray-500">{{ __('Thriller') }}</p>
+                <div id="rankingBadge" class="flex-grow px-12 border-l-2">
+                    <a href="#genres">
+                        <p class="font-bold">#13</p>
+                        <p class="text-sm text-gray-500">{{ __('Thriller') }}</p>
+                    </a>
                 </div>
 
-                <div id="badge-2" class="flex-grow px-12 border-l-2">
-                    <p class="font-bold">{{ $anime->tv_rating->name }}</p>
-                    <p class="text-sm text-gray-500">{{ __('Rated') }}</p>
+                <div id="tvRatingBadge" class="flex-grow px-12 border-l-2">
+                    <a href="#tvRating">
+                        <p class="font-bold">{{ $anime->tv_rating->name }}</p>
+                        <p class="text-sm text-gray-500">{{ __('Rated') }}</p>
+                    </a>
                 </div>
 
                 @if ($anime->studios()->count())
-                    <div id="badge-2" class="flex-grow px-12 border-l-2">
-                        <p class="font-bold">{{ $anime->studios()->first()->name }}</p>
-                        <p class="text-sm text-gray-500">{{ __('Studio') }}</p>
+                    <div id="studioBadge" class="flex-grow px-12 border-l-2">
+                        <a href="#moreByStudio">
+                            <p class="font-bold">{{ $anime->studios()->first()->name }}</p>
+                            <p class="text-sm text-gray-500">{{ __('Studio') }}</p>
+                        </a>
                     </div>
                 @endif
+
+                <div id="languageBadge" class="flex-grow px-12 border-l-2">
+                    <a href="#languages">
+                        <p class="font-bold">{{ strtoupper($anime->languages->first()->code) }}</p>
+                        <p class="text-sm text-gray-500">{{ trans_choice('{0} Language|{1} +:x More Language|[2,*] +:x More Languages', $anime->languages->count() - 1, ['x' => $anime->languages->count() - 1]) }}</p>
+                    </a>
+                </div>
             </section>
 
             @if (!empty($anime->synopsis))
@@ -112,7 +129,7 @@
                 </section>
             @endif
 
-            <section class="pt-5 pb-8 border-t-2">
+            <section id="ratingsAndReviews" class="pt-5 pb-8 border-t-2">
                 <x-section-nav>
                     <x-slot name="title">
                         {{ __('Ratings & Reviews') }}
@@ -142,7 +159,7 @@
                 </x-section-nav>
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-4">
-                    <x-information-list title="{{ __('Type') }}" icon="{{ asset('images/symbols/tv_and_mediabox.svg') }}">
+                    <x-information-list id="type" title="{{ __('Type') }}" icon="{{ asset('images/symbols/tv_and_mediabox.svg') }}">
                         <x-slot name="information">
                             {{ $anime->media_type->name }}
                         </x-slot>
@@ -152,7 +169,7 @@
                         </x-slot>
                     </x-information-list>
 
-                    <x-information-list title="{{ __('Source') }}" icon="{{ asset('images/symbols/target.svg') }}">
+                    <x-information-list id="source" title="{{ __('Source') }}" icon="{{ asset('images/symbols/target.svg') }}">
                         <x-slot name="information">
                             {{ $anime->source->name }}
                         </x-slot>
@@ -162,14 +179,14 @@
                         </x-slot>
                     </x-information-list>
 
-                    <x-information-list title="{{ __('Genres') }}" icon="{{ asset('images/symbols/theatermasks.svg') }}">
+                    <x-information-list id="genres" title="{{ __('Genres') }}" icon="{{ asset('images/symbols/theatermasks.svg') }}">
                         <x-slot name="information">
                             {{ $anime->genres->implode('name', ', ') ?: '-' }}
                         </x-slot>
                     </x-information-list>
 
                     @if (in_array($anime->media_type->name, ['Unknown', 'TV', 'ONA']))
-                        <x-information-list title="{{ __('Episodes') }}" icon="{{ asset('images/symbols/film.svg') }}">
+                        <x-information-list id="episodes" title="{{ __('Episodes') }}" icon="{{ asset('images/symbols/film.svg') }}">
                             <x-slot name="information">
                                 {{ $anime->episode_count }}
                             </x-slot>
@@ -180,7 +197,7 @@
                         </x-information-list>
                     @endif
 
-                    <x-information-list title="{{ __('Duration') }}" icon="{{ asset('images/symbols/hourglass.svg') }}">
+                    <x-information-list id="duration" title="{{ __('Duration') }}" icon="{{ asset('images/symbols/hourglass.svg') }}">
                         <x-slot name="information">
                             {{ $anime->runtime_string ?? '-' }}
                         </x-slot>
@@ -190,12 +207,16 @@
                         </x-slot>
                     </x-information-list>
 
-                    <x-information-list title="{{ __('Broadcast') }}" icon="{{ asset('images/symbols/calendar_badge_clock.svg') }}">
+                    <x-information-list id="broadcast" title="{{ __('Broadcast') }}" icon="{{ asset('images/symbols/calendar_badge_clock.svg') }}">
                         <x-slot name="information">
                             {{ $anime->broadcast }}
                         </x-slot>
 
-                        @if (empty($anime->broadcast))
+                        @if (!empty($anime->last_aired))
+                            <x-slot name="footer">
+                                {{ __('The broadcasting of this series has ended.') }}
+                            </x-slot>
+                        @elseif (empty($anime->broadcast))
                             {{ __('No broadcast data available at the moment.') }}
                         @else
                             <div class="flex flex-col align-center mt-1">
@@ -206,7 +227,7 @@
                         @endif
                     </x-information-list>
 
-                    <x-information-list title="{{ __('Aired') }}" icon="{{ asset('images/symbols/calendar.svg') }}">
+                    <x-information-list id="aired" title="{{ __('Aired') }}" icon="{{ asset('images/symbols/calendar.svg') }}">
                         @if (!empty($anime->first_aired))
                             @if (empty($anime->last_aired))
                                 <x-slot name="information">
@@ -214,7 +235,7 @@
                                 </x-slot>
 
                                 <x-slot name="footer">
-                                    {{ __('The show is :status.', ['status' => strtolower($anime->status->name)]) }}
+                                    {{ __($anime->status->description) }}
                                 </x-slot>
                             @else
                                 <div class="flex flex-col">
@@ -222,21 +243,32 @@
 
                                         @svg('dotted_line', 'fill-current', ['width' => '100%'])
 
-                                        <p class="font-semibold text-2xl text-right">🏁 {{ $anime->last_aired?->toFormattedDateString() }}</p>
+                                        <p class="font-semibold text-2xl text-right">{{ $anime->last_aired?->toFormattedDateString() }} 🏁</p>
                                 </div>
                             @endif
                         @else
-                            {{ __('Airing dates are unknown.') }}
+                            <x-slot name="information">
+                                -
+                            </x-slot>
+                            <x-slot name="footer">
+                                {{ __('Airing dates are unknown.') }}
+                            </x-slot>
                         @endif
                     </x-information-list>
 
-                    <x-information-list title="{{ __('Rating') }}" icon="{{ asset('images/symbols/tv_rating.svg') }}">
+                    <x-information-list id="tvRating" title="{{ __('Rating') }}" icon="{{ asset('images/symbols/tv_rating.svg') }}">
                         <x-slot name="information">
                             {{ $anime->tv_rating->name }}
                         </x-slot>
 
                         <x-slot name="footer">
                             <p class="text-sm">{{ $anime->tv_rating->description }}.</p>
+                        </x-slot>
+                    </x-information-list>
+
+                    <x-information-list id="languages" title="{{ __('Languages') }}" icon="{{ asset('images/symbols/globe.svg') }}">
+                        <x-slot name="information">
+                            {{ $anime->languages->implode('name', ', ') ?: '-' }}
                         </x-slot>
                     </x-information-list>
 

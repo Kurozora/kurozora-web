@@ -32,7 +32,7 @@ class StudioResourceBasic extends JsonResource
                 'name'          => $this->resource->name,
                 'logo'          => StudioImageResource::make($this->resource->logo_url),
                 'about'         => $this->resource->about,
-                'founded'       => $this->resource->founded?->format('Y-m-d'),
+                'founded'       => $this->resource->founded?->timestamp,
                 'websiteUrl'    => $this->resource->website_url,
                 'is_producer'   => $this->whenPivotLoaded(AnimeStudio::TABLE_NAME, function () {
                     return $this->pivot->is_producer;

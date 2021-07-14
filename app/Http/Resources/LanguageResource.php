@@ -2,16 +2,16 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Genre;
+use App\Models\Language;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class GenreResource extends JsonResource
+class LanguageResource extends JsonResource
 {
     /**
      * The resource instance.
      *
-     * @var Genre $resource
+     * @var Language $resource
      */
     public $resource;
 
@@ -25,14 +25,11 @@ class GenreResource extends JsonResource
     {
         return [
             'id'            => $this->resource->id,
-            'type'          => 'genres',
-            'href'          => route('api.genres.details', $this->resource, false),
+            'type'          => 'languages',
+            'href'          => route('api.languages.details', $this->resource, false),
             'attributes'    => [
                 'name'          => $this->resource->name,
-                'color'         => $this->resource->color,
-                'symbol'        => $this->resource->symbol,
-                'description'   => $this->resource->description,
-                'isNSFW'        => (bool) $this->resource->is_nsfw
+                'code'          => $this->resource->code,
             ]
         ];
     }

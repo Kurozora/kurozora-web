@@ -23,19 +23,19 @@ class StatusSeeder extends Seeder
         [
             'type'          => 'anime',
             'name'          => 'Currently Airing',
-            'description'   => 'Airing is ongoing.',
+            'description'   => 'The series is currently ongoing.',
             'color'         => '#22c55e',
         ],
         [
             'type'          => 'anime',
             'name'          => 'Finished Airing',
-            'description'   => 'Airing has come to an end',
+            'description'   => 'The series has come to an end.',
             'color'         => '#ef4444',
         ],
         [
             'type'          => 'anime',
             'name'          => 'On Hiatus',
-            'description'   => 'Airing is on a break for a while.',
+            'description'   => 'The series is on a break for a while.',
             'color'         => '#71717a',
         ],
         [
