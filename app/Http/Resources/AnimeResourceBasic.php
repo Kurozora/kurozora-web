@@ -48,6 +48,7 @@ class AnimeResourceBasic extends JsonResource
                 'tagline'               => $this->resource->tagline,
                 'synopsis'              => $this->resource->synopsis,
                 'genres'                => $this->resource->genres->pluck('name'),
+                'languages'             => LanguageResource::collection($this->resource->languages),
                 'tvRating'              => $this->resource->tv_rating->only(['name', 'description']),
                 'type'                  => $this->resource->media_type->only(['name', 'description']),
                 'source'                => $this->resource->source->only(['name', 'description']),
