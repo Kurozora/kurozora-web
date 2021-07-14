@@ -9,6 +9,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class GenreResource extends JsonResource
 {
     /**
+     * The resource instance.
+     *
+     * @var Genre $resource
+     */
+    public $resource;
+
+    /**
      * Transform the resource into an array.
      *
      * @param  Request  $request
@@ -16,19 +23,16 @@ class GenreResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var Genre $genre */
-        $genre = $this->resource;
-
         return [
-            'id'            => $genre->id,
+            'id'            => $this->resource->id,
             'type'          => 'genres',
-            'href'          => route('api.genres.details', $genre, false),
+            'href'          => route('api.genres.details', $this->resource, false),
             'attributes'    => [
-                'name'          => $genre->name,
-                'color'         => $genre->color,
-                'symbol'        => $genre->symbol,
-                'description'   => $genre->description,
-                'isNSFW'        => (bool) $genre->is_nsfw
+                'name'          => $this->resource->name,
+                'color'         => $this->resource->color,
+                'symbol'        => $this->resource->symbol,
+                'description'   => $this->resource->description,
+                'isNSFW'        => (bool) $this->resource->is_nsfw
             ]
         ];
     }

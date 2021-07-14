@@ -6,13 +6,19 @@ use App\Models\Anime;
 use App\Models\Episode;
 use App\Models\Season;
 use App\Enums\WatchStatus;
-use App\Models\User;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class EpisodeResource extends JsonResource
 {
+    /**
+     * The resource instance.
+     *
+     * @var Episode $resource
+     */
+    public $resource;
+
     /**
      * Transform the resource into an array.
      *
@@ -21,21 +27,18 @@ class EpisodeResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var Episode $episode */
-        $episode = $this->resource;
-
         $resource = [
-            'id'            => $episode->id,
+            'id'            => $this->resource->id,
             'type'          => 'episodes',
-            'href'          => route('api.episodes.details', $episode, false),
+            'href'          => route('api.episodes.details', $this->resource, false),
             'attributes'    => [
-                'previewImage'  => $episode->preview_image,
-                'number'        => $episode->number,
-                'title'         => $episode->title,
-                'synopsis'      => $episode->synopsis,
-                'duration'      => $episode->duration,
-                'firstAired'    => $episode->first_aired->format('j M, Y'),
-                'isVerified'    => (bool) $episode->verified
+                'previewImage'  => $this->resource->preview_image,
+                'number'        => $this->resource->number,
+                'title'         => $this->resource->title,
+                'synopsis'      => $this->resource->synopsis,
+                'duration'      => $this->resource->duration,
+                'firstAired'    => $this->resource->first_aired?->timestamp,
+                'isVerified'    => (bool) $this->resource->verified
             ]
         ];
 
@@ -53,21 +56,17 @@ class EpisodeResource extends JsonResource
      */
     protected function getUserSpecificDetails(): array
     {
-        /** @var Episode $episode */
-        $episode = $this->resource;
-
-        /** @var User $user */
         $user = Auth::user();
 
-        /** @var Season $user */
-        $season = Season::where('id', $episode->season_id)->first();
+        /** @var Season $season */
+        $season = Season::where('id', $this->resource->season_id)->first();
 
         /** @var Anime $anime */
         $anime = $season->anime()->first();
 
         $watchStatus = WatchStatus::Disabled();
         if ($user->isTracking($anime)) {
-            $watchStatus = WatchStatus::fromBool($user->watchedEpisodes()->where('episode_id', $episode->id)->exists());
+            $watchStatus = WatchStatus::fromBool($user->watchedEpisodes()->where('episode_id', $this->resource->id)->exists());
         }
 
         // Return the array
