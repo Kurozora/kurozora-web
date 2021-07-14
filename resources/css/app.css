@@ -33,6 +33,7 @@ input:invalid, textarea:invalid, select:invalid {
 html, body {
   @apply h-full
   w-full;
+  scroll-behavior: smooth;
 }
 
 ul, ol {
