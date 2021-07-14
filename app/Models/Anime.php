@@ -50,6 +50,7 @@ class Anime extends KModel
     const CACHE_KEY_CHARACTERS_SECONDS = 120 * 60;
     const CACHE_KEY_EPISODES_SECONDS = 120 * 60;
     const CACHE_KEY_GENRES_SECONDS = 120 * 60;
+    const CACHE_KEY_LANGUAGES_SECONDS = 120 * 60;
     const CACHE_KEY_RELATIONS_SECONDS = 120 * 60;
     const CACHE_KEY_SEASONS_SECONDS = 120 * 60;
     const CACHE_KEY_STAFF_SECONDS = 120 * 60;
@@ -261,7 +262,7 @@ class Anime extends KModel
      */
     public function getTimeUntilBroadcastAttribute(): string
     {
-        if (empty($this->broadcast)){
+        if (empty($this->broadcast)) {
             return '';
         }
 
@@ -284,10 +285,7 @@ class Anime extends KModel
         $airSeason = $this->air_season_string;
 
         if (!empty($episodesCount)) {
-            $informationSummary .= ' · ' . $episodesCount . match ($episodesCount) {
-                1 => 'ep',
-                default => 'eps',
-            };
+            $informationSummary .= ' · ' . $episodesCount . ' ' . trans_choice('{1} episode|episodes', $episodesCount);
         }
         if (!empty($duration)) {
             $informationSummary .= ' · ' . $duration;
@@ -614,6 +612,32 @@ class Anime extends KModel
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_GENRES_SECONDS, function () {
             return $this->media_genres;
+        });
+    }
+
+    /**
+     * The languages of this Anime
+     *
+     * @return HasManyThrough
+     */
+    public function languages(): HasManyThrough
+    {
+        return $this->hasManyThrough(Language::class, AnimeTranslation::class, 'anime_id', 'code', 'id', 'locale');
+    }
+
+    /**
+     * Returns this anime's languages
+     *
+     * @return mixed
+     */
+    public function getLanguages(): mixed
+    {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'anime.languages', 'id' => $this->id]);
+
+        // Retrieve or save cached result
+        return Cache::remember($cacheKey, self::CACHE_KEY_LANGUAGES_SECONDS, function () {
+            return $this->languages;
         });
     }
 

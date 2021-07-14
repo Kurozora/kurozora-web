@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Kurozora App'),
+    'name' => env('APP_NAME', 'Kurozora'),
 
     /*
     |--------------------------------------------------------------------------
@@ -38,7 +38,7 @@ return [
     | or any other location as required by the application or its packages.
     */
 
-    'version' => '1.2.0-alpha.111',
+    'version' => '1.2.0-alpha.112',
 
     /*
     |--------------------------------------------------------------------------

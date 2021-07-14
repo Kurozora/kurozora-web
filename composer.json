@@ -5,6 +5,7 @@
     "keywords": ["kurozora", "anime", "manga", "character", "actor", "people", "studio", "hentai", "song", "track", "watch"],
     "require": {
         "php": "^8.0",
+        "ext-curl": "*",
         "ext-json": "*",
         "ext-pdo": "*",
         "ext-simplexml": "*",
@@ -12,6 +13,7 @@
         "astrotomic/laravel-translatable": "^11.9",
         "bacon/bacon-qr-code": "^2.0",
         "bensampo/laravel-enum": "^3.0",
+        "beyondcode/laravel-websockets": "^1.12",
         "blade-ui-kit/blade-icons": "^1.0",
         "chaseconey/nova-external-image": "^0.3",
         "codercat/jwk-to-pem": "^1.0",
@@ -35,6 +37,7 @@
         "nicolaslopezj/searchable": "1.*",
         "nikkanetiya/laravel-color-palette": "dev-master",
         "pragmarx/google2fa": "^8.0",
+        "pusher/pusher-php-server": "^5.0",
         "spatie/icalendar-generator": "^2.1",
         "spatie/laravel-activitylog": "^3.9",
         "spatie/laravel-medialibrary": "^9.0",
