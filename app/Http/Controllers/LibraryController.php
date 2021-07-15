@@ -183,14 +183,18 @@ class LibraryController extends Controller
         $user = Auth::user();
 
         // Search for the anime
-        $library = $user->library()
-            ->search($searchQuery)
-            ->limit(Anime::MAX_SEARCH_RESULTS)
-            ->get();
+        $anime = $user->library()
+            ->search($searchQuery, null, true, true)
+            ->paginate(Anime::MAX_SEARCH_RESULTS)
+            ->appends('query', $searchQuery);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
 
         // Show response
         return JSONResult::success([
-            'data' => AnimeResourceBasic::collection($library)
+            'data' => AnimeResourceBasic::collection($anime),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 }

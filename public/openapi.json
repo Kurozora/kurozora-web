@@ -568,6 +568,16 @@
             },
             "required": false,
             "description": "The search query."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
           }
         ],
         "responses": {
@@ -1910,6 +1920,16 @@
             },
             "required": false,
             "description": "The search query."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
           }
         ],
         "responses": {
@@ -3060,6 +3080,16 @@
             },
             "required": false,
             "description": "The search query."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
           }
         ],
         "responses": {

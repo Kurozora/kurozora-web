@@ -36,7 +36,7 @@ class Anime extends KModel
         Translatable;
 
     // Maximum amount of returned search results
-    const MAX_SEARCH_RESULTS = 10;
+    const MAX_SEARCH_RESULTS = 25;
 
     // Minimum ratings required to calculate average
     const MINIMUM_RATINGS_REQUIRED = 30;
@@ -78,13 +78,14 @@ class Anime extends KModel
      */
     protected $searchable = [
         'columns' => [
+            'original_title' => 10,
+            'synonym_titles' => 10,
             'title' => 10,
-            'synopsis' => 5,
         ],
         'joins' => [
-            'anime_translations' => [
-                'animes.id',
-                'anime_translations.anime_id',
+            AnimeTranslation::TABLE_NAME => [
+                Anime::TABLE_NAME . '.id',
+                AnimeTranslation::TABLE_NAME . '.anime_id',
             ],
         ],
     ];
