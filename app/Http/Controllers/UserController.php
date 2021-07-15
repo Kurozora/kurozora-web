@@ -84,13 +84,16 @@ class UserController extends Controller
         $searchQuery = $request->input('query');
 
         // Search for the users
-        $users = User::kSearch($searchQuery, [
-            'limit' => User::MAX_SEARCH_RESULTS
-        ]);
+        $users = User::kSearch($searchQuery)->paginate(User::MAX_SEARCH_RESULTS)
+            ->appends('query', $searchQuery);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $users->nextPageUrl());
 
         // Show response
         return JSONResult::success([
-            'data' => UserResourceBasic::collection($users)
+            'data' => UserResourceBasic::collection($users),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 }
