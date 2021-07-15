@@ -244,13 +244,16 @@ class AnimeController extends Controller
     {
         $searchQuery = $request->input('query');
 
-        // Search for the Anime
-        $resultArr = Anime::kSearch($searchQuery, [
-            'limit' => Anime::MAX_SEARCH_RESULTS
-        ]);
+        // Search for the anime
+        $anime = Anime::kSearch($searchQuery)->paginate(Anime::MAX_SEARCH_RESULTS)
+            ->appends('query', $searchQuery);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
 
         return JSONResult::success([
-            'data' => AnimeResourceBasic::collection($resultArr)
+            'data' => AnimeResourceBasic::collection($anime),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 }

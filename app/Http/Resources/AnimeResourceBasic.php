@@ -45,6 +45,7 @@ class AnimeResourceBasic extends JsonResource
                 'banner'                => AnimeImageResource::make($this->resource->banner()),
                 'originalTitle'         => $this->resource->original_title,
                 'title'                 => $this->resource->title,
+                'synonymTitles'         => $this->resource->synonym_titles,
                 'tagline'               => $this->resource->tagline,
                 'synopsis'              => $this->resource->synopsis,
                 'genres'                => $this->resource->genres->pluck('name'),
