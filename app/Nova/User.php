@@ -11,11 +11,16 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphMany;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Ramsey\Uuid\Uuid;
+use Timothyasp\Color\Color;
 use Vyuldashev\NovaPermission\PermissionBooleanGroup;
 use Vyuldashev\NovaPermission\RoleBooleanGroup;
 
@@ -69,22 +74,76 @@ class User extends Resource
         return [
             ID::make()->sortable(),
 
-            Images::make('Profile Image', 'profile_image_url')
+            Images::make('Profile Image', 'profile')
+                ->showStatistics()
                 ->setFileName(function($originalFilename, $extension, $model) {
-                    return md5($originalFilename) . '.' . $extension;
+                    return Uuid::uuid4() . '.' . $extension;
                 })
                 ->setName(function($originalFilename, $model) {
-                    return md5($originalFilename);
-                }),
+                    return $this->resource->username . ' Profile Image';
+                })
+                ->customPropertiesFields([
+                    Heading::make('Colors (automatically generated if empty)'),
 
-            Images::make('Banner image', 'banner_image_url')
+                    Color::make('Background Color')
+                        ->help('The average background color of the image.'),
+
+                    Color::make('Text Color 1')
+                        ->help('The primary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 2')
+                        ->help('The secondary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 3')
+                        ->help('The tertiary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 4')
+                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
+
+                    Heading::make('Dimensions (automatically generated if empty)'),
+
+                    Number::make('Width')
+                        ->help('The maximum width available for the image.'),
+
+                    Number::make('Height')
+                        ->help('The maximum height available for the image.'),
+                ]),
+
+            Images::make('Banner image', 'banner')
                 ->hideFromIndex()
+                ->showStatistics()
                 ->setFileName(function($originalFilename, $extension, $model) {
-                    return md5($originalFilename) . '.' . $extension;
+                    return Uuid::uuid4() . '.' . $extension;
                 })
                 ->setName(function($originalFilename, $model) {
-                    return md5($originalFilename);
-                }),
+                    return $this->resource->username . ' Banner Image';
+                })
+                ->customPropertiesFields([
+                    Heading::make('Colors (automatically generated if empty)'),
+
+                    Color::make('Background Color')
+                        ->help('The average background color of the image.'),
+
+                    Color::make('Text Color 1')
+                        ->help('The primary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 2')
+                        ->help('The secondary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 3')
+                        ->help('The tertiary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 4')
+                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
+
+                    Heading::make('Dimensions (automatically generated if empty)'),
+
+                    Number::make('Width')
+                        ->help('The maximum width available for the image.'),
+
+                    Number::make('Height')
+                        ->help('The maximum height available for the image.'),
+                ]),
 
             Text::make('Name', 'username')
                 ->sortable()
@@ -232,6 +291,74 @@ class User extends Resource
         }
 
         return $roleString;
+    }
+
+    /**
+     * Return the location to redirect the user after creation.
+     *
+     * @param NovaRequest $request
+     * @param User $resource
+     * @return string
+     */
+    public static function redirectAfterCreate(NovaRequest $request, $resource)
+    {
+        self::generateProfileImageCustomProperties($resource);
+        self::generateBannerImageCustomProperties($resource);
+
+        return parent::redirectAfterCreate($request, $resource);
+    }
+
+    /**
+     * Return the location to redirect the user after update.
+     *
+     * @param NovaRequest $request
+     * @param User $resource
+     * @return string
+     */
+    public static function redirectAfterUpdate(NovaRequest $request, $resource)
+    {
+        self::generateProfileImageCustomProperties($resource);
+        self::generateBannerImageCustomProperties($resource);
+
+        return parent::redirectAfterUpdate($request, $resource);
+    }
+
+    /**
+     * Generates custom properties for the profile image of the resource.
+     *
+     * @param User $resource
+     */
+    static function generateProfileImageCustomProperties(User $resource) {
+        $profileImage = $resource->resource->profile_image;
+
+        if (!empty($profileImage) && empty($profileImage->hasCustomProperty('background_color'))) {
+            // Add color and dimension data to custom properties
+            $colors = $resource->resource->generateColorsFor($profileImage->getPath());
+            $dimensions = $resource->resource->generateDimensionsFor($profileImage->getPath());
+            $customProperties = array_merge($profileImage->custom_properties, $colors, $dimensions);
+            $profileImage->update([
+                'custom_properties' => $customProperties
+            ]);
+        }
+    }
+
+    /**
+     * Generates custom properties for the banner image of the resource.
+     *
+     * @param User $resource
+     */
+    static function generateBannerImageCustomProperties(User $resource) {
+        $bannerImage = $resource->resource->banner_image;
+
+        if (!empty($bannerImage) && empty($bannerImage->hasCustomProperty('background_color'))) {
+            // Add color and dimension data to custom properties
+            $colors = $resource->resource->generateColorsFor($bannerImage->getPath());
+            $dimensions = $resource->resource->generateDimensionsFor($bannerImage->getPath());
+            $customProperties = array_merge($bannerImage->custom_properties, $colors, $dimensions);
+            $bannerImage->update([
+                'custom_properties' => $customProperties
+            ]);
+        }
     }
 
     /**

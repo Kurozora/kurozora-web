@@ -2,15 +2,25 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
+use App\Traits\InteractsWithMediaExtension;
+use App\Traits\Model\HasProfileImage;
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Studio extends KModel
+class Studio extends KModel implements HasMedia
 {
-    use HasFactory;
+    use HasFactory,
+        HasProfileImage,
+        InteractsWithMedia,
+        InteractsWithMediaExtension;
+
+    // Maximum relationships fetch limit
+    const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
 
     // How long to cache certain responses
     const CACHE_KEY_ANIME_SECONDS = 120 * 60;
@@ -26,7 +36,27 @@ class Studio extends KModel
      */
     protected $casts = [
         'founded' => 'date',
+        'website_urls' => AsArrayObject::class,
     ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'profile_image',
+        'profile_image_url',
+    ];
+
+    /**
+     * Registers the media collections for the model.
+     */
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection($this->profileImageCollectionName)
+            ->singleFile();
+    }
 
     /**
      * Returns the anime that belongs to the studio

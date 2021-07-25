@@ -2,16 +2,21 @@
 
 namespace App\Models;
 
+use App\Traits\Model\HasProfileImage;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Person extends KModel
+class Person extends KModel implements HasMedia
 {
-    use HasFactory;
+    use HasFactory,
+        HasProfileImage,
+        InteractsWithMedia;
 
     // Maximum relationships fetch limit
     const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
@@ -43,7 +48,18 @@ class Person extends KModel
     protected $appends = [
         'full_name',
         'full_given_name',
+        'profile_image',
+        'profile_image_url',
     ];
+
+    /**
+     * Registers the media collections for the model.
+     */
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection($this->profileImageCollectionName)
+            ->singleFile();
+    }
 
     /**
      * Returns the full name of the person.

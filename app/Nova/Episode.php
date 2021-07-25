@@ -3,14 +3,19 @@
 namespace App\Nova;
 
 use Chaseconey\ExternalImage\ExternalImage;
+use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Ramsey\Uuid\Uuid;
+use Timothyasp\Color\Color;
 
 class Episode extends Resource
 {
@@ -60,21 +65,65 @@ class Episode extends Resource
     public function fields(Request $request): array
     {
         return [
+            Heading::make('Identification'),
+
             ID::make()->sortable(),
+
+            Heading::make('Media'),
+
+            Images::make('Banner')
+                ->showStatistics()
+                ->setFileName(function($originalFilename, $extension, $model) {
+                    return Uuid::uuid4() . '.' . $extension;
+                })
+                ->setName(function($originalFilename, $model) {
+                    return $this->resource->title;
+                })
+                ->customPropertiesFields([
+                    Heading::make('Colors (automatically generated if empty)'),
+
+                    Color::make('Background Color')
+                        ->help('The average background color of the image.'),
+
+                    Color::make('Text Color 1')
+                        ->help('The primary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 2')
+                        ->help('The secondary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 3')
+                        ->help('The tertiary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 4')
+                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
+
+                    Heading::make('Dimensions (automatically generated if empty)'),
+
+                    Number::make('Width')
+                        ->help('The maximum width available for the image.'),
+
+                    Number::make('Height')
+                        ->help('The maximum height available for the image.'),
+                ]),
+
+            Heading::make('Meta information'),
 
             BelongsTo::make('Season')
                 ->searchable()
                 ->sortable(),
 
-            ExternalImage::make('Preview Image')
-                ->width(240)
-                ->help('A link to a preview image of the episode.'),
-
             Number::make('Number')
+                ->sortable()
                 ->rules('required')
-                ->help('The episode number of the episode.'),
+                ->help('The number of the episode in the current season.'),
+
+            Number::make('Total Number')
+                ->sortable()
+                ->rules('required')
+                ->help('The total number of the episode in regard to past episodes.'),
 
             Text::make('Title')
+                ->sortable()
                 ->required()
                 ->help('The real title of the episode. If unknown, then use "Episode #" as the title in the respective locale.')
                 ->translatable(),
@@ -92,7 +141,7 @@ class Episode extends Resource
             Number::make('Duration')
                 ->rules('required')
                 ->sortable()
-                ->help('The duration of the episode in minutes. Usually the same as the duration of the anime, but can be different in special cases.'),
+                ->help('The duration of the episode in <b>seconds</b>. Usually the same as the duration of the anime, but can be different in special cases.'),
 
             Boolean::make('Verified')
                 ->help('Check the box if the information is correct.'),
@@ -153,6 +202,53 @@ class Episode extends Resource
     public function actions(Request $request): array
     {
         return [];
+    }
+
+    /**
+     * Return the location to redirect the user after creation.
+     *
+     * @param NovaRequest $request
+     * @param Episode $resource
+     * @return string
+     */
+    public static function redirectAfterCreate(NovaRequest $request, $resource)
+    {
+        self::generateBannerImageCustomProperties($resource);
+
+        return parent::redirectAfterCreate($request, $resource);
+    }
+
+    /**
+     * Return the location to redirect the user after update.
+     *
+     * @param NovaRequest $request
+     * @param Episode $resource
+     * @return string
+     */
+    public static function redirectAfterUpdate(NovaRequest $request, $resource)
+    {
+        self::generateBannerImageCustomProperties($resource);
+
+        return parent::redirectAfterUpdate($request, $resource);
+    }
+
+    /**
+     * Generates custom properties for the banner image of the resource.
+     *
+     * @param Episode $resource
+     */
+    static function generateBannerImageCustomProperties(Episode $resource) {
+        $bannerImage = $resource->resource->banner_image;
+
+        if (!empty($bannerImage) && empty($bannerImage->hasCustomProperty('background_color'))) {
+            // Add color and dimension data to custom properties
+            $colors = $resource->resource->generateColorsFor($bannerImage->getPath());
+            $dimensions = $resource->resource->generateDimensionsFor($bannerImage->getPath());
+            $customProperties = array_merge($bannerImage->custom_properties, $colors, $dimensions);
+            $bannerImage->update([
+                'custom_properties' => $customProperties
+            ]);
+        }
     }
 
     /**
