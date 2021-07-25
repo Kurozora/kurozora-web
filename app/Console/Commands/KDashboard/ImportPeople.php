@@ -21,7 +21,7 @@ class ImportPeople extends Command
      *
      * @var string
      */
-    protected $description = 'Imports the people from the KDashboard database';
+    protected $description = 'Imports the people from the KDashboard database.';
 
     /**
      * Create a new command instance.
