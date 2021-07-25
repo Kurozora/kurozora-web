@@ -20,13 +20,13 @@ class Session extends KModel
     const VALID_FOR_DAYS = 10;
 
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be cast.
      *
      * @var array
      */
-    protected $dates = [
-        'expires_at',
-        'last_activity_at'
+    protected $casts = [
+        'expires_at' => 'date',
+        'last_activity_at' => 'date',
     ];
 
     /**
