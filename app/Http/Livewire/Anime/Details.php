@@ -90,7 +90,7 @@ class Details extends Component
         $this->setupActions();
 
         $this->page['title'] = $anime->original_title;
-        $this->page['image'] = $anime->poster()->url ?? asset('images/static/placeholders/anime_poster.jpg');
+        $this->page['image'] = $anime->poster_image_url ?? asset('images/static/placeholders/anime_poster.jpg');
     }
 
     /**
