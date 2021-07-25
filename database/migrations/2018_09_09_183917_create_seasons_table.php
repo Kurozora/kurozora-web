@@ -21,6 +21,7 @@ class CreateSeasonsTable extends Migration
             $table->integer('number');
             $table->string('poster_url')->nullable();
             $table->dateTime('first_aired')->nullable();
+            $table->dateTime('last_aired')->nullable();
             $table->timestamps();
         });
 

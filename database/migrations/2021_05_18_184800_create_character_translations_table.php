@@ -21,7 +21,7 @@ class CreateCharacterTranslationsTable extends Migration
             $table->unsignedBigInteger('character_id');
             $table->string('locale', 2)->index();
             $table->string('name');
-            $table->text('about');
+            $table->text('about')->nullable();
             $table->timestamps();
         });
 

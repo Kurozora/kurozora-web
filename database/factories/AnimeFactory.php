@@ -76,7 +76,7 @@ class AnimeFactory extends Factory
             'status_id'         => $status,
             'first_aired'       => $firstAired,
             'last_aired'        => $lastAired,
-            'runtime'           => $this->faker->numberBetween(10, 25),
+            'duration'          => $this->faker->numberBetween(10, 25),
             'air_time'          => $this->faker->time(),
             'air_day'           => DayOfWeek::getRandomValue(),
             'is_nsfw'           => $this->faker->boolean,
