@@ -19,14 +19,17 @@ class ImportStudioProcessor
         foreach ($kStudios as $kStudio) {
             $studio = Studio::where([
                 ['mal_id', $kStudio->id],
-                ['type', $kStudio->type],
-                ['name', $kStudio->name]
+                ['type', $kStudio->type]
             ])->first();
 
             if (empty($studio)) {
                 Studio::create([
                     'mal_id' => $kStudio->id,
                     'type' => $kStudio->type,
+                    'name' => $kStudio->name,
+                ]);
+            } else {
+                $studio->update([
                     'name' => $kStudio->name,
                 ]);
             }

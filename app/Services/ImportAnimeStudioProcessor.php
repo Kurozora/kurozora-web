@@ -25,19 +25,21 @@ class ImportAnimeStudioProcessor
                 ['mal_id', $kAnimeProducer->producer_id],
             ]);
 
-            $animeStudio = AnimeStudio::firstWhere([
-                ['anime_id', $anime->id],
-                ['studio_id', $studio->id],
-            ]);
-
-            if (empty($animeStudio)) {
-                AnimeStudio::create([
-                    'anime_id' => $anime->id,
-                    'studio_id' => $studio->id,
-                    'is_licensor' => $kAnimeProducer->is_licensor,
-                    'is_producer' => $kAnimeProducer->getIsProducer(),
-                    'is_studio' => $kAnimeProducer->is_studio,
+            if (!empty($studio)) {
+                $animeStudio = AnimeStudio::firstWhere([
+                    ['anime_id', $anime->id],
+                    ['studio_id', $studio->id],
                 ]);
+
+                if (empty($animeStudio)) {
+                    AnimeStudio::create([
+                        'anime_id' => $anime->id,
+                        'studio_id' => $studio->id,
+                        'is_licensor' => $kAnimeProducer->is_licensor,
+                        'is_producer' => $kAnimeProducer->getIsProducer(),
+                        'is_studio' => $kAnimeProducer->is_studio,
+                    ]);
+                }
             }
         }
     }
