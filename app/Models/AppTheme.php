@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use App\Traits\MediaLibraryExtensionTrait;
+use App\Traits\InteractsWithMediaExtension;
+use App\Traits\Model\HasScreenshotImage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\View;
 use Spatie\MediaLibrary\HasMedia;
@@ -11,8 +12,9 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class AppTheme extends KModel implements HasMedia
 {
     use HasFactory,
+        HasScreenshotImage,
         InteractsWithMedia,
-        MediaLibraryExtensionTrait;
+        InteractsWithMediaExtension;
 
     // Table name
     const TABLE_NAME = 'app_themes';
@@ -24,7 +26,8 @@ class AppTheme extends KModel implements HasMedia
      * @var array
      */
     protected $appends = [
-        'screenshot'
+        'screenshot_image',
+        'screenshot_image_url',
     ];
 
     /**
@@ -39,24 +42,5 @@ class AppTheme extends KModel implements HasMedia
         ]);
 
         return $view->render();
-    }
-
-    /**
-     * Returns the theme's screenshot.
-     *
-     * @return string
-     */
-    public function getScreenshotAttribute(): string
-    {
-        return $this->getFirstMediaFullUrl('screenshot');
-    }
-
-    /**
-     * Registers the media collections for the model.
-     */
-    public function registerMediaCollections(): void
-    {
-        $this->addMediaCollection('screenshot')
-            ->singleFile();
     }
 }

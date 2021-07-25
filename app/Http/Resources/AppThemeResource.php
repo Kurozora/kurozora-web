@@ -9,6 +9,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class AppThemeResource extends JsonResource
 {
     /**
+     * The resource instance.
+     *
+     * @var AppTheme $resource
+     */
+    public $resource;
+
+    /**
      * Transform the resource into an array.
      *
      * @param  Request  $request
@@ -16,17 +23,14 @@ class AppThemeResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var AppTheme $theme */
-        $theme = $this->resource;
-
         return [
-            'id'            => $theme->id,
+            'id'            => $this->resource->id,
             'type'          => 'themes',
-            'href'          => route('api.themes.details', $theme, false),
+            'href'          => route('api.themes.details', $this->resource, false),
             'attributes'        => [
-                'name'          => $theme->name,
-                'screenshot'    => $theme->screenshot,
-                'downloadLink'  => route('api.themes.download', ['theme' => $theme->id])
+                'screenshot'    => ImageResource::make($this->resource->screenshot_image),
+                'name'          => $this->resource->name,
+                'downloadLink'  => route('api.themes.download', ['theme' => $this->resource->id])
             ]
         ];
     }
