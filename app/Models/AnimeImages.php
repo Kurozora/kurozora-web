@@ -3,10 +3,9 @@
 namespace App\Models;
 
 use ColorPalette;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class AnimeImages extends Model
+class AnimeImages extends KModel
 {
     // Table name
     const TABLE_NAME = 'anime_images';
@@ -23,8 +22,9 @@ class AnimeImages extends Model
 
         static::saving(function(AnimeImages $animeImage) {
             if (!$animeImage->background_color || $animeImage->isDirty('url')) {
-                if ($animeImage->isDirty('url'))
+                if ($animeImage->isDirty('url')) {
                     static::generateDimensionsFor($animeImage);
+                }
 
                 static::generateColorsFor($animeImage);
             }

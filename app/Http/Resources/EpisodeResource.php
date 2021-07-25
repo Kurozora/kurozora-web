@@ -32,11 +32,12 @@ class EpisodeResource extends JsonResource
             'type'          => 'episodes',
             'href'          => route('api.episodes.details', $this->resource, false),
             'attributes'    => [
-                'previewImage'  => $this->resource->preview_image,
+                'banner'        => ImageResource::make($this->resource->banner_image),
                 'number'        => $this->resource->number,
+                'numberTotal'   => $this->resource->number_total,
                 'title'         => $this->resource->title,
                 'synopsis'      => $this->resource->synopsis,
-                'duration'      => $this->resource->duration,
+                'duration'      => $this->resource->duration_string,
                 'firstAired'    => $this->resource->first_aired?->timestamp,
                 'isVerified'    => (bool) $this->resource->verified
             ]
