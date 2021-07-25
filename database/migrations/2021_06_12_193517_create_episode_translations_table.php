@@ -21,7 +21,7 @@ class CreateEpisodeTranslationsTable extends Migration
             $table->unsignedBigInteger('episode_id');
             $table->string('locale', 2)->index();
             $table->string('title');
-            $table->text('synopsis');
+            $table->text('synopsis')->nullable();
             $table->timestamps();
         });
 

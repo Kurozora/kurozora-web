@@ -21,8 +21,9 @@ class CreateStudioTable extends Migration
             $table->string('name');
             $table->string('logo_url')->nullable();
             $table->mediumText('about')->nullable();
+            $table->mediumText('address')->nullable();
             $table->date('founded')->nullable();
-            $table->string('website_url')->nullable();
+            $table->json('website_urls')->nullable();
             $table->timestamps();
         });
 
