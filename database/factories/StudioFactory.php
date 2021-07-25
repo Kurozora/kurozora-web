@@ -26,8 +26,9 @@ class StudioFactory extends Factory
             'type'          => 'anime',
             'logo_url'      => $this->faker->imageUrl(),
             'about'         => $this->faker->realText(),
+            'address'       => $this->faker->address(),
             'founded'       => $this->faker->date(),
-            'website_url'   => $this->faker->url,
+            'website_urls'  => $this->faker->randomElement([[$this->faker->url], null]),
             'created_at'    => now(),
             'updated_at'    => now(),
         ];

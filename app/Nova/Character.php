@@ -3,7 +3,7 @@
 namespace App\Nova;
 
 use App\Enums\AstrologicalSign;
-use Chaseconey\ExternalImage\ExternalImage;
+use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Code;
@@ -14,6 +14,9 @@ use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Ramsey\Uuid\Uuid;
+use Timothyasp\Color\Color;
 
 class Character extends Resource
 {
@@ -65,11 +68,45 @@ class Character extends Resource
         return [
             ID::make()->sortable(),
 
+            Heading::make('Media'),
+
+            Images::make('Profile Image', 'profile')
+                ->showStatistics()
+                ->setFileName(function($originalFilename, $extension, $model) {
+                    return Uuid::uuid4() . '.' . $extension;
+                })
+                ->setName(function($originalFilename, $model) {
+                    return $this->resource->name;
+                })
+                ->customPropertiesFields([
+                    Heading::make('Colors (automatically generated if empty)'),
+
+                    Color::make('Background Color')
+                        ->help('The average background color of the image.'),
+
+                    Color::make('Text Color 1')
+                        ->help('The primary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 2')
+                        ->help('The secondary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 3')
+                        ->help('The tertiary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 4')
+                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
+
+                    Heading::make('Dimensions (automatically generated if empty)'),
+
+                    Number::make('Width')
+                        ->help('The maximum width available for the image.'),
+
+                    Number::make('Height')
+                        ->help('The maximum height available for the image.'),
+                ]),
+
             Heading::make('Personal Information')
                 ->onlyOnForms(),
-
-            ExternalImage::make('Image')
-                ->width(128),
 
             Text::make('Name')
                 ->rules('required')
@@ -227,6 +264,53 @@ class Character extends Resource
     public function actions(Request $request): array
     {
         return [];
+    }
+
+    /**
+     * Return the location to redirect the user after creation.
+     *
+     * @param NovaRequest $request
+     * @param Character $resource
+     * @return string
+     */
+    public static function redirectAfterCreate(NovaRequest $request, $resource)
+    {
+        self::generateProfileImageCustomProperties($resource);
+
+        return parent::redirectAfterCreate($request, $resource);
+    }
+
+    /**
+     * Return the location to redirect the user after update.
+     *
+     * @param NovaRequest $request
+     * @param Character $resource
+     * @return string
+     */
+    public static function redirectAfterUpdate(NovaRequest $request, $resource)
+    {
+        self::generateProfileImageCustomProperties($resource);
+
+        return parent::redirectAfterUpdate($request, $resource);
+    }
+
+    /**
+     * Generates custom properties for the profile image of the resource.
+     *
+     * @param Character $resource
+     */
+    static function generateProfileImageCustomProperties(Character $resource) {
+        $profileImage = $resource->resource->profile_image;
+
+        if (!empty($profileImage) && empty($profileImage->hasCustomProperty('background_color'))) {
+            // Add color and dimension data to custom properties
+            $colors = $resource->resource->generateColorsFor($profileImage->getPath());
+            $dimensions = $resource->resource->generateDimensionsFor($profileImage->getPath());
+            $customProperties = array_merge($profileImage->custom_properties, $colors, $dimensions);
+            $profileImage->update([
+                'custom_properties' => $customProperties
+            ]);
+        }
     }
 
     /**

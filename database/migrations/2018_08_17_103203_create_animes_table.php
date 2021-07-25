@@ -43,7 +43,7 @@ class CreateAnimesTable extends Migration
             $table->string('video_url')->nullable();
             $table->date('first_aired')->nullable();
             $table->date('last_aired')->nullable();
-            $table->unsignedMediumInteger('runtime')->default(0);
+            $table->unsignedMediumInteger('duration')->default(0);
             $table->time('air_time')->nullable();
             $table->unsignedTinyInteger('air_day')->nullable();
             $table->unsignedTinyInteger('air_season')->nullable();
