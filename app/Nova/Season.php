@@ -2,13 +2,18 @@
 
 namespace App\Nova;
 
-use Chaseconey\ExternalImage\ExternalImage;
+use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Ramsey\Uuid\Uuid;
+use Timothyasp\Color\Color;
 
 class Season extends Resource
 {
@@ -58,11 +63,50 @@ class Season extends Resource
     public function fields(Request $request): array
     {
         return [
+            Heading::make('Identification')
+            ->hideWhenCreating()
+            ->hideWhenUpdating(),
+
             ID::make()->sortable(),
 
-            ExternalImage::make('Poster URL')
-                ->width(240)
-                ->help('A link to a poster image of the season.'),
+            Heading::make('Media'),
+
+            Images::make('Poster')
+                ->showStatistics()
+                ->setFileName(function($originalFilename, $extension, $model) {
+                    return Uuid::uuid4() . '.' . $extension;
+                })
+                ->setName(function($originalFilename, $model) {
+                    return $this->resource->title;
+                })
+                ->customPropertiesFields([
+                    Heading::make('Colors (automatically generated if empty)'),
+
+                    Color::make('Background Color')
+                        ->help('The average background color of the image.'),
+
+                    Color::make('Text Color 1')
+                        ->help('The primary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 2')
+                        ->help('The secondary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 3')
+                        ->help('The tertiary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 4')
+                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
+
+                    Heading::make('Dimensions (automatically generated if empty)'),
+
+                    Number::make('Width')
+                        ->help('The maximum width available for the image.'),
+
+                    Number::make('Height')
+                        ->help('The maximum height available for the image.'),
+                ]),
+
+            Heading::make('Meta information'),
 
             BelongsTo::make('Anime')
                 ->searchable()
@@ -74,10 +118,14 @@ class Season extends Resource
                 ->hideFromIndex()
                 ->help('The sequence in which the season starts.'),
 
-            Text::make('Title', 'title')
+            Text::make('Title')
                 ->sortable()
                 ->required()
                 ->translatable('Usually the name of the arc of the story. If unknown, use "Season #" as the title.'),
+
+            Textarea::make('Synopsis')
+                ->help('A short description of the Season.')
+                ->translatable(),
 
             HasMany::make('Episodes'),
         ];
@@ -142,6 +190,53 @@ class Season extends Resource
     public function actions(Request $request): array
     {
         return [];
+    }
+
+    /**
+     * Return the location to redirect the user after creation.
+     *
+     * @param NovaRequest $request
+     * @param Season $resource
+     * @return string
+     */
+    public static function redirectAfterCreate(NovaRequest $request, $resource)
+    {
+        self::generatePosterImageCustomProperties($resource);
+
+        return parent::redirectAfterCreate($request, $resource);
+    }
+
+    /**
+     * Return the location to redirect the user after update.
+     *
+     * @param NovaRequest $request
+     * @param Season $resource
+     * @return string
+     */
+    public static function redirectAfterUpdate(NovaRequest $request, $resource)
+    {
+        self::generatePosterImageCustomProperties($resource);
+
+        return parent::redirectAfterUpdate($request, $resource);
+    }
+
+    /**
+     * Generates custom properties for the poster image of the resource.
+     *
+     * @param Season $resource
+     */
+    static function generatePosterImageCustomProperties(Season $resource) {
+        $posterImage = $resource->resource->poster_image;
+
+        if (!empty($posterImage) && empty($posterImage->hasCustomProperty('background_color'))) {
+            // Add color and dimension data to custom properties
+            $colors = $resource->resource->generateColorsFor($posterImage->getPath());
+            $dimensions = $resource->resource->generateDimensionsFor($posterImage->getPath());
+            $customProperties = array_merge($posterImage->custom_properties, $colors, $dimensions);
+            $posterImage->update([
+                'custom_properties' => $customProperties
+            ]);
+        }
     }
 
     /**

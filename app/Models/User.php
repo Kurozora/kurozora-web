@@ -7,10 +7,10 @@ use App\Helpers\OptionsBag;
 use App\Jobs\FetchSessionLocation;
 use App\Notifications\NewSession;
 use App\Traits\HeartActionTrait;
-use App\Traits\MediaLibraryExtensionTrait;
+use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Searchable;
-use App\Traits\User\HasBannerImage;
-use App\Traits\User\HasProfileImage;
+use App\Traits\Model\HasBannerImage;
+use App\Traits\Model\HasProfileImage;
 use App\Traits\Web\Auth\TwoFactorAuthenticatable;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
 use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
@@ -47,8 +47,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         HasRoles,
         HeartActionTrait,
         InteractsWithMedia,
+        InteractsWithMediaExtension,
         LogsActivity,
-        MediaLibraryExtensionTrait,
         Notifiable,
         Reacterable,
         Searchable,
@@ -87,21 +87,13 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     protected $guarded = [];
 
     /**
-     * The attributes that should be cast to dates.
-     *
-     * @var array
-     */
-    protected $dates = [
-        'last_mal_import_at'
-    ];
-
-    /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
     protected $casts = [
-        'settings' => 'json'
+        'last_mal_import_at' => 'date',
+        'settings' => 'json',
     ];
 
     /**
@@ -113,7 +105,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         'profile_image',
         'profile_image_url',
         'banner_image',
-        'banner_image_url'
+        'banner_image_url',
     ];
 
     /**
@@ -123,23 +115,22 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     protected $searchable = [
         'columns' => [
-            'username' => 10
+            'username' => 10,
         ]
     ];
 
     /**
-     * The name of the banner image media collection.
-     *
-     * @var string $bannerImageCollectionName
+     * Registers the media collections for the model.
      */
-    protected string $bannerImageCollectionName = 'banner';
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection($this->profileImageCollectionName)
+            ->singleFile()
+            ->useFallbackUrl('https://ui-avatars.com/api/?name=' . $this->username . '&color=000000&background=e0e0e0&length=1&bold=true');
 
-    /**
-     * The name of the profile image media collection.
-     *
-     * @var string $profileImageCollectionName
-     */
-    protected string $profileImageCollectionName = 'profile';
+        $this->addMediaCollection($this->bannerImageCollectionName)
+            ->singleFile();
+    }
 
     /**
      * Returns the anime ratings the user has.
@@ -195,20 +186,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     function sessions(): HasMany
     {
         return $this->hasMany(Session::class);
-    }
-
-    /**
-     * Registers the media collections for the model.
-     */
-    public function registerMediaCollections(): void
-    {
-        $this->addMediaCollection($this->profileImageCollectionName)
-            ->singleFile()
-            ->useFallbackUrl('https://ui-avatars.com/api/?name=' . $this->username . '&color=000000&background=e0e0e0&length=1&bold=true');
-
-        $this->addMediaCollection($this->bannerImageCollectionName)
-            ->singleFile()
-            ->withResponsiveImages();
     }
 
     /**
@@ -269,9 +246,9 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
 
                 foreach ($episodes as $episode) {
                     $uniqueIdentifier = Uuid::uuid4() . '@kurozora.app';
-                    $eventName = $anime->title . ' Episode ' . $episode->number;
+                    $eventName = $anime->title . ' Episode ' . $episode->number_total;
                     $startsAt = $episode->first_aired->setTimezone('Asia/Tokyo');
-                    $endsAt = $episode->first_aired->addMinutes($anime->runtime)->setTimezone('Asia/Tokyo');
+                    $endsAt = $episode->first_aired->addSeconds($anime->duration)->setTimezone('Asia/Tokyo');
 
                     // Create event
                     $calendarEvent = Event::create($eventName)

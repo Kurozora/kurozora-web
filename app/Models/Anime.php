@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use App\Enums\AnimeImageType;
 use App\Enums\DayOfWeek;
 use App\Enums\SeasonOfYear;
+use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Searchable;
+use App\Traits\Model\HasBannerImage;
+use App\Traits\Model\HasPosterImage;
 use Astrotomic\Translatable\Translatable;
 use Auth;
 use Carbon\Carbon;
@@ -24,13 +26,19 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Request;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Anime extends KModel
+class Anime extends KModel implements HasMedia
 {
-    use HasFactory,
+    use HasBannerImage,
+        HasFactory,
+        HasPosterImage,
         HasSlug,
+        InteractsWithMedia,
+        InteractsWithMediaExtension,
         LogsActivity,
         Searchable,
         Translatable;
@@ -109,9 +117,14 @@ class Anime extends KModel
     protected $appends = [
         'air_season_string',
         'air_time_utc',
+        'banner_image',
+        'banner_image_url',
         'broadcast',
+        'duration_string',
+        'duration_total',
         'information_summary',
-        'runtime_string',
+        'poster_image',
+        'poster_image_url',
         'time_until_broadcast',
     ];
 
@@ -169,6 +182,19 @@ class Anime extends KModel
     }
 
     /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName(): string
+    {
+        if (Request::wantsJson()) {
+            return parent::getRouteKeyName();
+        }
+        return 'slug';
+    }
+
+    /**
      * Get the options for generating the slug.
      *
      * @return SlugOptions
@@ -181,16 +207,15 @@ class Anime extends KModel
     }
 
     /**
-     * Get the route key for the model.
-     *
-     * @return string
+     * Registers the media collections for the model.
      */
-    public function getRouteKeyName(): string
+    public function registerMediaCollections(): void
     {
-        if (Request::wantsJson()) {
-            return parent::getRouteKeyName();
-        }
-        return 'slug';
+        $this->addMediaCollection($this->posterImageCollectionName)
+            ->singleFile();
+
+        $this->addMediaCollection($this->bannerImageCollectionName)
+            ->singleFile();
     }
 
     /**
@@ -281,7 +306,7 @@ class Anime extends KModel
     {
         $informationSummary = $this->media_type->name . ' · ' . $this->tv_rating->name;
         $episodesCount = $this->episode_count ?? null;
-        $duration = $this->runtime_string;
+        $duration = $this->duration_string;
         $firstAiredYear = $this->first_aired;
         $airSeason = $this->air_season_string;
 
@@ -304,25 +329,25 @@ class Anime extends KModel
      * @return string
      * @throws Exception
      */
-    public function getRuntimeStringAttribute(): string
+    public function getDurationStringAttribute(): string
     {
-        $runtime = $this->runtime ?? 0;
+        $runtime = $this->duration ?? 0;
         return CarbonInterval::seconds($runtime)->cascade()->forHumans();
     }
 
     /**
-     * Get the total runtime of the anime. (runtime * episodes)
+     * Get the total runtime of the anime. (duration * episodes)
      *
      * @return string
      * @throws Exception
      */
-    public function getRuntimeTotalAttribute(): string
+    public function getDurationTotalAttribute(): string
     {
         if (empty($this->episode_count)) {
-            return $this->runtime_string;
+            return $this->duration_string;
         }
 
-        return CarbonInterval::seconds($this->runtime * $this->episode_count)->cascade()->forHumans();
+        return CarbonInterval::seconds($this->duration * $this->episode_count)->cascade()->forHumans();
     }
 
     /**
@@ -415,36 +440,6 @@ class Anime extends KModel
     public function ratings(): HasMany
     {
         return $this->hasMany(AnimeRating::class, 'anime_id', 'id');
-    }
-
-    /**
-     * Get the Anime's images
-     *
-     * @return HasMany
-     */
-    public function anime_images(): HasMany
-    {
-        return $this->hasMany(AnimeImages::class);
-    }
-
-    /**
-     * Get the Anime's poster
-     *
-     * @return ?HasMany
-     */
-    public function poster(): ?HasMany
-    {
-        return $this->hasMany(AnimeImages::class, 'anime_id', 'id')->firstWhere('type', '=', AnimeImageType::Poster);
-    }
-
-    /**
-     * Get the Anime's banner
-     *
-     * @return ?HasMany
-     */
-    public function banner(): ?HasMany
-    {
-        return $this->hasMany(AnimeImages::class, 'anime_id', 'id')->firstWhere('type', '=', AnimeImageType::Banner);
     }
 
     /**
@@ -541,16 +536,20 @@ class Anime extends KModel
      *
      * @param int $limit
      * @param int $page
+     * @param bool $reversed
      * @return mixed
      */
-    public function getSeasons(int $limit = 25, int $page = 1): mixed
+    public function getSeasons(int $limit = 25, int $page = 1, bool $reversed = false): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.seasons', 'id' => $this->id, 'limit' => $limit, 'page' => $page]);
+        $cacheKey = self::cacheKey(['name' => 'anime.seasons', 'id' => $this->id, 'limit' => $limit, 'page' => $page, 'reversed' => $reversed]);
 
         // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_SEASONS_SECONDS, function () use ($limit) {
-            return $this->seasons()->paginate($limit);
+        return Cache::remember($cacheKey, self::CACHE_KEY_SEASONS_SECONDS, function () use ($reversed, $limit) {
+            if ($reversed) {
+                return $this->seasons()->orderByDesc('number')->paginate($limit);
+            }
+            return $this->seasons()->orderBy('number')->paginate($limit);
         });
     }
 
