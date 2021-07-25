@@ -29,11 +29,11 @@ class CharacterResourceBasic extends JsonResource
             'type'          => 'characters',
             'href'          => route('api.characters.details', $this->resource, false),
             'attributes'    => [
+                'profile'           => ImageResource::make($this->resource->profile_image),
                 'name'              => $this->resource->name,
                 'japaneseName'      => $this->resource->getTranslation('ja')->name,
                 'nicknames'         => $this->resource->nicknames,
                 'about'             => $this->resource->about,
-                'imageURL'          => $this->resource->image,
                 'debut'             => $this->resource->debut,
                 'status'            => $this->resource->status,
                 'bloodType'         => $this->resource->blood_type,

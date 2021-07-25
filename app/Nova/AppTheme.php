@@ -6,7 +6,9 @@ use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
+use Ramsey\Uuid\Uuid;
 use Timothyasp\Color\Color;
 
 class AppTheme extends Resource
@@ -57,18 +59,51 @@ class AppTheme extends Resource
     public function fields(Request $request): array
     {
         return [
+            Heading::make('Identification'),
+
             ID::make()->sortable(),
 
+            Heading::make('Media'),
+
             Images::make('Screenshot')
+                ->showStatistics()
                 ->setFileName(function($originalFilename, $extension, $model) {
-                    return md5($originalFilename) . '.' . $extension;
+                    return Uuid::uuid4() . '.' . $extension;
                 })
                 ->setName(function($originalFilename, $model) {
-                    return md5($originalFilename);
+                    return $this->resource->name;
                 })
-                ->required()
+                ->customPropertiesFields([
+                    Heading::make('Colors (automatically generated if empty)'),
+
+                    Color::make('Background Color')
+                        ->help('The average background color of the image.'),
+
+                    Color::make('Text Color 1')
+                        ->help('The primary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 2')
+                        ->help('The secondary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 3')
+                        ->help('The tertiary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 4')
+                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
+
+                    Heading::make('Dimensions (automatically generated if empty)'),
+
+                    Number::make('Width')
+                        ->help('The maximum width available for the image.'),
+
+                    Number::make('Height')
+                        ->help('The maximum height available for the image.'),
+                ])
                 ->singleMediaRules('dimensions:min-width=375,min-height=667,max_width=768,max-height=1024')
-                ->help('Screenshot should have a minimum dimension of 375x667 and a maximum dimension of 768x1024. i.e a screenshot on iPhone 6...iPhone 12 Pro Max.'),
+                ->help('Screenshot should have a minimum dimension of 375x667 and a maximum dimension of 768x1024. i.e a screenshot on iPhone 6...iPhone 12 Pro Max.')
+                ->required(),
+
+            Heading::make('Meta information'),
 
             Text::make('Name')->sortable()
                 ->rules('required'),
@@ -192,9 +227,7 @@ class AppTheme extends Resource
      */
     public function title(): string
     {
-        $appTheme = $this->resource;
-
-        return 'Name: "' . $appTheme->name . '" (ID: ' . $appTheme->id . ')';
+        return 'Name: "' . $this->resource->name . '" (ID: ' . $this->resource->id . ')';
     }
 
     /**
