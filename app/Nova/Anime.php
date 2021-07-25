@@ -5,7 +5,7 @@ namespace App\Nova;
 use App\Enums\DayOfWeek;
 use App\Enums\SeasonOfYear;
 use App\Nova\Lenses\UnmoderatedAnime;
-use Chaseconey\ExternalImage\ExternalImage;
+use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -23,6 +23,8 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Ramsey\Uuid\Uuid;
+use Timothyasp\Color\Color;
 
 class Anime extends Resource
 {
@@ -76,10 +78,6 @@ class Anime extends Resource
 
             ID::make()->sortable(),
 
-            ExternalImage::make('Thumbnail', 'cached_poster_thumbnail')
-                ->height(100)
-                ->onlyOnIndex(),
-
             Number::make('AniDB ID')
                 ->hideFromIndex()
                 ->help('The ID of the Anime as noted on AniDB.'),
@@ -104,6 +102,79 @@ class Anime extends Resource
                 ->hideFromIndex()
                 ->help('The ID of the Anime as noted on The TVDB.'),
 
+            Heading::make('Media'),
+
+            Images::make('Poster Image', 'poster')
+                ->showStatistics()
+                ->setFileName(function($originalFilename, $extension, $model) {
+                    return Uuid::uuid4() . '.' . $extension;
+                })
+                ->setName(function($originalFilename, $model) {
+                    return $this->resource->original_title;
+                })
+                ->customPropertiesFields([
+                    Heading::make('Colors (automatically generated if empty)'),
+
+                    Color::make('Background Color')
+                        ->help('The average background color of the image.'),
+
+                    Color::make('Text Color 1')
+                        ->help('The primary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 2')
+                        ->help('The secondary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 3')
+                        ->help('The tertiary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 4')
+                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
+
+                    Heading::make('Dimensions (automatically generated if empty)'),
+
+                    Number::make('Width')
+                        ->help('The maximum width available for the image.'),
+
+                    Number::make('Height')
+                        ->help('The maximum height available for the image.'),
+                ]),
+
+            Images::make('Banner Image', 'banner')
+                ->hideFromIndex()
+                ->showStatistics()
+                ->setFileName(function($originalFilename, $extension, $model) {
+                    return Uuid::uuid4() . '.' . $extension;
+                })
+                ->setName(function($originalFilename, $model) {
+                    return $this->resource->original_title;
+                })
+                ->customPropertiesFields([
+                    Heading::make('Colors (automatically generated if empty)'),
+
+                    Color::make('Background Color')
+                        ->help('The average background color of the image.'),
+
+                    Color::make('Text Color 1')
+                        ->help('The primary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 2')
+                        ->help('The secondary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 3')
+                        ->help('The tertiary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 4')
+                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
+
+                    Heading::make('Dimensions (automatically generated if empty)'),
+
+                    Number::make('Width')
+                        ->help('The maximum width available for the image.'),
+
+                    Number::make('Height')
+                        ->help('The maximum height available for the image.'),
+                ]),
+
             Heading::make('Meta information'),
 
             Text::make('Slug')
@@ -125,7 +196,7 @@ class Anime extends Resource
                 ->rules('required')
                 ->translatable(),
 
-            Textarea::make('Synopsis Translations')
+            Textarea::make('Synopsis Translations', 'synopsis')
                 ->help('A short description of the Anime.')
                 ->translatable(),
 
@@ -179,9 +250,9 @@ class Anime extends Resource
                 ->hideFromIndex()
                 ->help('The date on which the show last aired. For example: 2016-03-08'),
 
-            Number::make('Runtime')
+            Number::make('Duration')
                 ->onlyOnForms()
-                ->help('For series: The average runtime in minutes of a single episode.<br />For movies: The amount of minutes the movie takes.'),
+                ->help('For series: The average runtime in <b>seconds</b> of a single episode.<br />For movies: The total amount of seconds the movie takes.'),
 
             Time::make('Air time')
                 ->withTwelveHourTime()
@@ -208,8 +279,6 @@ class Anime extends Resource
                 ->help('For example: © ' . date('Y') . ' Kurozora B.V.'),
 
             HasMany::make('Translations', 'anime_translations', AnimeTranslation::class),
-
-            HasMany::make('Images', 'anime_images', AnimeImage::class),
 
             HasMany::make('Genres', 'media_genres', MediaGenre::class),
 
@@ -360,6 +429,74 @@ class Anime extends Resource
     public static function relatableStatuses(NovaRequest $request, Builder $query): Builder
     {
         return $query->where('type', 'anime');
+    }
+
+    /**
+     * Return the location to redirect the user after creation.
+     *
+     * @param NovaRequest $request
+     * @param Anime $resource
+     * @return string
+     */
+    public static function redirectAfterCreate(NovaRequest $request, $resource)
+    {
+        self::generatePosterImageCustomProperties($resource);
+        self::generateBannerImageCustomProperties($resource);
+
+        return parent::redirectAfterCreate($request, $resource);
+    }
+
+    /**
+     * Return the location to redirect the user after update.
+     *
+     * @param NovaRequest $request
+     * @param Anime $resource
+     * @return string
+     */
+    public static function redirectAfterUpdate(NovaRequest $request, $resource)
+    {
+        self::generatePosterImageCustomProperties($resource);
+        self::generateBannerImageCustomProperties($resource);
+
+        return parent::redirectAfterUpdate($request, $resource);
+    }
+
+    /**
+     * Generates custom properties for the poster image of the resource.
+     *
+     * @param Anime $resource
+     */
+    static function generatePosterImageCustomProperties(Anime $resource) {
+        $posterImage = $resource->resource->poster_image;
+
+        if (!empty($posterImage) && empty($posterImage->hasCustomProperty('background_color'))) {
+            // Add color and dimension data to custom properties
+            $colors = $resource->resource->generateColorsFor($posterImage->getPath());
+            $dimensions = $resource->resource->generateDimensionsFor($posterImage->getPath());
+            $customProperties = array_merge($posterImage->custom_properties, $colors, $dimensions);
+            $posterImage->update([
+                'custom_properties' => $customProperties
+            ]);
+        }
+    }
+
+    /**
+     * Generates custom properties for the banner image of the resource.
+     *
+     * @param Anime $resource
+     */
+    static function generateBannerImageCustomProperties(Anime $resource) {
+        $bannerImage = $resource->resource->banner_image;
+
+        if (!empty($bannerImage) && empty($bannerImage->hasCustomProperty('background_color'))) {
+            // Add color and dimension data to custom properties
+            $colors = $resource->resource->generateColorsFor($bannerImage->getPath());
+            $dimensions = $resource->resource->generateDimensionsFor($bannerImage->getPath());
+            $customProperties = array_merge($bannerImage->custom_properties, $colors, $dimensions);
+            $bannerImage->update([
+                'custom_properties' => $customProperties
+            ]);
+        }
     }
 
     /**

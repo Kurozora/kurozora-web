@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Traits\InteractsWithMediaExtension;
+use App\Traits\Model\HasProfileImage;
 use App\Traits\Searchable;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
@@ -9,10 +11,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Character extends KModel
+class Character extends KModel implements HasMedia
 {
     use HasFactory,
+        HasProfileImage,
+        InteractsWithMedia,
+        InteractsWithMediaExtension,
         Searchable,
         Translatable;
 
@@ -66,6 +73,25 @@ class Character extends KModel
     protected $casts = [
         'nicknames' => AsArrayObject::class,
     ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'profile_image',
+        'profile_image_url',
+    ];
+
+    /**
+     * Registers the media collections for the model.
+     */
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection($this->profileImageCollectionName)
+            ->singleFile();
+    }
 
     /**
      * Returns the people the character belongs to.
