@@ -21,7 +21,7 @@ class ImportSongs extends Command
      *
      * @var string
      */
-    protected $description = 'Imports the songs from the KDashboard database';
+    protected $description = 'Imports the songs from the KDashboard database.';
 
     /**
      * Create a new command instance.

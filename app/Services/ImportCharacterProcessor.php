@@ -23,11 +23,11 @@ class ImportCharacterProcessor
 
             if (empty($character)) {
                 $japaneseName = [];
-                if (!empty($kCharacter->japanese_name)) {
+                if (!empty(trim($kCharacter->japanese_name))) {
                     $japaneseName = [
                         'ja' => [
-                            'name' => $kCharacter->japanese_name,
-                            'about' => '',
+                            'name' => trim($kCharacter->japanese_name),
+                            'about' => null,
                         ],
                     ];
                 }
@@ -35,9 +35,9 @@ class ImportCharacterProcessor
                 Character::create(array_merge($japaneseName, [
                     'mal_id' => $kCharacter->id,
                     'nicknames' => empty($kCharacter->nickname) ? null : explode(', ', $kCharacter->nickname),
-                    'name' => $kCharacter->name,
-                    'about' => $kCharacter->about,
-                    'image' => $kCharacter->image_url,
+                    'name' => trim($kCharacter->name),
+                    'about' => trim($kCharacter->about) ?: null,
+                    'image' => empty($kCharacter->image_url) ? null : $kCharacter->image_url,
                 ]));
             }
         }

@@ -104,7 +104,7 @@ class Anime extends Resource
 
             Heading::make('Media'),
 
-            Images::make('Poster Image', 'poster')
+            Images::make('Poster')
                 ->showStatistics()
                 ->setFileName(function($originalFilename, $extension, $model) {
                     return Uuid::uuid4() . '.' . $extension;
@@ -139,7 +139,7 @@ class Anime extends Resource
                         ->help('The maximum height available for the image.'),
                 ]),
 
-            Images::make('Banner Image', 'banner')
+            Images::make('Banner')
                 ->hideFromIndex()
                 ->showStatistics()
                 ->setFileName(function($originalFilename, $extension, $model) {

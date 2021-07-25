@@ -28,13 +28,13 @@ class PersonResourceBasic extends JsonResource
             'type'          => 'people',
             'href'          => route('api.people.details', $this->resource, false),
             'attributes'    => [
+                'profile'           => ImageResource::make($this->resource->profile_image),
                 'firstName'         => $this->resource->first_name,
                 'lastName'          => $this->resource->last_name,
                 'givenName'         => $this->resource->given_name,
                 'familyName'        => $this->resource->family_name,
                 'alternativeNames'  => $this->resource->alternative_names,
                 'about'             => $this->resource->about,
-                'imageURL'          => $this->resource->image,
                 'websiteURLs'       => $this->resource->website_urls,
             ]
         ];

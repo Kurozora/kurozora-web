@@ -28,18 +28,18 @@ class UserResourceBasic extends JsonResource
         $user = $this->resource;
 
         $purchaseReceipt = $user->receipt;
-        $isPro = $purchaseReceipt != null ? (bool) $purchaseReceipt->is_subscribed : false;
+        $isPro = $purchaseReceipt != null && $purchaseReceipt->is_subscribed;
 
         $resource = [
             'id'                => $user->id,
             'type'              => 'users',
             'href'              => route('api.users.profile', $user, false),
             'attributes'        => [
+                'profile'           => ImageResource::make($user->profile_image),
+                'banner'            => ImageResource::make($user->banner_image),
                 'username'          => $user->username,
                 'biography'         => $user->biography,
                 'activityStatus'    => $user->getActivityStatus()->description,
-                'profileImageURL'   => $user->profile_image_url,
-                'bannerImageURL'    => $user->banner_image_url,
                 'followerCount'     => $user->getFollowerCount(),
                 'followingCount'    => $user->getFollowingCount(),
                 'reputationCount'   => $user->getReputationCount(),

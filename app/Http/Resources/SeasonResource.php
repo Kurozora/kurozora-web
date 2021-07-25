@@ -28,8 +28,8 @@ class SeasonResource extends JsonResource
             'type'          => 'seasons',
             'href'          => route('api.seasons.details', $this->resource, false),
             'attributes'    => [
+                'poster'        => ImageResource::make($this->resource->poster_image),
                 'number'        => $this->resource->number,
-                'posterURL'     => $this->resource->poster_url,
                 'title'         => $this->resource->title,
                 'synopsis'      => $this->resource->synopsis,
                 'episodeCount'  => $this->resource->episodes()->count(),
