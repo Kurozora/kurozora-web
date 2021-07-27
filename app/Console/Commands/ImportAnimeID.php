@@ -49,22 +49,20 @@ class ImportAnimeID extends Command
         $progressBar->start();
 
         foreach ($animes as $data) {
-            if ($animes->getPosition() > 10111900) {
-                $sources = $this->filterSources($data->sources);
+            $sources = $this->filterSources($data->sources);
 
-                if (array_key_exists('mal_id', $sources) && array_key_exists('notify_id', $sources)) {
-                    $anime = Anime::firstWhere([
-                        ['mal_id', $sources['mal_id']],
-                    ]);
+            if (array_key_exists('mal_id', $sources) && array_key_exists('notify_id', $sources)) {
+                $anime = Anime::firstWhere([
+                    ['mal_id', $sources['mal_id']],
+                ]);
 
-                    if (!empty($anime)) {
-                        $anime->update($sources);
-                    }
+                if (!empty($anime)) {
+                    $anime->update($sources);
                 }
-
-                $progress = $animes->getPosition();
-                $progressBar->setProgress($progress);
             }
+
+            $progress = $animes->getPosition();
+            $progressBar->setProgress($progress);
         }
 
         $progressBar->finish();
