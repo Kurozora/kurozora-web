@@ -5,7 +5,9 @@ namespace App\Services;
 use App\Models\KDashboard\People as KPerson;
 use App\Models\Person;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
+use Log;
 
 class ImportPersonProcessor
 {
@@ -44,6 +46,16 @@ class ImportPersonProcessor
                     'image' => $kPerson->image_url,
                     'website_urls' => empty($kPerson->website) ? null : explode(', ', $kPerson->website),
                 ]);
+            }
+
+            // Download poster when available and if not already present
+            if (!empty($kPerson->image_url) && empty($person->profile_image)) {
+                try {
+                    $name = $person->full_name ?: $person->full_given_name;
+                    $person->updatePosterImage($kPerson->image_url, $name);
+                } catch (Exception $e) {
+                    Log::info($e->getMessage());
+                }
             }
         }
     }

@@ -24,7 +24,6 @@ class CreatePeopleTable extends Migration
             $table->json('alternative_names')->nullable();
             $table->text('about')->nullable();
             $table->date('birth_date')->nullable();
-            $table->string('image')->nullable();
             $table->json('website_urls')->nullable();
             $table->timestamps();
         });

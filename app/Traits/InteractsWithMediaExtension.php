@@ -30,15 +30,15 @@ trait InteractsWithMediaExtension {
     }
 
     /**
-     * Generate colors for the given AnimeImage object.
+     * Generate colors for the given image URL/path.
      *
-     * @param string $url
+     * @param string $path
      * @return array
      */
-    function generateColorsFor(string $url): array
+    function generateColorsFor(string $path): array
     {
         /** @var Color[] $palette */
-        $palette = ColorPalette::getPalette($url, 5, 1);
+        $palette = ColorPalette::getPalette($path, 5, 1);
 
         return [
             'background_color' => $palette[0]->toHexString(),
@@ -50,14 +50,14 @@ trait InteractsWithMediaExtension {
     }
 
     /**
-     * Generate dimensions for the given AnimeImage object.
+     * Generate dimensions for the given image URL/path.
      *
-     * @param string $url
+     * @param string $path
      * @return array
      */
-    function generateDimensionsFor(string $url): array
+    function generateDimensionsFor(string $path): array
     {
-        list($width, $height) = getimagesize($url);
+        list($width, $height) = getimagesize($path);
 
         return [
             'width' => $width,
