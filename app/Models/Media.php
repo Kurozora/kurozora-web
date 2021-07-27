@@ -11,10 +11,10 @@ class Media extends MediaLibrary
     const TABLE_NAME = 'media';
     protected $table = self::TABLE_NAME;
 
+    public static function findWithTemporaryUploadInCurrentSession(array $uuids) { }
+
     public function temporaryUpload(): BelongsTo
     {
         return $this->belongsTo(Media::class);
     }
-
-    public static function findWithTemporaryUploadInCurrentSession(array $uuids) { }
 }
