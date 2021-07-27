@@ -6,7 +6,6 @@ use App\Models\Media;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
@@ -43,13 +42,12 @@ trait HasBannerImage
      * Updates the model's banner image.
      *
      * @param string|UploadedFile $uploadFile
-     * @param string $name
+     * @param string|null $name
      * @param array $customProperties
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
-     * @throws FileCannotBeAdded
      */
-    function updateBannerImage(string|UploadedFile $uploadFile, string $name, array $customProperties)
+    function updateBannerImage(string|UploadedFile $uploadFile, string $name = null, array $customProperties = [])
     {
         // Determine media adder
         if (Str::startsWith($uploadFile, ['http://', 'https://'])) {

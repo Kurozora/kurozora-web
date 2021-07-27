@@ -139,11 +139,10 @@ class Person extends Resource
                 ->help('A short description of the person.')
                 ->rules(['nullable']),
 
-            Text::make('Website URL')
+            Text::make('Website URLs')
                 ->hideFromIndex()
-                ->help('The URL to the official website of the studio.')
-                ->rules(['nullable'])
-                ->sortable(),
+                ->help('The URLs to the official website of the person. Separated by ","')
+                ->nullable(),
 
             HasMany::make('Cast'),
 

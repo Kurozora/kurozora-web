@@ -4,7 +4,9 @@ namespace App\Services;
 
 use App\Models\Character;
 use App\Models\KDashboard\Character as KCharacter;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
+use Log;
 
 class ImportCharacterProcessor
 {
@@ -39,6 +41,15 @@ class ImportCharacterProcessor
                     'about' => trim($kCharacter->about) ?: null,
                     'image' => empty($kCharacter->image_url) ? null : $kCharacter->image_url,
                 ]));
+            }
+
+            // Download poster when available and if not already present
+            if (!empty($kCharacter->image_url) && empty($character->profile_image)) {
+                try {
+                    $character->updatePosterImage($kCharacter->image_url, $character->name);
+                } catch (Exception $e) {
+                    Log::info($e->getMessage());
+                }
             }
         }
     }

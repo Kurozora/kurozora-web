@@ -18,7 +18,6 @@ class CreateEpisodesTable extends Migration
         Schema::create(Episode::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('season_id');
-            $table->string('preview_image')->nullable();
             $table->unsignedInteger('number');
             $table->unsignedInteger('number_total');
             $table->unsignedMediumInteger('duration')->default(0);
