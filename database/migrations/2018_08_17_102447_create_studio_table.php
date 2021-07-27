@@ -19,7 +19,6 @@ class CreateStudioTable extends Migration
             $table->unsignedInteger('mal_id')->nullable();
             $table->string('type');
             $table->string('name');
-            $table->string('logo_url')->nullable();
             $table->mediumText('about')->nullable();
             $table->mediumText('address')->nullable();
             $table->date('founded')->nullable();

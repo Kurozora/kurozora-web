@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasProfileImage;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Collection;
@@ -16,7 +17,8 @@ class Person extends KModel implements HasMedia
 {
     use HasFactory,
         HasProfileImage,
-        InteractsWithMedia;
+        InteractsWithMedia,
+        InteractsWithMediaExtension;
 
     // Maximum relationships fetch limit
     const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
