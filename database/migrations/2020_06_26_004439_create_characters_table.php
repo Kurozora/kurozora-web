@@ -18,7 +18,6 @@ class CreateCharactersTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedInteger('mal_id')->unique()->nullable();
             $table->json('nicknames')->nullable();
-            $table->string('image')->nullable();
             $table->string('debut')->nullable();
             $table->string('status')->nullable();
             $table->string('blood_type')->nullable();

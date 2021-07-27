@@ -12,7 +12,9 @@ use App\Models\Status;
 use App\Models\TvRating;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
+use Log;
 use Str;
 
 class ImportAnimeProcessor
@@ -43,8 +45,9 @@ class ImportAnimeProcessor
                 ['mal_id', $kAnime->id],
             ])->first();
 
+            // Create or update the anime
             if (empty($anime)) {
-                Anime::create([
+                $anime = Anime::create([
                     'mal_id' => $kAnime->id,
                     'original_title' => $kAnime->title,
                     'synonym_titles' => empty($kAnime->title_synonym) ? null : explode(', ', $kAnime->title_synonym),
@@ -69,16 +72,20 @@ class ImportAnimeProcessor
                     'air_season' => $this->getAiringSeason($kAnime),
                     'is_nsfw' => $this->getIsNSFW($kAnime),
                 ]);
-            } else {
+            } else if ($this->getStatus($kAnime)->id != $anime->status->id) {
+                $episodeCount = max($anime->episode_count, $kAnime->episode);
+                $seasonCount = $anime->season_count ?: ($kAnime->episode ? 1 : 0);
+                $videoURL = $anime->video_url ?: ($kAnime->video_url ?: null);
+
                 $anime->update([
                     'synopsis' => $this->getAnimeSynopsis($kAnime),
                     'tv_rating_id' => $this->getTVRating($kAnime)->id,
                     'media_type_id' => $this->getMediaType($kAnime)->id,
                     'source_id' => $this->getSource($kAnime)->id,
                     'status_id' => $this->getStatus($kAnime)->id,
-                    'episode_count' => $kAnime->episode,
-                    'season_count' => $kAnime->episode ? 1 : 0,
-                    'video_url' => empty($kAnime->video_url) ? null : $kAnime->video_url,
+                    'episode_count' => $episodeCount,
+                    'season_count' => $seasonCount,
+                    'video_url' => $videoURL,
                     'first_aired' => $this->getFirstAirDate($kAnime),
                     'last_aired' => $this->getLastAirDate($kAnime),
                     'duration' => $kAnime->duration,
@@ -87,6 +94,15 @@ class ImportAnimeProcessor
                     'air_season' => $this->getAiringSeason($kAnime),
                     'is_nsfw' => $this->getIsNSFW($kAnime),
                 ]);
+            }
+
+            // Download poster when available and if not already present
+            if (!empty($kAnime->image_url) && empty($anime->poster_image)) {
+                try {
+                    $anime->updatePosterImage($kAnime->image_url, $anime->original_title);
+                } catch (Exception $e) {
+                    Log::info($e->getMessage());
+                }
             }
         }
     }

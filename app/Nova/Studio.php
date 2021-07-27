@@ -114,10 +114,10 @@ class Studio extends Resource
                 ->format('YYYY-MM-DD')
                 ->help('The date on which the studio was founded. For example: 2015-12-03'),
 
-            Text::make('Website URL')
-                ->rules('max:255')
-                ->help('The URL to the official website of the studio.')
-                ->hideFromIndex(),
+            Text::make('Website URLs')
+                ->hideFromIndex()
+                ->help('The URLs to the official website of the studio. Separated by ","')
+                ->nullable(),
 
             BelongsToMany::make('Anime')
                 ->searchable(),
