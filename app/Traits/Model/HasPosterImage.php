@@ -71,15 +71,7 @@ trait HasPosterImage
         }
 
         // Add media
-        $media = $addMedia->toMediaCollection($this->posterImageCollectionName);
-
-        // Add color and dimension data to custom properties
-        $colors = $this->generateColorsFor($media->getPath());
-        $dimensions = $this->generateDimensionsFor($media->getPath());
-        $customProperties = array_merge($colors, $dimensions, $media->custom_properties);
-        $media->update([
-            'custom_properties' => $customProperties
-        ]);
+        $addMedia->toMediaCollection($this->posterImageCollectionName);
     }
 
     /**

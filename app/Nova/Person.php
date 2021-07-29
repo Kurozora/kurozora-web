@@ -209,53 +209,6 @@ class Person extends Resource
     }
 
     /**
-     * Return the location to redirect the user after creation.
-     *
-     * @param NovaRequest $request
-     * @param Person $resource
-     * @return string
-     */
-    public static function redirectAfterCreate(NovaRequest $request, $resource)
-    {
-        self::generateProfileImageCustomProperties($resource);
-
-        return parent::redirectAfterCreate($request, $resource);
-    }
-
-    /**
-     * Return the location to redirect the user after update.
-     *
-     * @param NovaRequest $request
-     * @param Person $resource
-     * @return string
-     */
-    public static function redirectAfterUpdate(NovaRequest $request, $resource)
-    {
-        self::generateProfileImageCustomProperties($resource);
-
-        return parent::redirectAfterUpdate($request, $resource);
-    }
-
-    /**
-     * Generates custom properties for the profile image of the resource.
-     *
-     * @param Person $resource
-     */
-    static function generateProfileImageCustomProperties(Person $resource) {
-        $profileImage = $resource->resource->profile_image;
-
-        if (!empty($profileImage) && empty($profileImage->hasCustomProperty('background_color'))) {
-            // Add color and dimension data to custom properties
-            $colors = $resource->resource->generateColorsFor($profileImage->getPath());
-            $dimensions = $resource->resource->generateDimensionsFor($profileImage->getPath());
-            $customProperties = array_merge($profileImage->custom_properties, $colors, $dimensions);
-            $profileImage->update([
-                'custom_properties' => $customProperties
-            ]);
-        }
-    }
-
-    /**
      * The icon of the resource.
      *
      * @var string
