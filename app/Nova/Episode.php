@@ -205,53 +205,6 @@ class Episode extends Resource
     }
 
     /**
-     * Return the location to redirect the user after creation.
-     *
-     * @param NovaRequest $request
-     * @param Episode $resource
-     * @return string
-     */
-    public static function redirectAfterCreate(NovaRequest $request, $resource)
-    {
-        self::generateBannerImageCustomProperties($resource);
-
-        return parent::redirectAfterCreate($request, $resource);
-    }
-
-    /**
-     * Return the location to redirect the user after update.
-     *
-     * @param NovaRequest $request
-     * @param Episode $resource
-     * @return string
-     */
-    public static function redirectAfterUpdate(NovaRequest $request, $resource)
-    {
-        self::generateBannerImageCustomProperties($resource);
-
-        return parent::redirectAfterUpdate($request, $resource);
-    }
-
-    /**
-     * Generates custom properties for the banner image of the resource.
-     *
-     * @param Episode $resource
-     */
-    static function generateBannerImageCustomProperties(Episode $resource) {
-        $bannerImage = $resource->resource->banner_image;
-
-        if (!empty($bannerImage) && empty($bannerImage->hasCustomProperty('background_color'))) {
-            // Add color and dimension data to custom properties
-            $colors = $resource->resource->generateColorsFor($bannerImage->getPath());
-            $dimensions = $resource->resource->generateDimensionsFor($bannerImage->getPath());
-            $customProperties = array_merge($bannerImage->custom_properties, $colors, $dimensions);
-            $bannerImage->update([
-                'custom_properties' => $customProperties
-            ]);
-        }
-    }
-
-    /**
      * The icon of the resource.
      *
      * @var string
