@@ -42,7 +42,7 @@ class ImportPersonProcessor
                     'family_name' => $kPerson->family_name,
                     'alternative_names' => explode(', ', $kPerson->alternative_name),
                     'about' => $kPerson->more,
-                    'birth_date' => empty($birthDate) ? null : Carbon::parse($birthDate),
+                    'birthdate' => empty($birthDate) ? null : Carbon::parse($birthDate),
                     'image' => $kPerson->image_url,
                     'website_urls' => empty($kPerson->website) ? null : explode(', ', $kPerson->website),
                 ]);

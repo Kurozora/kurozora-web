@@ -31,7 +31,7 @@ class PersonFactory extends Factory
             'given_name'        => $this->faker->randomElement([$jpFaker->firstName($genderString), null]),
             'family_name'       => $this->faker->randomElement([$jpFaker->lastName, null]),
             'alternative_names' => $this->faker->randomElement([$this->faker->words(mt_rand(0, 3)), null]),
-            'birth_date'        => $this->faker->randomElement([$this->faker->date(), null]),
+            'birthdate'         => $this->faker->randomElement([$this->faker->date(), null]),
             'about'             => $this->faker->randomElement([$this->faker->realText(), null]),
             'image'             => $this->faker->randomElement([$this->faker->imageUrl(), null]),
             'website_urls'      => $this->faker->randomElement([[$this->faker->url], null]),

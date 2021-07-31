@@ -23,7 +23,9 @@ class CreatePeopleTable extends Migration
             $table->string('given_name')->nullable();
             $table->json('alternative_names')->nullable();
             $table->text('about')->nullable();
-            $table->date('birth_date')->nullable();
+            $table->date('birthdate')->nullable();
+            $table->date('deceased_date')->nullable();
+            $table->unsignedTinyInteger('astrological_sign')->nullable();
             $table->json('website_urls')->nullable();
             $table->timestamps();
         });
