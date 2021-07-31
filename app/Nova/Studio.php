@@ -5,13 +5,13 @@ namespace App\Nova;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Ramsey\Uuid\Uuid;
 use Timothyasp\Color\Color;
 
@@ -114,7 +114,8 @@ class Studio extends Resource
                 ->format('YYYY-MM-DD')
                 ->help('The date on which the studio was founded. For example: 2015-12-03'),
 
-            Text::make('Website URLs')
+            Code::make('Website URLs')
+                ->json()
                 ->hideFromIndex()
                 ->help('The URLs to the official website of the studio. Separated by ","')
                 ->nullable(),
