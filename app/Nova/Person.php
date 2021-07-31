@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Enums\AstrologicalSign;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsToMany;
@@ -11,9 +12,9 @@ use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Ramsey\Uuid\Uuid;
 use Timothyasp\Color\Color;
 
@@ -130,8 +131,17 @@ class Person extends Resource
                 ->help('Other names the person is known by. For example ["Nakamura Hiroaki", "中村 博昭"]')
                 ->rules(['nullable', 'json']),
 
-            Date::make('Birth Date')
+            Date::make('Birthdate')
                 ->rules(['nullable', 'date'])
+                ->sortable(),
+
+            Date::make('Deceased date')
+                ->rules(['nullable', 'date'])
+                ->sortable(),
+
+            Select::make('Astrological Sign')
+                ->options(AstrologicalSign::asSelectArray())
+                ->displayUsingLabels()
                 ->sortable(),
 
             Textarea::make('About')
@@ -139,7 +149,8 @@ class Person extends Resource
                 ->help('A short description of the person.')
                 ->rules(['nullable']),
 
-            Text::make('Website URLs')
+            Code::make('Website URLs')
+                ->json()
                 ->hideFromIndex()
                 ->help('The URLs to the official website of the person. Separated by ","')
                 ->nullable(),

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\AstrologicalSign;
 use App\Models\Person;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -29,13 +30,14 @@ class PersonResourceBasic extends JsonResource
             'href'          => route('api.people.details', $this->resource, false),
             'attributes'    => [
                 'profile'           => ImageResource::make($this->resource->profile_image),
-                'firstName'         => $this->resource->first_name,
-                'lastName'          => $this->resource->last_name,
-                'givenName'         => $this->resource->given_name,
-                'familyName'        => $this->resource->family_name,
+                'fullName'          => $this->resource->full_name,
+                'fullGivenName'     => $this->resource->full_given_name,
                 'alternativeNames'  => $this->resource->alternative_names,
+                'age'               => $this->resource->age_string,
+                'birthdate'         => $this->resource->birthdate?->timestamp,
                 'about'             => $this->resource->about,
                 'websiteURLs'       => $this->resource->website_urls,
+                'astrologicalSign'  => AstrologicalSign::getDescription($this->resource->astrological_sign) ?: null
             ]
         ];
     }
