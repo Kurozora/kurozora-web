@@ -38,7 +38,7 @@ class Person extends KModel implements HasMedia
      */
     protected $casts = [
         'alternative_names' => AsArrayObject::class,
-        'birth_date'        => 'date',
+        'birthdate'         => 'date',
         'website_urls'      => AsArrayObject::class,
     ];
 
@@ -48,6 +48,7 @@ class Person extends KModel implements HasMedia
      * @var array
      */
     protected $appends = [
+        'age_string',
         'full_name',
         'full_given_name',
         'profile_image',
@@ -103,6 +104,28 @@ class Person extends KModel implements HasMedia
         }
 
         return $this->family_name . ', ' . $this->given_name;
+    }
+
+    /**
+     * The age string of the person.
+     *
+     * @return string|null
+     */
+    public function getAgeStringAttribute(): ?string
+    {
+        $birthdate = $this->birthdate;
+
+        if (empty($birthdate)) {
+            return null;
+        }
+
+        if (empty($this->deceased_date)) {
+            $age = $birthdate->age;
+        } else {
+            $age = $birthdate->diffInYears($this->deceased_date);
+        }
+
+        return trans_choice('{1} :x year old|[2,*] :x years old', $age, ['x' => $age]);
     }
 
     /**

@@ -22,11 +22,12 @@ class CreateCharactersTable extends Migration
             $table->string('status')->nullable();
             $table->string('blood_type')->nullable();
             $table->string('favorite_food')->nullable();
-            $table->string('height')->nullable();
+            $table->unsignedDecimal('height', 32)->nullable();
+            $table->unsignedDecimal('weight', 32)->nullable();
             $table->unsignedDecimal('bust')->nullable();
             $table->unsignedDecimal('waist')->nullable();
             $table->unsignedDecimal('hip')->nullable();
-            $table->unsignedBigInteger('age')->nullable();
+            $table->unsignedDecimal('age', 32)->nullable();
             $table->unsignedTinyInteger('birth_day')->nullable();
             $table->unsignedTinyInteger('birth_month')->nullable();
             $table->unsignedTinyInteger('astrological_sign')->nullable();

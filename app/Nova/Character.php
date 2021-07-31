@@ -14,7 +14,6 @@ use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Ramsey\Uuid\Uuid;
 use Timothyasp\Color\Color;
 
@@ -154,45 +153,54 @@ class Character extends Resource
             Heading::make('Body Information')
                 ->onlyOnForms(),
 
-            Text::make('Height')
-                ->help('The official height of the character in cm. E.g. 10.25 or 277. If it\'s an abnormally tall height, then write it including the unit. E.g. 250ly (Light Years).')
+            Number::make('Height')
+                ->help('The current height of the character in cm. E.g. 10.25 or 277.')
+                ->step(0.01)
+                ->hideFromIndex(),
+
+            Number::make('Weight')
+                ->help('The current weight of the character in grams. E.g. 429 or 70000 (70kg).')
+                ->step(0.01)
                 ->hideFromIndex(),
 
             Number::make('Bust')
-                ->help('The official bust size of the character if it applies. E.g. 50 or 60.4')
-                ->step(0.001)
+                ->help('The current bust size of the character if it applies. E.g. 50 or 60.4')
+                ->step(0.01)
                 ->hideFromIndex(),
 
             Number::make('Waist')
-                ->help('The official waist size of the character if it applies. E.g. 50 or 60.4')
-                ->step(0.001)
+                ->help('The current waist size of the character if it applies. E.g. 50 or 60.4')
+                ->step(0.01)
                 ->hideFromIndex(),
 
             Number::make('Hip')
-                ->help('The official hip size of the character if it applies. E.g. 50 or 60.4')
-                ->step(0.001)
+                ->help('The current hip size of the character if it applies. E.g. 50 or 60.4')
+                ->step(0.01)
             ->hideFromIndex(),
 
             Heading::make('Birth Information')
                 ->onlyOnForms(),
 
             Number::make('Age')
-                ->help('The official age of the character in years. E.g. 17 or 25. If the age is something crazy like 3 and a half trillion years old, then write it out as a real number.')
+                ->help('The current age of the character in years. E.g. 17.5 or 25. If the age is something crazy like 3 and a half trillion years old, then write it out as a real number.')
                 ->step(0.01)
                 ->sortable(),
 
-            Text::make('Birth Day')
-                ->rules('nullable', 'max:31', 'numeric')
+            Number::make('Birth Day')
+                ->min(1)
+                ->max(31)
+                ->rules('nullable', 'min:1', 'max:31')
                 ->hideFromIndex(),
 
-            Text::make('Birth Month')
-                ->rules('nullable', 'max:12', 'numeric')
+            Number::make('Birth Month')
+                ->min(1)
+                ->max(12)
+                ->rules('nullable', 'min:1', 'max:12')
                 ->hideFromIndex(),
 
             Select::make('Astrological Sign')
                 ->options(AstrologicalSign::asSelectArray())
                 ->displayUsingLabels()
-                ->nullable(true)
                 ->sortable(),
 
             HasMany::make('Cast'),
