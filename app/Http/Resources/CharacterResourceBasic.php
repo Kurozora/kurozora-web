@@ -31,7 +31,6 @@ class CharacterResourceBasic extends JsonResource
             'attributes'    => [
                 'profile'           => ImageResource::make($this->resource->profile_image),
                 'name'              => $this->resource->name,
-                'japaneseName'      => $this->resource->getTranslation('ja')->name,
                 'nicknames'         => $this->resource->nicknames,
                 'about'             => $this->resource->about,
                 'debut'             => $this->resource->debut,
@@ -41,10 +40,10 @@ class CharacterResourceBasic extends JsonResource
                 'bust'              => $this->resource->bust,
                 'waist'             => $this->resource->waist,
                 'hip'               => $this->resource->hip,
-                'height'            => $this->resource->height,
-                'age'               => $this->resource->age,
-                'birthDay'          => $this->resource->birth_day,
-                'birthMonth'        => $this->resource->birth_month,
+                'height'            => $this->resource->height_string,
+                'weight'            => $this->resource->weight_string,
+                'age'               => $this->resource->age_string,
+                'birthdate'         => $this->resource->birthdate,
                 'astrologicalSign'  => AstrologicalSign::getDescription($this->resource->astrological_sign) ?: null
             ]
         ];
