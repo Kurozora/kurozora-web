@@ -80,8 +80,12 @@ class Character extends KModel implements HasMedia
      * @var array
      */
     protected $appends = [
+        'age_string',
+        'birthdate',
+        'height_string',
         'profile_image',
         'profile_image_url',
+        'weight_string',
     ];
 
     /**
@@ -91,6 +95,97 @@ class Character extends KModel implements HasMedia
     {
         $this->addMediaCollection($this->profileImageCollectionName)
             ->singleFile();
+    }
+
+    /**
+     * The age string of the character.
+     *
+     * @return string|null
+     */
+    public function getAgeStringAttribute(): ?string
+    {
+        $age = $this->age;
+
+        if (empty($age)) {
+            return null;
+        }
+
+        $shortNumber = number_shorten($age, 0);
+        return trans_choice('{1} :x year old|[2,*] :x years old', $age, ['x' => $shortNumber]);
+    }
+
+    /**
+     * The height string of the character.
+     *
+     * @return string|null
+     */
+    public function getHeightStringAttribute(): ?string
+    {
+        $height = $this->height;
+
+        if (empty($height)) {
+            return null;
+        }
+
+        // Remove decimals if unnecessary.
+        $height += 0;
+
+        // Use cm if shorter than a kilometer.
+        if ($height < 1000) {
+            return __(':x cm', ['x' => $height]);
+        }
+
+        // Otherwise, convert to km for clarity.
+        $shortNumber = number_shorten($height / 1000, 2);
+        return __(':x km', ['x' => $shortNumber]);
+    }
+
+    /**
+     * The weight string of the character.
+     *
+     * @return string|null
+     */
+    public function getWeightStringAttribute(): ?string
+    {
+        $weight = $this->weight;
+
+        if (empty($weight)) {
+            return null;
+        }
+
+        // Remove decimals if unnecessary.
+        $weight += 0;
+
+        // Use grams if less than a kilogram.
+        if ($weight < 1000) {
+            return trans_choice('{1} :x gram|[2,*] :x grams', $weight, ['x' => $weight]);
+        }
+
+        // Otherwise, use kg for clarity.
+        $shortNumber = number_shorten($weight / 1000, 2);
+        return __(':x kg', ['x' => $shortNumber]);
+    }
+
+    /**
+     * The birthdate of the character.
+     *
+     * @return string|null
+     */
+    public function getBirthdateAttribute(): ?string
+    {
+        $birthdate = now();
+        $format = '';
+
+        if (!empty($this->birth_month)) {
+            $birthdate->month($this->birth_month);
+            $format .= 'F ';
+        }
+        if (!empty($this->birth_day)) {
+            $birthdate->day($this->birth_day);
+            $format .= 'jS';
+        }
+
+        return $format ? $birthdate->format($format) : null;
     }
 
     /**

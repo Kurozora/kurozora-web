@@ -266,7 +266,8 @@ class Anime extends KModel implements HasMedia
         $broadcast = null;
         $airDay = $this->air_day;
         $airTime = $this->air_time;
-        $dayTime = now('Asia/Tokyo')->next($airDay)
+        $dayTime = now('Asia/Tokyo')
+            ->next((int) $airDay)
             ->setTimeFromTimeString($airTime ?? '00:00')
             ->setTimezone('UTC');
 
