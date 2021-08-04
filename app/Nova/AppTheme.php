@@ -2,11 +2,15 @@
 
 namespace App\Nova;
 
+use App\Enums\StatusBarStyle;
+use App\Enums\VisualEffectViewStyle;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\File;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Ramsey\Uuid\Uuid;
 use Timothyasp\Color\Color;
@@ -59,7 +63,8 @@ class AppTheme extends Resource
     public function fields(Request $request): array
     {
         return [
-            Heading::make('Identification'),
+            Heading::make('Identification')
+                ->onlyOnDetail(),
 
             ID::make()->sortable(),
 
@@ -99,124 +104,146 @@ class AppTheme extends Resource
                     Number::make('Height')
                         ->help('The maximum height available for the image.'),
                 ])
-                ->singleMediaRules('dimensions:min-width=375,min-height=667,max_width=768,max-height=1024')
+                ->singleMediaRules('dimensions:min-width=375,min-height=667,max_width=1170,max-height=2532')
                 ->help('Screenshot should have a minimum dimension of 375x667 and a maximum dimension of 768x1024. i.e a screenshot on iPhone 6...iPhone 12 Pro Max.')
                 ->required(),
 
             Heading::make('Meta information'),
 
-            Text::make('Name')->sortable()
-                ->rules('required'),
+            Text::make('Name')
+                ->required()
+                ->sortable(),
 
-            Text::make('Download link', function () {
-                return '
-                    <a href="' . route('api.themes.download', ['theme' => $this->resource->id]) . '" target="_blank" class="btn btn-default btn-primary">Download</a>
-                ';
-            })
-                ->asHtml()
+            Text::make('Version')
+                ->default('1.0')
+                ->required()
+                ->sortable(),
+
+            File::make('Download link')
+                ->displayUsing(function () {
+                    return ' ';
+                })
+                ->download(function () {
+                    return $this->resource->download();
+                })
+                ->hideWhenCreating()
+                ->hideWhenUpdating()
                 ->readonly(),
 
-            Heading::make('Global')
-                ->hideFromIndex(),
+            Heading::make('Root'),
+
+            Select::make('UI Status Bar Style')
+                ->options(StatusBarStyle::asSelectArray())
+                ->displayUsingLabels()
+                ->hideFromIndex()
+                ->required(),
+
+            Select::make('UI Visual Effect View')
+                ->options(VisualEffectViewStyle::asSelectArray())
+                ->displayUsingLabels()
+                ->hideFromIndex()
+                ->required(),
+
+            Heading::make('Global'),
 
             Color::make('Background color', 'global_background_color')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
 
             Color::make('Tinted background color', 'global_tinted_background_color')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
 
             Color::make('Bar tint color', 'global_bar_tint_color')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
 
             Color::make('Bar title text color', 'global_bar_title_text_color')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
 
             Color::make('Blur background color', 'global_blur_background_color')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
 
             Color::make('Border color', 'global_border_color')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
 
             Color::make('Text color', 'global_text_color')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
 
             Color::make('Text field background color', 'global_text_field_background_color')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
 
             Color::make('Text field text color', 'global_text_field_text_color')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
 
             Color::make('Text field placeholder text color', 'global_text_field_placeholder_text_color')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
 
             Color::make('Tint color', 'global_tint_color')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
 
             Color::make('Tinted button text color', 'global_tinted_button_text_color')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
 
             Color::make('Separator color', 'global_separator_color')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
 
             Color::make('Separator color light', 'global_separator_color_light')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
 
             Color::make('Sub text color light', 'global_sub_text_color')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
 
             Heading::make('Table View')
                 ->hideFromIndex(),
 
             Color::make('Background color', 'table_view_cell_background_color')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
 
             Color::make('Title text color', 'table_view_cell_title_text_color')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
 
             Color::make('Sub text color', 'table_view_cell_sub_text_color')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
 
             Color::make('Chevron color', 'table_view_cell_chevron_color')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
 
             Color::make('Selected background color', 'table_view_cell_selected_background_color')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
 
             Color::make('Selected title text color', 'table_view_cell_selected_title_text_color')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
 
             Color::make('Selected sub text color', 'table_view_cell_selected_sub_text_color')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
 
             Color::make('Selected chevron color', 'table_view_cell_selected_chevron_color')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
 
             Color::make('Action default color', 'table_view_cell_action_default_color')
                 ->hideFromIndex()
-                ->rules('required'),
+                ->required(),
         ];
     }
 
