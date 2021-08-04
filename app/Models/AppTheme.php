@@ -30,6 +30,7 @@ class AppTheme extends KModel implements HasMedia
      */
     protected $appends = [
         'screenshot_image',
+        'screenshot_image_collection',
         'screenshot_image_url',
         'status_bar_style',
         'visual_effect_view_style',
