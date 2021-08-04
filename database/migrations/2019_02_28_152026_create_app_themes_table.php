@@ -19,6 +19,8 @@ class CreateAppThemesTable extends Migration
         Schema::create(AppTheme::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->unsignedBigInteger('download_count')->default(0);
+            $table->string('version')->default('1.0');
 
             $table->unsignedTinyInteger('ui_status_bar_style')->default(StatusBarStyle::Default);
             $table->unsignedTinyInteger('ui_visual_effect_view')->default(VisualEffectViewStyle::Dark);
