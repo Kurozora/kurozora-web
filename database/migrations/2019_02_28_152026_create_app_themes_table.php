@@ -1,7 +1,8 @@
 <?php
 
+use App\Enums\StatusBarStyle;
+use App\Enums\VisualEffectViewStyle;
 use App\Models\AppTheme;
-use App\Enums\iOSUIKit;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,8 +20,8 @@ class CreateAppThemesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
 
-            $table->string('ui_status_bar_style')->default(iOSUIKit::StatusBarStyleDefault);
-            $table->string('ui_visual_effect_view')->default(iOSUIKit::UIVisualEffectViewDark);
+            $table->unsignedTinyInteger('ui_status_bar_style')->default(StatusBarStyle::Default);
+            $table->unsignedTinyInteger('ui_visual_effect_view')->default(VisualEffectViewStyle::Dark);
 
             $table->string('global_background_color');
             $table->string('global_tinted_background_color');
