@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\AppTheme;
 use App\Helpers\JSONResult;
 use App\Http\Resources\AppThemeResource;
+use Auth;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response;
 
 class AppThemeController extends Controller
 {
@@ -28,11 +29,10 @@ class AppThemeController extends Controller
     /**
      * Returns the information for a theme.
      *
-     * @param Request $request
      * @param AppTheme $theme
      * @return JsonResponse
      */
-    public function details(Request $request, AppTheme $theme): JsonResponse
+    public function details(AppTheme $theme): JsonResponse
     {
         return JSONResult::success([
             'data' => AppThemeResource::collection([$theme])
@@ -43,23 +43,24 @@ class AppThemeController extends Controller
      * Serves the plist file to be downloaded
      *
      * @param AppTheme $theme
-     * @return \Illuminate\Http\Response
+     * @return Response
+     * @throws AuthorizationException
      */
-    function download(AppTheme $theme): \Illuminate\Http\Response
+    function download(AppTheme $theme): Response
     {
-        // Name for the theme file
-        $fileName = 'theme-' . $theme->id . '.plist';
+        // Get the auth user
+        $user = Auth::user();
 
-        $content = $theme->pList();
+        if (empty($user->receipt) || !$user->receipt->is_subscribed ?? true) {
+            throw new AuthorizationException('Premium themes are only available to pro users.');
+        }
 
-        // Headers to return for the download
-        $headers = [
-            'Content-type'          => 'application/x-plist',
-            'Content-Disposition'   => sprintf('attachment; filename="%s"', $fileName),
-            'Content-Length'        => strlen($content)
-        ];
+        // Increment the download count of the theme
+        $theme->update([
+            'download_count' => $theme->download_count + 1
+        ]);
 
         // Return the file
-        return Response::make($content, 200, $headers);
+        return $theme->download();
     }
 }

@@ -44,7 +44,7 @@ class UserResourceBasic extends JsonResource
                 'followingCount'    => $user->getFollowingCount(),
                 'reputationCount'   => $user->getReputationCount(),
                 'joinDate'          => $user->created_at->format('Y-m-d'),
-                'isPro'             => $isPro
+                'isPro'             => $isPro,
             ]
         ];
 

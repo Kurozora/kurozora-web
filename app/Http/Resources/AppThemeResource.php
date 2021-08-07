@@ -28,9 +28,11 @@ class AppThemeResource extends JsonResource
             'type'          => 'themes',
             'href'          => route('api.themes.details', $this->resource, false),
             'attributes'        => [
-                'screenshot'    => ImageResource::make($this->resource->screenshot_image),
+                'screenshots'   => ImageResource::collection($this->resource->screenshot_image_collection),
                 'name'          => $this->resource->name,
-                'downloadLink'  => route('api.themes.download', ['theme' => $this->resource->id])
+                'downloadLink'  => route('api.themes.download', ['theme' => $this->resource->id]),
+                'downloadCount' => $this->resource->download_count,
+                'version'       => $this->resource->version,
             ]
         ];
     }
