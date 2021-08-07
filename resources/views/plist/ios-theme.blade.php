@@ -2,10 +2,12 @@
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
     <dict>
+        <key>Version</key>
+        <string>{{ $theme->version }}</string>
         <key>UIStatusBarStyle</key>
-        <string>{{ $theme->ui_status_bar_style }}</string>
+        <string>{{ $theme->statusBarStyle->stringValue() }}</string>
         <key>UIVisualEffectView</key>
-        <string>{{ $theme->ui_visual_effect_view }}</string>
+        <string>{{ $theme->visualEffectViewStyle->stringValue() }}</string>
         <key>Global</key>
         <dict>
             <key>backgroundColor</key>

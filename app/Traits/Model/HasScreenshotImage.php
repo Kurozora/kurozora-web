@@ -6,8 +6,10 @@ use App\Models\Media;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 
 trait HasScreenshotImage
 {
@@ -29,6 +31,16 @@ trait HasScreenshotImage
     }
 
     /**
+     * Get the model's screenshot image collection object.
+     *
+     * @return MediaCollection|null
+     */
+    function getScreenshotImageCollectionAttribute(): MediaCollection|null
+    {
+        return $this->getMedia($this->screenshotImageCollectionName);
+    }
+
+    /**
      * Get the URL of the model's screenshot image.
      *
      * @return string|null
@@ -46,15 +58,12 @@ trait HasScreenshotImage
      * @param array $customProperties
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
+     * @throws FileCannotBeAdded
      */
     function updateScreenshotImage(string|UploadedFile $uploadFile, string $name = null, array $customProperties = [])
     {
         // Determine media adder
-        if (Str::startsWith($uploadFile, ['http://', 'https://'])) {
-            $addMedia = $this->addMediaFromUrl($uploadFile);
-        } else {
-            $addMedia = $this->addMedia($uploadFile);
-        }
+        $addMedia = Str::startsWith($uploadFile, ['http://', 'https://']) ? $this->addMediaFromUrl($uploadFile) : $this->addMedia($uploadFile);
 
         // Configure properties
         if (!empty($name)) {
