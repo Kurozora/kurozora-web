@@ -25,6 +25,7 @@ class GenreSeeder extends Seeder
             // Create genres
             foreach ($parsedGenres->genres as $genre) {
                 Genre::create([
+                    'tv_rating_id'  => $genre->nsfw ? 5 : 2,
                     'name'          => $genre->name,
                     'description'   => $genre->description,
                     'is_nsfw'       => $genre->nsfw,

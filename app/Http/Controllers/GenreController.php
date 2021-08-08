@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Genre;
 use App\Helpers\JSONResult;
 use App\Http\Resources\GenreResource;
+use App\Models\Genre;
 use Illuminate\Http\JsonResponse;
 
 class GenreController extends Controller
@@ -17,12 +17,12 @@ class GenreController extends Controller
     public function overview(): JsonResponse
     {
         // Get all genres and format them
-        $allGenres = Genre::get()->map(function($genre) {
-            return GenreResource::make($genre);
-        });
+        $genres = Genre::all();
 
         // Show genres in response
-        return JSONResult::success(['data' => $allGenres]);
+        return JSONResult::success([
+            'data' => GenreResource::collection($genres)
+        ]);
     }
 
     /**

@@ -3,11 +3,14 @@
 namespace App\Nova;
 
 use Chaseconey\ExternalImage\ExternalImage;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Http\Requests\NovaRequest;
 use Timothyasp\Color\Color;
 
 class Genre extends Resource
@@ -75,6 +78,11 @@ class Genre extends Resource
                 ->rules('required')
                 ->sortable(),
 
+            BelongsTo::make('TV rating', 'tv_rating')
+                ->sortable()
+                ->help('The TV rating of the genre. For example NR, G, PG-12, etc.')
+                ->required(),
+
             BelongsToMany::make('Animes')
                 ->searchable(),
         ];
@@ -139,6 +147,18 @@ class Genre extends Resource
     public function actions(Request $request): array
     {
         return [];
+    }
+
+    /**
+     * Build an "index" query for the given resource.
+     *
+     * @param NovaRequest $request
+     * @param  Builder  $query
+     * @return Builder
+     */
+    public static function indexQuery(NovaRequest $request, $query): Builder
+    {
+        return parent::indexQuery($request, $query)->withoutGlobalScope('tv_rating');
     }
 
     /**

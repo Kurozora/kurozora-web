@@ -5,9 +5,9 @@ namespace App\Models;
 use App\Enums\DayOfWeek;
 use App\Enums\SeasonOfYear;
 use App\Traits\InteractsWithMediaExtension;
-use App\Traits\Searchable;
 use App\Traits\Model\HasBannerImage;
 use App\Traits\Model\HasPosterImage;
+use App\Traits\Searchable;
 use Astrotomic\Translatable\Translatable;
 use Auth;
 use Carbon\Carbon;
@@ -145,6 +145,8 @@ class Anime extends KModel implements HasMedia
                 if (!empty($tvRating)) {
                     $builder->where('tv_rating_id', '<=', $tvRating->id);
                 }
+            } else {
+                $builder->where('tv_rating_id', '<=', 4);
             }
         });
 
