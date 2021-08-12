@@ -19,7 +19,7 @@ class ImportAnimeSongProcessor
     public function process(Collection|array $kSongs)
     {
         foreach ($kSongs as $kSong) {
-            $anime = Anime::where([
+            $anime = Anime::withoutGlobalScope('tv_rating')->where([
                 ['mal_id', $kSong->anime_id],
             ])->first();
             $song = Song::where([

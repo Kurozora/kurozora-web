@@ -20,8 +20,8 @@ class ImportAnimeRelationProcessor
     public function process(Collection|array $kMediaRelated)
     {
         foreach ($kMediaRelated as $kRelatedMedia) {
-            $anime = Anime::firstWhere('mal_id', $kRelatedMedia->media_id);
-            $relatedAnime = Anime::firstWhere('mal_id', $kRelatedMedia->related_id);
+            $anime = Anime::withoutGlobalScope('tv_rating')->firstWhere('mal_id', $kRelatedMedia->media_id);
+            $relatedAnime = Anime::withoutGlobalScope('tv_rating')->firstWhere('mal_id', $kRelatedMedia->related_id);
             $relation = Relation::firstWhere('name', Str::title($kRelatedMedia->related->related));
 
             $mediaRelation = MediaRelation::where([
