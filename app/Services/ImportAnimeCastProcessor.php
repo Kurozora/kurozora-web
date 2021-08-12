@@ -22,7 +22,7 @@ class ImportAnimeCastProcessor
     public function process(Collection|array $kAnimeCasts)
     {
         foreach ($kAnimeCasts as $kAnimeCast) {
-            $animeId = Anime::firstWhere('mal_id', $kAnimeCast->anime_id)->id;
+            $animeId = Anime::withoutGlobalScope('tv_rating')->firstWhere('mal_id', $kAnimeCast->anime_id)->id;
             $characterId = Character::firstWhere('mal_id' , $kAnimeCast->character_id)?->id;
             $personId = Person::firstWhere('mal_id', $kAnimeCast->people_id)?->id;
 

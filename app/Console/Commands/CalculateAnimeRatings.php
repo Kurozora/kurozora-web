@@ -43,7 +43,7 @@ class CalculateAnimeRatings extends Command
         $meanAverageRating = AnimeRating::avg('rating');
 
         // Start looping through Anime
-        $animes = Anime::all();
+        $animes = Anime::withoutGlobalScope('tv_rating')->all();
 
         foreach ($animes as $anime) {
             // Total amount of ratings this Anime has

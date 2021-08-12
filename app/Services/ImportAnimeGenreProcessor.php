@@ -19,8 +19,8 @@ class ImportAnimeGenreProcessor
     public function process(Collection|array $kMediaGenres)
     {
         foreach ($kMediaGenres as $kMediaGenre) {
-            $anime = Anime::firstWhere('mal_id', $kMediaGenre->media_id);
-            $genre = Genre::firstWhere([
+            $anime = Anime::withoutGlobalScope('tv_rating')->firstWhere('mal_id', $kMediaGenre->media_id);
+            $genre = Genre::withoutGlobalScope('tv_rating')->firstWhere([
                 ['name', $kMediaGenre->genre->genre],
             ]);
 

@@ -26,7 +26,7 @@ class ImportAnimeStaffProcessor
                 default => $kStaff->position->position
             };
 
-            $anime = Anime::where([
+            $anime = Anime::withoutGlobalScope('tv_rating')->where([
                 ['mal_id', $kStaff->anime_id],
             ])->first();
             $person = Person::where([
