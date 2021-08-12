@@ -41,7 +41,7 @@ class ImportAnimeProcessor
     public function process(Collection|array $kAnimes)
     {
         foreach ($kAnimes as $kAnime) {
-            $anime = Anime::where([
+            $anime = Anime::withoutGlobalScope('tv_rating')->where([
                 ['mal_id', $kAnime->id],
             ])->first();
 
@@ -255,8 +255,8 @@ class ImportAnimeProcessor
             $mediaName = match ($kTVRating->rating) {
                 'G', 'PG' => 'G',
                 'PG-13' => 'PG-12',
-                'R' => 'R15+',
-                'R+', 'Rx' => 'R18+',
+                'R', 'R+' => 'R15+',
+                'Rx' => 'R18+',
                 default => 'NR',
             };
         }

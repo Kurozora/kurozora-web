@@ -3,12 +3,12 @@
 namespace App\Jobs;
 
 use App\Enums\MALImportBehavior;
-use App\Models\Anime;
 use App\Enums\UserLibraryStatus;
+use App\Models\Anime;
 use App\Models\AnimeRating;
+use App\Models\User;
 use App\Models\UserLibrary;
 use App\Notifications\MALImportFinished;
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -108,7 +108,7 @@ class ProcessMALImport implements ShouldQueue
     protected function handleXMLFileAnime(int $malID, string $malStatus, int $malRating)
     {
         // Try to find the Anime in our DB
-        $anime = Anime::firstWhere('mal_id', $malID);
+        $anime = Anime::withoutGlobalScope('tv_rating')->firstWhere('mal_id', $malID);
 
         // If a match was found
         if (!empty($anime)) {

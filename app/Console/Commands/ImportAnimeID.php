@@ -52,7 +52,7 @@ class ImportAnimeID extends Command
             $sources = $this->filterSources($data->sources);
 
             if (array_key_exists('mal_id', $sources) && array_key_exists('notify_id', $sources)) {
-                $anime = Anime::firstWhere([
+                $anime = Anime::withoutGlobalScope('tv_rating')->firstWhere([
                     ['mal_id', $sources['mal_id']],
                 ]);
 
