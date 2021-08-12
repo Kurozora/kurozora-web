@@ -19,7 +19,7 @@ class ImportAnimeStudioProcessor
     public function process(Collection|array $kAnimeProducers)
     {
         foreach ($kAnimeProducers as $kAnimeProducer) {
-            $anime = Anime::firstWhere('mal_id', $kAnimeProducer->anime_id);
+            $anime = Anime::withoutGlobalScope('tv_rating')->firstWhere('mal_id', $kAnimeProducer->anime_id);
             $studio = Studio::firstWhere([
                 ['type', 'anime'],
                 ['mal_id', $kAnimeProducer->producer_id],

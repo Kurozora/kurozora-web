@@ -2,26 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AnimeViewed;
+use App\Helpers\JSONResult;
+use App\Http\Requests\GetAnimeCastRequest;
 use App\Http\Requests\GetAnimeCharactersRequest;
+use App\Http\Requests\GetAnimeRelatedShowsRequest;
 use App\Http\Requests\GetAnimeSeasonsRequest;
 use App\Http\Requests\GetAnimeStaffRequest;
 use App\Http\Requests\GetAnimeStudiosRequest;
-use App\Http\Requests\GetAnimeCastRequest;
-use App\Http\Requests\GetAnimeRelatedShowsRequest;
-use App\Http\Resources\AnimeStaffResource;
-use App\Http\Resources\StudioResource;
-use App\Models\Anime;
-use App\Models\AnimeRating;
-use App\Events\AnimeViewed;
-use App\Helpers\JSONResult;
 use App\Http\Requests\RateAnimeRequest;
 use App\Http\Requests\SearchAnimeRequest;
 use App\Http\Resources\AnimeCastResource;
 use App\Http\Resources\AnimeRelatedShowsResource;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\AnimeResourceBasic;
-use App\Http\Resources\SeasonResource;
+use App\Http\Resources\AnimeStaffResource;
 use App\Http\Resources\CharacterResourceBasic;
+use App\Http\Resources\SeasonResource;
+use App\Http\Resources\StudioResource;
+use App\Models\Anime;
+use App\Models\AnimeRating;
 use Auth;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
