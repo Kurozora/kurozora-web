@@ -6,8 +6,8 @@ use App\Helpers\JSONResult;
 use App\Http\Requests\GetFollowersRequest;
 use App\Http\Requests\GetFollowingRequest;
 use App\Http\Resources\UserResourceBasic;
-use App\Notifications\NewFollower;
 use App\Models\User;
+use App\Notifications\NewFollower;
 use Auth;
 use Illuminate\Http\JsonResponse;
 
