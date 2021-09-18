@@ -70,7 +70,7 @@ class ExplorePageController extends Controller
         $category = ExplorePageCategory::make([
             'title'     => 'Featured ' . $genre->name . ' Shows',
             'position'  => $position,
-            'type'      => ExplorePageCategoryTypes::Shows,
+            'type'      => ExplorePageCategoryTypes::MostPopularShows,
             'size'      => 'large'
         ]);
 

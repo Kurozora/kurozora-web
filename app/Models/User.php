@@ -6,16 +6,16 @@ use App\Enums\UserActivityStatus;
 use App\Helpers\OptionsBag;
 use App\Jobs\FetchSessionLocation;
 use App\Notifications\NewSession;
+use App\Notifications\ResetPassword as ResetPasswordNotification;
+use App\Notifications\VerifyEmail as VerifyEmailNotification;
 use App\Traits\HeartActionTrait;
 use App\Traits\InteractsWithMediaExtension;
-use App\Traits\Searchable;
 use App\Traits\Model\HasBannerImage;
 use App\Traits\Model\HasProfileImage;
+use App\Traits\Searchable;
 use App\Traits\Web\Auth\TwoFactorAuthenticatable;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
 use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
-use App\Notifications\ResetPassword as ResetPasswordNotification;
-use App\Notifications\VerifyEmail as VerifyEmailNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -300,6 +300,18 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     {
         return $this->belongsToMany(Anime::class, UserReminderAnime::class, 'user_id', 'anime_id')
             ->withTimestamps();
+    }
+
+    /**
+     * Returns a boolean indicating whether the user is a pro user.
+     *
+     * @return bool
+     */
+    function isPro(): bool
+    {
+        $purchaseReceipt = $this->receipt;
+
+        return !empty($purchaseReceipt) && $purchaseReceipt->is_subscribed;
     }
 
     /**

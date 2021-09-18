@@ -27,6 +27,5 @@
         x-show="isCollapsed"
         x-text="'{{ __('more') }}'"
         class="absolute bottom-0 right-0 text-base tracking-normal leading-snug"
-    >
-    </x-simple-button>
+    />
 </p>

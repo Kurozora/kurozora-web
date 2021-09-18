@@ -18,17 +18,6 @@ class Details extends Component
     public ?User $user;
 
     /**
-     * The page's data.
-     *
-     * @var array
-     */
-    public array $page = [
-        'title' => '',
-        'image' => '',
-        'type' => 'profile',
-    ];
-
-    /**
      * Prepare the component.
      *
      * @param User $user
@@ -38,9 +27,6 @@ class Details extends Component
     public function mount(User $user)
     {
         $this->user = $user;
-
-        $this->page['title'] = $user->username . ' on Kurozora';
-        $this->page['image'] = $user->profile_image_url;
     }
 
     /**
