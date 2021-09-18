@@ -66,17 +66,6 @@ class Details extends Component
     ];
 
     /**
-     * The page's data.
-     *
-     * @var array
-     */
-    public array $page = [
-        'title' => '',
-        'image' => '',
-        'type' => 'video.tv_show',
-    ];
-
-    /**
      * Prepare the component.
      *
      * @param Anime $anime
@@ -88,9 +77,6 @@ class Details extends Component
         $this->anime = $anime;
 
         $this->setupActions();
-
-        $this->page['title'] = $anime->original_title;
-        $this->page['image'] = $anime->poster_image_url ?? asset('images/static/placeholders/anime_poster.jpg');
     }
 
     /**
@@ -139,13 +125,7 @@ class Details extends Component
     {
         $user = Auth::user();
 
-        if (empty($user->receipt) || !$user->receipt->is_subscribed ?? true) {
-            $this->popupData = [
-                'title' => __('That’s Unfortunate'),
-                'message' => __('This feature is only accessible to pro users 🧐'),
-            ];
-            $this->showPopup = true;
-        } else {
+        if ($user->isPro()) {
             if ($this->isTracking) {
                 if ($this->isReminded) { // Don't remind the user
                     $user->reminderAnime()->detach($this->anime->id);
@@ -154,7 +134,19 @@ class Details extends Component
                 }
 
                 $this->isReminded = !$this->isReminded;
+            } else {
+                $this->popupData = [
+                    'title' => __('Are you tracking?'),
+                    'message' => __('Make sure to add the anime to your library first.'),
+                ];
+                $this->showPopup = true;
             }
+        } else {
+            $this->popupData = [
+                'title' => __('That’s Unfortunate'),
+                'message' => __('This feature is only accessible to pro users 🧐'),
+            ];
+            $this->showPopup = true;
         }
     }
 

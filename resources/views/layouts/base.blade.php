@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         {{ $meta ?? '' }}
+        <meta property="og:url" content="{{ url()->current() }}" />
+        <meta property="og:site_name" content="{{ config('app.name') }}" />
 
         @if (!empty($appArgument))
-            <meta name="apple-itunes-app" content="app-id={{ config('app.ios.id') }}, app-argument={{ config('app.ios.protocol') }}{{ $appArgument }}">
+            <meta name="apple-itunes-app" content="app-id={{ config('app.ios.id') }}, app-argument={{ config('app.ios.protocol') }}{{ $appArgument }}" />
         @endif
 
         @if (empty($title))
@@ -15,21 +17,27 @@
             <title>{{ $title . ' - ' . config('app.name') }}</title>
         @endif
 
+        @if (empty($description))
+            <meta name="description" content="{{ __('app.description') }}" />
+        @else
+            <meta name="description" content="{{ $description }}" />
+        @endif
+
         <!-- Favicon -->
-        <link rel="shortcut icon" href="{{ url(asset('favicon.ico')) }}">
+        <link rel="shortcut icon" href="{{ url(asset('favicon.ico')) }}" />
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
 
         <!-- Styles -->
-        <link rel="stylesheet" href="{{ url(mix('css/app.css')) }}">
+        <link rel="stylesheet" href="{{ url(mix('css/app.css')) }}" />
         @livewireStyles
 
         <!-- Scripts -->
         <script src="{{ url(mix('js/app.js')) }}" defer></script>
 
         <!-- CSRF Token -->
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <meta name="csrf-token" content="{{ csrf_token() }}" />
     </head>
 
     <body class="bg-white dark:bg-black">
