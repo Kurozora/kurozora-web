@@ -51,9 +51,7 @@ body {
 }
 
 main {
-  @apply flex
-  flex-col
-  flex-grow;
+  @apply flex-grow;
 }
 
 picture::before {
