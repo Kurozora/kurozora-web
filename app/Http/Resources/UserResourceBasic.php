@@ -10,7 +10,14 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class UserResourceBasic extends JsonResource
 {
     /**
-     * Whether or not to include private details in the resource.
+     * The resource instance.
+     *
+     * @var User $resource
+     */
+    public $resource;
+
+    /**
+     * Whether to include private details in the resource.
      *
      * @var bool $includePrivateDetails
      */
@@ -24,11 +31,7 @@ class UserResourceBasic extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var User $user */
         $user = $this->resource;
-
-        $purchaseReceipt = $user->receipt;
-        $isPro = $purchaseReceipt != null && $purchaseReceipt->is_subscribed;
 
         $resource = [
             'id'                => $user->id,
@@ -44,7 +47,7 @@ class UserResourceBasic extends JsonResource
                 'followingCount'    => $user->getFollowingCount(),
                 'reputationCount'   => $user->getReputationCount(),
                 'joinDate'          => $user->created_at->format('Y-m-d'),
-                'isPro'             => $isPro,
+                'isPro'             => $user->isPro(),
             ]
         ];
 
@@ -66,7 +69,6 @@ class UserResourceBasic extends JsonResource
      */
     protected function getUserSpecificDetails(): array
     {
-        /** @var User $followedUser */
         $followedUser = $this->resource;
         $user = Auth::user();
 
@@ -87,7 +89,6 @@ class UserResourceBasic extends JsonResource
      */
     protected function getPrivateDetails(): array
     {
-        /** @var User $user */
         $user = $this->resource;
 
         return [

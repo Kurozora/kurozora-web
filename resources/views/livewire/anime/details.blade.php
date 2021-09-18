@@ -1,6 +1,6 @@
 <main>
     <x-slot name="title">
-        {!! $anime->original_title !!}
+        {!! $anime->title !!}
     </x-slot>
 
     <x-slot name="meta">
@@ -20,20 +20,20 @@
         <div class="relative">
             <div class="flex flex-no-wrap md:relative md:h-full">
                 <picture class="relative overflow-hidden">
-                    <img class="lg:h-full lg:object-cover" src="{{ $anime->banner_image_url ?? asset('images/static/star_bg_lg.jpg') }}" alt="{{ $anime->original_title }} Banner" title="{{ $anime->original_title }}">
+                    <img class="lg:h-full lg:object-cover" src="{{ $anime->banner_image_url ?? asset('images/static/placeholders/anime_banner.jpg') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
                 </picture>
             </div>
 
             <div class="md:absolute md:bottom-0 md:left-0 md:right-0 lg:px-4">
                 <div class="flex flex-no-wrap mx-5 pt-5 pb-8 md:mx-auto md:mb-8 md:p-6 md:max-w-lg md:bg-white md:bg-opacity-50 md:backdrop-filter md:backdrop-blur md:rounded-lg">
                     <picture class="relative w-1/4 h-full mr-2 rounded-lg overflow-hidden">
-                        <img src="{{ $anime->poster_image_url ?? asset('images/static/placeholders/anime_poster.jpg') }}" alt="{{ $anime->original_title }} Poster" title="{{ $anime->original_title }}">
+                        <img src="{{ $anime->poster_image_url ?? asset('images/static/placeholders/anime_poster.jpg') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
                         <div class="absolute top-0 left-0 h-full w-full ring-1 ring-gray-100 ring-opacity-25 ring-inset rounded-lg"></div>
                     </picture>
 
                     <div class="flex flex-col gap-2 justify-between w-3/4">
                         <div>
-                            <p class="font-semibold text-lg leading-tight break-all">{{ $anime->original_title }}</p>
+                            <p class="font-semibold text-lg leading-tight break-all">{{ $anime->title }}</p>
                             <p class="text-sm leading-tight">{{ $anime->information_summary }}</p>
                             <x-pill color="{{ $anime->status->color }}" class="mt-2">{{ $anime->status->name }}</x-pill>
                         </div>
