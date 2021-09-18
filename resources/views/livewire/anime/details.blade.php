@@ -4,9 +4,12 @@
     </x-slot>
 
     <x-slot name="meta">
-        <meta property="og:title" content="{{ $page['title'] }}" />
-        <meta property="og:image" content="{{ $page['image'] }}" />
-        <meta property="og:type" content="{{ $page['type'] }}" />
+        <meta property="og:title" content="{{ $anime->title }} — {{ config('app.name') }}" />
+        <meta property="og:description" content="{{ $anime->synopsis }}" />
+        <meta property="og:image" content="{{ $anime->banner_image_url ?? asset('images/static/placeholders/anime_banner.jpg') }}" />
+        <meta property="og:type" content="video.tv_show" />
+        <meta property="video:duration" content="{{ $anime->duration }}" />
+        <meta property="video:release_date" content="{{ $anime->first_aired }}" />
     </x-slot>
 
     <x-slot name="appArgument">

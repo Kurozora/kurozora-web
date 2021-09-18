@@ -66,17 +66,6 @@ class Details extends Component
     ];
 
     /**
-     * The page's data.
-     *
-     * @var array
-     */
-    public array $page = [
-        'title' => '',
-        'image' => '',
-        'type' => 'video.tv_show',
-    ];
-
-    /**
      * Prepare the component.
      *
      * @param Anime $anime
@@ -88,9 +77,6 @@ class Details extends Component
         $this->anime = $anime;
 
         $this->setupActions();
-
-        $this->page['title'] = $anime->original_title;
-        $this->page['image'] = $anime->poster_image_url ?? asset('images/static/placeholders/anime_poster.jpg');
     }
 
     /**

@@ -4,9 +4,11 @@
     </x-slot>
 
     <x-slot name="meta">
-        <meta property="og:title" content="{{ $page['title'] }}" />
-        <meta property="og:image" content="{{ $page['image'] }}" />
-        <meta property="og:type" content="{{ $page['type'] }}" />
+        <meta property="og:title" content="{{ $user->username . __(' on Kurozora') }}" />
+        <meta property="og:description" content="{{ $user->biography }}" />
+        <meta property="og:image" content="{{ $user->profile_image_url }}" />
+        <meta property="og:type" content="profile" />
+        <meta property="og:profile:username" content="{{ $user->username }}" />
     </x-slot>
 
     <div class="profile-image" style="background-image: url('{{ $user->profile_image_url }}')"></div>
