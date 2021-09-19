@@ -21,7 +21,7 @@
     <div class="flex flex-col gap-2 justify-between mt-2">
         <div>
             <p class="text-lg leading-tight line-clamp-2">{{ $anime->title }}</p>
-            <p class="leading-tight text-black/60 line-clamp-2">{{ $anime->tagline ?? $anime->genres->pluck('name')->join(',  ', ' and ') }}</p>
+            <p class="leading-tight text-black/60 line-clamp-2">{{ $anime->tagline ?? $anime->genres?->pluck('name')->join(',  ', ' and ') }}</p>
         </div>
     </div>
 </div>

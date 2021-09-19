@@ -1,6 +1,6 @@
 @props(['anime'])
 
-<div class="relative w-[374px] h-[460px]">
+<div class="relative w-[350px] h-[430px] pb-2">
     <div class="flex flex-no-wrap h-full">
         <picture class="relative w-full rounded-lg overflow-hidden">
             <img class="w-full h-full object-cover" src="{{ $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.jpg') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
