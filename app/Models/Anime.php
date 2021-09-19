@@ -307,7 +307,7 @@ class Anime extends KModel implements HasMedia
      */
     public function getInformationSummaryAttribute(): string
     {
-        $informationSummary = $this->media_type->name . ' · ' . $this->tv_rating->name;
+        $informationSummary = $this->media_type->name . ' · ' . $this->tv_rating?->name;
         $episodesCount = $this->episode_count ?? null;
         $duration = $this->duration_string;
         $firstAiredYear = $this->first_aired;
