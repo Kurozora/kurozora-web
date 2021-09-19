@@ -3,6 +3,9 @@
 namespace App\Http\Livewire\Anime;
 
 use App\Models\Anime;
+use App\Models\MediaRelation;
+use App\Models\Season;
+use App\Models\Studio;
 use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -17,6 +20,34 @@ class Details extends Component
      * @var Anime $anime
      */
     public Anime $anime;
+
+    /**
+     * The object containing the season collection.
+     *
+     * @var Season[]|null $seasons
+     */
+    public ?array $seasons;
+
+    /**
+     * The object containing the studio data.
+     *
+     * @var Studio|null
+     */
+    public ?Studio $studio = null;
+
+    /**
+     * The object containing more by studio anime collection.
+     *
+     * @var Anime[]|null $moreByStudio
+     */
+    public ?array $moreByStudio;
+
+    /**
+     * The object containing the anime relation collection.
+     *
+     * @var MediaRelation[]|null $animeRelations
+     */
+    public ?array $animeRelations;
 
     /**
      * Whether the user has favorited the anime.
@@ -75,6 +106,10 @@ class Details extends Component
     public function mount(Anime $anime)
     {
         $this->anime = $anime;
+        $this->seasons = $anime->getSeasons(Anime::MAXIMUM_RELATIONSHIPS_LIMIT, reversed: true)->items();
+        $this->studio = $anime->studios()?->firstWhere('is_studio', '=', true) ?? $anime->studios->first();
+        $this->moreByStudio = $this->studio?->getAnime(Studio::MAXIMUM_RELATIONSHIPS_LIMIT)->items();
+        $this->animeRelations = $anime->getAnimeRelations(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)->items();
 
         $this->setupActions();
     }
