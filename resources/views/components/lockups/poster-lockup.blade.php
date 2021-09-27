@@ -1,6 +1,6 @@
 @props(['season'])
 
-<div class="relative w-[350px] pb-2">
+<div {{ $attributes->merge(['class' => 'relative w-full sm:max-w-[350px] pb-2']) }}>
     <div class="flex flex-no-wrap">
         <picture class="relative min-w-[100px] max-w-[100px] min-h-[150px] max-h-[150px] mr-2 rounded-lg overflow-hidden">
             <img class="w-full h-full" src="{{ $season->poster_image_url ?? asset('images/static/placeholders/anime_poster.jpg') }}" alt="{{ $season->title }} Poster" title="{{ $season->title }}">
@@ -10,13 +10,13 @@
 
         <a class="absolute w-full h-full" href="{{ route('seasons.episodes', $season) }}"></a>
 
-        <div class="flex flex-col gap-2 justify-between w-3/4">
+        <div class="flex flex-col gap-1 justify-between w-3/4">
             <div>
                 <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ __('Season') . ' ' . $season->number }}</p>
                 <p class="leading-tight line-clamp-2">{{ $season->title }}</p>
             </div>
 
-            <div class="flex flex-wrap gap-2 justify-between mt-2">
+            <div class="flex flex-wrap gap-1.5 justify-between">
                 <div class="flex flex-wrap w-full justify-between">
                     <p class="text-sm text-black/60">{{ __('Premiere') }}</p>
                     <p class="text-sm">{{ $season->first_aired?->toFormattedDateString() }}</p>

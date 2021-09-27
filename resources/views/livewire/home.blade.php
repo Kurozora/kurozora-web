@@ -15,12 +15,12 @@
         explore
     </x-slot>
 
-    <div class="max-w-7xl mx-auto px-6 pb-6">
+    <div class="max-w-7xl mx-auto px-4 pb-6 sm:px-6">
         @foreach($explorePageCategories as $key => $explorePageCategory)
             @switch($explorePageCategory->type)
             @case('most-popular-shows')
-                <section class="flex pb-10 overflow-x-scroll no-scrollbar">
-                    <div class="flex flex-nowrap space-x-4">
+                <section class="flex pb-8 overflow-x-scroll no-scrollbar">
+                    <div class="flex flex-nowrap gap-4">
                         @foreach(App\Models\Anime::mostPopular()->get() as $anime)
                             <x-lockups.banner-lockup :anime="$anime" />
                         @endforeach
@@ -42,7 +42,7 @@
                     @switch($explorePageCategory->size)
                         @case('large')
                             <div class="flex mt-5 overflow-x-scroll no-scrollbar">
-                                <div class="flex flex-nowrap space-x-4">
+                                <div class="flex flex-nowrap gap-4">
                                     @foreach($explorePageCategory->animes as $anime)
                                         <x-lockups.large-lockup :anime="$anime" />
                                     @endforeach
@@ -50,17 +50,15 @@
                             </div>
                             @break
                         @case('small')
-                            <div class="flex mt-5 overflow-x-scroll no-scrollbar">
-                                <div class="flex flex-nowrap space-x-4">
-                                    @foreach($explorePageCategory->animes as $anime)
-                                        <x-lockups.small-lockup :anime="$anime" />
-                                    @endforeach
-                                </div>
+                            <div class="grid grid-flow-col-dense auto-cols-[calc(100%-2rem)] mt-5 gap-4 overflow-x-scroll no-scrollbar sm:auto-cols-[unset]">
+                                @foreach($explorePageCategory->animes as $anime)
+                                    <x-lockups.small-lockup :anime="$anime" />
+                                @endforeach
                             </div>
                             @break
                         @case('video')
                             <div class="flex mt-5 overflow-x-scroll no-scrollbar">
-                                <div class="flex flex-nowrap space-x-4">
+                                <div class="flex flex-nowrap gap-4">
                                     @foreach($explorePageCategory->animes as $anime)
                                         <x-lockups.video-lockup :anime="$anime" />
                                     @endforeach
@@ -85,7 +83,7 @@
                     </x-section-nav>
 
                     <div class="flex mt-5 overflow-x-scroll no-scrollbar">
-                        <div class="flex flex-nowrap space-x-4">
+                        <div class="flex flex-nowrap gap-4">
                             @foreach($explorePageCategory->genres as $genre)
                                 <x-lockups.medium-lockup
                                     :href="url('/?genre=' . $genre->id)"
