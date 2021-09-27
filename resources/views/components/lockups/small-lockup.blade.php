@@ -19,7 +19,7 @@
                 <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ $anime->tagline ?? $anime->genres?->pluck('name')->join(',  ', ' and ') }}</p>
             </div>
 
-            <livewire:anime.library-button :anime="$anime" />
+            <livewire:anime.library-button :anime="$anime" wire:key="{{ md5($anime->id) }}" />
         </div>
     </div>
 </div>

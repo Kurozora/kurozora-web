@@ -35,7 +35,7 @@
                 </div>
 
                 <div class="flex flex-wrap gap-2 justify-between mt-5 h-10">
-                    <livewire:anime.library-button :anime="$anime" />
+                    <livewire:anime.library-button :anime="$anime" wire:key="{{ md5($anime->id) }}" />
                 </div>
             </div>
         </div>

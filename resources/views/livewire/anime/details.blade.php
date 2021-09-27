@@ -39,7 +39,7 @@
                         </div>
 
                         <div class="flex flex-wrap gap-1 justify-between h-10">
-                            <livewire:anime.library-button :anime="$anime" />
+                            <livewire:anime.library-button :anime="$anime" wire:key="{{ md5($anime->id) }}" />
                             @if($isTracking)
                                 <div class="flex gap-2">
                                     <x-button class="!px-2 w-10 !bg-white text-yellow-300 rounded-full shadow-md hover:!bg-gray-100 hover:text-yellow-500 active:!bg-white active:text-yellow-300" wire:click="remindAnime">

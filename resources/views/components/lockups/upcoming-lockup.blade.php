@@ -27,12 +27,12 @@
             <div class="h-10">
                 @auth
                     @if(!Auth::user()->isPro())
-                        <livewire:anime.reminder-button :anime="$anime" />
+                        <livewire:anime.reminder-button :anime="$anime" wire:key="{{ md5($anime->id) }}" />
                     @else
-                        <livewire:anime.library-button :anime="$anime" />
+                        <livewire:anime.library-button :anime="$anime" wire:key="{{ md5($anime->id) }}" />
                     @endif
                 @else
-                    <livewire:anime.library-button :anime="$anime" />
+                    <livewire:anime.library-button :anime="$anime" wire:key="{{ md5($anime->id) }}" />
                 @endauth
             </div>
 
