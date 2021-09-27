@@ -16,13 +16,15 @@
         anime/{{ $anime->id }}/seasons
     </x-slot>
 
-    <div class="max-w-7xl mx-auto px-4 pb-6 sm:px-6">
-        <section class="flex flex-row flex-wrap gap-4 justify-between">
+    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
+        <section class="grid sm:grid-cols-2 sm:auto-cols-[unset] lg:grid-cols-3 gap-4">
             @foreach($animeRelations as $animeRelation)
                 <x-lockups.small-lockup :anime="$animeRelation->related_anime" :relation="$animeRelation->relation" />
             @endforeach
         </section>
 
-        {{ $animeRelations->links() }}
+        <section class="mt-4">
+            {{ $animeRelations->links() }}
+        </section>
     </div>
 </main>
