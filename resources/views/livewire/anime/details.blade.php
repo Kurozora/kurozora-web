@@ -16,18 +16,18 @@
         anime/{{ $anime->id }}
     </x-slot>
 
-    <div class="grid grid-rows-[repeat(2,minmax(0,min-content))] mb-4 h-full lg:grid-rows-none lg:grid-cols-2 2xl:grid-cols-3 lg:mb-0">
+    <div class="grid grid-rows-[repeat(2,minmax(0,min-content))] h-full lg:grid-rows-none lg:grid-cols-2 2xl:grid-cols-3 lg:mb-0">
         <div class="relative">
             <div class="flex flex-no-wrap md:relative md:h-full">
-                <picture class="relative overflow-hidden">
-                    <img class="lg:h-full lg:object-cover" src="{{ $anime->banner_image_url ?? asset('images/static/placeholders/anime_banner.jpg') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
+                <picture class="relative w-full overflow-hidden">
+                    <img class="w-full h-full object-cover" src="{{ $anime->banner_image_url ?? asset('images/static/placeholders/anime_banner.jpg') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
                 </picture>
             </div>
 
             <div class="md:absolute md:bottom-0 md:left-0 md:right-0 lg:px-4">
-                <div class="flex flex-no-wrap mx-5 pt-5 pb-8 md:mx-auto md:mb-8 md:p-6 md:max-w-lg md:bg-white md:bg-opacity-50 md:backdrop-filter md:backdrop-blur md:rounded-lg">
-                    <picture class="relative w-1/4 h-full mr-2 rounded-lg overflow-hidden">
-                        <img src="{{ $anime->poster_image_url ?? asset('images/static/placeholders/anime_poster.jpg') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
+                <div class="flex flex-no-wrap pt-5 pb-8 px-4 md:mx-auto md:mb-8 md:p-6 md:max-w-lg md:bg-white md:bg-opacity-50 md:backdrop-filter md:backdrop-blur md:rounded-lg">
+                    <picture class="relative min-w-[100px] max-w-[100px] min-h-[150px] max-h-[150px] mr-2 rounded-lg overflow-hidden">
+                        <img class="w-full h-full object-cover" src="{{ $anime->poster_image_url ?? asset('images/static/placeholders/anime_poster.jpg') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
                         <div class="absolute top-0 left-0 h-full w-full ring-1 ring-gray-100 ring-opacity-25 ring-inset rounded-lg"></div>
                     </picture>
 
@@ -38,8 +38,8 @@
                             <x-pill color="{{ $anime->status->color }}" class="mt-2">{{ $anime->status->name }}</x-pill>
                         </div>
 
-                        <div class="flex flex-wrap gap-2 justify-between mt-5 h-10">
-                            <livewire:anime.library-button :anime="$anime" />
+                        <div class="flex flex-wrap gap-1 justify-between h-10">
+                            <livewire:anime.library-button :anime="$anime" wire:key="{{ md5($anime->id) }}" />
                             @if($isTracking)
                                 <div class="flex gap-2">
                                     <x-button class="!px-2 w-10 !bg-white text-yellow-300 rounded-full shadow-md hover:!bg-gray-100 hover:text-yellow-500 active:!bg-white active:text-yellow-300" wire:click="remindAnime">
@@ -64,8 +64,8 @@
             </div>
         </div>
 
-        <div class="mt-4 mx-5 2xl:col-span-2 lg:max-h-[calc(100vh-64px)] overflow-x-hidden overflow-y-scroll no-scrollbar">
-            <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between text-center pb-5 overflow-x-scroll no-scrollbar">
+        <div class="pt-4 2xl:col-span-2 lg:max-h-[calc(100vh-64px)] overflow-x-hidden overflow-y-scroll no-scrollbar">
+            <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between text-center pb-5 px-4 overflow-x-scroll no-scrollbar">
                 <div id="ratingBadge" class="flex-grow pr-12">
                     <a href="#ratingsAndReviews">
                         <p class="inline-flex font-bold text-orange-500">
@@ -99,10 +99,10 @@
                     </a>
                 </div>
 
-                @if ($anime->studios()->count())
+                @if (!empty($studio))
                     <div id="studioBadge" class="flex-grow px-12 border-l-2">
-                        <a href="#moreByStudio">
-                            <p class="font-bold">{{ $anime->studios()->first()->name }}</p>
+                        <a href="{{ route('studios.details', $studio) }}">
+                            <p class="font-bold">{{ $studio->name }}</p>
                             <p class="text-sm text-gray-500">{{ __('Studio') }}</p>
                         </a>
                     </div>
@@ -117,7 +117,7 @@
             </section>
 
             @if (!empty($anime->synopsis))
-                <section class="pt-5 pb-8 border-t-2">
+                <section class="pt-5 pb-8 px-4 border-t-2">
                     <x-section-nav class="flex flex-no-wrap justify-between mb-5">
                         <x-slot name="title">
                             {{ __('Synopsis') }}
@@ -132,7 +132,7 @@
                 </section>
             @endif
 
-            <section id="ratingsAndReviews" class="pt-5 pb-8 border-t-2">
+            <section id="ratingsAndReviews" class="pt-5 pb-8 px-4 border-t-2">
                 <x-section-nav>
                     <x-slot name="title">
                         {{ __('Ratings & Reviews') }}
@@ -154,7 +154,7 @@
                 </div>
             </section>
 
-            <section class="pt-5 pb-8 border-t-2">
+            <section class="pt-5 pb-8 px-4 border-t-2">
                 <x-section-nav>
                     <x-slot name="title">
                         {{ __('Information') }}
@@ -184,7 +184,7 @@
 
                     <x-information-list id="genres" title="{{ __('Genres') }}" icon="{{ asset('images/symbols/theatermasks.svg') }}">
                         <x-slot name="information">
-                            {{ $anime->genres->implode('name', ', ') ?: '-' }}
+                            {{ $anime->genres?->pluck('name')->join(',  ', ' and ') ?: '-' }}
                         </x-slot>
                     </x-information-list>
 
@@ -223,7 +223,7 @@
                             {{ __('No broadcast data available at the moment.') }}
                         @else
                             <div class="flex flex-col align-center mt-1">
-                                <p class="font-black text-2xl" wire:poll.1000ms>
+                                <p class="font-black text-2xl">
                                     {{ $anime->time_until_broadcast }}
                                 </p>
                             </div>
@@ -271,7 +271,7 @@
 
                     <x-information-list id="languages" title="{{ __('Languages') }}" icon="{{ asset('images/symbols/globe.svg') }}">
                         <x-slot name="information">
-                            {{ $anime->languages->implode('name', ', ') ?: '-' }}
+                            {{ $anime->languages->pluck('name')->join(',  ', ' and ') ?: '-' }}
                         </x-slot>
                     </x-information-list>
 
@@ -289,16 +289,80 @@
                 </div>
             </section>
 
-            <section class="pt-5 pb-2 border-t">
-                <p class="text-sm text-gray-400">{{ $anime->copyright }}</p>
-            </section>
+            @if (!empty($seasons))
+                <section class="pt-5 pb-8 px-4 border-t-2">
+                    <x-section-nav>
+                        <x-slot name="title">
+                            {{ __('Seasons') }}
+                        </x-slot>
+
+                        <x-slot name="action">
+                            <x-simple-link href="{{ route('anime.seasons', $anime) }}">{{ __('See All') }}</x-simple-link>
+                        </x-slot>
+                    </x-section-nav>
+
+                    <div class="grid grid-flow-col-dense auto-cols-[calc(100%-2rem)] gap-4 overflow-x-scroll no-scrollbar sm:auto-cols-[max-content]">
+                        @foreach($seasons as $season)
+                            <x-lockups.poster-lockup :season="$season" />
+                        @endforeach
+                    </div>
+                </section>
+            @endif
+
+            <div class="bg-orange-50">
+                @if (!empty($moreByStudio))
+                    <section id="moreByStudio" class="pt-5 pb-8 px-4 border-t-2">
+                        <x-section-nav>
+                            <x-slot name="title">
+                                {{ __('More By :x', ['x' => $studio->name]) }}
+                            </x-slot>
+
+                            <x-slot name="action">
+                                <x-simple-link href="{{ route('studios.details', $studio) }}">{{ __('See All') }}</x-simple-link>
+                            </x-slot>
+                        </x-section-nav>
+
+                        <div class="grid grid-flow-col-dense auto-cols-[calc(100%-2rem)] gap-4 overflow-x-scroll no-scrollbar sm:auto-cols-[unset]">
+                            @foreach($moreByStudio as $moreByStudioAnime)
+                                <x-lockups.small-lockup :anime="$moreByStudioAnime" />
+                            @endforeach
+                        </div>
+                    </section>
+                @endif
+
+                @if (!empty($animeRelations))
+                    <section id="related" class="pt-5 pb-8 px-4 border-t-2">
+                        <x-section-nav>
+                            <x-slot name="title">
+                                {{ __('Related') }}
+                            </x-slot>
+
+                            <x-slot name="action">
+                                <x-simple-link href="{{ route('anime.related-shows', $anime) }}">{{ __('See All') }}</x-simple-link>
+                            </x-slot>
+                        </x-section-nav>
+
+                        <div class="grid grid-flow-col-dense auto-cols-[calc(100%-2rem)] gap-4 overflow-x-scroll no-scrollbar sm:auto-cols-[unset]">
+                            @foreach($animeRelations as $relatedAnime)
+                                <x-lockups.small-lockup :anime="$relatedAnime->related_anime" :relation="$relatedAnime->relation" />
+                            @endforeach
+                        </div>
+                    </section>
+                @endif
+
+                @if (!empty($anime->copyright))
+                    <section class="p-4 border-t-[1px]">
+                        <p class="text-sm text-gray-400">{{ $anime->copyright }}</p>
+                    </section>
+                @endif
+            </div>
 
             <x-dialog-modal maxWidth="md" wire:model="showPopup">
                 <x-slot name="title">
                     {{ $popupData['title'] }}
                 </x-slot>
                 <x-slot name="content">
-                    <p class="">{{ $popupData['message'] }}</p>
+                    <p>{{ $popupData['message'] }}</p>
                 </x-slot>
                 <x-slot name="footer">
                     <x-button wire:click="$toggle('showPopup')">{{ __('Ok') }}</x-button>

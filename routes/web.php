@@ -12,7 +12,10 @@ require 'Web/Authentication.php';
 
 // Landing pages
 require 'Web/Anime.php';
+require 'Web/Episodes.php';
 require 'Web/Profile.php';
+require 'Web/Seasons.php';
+require 'Web/Studios.php';
 require 'Web/Theme.php';
 
 // Legal pages
