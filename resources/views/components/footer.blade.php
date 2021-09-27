@@ -1,5 +1,5 @@
 <footer class="bg-gray-100">
-    <div class="max-w-7xl mx-auto px-6 pt-10 pb-6">
+    <div class="max-w-7xl mx-auto px-4 pt-10 pb-6 sm:px-6">
         <div class="flex flex-wrap">
             <div class="w-1/2 md:w-1/5 sm:w-1/3 text-center md:text-left">
                 <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('Account') }}</h5>

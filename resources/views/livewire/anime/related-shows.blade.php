@@ -16,7 +16,7 @@
         anime/{{ $anime->id }}/seasons
     </x-slot>
 
-    <div class="max-w-7xl mx-auto p-6">
+    <div class="max-w-7xl mx-auto px-4 pb-6 sm:px-6">
         <section class="flex flex-row flex-wrap gap-4 justify-between">
             @foreach($animeRelations as $animeRelation)
                 <x-lockups.small-lockup :anime="$animeRelation->related_anime" :relation="$animeRelation->relation" />

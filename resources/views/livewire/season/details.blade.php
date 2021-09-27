@@ -16,11 +16,15 @@
         anime/{{ $anime->id }}/seasons
     </x-slot>
 
-    <div class="max-w-7xl mx-auto p-6">
-        <section class="flex flex-row flex-wrap gap-4 justify-between">
-            @foreach($anime->seasons as $season)
+    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
+        <section class="grid sm:grid-cols-2 sm:auto-cols-[unset] lg:grid-cols-3 gap-4">
+            @foreach($seasons as $season)
                 <x-lockups.poster-lockup :season="$season" />
             @endforeach
+        </section>
+
+        <section class="mt-4">
+            {{ $seasons->links() }}
         </section>
     </div>
 </main>

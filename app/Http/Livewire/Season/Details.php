@@ -7,9 +7,12 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Details extends Component
 {
+    use WithPagination;
+
     /**
      * The object containing the anime data.
      *
@@ -36,7 +39,9 @@ class Details extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.season.details')
+        return view('livewire.season.details', [
+            'seasons' => $this->anime->seasons()->paginate(25)
+        ])
             ->layout('layouts.base');
     }
 }
