@@ -16,14 +16,15 @@
         seasons/{{ $season->id }}/episodes
     </x-slot>
 
-    <div class="max-w-7xl mx-auto p-6">
-        <section class="flex flex-row flex-wrap gap-4 justify-between">
-            <ol class="list-decimal">
-                @foreach($season->episodes as $episode)
-                    <li>{{ $episode->title }}</li>
-{{--                <x-lockups.poster-lockup :season="$episode" />--}}
-                @endforeach
-            </ol>
+    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
+        <section class="grid sm:grid-cols-2 sm:auto-cols-[unset] lg:grid-cols-3 gap-4">
+            @foreach($episodes as $episode)
+                <x-lockups.episode-lockup :episode="$episode" />
+            @endforeach
+        </section>
+
+        <section class="mt-4">
+            {{ $episodes->links() }}
         </section>
     </div>
 </main>
