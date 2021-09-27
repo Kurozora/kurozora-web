@@ -19,6 +19,9 @@ class Season extends KModel implements HasMedia
         InteractsWithMediaExtension,
         Translatable;
 
+    // Maximum relationships fetch limit
+    const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
+
     // Table name
     const TABLE_NAME = 'seasons';
     protected $table = self::TABLE_NAME;
