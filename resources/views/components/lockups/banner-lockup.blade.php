@@ -21,7 +21,7 @@
 
     <div class="absolute bottom-0 right-0 p-3 pb-5">
         <div class="flex h-10 mt-auto">
-            <livewire:anime.library-button :anime="$anime" />
+            <livewire:anime.library-button :anime="$anime" wire:key="{{ md5($anime->id) }}" />
         </div>
     </div>
 </div>
