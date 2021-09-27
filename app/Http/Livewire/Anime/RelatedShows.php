@@ -40,7 +40,7 @@ class RelatedShows extends Component
     public function render(): Application|Factory|View
     {
         return view('livewire.anime.related-shows', [
-            'animeRelations' => $this->anime->getAnimeRelations()
+            'animeRelations' => $this->anime->anime_relations()->paginate(25)
         ])
             ->layout('layouts.base');
     }
