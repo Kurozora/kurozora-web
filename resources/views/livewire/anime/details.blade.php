@@ -19,8 +19,8 @@
     <div class="grid grid-rows-[repeat(2,minmax(0,min-content))] h-full lg:grid-rows-none lg:grid-cols-2 2xl:grid-cols-3 lg:mb-0">
         <div class="relative">
             <div class="flex flex-no-wrap md:relative md:h-full">
-                <picture class="relative overflow-hidden">
-                    <img class="lg:h-full lg:object-cover" src="{{ $anime->banner_image_url ?? asset('images/static/placeholders/anime_banner.jpg') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
+                <picture class="relative w-full overflow-hidden">
+                    <img class="w-full h-full object-cover" src="{{ $anime->banner_image_url ?? asset('images/static/placeholders/anime_banner.jpg') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
                 </picture>
             </div>
 

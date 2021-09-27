@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Livewire\Season\Details as SeasonDetails;
 use App\Http\Livewire\Season\Episodes;
 
 Route::prefix('/seasons')
@@ -8,9 +7,6 @@ Route::prefix('/seasons')
     ->group(function() {
         Route::prefix('{season}')
             ->group(function () {
-                Route::get('/', SeasonDetails::class)
-                    ->name('.details');
-
                 Route::get('/episodes', Episodes::class)
                     ->name('.episodes');
             });
