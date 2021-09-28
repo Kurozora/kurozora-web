@@ -33,7 +33,6 @@ class Details extends Component
      */
     public Anime $anime;
 
-
     /**
      * Whether to show the popup to the user.
      *
