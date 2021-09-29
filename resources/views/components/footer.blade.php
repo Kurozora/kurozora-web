@@ -20,10 +20,10 @@
                         <x-footer-link href="#">{{ __('Kurozora+') }}</x-footer-link>
                     </li>
                     <li class="mt-2">
-                        <x-footer-link href="#">{{ __('Kurozora App') }}</x-footer-link>
+                        <x-footer-link href="{{ config('app.ios.url') }}" target="_blank">{{ __('Kurozora App') }}</x-footer-link>
                     </li>
                     <li class="mt-2">
-                        <x-footer-link href="{{ route('api') }}">{{ __('Kurozora API') }}</x-footer-link>
+                        <x-footer-link href="{{ route('api') }}" target="_blank">{{ __('Kurozora API') }}</x-footer-link>
                     </li>
                 </ul>
             </div>
@@ -44,8 +44,7 @@
                         <x-footer-link href="#">{{ __('Investors') }}</x-footer-link>
                     </li>
                     <li class="mt-2">
-{{--                        <x-footer-link href="{{ route('misc.contact') }}">{{ __('Contact Kurozora') }}</x-footer-link>--}}
-                        <x-footer-link href="#">{{ __('Contact Kurozora') }}</x-footer-link>
+                        <x-footer-link href="{{ route('misc.contact') }}">{{ __('Contact Kurozora') }}</x-footer-link>
                     </li>
                 </ul>
             </div>

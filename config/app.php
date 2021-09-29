@@ -38,7 +38,7 @@ return [
     | or any other location as required by the application or its packages.
     */
 
-    'version' => '1.2.0-alpha.148',
+    'version' => '1.2.0-alpha.149',
 
     /*
     |--------------------------------------------------------------------------
@@ -52,6 +52,7 @@ return [
     'ios' => [
         'id'        => '1476153872',
         'protocol'  => 'kurozora://',
+        'url'       => 'https://apps.apple.com/us/app/kurozora/id1476153872',
     ],
 
     /*
