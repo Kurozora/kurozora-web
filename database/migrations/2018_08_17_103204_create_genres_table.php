@@ -17,7 +17,7 @@ class CreateGenresTable extends Migration
     {
         Schema::create(Genre::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('tv_rating_id');
+            $table->unsignedBigInteger('tv_rating_id')->nullable();
             $table->string('name');
             $table->string('symbol')->nullable();
             $table->string('color')->default('#ffffff');
