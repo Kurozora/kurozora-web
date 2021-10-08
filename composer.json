@@ -11,6 +11,7 @@
         "ext-simplexml": "*",
         "anaseqal/nova-sidebar-icons": "^0.0",
         "astrotomic/laravel-translatable": "^11.9",
+        "aws/aws-sdk-php": "^3.198",
         "bacon/bacon-qr-code": "^2.0",
         "bensampo/laravel-enum": "^3.0",
         "beyondcode/laravel-websockets": "^1.12",
