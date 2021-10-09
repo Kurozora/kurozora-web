@@ -15,9 +15,6 @@ Route::prefix('/users')
         Route::post('/signin', [SessionController::class, 'create'])
             ->name('.sign-in');
 
-        Route::post('/signin/siwa', [SignInWithAppleController::class, 'signIn'])
-            ->name('.sign-in.siwa');
-
         Route::post('/reset-password', [UserController::class, 'resetPassword'])
             ->name('.reset-password');
 
