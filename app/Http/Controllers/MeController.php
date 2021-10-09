@@ -21,6 +21,7 @@ use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
@@ -54,6 +55,7 @@ class MeController extends Controller
      * @throws AuthorizationException
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
+     * @throws FileCannotBeAdded
      */
     public function updateProfile(UpdateProfileRequest $request): JsonResponse
     {

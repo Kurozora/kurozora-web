@@ -8,6 +8,7 @@ use App\Models\User;
 use Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
@@ -21,6 +22,7 @@ class RegistrationController extends Controller
      * @return JsonResponse
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
+     * @throws FileCannotBeAdded
      */
     public function signUp(SignUpRequest $request): JsonResponse
     {

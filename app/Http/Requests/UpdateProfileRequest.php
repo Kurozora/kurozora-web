@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\ValidateProfileImage;
 use App\Rules\ValidateBannerImage;
+use App\Rules\ValidateProfileImage;
 use App\Rules\ValidateUserBiography;
 use App\Rules\ValidateUsername;
 use Illuminate\Foundation\Http\FormRequest;
