@@ -244,16 +244,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.198.0",
+            "version": "3.198.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "313472659580c84efa343b5f3ef65e5d42f0fbd6"
+                "reference": "79bf3298bd2893eb0b4614c2463e9f675d07118b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/313472659580c84efa343b5f3ef65e5d42f0fbd6",
-                "reference": "313472659580c84efa343b5f3ef65e5d42f0fbd6",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/79bf3298bd2893eb0b4614c2463e9f675d07118b",
+                "reference": "79bf3298bd2893eb0b4614c2463e9f675d07118b",
                 "shasum": ""
             },
             "require": {
@@ -329,9 +329,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.198.0"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.198.1"
             },
-            "time": "2021-10-07T18:19:25+00:00"
+            "time": "2021-10-08T18:28:30+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -8256,16 +8256,16 @@
         },
         {
             "name": "spatie/laravel-medialibrary",
-            "version": "9.8.0",
+            "version": "9.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-medialibrary.git",
-                "reference": "5af16779d63426b5d968a9900a3e8e68b6d29c31"
+                "reference": "a73cde4f0438e6e6d6ec8f6d6a7258ba1e281a34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/5af16779d63426b5d968a9900a3e8e68b6d29c31",
-                "reference": "5af16779d63426b5d968a9900a3e8e68b6d29c31",
+                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/a73cde4f0438e6e6d6ec8f6d6a7258ba1e281a34",
+                "reference": "a73cde4f0438e6e6d6ec8f6d6a7258ba1e281a34",
                 "shasum": ""
             },
             "require": {
@@ -8345,7 +8345,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-medialibrary/issues",
-                "source": "https://github.com/spatie/laravel-medialibrary/tree/9.8.0"
+                "source": "https://github.com/spatie/laravel-medialibrary/tree/9.8.1"
             },
             "funding": [
                 {
@@ -8357,7 +8357,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-10-04T15:38:15+00:00"
+            "time": "2021-10-08T06:36:33+00:00"
         },
         {
             "name": "spatie/laravel-permission",
@@ -12585,16 +12585,16 @@
         },
         {
             "name": "facade/ignition",
-            "version": "2.14.0",
+            "version": "2.14.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/facade/ignition.git",
-                "reference": "c6126e291bd44ad3fe482537a145fc70e3320598"
+                "reference": "6d89c4c99537f487ad29f646d57ebf107ef714ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facade/ignition/zipball/c6126e291bd44ad3fe482537a145fc70e3320598",
-                "reference": "c6126e291bd44ad3fe482537a145fc70e3320598",
+                "url": "https://api.github.com/repos/facade/ignition/zipball/6d89c4c99537f487ad29f646d57ebf107ef714ed",
+                "reference": "6d89c4c99537f487ad29f646d57ebf107ef714ed",
                 "shasum": ""
             },
             "require": {
@@ -12657,7 +12657,7 @@
                 "issues": "https://github.com/facade/ignition/issues",
                 "source": "https://github.com/facade/ignition"
             },
-            "time": "2021-10-01T12:58:45+00:00"
+            "time": "2021-10-08T12:34:52+00:00"
         },
         {
             "name": "fakerphp/faker",
