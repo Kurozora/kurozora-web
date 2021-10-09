@@ -38,7 +38,7 @@ return [
     | or any other location as required by the application or its packages.
     */
 
-    'version' => '1.2.0-alpha.155',
+    'version' => '1.2.0-alpha.157',
 
     /*
     |--------------------------------------------------------------------------
@@ -51,7 +51,7 @@ return [
 
     'ios' => [
         'id'        => '1476153872',
-        'bundle_id' => env('APP_BUNDLE_ID'),
+        'bundle_id' => env('APP_BUNDLE_ID', 'app.kurozora.tracker'),
         'protocol'  => 'kurozora://',
         'url'       => 'https://apps.apple.com/us/app/kurozora/id1476153872',
     ],

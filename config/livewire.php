@@ -84,7 +84,7 @@ return [
     'temporary_file_upload' => [
         'disk' => env('APP_ENV') == 'local' ? 'local' : 's3',      // Example: 'local', 's3'              Default: 'default'
         'rules' => [            // Example: ['file', 'mimes:png,jpg']  Default: ['required', 'file', 'max:12288'] (12MB)
-            'required', 'file', 'max:20480'
+            'required', 'file', 'max:2048'
         ],
         'directory' => null,    // Example: 'tmp'                      Default  'livewire-tmp'
         'middleware' => null,   // Example: 'throttle:5,1'             Default: 'throttle:60,1'
