@@ -36,6 +36,7 @@ use Imdhemy\Purchases\Events\GooglePlay\SubscriptionRevoked;
 
 return [
     'routing' => [
+        'middleware' => 'api',
         'prefix' => 'api/v1'
     ],
 
@@ -65,7 +66,7 @@ return [
 
         /**
          * --------------------------------------------------------
-         * Appstore Events
+         * App Store Events
          * --------------------------------------------------------
          */
         Cancel::class => [CancelSubscription::class],

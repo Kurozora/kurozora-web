@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
-use App\Http\Requests\GetStoreRequest;
 use App\Http\Requests\VerifyReceiptRequest;
-use App\Http\Resources\StoreProductResource;
-use App\Models\StoreProduct;
 use App\Models\UserReceipt;
 use Auth;
 use GuzzleHttp\Exception\GuzzleException;
@@ -19,28 +16,6 @@ use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class StoreController extends Controller
 {
-    /**
-     * Returns the list of products in the store.
-     *
-     * @param GetStoreRequest $request
-     *
-     * @return JsonResponse
-     */
-    function index(GetStoreRequest $request): JsonResponse
-    {
-        $data = $request->validated();
-
-        $storeProducts = StoreProduct::all();
-
-        if (isset($data['type'])) {
-            $storeProducts = $storeProducts->where('type', '=', $data['type']);
-        }
-
-        return JSONResult::success([
-            'data' => StoreProductResource::collection($storeProducts)
-        ]);
-    }
-
     /**
      * Verify the App Store receipt.
      *
@@ -58,7 +33,7 @@ class StoreController extends Controller
         $receiptData = $this->validated($receipt);
 
         if (!$receiptData->getStatus()->isValid() &&
-            $receiptData->getReceipt()->getBundleId() != Env('APP_BUNDLE_ID')) {
+            $receiptData->getReceipt()->getBundleId() != config('app.ios.bundle_id')) {
             throw new ConflictHttpException('The generated receipt is invalid.');
         }
 
@@ -72,7 +47,7 @@ class StoreController extends Controller
         $pendingRenewalInfo = $receiptData->getPendingRenewalInfo()[0];
         $isInGracePeriod = $this->isInGracePeriod($pendingRenewalInfo);
 
-        // Decide validity of the subscription and whether it will auto renew.
+        // Decide validity of the subscription and whether it will auto-renew.
         $subscriptionIsValid = $expiresDate->isFuture() || $isInGracePeriod;
         $willAutoRenew = $pendingRenewalInfo->isAutoRenewStatus();
 
@@ -126,9 +101,10 @@ class StoreController extends Controller
     private function validated(string $receiptData): ReceiptResponse
     {
         // To verify auto-renewable receipt
-        return Subscription::appStore()->receiptData($receiptData)->renewable()->verifyReceipt();
+        return Subscription::appStore()
+            ->receiptData($receiptData)
+            ->verifyRenewable();
     }
-
 
     /**
      * Billing retrying and grace period expires date is in the future.

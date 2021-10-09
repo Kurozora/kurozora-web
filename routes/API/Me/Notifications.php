@@ -4,7 +4,7 @@ use App\Http\Controllers\NotificationController;
 
 Route::prefix('/notifications')
     ->name('.notifications')
-    ->group(function() {
+    ->group(function () {
         Route::get('/', [NotificationController::class, 'index'])
             ->middleware('auth.kurozora');
 
