@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DRIVER', 'local'),
+    'default' => env('FILESYSTEM_DRIVER', 'project'),
 
     'cloud' => env('FILESYSTEM_CLOUD', 's3'),
 

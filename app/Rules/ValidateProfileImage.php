@@ -22,7 +22,7 @@ class ValidateProfileImage implements Rule
 //        $user = Auth::user();
 //        $userReceipt = $user->receipt;
 
-        $rules = ['max:1000', 'nullable'];
+        $rules = ['max:2048', 'nullable'];
         $allowedMimes = 'mimes:jpeg,jpg,png';
 //        $allowedMimes = $userReceipt === null || !$userReceipt->is_subscribed ? 'mimes:jpeg,jpg,png' : 'mimes:jpeg,jpg,png,gif';
         array_push($rules, $allowedMimes);
