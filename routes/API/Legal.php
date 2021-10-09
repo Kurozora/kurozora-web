@@ -4,7 +4,7 @@ use App\Http\Controllers\MiscController;
 
 Route::prefix('/legal')
     ->name('.legal')
-    ->group(function() {
+    ->group(function () {
         Route::get('privacy-policy', [MiscController::class, 'getPrivacyPolicy'])
             ->name('.privacy-policy');
 

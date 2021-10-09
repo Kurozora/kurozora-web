@@ -4,7 +4,7 @@ use App\Http\Controllers\CharacterController;
 
 Route::prefix('/characters')
     ->name('.characters')
-    ->group(function() {
+    ->group(function () {
         Route::prefix('{character}')
             ->group(function () {
                 Route::get('/', [CharacterController::class, 'details'])

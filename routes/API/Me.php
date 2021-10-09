@@ -4,7 +4,7 @@ use App\Http\Controllers\MeController;
 
 Route::prefix('/me')
     ->name('.me')
-    ->group(function() {
+    ->group(function () {
         Route::get('/', [MeController::class, 'me'])
             ->middleware('auth.kurozora');
 

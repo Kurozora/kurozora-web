@@ -4,7 +4,7 @@ use App\Http\Controllers\SeasonController;
 
 Route::prefix('/seasons')
     ->name('.seasons')
-    ->group(function() {
+    ->group(function () {
         Route::prefix('{season}')
             ->group(function () {
                 Route::get('/', [SeasonController::class, 'details'])

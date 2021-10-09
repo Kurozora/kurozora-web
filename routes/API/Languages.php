@@ -4,7 +4,7 @@ use App\Http\Controllers\LanguageController;
 
 Route::prefix('/languages')
     ->name('.languages')
-    ->group(function() {
+    ->group(function () {
         Route::get('/', [LanguageController::class, 'overview'])
             ->name('.overview');
 
