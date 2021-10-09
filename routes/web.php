@@ -19,5 +19,8 @@ require 'Web/Seasons.php';
 require 'Web/Studios.php';
 require 'Web/Theme.php';
 
+// Misc pages
+require 'Web/Misc.php';
+
 // Legal pages
 require 'Web/Legal.php';
