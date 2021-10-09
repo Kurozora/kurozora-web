@@ -10,7 +10,7 @@
     </x-slot>
 
     <div x-data="{ recovery: false }"
-         class="max-w-prose w-screen my-auto mx-4 sm:mx-0 p-10 rounded-md shadow-lg"
+         class="flex flex-col justify-center max-w-prose w-screen h-full max-w-prose mx-auto px-4 py-6 sm:px-6"
     >
         <div class="mb-5 text-center text-gray-600" x-show="! recovery">
             <p class="text-2xl font-bold">{{ __('Enter Authorization Code') }}</p>
@@ -37,7 +37,7 @@
                 <x-input id="recovery_code" class="block mt-1 w-full" type="text" name="recovery_code" x-ref="recovery_code" autocomplete="one-time-code" />
             </div>
 
-            <div class="flex items-center justify-end mt-4">
+            <div class="flex flex-col items-center justify-end mt-4">
                 <button type="button" class="text-sm text-gray-600 hover:text-gray-900 underline cursor-pointer"
                                 x-show="! recovery"
                                 x-on:click="
@@ -47,7 +47,7 @@
                     {{ __('Use a recovery code') }}
                 </button>
 
-                <button type="button" class="text-sm text-gray-600 hover:text-gray-900 underline cursor-pointer"
+                <button type="button" class="mt-4 text-sm text-gray-600 hover:text-gray-900 underline cursor-pointer"
                                 x-show="recovery"
                                 x-on:click="
                                     recovery = false;
@@ -56,7 +56,7 @@
                     {{ __('Use an authentication code') }}
                 </button>
 
-                <x-button class="ml-4">
+                <x-button class="mt-4 ml-4">
                     {{ __('Sign in') }}
                 </x-button>
             </div>

@@ -9,7 +9,7 @@
         </h2>
     </x-slot>
 
-    <div  class="max-w-prose w-screen my-auto mx-4 sm:mx-0 p-10 rounded-md shadow-lg">
+    <div class="flex flex-col justify-center h-full max-w-prose mx-auto px-4 py-6 sm:px-6">
         <div class="text-center mb-5">
             <p class="text-2xl font-bold">{{ __('New Kurozora ID Password') }}</p>
             <p>
@@ -36,7 +36,7 @@
                 <x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
             </div>
 
-            <div class="flex items-center justify-end mt-4">
+            <div class="flex flex-col items-center justify-end mt-4">
                 <x-button>
                     {{ __('Reset Password') }}
                 </x-button>
