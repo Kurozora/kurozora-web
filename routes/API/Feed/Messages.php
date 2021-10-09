@@ -4,7 +4,7 @@ use App\Http\Controllers\FeedMessageController;
 
 Route::prefix('/messages')
     ->name('.messages')
-    ->group(function() {
+    ->group(function () {
         Route::get('/{feedMessage}', [FeedMessageController::class, 'details'])
             ->middleware('auth.kurozora:optional')
             ->name('.details');

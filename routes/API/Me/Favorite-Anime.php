@@ -5,7 +5,7 @@ use App\Http\Controllers\MeController;
 
 Route::prefix('/favorite-anime')
     ->name('.favorite-anime')
-    ->group(function() {
+    ->group(function () {
         Route::get('/', [MeController::class, 'getFavorites'])
             ->middleware('auth.kurozora');
 

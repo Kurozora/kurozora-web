@@ -5,7 +5,7 @@ use App\Http\Livewire\Studio\Details as StudioDetails;
 
 Route::prefix('/studios')
     ->name('studios')
-    ->group(function() {
+    ->group(function () {
         Route::prefix('{studio}')
             ->group(function () {
                 Route::get('/', StudioDetails::class)

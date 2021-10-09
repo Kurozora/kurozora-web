@@ -6,7 +6,6 @@ use App\Contracts\AppStore\HandlesSubscription;
 use App\Models\User;
 use App\Models\UserReceipt;
 use App\Notifications\SubscriptionStatus;
-use Imdhemy\AppStore\Receipts\ReceiptResponse;
 use Imdhemy\Purchases\Events\AppStore\InteractiveRenewal;
 
 class InteractiveRenewalSubscription implements HandlesSubscription
@@ -31,7 +30,7 @@ class InteractiveRenewalSubscription implements HandlesSubscription
         $user->save();
 
         // Notify the user about the subscription update.
-        if (Env('APP_ENV') === 'local') {
+        if (app()->environment('local')) {
             $this->notifyUserAboutUpdate($user, $event);
         }
     }

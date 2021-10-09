@@ -4,7 +4,7 @@ use App\Http\Controllers\EpisodeController;
 
 Route::prefix('/episodes')
     ->name('.episodes')
-    ->group(function() {
+    ->group(function () {
         Route::prefix('{episode}')
             ->group(function () {
                 Route::get('/', [EpisodeController::class, 'details'])

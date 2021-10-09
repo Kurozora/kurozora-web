@@ -4,7 +4,7 @@ use App\Http\Controllers\AnimeController;
 
 Route::prefix('/anime')
     ->name('.anime')
-    ->group(function() {
+    ->group(function () {
         Route::get('/search', [AnimeController::class, 'search'])
             ->middleware('auth.kurozora:optional')
             ->name('.search');
