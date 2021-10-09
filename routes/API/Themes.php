@@ -4,7 +4,7 @@ use App\Http\Controllers\AppThemeController;
 
 Route::prefix('/themes')
     ->name('.themes')
-    ->group(function() {
+    ->group(function () {
         Route::get('/', [AppThemeController::class, 'overview'])
             ->middleware('auth.kurozora:optional')
             ->name('.overview');

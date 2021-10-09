@@ -4,7 +4,7 @@ use App\Http\Controllers\FeedController;
 
 Route::prefix('/feed')
     ->name('.feed')
-    ->group(function() {
+    ->group(function () {
         Route::post('/', [FeedController::class, 'post'])
             ->middleware('auth.kurozora');
 

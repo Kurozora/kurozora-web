@@ -5,7 +5,7 @@ use App\Http\Livewire\Legal\TermsOfUse;
 
 Route::prefix('/legal')
     ->name('legal')
-    ->group(function() {
+    ->group(function () {
         Route::get('/privacy-policy', PrivacyPolicy::class)
             ->name('.privacy-policy');
 
