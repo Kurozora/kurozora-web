@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('username', 50)->nullable();
             $table->string('email');
             $table->timestamp('email_verified_at')->nullable();
+            $table->boolean('email_suspended')->default(false);
             $table->string('password')->nullable();
             $table->text('two_factor_secret')->nullable();
             $table->text('two_factor_recovery_codes')->nullable();
