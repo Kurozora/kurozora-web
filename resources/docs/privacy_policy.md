@@ -124,7 +124,7 @@ Kurozora makes it easy for you to keep your personal information accurate, compl
 To provide location-based services on Kurozora products, Kurozora and our partners and licensees, such as maps data providers, may collect, use, and share precise location data. Where available, Kurozora uses existing platform APIs for location-based services. These APIs may use GPS, Bluetooth, and your IP Address, along with crowd-sourced Wi-Fi hotspot and cell tower locations, and other technologies to determine your devices' approximate location.
 <div></div>
 
-We may also use a third party provider, <q>IP Info</q>, to resolve your IP address to a geographical location. We have picked <q>IP Info</q> with care, but what they do with your IP address is beyond our control. You can read their privacy policy at [ipinfo.io/privacy-policy](https://ipinfo.io/privacy-policy). The collected information consists of:
+We may also use a third party provider, <q>IP Info</q>, to resolve your IP address to a geographical location. We have picked <q>IP Info</q> with care, but what they do with your IP address is beyond our control. You can read their privacy policy at <a href="https://ipinfo.io/privacy-policy" target="_blank">ipinfo.io/privacy-policy</a>. The collected information consists of:
 <div></div>
 
 * Approximate city

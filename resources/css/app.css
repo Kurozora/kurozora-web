@@ -130,6 +130,11 @@ picture::before {
   display: none;
 }
 
+[target^="_blank"]::after {
+  content: "\0020\2197";
+  white-space: nowrap;
+}
+
 /**
  * This injects all of Tailwind's screen classes, generated based on the
  * config file.
