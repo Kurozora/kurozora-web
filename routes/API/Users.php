@@ -9,17 +9,27 @@ use App\Http\Controllers\UserController;
 
 Route::prefix('/users')
     ->name('.users')
-    ->group(function() {
+    ->group(function () {
         Route::post('/', [RegistrationController::class, 'signUp']);
 
         Route::post('/signin', [SessionController::class, 'create'])
             ->name('.sign-in');
 
         Route::post('/signin/siwa', [SignInWithAppleController::class, 'signIn'])
-        ->name('.sign-in.siwa');
+            ->name('.sign-in.siwa');
 
         Route::post('/reset-password', [UserController::class, 'resetPassword'])
             ->name('.reset-password');
+
+        Route::prefix('/siwa')
+            ->name('.siwa')
+            ->group(function () {
+                Route::post('/signin', [SignInWithAppleController::class, 'signIn'])
+                    ->name('.sign-in');
+
+                Route::post('/update', [SignInWithAppleController::class, 'update'])
+                    ->name('.update');
+            });
 
         Route::prefix('{user}')
             ->group(function () {

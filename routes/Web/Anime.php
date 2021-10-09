@@ -6,7 +6,7 @@ use App\Http\Livewire\Season\Details as SeasonDetails;
 
 Route::prefix('/anime')
     ->name('anime')
-    ->group(function() {
+    ->group(function () {
         Route::prefix('{anime}')
             ->group(function () {
                 Route::get('/', AnimeDetails::class)

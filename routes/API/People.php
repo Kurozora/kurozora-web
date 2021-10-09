@@ -4,7 +4,7 @@ use App\Http\Controllers\PersonController;
 
 Route::prefix('/people')
     ->name('.people')
-    ->group(function() {
+    ->group(function () {
         Route::prefix('{person}')
             ->group(function () {
                 Route::get('/', [PersonController::class, 'details'])

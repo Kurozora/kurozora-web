@@ -4,7 +4,7 @@ use App\Http\Controllers\ReminderAnimeController;
 
 Route::prefix('/reminder-anime')
     ->name('.reminder-anime')
-    ->group(function() {
+    ->group(function () {
         Route::get('/', [ReminderAnimeController::class, 'getReminders'])
             ->middleware('auth.kurozora');
 

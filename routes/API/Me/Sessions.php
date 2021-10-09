@@ -5,7 +5,7 @@ use App\Http\Controllers\SessionController;
 
 Route::prefix('/sessions')
     ->name('.sessions')
-    ->group(function() {
+    ->group(function () {
         Route::get('/', [MeController::class, 'getSessions'])
             ->middleware('auth.kurozora');
 

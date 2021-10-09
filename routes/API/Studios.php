@@ -4,7 +4,7 @@ use App\Http\Controllers\StudioController;
 
 Route::prefix('/studios')
     ->name('.studios')
-    ->group(function() {
+    ->group(function () {
         Route::prefix('{studio}')
             ->group(function () {
                 Route::get('/', [StudioController::class, 'details'])

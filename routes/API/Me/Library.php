@@ -4,7 +4,7 @@ use App\Http\Controllers\LibraryController;
 
 Route::prefix('/library')
     ->name('.library')
-    ->group(function() {
+    ->group(function () {
         Route::get('/', [LibraryController::class, 'index'])
             ->middleware('auth.kurozora');
 

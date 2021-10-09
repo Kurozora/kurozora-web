@@ -5,7 +5,7 @@ use App\Http\Livewire\Profile\Details;
 
 Route::prefix('/profile')
     ->name('profile')
-    ->group(function() {
+    ->group(function () {
         Route::get('/settings', [UserProfileController::class, 'settings'])
             ->middleware(['auth', 'verified'])
             ->name('.settings');
