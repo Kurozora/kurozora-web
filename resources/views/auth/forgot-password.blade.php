@@ -9,7 +9,7 @@
         </h2>
     </x-slot>
 
-    <div class="max-w-prose w-screen my-auto mx-4 sm:mx-0 p-10 rounded-md shadow-lg">
+    <div class="flex flex-col justify-center w-screen h-full max-w-prose mx-auto px-4 py-6 sm:px-6">
         <div class="text-center mb-5">
             <p class="text-2xl font-bold">{{ __('Forgot your password?') }}</p>
             <p>{{ __('Enter your Kurozora ID to continue.') }}</p>
@@ -31,7 +31,7 @@
                 <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
             </div>
 
-            <div class="flex items-center justify-end mt-4">
+            <div class="flex flex-col items-center justify-end mt-4">
                 <x-button>
                     {{ __('Email Password Reset Link') }}
                 </x-button>

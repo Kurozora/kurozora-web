@@ -6,11 +6,11 @@ use App\Http\Controllers\Web\EmailVerificationPromptController;
 use App\Http\Controllers\Web\NewPasswordController;
 use App\Http\Controllers\Web\PasswordResetLinkController;
 use App\Http\Controllers\Web\RecoveryCodeController;
+use App\Http\Controllers\Web\SignUpUserController;
 use App\Http\Controllers\Web\TwoFactorAuthenticatedSessionController;
 use App\Http\Controllers\Web\TwoFactorAuthenticationController;
 use App\Http\Controllers\Web\TwoFactorQrCodeController;
 use App\Http\Controllers\Web\VerifyEmailController;
-use App\Http\Controllers\Web\SignUpUserController;
 
 Route::get('/sign-in', [AuthenticatedSessionController::class, 'create'])
     ->middleware(['guest'])

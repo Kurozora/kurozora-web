@@ -9,7 +9,7 @@
         </h2>
     </x-slot>
 
-    <div class="max-w-prose w-screen my-auto mx-4 sm:mx-0 p-10 rounded-md shadow-lg">
+    <div class="flex flex-col justify-center w-screen h-full max-w-prose mx-auto px-4 py-6 sm:px-6">
         <div class="text-center mb-5">
             <p class="text-2xl font-bold">{{ __('Welcome to Kurozora!') }}</p>
             <p>{{ __('Sign in with your Kurozora ID to use the library and other Kurozora services.') }}</p>
