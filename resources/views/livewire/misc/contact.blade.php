@@ -12,7 +12,7 @@
     </x-slot>
 
     <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
-        <x-action-form-section submit="mailto:info@kurozora.app" method="GET" enctype="application/x-www-form-urlencoded">
+        <x-action-form-section submit="mailto:kurozoraapp@gmail.com" method="GET" enctype="application/x-www-form-urlencoded">
             <x-slot name="title">
                 {{ __('Contact Us') }}
             </x-slot>
