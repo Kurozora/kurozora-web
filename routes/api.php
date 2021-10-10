@@ -34,7 +34,7 @@ Route::prefix('/v1')
         require 'API/Store.php';
         require 'API/Themes.php';
         require 'API/Users.php';
-
-        Route::fallback([APIController::class, 'error'])
-            ->name('.fallback');
     });
+
+Route::fallback([APIController::class, 'error'])
+    ->name('.fallback');
