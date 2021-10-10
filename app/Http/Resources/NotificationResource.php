@@ -32,7 +32,7 @@ class NotificationResource extends JsonResource
                 'description'   => self::getNotificationDescription($notification),
                 'payload'       => $notification->data,
                 'isRead'        => ($notification->read_at != null),
-                'createdAt'     => $notification->created_at->format('Y-m-d H:i:s')
+                'createdAt'     => $notification->created_at->timestamp,
             ]
         ];
     }
