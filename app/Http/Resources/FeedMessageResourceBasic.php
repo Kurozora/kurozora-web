@@ -42,7 +42,7 @@ class FeedMessageResourceBasic extends JsonResource
                 'isReShared'    => $isReShared,
                 'isNSFW'        => $feedMessage->is_nsfw == 1,
                 'isSpoiler'     => $feedMessage->is_spoiler == 1,
-                'createdAt'     => $feedMessage->created_at->format('Y-m-d H:i:s'),
+                'createdAt'     => $feedMessage->created_at->timestamp,
             ]
         ];
 
