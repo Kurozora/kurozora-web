@@ -10,7 +10,7 @@ php artisan auth:clear-resets
 php artisan route:cache
 
 # Clear and cache events
-php artisan events:cache
+php artisan event:cache
 
 # Clear and cache config
 php artisan config:cache

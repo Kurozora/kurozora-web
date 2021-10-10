@@ -2657,13 +2657,13 @@
         }
       }
     },
-    "/users/signin/siwa": {
+    "/users/siwa/signin": {
       "post": {
         "tags": [
           "users"
         ],
-        "operationId": "postSignInSiwA",
-        "summary": "Sign in or sign up a user.",
+        "operationId": "postSiwASignIn",
+        "summary": "Sign in or sign up a user using Sign in with Apple.",
         "description": "This endpoint will sign in or sign up a user using Sign in with Apple.",
         "requestBody": {
           "content": {
