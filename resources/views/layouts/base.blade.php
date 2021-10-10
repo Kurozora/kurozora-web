@@ -43,6 +43,10 @@
     <body class="bg-white dark:bg-black">
         @livewire('navigation-dropdown')
 
+        @if(Session::has('success'))
+            <x-alert :message="Session::get('success')"></x-alert>
+        @endif
+
         {{ $slot }}
 
         <x-footer />
