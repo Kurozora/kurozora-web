@@ -20,7 +20,7 @@
             <div class="relative pb-2">
                 <div class="flex flex-col flex-wrap text-center items-center">
                     <picture class="relative min-w-[128px] max-w-[128px] min-h-[128px] max-h-[128px] rounded-full overflow-hidden">
-                        <img class="w-full h-full object-cover" src="{{ $studio->profile_image_url ?? asset('images/static/placeholders/studio_profile.png') }}" alt="{{ $studio->name }} Profile" title="{{ $studio->name }}">
+                        <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $studio->profile_image_url ?? asset('images/static/placeholders/studio_profile.png') }}" alt="{{ $studio->name }} Profile" title="{{ $studio->name }}">
 
                         <div class="absolute top-0 left-0 h-full w-full border-2 border-solid border-black/20 rounded-full"></div>
                     </picture>
