@@ -3,7 +3,7 @@
 <div class="relative">
     <div class="flex flex-no-wrap">
         <picture class="relative rounded-lg overflow-hidden" style="aspect-ratio: 16/9;">
-            <img src="{{ $episode->banner_image_url ?? asset('images/static/placeholders/episode_banner.jpg') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
+            <img class="lazyload" data-sizes="auto" data-src="{{ $episode->banner_image_url ?? asset('images/static/placeholders/episode_banner.jpg') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
 
             <div class="absolute bottom-0 left-0 right-0 p-3 pt-[15%] bg-gradient-to-t from-black to-transparent">
                 <div>

@@ -10,7 +10,7 @@
 <a class="relative" href="{{ route('home', ['genre' => $genre->id]) }}">
     <div class="flex">
         <picture class="relative rounded-lg overflow-hidden" style="{{ $backgroundColor }};">
-            <img src="{{ $genre->symbol ?? asset('images/static/icon/logo.png') }}" alt="{{ $genre->name }} Symbol" title="{{ $genre->name }}" class="p-3">
+            <img class="p-3 lazyload" data-sizes="auto" data-src="{{ $genre->symbol ?? asset('images/static/icon/logo.png') }}" alt="{{ $genre->name }} Symbol" title="{{ $genre->name }}">
 
             <div class="h-[95px] p-3 py-5 bg-black/30 backdrop-blur text-center">
                 <p class="text-white font-bold leading-tight line-clamp-1">{{ $genre->name }}</p>
