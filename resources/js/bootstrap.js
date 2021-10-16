@@ -1,6 +1,7 @@
 import "alpinejs";
 
 import iro from "@jaames/iro";
+import 'lazysizes';
 
 try {
     window.iro = iro;
@@ -22,3 +23,10 @@ try {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/**
+ * LazySizes is an SEO-friendly and self-initializing lazyloader for images
+ * iframes, scripts/widgets and much more. It prioritizes resources  by
+ * differentiating between crucial in view and near view elements to make
+ * perceived performance even faster.
+ */

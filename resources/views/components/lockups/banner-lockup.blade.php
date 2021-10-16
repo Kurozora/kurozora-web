@@ -5,7 +5,7 @@
 
     <div class="flex flex-no-wrap">
         <picture class="relative mt-2 rounded-lg overflow-hidden">
-            <img src="{{ $anime->banner_image_url ?? asset('images/static/placeholders/anime_banner.jpg') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
+            <img class="lazyload" data-sizes="auto" data-src="{{ $anime->banner_image_url ?? asset('images/static/placeholders/anime_banner.jpg') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
 
             <div class="absolute bottom-0 left-0 right-0 p-3 pt-[15%] bg-gradient-to-t from-black to-transparent">
                 <div class="max-w-[50%]">
