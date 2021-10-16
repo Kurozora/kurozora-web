@@ -2,15 +2,18 @@
 
 namespace App\Nova;
 
-use Chaseconey\ExternalImage\ExternalImage;
+use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Ramsey\Uuid\Uuid;
 use Timothyasp\Color\Color;
 
 class Genre extends Resource
@@ -61,11 +64,53 @@ class Genre extends Resource
     public function fields(Request $request): array
     {
         return [
+            Heading::make('Identification')
+                ->exceptOnForms(),
+
             ID::make()->sortable(),
 
-            ExternalImage::make('Symbol image URL', 'symbol')
-                ->width(100)
-                ->rules('max:255'),
+            Heading::make('Media'),
+
+            Images::make('Symbol')
+                ->showStatistics()
+                ->setFileName(function($originalFilename, $extension, $model) {
+                    return Uuid::uuid4() . '.' . $extension;
+                })
+                ->setName(function($originalFilename, $model) {
+                    return $this->resource->name;
+                })
+                ->customPropertiesFields([
+                    Heading::make('Colors (automatically generated if empty)'),
+
+                    Color::make('Background Color')
+                        ->help('The average background color of the image.'),
+
+                    Color::make('Text Color 1')
+                        ->help('The primary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 2')
+                        ->help('The secondary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 3')
+                        ->help('The tertiary text color that may be used if the background color is displayed.'),
+
+                    Color::make('Text Color 4')
+                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
+
+                    Heading::make('Dimensions (automatically generated if empty)'),
+
+                    Number::make('Width')
+                        ->help('The maximum width available for the image.'),
+
+                    Number::make('Height')
+                        ->help('The maximum height available for the image.'),
+                ]),
+
+            Heading::make('Meta information'),
+
+            Text::make('Slug')
+                ->onlyOnForms()
+                ->help('Used to identify the genre in a URL: https://kurozora.app/genre/<strong>action</strong>. Leave empty to auto-generate from name.'),
 
             Text::make('Name')
                 ->rules('required')
