@@ -18,8 +18,8 @@ class CreateGenresTable extends Migration
         Schema::create(Genre::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('tv_rating_id')->nullable();
+            $table->string('slug');
             $table->string('name');
-            $table->string('symbol')->nullable();
             $table->string('color')->default('#ffffff');
             $table->text('description')->nullable();
             $table->boolean('is_nsfw')->default(false);
@@ -27,6 +27,9 @@ class CreateGenresTable extends Migration
         });
 
         Schema::table(Genre::TABLE_NAME, function (Blueprint $table) {
+            // Set unique index constraints
+            $table->unique(['slug']);
+
             // Set foreign key constraints
             $table->foreign('tv_rating_id')->references('id')->on(TvRating::TABLE_NAME)->onDelete('set null');
         });

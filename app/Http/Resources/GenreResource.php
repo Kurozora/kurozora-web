@@ -30,7 +30,7 @@ class GenreResource extends JsonResource
             'attributes'    => [
                 'name'          => $this->resource->name,
                 'color'         => $this->resource->color,
-                'symbol'        => $this->resource->symbol,
+                'symbol'        => ImageResource::make($this->resource->symbol_image),
                 'description'   => $this->resource->description,
                 'isNSFW'        => (bool) $this->resource->is_nsfw
             ]

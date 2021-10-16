@@ -7,9 +7,12 @@
         <meta property="og:url" content="{{ url()->current() }}" />
         <meta property="og:site_name" content="{{ config('app.name') }}" />
 
-        @if (!empty($appArgument))
-            <meta name="apple-itunes-app" content="app-id={{ config('app.ios.id') }}, app-argument={{ config('app.ios.protocol') }}{{ $appArgument }}" />
-        @endif
+        @desktop
+        @else
+            @if (!empty($appArgument))
+                <meta name="apple-itunes-app" content="app-id={{ config('app.ios.id') }}, app-argument={{ config('app.ios.protocol') }}{{ $appArgument }}" />
+            @endif
+        @enddesktop
 
         @if (empty($title))
             <title>{{ config('app.name') }}</title>
