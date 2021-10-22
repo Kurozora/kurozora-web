@@ -38,7 +38,7 @@
         }
 
         .topbar-wrapper .link:before {
-            background-image: url('{{ asset('images/static/icon/logo.png') }}');
+            background-image: url('{{ asset('images/static/icon/app_icon.webp') }}');
             background-size: 48px 48px;
             content: '';
             margin-right: 0.5rem;

@@ -25,20 +25,20 @@ class ImportAnimeRelationProcessor
             $relation = Relation::firstWhere('name', Str::title($kRelatedMedia->related->related));
 
             $mediaRelation = MediaRelation::where([
-                ['media_type', 'anime'],
-                ['media_id', $anime->id],
+                ['model_id', $anime->id],
+                ['model_type', 'anime'],
                 ['relation_id', $relation->id],
-                ['related_type', 'anime'],
                 ['related_id', $relatedAnime->id],
+                ['related_type', 'anime'],
             ])->first();
 
             if (empty($mediaRelation)) {
                 MediaRelation::create([
-                    'media_type' => 'anime',
-                    'media_id' => $anime->id,
+                    'model_id' => $anime->id,
+                    'model_type' => 'anime',
                     'relation_id' => $relation->id,
-                    'related_type' => 'anime',
                     'related_id' => $relatedAnime->id,
+                    'related_type' => 'anime',
                 ]);
             }
         }

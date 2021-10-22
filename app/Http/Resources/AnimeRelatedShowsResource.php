@@ -24,7 +24,7 @@ class AnimeRelatedShowsResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'show'          => AnimeResourceBasic::make($this->resource->related_anime),
+            'show'          => AnimeResourceBasic::make($this->resource->related),
             'attributes'    => [
                 'relation'  => $this->resource->relation->only(['name', 'description']),
             ],

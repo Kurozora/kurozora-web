@@ -44,6 +44,6 @@ class ImportCharacters extends Command
             ProcessImportCharacter::dispatch($kCharacters);
         });
 
-        return 1;
+        return Command::SUCCESS;
     }
 }

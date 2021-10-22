@@ -44,6 +44,6 @@ class ImportPeople extends Command
             ProcessImportPerson::dispatch($kPeople);
         });
 
-        return 1;
+        return Command::SUCCESS;
     }
 }

@@ -44,6 +44,6 @@ class ImportSongs extends Command
             ProcessImportSong::dispatch($kSongs);
         });
 
-        return 1;
+        return Command::SUCCESS;
     }
 }

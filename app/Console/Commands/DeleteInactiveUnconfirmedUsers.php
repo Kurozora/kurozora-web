@@ -49,6 +49,6 @@ class DeleteInactiveUnconfirmedUsers extends Command
 
         $this->info('Deleted all inactive unconfirmed users.');
 
-        return 1;
+        return Command::SUCCESS;
     }
 }

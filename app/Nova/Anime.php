@@ -18,6 +18,7 @@ use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\MorphMany;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
@@ -288,7 +289,7 @@ class Anime extends Resource
 
             HasMany::make('Songs', 'songs', AnimeSong::class),
 
-            HasMany::make('Relations', 'relations', MediaRelation::class),
+            MorphMany::make('Relations', 'relations', MediaRelation::class),
 
             HasMany::make('Staff', 'staff', AnimeStaff::class),
 

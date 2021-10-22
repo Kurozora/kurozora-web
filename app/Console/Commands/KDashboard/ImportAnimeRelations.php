@@ -47,6 +47,6 @@ class ImportAnimeRelations extends Command
             ProcessImportAnimeRelations::dispatch($kMediaRelated);
         });
 
-        return 1;
+        return Command::SUCCESS;
     }
 }
