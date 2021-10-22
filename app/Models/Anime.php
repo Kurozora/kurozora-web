@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Request;
@@ -665,11 +666,11 @@ class Anime extends KModel implements HasMedia
     /**
      * The related anime of this anime.
      *
-     * @return HasMany
+     * @return morphMany
      */
-    public function anime_relations(): HasMany
+    public function anime_relations(): morphMany
     {
-        return $this->hasMany(MediaRelation::class, 'media_id')->where('related_type', 'anime');
+        return $this->morphMany(MediaRelation::class, 'model')->where('related_type', Anime::class);
     }
 
     /**
@@ -692,11 +693,11 @@ class Anime extends KModel implements HasMedia
     /**
      * The media relations of this anime.
      *
-     * @return HasMany
+     * @return MorphMany
      */
-    public function relations(): HasMany
+    public function relations(): MorphMany
     {
-        return $this->hasMany(MediaRelation::class, 'media_id');
+        return $this->morphMany(MediaRelation::class, 'model');
     }
 
     /**

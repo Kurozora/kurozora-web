@@ -6,7 +6,7 @@
     <x-slot name="meta">
         <meta property="og:title" content="{{ $anime->title }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ $anime->synopsis }}" />
-        <meta property="og:image" content="{{ $anime->banner_image_url ?? asset('images/static/placeholders/anime_banner.jpg') }}" />
+        <meta property="og:image" content="{{ $anime->banner_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" />
         <meta property="og:type" content="video.tv_show" />
         <meta property="video:duration" content="{{ $anime->duration }}" />
         <meta property="video:release_date" content="{{ $anime->first_aired }}" />
@@ -20,14 +20,14 @@
         <div class="relative">
             <div class="flex flex-no-wrap md:relative md:h-full">
                 <picture class="relative w-full overflow-hidden">
-                    <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->banner_image_url ?? asset('images/static/placeholders/anime_banner.jpg') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
+                    <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->banner_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
                 </picture>
             </div>
 
             <div class="md:absolute md:bottom-0 md:left-0 md:right-0 lg:px-4">
                 <div class="flex flex-no-wrap pt-5 pb-8 px-4 md:mx-auto md:mb-8 md:p-6 md:max-w-lg md:bg-white md:bg-opacity-50 md:backdrop-filter md:backdrop-blur md:rounded-lg">
                     <picture class="relative min-w-[100px] max-w-[100px] min-h-[150px] max-h-[150px] mr-2 rounded-lg overflow-hidden">
-                        <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->poster_image_url ?? asset('images/static/placeholders/anime_poster.jpg') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
+                        <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->poster_image_url ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
                         <div class="absolute top-0 left-0 h-full w-full ring-1 ring-gray-100 ring-opacity-25 ring-inset rounded-lg"></div>
                     </picture>
 
@@ -344,7 +344,7 @@
 
                         <div class="grid grid-flow-col-dense auto-cols-[calc(100%-2rem)] gap-4 overflow-x-scroll no-scrollbar sm:auto-cols-[unset]">
                             @foreach($animeRelations as $relatedAnime)
-                                <x-lockups.small-lockup :anime="$relatedAnime->related_anime" :relation="$relatedAnime->relation" />
+                                <x-lockups.small-lockup :anime="$relatedAnime->related" :relation="$relatedAnime->relation" />
                             @endforeach
                         </div>
                     </section>

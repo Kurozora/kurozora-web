@@ -67,6 +67,6 @@ class CalculateAnimeRatings extends Command
             }
         }
 
-        return 1;
+        return Command::SUCCESS;
     }
 }

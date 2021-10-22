@@ -44,6 +44,6 @@ class ImportAnime extends Command
             ProcessImportAnime::dispatch($kAnimes);
         });
 
-        return 1;
+        return Command::SUCCESS;
     }
 }

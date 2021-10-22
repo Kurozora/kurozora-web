@@ -46,6 +46,6 @@ class ImportAnimeCasts extends Command
             ProcessImportAnimeCast::dispatch($kAnimeCasts);
         });
 
-        return 1;
+        return Command::SUCCESS;
     }
 }

@@ -44,6 +44,6 @@ class ImportAnimeSongs extends Command
             ProcessImportAnimeSong::dispatch($kAnimeSongs);
         });
 
-        return 1;
+        return Command::SUCCESS;
     }
 }

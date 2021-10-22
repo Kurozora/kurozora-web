@@ -44,7 +44,7 @@ class MediaHasBeenAddedListener
     protected function generateColorsFor(string $path): array
     {
         /** @var Color[] $palette */
-        $palette = ColorPalette::getPalette($path, 5, 1);
+        $palette = ColorPalette::getPalette($path, 5, 8);
 
         return [
             'background_color' => $palette[0]->toHexString(),

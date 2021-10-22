@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class MediaRelation extends KModel
 {
@@ -16,21 +17,21 @@ class MediaRelation extends KModel
     /**
      * Returns the parent anime in the relationship.
      *
-     * @return BelongsTo
+     * @return MorphTo
      */
-    public function anime(): BelongsTo
+    public function model(): MorphTo
     {
-        return $this->belongsTo(Anime::class, 'media_id');
+        return $this->morphTo();
     }
 
     /**
      * Returns the anime related to the parent anime.
      *
-     * @return BelongsTo
+     * @return MorphTo
      */
-    public function related_anime(): BelongsTo
+    public function related(): MorphTo
     {
-        return $this->belongsTo(Anime::class, 'related_id');
+        return $this->morphTo();
     }
 
     /**

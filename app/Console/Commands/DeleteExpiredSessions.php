@@ -43,6 +43,6 @@ class DeleteExpiredSessions extends Command
 
         $this->info('Deleted all expired sessions.');
 
-        return 1;
+        return Command::SUCCESS;
     }
 }

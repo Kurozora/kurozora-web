@@ -44,6 +44,6 @@ class ImportAnimeStudios extends Command
             ProcessImportAnimeStudio::dispatch($kAnimeProducers);
         });
 
-        return 1;
+        return Command::SUCCESS;
     }
 }

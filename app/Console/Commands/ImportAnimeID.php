@@ -66,7 +66,8 @@ class ImportAnimeID extends Command
         }
 
         $progressBar->finish();
-        return 1;
+
+        return Command::SUCCESS;
     }
 
     /**

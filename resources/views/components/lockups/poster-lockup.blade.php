@@ -3,7 +3,7 @@
 <div {{ $attributes->merge(['class' => 'relative w-full sm:max-w-[350px] pb-2']) }}>
     <div class="flex flex-no-wrap">
         <picture class="relative min-w-[100px] max-w-[100px] min-h-[150px] max-h-[150px] mr-2 rounded-lg overflow-hidden">
-            <img class="w-full h-full lazyload" data-sizes="auto" data-src="{{ $season->poster_image_url ?? asset('images/static/placeholders/anime_poster.jpg') }}" alt="{{ $season->title }} Poster" title="{{ $season->title }}">
+            <img class="w-full h-full lazyload" data-sizes="auto" data-src="{{ $season->poster_image_url ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $season->title }} Poster" title="{{ $season->title }}">
 
             <div class="absolute top-0 left-0 h-full w-full border-[1px] border-solid border-black/20 rounded-lg"></div>
         </picture>
