@@ -4,7 +4,7 @@
     <div class="flex flex-col">
         @if(empty($anime->video_link))
             <picture class="relative rounded-lg overflow-hidden">
-                <img class="lazyload" data-sizes="auto" data-src="{{ $anime->banner_image_url ?? asset('images/static/placeholders/anime_banner.jpg') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
+                <img class="lazyload" data-sizes="auto" data-src="{{ $anime->banner_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
 
                 <div class="absolute top-0 left-0 h-full w-full border-[1px] border-solid border-black/20 rounded-lg"></div>
             </picture>
@@ -12,7 +12,7 @@
             <video class="mt-2 rounded-lg lazyload"
                    data-sizes="auto"
                    data-src="{{ $anime->video_link }}"
-                   poster="{{ $anime->banner_image_url ?? asset('images/static/placeholders/anime_banner.jpg') }}"
+                   poster="{{ $anime->banner_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}"
                    controls
             >
             </video>
@@ -22,7 +22,7 @@
     <div class="relative mt-4">
         <div class="flex flex-no-wrap">
             <picture class="relative min-w-[100px] max-w-[100px] min-h-[150px] max-h-[150px] mr-2 rounded-lg overflow-hidden">
-                <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->poster_image_url ?? asset('images/static/placeholders/anime_poster.jpg') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
+                <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->poster_image_url ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
 
                 <div class="absolute top-0 left-0 h-full w-full border-[1px] border-solid border-black/20 rounded-lg"></div>
             </picture>

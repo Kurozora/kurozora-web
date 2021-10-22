@@ -7,7 +7,7 @@
         <meta property="og:title" content="{{ config('app.name') }}" />
         <meta property="og:site_name" content="{{ config('app.name') }}" />
         <meta property="og:og:description" content="{{ __('app.description') }}" />
-        <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.png') }}" />
+        <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
     </x-slot>
 
@@ -89,7 +89,7 @@
                                     :href="route('genres.details', ['genre' => $genre])"
                                     :title="$genre->name"
                                     :backgroundColor="$genre->color"
-                                    :backgroundImage="$genre->symbol_image ?? asset('images/static/icon/logo.png')"
+                                    :backgroundImage="$genre->symbol_image_url ?? asset('images/static/icon/logo.webp')"
                                 />
                             @endforeach
                         </div>

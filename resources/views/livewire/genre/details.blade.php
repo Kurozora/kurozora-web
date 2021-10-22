@@ -13,7 +13,7 @@
     <x-slot name="meta">
         <meta property="og:title" content="{{ $genre->name }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ $genre->description }}" />
-        <meta property="og:image" content="{{ $genre->symbol_image_url ?? asset('images/static/promotional/social_preview_icon_only.png') }}" />
+        <meta property="og:image" content="{{ $genre->symbol_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
     </x-slot>
 
@@ -24,7 +24,7 @@
     <div class="max-w-7xl mx-auto px-4 pb-6 sm:px-6">
         <section class="mb-8 rounded-lg shadow-md overflow-hidden" style="{{ $backgroundColor }}">
             <picture class="flex justify-center">
-                <img class="lazyload" width="250px" data-sizes="auto" data-src="{{ $genre->symbol_image ?? asset('images/static/icon/logo.png') }}" alt="{{ $genre->name }} Symbol" title="{{ $genre->name }}">
+                <img class="lazyload" width="250px" data-sizes="auto" data-src="{{ $genre->symbol_image_url ?? asset('images/static/icon/logo.webp') }}" alt="{{ $genre->name }} Symbol" title="{{ $genre->name }}">
             </picture>
 
             <div class="p-3 py-5 bg-black/30 backdrop-blur text-center">
@@ -106,7 +106,7 @@
                                     :href="route('genres.details', ['genre' => $genre])"
                                     :title="$genre->name"
                                     :backgroundColor="$genre->color"
-                                    :backgroundImage="$genre->symbol_image ?? asset('images/static/icon/logo.png')"
+                                    :backgroundImage="$genre->symbol_image_url ?? asset('images/static/icon/logo.webp')"
                                 />
                             @endforeach
                         </div>
