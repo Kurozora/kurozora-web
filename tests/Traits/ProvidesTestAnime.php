@@ -2,13 +2,13 @@
 
 namespace Tests\Traits;
 
-use App\Models\AnimeCast;
 use App\Models\Anime;
+use App\Models\AnimeCast;
+use App\Models\Character;
 use App\Models\Episode;
 use App\Models\MediaRelation;
-use App\Models\Season;
-use App\Models\Character;
 use App\Models\Person;
+use App\Models\Season;
 use App\Models\TvRating;
 
 trait ProvidesTestAnime
@@ -69,8 +69,8 @@ trait ProvidesTestAnime
         ]);
 
         MediaRelation::factory()->create([
-            'media_id'      => $this->anime->id,
-            'media_type'    => 'anime',
+            'model_id'      => $this->anime->id,
+            'model_type'    => 'anime',
             'related_id'    => $this->relatedAnime->id,
             'related_type'  => 'anime',
         ]);
