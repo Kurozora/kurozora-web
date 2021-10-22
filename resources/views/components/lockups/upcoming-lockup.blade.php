@@ -3,7 +3,7 @@
 <div class="relative w-[350px] h-[430px] pb-2">
     <div class="flex flex-no-wrap h-full">
         <picture class="relative w-full rounded-lg overflow-hidden">
-            <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.jpg') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
+            <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
 
             <div class="absolute bottom-0 left-0 right-0 h-[20%] p-3 pt-[15%] bg-gradient-to-t from-black/60 to-transparent"></div>
 
