@@ -344,7 +344,7 @@
 
                         <div class="grid grid-flow-col-dense auto-cols-[calc(100%-2rem)] gap-4 overflow-x-scroll no-scrollbar sm:auto-cols-[unset]">
                             @foreach($animeRelations as $relatedAnime)
-                                <x-lockups.small-lockup :anime="$relatedAnime->related_anime" :relation="$relatedAnime->relation" />
+                                <x-lockups.small-lockup :anime="$relatedAnime->related" :relation="$relatedAnime->relation" />
                             @endforeach
                         </div>
                     </section>

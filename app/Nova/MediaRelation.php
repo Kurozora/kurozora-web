@@ -5,10 +5,14 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\MorphTo;
+use Laravel\Nova\Fields\Text;
+use Titasgailius\SearchRelations\SearchesRelations;
 
 class MediaRelation extends Resource
 {
+    use SearchesRelations;
+
     /**
      * The model the resource corresponds to.
      *
@@ -36,7 +40,18 @@ class MediaRelation extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'media_type', 'related_type',
+        'id',
+    ];
+
+    /**
+     * The relationship columns that should be searched.
+     *
+     * @var array
+     */
+    public static $searchRelations = [
+        'model' => ['original_title'],
+        'related' => ['original_title'],
+        'relation' => ['name'],
     ];
 
     /**
@@ -57,23 +72,31 @@ class MediaRelation extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('Media', 'anime', Anime::class)
+            MorphTo::make('Media', 'model')
+                ->types([
+                    Anime::class,
+                ])
                 ->searchable()
                 ->sortable(),
 
-            Select::make('Media Type')
-                ->options(['anime' => 'anime', 'manga' => 'manga'])
+            Text::make('Model Type')
+                ->onlyOnIndex()
+                ->onlyOnDetail()
                 ->sortable(),
 
             BelongsTo::make('Relation')
                 ->sortable(),
 
-            BelongsTo::make('Related Media', 'related_anime', Anime::class)
+            MorphTo::make('Related Media', 'related')
+                ->types([
+                    Anime::class,
+                ])
                 ->searchable()
                 ->sortable(),
 
-            Select::make('Related Type', 'related_type')
-                ->options(['anime' => 'anime', 'manga' => 'manga'])
+            Text::make('Related Type', 'related_type')
+                ->onlyOnIndex()
+                ->onlyOnDetail()
                 ->sortable(),
         ];
     }
