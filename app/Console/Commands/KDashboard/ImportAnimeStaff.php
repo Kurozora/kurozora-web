@@ -46,6 +46,6 @@ class ImportAnimeStaff extends Command
             ProcessImportAnimeStaff::dispatch($kAnimeStaff);
         });
 
-        return 1;
+        return Command::SUCCESS;
     }
 }

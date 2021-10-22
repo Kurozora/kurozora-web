@@ -44,6 +44,6 @@ class ImportStudios extends Command
             ProcessImportStudio::dispatch($kStudios);
         });
 
-        return 1;
+        return Command::SUCCESS;
     }
 }

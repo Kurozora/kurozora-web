@@ -44,6 +44,6 @@ class ImportAnimeGenres extends Command
             ProcessImportAnimeGenre::dispatch($kMediaGenres);
         });
 
-        return 1;
+        return Command::SUCCESS;
     }
 }
