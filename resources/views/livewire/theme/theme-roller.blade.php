@@ -43,9 +43,9 @@
         },
         handleColorPickerColorChange(color) {
             document.querySelectorAll('[x-data]').forEach(el => {
-                if (el.__x.getUnobservedData().selectedElement) {
-                    self = el.__x.getUnobservedData();
-                    selectedElement = self.selectedElement;
+                if (el._x_dataStack[0]['selectedElement']) {
+                    self = el._x_dataStack[0];
+                    selectedElement = self['selectedElement'];
                     if (selectedElement) {
                         let colorPickerInput = document.querySelector('#' + selectedElement);
                         colorPickerInput.value = color.hex8String;
@@ -58,7 +58,7 @@
             this.colorPicker.color.hex8String = value;
         },
     }"
-    x-init="() => {
+    x-init="$nextTick(() => {
         @this.set('state.global_background_color', '#353a50');
         @this.set('state.global_text_color', '#B7B9C1');
         @this.set('state.global_bar_title_text_color', '#ffffff');
@@ -68,7 +68,7 @@
         @this.set('state.ui_status_bar_style', '#ffffff');
 
         initializeColorPicker();
-    }"
+    })"
     x-on:keydown.escape.window="show = false; selectedElement = null"
 >
     <style scoped>
