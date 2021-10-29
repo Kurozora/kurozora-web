@@ -33,6 +33,7 @@ input:invalid, textarea:invalid, select:invalid {
 html, body {
   @apply h-full
   w-full;
+
   scroll-behavior: smooth;
 }
 
@@ -46,6 +47,7 @@ body {
   leading-snug
   dark:text-white
   tracking-tight;
+
   color: #333333;
   quotes: "“" "”";
 }
@@ -65,22 +67,6 @@ picture::before {
 }
 
 /* Placeholder styles */
-/* Anime placeholders */
-.anime-poster {
-  @apply bg-center
-  bg-cover
-  bg-no-repeat
-  border-2
-  border-gray-100
-  border-opacity-25
-  rounded-lg
-  shadow-lg;
-  margin: 10px auto 0;
-  width: 180px;
-  height: 268px;
-  background-size: 180px 268px;  /* ratio 45:67 */
-}
-
 /* User placeholders */
 .profile-image {
   @apply bg-center
