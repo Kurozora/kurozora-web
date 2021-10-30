@@ -1,181 +1,363 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
-    <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6">
-        <div class="flex justify-between h-16">
-            <div class="flex">
-                <!-- Logo -->
-                <div class="flex-shrink-0 flex items-center">
-                    <a href="/">
-                        <x-logo class="block h-10 w-auto"/>
-                    </a>
+<div
+    x-data="{
+        isSearchEnabled: @entangle('isSearchEnabled'),
+        isNavOpen: false,
+    }"
+>
+    <nav class="relative bg-white border-b border-gray-100 z-[300]">
+        {{-- Primary Navigation Menu --}}
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="flex justify-between h-16">
+                {{-- Hamburger --}}
+                <div
+                    class="-mr-2 flex items-center sm:hidden"
+                    x-show="! isSearchEnabled"
+                    x-transition:enter="ease-out duration-150 delay-[50ms] transform sm:delay-300"
+                    x-transition:enter-start="opacity-0 scale-75"
+                    x-transition:enter-end="opacity-100 scale-100"
+                    x-transition:leave="ease-in duration-200 delay-100 transform sm:delay-[50ms]"
+                    x-transition:leave-start="opacity-100 scale-100"
+                    x-transition:leave-end="opacity-0 scale-75"
+                >
+                    <button
+                        class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
+                        x-on:click="isNavOpen = ! isNavOpen"
+                    >
+                        <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                            <path
+                                class="inline-flex transform origin-center"
+                                x-show="! isNavOpen"
+                                x-transition:enter="ease-out duration-200"
+                                x-transition:enter-start="opacity-0 scale-75 rotate-180"
+                                x-transition:enter-end="opacity-100 scale-100 rotate-0"
+                                x-transition:leave="ease-in duration-200"
+                                x-transition:leave-start="opacity-100 scale-100 rotate-0"
+                                x-transition:leave-end="opacity-0 scale-75 rotate-180"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"
+                            />
+
+                            <path
+                                class="inline-flex transform origin-center"
+                                x-show="isNavOpen"
+                                x-transition:enter="ease-out duration-200"
+                                x-transition:enter-start="opacity-0 scale-75 rotate-180"
+                                x-transition:enter-end="opacity-100 scale-100 rotate-0"
+                                x-transition:leave="ease-in duration-200"
+                                x-transition:leave-start="opacity-100 scale-100 rotate-0"
+                                x-transition:leave-end="opacity-0 scale-75 rotate-180"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
-                        {{ __('Explore') }}
-                    </x-nav-link>
+                <div class="flex w-full justify-between">
+                    {{-- Left Side --}}
+                    <span class="flex w-full">
+                        {{-- Logo --}}
+                        <a class="inline-flex items-center m-auto text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700 sm:my-0 sm:ml-0 sm:mr-8 sm:pt-1"
+                           href="/"
+                           x-show="! isSearchEnabled"
+                           x-transition:enter="ease-out duration-150 delay-100 transform sm:delay-[0ms]"
+                           x-transition:enter-start="opacity-0 scale-75"
+                           x-transition:enter-end="opacity-100 scale-100"
+                           x-transition:leave="ease-in duration-200 delay-[50ms] transform sm:delay-[350ms]"
+                           x-transition:leave-start="opacity-100 scale-100"
+                           x-transition:leave-end="opacity-0 scale-75"
+                        >
+                            <x-logo class="block h-9 w-auto" />
+                        </a>
+
+                        {{-- Navigation Links --}}
+                        <div class="hidden sm:flex sm:justify-between sm:-my-px sm:w-full md:w-auto md:space-x-8">
+                        <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')"
+                                    x-show="! isSearchEnabled"
+                                    x-transition:enter="ease-out duration-150 delay-[50ms] transform"
+                                    x-transition:enter-start="opacity-0 scale-75"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    x-transition:leave="ease-in duration-200 delay-300 transform"
+                                    x-transition:leave-start="opacity-100 scale-100"
+                                    x-transition:leave-end="opacity-0 scale-75"
+                        >
+                            {{ __('Explore') }}
+                        </x-nav-link>
+
+                        <x-nav-link href="{{ route('genres.index') }}" :active="request()->routeIs('genres.index')"
+                                    x-show="! isSearchEnabled"
+                                    x-transition:enter="ease-out duration-150 delay-100 transform"
+                                    x-transition:enter-start="opacity-0 scale-75"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    x-transition:leave="ease-in duration-200 delay-[250ms] transform"
+                                    x-transition:leave-start="opacity-100 scale-100"
+                                    x-transition:leave-end="opacity-0 scale-75"
+                        >
+                            {{ __('Genres') }}
+                        </x-nav-link>
+
+                        <x-nav-link href="#"
+                                    x-show="! isSearchEnabled"
+                                    x-transition:enter="ease-out duration-150 delay-150 transform"
+                                    x-transition:enter-start="opacity-0 scale-75"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    x-transition:leave="ease-in duration-200 delay-200 transform"
+                                    x-transition:leave-start="opacity-100 scale-100"
+                                    x-transition:leave-end="opacity-0 scale-75"
+                        >
+                            {{ __('Characters') }}
+                        </x-nav-link>
+
+                        <x-nav-link href="#"
+                                    x-show="! isSearchEnabled"
+                                    x-transition:enter="ease-out duration-150 delay-200 transform"
+                                    x-transition:enter-start="opacity-0 scale-75"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    x-transition:leave="ease-in duration-200 delay-150 transform"
+                                    x-transition:leave-start="opacity-100 scale-100"
+                                    x-transition:leave-end="opacity-0 scale-75"
+                        >
+                            {{ __('People') }}
+                        </x-nav-link>
+
+                        <x-nav-link href="#"
+                                    x-show="! isSearchEnabled"
+                                    x-transition:enter="ease-out duration-150 delay-[250ms] transform"
+                                    x-transition:enter-start="opacity-0 scale-75"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    x-transition:leave="ease-in duration-200 delay-100 transform"
+                                    x-transition:leave-start="opacity-100 scale-100"
+                                    x-transition:leave-end="opacity-0 scale-75"
+                        >
+                            {{ __('Studios') }}
+                        </x-nav-link>
+                    </div>
+                    </span>
+
+                    {{-- Right Side --}}
+                    <div class="flex items-center sm:justify-between sm:ml-8 sm:-my-px sm:space-x-8">
+                        {{-- Search --}}
+                        <a class="inline-flex items-center text-gray-500 cursor-pointer transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700"
+                           x-show="! isSearchEnabled"
+                           x-on:click="isNavOpen = false; isSearchEnabled = ! isSearchEnabled;"
+                           x-transition:enter="ease-out duration-150 delay-150 transform dm:delay-300"
+                           x-transition:enter-start="opacity-0 scale-75"
+                           x-transition:enter-end="opacity-100 scale-100"
+                           x-transition:leave="ease-in duration-200 transform sm:delay-[50ms]"
+                           x-transition:leave-start="opacity-100 scale-100"
+                           x-transition:leave-end="opacity-0 scale-75"
+                        >
+                            @svg('magnifyingglass', 'fill-current', ['width' => '18'])
+                        </a>
+
+                        {{-- Settings Dropdown --}}
+                        <x-dropdown align="right" width="48">
+                            <x-slot name="trigger">
+                                <button
+                                    class="hidden sm:flex text-sm border-2 border-transparent rounded-full transition duration-150 ease-in-out focus:outline-none focus:border-gray-300"
+                                    x-show="! isSearchEnabled"
+                                    x-transition:enter="ease-out duration-150 delay-[350ms] transform"
+                                    x-transition:enter-start="opacity-0 scale-75"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    x-transition:leave="ease-in duration-200 transform"
+                                    x-transition:leave-start="opacity-100 scale-100"
+                                    x-transition:leave-end="opacity-0 scale-75"
+                                >
+                                    <div
+                                        class="h-8 w-8 bg-cover rounded-full"
+                                        style="background-image: url({{ Auth::user()?->profile_image_url ?? asset('images/static/placeholders/user_profile.webp') }});"
+                                        alt="{{ Auth::user()?->username ?? 'Guest' }} Profile"
+                                        title="{{ Auth::user()?->username ?? 'Guest' }}"
+                                        role="img"
+                                    ></div>
+                                </button>
+                            </x-slot>
+
+                            <x-slot name="content">
+                                <x-dropdown-link href="#">
+                                    {{ __('Profile') }}
+                                </x-dropdown-link>
+
+                                <x-dropdown-link href="#">
+                                    {{ __('Library') }}
+                                </x-dropdown-link>
+
+                                {{-- More Pages --}}
+                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                    {{ __('More') }}
+                                </div>
+
+                                <x-dropdown-link href="{{ route('themes') }}">
+                                    {{ __('Themes') }}
+                                </x-dropdown-link>
+
+                                <div class="border-t border-gray-100"></div>
+
+                                @auth
+                                    {{-- Account Management --}}
+                                    <div class="block px-4 py-2 text-xs text-gray-400">
+                                        {{ __('Manage Account') }}
+                                    </div>
+
+                                    <x-dropdown-link href="{{ route('profile.settings') }}">
+                                        {{ __('Settings') }}
+                                    </x-dropdown-link>
+
+                                    <div class="border-t border-gray-100"></div>
+                                @endauth
+
+                                {{-- Authentication --}}
+                                @auth
+                                    <form method="POST" action="{{ route('sign-out') }}">
+                                        @csrf
+
+                                        <x-dropdown-link href="{{ route('sign-out') }}"
+                                                         onclick="event.preventDefault(); this.closest('form').submit();">
+                                            {{ __('Sign out') }}
+                                        </x-dropdown-link>
+                                    </form>
+                                @else
+                                    <x-dropdown-link href="{{ route('sign-in') }}">
+                                        {{ __('Sign in') }}
+                                    </x-dropdown-link>
+
+                                    @if (Route::has('sign-up'))
+                                        <x-dropdown-link href="{{ route('sign-up') }}">
+                                            {{ __('Create Account') }}
+                                        </x-dropdown-link>
+                                    @endif
+                                @endauth
+                            </x-slot>
+                        </x-dropdown>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ml-6">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        @auth
-                            <button
-                                class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
-                                <div class="h-8 w-8 bg-cover rounded-full"
-                                     style="background-image: url({{ Auth::user()->profile_image_url }});" alt="{{ Auth::user()->username }}" role="img"></div>
-                            </button>
-                        @else
-                            <button
-                                class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
-                                     viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd"
-                                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                          clip-rule="evenodd"/>
-                                </svg>
-                            </button>
-                        @endauth
-                    </x-slot>
-
-                    <x-slot name="content">
-                        <!-- More Pages -->
-                        <div class="block px-4 py-2 text-xs text-gray-400">
-                            {{ __('More') }}
-                        </div>
-
-                        <x-dropdown-link href="{{ route('themes') }}">
-                            {{ __('Themes') }}
-                        </x-dropdown-link>
-
-                        <div class="border-t border-gray-100"></div>
-
-                        @auth
-                            <!-- Account Management -->
-                            <div class="block px-4 py-2 text-xs text-gray-400">
-                                {{ __('Manage Account') }}
-                            </div>
-
-                            <x-dropdown-link href="{{ route('profile.settings') }}">
-                                {{ __('Settings') }}
-                            </x-dropdown-link>
-
-                            <div class="border-t border-gray-100"></div>
-                        @endauth
-
-                        <!-- Authentication -->
-                        @auth
-                            <form method="POST" action="{{ route('sign-out') }}">
-                                @csrf
-
-                                <x-dropdown-link href="{{ route('sign-out') }}"
-                                                 onclick="event.preventDefault(); this.closest('form').submit();">
-                                    {{ __('Sign out') }}
-                                </x-dropdown-link>
-                            </form>
-                        @else
-                            <x-dropdown-link href="{{ route('sign-in') }}">
-                                {{ __('Sign in') }}
-                            </x-dropdown-link>
-
-                            @if (Route::has('sign-up'))
-                                <x-dropdown-link href="{{ route('sign-up') }}">
-                                    {{ __('Create Account') }}
-                                </x-dropdown-link>
-                            @endif
-                        @endauth
-                    </x-slot>
-                </x-dropdown>
-            </div>
-
-            <!-- Hamburger -->
-            <div class="-mr-2 flex items-center sm:hidden">
-                <button @click="open = ! open"
-                        class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex"
-                              stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M4 6h16M4 12h16M4 18h16"/>
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round"
-                              stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                </button>
             </div>
         </div>
-    </div>
 
-    <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
-                {{ __('Explore') }}
-            </x-responsive-nav-link>
-        </div>
-
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200">
-            @auth
-                <div class="flex items-center px-4 pb-4">
-                    <div class="flex-shrink-0">
-                        <div class="h-10 w-10 bg-cover rounded-full" style="background-image: url({{ Auth::user()->profile_image_url }});"
-                             alt="{{ Auth::user()->username }}" role="img"></div>
-                    </div>
-
-                    <div class="ml-3">
-                        <div class="font-medium text-base text-gray-800">{{ Auth::user()->username }}</div>
-                        <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-                    </div>
-                </div>
-            @endauth
-
-            <!-- Themes -->
-            <div class="space-y-1">
-                <x-responsive-nav-link href="{{ route('themes') }}"
-                                       :active="request()->routeIs('themes')">
-                    {{ __('Themes') }}
+        {{-- Responsive Navigation Menu --}}
+        <div
+            class="block absolute px-4 w-full bg-white rounded-b-2xl z-[300] sm:hidden"
+            x-show="isNavOpen"
+            x-collapse.duration.400ms=""
+        >
+            <div class="pt-2 pb-3 space-y-1">
+                <x-responsive-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
+                    {{ __('Explore') }}
                 </x-responsive-nav-link>
 
-                <div class="border-t border-gray-100"></div>
+                <x-responsive-nav-link href="{{ route('genres.index') }}" :active="request()->routeIs('genres.index')">
+                    {{ __('Genres') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link href="#">
+                    {{ __('Characters') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link href="#">
+                    {{ __('People') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link href="#">
+                    {{ __('Studios') }}
+                </x-responsive-nav-link>
             </div>
 
-            <!-- Account Management -->
-            @auth
+            {{-- Responsive Settings Options --}}
+            <div class="pt-4 pb-1 border-t border-gray-200">
+                @auth
+                    <div class="flex items-center px-4 pb-4">
+                        <div class="flex-shrink-0">
+                            <div class="h-10 w-10 bg-cover rounded-full" style="background-image: url({{ Auth::user()->profile_image_url }});"
+                                 alt="{{ Auth::user()->username }}" role="img"></div>
+                        </div>
+
+                        <div class="ml-3">
+                            <div class="font-medium text-base text-gray-800">{{ Auth::user()->username }}</div>
+                            <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                        </div>
+                    </div>
+                @endauth
+
+                {{-- Library --}}
                 <div class="space-y-1">
-                    <x-responsive-nav-link href="{{ route('profile.settings') }}"
-                                           :active="request()->routeIs('profile.settings')">
-                        {{ __('Settings') }}
+                    <x-responsive-nav-link href="#">
+                        {{ __('Profile') }}
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link href="#">
+                        {{ __('Library') }}
                     </x-responsive-nav-link>
 
                     <div class="border-t border-gray-100"></div>
                 </div>
-            @endauth
 
-            <!-- Authentication -->
-            <div class="space-y-1">
-                @auth
-                    <form method="POST" action="{{ route('sign-out') }}">
-                        @csrf
-
-                        <x-responsive-nav-link href="{{ route('sign-out') }}" onclick="event.preventDefault();
-                                                                            this.closest('form').submit();">
-                            {{ __('Sign out') }}
-                        </x-responsive-nav-link>
-                    </form>
-                @else
-                    <x-responsive-nav-link href="{{ route('sign-in') }}">
-                        {{ __('Sign in') }}
+                {{-- Themes --}}
+                <div class="space-y-1">
+                    <x-responsive-nav-link href="{{ route('themes') }}"
+                                           :active="request()->routeIs('themes')">
+                        {{ __('Themes') }}
                     </x-responsive-nav-link>
 
-                    @if (Route::has('sign-up'))
-                        <x-responsive-nav-link href="{{ route('sign-up') }}">
-                            {{ __('Create Account') }}
+                    <div class="border-t border-gray-100"></div>
+                </div>
+
+                {{-- Account Management --}}
+                @auth
+                    <div class="space-y-1">
+                        <x-responsive-nav-link href="{{ route('profile.settings') }}"
+                                               :active="request()->routeIs('profile.settings')">
+                            {{ __('Settings') }}
                         </x-responsive-nav-link>
-                    @endif
+
+                        <div class="border-t border-gray-100"></div>
+                    </div>
                 @endauth
+
+                {{-- Authentication --}}
+                <div class="space-y-1">
+                    @auth
+                        <form method="POST" action="{{ route('sign-out') }}">
+                            @csrf
+
+                            <x-responsive-nav-link href="{{ route('sign-out') }}" onclick="event.preventDefault();
+                                                                                this.closest('form').submit();">
+                                {{ __('Sign out') }}
+                            </x-responsive-nav-link>
+                        </form>
+                    @else
+                        <x-responsive-nav-link href="{{ route('sign-in') }}">
+                            {{ __('Sign in') }}
+                        </x-responsive-nav-link>
+
+                        @if (Route::has('sign-up'))
+                            <x-responsive-nav-link href="{{ route('sign-up') }}">
+                                {{ __('Create Account') }}
+                            </x-responsive-nav-link>
+                        @endif
+                    @endauth
+                </div>
             </div>
         </div>
+    </nav>
+
+    {{-- Responsive Overlay --}}
+    <div
+        class="fixed inset-0 transform transition-all z-[299] sm:hidden"
+        x-show="isNavOpen"
+        x-on:click="isNavOpen = false;"
+        x-transition:enter="ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="ease-in duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+    >
+        <div class="absolute inset-0 bg-black opacity-75"></div>
     </div>
-</nav>
+
+    {{-- Nav Search --}}
+    <livewire:nav-search />
+</div>

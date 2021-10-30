@@ -10,6 +10,13 @@ use Livewire\Component;
 class NavigationDropdown extends Component
 {
     /**
+     * Whether search is enabled.
+     *
+     * @var bool $isSearchEnabled
+     */
+    public bool $isSearchEnabled = false;
+
+    /**
      * The component's listeners.
      *
      * @var array

@@ -42,6 +42,21 @@ class NavSearch extends Component
 //            ];
 //        }
 
-        return view('livewire.nav-search'); //, $searchResults);
+        return view('livewire.nav-search', [
+            'quickLinks' => [
+                [
+                    'title' => __('About Kurozora+'),
+                    'link'  => '#',
+                ],
+                [
+                    'title' => __('About Personalisation'),
+                    'link'  => '#',
+                ],
+                [
+                    'title' => __('Welcome to Kurozora'),
+                    'link'  => '#',
+                ]
+            ]
+        ]); //, $searchResults);
     }
 }
