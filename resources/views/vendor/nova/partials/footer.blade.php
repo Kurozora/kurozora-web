@@ -5,3 +5,5 @@
     <span class="px-1">&middot;</span>
     v{{ \Laravel\Nova\Nova::version() }}
 </p>
+{{-- <nova-dark-theme-toggle></nova-dark-theme-toggle> --}}
+<nova-dark-theme-toggle label="{{ __('Dark Theme') }}"></nova-dark-theme-toggle>
