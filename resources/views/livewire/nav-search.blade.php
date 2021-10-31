@@ -1,10 +1,34 @@
 <div
     x-data="{
         searchQuery: @entangle('searchQuery'),
-        resetSearchQuery() {
+        resetAndClose() {
+            isSearchEnabled = false;
             this.searchQuery = '';
         },
+        focusables() {
+            // All focusable element types...
+            let selector = 'a, button, input, textarea, select, details, [tabindex]:not([tabindex=\'-1\'])'
+
+            return [...$el.querySelectorAll(selector)]
+                // All non-disabled elements...
+                .filter(el => ! el.hasAttribute('disabled'))
+        },
+        firstFocusable() { return this.focusables()[0] },
+        lastFocusable() { return this.focusables().slice(-1)[0] },
+        nextFocusable() { return this.focusables()[this.nextFocusableIndex()] || this.firstFocusable() },
+        prevFocusable() { return this.focusables()[this.prevFocusableIndex()] || this.lastFocusable() },
+        nextFocusableIndex() { return (this.focusables().indexOf(document.activeElement) + 1) % (this.focusables().length + 1) },
+        prevFocusableIndex() { return Math.max(0, this.focusables().indexOf(document.activeElement)) -1 },
+        focusOnSearch() { setTimeout(() => $refs.search.focus(), 0) },
     }"
+    x-on:close.stop="resetAndClose()"
+    x-on:keydown.escape.window="resetAndClose()"
+    x-on:keydown.meta.k.window.prevent="isSearchEnabled = true"
+    x-on:keydown.window.prevent.slash="isSearchEnabled = true"
+    x-on:keydown.tab.prevent="$event.shiftKey || nextFocusable().focus()"
+    x-on:keydown.shift.tab.prevent="prevFocusable().focus()"
+    x-on:keydown="console.log(event.key)"
+    x-on:transitionstart="focusOnSearch()"
 >
     <div class="absolute top-0 right-0 left-0 mx-auto max-w-full z-[300] sm:max-w-2xl"
          x-cloak=""
@@ -33,14 +57,20 @@
                 </button>
 
                 {{-- Search field --}}
-                <input class="absolute top-0 left-0 px-10 h-full w-full border-0 bg-transparent text-black focus:ring-0" type="text" placeholder="{{ __('I’m searching for…') }}" wire:model.debounce.500ms="searchQuery" />
+                <input
+                    class="absolute top-0 left-0 px-10 h-full w-full border-0 bg-transparent text-black focus:ring-0"
+                    type="text"
+                    placeholder="{{ __('I’m searching for…') }}"
+                    x-ref="search"
+                    wire:model.debounce.500ms="searchQuery"
+                />
             </span>
 
             {{-- Close button --}}
             <button
                 class="absolute right-0 pr-4 h-full text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 sm:pr-2"
                 x-show="isSearchEnabled"
-                x-on:click="isSearchEnabled = false; resetSearchQuery();"
+                x-on:click="resetAndClose()"
                 x-transition:enter="ease duration-[400ms] delay-[325ms] transform"
                 x-transition:enter-start="opacity-0 translate-x-1"
                 x-transition:enter-end="opacity-100 translate-x-0"
@@ -113,7 +143,7 @@
     <div
         class="fixed inset-0 transform transition-all z-[299]"
         x-show="isSearchEnabled"
-        x-on:click="isSearchEnabled = false; resetSearchQuery();"
+        x-on:click="resetAndClose()"
         x-transition:enter="ease-out duration-300"
         x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100"
