@@ -56,22 +56,26 @@
 
         {{-- Quick Links --}}
         <div class="absolute right-0 left-0 mx-auto p-4 max-w-7xl bg-white rounded-b-2xl sm:px-10">
-{{--            @foreach($searchResults as $key => $query)--}}
-{{--                @switch($key)--}}
-{{--                    @case('anime')--}}
-{{--                    @foreach($query as $anime)--}}
-{{--                        <x-lockups.search-anime-lockup :anime="$anime" wire:key="{{ $anime->id }}" />--}}
-{{--                    @endforeach--}}
-{{--                    @break--}}
-{{--                    @case('user')--}}
-{{--                    @foreach($query as $user)--}}
-{{--                        <x-dropdown-link href="{{ route('profile.details', $user) }}">--}}
-{{--                            {{ $user->username }}--}}
-{{--                        </x-dropdown-link>--}}
-{{--                    @endforeach--}}
-{{--                    @break--}}
-{{--                @endswitch--}}
-{{--            @endforeach--}}
+            @if(!empty($searchResults))
+                @foreach($searchResults as $key => $query)
+                    @switch($key)
+                        @case('anime')
+                        @foreach($query as $anime)
+                            <x-lockups.search-anime-lockup :anime="$anime" wire:key="{{ uniqid(md5($anime->title), true) }}" />
+
+                            <hr class="my-4" />
+                        @endforeach
+                        @break
+                        @case('user')
+                        @foreach($query as $user)
+                            <x-dropdown-link href="{{ route('profile.details', $user) }}">
+                                {{ $user->username }}
+                            </x-dropdown-link>
+                        @endforeach
+                        @break
+                    @endswitch
+                @endforeach
+            @endif
 
             @if(!empty($quickLinks))
                 <p
