@@ -95,25 +95,34 @@
                 </div>
             </div>
 
+            @php($searchResultsIsEmpty = false)
             @if(!empty($searchResults))
                 @foreach($searchResults as $key => $query)
                     @switch($key)
                         @case('anime')
-                        @foreach($query as $anime)
-                            <x-lockups.search-anime-lockup :anime="$anime" wire:key="{{ uniqid(md5($anime->title), true) }}" />
+                            @if(empty($query->total()))
+                                @php($searchResultsIsEmpty = true)
+                            @else
+                                @foreach($query as $key => $anime)
+                                    <x-lockups.search-anime-lockup :anime="$anime" wire:key="{{ uniqid(md5($anime->title), true) }}" />
 
-                            <hr class="my-4" />
-                        @endforeach
+                                    <hr class="my-4" />
+                                @endforeach
+                            @endif
                         @break
                         @case('user')
-                        @foreach($query as $user)
-                            <x-dropdown-link href="{{ route('profile.details', $user) }}">
-                                {{ $user->username }}
-                            </x-dropdown-link>
-                        @endforeach
+                            @foreach($query as $user)
+                                <x-dropdown-link href="{{ route('profile.details', $user) }}">
+                                    {{ $user->username }}
+                                </x-dropdown-link>
+                            @endforeach
                         @break
                     @endswitch
                 @endforeach
+            @endif
+
+            @if($searchResultsIsEmpty)
+                <p class="text-sm text-gray-500 text-center font-bold">{{ __('No search results found :(') }}</p>
             @endif
 
             @if(!empty($quickLinks))
