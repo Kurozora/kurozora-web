@@ -40,7 +40,7 @@ class NavSearch extends Component
 
         return view('livewire.nav-search', [
             'searchResults' => $searchResults,
-            'quickLinks' => [
+            'quickLinks'    => [
                 [
                     'title' => __('About Kurozora+'),
                     'link'  => '#',
@@ -53,7 +53,7 @@ class NavSearch extends Component
                     'title' => __('Welcome to Kurozora'),
                     'link'  => '#',
                 ]
-            ]
+            ],
         ]);
     }
 }
