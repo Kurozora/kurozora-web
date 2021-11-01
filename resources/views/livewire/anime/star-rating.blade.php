@@ -1,4 +1,4 @@
-<div class="inline-flex flex-col">
+<div class="inline-flex flex-col justify-center">
     <div class="inline-flex text-orange-500">
         @for ($i = 0; $i < 5; $i++)
     {{--            @php($id = uniqid('star' . $i + 0.5 ))--}}
@@ -10,7 +10,7 @@
     {{--                </svg>--}}
     {{--            </label>--}}
 
-            @php($id = uniqid('star' . $i + 1 ))
+            @php($id = uniqid('star-'))
             <label for="{{ $id }}">
                 <input id="{{ $id }}" class="hidden" type="radio" name="rating" value="{{ $i + 1 }}" wire:model="rating" wire:change="rate" {{ $disabled ? 'disabled' : '' }} />
 

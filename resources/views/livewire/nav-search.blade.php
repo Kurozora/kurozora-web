@@ -1,10 +1,34 @@
 <div
     x-data="{
         searchQuery: @entangle('searchQuery'),
-        resetSearchQuery() {
+        resetAndClose() {
+            isSearchEnabled = false;
             this.searchQuery = '';
         },
+        focusables() {
+            // All focusable element types...
+            let selector = 'a, button, input, textarea, select, details, [tabindex]:not([tabindex=\'-1\'])'
+
+            return [...$el.querySelectorAll(selector)]
+                // All non-disabled elements...
+                .filter(el => ! el.hasAttribute('disabled'))
+        },
+        firstFocusable() { return this.focusables()[0] },
+        lastFocusable() { return this.focusables().slice(-1)[0] },
+        nextFocusable() { return this.focusables()[this.nextFocusableIndex()] || this.firstFocusable() },
+        prevFocusable() { return this.focusables()[this.prevFocusableIndex()] || this.lastFocusable() },
+        nextFocusableIndex() { return (this.focusables().indexOf(document.activeElement) + 1) % (this.focusables().length + 1) },
+        prevFocusableIndex() { return Math.max(0, this.focusables().indexOf(document.activeElement)) -1 },
+        focusOnSearch() { setTimeout(() => $refs.search.focus(), 0) },
     }"
+    x-on:close.stop="resetAndClose()"
+    x-on:keydown.escape.window="resetAndClose()"
+    x-on:keydown.meta.k.window.prevent="isSearchEnabled = true"
+    x-on:keydown.window.prevent.slash="isSearchEnabled = true"
+    x-on:keydown.tab.prevent="$event.shiftKey || nextFocusable().focus()"
+    x-on:keydown.shift.tab.prevent="prevFocusable().focus()"
+    x-on:keydown="console.log(event.key)"
+    x-on:transitionstart="focusOnSearch()"
 >
     <div class="absolute top-0 right-0 left-0 mx-auto max-w-full z-[300] sm:max-w-2xl"
          x-cloak=""
@@ -33,14 +57,20 @@
                 </button>
 
                 {{-- Search field --}}
-                <input class="absolute top-0 left-0 px-10 h-full w-full border-0 bg-transparent text-black focus:ring-0" type="text" placeholder="{{ __('I’m searching for…') }}" wire:model.debounce.500ms="searchQuery" />
+                <input
+                    class="absolute top-0 left-0 px-10 h-full w-full border-0 bg-transparent text-black focus:ring-0"
+                    type="text"
+                    placeholder="{{ __('I’m searching for…') }}"
+                    x-ref="search"
+                    wire:model.debounce.500ms="searchQuery"
+                />
             </span>
 
             {{-- Close button --}}
             <button
                 class="absolute right-0 pr-4 h-full text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 sm:pr-2"
                 x-show="isSearchEnabled"
-                x-on:click="isSearchEnabled = false; resetSearchQuery();"
+                x-on:click="resetAndClose()"
                 x-transition:enter="ease duration-[400ms] delay-[325ms] transform"
                 x-transition:enter-start="opacity-0 translate-x-1"
                 x-transition:enter-end="opacity-100 translate-x-0"
@@ -56,22 +86,44 @@
 
         {{-- Quick Links --}}
         <div class="absolute right-0 left-0 mx-auto p-4 max-w-7xl bg-white rounded-b-2xl sm:px-10">
-{{--            @foreach($searchResults as $key => $query)--}}
-{{--                @switch($key)--}}
-{{--                    @case('anime')--}}
-{{--                    @foreach($query as $anime)--}}
-{{--                        <x-lockups.search-anime-lockup :anime="$anime" wire:key="{{ $anime->id }}" />--}}
-{{--                    @endforeach--}}
-{{--                    @break--}}
-{{--                    @case('user')--}}
-{{--                    @foreach($query as $user)--}}
-{{--                        <x-dropdown-link href="{{ route('profile.details', $user) }}">--}}
-{{--                            {{ $user->username }}--}}
-{{--                        </x-dropdown-link>--}}
-{{--                    @endforeach--}}
-{{--                    @break--}}
-{{--                @endswitch--}}
-{{--            @endforeach--}}
+            <div class="flex justify-center">
+                <div class="mb-4" wire:loading.delay.shortest wire:target="searchQuery">
+                    <svg class="animate-spin h-6 w-6 text-orange-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                </div>
+            </div>
+
+            @php($searchResultsIsEmpty = false)
+            @if(!empty($searchResults))
+                @foreach($searchResults as $key => $query)
+                    @switch($key)
+                        @case('anime')
+                            @if(empty($query->total()))
+                                @php($searchResultsIsEmpty = true)
+                            @else
+                                @foreach($query as $key => $anime)
+                                    <x-lockups.search-anime-lockup :anime="$anime" wire:key="{{ uniqid(md5($anime->title), true) }}" />
+
+                                    <hr class="my-4" />
+                                @endforeach
+                            @endif
+                        @break
+                        @case('user')
+                            @foreach($query as $user)
+                                <x-dropdown-link href="{{ route('profile.details', $user) }}">
+                                    {{ $user->username }}
+                                </x-dropdown-link>
+                            @endforeach
+                        @break
+                    @endswitch
+                @endforeach
+            @endif
+
+            @if($searchResultsIsEmpty)
+                <p class="text-sm text-gray-500 text-center font-bold">{{ __('No search results found :(') }}</p>
+            @endif
 
             @if(!empty($quickLinks))
                 <p
@@ -109,7 +161,7 @@
     <div
         class="fixed inset-0 transform transition-all z-[299]"
         x-show="isSearchEnabled"
-        x-on:click="isSearchEnabled = false; resetSearchQuery();"
+        x-on:click="resetAndClose()"
         x-transition:enter="ease-out duration-300"
         x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100"
