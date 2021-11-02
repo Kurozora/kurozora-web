@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
+use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasSymbolImage;
-use Auth;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Request;
@@ -44,18 +43,7 @@ class Genre extends KModel implements HasMedia
     {
         parent::boot();
 
-        static::addGlobalScope('tv_rating', function (Builder $builder) {
-            if (Auth::check()) {
-                $preferredTvRating = settings('tv_rating');
-                $tvRating = TvRating::firstWhere('weight', $preferredTvRating);
-
-                if (!empty($tvRating)) {
-                    $builder->where('tv_rating_id', '<=', $tvRating->id);
-                }
-            } else {
-                $builder->where('tv_rating_id', '<=', 4);
-            }
-        });
+        static::addGlobalScope(new TvRatingScope);
     }
 
     /**

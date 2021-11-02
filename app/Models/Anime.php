@@ -4,12 +4,12 @@ namespace App\Models;
 
 use App\Enums\DayOfWeek;
 use App\Enums\SeasonOfYear;
+use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasBannerImage;
 use App\Traits\Model\HasPosterImage;
 use App\Traits\Searchable;
 use Astrotomic\Translatable\Translatable;
-use Auth;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Carbon\CarbonInterval;
@@ -46,6 +46,9 @@ class Anime extends KModel implements HasMedia
 
     // Maximum amount of returned search results
     const MAX_SEARCH_RESULTS = 25;
+
+    // Maximum amount of returned search results for the web
+    const MAX_WEB_SEARCH_RESULTS = 5;
 
     // Minimum ratings required to calculate average
     const MINIMUM_RATINGS_REQUIRED = 30;
@@ -138,18 +141,7 @@ class Anime extends KModel implements HasMedia
     {
         parent::boot();
 
-        static::addGlobalScope('tv_rating', function (Builder $builder) {
-            if (Auth::check()) {
-                $preferredTvRating = settings('tv_rating');
-                $tvRating = TvRating::firstWhere('weight', $preferredTvRating);
-
-                if (!empty($tvRating)) {
-                    $builder->where('tv_rating_id', '<=', $tvRating->id);
-                }
-            } else {
-                $builder->where('tv_rating_id', '<=', 4);
-            }
-        });
+        static::addGlobalScope(new TvRatingScope);
 
         static::creating(function (Anime $anime) {
             if (empty($anime->air_season)) {
@@ -812,5 +804,17 @@ class Anime extends KModel implements HasMedia
     public function anime_translations(): HasMany
     {
         return $this->hasMany(AnimeTranslation::class);
+    }
+
+    /**
+     * Scope a query to only include anime proper to user's age.
+     *
+     * @param Builder $query
+     * @return void
+     */
+    public function scopeWithTvRating(Builder $query)
+    {
+        $scope = new TvRatingScope();
+        $scope->apply($query , $this);
     }
 }

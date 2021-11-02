@@ -5,6 +5,7 @@ namespace App\Traits;
 use App\Models\Anime;
 use App\Models\Character;
 use App\Models\User;
+use App\Scopes\TvRatingScope;
 use Illuminate\Database\Eloquent\Builder;
 use Nicolaslopezj\Searchable\SearchableTrait;
 
@@ -23,11 +24,15 @@ trait Searchable {
         preg_match('/^id:\s*([0-9]+?)$/i', $query, $idMatches);
 
         if (isset($idMatches[1])) {
-            $foundEntity = self::where('id', $idMatches[1]);
+            $foundEntity = self::withoutGlobalScope(new TvRatingScope)
+                ->withTvRating()
+                ->where('id', $idMatches[1]);
 
             return $foundEntity;
         }
 
-        return self::search($query, null, true, true);
+        return self::withoutGlobalScope(new TvRatingScope)
+            ->withTvRating()
+            ->search($query, null, true, true);
     }
 }
