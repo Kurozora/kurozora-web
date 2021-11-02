@@ -11,7 +11,6 @@ use Request;
 
 class TvRatingScope implements Scope
 {
-
     /**
      * @inheritDoc
      */
