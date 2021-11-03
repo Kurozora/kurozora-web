@@ -13,6 +13,6 @@ return [
     |
     */
 
-    'description' => 'Track, share and discover anime with friends.',
+    'description' => 'An extensive library of anime, movies, specials, OVA and ONA. Track, share and discover anime with friends.',
 
 ];
