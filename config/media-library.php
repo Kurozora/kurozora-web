@@ -74,7 +74,7 @@ return [
      * Whether to activate versioning when urls to files get generated.
      * When activated, this attaches a ?v=xx query string to the URL.
      */
-    'version_urls' => false,
+    'version_urls' => true,
 
     /*
      * The media library will try to optimize all converted images by removing
@@ -210,5 +210,5 @@ return [
      *
      * More info: https://css-tricks.com/native-lazy-loading/
      */
-    'default_loading_attribute_value' => null,
+    'default_loading_attribute_value' => 'lazy',
 ];

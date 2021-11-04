@@ -6,6 +6,7 @@
     "require": {
         "php": "^8.0",
         "ext-curl": "*",
+        "ext-gd": "*",
         "ext-json": "*",
         "ext-pdo": "*",
         "ext-simplexml": "*",
