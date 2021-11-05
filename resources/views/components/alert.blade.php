@@ -7,7 +7,7 @@
     x-init="setTimeout(function () { openAlertBox = false }, 2500)"
 >
     <div
-        class="fixed top-0 right-0 p-10 z-50"
+        class="fixed top-0 right-0 py-16 px-4 z-[999]"
         x-transition:enter="transition ease-out duration-300"
         x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100"

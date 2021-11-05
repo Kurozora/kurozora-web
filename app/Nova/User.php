@@ -18,7 +18,6 @@ use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Ramsey\Uuid\Uuid;
 use Timothyasp\Color\Color;
 use Vyuldashev\NovaPermission\PermissionBooleanGroup;
@@ -72,9 +71,14 @@ class User extends Resource
     public function fields(Request $request): array
     {
         return [
+            Heading::make('Identification')
+                ->onlyOnDetail(),
+
             ID::make()->sortable(),
 
-            Images::make('Profile Image', 'profile')
+            Heading::make('Media'),
+
+            Images::make('Profile')
                 ->showStatistics()
                 ->setFileName(function($originalFilename, $extension, $model) {
                     return Uuid::uuid4() . '.' . $extension;
@@ -109,7 +113,7 @@ class User extends Resource
                         ->help('The maximum height available for the image.'),
                 ]),
 
-            Images::make('Banner image', 'banner')
+            Images::make('Banner')
                 ->hideFromIndex()
                 ->showStatistics()
                 ->setFileName(function($originalFilename, $extension, $model) {
@@ -144,6 +148,8 @@ class User extends Resource
                     Number::make('Height')
                         ->help('The maximum height available for the image.'),
                 ]),
+
+            Heading::make('Meta information'),
 
             Text::make('Name', 'username')
                 ->sortable()
