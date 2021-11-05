@@ -37,6 +37,7 @@ use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
+use URL;
 
 class User extends Authenticatable implements HasMedia, MustVerifyEmail, ReacterableContract
 {
@@ -102,10 +103,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      * @var array
      */
     protected $appends = [
-        'profile_image',
-        'profile_image_url',
         'banner_image',
         'banner_image_url',
+        'profile_image',
+        'profile_image_url',
     ];
 
     /**
@@ -609,6 +610,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     public function sendEmailVerificationNotification()
     {
+        // Force root url, because the API will send the request from the API subdomain.
+        URL::forceRootUrl(config('app.url'));
+
+        // Notify user
         $this->notify(new VerifyEmailNotification);
     }
 
@@ -620,6 +625,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     public function sendPasswordResetNotification($token)
     {
+        // Force root url, because the API will send the request from the API subdomain.
+        URL::forceRootUrl(config('app.url'));
+
+        // Notify user
         $this->notify(new ResetPasswordNotification($token));
     }
 }
