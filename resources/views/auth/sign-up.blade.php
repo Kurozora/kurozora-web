@@ -19,6 +19,7 @@
 
         <form method="POST" action="{{ route('sign-up') }}">
             @csrf
+            <x-honey recaptcha="sign_up" />
 
             <div>
                 <x-label for="username" value="{{ __('Username') }}" />

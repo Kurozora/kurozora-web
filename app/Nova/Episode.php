@@ -2,7 +2,6 @@
 
 namespace App\Nova;
 
-use Chaseconey\ExternalImage\ExternalImage;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
@@ -13,7 +12,6 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Ramsey\Uuid\Uuid;
 use Timothyasp\Color\Color;
 
@@ -117,7 +115,7 @@ class Episode extends Resource
                 ->rules('required')
                 ->help('The number of the episode in the current season.'),
 
-            Number::make('Total Number')
+            Number::make('Number Total')
                 ->sortable()
                 ->rules('required')
                 ->help('The total number of the episode in regard to past episodes.'),

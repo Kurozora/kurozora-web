@@ -25,6 +25,7 @@
 
         <form method="POST" action="{{ route('sign-in') }}">
             @csrf
+            <x-honey recaptcha="sign_in" />
 
             <div>
                 <x-label for="email" value="{{ __('Kurozora ID') }}" />
