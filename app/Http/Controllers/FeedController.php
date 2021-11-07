@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FeedMessage;
 use App\Helpers\JSONResult;
 use App\Http\Requests\GetFeedMessagesExploreRequest;
 use App\Http\Requests\GetFeedMessagesHomeRequest;
 use App\Http\Requests\PostFeedRequest;
 use App\Http\Resources\FeedMessageResource;
+use App\Models\FeedMessage;
 use App\Models\User;
 use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -22,7 +22,7 @@ class FeedController extends Controller
      * @return JsonResponse
      * @throws AuthorizationException
      */
-    public function post(PostFeedRequest $request)
+    public function post(PostFeedRequest $request): JsonResponse
     {
         $data = $request->validated();
 
@@ -37,8 +37,9 @@ class FeedController extends Controller
                 ->where('is_reshare', true)
                 ->exists();
 
-            if ($reShareExists)
+            if ($reShareExists) {
                 throw new AuthorizationException('You are not allowed to re-share a message more than once.');
+            }
         }
 
         // Create the feed message
