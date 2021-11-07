@@ -83,6 +83,11 @@ picture::before {
   background-size: 150px 150px;
 }
 
+/* Hide reCAPTCHA */
+.grecaptcha-badge {
+  visibility: hidden;
+}
+
 /**
  * This injects all of Tailwind's utility classes, generated based on the
  * config file.
