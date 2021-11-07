@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Enums\FeedVoteType;
-use App\Models\FeedMessage;
 use App\Helpers\JSONResult;
 use App\Http\Requests\FeedMessageRepliesRequest;
+use App\Http\Requests\FeedMessageUpdateRequest;
 use App\Http\Resources\FeedMessageResource;
-use App\Models\User;
+use App\Models\FeedMessage;
 use Auth;
+use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 
 class FeedMessageController extends Controller
@@ -23,6 +25,43 @@ class FeedMessageController extends Controller
     {
         return JSONResult::success([
             'data' => FeedMessageResource::collection([$feedMessage])
+        ]);
+    }
+
+    /**
+     * Update a feed message's details.
+     *
+     * @param FeedMessageUpdateRequest $request
+     * @param FeedMessage $feedMessage
+     * @return JsonResponse
+     * @throws AuthorizationException
+     */
+    function update(FeedMessageUpdateRequest $request, FeedMessage $feedMessage): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the authenticated user
+        $user = Auth::user();
+
+        // Check if user is allowed to edit the feed message.
+        if ($user->id !== $feedMessage->user_id) {
+            throw new AuthorizationException('You are not allowed to edit another user’s message.');
+        }
+
+        // Update feed message
+        $feedMessage->update([
+            'body'          => $data['body'],
+            'is_nsfw'       => $data['is_nsfw'],
+            'is_spoiler'    => $data['is_spoiler']
+        ]);
+
+        // Show successful response
+        return JSONResult::success([
+            'data' => [
+                'body'          => $data['body'],
+                'isNSFW'       => (bool) $data['is_nsfw'],
+                'isSpoiler'    => (bool) $data['is_spoiler']
+            ]
         ]);
     }
 
@@ -71,5 +110,28 @@ class FeedMessageController extends Controller
                 'isHearted' => $voteAction == FeedVoteType::Heart
             ]
         ]);
+    }
+
+    /**
+     * Deletes the authenticated user's feed message.
+     *
+     * @param FeedMessage $feedMessage
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function delete(FeedMessage $feedMessage): JsonResponse
+    {
+        // Get the authenticated user
+        $user = Auth::user();
+
+        // Check if user is allowed to edit the feed message.
+        if ($user->id !== $feedMessage->user_id) {
+            throw new AuthorizationException('The request wasn’t accepted due to an issue with the feed message or because it’s using incorrect authentication.');
+        }
+
+        // Delete the feed message
+        $feedMessage->delete();
+
+        return JSONResult::success();
     }
 }

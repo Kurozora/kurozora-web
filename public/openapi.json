@@ -1295,6 +1295,67 @@
         }
       }
     },
+    "/feed/messages/{messageID}/update": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "feed"
+        ],
+        "operationId": "postFeedMessagesUpdate",
+        "summary": "Update the feed message's details",
+        "description": "This endpoint will update a feed message's details.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "messageID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the message."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type":"object",
+                "properties": {
+                  "body": {
+                    "type":"string",
+                    "description":"Text in the feed message."
+                  },
+                  "is_nsfw": {
+                    "$ref": "#/components/schemas/NSFWStatus"
+                  },
+                  "is_spoiler": {
+                    "$ref": "#/components/schemas/SpoilerStatus"
+                  }
+                },
+                "required":[
+                  "body",
+                  "is_nsfw",
+                  "is_spoiler"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/feed/messages/{messageID}/replies": {
       "get": {
         "security": [
@@ -1368,6 +1429,41 @@
         "operationId": "postFeedMessagesHeart",
         "summary": "Heart or un-heart a feed message.",
         "description": "This endpoint will heart or un-heart a feed message.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "messageID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the message."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/feed/messages/{messageID}/delete": {
+      "post": {
+        "security": [
+          {
+            "kurozoraBearer": [
+            ]
+          }
+        ],
+        "tags": [
+          "feed"
+        ],
+        "operationId": "postFeedMessagesDelete",
+        "summary": "Delete a feed message",
+        "description": "This endpoint will delete a feed message.",
         "parameters": [
           {
             "in": "path",
