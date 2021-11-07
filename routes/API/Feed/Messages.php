@@ -9,6 +9,10 @@ Route::prefix('/messages')
             ->middleware('auth.kurozora:optional')
             ->name('.details');
 
+        Route::post('/{feedMessage}/update', [FeedMessageController::class, 'update'])
+            ->middleware('auth.kurozora')
+            ->name('.update');
+
         Route::get('/{feedMessage}/replies', [FeedMessageController::class, 'replies'])
             ->middleware('auth.kurozora:optional')
             ->name('.replies');
@@ -16,4 +20,8 @@ Route::prefix('/messages')
         Route::post('/{feedMessage}/heart', [FeedMessageController::class, 'heart'])
             ->middleware('auth.kurozora')
             ->name('.heart');
+
+        Route::post('/{feedMessage}/delete', [FeedMessageController::class, 'delete'])
+            ->middleware('auth.kurozora')
+            ->name('.delete');
     });
