@@ -38,7 +38,7 @@ return [
     | or any other location as required by the application or its packages.
     */
 
-    'version' => '1.2.0-alpha.184',
+    'version' => '1.2.0-alpha.185',
 
     /*
     |--------------------------------------------------------------------------
@@ -53,7 +53,7 @@ return [
         'id'        => '1476153872',
         'bundle_id' => env('APP_BUNDLE_ID', 'app.kurozora.tracker'),
         'protocol'  => 'kurozora://',
-        'url'       => env('APP_ENV', 'local') != 'local' ? 'https://testflight.apple.com/join/Bzr2TrDi' : 'https://apps.apple.com/us/app/kurozora/id1476153872',
+        'url'       => env('APP_ENV', 'production') == 'local' ? 'https://apps.apple.com/us/app/kurozora/id1476153872' : 'https://testflight.apple.com/join/Bzr2TrDi',
     ],
 
     /*
