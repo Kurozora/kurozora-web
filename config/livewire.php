@@ -58,6 +58,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Livewire App URL
+    |--------------------------------------------------------------------------
+    |
+    | This value should be used if livewire assets are served from CDN.
+    | Livewire will communicate with an app through this url.
+    |
+    | Examples: "https://my-app.com", "myurl.com/app".
+    |
+    */
+
+    'app_url' => null,
+
+    /*
+    |--------------------------------------------------------------------------
     | Livewire Endpoint Middleware Group
     |--------------------------------------------------------------------------
     |
@@ -82,7 +96,7 @@ return [
     */
 
     'temporary_file_upload' => [
-        'disk' => env('APP_ENV') == 'local' ? 'local' : 's3',      // Example: 'local', 's3'              Default: 'default'
+        'disk' => 'local',      // Example: 'local', 's3'              Default: 'default'
         'rules' => [            // Example: ['file', 'mimes:png,jpg']  Default: ['required', 'file', 'max:12288'] (12MB)
             'required', 'file', 'max:2048'
         ],
@@ -112,4 +126,34 @@ return [
 
     'manifest_path' => null,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Back Button Cache
+    |--------------------------------------------------------------------------
+    |
+    | This value determines whether the back button cache will be used on pages
+    | that contain Livewire. By disabling back button cache, it ensures that
+    | the back button shows the correct state of components, instead of
+    | potentially stale, cached data.
+    |
+    | Setting it to "false" (default) will disable back button cache.
+    |
+    */
+
+    'back_button_cache' => false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Render On Redirect
+    |--------------------------------------------------------------------------
+    |
+    | This value determines whether Livewire will render before it's redirected
+    | or not. Setting it to "false" (default) will mean the render method is
+    | skipped when redirecting. And "true" will mean the render method is
+    | run before redirecting. Browsers bfcache can store a potentially
+    | stale view if render is skipped on redirect.
+    |
+    */
+
+    'render_on_redirect' => false,
 ];
