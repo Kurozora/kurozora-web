@@ -17,7 +17,7 @@ Route::get('/sign-in', [AuthenticatedSessionController::class, 'create'])
     ->name('sign-in');
 
 Route::post('/sign-in', [AuthenticatedSessionController::class, 'store'])
-    ->middleware(['guest', 'throttle:5,1']);
+    ->middleware(['guest', 'honey', 'honey-recaptcha', 'throttle:5,1']);
 
 Route::post('/sign-out', [AuthenticatedSessionController::class, 'destroy'])
     ->name('sign-out');
@@ -27,7 +27,7 @@ Route::get('/sign-up', [SignUpUserController::class, 'create'])
     ->name('sign-up');
 
 Route::post('/sign-up', [SignUpUserController::class, 'store'])
-    ->middleware(['guest']);
+    ->middleware(['guest', 'honey', 'honey-recaptcha']);
 
 Route::name('verification')
     ->group(function () {
@@ -40,7 +40,7 @@ Route::name('verification')
             ->name('.verify');
 
         Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-            ->middleware(['auth', 'throttle:6,1'])
+            ->middleware(['auth', 'honey', 'honey-recaptcha', 'throttle:6,1'])
             ->name('.send');
     });
 
@@ -51,7 +51,7 @@ Route::name('password')
             ->name('.request');
 
         Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
-            ->middleware(['guest'])
+            ->middleware(['guest', 'honey', 'honey-recaptcha'])
             ->name('.email');
 
         Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
@@ -59,7 +59,7 @@ Route::name('password')
             ->name('.reset');
 
         Route::post('/reset-password', [NewPasswordController::class, 'store'])
-            ->middleware(['guest'])
+            ->middleware(['guest', 'honey', 'honey-recaptcha'])
             ->name('.update');
     });
 
