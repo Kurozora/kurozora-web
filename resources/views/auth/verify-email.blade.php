@@ -24,6 +24,7 @@
         <div class="mt-4 flex items-center justify-between">
             <form method="POST" action="{{ route('verification.send') }}">
                 @csrf
+                <x-honey recaptcha="verify_email_send" />
 
                 <div>
                     <x-button type="submit">

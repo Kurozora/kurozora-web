@@ -27,7 +27,6 @@
     x-on:keydown.window.prevent.slash="isSearchEnabled = true"
     x-on:keydown.tab.prevent="$event.shiftKey || nextFocusable().focus()"
     x-on:keydown.shift.tab.prevent="prevFocusable().focus()"
-    x-on:keydown="console.log(event.key)"
     x-on:transitionstart="focusOnSearch()"
 >
     <div class="absolute top-0 right-0 left-0 mx-auto max-w-full z-[300] sm:max-w-2xl"
