@@ -24,7 +24,7 @@ class FeedMessageResourceBasic extends JsonResource
         $totalHearts = $feedMessage->viaLoveReactant()->getReactionCounterOfType(FeedVoteType::Heart()->description);
 
         $user = Auth::user();
-        $isReShared = $user ? $feedMessage->reShares()->where('user_id', $user->id)->exists() : false;
+        $isReShared = $user && $feedMessage->reShares()->where('user_id', $user->id)->exists();
 
         $resource = [
             'id'            => $feedMessage->id,
