@@ -118,8 +118,13 @@ class MeController extends Controller
         if (count($changedFields)) {
             $displayMessage .= 'You have updated your ' . join(', ', $changedFields) . '.';
             $user->save();
+
+            if (in_array('username', $changedFields)) {
+                settings('can_change_username', false, true);
+            }
+        } else {
+            $displayMessage .= 'No information was updated.';
         }
-        else $displayMessage .= 'No information was updated.';
 
         return JSONResult::success([
             'data'      => [
