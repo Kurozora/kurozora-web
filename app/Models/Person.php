@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Scopes\BornTodayScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasProfileImage;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -192,5 +194,17 @@ class Person extends KModel implements HasMedia
     public function cast(): HasMany
     {
         return $this->hasMany(AnimeCast::class, 'person_id');
+    }
+
+    /**
+     * Eloquent builder scope that limits the query to the characters born today.
+     *
+     * @param Builder $query
+     * @param int $limit
+     */
+    public function scopeBornToday(Builder $query, int $limit = 10)
+    {
+        $bornToday = new BornTodayScope();
+        $bornToday->apply($query->limit($limit), $this);
     }
 }

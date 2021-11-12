@@ -301,7 +301,7 @@
                         </x-slot>
                     </x-section-nav>
 
-                    <div class="grid grid-flow-col-dense auto-cols-[calc(100%-2rem)] gap-4 overflow-x-scroll no-scrollbar sm:auto-cols-[max-content]">
+                    <div class="grid grid-flow-col-dense gap-4 overflow-x-scroll no-scrollbar">
                         @foreach($seasons as $season)
                             <x-lockups.poster-lockup :season="$season" />
                         @endforeach
@@ -322,7 +322,7 @@
                             </x-slot>
                         </x-section-nav>
 
-                        <div class="grid grid-flow-col-dense auto-cols-[calc(100%-2rem)] gap-4 overflow-x-scroll no-scrollbar sm:auto-cols-[unset]">
+                        <div class="grid grid-flow-col-dense gap-4 overflow-x-scroll no-scrollbar">
                             @foreach($moreByStudio as $moreByStudioAnime)
                                 <x-lockups.small-lockup :anime="$moreByStudioAnime" />
                             @endforeach
@@ -342,7 +342,7 @@
                             </x-slot>
                         </x-section-nav>
 
-                        <div class="grid grid-flow-col-dense auto-cols-[calc(100%-2rem)] gap-4 overflow-x-scroll no-scrollbar sm:auto-cols-[unset]">
+                        <div class="grid grid-flow-col-dense gap-4 overflow-x-scroll no-scrollbar">
                             @foreach($animeRelations as $relatedAnime)
                                 <x-lockups.small-lockup :anime="$relatedAnime->related" :relation="$relatedAnime->relation" />
                             @endforeach

@@ -21,7 +21,7 @@
         genre/{{ $genre->id }}
     </x-slot>
 
-    <div class="max-w-7xl mx-auto px-4 pb-6 sm:px-6">
+    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
         <section class="mb-8 rounded-lg shadow-md overflow-hidden" style="{{ $backgroundColor }}">
             <picture class="flex justify-center">
                 <img class="lazyload" width="250px" data-sizes="auto" data-src="{{ $genre->symbol_image_url ?? asset('images/static/icon/logo.webp') }}" alt="{{ $genre->name }} Symbol" title="{{ $genre->name }}">
@@ -33,22 +33,22 @@
             </div>
         </section>
 
-        @foreach($explorePageCategories as $key => $explorePageCategory)
-            @switch($explorePageCategory->type)
-                @case('most-popular-shows')
+        @foreach($exploreCategories as $key => $exploreCategory)
+            @switch($exploreCategory->type)
+            @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
                 <section class="flex pb-8 overflow-x-scroll no-scrollbar">
                     <div class="flex flex-nowrap gap-4">
-                        @foreach(App\Models\Anime::mostPopular()->get() as $anime)
+                        @foreach($exploreCategory->explore_category_items as $anime)
                             <x-lockups.banner-lockup :anime="$anime" />
                         @endforeach
                     </div>
                 </section>
                 @break
-                @case('shows')
+            @case(\App\Enums\ExploreCategoryTypes::Shows)
                 <section class="pt-5 pb-8 border-t-2">
                     <x-section-nav class="flex flex-no-wrap justify-between mb-5">
                         <x-slot name="title">
-                            {{ $explorePageCategory->title }}
+                            {{ $exploreCategory->title }}
                         </x-slot>
 
                         <x-slot name="action">
@@ -56,42 +56,44 @@
                         </x-slot>
                     </x-section-nav>
 
-                    @switch($explorePageCategory->size)
-                        @case('large')
+                    @switch($exploreCategory->size)
+                    @case(\App\Enums\ExploreCategorySize::Large)
                         <div class="flex mt-5 overflow-x-scroll no-scrollbar">
                             <div class="flex flex-nowrap gap-4">
-                                @foreach($explorePageCategory->animes as $anime)
-                                    <x-lockups.large-lockup :anime="$anime" />
+                                @foreach($exploreCategory->explore_category_items as $categoryItem)
+                                    <x-lockups.large-lockup :anime="$categoryItem->model" />
                                 @endforeach
                             </div>
                         </div>
                         @break
-                        @case('small')
-                        <div class="grid grid-flow-col-dense auto-cols-[calc(100%-2rem)] mt-5 gap-4 overflow-x-scroll no-scrollbar sm:auto-cols-[unset]">
-                            @foreach($explorePageCategory->animes as $anime)
-                                <x-lockups.small-lockup :anime="$anime" />
+                    @case(\App\Enums\ExploreCategorySize::Small)
+                        <div class="grid grid-flow-col-dense mt-5 gap-4 overflow-x-scroll no-scrollbar">
+                            @foreach($exploreCategory->explore_category_items as $categoryItem)
+                                <x-lockups.small-lockup :anime="$categoryItem->model" />
                             @endforeach
                         </div>
                         @break
-                        @case('video')
+                    @case(\App\Enums\ExploreCategorySize::Video)
                         <div class="flex mt-5 overflow-x-scroll no-scrollbar">
                             <div class="flex flex-nowrap gap-4">
-                                @foreach($explorePageCategory->animes as $anime)
+                                @foreach($exploreCategory->explore_category_items as $anime)
                                     <x-lockups.video-lockup :anime="$anime" />
                                 @endforeach
                             </div>
                         </div>
                         @break
-                        @default
-                        {{ 'Unhandled size: ' . $explorePageCategory->size }}
+                    @default
+                        @if (config('app.env') === 'local')
+                            {{ 'Unhandled size: ' . $exploreCategory->size }}
+                        @endif
                     @endswitch
                 </section>
                 @break
-                @case('genres')
+            @case(\App\Enums\ExploreCategoryTypes::Genres)
                 <section class="pt-5 pb-8 border-t-2">
                     <x-section-nav class="flex flex-no-wrap justify-between mb-5">
                         <x-slot name="title">
-                            {{ __('Top Genres') }}
+                            {{ $exploreCategory->title }}
                         </x-slot>
 
                         <x-slot name="action">
@@ -101,20 +103,68 @@
 
                     <div class="flex mt-5 overflow-x-scroll no-scrollbar">
                         <div class="flex flex-nowrap gap-4">
-                            @foreach($explorePageCategory->genres as $genre)
+                            @foreach($exploreCategory->explore_category_items as $categoryItem)
                                 <x-lockups.medium-lockup
-                                    :href="route('genres.details', ['genre' => $genre])"
-                                    :title="$genre->name"
-                                    :backgroundColor="$genre->color"
-                                    :backgroundImage="$genre->symbol_image_url ?? asset('images/static/icon/logo.webp')"
+                                    :href="route('genres.details', ['genre' => $categoryItem->model])"
+                                    :title="$categoryItem->model->name"
+                                    :backgroundColor="$categoryItem->model->color"
+                                    :backgroundImage="$categoryItem->model->symbol_image_url ?? asset('images/static/icon/logo.webp')"
                                 />
                             @endforeach
                         </div>
                     </div>
                 </section>
                 @break
-                @default
-                {{ 'Unhandled type: ' . $explorePageCategory->type }}
+            @case(\App\Enums\ExploreCategoryTypes::Characters)
+                @if (\App\Models\Character::bornToday()->count() != 0)
+                    <section class="pt-5 pb-8 border-t-2">
+                        <x-section-nav class="flex flex-no-wrap justify-between mb-5">
+                            <x-slot name="title">
+                                {{ $exploreCategory->title }}
+                            </x-slot>
+
+                            <x-slot name="action">
+                                <x-simple-link href="#">{{ __('See All') }}</x-simple-link>
+                            </x-slot>
+                        </x-section-nav>
+
+                        <div class="flex mt-5 overflow-x-scroll no-scrollbar">
+                            <div class="flex flex-nowrap gap-4">
+                                @foreach($exploreCategory->charactersBornToday()->explore_category_items as $character)
+                                    <x-lockups.character-lockup :character="$character" />
+                                @endforeach
+                            </div>
+                        </div>
+                    </section>
+                @endif
+                @break
+            @case(\App\Enums\ExploreCategoryTypes::People)
+                @if (\App\Models\Person::bornToday()->count() != 0)
+                    <section class="pt-5 pb-8 border-t-2">
+                        <x-section-nav class="flex flex-no-wrap justify-between mb-5">
+                            <x-slot name="title">
+                                {{ $exploreCategory->title }}
+                            </x-slot>
+
+                            <x-slot name="action">
+                                <x-simple-link href="#">{{ __('See All') }}</x-simple-link>
+                            </x-slot>
+                        </x-section-nav>
+
+                        <div class="flex mt-5 overflow-x-scroll no-scrollbar">
+                            <div class="flex flex-nowrap gap-4">
+                                @foreach($exploreCategory->peopleBornToday()->explore_category_items as $person)
+                                    <x-lockups.person-lockup :person="$person" />
+                                @endforeach
+                            </div>
+                        </div>
+                    </section>
+                @endif
+                @break
+            @default
+                @if (config('app.env') === 'local')
+                    {{ 'Unhandled type: ' . $exploreCategory->type }}
+                @endif
             @endswitch
         @endforeach
     </div>
