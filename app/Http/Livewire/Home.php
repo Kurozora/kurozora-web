@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\ExplorePageCategory;
+use App\Models\ExploreCategory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -14,9 +14,9 @@ class Home extends Component
     /**
      * The object containing the collection of explore category data.
      *
-     * @var Collection $explorePageCategories
+     * @var ExploreCategory[]|Collection $exploreCategories
      */
-    public Collection $explorePageCategories;
+    public array|Collection $exploreCategories;
 
     /**
      * Prepare the component.
@@ -25,7 +25,7 @@ class Home extends Component
      */
     function mount()
     {
-        $this->explorePageCategories = ExplorePageCategory::orderBy('position')->get();;
+        $this->exploreCategories = ExploreCategory::orderBy('position')->get();;
     }
 
     /**

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\ExplorePageCategoryTypes;
+use App\Enums\ExploreCategoryTypes;
 use App\Helpers\JSONResult;
 use App\Http\Requests\GetExplorePageRequest;
-use App\Http\Resources\ExplorePageCategoryResource;
-use App\Models\ExplorePageCategory;
+use App\Http\Resources\ExploreCategoryResource;
+use App\Models\ExploreCategory;
 use App\Models\Genre;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -33,11 +33,11 @@ class ExplorePageController extends Controller
         }
         // Get global explore page
         else {
-            $categories = ExplorePageCategory::orderBy('position')->get();
+            $categories = ExploreCategory::orderBy('position')->get();
         }
 
         return JSONResult::success([
-            'data' => ExplorePageCategoryResource::collection(($categories))
+            'data' => ExploreCategoryResource::collection(($categories))
         ]);
     }
 
@@ -58,55 +58,38 @@ class ExplorePageController extends Controller
     }
 
     /**
-     * Returns the EPC for featured shows for a specific genre.
+     * Returns the explore category for featured shows for a specific genre.
      *
      * @param Genre $genre
      * @param int $position
-     * @return ExplorePageCategory
+     * @return ExploreCategory
      */
-    private function getFeaturedShowsCategoryForGenre(Genre $genre, int $position): ExplorePageCategory
+    private function getFeaturedShowsCategoryForGenre(Genre $genre, int $position): ExploreCategory
     {
-        /** @var ExplorePageCategory $category */
-        $category = ExplorePageCategory::make([
+        $exploreCategory = ExploreCategory::make([
             'title'     => 'Featured ' . $genre->name . ' Shows',
             'position'  => $position,
-            'type'      => ExplorePageCategoryTypes::MostPopularShows,
+            'type'      => ExploreCategoryTypes::MostPopularShows,
             'size'      => 'large'
         ]);
-
-        $popularShows = $genre->animes()->mostPopular(10)->get();
-
-        foreach($popularShows as $popularShow)
-            $category->animes->add($popularShow);
-
-        return $category;
+        return $exploreCategory->most_popular_anime($genre);
     }
 
     /**
-     * Returns the EPC for shows we love of a specific genre.
+     * Returns the explore category for shows we love of a specific genre.
      *
      * @param Genre $genre
      * @param int $position
-     * @return ExplorePageCategory
+     * @return ExploreCategory
      */
-    private function getShowsWeLoveCategoryForGenre(Genre $genre, int $position): ExplorePageCategory
+    private function getShowsWeLoveCategoryForGenre(Genre $genre, int $position): ExploreCategory
     {
-        /** @var ExplorePageCategory $category */
-        $category = ExplorePageCategory::make([
+        $exploreCategory = ExploreCategory::make([
             'title'     => $genre->name . ' Shows We Love',
             'position'  => $position,
-            'type'      => ExplorePageCategoryTypes::Shows,
+            'type'      => ExploreCategoryTypes::Shows,
             'size'      => 'video'
         ]);
-
-        $randomShows = $genre->animes()
-            ->inRandomOrder()
-            ->limit(10)
-            ->get();
-
-        foreach($randomShows as $randomShow)
-            $category->animes->add($randomShow);
-
-        return $category;
+        return $exploreCategory->shows_we_love($genre);
     }
 }
