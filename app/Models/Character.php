@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Scopes\BornTodayScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasProfileImage;
 use App\Traits\Searchable;
 use Astrotomic\Translatable\Translatable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -262,5 +264,17 @@ class Character extends KModel implements HasMedia
     public function character_translations(): HasMany
     {
         return $this->hasMany(CharacterTranslation::class);
+    }
+
+    /**
+     * Eloquent builder scope that limits the query to the characters born today.
+     *
+     * @param Builder $query
+     * @param int $limit
+     */
+    public function scopeBornToday(Builder $query, int $limit = 10)
+    {
+        $bornToday = new BornTodayScope();
+        $bornToday->apply($query->limit($limit), $this);
     }
 }
