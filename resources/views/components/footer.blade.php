@@ -32,17 +32,14 @@
                 <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('About Kurozora') }}</h5>
                 <ul class="m-0 mb-4 list-none">
                     <li class="mt-2">
-{{--                        <x-footer-link href="{{ route('misc.leadership') }}">{{ __('Kurozora Leadership') }}</x-footer-link>--}}
-                        <x-footer-link href="#">{{ __('Kurozora Leadership') }}</x-footer-link>
+                        <x-footer-link href="{{ route('misc.creators') }}">{{ __('Kurozora Creators') }}</x-footer-link>
                     </li>
-                    <li class="mt-2">
+{{--                    <li class="mt-2">--}}
 {{--                        <x-footer-link href="{{ route('misc.jobs') }}">{{ __('Job Opportunities') }}</x-footer-link>--}}
-                        <x-footer-link href="#">{{ __('Job Opportunities') }}</x-footer-link>
-                    </li>
-                    <li class="mt-2">
+{{--                    </li>--}}
+{{--                    <li class="mt-2">--}}
 {{--                        <x-footer-link href="{{ route('misc.investors') }}">{{ __('Investors') }}</x-footer-link>--}}
-                        <x-footer-link href="#">{{ __('Investors') }}</x-footer-link>
-                    </li>
+{{--                    </li>--}}
                     <li class="mt-2">
                         <x-footer-link href="{{ route('misc.contact') }}">{{ __('Contact Kurozora') }}</x-footer-link>
                     </li>
@@ -64,7 +61,7 @@
             <hr class="w-full mb-2" />
 
             <div class="w-full text-center md:text-left">
-                <p class="text-sm text-gray-500">Copyright © {{ now()->year }} Kurozora B.V. {{ __('All rights reserved') }}</p>
+                <p class="text-sm text-gray-500">Copyright © 2018-{{ now()->year }} Kurozora B.V. {{ __('All rights reserved') }}</p>
             </div>
         </div>
     </div>
