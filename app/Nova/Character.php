@@ -46,7 +46,7 @@ class Character extends Resource
      * @var array
      */
     public static $search = [
-        'id'
+        'id', 'slug'
     ];
 
     /**
@@ -104,8 +104,11 @@ class Character extends Resource
                         ->help('The maximum height available for the image.'),
                 ]),
 
-            Heading::make('Personal Information')
-                ->onlyOnForms(),
+            Heading::make('Personal Information'),
+
+            Text::make('Slug')
+                ->onlyOnForms()
+                ->help('Used to identify the Person in a URL: https://kurozora.app/characters/<strong>' . ($this->resource->slug ?? 'slug-identifier') . '</strong>. Leave empty to auto-generate from name.'),
 
             Text::make('Name')
                 ->rules('required')

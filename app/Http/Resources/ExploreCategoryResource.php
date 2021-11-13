@@ -2,18 +2,18 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\ExploreCategoryTypes;
 use App\Models\Anime;
-use App\Enums\ExplorePageCategoryTypes;
-use App\Models\ExplorePageCategory;
+use App\Models\ExploreCategory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ExplorePageCategoryResource extends JsonResource
+class ExploreCategoryResource extends JsonResource
 {
     /**
      * The resource instance.
      *
-     * @var ExplorePageCategory
+     * @var ExploreCategory
      */
     public $resource;
 

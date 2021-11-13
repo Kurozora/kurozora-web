@@ -1,6 +1,10 @@
-@props(['anime', 'relation'])
+@props(['anime', 'relation', 'isRow' => true])
 
-<div {{ $attributes->merge(['class' => 'relative w-64 pb-2 md:w-80']) }}>
+@php
+    $width = $isRow ? 'w-64 md:w-80' : '';
+@endphp
+
+<div {{ $attributes->merge(['class' => 'relative pb-2 ' . $width]) }}>
     <div class="flex flex-no-wrap">
         <picture class="relative flex-shrink-0 w-28 h-40 mr-2 mr-2 rounded-lg overflow-hidden md:w-32 md:h-48">
             <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->poster_image_url ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
