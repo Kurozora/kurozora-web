@@ -19,7 +19,7 @@
     <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
         <section class="grid sm:grid-cols-2 sm:auto-cols-[unset] lg:grid-cols-3 gap-4">
             @foreach($seasons as $season)
-                <x-lockups.poster-lockup :season="$season" />
+                <x-lockups.poster-lockup :season="$season" :isRow="false" />
             @endforeach
         </section>
 

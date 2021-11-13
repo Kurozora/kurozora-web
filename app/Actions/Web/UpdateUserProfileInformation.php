@@ -2,15 +2,15 @@
 
 namespace App\Actions\Web;
 
+use App\Contracts\UpdatesUserProfileInformation;
 use App\Models\User;
-use App\Rules\ValidateProfileImage;
 use App\Rules\ValidateEmail;
+use App\Rules\ValidateProfileImage;
 use App\Rules\ValidateUsername;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
-use App\Contracts\UpdatesUserProfileInformation;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
@@ -25,7 +25,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
      * @return void
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
-     * @throws ValidationException
+     * @throws FileCannotBeAdded
      */
     public function update(User $user, array $input)
     {

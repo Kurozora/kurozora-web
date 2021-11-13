@@ -12,8 +12,10 @@ require 'Web/Authentication.php';
 
 // Landing pages
 require 'Web/Anime.php';
+require 'Web/Characters.php';
 require 'Web/Episodes.php';
 require 'Web/Genres.php';
+require 'Web/People.php';
 require 'Web/Profile.php';
 require 'Web/Seasons.php';
 require 'Web/Studios.php';

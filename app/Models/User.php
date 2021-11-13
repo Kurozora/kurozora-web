@@ -27,6 +27,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
+use Request;
 use RuntimeException;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\IcalendarGenerator\Components\Alert;
@@ -37,6 +38,8 @@ use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 use URL;
 
 class User extends Authenticatable implements HasMedia, MustVerifyEmail, ReacterableContract
@@ -46,6 +49,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         HasFactory,
         HasProfileImage,
         HasRoles,
+        HasSlug,
         HeartActionTrait,
         InteractsWithMedia,
         InteractsWithMediaExtension,
@@ -57,6 +61,9 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
 
     // Maximum amount of returned search results
     const MAX_SEARCH_RESULTS = 25;
+
+    // Maximum amount of returned search results for the web
+    const MAX_WEB_SEARCH_RESULTS = 5;
 
     // Cache user's badges
     const CACHE_KEY_BADGES = 'user-badges-%d';
@@ -78,7 +85,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     const CACHE_KEY_REPUTATION_COUNT_SECONDS = 10 * 60;
 
     // User biography character limited
-    const BIOGRAPHY_LIMIT = 250;
+    const BIOGRAPHY_LIMIT = 500;
 
     // Table name
     const TABLE_NAME = 'users';
@@ -131,6 +138,31 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
 
         $this->addMediaCollection($this->bannerImageCollectionName)
             ->singleFile();
+    }
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName(): string
+    {
+        if (Request::wantsJson()) {
+            return parent::getRouteKeyName();
+        }
+        return 'slug';
+    }
+
+    /**
+     * Get the options for generating the slug.
+     *
+     * @return SlugOptions
+     */
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('username')
+            ->saveSlugsTo('slug');
     }
 
     /**
