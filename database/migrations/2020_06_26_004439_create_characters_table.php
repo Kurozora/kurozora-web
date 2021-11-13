@@ -17,6 +17,7 @@ class CreateCharactersTable extends Migration
         Schema::create(Character::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('mal_id')->unique()->nullable();
+            $table->string('slug');
             $table->json('nicknames')->nullable();
             $table->string('debut')->nullable();
             $table->string('status')->nullable();
@@ -32,6 +33,11 @@ class CreateCharactersTable extends Migration
             $table->unsignedTinyInteger('birth_month')->nullable();
             $table->unsignedTinyInteger('astrological_sign')->nullable();
             $table->timestamps();
+        });
+
+        Schema::table(Character::TABLE_NAME, function (Blueprint $table) {
+            // Set unique index constraints
+            $table->unique(['slug']);
         });
     }
 

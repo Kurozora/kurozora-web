@@ -2,27 +2,25 @@
 
 namespace App\Nova;
 
-use App\Enums\ExplorePageCategoryTypes;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Number;
-use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Text;
 
-class ExplorePageCategory extends Resource
+class ExploreCategoryItem extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static string $model = \App\Models\ExplorePageCategory::class;
+    public static string $model = \App\Models\ExploreCategoryItem::class;
 
     /**
      * The underlying model resource instance.
      *
-     * @var \App\Models\ExplorePageCategory|null
+     * @var \App\Models\ExploreCategoryItem|null
      */
     public $resource;
 
@@ -39,7 +37,7 @@ class ExplorePageCategory extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'title'
+        'id'
     ];
 
     /**
@@ -47,7 +45,7 @@ class ExplorePageCategory extends Resource
      *
      * @var string
      */
-    public static $group = 'Explore Page';
+    public static $group = 'Explore Category';
 
     /**
      * Get the fields displayed by the resource.
@@ -60,38 +58,20 @@ class ExplorePageCategory extends Resource
         return [
             ID::make()->sortable(),
 
-            Text::make('Title')
-                ->rules('required', 'max:255')
-                ->sortable()
-                ->help('Please fill in a title, even if it is not displayed on the explore page.'),
+            BelongsTo::make('Explore Category'),
 
-            Number::make('Position/order', 'position')
-                ->rules('required', 'numeric', 'min:1', 'max:100')
-                ->sortable()
-                ->help('This will determine the position on the explore page. Enter a number ranging from <strong>1 to 100</strong>. Lower numbers will display first.'),
-
-            Select::make('Type')->options([
-                ExplorePageCategoryTypes::Shows             => '(manual) Selected shows',
-                ExplorePageCategoryTypes::MostPopularShows  => '(automatic) Most Popular shows',
-                ExplorePageCategoryTypes::Genres            => '(manual) Selected genres',
-            ])
-                ->rules('required')
+            MorphTo::make('Model')
+                ->types([
+                    Anime::class,
+                    Genre::class
+                ])
+                ->searchable()
                 ->sortable(),
 
-            Select::make('Size')->options([
-                'small'     => 'Small',
-                'medium'    => 'Medium',
-                'large'     => 'Large',
-                'video'     => 'Video (for shows only)'
-            ])
-                ->rules('required')
+            Text::make('Model Type')
+                ->onlyOnIndex()
+                ->onlyOnDetail()
                 ->sortable(),
-
-            BelongsToMany::make('Animes')
-                ->searchable(),
-
-            BelongsToMany::make('Genres')
-                ->searchable(),
         ];
     }
 
@@ -102,19 +82,9 @@ class ExplorePageCategory extends Resource
      */
     public function title(): string
     {
-        $explorePageCategory = $this->resource;
+        $exploreCategory = $this->resource->explore_category;
 
-        return $explorePageCategory->title . ' (ID: ' . $explorePageCategory->id . ')';
-    }
-
-    /**
-     * Returns the user-friendly display name of the resource.
-     *
-     * @return string
-     */
-    public static function label(): string
-    {
-        return 'Explore Page Cat.';
+        return $exploreCategory->title . ' Items';
     }
 
     /**
