@@ -61,8 +61,8 @@
                         {{ __('Given name: :x', ['x' => $person->full_given_name]) }} <br />
                         @endif
 
-                        @if (!empty($person->alternative_names))
-                            {{ __('Nicknames: :x', ['x' => collect($person->alternative_names)->join(',  ', ' and ')]) }} <br />
+                        @if (count(array_filter((array)$person->alternative_names)))
+                            {{ __('Nicknames: :x', ['x' => collect(array_filter((array)$person->alternative_names))->join(',  ', ' and ')]) }} <br />
                         @endif
                     </x-slot>
                 </x-information-list>

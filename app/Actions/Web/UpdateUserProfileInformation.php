@@ -59,7 +59,9 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             if ($input['username'] !== $user->username) {
                 $user->forceFill([
                     'username' => $input['username']
-                ])->save();
+                ]);
+                $user->generateSlug();
+                $user->save();
 
                 settings('can_change_username', false, true);
             }
