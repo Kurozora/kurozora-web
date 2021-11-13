@@ -56,7 +56,7 @@ class Anime extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'tvdb_id', 'mal_id', 'original_title', 'air_season',
+        'id', 'tvdb_id', 'mal_id', 'slug', 'original_title', 'air_season',
     ];
 
     /**
