@@ -2,22 +2,29 @@
 
 namespace App\Models;
 
+use App\Enums\AstrologicalSign;
+use App\Scopes\BornTodayScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasProfileImage;
+use App\Traits\Model\HasTranslatableSlug;
 use App\Traits\Searchable;
 use Astrotomic\Translatable\Translatable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
+use Request;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Sluggable\SlugOptions;
 
 class Character extends KModel implements HasMedia
 {
     use HasFactory,
         HasProfileImage,
+        HasTranslatableSlug,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         Searchable,
@@ -81,12 +88,38 @@ class Character extends KModel implements HasMedia
      */
     protected $appends = [
         'age_string',
+        'astrological_sign_string',
         'birthdate',
         'height_string',
         'profile_image',
         'profile_image_url',
         'weight_string',
     ];
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName(): string
+    {
+        if (Request::wantsJson()) {
+            return parent::getRouteKeyName();
+        }
+        return 'slug';
+    }
+
+    /**
+     * Get the options for generating the slug.
+     *
+     * @return SlugOptions
+     */
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
+    }
 
     /**
      * Registers the media collections for the model.
@@ -189,6 +222,16 @@ class Character extends KModel implements HasMedia
     }
 
     /**
+     * The astrological sign of the character.
+     *
+     * @return string|null
+     */
+    public function getAstrologicalSignStringAttribute(): ?string
+    {
+        return AstrologicalSign::getDescription($this->astrological_sign) ?: null;
+    }
+
+    /**
      * Returns the people the character belongs to.
      *
      * @return BelongsToMany
@@ -262,5 +305,17 @@ class Character extends KModel implements HasMedia
     public function character_translations(): HasMany
     {
         return $this->hasMany(CharacterTranslation::class);
+    }
+
+    /**
+     * Eloquent builder scope that limits the query to the characters born today.
+     *
+     * @param Builder $query
+     * @param int $limit
+     */
+    public function scopeBornToday(Builder $query, int $limit = 10)
+    {
+        $bornToday = new BornTodayScope();
+        $bornToday->apply($query->limit($limit), $this);
     }
 }
