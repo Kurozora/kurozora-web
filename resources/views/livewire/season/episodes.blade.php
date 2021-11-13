@@ -4,7 +4,7 @@
     </x-slot>
 
     <x-slot name="meta">
-        <meta property="og:title" content="Episodes | {{ $season->title }} — {{ config('app.name') }}" />
+        <meta property="og:title" content="{{ __('Episodes') }} | {{ $season->title }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ $season->synopsis }}" />
         <meta property="og:image" content="{{ $season->poster_image_url ?? asset('images/static/placeholders/anime_poster.webp') }}" />
         <meta property="og:type" content="video.tv_show" />
