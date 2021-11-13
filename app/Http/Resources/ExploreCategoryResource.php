@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use App\Enums\ExploreCategoryTypes;
-use App\Models\Anime;
 use App\Models\ExploreCategory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -54,29 +53,33 @@ class ExploreCategoryResource extends JsonResource
     private function getTypeSpecificData(Request $request): array
     {
         // Genres category
-        switch ($this->resource->type) {
-            case ExplorePageCategoryTypes::Genres: {
-                return [
-                    'genres' => [
-                        'data' => GenreResource::collection($this->resource->genres)
-                    ]
-                ];
-            }
-            case ExplorePageCategoryTypes::Shows: {
-                return [
-                    'shows' => [
-                        'data' => AnimeResource::collection($this->resource->animes)
-                    ]
-                ];
-            }
-            case ExplorePageCategoryTypes::MostPopularShows: {
-                return [
-                    'shows' => [
-                        'data' => AnimeResource::collection(Anime::mostPopular()->get())
-                    ]
-                ];
-            }
-            default: return []; // Return nothing by default
-        }
+        return match ($this->resource->type) {
+            ExploreCategoryTypes::People => [
+                'people' => [
+                    'data' => PersonResource::collection($this->resource->peopleBornToday()->explore_category_items)
+                ]
+            ],
+            ExploreCategoryTypes::Characters => [
+                'characters' => [
+                    'data' => CharacterResource::collection($this->resource->charactersBornToday()->explore_category_items)
+                ]
+            ],
+            ExploreCategoryTypes::Genres => [
+                'genres' => [
+                    'data' => GenreResource::collection($this->resource->explore_category_items)
+                ]
+            ],
+            ExploreCategoryTypes::Shows => [
+                'shows' => [
+                    'data' => AnimeResource::collection($this->resource->explore_category_items)
+                ]
+            ],
+            ExploreCategoryTypes::MostPopularShows => [
+                'shows' => [
+                    'data' => AnimeResource::collection($this->resource->most_popular_anime()->explore_category_items)
+                ]
+            ],
+            default => [], // Return nothing by default
+        };
     }
 }

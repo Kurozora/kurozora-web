@@ -47,7 +47,7 @@ class Person extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'first_name', 'last_name',
+        'id', 'first_name', 'last_name', 'slug'
     ];
 
     /**
@@ -104,6 +104,12 @@ class Person extends Resource
                     Number::make('Height')
                         ->help('The maximum height available for the image.'),
                 ]),
+
+            Heading::make('Personal Information'),
+
+            Text::make('Slug')
+                ->onlyOnForms()
+                ->help('Used to identify the Person in a URL: https://kurozora.app/people/<strong>' . ($this->resource->slug ?? 'slug-identifier') . '</strong>. Leave empty to auto-generate from first and last name.'),
 
             Text::make('First name')
                 ->help('The first name of the person as known in the industry. Usually in English.')
