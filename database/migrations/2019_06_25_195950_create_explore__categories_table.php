@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\ExplorePageCategory;
+use App\Models\ExploreCategory;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateExplorePageCategoriesTable extends Migration
+class CreateExploreCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class CreateExplorePageCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create(ExplorePageCategory::TABLE_NAME, function (Blueprint $table) {
+        Schema::create(ExploreCategory::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title');
             $table->string('type');
@@ -31,6 +31,6 @@ class CreateExplorePageCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(ExplorePageCategory::TABLE_NAME);
+        Schema::dropIfExists(ExploreCategory::TABLE_NAME);
     }
 }

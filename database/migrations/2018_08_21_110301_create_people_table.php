@@ -17,6 +17,7 @@ class CreatePeopleTable extends Migration
         Schema::create(Person::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('mal_id')->unique()->nullable();
+            $table->string('slug');
             $table->string('first_name');
             $table->string('last_name')->nullable();
             $table->string('family_name')->nullable();
@@ -28,6 +29,11 @@ class CreatePeopleTable extends Migration
             $table->unsignedTinyInteger('astrological_sign')->nullable();
             $table->json('website_urls')->nullable();
             $table->timestamps();
+        });
+
+        Schema::table(Person::TABLE_NAME, function (Blueprint $table) {
+            // Set unique index constraints
+            $table->unique(['slug']);
         });
     }
 
