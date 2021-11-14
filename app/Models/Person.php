@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\AstrologicalSign;
 use App\Scopes\BornTodayScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasProfileImage;
@@ -49,19 +50,6 @@ class Person extends KModel implements HasMedia
     ];
 
     /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [
-        'age_string',
-        'full_name',
-        'full_given_name',
-        'profile_image',
-        'profile_image_url',
-    ];
-
-    /**
      * Registers the media collections for the model.
      */
     public function registerMediaCollections(): void
@@ -69,6 +57,20 @@ class Person extends KModel implements HasMedia
         $this->addMediaCollection($this->profileImageCollectionName)
             ->singleFile();
     }
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'age_string',
+        'astrological_sign_string',
+        'full_name',
+        'full_given_name',
+        'profile_image',
+        'profile_image_url',
+    ];
 
     /**
      * Get the route key for the model.
@@ -157,6 +159,16 @@ class Person extends KModel implements HasMedia
         }
 
         return trans_choice('{1} :x year old|[2,*] :x years old', $age, ['x' => $age]);
+    }
+
+    /**
+     * The astrological sign of the character.
+     *
+     * @return string|null
+     */
+    public function getAstrologicalSignStringAttribute(): ?string
+    {
+        return AstrologicalSign::getDescription($this->astrological_sign) ?: null;
     }
 
     /**

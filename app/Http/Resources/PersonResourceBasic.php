@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Enums\AstrologicalSign;
 use App\Models\Person;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -37,7 +36,7 @@ class PersonResourceBasic extends JsonResource
                 'birthdate'         => $this->resource->birthdate?->timestamp,
                 'about'             => $this->resource->about,
                 'websiteURLs'       => $this->resource->website_urls,
-                'astrologicalSign'  => AstrologicalSign::getDescription($this->resource->astrological_sign) ?: null
+                'astrologicalSign'  => $this->resource->astrological_sign_string,
             ]
         ];
     }

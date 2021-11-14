@@ -23,10 +23,8 @@ class SeasonResource extends JsonResource
      */
     public function toArray($request): array
     {
-        return [
-            'id'            => $this->resource->id,
-            'type'          => 'seasons',
-            'href'          => route('api.seasons.details', $this->resource, false),
+        $resource = SeasonResourceIdentity::make($this->resource)->toArray($request);
+        return array_merge($resource, [
             'attributes'    => [
                 'poster'        => ImageResource::make($this->resource->poster_image),
                 'number'        => $this->resource->number,
@@ -35,6 +33,6 @@ class SeasonResource extends JsonResource
                 'episodeCount'  => $this->resource->episodes()->count(),
                 'firstAired'    => $this->resource->first_aired?->timestamp,
             ]
-        ];
+        ]);
     }
 }

@@ -56,27 +56,45 @@ class ExploreCategoryResource extends JsonResource
         return match ($this->resource->type) {
             ExploreCategoryTypes::People => [
                 'people' => [
-                    'data' => PersonResource::collection($this->resource->peopleBornToday()->explore_category_items)
+                    'data' => PersonResource::collection($this->resource
+                        ->peopleBornToday()
+                        ->explore_category_items
+                        ->pluck('model')
+                    )
                 ]
             ],
             ExploreCategoryTypes::Characters => [
                 'characters' => [
-                    'data' => CharacterResource::collection($this->resource->charactersBornToday()->explore_category_items)
+                    'data' => CharacterResource::collection($this->resource
+                        ->charactersBornToday()
+                        ->explore_category_items
+                        ->pluck('model')
+                    )
                 ]
             ],
             ExploreCategoryTypes::Genres => [
                 'genres' => [
-                    'data' => GenreResource::collection($this->resource->explore_category_items)
+                    'data' => GenreResource::collection($this->resource
+                        ->explore_category_items
+                        ->pluck('model')
+                    )
                 ]
             ],
             ExploreCategoryTypes::Shows => [
                 'shows' => [
-                    'data' => AnimeResource::collection($this->resource->explore_category_items)
+                    'data' => AnimeResource::collection($this->resource
+                        ->explore_category_items
+                        ->pluck('model')
+                    )
                 ]
             ],
             ExploreCategoryTypes::MostPopularShows => [
                 'shows' => [
-                    'data' => AnimeResource::collection($this->resource->most_popular_anime()->explore_category_items)
+                    'data' => AnimeResource::collection($this->resource
+                        ->most_popular_anime()
+                        ->explore_category_items
+                        ->pluck('model')
+                    )
                 ]
             ],
             default => [], // Return nothing by default
