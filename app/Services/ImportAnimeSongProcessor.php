@@ -6,6 +6,7 @@ use App\Models\Anime;
 use App\Models\AnimeSong;
 use App\Models\KDashboard\Song as KSong;
 use App\Models\Song;
+use App\Scopes\TvRatingScope;
 use Illuminate\Database\Eloquent\Collection;
 
 class ImportAnimeSongProcessor
@@ -19,7 +20,7 @@ class ImportAnimeSongProcessor
     public function process(Collection|array $kSongs)
     {
         foreach ($kSongs as $kSong) {
-            $anime = Anime::withoutGlobalScope('tv_rating')->where([
+            $anime = Anime::withoutGlobalScope(new TvRatingScope)->where([
                 ['mal_id', $kSong->anime_id],
             ])->first();
             $song = Song::where([
