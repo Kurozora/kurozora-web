@@ -37,7 +37,10 @@ class ExploreCategory extends KModel
             }
 
             foreach($popularShows as $popularShow) {
-                $this->explore_category_items->add($popularShow);
+                $this->explore_category_items->add(new ExploreCategoryItem([
+                    'model_id' => $popularShow->id,
+                    'model_type' => get_class($popularShow)
+                ]));
             }
         }
         return $this;
@@ -58,7 +61,10 @@ class ExploreCategory extends KModel
                 ->get();
 
             foreach($randomShows as $randomShow) {
-                $this->explore_category_items->add($randomShow);
+                $this->explore_category_items->add(new ExploreCategoryItem([
+                    'model_id' => $randomShow->id,
+                    'model_type' => get_class($randomShow)
+                ]));
             }
         }
         return $this;
@@ -75,7 +81,10 @@ class ExploreCategory extends KModel
             $charactersBornToday = Character::bornToday()->get();
 
             foreach($charactersBornToday as $characterBornToday) {
-                $this->explore_category_items->add($characterBornToday);
+                $this->explore_category_items->add(new ExploreCategoryItem([
+                    'model_id' => $characterBornToday->id,
+                    'model_type' => get_class($characterBornToday)
+                ]));
             }
         }
         return $this;
@@ -92,7 +101,10 @@ class ExploreCategory extends KModel
             $peopleBornToday = Person::bornToday()->get();
 
             foreach($peopleBornToday as $personBornToday) {
-                $this->explore_category_items->add($personBornToday);
+                $this->explore_category_items->add(new ExploreCategoryItem([
+                    'model_id' => $personBornToday->id,
+                    'model_type' => get_class($personBornToday)
+                ]));
             }
         }
         return $this;

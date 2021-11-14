@@ -21,8 +21,8 @@
             @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
                 <section class="flex pb-8 overflow-x-scroll no-scrollbar">
                     <div class="flex flex-nowrap gap-4">
-                        @foreach($exploreCategory->most_popular_anime()->explore_category_items as $anime)
-                            <x-lockups.banner-lockup :anime="$anime" />
+                        @foreach($exploreCategory->most_popular_anime()->explore_category_items as $categoryItem)
+                            <x-lockups.banner-lockup :anime="$categoryItem->model" />
                         @endforeach
                     </div>
                 </section>
@@ -112,8 +112,8 @@
 
                         <div class="flex mt-5 overflow-x-scroll no-scrollbar">
                             <div class="flex flex-nowrap gap-4">
-                                @foreach($exploreCategory->charactersBornToday()->explore_category_items as $character)
-                                    <x-lockups.character-lockup :character="$character" />
+                                @foreach($exploreCategory->charactersBornToday()->explore_category_items as $categoryItem)
+                                    <x-lockups.character-lockup :character="$categoryItem->model" />
                                 @endforeach
                             </div>
                         </div>
@@ -135,8 +135,8 @@
 
                         <div class="flex mt-5 overflow-x-scroll no-scrollbar">
                             <div class="flex flex-nowrap gap-4">
-                                @foreach($exploreCategory->peopleBornToday()->explore_category_items as $person)
-                                    <x-lockups.person-lockup :person="$person" />
+                                @foreach($exploreCategory->peopleBornToday()->explore_category_items as $categoryItem)
+                                    <x-lockups.person-lockup :person="$categoryItem->model" />
                                 @endforeach
                             </div>
                         </div>

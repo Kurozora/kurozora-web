@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use App\Models\Character;
-use App\Enums\AstrologicalSign;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -44,7 +43,7 @@ class CharacterResourceBasic extends JsonResource
                 'weight'            => $this->resource->weight_string,
                 'age'               => $this->resource->age_string,
                 'birthdate'         => $this->resource->birthdate,
-                'astrologicalSign'  => AstrologicalSign::getDescription($this->resource->astrological_sign) ?: null
+                'astrologicalSign'  => $this->resource->astrological_sign_string,
             ]
         ];
     }
