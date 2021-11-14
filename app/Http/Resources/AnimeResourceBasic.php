@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Anime;
 use App\Enums\DayOfWeek;
 use App\Enums\UserLibraryStatus;
+use App\Models\Anime;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -26,10 +26,8 @@ class AnimeResourceBasic extends JsonResource
      */
     public function toArray($request): array
     {
-        $resource = [
-            'id'            => $this->resource->id,
-            'type'          => 'show',
-            'href'          => route('api.anime.view', $this->resource, false),
+        $resource = AnimeResourceIdentity::make($this->resource)->toArray($request);
+        $resource = array_merge($resource, [
             'attributes'    => [
                 'anidbID'               => $this->resource->anidb_id,
                 'anilistID'             => $this->resource->anilist_id,
@@ -77,7 +75,7 @@ class AnimeResourceBasic extends JsonResource
                 'isNSFW'                => (bool) $this->resource->is_nsfw,
                 'copyright'             => $this->resource->copyright,
             ]
-        ];
+        ]);
 
         if (Auth::check()) {
             $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());

@@ -23,10 +23,9 @@ class GenreResource extends JsonResource
      */
     public function toArray($request): array
     {
-        return [
-            'id'            => $this->resource->id,
-            'type'          => 'genres',
-            'href'          => route('api.genres.details', $this->resource, false),
+        $resource = GenreResourceIdentity::make($this->resource)->toArray($request);
+
+        return array_merge($resource, [
             'attributes'    => [
                 'name'          => $this->resource->name,
                 'color'         => $this->resource->color,
@@ -34,6 +33,6 @@ class GenreResource extends JsonResource
                 'description'   => $this->resource->description,
                 'isNSFW'        => (bool) $this->resource->is_nsfw
             ]
-        ];
+        ]);
     }
 }
