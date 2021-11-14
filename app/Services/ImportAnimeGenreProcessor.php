@@ -6,6 +6,7 @@ use App\Models\Anime;
 use App\Models\Genre;
 use App\Models\KDashboard\MediaGenre as KMediaGenre;
 use App\Models\MediaGenre;
+use App\Scopes\TvRatingScope;
 use Illuminate\Database\Eloquent\Collection;
 
 class ImportAnimeGenreProcessor
@@ -19,8 +20,8 @@ class ImportAnimeGenreProcessor
     public function process(Collection|array $kMediaGenres)
     {
         foreach ($kMediaGenres as $kMediaGenre) {
-            $anime = Anime::withoutGlobalScope('tv_rating')->firstWhere('mal_id', $kMediaGenre->media_id);
-            $genre = Genre::withoutGlobalScope('tv_rating')->firstWhere([
+            $anime = Anime::withoutGlobalScope(new TvRatingScope)->firstWhere('mal_id', $kMediaGenre->media_id);
+            $genre = Genre::withoutGlobalScope(new TvRatingScope)->firstWhere([
                 ['name', $kMediaGenre->genre->genre],
             ]);
 

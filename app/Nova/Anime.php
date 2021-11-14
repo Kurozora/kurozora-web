@@ -5,6 +5,7 @@ namespace App\Nova;
 use App\Enums\DayOfWeek;
 use App\Enums\SeasonOfYear;
 use App\Nova\Lenses\UnmoderatedAnime;
+use App\Scopes\TvRatingScope;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -405,7 +406,7 @@ class Anime extends Resource
      */
     public static function indexQuery(NovaRequest $request, $query): Builder
     {
-        return parent::indexQuery($request, $query)->withoutGlobalScope('tv_rating');
+        return parent::indexQuery($request, $query)->withoutGlobalScope(new TvRatingScope);
     }
 
     /**

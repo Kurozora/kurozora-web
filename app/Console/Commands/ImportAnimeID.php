@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Anime;
+use App\Scopes\TvRatingScope;
 use Http;
 use Illuminate\Console\Command;
 use JsonMachine\JsonDecoder\ExtJsonDecoder;
@@ -52,7 +53,7 @@ class ImportAnimeID extends Command
             $sources = $this->filterSources($data->sources);
 
             if (array_key_exists('mal_id', $sources) && array_key_exists('notify_id', $sources)) {
-                $anime = Anime::withoutGlobalScope('tv_rating')->firstWhere([
+                $anime = Anime::withoutGlobalScope(new TvRatingScope)->firstWhere([
                     ['mal_id', $sources['mal_id']],
                 ]);
 
