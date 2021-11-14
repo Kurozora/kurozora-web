@@ -9,6 +9,7 @@ use App\Models\AnimeRating;
 use App\Models\User;
 use App\Models\UserLibrary;
 use App\Notifications\MALImportFinished;
+use App\Scopes\TvRatingScope;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -108,7 +109,7 @@ class ProcessMALImport implements ShouldQueue
     protected function handleXMLFileAnime(int $malID, string $malStatus, int $malRating)
     {
         // Try to find the Anime in our DB
-        $anime = Anime::withoutGlobalScope('tv_rating')->firstWhere('mal_id', $malID);
+        $anime = Anime::withoutGlobalScope(new TvRatingScope)->firstWhere('mal_id', $malID);
 
         // If a match was found
         if (!empty($anime)) {

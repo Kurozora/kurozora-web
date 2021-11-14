@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Anime;
 use App\Models\AnimeRating;
+use App\Scopes\TvRatingScope;
 use Illuminate\Console\Command;
 
 class CalculateAnimeRatings extends Command
@@ -43,7 +44,7 @@ class CalculateAnimeRatings extends Command
         $meanAverageRating = AnimeRating::avg('rating');
 
         // Start looping through Anime
-        $animes = Anime::withoutGlobalScope('tv_rating')->all();
+        $animes = Anime::withoutGlobalScope(new TvRatingScope)->get();
 
         foreach ($animes as $anime) {
             // Total amount of ratings this Anime has
