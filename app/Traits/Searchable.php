@@ -23,16 +23,22 @@ trait Searchable {
         // Find the item by ID if the search query is an ID
         preg_match('/^id:\s*([0-9]+?)$/i', $query, $idMatches);
 
+        // If searching with ID
         if (isset($idMatches[1])) {
-            $foundEntity = self::withoutGlobalScope(new TvRatingScope)
-                ->withTvRating()
-                ->where('id', $idMatches[1]);
-
-            return $foundEntity;
+            if (self::class === Anime::class) {
+                return self::withoutGlobalScope(new TvRatingScope)
+                    ->withTvRating()
+                    ->where('id', $idMatches[1]);
+            }
+            return self::where('id', $idMatches[1]);
         }
 
-        return self::withoutGlobalScope(new TvRatingScope)
-            ->withTvRating()
-            ->search($query, null, true, true);
+        // If not searching with ID
+        if (self::class === Anime::class) {
+            return self::withoutGlobalScope(new TvRatingScope)
+                ->withTvRating()
+                ->search($query, null, true, true);
+        }
+        return self::search($query, null, true, true);
     }
 }
