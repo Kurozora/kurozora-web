@@ -41,7 +41,7 @@ class ValidateUsername implements Rule
             return false;
         }
 
-        // Check alpha numeric
+        // Check alphanumeric
         if (!ctype_alnum($value)) {
             $this->errorType = 'alpha-num';
             return false;
