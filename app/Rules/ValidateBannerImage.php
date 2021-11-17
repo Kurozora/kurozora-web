@@ -20,7 +20,7 @@ class ValidateBannerImage implements Rule
     public function passes($attribute, $value): bool
     {
         $imgValidator = Validator::make([$attribute => $value], [
-            $attribute => 'mimes:jpeg,jpg,png|max:1000|nullable',
+            $attribute => 'mimes:webp,jpg,png|max:2048|nullable',
         ]);
 
         if ($imgValidator->fails()) {
