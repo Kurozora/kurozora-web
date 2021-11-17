@@ -16,7 +16,6 @@ use App\Http\Resources\SessionResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceBasic;
 use App\Models\Session;
-use App\Models\User;
 use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -60,8 +59,6 @@ class MeController extends Controller
     public function updateProfile(UpdateProfileRequest $request): JsonResponse
     {
         $data = $request->validated();
-
-        /** @var User $user */
         $user = Auth::user();
 
         // Track if anything changed
@@ -69,8 +66,9 @@ class MeController extends Controller
 
         // Update username
         if ($request->has('username')) {
-            if (!settings('can_change_username'))
+            if (!settings('can_change_username')) {
                 throw new AuthorizationException('The request wasn’t accepted due to not being allowed to change the username.');
+            }
 
             $user->username = $data['username'];
             $changedFields[] = 'username';
