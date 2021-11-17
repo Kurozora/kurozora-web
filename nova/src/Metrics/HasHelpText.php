@@ -21,7 +21,7 @@ trait HasHelpText
     /**
      * Add help text to the metric.
      *
-     * @param string $text
+     * @param  string  $text
      * @return $this
      */
     public function help($text)

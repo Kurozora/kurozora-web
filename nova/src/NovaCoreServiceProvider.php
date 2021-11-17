@@ -7,9 +7,11 @@ use Illuminate\Contracts\Http\Kernel as HttpKernel;
 use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Nova\Contracts\QueryBuilder;
 use Laravel\Nova\Http\Middleware\ServeNova;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Listeners\BootNova;
+use Laravel\Nova\Query\Builder;
 use Laravel\Octane\Events\RequestReceived;
 use Spatie\Once\Cache;
 
@@ -70,5 +72,9 @@ class NovaCoreServiceProvider extends ServiceProvider
         if (! defined('NOVA_PATH')) {
             define('NOVA_PATH', realpath(__DIR__.'/../'));
         }
+
+        $this->app->bind(QueryBuilder::class, function ($app, $parameters) {
+            return new Builder(...$parameters);
+        });
     }
 }

@@ -18,7 +18,12 @@
           'form-select': shouldShowDropdownArrow,
           disabled,
         }"
-        class="flex items-center form-control form-input form-input-bordered pr-6"
+        class="
+          flex
+          items-center
+          form-control form-input form-input-bordered
+          pr-6
+        "
         :tabindex="show ? -1 : 0"
       >
         <div
@@ -54,7 +59,15 @@
     <div
       v-if="show"
       ref="dropdown"
-      class="form-input px-0 border border-60 absolute pin-t pin-l my-1 overflow-hidden"
+      class="
+        form-input
+        px-0
+        border border-60
+        absolute
+        pin-t pin-l
+        my-1
+        overflow-hidden
+      "
       :style="{ width: inputWidth + 'px', zIndex: 2000 }"
     >
       <div class="p-2 bg-grey-300">
@@ -66,7 +79,17 @@
           @keydown.enter.prevent="chooseSelected"
           @keydown.down.prevent="move(1)"
           @keydown.up.prevent="move(-1)"
-          class="outline-none search-input-input w-full px-2 py-1.5 text-sm leading-normal bg-white rounded"
+          class="
+            outline-none
+            search-input-input
+            w-full
+            px-2
+            py-1.5
+            text-sm
+            leading-normal
+            bg-white
+            rounded
+          "
           tabindex="-1"
           type="text"
           :placeholder="__('Search')"
@@ -76,7 +99,13 @@
 
       <div
         ref="container"
-        class="search-input-options relative overflow-y-scroll scrolling-touch text-sm"
+        class="
+          search-input-options
+          relative
+          overflow-y-scroll
+          scrolling-touch
+          text-sm
+        "
         tabindex="-1"
         style="max-height: 155px"
       >
@@ -108,7 +137,7 @@
 import _ from 'lodash'
 import Vue from 'vue'
 import Popper from 'popper.js'
-import { mixin as clickaway } from 'vue-clickaway'
+import {mixin as clickaway} from 'vue-clickaway'
 
 export default {
   mixins: [clickaway],

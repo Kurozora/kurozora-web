@@ -10,6 +10,8 @@
           :placeholder="placeholder"
           :dateFormat="pickerFormat"
           :alt-format="pickerDisplayFormat"
+          :hour-increment="pickerHourIncrement"
+          :minute-increment="pickerMinuteIncrement"
           :value="localizedValue"
           :twelve-hour-time="usesTwelveHourTime"
           :first-day-of-week="firstDayOfWeek"
@@ -40,11 +42,7 @@
 </template>
 
 <script>
-import {
-  FormField,
-  HandlesValidationErrors,
-  InteractsWithDates,
-} from 'laravel-nova'
+import {FormField, HandlesValidationErrors, InteractsWithDates,} from 'laravel-nova'
 
 export default {
   mixins: [HandlesValidationErrors, FormField, InteractsWithDates],
@@ -100,6 +98,14 @@ export default {
 
     pickerDisplayFormat() {
       return this.field.pickerDisplayFormat || 'Y-m-d H:i:S'
+    },
+
+    pickerHourIncrement() {
+      return this.field.pickerHourIncrement || 1
+    },
+
+    pickerMinuteIncrement() {
+      return this.field.pickerMinuteIncrement || 5
     },
   },
 }

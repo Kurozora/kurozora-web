@@ -113,7 +113,7 @@ class Line extends Text
     /**
      * Set the extra CSS classes to be applied to the line field.
      *
-     * @param mixed $classes
+     * @param  mixed  $classes
      * @return $this
      */
     public function extraClasses($classes)

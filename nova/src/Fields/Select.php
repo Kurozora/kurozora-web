@@ -59,6 +59,7 @@ class Select extends Field
      * Enable subtitles within the related search results.
      *
      * @return $this
+     *
      * @throws \Exception
      */
     public function withSubtitles()

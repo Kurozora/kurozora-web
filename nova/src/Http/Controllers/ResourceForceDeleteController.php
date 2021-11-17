@@ -38,5 +38,11 @@ class ResourceForceDeleteController extends Controller
                 });
             });
         });
+
+        if ($request->isForSingleResource() && ! is_null($redirect = $request->resource()::redirectAfterDelete($request))) {
+            return response()->json([
+                'redirect' => $redirect,
+            ]);
+        }
     }
 }

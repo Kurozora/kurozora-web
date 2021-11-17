@@ -39,7 +39,7 @@ class ResourceDetachController extends Controller
 
                 if (empty($inPivots) || in_array($pivot->getAttribute($accessorKeyName), $inPivots)) {
                     $this->deletePivot(
-                        $request, $pivot, $model, $parent,
+                        $request, $pivot, $model, $parent
                     );
                 }
             }

@@ -5,6 +5,7 @@ namespace Laravel\Nova\Rules;
 use Illuminate\Contracts\Validation\Rule;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Nova;
+use Laravel\Nova\ResourceToolElement;
 
 class NotExactlyAttached implements Rule
 {
@@ -55,6 +56,9 @@ class NotExactlyAttached implements Rule
         });
 
         $resource->resolvePivotFields($this->request, $this->request->relatedResource)
+            ->reject(function ($field) {
+                return $field instanceof ResourceToolElement || $field->computed();
+            })
             ->each(function ($field) use ($query) {
                 $query->wherePivot($field->attribute, $this->request->input($field->attribute));
             });

@@ -88,6 +88,40 @@ class DateTime extends Field
     }
 
     /**
+     * Set picker hour increment.
+     *
+     * @param  int  $increment
+     * @return $this
+     */
+    public function incrementPickerHourBy($increment)
+    {
+        $increment = intval($increment);
+
+        if ($increment > 0 && $increment < 24) {
+            return $this->withMeta(['pickerHourIncrement' => $increment]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set picker minute increment.
+     *
+     * @param  int  $increment
+     * @return $this
+     */
+    public function incrementPickerMinuteBy($increment)
+    {
+        $increment = intval($increment);
+
+        if ($increment > 0 && $increment < 60) {
+            return $this->withMeta(['pickerMinuteIncrement' => $increment]);
+        }
+
+        return $this;
+    }
+
+    /**
      * Resolve the default value for the field.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request

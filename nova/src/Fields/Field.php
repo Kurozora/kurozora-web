@@ -121,6 +121,13 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
     public $pivot = false;
 
     /**
+     * The accessor that should be used to refer as a pivot field.
+     *
+     * @var string|null
+     */
+    public $pivotAccessor;
+
+    /**
      * The text alignment for the field's text in tables.
      *
      * @var string
@@ -189,8 +196,7 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
     /**
      * Stack the label above the field.
      *
-     * @param bool $stack
-     *
+     * @param  bool  $stack
      * @return $this
      */
     public function stacked($stack = true)
@@ -384,7 +390,7 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
     /**
      * Check value for null value.
      *
-     * @param  mixed $value
+     * @param  mixed  $value
      * @return bool
      */
     protected function isNullValue($value)
@@ -723,6 +729,7 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
      *
      * @param  string
      * @return $this
+     *
      * @throws \Exception
      */
     public function helpWidth($helpWidth)
@@ -734,6 +741,7 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
      * Return the width of the help text tooltip.
      *
      * @return string
+     *
      * @throws \Exception
      */
     public function getHelpWidth()
@@ -778,7 +786,7 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
     /**
      * Set the placeholder text for the field if supported.
      *
-     * @param string $text
+     * @param  string  $text
      * @return $this
      */
     public function placeholder($text)

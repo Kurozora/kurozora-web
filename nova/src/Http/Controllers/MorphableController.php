@@ -19,10 +19,14 @@ class MorphableController extends Controller
     {
         $relatedResource = Nova::resourceForKey($request->type);
 
+        abort_if(is_null($relatedResource), 403);
+
         $field = $request->newResource()
                         ->availableFields($request)
                         ->whereInstanceOf(RelatableField::class)
-                        ->findFieldByAttribute($request->field);
+                        ->findFieldByAttribute($request->field, function () {
+                            abort(404);
+                        });
 
         $withTrashed = $this->shouldIncludeTrashed(
             $request, $relatedResource

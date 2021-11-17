@@ -130,7 +130,7 @@ class Code extends Field
     /**
      * Set the visual height of the Code editor.
      *
-     * @param string|int $height
+     * @param  string|int  $height
      * @return $this
      */
     public function height($height)

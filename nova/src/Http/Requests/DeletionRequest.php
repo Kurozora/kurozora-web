@@ -18,6 +18,8 @@ class DeletionRequest extends NovaRequest
      */
     protected function chunkWithAuthorization($count, Closure $callback, Closure $authCallback)
     {
+        $model = $this->model();
+
         $this->toSelectedResourceQuery()->when(! $this->forAllMatchingResources(), function ($query) {
             $query->whereKey($this->resources);
         })->tap(function ($query) {
@@ -28,7 +30,7 @@ class DeletionRequest extends NovaRequest
             if ($models->isNotEmpty()) {
                 $callback($models);
             }
-        });
+        }, $model->getQualifiedKeyName(), $model->getKeyName());
     }
 
     /**

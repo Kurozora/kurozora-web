@@ -25,7 +25,7 @@ class VaporImage extends VaporFile
      */
     public function __construct($name, $attribute = null, $storageCallback = null)
     {
-        parent::__construct($name, $attribute);
+        parent::__construct($name, $attribute, $storageCallback);
 
         $this->acceptedTypes('image/*');
 

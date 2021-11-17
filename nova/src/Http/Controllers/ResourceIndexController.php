@@ -17,7 +17,7 @@ class ResourceIndexController extends Controller
     {
         $resource = $request->resource();
 
-        [$paginator, $total] = $request->searchIndex();
+        [$paginator, $total, $sortable] = $request->searchIndex();
 
         return response()->json([
             'label' => $resource::label(),
@@ -28,6 +28,7 @@ class ResourceIndexController extends Controller
             'per_page_options' => $resource::perPageOptions(),
             'total' => $total,
             'softDeletes' => $resource::softDeletes(),
+            'sortable' => $sortable ?? true,
         ]);
     }
 }

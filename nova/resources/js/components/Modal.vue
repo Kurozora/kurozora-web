@@ -3,13 +3,13 @@
     class="modal select-none fixed pin z-50 overflow-x-hidden overflow-y-auto"
   >
     <div class="relative mx-auto flex justify-center z-20 py-view">
-      <div v-on-clickaway="close"><slot /></div>
+      <div v-on-clickaway="backdropClose"><slot /></div>
     </div>
   </div>
 </template>
 
 <script>
-import { mixin as clickaway } from 'vue-clickaway'
+import {mixin as clickaway} from 'vue-clickaway'
 import composedPath from '@/polyfills/composedPath'
 
 export default {
@@ -17,6 +17,16 @@ export default {
 
   props: {
     classWhitelist: [Array, String],
+
+    closesViaEscape: {
+      type: Boolean,
+      default: true,
+    },
+
+    closesViaBackdrop: {
+      type: Boolean,
+      default: true,
+    },
   },
 
   created() {
@@ -49,12 +59,12 @@ export default {
     handleEscape(e) {
       e.stopPropagation()
 
-      if (e.keyCode == 27) {
+      if (e.keyCode == 27 && this.closesViaEscape === true) {
         this.close(e)
       }
     },
 
-    close(e) {
+    backdropClose(e) {
       if (!e.isTrusted) return
 
       let classArray = Array.isArray(this.classWhitelist)
@@ -68,6 +78,12 @@ export default {
         return
       }
 
+      if (this.closesViaBackdrop === true) {
+        this.close(e)
+      }
+    },
+
+    close(e) {
       this.$emit('modal-close', e)
     },
   },

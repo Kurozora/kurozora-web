@@ -1,6 +1,11 @@
 <template>
   <button
-    class="rounded p-2 flex flex-no-shrink focus:shadow-outline focus:outline-none"
+    class="
+      rounded
+      p-2
+      flex flex-no-shrink
+      focus:shadow-outline focus:outline-none
+    "
     @click="togglePolling"
     v-tooltip.click="buttonLabel"
   >

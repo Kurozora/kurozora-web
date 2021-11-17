@@ -1,7 +1,7 @@
 <template>
   <div :class="`text-${field.textAlign}`">
     <router-link
-      v-if="hasValue"
+      v-if="hasValue && resource.authorizedToView"
       :to="{
         name: 'detail',
         params: {
@@ -13,13 +13,16 @@
     >
       {{ field.pivotValue || field.value }}
     </router-link>
+    <p v-else-if="hasValue">
+      {{ field.pivotValue || field.value }}
+    </p>
     <p v-else>&mdash;</p>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['resourceName', 'field'],
+  props: ['resource', 'resourceName', 'field'],
 
   computed: {
     /**

@@ -16,7 +16,13 @@
         }"
       >
         <header
-          class="flex items-center content-center justify-between border-b border-60"
+          class="
+            flex
+            items-center
+            content-center
+            justify-between
+            border-b border-60
+          "
           :class="{ 'bg-30': isReadonly }"
         >
           <ul class="w-full flex items-center content-center list-reset">
@@ -45,7 +51,16 @@
               :key="tool.action"
               @click.prevent="callAction(tool.action)"
               v-for="tool in tools"
-              class="rounded-none ico-button inline-flex items-center justify-center px-2 text-sm text-80 border-l border-60"
+              class="
+                rounded-none
+                ico-button
+                inline-flex
+                items-center
+                justify-center
+                px-2
+                text-sm text-80
+                border-l border-60
+              "
             >
               <component
                 :is="tool.icon"
@@ -75,10 +90,11 @@
 
 <script>
 import _ from 'lodash'
-const md = require('markdown-it')()
 import CodeMirror from 'codemirror'
 import 'codemirror/mode/markdown/markdown'
-import { FormField, HandlesValidationErrors } from 'laravel-nova'
+import {FormField, HandlesValidationErrors} from 'laravel-nova'
+
+const md = require('markdown-it')()
 
 const actions = {
   bold() {
@@ -193,9 +209,8 @@ export default {
           ? 'Cmd-'
           : 'Ctrl-'
       )
-      this.codemirror.options.extraKeys[realMap] = actions[keyMaps[map]].bind(
-        this
-      )
+      this.codemirror.options.extraKeys[realMap] =
+        actions[keyMaps[map]].bind(this)
     })
 
     this.doc.on('change', (cm, changeObj) => {

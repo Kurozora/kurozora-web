@@ -61,17 +61,14 @@
 </template>
 
 <script>
-import {
-  mapProps,
-  Errors,
-  InteractsWithResourceInformation,
-  PreventsFormAbandonment,
-} from 'laravel-nova'
+import {Errors, InteractsWithResourceInformation, mapProps, PreventsFormAbandonment,} from 'laravel-nova'
+import HandlesFormRequest from '@/mixins/HandlesFormRequest'
 import HandlesUploads from '@/mixins/HandlesUploads'
 
 export default {
   mixins: [
     InteractsWithResourceInformation,
+    HandlesFormRequest,
     HandlesUploads,
     PreventsFormAbandonment,
   ],
@@ -103,7 +100,6 @@ export default {
     title: null,
     fields: [],
     panels: [],
-    validationErrors: new Errors(),
     lastRetrievedAt: null,
   }),
 
@@ -249,18 +245,7 @@ export default {
             this.canLeave = false
           }
 
-          if (error.response.status == 422) {
-            this.validationErrors = new Errors(error.response.data.errors)
-            Nova.error(this.__('There was a problem submitting the form.'))
-          }
-
-          if (error.response.status == 409) {
-            Nova.error(
-              this.__(
-                'Another user has updated this resource since this page was loaded. Please refresh the page and try again.'
-              )
-            )
-          }
+          this.handleOnUpdateResponseError(error)
         }
       }
 

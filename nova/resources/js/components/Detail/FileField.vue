@@ -23,7 +23,14 @@
           @keydown.enter.prevent="download"
           @click.prevent="download"
           tabindex="0"
-          class="cursor-pointer dim btn btn-link text-primary inline-flex items-center"
+          class="
+            cursor-pointer
+            dim
+            btn btn-link
+            text-primary
+            inline-flex
+            items-center
+          "
         >
           <icon
             class="mr-2"

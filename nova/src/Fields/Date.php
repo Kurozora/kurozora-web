@@ -88,6 +88,28 @@ class Date extends Field
     }
 
     /**
+     * Set picker hour increment.
+     *
+     * @param  int  $increment
+     * @return $this
+     */
+    public function incrementPickerHourBy($increment)
+    {
+        throw new \Exception('The `incrementPickerHourBy` option is not available on Date fields.');
+    }
+
+    /**
+     * Set picker minute increment.
+     *
+     * @param  int  $increment
+     * @return $this
+     */
+    public function incrementPickerMinuteBy($increment)
+    {
+        throw new \Exception('The `incrementPickerMinuteBy` option is not available on Date fields.');
+    }
+
+    /**
      * Resolve the default value for the field.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request

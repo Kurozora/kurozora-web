@@ -16,12 +16,14 @@ trait DetachesPivotModels
     protected function detachmentCallback()
     {
         return function ($request, $model) {
+            $pivotAccessor = $model->{$this->attribute}()->getPivotAccessor();
+
             foreach ($model->{$this->attribute}()->withoutGlobalScopes()->cursor() as $related) {
                 $resource = Nova::resourceForModel($related);
 
                 $resource = new $resource($related);
 
-                $pivot = $related->{$model->{$this->attribute}()->getPivotAccessor()};
+                $pivot = $related->{$pivotAccessor};
 
                 $pivotFields = $resource->resolvePivotFields($request, $request->resource);
 

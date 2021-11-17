@@ -2,8 +2,8 @@
 
 namespace Laravel\Nova;
 
+use Laravel\Nova\Contracts\QueryBuilder;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Laravel\Nova\Query\Builder;
 
 class GlobalSearch
 {
@@ -52,8 +52,8 @@ class GlobalSearch
     protected function getSearchResults()
     {
         foreach ($this->resources as $resourceClass) {
-            $query = (new Builder($resourceClass))->search(
-                $this->request, $resourceClass::newModel()->newQuery(),
+            $query = app()->make(QueryBuilder::class, [$resourceClass])->search(
+                $this->request, $resourceClass::newModel()->newQuery()->with($resourceClass::$with),
                 $this->request->search
             );
 

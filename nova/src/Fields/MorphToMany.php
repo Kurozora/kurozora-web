@@ -7,9 +7,9 @@ use Illuminate\Support\Str;
 use Laravel\Nova\Contracts\Deletable as DeletableContract;
 use Laravel\Nova\Contracts\ListableField;
 use Laravel\Nova\Contracts\PivotableField;
+use Laravel\Nova\Contracts\QueryBuilder;
 use Laravel\Nova\Contracts\RelatableField;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Laravel\Nova\Query\Builder;
 use Laravel\Nova\Rules\RelatableAttachment;
 use Laravel\Nova\TrashedStatus;
 
@@ -174,13 +174,13 @@ class MorphToMany extends Field implements DeletableContract, ListableField, Piv
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @param  bool  $withTrashed
-     * @return \Laravel\Nova\Query\Builder
+     * @return \Laravel\Nova\Contracts\QueryBuilder
      */
     public function buildAttachableQuery(NovaRequest $request, $withTrashed = false)
     {
         $model = forward_static_call([$resourceClass = $this->resourceClass, 'newModel']);
 
-        $query = new Builder($resourceClass);
+        $query = app()->make(QueryBuilder::class, [$resourceClass]);
 
         $request->first === 'true'
                         ? $query->whereKey($model->newQueryWithoutScopes(), $request->current)

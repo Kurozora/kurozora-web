@@ -1,6 +1,13 @@
 <template>
   <div
-    class="dropdown-trigger h-dropdown-trigger flex items-center cursor-pointer select-none"
+    class="
+      dropdown-trigger
+      h-dropdown-trigger
+      flex
+      items-center
+      cursor-pointer
+      select-none
+    "
   >
     <slot />
 

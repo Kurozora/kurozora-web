@@ -25,4 +25,17 @@ class RelatableAttachment extends Relatable
             $this->request, $model
         );
     }
+
+    /**
+     * Determine if the relationship is "full".
+     *
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param  string  $attribute
+     * @param  mixed  $value
+     * @return bool
+     */
+    protected function relationshipIsFull($model, $attribute, $value)
+    {
+        return false;
+    }
 }

@@ -305,14 +305,16 @@ class File extends Field implements StorableContract, DeletableContract, Downloa
             return;
         }
 
+        $hasExistingFile = ! is_null($this->getStoragePath());
+
         $result = call_user_func(
             $this->storageCallback,
             $request,
             $model,
             $attribute,
             $requestAttribute,
-            $this->disk,
-            $this->storagePath
+            $this->getStorageDisk(),
+            $this->getStorageDir()
         );
 
         if ($result === true) {
@@ -331,7 +333,7 @@ class File extends Field implements StorableContract, DeletableContract, Downloa
             $model->{$key} = $value;
         }
 
-        if ($this->isPrunable()) {
+        if ($this->isPrunable() && $hasExistingFile) {
             return function () use ($model, $request) {
                 call_user_func(
                     $this->deleteCallback,

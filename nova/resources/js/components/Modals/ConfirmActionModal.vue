@@ -3,15 +3,8 @@
     data-testid="confirm-action-modal"
     tabindex="-1"
     role="dialog"
+    :closes-via-backdrop="canLeave"
     @modal-close="handleClose"
-    :classWhitelist="[
-      'flatpickr-current-month',
-      'flatpickr-next-month',
-      'flatpickr-prev-month',
-      'flatpickr-weekday',
-      'flatpickr-weekdays',
-      'flatpickr-calendar',
-    ]"
   >
     <form
       autocomplete="off"
@@ -64,17 +57,17 @@
             {{ action.cancelButtonText }}
           </button>
 
-          <button
+          <loading-button
             ref="runButton"
             dusk="confirm-action-button"
+            :processing="working"
             :disabled="working"
             type="submit"
             class="btn btn-default"
             :class="action.class"
           >
-            <loader v-if="working" width="30"></loader>
-            <span v-else>{{ action.confirmButtonText }}</span>
-          </button>
+            {{ action.confirmButtonText }}
+          </loading-button>
         </div>
       </div>
     </form>
@@ -91,6 +84,24 @@ export default {
     errors: { type: Object, required: true },
   },
 
+  created() {
+    const listenToDatePickerOpened = event => {
+      this.canLeave = false
+    }
+
+    const listenToDatePickerClosed = event => {
+      this.canLeave = true
+    }
+
+    Nova.$on('datepicker-opened', listenToDatePickerOpened)
+    Nova.$on('datepicker-closed', listenToDatePickerClosed)
+
+    this.$once('hook:beforeDestroy', () => {
+      Nova.$off('datepicker-opened', listenToDatePickerOpened)
+      Nova.$off('datepicker-closed', listenToDatePickerClosed)
+    })
+  },
+
   /**
    * Mount the component.
    */
@@ -103,6 +114,10 @@ export default {
       this.$refs.runButton.focus()
     }
   },
+
+  data: () => ({
+    canLeave: true,
+  }),
 
   methods: {
     /**
