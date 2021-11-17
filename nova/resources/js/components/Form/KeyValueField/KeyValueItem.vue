@@ -11,7 +11,17 @@
           @focus="handleKeyFieldFocus"
           ref="keyField"
           type="text"
-          class="font-mono text-sm resize-none block min-h-input w-full form-control form-input form-input-row py-4 text-90"
+          class="
+            font-mono
+            text-sm
+            resize-none
+            block
+            min-h-input
+            w-full
+            form-control form-input form-input-row
+            py-4
+            text-90
+          "
           :disabled="!isEditable || readOnlyKeys"
           style="background-clip: border-box"
           :class="{
@@ -28,7 +38,16 @@
           @focus="handleValueFieldFocus"
           ref="valueField"
           type="text"
-          class="font-mono text-sm block min-h-input w-full form-control form-input form-input-row py-4 text-90"
+          class="
+            font-mono
+            text-sm
+            block
+            min-h-input
+            w-full
+            form-control form-input form-input-row
+            py-4
+            text-90
+          "
           :disabled="!isEditable"
           :class="{
             'bg-white': !isEditable,
@@ -48,7 +67,15 @@
         :dusk="`remove-key-value-${index}`"
         type="button"
         tabindex="-1"
-        class="flex appearance-none cursor-pointer text-70 hover:text-primary active:outline-none active:shadow-outline focus:outline-none focus:shadow-outline"
+        class="
+          flex
+          appearance-none
+          cursor-pointer
+          text-70
+          hover:text-primary
+          active:outline-none active:shadow-outline
+          focus:outline-none focus:shadow-outline
+        "
         title="Delete"
       >
         <icon />

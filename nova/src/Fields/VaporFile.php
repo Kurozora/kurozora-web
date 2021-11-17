@@ -82,6 +82,7 @@ class VaporFile extends Field implements StorableContract, DeletableContract, Do
      *
      * @param  string  $disk
      * @return $this
+     *
      * @throws \Exception
      */
     public function disk($disk)
@@ -217,14 +218,16 @@ class VaporFile extends Field implements StorableContract, DeletableContract, Do
             return;
         }
 
+        $hasExistingFile = ! is_null($this->getStoragePath());
+
         $result = call_user_func(
             $this->storageCallback,
             $request,
             $model,
             $attribute,
             $requestAttribute,
-            $this->disk,
-            $this->storagePath
+            $this->getStorageDisk(),
+            $this->getStorageDir()
         );
 
         if ($result === true) {
@@ -243,7 +246,7 @@ class VaporFile extends Field implements StorableContract, DeletableContract, Do
             $model->{$key} = $value;
         }
 
-        if ($this->isPrunable()) {
+        if ($this->isPrunable() && $hasExistingFile) {
             return function () use ($model, $request) {
                 call_user_func(
                     $this->deleteCallback,

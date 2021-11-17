@@ -119,15 +119,16 @@
 
 <script>
 import _ from 'lodash'
-import {
-  PerformsSearches,
-  TogglesTrashed,
-  Errors,
-  PreventsFormAbandonment,
-} from 'laravel-nova'
+import {Errors, PerformsSearches, PreventsFormAbandonment, TogglesTrashed,} from 'laravel-nova'
+import HandlesFormRequest from '@/mixins/HandlesFormRequest'
 
 export default {
-  mixins: [PerformsSearches, TogglesTrashed, PreventsFormAbandonment],
+  mixins: [
+    HandlesFormRequest,
+    PerformsSearches,
+    TogglesTrashed,
+    PreventsFormAbandonment,
+  ],
 
   metaInfo() {
     if (this.relatedResourceLabel && this.title) {
@@ -180,7 +181,6 @@ export default {
     field: null,
     softDeletes: false,
     fields: [],
-    validationErrors: new Errors(),
     selectedResource: null,
     selectedResourceId: null,
     lastRetrievedAt: null,
@@ -351,18 +351,7 @@ export default {
           this.canLeave = false
         }
 
-        if (error.response.status == 422) {
-          this.validationErrors = new Errors(error.response.data.errors)
-          Nova.error(this.__('There was a problem submitting the form.'))
-        }
-
-        if (error.response.status == 409) {
-          Nova.error(
-            this.__(
-              'Another user has updated this resource since this page was loaded. Please refresh the page and try again.'
-            )
-          )
-        }
+        this.handleOnUpdateResponseError(error)
       }
     },
 
@@ -384,18 +373,7 @@ export default {
       } catch (error) {
         this.submittedViaUpdateAndContinueEditing = false
 
-        if (error.response.status == 422) {
-          this.validationErrors = new Errors(error.response.data.errors)
-          Nova.error(this.__('There was a problem submitting the form.'))
-        }
-
-        if (error.response.status == 409) {
-          Nova.error(
-            this.__(
-              'Another user has updated this resource since this page was loaded. Please refresh the page and try again.'
-            )
-          )
-        }
+        this.handleOnUpdateResponseError(error)
       }
     },
 

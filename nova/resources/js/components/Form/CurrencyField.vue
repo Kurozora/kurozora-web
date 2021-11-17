@@ -4,14 +4,32 @@
       <div class="flex flex-wrap items-stretch w-full relative">
         <div class="flex -mr-px">
           <span
-            class="flex items-center leading-normal rounded rounded-r-none border border-r-0 border-60 px-3 whitespace-no-wrap bg-30 text-80 text-sm font-bold"
+            class="
+              flex
+              items-center
+              leading-normal
+              rounded rounded-r-none
+              border border-r-0 border-60
+              px-3
+              whitespace-no-wrap
+              bg-30
+              text-80 text-sm
+              font-bold
+            "
           >
             {{ field.currency }}
           </span>
         </div>
 
         <input
-          class="flex-shrink flex-grow flex-auto leading-normal w-px flex-1 rounded-l-none form-control form-input form-input-bordered"
+          class="
+            flex-shrink flex-grow flex-auto
+            leading-normal
+            w-px
+            flex-1
+            rounded-l-none
+            form-control form-input form-input-bordered
+          "
           :id="field.attribute"
           :dusk="field.attribute"
           v-bind="extraAttributes"
@@ -25,7 +43,7 @@
 </template>
 
 <script>
-import { FormField, HandlesValidationErrors } from 'laravel-nova'
+import {FormField, HandlesValidationErrors} from 'laravel-nova'
 
 export default {
   mixins: [FormField, HandlesValidationErrors],

@@ -38,7 +38,19 @@
           @click="addRowAndSelect"
           :dusk="`${field.attribute}-add-key-value`"
           type="button"
-          class="btn btn-link dim cursor-pointer rounded-lg mx-auto text-primary mt-3 px-3 rounded-b-lg flex items-center"
+          class="
+            btn btn-link
+            dim
+            cursor-pointer
+            rounded-lg
+            mx-auto
+            text-primary
+            mt-3
+            px-3
+            rounded-b-lg
+            flex
+            items-center
+          "
         >
           <icon type="add" width="24" height="24" view-box="0 0 24 24" />
           <span class="ml-1">{{ field.actionText }}</span>
@@ -49,7 +61,7 @@
 </template>
 
 <script>
-import { FormField, HandlesValidationErrors } from 'laravel-nova'
+import {FormField, HandlesValidationErrors} from 'laravel-nova'
 import KeyValueItem from '@/components/Form/KeyValueField/KeyValueItem'
 import KeyValueHeader from '@/components/Form/KeyValueField/KeyValueHeader'
 import KeyValueTable from '@/components/Form/KeyValueField/KeyValueTable'

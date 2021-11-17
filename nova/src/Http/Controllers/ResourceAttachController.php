@@ -91,6 +91,7 @@ class ResourceAttachController extends Controller
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @param  \Illuminate\Database\Eloquent\Relations\BelongsToMany  $relationship
      * @return \Illuminate\Database\Eloquent\Relations\Pivot
+     *
      * @throws \Exception
      */
     protected function initializePivot(NovaRequest $request, $relationship)

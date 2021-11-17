@@ -32,6 +32,7 @@ trait HandlesCustomRelationKeys
 
     /**
      * Get the custom field attributes names for validation.
+     *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @param  string  $attribute
      * @return array

@@ -75,7 +75,13 @@
         dusk="run-action-button"
         @click.prevent="determineActionStrategy"
         :disabled="!selectedAction"
-        class="btn btn-default btn-primary flex items-center justify-center px-3"
+        class="
+          btn btn-default btn-primary
+          flex
+          items-center
+          justify-center
+          px-3
+        "
         :class="{ 'btn-disabled': !selectedAction }"
         :title="__('Run Action')"
       >
@@ -109,9 +115,8 @@
 </template>
 
 <script>
-import _ from 'lodash'
 import HandlesActions from '@/mixins/HandlesActions'
-import { InteractsWithResourceInformation } from 'laravel-nova'
+import {InteractsWithResourceInformation} from 'laravel-nova'
 
 export default {
   mixins: [InteractsWithResourceInformation, HandlesActions],

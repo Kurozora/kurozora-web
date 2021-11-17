@@ -37,7 +37,18 @@
             <div v-if="filtersAreApplied" class="bg-30 border-b border-60">
               <button
                 @click="$emit('clear-selected-filters')"
-                class="py-2 w-full block text-xs uppercase tracking-wide text-center text-80 dim font-bold focus:outline-none"
+                class="
+                  py-2
+                  w-full
+                  block
+                  text-xs
+                  uppercase
+                  tracking-wide
+                  text-center text-80
+                  dim
+                  font-bold
+                  focus:outline-none
+                "
               >
                 {{ __('Reset Filters') }}
               </button>
@@ -110,7 +121,7 @@
 </template>
 
 <script>
-import { mixin as clickaway } from 'vue-clickaway'
+import {mixin as clickaway} from 'vue-clickaway'
 import composedPath from '@/polyfills/composedPath'
 
 export default {

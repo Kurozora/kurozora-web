@@ -303,8 +303,8 @@ abstract class Trend extends RangedMetric
     /**
      * Return a value result showing a max aggregate over months.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Illuminate\Database\Eloquent\Builder|string $model
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Database\Eloquent\Builder|string  $model
      * @param  \Illuminate\Database\Query\Expression|string  $column
      * @param  string  $dateColumn
      * @return TrendResult

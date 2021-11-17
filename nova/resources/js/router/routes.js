@@ -83,8 +83,7 @@ export default [
   },
   {
     name: 'edit-attached',
-    path:
-      '/resources/:resourceName/:resourceId/edit-attached/:relatedResourceName/:relatedResourceId',
+    path: '/resources/:resourceName/:resourceId/edit-attached/:relatedResourceName/:relatedResourceId',
     component: UpdateAttachedResource,
     props: route => {
       return {

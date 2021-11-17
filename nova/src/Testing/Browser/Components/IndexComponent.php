@@ -409,7 +409,8 @@ class IndexComponent extends BaseComponent
 
         tap($this->selector(), function ($selector) use ($browser) {
             $browser->waitFor($selector, 25)
-                    ->assertVisible($selector);
+                    ->assertVisible($selector)
+                    ->scrollIntoView($selector);
         });
     }
 

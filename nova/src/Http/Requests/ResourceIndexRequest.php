@@ -2,7 +2,7 @@
 
 namespace Laravel\Nova\Http\Requests;
 
-use Laravel\Nova\Query\Builder as QueryBuilder;
+use Laravel\Nova\Contracts\QueryBuilder;
 
 class ResourceIndexRequest extends NovaRequest
 {
@@ -15,9 +15,7 @@ class ResourceIndexRequest extends NovaRequest
      */
     public function searchIndex()
     {
-        $resource = $this->resource();
-
-        return (new QueryBuilder($resource))->search(
+        return app()->make(QueryBuilder::class, [$this->resource()])->search(
             $this, $this->newQuery(), $this->search,
             $this->filters()->all(), $this->orderings(), $this->trashed()
         )->paginate((int) $this->perPage());
@@ -30,7 +28,10 @@ class ResourceIndexRequest extends NovaRequest
      */
     public function toCount()
     {
-        return $this->toQuery()->toBase()->getCountForPagination();
+        return app()->make(QueryBuilder::class, [$this->resource()])->search(
+            $this, $this->newQuery(), $this->search,
+            $this->filters()->all(), $this->orderings(), $this->trashed()
+        )->toBaseQueryBuilder()->getCountForPagination();
     }
 
     /**

@@ -17,7 +17,7 @@ class Slug extends Field
     /**
      * The field the slug should be generated from.
      *
-     * @param string $from
+     * @param  string  $from
      * @return string
      */
     public $from;
@@ -52,7 +52,7 @@ class Slug extends Field
     /**
      * The field the slug should be generated from.
      *
-     * @param string $from
+     * @param  string  $from
      * @return $this
      */
     public function from($from)
@@ -65,7 +65,7 @@ class Slug extends Field
     /**
      * Set the separator used for slugifying the field.
      *
-     * @param string $separator
+     * @param  string  $separator
      * @return $this
      */
     public function separator($separator)

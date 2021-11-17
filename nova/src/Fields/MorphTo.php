@@ -6,11 +6,11 @@ use Closure;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Laravel\Nova\Contracts\QueryBuilder;
 use Laravel\Nova\Contracts\RelatableField;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Http\Requests\ResourceIndexRequest;
 use Laravel\Nova\Nova;
-use Laravel\Nova\Query\Builder;
 use Laravel\Nova\Resource;
 use Laravel\Nova\Rules\Relatable;
 use Laravel\Nova\TrashedStatus;
@@ -18,7 +18,9 @@ use Laravel\Nova\Util;
 
 class MorphTo extends Field implements RelatableField
 {
-    use ResolvesReverseRelation, DeterminesIfCreateRelationCanBeShown, Searchable;
+    use DeterminesIfCreateRelationCanBeShown,
+        ResolvesReverseRelation,
+        Searchable;
 
     /**
      * The field's component.
@@ -328,13 +330,13 @@ class MorphTo extends Field implements RelatableField
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @param  string  $relatedResource
      * @param  bool  $withTrashed
-     * @return \Laravel\Nova\Query\Builder
+     * @return \Laravel\Nova\Contracts\QueryBuilder
      */
     public function buildMorphableQuery(NovaRequest $request, $relatedResource, $withTrashed = false)
     {
         $model = $relatedResource::newModel();
 
-        $query = new Builder($relatedResource);
+        $query = app()->make(QueryBuilder::class, [$relatedResource]);
 
         $request->first === 'true'
                         ? $query->whereKey($model->newQueryWithoutScopes(), $request->current)
@@ -528,7 +530,7 @@ class MorphTo extends Field implements RelatableField
     /**
      * Set the default relation resource class to be selected.
      *
-     * @param \Closure|string $resourceClass
+     * @param  \Closure|string  $resourceClass
      * @return $this
      */
     public function defaultResource($resourceClass)

@@ -49,7 +49,7 @@ class Panel extends MergeValue implements JsonSerializable
     /**
      * The help text for the element.
      *
-     * @var  string
+     * @var string
      */
     public $helpText;
 
@@ -136,7 +136,7 @@ class Panel extends MergeValue implements JsonSerializable
     /**
      * Set the number of initially visible fields.
      *
-     * @param int $limit
+     * @param  int  $limit
      * @return $this
      */
     public function limit($limit)
@@ -174,6 +174,7 @@ class Panel extends MergeValue implements JsonSerializable
      *
      * @param  string
      * @return $this
+     *
      * @throws \Exception
      */
     public function helpWidth($helpWidth)
@@ -185,6 +186,7 @@ class Panel extends MergeValue implements JsonSerializable
      * Return the width of the help text tooltip.
      *
      * @return string
+     *
      * @throws \Exception
      */
     public function getHelpWidth()

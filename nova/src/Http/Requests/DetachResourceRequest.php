@@ -17,16 +17,17 @@ class DetachResourceRequest extends DeletionRequest
     public function chunks($count, Closure $callback)
     {
         $parentResource = $this->findParentResourceOrFail();
+        $model = $this->model();
 
         $this->toSelectedResourceQuery()->when(! $this->forAllMatchingResources(), function ($query) {
             $query->whereKey($this->resources);
-        })->latest($this->model()->getQualifiedKeyName())->chunkById($count, function ($models) use ($callback, $parentResource) {
+        })->chunkById($count, function ($models) use ($callback, $parentResource) {
             $models = $this->detachableModels($models, $parentResource);
 
             if ($models->isNotEmpty()) {
                 $callback($models);
             }
-        });
+        }, $model->getQualifiedKeyName(), $model->getKeyName());
     }
 
     /**

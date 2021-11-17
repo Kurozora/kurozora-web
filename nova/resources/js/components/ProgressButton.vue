@@ -1,23 +1,22 @@
 <template>
-  <button
+  <loading-button
     class="btn btn-default btn-primary inline-flex items-center relative"
     type="button"
     ref="button"
+    :processing="processing"
   >
-    <span :class="{ invisible: processing }"> <slot /> </span>
-
-    <span
-      v-if="processing"
-      class="absolute"
-      style="top: 50%; left: 50%; transform: translate(-50%, -50%)"
-    >
-      <loader class="text-white" width="32" />
-    </span>
-  </button>
+    <slot />
+  </loading-button>
 </template>
 
 <script>
+import LoadingButton from './LoadingButton'
+
 export default {
+  components: {
+    LoadingButton,
+  },
+
   props: {
     processing: {
       type: Boolean,

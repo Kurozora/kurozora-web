@@ -23,6 +23,13 @@ class ActionResource extends Resource
     public static $model = ActionEvent::class;
 
     /**
+     * Indicates if the resource should be globally searchable.
+     *
+     * @var bool
+     */
+    public static $globallySearchable = false;
+
+    /**
      * Indicates whether the resource should automatically poll for new resources.
      *
      * @var bool

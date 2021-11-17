@@ -30,7 +30,7 @@ class Textarea extends Field
     /**
      * Set the number of rows used for the textarea.
      *
-     * @param  int $rows
+     * @param  int  $rows
      * @return $this
      */
     public function rows($rows)
