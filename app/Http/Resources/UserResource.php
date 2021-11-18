@@ -10,7 +10,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class UserResource extends JsonResource
 {
     /**
-     * Whether or not to include the given session in the resource.
+     * Whether to include the given session in the resource.
      *
      * @var bool $shouldIncludeSession
      */
@@ -38,7 +38,10 @@ class UserResource extends JsonResource
         $relationships = array_merge($relationships, $this->getBadgeRelationship());
 
         if ($this->shouldIncludeSession) {
-            $resource['attributes'] = array_merge($resource['attributes'], ['email' => $user->email]);
+            $resource['attributes'] = array_merge($resource['attributes'], [
+                'email'         => $user->email,
+                'siwaIsEnabled' => !empty($user->siwa_id)
+            ]);
             $relationships = array_merge($relationships, $this->getSessionRelationship());
         }
 
