@@ -19,17 +19,19 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        Registered::class => [
-            SendEmailVerificationNotification::class,
-        ],
-
         Event::class => [
             EventListener::class,
         ],
 
-        AnimeViewed::class => [
+        // User events
+        Registered::class => [
+            SendEmailVerificationNotification::class,
         ],
 
+        // Anime events
+        AnimeViewed::class => [],
+
+        // Media events
         MediaHasBeenAdded::class => [
             MediaHasBeenAddedListener::class,
         ],
