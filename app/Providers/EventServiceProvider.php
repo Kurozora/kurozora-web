@@ -4,8 +4,12 @@ namespace App\Providers;
 
 use App\Events\AnimeViewed;
 use App\Events\Event;
+use App\Events\UserLibraryCreatedEvent;
+use App\Events\UserLibraryUpdatedEvent;
+use App\Listeners\CreateMediaStatsListener;
 use App\Listeners\EventListener;
 use App\Listeners\MediaHasBeenAddedListener;
+use App\Listeners\UpdateMediaStatsListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -19,19 +23,31 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        Registered::class => [
-            SendEmailVerificationNotification::class,
-        ],
-
         Event::class => [
             EventListener::class,
         ],
 
+        // User events
+        Registered::class => [
+            SendEmailVerificationNotification::class,
+        ],
+
+        // Anime events
         AnimeViewed::class => [
         ],
 
+        // Media events
         MediaHasBeenAdded::class => [
             MediaHasBeenAddedListener::class,
+        ],
+
+        // User Library events
+        UserLibraryCreatedEvent::class => [
+            CreateMediaStatsListener::class
+        ],
+
+        UserLibraryUpdatedEvent::class => [
+            UpdateMediaStatsListener::class
         ],
     ];
 
