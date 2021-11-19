@@ -20,9 +20,9 @@ class AnimeRatingSorter extends Sorter
     public function apply(Request $request, Builder $builder, string $direction): Builder
     {
         if ($direction == 'worst') {
-            $builder->orderBy('average_rating');
+            $builder->orderBy('rating_average');
         } else {
-            $builder->orderBy('average_rating', 'desc');
+            $builder->orderBy('rating_average', 'desc');
         }
 
         return $builder;

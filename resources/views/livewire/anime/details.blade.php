@@ -69,8 +69,8 @@
                 <div id="ratingBadge" class="flex-grow pr-12">
                     <a href="#ratingsAndReviews">
                         <p class="inline-flex font-bold text-orange-500">
-                            {{ number_format($anime->average_rating, 1) }}
-                            <livewire:anime.star-rating :rating="$anime->average_rating" :star-size="'sm'" :disabled="true" />
+                            {{ number_format($anime->rating_average, 1) }}
+                            <livewire:anime.star-rating :rating="$anime->rating_average" :star-size="'sm'" :disabled="true" />
                         </p>
                         <p class="text-sm text-gray-500">{{ __('Not enough ratings') }}</p>
                     </a>
@@ -141,7 +141,7 @@
 
                 <div class="flex flex-row justify-between">
                     <div class="text-center">
-                        <p class="font-bold text-6xl">{{ number_format($anime->average_rating, 1) }}</p>
+                        <p class="font-bold text-6xl">{{ number_format($anime->rating_average, 1) }}</p>
                         <p class="font-bold text-sm text-gray-500">{{ __('out of') }} 5</p>
                     </div>
 

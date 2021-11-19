@@ -14,14 +14,14 @@ class CalculateAnimeRatings extends Command
      *
      * @var string
      */
-    protected $signature = 'ratings:calculate';
+    protected $signature = 'calculate:anime_ratings';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Recalculates the average rating for Anime items';
+    protected $description = 'Calculates the average rating for anime with sufficient data.';
 
     /**
      * Create a new command instance.
@@ -44,29 +44,29 @@ class CalculateAnimeRatings extends Command
         $meanAverageRating = AnimeRating::avg('rating');
 
         // Start looping through Anime
-        $animes = Anime::withoutGlobalScope(new TvRatingScope)->get();
+        Anime::withoutGlobalScope(new TvRatingScope)->chunk(5000, function ($animes) use ($meanAverageRating) {
+            foreach ($animes as $anime) {
+                // Total amount of ratings this Anime has
+                $totalRatingCount = $anime->ratings()->count();
 
-        foreach ($animes as $anime) {
-            // Total amount of ratings this Anime has
-            $totalRatingCount = $anime->ratings()->count();
+                // Check if minimum ratings are acquired
+                if ($totalRatingCount >= Anime::MINIMUM_RATINGS_REQUIRED) {
+                    $this->info('=============================');
+                    $this->info('Calculating for Anime ID ' . $anime->id);
 
-            // Check if minimum ratings are acquired
-            if ($totalRatingCount >= Anime::MINIMUM_RATINGS_REQUIRED) {
-                $this->info('=============================');
-                $this->info('Calculating for Anime ID ' . $anime->id);
+                    // Average score for this Anime
+                    $basicAverageRating = $anime->ratings()->avg('rating');
 
-                // Average score for this Anime
-                $basicAverageRating = $anime->ratings()->avg('rating');
+                    // Calculate the weighted rating
+                    $weightedRating = ($totalRatingCount / ($totalRatingCount + Anime::MINIMUM_RATINGS_REQUIRED)) * $basicAverageRating + (Anime::MINIMUM_RATINGS_REQUIRED / ($totalRatingCount + Anime::MINIMUM_RATINGS_REQUIRED)) * $meanAverageRating;
 
-                // Calculate the weighted rating
-                $weightedRating = ($totalRatingCount / ($totalRatingCount + Anime::MINIMUM_RATINGS_REQUIRED)) * $basicAverageRating + (Anime::MINIMUM_RATINGS_REQUIRED / ($totalRatingCount + Anime::MINIMUM_RATINGS_REQUIRED)) * $meanAverageRating;
-
-                $this->info('Calculated weighted rating: '. $weightedRating);
-                $this->info('');
-            } else { // This Anime does not have enough ratings
-                $this->error('Anime ' . $anime->id . ' does not have enough ratings. (' . $totalRatingCount . '/' . Anime::MINIMUM_RATINGS_REQUIRED . ')');
+                    $this->info('Calculated weighted rating: '. $weightedRating);
+                    $this->info('');
+                } else { // This Anime does not have enough ratings
+                    $this->error('Anime ' . $anime->id . ' does not have enough ratings. (' . $totalRatingCount . '/' . Anime::MINIMUM_RATINGS_REQUIRED . ')');
+                }
             }
-        }
+        });
 
         return Command::SUCCESS;
     }

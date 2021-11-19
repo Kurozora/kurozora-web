@@ -27,9 +27,9 @@
 
             <div class="flex flex-row flex-no-wrap justify-between space-x-2">
                 <div class="inline-flex my-auto">
-                    <p class="font-bold text-orange-500">{{ number_format($anime->average_rating, 1) }}</p>
+                    <p class="font-bold text-orange-500">{{ number_format($anime->rating_average, 1) }}</p>
 
-                    <livewire:anime.star-rating :rating="$anime->average_rating" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid(more_entropy: true) }}" />
+                    <livewire:anime.star-rating :rating="$anime->rating_average" :star-size="'sm'" :disabled="true" wire:key="{{ uniqid(more_entropy: true) }}" />
                 </div>
 
                 <livewire:anime.library-button :anime="$anime" wire:key="{{ uniqid(more_entropy: true) }}" />
