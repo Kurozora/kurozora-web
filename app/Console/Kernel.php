@@ -26,22 +26,31 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         /**********************************************/
-        // Recalculate Anime ratings every 4 hours
-        $schedule->command('ratings:calculate')->cron('0 */4 * * *');
+        // Calculate anime ratings every day
+        $schedule->command('calculate:anime_ratings')
+            ->daily();
+
+        /**********************************************/
+        // Calculate media stats ratings every day
+        $schedule->command('calculate:media_stats')
+            ->daily();
 
         /**********************************************/
         // Delete all expired sessions every day
-        $schedule->command('sessions:delete_expired')->daily();
+        $schedule->command('sessions:delete_expired')
+            ->daily();
 
         /**********************************************/
         // Delete all users that did not confirm their email within 24 hrs every day
-        $schedule->command('users:delete_inactive_unconfirmed')->daily();
+        $schedule->command('users:delete_inactive_unconfirmed')
+            ->daily();
 
         /**********************************************/
         // Truncates login attempts every day
         $schedule->call(function() {
             LoginAttempt::truncate();
-        })->daily();
+        })
+            ->daily();
     }
 
     /**
