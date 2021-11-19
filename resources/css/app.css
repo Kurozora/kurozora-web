@@ -104,6 +104,14 @@ picture::before {
       -ms-overflow-style: none;  /* IE and Edge */
       scrollbar-width: none;  /* Firefox */
     }
+
+    .aspect-ratio-16-9 {
+      aspect-ratio: 16/9;
+    }
+
+    .aspect-ratio-auto {
+      aspect-ratio: auto;
+    }
   }
 }
 
@@ -124,6 +132,12 @@ picture::before {
 [target^="_blank"]::after {
   content: "\0020\2197";
   white-space: nowrap;
+}
+
+[disabled] {
+  cursor: default;
+  pointer-events: none;
+  opacity: 25%;
 }
 
 /**
