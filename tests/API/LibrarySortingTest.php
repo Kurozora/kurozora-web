@@ -2,9 +2,9 @@
 
 namespace Tests\API;
 
+use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
 use App\Models\AnimeRating;
-use App\Enums\UserLibraryStatus;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
@@ -134,7 +134,7 @@ class LibrarySortingTest extends TestCase
             'title'             => 'Awesome Show',
             'synopsis'          => 'A very awesome show.',
             'created_at'        => now(),
-            'average_rating'    => 2.5
+            'rating_average'    => 2.5
         ]);
         $user->library()->attach($anime->id, ['status' => UserLibraryStatus::Watching]);
 
@@ -149,7 +149,7 @@ class LibrarySortingTest extends TestCase
             'title'             => 'Be a good person!',
             'synopsis'          => 'A story about being a good person.',
             'created_at'        => now()->subDay(),
-            'average_rating'    => 4.0
+            'rating_average'    => 4.0
         ]);
         $user->library()->attach($anime->id, ['status' => UserLibraryStatus::Watching]);
 
