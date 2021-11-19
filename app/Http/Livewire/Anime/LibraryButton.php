@@ -60,22 +60,25 @@ class LibraryButton extends Component
             return redirect(route('sign-in'));
         }
 
-        // Remove from library
-        $user->library()->detach($this->anime->id);
-
         // If user explicitly asked for removing from library, then also remove from favorites and reminders.
-        // Otherwise, update library status.
         if ($this->libraryStatus == -2) {
+            $user->library()->detach($this->anime->id);
             $user->favoriteAnime()->detach($this->anime->id);
             $user->reminderAnime()->detach($this->anime->id);
 
             // Reset dropdown to "ADD".
             $this->libraryStatus = -1;
         } else {
-            $user->library()->attach($this->anime->id, ['status' => $this->libraryStatus]);
+            // Update or create the user library entry.
+            UserLibrary::updateOrCreate([
+                'user_id'   => $user->id,
+                'anime_id'  => $this->anime->id
+            ], [
+                'status' => $this->libraryStatus
+            ]);
         }
 
-        // Notify other components of an update in the anime's data
+        // Notify other components of an update in the anime's data.
         $this->emitUp('update-anime');
 
         return null;
