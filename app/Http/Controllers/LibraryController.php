@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enums\MALImportBehavior;
-use App\Models\Anime;
 use App\Enums\UserLibraryStatus;
 use App\Helpers\JSONResult;
 use App\Http\Requests\AddToLibraryRequest;
@@ -13,6 +12,8 @@ use App\Http\Requests\MALImportRequest;
 use App\Http\Requests\SearchLibraryRequest;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Jobs\ProcessMALImport;
+use App\Models\Anime;
+use App\Models\UserLibrary;
 use Auth;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -70,17 +71,18 @@ class LibraryController extends Controller
         $user = Auth::user();
 
         // Get the Anime
-        /** @var Anime $anime */
         $anime = Anime::findOrFail($animeID);
 
         // Get the status
         $userLibraryStatus = UserLibraryStatus::fromKey($data['status']);
 
-        // Detach the current entry (if there is one)
-        $user->library()->detach($anime);
-
-        // Add a new library entry
-        $user->library()->attach($anime, ['status' => $userLibraryStatus->value]);
+        // Update or create the user library entry
+        UserLibrary::updateOrCreate([
+            'user_id'   => $user->id,
+            'anime_id'  => $anime->id,
+        ], [
+            'status' => $userLibraryStatus->value
+        ]);
 
         // Successful response
         return JSONResult::success([
