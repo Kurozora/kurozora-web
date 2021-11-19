@@ -6,7 +6,7 @@
     <x-slot name="meta">
         <meta property="og:title" content="{{ $anime->title }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ $anime->synopsis }}" />
-        <meta property="og:image" content="{{ $anime->banner_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" />
+        <meta property="og:image" content="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" />
         <meta property="og:type" content="video.tv_show" />
         <meta property="video:duration" content="{{ $anime->duration }}" />
         <meta property="video:release_date" content="{{ $anime->first_aired }}" />
@@ -18,9 +18,9 @@
 
     <div class="grid grid-rows-[repeat(2,minmax(0,min-content))] h-full lg:grid-rows-none lg:grid-cols-2 2xl:grid-cols-3 lg:mb-0">
         <div class="relative">
-            <div class="flex flex-no-wrap md:relative md:h-full">
+            <div class="flex flex-no-wrap aspect-ratio-16-9 md:relative md:h-full lg:aspect-ratio-auto">
                 <picture class="relative w-full overflow-hidden">
-                    <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->banner_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
+                    <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
                 </picture>
             </div>
 
