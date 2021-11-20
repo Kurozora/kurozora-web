@@ -42,21 +42,23 @@ class CalculateMediaStats extends Command
      */
     public function handle(): int
     {
+        // Get anime_id, status and count per status
         $userLibraries = UserLibrary::select(['anime_id', 'status', DB::raw('COUNT(*)')])
             ->groupBy(['anime_id', 'status'])
             ->get();
 
+        // Get unique anime id's
         $animeIDs = $userLibraries->unique('anime_id')
             ->pluck('anime_id');
 
         foreach ($animeIDs as $animeID) {
-            // Find or create media stat for the anime.
+            // Find or create media stat for the anime
             $mediaStat = MediaStat::firstOrCreate([
                 'model_type' => Anime::class,
                 'model_id' => $animeID,
             ]);
 
-            // Get all anime records from the library
+            // Get all current anime records from user library
             $animeInLibrary = $userLibraries->where('anime_id', '=', $animeID);
 
             // Get library status' for the anime
@@ -66,6 +68,7 @@ class CalculateMediaStats extends Command
             $onHoldCount = $animeInLibrary->where('status', '=', UserLibraryStatus::OnHold);
             $droppedCount = $animeInLibrary->where('status', '=', UserLibraryStatus::Dropped);
 
+            // Update media stat
             $mediaStat->update([
                 'planning_count'    => $planningCount->values()[0]['COUNT(*)'] ?? 0,
                 'watching_count'    => $watchingCount->values()[0]['COUNT(*)'] ?? 0,

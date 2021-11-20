@@ -706,7 +706,7 @@ class Anime extends KModel implements HasMedia
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_STATS_SECONDS, function () {
-            return $this->stats()->get();
+            return $this->stats;
         });
     }
 
@@ -717,7 +717,8 @@ class Anime extends KModel implements HasMedia
      */
     public function stats(): HasOne
     {
-        return $this->hasOne(MediaStat::class, 'model_id')->where('model_type', Anime::class);
+        return $this->hasOne(MediaStat::class, 'model_id')
+            ->where('model_type', Anime::class);
     }
 
     /**
