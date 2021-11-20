@@ -38,8 +38,6 @@ class CreateAnimesTable extends Migration
             $table->unsignedBigInteger('status_id')->nullable();
             $table->integer('episode_count')->default(0);
             $table->integer('season_count')->default(0);
-            $table->unsignedBigInteger('rating_count')->default(0);
-            $table->double('rating_average')->default(0.0);
             $table->string('video_url')->nullable();
             $table->date('first_aired')->nullable();
             $table->date('last_aired')->nullable();
