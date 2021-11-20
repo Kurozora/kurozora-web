@@ -107,6 +107,7 @@
                                     x-transition:leave="ease-in duration-200 delay-200 transform"
                                     x-transition:leave-start="opacity-100 scale-100"
                                     x-transition:leave-end="opacity-0 scale-75"
+                                    :disabled="true"
                         >
                             {{ __('Characters') }}
                         </x-nav-link>
@@ -119,6 +120,7 @@
                                     x-transition:leave="ease-in duration-200 delay-150 transform"
                                     x-transition:leave-start="opacity-100 scale-100"
                                     x-transition:leave-end="opacity-0 scale-75"
+                                    :disabled="true"
                         >
                             {{ __('People') }}
                         </x-nav-link>
@@ -131,6 +133,7 @@
                                     x-transition:leave="ease-in duration-200 delay-100 transform"
                                     x-transition:leave-start="opacity-100 scale-100"
                                     x-transition:leave-end="opacity-0 scale-75"
+                                    :disabled="true"
                         >
                             {{ __('Studios') }}
                         </x-nav-link>
@@ -252,15 +255,24 @@
                     {{ __('Genres') }}
                 </x-responsive-nav-link>
 
-                <x-responsive-nav-link href="#">
+                <x-responsive-nav-link
+                    href="#"
+                    :disabled="true"
+                >
                     {{ __('Characters') }}
                 </x-responsive-nav-link>
 
-                <x-responsive-nav-link href="#">
+                <x-responsive-nav-link
+                    href="#"
+                    :disabled="true"
+                >
                     {{ __('People') }}
                 </x-responsive-nav-link>
 
-                <x-responsive-nav-link href="#">
+                <x-responsive-nav-link
+                    href="#"
+                    :disabled="true"
+                >
                     {{ __('Studios') }}
                 </x-responsive-nav-link>
             </div>
