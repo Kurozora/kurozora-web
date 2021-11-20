@@ -52,7 +52,7 @@ class Anime extends KModel implements HasMedia
     const MAX_WEB_SEARCH_RESULTS = 5;
 
     // Minimum ratings required to calculate average
-    const MINIMUM_RATINGS_REQUIRED = 30;
+    const MINIMUM_RATINGS_REQUIRED = 130;
 
     // Maximum relationships fetch limit
     const MAXIMUM_RELATIONSHIPS_LIMIT = 10;

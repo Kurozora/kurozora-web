@@ -66,39 +66,41 @@ class CalculateAnimeRatings extends Command
             // Total amount of ratings this Anime has
             $totalRatingCount = $animeRatingForAnime->sum('COUNT(*)');
 
-            // Average score for this Anime
-            $basicAverageRating = $animeRatingForAnime->avg('rating');
+            if ($totalRatingCount >= Anime::MINIMUM_RATINGS_REQUIRED) {
+                // Average score for this Anime
+                $basicAverageRating = $animeRatingForAnime->avg('rating');
 
-            // Calculate weighted rating
-            $weightedRating = ($totalRatingCount / ($totalRatingCount + Anime::MINIMUM_RATINGS_REQUIRED)) * $basicAverageRating + (Anime::MINIMUM_RATINGS_REQUIRED / ($totalRatingCount + Anime::MINIMUM_RATINGS_REQUIRED)) * $meanAverageRating;
+                // Calculate weighted rating
+                $weightedRating = ($totalRatingCount / ($totalRatingCount + Anime::MINIMUM_RATINGS_REQUIRED)) * $basicAverageRating + (Anime::MINIMUM_RATINGS_REQUIRED / ($totalRatingCount + Anime::MINIMUM_RATINGS_REQUIRED)) * $meanAverageRating;
 
-            // Get count of ratings from 0.5 to 5.0
-            $rating1 = $animeRatingForAnime->where('rating', '=', 0.5);
-            $rating2 = $animeRatingForAnime->where('rating', '=', 1.0);
-            $rating3 = $animeRatingForAnime->where('rating', '=', 1.5);
-            $rating4 = $animeRatingForAnime->where('rating', '=', 2.0);
-            $rating5 = $animeRatingForAnime->where('rating', '=', 2.5);
-            $rating6 = $animeRatingForAnime->where('rating', '=', 3.0);
-            $rating7 = $animeRatingForAnime->where('rating', '=', 3.5);
-            $rating8 = $animeRatingForAnime->where('rating', '=', 4.0);
-            $rating9 = $animeRatingForAnime->where('rating', '=', 4.5);
-            $rating_10 = $animeRatingForAnime->where('rating', '=', 5.0);
+                // Get count of ratings from 0.5 to 5.0
+                $rating1 = $animeRatingForAnime->where('rating', '=', 0.5);
+                $rating2 = $animeRatingForAnime->where('rating', '=', 1.0);
+                $rating3 = $animeRatingForAnime->where('rating', '=', 1.5);
+                $rating4 = $animeRatingForAnime->where('rating', '=', 2.0);
+                $rating5 = $animeRatingForAnime->where('rating', '=', 2.5);
+                $rating6 = $animeRatingForAnime->where('rating', '=', 3.0);
+                $rating7 = $animeRatingForAnime->where('rating', '=', 3.5);
+                $rating8 = $animeRatingForAnime->where('rating', '=', 4.0);
+                $rating9 = $animeRatingForAnime->where('rating', '=', 4.5);
+                $rating_10 = $animeRatingForAnime->where('rating', '=', 5.0);
 
-            // Update media stat
-            $mediaStat->update([
-                'rating_1' => $rating1->values()[0]['COUNT(*)'] ?? 0,
-                'rating_2' => $rating2->values()[0]['COUNT(*)'] ?? 0,
-                'rating_3' => $rating3->values()[0]['COUNT(*)'] ?? 0,
-                'rating_4' => $rating4->values()[0]['COUNT(*)'] ?? 0,
-                'rating_5' => $rating5->values()[0]['COUNT(*)'] ?? 0,
-                'rating_6' => $rating6->values()[0]['COUNT(*)'] ?? 0,
-                'rating_7' => $rating7->values()[0]['COUNT(*)'] ?? 0,
-                'rating_8' => $rating8->values()[0]['COUNT(*)'] ?? 0,
-                'rating_9' => $rating9->values()[0]['COUNT(*)'] ?? 0,
-                'rating_10' => $rating_10->values()[0]['COUNT(*)'] ?? 0,
-                'rating_average' => $weightedRating,
-                'rating_count' => $totalRatingCount,
-            ]);
+                // Update media stat
+                $mediaStat->update([
+                    'rating_1' => $rating1->values()[0]['COUNT(*)'] ?? 0,
+                    'rating_2' => $rating2->values()[0]['COUNT(*)'] ?? 0,
+                    'rating_3' => $rating3->values()[0]['COUNT(*)'] ?? 0,
+                    'rating_4' => $rating4->values()[0]['COUNT(*)'] ?? 0,
+                    'rating_5' => $rating5->values()[0]['COUNT(*)'] ?? 0,
+                    'rating_6' => $rating6->values()[0]['COUNT(*)'] ?? 0,
+                    'rating_7' => $rating7->values()[0]['COUNT(*)'] ?? 0,
+                    'rating_8' => $rating8->values()[0]['COUNT(*)'] ?? 0,
+                    'rating_9' => $rating9->values()[0]['COUNT(*)'] ?? 0,
+                    'rating_10' => $rating_10->values()[0]['COUNT(*)'] ?? 0,
+                    'rating_average' => $weightedRating,
+                    'rating_count' => $totalRatingCount,
+                ]);
+            }
         }
 
         return Command::SUCCESS;
