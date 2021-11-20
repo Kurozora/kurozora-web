@@ -33,6 +33,8 @@ class CreateMediaStatsTable extends Migration
             $table->unsignedBigInteger('rating_8')->default(0);
             $table->unsignedBigInteger('rating_9')->default(0);
             $table->unsignedBigInteger('rating_10')->default(0);
+            $table->double('rating_average')->default(0.0);
+            $table->unsignedBigInteger('rating_count')->default(0);
             $table->timestamps();
         });
 
