@@ -17,6 +17,7 @@ use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphMany;
@@ -295,6 +296,8 @@ class Anime extends Resource
             HasMany::make('Staff', 'staff', AnimeStaff::class),
 
             HasMany::make('Studios', 'anime_studios', AnimeStudio::class),
+
+            HasOne::make('Stats', 'stats', MediaStat::class),
 
             BelongsToMany::make('Moderators', 'moderators', User::class)
                 // @TODO
