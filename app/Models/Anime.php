@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -66,6 +67,7 @@ class Anime extends KModel implements HasMedia
     const CACHE_KEY_RELATIONS_SECONDS = 120 * 60;
     const CACHE_KEY_SEASONS_SECONDS = 120 * 60;
     const CACHE_KEY_STAFF_SECONDS = 120 * 60;
+    const CACHE_KEY_STATS_SECONDS = 120 * 60;
     const CACHE_KEY_STUDIOS_SECONDS = 120 * 60;
 
     // Table name
@@ -690,6 +692,32 @@ class Anime extends KModel implements HasMedia
     public function relations(): MorphMany
     {
         return $this->morphMany(MediaRelation::class, 'model');
+    }
+
+    /**
+     * Returns the media relations.
+     *
+     * @return mixed
+     */
+    public function getStats(): mixed
+    {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'anime.stats', 'id' => $this->id]);
+
+        // Retrieve or save cached result
+        return Cache::remember($cacheKey, self::CACHE_KEY_STATS_SECONDS, function () {
+            return $this->stats()->get();
+        });
+    }
+
+    /**
+     * The media stats of this anime.
+     *
+     * @return HasOne
+     */
+    public function stats(): HasOne
+    {
+        return $this->hasOne(MediaStat::class, 'model_id')->where('model_type', Anime::class);
     }
 
     /**
