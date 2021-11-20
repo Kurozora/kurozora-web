@@ -25,18 +25,18 @@ class AnimeStatsResource extends JsonResource
     {
         return [
             'ratingCountList' => [
-                $this->resource->rating_1,
-                $this->resource->rating_2,
-                $this->resource->rating_3,
-                $this->resource->rating_4,
-                $this->resource->rating_5,
-                $this->resource->rating_6,
-                $this->resource->rating_7,
-                $this->resource->rating_8,
-                $this->resource->rating_9,
-                $this->resource->rating_10,
+                round($this->resource->rating_1, 1),
+                round($this->resource->rating_2, 1),
+                round($this->resource->rating_3, 1),
+                round($this->resource->rating_4, 1),
+                round($this->resource->rating_5, 1),
+                round($this->resource->rating_6, 1),
+                round($this->resource->rating_7, 1),
+                round($this->resource->rating_8, 1),
+                round($this->resource->rating_9, 1),
+                round($this->resource->rating_10, 1),
             ],
-            'ratingAverage' => $this->resource->rating_average,
+            'ratingAverage' => round($this->resource->rating_average, 1),
             'ratingCount' => $this->resource->rating_count,
         ];
     }
