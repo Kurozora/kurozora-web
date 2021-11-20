@@ -54,7 +54,7 @@ class AnimeResourceBasic extends JsonResource
                 'status'                => $this->resource->status->only(['name', 'description', 'color']),
                 'episodeCount'          => $this->resource->episode_count,
                 'seasonCount'           => $this->resource->season_count,
-                'userRating'            => AnimeStatsResource::make($this->resource->getStats()),
+                'stats'                 => AnimeStatsResource::make($this->resource->getStats()),
                 'firstAired'            => $this->resource->first_aired?->timestamp,
                 'lastAired'             => $this->resource->last_aired?->timestamp,
                 'duration'              => $this->resource->duration_string,
