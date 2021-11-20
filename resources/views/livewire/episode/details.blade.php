@@ -6,7 +6,7 @@
     <x-slot name="meta">
         <meta property="og:title" content="{{ __('Episode :x', ['x' => $episode->number_total]) }} | {{ $episode->title }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ $episode->synopsis }}" />
-        <meta property="og:image" content="{{ $episode->banner_image_url ?? asset('images/static/placeholders/episode_banner.webp') }}" />
+        <meta property="og:image" content="{{ $episode->banner_image_url ?? $season->poster_image_url ?? asset('images/static/placeholders/episode_banner.webp') }}" />
         <meta property="og:type" content="video.episode" />
         <meta property="video:duration" content="{{ $episode->duration }}" />
         <meta property="video:release_date" content="{{ $episode->first_aired }}" />
@@ -21,7 +21,7 @@
         <div class="relative">
             <div class="flex flex-no-wrap md:relative md:h-full">
                 <picture class="relative w-full overflow-hidden">
-                    <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $episode->banner_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}" style="aspect-ratio: 16/9;">
+                    <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $episode->banner_image_url ?? $season->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}" style="aspect-ratio: 16/9;">
                 </picture>
             </div>
 
