@@ -36,11 +36,13 @@
         @foreach($exploreCategories as $key => $exploreCategory)
             @switch($exploreCategory->type)
             @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
-                <section class="flex pb-8 overflow-x-scroll no-scrollbar">
-                    <div class="flex flex-nowrap gap-4">
-                        @foreach($exploreCategory->explore_category_items as $categoryItem)
-                            <x-lockups.banner-lockup :anime="$categoryItem->model" />
-                        @endforeach
+                <section class="pb-8">
+                    <div class="flex overflow-x-scroll no-scrollbar">
+                        <div class="flex flex-nowrap gap-4">
+                            @foreach($exploreCategory->explore_category_items as $categoryItem)
+                                <x-lockups.banner-lockup :anime="$categoryItem->model" />
+                            @endforeach
+                        </div>
                     </div>
                 </section>
                 @break
@@ -52,7 +54,7 @@
                         </x-slot>
 
                         <x-slot name="action">
-                            <x-simple-link href="#">{{ __('See All') }}</x-simple-link>
+                            <x-simple-link href="#" :disabled="true">{{ __('See All') }}</x-simple-link>
                         </x-slot>
                     </x-section-nav>
 
@@ -124,7 +126,7 @@
                             </x-slot>
 
                             <x-slot name="action">
-                                <x-simple-link href="#">{{ __('See All') }}</x-simple-link>
+                                <x-simple-link href="#" :disabled="true">{{ __('See All') }}</x-simple-link>
                             </x-slot>
                         </x-section-nav>
 
@@ -147,7 +149,7 @@
                             </x-slot>
 
                             <x-slot name="action">
-                                <x-simple-link href="#">{{ __('See All') }}</x-simple-link>
+                                <x-simple-link href="#" :disabled="true">{{ __('See All') }}</x-simple-link>
                             </x-slot>
                         </x-section-nav>
 
