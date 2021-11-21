@@ -52,7 +52,7 @@ class Anime extends KModel implements HasMedia
     const MAX_WEB_SEARCH_RESULTS = 5;
 
     // Minimum ratings required to calculate average
-    const MINIMUM_RATINGS_REQUIRED = 30;
+    const MINIMUM_RATINGS_REQUIRED = 130;
 
     // Maximum relationships fetch limit
     const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
@@ -512,8 +512,9 @@ class Anime extends KModel implements HasMedia
         return Cache::remember($cacheKey, self::CACHE_KEY_EPISODES_SECONDS, function () use ($whereBetween, $limit) {
             $episodes = $this->episodes();
 
-            if (!empty($whereBetween))
-                $episodes->whereBetween('first_aired', $whereBetween);
+            if (!empty($whereBetween)) {
+                $episodes->whereBetween(self::TABLE_NAME . '.first_aired', $whereBetween);
+            }
 
             return $episodes->limit($limit)->get();
         });
