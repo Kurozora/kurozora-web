@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AppTheme;
 use App\Helpers\JSONResult;
 use App\Http\Resources\AppThemeResource;
-use Auth;
+use App\Models\AppTheme;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -49,11 +48,11 @@ class AppThemeController extends Controller
     function download(AppTheme $theme): Response
     {
         // Get the auth user
-        $user = Auth::user();
-
-        if (empty($user->receipt) || !$user->receipt->is_subscribed ?? true) {
-            throw new AuthorizationException('Premium themes are only available to pro users.');
-        }
+//        $user = Auth::user();
+//
+//        if (empty($user->receipt) || !$user->receipt->is_subscribed ?? true) {
+//            throw new AuthorizationException('Premium themes are only available to pro users.');
+//        }
 
         // Increment the download count of the theme
         $theme->update([
