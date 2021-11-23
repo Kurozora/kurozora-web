@@ -249,6 +249,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     function getCalendar(): string
     {
+        /** @var Anime[] $animes */
         $animes = $this->reminderAnime()->get();
 
         // Find location of cached data

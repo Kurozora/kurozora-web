@@ -513,7 +513,7 @@ class Anime extends KModel implements HasMedia
             $episodes = $this->episodes();
 
             if (!empty($whereBetween)) {
-                $episodes->whereBetween(self::TABLE_NAME . '.first_aired', $whereBetween);
+                $episodes->whereBetween('episodes.first_aired', $whereBetween);
             }
 
             return $episodes->limit($limit)->get();
