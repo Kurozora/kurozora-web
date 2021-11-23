@@ -11,6 +11,6 @@ return [
     |
     */
 
-    'twitter' => 'KurozoraApp'
+    'twitter' => env('APP_TWITTER_HANDLE', '@KurozoraApp'),
 
 ];

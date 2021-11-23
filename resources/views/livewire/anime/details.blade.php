@@ -6,10 +6,47 @@
     <x-slot name="meta">
         <meta property="og:title" content="{{ $anime->title }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ $anime->synopsis }}" />
-        <meta property="og:image" content="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" />
+        <meta property="og:image" content="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="video.tv_show" />
         <meta property="video:duration" content="{{ $anime->duration }}" />
         <meta property="video:release_date" content="{{ $anime->first_aired }}" />
+        <meta property="twitter:title" content="{{ $anime->title }} — {{ config('app.name') }}" />
+        <meta property="twitter:description" content="{{ $anime->synopsis }}" />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:image" content="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
+        <meta property="twitter:image:alt" content="{{ $anime->synopsis }}" />
+        <link rel="canonical" href="{{ route('anime.details', $anime) }}">
+        <x-misc.schema>
+            "@type":"TVSeries",
+            "url":"/anime/{{ $anime->slug }}/",
+            "name": "{{ $anime->title }}",
+            "alternateName": "{{ $anime->original_title }}",
+            "image": "{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
+            "description": "{{ $anime->synopsis }}",
+            "aggregateRating": {
+                "@type":"AggregateRating",
+                "ratingCount": {{ $anime->stats->rating_count }},
+                "bestRating": 5,
+                "worstRating": 0,
+                "ratingValue": {{ $anime->stats->rating_average }}
+            },
+            "contentRating": "{{ $anime->tv_rating->name }}",
+            "genre": {!! $anime->genres()->pluck('name') !!},
+            "datePublished": "{{ $anime->first_aired?->format('Y-m-d') }}",
+            "keywords": "anime{{ (',' . $anime->keywords) ?? '' }}",
+            "creator":[
+                {
+                    "@type":"Organization",
+                    "url":"/studio/{{ $anime->studios?->firstWhere('is_studio', '=', true)?->id ?? $anime->studios->first()?->id }}/"
+                }
+            ],
+            "trailer": {
+                "@type":"VideoObject",
+                "name":"{{ $anime->title }}",
+                "embedUrl": "{{ $anime->video_url }}",
+                "description":"Official Trailer"
+            }
+        </x-misc.schema>
     </x-slot>
 
     <x-slot name="appArgument">

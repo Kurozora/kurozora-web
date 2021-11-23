@@ -6,6 +6,7 @@
         {{ $meta ?? '' }}
         <meta property="og:url" content="{{ url()->current() }}" />
         <meta property="og:site_name" content="{{ config('app.name') }}" />
+        <meta property="twitter:site" content="{{ config('social.twitter') }}" />
 
         @desktop
         @else
