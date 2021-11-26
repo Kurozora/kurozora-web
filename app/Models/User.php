@@ -194,17 +194,17 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     {
         /** @var Session $session */
         $session = $this->sessions()
-            ->orderBy('last_activity_at', 'desc')
+            ->orderBy('last_activity', 'desc')
             ->first();
 
         if ($session === null)
             return UserActivityStatus::Offline();
 
         // Seen within the last 5 minutes
-        if ($session->last_activity_at >= now()->subMinutes(5)) {
+        if ($session->last_activity >= now()->subMinutes(5)->unix()) {
             return UserActivityStatus::Online();
         } // Seen within the last 15 minutes
-        else if ($session->last_activity_at >= now()->subMinutes(15)) {
+        else if ($session->last_activity >= now()->subMinutes(15)->unix()) {
             return UserActivityStatus::SeenRecently();
         }
 
@@ -444,27 +444,16 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             $ipAddress = request()->ip();
         }
 
-        try {
-            $sessionID = request()->session()->getId();
-        } catch (RuntimeException $e) {
-            // Laravel session doesn't exist on API requests, so empty string is used instead.
-            $sessionID = '';
-        }
+        $sessionID = session()->getId();
 
-        $session = Session::create([
-            'session_id'        => $sessionID,
-            'user_id'           => $this->id,
-            'secret'            => Str::random(128),
-            'expires_at'        => now()->addDays(Session::VALID_FOR_DAYS),
-            'last_activity_at'  => now(),
-            'ip_address'        => $ipAddress,
-
-            // Platform information
-            'platform'          => $options->get('platform'),
-            'platform_version'  => $options->get('platform_version'),
-            'device_vendor'     => $options->get('device_vendor'),
-            'device_model'      => $options->get('device_model'),
-        ]);
+        $session = Session::firstWhere('id', $sessionID);
+        $session->secret = Str::random(128);
+        $session->ip_address = $ipAddress;
+        $session->expires_at = now()->addDays(Session::VALID_FOR_DAYS);
+        $session->platform = $options->get('platform');
+        $session->platform_version = $options->get('platform_version');
+        $session->device_vendor = $options->get('device_vendor');
+        $session->device_model = $options->get('device_model');
 
         // Dispatch job to retrieve location
         if ($options->get('retrieve_location', true)) {
@@ -495,7 +484,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         }
 
         return $this->sessions()
-            ->where('session_id', $sessionID)
+            ->where('id', $sessionID)
             ->delete();
     }
 

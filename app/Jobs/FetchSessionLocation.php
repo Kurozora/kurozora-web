@@ -49,17 +49,14 @@ class FetchSessionLocation implements ShouldQueue
         $data = $this->getDataFromAPI();
 
         // Add IP info to the session
-        $this->session->city = (isset($data->city)) ? $data->city : null;
-        $this->session->region = (isset($data->region)) ? $data->region : null;
-        $this->session->country = (isset($data->country)) ? $data->country : null;
+        $this->session->city = $data->city ?? null;
+        $this->session->region = $data->region ?? null;
+        $this->session->country = $data->country ?? null;
 
         if ($coordinates = $this->getCoordinates($data)) {
             $this->session->latitude = $coordinates['lat'];
             $this->session->longitude = $coordinates['lon'];
         }
-
-        // Save the session
-        $this->session->save();
     }
 
     /**
@@ -72,7 +69,6 @@ class FetchSessionLocation implements ShouldQueue
     {
         // Get the IP in question and query the API
         $ip = $this->session->ip_address;
-
         $rawContent = file_get_contents('https://ipinfo.io/' . $ip . '/json');
 
         // Attempt to decode the content

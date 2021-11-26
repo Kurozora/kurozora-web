@@ -5,7 +5,6 @@ namespace App\Http\Livewire\Profile;
 use App\Models\Session;
 use Auth;
 use Browser;
-use Carbon\Carbon;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -79,7 +78,7 @@ class SignOutOtherSessionsForm extends Component
     protected function deleteOtherSessionRecords()
     {
        Session::where('user_id', Auth::user()->id)
-           ->where('session_id', '!=', request()->session()->getId())
+           ->where('id', '!=', session()->getId())
            ->delete();
     }
 
@@ -91,18 +90,16 @@ class SignOutOtherSessionsForm extends Component
     public function getSessionsProperty(): Collection
     {
         $otherSessions = Session::where('user_id', Auth::user()->id)
-            ->where('session_id', '!=', request()->session()->getId())
-            ->orderBy('last_activity_at', 'desc')
+            ->where('id', '!=', session()->getId())
+            ->orderBy('last_activity', 'desc')
             ->get();
 
         $currentSession = Session::where('user_id', Auth::user()->id)
-            ->where('session_id', request()->session()->getId())
+            ->where('id', session()->getId())
             ->first();
 
-        return collect(
-            $otherSessions->prepend($currentSession)
-        )
-            ->where('session_id', '!=', null)
+        return $otherSessions->prepend($currentSession)
+            ->where('id', '!=', null)
             ->map(function (Session $session) {
             return (object) [
                 'browser'           => Browser::detect(),
@@ -110,8 +107,8 @@ class SignOutOtherSessionsForm extends Component
                 'platform_version'  => $session->platform_version,
                 'device_model'      => $session->device_model,
                 'ip_address'        => $session->ip_address,
-                'is_current_device' => $session->session_id === request()->session()->getId(),
-                'last_activity_at'  => Carbon::parse($session->last_activity_at)->diffForHumans(),
+                'is_current_device' => $session->id === session()->getId(),
+                'last_activity'     => $session->last_activity->diffForHumans(),
             ];
         });
     }

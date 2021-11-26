@@ -32,7 +32,7 @@ class SessionFactory extends Factory
         return [
             'user_id'           => $user,
             'expires_at'        => now()->addDays(90),
-            'last_activity_at'  => now(),
+            'last_activity'     => now()->unix(),
             'ip_address'        => $this->faker->ipv4,
             'apn_device_token'  => null,
             'secret'            => Str::random(128),

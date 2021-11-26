@@ -3479,8 +3479,8 @@
                     "type": "NewSession",
                     "isRead": true,
                     "data": {
-                      "ip": "127.0.0.1",
-                      "session_id": 2
+                      "id": 2,
+                      "ip": "127.0.0.1"
                     },
                     "string": "A new client has logged in to your account. (IP: 127.0.0.1)",
                     "createdAt": "2020-07-27 13:57:12"
