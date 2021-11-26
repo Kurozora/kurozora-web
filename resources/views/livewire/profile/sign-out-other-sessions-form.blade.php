@@ -41,7 +41,7 @@
                                     @if ($session->is_current_device)
                                         <span class="text-green-500 font-semibold">{{ __('This device') }}</span>
                                     @else
-                                        {{ __('Last active') }} {{ $session->last_activity_at }}
+                                        {{ __('Last active') }} {{ $session->last_activity }}
                                     @endif
                                 </div>
                             </div>
