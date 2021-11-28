@@ -5,9 +5,17 @@ namespace App\Http\Resources;
 use App\Models\Session;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Carbon;
 
 class SessionResource extends JsonResource
 {
+    /**
+     * The resource instance.
+     *
+     * @var Session $resource
+     */
+    public $resource;
+
     /**
      * Transform the resource into an array.
      *
@@ -16,16 +24,13 @@ class SessionResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var Session $session */
-        $session = $this->resource;
-
         $resource = [
-            'id'            => $session->id,
+            'id'            => $this->resource->id,
             'type'          => 'sessions',
-            'href'          => route('api.me.sessions.details', $session, false),
+            'href'          => route('api.me.sessions.details', $this->resource, false),
             'attributes'    => [
-                'ipAddress'         => $session->ip_address,
-                'lastValidatedAt'   => $session->last_activity->format('Y-m-d H:i:s'),
+                'ipAddress'         => $this->resource->ip_address,
+                'lastValidatedAt'   => Carbon::createFromTimestamp($this->resource->last_activity)->format('Y-m-d H:i:s'),
             ]
         ];
 
@@ -33,10 +38,10 @@ class SessionResource extends JsonResource
         $relationships = [
             'relationships' => [
                 'platform' => [
-                    'data' => PlatformResource::collection([$session])
+                    'data' => PlatformResource::collection([$this->resource])
                 ],
                 'location' => [
-                    'data' => LocationResource::collection([$session])
+                    'data' => LocationResource::collection([$this->resource])
                 ]
             ]
         ];

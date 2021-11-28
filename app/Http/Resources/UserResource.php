@@ -10,6 +10,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class UserResource extends JsonResource
 {
     /**
+     * The resource instance.
+     *
+     * @var User $resource
+     */
+    public $resource;
+
+    /**
      * Whether to include the given session in the resource.
      *
      * @var bool $shouldIncludeSession
@@ -27,10 +34,7 @@ class UserResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var User $user */
-        $user = $this->resource;
-
-        $resource = UserResourceBasic::make($user)->toArray($request);
+        $resource = UserResourceBasic::make($this->resource)->toArray($request);
 
         // Add additional data to the resource
         $relationships = [];
@@ -39,8 +43,8 @@ class UserResource extends JsonResource
 
         if ($this->shouldIncludeSession) {
             $resource['attributes'] = array_merge($resource['attributes'], [
-                'email'         => $user->email,
-                'siwaIsEnabled' => !empty($user->siwa_id)
+                'email'         => $this->resource->email,
+                'siwaIsEnabled' => !empty($this->resource->siwa_id)
             ]);
             $relationships = array_merge($relationships, $this->getSessionRelationship());
         }
@@ -57,12 +61,9 @@ class UserResource extends JsonResource
      */
     protected function getBadgeRelationship(): array
     {
-        /** @var User $user */
-        $user = $this->resource;
-
         return [
             'badges' => [
-                'data' => BadgeResource::collection($user->badges)
+                'data' => BadgeResource::collection($this->resource->badges)
             ]
         ];
     }

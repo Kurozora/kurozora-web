@@ -9,6 +9,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class LocationResource extends JsonResource
 {
     /**
+     * The resource instance.
+     *
+     * @var Session $resource
+     */
+    public $resource;
+
+    /**
      * Transform the resource into an array.
      *
      * @param  Request  $request
@@ -16,17 +23,14 @@ class LocationResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var Session $session */
-        $session = $this->resource;
-
         return [
             'type'          => 'locations',
             'attributes'    => [
-                'city'          => $session->city,
-                'region'        => $session->region,
-                'country'       => $session->country,
-                'latitude'      => $session->latitude,
-                'longitude'     => $session->longitude
+                'city'          => $this->resource->city,
+                'region'        => $this->resource->region,
+                'country'       => $this->resource->country,
+                'latitude'      => $this->resource->latitude,
+                'longitude'     => $this->resource->longitude
             ]
         ];
     }

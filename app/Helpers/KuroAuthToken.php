@@ -20,10 +20,10 @@ class KuroAuthToken {
     /**
      * Checks if an auth token has a valid format.
      *
-     * @param string $token
+     * @param string|null $token
      * @return bool
      */
-    private static function tokenHasValidFormat(string $token): bool
+    private static function tokenHasValidFormat(?string $token): bool
     {
         if ($token === null) {
             return false;
