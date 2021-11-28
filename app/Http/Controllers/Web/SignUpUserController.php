@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Actions\Web\Auth\AttemptToAuthenticate;
 use App\Actions\Web\Auth\PrepareAuthenticatedSession;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\SignUpRequest;
 use App\Models\User;
-use Auth;
 use Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
@@ -64,11 +64,9 @@ class SignUpUserController extends Controller
 
         event(new Registered($newUser));
 
-        Session::flash('success', __('Account created successfully! Please check your email for confirmation.'));
-
-        Auth::login($newUser);
-
         return $this->loginPipeline($request)->then(function () {
+            Session::flash('success', __('Account created successfully! Please check your email for confirmation.'));
+
             return redirect()->intended();
         });
     }
@@ -82,6 +80,7 @@ class SignUpUserController extends Controller
     protected function loginPipeline(SignUpRequest $request): Pipeline
     {
         return (new Pipeline(app()))->send($request)->through(array_filter([
+            AttemptToAuthenticate::class,
             PrepareAuthenticatedSession::class,
         ]));
     }
