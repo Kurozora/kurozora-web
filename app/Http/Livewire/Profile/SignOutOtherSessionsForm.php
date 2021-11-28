@@ -9,6 +9,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -108,7 +109,7 @@ class SignOutOtherSessionsForm extends Component
                 'device_model'      => $session->device_model,
                 'ip_address'        => $session->ip_address,
                 'is_current_device' => $session->id === session()->getId(),
-                'last_activity'     => $session->last_activity->diffForHumans(),
+                'last_activity'     => Carbon::createFromTimestamp($session->last_activity)->diffForHumans(),
             ];
         });
     }
