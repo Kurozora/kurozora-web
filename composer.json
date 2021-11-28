@@ -33,6 +33,7 @@
         "laravel-notification-channels/apn": "^3.0",
         "laravel/framework": "^8.0",
         "laravel/nova": "*",
+        "laravel/sanctum": "^2.12",
         "laravel/tinker": "^2.6",
         "laravelwebdev/responsive": "^1.0",
         "league/flysystem-aws-s3-v3": "^1.0",

@@ -26,6 +26,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use Laravel\Sanctum\HasApiTokens;
 use Ramsey\Uuid\Uuid;
 use Request;
 use RuntimeException;
@@ -45,6 +46,7 @@ use URL;
 class User extends Authenticatable implements HasMedia, MustVerifyEmail, ReacterableContract
 {
     use Authorizable,
+        HasApiTokens,
         HasBannerImage,
         HasFactory,
         HasProfileImage,
@@ -197,8 +199,9 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             ->orderBy('last_activity', 'desc')
             ->first();
 
-        if ($session === null)
+        if ($session === null) {
             return UserActivityStatus::Offline();
+        }
 
         // Seen within the last 5 minutes
         if ($session->last_activity >= now()->subMinutes(5)->unix()) {
@@ -444,9 +447,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             $ipAddress = request()->ip();
         }
 
-        $sessionID = session()->getId();
-
-        $session = Session::firstWhere('id', $sessionID);
+        $session = Session::firstWhere('id', session()->getId());
         $session->secret = Str::random(128);
         $session->ip_address = $ipAddress;
         $session->expires_at = now()->addDays(Session::VALID_FOR_DAYS);
