@@ -3,12 +3,14 @@
 namespace App\Providers;
 
 use App\Models\Episode;
-use App\Policies\EpisodePolicy;
-use App\Policies\DatabaseNotificationPolicy;
-use App\Policies\SessionPolicy;
-use App\Policies\UserPolicy;
+use App\Models\PersonalAccessToken;
 use App\Models\Session;
 use App\Models\User;
+use App\Policies\DatabaseNotificationPolicy;
+use App\Policies\EpisodePolicy;
+use App\Policies\PersonalAccessTokenPolicy;
+use App\Policies\SessionPolicy;
+use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Gate;
@@ -25,6 +27,7 @@ class AuthServiceProvider extends ServiceProvider
         DatabaseNotification::class => DatabaseNotificationPolicy::class,
         User::class                 => UserPolicy::class,
         Session::class              => SessionPolicy::class,
+        PersonalAccessToken::class  => PersonalAccessTokenPolicy::class,
         Episode::class              => EpisodePolicy::class
     ];
 
