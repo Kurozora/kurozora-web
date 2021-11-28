@@ -23,8 +23,11 @@ class ImageResource extends JsonResource
      */
     public function toArray($request): array
     {
+        $components = parse_url($this->resource->getFullUrl());
+        $url = str_replace($components['host'], 'a7ca-86-91-117-161.eu.ngrok.io', $this->resource->getFullUrl());
+
         return [
-            'url'               => $this->resource->getFullUrl(),
+            'url'               => $url,
             'height'            => $this->resource->getCustomProperty('height'),
             'width'             => $this->resource->getCustomProperty('width'),
             'backgroundColor'   => $this->resource->getCustomProperty('background_color'),
