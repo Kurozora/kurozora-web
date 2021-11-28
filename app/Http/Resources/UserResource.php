@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Session;
+use App\Models\PersonalAccessToken;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -23,8 +23,8 @@ class UserResource extends JsonResource
      */
     private bool $shouldIncludeSession = false;
 
-    /** @var Session $session */
-    private Session $session;
+    /** @var PersonalAccessToken $personalAccessToken */
+    private PersonalAccessToken $personalAccessToken;
 
     /**
      * Transform the resource into an array.
@@ -46,7 +46,7 @@ class UserResource extends JsonResource
                 'email'         => $this->resource->email,
                 'siwaIsEnabled' => !empty($this->resource->siwa_id)
             ]);
-            $relationships = array_merge($relationships, $this->getSessionRelationship());
+            $relationships = array_merge($relationships, $this->getAccessTokensRelationship());
         }
 
         $resource = array_merge($resource, ['relationships' => $relationships]);
@@ -69,15 +69,15 @@ class UserResource extends JsonResource
     }
 
     /**
-     * Returns the sessions relationship for the resource.
+     * Returns the access tokens relationship for the resource.
      *
      * @return array
      */
-    protected function getSessionRelationship(): array
+    protected function getAccessTokensRelationship(): array
     {
         return [
-            'sessions' => [
-                'data' => SessionResource::collection([$this->session])
+            'accessTokens' => [
+                'data' => AccessTokenResource::collection([$this->personalAccessToken])
             ]
         ];
     }
@@ -85,12 +85,12 @@ class UserResource extends JsonResource
     /**
      * Enables including the given session in the resource.
      *
-     * @param Session $session
+     * @param PersonalAccessToken $personalAccessToken
      * @return $this
      */
-    public function includingSession(Session $session): self
+    public function includingAccessToken(PersonalAccessToken $personalAccessToken): self
     {
-        $this->session = $session;
+        $this->personalAccessToken = $personalAccessToken;
         $this->shouldIncludeSession = true;
         return $this;
     }

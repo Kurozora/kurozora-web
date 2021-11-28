@@ -38,10 +38,10 @@ class SessionResource extends JsonResource
         $relationships = [
             'relationships' => [
                 'platform' => [
-                    'data' => PlatformResource::collection([$this->resource])
+                    'data' => PlatformResource::collection([$this->resource->session_attribute])
                 ],
                 'location' => [
-                    'data' => LocationResource::collection([$this->resource])
+                    'data' => LocationResource::collection([$this->resource->session_attribute])
                 ]
             ]
         ];

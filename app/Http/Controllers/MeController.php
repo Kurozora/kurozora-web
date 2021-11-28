@@ -3,19 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
-use App\Helpers\KuroAuthToken;
+use App\Http\Requests\GetAccessTokensRequest;
 use App\Http\Requests\GetAnimeFavoritesRequest;
 use App\Http\Requests\GetFeedMessagesRequest;
 use App\Http\Requests\GetFollowersRequest;
 use App\Http\Requests\GetFollowingRequest;
-use App\Http\Requests\GetSessionsRequest;
 use App\Http\Requests\UpdateProfileRequest;
+use App\Http\Resources\AccessTokenResource;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Http\Resources\FeedMessageResource;
 use App\Http\Resources\SessionResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceBasic;
-use App\Models\Session;
+use App\Models\PersonalAccessToken;
 use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -35,14 +35,13 @@ class MeController extends Controller
     public function me(Request $request): JsonResponse
     {
         // Get authenticated session
-        $sessionID = (int) $request->input('session_id');
-        $session = Session::find($sessionID);
+        $bearerToken = $request->bearerToken();
+        $personalAccessToken = PersonalAccessToken::findToken($bearerToken);
 
         return JSONResult::success([
-            'data'                  => [
-                UserResource::make($session->user)->includingSession($session)
-            ],
-            'authenticationToken'   => KuroAuthToken::generate($session->user->id, $session->secret)
+            'data' => [
+                UserResource::make($personalAccessToken->user)->includingAccessToken($personalAccessToken)
+            ]
         ]);
     }
 
@@ -131,6 +130,31 @@ class MeController extends Controller
                 'bannerImageURL'    => $user->banner_image_url
             ],
             'message'   => $displayMessage,
+        ]);
+    }
+
+    /**
+     * Returns the current active access tokens for a user
+     *
+     * @param GetAccessTokensRequest $request
+     * @return JsonResponse
+     */
+    public function getAccessTokens(GetAccessTokensRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the authenticated user
+        $user = Auth::user();
+
+        // Get paginated sessions except current session
+        $tokens = $user->tokens()->paginate($data['limit'] ?? 25);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $tokens->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => AccessTokenResource::collection($tokens),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 
@@ -240,10 +264,10 @@ class MeController extends Controller
     /**
      * Returns the current active sessions for a user
      *
-     * @param GetSessionsRequest $request
+     * @param GetAccessTokensRequest $request
      * @return JsonResponse
      */
-    public function getSessions(GetSessionsRequest $request): JsonResponse
+    public function getSessions(GetAccessTokensRequest $request): JsonResponse
     {
         $data = $request->validated();
 
@@ -251,9 +275,7 @@ class MeController extends Controller
         $user = Auth::user();
 
         // Get paginated sessions except current session
-        $sessions = $user->sessions()->where([
-            ['secret',  '!=',   $request['session_secret']]
-        ])->paginate($data['limit'] ?? 25);
+        $sessions = $user->sessions()->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $sessions->nextPageUrl());
