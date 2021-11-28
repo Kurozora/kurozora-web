@@ -80,7 +80,7 @@ class SignOutAppSessionsForm extends Component
         return $currentTokens->map(function (PersonalAccessToken $personalAccessToken) {
             return (object) [
                 'name'          => $personalAccessToken->name,
-                'last_activity' => $personalAccessToken->last_used_at->diffForHumans(),
+                'last_activity' => $personalAccessToken->last_used_at?->diffForHumans() ?? 'now',
             ];
         });
     }
