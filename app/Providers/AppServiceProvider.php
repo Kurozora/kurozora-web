@@ -3,11 +3,13 @@
 namespace App\Providers;
 
 use App\Helpers\Settings;
+use App\Models\PersonalAccessToken;
 use Auth;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Sanctum\Sanctum;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -41,6 +43,11 @@ class AppServiceProvider extends ServiceProvider
          */
         Paginator::defaultView('pagination::tailwind');
         Paginator::defaultSimpleView('pagination::simple-tailwind');
+
+        /*
+         * Set the default Sanctum classes.
+         */
+        Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
     }
 
     /**

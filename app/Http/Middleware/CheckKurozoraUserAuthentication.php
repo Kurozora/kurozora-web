@@ -2,8 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Helpers\KuroAuthToken;
-use App\Models\Session;
 use Auth;
 use Closure;
 use Exception;
@@ -23,7 +21,6 @@ class CheckKurozoraUserAuthentication
      * @param Closure $next
      * @param ?string $parameter
      * @return mixed
-     * @throws AuthorizationException
      * @throws Exception
      */
     public function handle(Request $request, Closure $next, ?string $parameter = null): mixed
@@ -33,11 +30,8 @@ class CheckKurozoraUserAuthentication
             throw new Exception('Middleware parameter value "' . $parameter . '" is not valid.');
         }
 
-        // Get kuro auth token from header
-        $rawToken = $request->header('kuro-auth');
-
-        // Header is invalid
-        if (!is_string($rawToken)) {
+        // Bearer is empty
+        if (!$request->bearerToken()) {
             // Continue with the request if authentication is optional
             if ($parameter === 'optional') {
                 return $next($request);
@@ -46,81 +40,13 @@ class CheckKurozoraUserAuthentication
             throw new AuthorizationException('The request wasn’t accepted due to an issue with the kuro-auth token or because it’s using incorrect authentication.');
         }
 
-        // Read the authentication token
-        $token = KuroAuthToken::readToken($rawToken);
-
-        if ($token === null) {
-            throw new AuthorizationException('The request wasn’t accepted due to an issue with the kuro-auth token or because it’s using incorrect authentication.');
+        // Authenticate user
+        $user = Auth::guard('sanctum')->user();
+        if ($user) {
+            // Set user if bearer is valid
+            Auth::setUser($user);
         }
-
-        // Fetch the variables
-        $secret = $token['session_secret'];
-        $userID = $token['user_id'];
-
-        return $this->authenticate($userID, $secret, $next, $request);
-    }
-
-    /**
-     * Checks the given authentication details.
-     *
-     * @param int $userID
-     * @param string $secret
-     * @param Closure $next
-     * @param Request $request
-     * @return mixed
-     * @throws AuthorizationException
-     */
-    private function authenticate(int $userID, string $secret, Closure $next, Request $request): mixed
-    {
-        // Find the session
-        /** @var Session $session */
-        $session = Session::where([
-            ['user_id', '=', $userID],
-            ['secret',  '=', $secret]
-        ])->first();
-
-        // Check whether the session exists
-        if ($session === null) {
-            throw new AuthorizationException('The request wasn’t accepted due to an expired kuro-auth token.');
-        }
-
-        if ($session->isExpired()) {
-            $session->delete();
-
-            throw new AuthorizationException('The request wasn’t accepted due to an expired kuro-auth token.');
-        }
-
-        // Update the session's fields if necessary
-        $this->updateSession($session);
-
-        // Log the user in
-        $request->request->add([
-            'user_id'           => $userID,
-            'session_secret'    => $secret,
-            'session_id'        => $session->id
-        ]);
-
-        Auth::loginUsingId($request['user_id']);
 
         return $next($request);
-    }
-
-    /**
-     * Updates the session's fields if necessary.
-     *
-     * @param Session $session
-     */
-    private function updateSession(Session $session)
-    {
-        // Extend the session's lifetime when at least 1 day has passed
-        if ($session->expires_at->startOfDay() < now()->addDays(Session::VALID_FOR_DAYS)->startOfDay())
-        {
-            $session->expires_at = now()->addDays(Session::VALID_FOR_DAYS);
-        }
-
-        // Update the last validated date
-        $session->last_activity_at = now();
-
-        $session->save();
     }
 }

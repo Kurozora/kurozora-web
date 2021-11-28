@@ -2,16 +2,11 @@
 
 namespace App\Nova;
 
-use App\Rules\ValidateAPNDeviceToken;
-use App\Rules\ValidatePlatformName;
-use App\Rules\ValidatePlatformVersion;
-use App\Rules\ValidateVendorName;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\Heading;
+use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\MorphOne;
 use Laravel\Nova\Fields\Text;
 
 class Session extends Resource
@@ -43,7 +38,7 @@ class Session extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'platform', 'platform_version', 'device_vendor', 'device_model'
+        'id'
     ];
 
     /**
@@ -51,7 +46,7 @@ class Session extends Resource
      *
      * @var string
      */
-    public static $group = 'Users';
+    public static $group = 'Sessions';
 
     /**
      * Get the fields displayed by the resource.
@@ -61,97 +56,21 @@ class Session extends Resource
      */
     public function fields(Request $request): array
     {
-        $session = $this->resource;
-
         return [
             ID::make()->sortable(),
+
+            Text::make('IP Address', 'ip_address')
+                ->sortable(),
+
+            Text::make('User Agent')
+                ->hideFromIndex(),
+
+            Code::make('Payload'),
 
             BelongsTo::make('User')
                 ->searchable(),
 
-            Text::make('Secret Token', function() {
-                return '••••••';
-            })
-                ->onlyOnDetail()
-                ->readonly(),
-
-            Text::make('Secret Token', 'secret')
-                ->rules('required', 'max:128')
-                ->onlyOnForms(),
-
-            Text::make('Platform', function () use($session) {
-                return $session->humanReadablePlatform();
-            })
-                ->readonly()
-                ->onlyOnIndex(),
-
-            Boolean::make('Notifications', function() use($session) {
-                return $session->apn_device_token !== null;
-            })
-                ->readonly()
-                ->onlyOnIndex(),
-
-            Heading::make('Platform information'),
-
-            Text::make('Platform')
-                ->rules('required', new ValidatePlatformName)
-                ->hideFromIndex(),
-
-            Text::make('Platform version')
-                ->rules('required', new ValidatePlatformVersion)
-                ->hideFromIndex(),
-
-            Text::make('Device vendor')
-                ->rules('required', new ValidateVendorName)
-                ->hideFromIndex(),
-
-            Text::make('Device model')
-                ->rules('required', 'max:50')
-                ->hideFromIndex(),
-
-            Heading::make('Location'),
-
-            Text::make('IP Address', 'ip_address')
-                ->rules('max:45')
-                ->hideFromIndex(),
-
-            Text::make('City')
-                ->rules('max:255')
-                ->hideFromIndex(),
-
-            Text::make('Region')
-                ->rules('max:255')
-                ->hideFromIndex(),
-
-            Text::make('Country')
-                ->rules('max:255')
-                ->hideFromIndex(),
-
-            Number::make('Latitude (coordinates)', 'latitude')
-                ->step(0.001)
-                ->hideFromIndex(),
-
-            Number::make('Longitude (coordinates)', 'longitude')
-                ->step(0.001)
-                ->hideFromIndex(),
-
-            Text::make('', function () use($session) {
-                $enabled = $session->latitude !== null && $session->longitude !== null;
-                $mapsURL = 'https://www.google.com/maps/search/?api=1&query=' . $session->latitude .',' . $session->longitude;
-
-                return $enabled ? '
-                    <a href="' . $mapsURL . '" target="_blank" class="btn btn-default btn-primary">Open location in Google Maps</a>
-                ' : '<strong>Google Maps link could not be generated at this time.</strong>';
-            })
-                ->asHtml()
-                ->readonly()
-                ->onlyOnDetail(),
-
-            Heading::make('Apple Push Notifications'),
-
-            Text::make('APN device token', 'apn_device_token')
-                ->rules('max:' . ValidateAPNDeviceToken::TOKEN_LENGTH)
-                ->hideFromIndex(),
+            MorphOne::make('Session Attribute'),
         ];
     }
 

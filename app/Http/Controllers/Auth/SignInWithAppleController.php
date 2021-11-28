@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Helpers\AppleAuthKeys;
 use App\Helpers\JSONResult;
-use App\Helpers\KuroAuthToken;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignInWithAppleRequest;
 use App\Http\Requests\SignInWithAppleUpdateRequest;
 use App\Http\Resources\UserResource;
+use App\Models\PersonalAccessToken;
 use App\Models\User;
 use Exception;
 use Hash;
@@ -60,8 +60,13 @@ class SignInWithAppleController extends Controller
         // Get user or create new one
         $user = $this->getUser($payload);
 
-        // Create a session for the user
-        $session = $user->createSession([
+        // Create new token
+        $newToken = $user->createToken($user->username . '’s ' . $data['device_model']);
+        /** @var PersonalAccessToken $personalAccessToken */
+        $personalAccessToken = $newToken->accessToken;
+
+        // Create a new session attribute
+        $user->createSessionAttributes($personalAccessToken, [
             'platform'          => $data['platform'],
             'platform_version'  => $data['platform_version'],
             'device_vendor'     => $data['device_vendor'],
@@ -71,14 +76,14 @@ class SignInWithAppleController extends Controller
         // Prepare response
         $shouldSetupAccount = $user->username == null;
         $response = [
-            'authenticationToken'   => KuroAuthToken::generate($user->id, $session->secret),
+            'authenticationToken'   => $newToken->plainTextToken,
             'action'                => $shouldSetupAccount ? 'setupAccount' : 'signIn'
         ];
 
         if (!$shouldSetupAccount) {
             $response = array_merge($response, [
                 'data' => [
-                    UserResource::make($user)->includingSession($session)
+                    UserResource::make($user)->includingAccessToken($personalAccessToken)
                 ]
             ]);
         }

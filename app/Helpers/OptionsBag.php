@@ -17,8 +17,7 @@ class OptionsBag
     }
 
     /**
-     * Returns the value of an option, or the default ..
-     * .. value if the option is not present.
+     * Returns the value of an option, or the default value if the option is not present.
      *
      * @param string $key
      * @param mixed|null $default
@@ -26,10 +25,6 @@ class OptionsBag
      */
     function get(string $key, mixed $default = null): mixed
     {
-        if (isset($this->data[$key])) {
-            return $this->data[$key];
-        } else {
-            return $default;
-        }
+        return $this->data[$key] ?? $default;
     }
 }
