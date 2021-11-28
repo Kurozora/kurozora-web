@@ -44,7 +44,7 @@
                 {{ __('Sign Out App Sessions') }}
             </x-button>
 
-            <x-action-message class="ml-3" on="signedOut">
+            <x-action-message class="ml-3" on="signedOutApp">
                 {{ __('Done.') }}
             </x-action-message>
         </div>

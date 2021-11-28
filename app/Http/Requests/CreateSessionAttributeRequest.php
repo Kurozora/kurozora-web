@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\ValidateEmail;
 use App\Models\Session;
+use App\Rules\ValidateEmail;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateSessionRequest extends FormRequest
+class CreateSessionAttributeRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
