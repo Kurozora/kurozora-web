@@ -10,7 +10,6 @@ use App\Http\Resources\UserResource;
 use App\Models\LoginAttempt;
 use App\Models\PersonalAccessToken;
 use App\Models\User;
-use Auth;
 use Hash;
 use Illuminate\Http\JsonResponse;
 use Laravel\Nova\Exceptions\AuthenticationException;
@@ -90,21 +89,19 @@ class AccessTokenController
      * Updates a session's information.
      *
      * @param UpdateSessionAttributeRequest $request
+     * @param PersonalAccessToken $accessToken
      * @return JsonResponse
      */
-    function update(UpdateSessionAttributeRequest $request): JsonResponse
+    function update(UpdateSessionAttributeRequest $request, PersonalAccessToken $accessToken): JsonResponse
     {
         $data = $request->validated();
-
-        /** @var PersonalAccessToken $personalAccessToken */
-        $personalAccessToken = Auth::user()->tokens()->firstWhere('token', hash('sha256', $request->bearerToken()));
 
         // Track if anything changed
         $changedFields = [];
 
         // Update APN device token
         if ($request->has('apn_device_token')) {
-            $personalAccessToken->session_attribute->apn_device_token = $data['apn_device_token'];
+            $accessToken->session_attribute->apn_device_token = $data['apn_device_token'];
             $changedFields[] = 'APN device token';
         }
 
@@ -113,7 +110,7 @@ class AccessTokenController
 
         if (count($changedFields)) {
             $displayMessage .= 'You have updated: ' . join(', ', $changedFields) . '.';
-            $personalAccessToken->session_attribute->save();
+            $accessToken->session_attribute->save();
         } else {
             $displayMessage .= 'No information was updated.';
         }
