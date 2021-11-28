@@ -58,11 +58,14 @@ class SignOutAppSessionsForm extends Component
             ]);
         }
 
-        Auth::user()->tokens()->delete();
+        Auth::user()->tokens()
+            ->get()
+            ->each
+            ->delete();
 
         $this->confirmingSignOut = false;
 
-        $this->emit('signedOut');
+        $this->emit('signedOutApp');
     }
 
     /**

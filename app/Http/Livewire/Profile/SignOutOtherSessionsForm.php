@@ -68,7 +68,7 @@ class SignOutOtherSessionsForm extends Component
 
         $this->confirmingSignOut = false;
 
-        $this->emit('signedOut');
+        $this->emit('signedOutBrowser');
     }
 
     /**
@@ -80,6 +80,8 @@ class SignOutOtherSessionsForm extends Component
     {
        Session::where('user_id', Auth::user()->id)
            ->where('id', '!=', session()->getId())
+           ->get()
+           ->each
            ->delete();
     }
 
@@ -102,16 +104,18 @@ class SignOutOtherSessionsForm extends Component
         return $otherSessions->prepend($currentSession)
             ->where('id', '!=', null)
             ->map(function (Session $session) {
-            return (object) [
-                'browser'           => Browser::detect(),
-                'platform'          => $session->platform,
-                'platform_version'  => $session->platform_version,
-                'device_model'      => $session->device_model,
-                'ip_address'        => $session->ip_address,
-                'is_current_device' => $session->id === session()->getId(),
-                'last_activity'     => Carbon::createFromTimestamp($session->last_activity)->diffForHumans(),
-            ];
-        });
+                $sessionAttribute = $session->session_attribute;
+
+                return (object) [
+                    'browser'           => Browser::detect(),
+                    'platform'          => $sessionAttribute->platform,
+                    'platform_version'  => $sessionAttribute->platform_version,
+                    'device_model'      => $sessionAttribute->device_model,
+                    'ip_address'        => $sessionAttribute->ip_address,
+                    'is_current_device' => $session->id === session()->getId(),
+                    'last_activity'     => Carbon::createFromTimestamp($session->last_activity)->diffForHumans(),
+                ];
+            });
     }
 
     /**
