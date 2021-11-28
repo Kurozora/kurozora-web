@@ -18,7 +18,7 @@ class CreateSessionAttributesTable extends Migration
     {
         Schema::create(SessionAttribute::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('model_id');
+            $table->string('model_id');
             $table->string('model_type');
             $table->string('apn_device_token', ValidateAPNDeviceToken::TOKEN_LENGTH)->nullable()->index();
             $table->string('secret', 128);
@@ -39,6 +39,11 @@ class CreateSessionAttributesTable extends Migration
 
             // Timestamps
             $table->timestamps();
+        });
+
+        Schema::table(SessionAttribute::TABLE_NAME, function (Blueprint $table) {
+            // Set unique index constraints
+            $table->unique(['model_id', 'model_type']);
         });
     }
 
