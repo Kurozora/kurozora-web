@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Models\Session;
+use App\Models\SessionAttribute;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
@@ -14,18 +14,18 @@ class NewSession extends Notification implements ShouldQueue
     /**
      * The session object.
      *
-     * @var Session $session
+     * @var SessionAttribute $sessionA
      */
-    private Session $session;
+    private SessionAttribute $sessionAttribute;
 
     /**
      * Create a new notification instance.
      *
-     * @param Session $session
+     * @param SessionAttribute $sessionAttribute
      */
-    public function __construct(Session $session)
+    public function __construct(SessionAttribute $sessionAttribute)
     {
-        $this->session = $session;
+        $this->sessionAttribute = $sessionAttribute;
     }
 
     /**
@@ -48,8 +48,8 @@ class NewSession extends Notification implements ShouldQueue
     public function toDatabase(mixed $notifiable): array
     {
         return [
-            'sessionID' => $this->session->id,
-            'ipAddress' => $this->session->ip_address,
+            'sessionID' => $this->sessionAttribute->id,
+            'ipAddress' => $this->sessionAttribute->ip_address,
         ];
     }
 }
