@@ -36,6 +36,7 @@ class UserResourceBasic extends JsonResource
             'type'              => 'users',
             'href'              => route('api.users.profile', $this->resource, false),
             'attributes'        => [
+                'slug'              => $this->resource->slug,
                 'profile'           => ImageResource::make($this->resource->profile_image),
                 'banner'            => ImageResource::make($this->resource->banner_image),
                 'username'          => $this->resource->username,

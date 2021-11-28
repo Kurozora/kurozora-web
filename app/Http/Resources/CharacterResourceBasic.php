@@ -28,6 +28,7 @@ class CharacterResourceBasic extends JsonResource
             'type'          => 'characters',
             'href'          => route('api.characters.details', $this->resource, false),
             'attributes'    => [
+                'slug'              => $this->resource->slug,
                 'profile'           => ImageResource::make($this->resource->profile_image),
                 'name'              => $this->resource->name,
                 'nicknames'         => $this->resource->nicknames,
