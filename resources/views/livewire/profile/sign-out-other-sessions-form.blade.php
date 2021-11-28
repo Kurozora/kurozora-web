@@ -56,7 +56,7 @@
                 {{ __('Sign Out Other Sessions') }}
             </x-button>
 
-            <x-action-message class="ml-3" on="signedOut">
+            <x-action-message class="ml-3" on="signedOutBrowser">
                 {{ __('Done.') }}
             </x-action-message>
         </div>
