@@ -27,6 +27,7 @@ class GenreResource extends JsonResource
 
         return array_merge($resource, [
             'attributes'    => [
+                'slug'          => $this->resource->slug,
                 'name'          => $this->resource->name,
                 'color'         => $this->resource->color,
                 'symbol'        => ImageResource::make($this->resource->symbol_image),

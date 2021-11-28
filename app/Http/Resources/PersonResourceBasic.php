@@ -28,6 +28,7 @@ class PersonResourceBasic extends JsonResource
             'type'          => 'people',
             'href'          => route('api.people.details', $this->resource, false),
             'attributes'    => [
+                'slug'              => $this->resource->slug,
                 'profile'           => ImageResource::make($this->resource->profile_image),
                 'fullName'          => $this->resource->full_name,
                 'fullGivenName'     => $this->resource->full_given_name,
