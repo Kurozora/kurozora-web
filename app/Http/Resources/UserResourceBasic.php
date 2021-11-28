@@ -31,23 +31,21 @@ class UserResourceBasic extends JsonResource
      */
     public function toArray($request): array
     {
-        $user = $this->resource;
-
         $resource = [
-            'id'                => $user->id,
+            'id'                => $this->resource->id,
             'type'              => 'users',
-            'href'              => route('api.users.profile', $user, false),
+            'href'              => route('api.users.profile', $this->resource, false),
             'attributes'        => [
-                'profile'           => ImageResource::make($user->profile_image),
-                'banner'            => ImageResource::make($user->banner_image),
-                'username'          => $user->username,
-                'biography'         => $user->biography,
-                'activityStatus'    => $user->getActivityStatus()->description,
-                'followerCount'     => $user->getFollowerCount(),
-                'followingCount'    => $user->getFollowingCount(),
-                'reputationCount'   => $user->getReputationCount(),
-                'joinDate'          => $user->created_at->format('Y-m-d'),
-                'isPro'             => $user->isPro(),
+                'profile'           => ImageResource::make($this->resource->profile_image),
+                'banner'            => ImageResource::make($this->resource->banner_image),
+                'username'          => $this->resource->username,
+                'biography'         => $this->resource->biography,
+                'activityStatus'    => $this->resource->getActivityStatus()->description,
+                'followerCount'     => $this->resource->getFollowerCount(),
+                'followingCount'    => $this->resource->getFollowingCount(),
+                'reputationCount'   => $this->resource->getReputationCount(),
+                'joinDate'          => $this->resource->created_at->format('Y-m-d'),
+                'isPro'             => $this->resource->isPro(),
             ]
         ];
 
@@ -89,11 +87,9 @@ class UserResourceBasic extends JsonResource
      */
     protected function getPrivateDetails(): array
     {
-        $user = $this->resource;
-
         return [
             'private' => [
-                'settings' => $user->settings,
+                'settings' => $this->resource->settings,
             ]
         ];
     }

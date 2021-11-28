@@ -40,7 +40,7 @@ class SessionController extends Controller
         $user = User::where('email', $data['email'])->first();
 
         // Compare the passwords
-        if (!Hash::check($data['password'], $user->password)) {
+        if (!$user || !Hash::check($data['password'], $user->password)) {
             // Register the login attempt
             LoginAttempt::registerFailedLoginAttempt($request->ip());
 

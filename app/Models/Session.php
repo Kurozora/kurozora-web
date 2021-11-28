@@ -29,13 +29,19 @@ class Session extends KModel
     public $incrementing = false;
 
     /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
      * The attributes that should be cast.
      *
      * @var array
      */
     protected $casts = [
         'expires_at' => 'date',
-        'last_activity' => 'date',
     ];
 
     public function setApnDeviceTokenAttribute(?string $apnDeviceToken)
