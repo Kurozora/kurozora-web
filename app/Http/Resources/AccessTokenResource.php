@@ -2,17 +2,16 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Session;
+use App\Models\PersonalAccessToken;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Carbon;
 
-class SessionResource extends JsonResource
+class AccessTokenResource extends JsonResource
 {
     /**
      * The resource instance.
      *
-     * @var Session $resource
+     * @var PersonalAccessToken $resource
      */
     public $resource;
 
@@ -26,11 +25,11 @@ class SessionResource extends JsonResource
     {
         $resource = [
             'id'            => $this->resource->id,
-            'type'          => 'sessions',
-            'href'          => route('api.me.sessions.details', $this->resource, false),
+            'type'          => 'access-token',
+            'href'          => route('api.me.access-tokens.details', $this->resource, false),
             'attributes'    => [
-                'ipAddress'         => $this->resource->ip_address,
-                'lastValidatedAt'   => Carbon::createFromTimestamp($this->resource->last_activity)->format('Y-m-d H:i:s'),
+                'ipAddress'         => $this->resource->session_attribute->ip_address,
+                'lastValidatedAt'   => $this->resource->last_used_at?->format('Y-m-d H:i:s'),
             ]
         ];
 

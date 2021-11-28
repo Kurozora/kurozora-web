@@ -1,6 +1,6 @@
 <x-action-section>
     <x-slot name="title">
-        {{ __('Sessions') }}
+        {{ __('Browser Sessions') }}
     </x-slot>
 
     <x-slot name="description">
@@ -41,7 +41,7 @@
                                     @if ($session->is_current_device)
                                         <span class="text-green-500 font-semibold">{{ __('This device') }}</span>
                                     @else
-                                        {{ __('Last active') }} {{ $session->last_activity_at }}
+                                        {{ __('Last active') }} {{ $session->last_activity }}
                                     @endif
                                 </div>
                             </div>
@@ -56,7 +56,7 @@
                 {{ __('Sign Out Other Sessions') }}
             </x-button>
 
-            <x-action-message class="ml-3" on="signedOut">
+            <x-action-message class="ml-3" on="signedOutBrowser">
                 {{ __('Done.') }}
             </x-action-message>
         </div>

@@ -61,7 +61,7 @@ class TwoFactorAuthenticatedSessionController extends Controller
     {
         $browser = Browser::detect();
 
-        Auth::user()->createSession([
+        Auth::user()->createSessionAttributes([
             'platform'          => $browser->platformFamily(),
             'platform_version'  => $browser->platformVersion(),
             'device_vendor'     => $browser->deviceFamily(),

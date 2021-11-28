@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Session;
+use App\Models\SessionAttribute;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -11,7 +11,7 @@ class PlatformResource extends JsonResource
     /**
      * The resource instance.
      *
-     * @var Session
+     * @var SessionAttribute
      */
     public $resource;
 

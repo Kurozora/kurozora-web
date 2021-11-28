@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Rules\ValidateAPNDeviceToken;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateSessionRequest extends FormRequest
+class UpdateSessionAttributeRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.

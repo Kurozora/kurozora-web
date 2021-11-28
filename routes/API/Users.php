@@ -1,10 +1,10 @@
 <?php
 
+use App\Http\Controllers\AccessTokenController;
 use App\Http\Controllers\Auth\SignInWithAppleController;
 use App\Http\Controllers\FavoriteAnimeController;
 use App\Http\Controllers\FollowingController;
 use App\Http\Controllers\RegistrationController;
-use App\Http\Controllers\SessionController;
 use App\Http\Controllers\UserController;
 
 Route::prefix('/users')
@@ -12,7 +12,7 @@ Route::prefix('/users')
     ->group(function () {
         Route::post('/', [RegistrationController::class, 'signUp']);
 
-        Route::post('/signin', [SessionController::class, 'create'])
+        Route::post('/signin', [AccessTokenController::class, 'create'])
             ->name('.sign-in');
 
         Route::post('/reset-password', [UserController::class, 'resetPassword'])

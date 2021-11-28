@@ -4,7 +4,8 @@ namespace App\Helpers;
 
 use Illuminate\Support\Facades\DB;
 
-class CollectionLikeChecker {
+class CollectionLikeChecker
+{
     protected $collectionType;
     protected $collection;
     protected $userID;

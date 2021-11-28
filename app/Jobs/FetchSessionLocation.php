@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\Session;
+use App\Models\SessionAttribute;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -24,18 +24,18 @@ class FetchSessionLocation implements ShouldQueue
     /**
      * The session object.
      *
-     * @var Session $session
+     * @var SessionAttribute $sessionAttribute
      */
-    private Session $session;
+    private SessionAttribute $sessionAttribute;
 
     /**
      * Create a new job instance.
      *
-     * @param Session $session
+     * @param SessionAttribute $sessionAttribute
      */
-    public function __construct(Session $session)
+    public function __construct(SessionAttribute $sessionAttribute)
     {
-        $this->session = $session;
+        $this->sessionAttribute = $sessionAttribute;
     }
 
     /**
@@ -49,17 +49,17 @@ class FetchSessionLocation implements ShouldQueue
         $data = $this->getDataFromAPI();
 
         // Add IP info to the session
-        $this->session->city = (isset($data->city)) ? $data->city : null;
-        $this->session->region = (isset($data->region)) ? $data->region : null;
-        $this->session->country = (isset($data->country)) ? $data->country : null;
+        $this->sessionAttribute->city = $data->city ?? null;
+        $this->sessionAttribute->region = $data->region ?? null;
+        $this->sessionAttribute->country = $data->country ?? null;
 
         if ($coordinates = $this->getCoordinates($data)) {
-            $this->session->latitude = $coordinates['lat'];
-            $this->session->longitude = $coordinates['lon'];
+            $this->sessionAttribute->latitude = $coordinates['lat'];
+            $this->sessionAttribute->longitude = $coordinates['lon'];
         }
 
-        // Save the session
-        $this->session->save();
+        // Save changes
+        $this->sessionAttribute->save();
     }
 
     /**
@@ -71,8 +71,7 @@ class FetchSessionLocation implements ShouldQueue
     private function getDataFromAPI(): mixed
     {
         // Get the IP in question and query the API
-        $ip = $this->session->ip_address;
-
+        $ip = $this->sessionAttribute->ip_address;
         $rawContent = file_get_contents('https://ipinfo.io/' . $ip . '/json');
 
         // Attempt to decode the content

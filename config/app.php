@@ -38,7 +38,7 @@ return [
     | or any other location as required by the application or its packages.
     */
 
-    'version' => '1.2.0-alpha.216',
+    'version' => '1.3.0-alpha.6',
 
     /*
     |--------------------------------------------------------------------------
@@ -216,6 +216,7 @@ return [
         App\Providers\NovaServiceProvider::class,
         App\Providers\ProfileServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\SessionServiceProvider::class,
         App\Providers\UserModelServiceProvider::class,
 
     ],

@@ -2,12 +2,12 @@
 
 namespace Tests;
 
-use App\Helpers\KuroAuthToken;
 use App\Models\User;
 use Illuminate\Foundation\Mix;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Testing\Assert as PHPUnit;
 use Illuminate\Testing\TestResponse;
+use Laravel\Sanctum\Sanctum;
 use Spatie\Snapshots\MatchesSnapshots;
 use Tests\Traits\ProvidesTestAnime;
 use Tests\Traits\ProvidesTestMultipleAnime;
@@ -85,11 +85,8 @@ abstract class TestCase extends BaseTestCase
             $this->fail('Used "authHeader", but no user present.');
         }
 
-        // Create a session
-        $session = $user->createSession();
-
-        // Attach the auth header
-        $this->withHeader('kuro-auth', KuroAuthToken::generate($user->id, $session->secret));
+        // Authenticate user
+        Sanctum::actingAs($user, ['*']);
 
         return $this;
     }

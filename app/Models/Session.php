@@ -7,6 +7,7 @@ use App\Rules\ValidatePlatformVersion;
 use App\Rules\ValidateVendorName;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Session extends KModel
 {
@@ -20,14 +21,32 @@ class Session extends KModel
     const VALID_FOR_DAYS = 10;
 
     /**
-     * The attributes that should be cast.
+     * Indicates if the IDs are auto-incrementing.
      *
-     * @var array
+     * @var bool
      */
-    protected $casts = [
-        'expires_at' => 'date',
-        'last_activity_at' => 'date',
-    ];
+    public $incrementing = false;
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
+     * Bootstrap the model and its traits.
+     *
+     * @return void
+     */
+    static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function($session) {
+            $session->session_attribute()->delete();
+        });
+    }
 
     /**
      * Returns the user that owns the session.
@@ -40,28 +59,13 @@ class Session extends KModel
     }
 
     /**
-     * Returns whether or not the session is expired.
+     * The session attribute of the session.
      *
-     * @return bool
+     * @return MorphOne
      */
-    public function isExpired(): bool
+    function session_attribute(): MorphOne
     {
-        return $this->expires_at <= now();
-    }
-
-    /**
-     * Returns the platform information in a human readable format.
-     *
-     * @return string
-     */
-    function humanReadablePlatform(): string
-    {
-        if ($this->device_model == null ||
-            $this->platform == null ||
-            $this->platform_version == null)
-            return 'Unknown platform';
-
-        return $this->device_model . ' on ' . $this->platform . ' ' . $this->platform_version;
+        return $this->morphOne(SessionAttribute::class, 'model')->where('model_type', Session::class);
     }
 
     /**

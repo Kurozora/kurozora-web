@@ -3,7 +3,6 @@
 namespace Tests\Unit\Middleware;
 
 use App\Helpers\JSONResult;
-use App\Helpers\KuroAuthToken;
 use App\Http\Middleware\CheckKurozoraUserAuthentication;
 use App\Models\Session;
 use Auth;
@@ -68,7 +67,7 @@ class CheckKurozoraUserAuthenticationTest extends TestCase
     function authentication_is_not_accepted_when_the_session_is_expired()
     {
         // Create a session and expire it
-        $session = $this->user->createSession();
+        $session = $this->user->createSessionAttributes();
         $session->expires_at = now();
         $session->save();
 
@@ -87,7 +86,7 @@ class CheckKurozoraUserAuthenticationTest extends TestCase
         Carbon::setTestNow();
 
         // Create a session and subtract a day from its expiry
-        $session = $this->user->createSession();
+        $session = $this->user->createSessionAttributes();
         $session->expires_at = now()->addDays(Session::VALID_FOR_DAYS)->subDay();
         $session->save();
 
