@@ -30,7 +30,7 @@ class CheckKurozoraUserAuthentication
             throw new Exception('Middleware parameter value "' . $parameter . '" is not valid.');
         }
 
-        // Header is invalid
+        // Bearer is empty
         if (!$request->bearerToken()) {
             // Continue with the request if authentication is optional
             if ($parameter === 'optional') {
@@ -40,7 +40,12 @@ class CheckKurozoraUserAuthentication
             throw new AuthorizationException('The request wasn’t accepted due to an issue with the kuro-auth token or because it’s using incorrect authentication.');
         }
 
-        Auth::setUser(Auth::guard('sanctum')->user());
+        // Authenticate user
+        $user = Auth::guard('sanctum')->user();
+        if ($user) {
+            // Set user if bearer is valid
+            Auth::setUser($user);
+        }
 
         return $next($request);
     }

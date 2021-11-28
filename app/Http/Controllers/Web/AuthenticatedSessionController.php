@@ -64,7 +64,6 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): Application|Redirector|RedirectResponse
     {
-        Auth::user()->deleteCurrentSession();
         Auth::logout();
 
         $request->session()->invalidate();
