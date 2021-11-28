@@ -38,6 +38,7 @@ class AnimeResourceBasic extends JsonResource
                 'syoboiID'              => $this->resource->syoboi_id,
                 'traktID'               => $this->resource->trakt_id,
                 'tvdbID'                => $this->resource->tvdb_id,
+                'slug'                  => $this->resource->slug,
                 'videoUrl'              => $this->resource->video_url,
                 'poster'                => ImageResource::make($this->resource->poster_image),
                 'banner'                => ImageResource::make($this->resource->banner_image),
