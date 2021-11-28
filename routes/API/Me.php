@@ -20,6 +20,7 @@ Route::prefix('/me')
             ->middleware('auth.kurozora:optional')
             ->name('.following');
 
+        require 'Me/Access-Tokens.php';
         require 'Me/Favorite-Anime.php';
         require 'Me/Feed-Messages.php';
         require 'Me/Library.php';
