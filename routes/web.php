@@ -1,11 +1,15 @@
 <?php
 
+use App\Http\Controllers\Web\Misc\HealthCheckController;
 use App\Http\Livewire\Home;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Route;
 
 Route::get(RouteServiceProvider::HOME, Home::class)
     ->name('home');
+
+Route::get('health-check', [HealthCheckController::class, 'index'])
+    ->name('misc.health-check');
 
 // Authentication routes
 require 'Web/Authentication.php';
