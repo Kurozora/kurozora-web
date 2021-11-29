@@ -192,20 +192,20 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     public function getActivityStatus(): UserActivityStatus
     {
-        /** @var Session $session */
-        $session = $this->sessions()
-            ->orderBy('last_activity', 'desc')
+        /** @var PersonalAccessToken $personalAccessToken */
+        $personalAccessToken = $this->tokens()
+            ->orderBy('last_used_at', 'desc')
             ->first();
 
-        if ($session === null) {
+        if ($personalAccessToken === null) {
             return UserActivityStatus::Offline();
         }
 
         // Seen within the last 5 minutes
-        if ($session->last_activity >= now()->subMinutes(5)->unix()) {
+        if ($personalAccessToken->last_used_at >= now()->subMinutes(5)) {
             return UserActivityStatus::Online();
         } // Seen within the last 15 minutes
-        else if ($session->last_activity >= now()->subMinutes(15)->unix()) {
+        else if ($personalAccessToken->last_used_at >= now()->subMinutes(15)) {
             return UserActivityStatus::SeenRecently();
         }
 
