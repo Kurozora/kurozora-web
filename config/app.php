@@ -38,7 +38,7 @@ return [
     | or any other location as required by the application or its packages.
     */
 
-    'version' => '1.3.0-alpha.11',
+    'version' => '1.3.0-alpha.12',
 
     /*
     |--------------------------------------------------------------------------
@@ -206,6 +206,7 @@ return [
         /*
          * Package Service Providers...
          */
+        \SocialiteProviders\Manager\ServiceProvider::class,
 
         /*
          * Application Service Providers...

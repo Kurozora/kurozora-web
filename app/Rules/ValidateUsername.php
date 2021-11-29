@@ -41,8 +41,8 @@ class ValidateUsername implements Rule
             return false;
         }
 
-        // Check alphanumeric
-        if (!ctype_alnum($value)) {
+        // Check alphanumeric and space
+        if (!ctype_alpha(str_replace(' ', '', $value))) {
             $this->errorType = 'alpha-num';
             return false;
         }
