@@ -255,7 +255,8 @@ class Anime extends Resource
 
             Number::make('Duration')
                 ->onlyOnForms()
-                ->help('For series: The average runtime in <b>seconds</b> of a single episode.<br />For movies: The total amount of seconds the movie takes.'),
+                ->help('For series: The average runtime in <b>seconds</b> of a single episode.<br />For movies: The total amount of seconds the movie takes.')
+                ->required(),
 
             Time::make('Air time')
                 ->withTwelveHourTime()
