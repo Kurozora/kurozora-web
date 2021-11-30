@@ -3,6 +3,8 @@
 namespace App\Http\Resources;
 
 use App\Notifications\MALImportFinished;
+use App\Notifications\NewFeedMessageReply;
+use App\Notifications\NewFeedMessageReShare;
 use App\Notifications\NewFollower;
 use App\Notifications\NewSession;
 use App\Notifications\SubscriptionStatus;
@@ -13,6 +15,13 @@ use Illuminate\Notifications\DatabaseNotification;
 class NotificationResource extends JsonResource
 {
     /**
+     * The resource instance.
+     *
+     * @var DatabaseNotification $resource
+     */
+    public $resource;
+
+    /**
      * Transform the resource into an array.
      *
      * @param  Request  $request
@@ -20,19 +29,16 @@ class NotificationResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var DatabaseNotification $notification */
-        $notification = $this->resource;
-
         return [
-            'id'            => $notification->id,
+            'id'            => $this->resource->id,
             'type'          => 'notifications',
-            'href'          => route('api.me.notifications.details', $notification, false),
+            'href'          => route('api.me.notifications.details', $this->resource, false),
             'attributes'    => [
-                'type'          => $this->typeWithoutNamespace($notification),
-                'description'   => self::getNotificationDescription($notification),
-                'payload'       => $notification->data,
-                'isRead'        => ($notification->read_at != null),
-                'createdAt'     => $notification->created_at->timestamp,
+                'type'          => $this->typeWithoutNamespace($this->resource),
+                'description'   => self::getNotificationDescription($this->resource),
+                'payload'       => $this->resource->data,
+                'isRead'        => ($this->resource->read_at != null),
+                'createdAt'     => $this->resource->created_at->timestamp,
             ]
         ];
     }
@@ -58,6 +64,7 @@ class NotificationResource extends JsonResource
     static function getNotificationDescription(DatabaseNotification $notification): string
     {
         switch ($notification->type) {
+            // Session notifications
             case NewSession::class:
                 $body = 'A new client has logged in to your account.';
 
@@ -66,12 +73,24 @@ class NotificationResource extends JsonResource
                 }
 
                 return $body;
+
+            // Follower notifications
             case NewFollower::class:
                 $body = (self::hasData($notification, 'username')) ? self::getData($notification, 'username') : 'Someone';
-
                 $body .= ' has started following you.';
-
                 return $body;
+
+            // Feed notifications
+            case NewFeedMessageReply::class:
+                $body = (self::hasData($notification, 'username')) ? self::getData($notification, 'username') : 'Someone';
+                $body .= ' Replied to Your Message.';
+                return $body;
+            case NewFeedMessageReShare::class:
+                $body = (self::hasData($notification, 'username')) ? self::getData($notification, 'username') : 'Someone';
+                $body .= ' ReShared Your Message';
+                return $body;
+
+            // Misc notifications
             case MALImportFinished::class:
                 $body = 'Your "MyAnimeList" import request has been processed.';
 
