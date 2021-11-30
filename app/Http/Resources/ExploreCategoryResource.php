@@ -91,7 +91,7 @@ class ExploreCategoryResource extends JsonResource
             ExploreCategoryTypes::MostPopularShows => [
                 'shows' => [
                     'data' => AnimeResource::collection($this->resource
-                        ->most_popular_anime()
+                        ->most_popular_shows()
                         ->explore_category_items
                         ->pluck('model')
                     )

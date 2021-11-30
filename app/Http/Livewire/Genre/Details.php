@@ -70,7 +70,7 @@ class Details extends Component
             'type'      => ExploreCategoryTypes::MostPopularShows,
             'size'      => 'large'
         ]);
-        return $exploreCategory->most_popular_anime($genre);
+        return $exploreCategory->most_popular_shows($genre);
     }
 
     /**
