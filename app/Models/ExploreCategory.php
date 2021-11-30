@@ -27,7 +27,7 @@ class ExploreCategory extends KModel
      * @param Genre|null $genre
      * @return ExploreCategory
      */
-    public function most_popular_anime(?Genre $genre = null): ExploreCategory
+    public function most_popular_shows(?Genre $genre = null): ExploreCategory
     {
         if ($this->type === ExploreCategoryTypes::MostPopularShows) {
             if (empty($genre)) {

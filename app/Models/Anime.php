@@ -723,8 +723,7 @@ class Anime extends KModel implements HasMedia
     }
 
     /**
-     * Eloquent builder scope that limits the query to
-     * the most popular shows.
+     * Eloquent builder scope that limits the query to the most popular shows.
      *
      * @param Builder $query
      * @param int $limit
@@ -746,6 +745,20 @@ class Anime extends KModel implements HasMedia
         });
 
         return $query->whereIn(self::TABLE_NAME . '.id', $mostAddedIDs);
+    }
+
+    /**
+     * Eloquent builder scope that limits the query to upcoming shows.
+     *
+     * @param Builder $query
+     * @param int $limit
+     * @return Builder
+     */
+    public function scopeUpcomingShows(Builder $query, int $limit = 10): Builder
+    {
+        return $query->whereDate('first_aired', '>', today())
+            ->orderBy('first_aired')
+            ->limit($limit);
     }
 
     /**

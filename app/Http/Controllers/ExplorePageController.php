@@ -72,7 +72,7 @@ class ExplorePageController extends Controller
             'type'      => ExploreCategoryTypes::MostPopularShows,
             'size'      => 'large'
         ]);
-        return $exploreCategory->most_popular_anime($genre);
+        return $exploreCategory->most_popular_shows($genre);
     }
 
     /**
