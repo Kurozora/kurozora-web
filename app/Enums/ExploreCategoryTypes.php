@@ -10,6 +10,7 @@ use BenSampo\Enum\Enum;
  * @method static static Shows()
  * @method static static Genres()
  * @method static static MostPopularShows()
+ * @method static static UpcomingShows()
  */
 final class ExploreCategoryTypes extends Enum
 {
@@ -18,4 +19,5 @@ final class ExploreCategoryTypes extends Enum
     const Shows = 'shows';
     const Genres = 'genres';
     const MostPopularShows = 'most-popular-shows';
+    const UpcomingShows = 'upcoming-shows';
 }

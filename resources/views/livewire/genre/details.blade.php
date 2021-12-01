@@ -46,6 +46,27 @@
                     </div>
                 </section>
                 @break
+            @case(\App\Enums\ExploreCategoryTypes::UpcomingShows)
+                <section class="pt-5 pb-8 border-t-2">
+                    <x-section-nav class="flex flex-no-wrap justify-between mb-5">
+                        <x-slot name="title">
+                            {{ $exploreCategory->title }}
+                        </x-slot>
+
+                        <x-slot name="action">
+                            <x-simple-link href="#" :disabled="true">{{ __('See All') }}</x-simple-link>
+                        </x-slot>
+                    </x-section-nav>
+
+                    <div class="flex mt-5 overflow-x-scroll no-scrollbar">
+                        <div class="flex flex-nowrap gap-4">
+                            @foreach($exploreCategory->upcoming_shows()->explore_category_items as $categoryItem)
+                                <x-lockups.upcoming-lockup :anime="$categoryItem->model" />
+                            @endforeach
+                        </div>
+                    </div>
+                </section>
+                @break
             @case(\App\Enums\ExploreCategoryTypes::Shows)
                 <section class="pt-5 pb-8 border-t-2">
                     <x-section-nav class="flex flex-no-wrap justify-between mb-5">
