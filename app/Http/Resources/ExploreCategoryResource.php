@@ -88,16 +88,27 @@ class ExploreCategoryResource extends JsonResource
                     )
                 ]
             ],
-            ExploreCategoryTypes::MostPopularShows => [
+            ExploreCategoryTypes::UpcomingShows => [
                 'shows' => [
                     'data' => AnimeResource::collection($this->resource
-                        ->most_popular_anime()
+                        ->upcoming_shows()
                         ->explore_category_items
                         ->pluck('model')
                     )
                 ]
             ],
-            default => [], // Return nothing by default
+            ExploreCategoryTypes::MostPopularShows => [
+                'shows' => [
+                    'data' => AnimeResource::collection($this->resource
+                        ->most_popular_shows()
+                        ->explore_category_items
+                        ->pluck('model')
+                    )
+                ]
+            ],
+            default => [
+                'shows' => null
+            ], // Return empty shows by default
         };
     }
 }

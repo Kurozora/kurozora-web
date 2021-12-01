@@ -27,7 +27,7 @@ class ExploreCategory extends KModel
      * @param Genre|null $genre
      * @return ExploreCategory
      */
-    public function most_popular_anime(?Genre $genre = null): ExploreCategory
+    public function most_popular_shows(?Genre $genre = null): ExploreCategory
     {
         if ($this->type === ExploreCategoryTypes::MostPopularShows) {
             if (empty($genre)) {
@@ -40,6 +40,31 @@ class ExploreCategory extends KModel
                 $this->explore_category_items->add(new ExploreCategoryItem([
                     'model_id' => $popularShow->id,
                     'model_type' => get_class($popularShow)
+                ]));
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Returns the upcoming anime.
+     *
+     * @param Genre|null $genre
+     * @return ExploreCategory
+     */
+    public function upcoming_shows(?Genre $genre = null): ExploreCategory
+    {
+        if ($this->type === ExploreCategoryTypes::UpcomingShows) {
+            if (empty($genre)) {
+                $upcomingShows = Anime::upcomingShows()->get();
+            } else {
+                $upcomingShows = $genre->animes()->upcomingShows()->get();
+            }
+
+            foreach($upcomingShows as $upcomingShow) {
+                $this->explore_category_items->add(new ExploreCategoryItem([
+                    'model_id' => $upcomingShow->id,
+                    'model_type' => get_class($upcomingShow)
                 ]));
             }
         }

@@ -9,6 +9,7 @@ use BenSampo\Enum\Enum;
  * @method static static Medium()
  * @method static static Large()
  * @method static static Video()
+ * @method static static Upcoming()
  */
 final class ExploreCategorySize extends Enum
 {
@@ -16,4 +17,5 @@ final class ExploreCategorySize extends Enum
     const Medium    = 'medium';
     const Large     = 'large';
     const Video     = 'video';
+    const Upcoming  = 'upcoming';
 }

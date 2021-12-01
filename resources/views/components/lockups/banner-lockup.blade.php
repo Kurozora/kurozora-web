@@ -13,6 +13,7 @@
                     <p class="text-xs text-white/60 leading-tight line-clamp-2">{{ $anime->tagline ?? $anime->genres?->pluck('name')->join(',  ', ' and ') }}</p>
                 </div>
             </div>
+
             <div class="absolute top-0 left-0 h-full w-full border-[1px] border-solid border-black/20 rounded-lg"></div>
         </picture>
     </div>

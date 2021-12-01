@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Carbon\CarbonInterval;
 use Carbon\Exceptions\InvalidFormatException;
+use Date;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
@@ -723,8 +724,7 @@ class Anime extends KModel implements HasMedia
     }
 
     /**
-     * Eloquent builder scope that limits the query to
-     * the most popular shows.
+     * Eloquent builder scope that limits the query to the most popular shows.
      *
      * @param Builder $query
      * @param int $limit
@@ -746,6 +746,20 @@ class Anime extends KModel implements HasMedia
         });
 
         return $query->whereIn(self::TABLE_NAME . '.id', $mostAddedIDs);
+    }
+
+    /**
+     * Eloquent builder scope that limits the query to upcoming shows.
+     *
+     * @param Builder $query
+     * @param int $limit
+     * @return Builder
+     */
+    public function scopeUpcomingShows(Builder $query, int $limit = 10): Builder
+    {
+        return $query->whereDate('first_aired', '>', Date::yesterday())
+            ->orderBy('first_aired')
+            ->limit($limit);
     }
 
     /**
