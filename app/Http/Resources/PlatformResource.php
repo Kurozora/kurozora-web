@@ -26,11 +26,11 @@ class PlatformResource extends JsonResource
         return [
             'type'          => 'platforms',
             'attributes'    => [
-                'description'       => $this->resource->humanReadablePlatform(),
-                'systemName'        => $this->resource->platform,
-                'systemVersion'     => $this->resource->platform_version,
-                'deviceVendor'      => $this->resource->device_vendor,
-                'deviceModel'       => $this->resource->device_model
+                'description'       => $this->resource?->humanReadablePlatform() ?? 'Unknown',
+                'systemName'        => $this->resource?->platform ?? 'Unknown',
+                'systemVersion'     => $this->resource?->platform_version ?? 'Unknown',
+                'deviceVendor'      => $this->resource?->device_vendor ?? 'Unknown',
+                'deviceModel'       => $this->resource?->device_model ?? 'Unknown',
             ]
         ];
     }
