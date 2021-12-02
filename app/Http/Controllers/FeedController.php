@@ -28,6 +28,7 @@ class FeedController extends Controller
     {
         $data = $request->validated();
 
+
         // Get the auth user
         $user = Auth::user();
 
@@ -54,10 +55,10 @@ class FeedController extends Controller
             'is_spoiler'                => $data['is_spoiler'] ?? false,
         ]);
 
-        if ($data['is_reply']) {
+        if ($data['is_reply'] ?? false) {
             // Notify user of the reply
             $user->notify(new NewFeedMessageReply($feedMessage));
-        } else if ($data['is_reshare']) {
+        } else if ($data['is_reshare'] ?? false) {
             // Notify user of the re-share
             $user->notify(new NewFeedMessageReShare($feedMessage));
         }
