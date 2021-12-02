@@ -28,13 +28,11 @@ class FeedController extends Controller
     {
         $data = $request->validated();
 
-
         // Get the auth user
         $user = Auth::user();
 
-        // Check if the message is a re-share as user is allowed only one re-share per message
+        // Check if the message has already been re-shared as user is allowed only one re-share per message
         if ($data['is_reshare'] ?? false) {
-            /** @var FeedMessage $parent */
             $reShareExists = FeedMessage::where('parent_feed_message_id', '=', $data['parent_id'])
                 ->where('user_id', $user->id)
                 ->where('is_reshare', true)
@@ -56,11 +54,21 @@ class FeedController extends Controller
         ]);
 
         if ($data['is_reply'] ?? false) {
-            // Notify user of the reply
-            $user->notify(new NewFeedMessageReply($feedMessage));
+            // Get parent message
+            $parentMessage = FeedMessage::firstWhere('id', '=', $data['parent_id']);
+
+            // Notify user of the reply if the message doesn't belong to the current user
+            if ($parentMessage->user->id != $user->id) {
+                $user->notify(new NewFeedMessageReply($feedMessage));
+            }
         } else if ($data['is_reshare'] ?? false) {
-            // Notify user of the re-share
-            $user->notify(new NewFeedMessageReShare($feedMessage));
+            // Get parent message
+            $parentMessage = FeedMessage::firstWhere('id', '=', $data['parent_id']);
+
+            // // Notify user of the re-share if the message doesn't belong to the current user
+            if ($parentMessage->first()->user->id != $user->id) {
+                $user->notify(new NewFeedMessageReShare($feedMessage));
+            }
         }
 
         return JSONResult::success([
