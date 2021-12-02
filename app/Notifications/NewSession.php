@@ -14,7 +14,7 @@ class NewSession extends Notification implements ShouldQueue
     /**
      * The session object.
      *
-     * @var SessionAttribute $sessionA
+     * @var SessionAttribute $sessionAttribute
      */
     private SessionAttribute $sessionAttribute;
 

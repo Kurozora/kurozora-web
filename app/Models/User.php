@@ -587,10 +587,18 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     public function routeNotificationForApn(): array
     {
-        return $this->sessions()
-            ->whereNotNull('apn_device_token')
-            ->pluck('apn_device_token')
-            ->toArray();
+        $tokenIDs = $this->tokens()
+            ->pluck('token');
+
+        $apnDeviceToken = SessionAttribute::whereIn('model_id', $tokenIDs)
+            ->get()
+            ->filter(function (SessionAttribute $sessionAttribute) {
+                return $sessionAttribute->apn_device_token != null;
+            })
+            ->unique('apn_device_token')
+            ->pluck('apn_device_token');
+
+        return $apnDeviceToken->toArray();
     }
 
     /**
