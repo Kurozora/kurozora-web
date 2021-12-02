@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Session;
+use App\Models\SessionAttribute;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -11,7 +11,7 @@ class LocationResource extends JsonResource
     /**
      * The resource instance.
      *
-     * @var Session $resource
+     * @var SessionAttribute $resource
      */
     public $resource;
 
@@ -26,11 +26,11 @@ class LocationResource extends JsonResource
         return [
             'type'          => 'locations',
             'attributes'    => [
-                'city'          => $this->resource->city,
-                'region'        => $this->resource->region,
-                'country'       => $this->resource->country,
-                'latitude'      => $this->resource->latitude,
-                'longitude'     => $this->resource->longitude
+                'city'          => $this->resource?->city ?? 'Unknown',
+                'region'        => $this->resource?->region ?? 'Unknown',
+                'country'       => $this->resource?->country ?? 'Unknown',
+                'latitude'      => $this->resource?->latitude ?? 0,
+                'longitude'     => $this->resource?->longitude ?? 0,
             ]
         ];
     }
