@@ -44,30 +44,39 @@ trait ProvidesTestAnime
      */
     protected function initializeTestAnime()
     {
+        // Create a tv rating
         $this->tvRating = TvRating::factory()->create();
 
+        // Create an anime
         $this->anime = Anime::factory()->create();
 
+        // Create a related anime
         $this->relatedAnime = Anime::factory()->create();
 
+        // Create a season
         $this->season = Season::factory()->create([
             'anime_id' => $this->anime->id,
         ]);
 
+        // Create an episode and connect to season
         $this->episode = Episode::factory()->create([
             'season_id' => $this->season->id,
         ]);
 
+        // Create a person
         $this->person = Person::factory()->create();
 
+        // Create a character
         $this->character = Character::factory()->create();
 
+        // Create a cast form person and character
         $this->animeCast = AnimeCast::factory()->create([
             'anime_id' => $this->anime->id,
             'character_id' => $this->character->id,
             'person_id' => $this->person->id,
         ]);
 
+        // Create a relationship between main and related anime
         MediaRelation::factory()->create([
             'model_id'      => $this->anime->id,
             'model_type'    => 'anime',

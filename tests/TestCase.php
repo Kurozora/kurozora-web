@@ -44,6 +44,9 @@ abstract class TestCase extends BaseTestCase
                 'Response status code ['.$this->getStatusCode().'] is not an unsuccessful status code.'
             );
         });
+
+        // Tells the API to always return JSON results
+        $this->withHeader('Accept', 'application/json');
     }
 
     /**
