@@ -3,7 +3,7 @@
 namespace Tests\API;
 
 use App\Helpers\Settings;
-use App\Models\Session;
+use App\Models\PersonalAccessToken;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
@@ -20,7 +20,7 @@ class SignInWithAppleTest extends TestCase
      */
     function an_account_can_be_signed_up_via_siwa()
     {
-        $this->json('POST', 'v1/users/signin/siwa', [
+        $this->json('POST', 'v1/users/siwa/signin', [
             'token'             => 'eyJraWQiOiJlWGF1bm1MIiwiYWxnIjoiUlMyNTYifQ.eyJpc3MiOiJodHRwczovL2FwcGxlaWQuYXBwbGUuY29tIiwiYXVkIjoiYXBwLmt1cm96b3JhLnRyYWNrZXIiLCJleHAiOjE1ODI3MjczNTcsImlhdCI6MTU4MjcyNjc1Nywic3ViIjoiMDAxMTUxLjZhNTRmM2JhZmE1MDQxYmJhMDY5M2ZkMTA3OWIwZTc4LjEzNTQiLCJjX2hhc2giOiIxS3lzLURLbDAzUmNJZUFvYmlaUlFnIiwiZW1haWwiOiJtdTR5NzZtN2Q3QHByaXZhdGVyZWxheS5hcHBsZWlkLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjoidHJ1ZSIsImlzX3ByaXZhdGVfZW1haWwiOiJ0cnVlIiwiYXV0aF90aW1lIjoxNTgyNzI2NzU3LCJub25jZV9zdXBwb3J0ZWQiOnRydWV9.qFHuG25KsAYybjJ9DXl9X2bq64eejYQ5bfdG0xH5xySu38BFNxGi15t18209JdwiuAO3PPSt8l-DdFJU6WB568-UedbiASo6TBVKAdqjX4bG7VJdUqS5NgMJRARhLQ19EF6DHGDQF4JNkzzkcPxkq2YViSdtnMfceXl-irh3rsK3ISxz2eMshcvpOAVnJPWGwwiAJQq33FlIISbVn2TKbDVsunAgSNpNFzZV7uQEFxxmEqMPqA393XkWKOWeJpP4b-N1aMTfiqBMjZLO4laoClGur1bIaJUmPqo-hNSTu7ubNQhVhkBVpdlUo83KJDr6d6wxl6ZgMF70nmchx2H7Tw',
             'platform'          => 'iOS',
             'platform_version'  => '13.4',
@@ -31,8 +31,8 @@ class SignInWithAppleTest extends TestCase
         // Check whether the account was created
         $this->assertEquals(1, User::count(), 'The user account was not created.');
 
-        // Check whether a session was created
-        $this->assertEquals(1, Session::count(), 'A session was not created.');
+        // Check whether a personal access token was created
+        $this->assertEquals(1, PersonalAccessToken::count(), 'A personal access token was not created.');
 
         // Check whether the user can change their username
         $settings = Settings::create(User::first());
@@ -54,8 +54,8 @@ class SignInWithAppleTest extends TestCase
         ]);
 
         // Make the login request
-        $response = $this->json('POST', 'v1/users/signin/siwa', [
-            'token'    => 'eyJraWQiOiJlWGF1bm1MIiwiYWxnIjoiUlMyNTYifQ.eyJpc3MiOiJodHRwczovL2FwcGxlaWQuYXBwbGUuY29tIiwiYXVkIjoiYXBwLmt1cm96b3JhLnRyYWNrZXIiLCJleHAiOjE1ODI3MjczNTcsImlhdCI6MTU4MjcyNjc1Nywic3ViIjoiMDAxMTUxLjZhNTRmM2JhZmE1MDQxYmJhMDY5M2ZkMTA3OWIwZTc4LjEzNTQiLCJjX2hhc2giOiIxS3lzLURLbDAzUmNJZUFvYmlaUlFnIiwiZW1haWwiOiJtdTR5NzZtN2Q3QHByaXZhdGVyZWxheS5hcHBsZWlkLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjoidHJ1ZSIsImlzX3ByaXZhdGVfZW1haWwiOiJ0cnVlIiwiYXV0aF90aW1lIjoxNTgyNzI2NzU3LCJub25jZV9zdXBwb3J0ZWQiOnRydWV9.qFHuG25KsAYybjJ9DXl9X2bq64eejYQ5bfdG0xH5xySu38BFNxGi15t18209JdwiuAO3PPSt8l-DdFJU6WB568-UedbiASo6TBVKAdqjX4bG7VJdUqS5NgMJRARhLQ19EF6DHGDQF4JNkzzkcPxkq2YViSdtnMfceXl-irh3rsK3ISxz2eMshcvpOAVnJPWGwwiAJQq33FlIISbVn2TKbDVsunAgSNpNFzZV7uQEFxxmEqMPqA393XkWKOWeJpP4b-N1aMTfiqBMjZLO4laoClGur1bIaJUmPqo-hNSTu7ubNQhVhkBVpdlUo83KJDr6d6wxl6ZgMF70nmchx2H7Tw',
+        $response = $this->json('POST', 'v1/users/siwa/signin', [
+            'token'             => 'eyJraWQiOiJlWGF1bm1MIiwiYWxnIjoiUlMyNTYifQ.eyJpc3MiOiJodHRwczovL2FwcGxlaWQuYXBwbGUuY29tIiwiYXVkIjoiYXBwLmt1cm96b3JhLnRyYWNrZXIiLCJleHAiOjE1ODI3MjczNTcsImlhdCI6MTU4MjcyNjc1Nywic3ViIjoiMDAxMTUxLjZhNTRmM2JhZmE1MDQxYmJhMDY5M2ZkMTA3OWIwZTc4LjEzNTQiLCJjX2hhc2giOiIxS3lzLURLbDAzUmNJZUFvYmlaUlFnIiwiZW1haWwiOiJtdTR5NzZtN2Q3QHByaXZhdGVyZWxheS5hcHBsZWlkLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjoidHJ1ZSIsImlzX3ByaXZhdGVfZW1haWwiOiJ0cnVlIiwiYXV0aF90aW1lIjoxNTgyNzI2NzU3LCJub25jZV9zdXBwb3J0ZWQiOnRydWV9.qFHuG25KsAYybjJ9DXl9X2bq64eejYQ5bfdG0xH5xySu38BFNxGi15t18209JdwiuAO3PPSt8l-DdFJU6WB568-UedbiASo6TBVKAdqjX4bG7VJdUqS5NgMJRARhLQ19EF6DHGDQF4JNkzzkcPxkq2YViSdtnMfceXl-irh3rsK3ISxz2eMshcvpOAVnJPWGwwiAJQq33FlIISbVn2TKbDVsunAgSNpNFzZV7uQEFxxmEqMPqA393XkWKOWeJpP4b-N1aMTfiqBMjZLO4laoClGur1bIaJUmPqo-hNSTu7ubNQhVhkBVpdlUo83KJDr6d6wxl6ZgMF70nmchx2H7Tw',
             'platform'          => 'iOS',
             'platform_version'  => '13.4',
             'device_vendor'     => 'Apple',
@@ -64,7 +64,7 @@ class SignInWithAppleTest extends TestCase
 
         $response->assertSuccessfulAPIResponse();
 
-        // Check whether a session was created
-        $this->assertEquals(1, Session::count(), 'A session was not created.');
+        // Check whether a personal access token was created
+        $this->assertEquals(1, PersonalAccessToken::count(), 'A personal access token was not created.');
     }
 }
