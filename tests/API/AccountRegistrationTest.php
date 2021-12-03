@@ -22,13 +22,31 @@ class AccountRegistrationTest extends TestCase
     function an_account_can_be_signed_up()
     {
         $this->json('POST', 'v1/users', [
-            'username'  => 'KurozoraTester',
+            'username'  => 'Kurozora Tester',
             'password'  => 'StrongPassword909@!',
-            'email'     => 'tester@kurozora.app'
+            'email'     => 'tester1@kurozora.app'
+        ])->assertSuccessfulAPIResponse();
+
+        $this->json('POST', 'v1/users', [
+            'username'  => 'Kurozora_Tester',
+            'password'  => 'StrongPassword909@!',
+            'email'     => 'tester2@kurozora.app'
+        ])->assertSuccessfulAPIResponse();
+
+        $this->json('POST', 'v1/users', [
+            'username'  => 'Kurozora-Tester',
+            'password'  => 'StrongPassword909@!',
+            'email'     => 'tester3@kurozora.app'
+        ])->assertSuccessfulAPIResponse();
+
+        $this->json('POST', 'v1/users', [
+            'username'  => 'Kurozora Tester 123',
+            'password'  => 'StrongPassword909@!',
+            'email'     => 'tester4@kurozora.app'
         ])->assertSuccessfulAPIResponse();
 
         // Double check that the account was created
-        $this->assertEquals(1, User::count());
+        $this->assertEquals(4, User::count());
     }
 
     /**
@@ -83,7 +101,7 @@ class AccountRegistrationTest extends TestCase
         Storage::fake('profile_images');
 
         // Create fake 1.2mb image
-        $uploadFile = UploadedFile::fake()->image('ProfileImage.jpg', 250, 250)->size(1200);
+        $uploadFile = UploadedFile::fake()->image('ProfileImage.jpg', 250, 250)->size(2400);
 
         // Attempt to signup the user
         $this->json('POST', 'v1/users', [

@@ -13,47 +13,50 @@
             "syoboiID": null,
             "traktID": null,
             "tvdbID": null,
+            "slug": "awesome-show",
             "videoUrl": null,
             "poster": null,
             "banner": null,
-            "originalTitle": "Id sint laborum amet architecto.",
+            "originalTitle": "Awesome Show",
             "title": "Awesome Show",
-            "tagline": "Libero eum in illo ipsum consectetur modi sed.",
+            "synonymTitles": [
+                "Est quia est vitae consequuntur.",
+                "Deserunt veniam pariatur eligendi cumque maiores.",
+                "Minima laboriosam minima praesentium nihil officia."
+            ],
+            "tagline": "Eos eos ad quaerat qui corporis placeat iure.",
             "synopsis": "A very awesome show.",
             "genres": [],
+            "languages": [],
             "tvRating": {
-                "name": "c",
-                "description": "Laudantium perspiciatis quibusdam rem ut."
+                "name": "z",
+                "description": "Eveniet maxime commodi eum ut explicabo officia ipsam doloribus."
             },
             "type": {
-                "name": "Mohammad Graham",
-                "description": "Dignissimos culpa nulla non incidunt."
+                "name": "Rafaela Hegmann",
+                "description": "Aliquid placeat libero qui eos atque omnis."
             },
             "source": {
-                "name": "Jadyn Hintz",
-                "description": "Iste voluptatem et tempore similique dolores ab blanditiis."
+                "name": "Sherman Zieme PhD",
+                "description": "Provident labore et dolorem qui."
             },
             "status": {
-                "name": "dolor labore",
-                "description": "Consequatur voluptatem error asperiores tempora minus nihil ratione.",
-                "color": "#54e0cc"
+                "name": "iusto minus",
+                "description": "Mollitia totam nulla ut tenetur saepe soluta dolor.",
+                "color": "#b01b3a"
             },
             "episodeCount": "0",
             "seasonCount": "0",
-            "userRating": {
-                "ratingCountList": [],
-                "averageRating": "2.5",
-                "ratingCount": "0"
-            },
-            "firstAired": "1991-09-03",
-            "lastAired": "1991-11-26",
-            "runtime": "22 seconds",
-            "runtimeTotal": "22 seconds",
+            "stats": null,
+            "firstAired": 67046400,
+            "lastAired": 73094400,
+            "duration": "24 minutes",
+            "durationTotal": "24 minutes",
             "airSeason": "Winter",
-            "airTime": "17:05",
+            "airTime": "08:00",
             "airDay": null,
-            "isNSFW": true,
-            "copyright": "\u2117 1997 Legros, Price and Mueller",
+            "isNSFW": false,
+            "copyright": "\u00ae 2012 Steuber Group",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
@@ -74,47 +77,50 @@
             "syoboiID": null,
             "traktID": null,
             "tvdbID": null,
+            "slug": "be-a-good-person",
             "videoUrl": null,
             "poster": null,
             "banner": null,
-            "originalTitle": "Qui nemo nesciunt ex est.",
+            "originalTitle": "Be a good person",
             "title": "Be a good person!",
-            "tagline": "Sint tempore voluptas assumenda quibusdam non quisquam.",
+            "synonymTitles": [
+                "Est quia est vitae consequuntur.",
+                "Deserunt veniam pariatur eligendi cumque maiores.",
+                "Minima laboriosam minima praesentium nihil officia."
+            ],
+            "tagline": "Odio nesciunt vel eveniet esse.",
             "synopsis": "A story about being a good person.",
             "genres": [],
+            "languages": [],
             "tvRating": {
-                "name": "c",
-                "description": "Laudantium perspiciatis quibusdam rem ut."
+                "name": "z",
+                "description": "Eveniet maxime commodi eum ut explicabo officia ipsam doloribus."
             },
             "type": {
-                "name": "Mohammad Graham",
-                "description": "Dignissimos culpa nulla non incidunt."
+                "name": "Rafaela Hegmann",
+                "description": "Aliquid placeat libero qui eos atque omnis."
             },
             "source": {
-                "name": "Jadyn Hintz",
-                "description": "Iste voluptatem et tempore similique dolores ab blanditiis."
+                "name": "Sherman Zieme PhD",
+                "description": "Provident labore et dolorem qui."
             },
             "status": {
-                "name": "dolor labore",
-                "description": "Consequatur voluptatem error asperiores tempora minus nihil ratione.",
-                "color": "#54e0cc"
+                "name": "iusto minus",
+                "description": "Mollitia totam nulla ut tenetur saepe soluta dolor.",
+                "color": "#b01b3a"
             },
             "episodeCount": "0",
             "seasonCount": "0",
-            "userRating": {
-                "ratingCountList": [],
-                "averageRating": "4.0",
-                "ratingCount": "0"
-            },
-            "firstAired": "1979-06-20",
-            "lastAired": "1979-12-05",
-            "runtime": "14 seconds",
-            "runtimeTotal": "14 seconds",
+            "stats": null,
+            "firstAired": 67046400,
+            "lastAired": 73094400,
+            "duration": "24 minutes",
+            "durationTotal": "24 minutes",
             "airSeason": "Winter",
-            "airTime": "05:01",
+            "airTime": "07:30",
             "airDay": null,
-            "isNSFW": false,
-            "copyright": "\u2117 2007 Senger, Heidenreich and Baumbach",
+            "isNSFW": true,
+            "copyright": "\u2117 2018 Abernathy-Daniel",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,

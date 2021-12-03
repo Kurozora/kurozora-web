@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Character;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class CharacterFactory extends Factory
 {
@@ -25,6 +26,7 @@ class CharacterFactory extends Factory
         $month = $this->faker->month;
         $isFemale = mt_rand(0, 1);
         $genderString = $isFemale ? 'female' : 'male';
+        $name = $this->faker->name($genderString);
         $bust = null;
         $waist = null;
         $hip = null;
@@ -36,14 +38,14 @@ class CharacterFactory extends Factory
         }
 
         return [
-            'name'              => $this->faker->name($genderString),
+            'slug'              => Str::slug($name),
+            'name'              => $name,
             'nicknames'         => $this->faker->words(mt_rand(0, 3)),
             'about'             => $this->faker->realText(),
             'ja'                => [
                 'name'  => $jaFaker->name($genderString),
                 'about' => $jaFaker->paragraph
             ],
-            'image'             => $this->faker->imageUrl(),
             'debut'             => $this->faker->numerify('Episode ##'),
             'status'            => $this->faker->randomElement(['Alive', 'Deceased']),
             'blood_type'        => strtoupper($this->faker->randomLetter),

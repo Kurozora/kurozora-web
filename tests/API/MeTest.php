@@ -3,7 +3,7 @@
 namespace Tests\API;
 
 use App\Models\Anime;
-use App\Models\Session;
+use App\Models\SessionAttribute;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
@@ -274,7 +274,7 @@ class MeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check that the response contains the follower
-        $this->assertTrue($response['data'] > 0);
+        $this->assertNotEmpty($response['data']);
     }
 
     /**
@@ -298,22 +298,31 @@ class MeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check that the response contains the user
-        $this->assertTrue($response['data'] > 0);
+        $this->assertNotEmpty($response['data']);
     }
 
     /**
-     * User can get a list of their sessions.
+     * User can get a list of their auth token related session attributes.
      *
      * @return void
      * @test
      */
-    function user_can_get_a_list_of_their_sessions()
+    function user_can_get_a_list_of_their_auth_token_related_session_attributes()
     {
         // Create some sessions for the user
-        Session::factory(25)->create(['user_id' => $this->user->id]);
+        $personalAccessTokens = [];
+        foreach (range(1, 25) as $index) {
+            $personalAccessTokens[] = $this->user->createToken('user_can_get_a_list_of_their_auth_token_related_session_attributes ' . $index);
+        }
+
+        foreach ($personalAccessTokens as $personalAccessToken) {
+            SessionAttribute::factory()->create([
+                'model_id' => $personalAccessToken->accessToken->token
+            ]);
+        }
 
         // Send the request
-        $response = $this->auth()->json('GET', 'v1/me/sessions');
+        $response = $this->auth()->json('GET', 'v1/me/access-tokens');
 
         // Check whether the request was successful
         $response->assertSuccessfulAPIResponse();

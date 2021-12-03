@@ -2,6 +2,7 @@
 
 namespace Tests\API;
 
+use App\Models\AnimeStudio;
 use App\Models\Studio;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
@@ -10,8 +11,12 @@ class StudioTest extends TestCase
 {
     use DatabaseMigrations;
 
-    /** @var Studio $studio */
-    protected $studio;
+    /**
+     * The object containing the studio data.
+     *
+     * @var Studio $studio
+     */
+    protected Studio $studio;
 
     public function setUp(): void
     {
@@ -66,12 +71,17 @@ class StudioTest extends TestCase
      */
     public function a_user_can_view_specific_studio_anime()
     {
+        // Prepare studio anime
+        AnimeStudio::factory(25)->create([
+            'studio_id' => $this->studio->id
+        ]);
+
         $response = $this->get('v1/studios/'.$this->studio->id.'/anime');
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the anime are in the response
-        $this->assertTrue($response->json()['data'] > 0);
+        $this->assertNotEmpty($response->json()['data']);
     }
 }

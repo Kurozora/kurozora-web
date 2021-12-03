@@ -4,8 +4,8 @@ namespace Tests\API;
 
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Tests\Traits\ProvidesTestUser;
 use Tests\TestCase;
+use Tests\Traits\ProvidesTestUser;
 
 class SignInTest extends TestCase
 {
@@ -29,7 +29,7 @@ class SignInTest extends TestCase
         ])->assertSuccessfulAPIResponse();
 
         // Check whether a session was created for the user
-        $this->assertEquals(1, $this->user->sessions()->count());
+        $this->assertEquals(1, $this->user->tokens()->count());
     }
 
     /**

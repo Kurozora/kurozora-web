@@ -13,47 +13,50 @@
             "syoboiID": null,
             "traktID": null,
             "tvdbID": null,
+            "slug": "awesome-show",
             "videoUrl": null,
             "poster": null,
             "banner": null,
-            "originalTitle": "Totam repellendus hic quaerat totam alias animi.",
+            "originalTitle": "Awesome Show",
             "title": "Awesome Show",
-            "tagline": "Est velit odit dignissimos temporibus quo deleniti.",
+            "synonymTitles": [
+                "Est quia est vitae consequuntur.",
+                "Deserunt veniam pariatur eligendi cumque maiores.",
+                "Minima laboriosam minima praesentium nihil officia."
+            ],
+            "tagline": "Eos eos ad quaerat qui corporis placeat iure.",
             "synopsis": "A very awesome show.",
             "genres": [],
+            "languages": [],
             "tvRating": {
-                "name": "k",
-                "description": "Sint qui voluptatem eligendi dolores rem et unde."
+                "name": "z",
+                "description": "Eveniet maxime commodi eum ut explicabo officia ipsam doloribus."
             },
             "type": {
-                "name": "Connor Monahan MD",
-                "description": "Consequatur veniam doloribus aut eum."
+                "name": "Rafaela Hegmann",
+                "description": "Aliquid placeat libero qui eos atque omnis."
             },
             "source": {
-                "name": "Miss Shanel Williamson",
-                "description": "Et et aut omnis totam ipsum."
+                "name": "Sherman Zieme PhD",
+                "description": "Provident labore et dolorem qui."
             },
             "status": {
-                "name": "ea fugit",
-                "description": "Ab repellendus debitis voluptatem iste dolores ab.",
-                "color": "#a3c99b"
+                "name": "iusto minus",
+                "description": "Mollitia totam nulla ut tenetur saepe soluta dolor.",
+                "color": "#b01b3a"
             },
             "episodeCount": "0",
             "seasonCount": "0",
-            "userRating": {
-                "ratingCountList": [],
-                "averageRating": "2.5",
-                "ratingCount": "0"
-            },
-            "firstAired": "1972-01-11",
-            "lastAired": "1972-06-27",
-            "runtime": "11 seconds",
-            "runtimeTotal": "11 seconds",
+            "stats": null,
+            "firstAired": 67046400,
+            "lastAired": 73094400,
+            "duration": "24 minutes",
+            "durationTotal": "24 minutes",
             "airSeason": "Winter",
-            "airTime": "19:43",
+            "airTime": "08:00",
             "airDay": null,
             "isNSFW": false,
-            "copyright": "\u2117 1986 Flatley Ltd",
+            "copyright": "\u00ae 2012 Steuber Group",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
@@ -74,47 +77,50 @@
             "syoboiID": null,
             "traktID": null,
             "tvdbID": null,
+            "slug": "be-a-good-person",
             "videoUrl": null,
             "poster": null,
             "banner": null,
-            "originalTitle": "Libero voluptatum eos et sint ipsam sunt quibusdam.",
+            "originalTitle": "Be a good person",
             "title": "Be a good person!",
-            "tagline": "Velit cumque inventore in at modi ut eum magni.",
+            "synonymTitles": [
+                "Est quia est vitae consequuntur.",
+                "Deserunt veniam pariatur eligendi cumque maiores.",
+                "Minima laboriosam minima praesentium nihil officia."
+            ],
+            "tagline": "Odio nesciunt vel eveniet esse.",
             "synopsis": "A story about being a good person.",
             "genres": [],
+            "languages": [],
             "tvRating": {
-                "name": "k",
-                "description": "Sint qui voluptatem eligendi dolores rem et unde."
+                "name": "z",
+                "description": "Eveniet maxime commodi eum ut explicabo officia ipsam doloribus."
             },
             "type": {
-                "name": "Connor Monahan MD",
-                "description": "Consequatur veniam doloribus aut eum."
+                "name": "Rafaela Hegmann",
+                "description": "Aliquid placeat libero qui eos atque omnis."
             },
             "source": {
-                "name": "Miss Shanel Williamson",
-                "description": "Et et aut omnis totam ipsum."
+                "name": "Sherman Zieme PhD",
+                "description": "Provident labore et dolorem qui."
             },
             "status": {
-                "name": "ea fugit",
-                "description": "Ab repellendus debitis voluptatem iste dolores ab.",
-                "color": "#a3c99b"
+                "name": "iusto minus",
+                "description": "Mollitia totam nulla ut tenetur saepe soluta dolor.",
+                "color": "#b01b3a"
             },
             "episodeCount": "0",
             "seasonCount": "0",
-            "userRating": {
-                "ratingCountList": [],
-                "averageRating": "4.0",
-                "ratingCount": "0"
-            },
-            "firstAired": "2006-10-12",
-            "lastAired": "2006-12-21",
-            "runtime": "24 seconds",
-            "runtimeTotal": "24 seconds",
+            "stats": null,
+            "firstAired": 67046400,
+            "lastAired": 73094400,
+            "duration": "24 minutes",
+            "durationTotal": "24 minutes",
             "airSeason": "Winter",
-            "airTime": "00:52",
+            "airTime": "07:30",
             "airDay": null,
             "isNSFW": true,
-            "copyright": "\u2117 1974 Kiehn Ltd",
+            "copyright": "\u2117 2018 Abernathy-Daniel",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,

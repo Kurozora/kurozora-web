@@ -13,47 +13,50 @@
             "syoboiID": null,
             "traktID": null,
             "tvdbID": null,
+            "slug": "be-a-good-person",
             "videoUrl": null,
             "poster": null,
             "banner": null,
-            "originalTitle": "Odit magni debitis consequatur iure.",
+            "originalTitle": "Be a good person",
             "title": "Be a good person!",
-            "tagline": "Eligendi est quam iusto id aut exercitationem.",
+            "synonymTitles": [
+                "Est quia est vitae consequuntur.",
+                "Deserunt veniam pariatur eligendi cumque maiores.",
+                "Minima laboriosam minima praesentium nihil officia."
+            ],
+            "tagline": "Odio nesciunt vel eveniet esse.",
             "synopsis": "A story about being a good person.",
             "genres": [],
+            "languages": [],
             "tvRating": {
-                "name": "b",
-                "description": "Corrupti esse quis expedita sed consectetur."
+                "name": "z",
+                "description": "Eveniet maxime commodi eum ut explicabo officia ipsam doloribus."
             },
             "type": {
-                "name": "Larue Connelly",
-                "description": "Aut doloribus nam voluptatibus quo."
+                "name": "Rafaela Hegmann",
+                "description": "Aliquid placeat libero qui eos atque omnis."
             },
             "source": {
-                "name": "Dr. Raoul Hahn V",
-                "description": "Quas et voluptatem consequatur aliquam omnis."
+                "name": "Sherman Zieme PhD",
+                "description": "Provident labore et dolorem qui."
             },
             "status": {
-                "name": "tempore blanditiis",
-                "description": "Atque excepturi voluptatem dolores exercitationem repudiandae laboriosam sit.",
-                "color": "#f6a120"
+                "name": "iusto minus",
+                "description": "Mollitia totam nulla ut tenetur saepe soluta dolor.",
+                "color": "#b01b3a"
             },
             "episodeCount": "0",
             "seasonCount": "0",
-            "userRating": {
-                "ratingCountList": [],
-                "averageRating": "4.0",
-                "ratingCount": "0"
-            },
-            "firstAired": "1985-07-17",
-            "lastAired": "1986-01-01",
-            "runtime": "23 seconds",
-            "runtimeTotal": "23 seconds",
+            "stats": null,
+            "firstAired": 67046400,
+            "lastAired": 73094400,
+            "duration": "24 minutes",
+            "durationTotal": "24 minutes",
             "airSeason": "Winter",
-            "airTime": "01:22",
+            "airTime": "07:30",
             "airDay": null,
-            "isNSFW": false,
-            "copyright": "\u00a9 2006 Douglas PLC",
+            "isNSFW": true,
+            "copyright": "\u2117 2018 Abernathy-Daniel",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,
@@ -74,47 +77,50 @@
             "syoboiID": null,
             "traktID": null,
             "tvdbID": null,
+            "slug": "awesome-show",
             "videoUrl": null,
             "poster": null,
             "banner": null,
-            "originalTitle": "Omnis mollitia illum vel et.",
+            "originalTitle": "Awesome Show",
             "title": "Awesome Show",
-            "tagline": "Eaque maxime non dicta et dignissimos aspernatur sit.",
+            "synonymTitles": [
+                "Est quia est vitae consequuntur.",
+                "Deserunt veniam pariatur eligendi cumque maiores.",
+                "Minima laboriosam minima praesentium nihil officia."
+            ],
+            "tagline": "Eos eos ad quaerat qui corporis placeat iure.",
             "synopsis": "A very awesome show.",
             "genres": [],
+            "languages": [],
             "tvRating": {
-                "name": "b",
-                "description": "Corrupti esse quis expedita sed consectetur."
+                "name": "z",
+                "description": "Eveniet maxime commodi eum ut explicabo officia ipsam doloribus."
             },
             "type": {
-                "name": "Larue Connelly",
-                "description": "Aut doloribus nam voluptatibus quo."
+                "name": "Rafaela Hegmann",
+                "description": "Aliquid placeat libero qui eos atque omnis."
             },
             "source": {
-                "name": "Dr. Raoul Hahn V",
-                "description": "Quas et voluptatem consequatur aliquam omnis."
+                "name": "Sherman Zieme PhD",
+                "description": "Provident labore et dolorem qui."
             },
             "status": {
-                "name": "tempore blanditiis",
-                "description": "Atque excepturi voluptatem dolores exercitationem repudiandae laboriosam sit.",
-                "color": "#f6a120"
+                "name": "iusto minus",
+                "description": "Mollitia totam nulla ut tenetur saepe soluta dolor.",
+                "color": "#b01b3a"
             },
             "episodeCount": "0",
             "seasonCount": "0",
-            "userRating": {
-                "ratingCountList": [],
-                "averageRating": "2.5",
-                "ratingCount": "0"
-            },
-            "firstAired": "2000-09-17",
-            "lastAired": "2000-12-10",
-            "runtime": "23 seconds",
-            "runtimeTotal": "23 seconds",
+            "stats": null,
+            "firstAired": 67046400,
+            "lastAired": 73094400,
+            "duration": "24 minutes",
+            "durationTotal": "24 minutes",
             "airSeason": "Winter",
-            "airTime": "00:58",
+            "airTime": "08:00",
             "airDay": null,
-            "isNSFW": true,
-            "copyright": "\u00a9 1999 Hegmann, Hill and Halvorson",
+            "isNSFW": false,
+            "copyright": "\u00ae 2012 Steuber Group",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
