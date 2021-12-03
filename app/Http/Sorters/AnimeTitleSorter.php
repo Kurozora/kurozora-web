@@ -21,7 +21,7 @@ class AnimeTitleSorter extends Sorter
      */
     public function apply(Request $request, Builder $builder, string $direction): Builder
     {
-        // Join the user ratings table
+        // Join the anime translation table
         $builder->join(AnimeTranslation::TABLE_NAME, AnimeTranslation::TABLE_NAME . '.anime_id', '=', Anime::TABLE_NAME . '.id')
             ->select(Anime::TABLE_NAME . '.*');
 
