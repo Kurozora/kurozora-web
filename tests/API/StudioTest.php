@@ -10,8 +10,12 @@ class StudioTest extends TestCase
 {
     use DatabaseMigrations;
 
-    /** @var Studio $studio */
-    protected $studio;
+    /**
+     * The object containing the studio data.
+     *
+     * @var Studio $studio
+     */
+    protected Studio $studio;
 
     public function setUp(): void
     {
