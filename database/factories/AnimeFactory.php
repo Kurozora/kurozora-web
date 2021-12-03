@@ -2,15 +2,15 @@
 
 namespace Database\Factories;
 
-use App\Models\Anime;
 use App\Enums\DayOfWeek;
-use App\Models\Source;
+use App\Models\Anime;
 use App\Models\MediaType;
+use App\Models\Source;
 use App\Models\Status;
 use App\Models\TvRating;
 use Carbon\Carbon;
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class AnimeFactory extends Factory
 {
@@ -62,12 +62,13 @@ class AnimeFactory extends Factory
         return [
             'slug'              => Str::slug($title),
             'original_title'    => $title,
-            'tagline'           => $this->faker->sentence,
             'title'             => $title,
             'synopsis'          => $this->faker->realText(),
+            'tagline'           => $this->faker->sentence,
             'ja'                => [
                 'title'         => $jaFaker->sentence,
                 'synopsis'      => $jaFaker->realText(),
+                'tagline'       => $jaFaker->sentence,
             ],
             'synonym_titles'    => $this->faker->sentences(),
             'tv_rating_id'      => $tvRating,

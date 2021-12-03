@@ -44,35 +44,54 @@ trait ProvidesTestAnime
      */
     protected function initializeTestAnime()
     {
-        $this->tvRating = TvRating::factory()->create();
+        // Create a tv rating
+        $this->tvRating = TvRating::factory()
+            ->create();
 
-        $this->anime = Anime::factory()->create();
+        // Create an anime
+        $this->anime = Anime::factory()
+            ->create();
 
-        $this->relatedAnime = Anime::factory()->create();
+        // Create a related anime
+        $this->relatedAnime = Anime::factory()
+            ->create();
 
-        $this->season = Season::factory()->create([
-            'anime_id' => $this->anime->id,
-        ]);
+        // Create a season
+        $this->season = Season::factory()
+            ->create([
+                'anime_id' => $this->anime->id,
+            ]);
 
-        $this->episode = Episode::factory()->create([
-            'season_id' => $this->season->id,
-        ]);
+        // Create an episode and connect to season
+        $this->episode = Episode::factory()
+            ->create([
+                'season_id' => $this->season->id,
+            ]);
 
-        $this->person = Person::factory()->create();
+        // Create a person
+        $this->person = Person::factory()
+            ->create();
 
-        $this->character = Character::factory()->create();
+        // Create a character
+        $this->character = Character::factory()
+            ->create();
 
-        $this->animeCast = AnimeCast::factory()->create([
-            'anime_id' => $this->anime->id,
-            'character_id' => $this->character->id,
-            'person_id' => $this->person->id,
-        ]);
+        // Create a cast form person and character
+        $this->animeCast = AnimeCast::factory()
+            ->create([
+                'anime_id' => $this->anime->id,
+                'character_id' => $this->character->id,
+                'person_id' => $this->person->id,
+                'language_id' => 73 // only japanese cast for now
+            ]);
 
-        MediaRelation::factory()->create([
-            'model_id'      => $this->anime->id,
-            'model_type'    => 'anime',
-            'related_id'    => $this->relatedAnime->id,
-            'related_type'  => 'anime',
-        ]);
+        // Create a relationship between main and related anime
+        MediaRelation::factory()
+            ->create([
+                'model_id'      => $this->anime->id,
+                'model_type'    => Anime::class,
+                'related_id'    => $this->relatedAnime->id,
+                'related_type'  => Anime::class,
+            ]);
     }
 }

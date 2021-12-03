@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\Models\SessionAttribute;
 use App\Models\User;
 use Illuminate\Foundation\Mix;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
@@ -44,6 +45,9 @@ abstract class TestCase extends BaseTestCase
                 'Response status code ['.$this->getStatusCode().'] is not an unsuccessful status code.'
             );
         });
+
+        // Tells the API to always return JSON results
+        $this->withHeader('Accept', 'application/json');
     }
 
     /**
@@ -71,8 +75,7 @@ abstract class TestCase extends BaseTestCase
     /**
      * API auth header
      *
-     * This function will create a session for the user, and attach
-     * .. the auth token to the request.
+     * This function will create a session for the user, and attach the auth token to the request.
      *
      * @return $this
      */
@@ -82,8 +85,15 @@ abstract class TestCase extends BaseTestCase
         $user = $this->user;
 
         if (!isset($user)) {
-            $this->fail('Used "authHeader", but no user present.');
+            $this->fail('Used "auth", but no user present.');
         }
+
+        // Add bearer token to header
+        $personalAccessToken = $user->createToken('Auth token');
+        $this->withHeader('Authorization', 'Bearer ' . $personalAccessToken->plainTextToken);
+        SessionAttribute::factory()->create([
+            'model_id' => $personalAccessToken->accessToken->token
+        ]);
 
         // Authenticate user
         Sanctum::actingAs($user, ['*']);

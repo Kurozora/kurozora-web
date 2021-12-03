@@ -50,7 +50,6 @@ class CharactersTest extends TestCase
         $this->assertArrayHasKey('people', $response->json()['data'][0]['relationships']);
     }
 
-
     /**
      * A user can view specific character people.
      *
@@ -65,7 +64,7 @@ class CharactersTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the characters are in the response
-        $this->assertTrue($response->json()['data'] > 0);
+        $this->assertNotEmpty($response->json()['data']);
     }
 
     /**
@@ -82,6 +81,6 @@ class CharactersTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the anime are in the response
-        $this->assertTrue($response->json()['data'] > 0);
+        $this->assertNotEmpty($response->json()['data']);
     }
 }

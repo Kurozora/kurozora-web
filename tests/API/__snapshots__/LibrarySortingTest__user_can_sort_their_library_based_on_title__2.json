@@ -1,66 +1,5 @@
 [
     {
-        "id": 2,
-        "type": "show",
-        "href": "\/v1\/anime\/2",
-        "attributes": {
-            "anidbID": null,
-            "anilistID": null,
-            "imdbID": null,
-            "kitsuID": null,
-            "malID": null,
-            "notifyID": null,
-            "syoboiID": null,
-            "traktID": null,
-            "tvdbID": null,
-            "videoUrl": null,
-            "poster": null,
-            "banner": null,
-            "originalTitle": "Quasi culpa eius itaque illo eaque sit fuga.",
-            "title": "Be a good person!",
-            "tagline": "Dolore sed expedita vel corrupti.",
-            "synopsis": "A story about being a good person.",
-            "genres": [],
-            "tvRating": {
-                "name": "h",
-                "description": "Est quia sint doloremque."
-            },
-            "type": {
-                "name": "Myah Waters",
-                "description": "Officia unde sit qui et nihil neque deserunt."
-            },
-            "source": {
-                "name": "Dr. Anastasia Koepp",
-                "description": "Rerum nihil sed provident repellat veniam nihil rem laborum."
-            },
-            "status": {
-                "name": "eum cumque",
-                "description": "Atque officia necessitatibus sint a.",
-                "color": "#19a911"
-            },
-            "episodeCount": "0",
-            "seasonCount": "0",
-            "userRating": {
-                "ratingCountList": [],
-                "averageRating": "4.0",
-                "ratingCount": "0"
-            },
-            "firstAired": "1985-12-18",
-            "lastAired": "1986-03-12",
-            "runtime": "25 seconds",
-            "runtimeTotal": "25 seconds",
-            "airSeason": "Winter",
-            "airTime": "15:10",
-            "airDay": null,
-            "isNSFW": true,
-            "copyright": "\u00a9 1992 Bauch-Heaney",
-            "givenRating": 1.2,
-            "libraryStatus": "",
-            "isFavorited": false,
-            "isReminded": false
-        }
-    },
-    {
         "id": 1,
         "type": "show",
         "href": "\/v1\/anime\/1",
@@ -74,47 +13,50 @@
             "syoboiID": null,
             "traktID": null,
             "tvdbID": null,
+            "slug": "awesome-show",
             "videoUrl": null,
             "poster": null,
             "banner": null,
-            "originalTitle": "Illo aut impedit totam ex ducimus quia.",
+            "originalTitle": "Awesome Show",
             "title": "Awesome Show",
-            "tagline": "Vitae rerum ut perferendis totam ad quos et doloremque.",
+            "synonymTitles": [
+                "Est quia est vitae consequuntur.",
+                "Deserunt veniam pariatur eligendi cumque maiores.",
+                "Minima laboriosam minima praesentium nihil officia."
+            ],
+            "tagline": "Eos eos ad quaerat qui corporis placeat iure.",
             "synopsis": "A very awesome show.",
             "genres": [],
+            "languages": [],
             "tvRating": {
-                "name": "h",
-                "description": "Est quia sint doloremque."
+                "name": "z",
+                "description": "Eveniet maxime commodi eum ut explicabo officia ipsam doloribus."
             },
             "type": {
-                "name": "Myah Waters",
-                "description": "Officia unde sit qui et nihil neque deserunt."
+                "name": "Rafaela Hegmann",
+                "description": "Aliquid placeat libero qui eos atque omnis."
             },
             "source": {
-                "name": "Dr. Anastasia Koepp",
-                "description": "Rerum nihil sed provident repellat veniam nihil rem laborum."
+                "name": "Sherman Zieme PhD",
+                "description": "Provident labore et dolorem qui."
             },
             "status": {
-                "name": "eum cumque",
-                "description": "Atque officia necessitatibus sint a.",
-                "color": "#19a911"
+                "name": "iusto minus",
+                "description": "Mollitia totam nulla ut tenetur saepe soluta dolor.",
+                "color": "#b01b3a"
             },
             "episodeCount": "0",
             "seasonCount": "0",
-            "userRating": {
-                "ratingCountList": [],
-                "averageRating": "2.5",
-                "ratingCount": "0"
-            },
-            "firstAired": "2015-04-03",
-            "lastAired": "2015-06-12",
-            "runtime": "19 seconds",
-            "runtimeTotal": "19 seconds",
+            "stats": null,
+            "firstAired": 67046400,
+            "lastAired": 73094400,
+            "duration": "24 minutes",
+            "durationTotal": "24 minutes",
             "airSeason": "Winter",
-            "airTime": "15:02",
+            "airTime": "08:00",
             "airDay": null,
-            "isNSFW": true,
-            "copyright": "\u00a9 2019 Reinger-West",
+            "isNSFW": false,
+            "copyright": "\u00ae 2012 Steuber Group",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
@@ -135,47 +77,114 @@
             "syoboiID": null,
             "traktID": null,
             "tvdbID": null,
+            "slug": "be-a-good-person",
             "videoUrl": null,
             "poster": null,
             "banner": null,
-            "originalTitle": "Quasi culpa eius itaque illo eaque sit fuga.",
+            "originalTitle": "Be a good person",
             "title": "Be a good person!",
-            "tagline": "Dolore sed expedita vel corrupti.",
+            "synonymTitles": [
+                "Est quia est vitae consequuntur.",
+                "Deserunt veniam pariatur eligendi cumque maiores.",
+                "Minima laboriosam minima praesentium nihil officia."
+            ],
+            "tagline": "Odio nesciunt vel eveniet esse.",
             "synopsis": "A story about being a good person.",
             "genres": [],
+            "languages": [],
             "tvRating": {
-                "name": "h",
-                "description": "Est quia sint doloremque."
+                "name": "z",
+                "description": "Eveniet maxime commodi eum ut explicabo officia ipsam doloribus."
             },
             "type": {
-                "name": "Myah Waters",
-                "description": "Officia unde sit qui et nihil neque deserunt."
+                "name": "Rafaela Hegmann",
+                "description": "Aliquid placeat libero qui eos atque omnis."
             },
             "source": {
-                "name": "Dr. Anastasia Koepp",
-                "description": "Rerum nihil sed provident repellat veniam nihil rem laborum."
+                "name": "Sherman Zieme PhD",
+                "description": "Provident labore et dolorem qui."
             },
             "status": {
-                "name": "eum cumque",
-                "description": "Atque officia necessitatibus sint a.",
-                "color": "#19a911"
+                "name": "iusto minus",
+                "description": "Mollitia totam nulla ut tenetur saepe soluta dolor.",
+                "color": "#b01b3a"
             },
             "episodeCount": "0",
             "seasonCount": "0",
-            "userRating": {
-                "ratingCountList": [],
-                "averageRating": "4.0",
-                "ratingCount": "0"
-            },
-            "firstAired": "1985-12-18",
-            "lastAired": "1986-03-12",
-            "runtime": "25 seconds",
-            "runtimeTotal": "25 seconds",
+            "stats": null,
+            "firstAired": 67046400,
+            "lastAired": 73094400,
+            "duration": "24 minutes",
+            "durationTotal": "24 minutes",
             "airSeason": "Winter",
-            "airTime": "15:10",
+            "airTime": "07:30",
             "airDay": null,
             "isNSFW": true,
-            "copyright": "\u00a9 1992 Bauch-Heaney",
+            "copyright": "\u2117 2018 Abernathy-Daniel",
+            "givenRating": 1.2,
+            "libraryStatus": "",
+            "isFavorited": false,
+            "isReminded": false
+        }
+    },
+    {
+        "id": 2,
+        "type": "show",
+        "href": "\/v1\/anime\/2",
+        "attributes": {
+            "anidbID": null,
+            "anilistID": null,
+            "imdbID": null,
+            "kitsuID": null,
+            "malID": null,
+            "notifyID": null,
+            "syoboiID": null,
+            "traktID": null,
+            "tvdbID": null,
+            "slug": "be-a-good-person",
+            "videoUrl": null,
+            "poster": null,
+            "banner": null,
+            "originalTitle": "Be a good person",
+            "title": "Be a good person!",
+            "synonymTitles": [
+                "Est quia est vitae consequuntur.",
+                "Deserunt veniam pariatur eligendi cumque maiores.",
+                "Minima laboriosam minima praesentium nihil officia."
+            ],
+            "tagline": "Odio nesciunt vel eveniet esse.",
+            "synopsis": "A story about being a good person.",
+            "genres": [],
+            "languages": [],
+            "tvRating": {
+                "name": "z",
+                "description": "Eveniet maxime commodi eum ut explicabo officia ipsam doloribus."
+            },
+            "type": {
+                "name": "Rafaela Hegmann",
+                "description": "Aliquid placeat libero qui eos atque omnis."
+            },
+            "source": {
+                "name": "Sherman Zieme PhD",
+                "description": "Provident labore et dolorem qui."
+            },
+            "status": {
+                "name": "iusto minus",
+                "description": "Mollitia totam nulla ut tenetur saepe soluta dolor.",
+                "color": "#b01b3a"
+            },
+            "episodeCount": "0",
+            "seasonCount": "0",
+            "stats": null,
+            "firstAired": 67046400,
+            "lastAired": 73094400,
+            "duration": "24 minutes",
+            "durationTotal": "24 minutes",
+            "airSeason": "Winter",
+            "airTime": "07:30",
+            "airDay": null,
+            "isNSFW": true,
+            "copyright": "\u2117 2018 Abernathy-Daniel",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,
@@ -196,47 +205,50 @@
             "syoboiID": null,
             "traktID": null,
             "tvdbID": null,
+            "slug": "awesome-show",
             "videoUrl": null,
             "poster": null,
             "banner": null,
-            "originalTitle": "Illo aut impedit totam ex ducimus quia.",
+            "originalTitle": "Awesome Show",
             "title": "Awesome Show",
-            "tagline": "Vitae rerum ut perferendis totam ad quos et doloremque.",
+            "synonymTitles": [
+                "Est quia est vitae consequuntur.",
+                "Deserunt veniam pariatur eligendi cumque maiores.",
+                "Minima laboriosam minima praesentium nihil officia."
+            ],
+            "tagline": "Eos eos ad quaerat qui corporis placeat iure.",
             "synopsis": "A very awesome show.",
             "genres": [],
+            "languages": [],
             "tvRating": {
-                "name": "h",
-                "description": "Est quia sint doloremque."
+                "name": "z",
+                "description": "Eveniet maxime commodi eum ut explicabo officia ipsam doloribus."
             },
             "type": {
-                "name": "Myah Waters",
-                "description": "Officia unde sit qui et nihil neque deserunt."
+                "name": "Rafaela Hegmann",
+                "description": "Aliquid placeat libero qui eos atque omnis."
             },
             "source": {
-                "name": "Dr. Anastasia Koepp",
-                "description": "Rerum nihil sed provident repellat veniam nihil rem laborum."
+                "name": "Sherman Zieme PhD",
+                "description": "Provident labore et dolorem qui."
             },
             "status": {
-                "name": "eum cumque",
-                "description": "Atque officia necessitatibus sint a.",
-                "color": "#19a911"
+                "name": "iusto minus",
+                "description": "Mollitia totam nulla ut tenetur saepe soluta dolor.",
+                "color": "#b01b3a"
             },
             "episodeCount": "0",
             "seasonCount": "0",
-            "userRating": {
-                "ratingCountList": [],
-                "averageRating": "2.5",
-                "ratingCount": "0"
-            },
-            "firstAired": "2015-04-03",
-            "lastAired": "2015-06-12",
-            "runtime": "19 seconds",
-            "runtimeTotal": "19 seconds",
+            "stats": null,
+            "firstAired": 67046400,
+            "lastAired": 73094400,
+            "duration": "24 minutes",
+            "durationTotal": "24 minutes",
             "airSeason": "Winter",
-            "airTime": "15:02",
+            "airTime": "08:00",
             "airDay": null,
-            "isNSFW": true,
-            "copyright": "\u00a9 2019 Reinger-West",
+            "isNSFW": false,
+            "copyright": "\u00ae 2012 Steuber Group",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,

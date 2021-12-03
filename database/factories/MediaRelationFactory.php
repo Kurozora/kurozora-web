@@ -23,7 +23,7 @@ class MediaRelationFactory extends Factory
      */
     public function definition(): array
     {
-        $anime = Anime::inRandomOrder()->first();
+        $anime = Anime::inRandomOrder(mt_rand(1, 999))->first();
         if ($anime == null) {
             $anime = Anime::factory()->create();
         }
@@ -39,11 +39,11 @@ class MediaRelationFactory extends Factory
         }
 
         return [
-            'media_id'      => $anime,
-            'media_type'    => $this->faker->randomElement(['anime', 'manga']),
+            'model_id'      => $anime,
+            'model_type'    => $this->faker->randomElement([Anime::class, 'Models\Manga']),
             'relation_id'   => $relation,
             'related_id'    => $relatedAnime,
-            'related_type'  => $this->faker->randomElement(['anime', 'manga']),
+            'related_type'  => $this->faker->randomElement([Anime::class, 'Models\Manga']),
             'created_at'    => now(),
             'updated_at'    => now(),
         ];

@@ -64,7 +64,7 @@ class PeopleTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the characters are in the response
-        $this->assertTrue($response->json()['data'] > 0);
+        $this->assertNotEmpty($response->json()['data']);
     }
 
     /**
@@ -81,6 +81,6 @@ class PeopleTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the anime are in the response
-        $this->assertTrue($response->json()['data'] > 0);
+        $this->assertNotEmpty($response->json()['data']);
     }
 }
