@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Studio;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Str;
 
 class StudioFactory extends Factory
 {
@@ -21,8 +22,10 @@ class StudioFactory extends Factory
      */
     public function definition(): array
     {
+        $name = $this->faker->unique()->company;
         return [
-            'name'          => $this->faker->unique()->company,
+            'slug'          => Str::slug($name),
+            'name'          => $name,
             'type'          => 'anime',
             'about'         => $this->faker->realText(),
             'address'       => $this->faker->address(),

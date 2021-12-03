@@ -2,19 +2,18 @@
 
 namespace Database\Factories;
 
-use App\Models\Session;
-use App\Models\User;
+use App\Models\PersonalAccessToken;
+use App\Models\SessionAttribute;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
-class SessionFactory extends Factory
+class SessionAttributeFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Session::class;
+    protected $model = SessionAttribute::class;
 
     /**
      * Define the model's default state.
@@ -23,19 +22,11 @@ class SessionFactory extends Factory
      */
     public function definition(): array
     {
-        $user = User::inRandomOrder()->first();
-
-        if ($user == null) {
-            $user = User::factory()->create();
-        }
-
         return [
-            'user_id'           => $user,
-            'expires_at'        => now()->addDays(90),
-            'last_activity'     => now()->unix(),
-            'ip_address'        => $this->faker->ipv4,
+            'model_id'          => hash('sha256', $this->faker->macPlatformToken),
+            'model_type'        => PersonalAccessToken::class,
             'apn_device_token'  => null,
-            'secret'            => Str::random(128),
+            'ip_address'        => $this->faker->ipv4,
             'city'              => $this->faker->city,
             'region'            => $this->faker->state,
             'country'           => $this->faker->country,

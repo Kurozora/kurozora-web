@@ -33,12 +33,14 @@ class EpisodeFactory extends Factory
         return [
             'season_id'     => $season,
             'number'        => $number++,
+            'number_total'  => $number,
             'title'         => $this->faker->sentence,
             'synopsis'      => $this->faker->realText(),
             'ja'            => [
                 'title'     => $jaFaker->sentence,
                 'synopsis'  => $jaFaker->realText(),
             ],
+            'duration'      => $this->faker->numberBetween(600, 1440),
             'first_aired'   => $this->faker->dateTime(),
             'created_at'    => now(),
             'updated_at'    => now(),
