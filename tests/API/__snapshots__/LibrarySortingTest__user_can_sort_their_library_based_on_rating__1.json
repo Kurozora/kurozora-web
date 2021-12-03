@@ -13,50 +13,50 @@
             "syoboiID": null,
             "traktID": null,
             "tvdbID": null,
-            "slug": "dolorem-velit-qui-voluptas-sequi",
+            "slug": "awesome-show",
             "videoUrl": null,
             "poster": null,
             "banner": null,
-            "originalTitle": "Dolorem velit qui voluptas sequi.",
+            "originalTitle": "Awesome Show",
             "title": "Awesome Show",
             "synonymTitles": [
-                "Et tempora aut sapiente ut sint.",
-                "Nisi et maxime quidem et eaque illum harum.",
-                "Rerum architecto quod rerum."
+                "Est quia est vitae consequuntur.",
+                "Deserunt veniam pariatur eligendi cumque maiores.",
+                "Minima laboriosam minima praesentium nihil officia."
             ],
-            "tagline": "Esse aliquid laborum sequi incidunt ratione et.",
+            "tagline": "Eos eos ad quaerat qui corporis placeat iure.",
             "synopsis": "A very awesome show.",
             "genres": [],
             "languages": [],
             "tvRating": {
-                "name": "o",
-                "description": "Ut dolore est sed iure delectus."
+                "name": "z",
+                "description": "Eveniet maxime commodi eum ut explicabo officia ipsam doloribus."
             },
             "type": {
-                "name": "Jayda Trantow",
-                "description": "Illo et et et eveniet."
+                "name": "Rafaela Hegmann",
+                "description": "Aliquid placeat libero qui eos atque omnis."
             },
             "source": {
-                "name": "Prof. Rudy Murray II",
-                "description": "Ipsam unde consequatur iste consequatur ipsa."
+                "name": "Sherman Zieme PhD",
+                "description": "Provident labore et dolorem qui."
             },
             "status": {
-                "name": "dicta qui",
-                "description": "Incidunt molestiae ipsum qui dolores.",
-                "color": "#f4bb53"
+                "name": "iusto minus",
+                "description": "Mollitia totam nulla ut tenetur saepe soluta dolor.",
+                "color": "#b01b3a"
             },
             "episodeCount": "0",
             "seasonCount": "0",
             "stats": null,
-            "firstAired": 1177632000,
-            "lastAired": 1192147200,
-            "duration": "16 seconds",
-            "durationTotal": "16 seconds",
+            "firstAired": 67046400,
+            "lastAired": 73094400,
+            "duration": "24 minutes",
+            "durationTotal": "24 minutes",
             "airSeason": "Winter",
-            "airTime": "04:16",
+            "airTime": "08:00",
             "airDay": null,
             "isNSFW": false,
-            "copyright": "\u00a9 1974 Pacocha, Kessler and Corkery",
+            "copyright": "\u00ae 2012 Steuber Group",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
@@ -77,50 +77,50 @@
             "syoboiID": null,
             "traktID": null,
             "tvdbID": null,
-            "slug": "dolores-optio-autem-odio-id-et",
+            "slug": "be-a-good-person",
             "videoUrl": null,
             "poster": null,
             "banner": null,
-            "originalTitle": "Dolores optio autem odio id et.",
+            "originalTitle": "Be a good person",
             "title": "Be a good person!",
             "synonymTitles": [
-                "Debitis pariatur expedita accusantium et facilis deleniti vitae.",
-                "Dolor sed blanditiis qui dolorem.",
-                "Id eligendi itaque voluptatibus omnis explicabo odit optio."
+                "Est quia est vitae consequuntur.",
+                "Deserunt veniam pariatur eligendi cumque maiores.",
+                "Minima laboriosam minima praesentium nihil officia."
             ],
-            "tagline": "Consequatur nesciunt eveniet hic atque.",
+            "tagline": "Odio nesciunt vel eveniet esse.",
             "synopsis": "A story about being a good person.",
             "genres": [],
             "languages": [],
             "tvRating": {
-                "name": "o",
-                "description": "Ut dolore est sed iure delectus."
+                "name": "z",
+                "description": "Eveniet maxime commodi eum ut explicabo officia ipsam doloribus."
             },
             "type": {
-                "name": "Jayda Trantow",
-                "description": "Illo et et et eveniet."
+                "name": "Rafaela Hegmann",
+                "description": "Aliquid placeat libero qui eos atque omnis."
             },
             "source": {
-                "name": "Prof. Rudy Murray II",
-                "description": "Ipsam unde consequatur iste consequatur ipsa."
+                "name": "Sherman Zieme PhD",
+                "description": "Provident labore et dolorem qui."
             },
             "status": {
-                "name": "dicta qui",
-                "description": "Incidunt molestiae ipsum qui dolores.",
-                "color": "#f4bb53"
+                "name": "iusto minus",
+                "description": "Mollitia totam nulla ut tenetur saepe soluta dolor.",
+                "color": "#b01b3a"
             },
             "episodeCount": "0",
             "seasonCount": "0",
             "stats": null,
-            "firstAired": 80611200,
-            "lastAired": 86659200,
-            "duration": "22 seconds",
-            "durationTotal": "22 seconds",
+            "firstAired": 67046400,
+            "lastAired": 73094400,
+            "duration": "24 minutes",
+            "durationTotal": "24 minutes",
             "airSeason": "Winter",
-            "airTime": "01:35",
+            "airTime": "07:30",
             "airDay": null,
-            "isNSFW": false,
-            "copyright": "\u2117 2017 Berge, Stark and Hintz",
+            "isNSFW": true,
+            "copyright": "\u2117 2018 Abernathy-Daniel",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,

@@ -13,50 +13,50 @@
             "syoboiID": null,
             "traktID": null,
             "tvdbID": null,
-            "slug": "laboriosam-libero-et-eos-explicabo-eos",
+            "slug": "awesome-show",
             "videoUrl": null,
             "poster": null,
             "banner": null,
-            "originalTitle": "Laboriosam libero et eos explicabo eos.",
+            "originalTitle": "Awesome Show",
             "title": "Awesome Show",
             "synonymTitles": [
-                "At repellendus veniam ducimus quibusdam cum laboriosam ratione.",
-                "Dolore corporis sit est sit sit provident dolores.",
-                "Exercitationem et dolore ipsa veritatis temporibus."
+                "Est quia est vitae consequuntur.",
+                "Deserunt veniam pariatur eligendi cumque maiores.",
+                "Minima laboriosam minima praesentium nihil officia."
             ],
-            "tagline": "Libero officia dolorem voluptas nisi doloremque.",
+            "tagline": "Eos eos ad quaerat qui corporis placeat iure.",
             "synopsis": "A very awesome show.",
             "genres": [],
             "languages": [],
             "tvRating": {
-                "name": "m",
-                "description": "Voluptates quasi voluptates architecto voluptas tempore."
+                "name": "z",
+                "description": "Eveniet maxime commodi eum ut explicabo officia ipsam doloribus."
             },
             "type": {
-                "name": "Dr. Jeremie Koelpin",
-                "description": "Quia laudantium assumenda harum odio qui placeat."
+                "name": "Rafaela Hegmann",
+                "description": "Aliquid placeat libero qui eos atque omnis."
             },
             "source": {
-                "name": "Alverta Goodwin",
-                "description": "Debitis temporibus eum aliquid iste sit."
+                "name": "Sherman Zieme PhD",
+                "description": "Provident labore et dolorem qui."
             },
             "status": {
-                "name": "neque ducimus",
-                "description": "Sint in perferendis magnam maxime voluptatem natus a.",
-                "color": "#71d622"
+                "name": "iusto minus",
+                "description": "Mollitia totam nulla ut tenetur saepe soluta dolor.",
+                "color": "#b01b3a"
             },
             "episodeCount": "0",
             "seasonCount": "0",
             "stats": null,
-            "firstAired": 1264032000,
-            "lastAired": 1270080000,
-            "duration": "12 seconds",
-            "durationTotal": "12 seconds",
+            "firstAired": 67046400,
+            "lastAired": 73094400,
+            "duration": "24 minutes",
+            "durationTotal": "24 minutes",
             "airSeason": "Winter",
-            "airTime": "08:16",
+            "airTime": "08:00",
             "airDay": null,
-            "isNSFW": true,
-            "copyright": "\u00ae 2013 Will Ltd",
+            "isNSFW": false,
+            "copyright": "\u00ae 2012 Steuber Group",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
@@ -77,50 +77,50 @@
             "syoboiID": null,
             "traktID": null,
             "tvdbID": null,
-            "slug": "et-aut-laboriosam-sit-et-tempora-commodi",
+            "slug": "be-a-good-person",
             "videoUrl": null,
             "poster": null,
             "banner": null,
-            "originalTitle": "Et aut laboriosam sit et tempora commodi.",
+            "originalTitle": "Be a good person",
             "title": "Be a good person!",
             "synonymTitles": [
-                "Fuga sit nemo quaerat illo quae cum.",
-                "Ipsam et at quia delectus.",
-                "Quia est excepturi delectus nihil."
+                "Est quia est vitae consequuntur.",
+                "Deserunt veniam pariatur eligendi cumque maiores.",
+                "Minima laboriosam minima praesentium nihil officia."
             ],
-            "tagline": "Quisquam nesciunt velit unde.",
+            "tagline": "Odio nesciunt vel eveniet esse.",
             "synopsis": "A story about being a good person.",
             "genres": [],
             "languages": [],
             "tvRating": {
-                "name": "m",
-                "description": "Voluptates quasi voluptates architecto voluptas tempore."
+                "name": "z",
+                "description": "Eveniet maxime commodi eum ut explicabo officia ipsam doloribus."
             },
             "type": {
-                "name": "Dr. Jeremie Koelpin",
-                "description": "Quia laudantium assumenda harum odio qui placeat."
+                "name": "Rafaela Hegmann",
+                "description": "Aliquid placeat libero qui eos atque omnis."
             },
             "source": {
-                "name": "Alverta Goodwin",
-                "description": "Debitis temporibus eum aliquid iste sit."
+                "name": "Sherman Zieme PhD",
+                "description": "Provident labore et dolorem qui."
             },
             "status": {
-                "name": "neque ducimus",
-                "description": "Sint in perferendis magnam maxime voluptatem natus a.",
-                "color": "#71d622"
+                "name": "iusto minus",
+                "description": "Mollitia totam nulla ut tenetur saepe soluta dolor.",
+                "color": "#b01b3a"
             },
             "episodeCount": "0",
             "seasonCount": "0",
             "stats": null,
-            "firstAired": 1302825600,
-            "lastAired": 1317340800,
-            "duration": "15 seconds",
-            "durationTotal": "15 seconds",
+            "firstAired": 67046400,
+            "lastAired": 73094400,
+            "duration": "24 minutes",
+            "durationTotal": "24 minutes",
             "airSeason": "Winter",
-            "airTime": "09:37",
+            "airTime": "07:30",
             "airDay": null,
-            "isNSFW": false,
-            "copyright": "\u00a9 1998 Balistreri-Fadel",
+            "isNSFW": true,
+            "copyright": "\u2117 2018 Abernathy-Daniel",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,

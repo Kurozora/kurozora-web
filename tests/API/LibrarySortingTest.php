@@ -5,6 +5,10 @@ namespace Tests\API;
 use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
 use App\Models\AnimeRating;
+use App\Models\MediaType;
+use App\Models\Source;
+use App\Models\Status;
+use App\Models\TvRating;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
@@ -14,6 +18,13 @@ class LibrarySortingTest extends TestCase
 {
     use DatabaseMigrations, ProvidesTestUser;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->addTestingAnimeToLibrary($this->user);
+    }
+
     /**
      * User can sort their library based on title.
      *
@@ -22,8 +33,6 @@ class LibrarySortingTest extends TestCase
      */
     function user_can_sort_their_library_based_on_title()
     {
-        $this->addTestingAnimeToLibrary($this->user);
-
         // Send the request and sort by title ascending
         $response = $this->auth()->json('GET', 'v1/me/library', [
             'status'    => 'Watching',
@@ -49,8 +58,6 @@ class LibrarySortingTest extends TestCase
      */
     function user_can_sort_their_library_based_on_age()
     {
-        $this->addTestingAnimeToLibrary($this->user);
-
         // Send the request and sort by age newest
         $response = $this->auth()->json('GET', 'v1/me/library', [
             'status'    => 'Watching',
@@ -76,8 +83,6 @@ class LibrarySortingTest extends TestCase
      */
     function user_can_sort_their_library_based_on_rating()
     {
-        $this->addTestingAnimeToLibrary($this->user);
-
         // Send the request and sort by rating best
         $response = $this->auth()->json('GET', 'v1/me/library', [
             'status'    => 'Watching',
@@ -103,8 +108,6 @@ class LibrarySortingTest extends TestCase
      */
     function user_can_sort_their_library_based_on_their_own_given_rating()
     {
-        $this->addTestingAnimeToLibrary($this->user);
-
         // Send the request and sort by my rating best
         $response = $this->auth()->json('GET', 'v1/me/library', [
             'status'    => 'Watching',
@@ -129,36 +132,94 @@ class LibrarySortingTest extends TestCase
      */
     private function addTestingAnimeToLibrary(User $user)
     {
+        $tvRating = TvRating::factory()->create([
+            'name' => 'z',
+            'description' => 'Eveniet maxime commodi eum ut explicabo officia ipsam doloribus.',
+        ]);
+        $mediaType = MediaType::factory()->create([
+            'type' => 'anime',
+            'name' => 'Rafaela Hegmann',
+            'description' => 'Aliquid placeat libero qui eos atque omnis.',
+        ]);
+        $source = Source::factory()->create([
+            'name' => 'Sherman Zieme PhD',
+            'description' => 'Provident labore et dolorem qui.',
+        ]);
+        $status = Status::factory()->create([
+            'type' => 'anime',
+            'name' => 'iusto minus',
+            'description' => 'Mollitia totam nulla ut tenetur saepe soluta dolor.',
+            'color' => '#b01b3a',
+        ]);
+
         // Add the first Anime
-        $anime = Anime::factory()->create([
+        $anime1 = Anime::factory()->create([
+            'id'                => 1,
+            'slug'              => 'awesome-show',
+            'original_title'    => 'Awesome Show',
             'title'             => 'Awesome Show',
             'synopsis'          => 'A very awesome show.',
+            'tagline'           => 'Eos eos ad quaerat qui corporis placeat iure.',
+            'synonym_titles'    => [
+                'Est quia est vitae consequuntur.',
+                'Deserunt veniam pariatur eligendi cumque maiores.',
+                'Minima laboriosam minima praesentium nihil officia.'
+            ],
+            'tv_rating_id'      => $tvRating->id,
+            'media_type_id'     => $mediaType->id,
+            'source_id'         => $source->id,
+            'status_id'         => $status->id,
+            'first_aired'       => 67046400,
+            'last_aired'        => 73094400,
+            'duration'          => 1440,
+            'air_time'          => '17:00',
+            'is_nsfw'           => false,
+            'copyright'         => '® 2012 Steuber Group',
             'created_at'        => now(),
         ]);
-        $anime->stats()->update([
+        $anime1->stats()->update([
             'rating_average' => 2.5,
         ]);
-        $user->library()->attach($anime->id, ['status' => UserLibraryStatus::Watching]);
+        $user->library()->attach($anime1->id, ['status' => UserLibraryStatus::Watching]);
 
         AnimeRating::create([
-            'anime_id'  => $anime->id,
+            'anime_id'  => $anime1->id,
             'user_id'   => $user->id,
             'rating'    => 3.0,
         ]);
 
         // Add the second Anime
-        $anime = Anime::factory()->create([
+        $anime2 = Anime::factory()->create([
+            'id'                => 2,
+            'slug'              => 'be-a-good-person',
+            'original_title'    => 'Be a good person',
             'title'             => 'Be a good person!',
             'synopsis'          => 'A story about being a good person.',
+            'tagline'           => 'Odio nesciunt vel eveniet esse.',
+            'synonym_titles'    => [
+                'Est quia est vitae consequuntur.',
+                'Deserunt veniam pariatur eligendi cumque maiores.',
+                'Minima laboriosam minima praesentium nihil officia.'
+            ],
+            'tv_rating_id'      => $tvRating->id,
+            'media_type_id'     => $mediaType->id,
+            'source_id'         => $source->id,
+            'status_id'         => $status->id,
+            'first_aired'       => 67046400,
+            'last_aired'        => 73094400,
+            'duration'          => 1440,
+            'air_time'          => '16:30',
+            'is_nsfw'           => true,
+            'copyright'         => '℗ 2018 Abernathy-Daniel',
             'created_at'        => now()->subDay(),
         ]);
-        $anime->stats()->update([
+        $anime2->stats()->update([
             'rating_average'    => 4.0,
         ]);
-        $user->library()->attach($anime->id, ['status' => UserLibraryStatus::Watching]);
+        $user->library()->attach($anime2->id, ['status' => UserLibraryStatus::Watching]);
 
         AnimeRating::create([
-            'anime_id'  => $anime->id,
+            'anime_id'  => $anime2->id,
             'user_id'   => $user->id,
             'rating'    => 1.2,
         ]);
