@@ -21,7 +21,6 @@ class CreateSessionAttributesTable extends Migration
             $table->string('model_id');
             $table->string('model_type');
             $table->string('apn_device_token', ValidateAPNDeviceToken::TOKEN_LENGTH)->nullable()->index();
-            $table->string('secret', 128);
 
             // Platform information
             $table->string('platform')->nullable();

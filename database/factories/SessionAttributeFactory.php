@@ -23,7 +23,7 @@ class SessionAttributeFactory extends Factory
     public function definition(): array
     {
         return [
-            'model_id'          => hash('sha256', $this->faker->macPlatformToken),
+            'model_id'          => $this->faker->sha256,
             'model_type'        => PersonalAccessToken::class,
             'apn_device_token'  => null,
             'ip_address'        => $this->faker->ipv4,
