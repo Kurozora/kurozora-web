@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\Models\SessionAttribute;
 use App\Models\User;
 use Illuminate\Foundation\Mix;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
@@ -84,8 +85,15 @@ abstract class TestCase extends BaseTestCase
         $user = $this->user;
 
         if (!isset($user)) {
-            $this->fail('Used "authHeader", but no user present.');
+            $this->fail('Used "auth", but no user present.');
         }
+
+        // Add bearer token to header
+        $personalAccessToken = $user->createToken('Auth token');
+        $this->withHeader('Authorization', 'Bearer ' . $personalAccessToken->plainTextToken);
+        SessionAttribute::factory()->create([
+            'model_id' => $personalAccessToken->accessToken->token
+        ]);
 
         // Authenticate user
         Sanctum::actingAs($user, ['*']);
