@@ -82,15 +82,16 @@ trait ProvidesTestAnime
                 'anime_id' => $this->anime->id,
                 'character_id' => $this->character->id,
                 'person_id' => $this->person->id,
+                'language_id' => 73 // only japanese cast for now
             ]);
 
         // Create a relationship between main and related anime
         MediaRelation::factory()
             ->create([
                 'model_id'      => $this->anime->id,
-                'model_type'    => 'anime',
+                'model_type'    => Anime::class,
                 'related_id'    => $this->relatedAnime->id,
-                'related_type'  => 'anime',
+                'related_type'  => Anime::class,
             ]);
     }
 }

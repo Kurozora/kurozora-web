@@ -274,7 +274,7 @@ class MeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check that the response contains the follower
-        $this->assertTrue($response['data'] > 0);
+        $this->assertNotEmpty($response['data']);
     }
 
     /**
@@ -298,7 +298,7 @@ class MeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check that the response contains the user
-        $this->assertTrue($response['data'] > 0);
+        $this->assertNotEmpty($response['data']);
     }
 
     /**

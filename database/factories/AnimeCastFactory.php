@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\AnimeCast;
 use App\Models\Anime;
+use App\Models\AnimeCast;
 use App\Models\CastRole;
 use App\Models\Character;
 use App\Models\Language;
@@ -45,7 +45,9 @@ class AnimeCastFactory extends Factory
             $castRole = CastRole::factory()->create();
         }
         if ($language == null) {
-            $language = Language::factory()->create();
+            $language = Language::factory([
+                'id' => 73 // japanese
+            ])->create();
         }
 
         return [
