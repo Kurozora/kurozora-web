@@ -26,7 +26,7 @@ class AppThemeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the characters array is not empty
-        $this->assertTrue(count($response->json()['data']) > 0);
+        $this->assertNotEmpty($response->json()['data']);
     }
 
     /**
