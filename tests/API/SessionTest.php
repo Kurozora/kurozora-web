@@ -32,7 +32,7 @@ class SessionTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the response contains the sessions
-        $this->assertTrue($response['data'] > 0);
+        $this->assertNotEmpty($response['data']);
     }
 
     /**
@@ -102,34 +102,6 @@ class SessionTest extends TestCase
 
         // Check whether the session still exists
         $this->assertNotNull(Session::find($session->id));
-    }
-
-    /**
-     * User can update the apn device token of their session.
-     *
-     * @return void
-     * @test
-     */
-    function user_can_update_the_apn_device_token_of_their_session()
-    {
-        // Create a session for the user
-        /** @var Session $session */
-        $session = Session::factory()->create(['user_id' => $this->user->id]);
-
-        // Create a new token
-        $newToken = Str::random(64);
-
-        // Send the request
-        $response = $this->auth()->json('POST', 'v1/me/sessions/' . $session->id . '/update', [
-            'apn_device_token' => $newToken
-        ]);
-
-        // Check whether the request was successful
-        $response->assertSuccessfulAPIResponse();
-
-        // Check whether the token was updated
-        $session->refresh();
-        $this->assertSame($newToken, $session->apn_device_token);
     }
 
     /**
