@@ -19,7 +19,7 @@ class AnimeTest extends TestCase
      */
      public function a_user_can_view_the_cast_of_an_anime()
      {
-        $response = $this->json('GET', 'v1/anime/' . $this->anime->id . '/cast', []);
+        $response = $this->json('GET', 'v1/anime/' . $this->anime->id . '/cast');
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();

@@ -76,6 +76,6 @@ class StudioTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the anime are in the response
-        $this->assertTrue($response->json()['data'] > 0);
+        $this->assertNotEmpty($response->json()['data']);
     }
 }

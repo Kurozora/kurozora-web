@@ -40,10 +40,10 @@ class MediaRelationFactory extends Factory
 
         return [
             'model_id'      => $anime,
-            'model_type'    => $this->faker->randomElement(['anime', 'manga']),
+            'model_type'    => $this->faker->randomElement([Anime::class, 'Models\Manga']),
             'relation_id'   => $relation,
             'related_id'    => $relatedAnime,
-            'related_type'  => $this->faker->randomElement(['anime', 'manga']),
+            'related_type'  => $this->faker->randomElement([Anime::class, 'Models\Manga']),
             'created_at'    => now(),
             'updated_at'    => now(),
         ];
