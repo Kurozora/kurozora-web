@@ -39,8 +39,8 @@ class MediaRelationFactory extends Factory
         }
 
         return [
-            'media_id'      => $anime,
-            'media_type'    => $this->faker->randomElement(['anime', 'manga']),
+            'model_id'      => $anime,
+            'model_type'    => $this->faker->randomElement(['anime', 'manga']),
             'relation_id'   => $relation,
             'related_id'    => $relatedAnime,
             'related_type'  => $this->faker->randomElement(['anime', 'manga']),
