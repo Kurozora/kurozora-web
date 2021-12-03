@@ -2,6 +2,7 @@
 
 namespace Tests\API;
 
+use App\Models\AnimeStudio;
 use App\Models\Studio;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
@@ -70,6 +71,11 @@ class StudioTest extends TestCase
      */
     public function a_user_can_view_specific_studio_anime()
     {
+        // Prepare studio anime
+        AnimeStudio::factory(25)->create([
+            'studio_id' => $this->studio->id
+        ]);
+
         $response = $this->get('v1/studios/'.$this->studio->id.'/anime');
 
         // Check whether the response was successful

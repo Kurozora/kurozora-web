@@ -23,7 +23,7 @@ class MediaRelationFactory extends Factory
      */
     public function definition(): array
     {
-        $anime = Anime::inRandomOrder()->first();
+        $anime = Anime::inRandomOrder(mt_rand(1, 999))->first();
         if ($anime == null) {
             $anime = Anime::factory()->create();
         }
