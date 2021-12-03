@@ -134,14 +134,16 @@ class LibrarySortingTest extends TestCase
             'title'             => 'Awesome Show',
             'synopsis'          => 'A very awesome show.',
             'created_at'        => now(),
-            'rating_average'    => 2.5
+        ]);
+        $anime->stats()->update([
+            'rating_average' => 2.5,
         ]);
         $user->library()->attach($anime->id, ['status' => UserLibraryStatus::Watching]);
 
         AnimeRating::create([
             'anime_id'  => $anime->id,
             'user_id'   => $user->id,
-            'rating'    => 3.0
+            'rating'    => 3.0,
         ]);
 
         // Add the second Anime
@@ -149,14 +151,16 @@ class LibrarySortingTest extends TestCase
             'title'             => 'Be a good person!',
             'synopsis'          => 'A story about being a good person.',
             'created_at'        => now()->subDay(),
-            'rating_average'    => 4.0
+        ]);
+        $anime->stats()->update([
+            'rating_average'    => 4.0,
         ]);
         $user->library()->attach($anime->id, ['status' => UserLibraryStatus::Watching]);
 
         AnimeRating::create([
             'anime_id'  => $anime->id,
             'user_id'   => $user->id,
-            'rating'    => 1.2
+            'rating'    => 1.2,
         ]);
     }
 }
