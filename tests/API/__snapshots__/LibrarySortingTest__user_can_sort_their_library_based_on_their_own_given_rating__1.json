@@ -13,47 +13,50 @@
             "syoboiID": null,
             "traktID": null,
             "tvdbID": null,
+            "slug": "laboriosam-libero-et-eos-explicabo-eos",
             "videoUrl": null,
             "poster": null,
             "banner": null,
-            "originalTitle": "Omnis mollitia illum vel et.",
+            "originalTitle": "Laboriosam libero et eos explicabo eos.",
             "title": "Awesome Show",
-            "tagline": "Eaque maxime non dicta et dignissimos aspernatur sit.",
+            "synonymTitles": [
+                "At repellendus veniam ducimus quibusdam cum laboriosam ratione.",
+                "Dolore corporis sit est sit sit provident dolores.",
+                "Exercitationem et dolore ipsa veritatis temporibus."
+            ],
+            "tagline": "Libero officia dolorem voluptas nisi doloremque.",
             "synopsis": "A very awesome show.",
             "genres": [],
+            "languages": [],
             "tvRating": {
-                "name": "b",
-                "description": "Corrupti esse quis expedita sed consectetur."
+                "name": "m",
+                "description": "Voluptates quasi voluptates architecto voluptas tempore."
             },
             "type": {
-                "name": "Larue Connelly",
-                "description": "Aut doloribus nam voluptatibus quo."
+                "name": "Dr. Jeremie Koelpin",
+                "description": "Quia laudantium assumenda harum odio qui placeat."
             },
             "source": {
-                "name": "Dr. Raoul Hahn V",
-                "description": "Quas et voluptatem consequatur aliquam omnis."
+                "name": "Alverta Goodwin",
+                "description": "Debitis temporibus eum aliquid iste sit."
             },
             "status": {
-                "name": "tempore blanditiis",
-                "description": "Atque excepturi voluptatem dolores exercitationem repudiandae laboriosam sit.",
-                "color": "#f6a120"
+                "name": "neque ducimus",
+                "description": "Sint in perferendis magnam maxime voluptatem natus a.",
+                "color": "#71d622"
             },
             "episodeCount": "0",
             "seasonCount": "0",
-            "userRating": {
-                "ratingCountList": [],
-                "averageRating": "2.5",
-                "ratingCount": "0"
-            },
-            "firstAired": "2000-09-17",
-            "lastAired": "2000-12-10",
-            "runtime": "23 seconds",
-            "runtimeTotal": "23 seconds",
+            "stats": null,
+            "firstAired": 1264032000,
+            "lastAired": 1270080000,
+            "duration": "12 seconds",
+            "durationTotal": "12 seconds",
             "airSeason": "Winter",
-            "airTime": "00:58",
+            "airTime": "08:16",
             "airDay": null,
             "isNSFW": true,
-            "copyright": "\u00a9 1999 Hegmann, Hill and Halvorson",
+            "copyright": "\u00ae 2013 Will Ltd",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
@@ -74,47 +77,50 @@
             "syoboiID": null,
             "traktID": null,
             "tvdbID": null,
+            "slug": "et-aut-laboriosam-sit-et-tempora-commodi",
             "videoUrl": null,
             "poster": null,
             "banner": null,
-            "originalTitle": "Odit magni debitis consequatur iure.",
+            "originalTitle": "Et aut laboriosam sit et tempora commodi.",
             "title": "Be a good person!",
-            "tagline": "Eligendi est quam iusto id aut exercitationem.",
+            "synonymTitles": [
+                "Fuga sit nemo quaerat illo quae cum.",
+                "Ipsam et at quia delectus.",
+                "Quia est excepturi delectus nihil."
+            ],
+            "tagline": "Quisquam nesciunt velit unde.",
             "synopsis": "A story about being a good person.",
             "genres": [],
+            "languages": [],
             "tvRating": {
-                "name": "b",
-                "description": "Corrupti esse quis expedita sed consectetur."
+                "name": "m",
+                "description": "Voluptates quasi voluptates architecto voluptas tempore."
             },
             "type": {
-                "name": "Larue Connelly",
-                "description": "Aut doloribus nam voluptatibus quo."
+                "name": "Dr. Jeremie Koelpin",
+                "description": "Quia laudantium assumenda harum odio qui placeat."
             },
             "source": {
-                "name": "Dr. Raoul Hahn V",
-                "description": "Quas et voluptatem consequatur aliquam omnis."
+                "name": "Alverta Goodwin",
+                "description": "Debitis temporibus eum aliquid iste sit."
             },
             "status": {
-                "name": "tempore blanditiis",
-                "description": "Atque excepturi voluptatem dolores exercitationem repudiandae laboriosam sit.",
-                "color": "#f6a120"
+                "name": "neque ducimus",
+                "description": "Sint in perferendis magnam maxime voluptatem natus a.",
+                "color": "#71d622"
             },
             "episodeCount": "0",
             "seasonCount": "0",
-            "userRating": {
-                "ratingCountList": [],
-                "averageRating": "4.0",
-                "ratingCount": "0"
-            },
-            "firstAired": "1985-07-17",
-            "lastAired": "1986-01-01",
-            "runtime": "23 seconds",
-            "runtimeTotal": "23 seconds",
+            "stats": null,
+            "firstAired": 1302825600,
+            "lastAired": 1317340800,
+            "duration": "15 seconds",
+            "durationTotal": "15 seconds",
             "airSeason": "Winter",
-            "airTime": "01:22",
+            "airTime": "09:37",
             "airDay": null,
             "isNSFW": false,
-            "copyright": "\u00a9 2006 Douglas PLC",
+            "copyright": "\u00a9 1998 Balistreri-Fadel",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,

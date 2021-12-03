@@ -13,47 +13,50 @@
             "syoboiID": null,
             "traktID": null,
             "tvdbID": null,
+            "slug": "quo-repellat-voluptatibus-rem-dolores",
             "videoUrl": null,
             "poster": null,
             "banner": null,
-            "originalTitle": "Illo aut impedit totam ex ducimus quia.",
+            "originalTitle": "Quo repellat voluptatibus rem dolores.",
             "title": "Awesome Show",
-            "tagline": "Vitae rerum ut perferendis totam ad quos et doloremque.",
+            "synonymTitles": [
+                "At repellat eum et dolores consequuntur voluptas pariatur enim.",
+                "Omnis tempore qui voluptatibus cum.",
+                "Eum rem sint deleniti aut illo blanditiis."
+            ],
+            "tagline": "Qui vel reprehenderit et repudiandae.",
             "synopsis": "A very awesome show.",
             "genres": [],
+            "languages": [],
             "tvRating": {
-                "name": "h",
-                "description": "Est quia sint doloremque."
+                "name": "i",
+                "description": "Est occaecati modi rerum officia consequatur qui tenetur."
             },
             "type": {
-                "name": "Myah Waters",
-                "description": "Officia unde sit qui et nihil neque deserunt."
+                "name": "Prof. Osvaldo Mertz PhD",
+                "description": "Odit et adipisci totam veritatis soluta vel."
             },
             "source": {
-                "name": "Dr. Anastasia Koepp",
-                "description": "Rerum nihil sed provident repellat veniam nihil rem laborum."
+                "name": "Cathy Hane DDS",
+                "description": "Ipsam blanditiis et pariatur amet eos."
             },
             "status": {
-                "name": "eum cumque",
-                "description": "Atque officia necessitatibus sint a.",
-                "color": "#19a911"
+                "name": "animi ex",
+                "description": "Voluptate deleniti iure aperiam fugiat placeat.",
+                "color": "#8f2e95"
             },
             "episodeCount": "0",
             "seasonCount": "0",
-            "userRating": {
-                "ratingCountList": [],
-                "averageRating": "2.5",
-                "ratingCount": "0"
-            },
-            "firstAired": "2015-04-03",
-            "lastAired": "2015-06-12",
-            "runtime": "19 seconds",
-            "runtimeTotal": "19 seconds",
+            "stats": null,
+            "firstAired": 150076800,
+            "lastAired": 164592000,
+            "duration": "19 seconds",
+            "durationTotal": "19 seconds",
             "airSeason": "Winter",
-            "airTime": "15:02",
+            "airTime": "11:05",
             "airDay": null,
             "isNSFW": true,
-            "copyright": "\u00a9 2019 Reinger-West",
+            "copyright": "\u2117 2013 Sporer LLC",
             "givenRating": 3,
             "libraryStatus": "",
             "isFavorited": false,
@@ -74,47 +77,114 @@
             "syoboiID": null,
             "traktID": null,
             "tvdbID": null,
+            "slug": "corrupti-neque-dolor-quo-iure-exercitationem-perferendis-error",
             "videoUrl": null,
             "poster": null,
             "banner": null,
-            "originalTitle": "Quasi culpa eius itaque illo eaque sit fuga.",
+            "originalTitle": "Corrupti neque dolor quo iure exercitationem perferendis error.",
             "title": "Be a good person!",
-            "tagline": "Dolore sed expedita vel corrupti.",
+            "synonymTitles": [
+                "Sed autem error quia rerum.",
+                "Et voluptas commodi debitis sunt minus necessitatibus tenetur et.",
+                "Earum est pariatur eligendi consectetur voluptatem quaerat eos."
+            ],
+            "tagline": "Dolores est expedita ut ad.",
             "synopsis": "A story about being a good person.",
             "genres": [],
+            "languages": [],
             "tvRating": {
-                "name": "h",
-                "description": "Est quia sint doloremque."
+                "name": "i",
+                "description": "Est occaecati modi rerum officia consequatur qui tenetur."
             },
             "type": {
-                "name": "Myah Waters",
-                "description": "Officia unde sit qui et nihil neque deserunt."
+                "name": "Prof. Osvaldo Mertz PhD",
+                "description": "Odit et adipisci totam veritatis soluta vel."
             },
             "source": {
-                "name": "Dr. Anastasia Koepp",
-                "description": "Rerum nihil sed provident repellat veniam nihil rem laborum."
+                "name": "Cathy Hane DDS",
+                "description": "Ipsam blanditiis et pariatur amet eos."
             },
             "status": {
-                "name": "eum cumque",
-                "description": "Atque officia necessitatibus sint a.",
-                "color": "#19a911"
+                "name": "animi ex",
+                "description": "Voluptate deleniti iure aperiam fugiat placeat.",
+                "color": "#8f2e95"
             },
             "episodeCount": "0",
             "seasonCount": "0",
-            "userRating": {
-                "ratingCountList": [],
-                "averageRating": "4.0",
-                "ratingCount": "0"
-            },
-            "firstAired": "1985-12-18",
-            "lastAired": "1986-03-12",
-            "runtime": "25 seconds",
-            "runtimeTotal": "25 seconds",
+            "stats": null,
+            "firstAired": 104112000,
+            "lastAired": 118627200,
+            "duration": "19 seconds",
+            "durationTotal": "19 seconds",
             "airSeason": "Winter",
-            "airTime": "15:10",
+            "airTime": "06:15",
             "airDay": null,
             "isNSFW": true,
-            "copyright": "\u00a9 1992 Bauch-Heaney",
+            "copyright": "\u00ae 1974 Roob and Sons",
+            "givenRating": 1.2,
+            "libraryStatus": "",
+            "isFavorited": false,
+            "isReminded": false
+        }
+    },
+    {
+        "id": 2,
+        "type": "show",
+        "href": "\/v1\/anime\/2",
+        "attributes": {
+            "anidbID": null,
+            "anilistID": null,
+            "imdbID": null,
+            "kitsuID": null,
+            "malID": null,
+            "notifyID": null,
+            "syoboiID": null,
+            "traktID": null,
+            "tvdbID": null,
+            "slug": "corrupti-neque-dolor-quo-iure-exercitationem-perferendis-error",
+            "videoUrl": null,
+            "poster": null,
+            "banner": null,
+            "originalTitle": "Corrupti neque dolor quo iure exercitationem perferendis error.",
+            "title": "Be a good person!",
+            "synonymTitles": [
+                "Sed autem error quia rerum.",
+                "Et voluptas commodi debitis sunt minus necessitatibus tenetur et.",
+                "Earum est pariatur eligendi consectetur voluptatem quaerat eos."
+            ],
+            "tagline": "Dolores est expedita ut ad.",
+            "synopsis": "A story about being a good person.",
+            "genres": [],
+            "languages": [],
+            "tvRating": {
+                "name": "i",
+                "description": "Est occaecati modi rerum officia consequatur qui tenetur."
+            },
+            "type": {
+                "name": "Prof. Osvaldo Mertz PhD",
+                "description": "Odit et adipisci totam veritatis soluta vel."
+            },
+            "source": {
+                "name": "Cathy Hane DDS",
+                "description": "Ipsam blanditiis et pariatur amet eos."
+            },
+            "status": {
+                "name": "animi ex",
+                "description": "Voluptate deleniti iure aperiam fugiat placeat.",
+                "color": "#8f2e95"
+            },
+            "episodeCount": "0",
+            "seasonCount": "0",
+            "stats": null,
+            "firstAired": 104112000,
+            "lastAired": 118627200,
+            "duration": "19 seconds",
+            "durationTotal": "19 seconds",
+            "airSeason": "Winter",
+            "airTime": "06:15",
+            "airDay": null,
+            "isNSFW": true,
+            "copyright": "\u00ae 1974 Roob and Sons",
             "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,
@@ -135,109 +205,51 @@
             "syoboiID": null,
             "traktID": null,
             "tvdbID": null,
+            "slug": "quo-repellat-voluptatibus-rem-dolores",
             "videoUrl": null,
             "poster": null,
             "banner": null,
-            "originalTitle": "Illo aut impedit totam ex ducimus quia.",
+            "originalTitle": "Quo repellat voluptatibus rem dolores.",
             "title": "Awesome Show",
-            "tagline": "Vitae rerum ut perferendis totam ad quos et doloremque.",
+            "synonymTitles": [
+                "At repellat eum et dolores consequuntur voluptas pariatur enim.",
+                "Omnis tempore qui voluptatibus cum.",
+                "Eum rem sint deleniti aut illo blanditiis."
+            ],
+            "tagline": "Qui vel reprehenderit et repudiandae.",
             "synopsis": "A very awesome show.",
             "genres": [],
+            "languages": [],
             "tvRating": {
-                "name": "h",
-                "description": "Est quia sint doloremque."
+                "name": "i",
+                "description": "Est occaecati modi rerum officia consequatur qui tenetur."
             },
             "type": {
-                "name": "Myah Waters",
-                "description": "Officia unde sit qui et nihil neque deserunt."
+                "name": "Prof. Osvaldo Mertz PhD",
+                "description": "Odit et adipisci totam veritatis soluta vel."
             },
             "source": {
-                "name": "Dr. Anastasia Koepp",
-                "description": "Rerum nihil sed provident repellat veniam nihil rem laborum."
+                "name": "Cathy Hane DDS",
+                "description": "Ipsam blanditiis et pariatur amet eos."
             },
             "status": {
-                "name": "eum cumque",
-                "description": "Atque officia necessitatibus sint a.",
-                "color": "#19a911"
+                "name": "animi ex",
+                "description": "Voluptate deleniti iure aperiam fugiat placeat.",
+                "color": "#8f2e95"
             },
             "episodeCount": "0",
             "seasonCount": "0",
-            "userRating": {
-                "ratingCountList": [],
-                "averageRating": "2.5",
-                "ratingCount": "0"
-            },
-            "firstAired": "2015-04-03",
-            "lastAired": "2015-06-12",
-            "runtime": "19 seconds",
-            "runtimeTotal": "19 seconds",
+            "stats": null,
+            "firstAired": 150076800,
+            "lastAired": 164592000,
+            "duration": "19 seconds",
+            "durationTotal": "19 seconds",
             "airSeason": "Winter",
-            "airTime": "15:02",
+            "airTime": "11:05",
             "airDay": null,
             "isNSFW": true,
-            "copyright": "\u00a9 2019 Reinger-West",
+            "copyright": "\u2117 2013 Sporer LLC",
             "givenRating": 3,
-            "libraryStatus": "",
-            "isFavorited": false,
-            "isReminded": false
-        }
-    },
-    {
-        "id": 2,
-        "type": "show",
-        "href": "\/v1\/anime\/2",
-        "attributes": {
-            "anidbID": null,
-            "anilistID": null,
-            "imdbID": null,
-            "kitsuID": null,
-            "malID": null,
-            "notifyID": null,
-            "syoboiID": null,
-            "traktID": null,
-            "tvdbID": null,
-            "videoUrl": null,
-            "poster": null,
-            "banner": null,
-            "originalTitle": "Quasi culpa eius itaque illo eaque sit fuga.",
-            "title": "Be a good person!",
-            "tagline": "Dolore sed expedita vel corrupti.",
-            "synopsis": "A story about being a good person.",
-            "genres": [],
-            "tvRating": {
-                "name": "h",
-                "description": "Est quia sint doloremque."
-            },
-            "type": {
-                "name": "Myah Waters",
-                "description": "Officia unde sit qui et nihil neque deserunt."
-            },
-            "source": {
-                "name": "Dr. Anastasia Koepp",
-                "description": "Rerum nihil sed provident repellat veniam nihil rem laborum."
-            },
-            "status": {
-                "name": "eum cumque",
-                "description": "Atque officia necessitatibus sint a.",
-                "color": "#19a911"
-            },
-            "episodeCount": "0",
-            "seasonCount": "0",
-            "userRating": {
-                "ratingCountList": [],
-                "averageRating": "4.0",
-                "ratingCount": "0"
-            },
-            "firstAired": "1985-12-18",
-            "lastAired": "1986-03-12",
-            "runtime": "25 seconds",
-            "runtimeTotal": "25 seconds",
-            "airSeason": "Winter",
-            "airTime": "15:10",
-            "airDay": null,
-            "isNSFW": true,
-            "copyright": "\u00a9 1992 Bauch-Heaney",
-            "givenRating": 1.2,
             "libraryStatus": "",
             "isFavorited": false,
             "isReminded": false
