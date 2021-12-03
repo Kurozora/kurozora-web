@@ -3,10 +3,7 @@
 namespace Tests\Unit\Middleware;
 
 use App\Helpers\JSONResult;
-use App\Http\Middleware\CheckKurozoraUserAuthentication;
-use App\Models\Session;
 use Auth;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
@@ -28,7 +25,7 @@ class CheckKurozoraUserAuthenticationTest extends TestCase
     {
         $response = $this->get('/auth-required');
 
-        $this->assertEquals($response->json('errors.0.status'), 403);
+        $this->assertEquals(403, $response->json('errors.0.status'));
     }
 
     /** @test */
@@ -38,7 +35,7 @@ class CheckKurozoraUserAuthenticationTest extends TestCase
         $json = $response->json();
 
         $response->assertSuccessful();
-        $this->assertSame(true, $json['is_authenticated']);
+        $this->assertTrue($json['is_authenticated']);
         $this->assertSame($this->user->id, $json['authenticated_user_id']);
     }
 
@@ -59,47 +56,8 @@ class CheckKurozoraUserAuthenticationTest extends TestCase
         $json = $response->json();
 
         $response->assertSuccessful();
-        $this->assertSame(true, $json['is_authenticated']);
+        $this->assertTrue($json['is_authenticated']);
         $this->assertSame($this->user->id, $json['authenticated_user_id']);
-    }
-
-    /** @test */
-    function authentication_is_not_accepted_when_the_session_is_expired()
-    {
-        // Create a session and expire it
-        $session = $this->user->createSessionAttributes();
-        $session->expires_at = now();
-        $session->save();
-
-        // Attach the auth header
-        $this->withHeader('kuro-auth', KuroAuthToken::generate($this->user->id, $session->secret));
-
-        // Perform request
-        $response = $this->get('/auth-required');
-
-        $response->assertStatus(403);
-    }
-
-    /** @test */
-    function session_lifetime_is_extended_when_passing_through_the_middleware()
-    {
-        Carbon::setTestNow();
-
-        // Create a session and subtract a day from its expiry
-        $session = $this->user->createSessionAttributes();
-        $session->expires_at = now()->addDays(Session::VALID_FOR_DAYS)->subDay();
-        $session->save();
-
-        // Attach the auth header
-        $this->withHeader('kuro-auth', KuroAuthToken::generate($this->user->id, $session->secret));
-
-        // Perform request
-        $this->get('/auth-required');
-
-        // Check whether the expiry was extended
-        $session->refresh();
-
-        $this->assertEquals($session->expires_at->startOfDay(), now()->addDays(Session::VALID_FOR_DAYS)->startOfDay());
     }
 
     /**
@@ -119,10 +77,10 @@ class CheckKurozoraUserAuthenticationTest extends TestCase
 
         Route::get('/auth-required', function() use ($userInfoResponse) {
             return $userInfoResponse();
-        })->middleware(CheckKurozoraUserAuthentication::class);
+        })->middleware('auth.kurozora');
 
         Route::get('/auth-optional', function() use ($userInfoResponse) {
             return $userInfoResponse();
-        })->middleware(CheckKurozoraUserAuthentication::class . ':optional');
+        })->middleware('auth.kurozora:optional');
     }
 }

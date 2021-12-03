@@ -71,8 +71,7 @@ abstract class TestCase extends BaseTestCase
     /**
      * API auth header
      *
-     * This function will create a session for the user, and attach
-     * .. the auth token to the request.
+     * This function will create a session for the user, and attach the auth token to the request.
      *
      * @return $this
      */

@@ -32,7 +32,8 @@ class CheckKurozoraUserAuthentication
 
         // Bearer is empty or user is empty
         $user = Auth::guard('sanctum')->user();
-        if (!$request->bearerToken() || !$user) {
+
+        if (!$user) {
             // Continue with the request if authentication is optional
             if ($parameter === 'optional') {
                 return $next($request);
