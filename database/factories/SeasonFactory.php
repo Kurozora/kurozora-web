@@ -24,7 +24,7 @@ class SeasonFactory extends Factory
     {
         static $number = 1;
         $jaFaker = \Faker\Factory::create('ja_JP');
-        $anime = Anime::inRandomOrder()->first();
+        $anime = Anime::inRandomOrder(mt_rand(1, 999))->first();
 
         if ($anime == null) {
             $anime = Anime::factory()->create();
