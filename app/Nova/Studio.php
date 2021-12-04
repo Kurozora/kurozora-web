@@ -44,7 +44,7 @@ class Studio extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name'
+        'id', 'name', 'slug'
     ];
 
     /**
@@ -99,6 +99,10 @@ class Studio extends Resource
                     Number::make('Height')
                         ->help('The maximum height available for the image.'),
                 ]),
+
+            Text::make('Slug')
+                ->onlyOnForms()
+                ->help('Used to identify the Studio in a URL: https://kurozora.app/studios/<strong>' . ($this->resource->slug ?? 'slug-identifier') . '</strong>. Leave empty to auto-generate from name.'),
 
             Text::make('Name')
                 ->rules('required')

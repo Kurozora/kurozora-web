@@ -9,13 +9,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
+use Request;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class Studio extends KModel implements HasMedia
 {
     use HasFactory,
         HasProfileImage,
+        HasSlug,
         InteractsWithMedia,
         InteractsWithMediaExtension;
 
@@ -48,6 +52,31 @@ class Studio extends KModel implements HasMedia
         'profile_image',
         'profile_image_url',
     ];
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName(): string
+    {
+        if (Request::wantsJson()) {
+            return parent::getRouteKeyName();
+        }
+        return 'slug';
+    }
+
+    /**
+     * Get the options for generating the slug.
+     *
+     * @return SlugOptions
+     */
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
+    }
 
     /**
      * Registers the media collections for the model.
