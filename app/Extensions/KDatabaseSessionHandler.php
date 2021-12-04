@@ -15,7 +15,7 @@ class KDatabaseSessionHandler extends BaseDatabaseSessionHandler
     #[\ReturnTypeWillChange]
     public function destroy($sessionId): bool
     {
-        Session::firstWhere('id', $sessionId)->delete();
+        Session::firstWhere('id', $sessionId)?->delete();
 
         return true;
     }
