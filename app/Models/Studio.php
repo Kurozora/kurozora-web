@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Traits\InteractsWithMediaExtension;
+use App\Traits\Model\HasBannerImage;
+use App\Traits\Model\HasLogoImage;
 use App\Traits\Model\HasProfileImage;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,6 +20,8 @@ use Spatie\Sluggable\SlugOptions;
 class Studio extends KModel implements HasMedia
 {
     use HasFactory,
+        HasBannerImage,
+        HasLogoImage,
         HasProfileImage,
         HasSlug,
         InteractsWithMedia,
@@ -49,6 +53,10 @@ class Studio extends KModel implements HasMedia
      * @var array
      */
     protected $appends = [
+        'banner_image',
+        'banner_image_url',
+        'logo_image',
+        'logo_image_url',
         'profile_image',
         'profile_image_url',
     ];
@@ -83,6 +91,10 @@ class Studio extends KModel implements HasMedia
      */
     public function registerMediaCollections(): void
     {
+        $this->addMediaCollection($this->bannerImageCollectionName)
+            ->singleFile();
+        $this->addMediaCollection($this->logoImageCollectionName)
+            ->singleFile();
         $this->addMediaCollection($this->profileImageCollectionName)
             ->singleFile();
     }
