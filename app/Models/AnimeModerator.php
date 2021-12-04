@@ -16,8 +16,8 @@ class AnimeModerator extends Pivot
      * @var array
      */
     protected $casts = [
-        'created_at' => 'date',
-        'updated_at' => 'date',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     /**

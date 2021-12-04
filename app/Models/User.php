@@ -100,7 +100,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      * @var array
      */
     protected $casts = [
-        'last_mal_import_at' => 'date',
+        'last_mal_import_at' => 'datetime',
         'settings' => 'json',
     ];
 
