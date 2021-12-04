@@ -5,13 +5,13 @@ namespace App\Nova;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Ramsey\Uuid\Uuid;
 use Timothyasp\Color\Color;
 
@@ -126,6 +126,14 @@ class Season extends Resource
             Textarea::make('Synopsis')
                 ->help('A short description of the Season.')
                 ->translatable(),
+
+            DateTime::make('First Aired')
+                ->sortable()
+                ->help('First air date of the of the season in JST timezone. Leave empty if not announced yet.'),
+
+                DateTime::make('Last Aired')
+                    ->sortable()
+                    ->help('Last air date of the of the season in JST timezone. Leave empty if not announced yet.'),
 
             HasMany::make('Episodes'),
         ];

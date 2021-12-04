@@ -134,7 +134,7 @@ class Episode extends Resource
 
             DateTime::make('First Aired')
                 ->sortable()
-                ->help('The air date of the of the episode. Leave empty if not announced yet.'),
+                ->help('The air date of the of the episode in JST timezone. Leave empty if not announced yet.'),
 
             Number::make('Duration')
                 ->rules('required')
