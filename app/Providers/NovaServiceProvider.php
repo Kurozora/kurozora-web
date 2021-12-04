@@ -25,7 +25,13 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         parent::boot();
 
+        // Register custom sign-in controller
         $this->app->alias(SignInController::class, LoginController::class);
+
+        // Set timezone to JST
+        Nova::userTimezone(function () {
+            return 'Asia/Tokyo';
+        });
     }
 
     /**
