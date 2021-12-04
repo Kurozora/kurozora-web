@@ -42,8 +42,8 @@ class Season extends KModel implements HasMedia
      * @var array
      */
     protected $casts = [
-        'first_aired' => 'date',
-        'last_aired' => 'date',
+        'first_aired' => 'datetime',
+        'last_aired' => 'datetime',
     ];
 
     /**
