@@ -182,7 +182,7 @@ class Anime extends Resource
 
             Text::make('Slug')
                 ->onlyOnForms()
-                ->help('Used to identify the Anime in a URL: https://kurozora.app/anime/<strong>wolf-children</strong>. Leave empty to auto-generate from title.'),
+                ->help('Used to identify the Anime in a URL: https://kurozora.app/anime/<strong>' . ($this->resource->slug ?? 'slug-identifier') . '</strong>. Leave empty to auto-generate from title.'),
 
             Text::make('Title', 'original_title')
                 ->sortable()
