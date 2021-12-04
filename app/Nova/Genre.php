@@ -111,7 +111,7 @@ class Genre extends Resource
 
             Text::make('Slug')
                 ->onlyOnForms()
-                ->help('Used to identify the genre in a URL: https://kurozora.app/genre/<strong>action</strong>. Leave empty to auto-generate from name.'),
+                ->help('Used to identify the genre in a URL: https://kurozora.app/genre/<strong>' . ($this->resource->slug ?? 'slug-identifier') . '</strong>. Leave empty to auto-generate from name.'),
 
             Text::make('Name')
                 ->rules('required')

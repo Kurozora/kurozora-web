@@ -17,6 +17,7 @@ class CreateStudioTable extends Migration
         Schema::create(Studio::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('mal_id')->nullable();
+            $table->string('slug');
             $table->string('type');
             $table->string('name');
             $table->mediumText('about')->nullable();
@@ -28,6 +29,7 @@ class CreateStudioTable extends Migration
 
         Schema::table(Studio::TABLE_NAME, function (Blueprint $table) {
             // Set unique key constraints
+            $table->unique(['slug']);
             $table->unique(['mal_id', 'type', 'name']);
         });
     }
