@@ -5,7 +5,7 @@
         <picture class="relative rounded-lg overflow-hidden" style="aspect-ratio: 16/9;">
             <img class="lazyload" data-sizes="auto" data-src="{{ $episode->banner_image_url ?? asset('images/static/placeholders/episode_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
 
-            <div class="absolute bottom-0 left-0 right-0 p-3 pt-[15%] bg-gradient-to-t from-black to-transparent">
+            <div class="absolute bottom-0 left-0 right-0 p-3 pt-[15%] bg-gradient-to-t from-black/50 to-transparent">
                 <div>
                     <p class="text-xs text-white/90 leading-tight line-clamp-2">{{ __('Episode :x', ['x' => $episode->number_total]) }}</p>
                     <p class="text-white leading-tight line-clamp-2">{{ $episode->title }}</p>
