@@ -40,7 +40,7 @@ class Episode extends KModel implements HasMedia
      * @var array
      */
     protected $casts = [
-        'first_aired' => 'date',
+        'first_aired' => 'datetime',
     ];
 
     /**

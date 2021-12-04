@@ -260,7 +260,6 @@ class Anime extends Resource
 
             Time::make('Air time')
                 ->withTwelveHourTime()
-                ->withTimezoneAdjustments()
                 ->hideFromIndex()
                 ->help('The exact time the show airs at in JST timezone. For example: 1:30 PM (13:30)')
                 ->nullable(),
