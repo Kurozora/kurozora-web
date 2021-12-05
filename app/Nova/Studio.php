@@ -71,7 +71,7 @@ class Studio extends Resource
                     return Uuid::uuid4() . '.' . $extension;
                 })
                 ->setName(function($originalFilename, $model) {
-                    return $this->resource->name . ' Banner Image';
+                    return $this->resource->name;
                 })
                 ->customPropertiesFields([
                     Heading::make('Colors (automatically generated if empty)'),
@@ -106,7 +106,7 @@ class Studio extends Resource
                     return Uuid::uuid4() . '.' . $extension;
                 })
                 ->setName(function($originalFilename, $model) {
-                    return $this->resource->name . ' Profile Image';
+                    return $this->resource->name;
                 })
                 ->customPropertiesFields([
                     Heading::make('Colors (automatically generated if empty)'),
@@ -141,7 +141,7 @@ class Studio extends Resource
                     return Uuid::uuid4() . '.' . $extension;
                 })
                 ->setName(function($originalFilename, $model) {
-                    return $this->resource->name . ' Logo Image';
+                    return $this->resource->name;
                 })
                 ->customPropertiesFields([
                     Heading::make('Colors (automatically generated if empty)'),

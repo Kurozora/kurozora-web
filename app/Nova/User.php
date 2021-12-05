@@ -84,7 +84,7 @@ class User extends Resource
                     return Uuid::uuid4() . '.' . $extension;
                 })
                 ->setName(function($originalFilename, $model) {
-                    return $this->resource->username . ' Profile Image';
+                    return $this->resource->username;
                 })
                 ->customPropertiesFields([
                     Heading::make('Colors (automatically generated if empty)'),
@@ -120,7 +120,7 @@ class User extends Resource
                     return Uuid::uuid4() . '.' . $extension;
                 })
                 ->setName(function($originalFilename, $model) {
-                    return $this->resource->username . ' Banner Image';
+                    return $this->resource->username;
                 })
                 ->customPropertiesFields([
                     Heading::make('Colors (automatically generated if empty)'),
