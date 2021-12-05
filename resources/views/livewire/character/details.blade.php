@@ -20,7 +20,7 @@
             <div class="relative pb-2">
                 <div class="flex flex-col flex-wrap text-center items-center">
                     <picture class="relative min-w-[128px] max-w-[128px] min-h-[128px] max-h-[128px] rounded-full overflow-hidden">
-                        <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $character->profile_image_url ?? asset('images/static/placeholders/character_profile.webp') }}" alt="{{ $character->name }} Profile" title="{{ $character->name }}">
+                        <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $character->profile_image_url ?? asset('images/static/placeholders/person_poster_square.webp') }}" alt="{{ $character->name }} Profile Image" title="{{ $character->name }}">
 
                         <div class="absolute top-0 left-0 h-full w-full border-2 border-solid border-black/20 rounded-full"></div>
                     </picture>
@@ -29,19 +29,21 @@
             </div>
         </section>
 
-        <section class="pt-5 pb-8 border-t-2">
-            <x-section-nav>
-                <x-slot name="title">
-                    {{ __('About') }}
-                </x-slot>
-            </x-section-nav>
+        @if (!empty($character->about))
+            <section class="pt-5 pb-8 border-t-2">
+                <x-section-nav>
+                    <x-slot name="title">
+                        {{ __('About') }}
+                    </x-slot>
+                </x-section-nav>
 
-            <x-truncated-text>
-                <x-slot name="text">
-                    {!! nl2br($character->about) !!}
-                </x-slot>
-            </x-truncated-text>
-        </section>
+                <x-truncated-text>
+                    <x-slot name="text">
+                        {!! nl2br($character->about) !!}
+                    </x-slot>
+                </x-truncated-text>
+            </section>
+        @endif
 
         <section class="pt-5 pb-8 border-t-2">
             <x-section-nav>
