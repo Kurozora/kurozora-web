@@ -60,3 +60,36 @@ if (!function_exists('number_shorten')) {
         return $formattedNumber . $unit;
     }
 }
+
+if (!function_exists('create_studio_banner_from')) {
+    function create_studio_banner_from($images, $filename_result)
+    {
+        // Create a new banner image canvas
+        $bannerImageCanvas = imagecreatetruecolor(1920, 1080);
+
+        // Get dimensions, load images and copy to the canvas
+        foreach ($images as $key => $image) {
+            // Get dimensions of the image
+            list(${'width_' . $key}, ${'height_' . $key}) = getimagesize($image);
+
+            // Load the image
+            ${'image_' . $key} = imagecreatefromwebp($image);
+
+            // Copy the image to the banner canvas
+            if ($key >= 5) { // Copy image to bottom row when reaching 5th image
+                imagecopyresized($bannerImageCanvas, ${'image_' . $key}, ($key - 5) * 384, 540, 0, 0, 384, 540, ${'width_' . $key}, ${'height_' . $key});
+            } else { // Copy image to top row
+                imagecopyresized($bannerImageCanvas, ${'image_' . $key}, $key * 384, 0, 0, 0, 384, 540, ${'width_' . $key}, ${'height_' . $key});
+            }
+        }
+
+        // Save the resulting image to disk as WebP
+        imagewebp($bannerImageCanvas, $filename_result);
+
+        // Remove images from memory
+        imagedestroy($bannerImageCanvas);
+        foreach ($images as $key => $image) {
+            imagedestroy(${'image_' . $key});
+        }
+    }
+}

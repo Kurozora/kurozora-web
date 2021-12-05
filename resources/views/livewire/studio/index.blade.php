@@ -22,6 +22,8 @@
             @endforeach
         </section>
 
-        {{ $studios->links() }}
+        <section class="mt-4">
+            {{ $studios->links() }}
+        </section>
     </div>
 </main>
