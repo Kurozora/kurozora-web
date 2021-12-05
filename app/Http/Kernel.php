@@ -6,6 +6,7 @@ use App\Http\Middleware\AuthenticateSession;
 use App\Http\Middleware\CheckKurozoraUserAuthentication;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\KAuthenticate;
+use App\Http\Middleware\NoSessionForBotsMiddleware;
 use App\Http\Middleware\PreventRequestsDuringMaintenance;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\TrustProxies;
@@ -54,6 +55,7 @@ class Kernel extends HttpKernel
         'web' => [
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
+            NoSessionForBotsMiddleware::class,
             StartSession::class,
             AuthenticateSession::class,
             ShareErrorsFromSession::class,
