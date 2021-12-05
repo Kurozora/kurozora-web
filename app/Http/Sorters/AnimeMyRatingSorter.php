@@ -22,8 +22,7 @@ class AnimeMyRatingSorter extends Sorter
     public function apply(Request $request, Builder $builder, string $direction): Builder
     {
         // Join the user ratings table
-        $builder->join(AnimeRating::TABLE_NAME, AnimeRating::TABLE_NAME . '.anime_id', '=', Anime::TABLE_NAME . '.id')
-            ->select(Anime::TABLE_NAME . '.*');
+        $builder->leftJoin(AnimeRating::TABLE_NAME, AnimeRating::TABLE_NAME . '.anime_id', '=', Anime::TABLE_NAME . '.id');
 
         // Order by the user rating
         if ($direction == 'worst') {
@@ -32,7 +31,7 @@ class AnimeMyRatingSorter extends Sorter
             $builder->orderBy(AnimeRating::TABLE_NAME . '.rating', 'desc');
         }
 
-        return $builder;
+        return $builder->select(Anime::TABLE_NAME . '.*');
     }
 
     /**
