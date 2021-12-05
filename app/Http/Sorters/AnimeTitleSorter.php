@@ -2,8 +2,6 @@
 
 namespace App\Http\Sorters;
 
-use App\Models\Anime;
-use App\Models\AnimeTranslation;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use musa11971\SortRequest\Support\Foundation\Contracts\Sorter;
@@ -21,18 +19,8 @@ class AnimeTitleSorter extends Sorter
      */
     public function apply(Request $request, Builder $builder, string $direction): Builder
     {
-        // Join the anime translation table
-        $builder->join(AnimeTranslation::TABLE_NAME, AnimeTranslation::TABLE_NAME . '.anime_id', '=', Anime::TABLE_NAME . '.id')
-            ->select(Anime::TABLE_NAME . '.*');
-
         // Order by the user rating
-        if ($direction == 'asc') {
-            $builder->orderBy(AnimeTranslation::TABLE_NAME . '.title');
-        } else {
-            $builder->orderBy(AnimeTranslation::TABLE_NAME . '.title', 'desc');
-        }
-
-        return $builder;
+        return $builder->orderBy('original_title', $direction);
     }
 
     /**
