@@ -28,6 +28,7 @@
         "hisorange/browser-detect": "^4.4",
         "imdhemy/laravel-purchases": "^0.10.2",
         "intervention/image": "^2.7",
+        "jaybizzle/crawler-detect": "^1.2",
         "kraenkvisuell/nova-astrotranslatable": "^2.0",
         "laraning/nova-time-field": "^1.0",
         "laravel-notification-channels/apn": "^3.0",
