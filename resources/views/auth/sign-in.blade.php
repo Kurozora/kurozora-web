@@ -3,6 +3,13 @@
         {{ __('Sign In') }}
     </x-slot>
 
+    <x-slot name="meta">
+        <meta name="appleid-signin-client-id" content="{{ config('services.apple.client_id') }}">
+        <meta name="appleid-signin-scope" content="name email">
+        <meta name="appleid-signin-redirect-uri" content="{{ route('siwa.callback') }}">
+        <meta name="appleid-signin-state" content="{{ Str::random(40) }}">
+    </x-slot>
+
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Kurozora ID') }}
@@ -45,8 +52,12 @@
             </div>
 
             <div class="flex flex-col items-center justify-end mt-4">
+                <x-button>
+                    {{ __('Open sesame 👐') }}
+                </x-button>
+
                 @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
+                    <a class="underline text-sm text-gray-600 hover:text-gray-900 mt-4" href="{{ route('password.request') }}">
                         {{ __('Forgot your password? Let\'s reset it 📧') }}
                     </a>
 
@@ -57,9 +68,11 @@
                     {{ __('New to Kurozora? Join us 🔥') }}
                 </a>
 
-                <x-button class="mt-4">
-                    {{ __('Open sesame 👐') }}
-                </x-button>
+                <p class="mt-4 tracking-wide font-black">{{ __('————— or —————') }}</p>
+
+                <div class="mt-4">
+                    <x-auth.apple-button />
+                </div>
             </div>
         </form>
     </div>

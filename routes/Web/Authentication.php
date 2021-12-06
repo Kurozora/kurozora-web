@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\Auth\SignInWithAppleController;
 use App\Http\Controllers\Web\AuthenticatedSessionController;
 use App\Http\Controllers\Web\EmailVerificationNotificationController;
 use App\Http\Controllers\Web\EmailVerificationPromptController;
@@ -28,6 +29,18 @@ Route::get('/sign-up', [SignUpUserController::class, 'create'])
 
 Route::post('/sign-up', [SignUpUserController::class, 'store'])
     ->middleware(['guest', 'honey', 'honey-recaptcha']);
+
+Route::prefix('/siwa')
+    ->name('siwa')
+    ->group(function () {
+        Route::get('/sign-in', [SignInWithAppleController::class, 'signIn'])
+            ->middleware(['guest'])
+            ->name('.sign-in');
+
+        Route::post('/callback', [SignInWithAppleController::class, 'callback'])
+            ->middleware(['guest'])
+            ->name('.callback');
+    });
 
 Route::name('verification')
     ->group(function () {
