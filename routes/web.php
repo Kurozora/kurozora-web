@@ -19,6 +19,7 @@ require 'Web/Anime.php';
 require 'Web/Characters.php';
 require 'Web/Episodes.php';
 require 'Web/Genres.php';
+require 'Web/Me.php';
 require 'Web/People.php';
 require 'Web/Profile.php';
 require 'Web/Seasons.php';
