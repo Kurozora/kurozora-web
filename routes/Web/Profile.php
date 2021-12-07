@@ -13,11 +13,3 @@ Route::prefix('/profile')
         Route::get('/{user}', Details::class)
             ->name('.details');
     });
-
-Route::prefix('/me')
-    ->middleware(['auth'])
-    ->group(function () {
-        Route::get('/', function () {
-            return redirect(route('profile.details', ['user' => Auth::user()]));
-        });
-    });

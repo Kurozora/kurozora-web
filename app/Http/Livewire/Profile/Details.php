@@ -13,9 +13,9 @@ class Details extends Component
     /**
      * The object containing the user data.
      *
-     * @var ?User $user
+     * @var User $user
      */
-    public ?User $user;
+    public User $user;
 
     /**
      * Prepare the component.
