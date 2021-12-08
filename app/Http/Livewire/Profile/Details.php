@@ -34,7 +34,7 @@ class Details extends Component
      *
      * @return Application|Factory|View
      */
-    public function render(): Factory|View|Application
+    public function render(): Application|Factory|View
     {
         return view('livewire.profile.details')
             ->layout('layouts.base');
