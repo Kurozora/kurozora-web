@@ -41,13 +41,7 @@
                     @if ($user->id == Auth::user()->id)
                         <x-button wire:click="$toggle('showPopup')">{{ __('Edit') }}</x-button>
                     @else
-                        <x-button>
-                            @if ($user->followers()->where('user_id', Auth::user()->id)->exists())
-                                {{ __('✓︎ Following') }}
-                            @else
-                                {{ __('+ Follow') }}
-                            @endif
-                        </x-button>
+                        @livewire('components.follow-button', ['user' => $user])
                     @endif
                 @endif
             </div>
