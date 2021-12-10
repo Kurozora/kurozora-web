@@ -108,10 +108,10 @@ class SignOutOtherSessionsForm extends Component
 
                 return (object) [
                     'browser'           => Browser::detect(),
-                    'platform'          => $sessionAttribute->platform,
-                    'platform_version'  => $sessionAttribute->platform_version,
-                    'device_model'      => $sessionAttribute->device_model,
-                    'ip_address'        => $sessionAttribute->ip_address,
+                    'platform'          => $sessionAttribute->platform ?? 'Unknown',
+                    'platform_version'  => $sessionAttribute->platform_version ?? 'Unknown',
+                    'device_model'      => $sessionAttribute->device_model ?? 'Unknown',
+                    'ip_address'        => $sessionAttribute->ip_address ?? 'Unknown',
                     'is_current_device' => $session->id === session()->getId(),
                     'last_activity'     => Carbon::createFromTimestamp($session->last_activity)->diffForHumans(),
                 ];
