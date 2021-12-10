@@ -58,7 +58,7 @@
 
                 @if (Route::has('password.request'))
                     <a class="underline text-sm text-gray-600 hover:text-gray-900 mt-4" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password? Let\'s reset it 📧') }}
+                        {{ __('Forgot your password? Let’s reset it 📧') }}
                     </a>
 
                     <p class="mt-4 tracking-wide font-black">{{ __('————— or —————') }}</p>
