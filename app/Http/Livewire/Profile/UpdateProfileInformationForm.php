@@ -6,7 +6,6 @@ use App\Contracts\UpdatesUserProfileInformation;
 use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -27,7 +26,14 @@ class UpdateProfileInformationForm extends Component
      *
      * @var mixed
      */
-    public mixed $photo = null;
+    public mixed $profileImage = null;
+
+    /**
+     * The new banner image for the user.
+     *
+     * @var mixed
+     */
+    public mixed $bannerImage = null;
 
     /**
      * The component's listeners.
@@ -52,40 +58,63 @@ class UpdateProfileInformationForm extends Component
      * Update the user's profile information.
      *
      * @param UpdatesUserProfileInformation $updater
-     * @return RedirectResponse|void
+     * @return void
      */
     public function updateProfileInformation(UpdatesUserProfileInformation $updater)
     {
         $this->resetErrorBag();
 
-        $updater->update(
-            Auth::user(),
-            $this->photo
-                ? array_merge($this->state, ['photo' => $this->photo])
-                : $this->state
-        );
+        $attributes = $this->state;
 
-        if (isset($this->photo)) {
-            return redirect()->route('profile.settings');
+        if (!empty($this->profileImage)) {
+            $attributes = array_merge($attributes, ['profileImage' => $this->profileImage]);
         }
+
+        if (!empty($this->bannerImage)) {
+            $attributes = array_merge($attributes, ['bannerImage' => $this->bannerImage]);
+        }
+
+        $updater->update(Auth::user(), $attributes);
 
         $this->emit('saved');
 
-        $this->emit('refresh-navigation-dropdown');
+        if (isset($this->profileImage)) {
+            $this->emit('refresh-profile-image');
+            $this->emit('refresh-navigation-dropdown');
+            $this->profileImage = null;
+        }
+
+        if (isset($this->bannerImage)) {
+            $this->emit('refresh-banner-image');
+            $this->bannerImage = null;
+        }
     }
 
     /**
-     * Delete user's profile photo.
+     * Delete user's profile image.
      *
      * @return void
      */
-    public function deleteProfilePhoto()
+    public function deleteProfileImage()
     {
         Auth::user()->deleteProfileImage();
 
         $this->emitSelf('refresh-component');
-
+        $this->emit('refresh-profile-image');
         $this->emit('refresh-navigation-dropdown');
+    }
+
+    /**
+     * Delete user's banner image.
+     *
+     * @return void
+     */
+    public function deleteBannerImage()
+    {
+        Auth::user()->deleteBannerImage();
+
+        $this->emitSelf('refresh-component');
+        $this->emit('refresh-banner-image');
     }
 
     /**

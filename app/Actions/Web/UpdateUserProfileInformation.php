@@ -4,6 +4,7 @@ namespace App\Actions\Web;
 
 use App\Contracts\UpdatesUserProfileInformation;
 use App\Models\User;
+use App\Rules\ValidateBannerImage;
 use App\Rules\ValidateEmail;
 use App\Rules\ValidateProfileImage;
 use App\Rules\ValidateUsername;
@@ -31,7 +32,8 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     {
         $rules = [
             'email' => ['required', new ValidateEmail, Rule::unique(User::TABLE_NAME)->ignore($user->id)],
-            'photo' => [new ValidateProfileImage],
+            'profileImage' => [new ValidateProfileImage],
+            'bannerImage' => [new ValidateBannerImage],
         ];
 
         if (settings('can_change_username')) {
@@ -42,8 +44,12 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 
         Validator::make($input, $rules)->validateWithBag('updateProfileInformation');
 
-        if (isset($input['photo'])) {
-            $user->updateProfileImage($input['photo']->getRealPath());
+        if (isset($input['profileImage'])) {
+            $user->updateProfileImage($input['profileImage']->getRealPath());
+        }
+
+        if (isset($input['bannerImage'])) {
+            $user->updateBannerImage($input['bannerImage']->getRealPath());
         }
 
         if ($input['email'] !== $user->email &&

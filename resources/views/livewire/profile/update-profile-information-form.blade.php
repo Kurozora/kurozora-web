@@ -4,60 +4,174 @@
     </x-slot>
 
     <x-slot name="description">
-        {{ __('Update your account\'s profile information and email address.') }}
+        {{ __('Update your account’s profile information and email address.') }}
     </x-slot>
 
     <x-slot name="form">
-        <!-- Profile Image -->
-        <div x-data="{photoName: null, photoPreview: null}" class="col-span-6 sm:col-span-6">
-            <!-- Profile Image File Input -->
-            <input type="file" class="hidden"
-                wire:model="photo"
-                x-ref="photo"
+        {{-- Banner Image --}}
+        <div x-data="{bannerImageName: null, bannerImagePreview: @entangle('bannerImage')}" class="col-span-6 sm:col-span-6">
+            {{-- Banner Image File Input --}}
+            <input
+                type="file" class="hidden"
+                wire:model="bannerImage"
+                x-ref="bannerImage"
                 x-on:change="
-                    photoName = $refs.photo.files[0].name;
+                    bannerImageName = $refs.bannerImage.files[0].name;
                     const reader = new FileReader();
                     reader.onload = (e) => {
-                        photoPreview = e.target.result;
+                        bannerImagePreview = e.target.result;
                     };
-                    reader.readAsDataURL($refs.photo.files[0]);
-            " />
+                    reader.readAsDataURL($refs.bannerImage.files[0]);
+               "
+            />
 
-            <x-label for="photo" value="{{ __('Photo') }}" />
+            {{-- Current Banner Image --}}
+            <div class="relative" x-show="!bannerImagePreview">
+                @livewire('components.banner-image-view', ['user' => Auth::user()])
 
-            <!-- Current Profile Image -->
-            <div class="mt-2" x-show="!photoPreview">
-                <div class="h-20 w-20 bg-cover rounded-full" style="background-image: url({{ Auth::user()->profile_image_url }});" alt="{{ Auth::user()->username }}" role="img"></div>
-            </div>
+                <div class="absolute top-0 right-0 bottom-0 left-0 flex justify-center bg-black/20">
+                    <div class="flex items-center justify-center">
+                        <button
+                            class="inline-flex items-center justify-center w-12 h-12 p-2 text-white rounded-full hover:bg-white/20 focus:outline-none focus:bg-white/60 transition duration-150 ease-in-out"
+                            x-on:click.prevent="$refs.bannerImage.click()"
+                        >
+                            @svg('camera', 'fill-current', ['width' => '24'])
+                        </button>
 
-            <!-- New Profile Image Preview -->
-            <div class="mt-2" x-show="photoPreview">
-                <div class="block rounded-full w-20 h-20"
-                      x-bind:style="'background-size: cover; background-repeat: no-repeat; background-position: center center; background-image: url(\'' + photoPreview + '\');'" role="img" alt="{{ Auth::user()->username }}">
+                        @if (!empty(Auth::user()->banner_image_url))
+                            <button
+                                class="inline-flex items-center justify-center w-12 h-12 p-2 text-red-500 rounded-full hover:bg-white/20 focus:outline-none focus:bg-white/60 transition duration-150 ease-in-out"
+                                wire:click="deleteBannerImage"
+                            >
+                                @svg('trash', 'fill-current', ['width' => '24'])
+                            </button>
+                        @endif
+                    </div>
                 </div>
             </div>
 
-            <x-outlined-button class="mt-2 mr-2" type="button" x-on:click.prevent="$refs.photo.click()">
-                {{ __('Select A New Photo') }}
-            </x-outlined-button>
+            {{-- New Banner Image Preview --}}
+            <div class="relative" x-show="bannerImagePreview">
+                <div class="flex">
+                    <picture class="relative w-full overflow-hidden">
+                        <img
+                            class="inline-block w-full h-80 object-cover"
+                            style="background-color: {{ Auth::user()->banner_image?->custom_properties['background_color'] ?? '#FF9300' }}"
+                            src=""
+                            x-bind:src="bannerImagePreview"
+                            alt="{{ Auth::user()->username }} Banner Image"
+                        >
 
-            @if (!str_starts_with(Auth::user()->profile_image_url, 'https://ui-avatars.com/'))
-                <x-danger-button type="button" class="mt-2" wire:click="deleteProfilePhoto">
-                    {{ __('Remove Photo') }}
-                </x-danger-button>
-            @endif
+                        <div class="absolute top-0 left-0 h-full w-full"></div>
+                    </picture>
+                </div>
 
-            <x-input-error for="photo" class="mt-2" />
+                <div class="absolute top-0 right-0 bottom-0 left-0 flex justify-center bg-black/20">
+                    <div class="flex items-center justify-center">
+                        <button
+                            class="inline-flex items-center justify-center w-12 h-12 p-2 text-white rounded-full hover:bg-white/20 focus:outline-none focus:bg-white/60 transition duration-150 ease-in-out"
+                            x-on:click.prevent="$refs.bannerImage.click()"
+                        >
+                            @svg('camera', 'fill-current text-white', ['width' => '24'])
+                        </button>
+
+                        @if (!empty(Auth::user()->banner_image_url))
+                            <button
+                                class="inline-flex items-center justify-center w-12 h-12 p-2 text-red-500 rounded-full hover:bg-white/20 focus:outline-none focus:bg-white/60 transition duration-150 ease-in-out"
+                                wire:click="deleteBannerImage"
+                            >
+                                @svg('trash', 'fill-current text-red-500', ['width' => '24'])
+                            </button>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <x-input-error for="bannerImage" class="mt-2" />
         </div>
 
-        <!-- Username -->
+        {{-- Profile Image --}}
+        <div x-data="{profileImageName: null, profileImagePreview: @entangle('profileImage')}" class="-mt-20 px-4 col-span-6 z-10 sm:px-6 sm:col-span-6">
+            {{-- Profile Image File Input --}}
+            <input
+                type="file" class="hidden"
+                wire:model="profileImage"
+                x-ref="profileImage"
+                x-on:change="
+                    profileImageName = $refs.profileImage.files[0].name;
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        profileImagePreview = e.target.result;
+                    };
+                    reader.readAsDataURL($refs.profileImage.files[0]);
+                "
+            />
+
+            {{-- Current Profile Image --}}
+            <div class="relative w-24 h-24 rounded-full overflow-hidden" x-show="!profileImagePreview">
+                @livewire('components.profile-image-view', ['user' => Auth::user()])
+
+                <div class="absolute top-0 right-0 bottom-0 left-0 flex justify-center bg-black/20">
+                    <div class="flex items-center justify-center">
+                        <button
+                            class="inline-flex items-center justify-center w-12 h-12 p-2 text-white rounded-full hover:bg-white/20 focus:outline-none focus:bg-white/60 transition duration-150 ease-in-out"
+                            x-on:click.prevent="$refs.profileImage.click()"
+                        >
+                            @svg('camera', 'fill-current', ['width' => '24'])
+                        </button>
+
+                        @if (!str_starts_with(Auth::user()->profile_image_url, 'https://ui-avatars.com/'))
+                            <button
+                                class="inline-flex items-center justify-center w-12 h-12 p-2 text-red-500 rounded-full hover:bg-white/20 focus:outline-none focus:bg-white/60 transition duration-150 ease-in-out"
+                                wire:click="deleteProfileImage"
+                            >
+                                @svg('trash', 'fill-current', ['width' => '24'])
+                            </button>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            {{-- New Profile Image Preview --}}
+            <div class="relative w-24 h-24 rounded-full overflow-hidden" x-show="profileImagePreview">
+                <img class="w-24 h-24 bg-white border-2 border-black/5 rounded-full"
+                     src=""
+                     x-bind:src="profileImagePreview"
+                     alt="{{ Auth::user()->username }} Profile Image"
+                >
+
+                <div class="absolute top-0 right-0 bottom-0 left-0 flex justify-center bg-black/20">
+                    <div class="flex items-center justify-center">
+                        <button
+                            class="inline-flex items-center justify-center w-12 h-12 p-2 text-white rounded-full hover:bg-white/20 focus:outline-none focus:bg-white/60 transition duration-150 ease-in-out"
+                            x-on:click.prevent="$refs.profileImage.click()"
+                        >
+                            @svg('camera', 'fill-current', ['width' => '24'])
+                        </button>
+
+                        @if (!str_starts_with(Auth::user()->profile_image_url, 'https://ui-avatars.com/'))
+                            <button
+                                class="inline-flex items-center justify-center w-12 h-12 p-2 text-red-500 rounded-full hover:bg-white/20 focus:outline-none focus:bg-white/60 transition duration-150 ease-in-out"
+                                wire:click="deleteProfileImage"
+                            >
+                                @svg('trash', 'fill-current', ['width' => '24'])
+                            </button>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <x-input-error for="profileImage" class="mt-2" />
+        </div>
+
+        {{-- Username --}}
         <div class="col-span-3 sm:col-span-2">
             <x-label for="username" value="{{ __('Username') }}" />
             <x-input id="username" type="text" class="mt-1 block w-full {{ settings('can_change_username') ?: 'select-none opacity-25' }}" wire:model.defer="state.username" autocomplete="username" disabled="{{ !settings('can_change_username') }}" />
             <x-input-error for="username" class="mt-2" />
         </div>
 
-        <!-- Email -->
+        {{-- Email --}}
         <div class="col-span-6 sm:col-span-4">
             <x-label for="email" value="{{ __('Email') }}" />
             <x-input id="email" type="email" class="mt-1 block w-full" wire:model.defer="state.email" />
@@ -70,7 +184,7 @@
             {{ __('Saved.') }}
         </x-action-message>
 
-        <x-button wire:loading.attr="disabled" wire:target="photo">
+        <x-button wire:loading.attr="disabled" wire:target="profileImage,bannerImage">
             {{ __('Save') }}
         </x-button>
     </x-slot>
