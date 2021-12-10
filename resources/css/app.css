@@ -94,24 +94,22 @@ picture::before {
  */
 @tailwind utilities;
 @layer utilities {
-  @variants responsive {
-    /* Chrome, Safari and Opera */
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
+  /* Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 
-    .no-scrollbar {
-      -ms-overflow-style: none;  /* IE and Edge */
-      scrollbar-width: none;  /* Firefox */
-    }
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
 
-    .aspect-ratio-16-9 {
-      aspect-ratio: 16/9;
-    }
+  .aspect-ratio-16-9 {
+    aspect-ratio: 16/9;
+  }
 
-    .aspect-ratio-auto {
-      aspect-ratio: auto;
-    }
+  .aspect-ratio-auto {
+    aspect-ratio: auto;
   }
 }
 
@@ -144,4 +142,4 @@ picture::before {
  * This injects all of Tailwind's screen classes, generated based on the
  * config file.
  */
-@tailwind screens;
+@tailwind variants;
