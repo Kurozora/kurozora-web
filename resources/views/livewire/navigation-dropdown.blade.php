@@ -178,10 +178,11 @@
                             </x-slot>
 
                             <x-slot name="content">
-                                <x-dropdown-link href="#">
+                                <x-dropdown-link href="{{ route('me') }}">
                                     {{ __('Profile') }}
                                 </x-dropdown-link>
 
+                                {{-- Library --}}
                                 <x-dropdown-link href="#">
                                     {{ __('Library') }}
                                 </x-dropdown-link>
@@ -270,7 +271,7 @@
             <div class="pt-4 pb-1 border-t border-gray-200">
                 @auth
                     <div class="flex items-center px-4 pb-4">
-                        <div class="flex-shrink-0">
+                        <div class="shrink-0">
                             <div class="h-10 w-10 bg-cover rounded-full" style="background-image: url({{ Auth::user()->profile_image_url }});"
                                  alt="{{ Auth::user()->username }}" role="img"></div>
                         </div>
@@ -282,12 +283,12 @@
                     </div>
                 @endauth
 
-                {{-- Library --}}
                 <div class="space-y-1">
-                    <x-responsive-nav-link href="#">
+                    <x-responsive-nav-link href="{{ route('me') }}">
                         {{ __('Profile') }}
                     </x-responsive-nav-link>
 
+                    {{-- Library --}}
                     <x-responsive-nav-link href="#">
                         {{ __('Library') }}
                     </x-responsive-nav-link>

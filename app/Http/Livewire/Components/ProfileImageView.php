@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Profile;
+namespace App\Http\Livewire\Components;
 
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
@@ -8,7 +8,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
-class Details extends Component
+class ProfileImageView extends Component
 {
     /**
      * The object containing the user data.
@@ -18,9 +18,13 @@ class Details extends Component
     public User $user;
 
     /**
-     * @var bool $showPopup
+     * The component's listeners.
+     *
+     * @var array
      */
-    public bool $showPopup = false;
+    protected $listeners = [
+        'refresh-profile-image' => '$refresh',
+    ];
 
     /**
      * Prepare the component.
@@ -41,9 +45,6 @@ class Details extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.profile.details', [
-            'isEditing' => true
-        ])
-            ->layout('layouts.base');
+        return view('livewire.components.profile-image-view');
     }
 }
