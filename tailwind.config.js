@@ -1,12 +1,9 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
-const colors = require('tailwindcss/colors');
 
 module.exports = {
-    mode: 'jit',
-
     darkMode: 'class',
 
-    purge: [
+    content: [
         './app/**/*.php',
         './public/**/*.html',
         './resources/**/*.{html,js,jsx,md,php,ts,tsx,twig,vue}'
@@ -21,48 +18,23 @@ module.exports = {
             linkLast: 'ml-6 border rounded',
         }),
 
-        colors: {
-            transparent: 'transparent',
-            current: 'currentColor',
-            black: colors.black,
-            white: colors.white,
-            rose: colors.rose,
-            pink: colors.pink,
-            fuchsia: colors.fuchsia,
-            purple: colors.purple,
-            violet: colors.violet,
-            indigo: colors.indigo,
-            blue: colors.blue,
-            sky: colors.sky,
-            cyan: colors.cyan,
-            teal: colors.teal,
-            emerald: colors.emerald,
-            green: colors.green,
-            lime: colors.lime,
-            yellow: colors.yellow,
-            amber: colors.amber,
-            orange: {
-                DEFAULT: '#FF9300',
-                '50': '#FFF4E5',
-                '100': '#FFE9CC',
-                '200': '#FFD499',
-                '300': '#FFBE66',
-                '400': '#FFA933',
-                '500': '#FF9300',
-                '600': '#E68400',
-                '700': '#CC7600',
-                '800': '#B36700',
-                '900': '#995800'
-            },
-            red: colors.red,
-            warmGray: colors.warmGray,
-            trueGray: colors.trueGray,
-            gray: colors.gray,
-            coolGray: colors.coolGray,
-            blueGray: colors.blueGray
-        },
-
         extend: {
+            colors: {
+                orange: {
+                    DEFAULT: '#FF9300',
+                    '50': '#FFF4E5',
+                    '100': '#FFE9CC',
+                    '200': '#FFD499',
+                    '300': '#FFBE66',
+                    '400': '#FFA933',
+                    '500': '#FF9300',
+                    '600': '#E68400',
+                    '700': '#CC7600',
+                    '800': '#B36700',
+                    '900': '#995800'
+                },
+            },
+
             fontFamily: {
                 sans: ['Inter var', ...defaultTheme.fontFamily.sans],
             },
