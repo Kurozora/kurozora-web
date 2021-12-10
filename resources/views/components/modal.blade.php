@@ -4,11 +4,11 @@
     $id = $id ?? md5($attributes->wire('model'));
 
     match ($maxWidth ?? '2xl') {
-        'sm' => $maxWidth = 'sm:max-w-sm',
-        'md' => $maxWidth = 'sm:max-w-md',
-        'lg' => $maxWidth = 'sm:max-w-lg',
-        'xl' => $maxWidth = 'sm:max-w-xl',
-        default => $maxWidth = 'sm:max-w-2xl'
+        'sm' => $maxWidth = 'sm:max-w-sm lg:max-w-2xl',
+        'md' => $maxWidth = 'sm:max-w-md lg:max-w-3xl',
+        'lg' => $maxWidth = 'sm:max-w-lg lg:max-w-4xl',
+        'xl' => $maxWidth = 'sm:max-w-xl lg:max-w-5xl',
+        default => $maxWidth = 'sm:max-w-2xl lg:max-w-6xl'
     };
 @endphp
 
@@ -34,6 +34,7 @@
     x-on:keydown.escape.window="show = false"
     x-on:keydown.tab.prevent="$event.shiftKey || nextFocusable().focus()"
     x-on:keydown.shift.tab.prevent="prevFocusable().focus()"
+    x-cloak=""
     x-show="show"
     id="{{ $id }}"
     style="display: none;"
