@@ -15,7 +15,7 @@
         users/{{ $user->id }}
     </x-slot>
 
-    <div class="">
+    <div>
         <section>
             @livewire('components.banner-image-view', ['user' => $user])
         </section>
@@ -41,13 +41,7 @@
                     @if ($user->id == Auth::user()->id)
                         <x-button wire:click="$toggle('showPopup')">{{ __('Edit') }}</x-button>
                     @else
-                        <x-button>
-                            @if ($user->followers()->where('user_id', Auth::user()->id)->exists())
-                                {{ __('✓︎ Following') }}
-                            @else
-                                {{ __('+ Follow') }}
-                            @endif
-                        </x-button>
+                        @livewire('components.follow-button', ['user' => $user])
                     @endif
                 @endif
             </div>
@@ -59,22 +53,22 @@
             @endif
 
             <div class="flex justify-between">
-                <a href="#" class="w-48 text-center">
-                    <p class="font-semibold">0</p>
-                    <p class="text-gray-500 text-sm font-semibold">{{ __('Reputation') }}</p>
-                </a>
-                <a href="#" class="w-48 text-center">
-                    <p class="font-semibold">{{ $user->badges()->count() }}</p>
-                    <p class="text-gray-500 text-sm font-semibold">{{ __('Badges') }}</p>
-                </a>
-                <a href="#" class="w-48 text-center">
-                    <p class="font-semibold">{{ $user->following()->count() }}</p>
-                    <p class="text-gray-500 text-sm font-semibold">{{ __('Following') }}</p>
-                </a>
-                <a href="#" class="w-48 text-center">
-                    <p class="font-semibold">{{ $user->followers()->count() }}</p>
-                    <p class="text-gray-500 text-sm font-semibold">{{ __('Followers') }}</p>
-                </a>
+                <x-profile-information-badge>
+                    <x-slot name="title">{{ __('Reputation') }}</x-slot>
+                    <x-slot name="description">0</x-slot>
+                </x-profile-information-badge>
+
+                <x-profile-information-badge>
+                    <x-slot name="title">{{ __('Badges') }}</x-slot>
+                    <x-slot name="description">{{ $user->badges()->count() }}</x-slot>
+                </x-profile-information-badge>
+
+                <x-profile-information-badge>
+                    <x-slot name="title">{{ __('Following') }}</x-slot>
+                    <x-slot name="description">{{ $user->following()->count() }}</x-slot>
+                </x-profile-information-badge>
+
+                @livewire('components.followers-badge', ['user' => $user])
             </div>
 
             <x-hr class="mt-2" />
