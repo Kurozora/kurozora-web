@@ -15,7 +15,7 @@
         users/{{ $user->id }}
     </x-slot>
 
-    <div class="">
+    <div>
         <section>
             @livewire('components.banner-image-view', ['user' => $user])
         </section>
