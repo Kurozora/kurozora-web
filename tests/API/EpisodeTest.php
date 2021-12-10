@@ -2,8 +2,8 @@
 
 namespace Tests\API;
 
-use App\Models\Episode;
 use App\Enums\UserLibraryStatus;
+use App\Models\Episode;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 use Tests\Traits\ProvidesTestAnime;
@@ -140,7 +140,7 @@ class EpisodeTest extends TestCase
     {
         $exists = $this->user->watchedEpisodes()->where('episode_id', $episode->id)->exists();
 
-        $message = 'Episode ID ' . $episode->id .' was ' . ($exists ? 'found' : 'not found') . ' in the user\'s watch list.';
+        $message = 'Episode ID ' . $episode->id .' was ' . ($exists ? 'found' : 'not found') . ' in the user’s watch list.';
 
         $this->assertEquals($expected, $exists, $message);
     }
