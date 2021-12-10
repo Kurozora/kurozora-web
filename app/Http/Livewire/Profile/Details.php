@@ -41,9 +41,7 @@ class Details extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.profile.details', [
-            'isEditing' => true
-        ])
+        return view('livewire.profile.details')
             ->layout('layouts.base');
     }
 }

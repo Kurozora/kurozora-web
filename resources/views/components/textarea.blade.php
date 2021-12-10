@@ -7,11 +7,11 @@
 @endphp
 
 <textarea
-    @if ($readonly)
-        x-data="{ resize: () => { $el.style.height = '5px'; $el.style.height = $el.scrollHeight + 'px' } }"
-        x-init="resize()"
-        @input="resize()"
-        @resize.window="resize()"
-    @endif
+{{--    @if ($readonly)--}}
+{{--        x-data="{ resize: () => { $el.style.height = '5px'; $el.style.height = $el.scrollHeight + 'px' } }"--}}
+{{--        x-init="resize()"--}}
+{{--        @input="resize()"--}}
+{{--        @resize.window="resize()"--}}
+{{--    @endif--}}
     {{ $disabled ? 'disabled' : '' }} {{ $readonly ? 'readonly' : '' }} {!! $attributes->merge(['class' => $class]) !!}
 >{{ $slot }}</textarea>

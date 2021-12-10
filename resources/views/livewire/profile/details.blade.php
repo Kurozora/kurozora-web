@@ -46,11 +46,7 @@
                 @endif
             </div>
 
-            @if ($isEditing)
-                <x-textarea class="mt-2" :readonly="$isEditing">{{ $user->biography }}</x-textarea>
-            @else
-                <div class="mt-2 py-2 px-3">{!! nl2br($user->biography) !!}</div>
-            @endif
+            <div class="mt-2 py-2 px-3">{!! nl2br($user->biography) !!}</div>
 
             <div class="flex justify-between">
                 <x-profile-information-badge>
