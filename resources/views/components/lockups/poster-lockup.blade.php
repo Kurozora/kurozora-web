@@ -6,7 +6,7 @@
 
 <div {{ $attributes->merge(['class' => 'relative pb-2 ' . $width]) }}>
     <div class="flex flex-no-wrap">
-        <picture class="relative flex-shrink-0 w-28 h-40 mr-2 rounded-lg overflow-hidden md:w-32 md:h-48">
+        <picture class="relative shrink-0 w-28 h-40 mr-2 rounded-lg overflow-hidden md:w-32 md:h-48">
             <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $season->poster_image_url ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $season->title }} Poster" title="{{ $season->title }}">
 
             <div class="absolute top-0 left-0 h-full w-full border-[1px] border-solid border-black/20 rounded-lg"></div>
@@ -25,13 +25,13 @@
                     <p class="text-sm text-black/60">{{ __('Premiere') }}</p>
                     <p class="text-sm">{{ $season->first_aired?->toFormattedDateString() }}</p>
                 </div>
-                <hr class="w-full" />
+                <x-hr />
 
                 <div class="flex flex-wrap w-full justify-between">
                     <p class="text-sm text-black/60">{{ __('Episodes') }}</p>
                     <p class="text-sm">{{ $season->episodes()->count() }}</p>
                 </div>
-                <hr class="w-full" />
+                <x-hr />
 
                 <div class="flex flex-wrap w-full justify-between">
                     <p class="text-sm text-black/60">{{ __('Score') }}</p>

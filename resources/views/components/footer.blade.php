@@ -58,7 +58,7 @@
                 </ul>
             </div>
 
-            <hr class="w-full mb-2" />
+            <x-hr class="mb-2" />
 
             <div class="w-full text-center md:text-left">
                 <p class="text-sm text-gray-500">Copyright © 2018-{{ now()->year }} Kurozora B.V. {{ __('All rights reserved') }}</p>

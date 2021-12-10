@@ -1,7 +1,7 @@
 @props(['anime'])
 
 <div class="relative pb-2">
-    <hr class="mb-5" />
+    <x-hr class="mb-5" />
 
     <div class="flex flex-no-wrap">
         <picture class="relative w-64 h-40 mt-2 rounded-lg overflow-hidden sm:w-[35rem] sm:h-[22rem] md:w-[42rem] md:h-[26rem]">
