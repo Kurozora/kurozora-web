@@ -105,7 +105,7 @@
                                 @foreach($query as $key => $anime)
                                     <x-lockups.search-anime-lockup :anime="$anime" wire:key="{{ uniqid(md5($anime->title), true) }}" />
 
-                                    <hr class="my-4" />
+                                    <x-hr class="my-4" />
                                 @endforeach
                             @endif
                         @break
