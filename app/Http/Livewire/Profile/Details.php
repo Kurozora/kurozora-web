@@ -18,6 +18,11 @@ class Details extends Component
     public User $user;
 
     /**
+     * @var bool $showPopup
+     */
+    public bool $showPopup = false;
+
+    /**
      * Prepare the component.
      *
      * @param User $user
@@ -36,7 +41,9 @@ class Details extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.profile.details')
+        return view('livewire.profile.details', [
+            'isEditing' => true
+        ])
             ->layout('layouts.base');
     }
 }

@@ -15,27 +15,15 @@
         users/{{ $user->id }}
     </x-slot>
 
-{{--    <div class="profile-image" style="background-image: url('{{ $user->profile_image_url }}')"></div>--}}
-
-{{--    <h1 class="font-bold mt-6">{{ $user->username }}</h1>--}}
-{{--    <h2 class="mb-2">{{ $user->getFollowerCount() }} {{ __('followers') }}</h2>--}}
-
-{{--    <x-link-button href="{{ ios_app_url('profile/' . $user->id) }}" class="rounded-full">--}}
-{{--        {{ __('Open in Kurozora App') }}--}}
-{{--    </x-link-button>--}}
     <div class="">
         <section>
-            @if ($user->banner_image)
-                <img src="{{ $user->banner_image_url }}" alt="{{ $user->username }} Banner Image">
-            @else
-                <div class="inline-block w-full h-80 bg-orange-500"></div>
-            @endif
+            @livewire('components.banner-image-view', ['user' => $user])
         </section>
 
-        <section class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
+        <section class="relative max-w-7xl mx-auto px-4 py-6 z-10 sm:px-6">
             <div class="flex items-end justify-between -mt-20">
                 <div class="flex items-end">
-                    <img class="w-24 h-24 bg-white border-2 border-black/5 rounded-full" src="{{ $user->profile_image_url }}" alt="{{ $user->username }} Profile Image" width="{{ $user->profile_image?->custom_properties['width'] ?? 96 }}" height="{{ $user->profile_image?->custom_properties['height'] ?? 96 }}">
+                    @livewire('components.profile-image-view', ['user' => $user])
 
                     <span class="flex items-baseline">
                         <p class="ml-2 text-xl font-bold">{{ $user->username }}</p>
@@ -51,7 +39,7 @@
 
                 @auth
                     @if ($user->id == Auth::user()->id)
-                        <x-button>{{ __('Edit') }}</x-button>
+                        <x-button wire:click="$toggle('showPopup')">{{ __('Edit') }}</x-button>
                     @else
                         <x-button>
                             @if ($user->followers()->where('user_id', Auth::user()->id)->exists())
@@ -64,7 +52,42 @@
                 @endif
             </div>
 
-            <x-textarea class="mt-2" :readonly="true">{{ $user->biography }}</x-textarea>
+            @if ($isEditing)
+                <x-textarea class="mt-2" :readonly="$isEditing">{{ $user->biography }}</x-textarea>
+            @else
+                <div class="mt-2 py-2 px-3">{!! nl2br($user->biography) !!}</div>
+            @endif
+
+            <div class="flex justify-between">
+                <a href="#" class="w-48 text-center">
+                    <p class="font-semibold">0</p>
+                    <p class="text-gray-500 text-sm font-semibold">{{ __('Reputation') }}</p>
+                </a>
+                <a href="#" class="w-48 text-center">
+                    <p class="font-semibold">{{ $user->badges()->count() }}</p>
+                    <p class="text-gray-500 text-sm font-semibold">{{ __('Badges') }}</p>
+                </a>
+                <a href="#" class="w-48 text-center">
+                    <p class="font-semibold">{{ $user->following()->count() }}</p>
+                    <p class="text-gray-500 text-sm font-semibold">{{ __('Following') }}</p>
+                </a>
+                <a href="#" class="w-48 text-center">
+                    <p class="font-semibold">{{ $user->followers()->count() }}</p>
+                    <p class="text-gray-500 text-sm font-semibold">{{ __('Followers') }}</p>
+                </a>
+            </div>
+
+            <x-hr class="mt-2" />
         </section>
     </div>
+
+    @auth
+        <x-modal-form-section wire:model="showPopup" submit="">
+            <x-slot name="title">
+                {{ __('Edit Profile') }}
+            </x-slot>
+
+            @livewire('profile.update-profile-information-form')
+        </x-modal-form-section>
+    @endauth
 </main>
