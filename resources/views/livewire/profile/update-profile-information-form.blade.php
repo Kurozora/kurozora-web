@@ -177,6 +177,13 @@
             <x-input id="email" type="email" class="mt-1 block w-full" wire:model.defer="state.email" />
             <x-input-error for="email" class="mt-2" />
         </div>
+
+        {{-- Biography --}}
+        <div class="col-span-6">
+            <x-label for="biography" value="{{ __('Biography') }}" />
+            <x-textarea id="biography" class="mt-1 block w-full" placeholder="{{ __('Describe yourself') }}" :autoresize="true" wire:model.defer="state.biography" />
+            <x-input-error for="biography" class="mt-2" />
+        </div>
     </x-slot>
 
     <x-slot name="actions">
