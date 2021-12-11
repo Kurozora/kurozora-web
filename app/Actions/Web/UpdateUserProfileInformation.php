@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Rules\ValidateBannerImage;
 use App\Rules\ValidateEmail;
 use App\Rules\ValidateProfileImage;
+use App\Rules\ValidateUserBiography;
 use App\Rules\ValidateUsername;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
@@ -32,6 +33,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     {
         $rules = [
             'email' => ['required', new ValidateEmail, Rule::unique(User::TABLE_NAME)->ignore($user->id)],
+            'biography' => ['bail', new ValidateUserBiography],
             'profileImage' => [new ValidateProfileImage],
             'bannerImage' => [new ValidateBannerImage],
         ];
@@ -59,6 +61,12 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             $user->forceFill([
                 'email' => $input['email'],
             ])->save();
+        }
+
+        if (isset($input['biography'])) {
+            $user->update([
+                'biography' => $input['biography']
+            ]);
         }
 
         if (settings('can_change_username')) {
