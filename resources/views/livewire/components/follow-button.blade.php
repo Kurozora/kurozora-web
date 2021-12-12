@@ -1,9 +1,13 @@
 <div>
     <x-button wire:click="toggleFollow">
-        @if ($user->followers()->where('user_id', Auth::user()->id)->exists())
-            {{ __('✓︎ Following') }}
+        @auth
+            @if ($user->followers()->where('user_id', Auth::user()->id)->exists())
+                {{ __('✓︎ Following') }}
+            @else
+                {{ __('+ Follow') }}
+            @endif
         @else
             {{ __('+ Follow') }}
-        @endif
+        @endauth
     </x-button>
 </div>

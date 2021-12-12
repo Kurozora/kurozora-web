@@ -8,6 +8,8 @@ use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Redirector;
 use Livewire\Component;
 
 class FollowButton extends Component
@@ -34,12 +36,18 @@ class FollowButton extends Component
     /**
      * Toggles the follow status of the user.
      *
-     * @return void
+     * @return Application|RedirectResponse|Redirector|null
      */
-    public function toggleFollow()
+    public function toggleFollow(): Application|RedirectResponse|Redirector|null
     {
         $authUser = Auth::user();
 
+        // Require user to authenticate if necessary.
+        if (empty($authUser)) {
+            return redirect(route('sign-in'));
+        }
+
+        // Determine if the user is already followed
         $isAlreadyFollowing = $this->user->followers()->where('user_id', $authUser->id)->exists();
 
         if ($isAlreadyFollowing) {
@@ -54,6 +62,8 @@ class FollowButton extends Component
         }
 
         $this->emit('followers-badge-refresh');
+
+        return null;
     }
 
     /**
