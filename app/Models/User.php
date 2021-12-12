@@ -14,6 +14,7 @@ use App\Traits\Model\HasBannerImage;
 use App\Traits\Model\HasProfileImage;
 use App\Traits\Searchable;
 use App\Traits\Web\Auth\TwoFactorAuthenticatable;
+use Carbon\Carbon;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
 use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -195,17 +196,22 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         /** @var PersonalAccessToken $personalAccessToken */
         $personalAccessToken = $this->tokens()
             ->orderBy('last_used_at', 'desc')
-            ->first();
+            ->first('last_used_at');
+        $personalAccessTokenLastUsedAt = $personalAccessToken?->last_used_at;
 
-        if ($personalAccessToken === null) {
-            return UserActivityStatus::Offline();
-        }
+        /** @var Session $session */
+        $session = $this->sessions()
+            ->orderBy('last_activity', 'desc')
+            ->first('last_activity');
+        $sessionLastActivity = Carbon::createFromTimestamp($session?->last_activity);
 
-        // Seen within the last 5 minutes
-        if ($personalAccessToken->last_used_at >= now()->subMinutes(5)) {
+        $activity = max($sessionLastActivity, $personalAccessTokenLastUsedAt);
+
+        if ($activity >= now()->subMinutes(5)) {
+            // Seen within the last 5 minutes
             return UserActivityStatus::Online();
-        } // Seen within the last 15 minutes
-        else if ($personalAccessToken->last_used_at >= now()->subMinutes(15)) {
+        } else if ($activity >= now()->subMinutes(15)) {
+            // Seen within the last 15 minutes
             return UserActivityStatus::SeenRecently();
         }
 
