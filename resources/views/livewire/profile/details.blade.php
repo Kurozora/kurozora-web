@@ -28,11 +28,14 @@
                     <span class="flex items-baseline">
                         <p class="ml-2 text-xl font-bold">{{ $user->username }}</p>
                         @switch ($user->getActivityStatus()->value)
-                            @case(\App\Enums\UserActivityStatus::Online || \App\Enums\UserActivityStatus::SeenRecently)
-                                <span class="block ml-1 w-2 h-2 bg-green-500 rounded-full"></span>
+                            @case(\App\Enums\UserActivityStatus::SeenRecently)
+                                <span class="block ml-1 w-2 h-2 bg-yellow-500 rounded-full" title="{{ __('Seen Recently') }}"></span>
+                                @break
+                            @case(\App\Enums\UserActivityStatus::Online)
+                                <span class="block ml-1 w-2 h-2 bg-green-500 rounded-full" title="{{ __('Online') }}"></span>
                                 @break
                             @case(\App\Enums\UserActivityStatus::Offline)
-                                <span class="block ml-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                                <span class="block ml-1 w-2 h-2 bg-red-500 rounded-full" title="{{ __('Offline') }}"></span>
                         @endswitch
                     </span>
                 </div>
