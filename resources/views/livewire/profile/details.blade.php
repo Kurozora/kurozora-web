@@ -21,7 +21,7 @@
         </section>
 
         <section class="relative max-w-7xl mx-auto px-4 py-6 z-10 sm:px-6">
-            <div class="flex items-end justify-between -mt-20">
+            <div class="flex items-end justify-between -mt-14 sm:-mt-20">
                 <div class="flex items-end">
                     @livewire('components.profile-image-view', ['user' => $user])
 

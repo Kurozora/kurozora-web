@@ -1,7 +1,7 @@
 @props(['episode'])
 
 <div class="relative">
-    <div class="flex flex-no-wrap">
+    <div class="flex flex-nowrap">
         <picture class="relative rounded-lg overflow-hidden" style="aspect-ratio: 16/9;">
             <img class="lazyload" data-sizes="auto" data-src="{{ $episode->banner_image_url ?? asset('images/static/placeholders/episode_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
 

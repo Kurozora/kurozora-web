@@ -1,7 +1,7 @@
 @props(['anime'])
 
 <div class="relative w-[350px]">
-    <div class="flex flex-no-wrap">
+    <div class="flex flex-nowrap">
         @if(empty($anime->video_link))
             <picture class="relative mt-2 rounded-lg overflow-hidden">
                 <img class="lazyload" data-sizes="auto" data-src="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">

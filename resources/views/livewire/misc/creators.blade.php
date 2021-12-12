@@ -24,7 +24,7 @@
                     <div class="{{ $backgroundColor }} px-6 py-8 rounded-lg shadow-lg text-center">
                         <div class="flex justify-center mb-3">
                             <picture class="relative w-40 h-40 rounded-full shadow-lg overflow-hidden">
-                                <img class="w-full h-full object-cover" width="160" height="160" src="{{ $user->profile_image_url ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $user->username }} Profile Image" title="{{ $user->username }}">
+                                <img class="w-full h-full object-cover" width="160" height="160" src="{{ $user->profile_image_url }}" alt="{{ $user->username }} Profile Image" title="{{ $user->username }}">
 
                                 <div class="absolute top-0 left-0 h-full w-full border-4 border-solid border-black/20 rounded-full"></div>
                             </picture>
