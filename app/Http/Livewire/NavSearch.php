@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Anime;
+use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -25,19 +26,23 @@ class NavSearch extends Component
     public function render(): Application|Factory|View
     {
         $searchResults = [];
+        $anime = Anime::kSearch($this->searchQuery)
+            ->paginate(Anime::MAX_WEB_SEARCH_RESULTS)
+            ->appends('query', $this->searchQuery);
+        $users = User::kSearch($this->searchQuery)
+            ->paginate(User::MAX_WEB_SEARCH_RESULTS)
+            ->appends('query', $this->searchQuery);
 
         if (!empty($this->searchQuery)) {
             $searchResults = [
-                'anime' => Anime::kSearch($this->searchQuery)
-                    ->paginate(Anime::MAX_WEB_SEARCH_RESULTS)
-                    ->appends('query', $this->searchQuery),
-//                'users' => User::kSearch($this->searchQuery)->paginate(User::MAX_WEB_SEARCH_RESULTS)
-//                    ->appends('query', $this->searchQuery)
+                'anime' => $anime,
+                'users' => $users,
             ];
         }
 
         return view('livewire.nav-search', [
             'searchResults' => $searchResults,
+            'searchResultsTotal' => $anime->total() + $users->total(),
             'quickLinks'    => [
                 [
                     'title' => __('About Kurozora+'),
