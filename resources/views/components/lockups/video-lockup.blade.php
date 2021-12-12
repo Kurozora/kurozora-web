@@ -20,7 +20,7 @@
     </div>
 
     <div class="relative mt-4">
-        <div class="flex flex-no-wrap">
+        <div class="flex flex-nowrap">
             <picture class="relative shrink-0 w-28 h-40 mr-2 mr-2 rounded-lg overflow-hidden md:w-32 md:h-48">
                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->poster_image_url ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
 

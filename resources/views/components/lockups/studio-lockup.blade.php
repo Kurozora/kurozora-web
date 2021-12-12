@@ -5,7 +5,7 @@
 @endphp
 
 <div class="relative">
-    <div class="flex flex-no-wrap">
+    <div class="flex flex-nowrap">
         <picture class="relative w-full aspect-ratio-16-9 rounded-lg overflow-hidden">
             <img class="w-full h-full object-cover lazyload"
                  data-sizes="auto"
