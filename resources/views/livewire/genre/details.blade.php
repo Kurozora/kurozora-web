@@ -48,7 +48,7 @@
                 @break
             @case(\App\Enums\ExploreCategoryTypes::UpcomingShows)
                 <section class="pt-5 pb-8 border-t-2">
-                    <x-section-nav class="flex flex-no-wrap justify-between mb-5">
+                    <x-section-nav class="flex flex-nowrap justify-between mb-5">
                         <x-slot name="title">
                             {{ $exploreCategory->title }}
                         </x-slot>
@@ -69,7 +69,7 @@
                 @break
             @case(\App\Enums\ExploreCategoryTypes::Shows)
                 <section class="pt-5 pb-8 border-t-2">
-                    <x-section-nav class="flex flex-no-wrap justify-between mb-5">
+                    <x-section-nav class="flex flex-nowrap justify-between mb-5">
                         <x-slot name="title">
                             {{ $exploreCategory->title }}
                         </x-slot>
@@ -114,7 +114,7 @@
                 @break
             @case(\App\Enums\ExploreCategoryTypes::Genres)
                 <section class="pt-5 pb-8 border-t-2">
-                    <x-section-nav class="flex flex-no-wrap justify-between mb-5">
+                    <x-section-nav class="flex flex-nowrap justify-between mb-5">
                         <x-slot name="title">
                             {{ $exploreCategory->title }}
                         </x-slot>
@@ -141,7 +141,7 @@
             @case(\App\Enums\ExploreCategoryTypes::Characters)
                 @if (\App\Models\Character::bornToday()->count() != 0)
                     <section class="pt-5 pb-8 border-t-2">
-                        <x-section-nav class="flex flex-no-wrap justify-between mb-5">
+                        <x-section-nav class="flex flex-nowrap justify-between mb-5">
                             <x-slot name="title">
                                 {{ $exploreCategory->title }}
                             </x-slot>
@@ -164,7 +164,7 @@
             @case(\App\Enums\ExploreCategoryTypes::People)
                 @if (\App\Models\Person::bornToday()->count() != 0)
                     <section class="pt-5 pb-8 border-t-2">
-                        <x-section-nav class="flex flex-no-wrap justify-between mb-5">
+                        <x-section-nav class="flex flex-nowrap justify-between mb-5">
                             <x-slot name="title">
                                 {{ $exploreCategory->title }}
                             </x-slot>
