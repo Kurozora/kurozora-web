@@ -94,39 +94,45 @@
                 </div>
             </div>
 
-            @php($searchResultsIsEmpty = false)
             @if(!empty($searchResults))
                 @foreach($searchResults as $key => $query)
                     @switch($key)
                         @case('anime')
-                            @if(empty($query->total()))
-                                @php($searchResultsIsEmpty = true)
-                            @else
-                                @foreach($query as $key => $anime)
-                                    <x-lockups.search-anime-lockup :anime="$anime" wire:key="{{ uniqid(md5($anime->title), true) }}" />
+                            @if(!empty($query->total()))
+                                <x-search-header>{{ __('Anime') }}</x-search-header>
 
-                                    <x-hr class="my-4" />
-                                @endforeach
+                                <div class="mt-4">
+                                    @foreach($query as $key => $anime)
+                                        <x-lockups.search-anime-lockup :anime="$anime" wire:key="{{ uniqid(md5($anime->title), true) }}" />
+
+                                        <x-hr class="my-4" />
+                                    @endforeach
+                                </div>
                             @endif
                         @break
-                        @case('user')
-                            @foreach($query as $user)
-                                <x-dropdown-link href="{{ route('profile.details', $user) }}">
-                                    {{ $user->username }}
-                                </x-dropdown-link>
-                            @endforeach
+                        @case('users')
+                            @if(!empty($query->total()))
+                                <x-search-header>{{ __('Users') }}</x-search-header>
+
+                                <div class="mt-4">
+                                    @foreach($query as $user)
+                                        <x-lockups.search-user-lockup :user="$user" wire:key="{{ uniqid(md5($user->username), true) }}" />
+
+                                        <x-hr class="my-4" />
+                                    @endforeach
+                                </div>
+                            @endif
                         @break
                     @endswitch
                 @endforeach
             @endif
 
-            @if($searchResultsIsEmpty)
+            @if(($searchResultsTotal) == 0)
                 <p class="text-sm text-gray-500 text-center font-bold">{{ __('No search results found :(') }}</p>
             @endif
 
             @if(!empty($quickLinks))
-                <p
-                    class="mt-2 text-md text-gray-500 font-semibold uppercase"
+                <x-search-header
                     x-show="isSearchEnabled"
                     x-transition:enter="ease duration-[400ms] transform"
                     x-transition:enter-start="opacity-0 translate-x-8"
@@ -134,7 +140,7 @@
                     x-transition:leave="ease-in duration-200"
                     x-transition:leave-start="opacity-100"
                     x-transition:leave-end="opacity-0"
-                >{{ __('Quick Links') }}</p>
+                >{{ __('Quick Links') }}</x-search-header>
 
                 <ul class="space-y-4">
                     @foreach($quickLinks as $key => $quickLink)
