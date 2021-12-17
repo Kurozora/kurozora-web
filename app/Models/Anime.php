@@ -26,7 +26,6 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Request;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
@@ -733,20 +732,13 @@ class Anime extends KModel implements HasMedia
      */
     public function scopeMostPopular(Builder $query, int $limit = 10): Builder
     {
-        // Find the Anime that is most added to user libraries
-        $mostAdded = DB::table(UserLibrary::TABLE_NAME)
-            ->select('anime_id', DB::raw('count(*) as total'))
-            ->groupBy('anime_id')
-            ->orderBy('total', 'DESC')
+        return $query->where('status_id', 3)
+            ->where('is_nsfw', false)
+            ->leftJoin(MediaStat::TABLE_NAME, MediaStat::TABLE_NAME . '.model_id', '=', Anime::TABLE_NAME . '.id')
+            ->orderBy(MediaStat::TABLE_NAME . '.watching_count', 'desc')
+            ->orderBy(MediaStat::TABLE_NAME . '.rating_average', 'desc')
             ->limit($limit)
-            ->get();
-
-        // Only keep the IDs of the most added Anime
-        $mostAddedIDs = $mostAdded->map(function($item) {
-            return $item->anime_id;
-        });
-
-        return $query->whereIn(self::TABLE_NAME . '.id', $mostAddedIDs);
+            ->select(Anime::TABLE_NAME . '.*');
     }
 
     /**
