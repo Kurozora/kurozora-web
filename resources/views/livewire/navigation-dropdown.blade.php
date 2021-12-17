@@ -76,66 +76,79 @@
 
                         {{-- Navigation Links --}}
                         <div class="hidden sm:flex sm:justify-between sm:-my-px sm:w-full md:w-auto md:space-x-8">
-                        <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')"
-                                    x-show="! isSearchEnabled"
-                                    x-transition:enter="ease-out duration-150 delay-[50ms] transform"
-                                    x-transition:enter-start="opacity-0 scale-75"
-                                    x-transition:enter-end="opacity-100 scale-100"
-                                    x-transition:leave="ease-in duration-200 delay-300 transform"
-                                    x-transition:leave-start="opacity-100 scale-100"
-                                    x-transition:leave-end="opacity-0 scale-75"
-                        >
-                            {{ __('Explore') }}
-                        </x-nav-link>
+                            <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')"
+                                        x-show="! isSearchEnabled"
+                                        x-transition:enter="ease-out duration-150 delay-[50ms] transform"
+                                        x-transition:enter-start="opacity-0 scale-75"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="ease-in duration-200 delay-300 transform"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-75"
+                            >
+                                {{ __('Explore') }}
+                            </x-nav-link>
 
-                        <x-nav-link href="{{ route('genres.index') }}" :active="request()->routeIs('genres.index')"
-                                    x-show="! isSearchEnabled"
-                                    x-transition:enter="ease-out duration-150 delay-100 transform"
-                                    x-transition:enter-start="opacity-0 scale-75"
-                                    x-transition:enter-end="opacity-100 scale-100"
-                                    x-transition:leave="ease-in duration-200 delay-[250ms] transform"
-                                    x-transition:leave-start="opacity-100 scale-100"
-                                    x-transition:leave-end="opacity-0 scale-75"
-                        >
-                            {{ __('Genres') }}
-                        </x-nav-link>
+                            <x-nav-link href="{{ route('genres.index') }}" :active="request()->routeIs('genres.index')"
+                                        x-show="! isSearchEnabled"
+                                        x-transition:enter="ease-out duration-150 delay-100 transform"
+                                        x-transition:enter-start="opacity-0 scale-75"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="ease-in duration-200 delay-[250ms] transform"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-75"
+                            >
+                                {{ __('Genres') }}
+                            </x-nav-link>
 
-                        <x-nav-link href="{{ route('characters.index') }}" :active="request()->routeIs('characters.index')"
-                                    x-show="! isSearchEnabled"
-                                    x-transition:enter="ease-out duration-150 delay-150 transform"
-                                    x-transition:enter-start="opacity-0 scale-75"
-                                    x-transition:enter-end="opacity-100 scale-100"
-                                    x-transition:leave="ease-in duration-200 delay-200 transform"
-                                    x-transition:leave-start="opacity-100 scale-100"
-                                    x-transition:leave-end="opacity-0 scale-75"
-                        >
-                            {{ __('Characters') }}
-                        </x-nav-link>
+                            <x-nav-link href="{{ route('characters.index') }}" :active="request()->routeIs('characters.index')"
+                                        x-show="! isSearchEnabled"
+                                        x-transition:enter="ease-out duration-150 delay-150 transform"
+                                        x-transition:enter-start="opacity-0 scale-75"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="ease-in duration-200 delay-200 transform"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-75"
+                            >
+                                {{ __('Characters') }}
+                            </x-nav-link>
 
-                        <x-nav-link href="{{ route('people.index') }}" :active="request()->routeIs('people.index')"
-                                    x-show="! isSearchEnabled"
-                                    x-transition:enter="ease-out duration-150 delay-200 transform"
-                                    x-transition:enter-start="opacity-0 scale-75"
-                                    x-transition:enter-end="opacity-100 scale-100"
-                                    x-transition:leave="ease-in duration-200 delay-150 transform"
-                                    x-transition:leave-start="opacity-100 scale-100"
-                                    x-transition:leave-end="opacity-0 scale-75"
-                        >
-                            {{ __('People') }}
-                        </x-nav-link>
+                            <x-nav-link href="{{ route('people.index') }}" :active="request()->routeIs('people.index')"
+                                        x-show="! isSearchEnabled"
+                                        x-transition:enter="ease-out duration-150 delay-200 transform"
+                                        x-transition:enter-start="opacity-0 scale-75"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="ease-in duration-200 delay-150 transform"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-75"
+                            >
+                                {{ __('People') }}
+                            </x-nav-link>
 
-                        <x-nav-link href="{{ route('studios.index') }}" :active="request()->routeIs('studios.index')"
-                                    x-show="! isSearchEnabled"
-                                    x-transition:enter="ease-out duration-150 delay-[250ms] transform"
-                                    x-transition:enter-start="opacity-0 scale-75"
-                                    x-transition:enter-end="opacity-100 scale-100"
-                                    x-transition:leave="ease-in duration-200 delay-100 transform"
-                                    x-transition:leave-start="opacity-100 scale-100"
-                                    x-transition:leave-end="opacity-0 scale-75"
-                        >
-                            {{ __('Studios') }}
-                        </x-nav-link>
-                    </div>
+                            <x-nav-link href="{{ route('studios.index') }}" :active="request()->routeIs('studios.index')"
+                                        x-show="! isSearchEnabled"
+                                        x-transition:enter="ease-out duration-150 delay-[250ms] transform"
+                                        x-transition:enter-start="opacity-0 scale-75"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="ease-in duration-200 delay-100 transform"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-75"
+                            >
+                                {{ __('Studios') }}
+                            </x-nav-link>
+
+                            <x-nav-link href="{{ config('app.ios.url') }}"
+                                        target="_blank"
+                                        x-show="! isSearchEnabled"
+                                        x-transition:enter="ease-out duration-150 delay-300 transform"
+                                        x-transition:enter-start="opacity-0 scale-75"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="ease-in duration-200 delay-75 transform"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-75"
+                            >
+                                App <span class="ml-1 px-2 py-1 bg-orange-500 text-white text-xs font-bold rounded-full">{{ __('Beta') }}</span>
+                            </x-nav-link>
+                        </div>
                     </span>
 
                     {{-- Right Side --}}
@@ -264,6 +277,10 @@
 
                 <x-responsive-nav-link href="{{ route('studios.index') }}" :active="request()->routeIs('studios.index')">
                     {{ __('Studios') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link href="{{ config('app.ios.url') }}" target="_blank">
+                    App <span class="ml-1 px-2 py-1 bg-orange-500 text-white text-xs font-bold rounded-full">{{ __('Beta') }}</span>
                 </x-responsive-nav-link>
             </div>
 
