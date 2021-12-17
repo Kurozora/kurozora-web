@@ -1,13 +1,12 @@
 <?php
 
-use App\Models\Anime;
-use App\Models\AnimeRating;
+use App\Models\MediaRating;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAnimeRatingsTable extends Migration
+class CreateMediaRatingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,20 +15,23 @@ class CreateAnimeRatingsTable extends Migration
      */
     public function up()
     {
-        Schema::create(AnimeRating::TABLE_NAME, function (Blueprint $table) {
+        Schema::create(MediaRating::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('anime_id');
+            $table->morphs('model');
             $table->unsignedBigInteger('user_id');
             $table->float('rating');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
 
-        Schema::table(AnimeRating::TABLE_NAME, function(Blueprint $table) {
+        Schema::table(MediaRating::TABLE_NAME, function(Blueprint $table) {
+            // Set index key constraints
+            $table->index('user_id');
+
             // Set unique key constraints
-            $table->unique(['anime_id', 'user_id']);
+            $table->unique(['user_id', 'model_id', 'model_type']);
 
             // Set foreign key constraints
-            $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
         });
     }
@@ -41,6 +43,6 @@ class CreateAnimeRatingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(AnimeRating::TABLE_NAME);
+        Schema::dropIfExists(MediaRating::TABLE_NAME);
     }
 }

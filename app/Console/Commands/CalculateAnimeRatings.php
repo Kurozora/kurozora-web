@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Anime;
-use App\Models\AnimeRating;
+use App\Models\MediaRating;
 use App\Models\MediaStat;
 use DB;
 use Illuminate\Console\Command;
@@ -42,16 +42,18 @@ class CalculateAnimeRatings extends Command
     public function handle(): int
     {
         // Mean score of all Anime
-        $meanAverageRating = AnimeRating::avg('rating');
+        $meanAverageRating = MediaRating::where('model_type', Anime::class)
+            ->avg('rating');
 
-        // Get anime_id, rating and count per rating
-        $animeRatings = AnimeRating::select(['anime_id', 'rating', DB::raw('COUNT(*)')])
-            ->groupBy(['anime_id', 'rating'])
+        // Get model_id, rating and count per rating
+        $animeRatings = MediaRating::select(['model_id', 'rating', DB::raw('COUNT(*)')])
+            ->where('model_type', Anime::class)
+            ->groupBy(['model_id', 'rating'])
             ->get();
 
         // Get unique anime id's
-        $animeIDs = $animeRatings->unique('anime_id')
-            ->pluck('anime_id');
+        $animeIDs = $animeRatings->unique('model_id')
+            ->pluck('model_id');
 
         foreach ($animeIDs as $animeID) {
             // Find or create media stat for the anime
@@ -61,7 +63,7 @@ class CalculateAnimeRatings extends Command
             ]);
 
             // Get all current anime records from anime ratings
-            $animeRatingForAnime = $animeRatings->where('anime_id', '=', $animeID);
+            $animeRatingForAnime = $animeRatings->where('model_id', '=', $animeID);
 
             // Total amount of ratings this Anime has
             $totalRatingCount = $animeRatingForAnime->sum('COUNT(*)');
@@ -83,7 +85,7 @@ class CalculateAnimeRatings extends Command
                 $rating7 = $animeRatingForAnime->where('rating', '=', 3.5);
                 $rating8 = $animeRatingForAnime->where('rating', '=', 4.0);
                 $rating9 = $animeRatingForAnime->where('rating', '=', 4.5);
-                $rating_10 = $animeRatingForAnime->where('rating', '=', 5.0);
+                $rating10 = $animeRatingForAnime->where('rating', '=', 5.0);
 
                 // Update media stat
                 $mediaStat->update([
@@ -96,7 +98,7 @@ class CalculateAnimeRatings extends Command
                     'rating_7' => $rating7->values()[0]['COUNT(*)'] ?? 0,
                     'rating_8' => $rating8->values()[0]['COUNT(*)'] ?? 0,
                     'rating_9' => $rating9->values()[0]['COUNT(*)'] ?? 0,
-                    'rating_10' => $rating_10->values()[0]['COUNT(*)'] ?? 0,
+                    'rating_10' => $rating10->values()[0]['COUNT(*)'] ?? 0,
                     'rating_average' => $weightedRating,
                     'rating_count' => $totalRatingCount,
                 ]);
