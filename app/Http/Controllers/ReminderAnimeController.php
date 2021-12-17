@@ -28,7 +28,7 @@ class ReminderAnimeController extends Controller
         $user = Auth::user();
 
         // Paginate the reminder anime
-        $reminderAnime = $user->reminderAnime()->paginate($data['limit'] ?? 25);
+        $reminderAnime = $user->reminder_anime()->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $reminderAnime->nextPageUrl());
@@ -56,12 +56,12 @@ class ReminderAnimeController extends Controller
 //            throw new AuthorizationException('Reminders are only available to pro users.');
 //        }
 
-        $isAlreadyReminded = $user->userReminderAnime()->where('anime_id', $animeID)->exists();
+        $isAlreadyReminded = $user->user_reminder_anime()->where('anime_id', $animeID)->exists();
 
         if ($isAlreadyReminded) { // Don't remind the user
-            $user->reminderAnime()->detach($animeID);
+            $user->reminder_anime()->detach($animeID);
         } else { // Remind the user
-            $user->reminderAnime()->attach($animeID);
+            $user->reminder_anime()->attach($animeID);
         }
 
         return JSONResult::success([

@@ -138,7 +138,7 @@ class EpisodeTest extends TestCase
      */
     private function assertEpisodeWatched(bool $expected, Episode $episode)
     {
-        $exists = $this->user->watchedEpisodes()->where('episode_id', $episode->id)->exists();
+        $exists = $this->user->episodes()->where('episode_id', $episode->id)->exists();
 
         $message = 'Episode ID ' . $episode->id .' was ' . ($exists ? 'found' : 'not found') . ' in the user’s watch list.';
 

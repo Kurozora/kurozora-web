@@ -44,7 +44,7 @@ class FeedController extends Controller
         }
 
         // Create the feed message
-        $feedMessage = $user->feedMessages()->create([
+        $feedMessage = $user->feed_messages()->create([
             'parent_feed_message_id'    => $data['parent_id'] ?? null,
             'body'                      => $request->input('body'),
             'is_reply'                  => $data['is_reply'] ?? false,

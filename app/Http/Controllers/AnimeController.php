@@ -21,7 +21,7 @@ use App\Http\Resources\CharacterResourceBasic;
 use App\Http\Resources\SeasonResource;
 use App\Http\Resources\StudioResource;
 use App\Models\Anime;
-use App\Models\AnimeRating;
+use App\Models\MediaRating;
 use Auth;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -195,37 +195,44 @@ class AnimeController extends Controller
      */
     public function rateAnime(RateAnimeRequest $request, Anime $anime): JsonResponse
     {
-        if (!Auth::user()->isTracking($anime))
+        $user = Auth::user();
+
+        // Check if the user is already tracking the anime
+        if (!$user->isTracking($anime)) {
             throw new AuthorizationException('Please add ' . $anime->title . ' to your library first.');
+        }
+
+        // Validate the request
+        $data = $request->validated();
 
         // Fetch the variables
-        $givenRating = $request->input('rating');
+        $givenRating = $data['rating'];
 
         // Try to modify the rating if it already exists
-        /** @var AnimeRating $foundRating */
-        $foundRating = AnimeRating::where([
-            ['anime_id', '=', $anime->id],
-            ['user_id', '=', Auth::id()]
+        /** @var MediaRating $foundRating */
+        $foundRating = $user->anime_ratings()->where([
+            ['model_id', '=', $anime->id],
+            ['model_type', '=', Anime::class],
         ])->first();
 
         // The rating exists
         if ($foundRating) {
-            // If the given rating is 0, delete the rating
-            if ($givenRating <= 0)
+            // If the given rating is 0
+            if ($givenRating <= 0) {
+                // Delete the rating
                 $foundRating->delete();
-            // Update the current rating
-            else {
-                $foundRating->rating = $givenRating;
-                $foundRating->save();
+            } else {
+                // Update the current rating
+                $foundRating->update([
+                    'rating' => $givenRating,
+                ]);
             }
-        }
-        // Rating needs to be inserted
-        else {
+        } else {
             // Only insert the rating if it's rated higher than 0
             if ($givenRating > 0) {
-                AnimeRating::create([
-                    'anime_id'  => $anime->id,
-                    'user_id'   => Auth::id(),
+                $user->episode_ratings()->create([
+                    'model_type'  => Anime::class,
+                    'model_id'  => $anime->id,
                     'rating'    => $givenRating
                 ]);
             }

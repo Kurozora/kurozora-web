@@ -3,7 +3,6 @@
 namespace Tests\API;
 
 use App\Models\Anime;
-use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 use Tests\Traits\ProvidesTestUser;
@@ -35,7 +34,7 @@ class FavoriteAnimeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the user now has 1 anime in their favorites
-        $this->assertEquals(1, $this->user->favoriteAnime()->count());
+        $this->assertEquals(1, $this->user->favorite_anime()->count());
     }
 
     /**
@@ -51,7 +50,7 @@ class FavoriteAnimeTest extends TestCase
         $anime = Anime::factory()->create();
 
         $this->user->library()->attach($anime);
-        $this->user->favoriteAnime()->attach($anime->id);
+        $this->user->favorite_anime()->attach($anime->id);
 
         // Send request to remove the anime from the user's favorites
         $response = $this->auth()->json('POST', 'v1/me/favorite-anime', [
@@ -63,7 +62,7 @@ class FavoriteAnimeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the user now has no anime in their favorites
-        $this->assertEquals(0, $this->user->favoriteAnime()->count());
+        $this->assertEquals(0, $this->user->favorite_anime()->count());
     }
 
 //    /**
