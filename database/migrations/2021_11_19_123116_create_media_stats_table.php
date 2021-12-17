@@ -18,6 +18,7 @@ class CreateMediaStatsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('model_id');
             $table->string('model_type');
+            $table->unsignedBigInteger('model_count')->default(0);
             $table->unsignedBigInteger('planning_count')->default(0);
             $table->unsignedBigInteger('watching_count')->default(0);
             $table->unsignedBigInteger('completed_count')->default(0);
