@@ -73,14 +73,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     // Cache user's calendar
     const CACHE_KEY_CALENDAR_SECONDS = 60 * 60 * 24;
 
-    // Cache user's follower count
-    const CACHE_KEY_FOLLOWER_COUNT = 'user-followers-%d';
-    const CACHE_KEY_FOLLOWER_COUNT_SECONDS = 10 * 60;
-
-    // Cache user's following count
-    const CACHE_KEY_FOLLOWING_COUNT = 'user-following-%d';
-    const CACHE_KEY_FOLLOWING_COUNT_SECONDS = 10 * 60;
-
     // Cache user's reputation count
     const CACHE_KEY_REPUTATION_COUNT = 'user-reputation-%d';
     const CACHE_KEY_REPUTATION_COUNT_SECONDS = 10 * 60;
@@ -255,7 +247,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return BelongsToMany
      */
-    function favoriteAnime(): BelongsToMany
+    function favorite_anime(): BelongsToMany
     {
         return $this->belongsToMany(Anime::class, UserFavoriteAnime::class, 'user_id', 'anime_id')
             ->withTimestamps();
@@ -523,22 +515,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
-     * Returns the amount of followers the user has
-     *
-     * @return int
-     */
-    public function getFollowerCount(): int
-    {
-        // Find location of cached data
-        $cacheKey = sprintf(self::CACHE_KEY_FOLLOWER_COUNT, $this->id);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_FOLLOWER_COUNT_SECONDS, function () {
-            return $this->followers()->count();
-        });
-    }
-
-    /**
      * Get the user's followers
      *
      * @return BelongsToMany
@@ -547,22 +523,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     {
         return $this->belongsToMany(User::class, UserFollow::class, 'following_user_id', 'user_id')
             ->withTimestamps();
-    }
-
-    /**
-     * Returns the amount of users the user follows
-     *
-     * @return int
-     */
-    public function getFollowingCount(): int
-    {
-        // Find location of cached data
-        $cacheKey = sprintf(self::CACHE_KEY_FOLLOWING_COUNT, $this->id);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_FOLLOWING_COUNT_SECONDS, function () {
-            return $this->following()->count();
-        });
     }
 
     /**
