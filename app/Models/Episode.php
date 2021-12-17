@@ -9,6 +9,9 @@ use Carbon\CarbonInterval;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Facades\Cache;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -19,6 +22,12 @@ class Episode extends KModel implements HasMedia
         InteractsWithMedia,
         InteractsWithMediaExtension,
         Translatable;
+
+    // How long to cache certain responses
+    const CACHE_KEY_STATS_SECONDS = 120 * 60;
+
+    // Minimum ratings required to calculate average
+    const MINIMUM_RATINGS_REQUIRED = 1;
 
     // Table name
     const TABLE_NAME = 'episodes';
