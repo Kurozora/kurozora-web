@@ -24,7 +24,7 @@ class FavoriteAnimeController extends Controller
         $data = $request->validated();
 
         // Paginate the favorited anime
-        $favoriteAnime = $user->favoriteAnime()->paginate($data['limit'] ?? 25);
+        $favoriteAnime = $user->favorite_anime()->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $favoriteAnime->nextPageUrl());
@@ -46,12 +46,12 @@ class FavoriteAnimeController extends Controller
         $animeID = $request->input('anime_id');
         $user = Auth::user();
 
-        $isAlreadyFavorited = $user->favoriteAnime()->where('anime_id', $animeID)->exists();
+        $isAlreadyFavorited = $user->favorite_anime()->where('anime_id', $animeID)->exists();
 
         if ($isAlreadyFavorited) { // Unfavorite the show
-            $user->favoriteAnime()->detach($animeID);
+            $user->favorite_anime()->detach($animeID);
         } else { // Favorite the show
-            $user->favoriteAnime()->attach($animeID);
+            $user->favorite_anime()->attach($animeID);
         }
 
         return JSONResult::success([

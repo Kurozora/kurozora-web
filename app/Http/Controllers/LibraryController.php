@@ -88,8 +88,8 @@ class LibraryController extends Controller
         return JSONResult::success([
             'data' => [
                 'libraryStatus' => $userLibraryStatus->description,
-                'isFavorited'   => $user->favoriteAnime()->where('anime_id', $animeID)->exists(),
-                'isReminded'    => $user->userReminderAnime()->where('anime_id', $animeID)->exists()
+                'isFavorited'   => $user->favorite_anime()->where('anime_id', $animeID)->exists(),
+                'isReminded'    => $user->user_reminder_anime()->where('anime_id', $animeID)->exists()
             ]
         ]);
     }
@@ -114,9 +114,9 @@ class LibraryController extends Controller
             $user->library()->detach($animeID);
 
             // Remove from favorites as you can't favorite and not have anime in library
-            $user->favoriteAnime()->detach($animeID);
+            $user->favorite_anime()->detach($animeID);
             // Remove from reminders as you can't remind and not have anime in library
-            $user->reminderAnime()->detach($animeID);
+            $user->reminder_anime()->detach($animeID);
 
             return JSONResult::success([
                 'data' => [

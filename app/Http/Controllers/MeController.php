@@ -172,7 +172,7 @@ class MeController extends Controller
         $user = Auth::user();
 
         // Paginate the favorite anime
-        $favoriteAnime = $user->favoriteAnime()->paginate($data['limit'] ?? 25);
+        $favoriteAnime = $user->favorite_anime()->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $favoriteAnime->nextPageUrl());
@@ -198,7 +198,7 @@ class MeController extends Controller
         $user = Auth::user();
 
         // Get the feed messages
-        $feedMessages = $user->feedMessages()
+        $feedMessages = $user->feed_messages()
             ->orderByDesc('created_at')
             ->paginate($data['limit'] ?? 25);
 
