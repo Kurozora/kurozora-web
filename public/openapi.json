@@ -357,9 +357,13 @@
                     "type": "number",
                     "format": "double",
                     "description": "The rating to leave.",
-                    "example": 3.5,
-                    "minimum": 1,
+                    "example": 2.5,
+                    "minimum": 0,
                     "maximum": 5
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "The description accompanying the rating."
                   }
                 },
                 "required": [
@@ -721,6 +725,67 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/PostEpisodesWatchedSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/episodes/{episodeID}/rate": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "episodes"
+        ],
+        "operationId": "postEpisodeRate",
+        "summary": "Rate an Episode.",
+        "description": "This endpoint will allow user's to leave a rating for an Episode.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "rating": {
+                    "type": "number",
+                    "format": "double",
+                    "description": "The rating to leave.",
+                    "example": 2.5,
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "The description accompanying the rating."
+                  }
+                },
+                "required": [
+                  "rating"
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "episodeID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the episode."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"

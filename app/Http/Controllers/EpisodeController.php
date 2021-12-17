@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Episode;
 use App\Helpers\JSONResult;
 use App\Http\Requests\MarkEpisodeAsWatchedRequest;
+use App\Http\Requests\RateEpisodeRequest;
 use App\Http\Resources\EpisodeResource;
+use App\Models\Episode;
+use App\Models\MediaRating;
 use Auth;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 
 class EpisodeController extends Controller
@@ -43,9 +46,9 @@ class EpisodeController extends Controller
 
         // If the episode's current status is watched then detach (unwatch) it, otherwise attach (watch) it.
         if ($isAlreadyWatched) {
-            $user->watchedEpisodes()->detach($episode);
+            $user->episodes()->detach($episode);
         } else {
-            $user->watchedEpisodes()->attach($episode);
+            $user->episodes()->attach($episode);
         }
 
         return JSONResult::success([
@@ -53,5 +56,60 @@ class EpisodeController extends Controller
                 'isWatched' => !$isAlreadyWatched
             ]
         ]);
+    }
+
+    /**
+     * Adds a rating for an Anime item
+     *
+     * @param RateEpisodeRequest $request
+     * @param Episode $episode
+     * @return JsonResponse
+     * @throws AuthorizationException
+     */
+    public function rateEpisode(RateEpisodeRequest $request, Episode $episode): JsonResponse
+    {
+        $user = Auth::user();
+
+        // Check if the episode has been watched
+        if (!$user->hasWatched($episode)) {
+            throw new AuthorizationException('Please watch ' . $episode->title . ' first.');
+        }
+
+        // Validate the request
+        $data = $request->validated();
+
+        // Fetch the variables
+        $givenRating = $data['rating'];
+
+        // Try to modify the rating if it already exists
+        /** @var MediaRating $foundRating */
+        $foundRating = $user->episode_ratings()->where([
+            ['model_id', '=', $episode->id],
+        ])->first();
+
+        // The rating exists
+        if ($foundRating) {
+            // If the given rating is 0
+            if ($givenRating <= 0) {
+                // Delete the rating
+                $foundRating->delete();
+            } else {
+                // Update the current rating
+                $foundRating->update([
+                    'rating' => $givenRating
+                ]);
+            }
+        } else {
+            // Only insert the rating if it's rated higher than 0
+            if ($givenRating > 0) {
+                $user->episode_ratings()->create([
+                    'model_type' => Episode::class,
+                    'model_id' => $episode->id,
+                    'rating' => $givenRating,
+                ]);
+            }
+        }
+
+        return JSONResult::success();
     }
 }
