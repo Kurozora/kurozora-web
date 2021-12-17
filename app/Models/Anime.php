@@ -434,11 +434,12 @@ class Anime extends KModel implements HasMedia
     /**
      * Get the Anime's ratings
      *
-     * @return HasMany
+     * @return MorphMany
      */
-    public function ratings(): HasMany
+    public function ratings(): MorphMany
     {
-        return $this->hasMany(AnimeRating::class, 'anime_id', 'id');
+        return $this->morphMany(MediaRating::class, 'model')
+            ->where('model_type', Anime::class);
     }
 
     /**

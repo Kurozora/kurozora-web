@@ -58,13 +58,13 @@ class EpisodeResource extends JsonResource
     protected function getUserSpecificDetails(): array
     {
         $user = Auth::user();
+        $anime = $this->resource->season->anime;
 
-        /** @var Season $season */
-        $season = Season::where('id', $this->resource->season_id)->first();
+        // Get the user rating for this episode
+        $givenRating = $this->resource->ratings()
+            ->firstWhere('user_id', $user->id);
 
-        /** @var Anime $anime */
-        $anime = $season->anime()->first();
-
+        // Get watch status
         $watchStatus = WatchStatus::Disabled();
         if ($user->isTracking($anime)) {
             $watchStatus = WatchStatus::fromBool($user->watchedEpisodes()->where('episode_id', $this->resource->id)->exists());
@@ -72,7 +72,8 @@ class EpisodeResource extends JsonResource
 
         // Return the array
         return [
-            'isWatched' => $watchStatus->boolValue
+            'givenRating'   => (double) $givenRating?->rating,
+            'isWatched'     => $watchStatus->boolValue
         ];
     }
 }

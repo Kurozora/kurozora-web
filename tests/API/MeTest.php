@@ -240,7 +240,7 @@ class MeTest extends TestCase
         $animeList = Anime::factory(25)->create();
 
         foreach($animeList as $anime)
-            $this->user->favoriteAnime()->attach($anime->id);
+            $this->user->favorite_anime()->attach($anime->id);
 
         // Send request for the list of anime
         $response = $this->auth()->json('GET', 'v1/me/favorite-anime');

@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\AnimeRating;
+use App\Models\MediaRating;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RateAnimeRequest extends FormRequest
@@ -25,7 +25,8 @@ class RateAnimeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'rating' => ['bail', 'required', 'numeric', 'between:' . AnimeRating::MIN_RATING_VALUE . ',' . AnimeRating::MAX_RATING_VALUE]
+            'rating' => ['bail', 'required', 'numeric', 'between:' . MediaRating::MIN_RATING_VALUE . ',' . MediaRating::MAX_RATING_VALUE],
+            'description' => ['bail', 'string']
         ];
     }
 }

@@ -184,7 +184,7 @@
 
                     @auth
                         <div class="text-right">
-                            <livewire:anime.star-rating :anime="$anime" :rating="Auth::user()->animeRating()->firstWhere('anime_id', $anime->id)?->rating" :star-size="'lg'" />
+                            <livewire:anime.star-rating :anime="$anime" :rating="$anime->ratings()->firstWhere('user_id', Auth::user()->id)?->rating" :star-size="'lg'" />
                             <p class="text-sm text-gray-500">{{ __('Not enough ratings') }}</p>
                         </div>
                     @endif

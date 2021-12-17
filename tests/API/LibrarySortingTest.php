@@ -4,7 +4,7 @@ namespace Tests\API;
 
 use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
-use App\Models\AnimeRating;
+use App\Models\MediaRating;
 use App\Models\MediaType;
 use App\Models\Source;
 use App\Models\Status;
@@ -182,10 +182,11 @@ class LibrarySortingTest extends TestCase
         ]);
         $user->library()->attach($anime1->id, ['status' => UserLibraryStatus::Watching]);
 
-        AnimeRating::create([
-            'anime_id'  => $anime1->id,
-            'user_id'   => $user->id,
-            'rating'    => 3.0,
+        MediaRating::create([
+            'model_type'    => Anime::class,
+            'model_id'      => $anime1->id,
+            'user_id'       => $user->id,
+            'rating'        => 3.0,
         ]);
 
         // Add the second Anime
@@ -218,10 +219,11 @@ class LibrarySortingTest extends TestCase
         ]);
         $user->library()->attach($anime2->id, ['status' => UserLibraryStatus::Watching]);
 
-        AnimeRating::create([
-            'anime_id'  => $anime2->id,
-            'user_id'   => $user->id,
-            'rating'    => 1.2,
+        MediaRating::create([
+            'model_type'    => Anime::class,
+            'model_id'      => $anime2->id,
+            'user_id'       => $user->id,
+            'rating'        => 1.2,
         ]);
     }
 }

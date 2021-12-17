@@ -3,7 +3,7 @@
 namespace App\Http\Sorters;
 
 use App\Models\Anime;
-use App\Models\AnimeRating;
+use App\Models\MediaRating;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use musa11971\SortRequest\Support\Foundation\Contracts\Sorter;
@@ -22,13 +22,14 @@ class AnimeMyRatingSorter extends Sorter
     public function apply(Request $request, Builder $builder, string $direction): Builder
     {
         // Join the user ratings table
-        $builder->leftJoin(AnimeRating::TABLE_NAME, AnimeRating::TABLE_NAME . '.anime_id', '=', Anime::TABLE_NAME . '.id');
+        $builder->leftJoin(MediaRating::TABLE_NAME, MediaRating::TABLE_NAME . '.model_id', '=', Anime::TABLE_NAME . '.id')
+        ->where(MediaRating::TABLE_NAME . '.model_type', Anime::class);
 
         // Order by the user rating
         if ($direction == 'worst') {
-            $builder->orderBy(AnimeRating::TABLE_NAME . '.rating');
+            $builder->orderBy(MediaRating::TABLE_NAME . '.rating');
         } else {
-            $builder->orderBy(AnimeRating::TABLE_NAME . '.rating', 'desc');
+            $builder->orderBy(MediaRating::TABLE_NAME . '.rating', 'desc');
         }
 
         return $builder->select(Anime::TABLE_NAME . '.*');

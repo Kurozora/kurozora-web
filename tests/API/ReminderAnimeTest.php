@@ -35,7 +35,7 @@ class ReminderAnimeTest extends TestCase
         $response->assertUnsuccessfulAPIResponse();
 
         // Check whether the user now has 1 anime in their reminders
-        $this->assertEquals(0, $this->user->reminderAnime()->count());
+        $this->assertEquals(0, $this->user->reminder_anime()->count());
     }
 
     /**
@@ -73,7 +73,7 @@ class ReminderAnimeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the user now has 1 anime in their reminders
-        $this->assertEquals(1, $this->user->reminderAnime()->count());
+        $this->assertEquals(1, $this->user->reminder_anime()->count());
     }
 
     /**
@@ -89,7 +89,7 @@ class ReminderAnimeTest extends TestCase
         $anime = Anime::factory()->create();
 
         $this->user->library()->attach($anime);
-        $this->user->reminderAnime()->attach($anime->id);
+        $this->user->reminder_anime()->attach($anime->id);
 
         // Attach a receipt to the user
         $this->user->receipt()->create([
@@ -112,7 +112,7 @@ class ReminderAnimeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the user now has no anime in their reminders
-        $this->assertEquals(0, $this->user->reminderAnime()->count());
+        $this->assertEquals(0, $this->user->reminder_anime()->count());
     }
 
     /**
@@ -128,7 +128,7 @@ class ReminderAnimeTest extends TestCase
         $animeList = Anime::factory(25)->create();
 
         foreach($animeList as $anime) {
-            $this->user->reminderAnime()->attach($anime->id);
+            $this->user->reminder_anime()->attach($anime->id);
         }
 
         // Send request for the list of anime

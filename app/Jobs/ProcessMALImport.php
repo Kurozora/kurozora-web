@@ -5,7 +5,7 @@ namespace App\Jobs;
 use App\Enums\MALImportBehavior;
 use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
-use App\Models\AnimeRating;
+use App\Models\MediaRating;
 use App\Models\User;
 use App\Models\UserLibrary;
 use App\Notifications\MALImportFinished;
@@ -80,7 +80,7 @@ class ProcessMALImport implements ShouldQueue
         // Wipe current library if behavior is set to overwrite
         if ($this->behavior->value === MALImportBehavior::Overwrite) {
             $this->user->library()->detach();
-            $this->user->animeRating()->delete();
+            $this->user->anime_ratings()->delete();
         }
 
         // Create XML object
@@ -125,16 +125,17 @@ class ProcessMALImport implements ShouldQueue
 
             // Add the anime to their library
             UserLibrary::updateOrCreate([
-                'user_id' => $this->user->id,
-                'anime_id' => $anime->id,
+                'user_id'   => $this->user->id,
+                'anime_id'  => $anime->id,
             ], [
                 'status' => $status
             ]);
 
             // Updated their anime score
-            AnimeRating::updateOrCreate([
-                'user_id' => $this->user->id,
-                'anime_id' => $anime->id,
+            MediaRating::updateOrCreate([
+                'user_id'       => $this->user->id,
+                'model_type'    => Anime::class,
+                'model_id'      => $anime->id,
             ], [
                 'rating' => $rating,
             ]);
