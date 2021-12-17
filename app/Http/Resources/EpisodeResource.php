@@ -2,10 +2,8 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Anime;
-use App\Models\Episode;
-use App\Models\Season;
 use App\Enums\WatchStatus;
+use App\Models\Episode;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -38,6 +36,7 @@ class EpisodeResource extends JsonResource
                 'title'         => $this->resource->title,
                 'synopsis'      => $this->resource->synopsis,
                 'duration'      => $this->resource->duration_string,
+                'stats'         => MediaStatsResource::make($this->resource->getStats()),
                 'firstAired'    => $this->resource->first_aired?->timestamp,
                 'isVerified'    => (bool) $this->resource->verified
             ]
@@ -67,7 +66,7 @@ class EpisodeResource extends JsonResource
         // Get watch status
         $watchStatus = WatchStatus::Disabled();
         if ($user->isTracking($anime)) {
-            $watchStatus = WatchStatus::fromBool($user->watchedEpisodes()->where('episode_id', $this->resource->id)->exists());
+            $watchStatus = WatchStatus::fromBool($user->episodes()->where('episode_id', $this->resource->id)->exists());
         }
 
         // Return the array

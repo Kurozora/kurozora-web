@@ -84,4 +84,42 @@ class Episode extends KModel implements HasMedia
     {
         return $this->belongsTo(Season::class);
     }
+
+    /**
+     * Returns the media relations.
+     *
+     * @return mixed
+     */
+    public function getStats(): mixed
+    {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'episode.stats', 'id' => $this->id]);
+
+        // Retrieve or save cached result
+        return Cache::remember($cacheKey, self::CACHE_KEY_STATS_SECONDS, function () {
+            return $this->stats;
+        });
+    }
+
+    /**
+     * The media stats of this episode.
+     *
+     * @return HasOne
+     */
+    public function stats(): HasOne
+    {
+        return $this->hasOne(MediaStat::class, 'model_id')
+            ->where('model_type', Episode::class);
+    }
+
+    /**
+     * The media rating relationship of the episode.
+     *
+     * @return MorphMany
+     */
+    function ratings(): MorphMany
+    {
+        return $this->morphMany(MediaRating::class, 'model')
+            ->where('model_type', Episode::class);
+    }
 }
