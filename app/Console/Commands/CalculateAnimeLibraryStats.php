@@ -9,21 +9,21 @@ use App\Models\UserLibrary;
 use DB;
 use Illuminate\Console\Command;
 
-class CalculateMediaStats extends Command
+class CalculateAnimeLibraryStats extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'calculate:media_stats';
+    protected $signature = 'calculate:anime_library_stats';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Calculate media stats for anime with sufficient data.';
+    protected $description = 'Calculate library stats for anime with sufficient data.';
 
     /**
      * Create a new command instance.
@@ -68,13 +68,22 @@ class CalculateMediaStats extends Command
             $onHoldCount = $animeInLibrary->where('status', '=', UserLibraryStatus::OnHold);
             $droppedCount = $animeInLibrary->where('status', '=', UserLibraryStatus::Dropped);
 
+            // Get all counts
+            $planningCount = $planningCount->values()[0]['COUNT(*)'] ?? 0;
+            $watchingCount = $watchingCount->values()[0]['COUNT(*)'] ?? 0;
+            $completedCount = $completedCount->values()[0]['COUNT(*)'] ?? 0;
+            $onHoldCount = $onHoldCount->values()[0]['COUNT(*)'] ?? 0;
+            $droppedCount = $droppedCount->values()[0]['COUNT(*)'] ?? 0;
+            $modelCount = $planningCount + $watchingCount + $completedCount + $onHoldCount + $droppedCount;
+
             // Update media stat
             $mediaStat->update([
-                'planning_count'    => $planningCount->values()[0]['COUNT(*)'] ?? 0,
-                'watching_count'    => $watchingCount->values()[0]['COUNT(*)'] ?? 0,
-                'completed_count'   => $completedCount->values()[0]['COUNT(*)'] ?? 0,
-                'on_hold_count'     => $onHoldCount->values()[0]['COUNT(*)'] ?? 0,
-                'dropped_count'     => $droppedCount->values()[0]['COUNT(*)'] ?? 0,
+                'model_count'       => $modelCount,
+                'planning_count'    => $planningCount,
+                'watching_count'    => $watchingCount,
+                'completed_count'   => $completedCount,
+                'on_hold_count'     => $onHoldCount,
+                'dropped_count'     => $droppedCount,
             ]);
         }
 

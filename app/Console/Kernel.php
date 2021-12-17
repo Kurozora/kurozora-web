@@ -31,9 +31,14 @@ class Kernel extends ConsoleKernel
             ->daily();
 
         /**********************************************/
-        // Calculate media stats ratings every day
-        $schedule->command('calculate:media_stats')
+        // Calculate anime library stats every day
+        $schedule->command('calculate:anime_library_stats')
             ->daily();
+
+        /**********************************************/
+        // Calculate episode ratings every week
+        $schedule->command('calculate:episode_ratings')
+            ->weekly();
 
         /**********************************************/
         // Delete all users that did not confirm their email within 24 hrs every day
