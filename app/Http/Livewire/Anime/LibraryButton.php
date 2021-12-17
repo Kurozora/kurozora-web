@@ -63,8 +63,8 @@ class LibraryButton extends Component
         // If user explicitly asked for removing from library, then also remove from favorites and reminders.
         if ($this->libraryStatus == -2) {
             $user->library()->detach($this->anime->id);
-            $user->favoriteAnime()->detach($this->anime->id);
-            $user->reminderAnime()->detach($this->anime->id);
+            $user->favorite_anime()->detach($this->anime->id);
+            $user->reminder_anime()->detach($this->anime->id);
 
             // Reset dropdown to "ADD".
             $this->libraryStatus = -1;

@@ -41,7 +41,7 @@ class UserController extends Controller
         $data = $request->validated();
 
         // Get the feed messages
-        $feedMessages = $user->feedMessages()
+        $feedMessages = $user->feed_messages()
             ->orderByDesc('created_at')
             ->paginate($data['limit'] ?? 25);
 

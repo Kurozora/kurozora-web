@@ -171,9 +171,31 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return HasMany
      */
-    public function animeRating(): HasMany
+    public function media_ratings(): HasMany
     {
-        return $this->hasMany(AnimeRating::class);
+        return $this->hasMany(MediaRating::class);
+    }
+
+    /**
+     * Returns the anime ratings the user has.
+     *
+     * @return HasMany
+     */
+    public function anime_ratings(): HasMany
+    {
+        return $this->hasMany(MediaRating::class)
+            ->where('model_type', Anime::class);
+    }
+
+    /**
+     * Returns the anime ratings the user has.
+     *
+     * @return HasMany
+     */
+    public function episode_ratings(): HasMany
+    {
+        return $this->hasMany(MediaRating::class, 'model_id')
+            ->where('model_type', Episode::class);
     }
 
     /**
@@ -181,7 +203,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return HasMany
      */
-    function feedMessages(): HasMany
+    function feed_messages(): HasMany
     {
         return $this->hasMany(FeedMessage::class);
     }
@@ -244,7 +266,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return HasMany
      */
-    function userReminderAnime(): HasMany
+    function user_reminder_anime(): HasMany
     {
         return $this->hasMany(UserReminderAnime::class);
     }
@@ -257,7 +279,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     function getCalendar(): string
     {
         /** @var Anime[] $animes */
-        $animes = $this->reminderAnime()->get();
+        $animes = $this->reminder_anime()->get();
 
         // Find location of cached data
         $cacheKey = self::TABLE_NAME . '-name-reminders-id-' . $this->id . '-reminder_count-' . count($animes);
@@ -336,7 +358,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return BelongsToMany
      */
-    function reminderAnime(): BelongsToMany
+    function reminder_anime(): BelongsToMany
     {
         return $this->belongsToMany(Anime::class, UserReminderAnime::class, 'user_id', 'anime_id')
             ->withTimestamps();
@@ -384,7 +406,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return BelongsToMany
      */
-    function moderatingAnime(): BelongsToMany
+    function moderating_anime(): BelongsToMany
     {
         return $this->belongsToMany(Anime::class, AnimeModerator::class, 'user_id', 'anime_id')
             ->withPivot('created_at')
@@ -394,13 +416,13 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     /**
      * Returns a boolean indicating whether the user has watched the given episode.
      *
-     * @param Episode $episode
+     * @param Episode $episode The episode to be searched for in the user's watched list.
      *
      * @return bool
      */
     function hasWatched(Episode $episode): bool
     {
-        return $this->watchedEpisodes()->where('episode_id', $episode->id)->exists();
+        return $this->episodes()->where('episode_id', $episode->id)->exists();
     }
 
     /**
@@ -408,10 +430,15 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return BelongsToMany
      */
-    function watchedEpisodes(): BelongsToMany
+    function episodes(): BelongsToMany
     {
         return $this->belongsToMany(Episode::class, UserWatchedEpisode::class, 'user_id', 'episode_id')
             ->withTimestamps();
+    }
+
+    function user_watched_episode(): HasMany
+    {
+        return $this->hasMany(UserWatchedEpisode::class);
     }
 
     /**

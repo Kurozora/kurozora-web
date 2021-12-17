@@ -182,7 +182,7 @@ class User extends Resource
 
             MorphMany::make('Notifications'),
 
-            BelongsToMany::make('Moderating Anime', 'moderatingAnime', Anime::class)
+            BelongsToMany::make('Moderating Anime', 'moderating_anime', Anime::class)
 // @TODO
 // This has been commented out, because it conflicts with the favoriteAnime relationship.
 //                ->fields(function() {
