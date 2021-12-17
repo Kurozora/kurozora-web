@@ -6,7 +6,7 @@ use App\Models\MediaStat;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AnimeStatsResource extends JsonResource
+class MediaStatsResource extends JsonResource
 {
     /**
      * The resource instance.

@@ -65,10 +65,10 @@ class WatchButton extends Component
 
         // If the episode's current status is watched then detach (unwatch) it, otherwise attach (watch) it.
         if ($isAlreadyWatched) {
-            $user->watchedEpisodes()->detach($this->episode);
+            $user->episodes()->detach($this->episode);
             $this->hasWatched = false;
         } else {
-            $user->watchedEpisodes()->attach($this->episode);
+            $user->episodes()->attach($this->episode);
             $this->hasWatched = true;
         }
 
