@@ -44,7 +44,9 @@
                 "@type":"VideoObject",
                 "name":"{{ $anime->title }}",
                 "embedUrl": "{{ $anime->video_url }}",
-                "description":"Official Trailer"
+                "description":"Official Trailer",
+                "thumbnailUrl": "{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
+                "uploadDate": "{{ $anime->first_aired?->format('Y-m-d') }}"
             }
         </x-misc.schema>
     </x-slot>
@@ -106,8 +108,8 @@
                 <div id="ratingBadge" class="flex-grow pr-12">
                     <a href="#ratingsAndReviews">
                         <p class="inline-flex font-bold text-orange-500">
-                            {{ number_format($anime->rating_average, 1) }}
-                            <livewire:anime.star-rating :rating="$anime->rating_average" :star-size="'sm'" :disabled="true" />
+                            {{ number_format($anime->stats?->rating_average, 1) }}
+                            <livewire:anime.star-rating :rating="$anime->stats?->rating_average" :star-size="'sm'" :disabled="true" />
                         </p>
                         <p class="text-sm text-gray-500">{{ __('Not enough ratings') }}</p>
                     </a>
@@ -178,7 +180,7 @@
 
                 <div class="flex flex-row justify-between">
                     <div class="text-center">
-                        <p class="font-bold text-6xl">{{ number_format($anime->rating_average, 1) }}</p>
+                        <p class="font-bold text-6xl">{{ number_format($anime->stats?->rating_average, 1) }}</p>
                         <p class="font-bold text-sm text-gray-500">{{ __('out of') }} 5</p>
                     </div>
 
