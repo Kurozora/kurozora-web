@@ -85,6 +85,7 @@ class EpisodeController extends Controller
         /** @var MediaRating $foundRating */
         $foundRating = $user->episode_ratings()->where([
             ['model_id', '=', $episode->id],
+            ['model_type', '=', Episode::class],
         ])->first();
 
         // The rating exists
@@ -103,6 +104,7 @@ class EpisodeController extends Controller
             // Only insert the rating if it's rated higher than 0
             if ($givenRating > 0) {
                 $user->episode_ratings()->create([
+                    'user_id' => $user->id,
                     'model_type' => Episode::class,
                     'model_id' => $episode->id,
                     'rating' => $givenRating,
