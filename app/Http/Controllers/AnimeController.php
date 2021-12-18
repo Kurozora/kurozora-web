@@ -231,9 +231,10 @@ class AnimeController extends Controller
             // Only insert the rating if it's rated higher than 0
             if ($givenRating > 0) {
                 $user->episode_ratings()->create([
-                    'model_type'  => Anime::class,
-                    'model_id'  => $anime->id,
-                    'rating'    => $givenRating
+                    'user_id'       => $user->id,
+                    'model_type'    => Anime::class,
+                    'model_id'      => $anime->id,
+                    'rating'        => $givenRating
                 ]);
             }
         }
