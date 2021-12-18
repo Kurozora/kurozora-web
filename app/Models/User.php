@@ -186,7 +186,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     public function episode_ratings(): HasMany
     {
-        return $this->hasMany(MediaRating::class, 'model_id')
+        return $this->hasMany(MediaRating::class)
             ->where('model_type', Episode::class);
     }
 
