@@ -11,6 +11,52 @@
         <meta property="video:duration" content="{{ $episode->duration }}" />
         <meta property="video:release_date" content="{{ $episode->first_aired }}" />
         <meta property="video:series" content="{{ $anime->title }}" />
+
+        <meta property="og:title" content="{{ $anime->title }} — {{ config('app.name') }}" />
+        <meta property="og:description" content="{{ $anime->synopsis }}" />
+        <meta property="og:image" content="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
+        <meta property="og:type" content="video.tv_show" />
+        <meta property="video:duration" content="{{ $anime->duration }}" />
+        <meta property="video:release_date" content="{{ $anime->first_aired }}" />
+        <meta property="twitter:title" content="{{ $anime->title }} — {{ config('app.name') }}" />
+        <meta property="twitter:description" content="{{ $anime->synopsis }}" />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:image" content="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
+        <meta property="twitter:image:alt" content="{{ $anime->synopsis }}" />
+        <link rel="canonical" href="{{ route('anime.details', $anime) }}">
+        <x-misc.schema>
+            "@type":"TVEpisode",
+            "url":"/episode/{{ $episode->id }}/",
+            "name": "{{ $episode->title }}",
+            "alternateName": "{{ $anime->original_title }}",
+            "image": "{{ $episode->banner_image_url ?? $season->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
+            "description": "{{ $episode->synopsis }}",
+            "aggregateRating": {
+                "@type":"AggregateRating",
+                "ratingCount": {{ $episode->stats?->rating_count ?? 0 }},
+                "bestRating": 5,
+                "worstRating": 0,
+                "ratingValue": {{ $episode->stats?->rating_average ?? 0 }}
+            },
+            "contentRating": "{{ $anime->tv_rating->name }}",
+            "genre": {!! $anime->genres()->pluck('name') !!},
+            "datePublished": "{{ $episode->first_aired?->format('Y-m-d') }}",
+            "keywords": "anime,episode{{ (',' . $anime->keywords) ?? '' }}",
+            "creator":[
+                {
+                    "@type":"Organization",
+                    "url":"/studio/{{ $anime->studios?->firstWhere('is_studio', '=', true)?->id ?? $anime->studios->first()?->id }}/"
+                }
+            ],
+            "trailer": {
+                "@type":"VideoObject",
+                "name":"{{ $episode->title }}",
+                "description":"Official Trailer",
+                "embedUrl": "{{ $anime->video_url }}",
+                "thumbnailUrl": "{{ $episode->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
+                "uploadDate": "{{ $episode->first_aired?->format('Y-m-d') }}"
+            }
+        </x-misc.schema>
     </x-slot>
 
     <x-slot name="appArgument">
@@ -50,8 +96,8 @@
                 <div id="ratingBadge" class="flex-grow pr-12">
                     <a href="#ratingsAndReviews">
                         <p class="inline-flex font-bold text-orange-500">
-                            {{ number_format($episode->rating_average, 1) }}
-                            <livewire:anime.star-rating :rating="$episode->rating_average" :star-size="'sm'" :disabled="true" />
+                            {{ number_format($episode->stats?->rating_average, 1) }}
+                            <livewire:anime.star-rating :rating="$episode->stats?->rating_average" :star-size="'sm'" :disabled="true" />
                         </p>
                         <p class="text-sm text-gray-500">{{ __('Not enough ratings') }}</p>
                     </a>
@@ -97,13 +143,13 @@
 
                 <div class="flex flex-row justify-between">
                     <div class="text-center">
-                        <p class="font-bold text-6xl">{{ number_format($episode->rating_average, 1) }}</p>
+                        <p class="font-bold text-6xl">{{ number_format($episode->stats?->rating_average, 1) }}</p>
                         <p class="font-bold text-sm text-gray-500">{{ __('out of') }} 5</p>
                     </div>
 
                     @auth
                         <div class="text-right">
-                            <livewire:anime.star-rating :rating="$episode->rating_average" :star-size="'lg'" :disabled="true" />
+                            <livewire:anime.star-rating :rating="$episode->stats?->rating_average" :star-size="'lg'" :disabled="true" />
                             <p class="text-sm text-gray-500">{{ __('Not enough ratings') }}</p>
                         </div>
                     @endif
