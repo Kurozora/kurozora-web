@@ -30,10 +30,12 @@ use Request;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Sitemap\Contracts\Sitemapable;
+use Spatie\Sitemap\Tags\Url;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Anime extends KModel implements HasMedia
+class Anime extends KModel implements HasMedia, Sitemapable
 {
     use HasBannerImage,
         HasFactory,
@@ -853,5 +855,15 @@ class Anime extends KModel implements HasMedia
     {
         $scope = new TvRatingScope();
         $scope->apply($query , $this);
+    }
+
+    /**
+     * Convert the model to its sitemap representation.
+     *
+     * @return Url|string|array
+     */
+    public function toSitemapTag(): Url|string|array
+    {
+        return route('anime.details', $this);
     }
 }

@@ -14,10 +14,12 @@ use Illuminate\Support\Facades\Cache;
 use Request;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Sitemap\Contracts\Sitemapable;
+use Spatie\Sitemap\Tags\Url;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Studio extends KModel implements HasMedia
+class Studio extends KModel implements HasMedia, Sitemapable
 {
     use HasFactory,
         HasBannerImage,
@@ -137,5 +139,15 @@ class Studio extends KModel implements HasMedia
         return Cache::remember($cacheKey, self::CACHE_KEY_ANIME_SECONDS, function () use ($limit, $where) {
             return $this->anime()->where($where)->paginate($limit);
         });
+    }
+
+    /**
+     * Convert the model to its sitemap representation.
+     *
+     * @return Url|string|array
+     */
+    public function toSitemapTag(): Url|string|array
+    {
+        return route('studios.details', $this);
     }
 }
