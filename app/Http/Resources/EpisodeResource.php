@@ -30,6 +30,7 @@ class EpisodeResource extends JsonResource
             'type'          => 'episodes',
             'href'          => route('api.episodes.details', $this->resource, false),
             'attributes'    => [
+                'poster'        => ImageResource::make($this->resource->season->poster_image),
                 'banner'        => ImageResource::make($this->resource->banner_image),
                 'number'        => $this->resource->number,
                 'numberTotal'   => $this->resource->number_total,
