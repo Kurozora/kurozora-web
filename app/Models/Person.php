@@ -16,10 +16,12 @@ use Illuminate\Support\Facades\Cache;
 use Request;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Sitemap\Contracts\Sitemapable;
+use Spatie\Sitemap\Tags\Url;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Person extends KModel implements HasMedia
+class Person extends KModel implements HasMedia, Sitemapable
 {
     use HasFactory,
         HasProfileImage,
@@ -247,5 +249,15 @@ class Person extends KModel implements HasMedia
     {
         $bornToday = new BornTodayScope();
         $bornToday->apply($query->limit($limit), $this);
+    }
+
+    /**
+     * Convert the model to its sitemap representation.
+     *
+     * @return Url|string|array
+     */
+    public function toSitemapTag(): Url|string|array
+    {
+        return route('people.details', $this);
     }
 }
