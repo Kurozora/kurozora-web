@@ -26,6 +26,11 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         /**********************************************/
+        // Generate sitemap every day
+//        $schedule->command('sitemap:generate')
+//            ->daily();
+
+        /**********************************************/
         // Calculate anime ratings every day
         $schedule->command('calculate:anime_ratings')
             ->daily();

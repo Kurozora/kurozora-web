@@ -14,8 +14,10 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Cache;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Sitemap\Contracts\Sitemapable;
+use Spatie\Sitemap\Tags\Url;
 
-class Episode extends KModel implements HasMedia
+class Episode extends KModel implements HasMedia, Sitemapable
 {
     use HasBannerImage,
         HasFactory,
@@ -130,5 +132,15 @@ class Episode extends KModel implements HasMedia
     {
         return $this->morphMany(MediaRating::class, 'model')
             ->where('model_type', Episode::class);
+    }
+
+    /**
+     * Convert the model to its sitemap representation.
+     *
+     * @return Url|string|array
+     */
+    public function toSitemapTag(): Url|string|array
+    {
+        return route('episodes.details', $this);
     }
 }

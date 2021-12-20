@@ -38,11 +38,12 @@ use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Sitemap\Contracts\Sitemapable;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use URL;
 
-class User extends Authenticatable implements HasMedia, MustVerifyEmail, ReacterableContract
+class User extends Authenticatable implements HasMedia, MustVerifyEmail, ReacterableContract, Sitemapable
 {
     use Authorizable,
         HasApiTokens,
@@ -631,5 +632,15 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
 
         // Notify user
         $this->notify(new ResetPasswordNotification($token));
+    }
+
+    /**
+     * Convert the model to its sitemap representation.
+     *
+     * @return \Spatie\Sitemap\Tags\Url|string|array
+     */
+    public function toSitemapTag(): \Spatie\Sitemap\Tags\Url|string|array
+    {
+        return route('people.details', $this);
     }
 }
