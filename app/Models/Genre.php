@@ -10,10 +10,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Request;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Sitemap\Contracts\Sitemapable;
+use Spatie\Sitemap\Tags\Url;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Genre extends KModel implements HasMedia
+class Genre extends KModel implements HasMedia, Sitemapable
 {
     use HasSymbolImage,
         InteractsWithMedia,
@@ -100,5 +102,15 @@ class Genre extends KModel implements HasMedia
     public function tv_rating(): BelongsTo
     {
         return $this->belongsTo(TvRating::class);
+    }
+
+    /**
+     * Convert the model to its sitemap representation.
+     *
+     * @return Url|string|array
+     */
+    public function toSitemapTag(): Url|string|array
+    {
+        return route('genres.details', $this);
     }
 }
