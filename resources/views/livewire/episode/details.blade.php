@@ -48,14 +48,16 @@
                     "url":"/studio/{{ $anime->studios?->firstWhere('is_studio', '=', true)?->id ?? $anime->studios->first()?->id }}/"
                 }
             ],
-            "trailer": {
-                "@type":"VideoObject",
-                "name":"{{ $episode->title }}",
-                "description":"Official Trailer",
-                "embedUrl": "{{ $anime->video_url }}",
-                "thumbnailUrl": "{{ $episode->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
-                "uploadDate": "{{ $episode->first_aired?->format('Y-m-d') }}"
-            }
+            @if(!empty($anime->video_url))
+                "trailer": {
+                    "@type":"VideoObject",
+                    "name":"{{ $episode->title }}",
+                    "description":"Official Trailer",
+                    "embedUrl": "{{ $anime->video_url }}",
+                    "thumbnailUrl": "{{ $episode->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
+                    "uploadDate": "{{ $episode->first_aired?->format('Y-m-d') }}"
+                }
+            @endif
         </x-misc.schema>
     </x-slot>
 
