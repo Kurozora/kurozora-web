@@ -1,28 +1,40 @@
 @props(['anime'])
 
-<div class="relative w-[350px]">
-    <div class="flex flex-nowrap">
-        @if(empty($anime->video_link))
-            <picture class="relative mt-2 rounded-lg overflow-hidden">
-                <img class="lazyload" data-sizes="auto" data-src="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
+<div class="relative w-64 pb-2 md:w-80">
+    <div class="flex flex-col">
+        <picture class="relative rounded-lg overflow-hidden aspect-ratio-16-9">
+        @if(empty($anime->video_url))
+            <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
 
-                <div class="absolute top-0 left-0 h-full w-full border-[1px] border-solid border-black/20 rounded-lg"></div>
-            </picture>
+            <div class="absolute top-0 left-0 h-full w-full border-[1px] border-solid border-black/20 rounded-lg"></div>
         @else
-            <video class="mt-2 rounded-lg lazyload"
-                   data-sizes="auto"
-                   data-src="{{ $anime->video_link }}"
-                   poster="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}"
-                   controls
+            <iframe
+                class="w-full h-full lazyload"
+                type="text/html"
+                allowfullscreen="allowfullscreen"
+                mozallowfullscreen="mozallowfullscreen"
+                msallowfullscreen="msallowfullscreen"
+                oallowfullscreen="oallowfullscreen"
+                webkitallowfullscreen="webkitallowfullscreen"
+                allow="fullscreen;"
+                data-size="auto"
+                data-src="https://www.youtube-nocookie.com/embed/{{ Str::after($anime->video_url, '?v=') }}?autoplay=0&iv_load_policy=3&disablekb=1&color=red&rel=0&cc_load_policy=0&start=0&end=0&origin={{ config('app.url') }}&modestbranding=1&playsinline=1&loop=1&playlist={{ Str::after($anime->video_url, '?v=') }}"
             >
-            </video>
+            </iframe>
         @endif
+        </picture>
     </div>
 
-    <div class="flex flex-col gap-2 justify-between mt-2">
-        <div>
-            <p class="text-lg leading-tight line-clamp-2">{{ $anime->title }}</p>
-            <p class="leading-tight text-black/60 line-clamp-2">{{ $anime->tagline ?? $anime->genres?->pluck('name')->join(',  ', ' and ') }}</p>
+    <div class="relative mt-4">
+        <a class="absolute w-full h-full" href="{{ route('anime.details', $anime) }}"></a>
+
+        <div class="flex gap-2 justify-between">
+            <div>
+                <p class="leading-tight line-clamp-2">{{ $anime->title }}</p>
+                <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ $anime->tagline ?? $anime->genres?->pluck('name')->join(',  ', ' and ') }}</p>
+            </div>
+
+            <livewire:anime.library-button :anime="$anime" wire:key="{{ md5($anime->id) }}" />
         </div>
     </div>
 </div>
