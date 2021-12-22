@@ -5,7 +5,7 @@
 
     <x-slot name="meta">
         <meta property="og:title" content="{{ __('Characters') }} | {{ $person->full_name }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ $person->about }}" />
+        <meta property="og:description" content="{{ $person->about ?? __('app.description') }}" />
         <meta property="og:image" content="{{ $person->profile_image_url ?? asset('images/static/placeholders/character_poster.webp') }}" />
         <meta property="og:type" content="profile" />
         <meta property="og:profile:username" content="{{ $person->full_name }}" />
