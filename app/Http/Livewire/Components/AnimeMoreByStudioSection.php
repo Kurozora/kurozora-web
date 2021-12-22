@@ -25,7 +25,7 @@ class AnimeMoreByStudioSection extends Component
     public array $moreByStudio = [];
 
     /**
-     * Indicates whether to load the more by studio section.
+     * The number of anime the studio has.
      *
      * @var int $moreByStudioCount
      */
