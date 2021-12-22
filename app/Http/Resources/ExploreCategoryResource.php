@@ -28,10 +28,12 @@ class ExploreCategoryResource extends JsonResource
             'type'          => 'explore',
             'href'          => route('api.explore', absolute: false),
             'attributes'    => [
-                'title'     => $this->resource->title,
-                'position'  => $this->resource->position,
-                'type'      => $this->resource->type,
-                'size'      => $this->resource->size
+                'title'         => $this->resource->title,
+                'description'   => $this->resource->description,
+                'slug'          => $this->resource->slug,
+                'position'      => $this->resource->position,
+                'type'          => $this->resource->type,
+                'size'          => $this->resource->size
             ]
         ];
 
