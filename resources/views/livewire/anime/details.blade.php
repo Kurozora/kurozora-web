@@ -34,20 +34,24 @@
             "genre": {!! $anime->genres()->pluck('name') !!},
             "datePublished": "{{ $anime->first_aired?->format('Y-m-d') }}",
             "keywords": "anime{{ (',' . $anime->keywords) ?? '' }}",
-            "creator":[
-                {
-                    "@type":"Organization",
-                    "url":"/studio/{{ $anime->studios?->firstWhere('is_studio', '=', true)?->id ?? $anime->studios->first()?->id }}/"
+            @if (!empty($studio))
+                "creator":[
+                    {
+                        "@type":"Organization",
+                        "url":"/studio/{{ $studio->id }}/"
+                    }
+                ],
+            @endif
+            @if(!empty($anime->video_url))
+                "trailer": {
+                    "@type":"VideoObject",
+                    "name":"{{ $anime->title }}",
+                    "embedUrl": "{{ $anime->video_url }}",
+                    "description":"Official Trailer",
+                    "thumbnailUrl": "{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
+                    "uploadDate": "{{ $anime->first_aired?->format('Y-m-d') }}"
                 }
-            ],
-            "trailer": {
-                "@type":"VideoObject",
-                "name":"{{ $anime->title }}",
-                "embedUrl": "{{ $anime->video_url }}",
-                "description":"Official Trailer",
-                "thumbnailUrl": "{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
-                "uploadDate": "{{ $anime->first_aired?->format('Y-m-d') }}"
-            }
+            @endif
         </x-misc.schema>
     </x-slot>
 
@@ -62,6 +66,19 @@
                     <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
                 </picture>
             </div>
+
+            @if (!empty($anime->video_url))
+                <div class="absolute top-0 bottom-0 left-0 right-0">
+                    <div class="flex flex-col justify-center items-center h-full">
+                        <button
+                            class="inline-flex items-center p-5 bg-white/60 backdrop-blur border border-transparent rounded-full font-semibold text-xs text-gray-500 uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
+                            wire:click="showVide"
+                        >
+                            @svg('play_fill', 'fill-current', ['width' => '34'])
+                        </button>
+                    </div>
+                </div>
+            @endif
 
             <div class="md:absolute md:bottom-0 md:left-0 md:right-0 lg:px-4">
                 <div class="flex flex-nowrap pt-5 pb-8 px-4 md:mx-auto md:mb-8 md:p-6 md:max-w-lg md:bg-white md:bg-opacity-50 md:backdrop-filter md:backdrop-blur md:rounded-lg">
@@ -281,11 +298,11 @@
                                 </x-slot>
                             @else
                                 <div class="flex flex-col">
-                                        <p class="font-semibold text-2xl">🚀 {{ $anime->first_aired->toFormattedDateString() }}</p>
+                                    <p class="font-semibold text-2xl">🚀 {{ $anime->first_aired->toFormattedDateString() }}</p>
 
-                                        @svg('dotted_line', 'fill-current', ['width' => '100%'])
+                                    @svg('dotted_line', 'fill-current', ['width' => '100%'])
 
-                                        <p class="font-semibold text-2xl text-right">{{ $anime->last_aired?->toFormattedDateString() }} 🏁</p>
+                                    <p class="font-semibold text-2xl text-right">{{ $anime->last_aired?->toFormattedDateString() }} 🏁</p>
                                 </div>
                             @endif
                         @else
@@ -390,22 +407,46 @@
                 @endif
 
                 @if (!empty($anime->copyright))
-                    <section class="p-4 border-t-[1px]">
+                    <section class="p-4 border-t">
                         <p class="text-sm text-gray-400">{{ $anime->copyright }}</p>
                     </section>
                 @endif
             </div>
 
             <x-dialog-modal maxWidth="md" wire:model="showPopup">
-                <x-slot name="title">
-                    {{ $popupData['title'] }}
-                </x-slot>
-                <x-slot name="content">
-                    <p>{{ $popupData['message'] }}</p>
-                </x-slot>
-                <x-slot name="footer">
-                    <x-button wire:click="$toggle('showPopup')">{{ __('Ok') }}</x-button>
-                </x-slot>
+                @if($showVideo)
+                    <x-slot name="title">
+                        {{ $anime->title . ' Official Trailer' }}
+                    </x-slot>
+                    <x-slot name="content">
+                        <iframe
+                            class="w-full aspect-ratio-16-9 lazyload"
+                            type="text/html"
+                            allowfullscreen="allowfullscreen"
+                            mozallowfullscreen="mozallowfullscreen"
+                            msallowfullscreen="msallowfullscreen"
+                            oallowfullscreen="oallowfullscreen"
+                            webkitallowfullscreen="webkitallowfullscreen"
+                            allow="fullscreen;"
+                            data-size="auto"
+                            data-src="https://www.youtube-nocookie.com/embed/{{ Str::after($anime->video_url, '?v=') }}?autoplay=0&iv_load_policy=3&disablekb=1&color=red&rel=0&cc_load_policy=0&start=0&end=0&origin={{ config('app.url') }}&modestbranding=1&playsinline=1&loop=1&playlist={{ Str::after($anime->video_url, '?v=') }}"
+                        >
+                        </iframe>
+                    </x-slot>
+                    <x-slot name="footer">
+                        <x-button wire:click="$toggle('showPopup')">{{ __('Close') }}</x-button>
+                    </x-slot>
+                @else
+                    <x-slot name="title">
+                        {{ $popupData['title'] }}
+                    </x-slot>
+                    <x-slot name="content">
+                        <p>{{ $popupData['message'] }}</p>
+                    </x-slot>
+                    <x-slot name="footer">
+                        <x-button wire:click="$toggle('showPopup')">{{ __('Ok') }}</x-button>
+                    </x-slot>
+                @endif
             </x-dialog-modal>
         </div>
     </div>
