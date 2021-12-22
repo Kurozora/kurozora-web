@@ -34,7 +34,7 @@
                 </div>
             @endif
 
-            <div class="absolute top-0 left-0 h-full w-full border-[1px] border-solid border-black/20 rounded-lg"></div>
+            <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
         </picture>
     </div>
 

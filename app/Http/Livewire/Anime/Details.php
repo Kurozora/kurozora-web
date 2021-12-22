@@ -80,6 +80,13 @@ class Details extends Component
     public bool $isTracking = false;
 
     /**
+     * Whether to show the video to the user.
+     *
+     * @var bool $showVideo
+     */
+    public bool $showVideo = false;
+
+    /**
      * Whether to show the popup to the user.
      *
      * @var bool $showPopup
@@ -133,6 +140,15 @@ class Details extends Component
     public function updateAnimeHandler()
     {
         $this->setupActions();
+    }
+
+    /**
+     * Shows the trailer video to the user.
+     */
+    public function showVide()
+    {
+        $this->showVideo = true;
+        $this->showPopup = true;
     }
 
     /**
@@ -190,7 +206,7 @@ class Details extends Component
      *
      * @return Application|Factory|View
      */
-    public function render(): Factory|View|Application
+    public function render(): Application|Factory|View
     {
         return view('livewire.anime.details')
             ->layout('layouts.base');
