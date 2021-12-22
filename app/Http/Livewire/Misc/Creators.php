@@ -19,7 +19,6 @@ class Creators extends Component
     {
         return view('livewire.misc.creators', [
             'users' => User::whereIn('id', [1, 2])->get()
-        ])
-            ->layout('layouts.base');
+        ]);
     }
 }

@@ -35,7 +35,6 @@ class Home extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.home')
-            ->layout('layouts.base');
+        return view('livewire.home');
     }
 }

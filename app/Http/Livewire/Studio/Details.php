@@ -38,7 +38,6 @@ class Details extends Component
     {
         return view('livewire.studio.details', [
             'studioAnime' => $this->studio->getAnime(Studio::MAXIMUM_RELATIONSHIPS_LIMIT)
-        ])
-            ->layout('layouts.base');
+        ]);
     }
 }

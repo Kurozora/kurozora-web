@@ -39,7 +39,6 @@ class Details extends Component
         return view('livewire.person.details', [
             'personAnime' => $this->person->getAnime(Person::MAXIMUM_RELATIONSHIPS_LIMIT),
             'personCharacters' => $this->person->getCharacters(Person::MAXIMUM_RELATIONSHIPS_LIMIT),
-        ])
-            ->layout('layouts.base');
+        ]);
     }
 }
