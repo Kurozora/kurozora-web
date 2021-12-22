@@ -27,7 +27,7 @@
          class="absolute z-50 mt-2 {{ $width }} rounded-md shadow-lg {{ $alignmentClasses }}"
          style="display: none;"
          @click="open = false">
-        <div class="rounded-md border-[1px] border-black/5 overflow-hidden {{ $contentClasses }}">
+        <div class="rounded-md border border-black/5 overflow-hidden {{ $contentClasses }}">
             {{ $content }}
         </div>
     </div>

@@ -123,6 +123,10 @@ picture::before {
  * .skew-45 { ... }
  */
 
+img:not([src]):not([srcset]) {
+  visibility: hidden;
+}
+
 [x-cloak] {
   display: none;
 }
