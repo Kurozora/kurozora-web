@@ -17,6 +17,8 @@ class CreateExploreCategoriesTable extends Migration
         Schema::create(ExploreCategory::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title');
+            $table->string('description')->nullable();
+            $table->string('slug');
             $table->string('type');
             $table->string('size');
             $table->smallInteger('position');

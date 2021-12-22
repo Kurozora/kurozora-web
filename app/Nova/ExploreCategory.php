@@ -40,7 +40,7 @@ class ExploreCategory extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'title'
+        'id', 'title', 'description', 'slug'
     ];
 
     /**
@@ -65,6 +65,15 @@ class ExploreCategory extends Resource
                 ->rules('required', 'max:255')
                 ->sortable()
                 ->help('Please fill in a title, even if it is not displayed on the explore page.'),
+
+            Text::make('Description')
+                ->rules('max:255')
+                ->sortable()
+                ->help('Give the category a description if necessary.'),
+
+            Text::make('Slug')
+                ->onlyOnForms()
+                ->help('Used to identify the explore category in a URL: https://kurozora.app/explore/<strong>' . ($this->resource->slug ?? 'slug-identifier') . '</strong>. Leave empty to auto-generate from title.'),
 
             Number::make('Position/order', 'position')
                 ->rules('required', 'numeric', 'min:1', 'max:100')

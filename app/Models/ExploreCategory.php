@@ -4,12 +4,42 @@ namespace App\Models;
 
 use App\Enums\ExploreCategoryTypes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Request;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class ExploreCategory extends KModel
 {
+    use HasSlug;
+
     // Table name
     const TABLE_NAME = 'explore_categories';
     protected $table = self::TABLE_NAME;
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName(): string
+    {
+        if (Request::wantsJson()) {
+            return parent::getRouteKeyName();
+        }
+        return 'slug';
+    }
+
+    /**
+     * Get the options for generating the slug.
+     *
+     * @return SlugOptions
+     */
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('title')
+            ->saveSlugsTo('slug');
+    }
 
     /**
      * The items of the explore category.
