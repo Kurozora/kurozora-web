@@ -13,9 +13,9 @@ class AnimeMoreByStudioSection extends Component
     /**
      * The object containing the studio data.
      *
-     * @var Studio|null
+     * @var Studio
      */
-    public ?Studio $studio;
+    public Studio $studio;
 
     /**
      * The array containing the more by studio data.
@@ -34,14 +34,14 @@ class AnimeMoreByStudioSection extends Component
     /**
      * Prepare the component.
      *
-     * @param ?Studio $studio
+     * @param Studio $studio
      *
      * @return void
      */
-    public function mount(?Studio $studio)
+    public function mount(Studio $studio)
     {
         $this->studio = $studio;
-        $this->moreByStudioCount = $this->studio?->anime_studio()->count() ?? 0;
+        $this->moreByStudioCount = $this->studio->anime_studio()->count();
     }
 
     /**
@@ -51,7 +51,7 @@ class AnimeMoreByStudioSection extends Component
      */
     public function loadMoreByStudio()
     {
-        $this->moreByStudio = $this->studio?->getAnime(Studio::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
+        $this->moreByStudio = $this->studio->getAnime(Studio::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
     }
 
     /**
