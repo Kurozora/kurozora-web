@@ -93,7 +93,6 @@ class Index extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.person.index')
-            ->layout('layouts.base');
+        return view('livewire.person.index');
     }
 }
