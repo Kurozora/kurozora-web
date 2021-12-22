@@ -345,66 +345,12 @@
                 </div>
             </section>
 
-            @if (!empty($seasons))
-                <section class="pt-5 pb-8 px-4 border-t-2">
-                    <x-section-nav>
-                        <x-slot name="title">
-                            {{ __('Seasons') }}
-                        </x-slot>
-
-                        <x-slot name="action">
-                            <x-simple-link href="{{ route('anime.seasons', $anime) }}">{{ __('See All') }}</x-simple-link>
-                        </x-slot>
-                    </x-section-nav>
-
-                    <div class="grid grid-flow-col-dense gap-4 overflow-x-scroll no-scrollbar">
-                        @foreach($seasons as $season)
-                            <x-lockups.poster-lockup :season="$season" />
-                        @endforeach
-                    </div>
-                </section>
-            @endif
+            <livewire:components.anime-seasons-section :anime="$anime" />
 
             <div class="bg-orange-50">
-                @if (!empty($moreByStudio))
-                    <section id="moreByStudio" class="pt-5 pb-8 px-4 border-t-2">
-                        <x-section-nav>
-                            <x-slot name="title">
-                                {{ __('More By :x', ['x' => $studio->name]) }}
-                            </x-slot>
+                <livewire:components.anime-more-by-studio-section :studio="$studio" />
 
-                            <x-slot name="action">
-                                <x-simple-link href="{{ route('studios.details', $studio) }}">{{ __('See All') }}</x-simple-link>
-                            </x-slot>
-                        </x-section-nav>
-
-                        <div class="grid grid-flow-col-dense gap-4 overflow-x-scroll no-scrollbar">
-                            @foreach($moreByStudio as $moreByStudioAnime)
-                                <x-lockups.small-lockup :anime="$moreByStudioAnime" />
-                            @endforeach
-                        </div>
-                    </section>
-                @endif
-
-                @if (!empty($animeRelations))
-                    <section id="related" class="pt-5 pb-8 px-4 border-t-2">
-                        <x-section-nav>
-                            <x-slot name="title">
-                                {{ __('Related') }}
-                            </x-slot>
-
-                            <x-slot name="action">
-                                <x-simple-link href="{{ route('anime.related-shows', $anime) }}">{{ __('See All') }}</x-simple-link>
-                            </x-slot>
-                        </x-section-nav>
-
-                        <div class="grid grid-flow-col-dense gap-4 overflow-x-scroll no-scrollbar">
-                            @foreach($animeRelations as $relatedAnime)
-                                <x-lockups.small-lockup :anime="$relatedAnime->related" :relation="$relatedAnime->relation" />
-                            @endforeach
-                        </div>
-                    </section>
-                @endif
+                <livewire:components.anime-relations-section :anime="$anime" />
 
                 @if (!empty($anime->copyright))
                     <section class="p-4 border-t">
