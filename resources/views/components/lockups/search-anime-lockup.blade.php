@@ -5,7 +5,7 @@
         <picture class="relative shrink-0 w-16 h-24 mr-2 rounded-lg overflow-hidden sm:w-28 sm:h-40">
             <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->poster_image_url ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
 
-            <div class="absolute top-0 left-0 h-full w-full border-[1px] border-solid border-black/20 rounded-lg"></div>
+            <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
         </picture>
 
         <a class="absolute w-full h-full" href="{{ route('anime.details', $anime) }}"></a>
