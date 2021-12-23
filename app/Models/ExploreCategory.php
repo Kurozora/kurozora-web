@@ -5,10 +5,12 @@ namespace App\Models;
 use App\Enums\ExploreCategoryTypes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Request;
+use Spatie\Sitemap\Contracts\Sitemapable;
+use Spatie\Sitemap\Tags\Url;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class ExploreCategory extends KModel
+class ExploreCategory extends KModel implements Sitemapable
 {
     use HasSlug;
 
@@ -163,5 +165,15 @@ class ExploreCategory extends KModel
             }
         }
         return $this;
+    }
+
+    /**
+     * Convert the model to its sitemap representation.
+     *
+     * @return Url|string|array
+     */
+    public function toSitemapTag(): Url|string|array
+    {
+        return route('explore.details', $this);
     }
 }

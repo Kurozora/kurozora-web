@@ -7,7 +7,13 @@
                 </x-slot>
 
                 <x-slot name="action">
-                    <x-simple-link href="#" :disabled="true">{{ __('See All') }}</x-simple-link>
+                    @switch($exploreCategory->type)
+                        @case(\App\Enums\ExploreCategoryTypes::Genres)
+                            <x-simple-link href="{{ route('genres.index') }}">{{ __('See All') }}</x-simple-link>
+                        @break
+                        @default
+                            <x-simple-link href="{{ route('explore.details', $exploreCategory) }}">{{ __('See All') }}</x-simple-link>
+                    @endswitch
                 </x-slot>
             </x-section-nav>
 
