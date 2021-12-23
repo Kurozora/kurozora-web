@@ -18,6 +18,7 @@ require 'Web/Authentication.php';
 require 'Web/Anime.php';
 require 'Web/Characters.php';
 require 'Web/Episodes.php';
+require 'Web/Explore.php';
 require 'Web/Genres.php';
 require 'Web/Me.php';
 require 'Web/People.php';

@@ -41,7 +41,6 @@ class Characters extends Component
     {
         return view('livewire.person.characters', [
             'personCharacters' => $this->person->characters()->paginate(25)
-        ])
-            ->layout('layouts.base');
+        ]);
     }
 }

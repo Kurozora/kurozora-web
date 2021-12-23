@@ -5,7 +5,7 @@
 
     <x-slot name="meta">
         <meta property="og:title" content="{{ $anime->title }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ $anime->synopsis }}" />
+        <meta property="og:description" content="{{ $anime->synopsis ?? __('app.description') }}" />
         <meta property="og:image" content="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="video.tv_show" />
         <meta property="video:duration" content="{{ $anime->duration }}" />

@@ -70,7 +70,6 @@ class Details extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.episode.details')
-            ->layout('layouts.base');
+        return view('livewire.episode.details');
     }
 }
