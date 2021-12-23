@@ -181,7 +181,6 @@ class Details extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.anime.details')
-            ->layout('layouts.base');
+        return view('livewire.anime.details');
     }
 }

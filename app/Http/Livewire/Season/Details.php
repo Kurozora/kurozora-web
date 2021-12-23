@@ -41,7 +41,6 @@ class Details extends Component
     {
         return view('livewire.season.details', [
             'seasons' => $this->anime->seasons()->paginate(25)
-        ])
-            ->layout('layouts.base');
+        ]);
     }
 }

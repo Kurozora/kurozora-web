@@ -41,7 +41,6 @@ class RelatedShows extends Component
     {
         return view('livewire.anime.related-shows', [
             'animeRelations' => $this->anime->anime_relations()->paginate(25)
-        ])
-            ->layout('layouts.base');
+        ]);
     }
 }

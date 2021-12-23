@@ -16,7 +16,6 @@ class Contact extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.misc.contact')
-            ->layout('layouts.base');
+        return view('livewire.misc.contact');
     }
 }

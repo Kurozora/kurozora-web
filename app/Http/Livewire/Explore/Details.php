@@ -1,66 +1,41 @@
 <?php
 
-namespace App\Http\Livewire\Components;
+namespace App\Http\Livewire\Explore;
 
 use App\Enums\ExploreCategoryTypes;
-use App\Models\Anime;
-use App\Models\Character;
 use App\Models\ExploreCategory;
-use App\Models\ExploreCategoryItem;
-use App\Models\Person;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
 
-class ExploreCategorySection extends Component
+class Details extends Component
 {
     /**
      * The object containing the explore category data.
      *
-     * @var ExploreCategory $exploreCategory
+     * @var ExploreCategory
      */
     public ExploreCategory $exploreCategory;
 
     /**
-     * The array containing the explore category item data.
+     * The array containing the explore category items data.
      *
-     * @var ExploreCategoryItem[] $exploreCategoryItems
+     * @var Collection exploreCategoryItems
      */
-    public array|Collection $exploreCategoryItems = [];
-
-    /**
-     * The number of items the explore category has.
-     *
-     * @var int $exploreCategoryCount
-     */
-    public int $exploreCategoryCount = 0;
+    public Collection $exploreCategoryItems;
 
     /**
      * Prepare the component.
      *
      * @param ExploreCategory $exploreCategory
+     *
      * @return void
      */
     public function mount(ExploreCategory $exploreCategory)
     {
         $this->exploreCategory = $exploreCategory;
-        $this->exploreCategoryCount = match ($exploreCategory->type) {
-            ExploreCategoryTypes::UpcomingShows => Anime::upcomingShows()->count(),
-            ExploreCategoryTypes::Characters => Character::bornToday()->count(),
-            ExploreCategoryTypes::People => Person::bornToday()->count(),
-            default => $exploreCategory->explore_category_items()->count()
-        };
-    }
-
-    /**
-     * Loads the explore category section.
-     *
-     * @return void
-     */
-    public function loadExploreCategoryItems()
-    {
         $this->exploreCategoryItems = match ($this->exploreCategory->type) {
             ExploreCategoryTypes::MostPopularShows => $this->exploreCategory->most_popular_shows()->explore_category_items,
             ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcoming_shows()->explore_category_items,
@@ -77,6 +52,6 @@ class ExploreCategorySection extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.components.explore-category-section');
+        return view('livewire.explore.details');
     }
 }

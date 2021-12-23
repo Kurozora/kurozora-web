@@ -35,7 +35,6 @@ class Index extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.genre.index')
-            ->layout('layouts.base');
+        return view('livewire.genre.index');
     }
 }

@@ -41,7 +41,6 @@ class Anime extends Component
     {
         return view('livewire.person.anime', [
             'personAnime' => $this->person->anime()->paginate(25)
-        ])
-            ->layout('layouts.base');
+        ]);
     }
 }
