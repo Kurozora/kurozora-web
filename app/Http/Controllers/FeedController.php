@@ -59,15 +59,15 @@ class FeedController extends Controller
 
             // Notify user of the reply if the message doesn't belong to the current user
             if ($parentMessage->user->id != $user->id) {
-                $user->notify(new NewFeedMessageReply($feedMessage));
+                $parentMessage->user->notify(new NewFeedMessageReply($feedMessage));
             }
         } else if ($data['is_reshare'] ?? false) {
             // Get parent message
             $parentMessage = FeedMessage::firstWhere('id', '=', $data['parent_id']);
 
             // // Notify user of the re-share if the message doesn't belong to the current user
-            if ($parentMessage->first()->user->id != $user->id) {
-                $user->notify(new NewFeedMessageReShare($feedMessage));
+            if ($parentMessage->user->id != $user->id) {
+                $parentMessage->user->notify(new NewFeedMessageReShare($feedMessage));
             }
         }
 
