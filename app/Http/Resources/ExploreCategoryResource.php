@@ -26,7 +26,7 @@ class ExploreCategoryResource extends JsonResource
     {
         $resource = [
             'type'          => 'explore',
-            'href'          => route('api.explore', absolute: false),
+            'href'          => route('api.explore.details', $this->resource, absolute: false),
             'attributes'    => [
                 'title'         => $this->resource->title,
                 'description'   => $this->resource->description,
