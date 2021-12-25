@@ -25,7 +25,7 @@ class Home extends Component
      */
     function mount()
     {
-        $this->exploreCategories = ExploreCategory::orderBy('position')->get();;
+        $this->exploreCategories = ExploreCategory::orderBy('position')->get();
     }
 
     /**

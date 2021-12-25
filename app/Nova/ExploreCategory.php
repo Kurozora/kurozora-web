@@ -5,6 +5,7 @@ namespace App\Nova;
 use App\Enums\ExploreCategorySize;
 use App\Enums\ExploreCategoryTypes;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
@@ -92,6 +93,12 @@ class ExploreCategory extends Resource
                 ->rules('required')
                 ->sortable()
                 ->help('For genres, only use <b>Medium</b>.<br/><b>Video</b> is used only for shows.'),
+
+            Boolean::make('Is Global')
+                ->default(false)
+                ->rules('required')
+                ->sortable()
+                ->help('Turning this on will also include the category in genre specific categories.'),
 
             HasMany::make('Items', 'explore_category_items', ExploreCategoryItem::class),
         ];
