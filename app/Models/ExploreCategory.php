@@ -65,7 +65,7 @@ class ExploreCategory extends KModel implements Sitemapable
             if (empty($genre)) {
                 $popularShows = Anime::mostPopular()->get();
             } else {
-                $popularShows = $genre->animes()->mostPopular()->get();
+                $popularShows = Anime::whereGenre($genre)->mostPopular(10, null, $genre->is_nsfw)->get();
             }
 
             foreach($popularShows as $popularShow) {
@@ -90,7 +90,7 @@ class ExploreCategory extends KModel implements Sitemapable
             if (empty($genre)) {
                 $upcomingShows = Anime::upcomingShows()->get();
             } else {
-                $upcomingShows = $genre->animes()->upcomingShows()->get();
+                $upcomingShows = Anime::whereGenre($genre)->upcomingShows()->get();
             }
 
             foreach($upcomingShows as $upcomingShow) {

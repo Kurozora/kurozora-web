@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\Genre;
 
-use App\Enums\ExploreCategoryTypes;
 use App\Models\ExploreCategory;
 use App\Models\Genre;
 use Illuminate\Contracts\Foundation\Application;
@@ -36,59 +35,9 @@ class Details extends Component
     public function mount(Genre $genre)
     {
         $this->genre = $genre;
-        $this->exploreCategories = $this->getCategoriesForGenre($genre);
-    }
-
-    /**
-     * Generates fixed explore categories for a specific genre.
-     *
-     * @param Genre $genre
-     * @return array
-     */
-    private function getCategoriesForGenre(Genre $genre): array
-    {
-        $categories = [];
-
-        $categories[] = $this->getFeaturedShowsCategoryForGenre($genre, 1);
-        $categories[] = $this->getShowsWeLoveCategoryForGenre($genre, 2);
-
-        return $categories;
-    }
-
-    /**
-     * Returns the explore category for featured shows for a specific genre.
-     *
-     * @param Genre $genre
-     * @param int $position
-     * @return ExploreCategory
-     */
-    private function getFeaturedShowsCategoryForGenre(Genre $genre, int $position): ExploreCategory
-    {
-        $exploreCategory = ExploreCategory::make([
-            'title'     => 'Featured ' . $genre->name . ' Shows',
-            'position'  => $position,
-            'type'      => ExploreCategoryTypes::MostPopularShows,
-            'size'      => 'large'
-        ]);
-        return $exploreCategory->most_popular_shows($genre);
-    }
-
-    /**
-     * Returns the explore category for shows we love of a specific genre.
-     *
-     * @param Genre $genre
-     * @param int $position
-     * @return ExploreCategory
-     */
-    private function getShowsWeLoveCategoryForGenre(Genre $genre, int $position): ExploreCategory
-    {
-        $category = ExploreCategory::make([
-            'title'     => $genre->name . ' Shows We Love',
-            'position'  => $position,
-            'type'      => ExploreCategoryTypes::Shows,
-            'size'      => 'video'
-        ]);
-        return $category->shows_we_love($genre);
+        $this->exploreCategories = ExploreCategory::where('is_global', true)
+            ->orderBy('position')
+            ->get();
     }
 
     /**

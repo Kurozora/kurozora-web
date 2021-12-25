@@ -730,17 +730,39 @@ class Anime extends KModel implements HasMedia, Sitemapable
      *
      * @param Builder $query
      * @param int $limit
+     * @param int|null $status
+     * @param bool $nsfwAllowed
      * @return Builder
      */
-    public function scopeMostPopular(Builder $query, int $limit = 10): Builder
+    public function scopeMostPopular(Builder $query, int $limit = 10, ?int $status = 3, bool $nsfwAllowed = false): Builder
     {
-        return $query->where('status_id', 3)
-            ->where('is_nsfw', false)
-            ->leftJoin(MediaStat::TABLE_NAME, MediaStat::TABLE_NAME . '.model_id', '=', Anime::TABLE_NAME . '.id')
+        // Get anime with certain airing status.
+        if (!empty($status)) {
+            $query->where('status_id', $status);
+        }
+
+        // If NSFW is not allowed then filter it out.
+        if (!$nsfwAllowed) {
+            $query->where('is_nsfw', false);
+        }
+
+        return $query->leftJoin(MediaStat::TABLE_NAME, MediaStat::TABLE_NAME . '.model_id', '=', Anime::TABLE_NAME . '.id')
             ->orderBy(MediaStat::TABLE_NAME . '.watching_count', 'desc')
             ->orderBy(MediaStat::TABLE_NAME . '.rating_average', 'desc')
             ->limit($limit)
             ->select(Anime::TABLE_NAME . '.*');
+    }
+
+    /**
+     * Eloquent builder scope that limits the query to the given genre.
+     *
+     * @param Builder $query
+     * @param Genre $genre
+     * @return Builder
+     */
+    public function scopeWhereGenre(Builder $query, Genre $genre): Builder
+    {
+        return $query->whereRelation('genres', 'genre_id', '=', $genre->id);
     }
 
     /**
