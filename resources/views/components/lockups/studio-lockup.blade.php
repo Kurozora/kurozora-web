@@ -12,7 +12,7 @@
                  data-src="{{ $studio->banner_image_url ?? $studio->profile_image_url ?? asset('images/static/placeholders/studio_profile.webp') }}"
                  alt="{{ $studio->name }} Banner"
                  title="{{ $studio->name }}"
-                 width="{{ ( $studio->banner_image ?? $studio->profile_image)?->custom_properties['width'] ?? 300}}"
+                 width="{{ ($studio->banner_image ?? $studio->profile_image)?->custom_properties['width'] ?? 300}}"
                  height="{{ ($studio->banner_image ?? $studio->profile_image)?->custom_properties['height'] ?? 300 }}"
             >
 

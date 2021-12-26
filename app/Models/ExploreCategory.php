@@ -56,16 +56,22 @@ class ExploreCategory extends KModel implements Sitemapable
     /**
      * Returns the current most popular anime.
      *
-     * @param Genre|null $genre
+     * @param Genre|int|null $genre
      * @return ExploreCategory
      */
-    public function most_popular_shows(?Genre $genre = null): ExploreCategory
+    public function most_popular_shows(Genre|int|null $genre = null): ExploreCategory
     {
         if ($this->type === ExploreCategoryTypes::MostPopularShows) {
             if (empty($genre)) {
-                $popularShows = Anime::mostPopular()->get();
+                $popularShows = Anime::mostPopular()->get('id');
             } else {
-                $popularShows = Anime::whereGenre($genre)->mostPopular(10, null, $genre->is_nsfw)->get();
+                if (is_int($genre)) {
+                    $genre = Genre::findOrFail($genre, ['id', 'is_nsfw']);
+                }
+
+                $popularShows = Anime::whereGenre($genre)
+                    ->mostPopular(10, null, $genre->is_nsfw)
+                    ->get('id');
             }
 
             foreach($popularShows as $popularShow) {
@@ -81,16 +87,23 @@ class ExploreCategory extends KModel implements Sitemapable
     /**
      * Returns the upcoming anime.
      *
-     * @param Genre|null $genre
+     * @param Genre|int|null $genre
      * @return ExploreCategory
      */
-    public function upcoming_shows(?Genre $genre = null): ExploreCategory
+    public function upcoming_shows(Genre|int|null $genre = null): ExploreCategory
     {
         if ($this->type === ExploreCategoryTypes::UpcomingShows) {
             if (empty($genre)) {
-                $upcomingShows = Anime::upcomingShows()->get();
+                $upcomingShows = Anime::upcomingShows()
+                    ->get('id');
             } else {
-                $upcomingShows = Anime::whereGenre($genre)->upcomingShows()->get();
+                if (is_int($genre)) {
+                    $genre = Genre::findOrFail($genre, 'id');
+                }
+
+                $upcomingShows = Anime::whereGenre($genre)
+                    ->upcomingShows()
+                    ->get('id');
             }
 
             foreach($upcomingShows as $upcomingShow) {
@@ -106,16 +119,20 @@ class ExploreCategory extends KModel implements Sitemapable
     /**
      * Returns the current most popular anime.
      *
-     * @param Genre $genre
+     * @param Genre|int $genre
      * @return ExploreCategory
      */
-    public function shows_we_love(Genre $genre): ExploreCategory
+    public function shows_we_love(Genre|int $genre): ExploreCategory
     {
         if ($this->type === ExploreCategoryTypes::Shows) {
+            if (is_int($genre)) {
+                $genre = Genre::findOrFail($genre, 'id');
+            }
+
             $randomShows = $genre->animes()
                 ->inRandomOrder()
                 ->limit(10)
-                ->get();
+                ->get('id');
 
             foreach($randomShows as $randomShow) {
                 $this->explore_category_items->add(new ExploreCategoryItem([
@@ -135,7 +152,7 @@ class ExploreCategory extends KModel implements Sitemapable
     public function charactersBornToday(): ExploreCategory
     {
         if ($this->type === ExploreCategoryTypes::Characters) {
-            $charactersBornToday = Character::bornToday()->get();
+            $charactersBornToday = Character::bornToday()->get('id');
 
             foreach($charactersBornToday as $characterBornToday) {
                 $this->explore_category_items->add(new ExploreCategoryItem([
@@ -155,7 +172,7 @@ class ExploreCategory extends KModel implements Sitemapable
     public function peopleBornToday(): ExploreCategory
     {
         if ($this->type === ExploreCategoryTypes::People) {
-            $peopleBornToday = Person::bornToday()->get();
+            $peopleBornToday = Person::bornToday()->get('id');
 
             foreach($peopleBornToday as $personBornToday) {
                 $this->explore_category_items->add(new ExploreCategoryItem([

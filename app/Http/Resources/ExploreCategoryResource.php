@@ -93,7 +93,7 @@ class ExploreCategoryResource extends JsonResource
             ExploreCategoryTypes::UpcomingShows => [
                 'shows' => [
                     'data' => AnimeResource::collection($this->resource
-                        ->upcoming_shows()
+                        ->upcoming_shows($request->input('genre_id'))
                         ->explore_category_items
                         ->pluck('model')
                     )
@@ -102,7 +102,7 @@ class ExploreCategoryResource extends JsonResource
             ExploreCategoryTypes::MostPopularShows => [
                 'shows' => [
                     'data' => AnimeResource::collection($this->resource
-                        ->most_popular_shows()
+                        ->most_popular_shows($request->input('genre_id'))
                         ->explore_category_items
                         ->pluck('model')
                     )

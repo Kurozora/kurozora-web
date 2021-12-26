@@ -5,7 +5,15 @@
 
     <div class="flex flex-nowrap">
         <picture class="relative w-64 h-40 mt-2 rounded-lg overflow-hidden sm:w-[35rem] sm:h-[22rem] md:w-[42rem] md:h-[26rem]">
-            <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
+            <img
+                class="w-full h-full object-cover lazyload"
+                data-sizes="auto"
+                data-src="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}"
+                alt="{{ $anime->title }} Banner"
+                title="{{ $anime->title }}"
+                width="{{ ($anime->banner_image ?? $anime->profile_image)?->custom_properties['width'] ?? 300}}"
+                height="{{ ($anime->banner_image ?? $anime->profile_image)?->custom_properties['height'] ?? 300 }}"
+            >
 
             <div class="absolute bottom-0 left-0 right-0 p-3 pt-[15%] bg-gradient-to-t from-black to-transparent">
                 <div class="max-w-[50%]">
