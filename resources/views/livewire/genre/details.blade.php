@@ -7,12 +7,16 @@
 
 <main>
     <x-slot name="title">
-        {{ $genre->name }}
+        {{ $genre->name }} — {{ config('app.name') }}
+    </x-slot>
+
+    <x-slot name="description">
+        {{ __('Discover the extensive list of :x anime only on Kurozora, the largest, free online anime and manga database in the world.', ['x' => $genre->name]) }} {{ $genre->description }}
     </x-slot>
 
     <x-slot name="meta">
         <meta property="og:title" content="{{ $genre->name }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ $genre->description }}" />
+        <meta property="og:description" content="{{ __('Discover the extensive list of :x anime only on Kurozora, the largest, free online anime and manga database in the world.', ['x' => $genre->name]) }} {{ $genre->description }}" />
         <meta property="og:image" content="{{ $genre->symbol_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
     </x-slot>

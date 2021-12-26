@@ -1,6 +1,10 @@
 <main>
     <x-slot name="title">
-        {!! $anime->title !!}
+        {!! $anime->title !!} — {{ config('app.name') }}
+    </x-slot>
+
+    <x-slot name="description">
+        {{ $anime->synopsis }}
     </x-slot>
 
     <x-slot name="meta">
@@ -61,24 +65,24 @@
 
     <div class="grid grid-rows-[repeat(2,minmax(0,min-content))] h-full lg:grid-rows-none lg:grid-cols-2 2xl:grid-cols-3 lg:mb-0">
         <div class="relative">
-            <div class="flex flex-nowrap aspect-ratio-16-9 md:relative md:h-full lg:aspect-ratio-auto">
+            <div class="relative flex flex-nowrap aspect-ratio-16-9 md:relative md:h-full lg:aspect-ratio-auto">
                 <picture class="relative w-full overflow-hidden">
                     <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
                 </picture>
-            </div>
 
-            @if (!empty($anime->video_url))
-                <div class="absolute top-0 bottom-0 left-0 right-0">
-                    <div class="flex flex-col justify-center items-center h-full">
-                        <button
-                            class="inline-flex items-center p-5 bg-white/60 backdrop-blur border border-transparent rounded-full font-semibold text-xs text-gray-500 uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
-                            wire:click="showVide"
-                        >
-                            @svg('play_fill', 'fill-current', ['width' => '34'])
-                        </button>
+                @if (!empty($anime->video_url))
+                    <div class="absolute top-0 bottom-0 left-0 right-0">
+                        <div class="flex flex-col justify-center items-center h-full md:pb-40 lg:pb-0">
+                            <button
+                                class="inline-flex items-center p-5 bg-white/60 backdrop-blur border border-transparent rounded-full font-semibold text-xs text-gray-500 uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
+                                wire:click="showVide"
+                            >
+                                @svg('play_fill', 'fill-current', ['width' => '34'])
+                            </button>
+                        </div>
                     </div>
-                </div>
-            @endif
+                @endif
+            </div>
 
             <div class="md:absolute md:bottom-0 md:left-0 md:right-0 lg:px-4">
                 <div class="flex flex-nowrap pt-5 pb-8 px-4 md:mx-auto md:mb-8 md:p-6 md:max-w-lg md:bg-white md:bg-opacity-50 md:backdrop-filter md:backdrop-blur md:rounded-lg">
