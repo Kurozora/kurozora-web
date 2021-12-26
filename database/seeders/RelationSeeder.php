@@ -15,51 +15,51 @@ class RelationSeeder extends Seeder
     protected array $relations = [
         [
             'name' => 'Sequel',
-            'description' => '',
+            'description' => 'Series that are a direct, chronological, continuation of the original story.',
         ],
         [
             'name' => 'Prequel',
-            'description' => '',
+            'description' => 'Series that tell a story which takes place before another one.',
         ],
         [
             'name' => 'Alternative Setting',
-            'description' => '',
+            'description' => 'Series that take place in the same universe, but with different characters.',
         ],
         [
             'name' => 'Alternative Version',
-            'description' => '',
+            'description' => 'Series that usually take place in the same universe with the same characters, but with a different storyline',
         ],
         [
             'name' => 'Side Story',
-            'description' => '',
+            'description' => 'Series that focus on a single perspective or point of view about a given situation, incident, or account within the same series.',
         ],
         [
             'name' => 'Summary',
-            'description' => '',
+            'description' => 'Series that sums up a season or storyline by showing clips of significant events.',
         ],
         [
             'name' => 'Full Story',
-            'description' => '',
+            'description' => 'The full story of a summarised series.',
         ],
         [
             'name' => 'Parent Story',
-            'description' => '',
+            'description' => 'The original series from which all other stories are derived.',
         ],
         [
             'name' => 'Spin-Off',
-            'description' => '',
+            'description' => 'Parts of successful series, for example the concept, are taken and given a second series of their own.',
         ],
         [
             'name' => 'Adaptation',
-            'description' => '',
+            'description' => 'Series adapted from a different source. Usually when a book or a game is adapted to a TV series, and vice versa.',
         ],
         [
             'name' => 'Character',
-            'description' => '',
+            'description' => 'Series that usually focus on, usually popular, characters of a show.',
         ],
         [
             'name' => 'Other',
-            'description' => '',
+            'description' => 'Series that don’t fall under one of the other relation types.',
         ],
     ];
 

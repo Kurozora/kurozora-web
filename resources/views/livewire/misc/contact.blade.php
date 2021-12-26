@@ -1,12 +1,15 @@
 <main>
     <x-slot name="title">
-        {{ __('Contact Kurozora') }}
+        {{ __('Contact Kurozora') }} — {{ config('app.name') }}
+    </x-slot>
+
+    <x-slot name="description">
+        {{ __('Contact Kurozora support by email regarding the app, website, or other services. Kurozora support is here to help.') }}
     </x-slot>
 
     <x-slot name="meta">
         <meta property="og:title" content="{{ __('Contact') }} — {{ config('app.name') }}" />
-        <meta property="og:site_name" content="{{ config('app.name') }}" />
-        <meta property="og:og:description" content="{{ __('app.description') }}" />
+        <meta property="og:og:description" content="{{ __('Contact Kurozora support by email regarding the app, website, or other services. Kurozora support is here to help.') }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
     </x-slot>

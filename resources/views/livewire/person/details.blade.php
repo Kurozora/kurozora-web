@@ -1,6 +1,10 @@
 <main>
     <x-slot name="title">
-        {!! $person->full_name !!}
+        {!! $person->full_name !!} — {{ config('app.name') }}
+    </x-slot>
+
+    <x-slot name="description">
+        {{ $person->about }}
     </x-slot>
 
     <x-slot name="meta">
