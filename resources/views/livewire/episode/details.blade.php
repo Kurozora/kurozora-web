@@ -1,6 +1,10 @@
 <main>
     <x-slot name="title">
-        {{ __('Episode :x', ['x' => $episode->number_total]) }} | {!! $episode->title !!}
+        {{ __(':x episode :y', ['x' => $anime->title, 'y' => $episode->number_total]) }} | {!! $episode->title !!} — {{ config('app.name') }}
+    </x-slot>
+
+    <x-slot name="description">
+        {{ $episode->synopsis }}
     </x-slot>
 
     <x-slot name="meta">
@@ -11,19 +15,12 @@
         <meta property="video:duration" content="{{ $episode->duration }}" />
         <meta property="video:release_date" content="{{ $episode->first_aired }}" />
         <meta property="video:series" content="{{ $anime->title }}" />
-
-        <meta property="og:title" content="{{ $anime->title }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ $anime->synopsis ?? __('app.description') }}" />
-        <meta property="og:image" content="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
-        <meta property="og:type" content="video.tv_show" />
-        <meta property="video:duration" content="{{ $anime->duration }}" />
-        <meta property="video:release_date" content="{{ $anime->first_aired }}" />
-        <meta property="twitter:title" content="{{ $anime->title }} — {{ config('app.name') }}" />
-        <meta property="twitter:description" content="{{ $anime->synopsis }}" />
+        <meta property="twitter:title" content="{{ $episode->title }} — {{ config('app.name') }}" />
+        <meta property="twitter:description" content="{{ $episode->synopsis }}" />
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:image" content="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
-        <meta property="twitter:image:alt" content="{{ $anime->synopsis }}" />
-        <link rel="canonical" href="{{ route('anime.details', $anime) }}">
+        <meta property="twitter:image" content="{{ $episode->banner_image_url ?? $season->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
+        <meta property="twitter:image:alt" content="{{ $episode->synopsis }}" />
+        <link rel="canonical" href="{{ route('episodes.details', $episode) }}">
         <x-misc.schema>
             "@type":"TVEpisode",
             "url":"/episode/{{ $episode->id }}/",

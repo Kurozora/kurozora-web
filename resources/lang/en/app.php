@@ -13,6 +13,6 @@ return [
     |
     */
 
-    'description' => 'An extensive library of anime, movies, specials, OVA and ONA. Track, share and discover anime with friends.',
+    'description' => 'A community for anime fans with an extensive library of anime, manga, music, games, movies, specials, OVA, and ONA. Only on Kurozora, the largest, free online anime and manga website in the world. Track, share and discover anime with friends.',
 
 ];

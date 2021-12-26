@@ -3,10 +3,10 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        {{ $meta ?? '' }}
         <meta property="og:url" content="{{ url()->current() }}" />
         <meta property="og:site_name" content="{{ config('app.name') }}" />
         <meta property="twitter:site" content="{{ config('social.twitter') }}" />
+        {{ $meta ?? '' }}
 
         @desktop
         @else
@@ -31,7 +31,8 @@
         <link rel="shortcut icon" href="{{ url(asset('favicon.ico')) }}" />
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+        <link rel="preload" href="https://rsms.me/inter/inter.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+        <noscript><link rel="stylesheet" href="https://rsms.me/inter/inter.css" /></noscript>
 
         <!-- Styles -->
         <link rel="preload" href="{{ url(mix('css/app.css')) }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
