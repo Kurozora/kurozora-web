@@ -14,6 +14,7 @@
         <meta property="og:type" content="video.tv_show" />
         <meta property="video:duration" content="{{ $anime->duration }}" />
         <meta property="video:release_date" content="{{ $anime->first_aired }}" />
+        <link rel="canonical" href="{{ route('anime.related-shows', $anime) }}">
     </x-slot>
 
     <x-slot name="appArgument">

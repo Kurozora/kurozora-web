@@ -66,7 +66,7 @@
         <div class="relative">
             <div class="flex flex-nowrap md:relative md:h-full">
                 <picture class="relative w-full overflow-hidden">
-                    <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $episode->banner_image_url ?? $season->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}" style="aspect-ratio: 16/9;">
+                    <img class="w-full h-full object-cover aspect-ratio-16-9 lazyload" data-sizes="auto" data-src="{{ $episode->banner_image_url ?? $season->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
                 </picture>
             </div>
 

@@ -13,6 +13,7 @@
         <meta property="og:image" content="{{ $studio->profile_image_url ?? asset('images/static/placeholders/person_poster.webp') }}" />
         <meta property="og:type" content="profile" />
         <meta property="og:profile:username" content="{{ $studio->name }}" />
+        <link rel="canonical" href="{{ route('studios.anime', $studio) }}">
     </x-slot>
 
     <x-slot name="appArgument">
