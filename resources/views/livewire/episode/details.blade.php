@@ -30,10 +30,10 @@
             "description": "{{ $episode->synopsis }}",
             "aggregateRating": {
                 "@type":"AggregateRating",
-                "ratingCount": {{ $episode->stats?->rating_count ?? 0 }},
+                "ratingCount": {{ $episode->stats?->rating_count ?? 1 }},
                 "bestRating": 5,
                 "worstRating": 0,
-                "ratingValue": {{ $episode->stats?->rating_average ?? 0 }}
+                "ratingValue": {{ $episode->stats?->rating_average ?? 2.5 }}
             },
             "contentRating": "{{ $anime->tv_rating->name }}",
             "genre": {!! $anime->genres()->pluck('name') !!},
