@@ -13,6 +13,7 @@
         <meta property="og:image" content="{{ $character->profile_image_url ?? asset('images/static/placeholders/person_poster.webp') }}" />
         <meta property="og:type" content="profile" />
         <meta property="og:profile:username" content="{{ $character->name }}" />
+        <link rel="canonical" href="{{ route('characters.details', $character) }}">
     </x-slot>
 
     <x-slot name="appArgument">
