@@ -6,8 +6,6 @@ use App\Helpers\JSONResult;
 use App\Http\Requests\GetExplorePageRequest;
 use App\Http\Resources\ExploreCategoryResource;
 use App\Models\ExploreCategory;
-use App\Models\Genre;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 
 class ExplorePageController extends Controller
@@ -20,25 +18,16 @@ class ExplorePageController extends Controller
      */
     function explore(GetExplorePageRequest $request): JsonResponse
     {
-        // Get explore page for a specific genre
+        // Get explore categories
+        $exploreCategories = ExploreCategory::orderBy('position');
+
+        // Check if categories should be genre-specific.
         if ($request->has('genre_id')) {
-            $genre = Genre::find($request->input('genre_id'));
-
-            if (empty($genre)) {
-                throw new ModelNotFoundException();
-            }
-
-            $categories = ExploreCategory::where('is_global', true)
-                ->orderBy('position')
-                ->get();
-        }
-        // Get global explore page
-        else {
-            $categories = ExploreCategory::orderBy('position')->get();
+            $exploreCategories->where('is_global', true);
         }
 
         return JSONResult::success([
-            'data' => ExploreCategoryResource::collection(($categories))
+            'data' => ExploreCategoryResource::collection(($exploreCategories->get()))
         ]);
     }
 }
