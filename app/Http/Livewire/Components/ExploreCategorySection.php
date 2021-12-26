@@ -7,6 +7,7 @@ use App\Models\Anime;
 use App\Models\Character;
 use App\Models\ExploreCategory;
 use App\Models\ExploreCategoryItem;
+use App\Models\Genre;
 use App\Models\Person;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -22,6 +23,13 @@ class ExploreCategorySection extends Component
      * @var ExploreCategory $exploreCategory
      */
     public ExploreCategory $exploreCategory;
+
+    /**
+     * The object containing the genre data.
+     *
+     * @var Genre|null $genre
+     */
+    public ?Genre $genre = null;
 
     /**
      * The array containing the explore category item data.
@@ -41,13 +49,16 @@ class ExploreCategorySection extends Component
      * Prepare the component.
      *
      * @param ExploreCategory $exploreCategory
+     * @param Genre|null $genre
      * @return void
      */
-    public function mount(ExploreCategory $exploreCategory)
+    public function mount(ExploreCategory $exploreCategory, ?Genre $genre = null)
     {
         $this->exploreCategory = $exploreCategory;
+        $this->genre = $genre->id ? $genre : null;
         $this->exploreCategoryCount = match ($exploreCategory->type) {
-            ExploreCategoryTypes::UpcomingShows => Anime::upcomingShows()->count(),
+            ExploreCategoryTypes::MostPopularShows => $this->genre ? Anime::whereGenre($genre)->mostPopular()->count() : Anime::mostPopular()->count(),
+            ExploreCategoryTypes::UpcomingShows => $this->genre ? Anime::whereGenre($genre)->upcomingShows()->count() : Anime::upcomingShows()->count(),
             ExploreCategoryTypes::Characters => Character::bornToday()->count(),
             ExploreCategoryTypes::People => Person::bornToday()->count(),
             default => $exploreCategory->explore_category_items()->count()
@@ -62,8 +73,8 @@ class ExploreCategorySection extends Component
     public function loadExploreCategoryItems()
     {
         $this->exploreCategoryItems = match ($this->exploreCategory->type) {
-            ExploreCategoryTypes::MostPopularShows => $this->exploreCategory->most_popular_shows()->explore_category_items,
-            ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcoming_shows()->explore_category_items,
+            ExploreCategoryTypes::MostPopularShows => $this->exploreCategory->most_popular_shows($this->genre)->explore_category_items,
+            ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcoming_shows($this->genre)->explore_category_items,
             ExploreCategoryTypes::Characters => $this->exploreCategory->charactersBornToday()->explore_category_items,
             ExploreCategoryTypes::People => $this->exploreCategory->peopleBornToday()->explore_category_items,
             default => $this->exploreCategory->explore_category_items
