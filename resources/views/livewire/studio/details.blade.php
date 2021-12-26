@@ -1,6 +1,10 @@
 <main>
     <x-slot name="title">
-        {!! $studio->name !!}
+        {!! $studio->name !!} — {{ config('app.name') }}
+    </x-slot>
+
+    <x-slot name="description">
+        {{ $studio->synopsis }}
     </x-slot>
 
     <x-slot name="meta">
