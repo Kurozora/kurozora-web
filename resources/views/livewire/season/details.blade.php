@@ -9,11 +9,12 @@
 
     <x-slot name="meta">
         <meta property="og:title" content="{{ __('Seasons') }} | {{ $anime->title }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Check out all seasons of :x on Kurozora, the largest, free online anime and manga database in the world.', ['x' => $anime->title]) }}" />
+        <meta property="og:description" content="{{ __('Discover all seasons of :x on Kurozora, the largest, free online anime and manga database in the world.', ['x' => $anime->title]) }}" />
         <meta property="og:image" content="{{ $anime->poster_image_url ?? asset('images/static/placeholders/anime_poster.webp') }}" />
         <meta property="og:type" content="video.tv_show" />
         <meta property="video:duration" content="{{ $anime->duration }}" />
         <meta property="video:release_date" content="{{ $anime->first_aired }}" />
+        <link rel="canonical" href="{{ route('anime.seasons', $anime) }}">
     </x-slot>
 
     <x-slot name="appArgument">

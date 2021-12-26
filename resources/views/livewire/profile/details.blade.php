@@ -13,6 +13,7 @@
         <meta property="og:image" content="{{ $user->profile_image_url }}" />
         <meta property="og:type" content="profile" />
         <meta property="og:profile:username" content="{{ $user->username }}" />
+        <link rel="canonical" href="{{ route('profile.details', $user) }}">
     </x-slot>
 
     <x-slot name="appArgument">

@@ -19,6 +19,7 @@
         <meta property="og:description" content="{{ __('Discover the extensive list of :x anime only on Kurozora, the largest, free online anime and manga database in the world.', ['x' => $genre->name]) }} {{ $genre->description }}" />
         <meta property="og:image" content="{{ $genre->symbol_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
+        <link rel="canonical" href="{{ route('genres.details', $genre) }}">
     </x-slot>
 
     <x-slot name="appArgument">
