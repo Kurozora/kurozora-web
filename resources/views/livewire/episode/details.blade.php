@@ -30,6 +30,13 @@
             "description": "{{ $episode->synopsis }}",
             "aggregateRating": {
                 "@type":"AggregateRating",
+                "itemReviewed": {
+                    "@type": "TVEpisode",
+                    "image": [
+                        "{{ $episode->banner_image_url ?? $season->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}"
+                    ],
+                    "name": "{{ $episode->title }}"
+                },
                 "ratingCount": {{ $episode->stats?->rating_count ?? 1 }},
                 "bestRating": 5,
                 "worstRating": 0,
@@ -44,9 +51,9 @@
                     "@type":"Organization",
                     "url":"/studio/{{ $anime->studios?->firstWhere('is_studio', '=', true)?->id ?? $anime->studios->first()?->id }}/"
                 }
-            ],
+            ]
             @if(!empty($anime->video_url))
-                "trailer": {
+                ,"trailer": {
                     "@type":"VideoObject",
                     "name":"{{ $episode->title }}",
                     "description":"Official Trailer",
