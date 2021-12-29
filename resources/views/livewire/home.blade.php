@@ -4,7 +4,7 @@
     </x-slot>
 
     <x-slot name="meta">
-        <meta property="og:title" content="{{ __('Explore') }} — {{ config('app.name') }}" />
+        <meta property="og:title" content="{{ config('app.name') }}" />
         <meta property="og:description" content="{{ __('app.description') }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />

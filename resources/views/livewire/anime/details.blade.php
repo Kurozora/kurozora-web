@@ -11,6 +11,7 @@
         <meta property="og:title" content="{{ $anime->title }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ $anime->synopsis ?? __('app.description') }}" />
         <meta property="og:image" content="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
+        <meta property="og:video" content="{{ $anime->video_url ?? '' }}" />
         <meta property="og:type" content="video.tv_show" />
         <meta property="video:duration" content="{{ $anime->duration }}" />
         <meta property="video:release_date" content="{{ $anime->first_aired }}" />
@@ -29,6 +30,13 @@
             "description": "{{ $anime->synopsis }}",
             "aggregateRating": {
                 "@type":"AggregateRating",
+                "itemReviewed": {
+                    "@type": "TVSeries",
+                    "image": [
+                        "{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}"
+                    ],
+                    "name": "{{ $anime->title }}"
+                },
                 "ratingCount": {{ $anime->stats?->rating_count ?? 1 }},
                 "bestRating": 5,
                 "worstRating": 0,
@@ -37,17 +45,17 @@
             "contentRating": "{{ $anime->tv_rating->name }}",
             "genre": {!! $anime->genres()->pluck('name') !!},
             "datePublished": "{{ $anime->first_aired?->format('Y-m-d') }}",
-            "keywords": "anime{{ (',' . $anime->keywords) ?? '' }}",
+            "keywords": "anime{{ (',' . $anime->keywords) ?? '' }}"
             @if (!empty($studio))
-                "creator":[
+                ,"creator":[
                     {
                         "@type":"Organization",
                         "url":"/studio/{{ $studio->id }}/"
                     }
-                ],
+                ]
             @endif
             @if(!empty($anime->video_url))
-                "trailer": {
+                ,"trailer": {
                     "@type":"VideoObject",
                     "name":"{{ $anime->title }}",
                     "embedUrl": "{{ $anime->video_url }}",

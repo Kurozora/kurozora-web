@@ -130,7 +130,7 @@
             <section class="pt-5 pb-8 border-t-2">
                 <x-section-nav>
                     <x-slot name="title">
-                        {{ __('People') }}
+                        {{ __('Characters') }}
                     </x-slot>
 
                     <x-slot name="action">
