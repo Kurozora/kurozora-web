@@ -1,6 +1,6 @@
 <main>
     <x-slot name="title">
-        {!! $person->full_name !!} — {{ config('app.name') }}
+        {!! $person->full_name !!}
     </x-slot>
 
     <x-slot name="description">
