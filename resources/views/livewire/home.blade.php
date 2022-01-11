@@ -1,6 +1,6 @@
 <main>
     <x-slot name="title">
-        {{ __('Explore') }} — {{ config('app.name') }}
+        {{ __('Explore') }}
     </x-slot>
 
     <x-slot name="meta">

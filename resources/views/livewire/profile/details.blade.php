@@ -1,6 +1,6 @@
 <main>
     <x-slot name="title">
-        {{ $user->username }} — {{ config('app.name') }}
+        {{ $user->username }}
     </x-slot>
 
     <x-slot name="description">
