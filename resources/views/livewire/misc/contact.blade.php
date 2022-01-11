@@ -1,6 +1,6 @@
 <main>
     <x-slot name="title">
-        {{ __('Contact Kurozora') }} — {{ config('app.name') }}
+        {{ __('Contact Kurozora') }}
     </x-slot>
 
     <x-slot name="description">
