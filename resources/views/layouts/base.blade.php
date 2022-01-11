@@ -18,7 +18,7 @@
         @if (empty($title))
             <title>{{ config('app.name') }}</title>
         @else
-            <title>{{ $title . ' - ' . config('app.name') }}</title>
+            <title>{{ $title . ' — ' . config('app.name') }}</title>
         @endif
 
         @if (empty($description))

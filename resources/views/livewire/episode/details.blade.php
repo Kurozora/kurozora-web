@@ -1,6 +1,6 @@
 <main>
     <x-slot name="title">
-        {{ __(':x episode :y', ['x' => $anime->title, 'y' => $episode->number_total]) }} | {!! $episode->title !!} — {{ config('app.name') }}
+        {{ __(':x episode :y', ['x' => $anime->title, 'y' => $episode->number_total]) }} | {!! $episode->title !!}
     </x-slot>
 
     <x-slot name="description">
