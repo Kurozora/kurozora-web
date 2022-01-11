@@ -7,7 +7,7 @@
 
 <main>
     <x-slot name="title">
-        {{ $genre->name }} — {{ config('app.name') }}
+        {{ $genre->name }}
     </x-slot>
 
     <x-slot name="description">

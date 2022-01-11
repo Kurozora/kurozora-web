@@ -1,6 +1,6 @@
 <main>
     <x-slot name="title">
-        {!! $studio->name !!} — {{ config('app.name') }}
+        {!! $studio->name !!}
     </x-slot>
 
     <x-slot name="description">

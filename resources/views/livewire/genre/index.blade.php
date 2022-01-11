@@ -1,6 +1,6 @@
 <main>
     <x-slot name="title">
-        {{ __('Genres') }} — {{ config('app.name') }}
+        {{ __('Genres') }}
     </x-slot>
 
     <x-slot name="description">

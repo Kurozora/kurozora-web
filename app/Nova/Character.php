@@ -46,7 +46,7 @@ class Character extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'slug'
+        'id', 'mal_id', 'slug'
     ];
 
     /**
@@ -66,6 +66,10 @@ class Character extends Resource
     {
         return [
             ID::make()->sortable(),
+
+            Number::make('MAL ID')
+                ->hideFromIndex()
+                ->help('The ID of the character as noted on MyAnimeList.'),
 
             Heading::make('Media'),
 
