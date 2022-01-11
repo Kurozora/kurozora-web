@@ -1,6 +1,6 @@
 <main>
     <x-slot name="title">
-        Anime | {!! $character->name !!} — {{ config('app.name') }}
+        Anime | {!! $character->name !!}
     </x-slot>
 
     <x-slot name="description">

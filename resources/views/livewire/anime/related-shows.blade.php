@@ -1,6 +1,6 @@
 <main>
     <x-slot name="title">
-        {{ __('Relations') }} | {!! $anime->title !!} — {{ config('app.name') }}
+        {{ __('Relations') }} | {!! $anime->title !!}
     </x-slot>
 
     <x-slot name="description">

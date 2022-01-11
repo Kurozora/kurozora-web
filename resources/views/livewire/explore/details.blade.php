@@ -8,7 +8,7 @@
 
 <main>
     <x-slot name="title">
-        {{ $exploreCategory->title }} — {{ config('app.name') }}
+        {!! $exploreCategory->title !!}
     </x-slot>
 
     <x-slot name="description">

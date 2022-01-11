@@ -1,6 +1,6 @@
 <main>
     <x-slot name="title">
-        {{ __('Anime Characters') }} — {{ config('app.name') }}
+        {{ __('Anime Characters') }}
     </x-slot>
 
     <x-slot name="description">
