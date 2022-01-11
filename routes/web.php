@@ -2,11 +2,15 @@
 
 use App\Http\Controllers\Web\Misc\HealthCheckController;
 use App\Http\Livewire\Home;
+use App\Http\Livewire\Welcome;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Route;
 
 Route::get(RouteServiceProvider::HOME, Home::class)
     ->name('home');
+
+Route::get('welcome', Welcome::class)
+    ->name('welcome');
 
 Route::get('health-check', [HealthCheckController::class, 'index'])
     ->name('misc.health-check');
