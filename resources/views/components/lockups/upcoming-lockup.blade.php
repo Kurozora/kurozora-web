@@ -9,9 +9,9 @@
 
             <div class="absolute top-0 bottom-0 left-0 right-0 h-full w-full text-center">
                 @if (empty($anime->logo_image_url))
-                    <p class="relative top-[50%] -translate-y-1/2 px-8 text-3xl text-white font-bold line-clamp-2" style="text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);">{{ $anime->original_title }}</p>
+                    <p class="relative top-1/2 -translate-y-1/2 px-8 text-3xl text-white font-bold line-clamp-2" style="text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);">{{ $anime->original_title }}</p>
                 @else
-                    <img class="relative top-[50%] -translate-y-1/2 px-8 lazyload" data-sizes="auto" data-src="{{ $anime->logo_image_url }}"
+                    <img class="relative top-1/2 -translate-y-1/2 px-8 lazyload" data-sizes="auto" data-src="{{ $anime->logo_image_url }}"
                     alt="{{ $anime->title }} Logo" title="{{ $anime->title }}">
                 @endif
             </div>

@@ -115,6 +115,10 @@ picture::before {
   .aspect-ratio-auto {
     aspect-ratio: auto;
   }
+
+  .text-unset {
+    text-align: unset;
+  }
 }
 
 /**
