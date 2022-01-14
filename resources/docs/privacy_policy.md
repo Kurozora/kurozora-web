@@ -1,4 +1,4 @@
-<section class="prose prose-orange lg:prose-lg max-w-4xl" style="padding-bottom: 22px;">
+<section class="m-auto max-w-4xl prose prose-orange lg:prose-lg" style="padding-bottom: 22px;">
 
 <div style="text-align: center;">
 
@@ -27,18 +27,18 @@ Please take a moment to familiarize yourself with our privacy practices.
 
 </section>
 
-<section class="prose prose-orange lg:prose-lg max-w-4xl">
+<section class="m-auto max-w-4xl prose prose-orange lg:prose-lg">
 
 <div style="padding: 2em 0;">
 
 ## Our Commitment to Your Privacy
-Kurozora respects your privacy, It is _your_ data after all. Your privacy comes first for Kurozora, as such Kurozora will always:
+Redark respects your privacy, It is _your_ data after all. Your privacy comes first for Redark, as such Redark will always:
 <div></div>
 
-* **Be Transparent:** Kurozora will clearly explain what data is processed and for what purpose it is used.
-* **Keep you Safe:** Kurozora secures your data properly and only uses them for its own services. Kurozora will not share your data with third parties unless your explicit permission is given.
-* **Give you Control:** Kurozora gives you the option to be forgotten and removed from its entire infrastructure. You can request this by reaching out to an administrator.	
-* **Stay Innovative:** Kurozora will always strive to improve its infrastructure to protect your data even better, and we are always open to suggestions from our community.
+* **Be Transparent:** Redark will clearly explain what data is processed and for what purpose it is used.
+* **Keep you Safe:** Redark secures your data properly and only uses them for its own services. Redark will not share your data with third parties unless your explicit permission is given.
+* **Give you Control:** Redark gives you the option to be forgotten and removed from its entire infrastructure. You can request this by reaching out to an administrator.
+* **Stay Innovative:** Redark will always strive to improve its infrastructure to protect your data even better, and we are always open to suggestions from our community.
 <div></div>
 
 ## What personal information we collect and use?
@@ -49,23 +49,23 @@ Personal information is data that can be used to identify or contact a single pe
 <div></div>
 
 * When you create a Kurozora ID, connect to our services, contact us including by social media or participate in an online survey, we may collect a variety of information, including your name, phone number, email address, contact preferences, device identifiers, IP address, location information, and profile information where the contact is via social media.
-* When you share your content with family and friends using Kurozora services, send gift certificates, or invite others to participate in Kurozora services or feeds, Kurozora may collect the information you provide about those people such as name, email address, and phone number. Kurozora will use such information to fulfil your requests, provide the relevant service, or for anti-fraud purposes.
+* When you share your content with family and friends using Kurozora services, send gift certificates, or invite others to participate in Kurozora services or feeds, Redark may collect the information you provide about those people such as name, email address, and phone number. Redark will use such information to fulfil your requests, provide the relevant service, or for anti-fraud purposes.
 <div></div>
 
 ### How we use your personal information
-We may process your personal information: for the purposes described in this Privacy Policy, with your consent, for compliance with a legal obligation to which Kurozora is subject, for the performance of a contract to which you are party, in order to protect your vital interests, or when we have assessed it is necessary for the purposes of the legitimate interests pursued by Kurozora or a third party to whom it may be necessary to disclose information.
+We may process your personal information: for the purposes described in this Privacy Policy, with your consent, for compliance with a legal obligation to which Redark is subject, for the performance of a contract to which you are party, in order to protect your vital interests, or when we have assessed it is necessary for the purposes of the legitimate interests pursued by Redark or a third party to whom it may be necessary to disclose information.
 <div></div>
 
-* The personal information we collect allows us to keep you posted on Kurozora’s latest product announcements, software updates, and upcoming events. If you don't want to be on our mailing list, you can opt-out anytime by updating your preferences.
+* The personal information we collect allows us to keep you posted on Redark’s latest product announcements, software updates, and upcoming events. If you don't want to be on our mailing list, you can opt-out anytime by updating your preferences.
 * We also use personal information to help us create, develop, operate, deliver, and improve our products, services, content, and for loss prevention and anti-fraud purposes. We may also use your personal information for account and network security purposes, including in order to protect our services for the benefit of all our users. We limit our uses of data for anti-fraud purposes to those which are strictly necessary and within our assessed legitimate interests to protect our users and our services.
 * We may use your personal information, including date of birth, to verify identity, assist with identification of users, and to determine appropriate services. For example, we may use date of birth to determine the age of Kurozora ID account holders.
 * From time to time, we may use your personal information to send important notices, such as communications about purchases and changes to our terms, conditions, and policies. Because this information is important to your interaction with Kurozora, you may not opt out of receiving these communications.
-* We may also use personal information for internal purposes such as auditing, data analysis, and research to improve Kurozora’s products, services, and user communications.
+* We may also use personal information for internal purposes such as auditing, data analysis, and research to improve Redark’s products, services, and user communications.
 * If you enter into a sweepstake, contest, or similar promotion we may use the information you provide to administer those programs.
 <div></div>
 
 ### Source of your personal information where they are not collected from you
-We may have received your personal information from other persons if that person has shared their content with you using Kurozora products, sent gift codes, or invited you to participate in Kurozora services or feeds.
+We may have received your personal information from other persons if that person has shared their content with you using Redark products, sent gift codes, or invited you to participate in Redark services or feeds.
 <div></div>
 
 ## Collection and Use of Non-Personal Information
@@ -79,7 +79,7 @@ If we do combine non-personal information with personal information the combined
 <div></div>
 
 ## Cookies and Other Technologies
-Kurozora’s websites, online services, interactive applications, and email messages may use <q>cookies</q> and other technologies. These help us better understand user behavior, tell us which parts of our websites people have visited, and facilitate and measure the effectiveness of web searches. We treat information collected by cookies and other technologies as non‑personal information. However, to the extent that Internet Protocol (IP) addresses or similar identifiers are considered personal information by local law, we also treat these identifiers as personal information. Similarly, to the extent that non-personal information is combined with personal information, we treat the combined information as personal information for the purposes of this Privacy Policy.
+Redark’s websites, online services, interactive applications, and email messages may use <q>cookies</q> and other technologies. These help us better understand user behavior, tell us which parts of our websites people have visited, and facilitate and measure the effectiveness of web searches. We treat information collected by cookies and other technologies as non‑personal information. However, to the extent that Internet Protocol (IP) addresses or similar identifiers are considered personal information by local law, we also treat these identifiers as personal information. Similarly, to the extent that non-personal information is combined with personal information, we treat the combined information as personal information for the purposes of this Privacy Policy.
 <div></div>
 
 Kurozora also uses cookies and other technologies to remember personal information when you use our website, online services, and applications. Our goal in these cases is to make your experience with Kurozora more convenient and personal. For example, knowing your first name lets us welcome you the next time you visit the Kurozora website. Knowing your country and language helps us provide a customized and more useful localized experience. And knowing your contact information, hardware identifiers, and information about your computer or device helps us personalize your experience on our platforms.
@@ -92,18 +92,18 @@ In some of our email messages, we use a <q>click-through URL</q> linked to conte
 <div></div>
 
 ## Disclosure to Third Parties
-At times Kurozora may provide third parties with certain personal information to provide or improve our products and services, including to deliver products at your request, or to help Kurozora market to users. When we do, we require those third parties to handle it in accordance with relevant laws. Kurozora does not sell personal information, and personal information will never be shared with third parties for their marketing purposes. For example, when you register a Kurozora ID, you authorize Kurozora and the email delivery service to exchange your email address provided during the registration process to carry out service, such as sending an activation link. If you are approved for service, your account will be governed by Kurozora and the email delivery service's respective privacy policies.
+At times Redark may provide third parties with certain personal information to provide or improve our products and services, including to deliver products at your request, or to help Redark market to users. When we do, we require those third parties to handle it in accordance with relevant laws. Redark does not sell personal information, and personal information will never be shared with third parties for their marketing purposes. For example, when you register a Kurozora ID, you authorize Redark and the email delivery service to exchange your email address provided during the registration process to carry out service, such as sending an activation link. If you are approved for service, your account will be governed by Redark and the email delivery service’s respective privacy policies.
 <div></div>
 
 ### Others
-It may be necessary —by law, legal process, litigation, and/or requests from public and governmental authorities within or outside your country of residence— for Kurozora to disclose your personal information. We may also disclose information about you if we determine that for purposes of national security, law enforcement, or other issues of public importance, disclosure is necessary or appropriate. We may also disclose information about you, but only where there is a lawful basis for doing so, if we determine that disclosure is reasonably necessary to enforce our terms and conditions or protect our operations or users. This could include providing information to public or governmental authorities. Additionally, in the event of a reorganization, merger, or sale we may transfer any and all personal information we collect to the relevant third party.
+It may be necessary —by law, legal process, litigation, and/or requests from public and governmental authorities within or outside your country of residence— for Redark to disclose your personal information. We may also disclose information about you if we determine that for purposes of national security, law enforcement, or other issues of public importance, disclosure is necessary or appropriate. We may also disclose information about you, but only where there is a lawful basis for doing so, if we determine that disclosure is reasonably necessary to enforce our terms and conditions or protect our operations or users. This could include providing information to public or governmental authorities. Additionally, in the event of a reorganization, merger, or sale we may transfer any and all personal information we collect to the relevant third party.
 <div></div>
 
 ## Protection of Personal Information
-Kurozora takes the security of your personal information very seriously. Kurozora applications and online services protect your personal information during transit using encryption such as Secure Sockets Layer (SSL). When your personal data is stored by Kurozora, we use computer systems with limited access. User passwords are always encrypted and are not readable by anyone —not even a full-access administrator.
+Redark takes the security of your personal information very seriously. Redark applications and online services protect your personal information during transit using encryption such as Secure Sockets Layer (SSL). When your personal data is stored by Redark, we use computer systems with limited access. User passwords are always encrypted and are not readable by anyone —not even a full-access administrator.
 <div></div>
 
-When you use some Kurozora products, services, or applications or post on a Kurozora feeds, chat room, or social networking service, the personal information and content you share is visible to other users and can be read, collected, or used by them. You are responsible for the personal information you choose to share or submit in these instances. For example, if you list your name and email address in a feed message, that information is public. Please take care when using these features.
+When you use some Redark products, services, or applications or post on a Redark feed, chat room, or social networking service, the personal information and content you share is visible to other users and can be read, collected, or used by them. You are responsible for the personal information you choose to share or submit in these instances. For example, if you list your name and email address in a feed message, that information is public. Please take care when using these features.
 <div></div>
 
 If you log on to a device that is owned by a third party, your personal information —including email address, location, and service specific information— may be downloaded on to that third-party device thereby disclosing any such shared information.
@@ -113,15 +113,15 @@ We do our very best to protect your data as much as we can. However, as with any
 <div></div>
 
 ## The Existence of Automated Decision-Making, Including Profiling
-Kurozora does not take any decisions involving the use of algorithms or profiling that significantly affect you.
+Redark does not take any decisions involving the use of algorithms or profiling that significantly affect you.
 <div></div>
 
 ## Integrity and Retention of Personal Information
-Kurozora makes it easy for you to keep your personal information accurate, complete, and up to date. We will retain your personal information for the period necessary to fulfil the purposes outlined in this Privacy Policy and our service specific privacy summaries. When assessing these periods we carefully examine our need to collect personal information at all and if we establish a relevant need we only retain it for the shortest possible period to realize the purpose of collection unless a longer retention period is required by law.
+Redark makes it easy for you to keep your personal information accurate, complete, and up to date. We will retain your personal information for the period necessary to fulfil the purposes outlined in this Privacy Policy and our service specific privacy summaries. When assessing these periods we carefully examine our need to collect personal information at all and if we establish a relevant need we only retain it for the shortest possible period to realize the purpose of collection unless a longer retention period is required by law.
 <div></div>
 
 ## Location-Based Services
-To provide location-based services on Kurozora products, Kurozora and our partners and licensees, such as maps data providers, may collect, use, and share precise location data. Where available, Kurozora uses existing platform APIs for location-based services. These APIs may use GPS, Bluetooth, and your IP Address, along with crowd-sourced Wi-Fi hotspot and cell tower locations, and other technologies to determine your devices' approximate location.
+To provide location-based services on Redark products, Redark and our partners and licensees, such as maps data providers, may collect, use, and share precise location data. Where available, Redark uses existing platform APIs for location-based services. These APIs may use GPS, Bluetooth, and your IP Address, along with crowd-sourced Wi-Fi hotspot and cell tower locations, and other technologies to determine your devices' approximate location.
 <div></div>
 
 We may also use a third party provider, <q>IP Info</q>, to resolve your IP address to a geographical location. We have picked <q>IP Info</q> with care, but what they do with your IP address is beyond our control. You can read their privacy policy at <a href="https://ipinfo.io/privacy-policy" target="_blank">ipinfo.io/privacy-policy</a>. The collected information consists of:
@@ -140,17 +140,27 @@ We also keep track of IP addresses that have made failed login attempts. We do t
 <div></div>
 
 ## Third-Party Sites and Services
-Kurozora websites, products, applications, and services may contain links to third-party websites, products, and services. Our products and services may also use or offer products or services from third parties —for example, a third‑party email service.
+Redark websites, products, applications, and services may contain links to third-party websites, products, and services. Our products and services may also use or offer products or services from third parties —for example, a third‑party email service.
 <div></div>
 
 Information collected by third parties, which may include such things as location data or contact details, is governed by their privacy practices. We encourage you to learn about the privacy practices of those third parties.
 <div></div>
 
 ## Privacy Questions
-If you have any questions or suggestions about Kurozora’s Privacy Policy or if you feel that Kurozora is not abiding this Privacy Policy, do not hesitate to contact us. You can always contact us through administrators and other relevant contact forms.
+If you have any questions or suggestions about Kurozora’s Privacy Policy or if you feel that Redark is not abiding this Privacy Policy, do not hesitate to contact us. You can always contact us through administrators and other relevant contact forms.
 <div></div>
 
-Kurozora may update its Privacy Policy from time to time. Thus, we advise you to review this page periodically for any changes. We will notify you of any changes by posting the new Privacy Policy on this page. These changes are effective immediately, after they are posted on this page.
+Redark may update this Privacy Policy from time to time. Thus, we advise you to review this page periodically for any changes. We will notify you of any changes by posting the new Privacy Policy on this page. These changes are effective immediately, after they are posted on this page.
+<div></div>
+
+Redark  
+Drenthe, Hoogeveen  
+Netherlands  
+KVK: 85108596  
+BTW-ID: NL004052193B08  
+Email: kurozoraapp@gmail.com
+
+Copyright © 2018-now Redark All rights reserved.
 <div></div>
 </div>
 
