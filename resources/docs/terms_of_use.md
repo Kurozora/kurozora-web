@@ -1,4 +1,4 @@
-<section class="prose prose-orange lg:prose-lg max-w-4xl" style="padding-bottom: 22px;">
+<section class="m-auto max-w-4xl prose prose-orange lg:prose-lg" style="padding-bottom: 22px;">
 
 <div style="text-align: center;">
 
@@ -21,21 +21,21 @@ Please take a moment to familiarize yourself with our terms of use.
 <div></div>
 </section>
 
-<section class="prose prose-orange lg:prose-lg max-w-4xl">
+<section class="m-auto max-w-4xl prose prose-orange lg:prose-lg">
 
 <div style="padding: 2em 0;">
 
 ### Agreement to Terms of Use
-These Terms and Conditions of Use (the "Terms of Use") apply to the Kurozora web site located at www.kurozora.app, and all associated sites linked to www.kurozora.app by Kurozora, its subsidiaries and affiliates, including Kurozora sites around the world, any other media form, media channel, mobile website or mobile application related, linked, or otherwise connected (collectively, the "Site"). The Site is the property of Kurozora B.V. ("Kurozora") and its licensors. BY USING THE SITE, YOU AGREE TO THESE TERMS OF USE; IF YOU DO NOT AGREE, DO NOT USE THE SITE.
+These Terms and Conditions of Use (the "Terms of Use") apply to the Kurozora web site located at www.kurozora.app, and all associated sites linked to www.kurozora.app by Redark, its subsidiaries and affiliates, including Redark sites around the world, any other media form, media channel, mobile website or mobile application related, linked, or otherwise connected (collectively, the "Site"). The Site is the property of Redark and its licensors. BY USING THE SITE, YOU AGREE TO THESE TERMS OF USE; IF YOU DO NOT AGREE, DO NOT USE THE SITE.
 
-Supplemental terms and conditions or documents that may be posted on the Site from time to time are hereby expressly incorporated herein by reference. Kurozora reserves the right, at its sole discretion, to change, modify, add or remove portions of these Terms of Use, at any time. Kurozora will alert you about any changes by updating the last updated date of these Terms of Use, and you waive any right to receive specific notice of each such change. It is your responsibility to check these Terms of Use periodically for changes. Your continued use of the Site following the posting of changes will mean that you accept and agree to the changes. As long as you comply with these Terms of Use, Kurozora grants you a personal, non-exclusive, non-transferable, limited privilege to enter and use the Site.
+Supplemental terms and conditions or documents that may be posted on the Site from time to time are hereby expressly incorporated herein by reference. Redark reserves the right, at its sole discretion, to change, modify, add or remove portions of these Terms of Use, at any time. Redark will alert you about any changes by updating the last updated date of these Terms of Use, and you waive any right to receive specific notice of each such change. It is your responsibility to check these Terms of Use periodically for changes. Your continued use of the Site following the posting of changes will mean that you accept and agree to the changes. As long as you comply with these Terms of Use, Redark grants you a personal, non-exclusive, non-transferable, limited privilege to enter and use the Site.
 
 ### Content
-All source code, databases, functionality, software, website designs, app designs, any other computer code, text, graphics, user interfaces, visual interfaces, photographs, trademarks, logos, sounds, music and artwork (collectively, "Content"), including but not limited to the design, structure, selection, coordination, expression, "look and feel" and arrangement of such Content, contained on the Site is owned, controlled or licensed by or to Kurozora, and is protected by trade dress, copyright, patent and trademark laws, and various other intellectual property rights and unfair competition laws.
+All source code, databases, functionality, software, website designs, app designs, any other computer code, text, graphics, user interfaces, visual interfaces, photographs, trademarks, logos, sounds, music and artwork (collectively, "Content"), including but not limited to the design, structure, selection, coordination, expression, "look and feel" and arrangement of such Content, contained on the Site is owned, controlled or licensed by or to Redark, and is protected by trade dress, copyright, patent and trademark laws, and various other intellectual property rights and unfair competition laws.
 
-Except as expressly provided in these Terms of Use, no part of the Site and no Content may be copied, reproduced, republished, uploaded, posted, publicly displayed, encoded, translated, transmitted or distributed in any way (including "mirroring") to any other computer, server, Web site or other medium for publication or distribution or for any commercial enterprise, without Kurozora’s express prior written consent.
+Except as expressly provided in these Terms of Use, no part of the Site and no Content may be copied, reproduced, republished, uploaded, posted, publicly displayed, encoded, translated, transmitted or distributed in any way (including "mirroring") to any other computer, server, Web site or other medium for publication or distribution or for any commercial enterprise, without Redark’s express prior written consent.
 
-You may use information on Kurozora products and services (such as data sheets, knowledge base articles, and similar materials) purposely made available by Kurozora for downloading from the Site, provided that you (1) not remove any proprietary notice language in all copies of such documents, (2) use such information only for your personal, non-commercial informational purpose and do not copy or post such information on any networked computer or broadcast it in any media, (3) make no modifications to any such information, and (4) not make any additional representations or warranties relating to such documents.
+You may use information on Redark products and services (such as data sheets, knowledge base articles, and similar materials) purposely made available by Redark for downloading from the Site, provided that you (1) not remove any proprietary notice language in all copies of such documents, (2) use such information only for your personal, non-commercial informational purpose and do not copy or post such information on any networked computer or broadcast it in any media, (3) make no modifications to any such information, and (4) not make any additional representations or warranties relating to such documents.
 
 ### Your Use of the Site
 By using the Site, you represent and warrant that:
@@ -54,7 +54,7 @@ If you provide any information that is untrue, inaccurate, not current, or incom
 ## Accounts, Passwords and Security
 Certain features or services offered on or through the Site may require you to open an account (including setting up a Kurozora ID and password). You agree to keep your password confidential and will be responsible for all use of your account and password. We reserve the right to remove, reclaim, or change a username you select if we determine, in our sole discretion, that such username is inappropriate, obscene, or otherwise objectionable.
 
-You may not use anyone else’s Kurozora ID, password or account at any time without the express permission and consent of the holder of that Kurozora ID, password or account. Kurozora cannot and will not be liable for any loss or damage arising from your failure to comply with these obligations.
+You may not use anyone else’s Kurozora ID, password or account at any time without the express permission and consent of the holder of that Kurozora ID, password or account. Redark cannot and will not be liable for any loss or damage arising from your failure to comply with these obligations.
 
 ## Your Access to the Site
 You may not access or use the Site for any purpose other than that for which we make the Site available. The Site may not be used in connection with any commercial endeavors except those that are specifically endorsed or approved by us.
@@ -112,9 +112,9 @@ By posting your Contributions to any part of the Site, you automatically grant, 
 
 This license will apply to any form, media, or technology now known or hereafter developed, and includes our use of your name, company name, and franchise name, as applicable, and any of the trademarks, service marks, trade names, logos, and personal and commercial images you provide. You waive all moral rights in your Contributions, and you warrant that moral rights have not otherwise been asserted in your Contributions.
 
-Kurozora does not assert any ownership over your Contributions. You retain full ownership of all of your Contributions and any intellectual property rights or other proprietary rights associated with your Contributions. Kurozora is not liable for any statements or representations in your Contributions provided by you in any area on the Site. You are solely responsible for your Contributions to the Site and you expressly agree to exonerate us from any and all responsibility and to refrain from any legal action against Kurozora regarding your Contributions.
+Redark does not assert any ownership over your Contributions. You retain full ownership of all of your Contributions and any intellectual property rights or other proprietary rights associated with your Contributions. Redark is not liable for any statements or representations in your Contributions provided by you in any area on the Site. You are solely responsible for your Contributions to the Site and you expressly agree to exonerate us from any and all responsibility and to refrain from any legal action against Redark regarding your Contributions.
 
-Kurozora has the right, in its sole and absolute discretion:
+Redark has the right, in its sole and absolute discretion:
 
 (1) to edit, redact, or otherwise change any Contributions;  
 (2) to re-categorize any Contributions to place them in more appropriate locations on the Site; and  
@@ -122,7 +122,7 @@ Kurozora has the right, in its sole and absolute discretion:
 
 ## Guidelines for Reviews
 
-Kurozora may provide you areas on the Site to leave reviews or ratings. When posting a review, you must comply with the following criteria: 
+Redark may provide you areas on the Site to leave reviews or ratings. When posting a review, you must comply with the following criteria: 
 
 (1) you should have firsthand experience with the person/entity being reviewed;  
 (2) your reviews should not contain offensive profanity, or abusive, racist, offensive, or hate language;  
@@ -181,11 +181,11 @@ We reserve the right, but not the obligation, to:
 (4) in our sole discretion and without limitation, notice, or liability, to remove from the Site or otherwise disable all files and content that are excessive in size or are in any way burdensome to our systems; and  
 (5) otherwise manage the Site in a manner designed to protect our rights and property and to facilitate the proper functioning of the Site.
 
-## Pivacy
+## Privacy
 
-Kurozora cares about data privacy and security. To view Kurozora’s Privacy Policy, [click here](https://kurozora.app/legal/privacy-policy). By using the Site, you agree to be bound by our Privacy Policy posted on the Site, which is incorporated into these Terms of Use. Please be advised the Site is hosted in the United States. If you access the Site from any other region of the world with laws or other requirements governing personal data collection, use, or disclosure that differ from applicable laws in the United States, then through your continued use of the Site, you are transferring your data to the United States, and you agree to have your data transferred to and processed in the United States. Further, we do not knowingly accept, request, or solicit information from children or knowingly market to children. Therefore, in accordance with the U.S. Children’s Online Privacy Protection Act, if we receive actual knowledge that anyone under the age of 13 has provided personal information to us without the requisite and verifiable parental consent, we will delete that information from the Site as quickly as is reasonably practical.
+Redark cares about data privacy and security. To view Kurozora’s Privacy Policy, [click here](https://kurozora.app/legal/privacy-policy). By using the Site, you agree to be bound by our Privacy Policy posted on the Site, which is incorporated into these Terms of Use. Please be advised the Site is hosted in the United States. If you access the Site from any other region of the world with laws or other requirements governing personal data collection, use, or disclosure that differ from applicable laws in the United States, then through your continued use of the Site, you are transferring your data to the United States, and you agree to have your data transferred to and processed in the United States. Further, we do not knowingly accept, request, or solicit information from children or knowingly market to children. Therefore, in accordance with the U.S. Children’s Online Privacy Protection Act, if we receive actual knowledge that anyone under the age of 13 has provided personal information to us without the requisite and verifiable parental consent, we will delete that information from the Site as quickly as is reasonably practical.
 
-## Copyright Infringments
+## Copyright Infringements
 
 We respect the intellectual property rights of others. If you believe that any material available on or through the Site infringes upon any copyright you own or control, please immediately notify us using the contact information provided below (a “Notification”). A copy of your Notification will be sent to the person who posted or stored the material addressed in the Notification. Please be advised that pursuant to applicable law you may be held liable for damages if you make material misrepresentations in a Notification. Thus, if you are not sure that material located on or linked to by the Site infringes your copyright, you should consider first contacting an attorney.
 
@@ -203,7 +203,7 @@ We cannot guarantee the Site will be available at all times. We may experience h
 
 ## Governing Law; Dispute Resolution
 
-These conditions are governed by and interpreted following the laws of the Netherlands, and the use of the United Nations Convention of Contracts for the International Sale of Goods is expressly excluded. If your habitual residence is in the EU, and you are a consumer, you additionally possess the protection provided to you by obligatory provisions of the law of your country of residence. Kurozora B.V. and yourself both agree to submit to the non-exclusive jurisdiction of the courts of Amsterdam, which means that you may make a claim to defend your consumer protection rights in regards to these Conditions of Use in the Netherlands, or in the EU country in which you reside.
+These conditions are governed by and interpreted following the laws of the Netherlands, and the use of the United Nations Convention of Contracts for the International Sale of Goods is expressly excluded. If your habitual residence is in the EU, and you are a consumer, you additionally possess the protection provided to you by obligatory provisions of the law of your country of residence. Redark and yourself both agree to submit to the non-exclusive jurisdiction of the courts of Amsterdam, which means that you may make a claim to defend your consumer protection rights in regards to these Conditions of Use in the Netherlands, or in the EU country in which you reside.
 
 
 ## Dispute Resolution
@@ -282,12 +282,14 @@ These Terms of Use and any policies or operating rules posted by us on the Site 
 
 In order to resolve a complaint regarding the Site or to receive further information regarding use of the Site, please contact us at: 
 
-Kurozora B.V.  
+Redark  
 Drenthe, Hoogeveen  
 Netherlands  
+KVK: 85108596  
+BTW-ID: NL004052193B08  
 Email: kurozoraapp@gmail.com
 
 The information contained in this web site is subject to change without notice.  
-Copyright © 2018-now Kurozora B.V. All rights reserved.
+Copyright © 2018-now Redark All rights reserved.
 </div>
 </section>
