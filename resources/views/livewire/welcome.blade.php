@@ -135,7 +135,7 @@
             </div>
         </section>
 
-        {{-- Anime Showcase --}}
+        {{-- App Showcase --}}
         <section class="mt-36 px-4 sm:px-6">
             <div class="flex flex-col items-center mx-auto max-w-2xl text-center">
                 <img class="m-10 mb-0" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="Kurozora">
@@ -145,12 +145,12 @@
                 <p class="text-4xl font-bold leading-tight tracking-tight md:text-6xl">{{ __('Discover, track, share. All in one place.') }}</p>
             </div>
 
-            <div class="flex flex-col space-y-20 my-10 md:flex-col-reverse md:space-y-reverse md:mb-0">
-                <img src="{{ asset('images/static/promotional/kurozora_on_device.webp') }}" alt="">
-
+            <div class="flex flex-col space-y-20 mt-10 overflow-hidden">
                 <div class="max-w-2xl mx-auto text-center">
                     <p class="text-lg font-light md:text-2xl">{{ __('Kurozora is the single destination for all the Japanese media you love — and all the ones you’ll love next. Discover new and classical anime, manga, music and games. Track what you’re watching and want to watch, and set your own watching goals — all in one app and across all your devices.') }}</p>
                 </div>
+
+                <img src="{{ asset('images/static/promotional/kurozora_on_device.webp') }}" alt="Kurozora on device">
             </div>
         </section>
 
@@ -158,22 +158,76 @@
         <section class="px-4 pt-36 pb-10 bg-gray-100 sm:px-6">
             <div class="max-w-sm md:max-w-2xl m-auto">
                 <ul class="m-auto text-center">
-                    <li class="m-10 mb-0 text-2xl md:text-6xl font-bold leading-tight">
-                        <span class="text-orange-500">{{ __('Biggest collection') }}</span> {{ __('of Japanse media — Anime, Manga, Music and Games.') }}
-                    </li>
-                    <li class="m-10 mb-0 text-2xl md:text-6xl font-bold leading-tight">
-                        <span class="text-lime-500">{{ __('20,000+ anime') }}</span> {{ __('with more added all the time.') }}
-                    </li>
-                    <li class="m-10 mb-0 text-2xl md:text-6xl font-bold leading-tight">
-                        <span class="text-sky-500">{{ __('One subscription level.') }}</span> {{ __('No ads. Unlimited fun.') }}
-                    </li>
-                    <li class="m-10 mb-0 text-2xl md:text-6xl font-bold leading-tight">
-                        <span class="text-pink-500">{{ __('Share Kurozora') }}</span>  {{ __('with your family.') }}
-                    </li>
+                    <span
+                        x-data="{shown: false}"
+                        x-intersect.full.once="shown = true"
+                    >
+                        <li
+                            class="m-10 mb-0 text-2xl md:text-6xl font-bold leading-tight"
+                            x-show="shown"
+                            x-transition:enter="transition duration-1000 delay-100"
+                            x-transition:enter-start="opacity-0 translate-y-full"
+                            x-transition:enter-end="opacity-100 translate-y-0"
+                        >
+                            <span class="text-orange-500">{{ __('Biggest collection') }}</span> {{ __('of Japanse media — Anime, Manga, Music and Games.') }}
+                        </li>
+                    </span>
+                    <span
+                        x-data="{shown: false}"
+                        x-intersect.full.once="shown = true"
+                    >
+                        <li
+                            class="m-10 mb-0 text-2xl md:text-6xl font-bold leading-tight"
+                            x-show="shown"
+                            x-transition:enter="transition duration-1000 delay-200"
+                            x-transition:enter-start="opacity-0 translate-y-full"
+                            x-transition:enter-end="opacity-100 translate-y-0"
+                        >
+                            <span class="text-lime-500">{{ __('20,000+ anime') }}</span> {{ __('with more added all the time.') }}
+                        </li>
+                    </span>
+                    <span
+                        x-data="{shown: false}"
+                        x-intersect.full.once="shown = true"
+                    >
+                        <li
+                            class="m-10 mb-0 text-2xl md:text-6xl font-bold leading-tight"
+                            x-show="shown"
+                            x-transition:enter="transition duration-1000 delay-[300ms]"
+                            x-transition:enter-start="opacity-0 translate-y-full"
+                            x-transition:enter-end="opacity-100 translate-y-0"
+                        >
+                            <span class="text-sky-500">{{ __('One subscription level.') }}</span> {{ __('No ads. Unlimited fun.') }}
+                        </li>
+                    </span>
+                    <span
+                        x-data="{shown: false}"
+                        x-intersect.full.once="shown = true"
+                    >
+                        <li
+                            class="m-10 mb-0 text-2xl md:text-6xl font-bold leading-tight"
+                            x-show="shown"
+                            x-transition:enter="transition duration-1000 delay-[400ms]"
+                            x-transition:enter-start="opacity-0 translate-y-full"
+                            x-transition:enter-end="opacity-100 translate-y-0"
+                        >
+                            <span class="text-pink-500">{{ __('Share Kurozora') }}</span>  {{ __('with your family.') }}
+                        </li>
+                    </span>
                 </ul>
 
-                <div class="flex flex-wrap justify-between space-y-8 sm:space-y-0 mt-16">
-                    <div class="flex flex-col flex-grow md:basis-1/3 items-center text-center">
+                <div
+                    class="flex flex-wrap justify-between space-y-8 sm:space-y-0 mt-16"
+                    x-data="{shown: false}"
+                    x-intersect.full.once="shown = true"
+                >
+                    <div
+                        class="flex flex-col flex-grow md:basis-1/3 items-center text-center"
+                        x-show="shown"
+                        x-transition:enter="transition duration-1000 delay-500"
+                        x-transition:enter-start="opacity-0"
+                        x-transition:enter-end="opacity-100"
+                    >
                         <p class="font-semibold">{{ __('Free 7-days trial') }}</p>
                         <p class="text-lg font-bold">{{ __('$3.99 / mo.') }}</p>
                         <p class="mt-4 text-gray-400">{{ __('A monthly subscription is just $3.99 per month after a free 7-day trial.') }}</p>
@@ -181,7 +235,13 @@
                         <x-link-button href="{{ config('app.ios.url') }}" class="mt-4">{{ __('Try it free') }}</x-link-button>
                     </div>
 
-                    <div class="flex flex-col flex-grow md:basis-1/3 items-center text-center">
+                    <div
+                        class="flex flex-col flex-grow md:basis-1/3 items-center text-center"
+                        x-show="shown"
+                        x-transition:enter="transition duration-1000 delay-500"
+                        x-transition:enter-start="opacity-0"
+                        x-transition:enter-end="opacity-100"
+                    >
                         <p class="font-semibold">{{ __('Free 14-days trial') }}</p>
                         <p class="text-lg font-bold">{{ __('$11.99 / 6 mo.') }}</p>
                         <p class="mt-4 text-gray-400">{{ __('A half yearly subscription is just $11.99 per 6 months after a free 14-days trial.') }}</p>
@@ -189,7 +249,13 @@
                         <x-link-button href="{{ config('app.ios.url') }}" class="mt-4">{{ __('Try it free') }}</x-link-button>
                     </div>
 
-                    <div class="flex flex-col flex-grow md:basis-1/3 items-center text-center">
+                    <div
+                        class="flex flex-col flex-grow md:basis-1/3 items-center text-center"
+                        x-show="shown"
+                         x-transition:enter="transition duration-1000 delay-500"
+                        x-transition:enter-start="opacity-0"
+                        x-transition:enter-end="opacity-100"
+                    >
                         <p class="font-semibold">{{ __('Free 1-month trial') }}</p>
                         <p class="text-lg font-bold">{{ __('$18.99 / 12 mo.') }}</p>
                         <p class="mt-4 text-gray-400">{{ __('A yearly subscription is just $18.99 per 12 months after a free 1-month trial.') }}</p>
@@ -200,12 +266,177 @@
             </div>
         </section>
 
-        {{-- App Showcase --}}
-        <section>
+        {{-- Anime Showcase --}}
+        <section class="mt-36">
+            <div class="flex flex-col items-center mx-auto px-4 max-w-2xl text-center sm:px-6">
+                <p class="my-2 text-4xl font-bold leading-tight md:text-6xl">{{ __('Something for everyone.') }}</p>
+
+                <p class="font-semibold md:text-xl">{{ __('Action, drama, ecchi, fantasy, space, thriller and more — with new amazing anime and updates added every week. Enjoy free, uninterrupted access to the anime you love and the ones you’re going to love.') }}</p>
+            </div>
+
+            <div
+                class="relative mt-20"
+                x-data="{
+                    isPlaying: true,
+                    isInReverse: false,
+                    activeSlide: 0,
+                    nextSlide: 1,
+                    previousSlide: 4,
+                    goToNextSlide() {
+                        this.activeSlide = this.nextSlide
+                    },
+                }"
+                x-init="
+                    setInterval(() => { if (isPlaying) { goToNextSlide() } }, 5000)
+
+                    $watch('activeSlide', (newValue, oldValue) => {
+                        if (newValue >= 4) {
+                            nextSlide = 0
+                            previousSlide = 4
+                        } else {
+                            nextSlide = newValue + 1
+                            previousSlide = oldValue
+                        }
+                    })
+                "
+            >
+                <div class="relative flex h-screen w-full overflow-hidden">
+                    <div
+                        class="absolute h-full w-full"
+                        style="background-color:#d3fbff;"
+                        x-show="activeSlide === 0"
+                        x-transition:enter="transition duration-1000"
+                        x-transition:enter-start="translate-x-full"
+                        x-transition:enter-end="translate-x-0"
+                        x-transition:leave="transition duration-1000"
+                        x-transition:leave-start=""
+                        x-transition:leave-end="-translate-x-full"
+                    >
+                        <div class="absolute top-0 left-0 bottom-0 right-0">
+                            <img class="h-screen w-full object-cover lazyload" data-sizes="auto" data-src="https://cdn.kurozora.app/149148/7cf55c46-7aba-457e-936d-27340f5d67c4.webp?v=1637190880" alt="One Piece Banner Image" title="One Piece">
+
+                            <div class="absolute top-0 left-0 right-0 h-screen" style="background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0) 75%);"></div>
+                        </div>
+
+                        <div class="absolute bottom-4 left-4 right-4 m-auto max-w-7xl">
+                            <p class="text-4xl text-white font-bold md:text-8xl">One Piece</p>
+                            <p class="mt-4 text-white font-bold md:text-2xl">Action</p>
+                            <x-button class="mt-8" href="/anime/one-piece">{{ __('Visit now') }}</x-button>
+                        </div>
+                    </div>
+                    <div
+                        class="absolute h-full w-full"
+                        style="background-color:#ffffff;"
+                        x-show="activeSlide === 1"
+                        x-transition:enter="transition duration-1000"
+                        x-transition:enter-start="translate-x-full"
+                        x-transition:enter-end="translate-x-0"
+                        x-transition:leave="transition duration-1000"
+                        x-transition:leave-start=""
+                        x-transition:leave-end="-translate-x-full"
+                    >
+                        <div class="absolute top-0 left-0 bottom-0 right-0">
+                            <img class="h-screen w-full object-cover lazyload" data-sizes="auto" data-src="https://cdn.kurozora.app/149812/0628d10a-bd75-4bab-81fa-7df7284c04d6.webp?v=1642184418" alt="Horimiya Banner Image" title="Horimiya">
+
+                            <div class="absolute top-0 left-0 right-0 h-screen" style="background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0) 75%);"></div>
+                        </div>
+
+                        <div class="absolute bottom-4 left-4 right-4 m-auto max-w-7xl">
+                            <p class="text-4xl text-white font-bold md:text-8xl">Horimiya</p>
+                            <p class="mt-4 text-white font-bold md:text-2xl">Romance</p>
+                            <x-button class="mt-8" href="/anime/horimiya">{{ __('Visit now') }}</x-button>
+                        </div>
+                    </div>
+                    <div
+                        class="absolute h-full w-full"
+                        style="background-color:#e2db3c;"
+                        x-show="activeSlide === 2"
+                        x-transition:enter="transition duration-1000"
+                        x-transition:enter-start="translate-x-full"
+                        x-transition:enter-end="translate-x-0"
+                        x-transition:leave="transition duration-1000"
+                        x-transition:leave-start=""
+                        x-transition:leave-end="-translate-x-full"
+                    >
+                        <div class="absolute top-0 left-0 bottom-0 right-0">
+                            <img class="h-screen w-full object-cover lazyload" data-sizes="auto" data-src="https://cdn.kurozora.app/149152/23a88a10-cab6-4f1c-a4de-675ec9551e72.webp?v=1637193049" alt="Assassination Classroom Banner Image" title="Assassination Classroom">
+
+                            <div class="absolute top-0 left-0 right-0 h-screen" style="background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0) 75%);"></div>
+                        </div>
+
+                        <div class="absolute bottom-4 left-4 right-4 m-auto max-w-7xl">
+                            <p class="text-4xl text-white font-bold md:text-8xl">Assassination Classroom</p>
+                            <p class="mt-4 text-white font-bold md:text-2xl">School</p>
+                            <x-button class="mt-8" href="/anime/assassination-classroom">{{ __('Visit now') }}</x-button>
+                        </div>
+                    </div>
+                    <div
+                        class="absolute h-full w-full"
+                        style="background-color:#030005;"
+                        x-show="activeSlide === 3"
+                        x-transition:enter="transition duration-1000"
+                        x-transition:enter-start="translate-x-full"
+                        x-transition:enter-end="translate-x-0"
+                        x-transition:leave="transition duration-1000"
+                        x-transition:leave-start=""
+                        x-transition:leave-end="-translate-x-full"
+                    >
+                        <div class="absolute top-0 left-0 bottom-0 right-0">
+                            <img class="h-screen w-full object-cover lazyload" data-sizes="auto" data-src="https://cdn.kurozora.app/149150/fe666971-78d6-4f40-8cd3-8b1428c4ce51.webp?v=1637192846" alt="Death Parade Banner Image" title="Death Parade">
+
+                            <div class="absolute top-0 left-0 right-0 h-screen" style="background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0) 75%);"></div>
+                        </div>
+
+                        <div class="absolute bottom-4 left-4 right-4 m-auto max-w-7xl">
+                            <p class="text-4xl text-white font-bold md:text-8xl">Death Parade</p>
+                            <p class="mt-4 text-white font-bold md:text-2xl">Thriller</p>
+                            <x-button class="mt-8" href="/anime/death-parade">{{ __('Visit now') }}</x-button>
+                        </div>
+                    </div>
+                    <div
+                        class="absolute h-full w-full"
+                        style="background-color:#f88e4e;"
+                        x-show="activeSlide === 4"
+                        x-transition:enter="transition duration-1000"
+                        x-transition:enter-start="translate-x-full"
+                        x-transition:enter-end="translate-x-0"
+                        x-transition:leave="transition duration-1000"
+                        x-transition:leave-start=""
+                        x-transition:leave-end="-translate-x-full"
+                    >
+                        <div class="absolute top-0 left-0 bottom-0 right-0">
+                            <img class="h-screen w-full object-cover lazyload" data-sizes="auto" data-src="https://cdn.kurozora.app/149813/ad533ed0-9adb-4a4d-bcc0-7ff341b435e8.webp?v=1642184953" alt="Haikyu!! Banner Image" title="Haikyu!!">
+
+                            <div class="absolute top-0 left-0 right-0 h-screen" style="background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0) 75%);"></div>
+                        </div>
+
+                        <div class="absolute bottom-4 left-4 right-4 m-auto max-w-7xl">
+                            <p class="text-4xl text-white font-bold md:text-8xl">Haikyu!!</p>
+                            <p class="mt-4 text-white font-bold md:text-2xl">Sports</p>
+                            <x-button class="mt-8" href="/anime/haikyuu">{{ __('Visit now') }}</x-button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="absolute bottom-4 right-4">
+                        <button
+                            class="inline-flex items-center p-3 bg-white/60 backdrop-blur border border-transparent rounded-full font-semibold text-xs text-gray-500 uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
+                            x-on:click="isPlaying = !isPlaying"
+                        >
+                            <template x-if="isPlaying">
+                                @svg('pause_fill', 'fill-current', ['width' => '24'])
+                            </template>
+
+                            <template x-if="!isPlaying">
+                                @svg('play_fill', 'fill-current', ['width' => '24'])
+                            </template>
+                        </button>
+                    </div>
+            </div>
         </section>
 
         {{-- Call to Action --}}
-        <section class="mt-36 px-4 pb-10 sm:px-6">
+        <section class="px-4 pt-36 pb-10 bg-gray-100 sm:px-6">
             <div class="flex flex-col items-center m-auto max-w-2xl text-center">
                 <img class="m-10 mb-0" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="Kurozora">
 
@@ -215,23 +446,51 @@
                 {{ config('app.domain') }}</x-link></p>
             </div>
 
-            <div class="flex flex-wrap space-y-4 m-auto mt-16 max-w-2xl sm:space-y-0">
-                <div class="flex flex-col basis-1/2 items-center text-center sm:basis-1/4">
+            <div
+                class="flex flex-wrap space-y-4 m-auto mt-16 max-w-2xl sm:space-y-0"
+                x-data="{shown: false}"
+                x-intersect.full="shown = true"
+            >
+                <div
+                    class="flex flex-col basis-1/2 items-center text-center sm:basis-1/4"
+                    x-show="shown"
+                    x-transition:enter="transition duration-1000"
+                    x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100"
+                >
                     @svg('iphone_landscape', 'fill-current', ['width' => '82'])
                     <p class="font-semibold">iPhone</p>
                 </div>
 
-                <div class="flex flex-col basis-1/2 items-center text-center sm:basis-1/4">
+                <div
+                    class="flex flex-col basis-1/2 items-center text-center sm:basis-1/4"
+                    x-show="shown"
+                    x-transition:enter="transition duration-1000 delay-100"
+                    x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100"
+                >
                     @svg('ipad_landscape', 'fill-current', ['width' => '82'])
                     <p class="font-semibold">iPad</p>
                 </div>
 
-                <div class="flex flex-col basis-1/2 items-center text-center sm:basis-1/4">
+                <div
+                    class="flex flex-col basis-1/2 items-center text-center sm:basis-1/4"
+                    x-show="shown"
+                    x-transition:enter="transition duration-1000 delay-200"
+                    x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100"
+                >
                     @svg('macbook', 'fill-current', ['width' => '82'])
                     <p class="font-semibold">Mac</p>
                 </div>
 
-                <div class="flex flex-col basis-1/2 items-center text-center sm:basis-1/4">
+                <div
+                    class="flex flex-col basis-1/2 items-center text-center sm:basis-1/4"
+                    x-show="shown"
+                    x-transition:enter="transition duration-1000 delay-300"
+                    x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100"
+                >
                     @svg('browser', 'fill-current', ['width' => '82'])
                     <p class="font-semibold">Web</p>
                 </div>
@@ -248,6 +507,7 @@
             </div>
         </section>
 
+        {{-- FAQ --}}
         <section class="mt-36 px-4 sm:px-6">
             <div class="flex flex-col items-center m-auto max-w-2xl text-center">
                 <p class="my-2 text-4xl font-bold leading-tight md:text-6xl">{{ __('Let’s go over it one last time.') }}</p>
