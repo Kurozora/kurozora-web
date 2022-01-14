@@ -58,10 +58,28 @@
                 </ul>
             </div>
 
+            <div class="w-1/2 md:w-1/5 sm:w-1/3 text-center md:text-left">
+                <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('Socials') }}</h5>
+                <ul class="m-0 mb-4 list-none">
+                    <li class="mt-2">
+                        <x-footer-link target="_blank" href="https://discord.gg/f3QFzGqsah">Discord</x-footer-link>
+                    </li>
+                    <li class="mt-2">
+                        <x-footer-link target="_blank" href="https://www.instagram.com/kurozora_app">Instagram</x-footer-link>
+                    </li>
+                    <li class="mt-2">
+                        <x-footer-link target="_blank" href="https://www.reddit.com/r/Kurozora">Reddit</x-footer-link>
+                    </li>
+                    <li class="mt-2">
+                        <x-footer-link target="_blank" href="https://twitter.com/KurozoraApp">Twitter</x-footer-link>
+                    </li>
+                </ul>
+            </div>
+
             <x-hr class="mb-2" />
 
             <div class="w-full text-center md:text-left">
-                <p class="text-sm text-gray-500">Copyright © 2018-{{ now()->year }} Kurozora B.V. {{ __('All rights reserved') }}</p>
+                <p class="text-sm text-gray-500">Copyright © 2018-{{ now()->year }} Redark {{ __('All rights reserved') }}</p>
             </div>
         </div>
     </div>

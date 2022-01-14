@@ -55,7 +55,7 @@ class NavSearch extends Component
                 ],
                 [
                     'title' => __('Welcome to Kurozora'),
-                    'link'  => '#',
+                    'link'  => route('welcome'),
                 ]
             ],
         ]);
