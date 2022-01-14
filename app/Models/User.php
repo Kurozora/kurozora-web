@@ -280,7 +280,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_CALENDAR_SECONDS, function() use ($animes) {
             $appName = config('app.name');
-            $productIdentifier = '-//Kurozora B.V.//' . $appName . '//' . strtoupper(config('app.locale'));
+            $productIdentifier = '-//Redark//' . $appName . '//' . strtoupper(config('app.locale'));
 
             $calendar = Calendar::create(UserReminderAnime::CAL_NAME);
             $calendar->description(UserReminderAnime::CAL_DESCRIPTION)
