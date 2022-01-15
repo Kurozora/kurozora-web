@@ -15,6 +15,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Carbon;
 
 class ProcessMALImport implements ShouldQueue
 {
@@ -92,7 +93,30 @@ class ProcessMALImport implements ShouldQueue
 
         // Loop through the anime in the export file
         foreach($json['anime'] as $anime) {
-            $this->handleXMLFileAnime($anime['series_animedb_id'], $anime['my_status'], $anime['my_score']);
+            $animeId = $anime['series_animedb_id'];
+            $status = $anime['my_status'];
+            $rating = $anime['my_score'];
+            $startDate = $anime['my_start_date'];
+            $endDate = $anime['my_finish_date'];
+
+            // Prepare start date
+            if ($startDate === '0000-00-00') {
+                $startDate = null;
+            } else {
+                $dateComponents = explode('-', $startDate);
+                $startDate = Carbon::createFromDate($dateComponents[0], $dateComponents[1], $dateComponents[2]);
+            }
+
+            // Prepare end date
+            if ($endDate === '0000-00-00') {
+                $endDate = null;
+            } else {
+                $dateComponents = explode('-', $endDate);
+                $endDate = Carbon::createFromDate($dateComponents[0], $dateComponents[1], $dateComponents[2]);
+            }
+
+            // Handle import
+            $this->handleXMLFileAnime($animeId, $status, $rating, $startDate, $endDate);
         }
 
         // Notify the user that the MAL import was finished
@@ -105,8 +129,10 @@ class ProcessMALImport implements ShouldQueue
      * @param int $malID
      * @param string $malStatus
      * @param int $malRating
+     * @param $startDate
+     * @param $endDate
      */
-    protected function handleXMLFileAnime(int $malID, string $malStatus, int $malRating)
+    protected function handleXMLFileAnime(int $malID, string $malStatus, int $malRating, $startDate = null, $endDate = null)
     {
         // Try to find the Anime in our DB
         $anime = Anime::withoutGlobalScope(new TvRatingScope)->firstWhere('mal_id', $malID);
@@ -128,7 +154,9 @@ class ProcessMALImport implements ShouldQueue
                 'user_id'   => $this->user->id,
                 'anime_id'  => $anime->id,
             ], [
-                'status' => $status
+                'status' => $status,
+                'start_date' => $startDate,
+                'end_date' => $endDate
             ]);
 
             // Updated their anime score
