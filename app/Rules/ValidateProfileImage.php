@@ -23,9 +23,10 @@ class ValidateProfileImage implements Rule
 //        $userReceipt = $user->receipt;
 
         $rules = ['nullable', 'image', 'max:2048'];
-        $allowedMimes = 'mimes:webp,jpg,png';
-//        $allowedMimes = $userReceipt === null || !$userReceipt->is_subscribed ? 'mimes:webp,jpg,png' : 'mimes:webp,jpg,png,gif';
-        array_push($rules, $allowedMimes);
+//        $allowedMimes = 'mimes:webp,jpg,png';
+        $allowedMimes = empty($userReceipt) ? 'mimes:webp,jpg,png' : 'mimes:webp,jpg,png,gif';
+//        || !$userReceipt->is_subscribed ?
+        $rules[] = $allowedMimes;
 
         $value = $value == 'null' ? null : $value;
         $imgValidator = Validator::make([$attribute => $value], [
