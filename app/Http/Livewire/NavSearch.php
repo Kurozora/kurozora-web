@@ -47,11 +47,11 @@ class NavSearch extends Component
             'quickLinks'    => [
                 [
                     'title' => __('About Kurozora+'),
-                    'link'  => '#',
+                    'link'  => route('kb.iap'),
                 ],
                 [
                     'title' => __('About Personalisation'),
-                    'link'  => '#',
+                    'link'  => route('kb.personalisation'),
                 ],
                 [
                     'title' => __('Welcome to Kurozora'),
