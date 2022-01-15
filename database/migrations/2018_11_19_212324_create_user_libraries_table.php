@@ -20,7 +20,9 @@ class CreateUserLibrariesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('anime_id');
-            $table->tinyInteger('status')->nullable()->default(null);
+            $table->tinyInteger('status');
+            $table->timestamp('start_date')->useCurrent();
+            $table->timestamp('end_date')->nullable();
             $table->timestamps();
         });
 

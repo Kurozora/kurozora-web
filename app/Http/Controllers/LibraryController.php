@@ -73,15 +73,20 @@ class LibraryController extends Controller
         // Get the Anime
         $anime = Anime::findOrFail($animeID);
 
-        // Get the status
+        // Get the status, and decide the end_date
         $userLibraryStatus = UserLibraryStatus::fromKey($data['status']);
+        $endDate = match ($userLibraryStatus->value) {
+            UserLibraryStatus::Completed => now(),
+            default => null
+        };
 
         // Update or create the user library entry
         UserLibrary::updateOrCreate([
             'user_id'   => $user->id,
             'anime_id'  => $anime->id,
         ], [
-            'status' => $userLibraryStatus->value
+            'status' => $userLibraryStatus->value,
+            'end_date' => $endDate
         ]);
 
         // Successful response

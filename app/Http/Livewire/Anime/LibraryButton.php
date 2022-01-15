@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Anime;
 
+use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
 use App\Models\UserLibrary;
 use Auth;
@@ -69,12 +70,18 @@ class LibraryButton extends Component
             // Reset dropdown to "ADD".
             $this->libraryStatus = -1;
         } else {
+            $endDate = match ($this->libraryStatus) {
+                UserLibraryStatus::Completed => now(),
+                default => null
+            };
+
             // Update or create the user library entry.
             UserLibrary::updateOrCreate([
                 'user_id'   => $user->id,
                 'anime_id'  => $this->anime->id
             ], [
-                'status' => $this->libraryStatus
+                'status' => $this->libraryStatus,
+                'end_date' => $endDate
             ]);
         }
 
