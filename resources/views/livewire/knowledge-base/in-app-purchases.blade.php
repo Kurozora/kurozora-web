@@ -4,12 +4,12 @@
     </x-slot>
 
     <x-slot name="description">
-        {{ __('') }}
+        {{ __('Find out everything about in-app purchases on Kurozora. What does Kurozora+ cost? How to manage or cancel subscription? How is privacy managed?') }}
     </x-slot>
 
     <x-slot name="meta">
         <meta property="og:title" content="{{ __('About In-App Purchases') }} — {{ config('app.name') }}" />
-        <meta property="og:og:description" content="{{ __('') }}" />
+        <meta property="og:description" content="{{ __('Find out everything about in-app purchases on Kurozora. What does Kurozora+ cost? How to manage or cancel subscription? How is privacy managed?') }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
     </x-slot>

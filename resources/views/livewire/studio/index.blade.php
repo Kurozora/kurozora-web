@@ -9,7 +9,7 @@
 
     <x-slot name="meta">
         <meta property="og:title" content="{{ __('Studios') }} — {{ config('app.name') }}" />
-        <meta property="og:og:description" content="{{ __('An extensive list of anime studios, producers, and networks only on Kurozora, the largest, free online anime and manga database in the world.') }}" />
+        <meta property="og:description" content="{{ __('An extensive list of anime studios, producers, and networks only on Kurozora, the largest, free online anime and manga database in the world.') }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('studios.index') }}">

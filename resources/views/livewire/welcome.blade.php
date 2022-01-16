@@ -621,7 +621,7 @@
                             x-show="expanded"
                             x-collapse
                         >
-                            <p>{{ 'Kurozora is free to download and use. However, some supplemental features can be unlocked using in-app purchases. The cost depends on which offer you choose. All offers unlock the same features.' }}</p>
+                            <p>{{ __('Kurozora is free to download and use. However, some supplemental features can be unlocked using in-app purchases. The cost depends on which offer you choose. All offers unlock the same features.') }}</p>
                             <br>
                             <br>
                             <p>{{ __('(1) Free to try for 1 week and $3.99 per month after that.') }}</p><br>
