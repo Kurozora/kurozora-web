@@ -4,7 +4,6 @@ use App\Http\Controllers\AccessTokenController;
 use App\Http\Controllers\MeController;
 
 Route::prefix('/access-tokens')
-
     ->name('.access-tokens')
     ->group(function () {
         Route::get('/', [MeController::class, 'getAccessTokens'])
