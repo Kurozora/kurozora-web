@@ -62,7 +62,11 @@ class SessionAttribute extends Resource
     public function fields(Request $request): array
     {
         return [
-            ID::make(__('ID'), 'id')->sortable(),
+            Heading::make('Identification'),
+
+            ID::make()->sortable(),
+
+            Heading::make('Meta information'),
 
             MorphTo::make('Model')
                 ->types([

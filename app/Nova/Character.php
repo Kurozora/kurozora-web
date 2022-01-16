@@ -65,6 +65,8 @@ class Character extends Resource
     public function fields(Request $request): array
     {
         return [
+            Heading::make('Identification'),
+
             ID::make()->sortable(),
 
             Number::make('MAL ID')

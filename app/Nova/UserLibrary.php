@@ -51,8 +51,7 @@ class UserLibrary extends Resource
     public function fields(Request $request): array
     {
         return [
-            Heading::make('Identification')
-                ->onlyOnDetail(),
+            Heading::make('Identification'),
 
             ID::make()->sortable(),
 

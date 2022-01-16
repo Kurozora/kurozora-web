@@ -5,11 +5,11 @@ namespace App\Nova;
 use App\Enums\SongType;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
 
 class AnimeSong extends Resource
 {
@@ -59,7 +59,11 @@ class AnimeSong extends Resource
     public function fields(Request $request): array
     {
         return [
-            ID::make(__('ID'), 'id')->sortable(),
+            Heading::make('Identification'),
+
+            ID::make()->sortable(),
+
+            Heading::make('Meta information'),
 
             BelongsTo::make('Anime')
                 ->searchable()

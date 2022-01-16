@@ -63,7 +63,15 @@ class Studio extends Resource
     public function fields(Request $request): array
     {
         return [
+            Heading::make('Identification'),
+
             ID::make()->sortable(),
+
+            Number::make('MAL ID')
+                ->hideFromIndex()
+                ->help('The id of the studio as noted on MyAnimeList.'),
+
+            Heading::make('Media'),
 
             Images::make('Banner')
                 ->showStatistics()

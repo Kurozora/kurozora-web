@@ -58,7 +58,7 @@ class Anime extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'tvdb_id', 'mal_id', 'slug', 'original_title', 'air_season',
+        'id', 'tvdb_id', 'mal_id', 'slug', 'original_title'
     ];
 
     /**
@@ -83,27 +83,39 @@ class Anime extends Resource
 
             Number::make('AniDB ID')
                 ->hideFromIndex()
-                ->help('The ID of the Anime as noted on AniDB.'),
+                ->help('Used to identify the Anime on <a target="_blank" href="https://anidb.net/anime/' . ($this->resource->anidb_id ?? 'slug-identifier') . '">AniDB</a>'),
 
             Number::make('AniList ID')
                 ->hideFromIndex()
-                ->help('The ID of the Anime as noted on AniList.'),
+                ->help('Used to identify the Anime on <a target="_blank" href="https://anilist.co/anime/' . ($this->resource->anilist_id ?? 'slug-identifier') . '">AniList</a>'),
 
             Text::make('IMDB ID')
                 ->onlyOnForms()
-                ->help('The ID of the Anime as noted on IMDB.'),
+                ->help('Used to identify the Anime on <a target="_blank" href="https://imdb.com/title/' . ($this->resource->imdb_id ?? 'slug-identifier') . '">IMDB</a>'),
 
             Number::make('Kitsu ID')
                 ->hideFromIndex()
-                ->help('The ID of the Anime as noted on Kitsu.'),
+                ->help('Used to identify the Anime on <a target="_blank" href="https://kitsu.io/anime/' . ($this->resource->kitsu_id ?? 'slug-identifier') . '">Kitsu</a>'),
 
             Number::make('MAL ID')
                 ->hideFromIndex()
-                ->help('The ID of the Anime as noted on MyAnimeList.'),
+                ->help('Used to identify the Anime on <a target="_blank" href="https://myanimelist.net/anime/' . ($this->resource->mal_id ?? 'slug-identifier') . '">MyAnimeList</a>'),
+
+            Text::make('Notify ID')
+                ->hideFromIndex()
+                ->help('Used to identify the Anime on <a target="_blank" href="https://notify.moe/anime/' . ($this->resource->notify_id ?? 'slug-identifier') . '">Notify</a>'),
+
+            Number::make('Syoboi ID')
+                ->hideFromIndex()
+                ->help('Used to identify the Anime on <a target="_blank" href="https://cal.syoboi.jp/tid/' . ($this->resource->syoboi_id ?? 'slug-identifier') . '">Syoboi</a>'),
+
+            Number::make('Trakt ID')
+                ->hideFromIndex()
+                ->help('Used to identify the Anime on <a target="_blank" href="https://trakt.tv/shows/' . ($this->resource->trakt_id ?? 'slug-identifier') . '">Trakt.tv</a>'),
 
             Number::make('TVDB ID')
                 ->hideFromIndex()
-                ->help('The ID of the Anime as noted on The TVDB.'),
+                ->help('Used to identify the Anime on <a target="_blank" href="https://thetvdb.com/series/' . ($this->resource->tvdb_id ?? 'slug-identifier') . '">TheTVDB</a>'),
 
             Heading::make('Media'),
 
@@ -240,6 +252,14 @@ class Anime extends Resource
                 ->asHtml()
                 ->readonly()
                 ->onlyOnIndex(),
+
+            Heading::make('Aggregates'),
+
+            Number::make('Season Count')
+                ->help('The total number of seasons.'),
+
+            Number::make('Episode Count')
+                ->help('The total number of episodes.'),
 
             Heading::make('Schedule'),
 

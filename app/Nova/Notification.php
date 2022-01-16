@@ -8,6 +8,7 @@ use Illuminate\Notifications\DatabaseNotification;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Text;
 
@@ -61,9 +62,13 @@ class Notification extends Resource
         $notification = $this->resource;
 
         return [
+            Heading::make('Identification'),
+
             Text::make('UUID', 'id')
                 ->required()
                 ->hideFromIndex(),
+
+            Heading::make('Meta information'),
 
             Text::make('Type')
                 ->required()
