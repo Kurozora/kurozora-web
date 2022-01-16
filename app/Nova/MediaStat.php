@@ -59,7 +59,7 @@ class MediaStat extends Resource
         return [
             Heading::make('Identification'),
 
-            ID::make(__('ID'), 'id')->sortable(),
+            ID::make()->sortable(),
 
             Heading::make('Model'),
 

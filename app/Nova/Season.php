@@ -63,9 +63,7 @@ class Season extends Resource
     public function fields(Request $request): array
     {
         return [
-            Heading::make('Identification')
-            ->hideWhenCreating()
-            ->hideWhenUpdating(),
+            Heading::make('Identification'),
 
             ID::make()->sortable(),
 

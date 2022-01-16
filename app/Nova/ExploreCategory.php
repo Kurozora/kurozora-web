@@ -7,6 +7,7 @@ use App\Enums\ExploreCategoryTypes;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
@@ -60,7 +61,11 @@ class ExploreCategory extends Resource
     public function fields(Request $request): array
     {
         return [
+            Heading::make('Identification'),
+
             ID::make()->sortable(),
+
+            Heading::make('Meta information'),
 
             Text::make('Title')
                 ->rules('required', 'max:255')
