@@ -5,6 +5,7 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Text;
@@ -43,7 +44,11 @@ class Activity extends Resource
     public function fields(Request $request): array
     {
         return [
+            Heading::make('Identification'),
+
             ID::make()->sortable(),
+
+            Heading::make('Meta information'),
 
             Text::make('Log name')
                 ->sortable(),

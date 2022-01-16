@@ -65,8 +65,7 @@ class Genre extends Resource
     public function fields(Request $request): array
     {
         return [
-            Heading::make('Identification')
-                ->exceptOnForms(),
+            Heading::make('Identification'),
 
             ID::make()->sortable(),
 
