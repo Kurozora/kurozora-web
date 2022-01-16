@@ -19,7 +19,7 @@ class EmailVerificationPromptController
     public function __invoke(Request $request): Application|Factory|View|RedirectResponse
     {
         return $request->user()->hasVerifiedEmail()
-            ? redirect()->intended('/')
+            ? redirect()->intended()
             : view('auth.verify-email');
     }
 }

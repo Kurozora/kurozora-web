@@ -9,7 +9,7 @@
 
     <x-slot name="meta">
         <meta property="og:title" content="{{ __('Contact') }} — {{ config('app.name') }}" />
-        <meta property="og:og:description" content="{{ __('Contact Kurozora support by email regarding the app, website, or other services. Kurozora support is here to help.') }}" />
+        <meta property="og:description" content="{{ __('Contact Kurozora support by email regarding the app, website, or other services. Kurozora support is here to help.') }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
     </x-slot>
