@@ -12,7 +12,7 @@
     <div x-data="{ recovery: false }"
          class="flex flex-col justify-center max-w-prose w-screen h-full max-w-prose mx-auto px-4 py-6 sm:px-6"
     >
-        <div class="mb-5 text-center text-gray-600" x-show="! recovery">
+        <div class="mb-5 text-center text-gray-600" x-show="!recovery">
             <p class="text-2xl font-bold">{{ __('Enter Authorization Code') }}</p>
             <p>{{ __('Please confirm access to your account by entering the authentication code provided by your authenticator application.') }}</p>
         </div>
@@ -27,7 +27,7 @@
         <form method="POST" action="{{ route('two-factor.update') }}">
             @csrf
 
-            <div class="mt-4" x-show="! recovery">
+            <div class="mt-4" x-show="!recovery">
                 <x-label for="code" value="{{ __('Code') }}" />
                 <x-input id="code" class="block mt-1 w-full" type="text" name="code" autofocus x-ref="code" autocomplete="one-time-code" />
             </div>
@@ -38,25 +38,23 @@
             </div>
 
             <div class="flex flex-col items-center justify-end mt-4">
-                <button type="button" class="text-sm text-gray-600 hover:text-gray-900 underline cursor-pointer"
-                                x-show="! recovery"
-                                x-on:click="
-                                    recovery = true;
-                                    $nextTick(() => { $refs.recovery_code.focus() })
-                                ">
+                <x-simple-button
+                    type="button"
+                    x-show="! recovery"
+                    x-on:click="recovery = true; $nextTick(() => { $refs.recovery_code.focus() });"
+                >
                     {{ __('Use a recovery code') }}
-                </button>
+                </x-simple-button>
 
-                <button type="button" class="mt-4 text-sm text-gray-600 hover:text-gray-900 underline cursor-pointer"
-                                x-show="recovery"
-                                x-on:click="
-                                    recovery = false;
-                                    $nextTick(() => { $refs.code.focus() })
-                                ">
+                <x-simple-button
+                    type="button"
+                    x-show="recovery"
+                    x-on:click="recovery = false; $nextTick(() => { $refs.code.focus() });"
+                >
                     {{ __('Use an authentication code') }}
-                </button>
+                </x-simple-button>
 
-                <x-button class="mt-4 ml-4">
+                <x-button class="mt-4">
                     {{ __('Sign in') }}
                 </x-button>
             </div>
