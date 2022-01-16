@@ -47,7 +47,7 @@ class Person extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'first_name', 'last_name', 'slug'
+        'id', 'mal_id', 'first_name', 'last_name', 'slug'
     ];
 
     /**
@@ -67,6 +67,10 @@ class Person extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
+
+            Number::make('MAL ID')
+                ->hideFromIndex()
+                ->help('The ID of the person as noted on MyAnimeList.'),
 
             Heading::make('Media'),
 

@@ -4,10 +4,10 @@ namespace App\Nova;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Timothyasp\Color\Color;
 
 class Status extends Resource
@@ -58,7 +58,11 @@ class Status extends Resource
     public function fields(Request $request): array
     {
         return [
-            ID::make(__('ID'), 'id')->sortable(),
+            Heading::make('Identification'),
+
+            ID::make()->sortable(),
+
+            Heading::make('Meta information'),
 
             Select::make('Type')
                 ->options([

@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 
@@ -54,7 +55,11 @@ class StaffRole extends Resource
     public function fields(Request $request): array
     {
         return [
-            ID::make(__('ID'), 'id')->sortable(),
+            Heading::make('Identification'),
+
+            ID::make()->sortable(),
+
+            Heading::make('Meta information'),
 
             Text::make('Name')
                 ->sortable()

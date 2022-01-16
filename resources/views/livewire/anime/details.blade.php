@@ -74,9 +74,9 @@
     <div class="grid grid-rows-[repeat(2,minmax(0,min-content))] h-full lg:grid-rows-none lg:grid-cols-2 2xl:grid-cols-3 lg:mb-0">
         <div class="relative">
             <div class="relative flex flex-nowrap aspect-ratio-16-9 md:relative md:h-full lg:aspect-ratio-auto">
-                <picture class="relative w-full overflow-hidden">
+                <x-picture class="w-full overflow-hidden">
                     <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
-                </picture>
+                </x-picture>
 
                 @if (!empty($anime->video_url))
                     <div class="absolute top-0 bottom-0 left-0 right-0">
@@ -94,10 +94,9 @@
 
             <div class="md:absolute md:bottom-0 md:left-0 md:right-0 lg:px-4">
                 <div class="flex flex-nowrap pt-5 pb-8 px-4 md:mx-auto md:mb-8 md:p-6 md:max-w-lg md:bg-white md:bg-opacity-50 md:backdrop-filter md:backdrop-blur md:rounded-lg">
-                    <picture class="relative min-w-[100px] max-w-[100px] min-h-[150px] max-h-[150px] mr-2 rounded-lg overflow-hidden">
+                    <x-picture :border="true" class="min-w-[100px] max-w-[100px] min-h-[150px] max-h-[150px] mr-2 rounded-lg overflow-hidden">
                         <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->poster_image_url ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
-                        <div class="absolute top-0 left-0 h-full w-full ring-1 ring-gray-100 ring-opacity-25 ring-inset rounded-lg"></div>
-                    </picture>
+                    </x-picture>
 
                     <div class="flex flex-col gap-2 justify-between w-3/4">
                         <div>
