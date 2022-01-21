@@ -26,15 +26,6 @@ class Index extends Component
     ];
 
     /**
-     * The component's listeners.
-     *
-     * @var array $listeners
-     */
-    protected $listeners = [
-        'load_characters' => 'characters'
-    ];
-
-    /**
      * Prepare the component.
      *
      * @return void
