@@ -24,22 +24,14 @@
             <div>
                 <p class="text-2xl font-bold">{{ __('People') }}</p>
 
-                <div
-                    class="flex justify-between mt-4"
-                    x-data="{
-                        isFilterOpen: @entangle('isFilterOpen')
-                    }"
-                >
+                <div class="flex justify-between mt-4">
                     <div>
                         <x-input id="search" type="text" placeholder="{{ __('I’m searching for…') }}" wire:model.debounce.500ms="filter.search" />
                     </div>
 
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
-                            <button
-                                class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
-                                x-on:click="$toggle('isFilterOpen')"
-                            >
+                            <button class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
                                 @svg('line_3_horizontal_decrease_circle', 'fill-current', ['aria-labelledby' => 'filter', 'width' => '28'])
                             </button>
                         </x-slot>
