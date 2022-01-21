@@ -196,7 +196,7 @@
                                 </x-dropdown-link>
 
                                 {{-- Library --}}
-                                <x-dropdown-link href="#">
+                                <x-dropdown-link href="{{ route('library.index') }}">
                                     {{ __('Library') }}
                                 </x-dropdown-link>
 
@@ -306,7 +306,7 @@
                     </x-responsive-nav-link>
 
                     {{-- Library --}}
-                    <x-responsive-nav-link href="#">
+                    <x-responsive-nav-link href="{{ route('library.index') }}">
                         {{ __('Library') }}
                     </x-responsive-nav-link>
 
