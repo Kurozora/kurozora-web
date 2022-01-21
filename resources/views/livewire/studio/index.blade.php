@@ -77,7 +77,7 @@
             </div>
         </section>
 
-        <section class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             @foreach($this->studios as $studio)
                 <x-lockups.studio-lockup :studio="$studio" />
             @endforeach
