@@ -15,7 +15,9 @@
     </x-slot>
 
     <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
-        <img class="w-full h-32 object-cover object-center rounded-lg shadow-lg sm:h-44" src="{{ asset('images/static/banners/personalisation.webp') }}"  alt="About Personalisation" />
+        <x-picture>
+            <img class="h-32 w-full object-cover object-center rounded-lg shadow-lg sm:h-44" src="{{ asset('images/static/banners/personalisation.webp') }}"  alt="About Personalisation" />
+        </x-picture>
 
         <section class="my-4">
             <p class="text-2xl font-bold">{{ __('About Personalisation') }}</p>
