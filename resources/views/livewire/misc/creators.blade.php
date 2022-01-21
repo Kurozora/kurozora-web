@@ -1,6 +1,8 @@
 <main>
     <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
-        <img class="w-full h-32 object-cover object-center rounded-lg shadow-lg sm:h-44" src="{{ asset('images/static/banners/made_with_love.webp') }}"  alt="Made with Love by 2 Students." />
+        <x-picture>
+            <img class="h-32 w-full object-cover object-center rounded-lg shadow-lg sm:h-44" src="{{ asset('images/static/banners/made_with_love.webp') }}"  alt="Made with Love by 2 Students." />
+        </x-picture>
 
         <div class="flex flex-col mt-8 sm:flex-row">
             @foreach($users as $user)
