@@ -11,6 +11,7 @@
         "ext-pdo": "*",
         "ext-simplexml": "*",
         "anaseqal/nova-sidebar-icons": "^0.0",
+        "astrotomic/laravel-cachable-attributes": "^0.3.0",
         "astrotomic/laravel-translatable": "^11.9",
         "aws/aws-sdk-php": "^3.198",
         "bacon/bacon-qr-code": "^2.0",

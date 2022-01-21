@@ -4,6 +4,13 @@ namespace App\Enums;
 
 use BenSampo\Enum\Enum;
 
+/**
+ * @method static UserLibraryStatus Watching()
+ * @method static UserLibraryStatus Dropped()
+ * @method static UserLibraryStatus Planning()
+ * @method static UserLibraryStatus Completed()
+ * @method static UserLibraryStatus OnHold()
+ */
 final class UserLibraryStatus extends Enum
 {
     const Watching  = 0;
