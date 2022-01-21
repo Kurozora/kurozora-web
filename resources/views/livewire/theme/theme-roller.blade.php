@@ -1,4 +1,5 @@
-<div x-data="{
+<div
+    x-data="{
         show: @entangle('showColorPicker'),
         state: @entangle('state'),
         selectedElement: @entangle('selectedElement'),
@@ -322,6 +323,7 @@
     <div x-show="show" class="fixed inset-0" x-on:click="show = false; selectedElement = null">
         <div class="absolute inset-0"></div>
     </div>
+
     <div x-show="show" class="absolute top-10 right-auto transform-none my-auto bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:top-1/2 sm:right-10 sm:transform sm:-translate-y-1/2 sm:max-w-sm">
         <div class="px-6 py-4">
             <div class="text-lg text-center">
@@ -329,7 +331,7 @@
             </div>
 
             <div class="mt-4">
-                <div id="colorPicker" wire:ignore class="flex justify-center"></div>
+                <div id="colorPicker" class="flex justify-center" wire:ignore></div>
             </div>
 
             <template x-if="selectedElement !== null">

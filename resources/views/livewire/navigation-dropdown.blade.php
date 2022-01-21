@@ -205,7 +205,7 @@
                                     {{ __('More') }}
                                 </div>
 
-                                <x-dropdown-link href="{{ route('themes') }}">
+                                <x-dropdown-link href="{{ route('themes.index') }}">
                                     {{ __('Themes') }}
                                 </x-dropdown-link>
 
@@ -315,7 +315,7 @@
 
                 {{-- Themes --}}
                 <div class="space-y-1">
-                    <x-responsive-nav-link href="{{ route('themes') }}"
+                    <x-responsive-nav-link href="{{ route('themes.index') }}"
                                            :active="request()->routeIs('themes')">
                         {{ __('Themes') }}
                     </x-responsive-nav-link>
