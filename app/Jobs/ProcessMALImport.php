@@ -99,22 +99,6 @@ class ProcessMALImport implements ShouldQueue
             $startDate = $anime['my_start_date'];
             $endDate = $anime['my_finish_date'];
 
-            // Prepare start date
-            if ($startDate === '0000-00-00') {
-                $startDate = null;
-            } else {
-                $dateComponents = explode('-', $startDate);
-                $startDate = Carbon::createFromDate($dateComponents[0], $dateComponents[1], $dateComponents[2]);
-            }
-
-            // Prepare end date
-            if ($endDate === '0000-00-00') {
-                $endDate = null;
-            } else {
-                $dateComponents = explode('-', $endDate);
-                $endDate = Carbon::createFromDate($dateComponents[0], $dateComponents[1], $dateComponents[2]);
-            }
-
             // Handle import
             $this->handleXMLFileAnime($animeId, $status, $rating, $startDate, $endDate);
         }
@@ -129,10 +113,10 @@ class ProcessMALImport implements ShouldQueue
      * @param int $malID
      * @param string $malStatus
      * @param int $malRating
-     * @param $startDate
-     * @param $endDate
+     * @param string $malStartDate
+     * @param string $malEndDate
      */
-    protected function handleXMLFileAnime(int $malID, string $malStatus, int $malRating, $startDate = null, $endDate = null)
+    protected function handleXMLFileAnime(int $malID, string $malStatus, int $malRating, string $malStartDate, string $malEndDate)
     {
         // Try to find the Anime in our DB
         $anime = Anime::withoutGlobalScope(new TvRatingScope)->firstWhere('mal_id', $malID);
@@ -142,11 +126,18 @@ class ProcessMALImport implements ShouldQueue
             // Convert the MAL data to our own
             $status = $this->convertMALStatus($malStatus);
             $rating = $this->convertMALRating($malRating);
+            $startDate = $this->convertMALDate($malStartDate);
+            $endDate = $this->convertMaLDate($malEndDate);
 
             // Status not found
             if ($status === null) {
                 $this->registerFailure($malID, 'Could not handle status: ' . $malStatus);
                 return;
+            }
+
+            // Needs end date
+            if ($status === UserLibraryStatus::Completed && $endDate === null) {
+                $endDate = now();
             }
 
             // Add the anime to their library
@@ -205,6 +196,22 @@ class ProcessMALImport implements ShouldQueue
         }
 
         return round($malRating) * 0.5;
+    }
+
+    /**
+     * Converts and returns Carbon dates from given string.
+     *
+     * @param string $malDate
+     * @return Carbon|null
+     */
+    protected function convertMALDate(string $malDate): ?Carbon
+    {
+        if ($malDate === '0000-00-00') {
+            return null;
+        }
+
+        $dateComponents = explode('-', $malDate);
+        return Carbon::createFromDate($dateComponents[0], $dateComponents[1], $dateComponents[2]);
     }
 
     /**
