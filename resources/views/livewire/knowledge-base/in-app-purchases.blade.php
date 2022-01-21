@@ -15,7 +15,9 @@
     </x-slot>
 
     <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
-        <img class="w-full h-32 object-cover object-center rounded-lg shadow-lg sm:h-44" src="{{ asset('images/static/banners/in-app_purchases.webp') }}"  alt="About Personalisation" />
+        <x-picture>
+            <img class="h-32 w-full object-cover object-center rounded-lg shadow-lg sm:h-44" src="{{ asset('images/static/banners/in-app_purchases.webp') }}"  alt="About Personalisation" />
+        </x-picture>
 
         <section class="my-4">
             <p class="text-2xl font-bold">{{ __('About In-App Purchases') }}</p>
@@ -58,7 +60,9 @@
             <p>{{ __('Unlike donations and Kurozora One, Kurozora+ renews until you choose to end it. If you wish to cancel your subscription, you can easily change renewal settings from the Kurozora app. On the Kurozora app, go to settings and scroll down to the Support Us section. Next, tap Manage Subscriptions.') }}</p>
             <br />
 
-            <img class="w-full rounded-lg shadow-lg" src="{{ asset('images/static/screenshots/manage_subscriptions.webp') }}" alt="Manage Kurozora Subscriptions" style="max-width: 320px;">
+            <x-picture style="max-width: 320px;">
+                <img class="rounded-lg shadow-lg" src="{{ asset('images/static/screenshots/manage_subscriptions.webp') }}" alt="Manage Kurozora Subscriptions">
+            </x-picture>
             <br />
 
             <p>{{ __('Use the presented options to manage your subscription. You can choose a different subscription offering or tap Cancel Subscription to cancel your subscription. After you cancel, your subscription will stop at the end of the current billing cycle.') }}</p>
