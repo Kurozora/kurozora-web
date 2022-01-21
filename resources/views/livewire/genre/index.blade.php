@@ -20,7 +20,7 @@
     </x-slot>
 
     <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
-        <section class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             @foreach($genres as $genre)
                 <x-lockups.genre-lockup :genre="$genre" />
             @endforeach
