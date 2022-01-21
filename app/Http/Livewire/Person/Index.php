@@ -15,13 +15,6 @@ class Index extends Component
     use WithPagination;
 
     /**
-     * Indicates whether the filter dropdown is open.
-     *
-     * @var bool $isFilterOpen
-     */
-    public bool $isFilterOpen = false;
-
-    /**
      * The component's filters.
      *
      * @var array $filter
