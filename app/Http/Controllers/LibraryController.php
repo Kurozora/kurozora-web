@@ -154,7 +154,7 @@ class LibraryController extends Controller
         if (!$user->canDoMALImport()) {
             $cooldownDays = config('mal-import.cooldown_in_days');
 
-            throw new TooManyRequestsHttpException($cooldownDays * 24 * 60 * 60, 'You can only perform a MAL import every ' . $cooldownDays . ' day(s).');
+            throw new TooManyRequestsHttpException($cooldownDays * 24 * 60 * 60, __('You can only perform a MAL import every :x day(s).', ['x' => $cooldownDays]));
         }
 
         // Read XML file

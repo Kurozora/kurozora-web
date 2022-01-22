@@ -565,11 +565,13 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     function canDoMALImport(): bool
     {
-        if (!$this->last_mal_import_at)
+        if (!$this->last_mal_import_at) {
             return true;
+        }
 
-        if ($this->last_mal_import_at > now()->subDays(config('mal-import.cooldown_in_days')))
+        if ($this->last_mal_import_at > now()->subDays(config('mal-import.cooldown_in_days'))) {
             return false;
+        }
 
         return true;
     }
