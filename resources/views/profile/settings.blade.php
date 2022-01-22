@@ -22,6 +22,12 @@
             <x-section-border />
 
             <div class="mt-10 sm:mt-0">
+                @livewire('profile.mal-import-form')
+            </div>
+
+            <x-section-border />
+
+            <div class="mt-10 sm:mt-0">
                 @livewire('profile.update-password-form')
             </div>
 
