@@ -207,7 +207,7 @@ class ProcessMALImport implements ShouldQueue
     protected function convertMALDate(string $malDate): ?Carbon
     {
         if ($malDate === '0000-00-00') {
-            return null;
+            return now();
         }
 
         $dateComponents = explode('-', $malDate);
