@@ -4,6 +4,8 @@ namespace App\Http\Resources;
 
 use App\Enums\ExploreCategoryTypes;
 use App\Models\ExploreCategory;
+use App\Models\Genre;
+use App\Models\Theme;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -55,62 +57,94 @@ class ExploreCategoryResource extends JsonResource
     private function getTypeSpecificData(Request $request): array
     {
         // Genres category
-        return match ($this->resource->type) {
-            ExploreCategoryTypes::People => [
-                'people' => [
-                    'data' => PersonResource::collection($this->resource
-                        ->peopleBornToday()
-                        ->explore_category_items
-                        ->pluck('model')
-                    )
-                ]
-            ],
-            ExploreCategoryTypes::Characters => [
-                'characters' => [
-                    'data' => CharacterResource::collection($this->resource
-                        ->charactersBornToday()
-                        ->explore_category_items
-                        ->pluck('model')
-                    )
-                ]
-            ],
-            ExploreCategoryTypes::Genres => [
-                'genres' => [
-                    'data' => GenreResource::collection($this->resource
-                        ->explore_category_items
-                        ->pluck('model')
-                    )
-                ]
-            ],
-            ExploreCategoryTypes::Shows => [
-                'shows' => [
-                    'data' => AnimeResource::collection($this->resource
-                        ->explore_category_items
-                        ->pluck('model')
-                    )
-                ]
-            ],
-            ExploreCategoryTypes::UpcomingShows => [
-                'shows' => [
-                    'data' => AnimeResource::collection($this->resource
-                        ->upcoming_shows($request->input('genre_id'))
-                        ->explore_category_items
-                        ->pluck('model')
-                    )
-                ]
-            ],
-            ExploreCategoryTypes::MostPopularShows => [
-                'shows' => [
-                    'data' => AnimeResource::collection($this->resource
-                        ->most_popular_shows($request->input('genre_id'))
-                        ->explore_category_items
-                        ->pluck('model')
-                    )
-                ]
-            ],
-            default => [
-                'shows' => null
-            ], // Return empty shows by default
-        };
+        switch ($this->resource->type) {
+            case ExploreCategoryTypes::People:
+                return [
+                    'people' => [
+                        'data' => PersonResource::collection($this->resource
+                            ->peopleBornToday()
+                            ->explore_category_items
+                            ->pluck('model')
+                        )
+                    ]
+                ];
+            case ExploreCategoryTypes::Characters:
+                return [
+                    'characters' => [
+                        'data' => CharacterResource::collection($this->resource
+                            ->charactersBornToday()
+                            ->explore_category_items
+                            ->pluck('model')
+                        )
+                    ]
+                ];
+            case ExploreCategoryTypes::Genres:
+                return [
+                    'genres' => [
+                        'data' => GenreResource::collection($this->resource
+                            ->explore_category_items
+                            ->pluck('model')
+                        )
+                    ]
+                ];
+            case ExploreCategoryTypes::Themes:
+                return [
+                    'themes' => [
+                        'data' => ThemeResource::collection($this->resource
+                            ->explore_category_items
+                            ->pluck('model')
+                        )
+                    ]
+                ];
+            case ExploreCategoryTypes::Shows:
+                return [
+                    'shows' => [
+                        'data' => AnimeResource::collection($this->resource
+                            ->explore_category_items
+                            ->pluck('model')
+                        )
+                    ]
+                ];
+            case ExploreCategoryTypes::UpcomingShows:
+                $model = null;
+
+                if (!empty($request->input('genre_id'))) {
+                    $model = Genre::find($request->input('genre_id'));
+                } else if (!empty($request->input('theme_id'))) {
+                    $model = Theme::find($request->input('theme_id'));
+                }
+
+                return [
+                    'shows' => [
+                        'data' => AnimeResource::collection($this->resource
+                            ->upcoming_shows($model)
+                            ->explore_category_items
+                            ->pluck('model')
+                        )
+                    ]
+                ];
+            case ExploreCategoryTypes::MostPopularShows:
+                $model = null;
+
+                if (!empty($request->input('genre_id'))) {
+                   $model = Genre::find($request->input('genre_id'));
+                } else if (!empty($request->input('theme_id'))) {
+                    $model = Theme::find($request->input('theme_id'));
+                }
+
+                return [
+                    'shows' => [
+                        'data' => AnimeResource::collection($this->resource
+                            ->most_popular_shows($model)
+                            ->explore_category_items
+                            ->pluck('model')
+                        )
+                    ]
+                ];
+            default: // Return empty shows by default
+                return [
+                    'shows' => null
+                ];
+        }
     }
 }
