@@ -2,6 +2,7 @@
 
 namespace Tests\API;
 
+use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
@@ -23,7 +24,7 @@ class FavoriteAnimeTest extends TestCase
         /** @var Anime $anime */
         $anime = Anime::factory()->create();
 
-        $this->user->library()->attach($anime);
+        $this->user->library()->attach($anime, ['status' => UserLibraryStatus::Watching]);
 
         $response = $this->auth()->json('POST', 'v1/me/favorite-anime', [
             'anime_id'      => $anime->id,
@@ -49,7 +50,7 @@ class FavoriteAnimeTest extends TestCase
         /** @var Anime $anime */
         $anime = Anime::factory()->create();
 
-        $this->user->library()->attach($anime);
+        $this->user->library()->attach($anime, ['status' => UserLibraryStatus::Watching]);
         $this->user->favorite_anime()->attach($anime->id);
 
         // Send request to remove the anime from the user's favorites
