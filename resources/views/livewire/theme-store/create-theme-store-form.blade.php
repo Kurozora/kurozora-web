@@ -12,7 +12,7 @@
         <meta property="og:description" content="{{ __('Create a unique theme for your account only on Kurozora, the largest, free online anime and manga database in the world.') }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
-        <link rel="canonical" href="{{ route('themes.create') }}">
+        <link rel="canonical" href="{{ route('theme-store.create') }}">
     </x-slot>
 
     {{-- Header --}}
@@ -31,7 +31,7 @@
             <p class="">{{ __('Take your time and make something great, we\'ll leave you to it.') }}</p>
         </div>
 
-        <livewire:theme.theme-roller />
+        <livewire:theme-store.theme-store-roller />
     </section>
 
     <section class="max-w-7xl mx-auto px-4 py-6 text-center sm:px-6">
