@@ -56,22 +56,22 @@ class ExploreCategory extends KModel implements Sitemapable
     /**
      * Returns the current most popular anime.
      *
-     * @param Genre|int|null $genre
+     * @param Genre|Theme|null $model
      * @return ExploreCategory
      */
-    public function most_popular_shows(Genre|int|null $genre = null): ExploreCategory
+    public function most_popular_shows(Genre|Theme|null $model = null): ExploreCategory
     {
         if ($this->type === ExploreCategoryTypes::MostPopularShows) {
-            if (empty($genre)) {
-                $popularShows = Anime::mostPopular()->get('id');
-            } else {
-                if (is_int($genre)) {
-                    $genre = Genre::findOrFail($genre, ['id', 'is_nsfw']);
-                }
-
-                $popularShows = Anime::whereGenre($genre)
-                    ->mostPopular(10, null, $genre->is_nsfw)
+            if (is_a($model, Genre::class)) {
+                $popularShows = Anime::whereGenre($model)
+                    ->mostPopular(10, 3, $model->is_nsfw) // fucking named parameters not working
                     ->get('id');
+            } else if (is_a($model, Theme::class)) {
+                $popularShows = Anime::whereTheme($model)
+                    ->mostPopular(10, 3, $model->is_nsfw) // look above
+                    ->get('id');
+            } else {
+                $popularShows = Anime::mostPopular()->get('id');
             }
 
             foreach($popularShows as $popularShow) {
@@ -87,22 +87,22 @@ class ExploreCategory extends KModel implements Sitemapable
     /**
      * Returns the upcoming anime.
      *
-     * @param Genre|int|null $genre
+     * @param Genre|Theme|null $model
      * @return ExploreCategory
      */
-    public function upcoming_shows(Genre|int|null $genre = null): ExploreCategory
+    public function upcoming_shows(Genre|Theme|null $model = null): ExploreCategory
     {
         if ($this->type === ExploreCategoryTypes::UpcomingShows) {
-            if (empty($genre)) {
-                $upcomingShows = Anime::upcomingShows()
+            if (is_a($model, Genre::class)) {
+                $upcomingShows = Anime::whereGenre($model)
+                    ->upcomingShows()
+                    ->get('id');
+            } else if (is_a($model, Theme::class)) {
+                $upcomingShows = Anime::whereTheme($model)
+                    ->upcomingShows()
                     ->get('id');
             } else {
-                if (is_int($genre)) {
-                    $genre = Genre::findOrFail($genre, 'id');
-                }
-
-                $upcomingShows = Anime::whereGenre($genre)
-                    ->upcomingShows()
+                $upcomingShows = Anime::upcomingShows()
                     ->get('id');
             }
 
@@ -119,20 +119,27 @@ class ExploreCategory extends KModel implements Sitemapable
     /**
      * Returns the current most popular anime.
      *
-     * @param Genre|int $genre
+     * @param Genre|Theme $model
      * @return ExploreCategory
      */
-    public function shows_we_love(Genre|int $genre): ExploreCategory
+    public function shows_we_love(Genre|Theme $model): ExploreCategory
     {
         if ($this->type === ExploreCategoryTypes::Shows) {
-            if (is_int($genre)) {
-                $genre = Genre::findOrFail($genre, 'id');
+            if (is_a($model, Genre::class)) {
+                $randomShows = $model->animes()
+                    ->inRandomOrder()
+                    ->limit(10)
+                    ->get('id');
+            } else if (is_a($model, Theme::class)) {
+                $randomShows = $model->animes()
+                    ->inRandomOrder()
+                    ->limit(10)
+                    ->get('id');
+            } else {
+                $randomShows = Anime::inRandomOrder()
+                    ->limit(10)
+                    ->get('id');
             }
-
-            $randomShows = $genre->animes()
-                ->inRandomOrder()
-                ->limit(10)
-                ->get('id');
 
             foreach($randomShows as $randomShow) {
                 $this->explore_category_items->add(new ExploreCategoryItem([
