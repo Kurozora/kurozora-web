@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Livewire\Theme\CreateThemeForm;
+use App\Http\Livewire\Theme\Details as ThemeDetails;
 use App\Http\Livewire\Theme\Index as ThemeIndex;
 
 Route::prefix('/themes')
@@ -9,6 +9,9 @@ Route::prefix('/themes')
         Route::get('/', ThemeIndex::class)
             ->name('.index');
 
-        Route::get('/create', CreateThemeForm::class)
-            ->name('.create');
+        Route::prefix('{theme}')
+            ->group(function () {
+                Route::get('/', ThemeDetails::class)
+                    ->name('.details');
+            });
     });
