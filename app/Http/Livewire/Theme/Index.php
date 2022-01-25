@@ -2,57 +2,30 @@
 
 namespace App\Http\Livewire\Theme;
 
-use App\Models\AppTheme;
+use App\Models\Theme;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Livewire\Component;
-use Livewire\WithPagination;
 
 class Index extends Component
 {
-    use WithPagination;
-
     /**
-     * The component's filters.
+     * The object containing the collection of themes.
      *
-     * @var array $filter
+     * @var Collection|Theme[] $themes
      */
-    public array $filter = [
-        'search' => '',
-        'order_type' => '',
-        'per_page' => 25,
-    ];
+    public Collection|array $themes;
 
     /**
      * Prepare the component.
      *
      * @return void
      */
-    public function mount() {}
-
-    /**
-     * The computed themes property.
-     *
-     * @return LengthAwarePaginator
-     */
-    private function getThemesAttribute(): LengthAwarePaginator
+    public function mount()
     {
-        $themes = AppTheme::query();
-
-        // Search
-        if (!empty($this->filter['search'])) {
-            $themes = $themes->where('name', 'like', '%' . $this->filter['search'] . '%');
-        }
-
-        // Order
-        if (!empty($this->filter['order_type'])) {
-            $themes = $themes->orderBy('name', $this->filter['order_type']);
-        }
-
-        // Paginate
-        return $themes->paginate($this->filter['per_page'] ?? 25);
+        $this->themes = Theme::all();
     }
 
     /**
@@ -62,8 +35,6 @@ class Index extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.theme.index', [
-            'themes' => $this->getThemesAttribute()
-        ]);
+        return view('livewire.theme.index');
     }
 }
