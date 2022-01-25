@@ -2,6 +2,7 @@
 
 namespace Tests\API;
 
+use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
@@ -50,7 +51,7 @@ class ReminderAnimeTest extends TestCase
         /** @var Anime $anime */
         $anime = Anime::factory()->create();
 
-        $this->user->library()->attach($anime);
+        $this->user->library()->attach($anime, ['status' => UserLibraryStatus::Watching]);
 
         // Attach a receipt to the user
         $this->user->receipt()->create([
@@ -88,7 +89,7 @@ class ReminderAnimeTest extends TestCase
         /** @var Anime $anime */
         $anime = Anime::factory()->create();
 
-        $this->user->library()->attach($anime);
+        $this->user->library()->attach($anime, ['status' => UserLibraryStatus::Watching]);
         $this->user->reminder_anime()->attach($anime->id);
 
         // Attach a receipt to the user
