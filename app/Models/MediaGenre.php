@@ -3,21 +3,30 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class MediaGenre extends KModel
+class MediaGenre extends Pivot
 {
     // Table name
     const TABLE_NAME = 'media_genres';
     protected $table = self::TABLE_NAME;
 
     /**
-     * The anime belonging to the media genre.
+     * Indicates if the IDs are auto-incrementing.
      *
-     * @return BelongsTo
+     * @var bool
      */
-    public function anime(): BelongsTo
+    public $incrementing = true;
+
+    /**
+     * Returns the model in the media theme.
+     *
+     * @return MorphTo
+     */
+    public function model(): MorphTo
     {
-        return $this->belongsTo(Anime::class, 'media_id');
+        return $this->morphTo();
     }
 
     /**
