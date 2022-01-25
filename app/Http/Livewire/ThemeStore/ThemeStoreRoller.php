@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Theme;
+namespace App\Http\Livewire\ThemeStore;
 
 use App\Models\AppTheme;
 use Illuminate\Contracts\Foundation\Application;
@@ -9,7 +9,7 @@ use Illuminate\Contracts\View\View;
 use JetBrains\PhpStorm\NoReturn;
 use Livewire\Component;
 
-class ThemeRoller extends Component
+class ThemeStoreRoller extends Component
 {
     /**
      * The component's state.
@@ -63,6 +63,6 @@ class ThemeRoller extends Component
      */
     public function render(): Factory|View|Application
     {
-        return view('livewire.theme.theme-roller');
+        return view('livewire.theme-store.theme-store-roller');
     }
 }
