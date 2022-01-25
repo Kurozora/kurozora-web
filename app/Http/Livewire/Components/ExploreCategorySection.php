@@ -9,6 +9,7 @@ use App\Models\ExploreCategory;
 use App\Models\ExploreCategoryItem;
 use App\Models\Genre;
 use App\Models\Person;
+use App\Models\Theme;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -32,6 +33,13 @@ class ExploreCategorySection extends Component
     public ?Genre $genre = null;
 
     /**
+     * The object containing the theme data.
+     *
+     * @var Theme|null $genre
+     */
+    public ?Theme $theme = null;
+
+    /**
      * The array containing the explore category item data.
      *
      * @var ExploreCategoryItem[] $exploreCategoryItems
@@ -50,15 +58,38 @@ class ExploreCategorySection extends Component
      *
      * @param ExploreCategory $exploreCategory
      * @param Genre|null $genre
+     * @param Theme|null $theme
      * @return void
      */
-    public function mount(ExploreCategory $exploreCategory, ?Genre $genre = null)
+    public function mount(ExploreCategory $exploreCategory, ?Genre $genre = null, ?Theme $theme = null)
     {
         $this->exploreCategory = $exploreCategory;
-        $this->genre = $genre->id ? $genre : null;
+        $mostPopularShows = null;
+        $upcomingShows = null;
+
+        if (!empty($genre->id)) {
+            $this->genre = $genre;
+
+            $anime = Anime::whereGenre($genre);
+            $mostPopularShows = $anime->mostPopular()->count();
+            $upcomingShows = $anime->upcomingShows()->count();
+        } else {
+            $this->genre = null;
+        }
+
+        if (!empty($theme->id)) {
+            $this->theme = $theme;
+
+            $anime = Anime::whereTheme($theme);
+            $mostPopularShows = $anime->mostPopular()->count();
+            $upcomingShows = $anime->upcomingShows()->count();
+        } else {
+            $this->theme = null;
+        }
+
         $this->exploreCategoryCount = match ($exploreCategory->type) {
-            ExploreCategoryTypes::MostPopularShows => $this->genre ? Anime::whereGenre($genre)->mostPopular()->count() : Anime::mostPopular()->count(),
-            ExploreCategoryTypes::UpcomingShows => $this->genre ? Anime::whereGenre($genre)->upcomingShows()->count() : Anime::upcomingShows()->count(),
+            ExploreCategoryTypes::MostPopularShows => $mostPopularShows ?? Anime::mostPopular()->count(),
+            ExploreCategoryTypes::UpcomingShows => $upcomingShows ?? Anime::upcomingShows()->count(),
             ExploreCategoryTypes::Characters => Character::bornToday()->count(),
             ExploreCategoryTypes::People => Person::bornToday()->count(),
             default => $exploreCategory->explore_category_items()->count()
@@ -73,8 +104,8 @@ class ExploreCategorySection extends Component
     public function loadExploreCategoryItems()
     {
         $this->exploreCategoryItems = match ($this->exploreCategory->type) {
-            ExploreCategoryTypes::MostPopularShows => $this->exploreCategory->most_popular_shows($this->genre)->explore_category_items,
-            ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcoming_shows($this->genre)->explore_category_items,
+            ExploreCategoryTypes::MostPopularShows => $this->exploreCategory->most_popular_shows($this->genre ?? $this->theme)->explore_category_items,
+            ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcoming_shows($this->genre ?? $this->theme)->explore_category_items,
             ExploreCategoryTypes::Characters => $this->exploreCategory->charactersBornToday()->explore_category_items,
             ExploreCategoryTypes::People => $this->exploreCategory->peopleBornToday()->explore_category_items,
             default => $this->exploreCategory->explore_category_items
