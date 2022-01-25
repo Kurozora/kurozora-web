@@ -25,6 +25,11 @@ class CreateExploreCategoriesTable extends Migration
             $table->boolean('is_global');
             $table->timestamps();
         });
+
+        Schema::table(ExploreCategory::TABLE_NAME, function (Blueprint $table) {
+            // Set unique key constraints
+            $table->unique(['slug']);
+        });
     }
 
     /**
