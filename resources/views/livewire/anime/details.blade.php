@@ -255,6 +255,12 @@
                         </x-slot>
                     </x-information-list>
 
+                    <x-information-list id="themes" title="{{ __('Themes') }}" icon="{{ asset('images/symbols/crown.svg') }}">
+                        <x-slot name="information">
+                            {{ $anime->themes?->pluck('name')->join(',  ', ' and ') ?: '-' }}
+                        </x-slot>
+                    </x-information-list>
+
                     @if (in_array($anime->media_type->name, ['Unknown', 'TV', 'ONA']))
                         <x-information-list id="episodes" title="{{ __('Episodes') }}" icon="{{ asset('images/symbols/film.svg') }}">
                             <x-slot name="information">
