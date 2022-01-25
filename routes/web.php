@@ -31,6 +31,7 @@ require 'Web/Profile.php';
 require 'Web/Seasons.php';
 require 'Web/Studios.php';
 require 'Web/Theme.php';
+require 'Web/Theme Store.php';
 
 // Knowledge Base
 require 'Web/Knowledge Base.php';
