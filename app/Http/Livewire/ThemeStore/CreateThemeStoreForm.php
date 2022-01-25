@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Livewire\Theme;
+namespace App\Http\Livewire\ThemeStore;
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
-class CreateThemeForm extends Component
+class CreateThemeStoreForm extends Component
 {
     /**
      * Render the component.
@@ -16,6 +16,6 @@ class CreateThemeForm extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.theme.create-theme-form');
+        return view('livewire.theme-store.create-theme-store-form');
     }
 }
