@@ -65,6 +65,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     const CACHE_KEY_CHARACTERS_SECONDS = 120 * 60;
     const CACHE_KEY_EPISODES_SECONDS = 120 * 60;
     const CACHE_KEY_GENRES_SECONDS = 120 * 60;
+    const CACHE_KEY_THEMES_SECONDS = 120 * 60;
     const CACHE_KEY_LANGUAGES_SECONDS = 120 * 60;
     const CACHE_KEY_RELATIONS_SECONDS = 120 * 60;
     const CACHE_KEY_SEASONS_SECONDS = 120 * 60;
@@ -572,7 +573,8 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function genres(): HasManyThrough
     {
-        return $this->hasManyThrough(Genre::class, MediaGenre::class, 'media_id', 'id', 'id', 'genre_id');
+        return $this->hasManyThrough(Genre::class, MediaGenre::class, 'model_id', 'id', 'id', 'genre_id')
+            ->where('model_type', '=', Anime::class);
     }
 
     /**
@@ -598,7 +600,8 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function media_genres(): HasMany
     {
-        return $this->hasMany(MediaGenre::class, 'media_id');
+        return $this->hasMany(MediaGenre::class, 'model_id')
+            ->where('model_type', '=', Anime::class);
     }
 
     /**
@@ -614,6 +617,60 @@ class Anime extends KModel implements HasMedia, Sitemapable
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_GENRES_SECONDS, function () {
             return $this->media_genres;
+        });
+    }
+
+    /**
+     * The themes of this Anime
+     *
+     * @return HasManyThrough
+     */
+    public function themes(): HasManyThrough
+    {
+        return $this->hasManyThrough(Theme::class, MediaTheme::class, 'model_id', 'id', 'id', 'theme_id')
+            ->where('model_type', '=', Anime::class);
+    }
+
+    /**
+     * Returns this anime's themes
+     *
+     * @return mixed
+     */
+    public function getThemes(): mixed
+    {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'anime.themes', 'id' => $this->id]);
+
+        // Retrieve or save cached result
+        return Cache::remember($cacheKey, self::CACHE_KEY_THEMES_SECONDS, function () {
+            return $this->themes;
+        });
+    }
+
+    /**
+     * The themes of this Anime
+     *
+     * @return HasMany
+     */
+    public function media_themes(): HasMany
+    {
+        return $this->hasMany(MediaTheme::class, 'model_id')
+            ->where('model_type', '=', Anime::class);
+    }
+
+    /**
+     * Returns this anime's themes
+     *
+     * @return mixed
+     */
+    public function getMediaThemes(): mixed
+    {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'anime.media_themes', 'id' => $this->id]);
+
+        // Retrieve or save cached result
+        return Cache::remember($cacheKey, self::CACHE_KEY_THEMES_SECONDS, function () {
+            return $this->media_themes;
         });
     }
 
@@ -763,6 +820,18 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function scopeWhereGenre(Builder $query, Genre $genre): Builder
     {
         return $query->whereRelation('genres', 'genre_id', '=', $genre->id);
+    }
+
+    /**
+     * Eloquent builder scope that limits the query to the given theme.
+     *
+     * @param Builder $query
+     * @param Theme $theme
+     * @return Builder
+     */
+    public function scopeWhereTheme(Builder $query, Theme $theme): Builder
+    {
+        return $query->whereRelation('themes', 'theme_id', '=', $theme->id);
     }
 
     /**

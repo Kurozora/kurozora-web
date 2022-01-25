@@ -16,14 +16,4 @@ class AnimeModerator extends Pivot
      * @var bool
      */
     public $incrementing = true;
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
 }
