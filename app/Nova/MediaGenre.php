@@ -8,7 +8,8 @@ use Illuminate\Validation\ValidationException;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\MorphTo;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Validator;
 
@@ -66,21 +67,21 @@ class MediaGenre extends Resource
 
             Heading::make('Meta information'),
 
-            Select::make('Type')
-                ->options([
-                    'anime' => 'anime',
-                    'manga' => 'manga'
+            MorphTo::make('Model')
+                ->types([
+                    Anime::class,
+//                    Manga::class,
                 ])
-                ->sortable()
-                ->required(),
+                ->searchable()
+                ->sortable(),
+
+            Text::make('Model Type')
+                ->onlyOnIndex()
+                ->onlyOnDetail()
+                ->sortable(),
 
             BelongsTo::make('Genre')
                 ->sortable()
-                ->required(),
-
-            BelongsTo::make('Media', 'anime', Anime::class)
-                ->sortable()
-                ->searchable()
                 ->required(),
         ];
     }
@@ -104,7 +105,7 @@ class MediaGenre extends Resource
                 $query->whereNotIn('id', [$resourceID]);
             }
 
-            return $query->where('media_id', $anime)->where('genre_id', $genre);
+            return $query->where('model_id', $anime)->where('genre_id', $genre);
         });
 
         $uniqueValidator = Validator::make($request->only('genre'), [
