@@ -14,7 +14,7 @@ class GenreController extends Controller
      *
      * @return JsonResponse
      */
-    public function overview(): JsonResponse
+    public function index(): JsonResponse
     {
         // Get all genres and format them
         $genres = Genre::all();
