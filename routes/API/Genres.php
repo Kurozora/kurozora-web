@@ -5,9 +5,9 @@ use App\Http\Controllers\GenreController;
 Route::prefix('/genres')
     ->name('.genres')
     ->group(function () {
-        Route::get('/', [GenreController::class, 'overview'])
+        Route::get('/', [GenreController::class, 'index'])
             ->middleware('auth.kurozora:optional')
-            ->name('.overview');
+            ->name('.index');
 
         Route::prefix('{genre}')
             ->group(function () {

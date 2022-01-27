@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "description": "Integrate tracking shows with Kurozora content.\n *** \nThe Kurozora API is a web service that lets you access information about the media found in the Kurozora&nbsp;Catalog and the user's personal Kurozora&nbsp;Library. Here's what each one includes:\n- The Kurozora&nbsp;Catalog includes all resources available in Kurozora.\n- The user's Kurozora&nbsp;Library contains only those resources that the user added to their personal library. For example, it contains shows added to their tracking list, and favorites.\n\nUse this service to retrieve information about people, characters, episodes, seasons, genres, shows, studios, feeds, users, and the users' library.\nWith proper authorization from the user, you can also create or modify their library, apply ratings to shows, create or modify feeds and react on replies.",
-    "version": "1.3.0",
+    "version": "1.3.1",
     "title": "Kurozora API",
     "termsOfService": "https://swagger.io/terms/",
     "contact": {
@@ -69,8 +69,8 @@
       "description": "Everything user related"
     },
     {
-      "name": "themes",
-      "description": "Everything theme related"
+      "name": "theme-store",
+      "description": "Everything theme store related"
     },
     {
       "name": "store",
@@ -2756,7 +2756,7 @@
         }
       }
     },
-    "/themes": {
+    "/theme-store": {
       "get": {
         "security": [
           {
@@ -2767,14 +2767,14 @@
           }
         ],
         "tags": [
-          "themes"
+          "theme-store"
         ],
-        "operationId": "getThemes",
-        "summary": "Retrieve an overview of themes.",
-        "description": "This endpoint will retrieve an overview of themes.",
+        "operationId": "getThemeStore",
+        "summary": "Retrieve an overview of theme store items.",
+        "description": "This endpoint will retrieve an overview of theme store items.",
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetThemesSuccess"
+            "$ref": "#/components/responses/GetThemeStoreSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2782,7 +2782,7 @@
         }
       }
     },
-    "/themes/{themeID}": {
+    "/theme-store/{themeID}": {
       "get": {
         "security": [
           {
@@ -2793,11 +2793,11 @@
           }
         ],
         "tags": [
-          "themes"
+          "theme-store"
         ],
-        "operationId": "getThemesDetails",
-        "summary": "Get specific theme details.",
-        "description": "This endpoint will retrieve the details of a specific theme.",
+        "operationId": "getThemeStoreDetails",
+        "summary": "Get specific theme store item details.",
+        "description": "This endpoint will retrieve the details of a specific theme store item.",
         "parameters": [
           {
             "in": "path",
@@ -2806,12 +2806,12 @@
               "type": "integer"
             },
             "required": true,
-            "description": "ID of the theme."
+            "description": "ID of the theme store item."
           }
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetThemesDetailsSuccess"
+            "$ref": "#/components/responses/GetThemeStoreDetailsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -5197,7 +5197,7 @@
                     "attributes": {
                       "name": "Action",
                       "color": "#FFE4B9",
-                      "symbol": "https://raw.githubusercontent.com/Kurozora/anime/master/genre-symbols/Action.png",
+                      "symbol": "https://kurozora-cdn.app/1/symbol.png",
                       "description": "An action story is similar to adventure, and the protagonist usually takes a risky turn, which leads to desperate situations (including explosions, fight scenes, daring escapes, etc.).",
                       "isNSFW": false
                     }
@@ -5209,7 +5209,7 @@
                     "attributes": {
                       "name": "Adventure",
                       "color": "#CAF0FF",
-                      "symbol": "https://raw.githubusercontent.com/Kurozora/anime/master/genre-symbols/Adventure.png",
+                      "symbol": "https://kurozora-cdn.app/2/symbol.png",
                       "description": "An adventure story is about a protagonist who journeys to epic or distant places to accomplish something.",
                       "isNSFW": false
                     }
@@ -5235,7 +5235,7 @@
                     "attributes": {
                       "name": "Action",
                       "color": "#FFE4B9",
-                      "symbol": "https://raw.githubusercontent.com/Kurozora/anime/master/genre-symbols/Action.png",
+                      "symbol": "https://kurozora-cdn.app/1/symbol.png",
                       "description": "An action story is similar to adventure, and the protagonist usually takes a risky turn, which leads to desperate situations (including explosions, fight scenes, daring escapes, etc.).",
                       "isNSFW": false
                     }
@@ -5322,8 +5322,8 @@
                               "username": "Kirito",
                               "activityStatus": "Online",
                               "biography": "An interesting biography.",
-                              "profileImageURL": "https://kurozora.app/storage/2/ProfileImage.png",
-                              "bannerImageURL": "https://kurozora.app/storage/2/BannerImage.png",
+                              "profileImageURL": "https://kurozora-cdn.app/2/ProfileImage.png",
+                              "bannerImageURL": "https://kurozora-cdn.app/2/BannerImage.png",
                               "followerCount": 10,
                               "followingCount": 12,
                               "reputationCount": 14
@@ -5634,8 +5634,8 @@
           }
         }
       },
-      "GetThemesSuccess": {
-        "description": "Successful GET Themes JSON response",
+      "GetThemeStoreSuccess": {
+        "description": "Successful GET Theme Store JSON response",
         "content": {
           "application/json": {
             "schema": {
@@ -5644,20 +5644,20 @@
                 "data": [
                   {
                     "id": 1,
-                    "type": "themes",
+                    "type": "theme-store",
                     "attributes": {
                       "name": "Watermelon",
-                      "screenshot": "https://kurozora.app/storage/1/Screenshot.jpeg",
-                      "downloadLink": "/api/v1/themes/1/download"
+                      "screenshot": "https://kurozora-cdn.app/1/Screenshot.jpeg",
+                      "downloadLink": "/api/v1/theme-store/1/download"
                     }
                   },
                   {
                     "id": 2,
-                    "type": "themes",
+                    "type": "theme-store",
                     "attributes": {
                       "name": "Blueberry",
-                      "screenshot": "https://kurozora.app/storage/2/Screenshot.jpeg",
-                      "downloadLink": "/api/v1/themes/2/download"
+                      "screenshot": "https://kurozora-cdn.app/2/Screenshot.jpeg",
+                      "downloadLink": "/api/v1/theme-store/2/download"
                     }
                   }
                 ]
@@ -5666,8 +5666,8 @@
           }
         }
       },
-      "GetThemesDetailsSuccess": {
-        "description": "Successful GET Theme Details JSON response",
+      "GetThemeStoreDetailsSuccess": {
+        "description": "Successful GET Theme Store Details JSON response",
         "content": {
           "application/json": {
             "schema": {
@@ -5676,12 +5676,12 @@
                 "data": [
                   {
                     "id": 1,
-                    "type": "themes",
-                    "href": "/v1/themes/1",
+                    "type": "theme-store",
+                    "href": "/v1/theme-store/1",
                     "attributes": {
                       "name": "Tatum Orn",
-                      "screenshot": "https://kurozora.app/storage/1/Screenshot.jpeg",
-                      "downloadLink": "https://kurozora.app/api/v1/themes/1/download"
+                      "screenshot": "https://kurozora-cdn.app/1/Screenshot.jpeg",
+                      "downloadLink": "https://kurozora.app/api/v1/theme-store/1/download"
                     }
                   }
                 ]

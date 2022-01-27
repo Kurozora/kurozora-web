@@ -16,50 +16,50 @@ class AppThemeController extends Controller
      *
      * @return JsonResponse
      */
-    function overview(): JsonResponse
+    function index(): JsonResponse
     {
-        $themes = AppTheme::with('media')->get();
+        $appThemes = AppTheme::with('media')->get();
 
         return JSONResult::success([
-            'data' => AppThemeResource::collection($themes)
+            'data' => AppThemeResource::collection($appThemes)
         ]);
     }
 
     /**
      * Returns the information for a theme.
      *
-     * @param AppTheme $theme
+     * @param AppTheme $appTheme
      * @return JsonResponse
      */
-    public function details(AppTheme $theme): JsonResponse
+    public function details(AppTheme $appTheme): JsonResponse
     {
         return JSONResult::success([
-            'data' => AppThemeResource::collection([$theme])
+            'data' => AppThemeResource::collection([$appTheme])
         ]);
     }
 
     /**
      * Serves the plist file to be downloaded
      *
-     * @param AppTheme $theme
+     * @param AppTheme $appTheme
      * @return Response
      * @throws AuthorizationException
      */
-    function download(AppTheme $theme): Response
+    function download(AppTheme $appTheme): Response
     {
         // Get the auth user
 //        $user = Auth::user();
 //
 //        if (empty($user->receipt) || !$user->receipt->is_subscribed ?? true) {
-//            throw new AuthorizationException('Premium themes are only available to pro users.');
+//            throw new AuthorizationException('Premium platform themes are only available to pro users.');
 //        }
 
         // Increment the download count of the theme
-        $theme->update([
-            'download_count' => $theme->download_count + 1
+        $appTheme->update([
+            'download_count' => $appTheme->download_count + 1
         ]);
 
         // Return the file
-        return $theme->download();
+        return $appTheme->download();
     }
 }
