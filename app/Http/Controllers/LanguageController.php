@@ -14,7 +14,7 @@ class LanguageController extends Controller
      *
      * @return JsonResponse
      */
-    public function overview(): JsonResponse
+    public function index(): JsonResponse
     {
         // Get all languages and format them
         $allLanguages = Language::get()->map(function($language) {
