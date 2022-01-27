@@ -22,13 +22,17 @@ class ImportAnimeGenreProcessor
     public function process(Collection|array $kMediaGenres)
     {
         foreach ($kMediaGenres as $kMediaGenre) {
-            $anime = Anime::withoutGlobalScope(new TvRatingScope)->firstWhere('mal_id', $kMediaGenre->media_id);
-            $genre = Genre::withoutGlobalScope(new TvRatingScope)->firstWhere([
-                ['name', $kMediaGenre->genre->genre],
-            ]);
-            $theme = Theme::withoutGlobalScope(new TvRatingScope)->firstWhere([
-                ['name', $kMediaGenre->genre->genre],
-            ]);
+            $anime = Anime::withoutGlobalScope(new TvRatingScope)
+                ->firstWhere('mal_id', $kMediaGenre->media_id);
+            $genre = Genre::withoutGlobalScope(new TvRatingScope)
+                ->firstWhere('name', $kMediaGenre->genre->genre);
+            $theme = Theme::withoutGlobalScope(new TvRatingScope)
+                ->firstWhere('name', $kMediaGenre->genre->genre);
+
+            if (!$anime) {
+                \Log::info('Anime not found: ' . $kMediaGenre->media_id);
+                return;
+            }
 
             if ($genre) {
                 $mediaGenre = MediaGenre::firstWhere([
@@ -46,7 +50,9 @@ class ImportAnimeGenreProcessor
                 }
             } else if ($theme) {
                 $mediaTheme = MediaTheme::firstWhere([
-                   ['nam', $kMediaGenre->genre->genre]
+                    ['model_type', Anime::class],
+                    ['model_id', $anime->id],
+                    ['theme_id', $theme->id],
                 ]);
 
                 if (empty($mediaTheme)) {
@@ -57,8 +63,6 @@ class ImportAnimeGenreProcessor
                     ]);
                 }
             }
-
-
         }
     }
 }
