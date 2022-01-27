@@ -1,6 +1,6 @@
 @php
     $gridClass = match($exploreCategory->type) {
-        \App\Enums\ExploreCategoryTypes::Genres => 'grid sm:grid-cols-2 lg:grid-cols-4 gap-4',
+        \App\Enums\ExploreCategoryTypes::Genres, \App\Enums\ExploreCategoryTypes::Themes => 'grid sm:grid-cols-2 lg:grid-cols-4 gap-4',
         \App\Enums\ExploreCategoryTypes::People, \App\Enums\ExploreCategoryTypes::Characters => 'grid grid-cols-3 gap-4 sm:grid-cols-4 sm:auto-cols-[unset] md:grid-cols-5 lg:grid-cols-7',
         default => 'grid sm:grid-cols-2 sm:auto-cols-[unset] lg:grid-cols-3 gap-4',
     };
@@ -55,6 +55,9 @@
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::Genres)
                         <x-lockups.genre-lockup :genre="$categoryItem->model" />
+                    @break
+                    @case(\App\Enums\ExploreCategoryTypes::Themes)
+                    <x-lockups.theme-lockup :theme="$categoryItem->model" />
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::Characters)
                         <x-lockups.character-lockup :character="$categoryItem->model" />
