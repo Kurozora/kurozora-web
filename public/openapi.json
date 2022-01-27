@@ -57,6 +57,10 @@
       "description": "Everything studio related"
     },
     {
+      "name": "themes",
+      "description": "Everything themes related"
+    },
+    {
       "name":"feed",
       "description":"Everything feed related"
     },
@@ -1155,6 +1159,53 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/GetPeopleCharactersSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/themes": {
+      "get": {
+        "tags": [
+          "themes"
+        ],
+        "operationId": "getThemes",
+        "summary": "Themes list.",
+        "description": "This endpoint will retrieve the themes.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetThemesSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/themes/{themeID}": {
+      "get": {
+        "tags": [
+          "themes"
+        ],
+        "operationId": "getThemeDetails",
+        "summary": "Get theme details.",
+        "description": "This endpoint will retrieve the details of a specific theme.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "themeID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the theme."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetThemesDetailsSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -3960,6 +4011,7 @@
                       },
                       "isNSFW": false,
                       "genres": [],
+                      "themes": [],
                       "firstAired": "1973-11-15",
                       "lastAired": "1974-02-07",
                       "airTime": "20:00:00",
@@ -4234,6 +4286,7 @@
                                 "background": null,
                                 "isNSFW": true,
                                 "genres": [],
+                                "themes": [],
                                 "firstAired": "2014-12-10",
                                 "lastAired": "2015-05-27",
                                 "airTime": "16:49:00",
@@ -4282,6 +4335,7 @@
                                 "background": null,
                                 "isNSFW": false,
                                 "genres": [],
+                                "themes": [],
                                 "firstAired": "2015-02-10",
                                 "lastAired": "2015-05-05",
                                 "airTime": "18:32:00",
@@ -4518,6 +4572,7 @@
                         "background": null,
                         "isNSFW": true,
                         "genres": [],
+                        "themes": [],
                         "firstAired": "2014-12-10",
                         "lastAired": "2015-05-27",
                         "airTime": "16:49:00",
@@ -4567,6 +4622,7 @@
                         "background": null,
                         "isNSFW": false,
                         "genres": [],
+                        "themes": [],
                         "firstAired": "2015-02-10",
                         "lastAired": "2015-05-05",
                         "airTime": "18:32:00",
@@ -4765,6 +4821,10 @@
                         "Action",
                         "Adventure"
                       ],
+                      "themes": [
+                        "Cars",
+                        "Demons"
+                      ],
                       "firstAired": "1973-11-15",
                       "lastAired": "1974-02-07",
                       "airTime": "20:00:00",
@@ -4817,6 +4877,7 @@
                       "background": null,
                       "isNSFW": false,
                       "genres": [],
+                      "themes": [],
                       "firstAired": "2014-09-28",
                       "lastAired": "2014-12-21",
                       "airTime": "19:24:00",
@@ -5246,6 +5307,70 @@
           }
         }
       },
+      "GetThemesSuccess": {
+        "description": "Successful GET Themes JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "themes",
+                    "href": "/v1/themes/1",
+                    "attributes": {
+                      "name": "Cars",
+                      "color": "#C5C5C5",
+                      "symbol": "https://kurozora-cdn.app/1/symbol.png",
+                      "description": "Stories that feature cars at the center of attention or involve racing.",
+                      "isNSFW": false
+                    }
+                  },
+                  {
+                    "id": 2,
+                    "type": "themes",
+                    "href": "/v1/themes/2",
+                    "attributes": {
+                      "name": "Demons",
+                      "color": "#99B6D8",
+                      "symbol": "https://kurozora-cdn.app/2/symbol.png",
+                      "description": "Supernatural and often malevolent being prevalent in religion, occultism, literature, fiction, mythology and folklore.",
+                      "isNSFW": false
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetThemesDetailsSuccess": {
+        "description": "Successful GET Themes Details JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "themes",
+                    "href": "/v1/themes/1",
+                    "attributes": {
+                      "name": "Cars",
+                      "color": "#C5C5C5",
+                      "symbol": "https://kurozora-cdn.app/1/symbol.png",
+                      "description": "Stories that feature cars at the center of attention or involve racing.",
+                      "isNSFW": false
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
       "PostAccessTokensUpdateSuccess": {
         "description": "Successful POST Access Token Update JSON response",
         "content": {
@@ -5446,6 +5571,7 @@
                               "background": null,
                               "isNSFW": false,
                               "genres": [],
+                              "themes": [],
                               "firstAired": "1973-11-15",
                               "lastAired": "1974-02-07",
                               "airTime": "20:00:00",
@@ -5498,6 +5624,7 @@
                               "background": null,
                               "isNSFW": false,
                               "genres": [],
+                              "themes": [],
                               "firstAired": "2014-09-28",
                               "lastAired": "2014-12-21",
                               "airTime": "19:24:00",
@@ -5569,6 +5696,7 @@
                       "background": null,
                       "isNSFW": false,
                       "genres": [],
+                      "themes": [],
                       "firstAired": "1973-11-15",
                       "lastAired": "1974-02-07",
                       "airTime": "20:00:00",
@@ -5621,6 +5749,7 @@
                       "background": null,
                       "isNSFW": false,
                       "genres": [],
+                      "themes": [],
                       "firstAired": "2014-09-28",
                       "lastAired": "2014-12-21",
                       "airTime": "19:24:00",
