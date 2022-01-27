@@ -11,6 +11,9 @@
                         @case(\App\Enums\ExploreCategoryTypes::Genres)
                             <x-simple-link href="{{ route('genres.index') }}">{{ __('See All') }}</x-simple-link>
                         @break
+                        @case(\App\Enums\ExploreCategoryTypes::Themes)
+                        <x-simple-link href="{{ route('themes.index') }}">{{ __('See All') }}</x-simple-link>
+                        @break
                         @default
                             <x-simple-link href="{{ route('explore.details', $exploreCategory) }}">{{ __('See All') }}</x-simple-link>
                     @endswitch
@@ -60,6 +63,14 @@
                                     :backgroundColor="$categoryItem->model->color"
                                     :backgroundImage="$categoryItem->model->symbol_image_url ?? asset('images/static/icon/logo.webp')"
                                 />
+                            @break
+                            @case(\App\Enums\ExploreCategoryTypes::Themes)
+                            <x-lockups.medium-lockup
+                                :href="route('themes.details', ['theme' => $categoryItem->model])"
+                                :title="$categoryItem->model->name"
+                                :backgroundColor="$categoryItem->model->color"
+                                :backgroundImage="$categoryItem->model->symbol_image_url ?? asset('images/static/icon/logo.webp')"
+                            />
                             @break
                             @case(\App\Enums\ExploreCategoryTypes::Characters)
                                 <x-lockups.character-lockup :character="$categoryItem->model" />
