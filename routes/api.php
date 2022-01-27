@@ -33,6 +33,7 @@ Route::prefix('/v1')
         require 'API/Studios.php';
         require 'API/Store.php';
         require 'API/Themes.php';
+        require 'API/Theme Store.php';
         require 'API/Users.php';
     });
 

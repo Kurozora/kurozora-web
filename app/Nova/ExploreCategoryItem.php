@@ -68,7 +68,8 @@ class ExploreCategoryItem extends Resource
             MorphTo::make('Model')
                 ->types([
                     Anime::class,
-                    Genre::class
+                    Genre::class,
+                    Theme::class,
                 ])
                 ->searchable()
                 ->sortable(),

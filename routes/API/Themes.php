@@ -1,21 +1,18 @@
 <?php
 
-use App\Http\Controllers\AppThemeController;
+use App\Http\Controllers\ThemeController;
 
 Route::prefix('/themes')
     ->name('.themes')
     ->group(function () {
-        Route::get('/', [AppThemeController::class, 'overview'])
+        Route::get('/', [ThemeController::class, 'index'])
             ->middleware('auth.kurozora:optional')
-            ->name('.overview');
+            ->name('.index');
 
         Route::prefix('{theme}')
             ->group(function () {
-                Route::get('/', [AppThemeController::class, 'details'])
+                Route::get('/', [ThemeController::class, 'details'])
                     ->middleware('auth.kurozora:optional')
                     ->name('.details');
-
-                Route::get('/download', [AppThemeController::class, 'download'])
-                    ->name('.download');
             });
     });
