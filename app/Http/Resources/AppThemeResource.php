@@ -30,7 +30,7 @@ class AppThemeResource extends JsonResource
             'attributes'        => [
                 'screenshots'   => ImageResource::collection($this->resource->screenshot_image_collection),
                 'name'          => $this->resource->name,
-                'downloadLink'  => route('api.theme-store.download', ['theme' => $this->resource->id]),
+                'downloadLink'  => route('api.theme-store.download', ['appTheme' => $this->resource->id]),
                 'downloadCount' => $this->resource->download_count,
                 'version'       => $this->resource->version,
             ]
