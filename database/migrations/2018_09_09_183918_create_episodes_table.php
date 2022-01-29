@@ -22,6 +22,7 @@ class CreateEpisodesTable extends Migration
             $table->unsignedInteger('number_total');
             $table->unsignedMediumInteger('duration')->default(0);
             $table->dateTime('first_aired')->nullable();
+            $table->boolean('is_filler')->default(false);
             $table->boolean('verified')->default(false);
             $table->timestamps();
         });

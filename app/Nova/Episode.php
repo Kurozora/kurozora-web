@@ -141,6 +141,12 @@ class Episode extends Resource
                 ->sortable()
                 ->help('The duration of the episode in <b>seconds</b>. Usually the same as the duration of the anime, but can be different in special cases.'),
 
+            Boolean::make('Is Filler')
+                ->default(false)
+                ->required()
+                ->sortable()
+                ->help('Check the box if the episode is a filler, and the story is understood even if this episode is skipped.'),
+
             Boolean::make('Verified')
                 ->help('Check the box if the information is correct.'),
         ];
