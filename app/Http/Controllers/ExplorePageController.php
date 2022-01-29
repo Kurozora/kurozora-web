@@ -21,8 +21,8 @@ class ExplorePageController extends Controller
         // Get explore categories
         $exploreCategories = ExploreCategory::orderBy('position');
 
-        // Check if categories should be genre-specific.
-        if ($request->has('genre_id')) {
+        // Check if categories should be genre or theme specific.
+        if ($request->has('genre_id') || $request->has('theme_id')) {
             $exploreCategories->where('is_global', true);
         }
 
