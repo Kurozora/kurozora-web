@@ -652,6 +652,44 @@
             },
             "required": true,
             "description": "ID of the season."
+          },
+          {
+            "in": "query",
+            "name": "hide_fillers",
+            "schema": {
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ],
+              "default": 0,
+              "minimum": 0,
+              "maximum": 1
+            },
+            "required": false,
+            "description": "Indicates whether filler episodes should be included.\n- 0 = Include fillers\n- 1 = No fillers"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
           }
         ],
         "responses": {
@@ -4930,12 +4968,35 @@
                   {
                     "id": 1,
                     "type": "episodes",
-                    "href": "/v1/seasons/1/episodes",
+                    "href": "/v1/episodes/1",
                     "attributes": {
+                      "poster": {
+                        "url": "https://kurozora-cdn.app/episodes/1_poster.png",
+                        "height": 200,
+                        "width": 140,
+                        "backgroundColor": "#d2c6bd",
+                        "textColor1": "#30475d",
+                        "textColor2": "#8f2c1d",
+                        "textColor3": "#a46c39",
+                        "textColor4": "#ac7867"
+                      },
+                      "banner": {
+                        "url": "https://kurozora-cdn.app/episodes/1_banner.png",
+                        "height": 480,
+                        "width": 640,
+                        "backgroundColor": "#c4dbdf",
+                        "textColor1": "#3e779f",
+                        "textColor2": "#6bb2cc",
+                        "textColor3": "#5d5b5e",
+                        "textColor4": "#727466"
+                      },
                       "number": 1,
+                      "numberTotal": 1,
                       "title": "Episode 1",
-                      "firstAired": "29 Jul, 2020",
-                      "overview": "A short, or long description of the episode.",
+                      "synopsis": "A short, or long description of the episode.",
+                      "duration": "24 minutes",
+                      "firstAired": 959731200,
+                      "isFiller": false,
                       "isVerified": false,
                       "isWatched": true
                     }
@@ -4945,10 +5006,33 @@
                     "type": "episodes",
                     "href": "/v1/seasons/2/episodes",
                     "attributes": {
+                      "poster": {
+                        "url": "https://kurozora-cdn.app/episodes/2_poster.png",
+                        "height": 200,
+                        "width": 140,
+                        "backgroundColor": "#d2c6bd",
+                        "textColor1": "#30475d",
+                        "textColor2": "#8f2c1d",
+                        "textColor3": "#a46c39",
+                        "textColor4": "#ac7867"
+                      },
+                      "banner": {
+                        "url": "https://kurozora-cdn.app/episodes/2_banner.png",
+                        "height": 480,
+                        "width": 640,
+                        "backgroundColor": "#c4dbdf",
+                        "textColor1": "#3e779f",
+                        "textColor2": "#6bb2cc",
+                        "textColor3": "#5d5b5e",
+                        "textColor4": "#727466"
+                      },
                       "number": 2,
+                      "numberTotal": 2,
                       "title": "Episode 2",
-                      "firstAired": "5 Aug, 2020",
-                      "overview": "A long, or short description of the episode.",
+                      "synopsis": "A long, or short description of the episode.",
+                      "duration": "24 minutes",
+                      "firstAired": 959731200,
+                      "isFiller": true,
                       "isVerified": false,
                       "isWatched": false
                     }
