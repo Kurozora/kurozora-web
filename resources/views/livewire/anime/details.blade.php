@@ -235,7 +235,7 @@
                         </x-slot>
 
                         <x-slot name="footer">
-                            {{ $anime->media_type->description }}
+                            <p class="text-sm">{{ $anime->media_type->description }}</p>
                         </x-slot>
                     </x-information-list>
 
@@ -245,7 +245,7 @@
                         </x-slot>
 
                         <x-slot name="footer">
-                            {{ $anime->source->description }}
+                            <p class="text-sm">{{ $anime->source->description }}</p>
                         </x-slot>
                     </x-information-list>
 
