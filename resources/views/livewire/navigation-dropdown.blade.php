@@ -200,6 +200,8 @@
                                     {{ __('Library') }}
                                 </x-dropdown-link>
 
+                                <div class="border-t border-gray-100"></div>
+
                                 {{-- More Pages --}}
                                 <div class="block px-4 py-2 text-xs text-gray-400">
                                     {{ __('More') }}
