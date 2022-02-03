@@ -17,7 +17,8 @@ class ThemeController extends Controller
     public function index(): JsonResponse
     {
         // Get all themes and format them
-        $themes = Theme::all();
+        $themes = Theme::orderBy('name')
+            ->get();
 
         // Show themes in response
         return JSONResult::success([

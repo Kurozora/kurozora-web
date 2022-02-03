@@ -305,6 +305,8 @@ class Anime extends Resource
 
             HasMany::make('Genres', 'media_genres', MediaGenre::class),
 
+            HasMany::make('Themes', 'media_themes', MediaTheme::class),
+
             HasMany::make('Seasons'),
 
             HasMany::make('Cast'),
