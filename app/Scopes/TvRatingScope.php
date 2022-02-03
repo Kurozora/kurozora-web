@@ -7,7 +7,6 @@ use Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
-use Request;
 
 class TvRatingScope implements Scope
 {
@@ -24,7 +23,7 @@ class TvRatingScope implements Scope
             if (!empty($tvRating)) {
                 $builder->where('tv_rating_id', '<=', $tvRating->id);
             }
-        } else if (Request::wantsJson()) {
+        } else {
             // User not signed in so default to user friendly.
             $builder->where('tv_rating_id', '<=', 4);
         }
