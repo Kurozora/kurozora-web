@@ -25,22 +25,24 @@ class ImportAnimeRelationProcessor
             $relatedAnime = Anime::withoutGlobalScope(new TvRatingScope)->firstWhere('mal_id', $kRelatedMedia->related_id);
             $relation = Relation::firstWhere('name', Str::title($kRelatedMedia->related->related));
 
-            $mediaRelation = MediaRelation::where([
-                ['model_id', $anime->id],
-                ['model_type', 'anime'],
-                ['relation_id', $relation->id],
-                ['related_id', $relatedAnime->id],
-                ['related_type', 'anime'],
-            ])->first();
+            if (!empty($anime) && !empty($relatedAnime)) {
+                $mediaRelation = MediaRelation::where([
+                    ['model_id', $anime->id],
+                    ['model_type', Anime::class],
+                    ['relation_id', $relation->id],
+                    ['related_id', $relatedAnime->id],
+                    ['related_type', Anime::class],
+                ])->first();
 
-            if (empty($mediaRelation)) {
-                MediaRelation::create([
-                    'model_id' => $anime->id,
-                    'model_type' => 'anime',
-                    'relation_id' => $relation->id,
-                    'related_id' => $relatedAnime->id,
-                    'related_type' => 'anime',
-                ]);
+                if (empty($mediaRelation)) {
+                    MediaRelation::create([
+                        'model_id' => $anime->id,
+                        'model_type' => Anime::class,
+                        'relation_id' => $relation->id,
+                        'related_id' => $relatedAnime->id,
+                        'related_type' => Anime::class,
+                    ]);
+                }
             }
         }
     }

@@ -43,18 +43,18 @@ class ImportPersonProcessor
                     'alternative_names' => explode(', ', $kPerson->alternative_name),
                     'about' => $kPerson->more,
                     'birthdate' => empty($birthDate) ? null : Carbon::parse($birthDate),
-                    'image' => $kPerson->image_url,
                     'website_urls' => empty($kPerson->website) ? null : explode(', ', $kPerson->website),
                 ]);
             }
 
             // Download poster when available and if not already present
-            if (!empty($kPerson->image_url) && empty($person->profile_image)) {
+            if (!empty($kPerson->image_url) && !empty($person) && empty($person->profile_image)) {
                 try {
                     $name = $person->full_name ?: $person->full_given_name;
-                    $person->updatePosterImage($kPerson->image_url, $name);
+                    $person->updateProfileImage($kPerson->image_url, $name);
                 } catch (Exception $e) {
-                    Log::info($e->getMessage());
+                    Log::info('person: ' . $e->getMessage());
+                    Log::info('person mal id: ' . $kPerson->id);
                 }
             }
         }

@@ -27,6 +27,7 @@ class ImportAnimeProcessor
      */
     protected array $nsfwGenres = [
         'Ecchi',
+        'Erotica',
         'Harem',
         'Hentai',
         'Yaoi',
@@ -74,8 +75,15 @@ class ImportAnimeProcessor
                     'is_nsfw' => $this->getIsNSFW($kAnime),
                 ]);
             } else if ($this->getStatus($kAnime)->id != $anime->status->id) {
+                // Update the attributes if its airing status has changed
+
+                // Get max episode count
                 $episodeCount = max($anime->episode_count, $kAnime->episode);
+
+                // If it has season count then use that, otherwise check if it has an episode to add 1 as season count
                 $seasonCount = $anime->season_count ?: ($kAnime->episode ? 1 : 0);
+
+                // If it has video url then use that, otherwise update
                 $videoURL = $anime->video_url ?: ($kAnime->video_url ?: null);
 
                 $anime->update([
