@@ -39,16 +39,16 @@ class ImportCharacterProcessor
                     'nicknames' => empty($kCharacter->nickname) ? null : explode(', ', $kCharacter->nickname),
                     'name' => trim($kCharacter->name),
                     'about' => trim($kCharacter->about) ?: null,
-                    'image' => empty($kCharacter->image_url) ? null : $kCharacter->image_url,
                 ]));
             }
 
             // Download poster when available and if not already present
-            if (!empty($kCharacter->image_url) && empty($character->profile_image)) {
+            if (!empty($kCharacter->image_url) && !empty($character) && empty($character->profile_image)) {
                 try {
-                    $character->updatePosterImage($kCharacter->image_url, $character->name);
+                    $character->updateProfileImage($kCharacter->image_url, $character->name);
                 } catch (Exception $e) {
-                    Log::info($e->getMessage());
+                    Log::info('character:' . $e->getMessage());
+                    Log::info('character mal id: ' . $kCharacter->id);
                 }
             }
         }
