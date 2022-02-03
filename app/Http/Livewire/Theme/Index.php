@@ -25,7 +25,8 @@ class Index extends Component
      */
     public function mount()
     {
-        $this->themes = Theme::all();
+        $this->themes = Theme::orderBy('name')
+            ->get();
     }
 
     /**

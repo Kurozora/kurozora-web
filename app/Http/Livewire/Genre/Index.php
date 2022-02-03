@@ -25,7 +25,8 @@ class Index extends Component
      */
     public function mount()
     {
-        $this->genres = Genre::all();
+        $this->genres = Genre::orderBy('name')
+            ->get();
     }
 
     /**

@@ -17,7 +17,8 @@ class GenreController extends Controller
     public function index(): JsonResponse
     {
         // Get all genres and format them
-        $genres = Genre::all();
+        $genres = Genre::orderBy('name')
+            ->get();
 
         // Show genres in response
         return JSONResult::success([
