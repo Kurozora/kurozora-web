@@ -15,6 +15,9 @@ class DeleteUser implements DeletesUsers
      */
     public function delete(User $user)
     {
+        $user->tokens()->delete();
+        $user->sessions()->delete();
+        $user->notifications()->delete();
         $user->delete();
     }
 }
