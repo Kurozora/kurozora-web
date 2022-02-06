@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\DeletesUsers;
 use App\Helpers\JSONResult;
+use App\Http\Requests\DeleteUserRequest;
 use App\Http\Requests\GetFeedMessagesRequest;
 use App\Http\Requests\ResetPassword;
 use App\Http\Requests\SearchUserRequest;
@@ -10,7 +12,10 @@ use App\Http\Resources\FeedMessageResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceBasic;
 use App\Models\User;
+use Auth;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 
 class UserController extends Controller
@@ -95,5 +100,31 @@ class UserController extends Controller
             'data' => UserResourceBasic::collection($users),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
+    }
+
+    /**
+     * Deletes the user's account permanently.
+     *
+     * @param DeleteUserRequest $request
+     * @param DeletesUsers $deleter
+     * @return JsonResponse
+     * @throws AuthorizationException
+     */
+    public function delete(DeleteUserRequest $request, DeletesUsers $deleter): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Validate the password
+        if (!Hash::check($data['password'], Auth::user()->password)) {
+            throw new AuthorizationException(__('This password does not match our records.'));
+        }
+
+        // Delete the user and any relevant records
+        $deleter->delete(Auth::user()->fresh());
+
+        // Logout the user
+        Auth::logout();
+
+        return JSONResult::success();
     }
 }
