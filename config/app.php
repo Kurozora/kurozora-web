@@ -38,7 +38,7 @@ return [
     | or any other location as required by the application or its packages.
     */
 
-    'version' => '1.3.5-alpha.10',
+    'version' => '1.3.6-alpha.1',
 
     /*
     |--------------------------------------------------------------------------
