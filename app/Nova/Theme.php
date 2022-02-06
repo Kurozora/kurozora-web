@@ -116,6 +116,9 @@ class Theme extends Resource
                 ->rules('required')
                 ->sortable(),
 
+            Text::make('Description')
+                ->hideFromIndex(),
+
             Color::make('Color')
                 ->rules('required'),
 
