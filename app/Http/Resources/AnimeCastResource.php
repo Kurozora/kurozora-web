@@ -23,15 +23,13 @@ class AnimeCastResource extends JsonResource
      */
     public function toArray($request): array
     {
-        $resource = [
-            'id'            => $this->resource->id,
-            'type'          => 'cast',
-            'href'          => route('api.anime.cast', $this->resource->anime, false),
+        $resource = AnimeResourceIdentity::make($this->resource)->toArray($request);
+        $resource = array_merge($resource, [
             'attributes'    => [
                 'role'      => $this->resource->cast_role->only(['name', 'description']),
                 'language'  => $this->resource->language?->name,
             ]
-        ];
+        ]);
 
         $relationships = [];
 
