@@ -33,6 +33,10 @@
       "description": "Everything anime related"
     },
     {
+      "name": "cast",
+      "description": "Everything cast related"
+    },
+    {
       "name": "characters",
       "description": "Everything character related"
     },
@@ -1036,6 +1040,35 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/GetGenresDetailsSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/cast/{castID}": {
+      "get": {
+        "tags": [
+          "cast"
+        ],
+        "operationId": "getCast",
+        "summary": "Cast details.",
+        "description": "This endpoint will retrieve the details of a cast.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "castID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the cast."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetCastSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -5122,6 +5155,67 @@
                 "data": {
                   "isWatched": true
                 }
+              }
+            }
+          }
+        }
+      },
+      "GetCastSuccess": {
+        "description": "Successful GET Cast JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "show",
+                    "href": "/api/v1/anime/1",
+                    "attributes": {
+                      "role": {
+                        "name": "Protagonist",
+                        "description": "The leading character or one of the major characters."
+                      },
+                      "language": "Japanese"
+                    },
+                    "relationships": {
+                      "person": {
+                        "id": 10,
+                        "type": "people",
+                        "href": "/v1/people/10",
+                        "attributes": {
+                          "firstName": "Leatha",
+                          "lastName": "Dietrich",
+                          "occupation": "Installation and Repair Technician",
+                          "imageURL": "https://lorempixel.com/640/480/?22657"
+                        }
+                      },
+                      "character": {
+                        "id": 10,
+                        "type": "characters",
+                        "href": "/v1/characters/10",
+                        "attributes": {
+                          "name": "Savion Strosin",
+                          "about": "Quae rerum delectus neque et officiis fuga incidunt et. Exercitationem et consequatur quae sunt molestias repellat dolorem. Necessitatibus iusto voluptatem ea dolor quasi. Rerum voluptas vel voluptate. Aut est dignissimos et molestias dolores sed perspiciatis. Aperiam eveniet omnis quo vel ipsum incidunt earum. Maxime veritatis eligendi sit. Quae et placeat earum quos. Et ut possimus in cumque. Omnis veniam distinctio officia minus. Et aut quia vel pariatur. Sint ut natus quia vitae sed quia. Numquam voluptatem quis beatae optio facere animi voluptatem. Quidem ullam ipsa velit totam debitis enim. Eos nesciunt aut dolores vitae consequuntur voluptas. Molestiae illo repellendus necessitatibus voluptatem. Optio labore necessitatibus incidunt. Non quia molestiae dolores repudiandae. Quam sapiente ea sed delectus molestiae deleniti maiores.",
+                          "imageURL": "https://lorempixel.com/640/480/?82757",
+                          "debut": "Episode 65",
+                          "status": "Deceased",
+                          "bloodType": "H",
+                          "favoriteFood": "beatae",
+                          "bust": null,
+                          "waist": null,
+                          "hip": null,
+                          "height": "616",
+                          "age": 233,
+                          "birthDay": 1,
+                          "birthMonth": 7,
+                          "astrologicalSign": "Aquarius ♒️"
+                        }
+                      }
+                    }
+                  }
+                ]
               }
             }
           }

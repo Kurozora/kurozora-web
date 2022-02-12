@@ -21,6 +21,7 @@ Route::prefix('/v1')
             ->name('.explore');
 
         require 'API/Anime.php';
+        require 'API/Cast.php';
         require 'API/Characters.php';
         require 'API/Episodes.php';
         require 'API/Genres.php';
