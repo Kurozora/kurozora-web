@@ -24,10 +24,8 @@ class StudioResourceBasic extends JsonResource
      */
     public function toArray($request): array
     {
-        return [
-            'id'            => $this->resource->id,
-            'type'          => 'studios',
-            'href'          => route('api.studios.details', $this->resource, false),
+        $resource = StudioResourceIdentity::make($this->resource)->toArray($request);
+        return array_merge($resource, [
             'attributes'    => [
                 'logo'          => ImageResource::make($this->resource->profile_image),
                 'name'          => $this->resource->name,
@@ -45,6 +43,6 @@ class StudioResourceBasic extends JsonResource
                     return $this->pivot->is_licensor;
                 }),
             ]
-        ];
+        ]);
     }
 }

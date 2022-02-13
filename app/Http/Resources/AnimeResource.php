@@ -70,7 +70,7 @@ class AnimeResource extends JsonResource
         return [
             'cast' => [
                 'href' => route('api.anime.cast', $this->resource, false),
-                'data' => AnimeCastResource::collection($this->resource->getCast(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'data' => AnimeCastResourceIdentity::collection($this->resource->getCast(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }
@@ -115,7 +115,7 @@ class AnimeResource extends JsonResource
         return [
             'seasons' => [
                 'href' => route('api.anime.seasons', $this->resource, false),
-                'data' => SeasonResource::collection($this->resource->getSeasons(Anime::MAXIMUM_RELATIONSHIPS_LIMIT, reversed: true))
+                'data' => SeasonResourceIdentity::collection($this->resource->getSeasons(Anime::MAXIMUM_RELATIONSHIPS_LIMIT, reversed: true))
             ]
         ];
     }
