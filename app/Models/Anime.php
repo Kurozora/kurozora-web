@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Cache;
 use Request;
+use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -204,6 +205,17 @@ class Anime extends KModel implements HasMedia, Sitemapable
         return SlugOptions::create()
             ->generateSlugsFrom('original_title')
             ->saveSlugsTo('slug');
+    }
+
+    /**
+     * Get the activity options for activity log.
+     *
+     * @return LogOptions
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll();
     }
 
     /**
