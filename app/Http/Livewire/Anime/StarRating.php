@@ -54,7 +54,7 @@ class StarRating extends Component
         $this->anime = $anime;
         $this->rating = $rating ?? 0.0;
         $this->starSize = match ($starSize) {
-            'sm' => 'h-4',
+            'sm' => 'h-5',
             'md' => 'h-6',
             default => 'h-8'
         };

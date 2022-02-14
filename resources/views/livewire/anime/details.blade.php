@@ -132,52 +132,67 @@
         </div>
 
         <div class="pt-4 2xl:col-span-2 lg:max-h-[calc(100vh-64px)] overflow-x-hidden overflow-y-scroll no-scrollbar">
-            <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between text-center pb-5 px-4 overflow-x-scroll no-scrollbar">
+            <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between items-center text-center pb-5 px-4 overflow-x-scroll no-scrollbar">
                 <div id="ratingBadge" class="flex-grow pr-12">
                     <a href="#ratingsAndReviews">
-                        <p class="inline-flex font-bold text-orange-500">
+                        <p class="font-bold text-orange-500">
                             {{ number_format($anime->stats?->rating_average, 1) }}
-                            <livewire:anime.star-rating :rating="$anime->stats?->rating_average" :star-size="'sm'" :disabled="true" />
                         </p>
+                        <livewire:anime.star-rating :rating="$anime->stats?->rating_average" :star-size="'sm'" :disabled="true" />
                         <p class="text-sm text-gray-500">{{ __('Not enough ratings') }}</p>
                     </a>
                 </div>
 
-                @if ($anime->air_season_string)
+                @if ($anime->air_season)
                     <div id="seasonBadge" class="flex-grow px-12 border-l-2">
-                        <a href="#aired">
-                            <p class="font-bold">{{ $anime->air_season_string }}</p>
+                        <a class="flex flex-col items-center" href="#aired">
+                            <p class="font-bold">{{ $anime->air_season->description }}</p>
+                            <p class="text-orange-500">
+                                {{ $anime->air_season->symbol() }}
+                            </p>
                             <p class="text-sm text-gray-500">{{ __('Season') }}</p>
                         </a>
                     </div>
                 @endif
 
                 <div id="rankingBadge" class="flex-grow px-12 border-l-2">
-                    <a href="#genres">
-                        <p class="font-bold">#13</p>
-                        <p class="text-sm text-gray-500">{{ __('Thriller') }}</p>
+                    <a class="flex flex-col items-center" href="#genres">
+                        <p class="font-bold">-</p>
+                        <p class="text-orange-500">
+                            @svg('chart_bar_fill', 'fill-current', ['width' => '20'])
+                        </p>
+                        <p class="text-sm text-gray-500">{{ __('Chart') }}</p>
                     </a>
                 </div>
 
                 <div id="tvRatingBadge" class="flex-grow px-12 border-l-2">
-                    <a href="#tvRating">
+                    <a class="flex flex-col items-center" href="#tvRating">
                         <p class="font-bold">{{ $anime->tv_rating->name }}</p>
+                        <p class="text-orange-500">
+                            @svg('tv_fill', 'fill-current', ['width' => '20'])
+                        </p>
                         <p class="text-sm text-gray-500">{{ __('Rated') }}</p>
                     </a>
                 </div>
 
                 @if (!empty($studio))
                     <div id="studioBadge" class="flex-grow px-12 border-l-2">
-                        <a href="{{ route('studios.details', $studio) }}">
+                        <a class="flex flex-col items-center" href="{{ route('studios.details', $studio) }}">
                             <p class="font-bold">{{ $studio->name }}</p>
+                            <p class="text-orange-500">
+                                @svg('building_2_fill', 'fill-current', ['width' => '20'])
+                            </p>
                             <p class="text-sm text-gray-500">{{ __('Studio') }}</p>
                         </a>
                     </div>
                 @endif
 
                 <div id="languageBadge" class="flex-grow px-12 border-l-2">
-                    <a href="#languages">
+                    <a class="flex flex-col items-center" href="#languages">
                         <p class="font-bold">{{ strtoupper($anime->languages->first()->code) }}</p>
+                        <p class="text-orange-500">
+                            @svg('character_bubble_fill', 'fill-current', ['width' => '20'])
+                        </p>
                         <p class="text-sm text-gray-500">{{ trans_choice('{0} Language|{1} +:x More Language|[2,*] +:x More Languages', $anime->languages->count() - 1, ['x' => $anime->languages->count() - 1]) }}</p>
                     </a>
                 </div>
