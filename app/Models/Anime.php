@@ -124,7 +124,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
      * @var array
      */
     protected $appends = [
-        'air_season_string',
         'air_time_utc',
         'banner_image',
         'banner_image_url',
@@ -221,15 +220,14 @@ class Anime extends KModel implements HasMedia, Sitemapable
     /**
      * The season in which the anime aired.
      *
-     * @return string|null
+     * @param $value
+     * @return SeasonOfYear|null
      */
-    public function getAirSeasonStringAttribute(): ?string
+    public function getAirSeasonAttribute($value): ?SeasonOfYear
     {
-        if ($this->air_season == null) {
-            return null;
-        }
         // For some reason air season is sometimes seen as a string, so force cast to int.
-        return SeasonOfYear::fromValue((int) $this->air_season)->description;
+        //Also makes 0 out of null, so win/win.
+        return SeasonOfYear::fromValue((int) $value);
     }
 
     /**
@@ -309,7 +307,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         $episodesCount = $this->episode_count ?? null;
         $duration = $this->duration_string;
         $firstAiredYear = $this->first_aired;
-        $airSeason = $this->air_season_string;
+        $airSeason = $this->air_season->description;
 
         if (!empty($episodesCount)) {
             $informationSummary .= ' · ' . $episodesCount . ' ' . trans_choice('{1} episode|episodes', $episodesCount);
