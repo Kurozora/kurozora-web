@@ -79,11 +79,23 @@ class GenerateSitemap extends Command
                 $sitemapIndex->add($path);
             });
 
-        //========== Episodes sitemap ==========//
+        //========== Genres sitemap ==========//
         $this->info('- Generating genres...');
         Genre::select(['slug'])
             ->chunk(20000, function($genres, int $page) use ($sitemapIndex) {
                 $path = 'sitemaps/genres_' . $page . '_sitemap.xml';
+                $this->info($path);
+                Sitemap::create()
+                    ->add($genres)
+                    ->writeToFile(public_path($path));
+                $sitemapIndex->add($path);
+            });
+
+        //========== Themes sitemap ==========//
+        $this->info('- Generating themes...');
+        Genre::select(['slug'])
+            ->chunk(20000, function($genres, int $page) use ($sitemapIndex) {
+                $path = 'sitemaps/themes_' . $page . '_sitemap.xml';
                 $this->info($path);
                 Sitemap::create()
                     ->add($genres)
@@ -141,7 +153,7 @@ class GenerateSitemap extends Command
 
         //========== Sitemap Index ==========//
         $this->info('- Generating sitemap index...');
-        $sitemapIndex->writeToFile(public_path('sitemap.xml'));
+        $sitemapIndex->writeToFile(public_path('sitemaps/sitemap.xml'));
 
         $this->info('- Done -');
         return Command::SUCCESS;
