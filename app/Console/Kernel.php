@@ -51,6 +51,11 @@ class Kernel extends ConsoleKernel
             ->daily();
 
         /**********************************************/
+        // Delete all activity logs every week
+        $schedule->command('activitylog:clean')
+            ->weekly();
+
+        /**********************************************/
         // Truncates login attempts every day
         $schedule->call(function() {
             LoginAttempt::truncate();
