@@ -105,7 +105,7 @@
                             {{ number_format($episode->stats?->rating_average, 1) }}
                             <livewire:anime.star-rating :rating="$episode->stats?->rating_average" :star-size="'sm'" :disabled="true" />
                         </p>
-                        <p class="text-sm text-gray-500">{{ __('Not enough ratings') }}</p>
+                        <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $episode->stats?->rating_count, ['x' => number_shorten((int) $episode->stats?->rating_count, 1, true)]) }}</p>
                     </a>
                 </div>
 
@@ -156,7 +156,7 @@
                     @auth
                         <div class="text-right">
                             <livewire:anime.star-rating :rating="$episode->stats?->rating_average" :star-size="'lg'" :disabled="true" />
-                            <p class="text-sm text-gray-500">{{ __('Not enough ratings') }}</p>
+                            <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $episode->stats?->rating_count, ['x' => (int) $episode->stats?->rating_count]) }}</p>
                         </div>
                     @endif
                 </div>
