@@ -128,6 +128,7 @@ class HasOne extends Field implements ListableField, RelatableField
      *
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         $request = app(NovaRequest::class);

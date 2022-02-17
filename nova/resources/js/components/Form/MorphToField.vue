@@ -14,12 +14,7 @@
         slot="field"
         :value="resourceType"
         @change="refreshResourcesForTypeChange"
-        class="
-          block
-          w-full
-          form-control form-input form-input-bordered form-select
-          mb-3
-        "
+        class="block w-full form-control form-input form-input-bordered form-select mb-3"
       >
         <option value="" selected :disabled="!field.nullable">
           {{ __('Choose Type') }}
@@ -108,7 +103,7 @@
           </search-input>
 
           <select-control
-            v-if="!isSearchable || isLocked"
+            v-if="!isSearchable || isLocked || isReadonly"
             class="form-control form-select w-full"
             :class="{ 'border-danger': hasError }"
             :dusk="`${field.attribute}-select`"
@@ -377,7 +372,7 @@ export default {
 
     shouldLoadFirstResource() {
       return (
-        this.isSearchable &&
+        (this.isSearchable || this.creatingViaRelatedResource) &&
         this.shouldSelectInitialResource &&
         this.initializingWithExistingResource
       )
@@ -437,7 +432,7 @@ export default {
      * Determine if the field is set to readonly.
      */
     isReadonly() {
-      return (
+      return Boolean(
         this.field.readonly || _.get(this.field, 'extraAttributes.readonly')
       )
     },

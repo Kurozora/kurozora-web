@@ -733,6 +733,7 @@ class Action implements JsonSerializable
      *
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         $request = app(NovaRequest::class);

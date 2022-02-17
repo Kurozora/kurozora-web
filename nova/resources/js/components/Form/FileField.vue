@@ -18,14 +18,7 @@
 
         <template v-if="field.value && !imageUrl">
           <card
-            class="
-              flex
-              item-center
-              relative
-              border border-lg border-50
-              overflow-hidden
-              p-4
-            "
+            class="flex item-center relative border border-lg border-50 overflow-hidden p-4"
           >
             <span class="truncate mr-3"> {{ field.value }} </span>
 

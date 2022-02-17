@@ -3,19 +3,7 @@
     <select
       ref="selectBox"
       v-if="actions.length > 1"
-      class="
-        rounded-sm
-        select-box-sm
-        mr-2
-        h-6
-        text-xs
-        appearance-none
-        bg-40
-        pl-2
-        pr-6
-        active:outline-none active:shadow-outline
-        focus:outline-none focus:shadow-outline
-      "
+      class="rounded-sm select-box-sm mr-2 h-6 text-xs appearance-none bg-40 pl-2 pr-6 active:outline-none active:shadow-outline focus:outline-none focus:shadow-outline"
       style="max-width: 90px"
       @change="handleSelectionChange"
       dusk="inline-action-select"

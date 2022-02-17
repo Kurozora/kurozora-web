@@ -4,6 +4,7 @@
       <!-- Search Input -->
       <search-input
         v-if="!isReadonly && isSearchable"
+        :data-testid="`${field.attribute}-search-input`"
         @input="performSearch"
         @clear="clearSelection"
         @selected="selectOption"
@@ -51,7 +52,7 @@
 </template>
 
 <script>
-import { FormField, HandlesValidationErrors } from 'laravel-nova'
+import {FormField, HandlesValidationErrors} from 'laravel-nova'
 
 export default {
   mixins: [HandlesValidationErrors, FormField],

@@ -45,14 +45,7 @@
           <router-link
             :data-testid="`${testId}-view-button`"
             :dusk="`${resource['id'].value}-view-button`"
-            class="
-              cursor-pointer
-              text-70
-              hover:text-primary
-              mr-3
-              inline-flex
-              items-center
-            "
+            class="cursor-pointer text-70 hover:text-primary mr-3 inline-flex items-center"
             v-tooltip.click="__('View')"
             :to="{
               name: 'detail',
@@ -120,14 +113,7 @@
         <button
           :data-testid="`${testId}-delete-button`"
           :dusk="`${resource['id'].value}-delete-button`"
-          class="
-            inline-flex
-            appearance-none
-            cursor-pointer
-            text-70
-            hover:text-primary
-            mr-3
-          "
+          class="inline-flex appearance-none cursor-pointer text-70 hover:text-primary mr-3"
           v-tooltip.click="__(viaManyToMany ? 'Detach' : 'Delete')"
           v-if="
             resource.authorizedToDelete &&

@@ -1,14 +1,6 @@
 <template>
   <span
-    class="
-      whitespace-no-wrap
-      px-2
-      py-1
-      rounded-full
-      uppercase
-      text-xs
-      font-bold
-    "
+    class="whitespace-no-wrap px-2 py-1 rounded-full uppercase text-xs font-bold"
     :class="extraClasses"
   >
     {{ label }}

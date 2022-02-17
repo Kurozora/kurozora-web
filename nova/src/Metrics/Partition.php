@@ -2,6 +2,7 @@
 
 namespace Laravel\Nova\Metrics;
 
+use BackedEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Facades\DB;
@@ -137,7 +138,13 @@ abstract class Partition extends Metric
      */
     protected function formatAggregateResult($result, $groupBy)
     {
-        $key = $result->{last(explode('.', $groupBy))};
+        $key = with($result->{last(explode('.', $groupBy))}, function ($key) {
+            if ($key instanceof BackedEnum) {
+                return $key->value;
+            }
+
+            return $key;
+        });
 
         return [$key => $result->aggregate];
     }

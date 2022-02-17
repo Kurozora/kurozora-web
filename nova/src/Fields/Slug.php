@@ -17,8 +17,7 @@ class Slug extends Field
     /**
      * The field the slug should be generated from.
      *
-     * @param  string  $from
-     * @return string
+     * @var string|\Laravel\Nova\Fields\Field
      */
     public $from;
 
@@ -52,7 +51,7 @@ class Slug extends Field
     /**
      * The field the slug should be generated from.
      *
-     * @param  string  $from
+     * @param  string|\Laravel\Nova\Fields\Field  $from
      * @return $this
      */
     public function from($from)
@@ -80,6 +79,7 @@ class Slug extends Field
      *
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         $request = app(NovaRequest::class);
@@ -91,7 +91,7 @@ class Slug extends Field
 
         return array_merge([
             'updating' => $request->isUpdateOrUpdateAttachedRequest(),
-            'from' => Str::lower($this->from),
+            'from' => $this->from instanceof Field ? $this->from->attribute : Str::lower($this->from),
             'separator' => $this->separator,
             'showCustomizeButton' => $this->showCustomizeButton,
         ], parent::jsonSerialize());

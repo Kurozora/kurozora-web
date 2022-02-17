@@ -802,6 +802,7 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
      *
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return with(app(NovaRequest::class), function ($request) {

@@ -48,7 +48,7 @@ class NovaServiceProvider extends ServiceProvider
         ], 'nova-assets');
 
         $this->publishes([
-            __DIR__.'/../resources/lang' => resource_path('lang/vendor/nova'),
+            __DIR__.'/../resources/lang' => lang_path('vendor/nova'),
         ], 'nova-lang');
 
         $this->publishes([
@@ -69,7 +69,7 @@ class NovaServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'nova');
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'nova');
-        $this->loadJsonTranslationsFrom(resource_path('lang/vendor/nova'));
+        $this->loadJsonTranslationsFrom(lang_path('vendor/nova'));
 
         if (Nova::runsMigrations()) {
             $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
@@ -127,7 +127,7 @@ class NovaServiceProvider extends ServiceProvider
         Nova::serving(function (ServingNova $event) {
             // Load the default Nova translations.
             Nova::translations(
-                resource_path('lang/vendor/nova/'.app()->getLocale().'.json')
+                lang_path('vendor/nova/'.app()->getLocale().'.json')
             );
 
             Nova::provideToScript([

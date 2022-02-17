@@ -3,6 +3,7 @@
 namespace Laravel\Nova\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Support\Arr;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Nova;
 use Laravel\Nova\ResourceToolElement;
@@ -45,11 +46,12 @@ class NotExactlyAttached implements Rule
      */
     public function passes($attribute, $value)
     {
-        $query = $this->model
-            ->{$this->request->viaRelationship}()
-            ->withoutGlobalScopes();
+        /** @var \Illuminate\Database\Eloquent\Relations\MorphToMany|\Illuminate\Database\Eloquent\Relations\BelongsToMany $relation */
+        $relation = $this->model->{$this->request->viaRelationship}();
 
-        $relatedModel = $query->getModel();
+        $pivot = $relation->newPivot();
+        $query = $relation->withoutGlobalScopes()
+                        ->where($relation->getQualifiedRelatedPivotKeyName(), '=', $this->request->input($this->request->relatedResource));
 
         $resource = with(Nova::resourceForModel($this->model), function ($resource) {
             return new $resource($this->model);
@@ -59,14 +61,21 @@ class NotExactlyAttached implements Rule
             ->reject(function ($field) {
                 return $field instanceof ResourceToolElement || $field->computed();
             })
-            ->each(function ($field) use ($query) {
-                $query->wherePivot($field->attribute, $this->request->input($field->attribute));
+            ->each(function ($field) use ($pivot) {
+                $pivot->setAttribute($field->attribute, $this->request->input($field->attribute));
             });
 
-        return ! in_array(
-            $this->request->input($this->request->relatedResource),
-            $query->pluck($relatedModel->getQualifiedKeyName())->all()
-        );
+        $attributes = $pivot->toArray();
+
+        foreach ($query->cursor() as $result) {
+            $pivots = Arr::only($result->pivot->toArray(), array_keys($attributes));
+
+            if (array_diff_assoc(Arr::flatten($pivots), Arr::flatten($attributes)) === []) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

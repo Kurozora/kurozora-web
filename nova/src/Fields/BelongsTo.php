@@ -394,6 +394,7 @@ class BelongsTo extends Field implements RelatableField
      *
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return array_merge([
