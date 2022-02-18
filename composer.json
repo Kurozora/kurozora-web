@@ -1,5 +1,5 @@
 {
-    "name": "musa11971/kurozora-web",
+    "name": "kurozora/kurozora-web",
     "type": "project",
     "description": "Kurozora web application.",
     "keywords": ["kurozora", "anime", "manga", "character", "actor", "people", "studio", "hentai", "song", "track", "watch"],
@@ -30,6 +30,7 @@
         "imdhemy/laravel-purchases": "^0.10.2",
         "intervention/image": "^2.7",
         "jaybizzle/crawler-detect": "^1.2",
+        "kiritokatklian/nova-permission": "^3.0",
         "kraenkvisuell/nova-astrotranslatable": "^2.0",
         "laraning/nova-time-field": "^1.0",
         "laravel-notification-channels/apn": "^3.0",
@@ -57,8 +58,7 @@
         "spatie/laravel-sitemap": "^6.0",
         "spatie/laravel-sluggable": "^3.0",
         "timothyasp/nova-color-field": "^1.0",
-        "titasgailius/search-relations": "^2.0",
-        "vyuldashev/nova-permission": "^2.5"
+        "titasgailius/search-relations": "^2.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
