@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Anaseqal\NovaSidebarIcons\NovaSidebarIcons;
 use App\Http\Controllers\Web\Nova\SignInController;
+use App\Models\User;
 use App\Nova\Metrics\ActivityLogCount;
 use App\Nova\Metrics\AnimeNSFWChart;
 use App\Nova\Metrics\NewUsers;
@@ -56,8 +57,8 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     protected function gate()
     {
-        Gate::define('viewNova', function ($user) {
-            return $user->hasRole('admin');
+        Gate::define('viewNova', function (User $user) {
+            return $user->hasRole(['admin']);
         });
     }
 
