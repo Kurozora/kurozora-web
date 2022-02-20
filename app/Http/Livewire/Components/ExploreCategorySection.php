@@ -108,7 +108,7 @@ class ExploreCategorySection extends Component
             ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcoming_shows($this->genre ?? $this->theme)->explore_category_items,
             ExploreCategoryTypes::Characters => $this->exploreCategory->charactersBornToday()->explore_category_items,
             ExploreCategoryTypes::People => $this->exploreCategory->peopleBornToday()->explore_category_items,
-            default => $this->exploreCategory->explore_category_items
+            default => $this->exploreCategory->explore_category_items()->limit(10)->get()
         };
     }
 
