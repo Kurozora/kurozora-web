@@ -379,6 +379,8 @@
 
             <livewire:components.anime-seasons-section :anime="$anime" />
 
+            <livewire:components.anime-cast-section :anime="$anime" />
+
             <div class="bg-orange-50">
                 @if(!empty($studio))
                     <livewire:components.anime-more-by-studio-section :studio="$studio" />
