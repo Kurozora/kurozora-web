@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\Anime\Cast as AnimeCast;
 use App\Http\Livewire\Anime\Details as AnimeDetails;
 use App\Http\Livewire\Anime\RelatedShows;
 use App\Http\Livewire\Season\Details as SeasonDetails;
@@ -14,6 +15,9 @@ Route::prefix('/anime')
 
                 Route::get('/seasons', SeasonDetails::class)
                     ->name('.seasons');
+
+                Route::get('/cast', AnimeCast::class)
+                    ->name('.cast');
 
                 Route::get('/related-shows', RelatedShows::class)
                     ->name('.related-shows');
