@@ -495,7 +495,8 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function cast(): HasMany
     {
-        return $this->hasMany(AnimeCast::class)->where('language_id', 73); // Only japanese cast for now
+        return $this->hasMany(AnimeCast::class)
+            ->where('language_id', 73); // Only japanese cast for now
     }
 
     /**
