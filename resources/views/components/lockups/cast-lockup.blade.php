@@ -24,7 +24,7 @@
                 <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ __('Voice actor') }}</p>
             </div>
 
-            <div class="flex flex-col items-end gap-1">
+            <div class="flex flex-col text-end gap-1">
                 <p class="leading-tight line-clamp-2">{{ __('as :x', ['x' => $cast->character->name]) }}</p>
                 <p class="text-xs leading-tight text-black/60 line-clamp-2" >{{ $cast->cast_role->name }}</p>
             </div>
