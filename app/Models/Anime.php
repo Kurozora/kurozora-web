@@ -69,6 +69,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     const CACHE_KEY_LANGUAGES_SECONDS = 120 * 60;
     const CACHE_KEY_RELATIONS_SECONDS = 120 * 60;
     const CACHE_KEY_SEASONS_SECONDS = 120 * 60;
+    const CACHE_KEY_SONGS_SECONDS = 120 * 60;
     const CACHE_KEY_STAFF_SECONDS = 120 * 60;
     const CACHE_KEY_STATS_SECONDS = 120 * 60;
     const CACHE_KEY_STUDIOS_SECONDS = 120 * 60;
@@ -885,6 +886,24 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function songs(): HasMany
     {
         return $this->hasMany(AnimeSong::class);
+    }
+
+    /**
+     * Returns the songs relations.
+     *
+     * @param int $limit
+     * @param int $page
+     * @return mixed
+     */
+    public function getSongs(int $limit = 25, int $page = 1): mixed
+    {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'anime.songs', 'id' => $this->id, 'limit' => $limit, 'page' => $page]);
+
+        // Retrieve or save cached result
+        return Cache::remember($cacheKey, self::CACHE_KEY_SONGS_SECONDS, function () use ($limit) {
+            return $this->songs()->paginate($limit);
+        });
     }
 
     /**
