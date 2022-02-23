@@ -20,7 +20,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-flow-col-dense gap-4 overflow-x-scroll no-scrollbar">
+            <div class="grid grid-flow-col-dense gap-4 justify-start overflow-x-scroll no-scrollbar">
                 @foreach($animeRelations as $relatedAnime)
                     <x-lockups.small-lockup :anime="$relatedAnime->related" :relation="$relatedAnime->relation" />
                 @endforeach
