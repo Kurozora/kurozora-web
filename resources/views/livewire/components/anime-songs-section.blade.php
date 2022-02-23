@@ -1,13 +1,13 @@
 <div>
-    @if ($seasonsCount)
-        <section class="pt-5 pb-8 px-4 border-t-2" wire:init="loadAnimeSeasons">
+    @if ($animeSongsCount)
+        <section class="pt-5 pb-8 px-4 border-t-2" wire:init="loadAnimeSongs">
             <x-section-nav>
                 <x-slot name="title">
-                    {{ __('Seasons') }}
+                    {{ __('Songs') }}
                 </x-slot>
 
                 <x-slot name="action">
-                    <x-simple-link href="{{ route('anime.seasons', $anime) }}">{{ __('See All') }}</x-simple-link>
+                    <x-simple-link href="{{ route('anime.songs', $anime) }}">{{ __('See All') }}</x-simple-link>
                 </x-slot>
             </x-section-nav>
 
@@ -21,8 +21,8 @@
             </div>
 
             <div class="grid grid-flow-col-dense gap-4 justify-start overflow-x-scroll no-scrollbar">
-                @foreach($seasons as $season)
-                    <x-lockups.poster-lockup :season="$season" />
+                @foreach($animeSongs as $animeSong)
+                    <x-lockups.music-lockup :anime-song="$animeSong" />
                 @endforeach
             </div>
         </section>
