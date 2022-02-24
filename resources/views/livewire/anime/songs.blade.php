@@ -10,12 +10,12 @@
     </x-slot>
 
     <x-slot name="description">
-        {{ __('Discover all openings, endings and background music of :x only on Kurozora, the largest, free online anime and manga database in the world.', ['x' => $anime->title]) }}
+        {{ __('Discover all openings, endings and background music of :x only on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $anime->title]) }}
     </x-slot>
 
     <x-slot name="meta">
         <meta property="og:title" content="{{ __('Songs') }} | {{ $anime->title }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Discover all openings, endings and other music of :x only on Kurozora, the largest, free online anime and manga database in the world.', ['x' => $anime->title]) }}" />
+        <meta property="og:description" content="{{ __('Discover all openings, endings and other music of :x only on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $anime->title]) }}" />
         <meta property="og:image" content="{{ asset('images/static/placeholders/music_album.webp') }}" />
         <meta property="og:type" content="music.song" />
         <meta property="music:musician" content="{{ route('anime.details', $anime) }}" />

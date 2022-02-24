@@ -11,12 +11,12 @@
     </x-slot>
 
     <x-slot name="description">
-        {{ __('Discover the extensive list of :x anime only on Kurozora, the largest, free online anime and manga database in the world.', ['x' => $theme->name]) }} {{ $theme->description }}
+        {{ __('Discover the extensive list of :x anime only on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $theme->name]) }} {{ $theme->description }}
     </x-slot>
 
     <x-slot name="meta">
         <meta property="og:title" content="{{ $theme->name }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Discover the extensive list of :x anime only on Kurozora, the largest, free online anime and manga database in the world.', ['x' => $theme->name]) }} {{ $theme->description }}" />
+        <meta property="og:description" content="{{ __('Discover the extensive list of :x anime only on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $theme->name]) }} {{ $theme->description }}" />
         <meta property="og:image" content="{{ $theme->symbol_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('themes.details', $theme) }}">
