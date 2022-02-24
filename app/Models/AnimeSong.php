@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\SongType;
-use App\Scopes\TvRatingScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\Sitemap\Contracts\Sitemapable;
@@ -24,8 +23,8 @@ class AnimeSong extends KModel implements Sitemapable
      */
     public function anime(): BelongsTo
     {
-        return $this->belongsTo(Anime::class)
-                        ->withoutGlobalScope(new TvRatingScope());
+        return $this->belongsTo(Anime::class);
+//                        ->withoutGlobalScope(new TvRatingScope());
     }
 
     /**
