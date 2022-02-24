@@ -10,9 +10,12 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
+use Titasgailius\SearchRelations\SearchesRelations;
 
 class AnimeSong extends Resource
 {
+    use SearchesRelations;
+
     /**
      * The model the resource corresponds to.
      *
@@ -40,7 +43,17 @@ class AnimeSong extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'type', 'position', 'episodes'
+        'id', 'type'
+    ];
+
+    /**
+     * The relationship columns that should be searched.
+     *
+     * @var array
+     */
+    public static $searchRelations = [
+        'song' => ['id', 'title', 'artist'],
+        'anime' => ['id', 'original_title'],
     ];
 
     /**
@@ -89,6 +102,18 @@ class AnimeSong extends Resource
             Text::make('Episodes')
                 ->help('For example: 1-12; or 1-12, 14-24; or even 14, 16, 19'),
         ];
+    }
+
+    /**
+     * Get the value that should be displayed to represent the resource.
+     *
+     * @return string
+     */
+    public function title(): string
+    {
+        $animeSong = $this->resource;
+
+        return $animeSong->song->title . ' | ' . $animeSong->anime->original_title . ' (ID: ' . $animeSong->id . ')';
     }
 
     /**

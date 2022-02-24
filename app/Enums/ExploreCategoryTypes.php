@@ -12,6 +12,7 @@ use BenSampo\Enum\Enum;
  * @method static static People()
  * @method static static Genres()
  * @method static static Themes()
+ * @method static static Songs()
  */
 final class ExploreCategoryTypes extends Enum
 {
@@ -22,4 +23,5 @@ final class ExploreCategoryTypes extends Enum
     const People = 'people';
     const Genres = 'genres';
     const Themes = 'themes';
+    const Songs = 'songs';
 }
