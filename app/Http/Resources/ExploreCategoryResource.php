@@ -96,6 +96,21 @@ class ExploreCategoryResource extends JsonResource
                         )
                     ]
                 ];
+            case ExploreCategoryTypes::Songs:
+                $request->merge(['include' => 'shows']);
+
+                $showSongs = [
+                    'showSongs' => [
+                        'data' => AnimeSongResource::collection($this->resource
+                            ->explore_category_items
+                            ->pluck('model')
+                        )->toArray($request)
+                    ]
+                ];
+
+                $request->offsetUnset('include');
+
+                return $showSongs;
             case ExploreCategoryTypes::Shows:
                 return [
                     'shows' => [
