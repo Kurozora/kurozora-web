@@ -43,6 +43,9 @@ class AnimeResource extends JsonResource
                     case 'seasons':
                         $relationships = array_merge($relationships, $this->getSeasonsRelationship());
                         break;
+                    case 'songs':
+                        $relationships = array_merge($relationships, $this->getSongsRelationship());
+                        break;
                     case 'staff':
                         $relationships = array_merge($relationships, $this->getStaffRelationship());
                         break;
@@ -116,6 +119,21 @@ class AnimeResource extends JsonResource
             'seasons' => [
                 'href' => route('api.anime.seasons', $this->resource, false),
                 'data' => SeasonResourceIdentity::collection($this->resource->getSeasons(Anime::MAXIMUM_RELATIONSHIPS_LIMIT, reversed: true))
+            ]
+        ];
+    }
+
+    /**
+     * Returns the songs relationship for the resource.
+     *
+     * @return array
+     */
+    protected function getSongsRelationship(): array
+    {
+        return [
+            'showSongs' => [
+                'href' => route('api.anime.songs', $this->resource, false),
+                'data' => AnimeSongResource::collection($this->resource->getAnimeSongs(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }
