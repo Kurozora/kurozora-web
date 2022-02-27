@@ -31,6 +31,7 @@ Route::prefix('/v1')
         require 'API/Me.php';
         require 'API/People.php';
         require 'API/Seasons.php';
+        require 'API/Songs.php';
         require 'API/Studios.php';
         require 'API/Store.php';
         require 'API/Themes.php';
