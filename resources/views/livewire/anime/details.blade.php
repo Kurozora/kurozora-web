@@ -303,13 +303,13 @@
                             {{ $anime->broadcast }}
                         </x-slot>
 
-                        @if (!empty($anime->last_aired))
+                        @if ($anime->status_id === 4)
                             <x-slot name="footer">
                                 {{ __('The broadcasting of this series has ended.') }}
                             </x-slot>
                         @elseif (empty($anime->broadcast))
                             {{ __('No broadcast data available at the moment.') }}
-                        @else
+                        @elseif ($anime->status_id === 3)
                             <div class="flex flex-col align-center mt-1">
                                 <p class="font-black text-2xl">
                                     {{ $anime->time_until_broadcast }}
