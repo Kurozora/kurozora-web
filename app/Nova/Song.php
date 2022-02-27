@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\HasManyThrough;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
@@ -82,7 +83,9 @@ class Song extends Resource
             Text::make('Artist')
                 ->sortable(),
 
-            HasMany::make('Anime', 'anime_songs', AnimeSong::class),
+            HasMany::make('Anime Songs'),
+
+            HasManyThrough::make('Anime'),
         ];
     }
 

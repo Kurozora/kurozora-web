@@ -41,7 +41,7 @@ class AnimeSongsSection extends Component
     public function mount(Anime $anime)
     {
         $this->anime = $anime;
-        $this->animeSongsCount = $anime->songs()->count();
+        $this->animeSongsCount = $anime->getAnimeSongs()->count();
     }
 
     /**
@@ -51,7 +51,7 @@ class AnimeSongsSection extends Component
      */
     public function loadAnimeSongs()
     {
-        $this->animeSongs = $this->anime->getSongs(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
+        $this->animeSongs = $this->anime->getAnimeSongs(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
     }
 
     /**

@@ -28,6 +28,9 @@ Route::prefix('/anime')
                 Route::get('/seasons', [AnimeController::class, 'seasons'])
                     ->name('.seasons');
 
+                Route::get('/songs', [AnimeController::class, 'songs'])
+                    ->name('.songs');
+
                 Route::get('/staff', [AnimeController::class, 'staff'])
                     ->name('.staff');
 
