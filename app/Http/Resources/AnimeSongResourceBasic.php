@@ -29,7 +29,7 @@ class AnimeSongResourceBasic extends JsonResource
             'attributes'    => [
                 'type'      => $this->resource->type->value,
                 'position'  => $this->resource->position,
-                'episodes'  => $this->resource->episodes,
+                'episodes'  => $this->resource->episodes ?? '1',
             ]
         ]);
 

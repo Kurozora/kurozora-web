@@ -38,14 +38,14 @@ class AnimeSong extends KModel implements Sitemapable
     }
 
     /**
-     * Get the type attribute.
+     * Get the song type attribute.
      *
-     * @param $value
-     * @return SongType
+     * @param int|null $value
+     * @return SongType|null
      */
-    public function getTypeAttribute($value): SongType
+    public function getTypeAttribute(?int $value): ?SongType
     {
-        return SongType::fromValue($value);
+        return $value ? SongType::fromValue($value) : null;
     }
 
     /**
