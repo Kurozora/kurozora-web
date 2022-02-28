@@ -25,13 +25,15 @@
     @endif
 >
     <div class="flex flex-col">
-        <x-picture class="rounded-lg overflow-hidden aspect-ratio-1-1">
+        <x-picture class="rounded-lg shadow-md overflow-hidden aspect-ratio-1-1">
             <img class="w-full h-full object-cover"
                  alt="{{ $animeSong->song->title }} Banner" title="{{ $animeSong->song->title }}"
                  width="320" height="320"
                  x-bind:src="artworkURL"
                  x-bind:style="{'background-color': bgColor}"
             >
+
+            <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
 
             <div class="absolute top-0 bottom-0 left-0 right-0">
                 <div class="flex flex-col justify-center items-center h-full">
