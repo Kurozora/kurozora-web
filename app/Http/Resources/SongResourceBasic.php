@@ -27,8 +27,8 @@ class SongResourceBasic extends JsonResource
 
         return array_merge($resource, [
             'attributes'    => [
-                'am_id'     => $this->resource->am_id,
-                'mal_id'    => $this->resource->mal_id,
+                'amID'      => $this->resource->am_id,
+                'malID'     => $this->resource->mal_id,
                 'title'     => $this->resource->title,
                 'artist'    => $this->resource->artist,
             ]
