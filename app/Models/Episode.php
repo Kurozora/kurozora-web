@@ -141,6 +141,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
      */
     public function toSitemapTag(): Url|string|array
     {
-        return route('episodes.details', $this);
+        return Url::create(route('episodes.details', $this))
+            ->setChangeFrequency('weekly');
     }
 }
