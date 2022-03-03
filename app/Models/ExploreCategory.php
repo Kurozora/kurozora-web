@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ExploreCategoryTypes;
+use App\Scopes\ExploreCategoryIsEnabledScope;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Request;
 use Spatie\Sitemap\Contracts\Sitemapable;
@@ -17,6 +18,20 @@ class ExploreCategory extends KModel implements Sitemapable
     // Table name
     const TABLE_NAME = 'explore_categories';
     protected $table = self::TABLE_NAME;
+
+    /**
+     * Bootstrap the model and its traits.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        if (app('explore.only_enabled')) {
+            static::addGlobalScope(new ExploreCategoryIsEnabledScope);
+        }
+    }
 
     /**
      * Get the route key for the model.
@@ -198,6 +213,7 @@ class ExploreCategory extends KModel implements Sitemapable
      */
     public function toSitemapTag(): Url|string|array
     {
-        return route('explore.details', $this);
+        return Url::create(route('explore.details', $this))
+            ->setChangeFrequency('weekly');
     }
 }

@@ -63,6 +63,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     // How long to cache certain responses
     const CACHE_KEY_EXPLORE_SECONDS = 120 * 60;
     const CACHE_KEY_ANIME_CAST_SECONDS = 120 * 60;
+    const CACHE_KEY_ANIME_SONGS_SECONDS = 120 * 60;
     const CACHE_KEY_CHARACTERS_SECONDS = 120 * 60;
     const CACHE_KEY_EPISODES_SECONDS = 120 * 60;
     const CACHE_KEY_GENRES_SECONDS = 120 * 60;
@@ -70,6 +71,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     const CACHE_KEY_LANGUAGES_SECONDS = 120 * 60;
     const CACHE_KEY_RELATIONS_SECONDS = 120 * 60;
     const CACHE_KEY_SEASONS_SECONDS = 120 * 60;
+    const CACHE_KEY_SONGS_SECONDS = 120 * 60;
     const CACHE_KEY_STAFF_SECONDS = 120 * 60;
     const CACHE_KEY_STATS_SECONDS = 120 * 60;
     const CACHE_KEY_STUDIOS_SECONDS = 120 * 60;
@@ -509,7 +511,8 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function cast(): HasMany
     {
-        return $this->hasMany(AnimeCast::class)->where('language_id', 73); // Only japanese cast for now
+        return $this->hasMany(AnimeCast::class)
+            ->where('language_id', 73); // Only japanese cast for now
     }
 
     /**
@@ -893,11 +896,57 @@ class Anime extends KModel implements HasMedia, Sitemapable
     /**
      * The anime's songs relationship.
      *
+     * @return HasManyThrough
+     */
+    public function songs(): HasManyThrough
+    {
+        return $this->hasManyThrough(Song::class, AnimeSong::class, 'anime_id', 'id', 'id', 'song_id');
+    }
+
+    /**
+     * Returns the songs relations.
+     *
+     * @param int $limit
+     * @param int $page
+     * @return mixed
+     */
+    public function getSongs(int $limit = 25, int $page = 1): mixed
+    {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'anime.songs', 'id' => $this->id, 'limit' => $limit, 'page' => $page]);
+
+        // Retrieve or save cached result
+        return Cache::remember($cacheKey, self::CACHE_KEY_SONGS_SECONDS, function () use ($limit) {
+            return $this->songs()->paginate($limit);
+        });
+    }
+
+    /**
+     * The anime's anime-songs relationship.
+     *
      * @return HasMany
      */
-    public function songs(): HasMany
+    public function animeSongs(): HasMany
     {
         return $this->hasMany(AnimeSong::class);
+    }
+
+    /**
+     * Returns the songs relations.
+     *
+     * @param int $limit
+     * @param int $page
+     * @return mixed
+     */
+    public function getAnimeSongs(int $limit = 25, int $page = 1): mixed
+    {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'anime.anime-songs', 'id' => $this->id, 'limit' => $limit, 'page' => $page]);
+
+        // Retrieve or save cached result
+        return Cache::remember($cacheKey, self::CACHE_KEY_ANIME_SONGS_SECONDS, function () use ($limit) {
+            return $this->animeSongs()->paginate($limit);
+        });
     }
 
     /**
@@ -967,6 +1016,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function toSitemapTag(): Url|string|array
     {
-        return route('anime.details', $this);
+        return Url::create(route('anime.details', $this))
+            ->setChangeFrequency('weekly');
     }
 }

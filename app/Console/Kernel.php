@@ -46,8 +46,13 @@ class Kernel extends ConsoleKernel
             ->weekly();
 
         /**********************************************/
+        // Calculate episode ratings every week
+        $schedule->command('calculate:episode_stats')
+            ->weekly();
+
+        /**********************************************/
         // Delete all users that did not confirm their email within 24 hrs every day
-        $schedule->command('users:delete_inactive_unconfirmed')
+        $schedule->command('delete:inactive_unconfirmed_users')
             ->daily();
 
         /**********************************************/

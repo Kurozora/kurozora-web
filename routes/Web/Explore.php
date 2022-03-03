@@ -10,6 +10,7 @@ Route::prefix('/explore')
             ->name('.index');
 
         Route::prefix('{exploreCategory}')
+            ->middleware(['explore.always-enabled'])
             ->group(function () {
                 Route::get('/', ExploreDetails::class)
                     ->name('.details');

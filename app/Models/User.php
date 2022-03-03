@@ -655,6 +655,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     public function toSitemapTag(): \Spatie\Sitemap\Tags\Url|string|array
     {
-        return route('people.details', $this);
+        return route('profile.details', $this);
     }
 }

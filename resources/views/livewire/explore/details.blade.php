@@ -2,6 +2,7 @@
     $gridClass = match($exploreCategory->type) {
         \App\Enums\ExploreCategoryTypes::Genres, \App\Enums\ExploreCategoryTypes::Themes => 'grid sm:grid-cols-2 lg:grid-cols-4 gap-4',
         \App\Enums\ExploreCategoryTypes::People, \App\Enums\ExploreCategoryTypes::Characters => 'grid grid-cols-3 gap-4 sm:grid-cols-4 sm:auto-cols-[unset] md:grid-cols-5 lg:grid-cols-7',
+        \App\Enums\ExploreCategoryTypes::Songs => 'grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
         default => 'grid sm:grid-cols-2 sm:auto-cols-[unset] lg:grid-cols-3 gap-4',
     };
 @endphp
@@ -16,16 +17,16 @@
             @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
             @case(\App\Enums\ExploreCategoryTypes::UpcomingShows)
             @case(\App\Enums\ExploreCategoryTypes::Shows)
-                {{ __('Explore the latest :x anime only on Kurozora, the largest, free online anime and manga database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}
+                {{ __('Explore the latest :x anime only on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}
             @break
             @default
-                {{ __('Explore the latest :x only on Kurozora, the largest, free online anime and manga database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}
+                {{ __('Explore the latest :x only on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}
         @endswitch
     </x-slot>
 
     <x-slot name="meta">
         <meta property="og:title" content="{{ __('Explore') . ' ' . $exploreCategory->title }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Explore the latest :x category only on Kurozora, the largest, free online anime and manga database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}" />
+        <meta property="og:description" content="{{ __('Explore the latest :x category only on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <meta property="twitter:title" content="{{ $exploreCategory->title }} — {{ config('app.name') }}" />
@@ -65,6 +66,9 @@
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::People)
                         <x-lockups.person-lockup :person="$categoryItem->model" />
+                    @break
+                    @case(\App\Enums\ExploreCategoryTypes::Songs)
+                        <x-lockups.music-lockup :anime-song="$categoryItem->model" :show-episodes="false" :show-anime="true" :onMusicKitLoad="true" :is-row="false" />
                     @break
                     @default
                         @if (config('app.env') === 'local')

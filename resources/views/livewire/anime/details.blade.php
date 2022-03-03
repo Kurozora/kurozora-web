@@ -139,7 +139,7 @@
                             {{ number_format($anime->stats?->rating_average, 1) }}
                         </p>
                         <livewire:anime.star-rating :rating="$anime->stats?->rating_average" :star-size="'sm'" :disabled="true" />
-                        <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int)$anime->stats?->rating_count, ['x' => number_shorten((int)$anime->stats?->rating_count, 1, true)]) }}</p>
+                        <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int)$anime->stats?->rating_count, ['x' => number_shorten((int)$anime->stats?->rating_count, 0, true)]) }}</p>
                     </a>
                 </div>
 
@@ -303,13 +303,13 @@
                             {{ $anime->broadcast }}
                         </x-slot>
 
-                        @if (!empty($anime->last_aired))
+                        @if ($anime->status_id === 4)
                             <x-slot name="footer">
                                 {{ __('The broadcasting of this series has ended.') }}
                             </x-slot>
                         @elseif (empty($anime->broadcast))
                             {{ __('No broadcast data available at the moment.') }}
-                        @else
+                        @elseif ($anime->status_id === 3)
                             <div class="flex flex-col align-center mt-1">
                                 <p class="font-black text-2xl">
                                     {{ $anime->time_until_broadcast }}
@@ -378,6 +378,10 @@
             </section>
 
             <livewire:components.anime-seasons-section :anime="$anime" />
+
+            <livewire:components.anime-cast-section :anime="$anime" />
+
+            <livewire:components.anime-songs-section :anime="$anime" />
 
             <div class="bg-orange-50">
                 @if(!empty($studio))
