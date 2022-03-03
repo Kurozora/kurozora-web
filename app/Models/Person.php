@@ -180,7 +180,9 @@ class Person extends KModel implements HasMedia, Sitemapable
      */
     function anime(): BelongsToMany
     {
-        return $this->belongsToMany(Anime::class, AnimeCast::class)->distinct();
+        return $this->belongsToMany(Anime::class, AnimeCast::class)
+            ->distinct()
+            ->withTimestamps();
     }
 
     /**
@@ -208,7 +210,9 @@ class Person extends KModel implements HasMedia, Sitemapable
      */
     function characters(): BelongsToMany
     {
-        return $this->belongsToMany(Character::class, AnimeCast::class)->distinct();
+        return $this->belongsToMany(Character::class, AnimeCast::class)
+            ->distinct()
+            ->withTimestamps();
     }
 
     /**

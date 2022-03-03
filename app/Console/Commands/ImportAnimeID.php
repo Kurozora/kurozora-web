@@ -121,7 +121,8 @@ class ImportAnimeID extends Command
      */
     protected function getIDsFromNotify(string $notifyID): array
     {
-        $response = Http::get('https://notify.moe/api/anime/' . $notifyID);
+        $response = Http::timeout(120)
+            ->get('https://notify.moe/api/anime/' . $notifyID);
         $cleanSources = [];
 
         if ($response->failed()) {

@@ -3,7 +3,6 @@
 namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Support\Str;
 
 class ValidatePassword implements Rule
 {
@@ -58,9 +57,9 @@ class ValidatePassword implements Rule
      */
     public function passes($attribute, $value): bool
     {
-        $stringLength = Str::length($value);
+        $stringLength = str($value)->length();
 
-        if ($this->requireUppercase && Str::lower($value) === $value) {
+        if ($this->requireUppercase && str($value)->lower() === $value) {
             return false;
         }
 

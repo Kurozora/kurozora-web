@@ -10,7 +10,6 @@ use Illuminate\Queue\SerializesModels;
 use Image;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Storage;
-use Str;
 
 class ConvertImageToWebPJob implements ShouldQueue
 {
@@ -44,7 +43,7 @@ class ConvertImageToWebPJob implements ShouldQueue
         // Get the old paths, and prepare the new paths.
         $oldImageFullPath = $this->media->getFullUrl();
         $oldExtension = pathinfo($oldImageFullPath, PATHINFO_EXTENSION);
-        $newImageFullPath = Str::replaceLast('.' . $oldExtension, '.webp', $oldImageFullPath);
+        $newImageFullPath = str($oldImageFullPath)->replaceLast('.' . $oldExtension, '.webp');
         $newImageName = pathinfo($newImageFullPath, PATHINFO_FILENAME) . '.webp';
 
         // Convert image to WebP
