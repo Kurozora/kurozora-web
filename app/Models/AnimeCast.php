@@ -74,6 +74,7 @@ class AnimeCast extends KModel implements Sitemapable
      */
     public function toSitemapTag(): Url|string|array
     {
-        return route('anime.cast', $this->anime);
+        return Url::create(route('anime.cast', $this->anime))
+            ->setChangeFrequency('monthly');
     }
 }

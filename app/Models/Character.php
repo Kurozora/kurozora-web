@@ -328,6 +328,7 @@ class Character extends KModel implements HasMedia, Sitemapable
      */
     public function toSitemapTag(): Url|string|array
     {
-        return route('characters.details', $this);
+        return Url::create(route('characters.details', $this))
+            ->setChangeFrequency('weekly');
     }
 }

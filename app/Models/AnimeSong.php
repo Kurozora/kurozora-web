@@ -55,6 +55,7 @@ class AnimeSong extends KModel implements Sitemapable
      */
     public function toSitemapTag(): Url|string|array
     {
-        return route('anime.songs', $this->anime);
+        return Url::create(route('anime.songs', $this->anime))
+            ->setChangeFrequency('monthly');
     }
 }
