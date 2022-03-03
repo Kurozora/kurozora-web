@@ -68,6 +68,7 @@ class ExploreCategoryItem extends Resource
             MorphTo::make('Model')
                 ->types([
                     Anime::class,
+                    AnimeSong::class,
                     Genre::class,
                     Theme::class,
                 ])

@@ -5,6 +5,7 @@ namespace App\Http;
 use App\Http\Middleware\AuthenticateSession;
 use App\Http\Middleware\CheckKurozoraUserAuthentication;
 use App\Http\Middleware\EncryptCookies;
+use App\Http\Middleware\ExploreCategoryAlwaysEnabled;
 use App\Http\Middleware\KAuthenticate;
 use App\Http\Middleware\NoSessionForBotsMiddleware;
 use App\Http\Middleware\PreventRequestsDuringMaintenance;
@@ -87,5 +88,6 @@ class Kernel extends HttpKernel
         'signed' => ValidateSignature::class,
         'throttle' => ThrottleRequests::class,
         'verified' => EnsureEmailIsVerified::class,
+        'explore.always-enabled' => ExploreCategoryAlwaysEnabled::class
     ];
 }

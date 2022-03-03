@@ -105,6 +105,12 @@ class ExploreCategory extends Resource
                 ->sortable()
                 ->help('Turning this on will also include the category in genre specific categories.'),
 
+            Boolean::make('Is Enabled')
+                ->default(true)
+                ->rules('required')
+                ->sortable()
+                ->help('Turning this on will make the category visible to the users.'),
+
             HasMany::make('Items', 'explore_category_items', ExploreCategoryItem::class),
         ];
     }

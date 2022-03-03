@@ -8,6 +8,7 @@ use App\Http\Requests\GetAnimeCastRequest;
 use App\Http\Requests\GetAnimeCharactersRequest;
 use App\Http\Requests\GetAnimeRelatedShowsRequest;
 use App\Http\Requests\GetAnimeSeasonsRequest;
+use App\Http\Requests\GetAnimeSongsRequest;
 use App\Http\Requests\GetAnimeStaffRequest;
 use App\Http\Requests\GetAnimeStudiosRequest;
 use App\Http\Requests\RateAnimeRequest;
@@ -16,6 +17,7 @@ use App\Http\Resources\AnimeCastResource;
 use App\Http\Resources\AnimeRelatedShowsResource;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\AnimeResourceBasic;
+use App\Http\Resources\AnimeSongResource;
 use App\Http\Resources\AnimeStaffResource;
 use App\Http\Resources\CharacterResourceBasic;
 use App\Http\Resources\SeasonResource;
@@ -135,6 +137,29 @@ class AnimeController extends Controller
         return JSONResult::success([
             'data' => SeasonResource::collection($seasons),
             'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Returns song information for an Anime
+     *
+     * @param GetAnimeSongsRequest $request
+     * @param Anime $anime
+     * @return JsonResponse
+     */
+    public function songs(GetAnimeSongsRequest $request, Anime $anime): JsonResponse
+    {
+//        $data = $request->validated();
+//
+//        // Get the seasons
+//        $animeSongs = $anime->getAnimeSongs($data['limit'] ?? 25, $data['page'] ?? 1);
+//
+//        // Get next page url minus domain
+//        $nextPageURL = str_replace($request->root(), '', $animeSongs->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => AnimeSongResource::collection($anime->getAnimeSongs(150)),
+//            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 

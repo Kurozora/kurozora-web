@@ -111,6 +111,7 @@ class Theme extends KModel implements HasMedia, Sitemapable
      */
     public function toSitemapTag(): Url|string|array
     {
-        return route('themes.details', $this);
+        return Url::create(route('themes.details', $this))
+            ->setChangeFrequency('weekly');
     }
 }

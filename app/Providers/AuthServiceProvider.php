@@ -40,7 +40,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         // Register the super-admin permission
-        Gate::before(function ($user, $ability) {
+        Gate::before(function (User $user, $ability) {
             try {
                 return $user->hasPermissionTo('*') ? true : null;
             }

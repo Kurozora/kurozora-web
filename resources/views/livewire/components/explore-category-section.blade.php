@@ -69,18 +69,21 @@
                                 />
                             @break
                             @case(\App\Enums\ExploreCategoryTypes::Themes)
-                            <x-lockups.medium-lockup
-                                :href="route('themes.details', ['theme' => $categoryItem->model])"
-                                :title="$categoryItem->model->name"
-                                :backgroundColor="$categoryItem->model->color"
-                                :backgroundImage="$categoryItem->model->symbol_image_url ?? asset('images/static/icon/logo.webp')"
-                            />
+                                <x-lockups.medium-lockup
+                                    :href="route('themes.details', ['theme' => $categoryItem->model])"
+                                    :title="$categoryItem->model->name"
+                                    :backgroundColor="$categoryItem->model->color"
+                                    :backgroundImage="$categoryItem->model->symbol_image_url ?? asset('images/static/icon/logo.webp')"
+                                />
                             @break
                             @case(\App\Enums\ExploreCategoryTypes::Characters)
                                 <x-lockups.character-lockup :character="$categoryItem->model" />
                             @break
                             @case(\App\Enums\ExploreCategoryTypes::People)
                                 <x-lockups.person-lockup :person="$categoryItem->model" />
+                            @break
+                            @case(\App\Enums\ExploreCategoryTypes::Songs)
+                                <x-lockups.music-lockup :anime-song="$categoryItem->model" :show-episodes="false" :show-anime="true" />
                             @break
                             @default
                                 @if (config('app.env') === 'local')

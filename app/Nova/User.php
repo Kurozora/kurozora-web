@@ -192,7 +192,7 @@ class User extends Resource
 //                })
                 ->searchable(),
 
-            BelongsToMany::make('Favorite Anime', 'favoriteAnime', Anime::class),
+            BelongsToMany::make('Favorite Anime', 'favorite_anime', Anime::class),
 
             BelongsToMany::make('Badges')
                 ->searchable(),

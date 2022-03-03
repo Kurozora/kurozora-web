@@ -44,6 +44,18 @@ class ImportStudios extends Command
             ProcessImportStudio::dispatch($kStudios);
         });
 
+//        Studio::chunk(1000, function (Collection $studios) {
+//            /** @var Studio[] $studios */
+//            foreach ($studios as $studio) {
+//                $kStudio = KStudio::firstWhere('id', '=', $studio->mal_id);
+//
+//                if (empty($kStudio)) {
+//                    \Log::warning('Didn’t find: ' . $studio->name);
+//                    \Log::info('studio id: ' . $studio->mal_id);
+//                }
+//            }
+//        });
+
         return Command::SUCCESS;
     }
 }
