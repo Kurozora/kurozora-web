@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Deleters;
 
 use App\Models\User;
 use Carbon\Carbon;
@@ -13,7 +13,7 @@ class DeleteInactiveUnconfirmedUsers extends Command
      *
      * @var string
      */
-    protected $signature = 'users:delete_inactive_unconfirmed';
+    protected $signature = 'delete:inactive_unconfirmed_users';
 
     /**
      * The console command description.

@@ -44,6 +44,38 @@ class ImportAnime extends Command
             ProcessImportAnime::dispatch($kAnimes);
         });
 
+        // Clean invalid anime
+//        Anime::chunk(1000, function (Collection $animes) {
+//        /** @var Anime[] $animes */
+//            foreach ($animes as $anime) {
+//                $kAnime = KAnime::firstWhere('id', '=', $anime->mal_id);
+//
+//                if (empty($kAnime)) {
+//                    \Log::info($anime->mal_id);
+//
+//                    $altAnime = Anime::firstWhere([
+//                        ['mal_id', '!=', $anime->mal_id],
+//                        ['original_title', '=', $anime->original_title],
+//                    ]);
+//
+//                    if (empty($altAnime)) {
+////                        \Log::warning('Didn’t find: ' . $anime->original_title);
+//                    } else {
+//                        // Grab the slug
+//                        $animeSlug = $anime->slug;
+//
+//                        // Delete the invalid anime
+//                        $anime->delete();
+//
+//                        // Update the slug of the alternative
+//                        $altAnime->update([
+//                            'slug' => $animeSlug
+//                        ]);
+//                    }
+//                }
+//            }
+//        });
+
         return Command::SUCCESS;
     }
 }
