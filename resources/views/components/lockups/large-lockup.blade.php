@@ -18,7 +18,7 @@
                 webkitallowfullscreen="webkitallowfullscreen"
                 allow="fullscreen;"
                 data-size="auto"
-                data-src="https://www.youtube-nocookie.com/embed/{{ Str::after($anime->video_url, '?v=') }}?autoplay=0&iv_load_policy=3&disablekb=1&color=red&rel=0&cc_load_policy=0&start=0&end=0&origin={{ config('app.url') }}&modestbranding=1&playsinline=1&loop=1&playlist={{ Str::after($anime->video_url, '?v=') }}"
+                data-src="https://www.youtube-nocookie.com/embed/{{ str($anime->video_url)->after('?v=') }}?autoplay=0&iv_load_policy=3&disablekb=1&color=red&rel=0&cc_load_policy=0&start=0&end=0&origin={{ config('app.url') }}&modestbranding=1&playsinline=1&loop=1&playlist={{ str($anime->video_url)->after('?v=') }}"
             >
             </iframe>
         @endif
