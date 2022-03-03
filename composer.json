@@ -4,7 +4,7 @@
     "description": "Kurozora web application.",
     "keywords": ["kurozora", "anime", "manga", "game", "character", "actor", "people", "studio", "hentai", "song", "track", "watch"],
     "require": {
-        "php": "^8.0",
+        "php": "^8.0.2",
         "ext-curl": "*",
         "ext-gd": "*",
         "ext-json": "*",
@@ -31,9 +31,9 @@
         "kraenkvisuell/nova-astrotranslatable": "^2.0",
         "laraning/nova-time-field": "^1.0",
         "laravel-notification-channels/apn": "^v4.0",
-        "laravel/framework": "^9.0",
+        "laravel/framework": "^9.2",
         "laravel/nova": "*",
-        "laravel/sanctum": "^2.12",
+        "laravel/sanctum": "^2.14",
         "laravel/socialite": "^5.2",
         "laravel/tinker": "^2.7",
         "laravelwebdev/responsive": "^1.0",
@@ -59,12 +59,12 @@
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
         "barryvdh/laravel-ide-helper": "^2.12",
-        "spatie/laravel-ignition": "^1.0",
         "fakerphp/faker": "^1.19",
         "laravel/sail": "^1.13",
         "mockery/mockery": "^1.5",
         "nunomaduro/collision": "^6.1",
-        "phpunit/phpunit": "^9.5",
+        "phpunit/phpunit": "^9.5.10",
+        "spatie/laravel-ignition": "^1.0",
         "spatie/phpunit-snapshot-assertions": "^4.2"
     },
     "repositories": [
