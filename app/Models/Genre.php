@@ -111,6 +111,7 @@ class Genre extends KModel implements HasMedia, Sitemapable
      */
     public function toSitemapTag(): Url|string|array
     {
-        return route('genres.details', $this);
+        return Url::create(route('genres.details', $this))
+            ->setChangeFrequency('weekly');
     }
 }

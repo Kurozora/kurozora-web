@@ -213,6 +213,7 @@ class ExploreCategory extends KModel implements Sitemapable
      */
     public function toSitemapTag(): Url|string|array
     {
-        return route('explore.details', $this);
+        return Url::create(route('explore.details', $this))
+            ->setChangeFrequency('weekly');
     }
 }
