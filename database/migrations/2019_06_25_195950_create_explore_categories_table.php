@@ -23,6 +23,7 @@ class CreateExploreCategoriesTable extends Migration
             $table->string('size');
             $table->smallInteger('position');
             $table->boolean('is_global');
+            $table->boolean('is_enabled');
             $table->timestamps();
         });
 
