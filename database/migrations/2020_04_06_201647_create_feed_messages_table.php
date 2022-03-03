@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFeedMessagesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -45,4 +45,4 @@ class CreateFeedMessagesTable extends Migration
     {
         Schema::dropIfExists(FeedMessage::TABLE_NAME);
     }
-}
+};
