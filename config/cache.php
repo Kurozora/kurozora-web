@@ -86,6 +86,10 @@ return [
             'endpoint' => env('DYNAMODB_ENDPOINT'),
         ],
 
+        'octane' => [
+            'driver' => 'octane',
+        ],
+
     ],
 
     /*
@@ -99,6 +103,6 @@ return [
     |
     */
 
-    'prefix' => env('CACHE_PREFIX', 'kurozora_cache'),
+    'prefix' => env('CACHE_PREFIX', str(env('APP_NAME', 'kurozora'))->slug('_').'_cache_'),
 
 ];
