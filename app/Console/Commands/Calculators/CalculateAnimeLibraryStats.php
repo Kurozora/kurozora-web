@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Calculators;
 
 use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
