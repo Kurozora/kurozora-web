@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Importers;
 
 use App\Models\Anime;
 use App\Scopes\TvRatingScope;
@@ -8,6 +8,7 @@ use Http;
 use Illuminate\Console\Command;
 use JsonMachine\JsonDecoder\ExtJsonDecoder;
 use JsonMachine\JsonMachine;
+use function storage_path;
 
 class ImportAnimeID extends Command
 {
@@ -16,7 +17,7 @@ class ImportAnimeID extends Command
      *
      * @var string
      */
-    protected $signature = 'import:anime-ids';
+    protected $signature = 'import:anime_ids';
 
     /**
      * The console command description.
@@ -50,17 +51,19 @@ class ImportAnimeID extends Command
         $progressBar->start();
 
         foreach ($animes as $data) {
-            $sources = $this->filterSources($data->sources);
+//            if ($animes->getPosition() >= 24594500) {
+                $sources = $this->filterSources($data->sources);
 
-            if (array_key_exists('mal_id', $sources) && array_key_exists('notify_id', $sources)) {
-                $anime = Anime::withoutGlobalScope(new TvRatingScope)->firstWhere([
-                    ['mal_id', $sources['mal_id']],
-                ]);
+                if (array_key_exists('mal_id', $sources) && array_key_exists('notify_id', $sources)) {
+                    $anime = Anime::withoutGlobalScope(new TvRatingScope)->firstWhere([
+                        ['mal_id', $sources['mal_id']],
+                    ]);
 
-                if (!empty($anime)) {
-                    $anime->update($sources);
+                    if (!empty($anime)) {
+                        $anime->update($sources);
+                    }
                 }
-            }
+//            }
 
             $progress = $animes->getPosition();
             $progressBar->setProgress($progress);
