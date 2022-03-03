@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\Character;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 class CharacterFactory extends Factory
 {
@@ -38,7 +37,7 @@ class CharacterFactory extends Factory
         }
 
         return [
-            'slug'              => Str::slug($name),
+            'slug'              => str($name)->slug(),
             'name'              => $name,
             'nicknames'         => $this->faker->words(mt_rand(0, 3)),
             'about'             => $this->faker->realText(),

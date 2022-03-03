@@ -10,7 +10,6 @@ use App\Models\Status;
 use App\Models\TvRating;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 class AnimeFactory extends Factory
 {
@@ -60,7 +59,7 @@ class AnimeFactory extends Factory
         }
 
         return [
-            'slug'              => Str::slug($title),
+            'slug'              => str($title)->slug(),
             'original_title'    => $title,
             'title'             => $title,
             'synopsis'          => $this->faker->realText(),
