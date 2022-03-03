@@ -8,7 +8,6 @@ use App\Models\MediaRelation;
 use App\Models\Relation;
 use App\Scopes\TvRatingScope;
 use Illuminate\Database\Eloquent\Collection;
-use Str;
 
 class ImportAnimeRelationProcessor
 {
@@ -23,7 +22,7 @@ class ImportAnimeRelationProcessor
         foreach ($kMediaRelated as $kRelatedMedia) {
             $anime = Anime::withoutGlobalScope(new TvRatingScope)->firstWhere('mal_id', $kRelatedMedia->media_id);
             $relatedAnime = Anime::withoutGlobalScope(new TvRatingScope)->firstWhere('mal_id', $kRelatedMedia->related_id);
-            $relation = Relation::firstWhere('name', Str::title($kRelatedMedia->related->related));
+            $relation = Relation::firstWhere('name', str($kRelatedMedia->related->related)->title());
 
             if (!empty($anime) && !empty($relatedAnime)) {
                 $mediaRelation = MediaRelation::where([

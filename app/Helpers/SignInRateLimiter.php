@@ -4,7 +4,6 @@ namespace App\Helpers;
 
 use Illuminate\Cache\RateLimiter;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class SignInRateLimiter
 {
@@ -96,6 +95,6 @@ class SignInRateLimiter
      */
     protected function throttleKey(Request $request): string
     {
-        return Str::lower($request->input('email')) . '|' . $request->ip();
+        return str($request->input('email'))->lower() . '|' . $request->ip();
     }
 }
