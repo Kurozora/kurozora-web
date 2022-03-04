@@ -6,15 +6,15 @@
 @endphp
 
 <main>
-    <x-slot name="title">
+    <x-slot:title>
         {{ $theme->name }}
     </x-slot>
 
-    <x-slot name="description">
+    <x-slot:description>
         {{ __('Discover the extensive list of :x anime only on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $theme->name]) }} {{ $theme->description }}
     </x-slot>
 
-    <x-slot name="meta">
+    <x-slot:meta>
         <meta property="og:title" content="{{ $theme->name }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ __('Discover the extensive list of :x anime only on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $theme->name]) }} {{ $theme->description }}" />
         <meta property="og:image" content="{{ $theme->symbol_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
@@ -22,7 +22,7 @@
         <link rel="canonical" href="{{ route('themes.details', $theme) }}">
     </x-slot>
 
-    <x-slot name="appArgument">
+    <x-slot:appArgument>
         theme/{{ $theme->id }}
     </x-slot>
 

@@ -1,13 +1,13 @@
 <main>
-    <x-slot name="title">
+    <x-slot:title>
         {{ __('Library') }}
     </x-slot>
 
-    <x-slot name="description">
+    <x-slot:description>
         {{ __('Join Kurozora and build your own anime and manga library for free. Keep track of the anime you love, and the ones you will love next.') }}
     </x-slot>
 
-    <x-slot name="meta">
+    <x-slot:meta>
         <meta property="og:title" content="{{ __('Library') }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ __('Join Kurozora and build your own anime and manga library for free. Keep track of the anime you love, and the ones you will love next.') }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />

@@ -1,13 +1,13 @@
 <main>
-    <x-slot name="title">
+    <x-slot:title>
         {!! $person->full_name !!}
     </x-slot>
 
-    <x-slot name="description">
+    <x-slot:description>
         {{ $person->about }}
     </x-slot>
 
-    <x-slot name="meta">
+    <x-slot:meta>
         <meta property="og:title" content="{{ $person->full_name }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ $person->about ?? __('app.description') }}" />
         <meta property="og:image" content="{{ $person->profile_image_url ?? asset('images/static/placeholders/person_poster.webp') }}" />
@@ -16,7 +16,7 @@
         <link rel="canonical" href="{{ route('people.details', $person) }}">
     </x-slot>
 
-    <x-slot name="appArgument">
+    <x-slot:appArgument>
         person/{{ $person->id }}
     </x-slot>
 
@@ -37,13 +37,13 @@
         @if ($person->about)
             <section class="pt-5 pb-8 border-t-2">
                 <x-section-nav>
-                    <x-slot name="title">
+                    <x-slot:title>
                         {{ __('About') }}
                     </x-slot>
                 </x-section-nav>
 
                 <x-truncated-text>
-                    <x-slot name="text">
+                    <x-slot:text>
                         {!! nl2br($person->about) !!}
                     </x-slot>
                 </x-truncated-text>
@@ -52,14 +52,14 @@
 
         <section class="pt-5 pb-8 border-t-2">
             <x-section-nav>
-                <x-slot name="title">
+                <x-slot:title>
                     {{ __('Information') }}
                 </x-slot>
             </x-section-nav>
 
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-4">
                 <x-information-list id="aliases" title="{{ __('Aliases') }}" icon="{{ asset('images/symbols/person.svg') }}">
-                    <x-slot name="information">
+                    <x-slot:information>
                         @if (!empty($person->full_name))
                             {{ __('Name: :x', ['x' => $person->full_name]) }} <br />
                         @endif
@@ -75,17 +75,17 @@
                 </x-information-list>
 
                 <x-information-list id="age" title="{{ __('Age') }}" icon="{{ asset('images/symbols/calendar.svg') }}">
-                    <x-slot name="information">
+                    <x-slot:information>
                         {{ $person->age_string ?? '-' }}
                     </x-slot>
 
-                    <x-slot name="footer">
+                    <x-slot:footer>
                         {{ $person->birthdate?->format('d F Y') }}
                     </x-slot>
                 </x-information-list>
 
                 <x-information-list id="website" title="{{ __('Websites') }}" icon="{{ asset('images/symbols/safari.svg') }}">
-                    <x-slot name="information">
+                    <x-slot:information>
                         @if (!empty($person->website_urls))
                             <ul class="list-disc">
                                 @foreach($person->website_urls as $website_url)
@@ -107,11 +107,11 @@
         @if (!empty($personAnime->total()))
             <section class="pt-5 pb-8 border-t-2">
                 <x-section-nav>
-                    <x-slot name="title">
+                    <x-slot:title>
                         {{ __('Shows') }}
                     </x-slot>
 
-                    <x-slot name="action">
+                    <x-slot:action>
                         <x-simple-link href="{{ route('people.anime', $person) }}">{{ __('See All') }}</x-simple-link>
                     </x-slot>
                 </x-section-nav>
@@ -129,11 +129,11 @@
         @if (!empty($personCharacters->total()))
             <section class="pt-5 pb-8 border-t-2">
                 <x-section-nav>
-                    <x-slot name="title">
+                    <x-slot:title>
                         {{ __('Characters') }}
                     </x-slot>
 
-                    <x-slot name="action">
+                    <x-slot:action>
                         <x-simple-link href="{{ route('people.characters', $person) }}">{{ __('See All') }}</x-simple-link>
                     </x-slot>
                 </x-section-nav>

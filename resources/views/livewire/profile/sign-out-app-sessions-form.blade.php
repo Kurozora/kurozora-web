@@ -1,13 +1,13 @@
 <x-action-section>
-    <x-slot name="title">
+    <x-slot:title>
         {{ __('App Sessions') }}
     </x-slot>
 
-    <x-slot name="description">
+    <x-slot:description>
         {{ __('Manage and sign out your active app sessions on other devices.') }}
     </x-slot>
 
-    <x-slot name="content">
+    <x-slot:content>
         <div class="max-w-xl text-sm text-gray-600">
             {{ __('If necessary, you may sign out of all of your app sessions across all of your devices. If you feel your account has been compromised, you should also update your password.') }}
         </div>
@@ -51,11 +51,11 @@
 
         <!-- Sign Out App Devices Confirmation Modal -->
         <x-dialog-modal wire:model="confirmingSignOut">
-            <x-slot name="title">
+            <x-slot:title>
                 {{ __('Sign Out App Sessions') }}
             </x-slot>
 
-            <x-slot name="content">
+            <x-slot:content>
                 {{ __('Please enter your password to confirm you would like to sign out of your app sessions across all of your devices.') }}
 
                 <div class="mt-4" x-data="{}" x-on:confirming-sign-out-app-sessions.window="setTimeout(() => $refs.password.focus(), 250)">
@@ -68,7 +68,7 @@
                 </div>
             </x-slot>
 
-            <x-slot name="footer">
+            <x-slot:footer>
                 <x-outlined-button wire:click="$toggle('confirmingSignOut')" wire:loading.attr="disabled">
                     {{ __('Nevermind') }}
                 </x-outlined-button>

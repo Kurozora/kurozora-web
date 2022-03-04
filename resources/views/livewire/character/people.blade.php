@@ -1,13 +1,13 @@
 <main>
-    <x-slot name="title">
+    <x-slot:title>
         {{ __('People') }} | {!! $character->name !!}
     </x-slot>
 
-    <x-slot name="description">
+    <x-slot:description>
         {{ __('Discover the list of voice actors that played :x only on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $character->name]) }}
     </x-slot>
 
-    <x-slot name="meta">
+    <x-slot:meta>
         <meta property="og:title" content="{{ __('People') }} | {{ $character->name }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ __('Discover the list of voice actors that played :x only on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $character->name]) }}" />
         <meta property="og:image" content="{{ $character->profile_image_url ?? asset('images/static/placeholders/character_poster.webp') }}" />
@@ -16,7 +16,7 @@
         <link rel="canonical" href="{{ route('characters.people', $character) }}">
     </x-slot>
 
-    <x-slot name="appArgument">
+    <x-slot:appArgument>
         character/{{ $character->id }}/people
     </x-slot>
 

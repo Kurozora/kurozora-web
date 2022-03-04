@@ -1,13 +1,13 @@
 <x-form-section submit="updatePreferredTvRating">
-    <x-slot name="title">
+    <x-slot:title>
         {{ __('Update TV Rating') }}
     </x-slot>
 
-    <x-slot name="description">
+    <x-slot:description>
         {{ __('Select the shows that are allowed to be shown.') }}
     </x-slot>
 
-    <x-slot name="form">
+    <x-slot:form>
         <div class="col-span-12">
             <div class="max-w-xl text-sm text-gray-600">
                 {{ __('Depending on the chosen TV rating some shows might be hidden.') }}
@@ -25,7 +25,7 @@
         </div>
     </x-slot>
 
-    <x-slot name="actions">
+    <x-slot:actions>
         <x-action-message class="mr-3" on="saved">
             {{ __('Saved.') }}
         </x-action-message>

@@ -1,5 +1,5 @@
 <x-error-layout>
-    <x-slot name="title">
+    <x-slot:title>
         {{ __('Service Unavailable') }}
     </x-slot>
 

@@ -1,13 +1,13 @@
 <main>
-    <x-slot name="title">
+    <x-slot:title>
         {{ $user->username }}
     </x-slot>
 
-    <x-slot name="description">
+    <x-slot:description>
         {{ $user->biography }}
     </x-slot>
 
-    <x-slot name="meta">
+    <x-slot:meta>
         <meta property="og:title" content="{{ $user->username . __(' on Kurozora') }}" />
         <meta property="og:description" content="{{ $user->biography ?? __('app.description') }}" />
         <meta property="og:image" content="{{ $user->profile_image_url }}" />
@@ -16,7 +16,7 @@
         <link rel="canonical" href="{{ route('profile.details', $user) }}">
     </x-slot>
 
-    <x-slot name="appArgument">
+    <x-slot:appArgument>
         users/{{ $user->id }}
     </x-slot>
 
@@ -58,18 +58,18 @@
 
             <div class="flex justify-between">
                 <x-profile-information-badge>
-                    <x-slot name="title">{{ __('Reputation') }}</x-slot>
-                    <x-slot name="description">0</x-slot>
+                    <x-slot:title">{{ __('Reputation') }}</x-slo>
+                    <x-slot:description">0</x-slo>
                 </x-profile-information-badge>
 
                 <x-profile-information-badge>
-                    <x-slot name="title">{{ __('Badges') }}</x-slot>
-                    <x-slot name="description">{{ $user->badges()->count() }}</x-slot>
+                    <x-slot:title">{{ __('Badges') }}</x-slo>
+                    <x-slot:description">{{ $user->badges()->count() }}</x-slo>
                 </x-profile-information-badge>
 
                 <x-profile-information-badge>
-                    <x-slot name="title">{{ __('Following') }}</x-slot>
-                    <x-slot name="description">{{ $user->following()->count() }}</x-slot>
+                    <x-slot:title">{{ __('Following') }}</x-slo>
+                    <x-slot:description">{{ $user->following()->count() }}</x-slo>
                 </x-profile-information-badge>
 
                 @livewire('components.followers-badge', ['user' => $user])
@@ -81,7 +81,7 @@
 
     @auth
         <x-modal-form-section wire:model="showPopup" submit="">
-            <x-slot name="title">
+            <x-slot:title>
                 {{ __('Edit Profile') }}
             </x-slot>
 

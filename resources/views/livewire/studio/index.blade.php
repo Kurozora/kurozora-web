@@ -1,13 +1,13 @@
 <main>
-    <x-slot name="title">
+    <x-slot:title>
         {{ __('Studios') }}
     </x-slot>
 
-    <x-slot name="description">
+    <x-slot:description>
         {{ __('Discover an extensive list of anime studios, producers, and networks only on Kurozora, the largest, free online anime, manga & music database in the world.') }}
     </x-slot>
 
-    <x-slot name="meta">
+    <x-slot:meta>
         <meta property="og:title" content="{{ __('Studios') }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ __('An extensive list of anime studios, producers, and networks only on Kurozora, the largest, free online anime, manga & music database in the world.') }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
@@ -15,7 +15,7 @@
         <link rel="canonical" href="{{ route('studios.index') }}">
     </x-slot>
 
-    <x-slot name="appArgument">
+    <x-slot:appArgument>
         studios
     </x-slot>
 
@@ -30,13 +30,13 @@
                     </div>
 
                     <x-dropdown align="right" width="48">
-                        <x-slot name="trigger">
+                        <x-slot:trigger>
                             <button class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
                                 @svg('line_3_horizontal_decrease_circle', 'fill-current', ['aria-labelledby' => 'filter', 'width' => '28'])
                             </button>
                         </x-slot>
 
-                        <x-slot name="content">
+                        <x-slot:content>
                             {{-- Order --}}
                             <div class="block px-4 py-2 bg-gray-100 text-xs text-gray-400 font-semibold">
                                 {{ __('Order') }}

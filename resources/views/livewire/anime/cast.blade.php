@@ -1,13 +1,13 @@
 <main>
-    <x-slot name="title">
+    <x-slot:title>
         {{ __('Cast') }} | {!! $anime->title !!}
     </x-slot>
 
-    <x-slot name="description">
+    <x-slot:description>
         {{ __('Discover all cast of :x only on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $anime->title]) }}
     </x-slot>
 
-    <x-slot name="meta">
+    <x-slot:meta>
         <meta property="og:title" content="{{ __('Cast') }} | {{ $anime->title }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ __('Discover all cast of :x on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $anime->title]) }}" />
         <meta property="og:image" content="{{ $anime->poster_image_url ?? asset('images/static/placeholders/anime_poster.webp') }}" />
@@ -17,7 +17,7 @@
         <link rel="canonical" href="{{ route('anime.cast', $anime) }}">
     </x-slot>
 
-    <x-slot name="appArgument">
+    <x-slot:appArgument>
         anime/{{ $anime->id }}/cast
     </x-slot>
 

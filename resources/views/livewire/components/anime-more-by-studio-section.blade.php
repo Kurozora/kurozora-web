@@ -2,11 +2,11 @@
     @if ($moreByStudioCount)
         <section id="moreByStudio" class="pt-5 pb-8 px-4 border-t-2">
             <x-section-nav>
-                <x-slot name="title">
+                <x-slot:title>
                     {{ __('More By :x', ['x' => $studio->name]) }}
                 </x-slot>
 
-                <x-slot name="action">
+                <x-slot:action>
                     <x-simple-link href="{{ route('studios.details', $studio) }}">{{ __('See All') }}</x-simple-link>
                 </x-slot>
             </x-section-nav>
