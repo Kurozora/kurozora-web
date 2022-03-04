@@ -169,7 +169,7 @@
 
                         {{-- Settings Dropdown --}}
                         <x-dropdown align="right" width="48">
-                            <x-slot name="trigger">
+                            <x-slot:trigger>
                                 <button
                                     class="hidden sm:flex text-sm border-2 border-transparent rounded-full transition duration-150 ease-in-out focus:outline-none focus:border-gray-300"
                                     x-show="! isSearchEnabled"
@@ -190,7 +190,7 @@
                                 </button>
                             </x-slot>
 
-                            <x-slot name="content">
+                            <x-slot:content>
                                 <x-dropdown-link href="{{ route('me') }}">
                                     {{ __('Profile') }}
                                 </x-dropdown-link>

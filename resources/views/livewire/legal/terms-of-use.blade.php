@@ -1,13 +1,13 @@
 <main>
-    <x-slot name="title">
+    <x-slot:title>
         {{ __('Terms of Use') }}
     </x-slot>
 
-    <x-slot name="description">
+    <x-slot:description>
         {{ __('These Terms and Conditions of Use (the "Terms of Use") apply to the Kurozora web site located at www.kurozora.app, and all associated sites linked to www.kurozora.app by Redark.') }}
     </x-slot>
 
-    <x-slot name="meta">
+    <x-slot:meta>
         <meta property="og:title" content="{{ __('Terms of Use') }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ __('These Terms and Conditions of Use (the "Terms of Use") apply to the Kurozora web site located at www.kurozora.app, and all associated sites linked to www.kurozora.app by Redark.') }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
@@ -15,7 +15,7 @@
         <link rel="canonical" href="{{ route('legal.terms-of-use') }}">
     </x-slot>
 
-    <x-slot name="appArgument">
+    <x-slot:appArgument>
         legal/terms-of-use
     </x-slot>
 

@@ -1,13 +1,13 @@
 <main>
-    <x-slot name="title">
+    <x-slot:title>
         Anime | {!! $studio->name !!}
     </x-slot>
 
-    <x-slot name="description">
+    <x-slot:description>
         {{ __('Discover all of the latest anime, movies, specials, OVA and ONA by :x only on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $studio->name]) }}
     </x-slot>
 
-    <x-slot name="meta">
+    <x-slot:meta>
         <meta property="og:title" content="Anime | {{ $studio->name }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ __('Discover all of the latest anime, movies, specials, OVA and ONA by :x on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $studio->name]) }}" />
         <meta property="og:image" content="{{ $studio->profile_image_url ?? asset('images/static/placeholders/person_poster.webp') }}" />
@@ -16,7 +16,7 @@
         <link rel="canonical" href="{{ route('studios.anime', $studio) }}">
     </x-slot>
 
-    <x-slot name="appArgument">
+    <x-slot:appArgument>
         studio/{{ $studio->id }}/shows
     </x-slot>
 

@@ -1,13 +1,13 @@
 <main>
-    <x-slot name="title">
+    <x-slot:title>
         {!! $character->name !!}
     </x-slot>
 
-    <x-slot name="description">
+    <x-slot:description>
         {{ $character->synopsis }}
     </x-slot>
 
-    <x-slot name="meta">
+    <x-slot:meta>
         <meta property="og:title" content="{{ $character->name }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ $character->synopsis ?? __('app.description') }}" />
         <meta property="og:image" content="{{ $character->profile_image_url ?? asset('images/static/placeholders/person_poster.webp') }}" />
@@ -16,7 +16,7 @@
         <link rel="canonical" href="{{ route('characters.details', $character) }}">
     </x-slot>
 
-    <x-slot name="appArgument">
+    <x-slot:appArgument>
         character/{{ $character->id }}
     </x-slot>
 
@@ -37,13 +37,13 @@
         @if (!empty($character->about))
             <section class="pt-5 pb-8 border-t-2">
                 <x-section-nav>
-                    <x-slot name="title">
+                    <x-slot:title>
                         {{ __('About') }}
                     </x-slot>
                 </x-section-nav>
 
                 <x-truncated-text>
-                    <x-slot name="text">
+                    <x-slot:text>
                         {!! nl2br($character->about) !!}
                     </x-slot>
                 </x-truncated-text>
@@ -52,34 +52,34 @@
 
         <section class="pt-5 pb-8 border-t-2">
             <x-section-nav>
-                <x-slot name="title">
+                <x-slot:title>
                     {{ __('Information') }}
                 </x-slot>
             </x-section-nav>
 
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-4">
                 <x-information-list id="debut" title="{{ __('Debut') }}" icon="{{ asset('images/symbols/star.svg') }}">
-                    <x-slot name="information">
+                    <x-slot:information>
                         {{ $character->debut ?? '-' }}
                     </x-slot>
 
-                    <x-slot name="footer">
+                    <x-slot:footer>
                         {{ __('The character is :x.', ['x' => $character->status]) }}
                     </x-slot>
                 </x-information-list>
 
                 <x-information-list id="age" title="{{ __('Age') }}" icon="{{ asset('images/symbols/calendar.svg') }}">
-                    <x-slot name="information">
+                    <x-slot:information>
                         {{ $character->age_string ?? '-' }}
                     </x-slot>
 
-                    <x-slot name="footer">
+                    <x-slot:footer>
                         {{ $character->birthdate . ($character->astrological_sign_string ? ', ' . $character->astrological_sign_string : '') }}
                     </x-slot>
                 </x-information-list>
 
                 <x-information-list id="measurements" title="{{ __('Measurements') }}" icon="{{ asset('images/symbols/ruler.svg') }}">
-                    <x-slot name="information">
+                    <x-slot:information>
                         @if ($character->height_string )
                         {{ __('Height: :x', ['x' => $character->height_string]) }} <br />
                         @endif
@@ -103,7 +103,7 @@
                 </x-information-list>
 
                 <x-information-list id="characteristics" title="{{ __('Characteristics') }}" icon="{{ asset('images/symbols/list_bullet_rectangle.svg') }}">
-                    <x-slot name="information">
+                    <x-slot:information>
                         @if ($character->blood_type)
                             {{ __('Blood Type: :x', ['x' => $character->blood_type]) }} <br/>
                         @endif
@@ -119,11 +119,11 @@
         @if (!empty($characterAnime->total()))
             <section class="pt-5 pb-8 border-t-2">
                 <x-section-nav>
-                    <x-slot name="title">
+                    <x-slot:title>
                         {{ __('Shows') }}
                     </x-slot>
 
-                    <x-slot name="action">
+                    <x-slot:action>
                         <x-simple-link href="{{ route('characters.anime', $character) }}">{{ __('See All') }}</x-simple-link>
                     </x-slot>
                 </x-section-nav>
@@ -141,11 +141,11 @@
         @if (!empty($characterPeople->total()))
             <section class="pt-5 pb-8 border-t-2">
                 <x-section-nav>
-                    <x-slot name="title">
+                    <x-slot:title>
                         {{ __('People') }}
                     </x-slot>
 
-                    <x-slot name="action">
+                    <x-slot:action>
                         <x-simple-link href="{{ route('characters.people', $character) }}">{{ __('See All') }}</x-simple-link>
                     </x-slot>
                 </x-section-nav>

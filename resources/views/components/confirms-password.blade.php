@@ -16,11 +16,11 @@
 
 @once
     <x-dialog-modal wire:model="confirmingPassword">
-        <x-slot name="title">
+        <x-slot:title>
             {{ $title }}
         </x-slot>
 
-        <x-slot name="content">
+        <x-slot:content>
             {{ $content }}
 
             <div class="mt-4" x-data="{}" x-on:confirming-password.window="setTimeout(() => $refs.confirmable_password.focus(), 250)">
@@ -33,7 +33,7 @@
             </div>
         </x-slot>
 
-        <x-slot name="footer">
+        <x-slot:footer>
             <x-outlined-button wire:click="stopConfirmingPassword" wire:loading.attr="disabled">
                 {{ __('Nevermind') }}
             </x-outlined-button>
