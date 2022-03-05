@@ -23,11 +23,11 @@ final class UserActivityStatus extends Enum
      */
     public static function getDescription($value): string
     {
-        return match ($value) {
+        return match ((int) $value) {
             self::Online => 'Online',
             self::SeenRecently => 'Seen Recently',
             self::Offline => 'Offline',
-            default => parent::getDescription($value),
+            default => parent::getDescription((int) $value),
         };
     }
 }

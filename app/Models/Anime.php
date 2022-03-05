@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\AsArrayObject;
 use App\Enums\DayOfWeek;
 use App\Enums\SeasonOfYear;
 use App\Scopes\TvRatingScope;
@@ -17,7 +18,6 @@ use Carbon\Exceptions\InvalidFormatException;
 use Date;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -127,16 +127,16 @@ class Anime extends KModel implements HasMedia, Sitemapable
      * @var array
      */
     protected $appends = [
-        'air_time_utc',
-        'banner_image',
-        'banner_image_url',
-        'broadcast',
-        'duration_string',
-        'duration_total',
-        'information_summary',
-        'poster_image',
-        'poster_image_url',
-        'time_until_broadcast',
+//        'air_time_utc',
+//        'banner_image',
+//        'banner_image_url',
+//        'broadcast',
+//        'duration_string',
+//        'duration_total',
+//        'information_summary',
+//        'poster_image',
+//        'poster_image_url',
+//        'time_until_broadcast',
     ];
 
     /**
@@ -240,8 +240,19 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function getAirSeasonAttribute($value): ?SeasonOfYear
     {
         // For some reason air season is sometimes seen as a string, so force cast to int.
-        //Also makes 0 out of null, so win/win.
+        // Also makes 0 out of null, so win/win.
         return SeasonOfYear::fromValue((int) $value);
+    }
+
+    /**
+     * The air day of the show.
+     *
+     * @param int|null $value
+     * @return DayOfWeek|null
+     */
+    public function getAirDayAttribute(?int $value): ?DayOfWeek
+    {
+        return isset($value) ? DayOfWeek::fromValue($value) : null;
     }
 
     /**
@@ -276,15 +287,14 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function getBroadcastAttribute(): ?string
     {
         $broadcast = null;
-        $airDay = $this->air_day;
+        $airDay = $this->air_day?->value;
         $airTime = $this->air_time;
         $dayTime = now('Asia/Tokyo')
             ->next((int) $airDay)
             ->setTimeFromTimeString($airTime ?? '00:00')
             ->setTimezone('UTC');
 
-        // Check if air day is not empty or is Sunday, since Sunday has a value of 0.
-        if (!empty($airDay) || $airDay == DayOfWeek::Sunday) {
+        if (!is_null($airDay)) {
             $broadcast .= $dayTime->getTranslatedDayName();
         }
         if (!empty($airTime)) {
@@ -293,6 +303,19 @@ class Anime extends KModel implements HasMedia, Sitemapable
 
         return $broadcast;
     }
+
+//    /**
+//     * Interact with the user's first name.
+//     *
+//     * @return Attribute
+//     */
+//    protected function synonymTitles(): Attribute
+//    {
+//        return Attribute::make(
+//            get: fn($value) => $value ?? [],
+//            set: fn ($value) => $value ?? [],
+//        );
+//    }
 
     /**
      * The time from now until the broadcast.
