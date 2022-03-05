@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use App\Casts\AsArrayObject;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasBannerImage;
 use App\Traits\Model\HasLogoImage;
 use App\Traits\Model\HasProfileImage;
-use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
