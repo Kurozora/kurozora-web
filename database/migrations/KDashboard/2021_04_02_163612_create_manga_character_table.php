@@ -7,7 +7,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMangaCharacterTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -38,4 +38,4 @@ class CreateMangaCharacterTable extends Migration
     {
         Schema::dropIfExists(MangaCharacter::TABLE_NAME);
     }
-}
+};

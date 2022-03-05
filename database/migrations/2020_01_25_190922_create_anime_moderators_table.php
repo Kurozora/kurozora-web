@@ -7,7 +7,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAnimeModeratorsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -39,4 +39,4 @@ class CreateAnimeModeratorsTable extends Migration
     {
         Schema::dropIfExists(AnimeModerator::TABLE_NAME);
     }
-}
+};

@@ -1,9 +1,9 @@
 <main>
-    <x-slot name="title">
+    <x-slot:title>
         {{ __('Welcome') }}
     </x-slot>
 
-    <x-slot name="meta">
+    <x-slot:meta>
         <meta property="og:title" content="Welcome to {{ config('app.name') }}" />
         <meta property="og:description" content="{{ __('app.description') }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
@@ -11,7 +11,7 @@
         <link rel="canonical" href="{{ route('welcome') }}">
     </x-slot>
 
-    <x-slot name="appArgument">
+    <x-slot:appArgument>
         welcome
     </x-slot>
 

@@ -8,11 +8,11 @@
 @endphp
 
 <main>
-    <x-slot name="title">
+    <x-slot:title>
         {!! $exploreCategory->title !!}
     </x-slot>
 
-    <x-slot name="description">
+    <x-slot:description>
         @switch($exploreCategory->type)
             @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
             @case(\App\Enums\ExploreCategoryTypes::UpcomingShows)
@@ -24,7 +24,7 @@
         @endswitch
     </x-slot>
 
-    <x-slot name="meta">
+    <x-slot:meta>
         <meta property="og:title" content="{{ __('Explore') . ' ' . $exploreCategory->title }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ __('Explore the latest :x category only on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
@@ -37,7 +37,7 @@
         <link rel="canonical" href="{{ route('explore.details', $exploreCategory) }}">
     </x-slot>
 
-    <x-slot name="appArgument">
+    <x-slot:appArgument>
         explore/{{ $exploreCategory->id }}
     </x-slot>
 

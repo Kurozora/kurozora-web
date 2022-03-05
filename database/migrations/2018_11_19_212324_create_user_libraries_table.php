@@ -7,7 +7,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserLibrariesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -48,4 +48,4 @@ class CreateUserLibrariesTable extends Migration
     {
         Schema::dropIfExists(UserLibrary::TABLE_NAME);
     }
-}
+};

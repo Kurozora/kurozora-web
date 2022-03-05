@@ -1,13 +1,13 @@
 <main>
-    <x-slot name="title">
+    <x-slot:title>
        Anime | {!! $person->full_name !!}
     </x-slot>
 
-    <x-slot name="description">
+    <x-slot:description>
         {{ __('Discover the extensive list of anime :x has worked on only on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $person->full_name]) }}
     </x-slot>
 
-    <x-slot name="meta">
+    <x-slot:meta>
         <meta property="og:title" content="Anime | {{ $person->full_name }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ __('Discover the extensive list of anime :x has worked on only on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $person->full_name]) }}" />
         <meta property="og:image" content="{{ $person->profile_image_url ?? asset('images/static/placeholders/person_poster.webp') }}" />
@@ -16,7 +16,7 @@
         <link rel="canonical" href="{{ route('people.anime', $person) }}">
     </x-slot>
 
-    <x-slot name="appArgument">
+    <x-slot:appArgument>
         person/{{ $person->id }}/shows
     </x-slot>
 

@@ -7,7 +7,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSeasonTranslationsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -44,4 +44,4 @@ class CreateSeasonTranslationsTable extends Migration
     {
         Schema::dropIfExists(SeasonTranslation::TABLE_NAME);
     }
-}
+};

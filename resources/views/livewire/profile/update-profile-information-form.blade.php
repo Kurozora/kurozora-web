@@ -1,13 +1,13 @@
 <x-form-section submit="updateProfileInformation">
-    <x-slot name="title">
+    <x-slot:title>
         {{ __('Profile Information') }}
     </x-slot>
 
-    <x-slot name="description">
+    <x-slot:description>
         {{ __('Update your account’s profile information and email address.') }}
     </x-slot>
 
-    <x-slot name="form">
+    <x-slot:form>
         {{-- Banner Image --}}
         <div x-data="{bannerImageName: null, bannerImagePreview: @entangle('bannerImage')}" class="col-span-6 sm:col-span-6">
             {{-- Banner Image File Input --}}
@@ -186,7 +186,7 @@
         </div>
     </x-slot>
 
-    <x-slot name="actions">
+    <x-slot:actions>
         <x-action-message class="mr-3" on="saved">
             {{ __('Saved.') }}
         </x-action-message>

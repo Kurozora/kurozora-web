@@ -27,9 +27,9 @@ final class UserLibraryStatus extends Enum
      */
     static function getDescription($value): string
     {
-        return match ($value) {
+        return match ((int) $value) {
             self::OnHold => 'On-Hold',
-            default => parent::getDescription($value),
+            default => parent::getDescription((int) $value),
         };
     }
 

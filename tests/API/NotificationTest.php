@@ -3,8 +3,8 @@
 namespace Tests\API;
 
 use App\Http\Resources\NotificationResource;
-use App\Notifications\NewFollower;
 use App\Models\User;
+use App\Notifications\NewFollower;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Notifications\DatabaseNotification;
 use Tests\TestCase;
@@ -110,7 +110,7 @@ class NotificationTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the user now has no notifications
-        $this->assertDeleted($notification);
+        $this->assertModelMissing($notification);
     }
 
     /**

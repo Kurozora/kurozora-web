@@ -1,13 +1,13 @@
 <main>
-    <x-slot name="title">
+    <x-slot:title>
         {{ __('Create Theme') }}
     </x-slot>
 
-    <x-slot name="description">
+    <x-slot:description>
         {{ __('Create a unique theme for your account only on Kurozora, the largest, free online anime, manga & music database in the world.') }}
     </x-slot>
 
-    <x-slot name="meta">
+    <x-slot:meta>
         <meta property="og:title" content="{{ __('Create Theme') }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ __('Create a unique theme for your account only on Kurozora, the largest, free online anime, manga & music database in the world.') }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />

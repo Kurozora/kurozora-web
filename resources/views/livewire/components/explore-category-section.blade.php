@@ -2,15 +2,15 @@
     @if ($exploreCategoryCount)
         <section class="pt-5 pb-8 border-t-2" wire:init="loadExploreCategoryItems">
             <x-section-nav class="flex flex-nowrap justify-between mb-5">
-                <x-slot name="title">
+                <x-slot:title>
                     {{ $exploreCategory->title }}
                 </x-slot>
 
-                <x-slot name="description">
+                <x-slot:description>
                     {{ $exploreCategory->description }}
                 </x-slot>
 
-                <x-slot name="action">
+                <x-slot:action>
                     @switch($exploreCategory->type)
                         @case(\App\Enums\ExploreCategoryTypes::Genres)
                             <x-simple-link class="whitespace-nowrap" href="{{ route('genres.index') }}">{{ __('See All') }}</x-simple-link>

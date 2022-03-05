@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Cache;
 use Laravel\Sanctum\HasApiTokens;
 use Ramsey\Uuid\Uuid;
 use Request;
+use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Components\Calendar;
@@ -157,6 +158,17 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         return SlugOptions::create()
             ->generateSlugsFrom('username')
             ->saveSlugsTo('slug');
+    }
+
+    /**
+     * Get the activity options for activity log.
+     *
+     * @return LogOptions
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll();
     }
 
     /**
