@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\AnimeCast;
 use App\Models\Anime;
+use App\Models\AnimeCast;
 use App\Models\CastRole;
 use App\Models\Character;
 use App\Models\Language;
@@ -10,7 +10,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAnimeCastsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -51,4 +51,4 @@ class CreateAnimeCastsTable extends Migration
     {
         Schema::dropIfExists(AnimeCast::TABLE_NAME);
     }
-}
+};

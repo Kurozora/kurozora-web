@@ -3,7 +3,6 @@
 namespace App\Traits\Model;
 
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -52,7 +51,7 @@ trait HasPosterImage
     function updatePosterImage(string|UploadedFile $uploadFile, string $name = null, array $customProperties = [])
     {
         // Determine media adder
-        $addMedia = Str::startsWith($uploadFile, ['http://', 'https://']) ? $this->addMediaFromUrl($uploadFile) : $this->addMedia($uploadFile);
+        $addMedia = str($uploadFile)->startsWith(['http://', 'https://']) ? $this->addMediaFromUrl($uploadFile) : $this->addMedia($uploadFile);
 
         // Configure properties
         if (!empty($name)) {

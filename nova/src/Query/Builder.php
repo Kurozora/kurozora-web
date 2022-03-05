@@ -91,7 +91,7 @@ class Builder implements QueryBuilder
     {
         $this->setOriginalQueryBuilder($query);
 
-        $hasSearchKeyword = ! empty(trim($search));
+        $hasSearchKeyword = ! empty(trim($search ?? ''));
         $hasOrderings = collect($orderings)->filter()->isNotEmpty();
 
         if ($this->resource::usesScout()) {

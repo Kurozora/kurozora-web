@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\Person;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Str;
 
 class PersonFactory extends Factory
 {
@@ -28,7 +27,7 @@ class PersonFactory extends Factory
         $jpFaker = \Faker\Factory::create('ja_JP');
 
         return [
-            'slug'              => Str::slug($name),
+            'slug'              => str($name)->slug(),
             'first_name'        => $name,
             'last_name'         => $this->faker->randomElement([$this->faker->lastName, null]),
             'given_name'        => $this->faker->randomElement([$jpFaker->firstName($genderString), null]),

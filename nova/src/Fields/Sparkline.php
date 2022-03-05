@@ -68,14 +68,14 @@ class Sparkline extends Field
             $ranges = $this->data->ranges();
             $defaultRange = array_key_first($ranges);
 
-            $result = $this->data->calculate(
-                $request->merge([
-                    'range' => $defaultRange,
-                    'resourceId' => $this->data->component,
-                ])
+            return array_values(
+                $this->data->calculate(
+                    $request->merge([
+                        'range' => $defaultRange,
+                        'resourceId' => $this->data->component,
+                    ])
+                )->trend ?? []
             );
-
-            return array_values($this->data->calculate($request)->trend ?? []);
         } elseif ($this->data instanceof Closure) {
             return call_user_func($this->data, $request);
         }
@@ -126,6 +126,7 @@ class Sparkline extends Field
      *
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return array_merge(parent::jsonSerialize(), [

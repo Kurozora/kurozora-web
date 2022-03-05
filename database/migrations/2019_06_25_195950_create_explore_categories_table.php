@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateExploreCategoriesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -42,4 +42,4 @@ class CreateExploreCategoriesTable extends Migration
     {
         Schema::dropIfExists(ExploreCategory::TABLE_NAME);
     }
-}
+};

@@ -6,6 +6,8 @@ use Laravel\Dusk\Browser;
 
 trait HasSearchableRelations
 {
+    use HasSearchable;
+
     /**
      * Search for the given value for a searchable relationship attribute.
      *
@@ -16,9 +18,19 @@ trait HasSearchableRelations
      */
     public function searchRelation(Browser $browser, $attribute, $search)
     {
-        $browser->click('[dusk="'.$attribute.'-search-input"]')
-                    ->pause(100)
-                    ->type('[dusk="'.$attribute.'-search-input"] input', $search);
+        $this->searchInput($browser, $attribute, $search);
+    }
+
+    /**
+     * Select the currently highlighted searchable relation.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @param  string  $attribute
+     * @return void
+     */
+    public function selectFirstRelation(Browser $browser, $attribute)
+    {
+        $this->selectFirstSearchResult($browser, $attribute);
     }
 
     /**
@@ -30,7 +42,7 @@ trait HasSearchableRelations
      */
     public function selectCurrentRelation(Browser $browser, $attribute)
     {
-        $browser->click('[dusk="'.$attribute.'-search-input-result-0"]')->pause(150);
+        $this->selectFirstRelation($browser, $attribute);
     }
 
     /**
@@ -42,7 +54,7 @@ trait HasSearchableRelations
      */
     public function cancelSelectingRelation(Browser $browser, $attribute)
     {
-        $browser->keys('[dusk="'.$attribute.'-search-input"] input', '{escape}')->pause(150);
+        $this->cancelSelectingSearchResult($browser, $attribute);
     }
 
     /**
@@ -55,11 +67,7 @@ trait HasSearchableRelations
      */
     public function searchAndSelectFirstRelation(Browser $browser, $attribute, $search)
     {
-        $this->searchRelation($browser, $attribute, $search);
-
-        $browser->pause(1500);
-
-        $this->selectCurrentRelation($browser, $attribute);
+        $this->searchAndSelectFirstResult($browser, $attribute, $search);
     }
 
     /**

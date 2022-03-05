@@ -43,14 +43,11 @@ trait InteractsWithEvents
         static::$dashboards = [];
         static::$defaultDashboardCards = [];
         static::$jsonVariables = [];
-        static::$reportCallback = null;
-        static::$resetsPasswords = false;
         static::$resources = [];
         static::$resourcesByModel = [];
         static::$scripts = [];
         static::$styles = [];
         static::$themes = [];
         static::$tools = [];
-        static::$userTimezoneCallback = null;
     }
 }

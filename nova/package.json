@@ -43,7 +43,7 @@
     "inflector-js": "^1.0.1",
     "laravel-nova": "^1.12.3",
     "laravel-vapor": "^0.4.0",
-    "markdown-it": "^8.4.1",
+    "markdown-it": "^12.3.2",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.21",
     "mousetrap": "^1.6.3",

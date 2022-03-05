@@ -32,7 +32,7 @@ class TranslateCommand extends Command
     {
         $language = $this->argument('language');
 
-        $jsonLanguageFile = resource_path("lang/vendor/nova/{$language}.json");
+        $jsonLanguageFile = lang_path("vendor/nova/{$language}.json");
 
         if (! File::exists($jsonLanguageFile) || $this->option('force')) {
             File::copy(__DIR__.'/../../resources/lang/en.json', $jsonLanguageFile);

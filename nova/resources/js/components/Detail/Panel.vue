@@ -29,17 +29,7 @@
 
       <div
         v-if="shouldShowShowAllFieldsButton"
-        class="
-          bg-20
-          -mt-px
-          -mx-6
-          -mb-6
-          border-t border-40
-          p-3
-          text-center
-          rounded-b
-          text-center
-        "
+        class="bg-20 -mt-px -mx-6 -mb-6 border-t border-40 p-3 text-center rounded-b text-center"
       >
         <button
           class="block w-full dim text-sm text-80 font-bold"

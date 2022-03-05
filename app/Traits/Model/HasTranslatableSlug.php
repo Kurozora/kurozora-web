@@ -4,7 +4,6 @@ namespace App\Traits\Model;
 
 use App\Exceptions\AttributeIsNotTranslatable;
 use App\Exceptions\TranslationNotFound as TranslationNotFoundAlias;
-use Illuminate\Support\Str;
 use Spatie\Sluggable\Exceptions\InvalidOption;
 use Spatie\Sluggable\HasSlug;
 
@@ -71,7 +70,7 @@ trait HasTranslatableSlug
             return $this->$slugField;
         }
 
-        return Str::slug($this->getSlugSourceString(), $this->slugOptions->slugSeparator, $this->slugOptions->slugLanguage);
+        return str($this->getSlugSourceString())->slug($this->slugOptions->slugSeparator, $this->slugOptions->slugLanguage);
     }
 
     /**

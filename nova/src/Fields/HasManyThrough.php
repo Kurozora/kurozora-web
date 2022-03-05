@@ -41,6 +41,7 @@ class HasManyThrough extends HasMany implements ListableField, RelatableField
      *
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return array_merge([

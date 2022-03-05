@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\AsArrayObject;
 use App\Enums\AstrologicalSign;
 use App\Scopes\BornTodayScope;
 use App\Traits\InteractsWithMediaExtension;
@@ -10,7 +11,6 @@ use App\Traits\Model\HasTranslatableSlug;
 use App\Traits\Searchable;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -240,7 +240,9 @@ class Character extends KModel implements HasMedia, Sitemapable
      */
     function people(): BelongsToMany
     {
-        return $this->belongsToMany(Person::class, AnimeCast::class)->distinct();
+        return $this->belongsToMany(Person::class, AnimeCast::class)
+            ->distinct()
+            ->withTimestamps();
     }
 
     /**
@@ -268,7 +270,9 @@ class Character extends KModel implements HasMedia, Sitemapable
      */
     function anime(): BelongsToMany
     {
-        return $this->belongsToMany(Anime::class, AnimeCast::class)->distinct();
+        return $this->belongsToMany(Anime::class, AnimeCast::class)
+            ->distinct()
+            ->withTimestamps();
     }
 
     /**

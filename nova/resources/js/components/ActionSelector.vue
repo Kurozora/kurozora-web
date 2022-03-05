@@ -75,13 +75,7 @@
         dusk="run-action-button"
         @click.prevent="determineActionStrategy"
         :disabled="!selectedAction"
-        class="
-          btn btn-default btn-primary
-          flex
-          items-center
-          justify-center
-          px-3
-        "
+        class="btn btn-default btn-primary flex items-center justify-center px-3"
         :class="{ 'btn-disabled': !selectedAction }"
         :title="__('Run Action')"
       >

@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Enums\DayOfWeek;
 use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
 use Auth;
@@ -61,9 +60,9 @@ class AnimeResourceBasic extends JsonResource
                 'lastAired'             => $this->resource->last_aired?->timestamp,
                 'duration'              => $this->resource->duration_string,
                 'durationTotal'         => $this->resource->duration_total,
-                'airSeason'             => $this->resource->air_season->description,
+                'airSeason'             => $this->resource->air_season?->description,
                 'airTime'               => $this->resource->air_time_utc,
-                'airDay'                => DayOfWeek::getDescription($this->resource->air_day) ?: null,
+                'airDay'                => $this->resource->air_day?->description,
                 'isNSFW'                => (bool) $this->resource->is_nsfw,
                 'copyright'             => $this->resource->copyright,
             ]

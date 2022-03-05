@@ -2,11 +2,11 @@
     @if ($seasonsCount)
         <section class="pt-5 pb-8 px-4 border-t-2" wire:init="loadAnimeSeasons">
             <x-section-nav>
-                <x-slot name="title">
+                <x-slot:title>
                     {{ __('Seasons') }}
                 </x-slot>
 
-                <x-slot name="action">
+                <x-slot:action>
                     <x-simple-link href="{{ route('anime.seasons', $anime) }}">{{ __('See All') }}</x-simple-link>
                 </x-slot>
             </x-section-nav>

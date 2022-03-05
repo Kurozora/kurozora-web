@@ -72,6 +72,7 @@ class Select extends Field
      *
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return with(app(NovaRequest::class), function ($request) {

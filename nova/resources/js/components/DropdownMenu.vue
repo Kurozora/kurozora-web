@@ -2,14 +2,7 @@
   <div
     ref="menu"
     :style="styles"
-    class="
-      select-none
-      overflow-hidden
-      bg-white
-      border border-60
-      shadow
-      rounded-lg
-    "
+    class="select-none overflow-hidden bg-white border border-60 shadow rounded-lg"
   >
     <slot />
   </div>

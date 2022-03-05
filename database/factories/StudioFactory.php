@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\Studio;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Str;
 
 class StudioFactory extends Factory
 {
@@ -24,7 +23,7 @@ class StudioFactory extends Factory
     {
         $name = $this->faker->unique()->company;
         return [
-            'slug'          => Str::slug($name),
+            'slug'          => str($name)->slug(),
             'name'          => $name,
             'type'          => 'anime',
             'about'         => $this->faker->realText(),

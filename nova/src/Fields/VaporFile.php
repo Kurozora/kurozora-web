@@ -264,6 +264,7 @@ class VaporFile extends Field implements StorableContract, DeletableContract, Do
      *
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return array_merge(parent::jsonSerialize(), [

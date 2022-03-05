@@ -309,6 +309,7 @@ class BelongsToMany extends Field implements DeletableContract, ListableField, P
      *
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return array_merge([

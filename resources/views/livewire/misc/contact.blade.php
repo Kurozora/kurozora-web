@@ -1,13 +1,13 @@
 <main>
-    <x-slot name="title">
+    <x-slot:title>
         {{ __('Contact Kurozora') }}
     </x-slot>
 
-    <x-slot name="description">
+    <x-slot:description>
         {{ __('Contact Kurozora support by email regarding the app, website, or other services. Kurozora support is here to help.') }}
     </x-slot>
 
-    <x-slot name="meta">
+    <x-slot:meta>
         <meta property="og:title" content="{{ __('Contact') }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ __('Contact Kurozora support by email regarding the app, website, or other services. Kurozora support is here to help.') }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
@@ -16,15 +16,15 @@
 
     <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
         <x-action-form-section submit="mailto:kurozoraapp@gmail.com" method="GET" enctype="application/x-www-form-urlencoded">
-            <x-slot name="title">
+            <x-slot:title>
                 {{ __('Contact Us') }}
             </x-slot>
 
-            <x-slot name="description">
+            <x-slot:description>
                 {{ __('Send us an email with your question and we will help you. Clicking on send will open the mail app with the subject and message your provided in the form.') }}
             </x-slot>
 
-            <x-slot name="form">
+            <x-slot:form>
                 <div class="col-span-6 sm:col-span-4">
                     <x-label for="subject" value="{{ __('Subject') }}" />
                     <x-input id="subject" name="subject" type="text" class="mt-1 block w-full" autofocus />
@@ -36,7 +36,7 @@
                 </div>
             </x-slot>
 
-            <x-slot name="actions">
+            <x-slot:actions>
                 <x-button type="submit">
                     {{ __('Send') }}
                 </x-button>

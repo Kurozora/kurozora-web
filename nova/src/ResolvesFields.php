@@ -635,7 +635,9 @@ trait ResolvesFields
 
         return FieldCollection::make($this->filter($fields->each(function ($field) {
             if ($field instanceof Resolvable) {
-                $field->resolve($this->{$field->pivotAccessor} ?? new Pivot);
+                $field->resolve(
+                    $this->{$field->pivotAccessor} ?? $field->pivotRelation->newPivot()
+                );
             }
         })->authorized($request)->all()))->values();
     }
@@ -662,13 +664,15 @@ trait ResolvesFields
                 });
 
         if ($field && isset($field->fieldsCallback)) {
-            $field->pivotAccessor = $pivotAccessor = $this->resource->{$field->manyToManyRelationship}()->getPivotAccessor();
+            $pivotRelation = $this->resource->{$field->manyToManyRelationship}();
+            $field->pivotAccessor = $pivotAccessor = $pivotRelation->getPivotAccessor();
 
             return FieldCollection::make(array_values(
                 $this->filter(call_user_func($field->fieldsCallback, $request, $this->resource))
-            ))->each(function ($field) use ($pivotAccessor) {
+            ))->each(function ($field) use ($pivotAccessor, $pivotRelation) {
                 $field->pivot = true;
                 $field->pivotAccessor = $pivotAccessor;
+                $field->pivotRelation = $pivotRelation;
             });
         }
 
@@ -700,13 +704,15 @@ trait ResolvesFields
                 });
 
         if ($field && isset($field->fieldsCallback)) {
-            $field->pivotAccessor = $pivotAccessor = $relatedModel->{$field->manyToManyRelationship}()->getPivotAccessor();
+            $pivotRelation = $relatedModel->{$field->manyToManyRelationship}();
+            $field->pivotAccessor = $pivotAccessor = $pivotRelation->getPivotAccessor();
 
             return FieldCollection::make(array_values(
                 $this->filter(call_user_func($field->fieldsCallback, $request, $this->resource))
-            ))->each(function ($field) use ($pivotAccessor) {
+            ))->each(function ($field) use ($pivotAccessor, $pivotRelation) {
                 $field->pivot = true;
                 $field->pivotAccessor = $pivotAccessor;
+                $field->pivotRelation = $pivotRelation;
             });
         }
 

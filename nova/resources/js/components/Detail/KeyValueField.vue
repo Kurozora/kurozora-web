@@ -13,7 +13,8 @@
 
         <div class="bg-white overflow-hidden key-value-items">
           <KeyValueItem
-            v-for="item in theData"
+            v-for="(item, index) in theData"
+            :index="index"
             :item="item"
             :disabled="true"
             :key="item.key"

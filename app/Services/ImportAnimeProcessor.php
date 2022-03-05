@@ -16,7 +16,6 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Log;
-use Str;
 
 class ImportAnimeProcessor
 {
@@ -143,8 +142,8 @@ class ImportAnimeProcessor
         $synopsis = empty(trim($kSynopsis)) ? null: $kSynopsis;
 
         if (!empty($synopsis)) {
-            if (Str::contains($synopsis, ['[Written by MAL Rewrite]'])) {
-                $synopsis = Str::replaceLast('[Written by MAL Rewrite]', 'Source: MAL', $synopsis);
+            if (str($synopsis)->contains(['[Written by MAL Rewrite]'])) {
+                $synopsis = str($synopsis)->replaceLast('[Written by MAL Rewrite]', 'Source: MAL');
             } else {
                 $synopsis = preg_replace_array('/\([^ ]*|\)/i', ['Source:', ''], $synopsis);
             }

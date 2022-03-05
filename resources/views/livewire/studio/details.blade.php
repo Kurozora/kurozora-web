@@ -1,13 +1,13 @@
 <main>
-    <x-slot name="title">
+    <x-slot:title>
         {!! $studio->name !!}
     </x-slot>
 
-    <x-slot name="description">
+    <x-slot:description>
         {{ $studio->synopsis }}
     </x-slot>
 
-    <x-slot name="meta">
+    <x-slot:meta>
         <meta property="og:title" content="{{ $studio->name }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ $studio->synopsis ?? __('app.description') }}" />
         <meta property="og:image" content="{{ $studio->profile_image_url ?? asset('images/static/placeholders/person_poster.webp') }}" />
@@ -16,7 +16,7 @@
         <link rel="canonical" href="{{ route('studios.details', $studio) }}">
     </x-slot>
 
-    <x-slot name="appArgument">
+    <x-slot:appArgument>
         studio/{{ $studio->id }}
     </x-slot>
 
@@ -39,18 +39,18 @@
 
         <section class="pt-5 pb-8 border-t-2">
             <x-section-nav>
-                <x-slot name="title">
+                <x-slot:title>
                     {{ __('Information') }}
                 </x-slot>
             </x-section-nav>
 
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-4">
                 <x-information-list id="founded" title="{{ __('Founded') }}" icon="{{ asset('images/symbols/calendar.svg') }}">
-                    <x-slot name="information">
+                    <x-slot:information>
                         {{ $studio->founded?->toFormattedDateString() ?? '-' }}
                     </x-slot>
 
-                    <x-slot name="footer">
+                    <x-slot:footer>
                         @if (!empty($studio->founded))
                             {{ __('The studio was founded :x years ago.', ['x' => $studio->founded?->age]) }}
                         @endif
@@ -58,13 +58,13 @@
                 </x-information-list>
 
                 <x-information-list id="headquarters" title="{{ __('Headquarters') }}" icon="{{ asset('images/symbols/building_2.svg') }}">
-                    <x-slot name="information">
+                    <x-slot:information>
                         {{ $studio->address ?? '-' }}
                     </x-slot>
                 </x-information-list>
 
                 <x-information-list id="Website" title="{{ __('Website') }}" icon="{{ asset('images/symbols/safari.svg') }}">
-                    <x-slot name="information">
+                    <x-slot:information>
                         @if (!empty($studio->website_urls))
                             <ul class="list-disc">
                                 @foreach($studio->website_urls as $website_url)
@@ -86,11 +86,11 @@
         @if (!empty($studioAnime->total()))
             <section class="pt-5 pb-8 border-t-2">
                 <x-section-nav>
-                    <x-slot name="title">
+                    <x-slot:title>
                         {{ __('Shows') }}
                     </x-slot>
 
-                    <x-slot name="action">
+                    <x-slot:action>
                         <x-simple-link href="{{ route('studios.anime', $studio) }}">{{ __('See All') }}</x-simple-link>
                     </x-slot>
                 </x-section-nav>

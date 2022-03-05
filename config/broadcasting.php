@@ -55,6 +55,9 @@ return [
                     CURLOPT_SSL_VERIFYPEER => 0,
                 ],
             ],
+            'client_options' => [
+                // Guzzle client options: https://docs.guzzlephp.org/en/stable/request-options.html
+            ],
         ],
 
         'ably' => [

@@ -41,6 +41,7 @@ class VaporImage extends VaporFile
      *
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return array_merge(parent::jsonSerialize(), $this->imageAttributes());

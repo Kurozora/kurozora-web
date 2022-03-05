@@ -24,19 +24,7 @@
       <select
         v-if="ranges.length > 0"
         @change="handleChange"
-        class="
-          select-box-sm
-          ml-auto
-          min-w-24
-          h-6
-          text-xs
-          appearance-none
-          bg-40
-          pl-2
-          pr-6
-          active:outline-none active:shadow-outline
-          focus:outline-none focus:shadow-outline
-        "
+        class="select-box-sm ml-auto min-w-24 h-6 text-xs appearance-none bg-40 pl-2 pr-6 active:outline-none active:shadow-outline focus:outline-none focus:shadow-outline"
       >
         <option
           v-for="option in ranges"

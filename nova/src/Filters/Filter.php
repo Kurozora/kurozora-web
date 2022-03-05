@@ -93,6 +93,7 @@ abstract class Filter implements FilterContract, JsonSerializable
      *
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         $container = Container::getInstance();

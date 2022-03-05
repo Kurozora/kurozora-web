@@ -1,13 +1,13 @@
 <x-form-section submit="importLibraryFromMAL">
-    <x-slot name="title">
+    <x-slot:title>
         {{ __('Move From MyAnimeList') }}
     </x-slot>
 
-    <x-slot name="description">
+    <x-slot:description>
         {{ __('Export your anime library from MyAnimeList, so you can import it to your Kurozora library.') }}
     </x-slot>
 
-    <x-slot name="form">
+    <x-slot:form>
         <div class="col-span-12">
             <div class="max-w-xl text-sm text-gray-600">
                 <p>{{ __('Kurozora does not guarantee all shows will be imported to your library. Once the request has been processed a notification which contains the status of the import request will be sent. Furthermore the uploaded file is deleted as soon as the import request has been processed.') }}</p>
@@ -37,7 +37,7 @@
         </div>
     </x-slot>
 
-    <x-slot name="actions">
+    <x-slot:actions>
         <x-action-message class="mr-3" on="saved">
             {{ __('Import started.') }}
         </x-action-message>

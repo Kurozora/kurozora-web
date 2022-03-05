@@ -13,16 +13,7 @@
         />
 
         <button
-          class="
-            btn btn-link
-            rounded
-            px-1
-            py-1
-            inline-flex
-            text-sm text-primary
-            ml-1
-            mt-2
-          "
+          class="btn btn-link rounded px-1 py-1 inline-flex text-sm text-primary ml-1 mt-2"
           v-if="field.showCustomizeButton"
           type="button"
           @click="toggleCustomizeClick"

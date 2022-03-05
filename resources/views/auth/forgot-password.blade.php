@@ -1,9 +1,9 @@
 <x-app-layout>
-    <x-slot name="title">
+    <x-slot:title>
         {{ __('Forgot Password') }}
     </x-slot>
 
-    <x-slot name="header">
+    <x-slot:header>
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Kurozora ID') }}
         </h2>

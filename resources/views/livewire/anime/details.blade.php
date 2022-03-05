@@ -1,13 +1,13 @@
 <main>
-    <x-slot name="title">
+    <x-slot:title>
         {!! $anime->title !!}
     </x-slot>
 
-    <x-slot name="description">
+    <x-slot:description>
         {{ $anime->synopsis }}
     </x-slot>
 
-    <x-slot name="meta">
+    <x-slot:meta>
         <meta property="og:title" content="{{ $anime->title }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ $anime->synopsis ?? __('app.description') }}" />
         <meta property="og:image" content="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
@@ -67,7 +67,7 @@
         </x-misc.schema>
     </x-slot>
 
-    <x-slot name="appArgument">
+    <x-slot:appArgument>
         anime/{{ $anime->id }}
     </x-slot>
 
@@ -201,13 +201,13 @@
             @if (!empty($anime->synopsis))
                 <section class="pt-5 pb-8 px-4 border-t-2">
                     <x-section-nav class="flex flex-nowrap justify-between mb-5">
-                        <x-slot name="title">
+                        <x-slot:title>
                             {{ __('Synopsis') }}
                         </x-slot>
                     </x-section-nav>
 
                     <x-truncated-text>
-                        <x-slot name="text">
+                        <x-slot:text>
                             {!! nl2br($anime->synopsis) !!}
                         </x-slot>
                     </x-truncated-text>
@@ -216,7 +216,7 @@
 
             <section id="ratingsAndReviews" class="pt-5 pb-8 px-4 border-t-2">
                 <x-section-nav>
-                    <x-slot name="title">
+                    <x-slot:title>
                         {{ __('Ratings & Reviews') }}
                     </x-slot>
                 </x-section-nav>
@@ -238,73 +238,73 @@
 
             <section class="pt-5 pb-8 px-4 border-t-2">
                 <x-section-nav>
-                    <x-slot name="title">
+                    <x-slot:title>
                         {{ __('Information') }}
                     </x-slot>
                 </x-section-nav>
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-4">
                     <x-information-list id="type" title="{{ __('Type') }}" icon="{{ asset('images/symbols/tv_and_mediabox.svg') }}">
-                        <x-slot name="information">
+                        <x-slot:information>
                             {{ $anime->media_type->name }}
                         </x-slot>
 
-                        <x-slot name="footer">
+                        <x-slot:footer>
                             <p class="text-sm">{{ $anime->media_type->description }}</p>
                         </x-slot>
                     </x-information-list>
 
                     <x-information-list id="source" title="{{ __('Source') }}" icon="{{ asset('images/symbols/target.svg') }}">
-                        <x-slot name="information">
+                        <x-slot:information>
                             {{ $anime->source->name }}
                         </x-slot>
 
-                        <x-slot name="footer">
+                        <x-slot:footer>
                             <p class="text-sm">{{ $anime->source->description }}</p>
                         </x-slot>
                     </x-information-list>
 
                     <x-information-list id="genres" title="{{ __('Genres') }}" icon="{{ asset('images/symbols/theatermasks.svg') }}">
-                        <x-slot name="information">
+                        <x-slot:information>
                             {{ $anime->genres?->pluck('name')->join(',  ', ' and ') ?: '-' }}
                         </x-slot>
                     </x-information-list>
 
                     <x-information-list id="themes" title="{{ __('Themes') }}" icon="{{ asset('images/symbols/crown.svg') }}">
-                        <x-slot name="information">
+                        <x-slot:information>
                             {{ $anime->themes?->pluck('name')->join(',  ', ' and ') ?: '-' }}
                         </x-slot>
                     </x-information-list>
 
                     @if (in_array($anime->media_type->name, ['Unknown', 'TV', 'ONA']))
                         <x-information-list id="episodes" title="{{ __('Episodes') }}" icon="{{ asset('images/symbols/film.svg') }}">
-                            <x-slot name="information">
+                            <x-slot:information>
                                 {{ $anime->episode_count }}
                             </x-slot>
 
-                            <x-slot name="footer">
+                            <x-slot:footer>
                                 <p class="text-sm">{{ trans_choice('[0,1] Across one season.|[2,*] Across :count seasons.', $anime->season_count, ['count' => $anime->season_count]) }}</p>
                             </x-slot>
                         </x-information-list>
                     @endif
 
                     <x-information-list id="duration" title="{{ __('Duration') }}" icon="{{ asset('images/symbols/hourglass.svg') }}">
-                        <x-slot name="information">
+                        <x-slot:information>
                             {{ $anime->duration_string ?? '-' }}
                         </x-slot>
 
-                        <x-slot name="footer">
+                        <x-slot:footer>
                             <p class="text-sm">{{ __('With a total of :count.', ['count' => $anime->duration_total]) }}</p>
                         </x-slot>
                     </x-information-list>
 
                     <x-information-list id="broadcast" title="{{ __('Broadcast') }}" icon="{{ asset('images/symbols/calendar_badge_clock.svg') }}">
-                        <x-slot name="information">
+                        <x-slot:information>
                             {{ $anime->broadcast }}
                         </x-slot>
 
                         @if ($anime->status_id === 4)
-                            <x-slot name="footer">
+                            <x-slot:footer>
                                 {{ __('The broadcasting of this series has ended.') }}
                             </x-slot>
                         @elseif (empty($anime->broadcast))
@@ -321,11 +321,11 @@
                     <x-information-list id="aired" title="{{ __('Aired') }}" icon="{{ asset('images/symbols/calendar.svg') }}">
                         @if (!empty($anime->first_aired))
                             @if (empty($anime->last_aired))
-                                <x-slot name="information">
+                                <x-slot:information>
                                     🚀 {{ $anime->first_aired->toFormattedDateString() }}
                                 </x-slot>
 
-                                <x-slot name="footer">
+                                <x-slot:footer>
                                     {{ __($anime->status->description) }}
                                 </x-slot>
                             @else
@@ -338,39 +338,39 @@
                                 </div>
                             @endif
                         @else
-                            <x-slot name="information">
+                            <x-slot:information>
                                 -
                             </x-slot>
-                            <x-slot name="footer">
+                            <x-slot:footer>
                                 {{ __('Airing dates are unknown.') }}
                             </x-slot>
                         @endif
                     </x-information-list>
 
                     <x-information-list id="tvRating" title="{{ __('Rating') }}" icon="{{ asset('images/symbols/tv_rating.svg') }}">
-                        <x-slot name="information">
+                        <x-slot:information>
                             {{ $anime->tv_rating->name }}
                         </x-slot>
 
-                        <x-slot name="footer">
+                        <x-slot:footer>
                             <p class="text-sm">{{ $anime->tv_rating->description }}.</p>
                         </x-slot>
                     </x-information-list>
 
                     <x-information-list id="languages" title="{{ __('Languages') }}" icon="{{ asset('images/symbols/globe.svg') }}">
-                        <x-slot name="information">
+                        <x-slot:information>
                             {{ $anime->languages->pluck('name')->join(',  ', ' and ') ?: '-' }}
                         </x-slot>
                     </x-information-list>
 
 {{--                    <x-information-list title="{{ __('Studio') }}" icon="{{ asset('images/symbols/building_2.svg') }}">--}}
-{{--                        <x-slot name="information">--}}
+{{--                        <x:information">--}
 {{--                            {{ $anime->studios()->first()->name ?? '-' }}--}}
 {{--                        </x-slot>--}}
 {{--                    </x-information-list>--}}
 
 {{--                    <x-information-list title="{{ __('Network') }}" icon="{{ asset('images/symbols/dot_radiowaves_left_and_right.svg') }}">--}}
-{{--                        <x-slot name="information">--}}
+{{--                        <x:information">--}
 {{--                            {{ $anime->studios()->first()->name ?? '-' }}--}}
 {{--                        </x-slot>--}}
 {{--                    </x-information-list>--}}
@@ -399,10 +399,10 @@
 
             <x-dialog-modal maxWidth="md" wire:model="showPopup">
                 @if($showVideo)
-                    <x-slot name="title">
+                    <x-slot:title>
                         {{ $anime->title . ' Official Trailer' }}
                     </x-slot>
-                    <x-slot name="content">
+                    <x-slot:content>
                         <iframe
                             class="w-full aspect-ratio-16-9 lazyload"
                             type="text/html"
@@ -413,21 +413,21 @@
                             webkitallowfullscreen="webkitallowfullscreen"
                             allow="fullscreen;"
                             data-size="auto"
-                            data-src="https://www.youtube-nocookie.com/embed/{{ Str::after($anime->video_url, '?v=') }}?autoplay=0&iv_load_policy=3&disablekb=1&color=red&rel=0&cc_load_policy=0&start=0&end=0&origin={{ config('app.url') }}&modestbranding=1&playsinline=1&loop=1&playlist={{ Str::after($anime->video_url, '?v=') }}"
+                            data-src="https://www.youtube-nocookie.com/embed/{{ str($anime->video_url)->after('?v=') }}?autoplay=0&iv_load_policy=3&disablekb=1&color=red&rel=0&cc_load_policy=0&start=0&end=0&origin={{ config('app.url') }}&modestbranding=1&playsinline=1&loop=1&playlist={{ str($anime->video_url)->after('?v=') }}"
                         >
                         </iframe>
                     </x-slot>
-                    <x-slot name="footer">
+                    <x-slot:footer>
                         <x-button wire:click="$toggle('showPopup')">{{ __('Close') }}</x-button>
                     </x-slot>
                 @else
-                    <x-slot name="title">
+                    <x-slot:title>
                         {{ $popupData['title'] }}
                     </x-slot>
-                    <x-slot name="content">
+                    <x-slot:content>
                         <p>{{ $popupData['message'] }}</p>
                     </x-slot>
-                    <x-slot name="footer">
+                    <x-slot:footer>
                         <x-button wire:click="$toggle('showPopup')">{{ __('Ok') }}</x-button>
                     </x-slot>
                 @endif

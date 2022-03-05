@@ -361,6 +361,7 @@ class File extends Field implements StorableContract, DeletableContract, Downloa
      *
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return array_merge(parent::jsonSerialize(), [

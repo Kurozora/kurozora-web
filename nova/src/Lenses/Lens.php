@@ -166,6 +166,7 @@ abstract class Lens implements ArrayAccess, JsonSerializable, UrlRoutable
      *
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return [

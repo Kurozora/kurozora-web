@@ -1,9 +1,9 @@
 <x-base-layout>
-    <x-slot name="title">
+    <x-slot:title>
         {{ $title }}
     </x-slot>
 
-    <x-slot name="meta">
+    <x-slot:meta>
         {{ $meta ?? '' }}
     </x-slot>
 

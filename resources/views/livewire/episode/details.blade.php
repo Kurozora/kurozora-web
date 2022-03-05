@@ -1,13 +1,13 @@
 <main>
-    <x-slot name="title">
+    <x-slot:title>
         {{ __(':x episode :y', ['x' => $anime->title, 'y' => $episode->number_total]) }} | {!! $episode->title !!}
     </x-slot>
 
-    <x-slot name="description">
+    <x-slot:description>
         {{ $episode->synopsis }}
     </x-slot>
 
-    <x-slot name="meta">
+    <x-slot:meta>
         <meta property="og:title" content="{{ __('Episode :x', ['x' => $episode->number_total]) }} | {{ $episode->title }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ $episode->synopsis ?? __('app.description') }}" />
         <meta property="og:image" content="{{ $episode->banner_image_url ?? $season->poster_image_url ?? asset('images/static/placeholders/episode_banner.webp') }}" />
@@ -65,7 +65,7 @@
         </x-misc.schema>
     </x-slot>
 
-    <x-slot name="appArgument">
+    <x-slot:appArgument>
         episodes/{{ $episode->id }}
     </x-slot>
 
@@ -127,13 +127,13 @@
             @if (!empty($episode->synopsis))
                 <section class="pt-5 pb-8 px-4 border-t-2">
                     <x-section-nav class="flex flex-nowrap justify-between mb-5">
-                        <x-slot name="title">
+                        <x-slot:title>
                             {{ __('Synopsis') }}
                         </x-slot>
                     </x-section-nav>
 
                     <x-truncated-text>
-                        <x-slot name="text">
+                        <x-slot:text>
                             {!! nl2br($episode->synopsis) !!}
                         </x-slot>
                     </x-truncated-text>
@@ -142,7 +142,7 @@
 
             <section id="ratingsAndReviews" class="pt-5 pb-8 px-4 border-t-2">
                 <x-section-nav>
-                    <x-slot name="title">
+                    <x-slot:title>
                         {{ __('Ratings & Reviews') }}
                     </x-slot>
                 </x-section-nav>
@@ -164,35 +164,35 @@
 
             <section class="pt-5 pb-8 px-4 border-t-2">
                 <x-section-nav>
-                    <x-slot name="title">
+                    <x-slot:title>
                         {{ __('Information') }}
                     </x-slot>
                 </x-section-nav>
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-4">
                     <x-information-list id="number" title="{{ __('Number') }}" icon="{{ asset('images/symbols/number.svg') }}">
-                        <x-slot name="information">
+                        <x-slot:information>
                             {{ $episode->number_total }}
                         </x-slot>
 
-                        <x-slot name="footer">
+                        <x-slot:footer>
                             <p class="text-sm">{{ __('#:x in the current season.', ['x' => $episode->number]) }}</p>
                         </x-slot>
                     </x-information-list>
 
                     <x-information-list id="duration" title="{{ __('Duration') }}" icon="{{ asset('images/symbols/hourglass.svg') }}">
-                        <x-slot name="information">
+                        <x-slot:information>
                             {{ $episode->duration_string ?? '-' }}
                         </x-slot>
                     </x-information-list>
 
                     <x-information-list id="aired" title="{{ __('Aired') }}" icon="{{ asset('images/symbols/calendar.svg') }}">
                         @if (!empty($episode->first_aired))
-                            <x-slot name="information">
+                            <x-slot:information>
                                 🚀 {{ $episode->first_aired->toFormattedDateString() }}
                             </x-slot>
 
-                            <x-slot name="footer">
+                            <x-slot:footer>
                                 @if ($episode->first_aired->isFuture())
                                     {{ __('The episode will air on the announced date.') }}
                                 @else
@@ -200,10 +200,10 @@
                                 @endif
                             </x-slot>
                         @else
-                            <x-slot name="information">
+                            <x-slot:information>
                                 -
                             </x-slot>
-                            <x-slot name="footer">
+                            <x-slot:footer>
                                 {{ __('Airing date is unknown.') }}
                             </x-slot>
                         @endif
@@ -212,13 +212,13 @@
             </section>
 
             <x-dialog-modal maxWidth="md" wire:model="showPopup">
-                <x-slot name="title">
+                <x-slot:title>
                     {{ $popupData['title'] }}
                 </x-slot>
-                <x-slot name="content">
+                <x-slot:content>
                     <p>{{ $popupData['message'] }}</p>
                 </x-slot>
-                <x-slot name="footer">
+                <x-slot:footer>
                     <x-button wire:click="$toggle('showPopup')">{{ __('Ok') }}</x-button>
                 </x-slot>
             </x-dialog-modal>

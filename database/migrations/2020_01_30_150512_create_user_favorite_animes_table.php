@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserFavoriteAnimesTable extends Migration
+return new class extends Migration
 {
     const TABLE_NAME = 'user_favorite_animes';
 
@@ -40,4 +40,4 @@ class CreateUserFavoriteAnimesTable extends Migration
     {
         Schema::dropIfExists(self::TABLE_NAME);
     }
-}
+};
