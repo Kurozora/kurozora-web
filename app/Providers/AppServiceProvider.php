@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Sanctum\Sanctum;
-use URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,10 +22,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (config('app.env') === 'production') {
-            URL::forceScheme('https');
-        }
-
         /*
          * This snippet logs the amount of executed queries per request ..
          * .. to the config.
