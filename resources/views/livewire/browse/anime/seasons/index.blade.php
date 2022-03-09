@@ -12,7 +12,7 @@
         <meta property="og:description" content="{{ __('Browse the :x :y anime season. Join the Kurozora community and create your anime and manga list. Discover songs, games and read reviews and news!', ['x' => $seasonOfYear->key, 'y' => $year]) }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
-        <link rel="canonical" href="{{ route('anime.index.seasons.year.season', [$year, $season]) }}">
+        <link rel="canonical" href="{{ route('anime.seasons.year.season', [$year, $season]) }}">
     </x-slot>
 
     <div
@@ -51,7 +51,7 @@
                 <div
                     x-show="selectedMediaType === '{{ $mediaType->name }}' || selectedMediaType === null"
                 >
-                    <livewire:browse.anime.seasons-section :media-type="$mediaType" :season-of-year="$seasonOfYear->value" :year="$year" />
+                    <livewire:browse.anime.seasons.seasons-section :media-type="$mediaType" :season-of-year="$seasonOfYear->value" :year="$year" />
                 </div>
             @endforeach
         </section>

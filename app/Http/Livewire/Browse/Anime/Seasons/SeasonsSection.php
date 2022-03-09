@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Browse\Anime;
+namespace App\Http\Livewire\Browse\Anime\Seasons;
 
 use App\Models\Anime;
 use App\Models\MediaType;
@@ -77,6 +77,6 @@ class SeasonsSection extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.browse.anime.seasons-section');
+        return view('livewire.browse.anime.seasons.seasons-section');
     }
 }

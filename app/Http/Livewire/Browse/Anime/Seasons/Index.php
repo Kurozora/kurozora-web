@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Browse\Anime;
+namespace App\Http\Livewire\Browse\Anime\Seasons;
 
 use App\Enums\SeasonOfYear;
 use App\Models\Anime;
@@ -11,7 +11,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
-class Seasons extends Component
+class Index extends Component
 {
     /**
      * Thes selected year.
@@ -45,11 +45,11 @@ class Seasons extends Component
     public function mount($year, $season)
     {
         if (!is_numeric($year)) {
-            to_route('anime.index.seasons.index');
+            to_route('anime.seasons.index');
         }
 
         if ($year < 1917) {
-            to_route('anime.index.seasons.index');
+            to_route('anime.seasons.index');
         }
 
         $this->year = $year;
@@ -58,7 +58,7 @@ class Seasons extends Component
         try {
             $this->seasonOfYear = SeasonOfYear::fromKey(str($season)->ucfirst());
         } catch (InvalidEnumKeyException $e) {
-            to_route('anime.index.seasons.index');
+            to_route('anime.seasons.index');
         }
     }
 
@@ -69,7 +69,7 @@ class Seasons extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.browse.anime.seasons', [
+        return view('livewire.browse.anime.seasons.index', [
             'seasonOfYear' => $this->seasonOfYear,
             'mediaTypes' => MediaType::select(MediaType::TABLE_NAME . '.*')
                 ->join(Anime::TABLE_NAME, function ($join) {
