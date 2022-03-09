@@ -169,12 +169,13 @@ class ExploreCategory extends KModel implements Sitemapable
     /**
      * Append the characters born today to the category's items.
      *
+     * @param int $limit
      * @return ExploreCategory
      */
-    public function charactersBornToday(): ExploreCategory
+    public function charactersBornToday(int $limit = 10): ExploreCategory
     {
         if ($this->type === ExploreCategoryTypes::Characters) {
-            $charactersBornToday = Character::bornToday()->get('id');
+            $charactersBornToday = Character::bornToday($limit)->get('id');
 
             foreach($charactersBornToday as $characterBornToday) {
                 $this->explore_category_items->add(new ExploreCategoryItem([
@@ -189,12 +190,13 @@ class ExploreCategory extends KModel implements Sitemapable
     /**
      * Append the people born today to the category's items
      *
+     * @param int $limit
      * @return ExploreCategory
      */
-    public function peopleBornToday(): ExploreCategory
+    public function peopleBornToday(int $limit = 10): ExploreCategory
     {
         if ($this->type === ExploreCategoryTypes::People) {
-            $peopleBornToday = Person::bornToday()->get('id');
+            $peopleBornToday = Person::bornToday($limit)->get('id');
 
             foreach($peopleBornToday as $personBornToday) {
                 $this->explore_category_items->add(new ExploreCategoryItem([
