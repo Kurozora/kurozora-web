@@ -15,7 +15,6 @@ use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Carbon\CarbonInterval;
 use Carbon\Exceptions\InvalidFormatException;
-use Date;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -871,7 +870,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function scopeUpcomingShows(Builder $query, int $limit = 10): Builder
     {
-        return $query->whereDate('first_aired', '>', Date::yesterday())
+        return $query->whereDate('first_aired', '>', yesterday())
             ->orderBy('first_aired')
             ->limit($limit);
     }

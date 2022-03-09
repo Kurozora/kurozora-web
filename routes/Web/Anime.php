@@ -6,15 +6,23 @@ use App\Http\Livewire\Anime\RelatedShows;
 use App\Http\Livewire\Anime\Songs as AnimeSongs;
 use App\Http\Livewire\Browse\Anime\Seasons as BrowseAnimeSeasons;
 use App\Http\Livewire\Browse\Anime\Seasons\Archive as BrowseAnimeSeasonsArchive;
+use App\Http\Livewire\Browse\Anime\Upcoming\Index as BrowseAnimeUpcomingIndex;
 use App\Http\Livewire\Season\Details as SeasonDetails;
 
 Route::prefix('/anime')
     ->name('anime')
     ->group(function () {
+        Route::prefix('/upcoming')
+            ->name('.upcoming')
+            ->group(function () {
+                Route::get('/', BrowseAnimeUpcomingIndex::class)
+                    ->name('.index');
+            });
+
         Route::prefix('/')
             ->name('.index')
             ->group(function () {
-                Route::prefix('/seasons', )
+                Route::prefix('/seasons')
                     ->name('.seasons')
                     ->group(function () {
                         Route::get('/', function () {
