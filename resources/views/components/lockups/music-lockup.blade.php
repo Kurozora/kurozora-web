@@ -65,7 +65,7 @@
 
             <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ $animeSong->song->artist }}</p>
             @if($showAnime)
-                <a class="inline-flex text-xs text-orange-500 transition ease-in-out duration-150 focus:outline-none hover:text-orange-400 hover:underline active:text-orange-600 disabled:text-gray-300 disabled:cursor-default disabled:text-gray-400 disabled:cursor-default" href="{{ route('anime.details', $animeSong->anime) }}">{{ $animeSong->anime->original_title }}</a>
+                <x-simple-link class="text-xs" href="{{ route('anime.details', $animeSong->anime) }}">{{ $animeSong->anime->original_title }}</x-simple-link>
             @endif
             @if(!empty($animeSong->episodes) && $showEpisodes)
                 <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ __('Episodes: :x', ['x' => $animeSong->episodes]) }}</p>

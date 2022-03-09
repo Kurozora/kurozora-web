@@ -112,7 +112,7 @@
                     </x-slot>
 
                     <x-slot:action>
-                        <x-simple-link href="{{ route('people.anime', $person) }}">{{ __('See All') }}</x-simple-link>
+                        <x-section-nav-link href="{{ route('people.anime', $person) }}">{{ __('See All') }}</x-section-nav-link>
                     </x-slot>
                 </x-section-nav>
 
@@ -134,7 +134,7 @@
                     </x-slot>
 
                     <x-slot:action>
-                        <x-simple-link href="{{ route('people.characters', $person) }}">{{ __('See All') }}</x-simple-link>
+                        <x-section-nav-link href="{{ route('people.characters', $person) }}">{{ __('See All') }}</x-section-nav-link>
                     </x-slot>
                 </x-section-nav>
 

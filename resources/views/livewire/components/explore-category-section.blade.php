@@ -13,13 +13,13 @@
                 <x-slot:action>
                     @switch($exploreCategory->type)
                         @case(\App\Enums\ExploreCategoryTypes::Genres)
-                            <x-simple-link class="whitespace-nowrap" href="{{ route('genres.index') }}">{{ __('See All') }}</x-simple-link>
+                            <x-section-nav-link class="whitespace-nowrap" href="{{ route('genres.index') }}">{{ __('See All') }}</x-section-nav-link>
                         @break
                         @case(\App\Enums\ExploreCategoryTypes::Themes)
-                        <x-simple-link class="whitespace-nowrap" href="{{ route('themes.index') }}">{{ __('See All') }}</x-simple-link>
+                        <x-section-nav-link class="whitespace-nowrap" href="{{ route('themes.index') }}">{{ __('See All') }}</x-section-nav-link>
                         @break
                         @default
-                            <x-simple-link class="whitespace-nowrap" href="{{ route('explore.details', $exploreCategory) }}">{{ __('See All') }}</x-simple-link>
+                            <x-section-nav-link class="whitespace-nowrap" href="{{ route('explore.details', $exploreCategory) }}">{{ __('See All') }}</x-section-nav-link>
                     @endswitch
                 </x-slot>
             </x-section-nav>
