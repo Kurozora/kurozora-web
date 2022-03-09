@@ -11,16 +11,7 @@
                 </x-slot>
 
                 <x-slot:action>
-                    @switch($exploreCategory->type)
-                        @case(\App\Enums\ExploreCategoryTypes::Genres)
-                            <x-section-nav-link class="whitespace-nowrap" href="{{ route('genres.index') }}">{{ __('See All') }}</x-section-nav-link>
-                        @break
-                        @case(\App\Enums\ExploreCategoryTypes::Themes)
-                        <x-section-nav-link class="whitespace-nowrap" href="{{ route('themes.index') }}">{{ __('See All') }}</x-section-nav-link>
-                        @break
-                        @default
-                            <x-section-nav-link class="whitespace-nowrap" href="{{ route('explore.details', $exploreCategory) }}">{{ __('See All') }}</x-section-nav-link>
-                    @endswitch
+                    <x-section-nav-link class="whitespace-nowrap" href="{{ $exploreCategory->secondary_slug ? url($exploreCategory->secondary_slug) : route('explore.details', $exploreCategory) }}">{{ __('See All') }}</x-section-nav-link>
                 </x-slot>
             </x-section-nav>
 
