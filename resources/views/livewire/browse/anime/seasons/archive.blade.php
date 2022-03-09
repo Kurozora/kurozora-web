@@ -12,7 +12,7 @@
         <meta property="og:description" content="{{ __('Browse the archive of anime seasons. Join the Kurozora community and create your anime and manga list. Discover songs, games and read reviews and news!') }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
-        <link rel="canonical" href="{{ route('anime.index.seasons.archive') }}">
+        <link rel="canonical" href="{{ route('anime.seasons.archive') }}">
     </x-slot>
 
     <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
@@ -24,7 +24,7 @@
             </div>
 
             <table class="table-fixed w-full text-xs text-center border-2 sm:text-base">
-                <thead id="tableHeader" class="bg-gray-100 font-bold border-2 z-10">
+                <thead id="tableHeader" class="bg-gray-100 font-bold border-2">
                     <tr>
                         <th class="p-2 sm:p-4 border-b-2">
                             <p>
@@ -60,7 +60,7 @@
 
                             @foreach(\App\Enums\SeasonOfYear::asSelectArray() as $seasonOfYear)
                                 <td class="p-2 sm:p-4 {{ $year === now()->year && $seasonOfYear === season_of_year()->key ? 'font-semibold' : '' }}">
-                                    <x-simple-link href="{{ route('anime.index.seasons.year.season', [$year, $seasonOfYear]) }}">{{ $seasonOfYear }}</x-simple-link>
+                                    <x-simple-link href="{{ route('anime.seasons.year.season', [$year, $seasonOfYear]) }}">{{ $seasonOfYear }}</x-simple-link>
                                 </td>
                             @endforeach
                         </tr>

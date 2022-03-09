@@ -4,8 +4,8 @@ use App\Http\Livewire\Anime\Cast as AnimeCast;
 use App\Http\Livewire\Anime\Details as AnimeDetails;
 use App\Http\Livewire\Anime\RelatedShows;
 use App\Http\Livewire\Anime\Songs as AnimeSongs;
-use App\Http\Livewire\Browse\Anime\Seasons as BrowseAnimeSeasons;
 use App\Http\Livewire\Browse\Anime\Seasons\Archive as BrowseAnimeSeasonsArchive;
+use App\Http\Livewire\Browse\Anime\Seasons\Index as BrowseAnimeSeasons;
 use App\Http\Livewire\Browse\Anime\Upcoming\Index as BrowseAnimeUpcomingIndex;
 use App\Http\Livewire\Season\Details as SeasonDetails;
 
@@ -19,31 +19,27 @@ Route::prefix('/anime')
                     ->name('.index');
             });
 
-        Route::prefix('/')
-            ->name('.index')
+        Route::prefix('/seasons')
+            ->name('.seasons')
             ->group(function () {
-                Route::prefix('/seasons')
-                    ->name('.seasons')
+                Route::get('/', function () {
+                    return to_route('anime.seasons.year.season', [now()->year, season_of_year()->key]);
+                })
+                    ->name('.index');
+
+                Route::get('/archive', BrowseAnimeSeasonsArchive::class)
+                    ->name('.archive');
+
+                Route::prefix('/{year}')
+                    ->name('.year')
                     ->group(function () {
-                        Route::get('/', function () {
-                            return to_route('anime.index.seasons.year.season', [now()->year, season_of_year()->key]);
+                        Route::get('/', function ($year) {
+                            return to_route('anime.seasons.year.season', [$year, season_of_year()->key]);
                         })
                             ->name('.index');
 
-                        Route::get('/archive', BrowseAnimeSeasonsArchive::class)
-                            ->name('.archive');
-
-                        Route::prefix('/{year}')
-                            ->name('.year')
-                            ->group(function () {
-                                Route::get('/', function ($year) {
-                                    return to_route('anime.index.seasons.year.season', [$year, season_of_year()->key]);
-                                })
-                                    ->name('.index');
-
-                                Route::get('/{season}', BrowseAnimeSeasons::class)
-                                    ->name('.season');
-                            });
+                        Route::get('/{season}', BrowseAnimeSeasons::class)
+                            ->name('.season');
                     });
             });
 
