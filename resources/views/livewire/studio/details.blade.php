@@ -91,7 +91,7 @@
                     </x-slot>
 
                     <x-slot:action>
-                        <x-simple-link href="{{ route('studios.anime', $studio) }}">{{ __('See All') }}</x-simple-link>
+                        <x-section-nav-link href="{{ route('studios.anime', $studio) }}">{{ __('See All') }}</x-section-nav-link>
                     </x-slot>
                 </x-section-nav>
 
