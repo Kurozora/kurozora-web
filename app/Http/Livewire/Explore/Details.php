@@ -39,8 +39,8 @@ class Details extends Component
         $this->exploreCategoryItems = match ($this->exploreCategory->type) {
             ExploreCategoryTypes::MostPopularShows => $this->exploreCategory->most_popular_shows()->explore_category_items,
             ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcoming_shows()->explore_category_items,
-            ExploreCategoryTypes::Characters => $this->exploreCategory->charactersBornToday()->explore_category_items,
-            ExploreCategoryTypes::People => $this->exploreCategory->peopleBornToday()->explore_category_items,
+            ExploreCategoryTypes::Characters => $this->exploreCategory->charactersBornToday(-1)->explore_category_items,
+            ExploreCategoryTypes::People => $this->exploreCategory->peopleBornToday(-1)->explore_category_items,
             default => $this->exploreCategory->explore_category_items
         };
     }
