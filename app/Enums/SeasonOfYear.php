@@ -32,4 +32,46 @@ final class SeasonOfYear extends Enum
             default => svg('snowflake', 'fill-current', ['width' => '20'])
         };
     }
+
+    /**
+     * Returns the next SeasonOfYear type.
+     *
+     * @param int $steps
+     * @return SeasonOfYear
+     */
+    public function next(int $steps = 1): SeasonOfYear {
+        $seasonOfYear = $this;
+
+        foreach (range(0, $steps - 1) as $ignored) {
+            $seasonOfYear = match ($seasonOfYear->value) {
+                self::Winter => self::Spring(),
+                self::Spring => self::Summer(),
+                self::Summer => self::Fall(),
+                default => self::Winter(),
+            };
+        }
+
+        return $seasonOfYear;
+    }
+
+    /**
+     * Returns the previous SeasonOfYear type.
+     *
+     * @param int $steps
+     * @return SeasonOfYear
+     */
+    public function previous(int $steps = 1): SeasonOfYear {
+        $seasonOfYear = $this;
+
+        foreach (range(0, $steps - 1) as $ignored) {
+            $seasonOfYear = match ($seasonOfYear->value) {
+                self::Fall => self::Summer(),
+                self::Summer => self::Spring(),
+                self::Spring => self::Winter(),
+                default => self::Fall(),
+            };
+        }
+
+        return $seasonOfYear;
+    }
 }

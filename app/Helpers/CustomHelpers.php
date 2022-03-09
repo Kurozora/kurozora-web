@@ -1,6 +1,8 @@
 <?php
 
+use App\Enums\SeasonOfYear;
 use App\Helpers\Settings;
+use Carbon\Carbon;
 
 // Create a deeplink iOS URL
 if (!function_exists('ios_app_url')) {
@@ -91,5 +93,30 @@ if (!function_exists('create_studio_banner_from')) {
         foreach ($images as $key => $image) {
             imagedestroy(${'image_' . $key});
         }
+    }
+}
+
+if (!function_exists('season_of_year')) {
+    /**
+     * Get season of year value.
+     *
+     * @param Carbon|null $date
+     * @return SeasonOfYear
+     */
+    function season_of_year(?Carbon $date = null): SeasonOfYear
+    {
+        $date = $date ?? now();
+
+        $winter = Carbon::createFromDate(null, 1, 1);
+        $spring = Carbon::createFromDate(null, 4, 4);
+        $summer = Carbon::createFromDate(null, 7, 7);
+        $fall = Carbon::createFromDate(null, 10, 10);
+
+        return match (true) {
+            $date >= $spring && $date < $summer => SeasonOfYear::Spring(),
+            $date >= $summer && $date < $fall => SeasonOfYear::Summer(),
+            $date >= $fall && $date < $winter => SeasonOfYear::Fall(),
+            default => SeasonOfYear::Winter(),
+        };
     }
 }
