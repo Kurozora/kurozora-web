@@ -23,60 +23,28 @@
     >
         <p class="text-2xl font-bold">{{ __('Seasonal Anime') }}</p>
 
-        <section class="flex flex-wrap gap-4 justify-between mt-4 pb-5">
-            <x-season-pagination :season-of-year="$seasonOfYear" :year="$year" :on-each-side="2" />
+        <div id="mediaTypeHeader" class="bg-white z-10">
+            <section class="pt-4 pb-5">
+                <x-season-pagination :season-of-year="$seasonOfYear" :year="$year" :on-each-side="2" />
+            </section>
 
-            <div
-                class="flex flex-wrap gap-1"
-                x-data="{
-                    year: null,
-                    season: '{{ $season }}',
-                    goToSeason() {
-                        let year = this.year;
-                        let season = this.season;
-
-                        if (year && typeof parseInt(year) === 'number' && typeof season === 'string') {
-                            window.location = '../' + year  + '/' + season
-                        }
-                    }
-                }"
-            >
-                <p class="m-auto">{{ __('Jump to') }}</p>
-
-                <x-label>
-                    <x-select x-model="season">
-                        @foreach(\App\Enums\SeasonOfYear::asSelectArray() as $seasonOfYearValue)
-                            <option value="{{ $seasonOfYearValue }}">{{ __($seasonOfYearValue) }}</option>
-                        @endforeach
-                    </x-select>
-                    <x-input-error for="season"></x-input-error>
-                </x-label>
-
-                <x-label>
-                    <x-input class="w-24" name="year" type="number" placeholder="{{ __('Year') }}" x-model="year" />
-                    <x-input-error for="year"></x-input-error>
-                </x-label>
-
-                <x-button x-on:click="goToSeason()">{{ __('Go') }}</x-button>
-            </div>
-        </section>
-
-        <section id="mediaTypeHeader" class="flex flex-wrap gap-1 py-5 border-t-2 bg-white z-10">
-            <template x-if="selectedMediaType === null">
-                <x-button>{{ __('All') }}</x-button>
-            </template>
-            <template x-if="selectedMediaType !== null">
-                <x-outlined-button x-on:click="selectedMediaType = null">{{ __('All') }}</x-outlined-button>
-            </template>
-            @foreach($mediaTypes as $mediaType)
-                <template x-if="selectedMediaType === '{{ $mediaType->name }}'">
-                    <x-button>{{ $mediaType->name }}</x-button>
+            <section class="flex flex-wrap gap-1 py-5 border-t-2">
+                <template x-if="selectedMediaType === null">
+                    <x-button>{{ __('All') }}</x-button>
                 </template>
-                <template x-if="selectedMediaType !== '{{ $mediaType->name }}'">
-                    <x-outlined-button x-on:click="selectedMediaType = '{{ $mediaType->name }}'">{{ $mediaType->name }}</x-outlined-button>
+                <template x-if="selectedMediaType !== null">
+                    <x-outlined-button x-on:click="selectedMediaType = null">{{ __('All') }}</x-outlined-button>
                 </template>
-            @endforeach
-        </section>
+                @foreach($mediaTypes as $mediaType)
+                    <template x-if="selectedMediaType === '{{ $mediaType->name }}'">
+                        <x-button>{{ $mediaType->name }}</x-button>
+                    </template>
+                    <template x-if="selectedMediaType !== '{{ $mediaType->name }}'">
+                        <x-outlined-button x-on:click="selectedMediaType = '{{ $mediaType->name }}'">{{ $mediaType->name }}</x-outlined-button>
+                    </template>
+                @endforeach
+            </section>
+        </div>
 
         <section class="space-y-10">
             @foreach($mediaTypes as $mediaType)
@@ -90,8 +58,8 @@
     </div>
 
     <script>
-        // When the user scrolls the page, execute myFunction
-        window.onscroll = function() { myFunction() };
+        // When the user scrolls the page, execute stickyHeader
+        window.onscroll = function() { stickyHeader() };
 
         // Get the header
         const header = document.getElementById('mediaTypeHeader');
@@ -100,7 +68,7 @@
         const sticky = header.offsetTop;
 
         // Add the sticky class to the header when you reach its scroll position. Remove "sticky" when you leave the scroll position
-        function myFunction() {
+        function stickyHeader() {
             if (window.scrollY > sticky) {
                 header.classList.add('sticky', 'top-0', 'border-b-2');
             } else {
