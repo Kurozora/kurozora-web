@@ -5,6 +5,7 @@ use App\Http\Livewire\Anime\Details as AnimeDetails;
 use App\Http\Livewire\Anime\RelatedShows;
 use App\Http\Livewire\Anime\Songs as AnimeSongs;
 use App\Http\Livewire\Browse\Anime\Seasons as BrowseAnimeSeasons;
+use App\Http\Livewire\Browse\Anime\Seasons\Archive as BrowseAnimeSeasonsArchive;
 use App\Http\Livewire\Season\Details as SeasonDetails;
 
 Route::prefix('/anime')
@@ -21,11 +22,16 @@ Route::prefix('/anime')
                         })
                             ->name('.index');
 
+                        Route::get('/archive', BrowseAnimeSeasonsArchive::class)
+                            ->name('.archive');
+
                         Route::prefix('/{year}')
                             ->name('.year')
                             ->group(function () {
-//                                Route::get('/', AnimeBrowseYears::class)
-//                                    ->name('.index');
+                                Route::get('/', function ($year) {
+                                    return to_route('anime.index.seasons.year.season', [$year, season_of_year()->key]);
+                                })
+                                    ->name('.index');
 
                                 Route::get('/{season}', BrowseAnimeSeasons::class)
                                     ->name('.season');
