@@ -10,14 +10,6 @@ module.exports = {
     ],
 
     theme: {
-        pagination: theme => ({
-            color: theme('colors.orange.500'),
-            linkFirst: 'mr-6 border rounded',
-            linkSecond: 'rounded-l border-l',
-            linkBeforeLast: 'rounded-r border-r',
-            linkLast: 'ml-6 border rounded',
-        }),
-
         extend: {
             colors: {
                 orange: {
