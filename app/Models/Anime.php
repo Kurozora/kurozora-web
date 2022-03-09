@@ -170,17 +170,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
             return null;
         }
 
-        $winter = Carbon::createFromDate(null, 1, 1);
-        $spring = Carbon::createFromDate(null, 4, 4);
-        $summer = Carbon::createFromDate(null, 7, 7);
-        $fall = Carbon::createFromDate(null, 10, 10);
-
-        return match (true) {
-            $firstAired >= $spring && $firstAired < $summer => SeasonOfYear::Spring,
-            $firstAired >= $summer && $firstAired < $fall => SeasonOfYear::Summer,
-            $firstAired >= $fall && $firstAired < $winter => SeasonOfYear::Fall,
-            default => SeasonOfYear::Winter,
-        };
+        return season_of_year($firstAired)->value;
     }
 
     /**
