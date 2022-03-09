@@ -14,8 +14,7 @@ class Archive extends Component
      *
      * @return void
      */
-    public function mount()
-    {}
+    public function mount() {}
 
     /**
      * Render the component.

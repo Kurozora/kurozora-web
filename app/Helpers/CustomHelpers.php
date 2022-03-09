@@ -3,6 +3,7 @@
 use App\Enums\SeasonOfYear;
 use App\Helpers\Settings;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Date;
 
 // Create a deeplink iOS URL
 if (!function_exists('ios_app_url')) {
@@ -118,5 +119,18 @@ if (!function_exists('season_of_year')) {
             $date >= $fall && $date < $winter => SeasonOfYear::Fall(),
             default => SeasonOfYear::Winter(),
         };
+    }
+}
+
+if (! function_exists('yesterday')) {
+    /**
+     * Create a new Carbon instance for yesterday's time.
+     *
+     * @param DateTimeZone|string|null  $tz
+     * @return \Illuminate\Support\Carbon
+     */
+    function yesterday(DateTimeZone|string|null $tz = null): \Illuminate\Support\Carbon
+    {
+        return Date::yesterday($tz);
     }
 }
