@@ -11,6 +11,7 @@ use App\Http\Requests\GetAnimeSeasonsRequest;
 use App\Http\Requests\GetAnimeSongsRequest;
 use App\Http\Requests\GetAnimeStaffRequest;
 use App\Http\Requests\GetAnimeStudiosRequest;
+use App\Http\Requests\GetUpcomingAnimeRequest;
 use App\Http\Requests\RateAnimeRequest;
 use App\Http\Requests\SearchAnimeRequest;
 use App\Http\Resources\AnimeCastResource;
@@ -280,6 +281,28 @@ class AnimeController extends Controller
         // Search for the anime
         $anime = Anime::kSearch($searchQuery)->paginate(Anime::MAX_SEARCH_RESULTS)
             ->appends('query', $searchQuery);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => AnimeResourceBasic::collection($anime),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Retrieves upcoming Anime results
+     *
+     * @param GetUpcomingAnimeRequest $request
+     * @return JsonResponse
+     */
+    public function upcoming(GetUpcomingAnimeRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        $anime = Anime::upcomingShows(-1)
+            ->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
