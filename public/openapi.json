@@ -288,6 +288,8 @@
       "get": {
         "security": [
           {
+          },
+          {
             "bearerAuth": [
             ]
           }
@@ -548,6 +550,56 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/GetAnimeStudiosSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
+    "/anime/upcoming": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "anime"
+        ],
+        "operationId": "getAnimeUpcoming",
+        "summary": "Upcoming anime information.",
+        "description": "This endpoint will retrieve the upcoming Anime items.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "required": false,
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 100."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "The next page or group of objects to fetch. The default value is 1."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetAnimeUpcomingSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -4630,6 +4682,150 @@
                       "birthDay": 1,
                       "birthMonth": 2,
                       "astrologicalSign": "Cancer ♋️"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "GetAnimeUpcomingSuccess": {
+        "description": "Successful GET Upcoming Anime JSON response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "type": "show",
+                    "href": "/v1/anime/1",
+                    "attributes": {
+                      "title": "\"0\"",
+                      "type": "Tv",
+                      "source": "Unknown",
+                      "anidbID": 10143,
+                      "anilistID": 102416,
+                      "kitsuID": 8925,
+                      "imdbID": null,
+                      "malID": 20707,
+                      "network": null,
+                      "studio": [
+                        {
+                          "id": 1,
+                          "type": "studios",
+                          "href": "/v1/studios/1",
+                          "attributes": {
+                            "name": "Watsica-Kling",
+                            "logoURL": "https://place-hold.it/512x512",
+                            "about": "Error ipsa eos et rem recusandae rerum quos quidem aut.",
+                            "founded": "1963-11-15",
+                            "websiteURL": "https://watsica-kling.com/"
+                          }
+                        }
+                      ],
+                      "status": "Continuing",
+                      "episodes": 0,
+                      "seasons": 0,
+                      "averageRating": 0,
+                      "ratingCount": 0,
+                      "synopsis": "Error ipsa eos et rem recusandae voluptate sunt corrupti. Qui est est autem sit pariatur laudantium. Suscipit laboriosam enim modi quae quia aperiam excepturi sunt. Temporibus est hic adipisci.",
+                      "runtime": 25,
+                      "tvRating": {
+                        "name": "G",
+                        "description": "All Ages"
+                      },
+                      "tagline": "Voluptatem rerum quos quidem aut.",
+                      "videoURL": null,
+                      "poster": {
+                        "url": "https://place-hold.it/680x1000",
+                        "height": 1000,
+                        "width": 680,
+                        "backgroundColor": "#acacac",
+                        "textColor1": "#171717",
+                        "textColor2": "#545454",
+                        "textColor3": "#6e6e6e",
+                        "textColor4": "#5c5c5c"
+                      },
+                      "background": {
+                        "url": "https://place-hold.it/1920x1080",
+                        "height": 1080,
+                        "width": 1920,
+                        "backgroundColor": "#acacac",
+                        "textColor1": "#171717",
+                        "textColor2": "#545454",
+                        "textColor3": "#6d6d6d",
+                        "textColor4": "#5c5c5c"
+                      },
+                      "isNSFW": false,
+                      "genres": [
+                        "Action",
+                        "Adventure"
+                      ],
+                      "themes": [
+                        "Cars",
+                        "Demons"
+                      ],
+                      "firstAired": "1973-11-15",
+                      "lastAired": "1974-02-07",
+                      "airTime": "20:00:00",
+                      "airDay": 3,
+                      "copyright": "® 2003 Watsica-Kling"
+                    }
+                  },
+                  {
+                    "id": 2,
+                    "type": "show",
+                    "href": "/v1/anime/2",
+                    "attributes": {
+                      "title": "\"Aesop\" no Ohanashi yori: Ushi to Kaeru, Yokubatta Inu",
+                      "type": "Tv",
+                      "source": "Digital manga",
+                      "anidbID": 3689,
+                      "anilistID": null,
+                      "kitsuID": 9179,
+                      "imdbID": null,
+                      "malID": 25627,
+                      "network": null,
+                      "studio": [
+                        {
+                          "id": 2,
+                          "type": "studios",
+                          "href": "/v1/studios/2",
+                          "attributes": {
+                            "name": null,
+                            "logoURL": null,
+                            "about": null,
+                            "founded": null,
+                            "websiteURL": null
+                          }
+                        }
+                      ],
+                      "status": "Ended",
+                      "episodes": 0,
+                      "seasons": 0,
+                      "averageRating": 0,
+                      "ratingCount": 0,
+                      "synopsis": "Totam ex non eaque rem. Suscipit eos recusandae et. Pariatur reprehenderit aliquid reprehenderit nisi quae. Fuga enim atque ratione occaecati sequi iste dignissimos.",
+                      "runtime": 25,
+                      "tvRating": {
+                        "name": "G",
+                        "description": "All Ages"
+                      },
+                      "tagline": "Vel facilis dignissimos suscipit veritatis enim nemo ut.",
+                      "videoURL": null,
+                      "poster": null,
+                      "background": null,
+                      "isNSFW": false,
+                      "genres": [],
+                      "themes": [],
+                      "firstAired": "2014-09-28",
+                      "lastAired": "2014-12-21",
+                      "airTime": "19:24:00",
+                      "airDay": 4,
+                      "copyright": "® 1985 Fadel, Sipes and McGlynn"
                     }
                   }
                 ]
