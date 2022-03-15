@@ -4,6 +4,8 @@ namespace App\Nova;
 
 use App\Enums\ExploreCategorySize;
 use App\Enums\ExploreCategoryTypes;
+use App\Scopes\ExploreCategoryIsEnabledScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
@@ -12,6 +14,7 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 class ExploreCategory extends Resource
 {
@@ -175,6 +178,44 @@ class ExploreCategory extends Resource
     public function actions(Request $request): array
     {
         return [];
+    }
+
+    /**
+     * Build an "index" query for the given resource.
+     *
+     * @param NovaRequest $request
+     * @param  Builder  $query
+     * @return Builder
+     */
+    public static function indexQuery(NovaRequest $request, $query): Builder
+    {
+        return parent::indexQuery($request, $query)->withoutGlobalScope(new ExploreCategoryIsEnabledScope);
+    }
+
+    /**
+     * Build a "detail" query for the given resource.
+     *
+     * @param NovaRequest $request
+     * @param  Builder  $query
+     * @return Builder
+     */
+    public static function detailQuery(NovaRequest $request, $query): Builder
+    {
+        return parent::detailQuery($request, $query)->withoutGlobalScope(new ExploreCategoryIsEnabledScope);
+    }
+
+    /**
+     * Build a "relatable" query for the given resource.
+     *
+     * This query determines which instances of the model may be attached to other resources.
+     *
+     * @param NovaRequest $request
+     * @param  Builder  $query
+     * @return Builder
+     */
+    public static function relatableQuery(NovaRequest $request, $query): Builder
+    {
+        return parent::relatableQuery($request, $query)->withoutGlobalScope(new ExploreCategoryIsEnabledScope);
     }
 
     /**
