@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Filters\MissingSongAttributes;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -67,7 +68,7 @@ class Song extends Resource
             ID::make()->sortable(),
 
             Number::make('Apple Music ID', 'am_id')
-                ->hideFromIndex()
+                ->sortable()
                 ->help('The ID of the Song as noted on Apple Music.<br>Note: The id of the song is different from the album id.<br>Example: https://music.apple.com/us/album/w-a-v-e-r/1576224590?i=<strong>1576225422</strong>'),
 
             Number::make('MAL ID')
@@ -151,7 +152,9 @@ class Song extends Resource
      */
     public function filters(Request $request): array
     {
-        return [];
+        return [
+            new MissingSongAttributes
+        ];
     }
 
     /**
