@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scopes\ExploreCategoryIsEnabledScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -19,7 +20,8 @@ class ExploreCategoryItem extends KModel
      */
     function explore_category(): BelongsTo
     {
-        return $this->belongsTo(ExploreCategory::class);
+        return $this->belongsTo(ExploreCategory::class)
+            ->withoutGlobalScope(new ExploreCategoryIsEnabledScope);
     }
 
     /**
