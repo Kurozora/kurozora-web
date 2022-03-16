@@ -1,23 +1,19 @@
 <div
     x-data="{
-        isShown: false,
-        determineIsShown() {
-            if (tab === '#{{ strtolower($userLibraryStatusString) }}' && !this.isShown) {
-                this.isShown = true
-
+        loadResource() {
+            if (tab === '#{{ strtolower($userLibraryStatusString) }}' && !$wire.loadResourceIsEnabled) {
+                @this.call('loadResource');
+                console.log('resource is loaded')
+                return true;
+            } else if (tab === '#{{ strtolower($userLibraryStatusString) }}') {
+                return true;
             }
-            return tab === '#{{ strtolower($userLibraryStatusString) }}'
+
+            console.log('resource is not loaded')
+            return false;
         }
     }"
-    x-init="
-        $watch('isShown', function (newValue) {
-            if (newValue) {
-                @this.call('loadResource')
-            }
-        });
-    "
-    x-show="determineIsShown()"
-    x-cloak
+    x-show="tab === '#{{ strtolower($userLibraryStatusString) }}' && loadResource()"
 >
     <section>
         <div>
@@ -65,7 +61,7 @@
         </div>
 
         <div class="flex justify-center p-4 pb-0">
-            <div class="mb-4" wire:loading.delay.shortest>
+            <div class="mb-4" wire:loading.delay.shortest >
                 <svg class="animate-spin h-6 w-6 text-orange-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
@@ -76,17 +72,19 @@
 
     @if(!empty($library))
         @if(!empty($library->total()))
-            <section class="grid gap-4 mt-4 sm:grid-cols-2 sm:auto-cols-[unset] lg:grid-cols-3">
-                @foreach($library as $anime)
-                    <x-lockups.small-lockup :anime="$anime" wire:key="{{ $anime->id }}" />
-                @endforeach
-            </section>
+            <section wire:key="not-empty-{{ $userLibraryStatusString }}">
+                <div class="grid gap-4 mt-4 sm:grid-cols-2 sm:auto-cols-[unset] lg:grid-cols-3">
+                    @foreach($library as $anime)
+                        <x-lockups.small-lockup :anime="$anime" wire:key="{{ $anime->id }}" />
+                    @endforeach
+                </div>
 
-            <section class="mt-4">
-                {{ $library->links() }}
+                <div class="mt-4">
+                    {{ $library->links() }}
+                </div>
             </section>
         @else
-            <section class="flex flex-col items-center mt-4 text-center">
+            <section class="flex flex-col items-center mt-4 text-center" wire:key="empty-{{ $userLibraryStatusString }}">
                 <x-picture>
                     <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_library.webp') }}" alt="Empty Library" title="Empty Library">
                 </x-picture>
