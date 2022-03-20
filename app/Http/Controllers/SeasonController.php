@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
 use App\Http\Requests\GetSeasonEpisodesRequest;
-use App\Http\Resources\EpisodeResource;
+use App\Http\Resources\EpisodeResourceIdentity;
 use App\Http\Resources\SeasonResource;
 use App\Models\Season;
 use Illuminate\Http\JsonResponse;
@@ -50,7 +50,7 @@ class SeasonController extends Controller
         $nextPageURL = str_replace($request->root(), '', $episodes->nextPageUrl());
 
         return JSONResult::success([
-            'data' => EpisodeResource::collection($episodes),
+            'data' => EpisodeResourceIdentity::collection($episodes),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

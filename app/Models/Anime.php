@@ -290,19 +290,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
         return $broadcast;
     }
 
-//    /**
-//     * Interact with the user's first name.
-//     *
-//     * @return Attribute
-//     */
-//    protected function synonymTitles(): Attribute
-//    {
-//        return Attribute::make(
-//            get: fn($value) => $value ?? [],
-//            set: fn ($value) => $value ?? [],
-//        );
-//    }
-
     /**
      * The time from now until the broadcast.
      *
