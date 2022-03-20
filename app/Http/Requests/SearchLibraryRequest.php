@@ -24,7 +24,8 @@ class SearchLibraryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'query' => ['bail', 'required', 'string', 'min:1']
+            'query' => ['bail', 'required', 'string', 'min:1'],
+            'limit' => ['integer', 'min:1', 'max:10']
         ];
     }
 }
