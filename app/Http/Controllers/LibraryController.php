@@ -184,16 +184,16 @@ class LibraryController extends Controller
      */
     public function search(SearchLibraryRequest $request): JsonResponse
     {
-        $searchQuery = $request->input('query');
+        $data = $request->validated();
 
         // Get the authenticated user
         $user = Auth::user();
 
         // Search for the anime
         $anime = $user->library()
-            ->search($searchQuery, null, true, true)
+            ->search($data['query'], null, true, true)
             ->paginate(Anime::MAX_SEARCH_RESULTS)
-            ->appends('query', $searchQuery);
+            ->appends($data);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
