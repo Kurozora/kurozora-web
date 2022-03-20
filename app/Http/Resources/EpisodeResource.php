@@ -25,10 +25,8 @@ class EpisodeResource extends JsonResource
      */
     public function toArray($request): array
     {
-        $resource = [
-            'id'            => $this->resource->id,
-            'type'          => 'episodes',
-            'href'          => route('api.episodes.details', $this->resource, false),
+        $resource = EpisodeResourceIdentity::make($this->resource)->toArray($request);
+        $resource = array_merge($resource, [
             'attributes'    => [
                 'poster'        => ImageResource::make($this->resource->season->poster_image),
                 'banner'        => ImageResource::make($this->resource->banner_image),
@@ -42,7 +40,7 @@ class EpisodeResource extends JsonResource
                 'isFiller'      => (bool) $this->resource->is_filler,
                 'isVerified'    => (bool) $this->resource->verified,
             ]
-        ];
+        ]);
 
         if (Auth::check()) {
             $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
