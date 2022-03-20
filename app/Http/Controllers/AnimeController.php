@@ -276,11 +276,12 @@ class AnimeController extends Controller
      */
     public function search(SearchAnimeRequest $request): JsonResponse
     {
-        $searchQuery = $request->input('query');
+        $data = $request->validated();
 
         // Search for the anime
-        $anime = Anime::kSearch($searchQuery)->paginate(Anime::MAX_SEARCH_RESULTS)
-            ->appends('query', $searchQuery);
+        $anime = Anime::kSearch($data['query'])
+            ->paginate($data['limit'] ?? Anime::MAX_SEARCH_RESULTS)
+            ->appends($data);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
