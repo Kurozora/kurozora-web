@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use Auth;
 use Closure;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -30,21 +29,17 @@ class CheckKurozoraUserAuthentication
             throw new Exception('Middleware parameter value "' . $parameter . '" is not valid.');
         }
 
-        // Bearer is empty or user is empty
-        $user = Auth::guard('sanctum')->user();
-
-        if (!$user) {
-            // Continue with the request if authentication is optional
-            if ($parameter === 'optional') {
-                return $next($request);
-            }
-
-            throw new AuthorizationException('The request wasn’t accepted due to an issue with the bearer token or because it’s using incorrect authentication.');
+        // Continue with the request if the user exists
+        if ($request->user()) {
+            return $next($request);
         }
 
-        // Set user if bearer is valid
-        Auth::setUser($user);
+        // Continue with the request if authentication is optional
+        if ($parameter === 'optional') {
+            return $next($request);
+        }
 
-        return $next($request);
+        // Throw an exception when authentication required but missing
+        throw new AuthorizationException('The request wasn’t accepted due to an issue with the bearer token or because it’s using incorrect authentication.');
     }
 }
