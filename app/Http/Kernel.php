@@ -5,6 +5,7 @@ namespace App\Http;
 use App\Http\Middleware\AuthenticateSession;
 use App\Http\Middleware\CheckKurozoraUserAuthentication;
 use App\Http\Middleware\EncryptCookies;
+use App\Http\Middleware\EnsureAPIRequestsAreStateful;
 use App\Http\Middleware\ExploreCategoryAlwaysEnabled;
 use App\Http\Middleware\KAuthenticate;
 use App\Http\Middleware\NoSessionForBotsMiddleware;
@@ -65,6 +66,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
+            EnsureAPIRequestsAreStateful::class,
             'throttle:api',
             SubstituteBindings::class,
         ],
