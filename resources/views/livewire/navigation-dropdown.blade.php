@@ -67,7 +67,7 @@
                            x-transition:enter="ease-out duration-150 delay-100 transform sm:delay-[0ms]"
                            x-transition:enter-start="opacity-0 scale-75"
                            x-transition:enter-end="opacity-100 scale-100"
-                           x-transition:leave="ease-in duration-200 delay-[50ms] transform sm:delay-[350ms]"
+                           x-transition:leave="ease-in duration-200 delay-[50ms] transform sm:delay-[400ms]"
                            x-transition:leave-start="opacity-100 scale-100"
                            x-transition:leave-end="opacity-0 scale-75"
                         >
@@ -81,16 +81,28 @@
                                         x-transition:enter="ease-out duration-150 delay-[50ms] transform"
                                         x-transition:enter-start="opacity-0 scale-75"
                                         x-transition:enter-end="opacity-100 scale-100"
-                                        x-transition:leave="ease-in duration-200 delay-300 transform"
+                                        x-transition:leave="ease-in duration-200 delay-[350ms] transform"
                                         x-transition:leave-start="opacity-100 scale-100"
                                         x-transition:leave-end="opacity-0 scale-75"
                             >
                                 {{ __('Explore') }}
                             </x-nav-link>
 
-                            <x-nav-link href="{{ route('genres.index') }}" :active="request()->routeIs('genres.index')"
+                            <x-nav-link href="{{ route('anime.index') }}" :active="request()->routeIs('anime.index')"
                                         x-show="! isSearchEnabled"
                                         x-transition:enter="ease-out duration-150 delay-100 transform"
+                                        x-transition:enter-start="opacity-0 scale-75"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="ease-in duration-200 delay-300 transform"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-75"
+                            >
+                                {{ __('Anime') }}
+                            </x-nav-link>
+
+                            <x-nav-link href="{{ route('genres.index') }}" :active="request()->routeIs('genres.index')"
+                                        x-show="! isSearchEnabled"
+                                        x-transition:enter="ease-out duration-150 delay-150 transform"
                                         x-transition:enter-start="opacity-0 scale-75"
                                         x-transition:enter-end="opacity-100 scale-100"
                                         x-transition:leave="ease-in duration-200 delay-[250ms] transform"
@@ -102,7 +114,7 @@
 
                             <x-nav-link href="{{ route('characters.index') }}" :active="request()->routeIs('characters.index')"
                                         x-show="! isSearchEnabled"
-                                        x-transition:enter="ease-out duration-150 delay-150 transform"
+                                        x-transition:enter="ease-out duration-150 delay-200 transform"
                                         x-transition:enter-start="opacity-0 scale-75"
                                         x-transition:enter-end="opacity-100 scale-100"
                                         x-transition:leave="ease-in duration-200 delay-200 transform"
@@ -114,7 +126,7 @@
 
                             <x-nav-link href="{{ route('people.index') }}" :active="request()->routeIs('people.index')"
                                         x-show="! isSearchEnabled"
-                                        x-transition:enter="ease-out duration-150 delay-200 transform"
+                                        x-transition:enter="ease-out duration-150 delay-[250ms] transform"
                                         x-transition:enter-start="opacity-0 scale-75"
                                         x-transition:enter-end="opacity-100 scale-100"
                                         x-transition:leave="ease-in duration-200 delay-150 transform"
@@ -126,7 +138,7 @@
 
                             <x-nav-link href="{{ route('studios.index') }}" :active="request()->routeIs('studios.index')"
                                         x-show="! isSearchEnabled"
-                                        x-transition:enter="ease-out duration-150 delay-[250ms] transform"
+                                        x-transition:enter="ease-out duration-150 delay-300 transform"
                                         x-transition:enter-start="opacity-0 scale-75"
                                         x-transition:enter-end="opacity-100 scale-100"
                                         x-transition:leave="ease-in duration-200 delay-100 transform"
@@ -139,7 +151,7 @@
                             <x-nav-link href="{{ config('app.ios.url') }}"
                                         target="_blank"
                                         x-show="! isSearchEnabled"
-                                        x-transition:enter="ease-out duration-150 delay-300 transform"
+                                        x-transition:enter="ease-out duration-150 delay-[350ms] transform"
                                         x-transition:enter-start="opacity-0 scale-75"
                                         x-transition:enter-end="opacity-100 scale-100"
                                         x-transition:leave="ease-in duration-200 delay-75 transform"
