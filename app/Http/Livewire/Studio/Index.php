@@ -33,6 +33,16 @@ class Index extends Component
     public function mount() {}
 
     /**
+     * Redirect the user to a random studio.
+     *
+     * @return void
+     */
+    public function randomStudio()
+    {
+        $this->redirectRoute('studios.details', Studio::inRandomOrder()->first());
+    }
+
+    /**
      * The computed studios property.
      *
      * @return LengthAwarePaginator
