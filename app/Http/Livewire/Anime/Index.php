@@ -33,6 +33,16 @@ class Index extends Component
     public function mount() {}
 
     /**
+     * Redirect the user to a random anime.
+     *
+     * @return void
+     */
+    public function randomAnime()
+    {
+        $this->redirectRoute('anime.details', Anime::inRandomOrder()->first());
+    }
+
+    /**
      * The computed anime property.
      *
      * @return LengthAwarePaginator
