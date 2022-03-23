@@ -33,6 +33,16 @@ class Index extends Component
     public function mount() {}
 
     /**
+     * Redirect the user to a random character.
+     *
+     * @return void
+     */
+    public function randomCharacter()
+    {
+        $this->redirectRoute('characters.details', Character::inRandomOrder()->first());
+    }
+
+    /**
      * The computed characters property.
      *
      * @return LengthAwarePaginator

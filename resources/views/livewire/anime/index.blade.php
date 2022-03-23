@@ -26,13 +26,17 @@
                     </div>
 
                     <div class="flex flex-1 items-center justify-end space-x-1">
-                        <x-spinner />
+                        <x-spinner wire:target="filter" />
+
+                        <x-square-button wire:click="randomAnime">
+                            @svg('dice', 'fill-current', ['aria-labelledby' => 'random anime', 'width' => '28'])
+                        </x-square-button>
 
                         <x-dropdown align="right" width="48">
                             <x-slot:trigger>
-                                <button class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
+                                <x-square-button>
                                     @svg('line_3_horizontal_decrease_circle', 'fill-current', ['aria-labelledby' => 'filter', 'width' => '28'])
-                                </button>
+                                </x-square-button>
                             </x-slot>
 
                             <x-slot:content>
