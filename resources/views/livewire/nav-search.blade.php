@@ -141,7 +141,7 @@
                     @foreach($quickLinks as $key => $quickLink)
                         <li
                             x-show="isSearchEnabled"
-                            x-bind:style="isSearchEnabled ? 'transition-duration: {{ $key * 50 + 400 }}ms;' : ''"
+                            x-bind:style="isSearchEnabled ? 'transition-duration: {{ $key * 50 + 500 }}ms;' : ''"
                             x-transition:enter="ease duration-100 transform"
                             x-transition:enter-start="opacity-0 translate-x-8"
                             x-transition:enter-end="opacity-100 translate-x-0"
@@ -149,7 +149,11 @@
                             x-transition:leave-start="opacity-100"
                             x-transition:leave-end="opacity-0"
                         >
-                            <x-footer-link class="inline-block w-full" href="{{ $quickLink['link'] }}">{{ $quickLink['title'] }}</x-footer-link>
+                            @if (isset($quickLink['action']))
+                                <x-footer-link class="inline-block w-full" wire:click="{{ $quickLink['action'] }}">{{ $quickLink['title'] }}</x-footer-link>
+                            @elseif (isset($quickLink['link']))
+                                <x-footer-link class="inline-block w-full" href="{{ $quickLink['link'] }}">{{ $quickLink['title'] }}</x-footer-link>
+                            @endif
                         </li>
                     @endforeach
                 </ul>

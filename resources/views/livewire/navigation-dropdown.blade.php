@@ -1,7 +1,7 @@
 <div
     x-data="{
         isSearchEnabled: @entangle('isSearchEnabled'),
-        isNavOpen: false,
+        isNavOpen: false
     }"
 >
     <nav class="relative bg-white border-b border-gray-100 z-[300]">
@@ -275,6 +275,10 @@
             <div class="pt-2 pb-3 space-y-1">
                 <x-responsive-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
                     {{ __('Explore') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link href="{{ route('anime.index') }}" :active="request()->routeIs('anime.index')">
+                    {{ __('Anime') }}
                 </x-responsive-nav-link>
 
                 <x-responsive-nav-link href="{{ route('genres.index') }}" :active="request()->routeIs('genres.index')">

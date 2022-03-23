@@ -33,6 +33,16 @@ class Index extends Component
     public function mount() {}
 
     /**
+     * Redirect the user to a random person.
+     *
+     * @return void
+     */
+    public function randomPerson()
+    {
+        $this->redirectRoute('people.details', Person::inRandomOrder()->first());
+    }
+
+    /**
      * The computed people property.
      *
      * @return LengthAwarePaginator

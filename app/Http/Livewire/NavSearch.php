@@ -19,6 +19,16 @@ class NavSearch extends Component
     public string $searchQuery = '';
 
     /**
+     * Redirect the user to a random anime.
+     *
+     * @return void
+     */
+    public function randomAnime()
+    {
+        $this->redirect(route('anime.details', Anime::inRandomOrder()->first()));
+    }
+
+    /**
      * Render the component.
      *
      * @return Application|Factory|View
@@ -45,6 +55,10 @@ class NavSearch extends Component
             'searchResults' => $searchResults,
             'searchResultsTotal' => $searchResultsTotal,
             'quickLinks'    => [
+                [
+                    'title'  => __('Random Anime'),
+                    'action' => 'randomAnime',
+                ],
                 [
                     'title' => __('About Kurozora+'),
                     'link'  => route('kb.iap'),
