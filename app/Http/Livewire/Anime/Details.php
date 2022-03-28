@@ -118,7 +118,7 @@ class Details extends Component
     /**
      * Shows the trailer video to the user.
      */
-    public function showVide()
+    public function showVideo()
     {
         $this->showVideo = true;
         $this->showPopup = true;

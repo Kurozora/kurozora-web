@@ -1,14 +1,15 @@
 <main>
     <x-slot:title>
-        {{ __(':x episode :y', ['x' => $anime->title, 'y' => $episode->number_total]) }} | {!! $episode->title !!}
+        {{ __('Watch :x episode :y', ['x' => $anime->title, 'y' => $episode->number_total]) }} | {!! $episode->title !!}
     </x-slot>
 
     <x-slot:description>
+        {{ __('Watch English subbed anime episodes for free.') }}
         {{ $episode->synopsis }}
     </x-slot>
 
     <x-slot:meta>
-        <meta property="og:title" content="{{ __('Episode :x', ['x' => $episode->number_total]) }} | {{ $episode->title }} — {{ config('app.name') }}" />
+        <meta property="og:title" content="{{ __(':x episode :y', ['x' => $anime->title, 'y' => $episode->number_total]) }} | {{ $episode->title }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ $episode->synopsis ?? __('app.description') }}" />
         <meta property="og:image" content="{{ $episode->banner_image_url ?? $season->poster_image_url ?? asset('images/static/placeholders/episode_banner.webp') }}" />
         <meta property="og:type" content="video.episode" />
@@ -52,12 +53,12 @@
                     "url":"/studio/{{ $anime->studios?->firstWhere('is_studio', '=', true)?->id ?? $anime->studios->first()?->id }}/"
                 }
             ]
-            @if(!empty($anime->video_url))
+            @if(!empty($episode->video_url) || !empty($anime->video_url))
                 ,"trailer": {
                     "@type":"VideoObject",
                     "name":"{{ $episode->title }}",
                     "description":"Official Trailer",
-                    "embedUrl": "{{ $anime->video_url }}",
+                    "embedUrl": "{{ $episode->video_url ?? $anime->video_url }}",
                     "thumbnailUrl": "{{ $episode->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
                     "uploadDate": "{{ $episode->first_aired?->format('Y-m-d') }}"
                 }
@@ -71,10 +72,23 @@
 
     <div class="grid grid-rows-[repeat(2,minmax(0,min-content))] h-full lg:grid-rows-none lg:grid-cols-2 2xl:grid-cols-3 lg:mb-0">
         <div class="relative">
-            <div class="flex flex-nowrap md:relative md:h-full">
-                <picture class="relative w-full overflow-hidden">
-                    <img class="w-full h-full object-cover aspect-ratio-16-9 lazyload" data-sizes="auto" data-src="{{ $episode->banner_image_url ?? $season->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
-                </picture>
+            <div class="relative flex flex-nowrap aspect-ratio-16-9 md:relative md:h-full lg:aspect-ratio-auto">
+                <x-picture class="w-full overflow-hidden">
+                    <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $episode->banner_image_url ?? $season->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
+                </x-picture>
+
+                @if (!empty($episode->video_url))
+                    <div class="absolute top-0 bottom-0 left-0 right-0">
+                        <div class="flex flex-col justify-center items-center h-full md:pb-40 lg:pb-0">
+                            <button
+                                class="inline-flex items-center p-5 bg-white/60 backdrop-blur border border-transparent rounded-full font-semibold text-xs text-gray-500 uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
+                                wire:click="showVideo"
+                            >
+                                @svg('play_fill', 'fill-current', ['width' => '34'])
+                            </button>
+                        </div>
+                    </div>
+                @endif
             </div>
 
             <div class="md:absolute md:bottom-0 md:left-0 md:right-0 lg:px-4">
@@ -115,6 +129,24 @@
                         <p class="text-sm text-gray-500">{{ __('Season') }}</p>
                     </a>
                 </div>
+
+                @if($episode->previous_episode_id)
+                    <div id="episodeBadge" class="flex-grow px-12 border-l-2">
+                        <a href="{{ route('episodes.details', $episode->previous_episode_id) }}">
+                            <p class="font-bold">{{ __('Episode :x', ['x' => $episode->previous_episode->number_total]) }}</p>
+                            <p class="text-sm text-gray-500">{{ __('Previous') }}</p>
+                        </a>
+                    </div>
+                @endif
+
+                @if($episode->next_episode_id)
+                    <div id="episodeBadge" class="flex-grow px-12 border-l-2">
+                        <a href="{{ route('episodes.details', $episode->next_episode_id) }}">
+                            <p class="font-bold">{{ __('Episode :x', ['x' => $episode->next_episode->number_total]) }}</p>
+                            <p class="text-sm text-gray-500">{{ __('Up Next') }}</p>
+                        </a>
+                    </div>
+                @endif
 
                 <div id="animeBadge" class="flex-grow px-12 border-l-2">
                     <a href="{{ route('anime.details', $anime) }}">
@@ -212,15 +244,41 @@
             </section>
 
             <x-dialog-modal maxWidth="md" wire:model="showPopup">
-                <x-slot:title>
-                    {{ $popupData['title'] }}
-                </x-slot>
-                <x-slot:content>
-                    <p>{{ $popupData['message'] }}</p>
-                </x-slot>
-                <x-slot:footer>
-                    <x-button wire:click="$toggle('showPopup')">{{ __('Ok') }}</x-button>
-                </x-slot>
+                @if($showVideo)
+                    <x-slot:title>
+                        {{ __(':x — Episode :y', ['x' => $episode->title, 'y' => $episode->number_total]) }}
+                    </x-slot>
+                    <x-slot:content>
+                        <iframe
+                            class="w-full aspect-ratio-16-9 lazyload"
+                            type="text/html"
+                            scrolling="no"
+                            frameborder="no"
+                            allowfullscreen="allowfullscreen"
+                            mozallowfullscreen="mozallowfullscreen"
+                            msallowfullscreen="msallowfullscreen"
+                            oallowfullscreen="oallowfullscreen"
+                            webkitallowfullscreen="webkitallowfullscreen"
+                            allow="autoplay; fullscreen;"
+                            data-size="auto"
+                            data-src="{{ $episode->video_url }}"
+                        >
+                        </iframe>
+                    </x-slot>
+                    <x-slot:footer>
+                        <x-button wire:click="$toggle('showPopup')">{{ __('Close') }}</x-button>
+                    </x-slot>
+                @else
+                    <x-slot:title>
+                        {{ $popupData['title'] }}
+                    </x-slot>
+                    <x-slot:content>
+                        <p>{{ $popupData['message'] }}</p>
+                    </x-slot>
+                    <x-slot:footer>
+                        <x-button wire:click="$toggle('showPopup')">{{ __('Ok') }}</x-button>
+                    </x-slot>
+                @endif
             </x-dialog-modal>
         </div>
     </div>
