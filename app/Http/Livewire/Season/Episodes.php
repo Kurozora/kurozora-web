@@ -15,7 +15,7 @@ class Episodes extends Component
     use WithPagination;
 
     /**
-     * The object containing the anime data.
+     * The object containing the season data.
      *
      * @var Season $season
      */

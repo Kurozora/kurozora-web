@@ -97,6 +97,26 @@ class Episode extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * Returns the next episode this episode belongs to
+     *
+     * @return BelongsTo
+     */
+    function next_episode(): BelongsTo
+    {
+        return $this->belongsTo(Episode::class);
+    }
+
+    /**
+     * Returns the previous episode this episode belongs to
+     *
+     * @return BelongsTo
+     */
+    function previous_episode(): BelongsTo
+    {
+        return $this->belongsTo(Episode::class);
+    }
+
+    /**
      * Returns the media relations.
      *
      * @return mixed
