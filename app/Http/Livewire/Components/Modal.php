@@ -1,37 +1,30 @@
 <?php
 
-namespace App\Http\Livewire\Episode;
+namespace App\Http\Livewire\Components;
 
-use App\Models\Anime;
 use App\Models\Episode;
-use App\Models\Season;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
-class Details extends Component
+class Modal extends Component
 {
+    /**
+     * The component's listeners.
+     *
+     * @var array
+     */
+    protected $listeners = [
+        'showVideo' => 'showVideo'
+    ];
+
     /**
      * The object containing the episode data.
      *
      * @var Episode $episode
      */
     public Episode $episode;
-
-    /**
-     * The object containing the season data.
-     *
-     * @var Season $season
-     */
-    public Season $season;
-
-    /**
-     * The object containing the anime data.
-     *
-     * @var Anime $anime
-     */
-    public Anime $anime;
 
     /**
      * Whether to show the video to the user.
@@ -58,23 +51,14 @@ class Details extends Component
     ];
 
     /**
-     * Prepare the component.
+     * Shows the trailer video to the user.
      *
      * @param Episode $episode
-     * @return void
      */
-    public function mount(Episode $episode)
+    public function showVideo(Episode $episode)
     {
         $this->episode = $episode;
-        $this->season = $this->episode->season;
-        $this->anime = $this->season->anime;
-    }
 
-    /**
-     * Shows the trailer video to the user.
-     */
-    public function showVideo()
-    {
         $this->showVideo = true;
         $this->showPopup = true;
     }
@@ -86,6 +70,6 @@ class Details extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.episode.details');
+        return view('livewire.components.modal');
     }
 }

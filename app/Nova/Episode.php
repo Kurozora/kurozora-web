@@ -110,6 +110,16 @@ class Episode extends Resource
                 ->searchable()
                 ->sortable(),
 
+            BelongsTo::make('Previous Episode', 'previous_episode', Episode::class)
+                ->hideFromIndex()
+                ->searchable()
+                ->sortable(),
+
+            BelongsTo::make('Next Episode', 'next_episode', Episode::class)
+                ->hideFromIndex()
+                ->searchable()
+                ->sortable(),
+
             Number::make('Number')
                 ->sortable()
                 ->rules('required')
