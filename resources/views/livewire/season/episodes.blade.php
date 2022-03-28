@@ -22,7 +22,7 @@
     </x-slot>
 
     <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
-        <section class="mb-4">
+        <section class="mb-4" wire:ignore>
             <div>
                 <p class="text-2xl font-bold">{{ __(':x Episodes', ['x' => $season->title]) }}</p>
 
@@ -32,7 +32,8 @@
                     </div>
 
                     <div class="flex flex-1 items-center justify-end space-x-1">
-                        <x-spinner />
+                        <x-spinner wire:target="filter" />
+
                         <x-dropdown align="right" width="48">
                             <x-slot:trigger>
                                 <button class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
@@ -84,12 +85,14 @@
 
         <section class="grid gap-4 sm:grid-cols-2 sm:auto-cols-[unset] lg:grid-cols-3">
             @foreach($episodes as $episode)
-                <x-lockups.episode-lockup :episode="$episode" />
+                <livewire:episode.lockup :episode="$episode" />
             @endforeach
         </section>
 
         <section class="mt-4">
             {{ $episodes->links() }}
         </section>
+
+        <livewire:components.modal />
     </div>
 </main>

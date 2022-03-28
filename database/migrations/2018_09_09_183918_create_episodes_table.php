@@ -17,12 +17,15 @@ return new class extends Migration
     {
         Schema::create(Episode::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedInteger('next_episode_id')->nullable();
+            $table->unsignedInteger('previous_episode_id')->nullable();
             $table->unsignedBigInteger('season_id');
             $table->unsignedInteger('number');
             $table->unsignedInteger('number_total');
             $table->unsignedMediumInteger('duration')->default(0);
             $table->dateTime('first_aired')->nullable();
             $table->boolean('is_filler')->default(false);
+            $table->string('video_url')->nullable();
             $table->boolean('verified')->default(false);
             $table->timestamps();
         });
@@ -33,6 +36,8 @@ return new class extends Migration
 
             // Set foreign key constraints
             $table->foreign('season_id')->references('id')->on(Season::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('next_episode_id')->references('id')->on(Episode::TABLE_NAME)->onDelete('set null');
+            $table->foreign('previous_episode_id')->references('id')->on(Episode::TABLE_NAME)->onDelete('set null');
         });
     }
 
