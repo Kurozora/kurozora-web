@@ -14,9 +14,12 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Ramsey\Uuid\Uuid;
 use Timothyasp\Color\Color;
+use Titasgailius\SearchRelations\SearchesRelations;
 
 class Episode extends Resource
 {
+    use SearchesRelations;
+
     /**
      * The model the resource corresponds to.
      *
@@ -45,6 +48,15 @@ class Episode extends Resource
      */
     public static $search = [
         'id'
+    ];
+
+    /**
+     * The relationship columns that should be searched.
+     *
+     * @var array
+     */
+    public static $searchRelations = [
+        'translations' => [\App\Models\EpisodeTranslation::TABLE_NAME . '.title'],
     ];
 
     /**
@@ -113,12 +125,14 @@ class Episode extends Resource
             BelongsTo::make('Previous Episode', 'previous_episode', Episode::class)
                 ->hideFromIndex()
                 ->searchable()
-                ->sortable(),
+                ->sortable()
+                ->nullable(),
 
             BelongsTo::make('Next Episode', 'next_episode', Episode::class)
                 ->hideFromIndex()
                 ->searchable()
-                ->sortable(),
+                ->sortable()
+                ->nullable(),
 
             Number::make('Number')
                 ->sortable()
