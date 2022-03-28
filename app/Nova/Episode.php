@@ -157,6 +157,10 @@ class Episode extends Resource
                 ->sortable()
                 ->help('Check the box if the episode is a filler, and the story is understood even if this episode is skipped.'),
 
+            Text::make('Video URL', 'video_url')
+                ->rules('max:255')
+                ->hideFromIndex(),
+
             Boolean::make('Verified')
                 ->help('Check the box if the information is correct.'),
         ];
