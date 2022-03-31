@@ -7,9 +7,9 @@
 <div {{ $attributes->merge(['class' => 'relative w-full']) }}>
     <div class="flex flex-nowrap justify-between">
         <div class="flex">
-            <picture class="relative overflow-hidden">
+            <picture class="relative w-16 h-16 overflow-hidden">
                 <img
-                    class="w-16 h-16 bg-white border-2 border-black/5 rounded-full lazyload sm:w-24 sm:h-24"
+                    class="w-full bg-white border-2 border-black/5 rounded-full lazyload"
                     data-sizes="auto"
                     data-src="{{ $user->profile_image_url }}"
                     alt="{{ $user->username }} Profile Image"
@@ -21,9 +21,9 @@
                 <div class="absolute top-0 left-0 h-full w-full rounded-full"></div>
             </picture>
 
-            <div class="ml-2">
+            <div class="px-2">
                 <p class="leading-tight line-clamp-2">{{ $user->username }}</p>
-                <p class="text-xs leading-tight text-black/60 whitespace-nowrap">
+                <p class="text-xs leading-tight text-black/60">
                     @auth
                         @if ($followersCount === 0)
                             @if ($user->id === Auth::user()->id)
@@ -71,7 +71,7 @@
 
         <a class="absolute w-full h-full" href="{{ route('profile.details', $user) }}"></a>
 
-        <div class="flex flex-row flex-nowrap justify-between z-10">
+        <div class="flex flex-row flex-nowrap justify-between z-10 whitespace-nowrap">
             @auth
                 @if ($user->id != Auth::user()->id)
                     <livewire:components.follow-button :user='$user' wire:key="{{ uniqid(more_entropy: true) }}" />
