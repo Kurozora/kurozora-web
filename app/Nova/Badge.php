@@ -31,7 +31,7 @@ class Badge extends Resource
      *
      * @var string
      */
-    public static $title = 'text';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -39,7 +39,7 @@ class Badge extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'text'
+        'id', 'name'
     ];
 
     /**
@@ -62,15 +62,15 @@ class Badge extends Resource
 
             ID::make()->sortable(),
 
-            Text::make('Badge Text', 'text'),
-
-            Color::make('Text Color', 'textColor')
-                ->rules('required'),
-
-            Color::make('Background Color', 'backgroundColor')
-                ->rules('required'),
+            Text::make('Name'),
 
             Textarea::make('Description'),
+
+            Color::make('Text Color')
+                ->rules('required'),
+
+            Color::make('Background Color')
+                ->rules('required'),
 
             BelongsToMany::make('Users')
                 ->searchable(),
@@ -86,7 +86,7 @@ class Badge extends Resource
     {
         $badge = $this->resource;
 
-        return $badge->text . ' (ID: ' . $badge->id . ')';
+        return $badge->name . ' (ID: ' . $badge->id . ')';
     }
 
     /**
