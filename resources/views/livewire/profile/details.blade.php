@@ -62,30 +62,64 @@
                     <x-slot:description>0</x-slot>
                 </x-profile-information-badge>
 
-                <x-profile-information-badge>
+                <x-profile-information-badge wire:click="togglePopupFor('badges')">
                     <x-slot:title>{{ __('Badges') }}</x-slot>
                     <x-slot:description>{{ $user->badges()->count() }}</x-slot>
                 </x-profile-information-badge>
 
-                <x-profile-information-badge>
+                <x-profile-information-badge wire:click="togglePopupFor('following')">
                     <x-slot:title>{{ __('Following') }}</x-slot>
                     <x-slot:description>{{ $user->following()->count() }}</x-slot>
                 </x-profile-information-badge>
 
-                @livewire('components.followers-badge', ['user' => $user])
+                <x-profile-information-badge wire:click="togglePopupFor('followers')">
+                    <x-slot:title>{{ __('Followers') }}</x-slot>
+                    <x-slot:description>{{ $user->followers()->count() }}</x-slot>
+                </x-profile-information-badge>
             </div>
 
             <x-hr class="mt-2" />
         </section>
     </div>
 
-    @auth
-        <x-modal-form-section wire:model="showPopup" submit="">
+    @switch ($selectedPopupType)
+    @case('edit')
+        @auth
+            <x-modal-form-section wire:model="showPopup" submit="">
+                <x-slot:title>
+                    {{ __('Edit Profile') }}
+                </x-slot>
+
+                <livewire:profile.update-profile-information-form />
+            </x-modal-form-section>
+        @endauth
+        @break
+    @case ('badges')
+        <x-page-modal maxWidth="sm" wire:model="showPopup">
             <x-slot:title>
-                {{ __('Edit Profile') }}
+                {{ __('Badges') }}
             </x-slot>
 
-            @livewire('profile.update-profile-information-form')
-        </x-modal-form-section>
-    @endauth
+            <livewire:profile.badges :user="$user" />
+        </x-page-modal>
+        @break
+    @case ('followers')
+        <x-page-modal maxWidth="sm" wire:model="showPopup">
+            <x-slot:title>
+                {{ __('Followers') }}
+            </x-slot>
+
+            <livewire:profile.followers.index :user="$user" />
+        </x-page-modal>
+        @break
+    @case ('following')
+        <x-page-modal maxWidth="sm" wire:model="showPopup">
+            <x-slot:title>
+                {{ __('Following') }}
+            </x-slot>
+
+            <livewire:profile.following.index :user="$user" />
+        </x-page-modal>
+        @break
+    @endswitch
 </main>
