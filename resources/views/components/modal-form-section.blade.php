@@ -5,9 +5,9 @@
         <div class="text-lg">
             {{ $title }}
         </div>
-    </div>
 
-    <div class="mt-4 px-6 py-4">
-        {{ $slot }}
+        <div class="mt-4">
+            {{ $slot }}
+        </div>
     </div>
 </x-modal>

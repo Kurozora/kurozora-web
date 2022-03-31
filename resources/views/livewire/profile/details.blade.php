@@ -22,13 +22,13 @@
 
     <div>
         <section>
-            @livewire('components.banner-image-view', ['user' => $user])
+            <livewire:components.banner-image-view :user="$user" />
         </section>
 
         <section class="relative max-w-7xl mx-auto px-4 py-6 z-10 sm:px-6">
             <div class="flex items-end justify-between -mt-14 sm:-mt-20">
                 <div class="flex items-end">
-                    @livewire('components.profile-image-view', ['user' => $user])
+                    <livewire:components.profile-image-view :user="$user" />
 
                     <span class="flex items-baseline">
                         <p class="ml-2 text-xl font-bold">{{ $user->username }}</p>
@@ -47,9 +47,9 @@
 
                 @auth
                     @if ($user->id == Auth::user()->id)
-                        <x-button wire:click="$toggle('showPopup')">{{ __('Edit') }}</x-button>
+                        <x-button wire:click="togglePopupFor('edit')">{{ __('Edit') }}</x-button>
                     @else
-                        @livewire('components.follow-button', ['user' => $user])
+                        <livewire:components.follow-button :user="$user" />
                     @endif
                 @endif
             </div>
