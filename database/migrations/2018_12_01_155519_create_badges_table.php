@@ -16,10 +16,10 @@ return new class extends Migration
     {
         Schema::create(Badge::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('text')->nullable()->default(null);
-            $table->string('textColor', 10)->default('#000000');
-            $table->string('backgroundColor', 10)->default('#FFFFFF');
+            $table->string('name')->nullable()->default(null);
             $table->string('description')->nullable()->default(null);
+            $table->string('text_color', 10)->default('#000000');
+            $table->string('background_color', 10)->default('#FFFFFF');
             $table->timestamps();
         });
     }
