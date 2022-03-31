@@ -58,18 +58,18 @@
 
             <div class="flex justify-between">
                 <x-profile-information-badge>
-                    <x-slot:title">{{ __('Reputation') }}</x-slo>
-                    <x-slot:description">0</x-slo>
+                    <x-slot:title>{{ __('Reputation') }}</x-slot>
+                    <x-slot:description>0</x-slot>
                 </x-profile-information-badge>
 
                 <x-profile-information-badge>
-                    <x-slot:title">{{ __('Badges') }}</x-slo>
-                    <x-slot:description">{{ $user->badges()->count() }}</x-slo>
+                    <x-slot:title>{{ __('Badges') }}</x-slot>
+                    <x-slot:description>{{ $user->badges()->count() }}</x-slot>
                 </x-profile-information-badge>
 
                 <x-profile-information-badge>
-                    <x-slot:title">{{ __('Following') }}</x-slo>
-                    <x-slot:description">{{ $user->following()->count() }}</x-slo>
+                    <x-slot:title>{{ __('Following') }}</x-slot>
+                    <x-slot:description>{{ $user->following()->count() }}</x-slot>
                 </x-profile-information-badge>
 
                 @livewire('components.followers-badge', ['user' => $user])

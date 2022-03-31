@@ -22,7 +22,7 @@
 
     @if (!empty($episode->video_url))
         <div class="absolute top-0 bottom-0 left-0 right-0">
-            <div class="flex flex-col justify-center items-center h-full md:pb-40 lg:pb-0">
+            <div class="flex flex-col justify-center items-center h-full">
                 <a class="absolute bottom-0 w-full h-full" href="{{ route('episodes.details', $episode) }}"></a>
 
                 <button
