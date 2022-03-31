@@ -37,6 +37,22 @@
             </div>
         </section>
 
+        @if ($studio->about)
+            <section class="pt-5 pb-8 border-t-2">
+                <x-section-nav>
+                    <x-slot:title>
+                        {{ __('About') }}
+                        </x-slot>
+                </x-section-nav>
+
+                <x-truncated-text>
+                    <x-slot:text>
+                        {!! nl2br($studio->about) !!}
+                        </x-slot>
+                </x-truncated-text>
+            </section>
+        @endif
+
         <section class="pt-5 pb-8 border-t-2">
             <x-section-nav>
                 <x-slot:title>

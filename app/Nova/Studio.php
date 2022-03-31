@@ -10,6 +10,7 @@ use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Ramsey\Uuid\Uuid;
@@ -181,6 +182,14 @@ class Studio extends Resource
             Text::make('Slug')
                 ->onlyOnForms()
                 ->help('Used to identify the Studio in a URL: https://kurozora.app/studios/<strong>' . ($this->resource->slug ?? 'slug-identifier') . '</strong>. Leave empty to auto-generate from name.'),
+
+            Select::make('Type')
+                ->options([
+                    'anime',
+                    'manga'
+                ])
+                ->rules('required')
+                ->sortable(),
 
             Text::make('Name')
                 ->rules('required')
