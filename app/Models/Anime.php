@@ -229,12 +229,10 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function airSeason(): Attribute
     {
         return Attribute::make(
-            get: function ($value) {
+            get: fn ($value) => SeasonOfYear::fromValue((int) $value),
                 // For some reason air season is sometimes seen as a string, so force cast to int.
                 // Also makes 0 out of null, so win/win.
-                SeasonOfYear::fromValue((int) $value);
-            },
-            set: fn ($value) => (int) $value
+            set: fn ($value) => $value->value
         );
     }
 
