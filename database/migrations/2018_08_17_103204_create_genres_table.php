@@ -17,6 +17,7 @@ return new class extends Migration
     {
         Schema::create(Genre::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedInteger('mal_id')->nullable();
             $table->unsignedBigInteger('tv_rating_id')->nullable();
             $table->string('slug');
             $table->string('name');
@@ -28,6 +29,7 @@ return new class extends Migration
 
         Schema::table(Genre::TABLE_NAME, function (Blueprint $table) {
             // Set unique index constraints
+            $table->unique(['mal_id']);
             $table->unique(['slug']);
 
             // Set foreign key constraints

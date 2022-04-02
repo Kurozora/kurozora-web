@@ -17,6 +17,7 @@ return new class extends Migration
     {
         Schema::create(Theme::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedInteger('mal_id')->nullable();
             $table->unsignedBigInteger('tv_rating_id')->nullable();
             $table->string('slug');
             $table->string('name');
@@ -29,6 +30,7 @@ return new class extends Migration
         Schema::table(Theme::TABLE_NAME, function (Blueprint $table) {
             // Set unique key constraints
             $table->unique(['slug']);
+            $table->unique(['mal_id']);
 
             // Set foreign key constraints
             $table->foreign('tv_rating_id')->references('id')->on(TvRating::TABLE_NAME)->onDelete('set null');
