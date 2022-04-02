@@ -89,13 +89,13 @@ class Character extends KModel implements HasMedia, Sitemapable
      * @var array
      */
     protected $appends = [
-        'age_string',
-        'astrological_sign_string',
-        'birthdate',
-        'height_string',
-        'profile_image',
-        'profile_image_url',
-        'weight_string',
+//        'age_string',
+//        'astrological_sign_string',
+//        'birthdate',
+//        'height_string',
+//        'profile_image',
+//        'profile_image_url',
+//        'weight_string',
     ];
 
     /**
