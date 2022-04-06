@@ -39,6 +39,7 @@ trait Searchable {
                 ->withTvRating()
                 ->search($query, null, true, true);
         }
+
         return self::search($query, null, true, true);
     }
 }

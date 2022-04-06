@@ -49,17 +49,18 @@ class Index extends Component
      */
     public function getAnimesProperty(): LengthAwarePaginator
     {
-        $animes = Anime::query();
-
         // Search
         if (!empty($this->filter['search'])) {
-            $animes = $animes->search($this->filter['search'], null, true, true);
+            $animes = Anime::kSearch($this->filter['search']);
+        } else {
+            $animes = Anime::query();
         }
 
-        // Order
-        if (!empty($this->filter['order_type'])) {
-            $animes = $animes->orderByTranslation('title', $this->filter['order_type']);
-        }
+
+//        // Order
+//        if (!empty($this->filter['order_type'])) {
+//            $animes = $animes->orderByTranslation('title', $this->filter['order_type']);
+//        }
 
         // Paginate
         return $animes->paginate($this->filter['per_page'] ?? 25);
