@@ -17,7 +17,6 @@ use Carbon\CarbonInterval;
 use Carbon\Exceptions\InvalidFormatException;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -222,18 +221,27 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The season in which the anime aired.
+     * Get the season in which the anime aired.
      *
-     * @return Attribute
+     * @param int|null $value
+     * @return SeasonOfYear
      */
-    public function airSeason(): Attribute
+    public function getAirSeasonAttribute(?int $value): SeasonOfYear
     {
-        return Attribute::make(
-            get: fn ($value) => SeasonOfYear::fromValue((int) $value),
-                // For some reason air season is sometimes seen as a string, so force cast to int.
-                // Also makes 0 out of null, so win/win.
-            set: fn ($value) => $value->value
-        );
+        // For some reason air season is sometimes seen as a string, so force cast to int.
+        // Also makes 0 out of null, so win/win.
+        return SeasonOfYear::fromValue((int) $value);
+    }
+
+    /**
+     * Set the season in which the anime airs.
+     *
+     * @param int|null $value
+     * @return void
+     */
+    public function setAirSeasonAttribute(?int $value)
+    {
+        $this->attributes['air_season'] = (int) $value;
     }
 
     /**

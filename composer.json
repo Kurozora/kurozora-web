@@ -34,6 +34,7 @@
         "laravel/framework": "^9.2",
         "laravel/nova": "*",
         "laravel/sanctum": "^2.14",
+        "laravel/scout": "^9.4",
         "laravel/socialite": "^5.2",
         "laravel/tinker": "^2.7",
         "laravelwebdev/responsive": "^1.0",
