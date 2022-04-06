@@ -40,18 +40,18 @@
                             </x-slot>
 
                             <x-slot:content>
-                                {{-- Order --}}
-                                <div class="block px-4 py-2 bg-gray-100 text-xs text-gray-400 font-semibold">
-                                    {{ __('Order') }}
-                                </div>
+{{--                                --}}{{-- Order --}}
+{{--                                <div class="block px-4 py-2 bg-gray-100 text-xs text-gray-400 font-semibold">--}}
+{{--                                    {{ __('Order') }}--}}
+{{--                                </div>--}}
 
-                                <div class="block px-4 py-2">
-                                    <x-select id="orderType" wire:model="filter.order_type">
-                                        <option value="">{{ __('Default') }}</option>
-                                        <option value="asc">{{ __('A-Z') }}</option>
-                                        <option value="desc">{{ __('Z-A') }}</option>
-                                    </x-select>
-                                </div>
+{{--                                <div class="block px-4 py-2">--}}
+{{--                                    <x-select id="orderType" wire:model="filter.order_type">--}}
+{{--                                        <option value="">{{ __('Default') }}</option>--}}
+{{--                                        <option value="asc">{{ __('A-Z') }}</option>--}}
+{{--                                        <option value="desc">{{ __('Z-A') }}</option>--}}
+{{--                                    </x-select>--}}
+{{--                                </div>--}}
 
                                 {{-- Per Page --}}
                                 <div class="block px-4 py-2 bg-gray-100 text-xs text-gray-400 font-semibold">
