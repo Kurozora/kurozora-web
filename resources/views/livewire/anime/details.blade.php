@@ -106,25 +106,32 @@
                         </div>
 
                         <div class="flex flex-wrap gap-1 justify-between h-10">
-                            <livewire:anime.library-button :anime="$anime" wire:key="{{ md5($anime->id) }}" />
-                            @if($isTracking)
-                                <div class="flex gap-2">
-                                    <x-button class="!px-2 w-10 !bg-white text-yellow-300 rounded-full shadow-md hover:!bg-gray-100 hover:text-yellow-500 active:!bg-white active:text-yellow-300" wire:click="remindAnime">
+                            <div class="flex gap-2">
+                                <livewire:anime.library-button :anime="$anime" wire:key="{{ md5($anime->id) }}" />
+
+                               <x-nova-link :resource="\App\Nova\Anime::class" :model="$anime">
+                                   @svg('pencil', 'fill-current', ['width' => '44'])
+                               </x-nova-link>
+                            </div>
+
+                            <div class="flex gap-2">
+                                @if($isTracking)
+                                    <x-circle-button color="yellow" wire:click="remindAnime">
                                         @if($isReminded)
                                             @svg('bell_fill', 'fill-current', ['width' => '44'])
                                         @else
                                             @svg('bell', 'fill-current', ['width' => '44'])
                                         @endif
-                                    </x-button>
-                                    <x-button class="!px-2 w-10 !bg-white text-red-500 rounded-full shadow-md hover:!bg-gray-100 hover:text-red-600 active:!bg-white active:text-red-500" wire:click="favoriteAnime">
+                                    </x-circle-button>
+                                    <x-circle-button color="red" wire:click="favoriteAnime">
                                         @if($isFavorited)
                                             @svg('heart_fill', 'fill-current', ['width' => '44'])
                                         @else
                                             @svg('heart', 'fill-current', ['width' => '44'])
                                         @endif
-                                    </x-button>
-                                </div>
-                            @endif
+                                    </x-circle-button>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>

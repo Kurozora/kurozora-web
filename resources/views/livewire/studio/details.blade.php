@@ -29,7 +29,14 @@
 
                         <div class="absolute top-0 left-0 h-full w-full border-2 border-solid border-black/20 rounded-full"></div>
                     </picture>
-                    <p class="text-3xl font-bold">{{ $studio->name }}</p>
+
+                    <div class="flex gap-2">
+                        <p class="text-3xl font-bold">{{ $studio->name }}</p>
+
+                        <x-nova-link :resource="\App\Nova\Studio::class" :model="$studio">
+                            @svg('pencil', 'fill-current', ['width' => '44'])
+                        </x-nova-link>
+                    </div>
                     @if (!empty($studio->founded))
                         <p class="text-lg">{{ __('Founded on :x', ['x' => $studio->founded->toFormattedDateString()]) }}</p>
                     @endif
