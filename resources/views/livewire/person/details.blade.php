@@ -29,7 +29,14 @@
 
                         <div class="absolute top-0 left-0 h-full w-full border-2 border-solid border-black/20 rounded-full"></div>
                     </picture>
-                    <p class="text-3xl font-bold">{{ $person->full_name }}</p>
+
+                    <div class="flex gap-2">
+                        <p class="text-3xl font-bold">{{ $person->full_name }}</p>
+
+                        <x-nova-link :resource="\App\Nova\Person::class" :model="$person">
+                            @svg('pencil', 'fill-current', ['width' => '44'])
+                        </x-nova-link>
+                    </div>
                 </div>
             </div>
         </section>
