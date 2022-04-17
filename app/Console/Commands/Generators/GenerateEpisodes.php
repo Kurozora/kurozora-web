@@ -107,6 +107,24 @@ class GenerateEpisodes extends Command
                                 echo __('[][][] episode id: ') . $episode->id . PHP_EOL;
                                 $totalEpisodesAdded += 1;
                             }
+
+                            foreach ($episodes as $key => $episode) {
+                                $nextEpisode = null;
+                                $previousEpisode = null;
+
+                                if ($key != count($episodes) - 1) {
+                                    $nextEpisode = $episodes[$key + 1]->id;
+                                }
+
+                                if ($key != 0) {
+                                    $previousEpisode = $episodes[$key - 1]->id;
+                                }
+
+                                $episode->update([
+                                    'next_episode_id' => $nextEpisode,
+                                    'previous_episode_id' => $previousEpisode,
+                                ]);
+                            }
                         }
                     }
                     echo __('[][][] episodes count: ') . count($episodes) . PHP_EOL;
