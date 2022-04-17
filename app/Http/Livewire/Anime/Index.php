@@ -56,7 +56,6 @@ class Index extends Component
             $animes = Anime::query();
         }
 
-
 //        // Order
 //        if (!empty($this->filter['order_type'])) {
 //            $animes = $animes->orderByTranslation('title', $this->filter['order_type']);
