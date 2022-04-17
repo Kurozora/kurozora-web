@@ -21,7 +21,7 @@
     {{-- Footer --}}
     @slot('footer')
         @component('mail::footer')
-            Copyright © {{ date('Y') }} {{ config('app.name') }} B.V. @lang('All rights reserved.')
+            Copyright © {{ date('Y') }} Redark. @lang('All rights reserved.')
         @endcomponent
     @endslot
 @endcomponent
