@@ -14,7 +14,7 @@ class ImportCharacters extends Command
      *
      * @var string
      */
-    protected $signature = 'import:characters';
+    protected $signature = 'import:kdashboard_characters';
 
     /**
      * The console command description.

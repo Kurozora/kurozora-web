@@ -14,7 +14,7 @@ class ImportAnimeStaff extends Command
      *
      * @var string
      */
-    protected $signature = 'import:anime-staff';
+    protected $signature = 'import:kdashboard_anime_staff';
 
     /**
      * The console command description.

@@ -14,7 +14,7 @@ class ImportAnime extends Command
      *
      * @var string
      */
-    protected $signature = 'import:anime';
+    protected $signature = 'import:kdashboard_anime';
 
     /**
      * The console command description.

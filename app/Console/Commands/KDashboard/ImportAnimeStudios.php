@@ -14,7 +14,7 @@ class ImportAnimeStudios extends Command
      *
      * @var string
      */
-    protected $signature = 'import:anime-studios';
+    protected $signature = 'import:kdashboard_anime_studios';
 
     /**
      * The console command description.

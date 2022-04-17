@@ -14,7 +14,7 @@ class ImportPeople extends Command
      *
      * @var string
      */
-    protected $signature = 'import:people';
+    protected $signature = 'import:kdashboard_people';
 
     /**
      * The console command description.

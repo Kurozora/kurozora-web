@@ -14,7 +14,7 @@ class ImportAnimeStats extends Command
      *
      * @var string
      */
-    protected $signature = 'import:anime-stats';
+    protected $signature = 'import:kdashboard_anime_stats';
 
     /**
      * The console command description.

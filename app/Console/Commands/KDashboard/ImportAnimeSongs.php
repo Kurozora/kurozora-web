@@ -14,7 +14,7 @@ class ImportAnimeSongs extends Command
      *
      * @var string
      */
-    protected $signature = 'import:anime-songs';
+    protected $signature = 'import:kdashboard_anime_songs';
 
     /**
      * The console command description.
