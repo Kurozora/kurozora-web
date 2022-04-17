@@ -73,9 +73,7 @@ class ImportAnimeProcessor
                     'air_season' => $this->getAiringSeason($kAnime),
                     'is_nsfw' => $this->getIsNSFW($kAnime),
                 ]);
-            } else if ($this->getStatus($kAnime)->id != $anime->status->id) {
-                // Update the attributes if its airing status has changed
-
+            } else {
                 // Get max episode count
                 $episodeCount = max($anime->episode_count, $kAnime->episode);
 
@@ -85,8 +83,28 @@ class ImportAnimeProcessor
                 // If it has video url then use that, otherwise update
                 $videoURL = $anime->video_url ?: ($kAnime->video_url ?: null);
 
+                // Get max duration
+                $duration = max($anime->duration, $kAnime->duration ?: 0);
+
+                // If it has air time then use that, otherwise update
+                $airTime = $anime->air_time ?: $kAnime->airing_time;
+                $airDay = $anime->air_day?->value ?: $this->getAiringDay($kAnime);
+                $airSeason = $anime->air_season?->value ?: $this->getAiringSeason($kAnime);
+
+                $currentSynonymTitles = $anime->synonym_titles?->toArray();
+                $synonymTitles =  empty($kAnime->title_synonym) ? null : explode(', ', $kAnime->title_synonym);
+                $newSynonymTitles = empty($synonymTitles) || empty($anime->synonym_titles?->count()) ? $currentSynonymTitles : array_merge($currentSynonymTitles, $synonymTitles);
+                $uniqueSynonymTitles = count($newSynonymTitles ?? []) ? array_unique($newSynonymTitles) : null;
+
                 $anime->update([
+                    'original_title' => $kAnime->title,
+                    'synonym_titles' => $uniqueSynonymTitles,
+                    'title' => $this->getEnglishTitle($kAnime),
                     'synopsis' => $this->getAnimeSynopsis($kAnime),
+                    'ja' => [
+                        'title' => $kAnime->title_japanese,
+                        'synopsis' => null,
+                    ],
                     'tv_rating_id' => $this->getTVRating($kAnime)->id,
                     'media_type_id' => $this->getMediaType($kAnime)->id,
                     'source_id' => $this->getSource($kAnime)->id,
@@ -96,10 +114,10 @@ class ImportAnimeProcessor
                     'video_url' => $videoURL,
                     'first_aired' => $this->getFirstAirDate($kAnime),
                     'last_aired' => $this->getLastAirDate($kAnime),
-                    'duration' => $kAnime->duration,
-                    'air_time' => $kAnime->airing_time,
-                    'air_day' => $this->getAiringDay($kAnime),
-                    'air_season' => $this->getAiringSeason($kAnime),
+                    'duration' => $duration,
+                    'air_time' => $airTime,
+                    'air_day' => $airDay,
+                    'air_season' => $airSeason,
                     'is_nsfw' => $this->getIsNSFW($kAnime),
                 ]);
             }

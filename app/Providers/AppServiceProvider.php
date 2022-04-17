@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Sanctum\Sanctum;
+use RoachPHP\Roach;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         /*
          * This snippet logs the amount of executed queries per request ..
@@ -46,7 +47,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         // Register the user settings helper class.
         $this->app->singleton(Settings::class, function() {
@@ -59,5 +60,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('explore.only_enabled', function () {
             return true;
         });
+
+        // Register roach with the app container.
+        Roach::useContainer($this->app);
     }
 }
