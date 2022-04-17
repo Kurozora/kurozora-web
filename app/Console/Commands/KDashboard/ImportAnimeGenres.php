@@ -14,7 +14,7 @@ class ImportAnimeGenres extends Command
      *
      * @var string
      */
-    protected $signature = 'import:anime-genres';
+    protected $signature = 'import:kdashboard_anime_genres';
 
     /**
      * The console command description.

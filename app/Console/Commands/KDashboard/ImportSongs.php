@@ -14,7 +14,7 @@ class ImportSongs extends Command
      *
      * @var string
      */
-    protected $signature = 'import:songs';
+    protected $signature = 'import:kdashboard_songs';
 
     /**
      * The console command description.

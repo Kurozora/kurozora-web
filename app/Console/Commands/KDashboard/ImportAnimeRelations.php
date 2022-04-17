@@ -14,7 +14,7 @@ class ImportAnimeRelations extends Command
      *
      * @var string
      */
-    protected $signature = 'import:anime-relations';
+    protected $signature = 'import:kdashboard_anime_relations';
 
     /**
      * The console command description.

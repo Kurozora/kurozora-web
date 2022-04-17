@@ -14,7 +14,7 @@ class ImportAnimeCasts extends Command
      *
      * @var string
      */
-    protected $signature = 'import:anime-cast';
+    protected $signature = 'import:kdashboard_anime_cast';
 
     /**
      * The console command description.

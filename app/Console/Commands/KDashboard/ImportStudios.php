@@ -14,7 +14,7 @@ class ImportStudios extends Command
      *
      * @var string
      */
-    protected $signature = 'import:studios';
+    protected $signature = 'import:kdashboard_studios';
 
     /**
      * The console command description.
