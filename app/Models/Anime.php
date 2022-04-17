@@ -933,7 +933,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
      *
      * @return HasMany
      */
-    public function animeSongs(): HasMany
+    public function anime_songs(): HasMany
     {
         return $this->hasMany(AnimeSong::class);
     }
@@ -952,7 +952,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_ANIME_SONGS_SECONDS, function () use ($limit) {
-            return $this->animeSongs()->paginate($limit);
+            return $this->anime_songs()->paginate($limit);
         });
     }
 

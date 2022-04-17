@@ -20,4 +20,3 @@ class MediaStat extends KModel
         return $this->morphTo();
     }
 }
-
