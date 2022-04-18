@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Cache;
+use Laravel\Nova\Actions\Actionable;
 use Request;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -37,7 +38,8 @@ use Spatie\Sluggable\SlugOptions;
 
 class Anime extends KModel implements HasMedia, Sitemapable
 {
-    use HasBannerImage,
+    use Actionable,
+        HasBannerImage,
         HasFactory,
         HasPosterImage,
         HasSlug,

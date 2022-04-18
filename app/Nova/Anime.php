@@ -4,6 +4,7 @@ namespace App\Nova;
 
 use App\Enums\DayOfWeek;
 use App\Enums\SeasonOfYear;
+use App\Nova\Actions\ScrapeAnime;
 use App\Nova\Lenses\UnmoderatedAnime;
 use App\Scopes\TvRatingScope;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
@@ -398,7 +399,11 @@ class Anime extends Resource
      */
     public function actions(Request $request): array
     {
-        return [];
+        return [
+            (new ScrapeAnime)
+                ->confirmText('Are you sure you want to scrape this anime?')
+                ->confirmButtonText('Scrape'),
+        ];
     }
 
     /**
