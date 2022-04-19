@@ -2,10 +2,11 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\MALImportBehavior;
+use App\Enums\ImportBehavior;
+use App\Enums\ImportService;
 use Illuminate\Foundation\Http\FormRequest;
 
-class MALImportRequest extends FormRequest
+class ImportRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,8 +26,9 @@ class MALImportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file'      => ['required', 'file', 'mimes:xml', 'max:' . config('mal-import.max_xml_file_size')],
-            'behavior'  => ['required', 'integer', 'in:' . implode(',', MALImportBehavior::getValues())]
+            'service'   => ['nullable', 'integer', 'in:' . implode(',', ImportService::getValues())],
+            'file'      => ['required', 'file', 'mimes:xml', 'max:' . config('import.max_xml_file_size')],
+            'behavior'  => ['required', 'integer', 'in:' . implode(',', ImportBehavior::getValues())],
         ];
     }
 }

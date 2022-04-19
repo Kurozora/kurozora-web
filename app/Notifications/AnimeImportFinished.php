@@ -2,7 +2,8 @@
 
 namespace App\Notifications;
 
-use App\Enums\MALImportBehavior;
+use App\Enums\ImportBehavior;
+use App\Enums\ImportService;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -10,7 +11,7 @@ use Illuminate\Notifications\Notification;
 use NotificationChannels\Apn\ApnChannel;
 use NotificationChannels\Apn\ApnMessage;
 
-class MALImportFinished extends Notification implements ShouldQueue
+class AnimeImportFinished extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -22,21 +23,30 @@ class MALImportFinished extends Notification implements ShouldQueue
     private array $results;
 
     /**
+     * The service used when importing.
+     *
+     * @var ImportService $service
+     */
+    private ImportService $service;
+
+    /**
      * The behavior used when importing.
      *
-     * @var MALImportBehavior $behavior
+     * @var ImportBehavior $behavior
      */
-    private MALImportBehavior $behavior;
+    private ImportBehavior $behavior;
 
     /**
      * Create a new notification instance.
      *
      * @param array $results
-     * @param MALImportBehavior $behavior
+     * @param ImportService $service
+     * @param ImportBehavior $behavior
      */
-    public function __construct(array $results, MALImportBehavior $behavior)
+    public function __construct(array $results, ImportService $service, ImportBehavior $behavior)
     {
         $this->results = $results;
+        $this->service = $service;
         $this->behavior = $behavior;
     }
 
@@ -62,7 +72,8 @@ class MALImportFinished extends Notification implements ShouldQueue
         return [
             'successful_count'  => count($this->results['successful']),
             'failure_count'     => count($this->results['failure']),
-            'behavior'          => $this->behavior->description
+            'behavior'          => $this->behavior->description,
+            'service'           => $this->service->description,
         ];
     }
 
@@ -74,9 +85,11 @@ class MALImportFinished extends Notification implements ShouldQueue
      */
     public function toApn(User $notifiable): ApnMessage
     {
+        $serviceName = $this->service->description;
+
         return ApnMessage::create()
-            ->title('🤩 MAL Import finished')
+            ->title('🤩 ' . $serviceName . ' Import finished')
             ->badge($notifiable->unreadNotifications()->count())
-            ->body('Your MAL import was processed, come check it out!');
+            ->body('Your ' . $serviceName . ' anime import was processed, come check it out!');
     }
 }

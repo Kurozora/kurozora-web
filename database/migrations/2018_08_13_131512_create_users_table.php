@@ -29,7 +29,8 @@ return new class extends Migration
             $table->rememberToken();
             $table->text('biography')->nullable();
             $table->json('settings');
-            $table->timestamp('last_mal_import_at')->nullable();
+            $table->timestamp('last_anime_import_at')->nullable();
+            $table->timestamp('last_manga_import_at')->nullable();
             $table->timestamps();
         });
 

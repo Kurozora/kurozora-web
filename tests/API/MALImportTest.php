@@ -2,9 +2,10 @@
 
 namespace Tests\API;
 
-use App\Enums\MALImportBehavior;
+use App\Enums\ImportBehavior;
+use App\Enums\ImportService;
 use App\Models\Anime;
-use App\Notifications\MALImportFinished;
+use App\Notifications\AnimeImportFinished;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
 use Notification;
@@ -204,13 +205,14 @@ class MALImportTest extends TestCase
 
         // Request import
         $response = $this->auth()->json('POST', 'v1/me/library/mal-import', [
+            'service'   => ImportService::MAL,
             'file'      => $uploadFile,
-            'behavior'  => MALImportBehavior::Overwrite,
+            'behavior'  => ImportBehavior::Overwrite,
         ]);
         $response->assertSuccessfulAPIResponse();
 
         // Assert notification was sent
-        Notification::hasSent($this->user, MALImportFinished::class);
+        Notification::hasSent($this->user, AnimeImportFinished::class);
 
         // Assert anime has been imported in user's library
         $this->assertEquals(6, $this->user->library()->count());
@@ -241,13 +243,14 @@ class MALImportTest extends TestCase
 
         // Request import
         $response = $this->auth()->json('POST', 'v1/me/library/mal-import', [
+            'service'   => ImportService::MAL,
             'file'      => $uploadFile,
-            'behavior'  => MALImportBehavior::Merge,
+            'behavior'  => ImportBehavior::Merge,
         ]);
         $response->assertSuccessfulAPIResponse();
 
         // Assert notification was sent
-        Notification::hasSent($this->user, MALImportFinished::class);
+        Notification::hasSent($this->user, AnimeImportFinished::class);
 
         // Assert anime has been imported in user's library
         $this->assertEquals(7, $this->user->library()->count());
