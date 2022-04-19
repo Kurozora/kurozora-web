@@ -14,14 +14,14 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create(UserLibrary::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('anime_id');
             $table->tinyInteger('status');
-            $table->timestamp('start_date')->useCurrent();
+            $table->timestamp('start_date')->nullable();
             $table->timestamp('end_date')->nullable();
             $table->timestamps();
         });
@@ -44,7 +44,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists(UserLibrary::TABLE_NAME);
     }

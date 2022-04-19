@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\MALImportBehavior;
+use App\Enums\ImportBehavior;
+use App\Enums\ImportService;
 use App\Enums\UserLibraryStatus;
 use App\Helpers\JSONResult;
 use App\Http\Requests\AddToLibraryRequest;
 use App\Http\Requests\DeleteFromLibraryRequest;
 use App\Http\Requests\GetLibraryRequest;
-use App\Http\Requests\MALImportRequest;
+use App\Http\Requests\ImportRequest;
 use App\Http\Requests\SearchLibraryRequest;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Jobs\ProcessMALImport;
@@ -139,40 +140,48 @@ class LibraryController extends Controller
     /**
      * Allows the authenticated user to upload a MAL export file to be imported.
      *
-     * @param MALImportRequest $request
+     * @param ImportRequest $request
      * @return JsonResponse
      * @throws FileNotFoundException
      * @throws TooManyRequestsHttpException
      */
-    function malImport(MALImportRequest $request): JsonResponse
+    function animeImport(ImportRequest $request): JsonResponse
     {
         $data = $request->validated();
 
         // Get the authenticated user
         $user = Auth::user();
 
-        if (!$user->canDoMALImport()) {
-            $cooldownDays = config('mal-import.cooldown_in_days');
+        if (!$user->canDoAnimeImport()) {
+            $cooldownDays = config('import.cooldown_in_days');
 
-            throw new TooManyRequestsHttpException($cooldownDays * 24 * 60 * 60, __('You can only perform a MAL import every :x day(s).', ['x' => $cooldownDays]));
+            throw new TooManyRequestsHttpException($cooldownDays * 24 * 60 * 60, __('You can only perform an anime import every :x day(s).', ['x' => $cooldownDays]));
         }
 
         // Read XML file
         $xmlContent = File::get($data['file']->getRealPath());
 
+        // Get the import service
+        $importService = ImportService::fromValue((int) $data['service'] ?? 0);
+
         // Get import behavior
-        $behavior = MALImportBehavior::fromValue((int) $data['behavior']);
+        $importBehavior = ImportBehavior::fromValue((int) $data['behavior']);
 
         // Dispatch job
-        dispatch(new ProcessMALImport($user, $xmlContent, $behavior));
+        switch ($importService->value) {
+            case ImportService::MAL:
+            case ImportService::Kitsu:
+                dispatch(new ProcessMALImport($user, $xmlContent, $importService, $importBehavior));
+                break;
+        }
 
-        // Update last MAL import date for user
+        // Update last anime import date for user
         $user->update([
-          'last_mal_import_at' => now()
+          'last_anime_import_at' => now()
         ]);
 
         return JSONResult::success([
-            'message' => 'Your MAL import request has been submitted. You will be notified once it has been processed!'
+            'message' => 'Your anime import request has been submitted. You will be notified once it has been processed!'
         ]);
     }
 

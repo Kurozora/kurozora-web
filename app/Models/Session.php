@@ -39,7 +39,7 @@ class Session extends KModel
      *
      * @return void
      */
-    static function boot()
+    static function boot(): void
     {
         parent::boot();
 

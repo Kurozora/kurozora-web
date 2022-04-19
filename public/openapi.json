@@ -2325,9 +2325,9 @@
         "tags": [
           "me"
         ],
-        "operationId": "postMeLibraryMALImport",
-        "summary": "Import a MAL export file.",
-        "description": "This endpoint will import a MAL export file into the authenticated user's library.",
+        "operationId": "postMeLibraryAnimeImport",
+        "summary": "Import an anime export file.",
+        "description": "This endpoint will import an anime export file into the authenticated user's library.",
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -2337,14 +2337,18 @@
                   "file": {
                     "type": "string",
                     "format": "binary",
-                    "description": "The MAL export file"
+                    "description": "The anime export file"
+                  },
+                  "service": {
+                    "$ref": "#/components/schemas/ImportService"
                   },
                   "behavior": {
-                    "$ref": "#/components/schemas/MALImportBehavior"
+                    "$ref": "#/components/schemas/ImportBehavior"
                   }
                 },
                 "required": [
                   "file",
+                  "service",
                   "behavior"
                 ]
               }
@@ -3737,14 +3741,23 @@
         "default": "Watching",
         "description": "The set of available library status types."
       },
-      "MALImportBehavior": {
+      "ImportService": {
         "type": "integer",
         "enum": [
           0,
           1
         ],
         "default": 1,
-        "description": "The set of available MAL import behavior types.\n- 0 = overwrite\n- 1 = merge"
+        "description": "The set of available import service types.\n- 0 = MyAnimeList\n- 1 = Kitsu"
+      },
+      "ImportBehavior": {
+        "type": "integer",
+        "enum": [
+          0,
+          1
+        ],
+        "default": 1,
+        "description": "The set of available import behavior types.\n- 0 = overwrite\n- 1 = merge"
       },
       "NotificationReadStatus": {
         "type": "integer",

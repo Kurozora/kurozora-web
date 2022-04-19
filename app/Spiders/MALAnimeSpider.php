@@ -231,7 +231,7 @@ class MALAnimeSpider extends BasicSpider
                         $id = str($item->attr('id'));
 
                         if ($id->startsWith('apple_url_')) {
-                            // Get MAL ID
+                            // Get song MAL ID
                             $malSong['id'] = (int) $id->replace('apple_url_', '')->value();
 
                             // Get Apple Music ID

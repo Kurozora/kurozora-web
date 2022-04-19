@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Profile;
 
-use App\Contracts\Web\Profile\ImportsUserLibraryFromMAL;
+use App\Contracts\Web\Profile\ImportsUserAnimeLibrary;
 use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -10,7 +10,7 @@ use Illuminate\View\View;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-class MalImportForm extends Component
+class ImportForm extends Component
 {
     use WithFileUploads;
 
@@ -22,11 +22,11 @@ class MalImportForm extends Component
     public array $state = [];
 
     /**
-     * Update the user's preferred TV rating.
+     * Import anime to the user's library.
      *
-     * @param ImportsUserLibraryFromMAL $updater
+     * @param ImportsUserAnimeLibrary $updater
      */
-    public function importLibraryFromMAL(ImportsUserLibraryFromMAL $updater)
+    public function importAnimeLibrary(ImportsUserAnimeLibrary $updater)
     {
         $this->resetErrorBag();
 
@@ -42,6 +42,6 @@ class MalImportForm extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.profile.mal-import-form');
+        return view('livewire.profile.import-form');
     }
 }

@@ -95,7 +95,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      * @var array
      */
     protected $casts = [
-        'last_mal_import_at' => 'datetime',
+        'last_anime_import_at' => 'datetime',
+        'last_manga_import_at' => 'datetime',
         'settings' => 'json',
     ];
 
@@ -575,13 +576,13 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return bool
      */
-    function canDoMALImport(): bool
+    function canDoAnimeImport(): bool
     {
-        if (!$this->last_mal_import_at) {
+        if (!$this->last_anime_import_at) {
             return true;
         }
 
-        if ($this->last_mal_import_at > now()->subDays(config('mal-import.cooldown_in_days'))) {
+        if ($this->last_anime_import_at > now()->subDays(config('import.cooldown_in_days'))) {
             return false;
         }
 
