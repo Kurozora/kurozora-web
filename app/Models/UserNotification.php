@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use ReflectionClass;
-use ReflectionException;
 
 class UserNotification extends KModel
 {
@@ -12,7 +11,7 @@ class UserNotification extends KModel
     const TYPE_UNKNOWN              = 0;
     const TYPE_NEW_FOLLOWER         = 1;
     const TYPE_NEW_SESSION          = 2;
-    const TYPE_MAL_IMPORT_UPDATE    = 3;
+    const TYPE_ANIME_IMPORT_UPDATE  = 3;
 
     // Table name
     const TABLE_NAME = 'user_notifications';
@@ -40,21 +39,17 @@ class UserNotification extends KModel
             case self::TYPE_NEW_FOLLOWER: {
                 $followerName = $this->getDataVariable('follower_name');
 
-                return
-                    (($followerName == null) ? 'An unknown user' : $followerName) .
-                    ' started following you';
+                return (($followerName == null) ? 'An unknown user' : $followerName) . ' started following you';
             }
             // A new client/session was made for the user
             case self::TYPE_NEW_SESSION: {
                 $sessionIPAddress = $this->getDataVariable('ip_address');
 
-                return
-                    'A new client has logged in to your account.' .
-                    (($sessionIPAddress != null) ? ' (IP Address: ' . $sessionIPAddress . ')' : null);
+                return 'A new client has logged in to your account.' . (($sessionIPAddress != null) ? ' (IP Address: ' . $sessionIPAddress . ')' : null);
             }
-            // MAL import update notification
-            case self::TYPE_MAL_IMPORT_UPDATE: {
-                return 'Your "MyAnimeList" import request has been processed. ' .
+            // Anime import update notification
+            case self::TYPE_ANIME_IMPORT_UPDATE: {
+                return 'Your "' . $this->getDataVariable('import_service') . '" anime import request has been processed. ' .
                     '(' . $this->getDataVariable('successful_count') . ' successful, ' .
                     $this->getDataVariable('failure_count') . ' failed imports)';
             }
@@ -67,7 +62,6 @@ class UserNotification extends KModel
      * Returns the type of the notification as a string
      *
      * @return string
-     * @throws ReflectionException
      */
     public function getTypeString(): string
     {

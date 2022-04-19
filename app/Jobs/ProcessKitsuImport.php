@@ -18,7 +18,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Carbon;
 
-class ProcessMALImport implements ShouldQueue
+class ProcessKitsuImport implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -30,7 +30,7 @@ class ProcessMALImport implements ShouldQueue
     public int $tries = 1;
 
     /**
-     * The user to whose library the anime data should be imported.
+     * The user to whose library the Kitsu data should be imported.
      *
      * @var User
      */
@@ -106,14 +106,14 @@ class ProcessMALImport implements ShouldQueue
             $animeId = $anime['series_animedb_id'];
             $status = $anime['my_status'];
             $rating = $anime['my_score'] ?? 0;
-            $startDate = $anime['my_start_date'] ?? null;
-            $endDate = $anime['my_finish_date'] ?? null;
+            $startDate = $anime['my_start_date'];
+            $endDate = $anime['my_finish_date'] ?? '0000-00-00';
 
             // Handle import
             $this->handleXMLFileAnime($animeId, $status, $rating, $startDate, $endDate);
         }
 
-        // Notify the user that the anime import was finished
+        // Notify the user that the Kitsu import was finished
         $this->user->notify(new AnimeImportFinished($this->results, $this->service, $this->behavior));
     }
 
@@ -123,43 +123,31 @@ class ProcessMALImport implements ShouldQueue
      * @param int $malID
      * @param string $malStatus
      * @param int $malRating
-     * @param string|null $malStartDate
-     * @param string|null $malEndDate
+     * @param string $malStartDate
+     * @param string $malEndDate
      */
-    protected function handleXMLFileAnime(int $malID, string $malStatus, int $malRating, ?string $malStartDate, ?string $malEndDate)
+    protected function handleXMLFileAnime(int $malID, string $malStatus, int $malRating, string $malStartDate, string $malEndDate)
     {
         // Try to find the Anime in our DB
         $anime = Anime::withoutGlobalScope(new TvRatingScope)->firstWhere('mal_id', $malID);
 
         // If a match was found
         if (!empty($anime)) {
-            // Convert the MAL data to our own
-            $status = $this->convertMALStatus($malStatus);
-            $rating = $this->convertMALRating($malRating);
-            $startDate = null;
-            $endDate = null;
+            // Convert the Kitsu data to our own
+            $status = $this->convertKitsuStatus($malStatus);
+            $rating = $this->convertKitsuRating($malRating);
+            $startDate = $this->convertKitsuDate($malStartDate);
+            $endDate = $this->convertKitsuDate($malEndDate);
 
             // Status not found
-            // NOTE: - Don't use empty() because 'Watching' status is 0 and that returns true.
             if ($status === null) {
                 $this->registerFailure($malID, 'Could not handle status: ' . $malStatus);
                 return;
             }
 
-            // Check if the anime needs an end date
-            switch ($status) {
-                case UserLibraryStatus::OnHold:
-                case UserLibraryStatus::Watching:
-                    $startDate = $this->convertMALDate($malStartDate) ?? now();
-                    break;
-                case UserLibraryStatus::Dropped:
-                case UserLibraryStatus::Completed:
-                    $endDate = $this->convertMaLDate($malEndDate) ?? now();
-                    $startDate = $this->convertMALDate($malStartDate) ?? now();
-                    break;
-                case UserLibraryStatus::Planning:
-                default:
-                    break;
+            // Needs end date
+            if ($status === UserLibraryStatus::Completed && $endDate === null) {
+                $endDate = now();
             }
 
             // Add the anime to their library
@@ -173,42 +161,34 @@ class ProcessMALImport implements ShouldQueue
             ]);
 
             // Updated their anime score
-            if (!empty($rating)) {
-                MediaRating::updateOrCreate([
-                    'user_id' => $this->user->id,
-                    'model_type' => Anime::class,
-                    'model_id' => $anime->id,
-                ], [
-                    'rating' => $rating,
-                ]);
-            }
+            MediaRating::updateOrCreate([
+                'user_id'       => $this->user->id,
+                'model_type'    => Anime::class,
+                'model_id'      => $anime->id,
+            ], [
+                'rating' => $rating,
+            ]);
 
             $this->registerSuccess($anime->id, $malID, $status, $rating);
         } else {
-            logger('mal_id: ' . $malID . ' not exist');
-            $this->registerFailure($malID, 'MAL ID could not be found.');
+            $this->registerFailure($malID, 'Kitsu ID could not be found.');
         }
     }
 
     /**
-     * Converts a MAL status string to our library status.
+     * Converts a Kitsu status string to our library status'.
      *
      * @param string $malStatus
      * @return ?int
      */
-    protected function convertMALStatus(string $malStatus): ?int
+    protected function convertKitsuStatus(string $malStatus): ?int
     {
-        $malStatus = str($malStatus)->lower()
-            ->camel()
-            ->trim()
-            ->value();
-
         return match ($malStatus) {
-            'watching' => UserLibraryStatus::Watching,
-            'onHold' => UserLibraryStatus::OnHold,
-            'planToWatch' => UserLibraryStatus::Planning,
-            'dropped' => UserLibraryStatus::Dropped,
-            'completed' => UserLibraryStatus::Completed,
+            'Watching' => UserLibraryStatus::Watching,
+            'On-Hold' => UserLibraryStatus::OnHold,
+            'Plan to Watch' => UserLibraryStatus::Planning,
+            'Dropped' => UserLibraryStatus::Dropped,
+            'Completed' => UserLibraryStatus::Completed,
             default => null,
         };
     }
@@ -219,7 +199,7 @@ class ProcessMALImport implements ShouldQueue
      * @param int $malRating
      * @return int
      */
-    protected function convertMALRating(int $malRating): int
+    protected function convertKitsuRating(int $malRating): int
     {
         if ($malRating == 0) {
             return $malRating;
@@ -231,13 +211,13 @@ class ProcessMALImport implements ShouldQueue
     /**
      * Converts and returns Carbon dates from given string.
      *
-     * @param string|null $malDate
+     * @param string $malDate
      * @return Carbon|null
      */
-    protected function convertMALDate(?string $malDate): ?Carbon
+    protected function convertKitsuDate(string $malDate): ?Carbon
     {
-        if (empty($malDate) || $malDate === '0000-00-00') {
-            return null;
+        if ($malDate === '0000-00-00') {
+            return now();
         }
 
         $dateComponents = explode('-', $malDate);

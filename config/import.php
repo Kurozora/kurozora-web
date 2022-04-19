@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | This option controls the cooldown in days for users between importing
-    | a MAL export file.
+    | an export file.
     |
     | Default: 3
     |
@@ -21,7 +21,7 @@ return [
     | Maximum file size
     |--------------------------------------------------------------------------
     |
-    | This option controls the maximum allowed file size for a MAL export file
+    | This option controls the maximum allowed file size for an export file
     | in kilobytes.
     |
     | Default: 10000

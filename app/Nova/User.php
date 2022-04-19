@@ -165,13 +165,19 @@ class User extends Resource
 
             Textarea::make('Biography'),
 
-            Date::make('Last MAL Import date', 'last_mal_import_at')
-                ->help('The date at which the user last imported a MAL export file. The cooldown is <strong>' . config('mal-import.cooldown_in_days') . '</strong> day(s).')
+            Date::make('Last Anime Import date', 'last_anime_import_at')
+                ->help('The date at which the user last imported an anime export file. The cooldown is <strong>' . config('import.cooldown_in_days') . '</strong> day(s).')
+                ->hideFromIndex(),
+
+            Date::make('Last Manga Import date', 'last_manga_import_at')
+                ->help('The date at which the user last imported a manga export file. The cooldown is <strong>' . config('import.cooldown_in_days') . '</strong> day(s).')
                 ->hideFromIndex(),
 
             // Roles and permissions
-            RoleBooleanGroup::make('Roles')->hideFromIndex(),
-            PermissionBooleanGroup::make('Permissions')->hideFromIndex(),
+            RoleBooleanGroup::make('Roles')
+                ->hideFromIndex(),
+            PermissionBooleanGroup::make('Permissions')
+                ->hideFromIndex(),
 
             // Display roles on index
             Text::make('Roles', function() { return $this->displayRolesForIndex(); })

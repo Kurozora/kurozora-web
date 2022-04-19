@@ -2,12 +2,13 @@
 
 namespace App\Events;
 
-use App\Enums\MALImportBehavior;
+use App\Enums\ImportBehavior;
+use App\Enums\ImportService;
 use App\Models\User;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MALImportFinished
+class AnimeImportFinished
 {
     use Dispatchable, SerializesModels;
 
@@ -26,23 +27,32 @@ class MALImportFinished
     public array $results;
 
     /**
+     * The service of the import.
+     *
+     * @var ImportService
+     */
+    public ImportService $service;
+
+    /**
      * The behavior of the import.
      *
-     * @var MALImportBehavior
+     * @var ImportBehavior
      */
-    public MALImportBehavior $behavior;
+    public ImportBehavior $behavior;
 
     /**
      * Create a new event instance.
      *
      * @param User $user
      * @param array $results
-     * @param MALImportBehavior $behavior
+     * @param ImportService $service
+     * @param ImportBehavior $behavior
      */
-    public function __construct(User $user, array $results, MALImportBehavior $behavior)
+    public function __construct(User $user, array $results, ImportService $service, ImportBehavior $behavior)
     {
         $this->user = $user;
         $this->results = $results;
+        $this->service = $service;
         $this->behavior = $behavior;
     }
 }
