@@ -22,7 +22,7 @@
             <x-section-border />
 
             <div class="mt-10 sm:mt-0">
-                @livewire('profile.mal-import-form')
+                @livewire('profile.import-form')
             </div>
 
             <x-section-border />

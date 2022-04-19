@@ -11,7 +11,12 @@ class Media extends MediaLibrary
     const TABLE_NAME = 'media';
     protected $table = self::TABLE_NAME;
 
-    protected static function boot()
+    /**
+     * Bootstrap the model and its traits.
+     *
+     * @return void
+     */
+    protected static function boot(): void
     {
         parent::boot();
 
