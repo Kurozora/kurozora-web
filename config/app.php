@@ -99,6 +99,8 @@ return [
 
     'asset_url' => env('ASSET_URL'),
 
+    'status_url' => env('STATUS_URL', 'https://kurozora.statuspage.io'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

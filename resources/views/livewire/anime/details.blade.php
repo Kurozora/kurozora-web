@@ -1,4 +1,8 @@
 <main>
+    <x-slot:themeColor>
+        {{ $anime->banner_image?->custom_properties['background_color'] ?? $anime->poster_image?->custom_properties['background_color'] ?? null }}
+    </x-slot>
+
     <x-slot:title>
         {!! $anime->title !!}
     </x-slot>
