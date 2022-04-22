@@ -25,6 +25,9 @@
                     <li class="mt-2">
                         <x-footer-link href="{{ route('api') }}" target="_blank">{{ __('Kurozora API') }}</x-footer-link>
                     </li>
+                    <li class="mt-2">
+                        <x-footer-link href="{{ config('app.status_url') }}" target="_blank">{{ __('Kurozora Status') }}</x-footer-link>
+                    </li>
                 </ul>
             </div>
 
