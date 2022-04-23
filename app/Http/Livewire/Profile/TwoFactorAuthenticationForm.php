@@ -2,19 +2,17 @@
 
 namespace App\Http\Livewire\Profile;
 
+use App\Actions\Web\Auth\ConfirmTwoFactorAuthentication;
 use App\Actions\Web\Auth\DisableTwoFactorAuthentication;
 use App\Actions\Web\Auth\EnableTwoFactorAuthentication;
 use App\Actions\Web\Auth\GenerateNewRecoveryCodes;
+use App\Models\User;
 use App\Traits\Web\Auth\ConfirmsPasswords;
 use Auth;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
-use PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException;
-use PragmaRX\Google2FA\Exceptions\InvalidCharactersException;
-use PragmaRX\Google2FA\Exceptions\SecretKeyTooShortException;
 
 class TwoFactorAuthenticationForm extends Component
 {
@@ -28,6 +26,13 @@ class TwoFactorAuthenticationForm extends Component
     public bool $showingQrCode = false;
 
     /**
+     * Indicates if the two factor authentication confirmation input and button are being displayed.
+     *
+     * @var bool
+     */
+    public bool $showingConfirmation = false;
+
+    /**
      * Indicates if two factor authentication recovery codes are being displayed.
      *
      * @var bool
@@ -35,23 +40,54 @@ class TwoFactorAuthenticationForm extends Component
     public bool $showingRecoveryCodes = false;
 
     /**
+     * The OTP code for confirming two factor authentication.
+     *
+     * @var string
+     */
+    public string $code = '';
+
+    /**
+     * Mount the component.
+     *
+     * @return void
+     */
+    public function mount(): void
+    {
+        if (is_null(Auth::user()->two_factor_confirmed_at)) {
+            app(DisableTwoFactorAuthentication::class)(Auth::user());
+        }
+    }
+
+    /**
      * Enable two factor authentication for the user.
      *
      * @param EnableTwoFactorAuthentication $enable
-     *
      * @return void
-     * @throws AuthorizationException
-     * @throws IncompatibleWithGoogleAuthenticatorException
-     * @throws InvalidCharactersException
-     * @throws SecretKeyTooShortException
      */
-    public function enableTwoFactorAuthentication(EnableTwoFactorAuthentication $enable)
+    public function enableTwoFactorAuthentication(EnableTwoFactorAuthentication $enable): void
     {
         $this->ensurePasswordIsConfirmed();
 
         $enable(Auth::user());
 
         $this->showingQrCode = true;
+        $this->showingConfirmation = true;
+    }
+
+    /**
+     * Confirm two factor authentication for the user.
+     *
+     * @param ConfirmTwoFactorAuthentication $confirm
+     * @return void
+     */
+    public function confirmTwoFactorAuthentication(ConfirmTwoFactorAuthentication $confirm): void
+    {
+        $this->ensurePasswordIsConfirmed();
+
+        $confirm(Auth::user(), $this->code);
+
+        $this->showingQrCode = false;
+        $this->showingConfirmation = false;
         $this->showingRecoveryCodes = true;
     }
 
@@ -59,9 +95,8 @@ class TwoFactorAuthenticationForm extends Component
      * Display the user's recovery codes.
      *
      * @return void
-     * @throws AuthorizationException
      */
-    public function showRecoveryCodes()
+    public function showRecoveryCodes(): void
     {
         $this->ensurePasswordIsConfirmed();
 
@@ -72,11 +107,9 @@ class TwoFactorAuthenticationForm extends Component
      * Generate new recovery codes for the user.
      *
      * @param GenerateNewRecoveryCodes $generate
-     *
      * @return void
-     * @throws AuthorizationException
      */
-    public function regenerateRecoveryCodes(GenerateNewRecoveryCodes $generate)
+    public function regenerateRecoveryCodes(GenerateNewRecoveryCodes $generate): void
     {
         $this->ensurePasswordIsConfirmed();
 
@@ -89,15 +122,27 @@ class TwoFactorAuthenticationForm extends Component
      * Disable two factor authentication for the user.
      *
      * @param DisableTwoFactorAuthentication $disable
-     *
      * @return void
-     * @throws AuthorizationException
      */
-    public function disableTwoFactorAuthentication(DisableTwoFactorAuthentication $disable)
+    public function disableTwoFactorAuthentication(DisableTwoFactorAuthentication $disable): void
     {
         $this->ensurePasswordIsConfirmed();
 
         $disable(Auth::user());
+
+        $this->showingQrCode = false;
+        $this->showingConfirmation = false;
+        $this->showingRecoveryCodes = false;
+    }
+
+    /**
+     * Get the current user of the application.
+     *
+     * @return User|null
+     */
+    public function getUserProperty(): User|null
+    {
+        return Auth::user();
     }
 
     /**
@@ -107,7 +152,7 @@ class TwoFactorAuthenticationForm extends Component
      */
     public function getEnabledProperty(): bool
     {
-        return !empty(Auth::user()->two_factor_secret);
+        return !empty($this->user->two_factor_secret);
     }
 
     /**

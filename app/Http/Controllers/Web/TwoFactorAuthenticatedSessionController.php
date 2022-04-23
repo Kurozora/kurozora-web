@@ -2,27 +2,37 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Actions\Web\Auth\PrepareAuthenticatedSession;
+use App\Events\RecoveryCodeReplaced;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\TwoFactorSignInRequest;
 use Auth;
-use Browser;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Pipeline\Pipeline;
 use PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException;
 use PragmaRX\Google2FA\Exceptions\InvalidCharactersException;
 use PragmaRX\Google2FA\Exceptions\SecretKeyTooShortException;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class TwoFactorAuthenticatedSessionController extends Controller
 {
     /**
      * Show the two factor authentication challenge view.
      *
+     * @param TwoFactorSignInRequest $request
      * @return Application|Factory|View
      */
-    public function create(): Application|Factory|View
+    public function create(TwoFactorSignInRequest $request): Application|Factory|View
     {
+        if (!$request->hasChallengedUser()) {
+            throw new HttpResponseException(redirect()->route('sign-in'));
+        }
+
         return view('auth.two-factor-challenge');
     }
 
@@ -34,6 +44,7 @@ class TwoFactorAuthenticatedSessionController extends Controller
      * @throws IncompatibleWithGoogleAuthenticatorException
      * @throws InvalidCharactersException
      * @throws SecretKeyTooShortException
+     * @throws InvalidArgumentException
      */
     public function store(TwoFactorSignInRequest $request): RedirectResponse
     {
@@ -41,31 +52,29 @@ class TwoFactorAuthenticatedSessionController extends Controller
 
         if ($code = $request->validRecoveryCode()) {
             $user->replaceRecoveryCode($code);
-        } else if (!$request->hasValidCode()) {
-            return back()->withErrors([
-                'email' => __('The provided two factor authentication code was invalid.'),
-            ]);
+
+            event(new RecoveryCodeReplaced($user, $code));
+        } elseif (!$request->hasValidCode()) {
+            return redirect()->route('two-factor.sign-in')->withErrors(['code' => __('The provided two factor authentication code was invalid.')]);
         }
 
         Auth::login($user, $request->remember());
 
-        $this->prepareAuthenticatedSession();
-
-        return redirect()->intended();
+        return $this->signInPipeline($request)->then(function () {
+            return redirect()->intended();
+        });
     }
 
     /**
-     * Prepares the authenticated session for the newly authenticated user.
+     * Get the authentication pipeline instance.
+     *
+     * @param Request $request
+     * @return Pipeline
      */
-    protected function prepareAuthenticatedSession()
+    protected function signInPipeline(Request $request): Pipeline
     {
-        $browser = Browser::detect();
-
-        Auth::user()->createSessionAttributes([
-            'platform'          => $browser->platformFamily(),
-            'platform_version'  => $browser->platformVersion(),
-            'device_vendor'     => $browser->deviceFamily(),
-            'device_model'      => $browser->deviceModel(),
-        ]);
+        return (new Pipeline(app()))->send($request)->through(array_filter([
+            PrepareAuthenticatedSession::class,
+        ]));
     }
 }

@@ -39,7 +39,7 @@ class SignInWithAppleController extends Controller
         $socialiteUser = Socialite::driver('apple')->user();
 
         // Sign in user
-        return $this->loginPipeline($request, $socialiteUser)->then(function () {
+        return $this->signInPipeline($request, $socialiteUser)->then(function () {
             return redirect()->intended();
         });
     }
@@ -51,7 +51,7 @@ class SignInWithAppleController extends Controller
      * @param SocialiteUser $socialiteUser
      * @return Pipeline
      */
-    protected function loginPipeline(Request $request, SocialiteUser $socialiteUser): Pipeline
+    protected function signInPipeline(Request $request, SocialiteUser $socialiteUser): Pipeline
     {
         return (new Pipeline(app()))->send($request)->through(array_filter([
             $this->authenticateUser($socialiteUser),
@@ -81,7 +81,7 @@ class SignInWithAppleController extends Controller
             $user = $this->signUpUser($socialiteUser);
         }
 
-        // Login the user.
+        // Sign in the user.
         Auth::login($user);
     }
 
