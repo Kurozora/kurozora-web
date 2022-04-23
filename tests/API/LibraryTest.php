@@ -2,8 +2,8 @@
 
 namespace Tests\API;
 
-use App\Models\Anime;
 use App\Enums\UserLibraryStatus;
+use App\Models\Anime;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
@@ -20,7 +20,7 @@ class LibraryTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_get_the_Watching_anime_in_their_library()
+    function user_can_get_the_Watching_anime_in_their_library(): void
     {
         // Add an anime to the list
         $this->user->library()->attach($this->anime->id, ['status' => UserLibraryStatus::Watching]);
@@ -43,7 +43,7 @@ class LibraryTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_get_the_Dropped_anime_in_their_library()
+    function user_can_get_the_Dropped_anime_in_their_library(): void
     {
         // Add an anime to the list
         $this->user->library()->attach($this->anime->id, ['status' => UserLibraryStatus::Dropped]);
@@ -66,7 +66,7 @@ class LibraryTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_get_the_Planning_anime_in_their_library()
+    function user_can_get_the_Planning_anime_in_their_library(): void
     {
         // Add an anime to the list
         $this->user->library()->attach($this->anime->id, ['status' => UserLibraryStatus::Planning]);
@@ -89,7 +89,7 @@ class LibraryTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_get_the_Completed_anime_in_their_library()
+    function user_can_get_the_Completed_anime_in_their_library(): void
     {
         // Add an anime to the list
         $this->user->library()->attach($this->anime->id, ['status' => UserLibraryStatus::Completed]);
@@ -112,7 +112,7 @@ class LibraryTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_get_the_OnHold_anime_in_their_library()
+    function user_can_get_the_OnHold_anime_in_their_library(): void
     {
         // Add an anime to the list
         $this->user->library()->attach($this->anime->id, ['status' => UserLibraryStatus::OnHold]);
@@ -135,7 +135,7 @@ class LibraryTest extends TestCase
      * @return void
      * @test
      */
-    function user_cannot_get_the_anime_in_their_library_with_an_invalid_status()
+    function user_cannot_get_the_anime_in_their_library_with_an_invalid_status(): void
     {
         // Send the request
         $response = $this->auth()->json('GET', 'v1/me/library', [
@@ -152,7 +152,7 @@ class LibraryTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_add_anime_to_their_library_with_status_Watching()
+    function user_can_add_anime_to_their_library_with_status_Watching(): void
     {
         // Send request to add first anime to library
         $anime = Anime::first();
@@ -176,7 +176,7 @@ class LibraryTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_add_anime_to_their_library_with_status_Dropped()
+    function user_can_add_anime_to_their_library_with_status_Dropped(): void
     {
         // Send request to add first anime to library
         $anime = Anime::first();
@@ -200,7 +200,7 @@ class LibraryTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_add_anime_to_their_library_with_status_Planning()
+    function user_can_add_anime_to_their_library_with_status_Planning(): void
     {
         // Send request to add first anime to library
         $anime = Anime::first();
@@ -224,7 +224,7 @@ class LibraryTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_add_anime_to_their_library_with_status_Completed()
+    function user_can_add_anime_to_their_library_with_status_Completed(): void
     {
         // Send request to add first anime to library
         $anime = Anime::first();
@@ -248,7 +248,7 @@ class LibraryTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_add_anime_to_their_library_with_status_OnHold()
+    function user_can_add_anime_to_their_library_with_status_OnHold(): void
     {
         // Send request to add first anime to library
         $anime = Anime::first();
@@ -272,7 +272,7 @@ class LibraryTest extends TestCase
      * @return void
      * @test
      */
-    function user_cannot_add_anime_to_their_library_with_an_invalid_status()
+    function user_cannot_add_anime_to_their_library_with_an_invalid_status(): void
     {
         // Send request to add first anime to library
         $anime = Anime::first();
@@ -289,7 +289,7 @@ class LibraryTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_delete_anime_from_their_library()
+    function user_can_delete_anime_from_their_library(): void
     {
         // Add an anime to the list
         $this->user->library()->attach($this->anime->id, ['status' => UserLibraryStatus::Watching]);
@@ -314,7 +314,7 @@ class LibraryTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_search_in_own_library()
+    function user_can_search_in_own_library(): void
     {
         // Add an anime to the user's list
         $shows = Anime::factory(20)->create();

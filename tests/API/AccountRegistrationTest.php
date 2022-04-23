@@ -19,7 +19,7 @@ class AccountRegistrationTest extends TestCase
      * @return void
      * @test
      */
-    function an_account_can_be_signed_up()
+    function an_account_can_be_signed_up(): void
     {
         $this->json('POST', 'v1/users', [
             'username'  => 'Kurozora Tester',
@@ -55,7 +55,7 @@ class AccountRegistrationTest extends TestCase
      * @return void
      * @test
      */
-    function an_account_can_be_signed_up_with_an_profile_image()
+    function an_account_can_be_signed_up_with_an_profile_image(): void
     {
         // Create fake storage
         Storage::fake('profile_images');
@@ -95,7 +95,7 @@ class AccountRegistrationTest extends TestCase
      * @return void
      * @test
      */
-    function an_account_cannot_be_signed_up_with_a_large_profile_image()
+    function an_account_cannot_be_signed_up_with_a_large_profile_image(): void
     {
         // Create fake storage
         Storage::fake('profile_images');
@@ -121,7 +121,7 @@ class AccountRegistrationTest extends TestCase
      * @return void
      * @test
      */
-    function an_account_cannot_be_singed_up_with_a_pdf_as_profile_image()
+    function an_account_cannot_be_singed_up_with_a_pdf_as_profile_image(): void
     {
         // Create fake storage
         Storage::fake('profile_images');
@@ -147,7 +147,7 @@ class AccountRegistrationTest extends TestCase
      * @return void
      * @test
      */
-    function an_account_cannot_be_signed_up_with_a_gif_as_profile_image()
+    function an_account_cannot_be_signed_up_with_a_gif_as_profile_image(): void
     {
         // Create fake storage
         Storage::fake('profile_images');
@@ -173,7 +173,7 @@ class AccountRegistrationTest extends TestCase
      * @return void
      * @test
      */
-    function an_account_cannot_be_signed_up_with_a_username_that_is_already_in_use()
+    function an_account_cannot_be_signed_up_with_a_username_that_is_already_in_use(): void
     {
         // Create the first account
         $this->json('POST', 'v1/users', [
@@ -202,7 +202,7 @@ class AccountRegistrationTest extends TestCase
      * @return void
      * @test
      */
-    function an_account_cannot_be_signed_up_with_an_email_that_is_already_in_use()
+    function an_account_cannot_be_signed_up_with_an_email_that_is_already_in_use(): void
     {
         // Create the first account
         $this->json('POST', 'v1/users', [
@@ -231,7 +231,7 @@ class AccountRegistrationTest extends TestCase
      * @return void
      * @test
      */
-    function an_account_cannot_be_signed_up_with_a_long_password()
+    function an_account_cannot_be_signed_up_with_a_long_password(): void
     {
         // Generate a password with size of 256
         $longPassword = Str::random(256);
@@ -253,7 +253,7 @@ class AccountRegistrationTest extends TestCase
      * @return void
      * @test
      */
-    function an_account_cannot_be_signed_up_with_a_short_password()
+    function an_account_cannot_be_signed_up_with_a_short_password(): void
     {
         // Attempt to signup the account
         $this->json('POST', 'v1/users', [

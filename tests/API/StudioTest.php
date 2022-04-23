@@ -31,7 +31,7 @@ class StudioTest extends TestCase
      * @return void
      * @test
      */
-    public function a_user_can_view_specific_studio_details()
+    public function a_user_can_view_specific_studio_details(): void
     {
         $response = $this->get('v1/studios/'.$this->studio->id);
 
@@ -48,7 +48,7 @@ class StudioTest extends TestCase
      * @return void
      * @test
      */
-    public function a_user_can_view_specific_studio_details_including_relationships()
+    public function a_user_can_view_specific_studio_details_including_relationships(): void
     {
         $response = $this->get('v1/studios/'.$this->studio->id.'?include=shows');
 
@@ -69,7 +69,7 @@ class StudioTest extends TestCase
      * @return void
      * @test
      */
-    public function a_user_can_view_specific_studio_anime()
+    public function a_user_can_view_specific_studio_anime(): void
     {
         // Prepare studio anime
         AnimeStudio::factory(25)->create([

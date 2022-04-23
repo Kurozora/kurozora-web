@@ -17,7 +17,7 @@ class FollowTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_can_follow_another_user()
+    function a_user_can_follow_another_user(): void
     {
         /** @var User $anotherUser */
         $anotherUser = User::factory()->create();
@@ -37,7 +37,7 @@ class FollowTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_can_unfollow_another_user()
+    function a_user_can_unfollow_another_user(): void
     {
         /** @var User $anotherUser */
         $anotherUser = User::factory()->create();
@@ -61,7 +61,7 @@ class FollowTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_cannot_follow_an_invalid_user()
+    function a_user_cannot_follow_an_invalid_user(): void
     {
         $this->auth()->json('POST', 'v1/users/' . 99999 . '/follow')->assertNotFound();
 
@@ -75,7 +75,7 @@ class FollowTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_can_get_someone_elses_followers_list()
+    function a_user_can_get_someone_elses_followers_list(): void
     {
         // Add a follower
         /** @var User $anotherUser */
@@ -99,7 +99,7 @@ class FollowTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_can_get_someone_elses_following_list()
+    function a_user_can_get_someone_elses_following_list(): void
     {
         // Add a user to the following list
         /** @var User $anotherUser */
@@ -123,7 +123,7 @@ class FollowTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_receives_a_notification_when_someone_follows_them()
+    function a_user_receives_a_notification_when_someone_follows_them(): void
     {
         /** @var User $anotherUser */
         $anotherUser = User::factory()->create();

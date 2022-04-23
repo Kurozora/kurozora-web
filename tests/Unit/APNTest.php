@@ -12,7 +12,7 @@ class APNTest extends TestCase
     use DatabaseMigrations, ProvidesTestUser;
 
     /** @test */
-    function routeNotificationForApn_returns_the_device_tokens()
+    function routeNotificationForApn_returns_the_device_tokens(): void
     {
         // Create some sessions for the user
         /** @var SessionAttribute[] $sessionAttributes */

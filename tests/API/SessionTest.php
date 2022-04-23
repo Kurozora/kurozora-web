@@ -19,7 +19,7 @@ class SessionTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_get_the_details_of_their_session()
+    function user_can_get_the_details_of_their_session(): void
     {
         // Create a session for the user
         /** @var Session $session */
@@ -41,7 +41,7 @@ class SessionTest extends TestCase
      * @return void
      * @test
      */
-    function user_cannot_get_the_details_of_another_users_session()
+    function user_cannot_get_the_details_of_another_users_session(): void
     {
         // Create a session for the user
         /** @var User $anotherUser */
@@ -63,7 +63,7 @@ class SessionTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_delete_their_session()
+    function user_can_delete_their_session(): void
     {
         // Create a session for the user
         /** @var Session $session */
@@ -85,7 +85,7 @@ class SessionTest extends TestCase
      * @return void
      * @test
      */
-    function user_cannot_delete_another_users_session()
+    function user_cannot_delete_another_users_session(): void
     {
         // Create a session for the user
         /** @var User $anotherUser */
@@ -110,7 +110,7 @@ class SessionTest extends TestCase
      * @return void
      * @test
      */
-    function user_cannot_update_the_apn_device_token_of_another_users_session()
+    function user_cannot_update_the_apn_device_token_of_another_users_session(): void
     {
         // Create a session for the user
         /** @var User $anotherUser */

@@ -19,7 +19,7 @@ class EpisodeTest extends TestCase
      * @return void
      * @test
      */
-    public function a_user_can_view_specific_episode_details()
+    public function a_user_can_view_specific_episode_details(): void
     {
         /** @var Episode $episode */
         $episode = Episode::factory()->create();
@@ -39,7 +39,7 @@ class EpisodeTest extends TestCase
      * @return void
      * @test
      */
-    public function an_authenticated_user_can_view_specific_episode_details()
+    public function an_authenticated_user_can_view_specific_episode_details(): void
     {
         /** @var Episode $episode */
         $episode = Episode::factory()->create();
@@ -59,7 +59,7 @@ class EpisodeTest extends TestCase
      * @return void
      * @test
      */
-    function an_episode_can_not_be_watched_if_anime_not_in_library()
+    function an_episode_can_not_be_watched_if_anime_not_in_library(): void
     {
         $response = $this->auth()->json('POST', 'v1/episodes/' . $this->episode->id . '/watched');
 
@@ -76,7 +76,7 @@ class EpisodeTest extends TestCase
      * @return void
      * @test
      */
-    function an_episode_can_not_be_unwatched_if_anime_not_in_library()
+    function an_episode_can_not_be_unwatched_if_anime_not_in_library(): void
     {
         $response = $this->auth()->json('POST', 'v1/episodes/' . $this->episode->id . '/watched');
 
@@ -93,7 +93,7 @@ class EpisodeTest extends TestCase
      * @return void
      * @test
      */
-    function an_episode_can_be_watched_if_anime_in_library()
+    function an_episode_can_be_watched_if_anime_in_library(): void
     {
         // Add the Anime to the library
         $this->user->library()->attach($this->anime, ['status' => UserLibraryStatus::Watching]);
@@ -114,7 +114,7 @@ class EpisodeTest extends TestCase
      * @return void
      * @test
      */
-    function an_episode_can_be_unwatched_if_anime_in_library()
+    function an_episode_can_be_unwatched_if_anime_in_library(): void
     {
         // Add the Anime to the library and mark episode as watched
         $this->user->library()->attach($this->anime, ['status' => UserLibraryStatus::Watching]);

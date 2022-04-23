@@ -18,7 +18,7 @@ class SettingsTest extends TestCase
      *
      * @test
      */
-    function can_create_a_new_instance_by_providing_a_user()
+    function can_create_a_new_instance_by_providing_a_user(): void
     {
         // Create a new settings instance from the given user.
         $settings = Settings::create($this->user);
@@ -32,7 +32,7 @@ class SettingsTest extends TestCase
      *
      * @test
      */
-    function can_get_all_settings()
+    function can_get_all_settings(): void
     {
         // Authenticate the user.
         Auth::login($this->user);
@@ -46,7 +46,7 @@ class SettingsTest extends TestCase
      *
      * @test
      */
-    function can_get_a_specific_setting()
+    function can_get_a_specific_setting(): void
     {
         // Authenticate the user.
         Auth::login($this->user);
@@ -63,7 +63,7 @@ class SettingsTest extends TestCase
      *
      * @test
      */
-    function cannot_get_a_setting_that_does_not_exist()
+    function cannot_get_a_setting_that_does_not_exist(): void
     {
         // Authenticate the user.
         Auth::login($this->user);
@@ -80,7 +80,7 @@ class SettingsTest extends TestCase
      *
      * @test
      */
-    function can_set_a_setting_that_already_exist()
+    function can_set_a_setting_that_already_exist(): void
     {
         // Authenticate the user.
         Auth::login($this->user);
@@ -103,7 +103,7 @@ class SettingsTest extends TestCase
      *
      * @test
      */
-    function can_set_a_new_setting_that_does_not_exist()
+    function can_set_a_new_setting_that_does_not_exist(): void
     {
         // Authenticate the user.
         Auth::login($this->user);
@@ -126,7 +126,7 @@ class SettingsTest extends TestCase
      *
      * @test
      */
-    function can_determine_whether_a_setting_exists()
+    function can_determine_whether_a_setting_exists(): void
     {
         // Authenticate the user.
         Auth::login($this->user);
@@ -140,7 +140,7 @@ class SettingsTest extends TestCase
      *
      * @test
      */
-    function can_determine_whether_a_setting_does_not_exists()
+    function can_determine_whether_a_setting_does_not_exists(): void
     {
         // Authenticate the user.
         Auth::login($this->user);
@@ -154,7 +154,7 @@ class SettingsTest extends TestCase
      *
      * @test
      */
-    function can_merge_the_provided_attributes_with_the_settings_without_adding_new_settings()
+    function can_merge_the_provided_attributes_with_the_settings_without_adding_new_settings(): void
     {
         // The new attributes
         $attributes = [
@@ -189,7 +189,7 @@ class SettingsTest extends TestCase
      *
      * @test
      */
-    function settings_method_returns_the_settings_object_if_nothing_is_provided()
+    function settings_method_returns_the_settings_object_if_nothing_is_provided(): void
     {
         // Authenticate the user.
         Auth::login($this->user);
@@ -203,7 +203,7 @@ class SettingsTest extends TestCase
      *
      * @test
      */
-    function settings_method_can_get_a_setting_if_key_is_provided()
+    function settings_method_can_get_a_setting_if_key_is_provided(): void
     {
         // Authenticate the user.
         Auth::login($this->user);
@@ -217,7 +217,7 @@ class SettingsTest extends TestCase
      *
      * @test
      */
-    function settings_method_cannot_get_a_setting_if_the_provided_key_does_not_exist()
+    function settings_method_cannot_get_a_setting_if_the_provided_key_does_not_exist(): void
     {
         // Authenticate the user.
         Auth::login($this->user);
@@ -231,7 +231,7 @@ class SettingsTest extends TestCase
      *
      * @test
      */
-    function settings_method_can_set_an_existing_setting_if_a_key_and_a_value_is_provided()
+    function settings_method_can_set_an_existing_setting_if_a_key_and_a_value_is_provided(): void
     {
         // Authenticate the user.
         Auth::login($this->user);
@@ -254,7 +254,7 @@ class SettingsTest extends TestCase
      *
      * @test
      */
-    function settings_method_can_set_a_new_setting_if_a_key_and_a_value_is_provided()
+    function settings_method_can_set_a_new_setting_if_a_key_and_a_value_is_provided(): void
     {
         // Authenticate the user.
         Auth::login($this->user);

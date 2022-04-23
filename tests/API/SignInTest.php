@@ -17,7 +17,7 @@ class SignInTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_can_sign_in()
+    function a_user_can_sign_in(): void
     {
         $this->json('POST', 'v1/users/signin', [
             'email'             => $this->user->email,
@@ -38,7 +38,7 @@ class SignInTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_cannot_sign_in_with_an_incorrect_password()
+    function a_user_cannot_sign_in_with_an_incorrect_password(): void
     {
         $this->json('POST', 'v1/users/signin', [
             'email'     => $this->user->email,
@@ -59,7 +59,7 @@ class SignInTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_cannot_sign_in_with_an_unknown_email()
+    function a_user_cannot_sign_in_with_an_unknown_email(): void
     {
         $this->json('POST', 'v1/users/signin', [
             'email'     => 'invalidemail@example.com',
@@ -77,7 +77,7 @@ class SignInTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_can_only_attempt_to_sign_in_3_times_per_5_minutes()
+    function a_user_can_only_attempt_to_sign_in_3_times_per_5_minutes(): void
     {
         // Make 3 sign in attempts with wrong password
         for($i = 0; $i < 3; $i++)
@@ -120,7 +120,7 @@ class SignInTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_receives_a_notification_when_someone_logs_into_their_account()
+    function a_user_receives_a_notification_when_someone_logs_into_their_account(): void
     {
         $this->json('POST', 'v1/users/signin', [
             'email'     => $this->user->email,

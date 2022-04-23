@@ -9,7 +9,7 @@ use Tests\TestCase;
 class AppleAuthKeysTest extends TestCase
 {
     /** @test */
-    function it_can_get_apple_auth_keys()
+    function it_can_get_apple_auth_keys(): void
     {
         $keys = AppleAuthKeys::get();
 
@@ -17,7 +17,7 @@ class AppleAuthKeysTest extends TestCase
     }
 
     /** @test */
-    function it_caches_the_keys_for_24_hours()
+    function it_caches_the_keys_for_24_hours(): void
     {
         // To start off, the keys should not be cached
         Carbon::setTestNow();

@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\ValidationRules;
 
-use App\Rules\ValidateEmail;
 use App\Models\User;
+use App\Rules\ValidateEmail;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
@@ -63,7 +63,7 @@ class ValidateEmailTest extends TestCase
     }
 
     /** @test */
-    function valid_email_addresses_pass()
+    function valid_email_addresses_pass(): void
     {
         foreach($this->validEmailAddresses as $email) {
             $this->assertTrue($this->rule->passes('email', $email), "$email did not pass, while it should have!");
@@ -71,7 +71,7 @@ class ValidateEmailTest extends TestCase
     }
 
     /** @test */
-    function invalid_email_addresses_dont_pass()
+    function invalid_email_addresses_dont_pass(): void
     {
         foreach($this->invalidEmailAddresses as $email) {
             $this->assertFalse($this->rule->passes('email', $email), "$email passed, while it should not have!");
@@ -79,7 +79,7 @@ class ValidateEmailTest extends TestCase
     }
 
     /** @test */
-    function must_be_taken_option_works()
+    function must_be_taken_option_works(): void
     {
         $this->rule = new ValidateEmail(['must-be-taken' => true]);
 
@@ -97,7 +97,7 @@ class ValidateEmailTest extends TestCase
     }
 
     /** @test */
-    function must_be_available_option_works()
+    function must_be_available_option_works(): void
     {
         $this->rule = new ValidateEmail(['must-be-available' => true]);
 
@@ -115,7 +115,7 @@ class ValidateEmailTest extends TestCase
     }
 
     /** @test */
-    function must_be_available_and_must_be_taken_options_cannot_be_used_at_the_same_time()
+    function must_be_available_and_must_be_taken_options_cannot_be_used_at_the_same_time(): void
     {
         $this->expectException(InvalidArgumentException::class);
 

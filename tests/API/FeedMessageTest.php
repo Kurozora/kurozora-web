@@ -26,7 +26,7 @@ class FeedMessageTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_post_a_normal_message_to_the_feed()
+    function user_can_post_a_normal_message_to_the_feed(): void
     {
         $this->auth()->json('POST', 'v1/feed', [
             'body'          => 'Hello, Kurozora!',
@@ -44,7 +44,7 @@ class FeedMessageTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_post_an_nsfw_message_to_the_feed()
+    function user_can_post_an_nsfw_message_to_the_feed(): void
     {
         $this->auth()->json('POST', 'v1/feed', [
             'body'          => 'Hello, Kurozora!',
@@ -62,7 +62,7 @@ class FeedMessageTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_post_a_spoiler_message_to_the_feed()
+    function user_can_post_a_spoiler_message_to_the_feed(): void
     {
         $this->auth()->json('POST', 'v1/feed', [
             'body'          => 'Hello, Kurozora!',
@@ -80,7 +80,7 @@ class FeedMessageTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_post_an_nsfw_and_spoiler_message_to_the_feed()
+    function user_can_post_an_nsfw_and_spoiler_message_to_the_feed(): void
     {
         $this->auth()->json('POST', 'v1/feed', [
             'body'          => 'Hello, Kurozora!',
@@ -98,7 +98,7 @@ class FeedMessageTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_reply_to_a_feed_message()
+    function user_can_reply_to_a_feed_message(): void
     {
         $parent = FeedMessage::factory()->create();
 
@@ -123,7 +123,7 @@ class FeedMessageTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_re_share_a_feed_message_once()
+    function user_can_re_share_a_feed_message_once(): void
     {
         $parent = FeedMessage::factory()->create();
 
@@ -155,7 +155,7 @@ class FeedMessageTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_reply_to_feed_messages()
+    function user_can_reply_to_feed_messages(): void
     {
         $parent = FeedMessage::factory()->create([
             'parent_feed_message_id' => FeedMessage::factory()->create()->id
@@ -177,7 +177,7 @@ class FeedMessageTest extends TestCase
      * @return void
      * @test
      */
-    function user_cannot_post_to_the_feed_if_not_logged_in()
+    function user_cannot_post_to_the_feed_if_not_logged_in(): void
     {
         $this->json('POST', 'v1/feed', [
             'body'          => 'Hello, Kurozora!',
@@ -192,7 +192,7 @@ class FeedMessageTest extends TestCase
      * @return void
      * @test
      */
-    function feed_messages_can_have_a_maximum_length_of_240_characters()
+    function feed_messages_can_have_a_maximum_length_of_240_characters(): void
     {
         $this->auth()->json('POST', 'v1/feed', [
             'body' => Str::random(240),

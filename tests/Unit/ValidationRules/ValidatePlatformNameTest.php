@@ -8,13 +8,13 @@ use Tests\TestCase;
 class ValidatePlatformNameTest extends TestCase
 {
     /** @var ValidatePlatformName $rule */
-    private $rule;
+    private ValidatePlatformName $rule;
 
-    private $validPlatformNames = [
+    private array $validPlatformNames = [
         'iOS', 'Android', 'Web', 'Console', 'macOS', 'iPadOS', 'tvOS', 'watchOS'
     ];
 
-    private $invalidPlatformNames = [
+    private array $invalidPlatformNames = [
         'Windows', 'Linux', 'Water Bottle', 'Tin can telephone', 'Walkie Talkie OS'
     ];
 
@@ -26,14 +26,14 @@ class ValidatePlatformNameTest extends TestCase
     }
 
     /** @test */
-    function valid_platform_names_pass()
+    function valid_platform_names_pass(): void
     {
         foreach($this->validPlatformNames as $validPlatformName)
             $this->assertTrue($this->rule->passes('platform', $validPlatformName), "$validPlatformName did not pass, while it should have!");
     }
 
     /** @test */
-    function invalid_platform_names_dont_pass()
+    function invalid_platform_names_dont_pass(): void
     {
         foreach($this->invalidPlatformNames as $invalidPlatformName)
             $this->assertFalse($this->rule->passes('platform', $invalidPlatformName), "$invalidPlatformName passed, while it should not have!");

@@ -23,7 +23,7 @@ class MeTest extends TestCase
      * @return void
      * @test
      */
-    public function user_can_get_own_details_with_authentication_token()
+    public function user_can_get_own_details_with_authentication_token(): void
     {
         // Send request
         $response = $this->auth()->json('GET', 'v1/me');
@@ -41,7 +41,7 @@ class MeTest extends TestCase
      * @return void
      * @test
      */
-    public function user_cannot_get_own_details_without_authentication_token()
+    public function user_cannot_get_own_details_without_authentication_token(): void
     {
         // Send request
         $response = $this->json('GET', 'v1/me', []);
@@ -57,7 +57,7 @@ class MeTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_update_their_biography()
+    function user_can_update_their_biography(): void
     {
         // Remove the user's biography
         $this->user->update(['biography' => null]);
@@ -81,7 +81,7 @@ class MeTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_remove_their_biography()
+    function user_can_remove_their_biography(): void
     {
         // Set the user's biography
         $this->user->update(['biography' => 'I love Kurozora!']);
@@ -105,7 +105,7 @@ class MeTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_update_their_profile_image()
+    function user_can_update_their_profile_image(): void
     {
         // Create fake storage
         Storage::fake('profile_images');
@@ -139,7 +139,7 @@ class MeTest extends TestCase
      * @throws FileIsTooBig
      * @test
      */
-    function user_can_remove_their_profile_image()
+    function user_can_remove_their_profile_image(): void
     {
         // Create fake storage
         Storage::fake('profile_images');
@@ -169,7 +169,7 @@ class MeTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_update_their_banner()
+    function user_can_update_their_banner(): void
     {
         // Create fake storage
         Storage::fake('banners');
@@ -203,7 +203,7 @@ class MeTest extends TestCase
      * @throws FileIsTooBig
      * @test
      */
-    function user_can_remove_their_banner()
+    function user_can_remove_their_banner(): void
     {
         // Create fake storage
         Storage::fake('banners');
@@ -233,7 +233,7 @@ class MeTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_get_a_list_of_their_favorite_anime()
+    function user_can_get_a_list_of_their_favorite_anime(): void
     {
         // Add some anime to the user's favorites
         /** @var Anime[] $anime */
@@ -259,7 +259,7 @@ class MeTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_get_their_followers_list()
+    function user_can_get_their_followers_list(): void
     {
         // Add a follower
         /** @var User $anotherUser */
@@ -283,7 +283,7 @@ class MeTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_get_their_following_list()
+    function user_can_get_their_following_list(): void
     {
         // Add a user to the following list
         /** @var User $anotherUser */
@@ -307,7 +307,7 @@ class MeTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_get_a_list_of_their_auth_token_related_session_attributes()
+    function user_can_get_a_list_of_their_auth_token_related_session_attributes(): void
     {
         // Create some sessions for the user
         $personalAccessTokens = [];

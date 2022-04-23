@@ -16,7 +16,7 @@ class AppThemeTest extends TestCase
      * @return void
      * @test
      */
-    public function a_user_can_view_all_app_themes()
+    public function a_user_can_view_all_app_themes(): void
     {
         AppTheme::factory(2)->create();
 
@@ -35,7 +35,7 @@ class AppThemeTest extends TestCase
      * @return void
      * @test
      */
-    public function a_user_can_view_specific_app_theme_details()
+    public function a_user_can_view_specific_app_theme_details(): void
     {
         /** @var AppTheme $theme */
         $theme = AppTheme::factory()->create();

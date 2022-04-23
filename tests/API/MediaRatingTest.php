@@ -20,7 +20,7 @@ class MediaRatingTest extends TestCase
      * @return void
      * @test
      */
-    function user_cannot_rate_anime_if_not_in_library()
+    function user_cannot_rate_anime_if_not_in_library(): void
     {
         // Rate the anime
         $response = $this->auth()->json('POST', 'v1/anime/' . $this->anime->id . '/rate');
@@ -38,7 +38,7 @@ class MediaRatingTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_rate_anime_if_in_library()
+    function user_can_rate_anime_if_in_library(): void
     {
         // Add anime to library
         $this->user->library()->attach($this->anime, ['status' => UserLibraryStatus::Watching]);
@@ -61,7 +61,7 @@ class MediaRatingTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_remove_anime_rating()
+    function user_can_remove_anime_rating(): void
     {
         // Add anime to library
         $this->user->library()->attach($this->anime, ['status' => UserLibraryStatus::Watching]);
@@ -91,7 +91,7 @@ class MediaRatingTest extends TestCase
      * @return void
      * @test
      */
-    function user_cannot_rate_episode_if_not_watched()
+    function user_cannot_rate_episode_if_not_watched(): void
     {
         // Get the episode
         $episode = $this->anime->episodes()->first();
@@ -112,7 +112,7 @@ class MediaRatingTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_rate_episode_if_watched()
+    function user_can_rate_episode_if_watched(): void
     {
         // Get the episode
         $episode = $this->anime->episodes()->first();
@@ -138,7 +138,7 @@ class MediaRatingTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_remove_episode_rating()
+    function user_can_remove_episode_rating(): void
     {
         // Get the episode
         $episode = $this->anime->episodes()->first();

@@ -8,13 +8,13 @@ use Tests\TestCase;
 class ValidatePlatformVersionTest extends TestCase
 {
     /** @var ValidatePlatformVersion $rule */
-    private $rule;
+    private ValidatePlatformVersion $rule;
 
-    private $validPlatformVersions = [
+    private array $validPlatformVersions = [
         '1', '1.2', '1.2.0', '5.0', '902.3', '21.23', '3.455'
     ];
 
-    private $invalidPlatformVersions = [
+    private array $invalidPlatformVersions = [
         'v1.0', '2.0-rc', 'best version', 'cool', 'xp', '-12.1', '-1'
     ];
 
@@ -26,14 +26,14 @@ class ValidatePlatformVersionTest extends TestCase
     }
 
     /** @test */
-    function valid_platform_versions_pass()
+    function valid_platform_versions_pass(): void
     {
         foreach($this->validPlatformVersions as $validPlatformVersion)
             $this->assertTrue($this->rule->passes('platform_version', $validPlatformVersion), "$validPlatformVersion did not pass, while it should have!");
     }
 
     /** @test */
-    function invalid_platform_versions_dont_pass()
+    function invalid_platform_versions_dont_pass(): void
     {
         foreach($this->invalidPlatformVersions as $invalidPlatformVersion)
             $this->assertFalse($this->rule->passes('platform_version', $invalidPlatformVersion), "$invalidPlatformVersion passed, while it should not have!");

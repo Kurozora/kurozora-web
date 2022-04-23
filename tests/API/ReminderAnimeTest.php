@@ -18,7 +18,7 @@ class ReminderAnimeTest extends TestCase
      * @return void
      * @test
      */
-    function a_normal_user_cannot_add_anime_to_their_reminders()
+    function a_normal_user_cannot_add_anime_to_their_reminders(): void
     {
         $this->markTestIncomplete('Test will work once server sided IAP check is added.');
         // Send request to add anime to the user's reminders
@@ -45,7 +45,7 @@ class ReminderAnimeTest extends TestCase
      * @return void
      * @test
      */
-    function a_pro_user_can_add_anime_to_their_reminders()
+    function a_pro_user_can_add_anime_to_their_reminders(): void
     {
         // Send request to add anime to the user's reminders
         /** @var Anime $anime */
@@ -83,7 +83,7 @@ class ReminderAnimeTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_can_remove_anime_from_their_reminders()
+    function a_user_can_remove_anime_from_their_reminders(): void
     {
         // Add the anime to the user's reminders
         /** @var Anime $anime */
@@ -122,7 +122,7 @@ class ReminderAnimeTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_can_get_a_list_of_the_anime_in_their_reminders()
+    function a_user_can_get_a_list_of_the_anime_in_their_reminders(): void
     {
         // Add some anime to the user's reminders
         /** @var Anime[] $animeList */

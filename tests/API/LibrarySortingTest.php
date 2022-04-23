@@ -31,7 +31,7 @@ class LibrarySortingTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_sort_their_library_based_on_title()
+    function user_can_sort_their_library_based_on_title(): void
     {
         // Send the request and sort by title ascending
         $response = $this->auth()->json('GET', 'v1/me/library', [
@@ -56,7 +56,7 @@ class LibrarySortingTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_sort_their_library_based_on_age()
+    function user_can_sort_their_library_based_on_age(): void
     {
         // Send the request and sort by age newest
         $response = $this->auth()->json('GET', 'v1/me/library', [
@@ -81,7 +81,7 @@ class LibrarySortingTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_sort_their_library_based_on_rating()
+    function user_can_sort_their_library_based_on_rating(): void
     {
         // Send the request and sort by rating best
         $response = $this->auth()->json('GET', 'v1/me/library', [
@@ -106,7 +106,7 @@ class LibrarySortingTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_sort_their_library_based_on_their_own_given_rating()
+    function user_can_sort_their_library_based_on_their_own_given_rating(): void
     {
         // Send the request and sort by my rating best
         $response = $this->auth()->json('GET', 'v1/me/library', [
