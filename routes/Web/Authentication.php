@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Web\Auth\SignInWithAppleController;
 use App\Http\Controllers\Web\AuthenticatedSessionController;
+use App\Http\Controllers\Web\ConfirmedTwoFactorAuthenticationController;
 use App\Http\Controllers\Web\EmailVerificationNotificationController;
 use App\Http\Controllers\Web\EmailVerificationPromptController;
 use App\Http\Controllers\Web\NewPasswordController;
@@ -11,20 +12,25 @@ use App\Http\Controllers\Web\SignUpUserController;
 use App\Http\Controllers\Web\TwoFactorAuthenticatedSessionController;
 use App\Http\Controllers\Web\TwoFactorAuthenticationController;
 use App\Http\Controllers\Web\TwoFactorQrCodeController;
+use App\Http\Controllers\Web\TwoFactorSecretKeyController;
 use App\Http\Controllers\Web\VerifyEmailController;
+use Illuminate\Support\Facades\Route;
 
+// Sign In
 Route::get('/sign-in', [AuthenticatedSessionController::class, 'create'])
     ->middleware(['guest'])
     ->name('sign-in');
 
 Route::post('/sign-in', [AuthenticatedSessionController::class, 'store'])
-    ->middleware(['guest', 'honey', 'honey-recaptcha', 'throttle:5,1']);
+    ->middleware(['guest', 'honey', 'honey-recaptcha', 'throttle:6,1']);
 
+// Sign Out
 Route::post('/sign-out', [AuthenticatedSessionController::class, 'destroy'])
     ->name('sign-out');
 
+// Sign Up
 Route::get('/sign-up', [SignUpUserController::class, 'create'])
-    ->middleware(['guest', 'throttle:5,1'])
+    ->middleware(['guest', 'throttle:6,1'])
     ->name('sign-up');
 
 Route::post('/sign-up', [SignUpUserController::class, 'store'])
@@ -42,6 +48,7 @@ Route::prefix('/siwa')
             ->name('.callback');
     });
 
+// Email Verification
 Route::name('verification')
     ->group(function () {
         Route::get('/email/verify', [EmailVerificationPromptController::class, '__invoke'])
@@ -57,6 +64,7 @@ Route::name('verification')
             ->name('.send');
     });
 
+// Password Reset
 Route::name('password')
     ->group(function () {
         Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
@@ -76,6 +84,7 @@ Route::name('password')
             ->name('.update');
     });
 
+// Two Factor Authentication
 Route::name('two-factor')
     ->group(function () {
         Route::get('/two-factor-challenge', [TwoFactorAuthenticatedSessionController::class, 'create'])
@@ -83,12 +92,16 @@ Route::name('two-factor')
             ->name('.sign-in');
 
         Route::post('/two-factor-challenge', [TwoFactorAuthenticatedSessionController::class, 'store'])
-            ->middleware(['guest'])
+            ->middleware(['guest', 'throttle:6,1'])
             ->name('.update');
 
         Route::post('/user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'store'])
             ->middleware(['auth', 'password.confirm'])
             ->name('.two-factor-authentication.store');
+
+        Route::post('/user/confirmed-two-factor-authentication', [ConfirmedTwoFactorAuthenticationController::class, 'store'])
+            ->middleware(['auth', 'password.confirm'])
+            ->name('.two-factor-authentication.confirm');
 
         Route::delete('/user/two-factor-authentication', [TwoFactorAuthenticationController::class, 'destroy'])
             ->middleware(['auth', 'password.confirm'])
@@ -96,13 +109,17 @@ Route::name('two-factor')
 
         Route::get('/user/two-factor-qr-code', [TwoFactorQrCodeController::class, 'show'])
             ->middleware(['auth', 'password.confirm'])
-            ->name('.two-factor-qr-code');
+            ->name('.two-factor-authentication.qr-code');
+
+        Route::get('/user/two-factor-secret-key', [TwoFactorSecretKeyController::class, 'show'])
+            ->middleware(['auth', 'password.confirm'])
+            ->name('.two-factor-authentication.secret-key');
 
         Route::get('/user/two-factor-recovery-codes', [RecoveryCodeController::class, 'index'])
             ->middleware(['auth', 'password.confirm'])
-            ->name('.two-factor-recovery-codes');
+            ->name('.two-factor-authentication.recovery-codes');
 
         Route::post('/user/two-factor-recovery-codes', [RecoveryCodeController::class, 'store'])
             ->middleware(['auth', 'password.confirm'])
-            ->name('.two-factor-recovery-codes.store');
+            ->name('.two-factor-authentication.recovery-codes.store');
     });

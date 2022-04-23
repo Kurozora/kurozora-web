@@ -3,10 +3,12 @@
 namespace App\Providers;
 
 use App\Contracts\Web\Auth\TwoFactorAuthenticationProvider as TwoFactorAuthenticationProviderContract;
+use Illuminate\Contracts\Cache\Repository;
 use PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException;
 use PragmaRX\Google2FA\Exceptions\InvalidCharactersException;
 use PragmaRX\Google2FA\Exceptions\SecretKeyTooShortException;
 use PragmaRX\Google2FA\Google2FA;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class TwoFactorAuthenticationProvider implements TwoFactorAuthenticationProviderContract
 {
@@ -18,14 +20,23 @@ class TwoFactorAuthenticationProvider implements TwoFactorAuthenticationProvider
     protected Google2FA $engine;
 
     /**
+     * The cache repository implementation.
+     *
+     * @var Repository|null
+     */
+    protected ?Repository $cache;
+
+    /**
      * Create a new two factor authentication provider instance.
      *
      * @param Google2FA $engine
+     * @param Repository|null  $cache
      * @return void
      */
-    public function __construct(Google2FA $engine)
+    public function __construct(Google2FA $engine, Repository $cache = null)
     {
         $this->engine = $engine;
+        $this->cache = $cache;
     }
 
     /**
@@ -63,9 +74,20 @@ class TwoFactorAuthenticationProvider implements TwoFactorAuthenticationProvider
      * @throws IncompatibleWithGoogleAuthenticatorException
      * @throws InvalidCharactersException
      * @throws SecretKeyTooShortException
+     * @throws InvalidArgumentException
      */
     public function verify(string $secret, string $code): bool
     {
-        return $this->engine->verifyKey($secret, $code);
+        $timestamp = $this->engine->verifyKeyNewer(
+            $secret, $code, optional($this->cache)->get($key = 'kurozora.2fa_codes.' . md5($code))
+        );
+
+        if ($timestamp !== false) {
+            optional($this->cache)->put($key, $timestamp, ($this->engine->getWindow() ?: 1) * 60);
+
+            return true;
+        }
+
+        return false;
     }
 }

@@ -44,7 +44,7 @@ class AccessTokenController
 
         // Check if the request IP is not banned from logging in
         if (!LoginAttempt::isIPAllowedToLogin($request->ip())) {
-            throw new TooManyRequestsHttpException(300, 'You have failed to login too many times. Please grab yourself a snack and try again in a bit.');
+            throw new TooManyRequestsHttpException(300, 'You have failed to sign in too many times. Please grab yourself a snack and try again in a bit.');
         }
 
         // Find the user
@@ -52,7 +52,7 @@ class AccessTokenController
 
         // Compare the passwords
         if (!$user || !Hash::check($data['password'], $user->password)) {
-            // Register the login attempt
+            // Register the sign in attempt
             LoginAttempt::registerFailedLoginAttempt($request->ip());
 
             // Throw authorization error message

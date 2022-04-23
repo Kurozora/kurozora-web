@@ -2,12 +2,11 @@
 
 namespace App\Actions\Web\Auth;
 
+use App\Contracts\Web\Auth\TwoFactorAuthenticationProvider;
+use App\Events\TwoFactorAuthenticationEnabled;
 use App\Helpers\RecoveryCode;
-use App\Providers\TwoFactorAuthenticationProvider;
+use App\Models\User;
 use Illuminate\Support\Collection;
-use PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException;
-use PragmaRX\Google2FA\Exceptions\InvalidCharactersException;
-use PragmaRX\Google2FA\Exceptions\SecretKeyTooShortException;
 
 class EnableTwoFactorAuthentication
 {
@@ -32,14 +31,10 @@ class EnableTwoFactorAuthentication
     /**
      * Enable two factor authentication for the user.
      *
-     * @param mixed $user
-     *
+     * @param User|null $user
      * @return void
-     * @throws IncompatibleWithGoogleAuthenticatorException
-     * @throws InvalidCharactersException
-     * @throws SecretKeyTooShortException
      */
-    public function __invoke(mixed $user)
+    public function __invoke(?User $user): void
     {
         $user->forceFill([
             'two_factor_secret' => encrypt($this->provider->generateSecretKey()),
@@ -47,5 +42,7 @@ class EnableTwoFactorAuthentication
                 return RecoveryCode::generate();
             })->all())),
         ])->save();
+
+        TwoFactorAuthenticationEnabled::dispatch($user);
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Traits\Web\Auth;
 
 use Auth;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Validation\ValidationException;
 
 trait ConfirmsPasswords
@@ -32,7 +31,7 @@ trait ConfirmsPasswords
     /**
      * Start confirming the user's password.
      *
-     * @param  string  $confirmableId
+     * @param string $confirmableId
      * @return void
      */
     public function startConfirmingPassword(string $confirmableId)
@@ -57,7 +56,7 @@ trait ConfirmsPasswords
      *
      * @return void
      */
-    public function stopConfirmingPassword()
+    public function stopConfirmingPassword(): void
     {
         $this->confirmingPassword = false;
         $this->confirmableId = null;
@@ -68,16 +67,13 @@ trait ConfirmsPasswords
      * Confirm the user's password.
      *
      * @return void
-     * @throws ValidationException
      */
-    public function confirmPassword()
+    public function confirmPassword(): void
     {
-        $authenticated = Auth::validate([
-            'email' => Auth::user()->email,
-            'password' => $this->confirmablePassword,
-        ]);
-
-        if (!$authenticated) {
+        if (!Auth::validate([
+            'username' => Auth::user()->username,
+            'password' => $this->confirmablePassword
+        ])) {
             throw ValidationException::withMessages([
                 'confirmable_password' => [__('This password does not match our records.')],
             ]);
@@ -95,24 +91,22 @@ trait ConfirmsPasswords
     /**
      * Ensure that the user's password has been recently confirmed.
      *
-     * @param ?int $maximumSecondsSinceConfirmation
-     *
+     * @param int|null $maximumSecondsSinceConfirmation
      * @return void
-     * @throws AuthorizationException
      */
-    protected function ensurePasswordIsConfirmed(?int $maximumSecondsSinceConfirmation = null)
+    protected function ensurePasswordIsConfirmed(?int $maximumSecondsSinceConfirmation = null): void
     {
         $maximumSecondsSinceConfirmation = $maximumSecondsSinceConfirmation ?: config('auth.password_timeout', 900);
 
-        return $this->passwordIsConfirmed($maximumSecondsSinceConfirmation)
-            ? null
-            : throw new AuthorizationException('There was an error while authenticating.');
+        if (!$this->passwordIsConfirmed($maximumSecondsSinceConfirmation)) {
+            abort(403);
+        }
     }
 
     /**
      * Determine if the user's password has been recently confirmed.
      *
-     * @param ?int $maximumSecondsSinceConfirmation
+     * @param int|null $maximumSecondsSinceConfirmation
      * @return bool
      */
     protected function passwordIsConfirmed(?int $maximumSecondsSinceConfirmation = null): bool

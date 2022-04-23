@@ -2,11 +2,11 @@
 
 namespace App\Actions\Web\Auth;
 
+use App\Helpers\SignInRateLimiter;
 use Auth;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use App\Helpers\SignInRateLimiter;
 
 class AttemptToAuthenticate
 {
@@ -58,7 +58,7 @@ class AttemptToAuthenticate
      * @return void
      * @throws ValidationException
      */
-    protected function throwFailedAuthenticationException(Request $request)
+    protected function throwFailedAuthenticationException(Request $request): void
     {
         $this->limiter->increment($request);
 
@@ -73,7 +73,7 @@ class AttemptToAuthenticate
      * @param Request $request
      * @return void
      */
-    protected function fireFailedEvent(Request $request)
+    protected function fireFailedEvent(Request $request): void
     {
         event(new Failed('web', null, [
             'email' => $request->email,

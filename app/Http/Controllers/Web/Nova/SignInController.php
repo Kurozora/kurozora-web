@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 class SignInController extends LoginController
 {
     /**
-     * Handle a login request to the application.
+     * Handle a sign in request to the application.
      *
      * @param Request $request
      * @return JsonResponse|Response|RedirectResponse
@@ -28,7 +28,7 @@ class SignInController extends LoginController
         $this->validateLogin($request);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
-        // the login attempts for this application. We'll key this by the username and
+        // the sign in attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
         if (method_exists($this, 'hasTooManyLoginAttempts') &&
             $this->hasTooManyLoginAttempts($request)) {
@@ -37,7 +37,7 @@ class SignInController extends LoginController
             return $this->sendLockoutResponse($request);
         }
 
-        return $this->loginPipeline($request)->then(function () {
+        return $this->signInPipeline($request)->then(function () {
             return redirect()->intended($this->redirectPath());
         });
     }
@@ -48,7 +48,7 @@ class SignInController extends LoginController
      * @param Request $request
      * @return Pipeline
      */
-    protected function loginPipeline(Request $request): Pipeline
+    protected function signInPipeline(Request $request): Pipeline
     {
         return (new Pipeline(app()))->send($request)->through(array_filter([
             RedirectIfTwoFactorAuthenticatable::class,
