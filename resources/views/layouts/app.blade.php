@@ -4,15 +4,15 @@
     </x-slot>
 
     <x-slot:themeColor>
-        {{ $themeColor }}
+        {{ $themeColor ?? null }}
     </x-slot>
 
     <x-slot:lightThemeColor>
-        {{ $lightThemeColor }}
+        {{ $lightThemeColor ?? null }}
     </x-slot>
 
     <x-slot:darkThemeColor>
-        {{ $darkThemeColor }}
+        {{ $darkThemeColor ?? null }}
     </x-slot>
 
     <x-slot:meta>

@@ -7,9 +7,6 @@ use App\Actions\Web\Auth\EnableTwoFactorAuthentication;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException;
-use PragmaRX\Google2FA\Exceptions\InvalidCharactersException;
-use PragmaRX\Google2FA\Exceptions\SecretKeyTooShortException;
 
 class TwoFactorAuthenticationController extends Controller
 {
@@ -19,9 +16,6 @@ class TwoFactorAuthenticationController extends Controller
      * @param Request $request
      * @param EnableTwoFactorAuthentication $enable
      * @return RedirectResponse
-     * @throws IncompatibleWithGoogleAuthenticatorException
-     * @throws InvalidCharactersException
-     * @throws SecretKeyTooShortException
      */
     public function store(Request $request, EnableTwoFactorAuthentication $enable): RedirectResponse
     {

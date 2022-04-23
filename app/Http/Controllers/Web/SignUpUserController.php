@@ -64,7 +64,7 @@ class SignUpUserController extends Controller
 
         event(new Registered($newUser));
 
-        return $this->loginPipeline($request)->then(function () {
+        return $this->signInPipeline($request)->then(function () {
             Session::flash('success', __('Account created successfully! Please check your email for confirmation.'));
 
             return redirect()->intended();
@@ -77,7 +77,7 @@ class SignUpUserController extends Controller
      * @param SignUpRequest $request
      * @return Pipeline
      */
-    protected function loginPipeline(SignUpRequest $request): Pipeline
+    protected function signInPipeline(SignUpRequest $request): Pipeline
     {
         return (new Pipeline(app()))->send($request)->through(array_filter([
             AttemptToAuthenticate::class,

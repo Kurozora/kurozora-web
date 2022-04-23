@@ -16,7 +16,7 @@ class AuthenticateSession extends BaseAuthenticateSession
      *
      * @throws AuthenticationException
      */
-    protected function logout($request)
+    protected function logout($request): void
     {
         $this->guard()->logoutCurrentDevice();
 

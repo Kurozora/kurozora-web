@@ -36,7 +36,7 @@ class SignOutOtherSessionsForm extends Component
      *
      * @return void
      */
-    public function confirmSignOut()
+    public function confirmSignOut(): void
     {
         $this->password = '';
 
@@ -52,8 +52,12 @@ class SignOutOtherSessionsForm extends Component
      * @throws ValidationException
      * @throws AuthenticationException
      */
-    public function signOutOtherBrowserSessions()
+    public function signOutOtherBrowserSessions(): void
     {
+        if (config('session.driver') !== 'database') {
+            return;
+        }
+
         $this->resetErrorBag();
 
         if (!Hash::check($this->password, Auth::user()->password)) {
@@ -66,6 +70,10 @@ class SignOutOtherSessionsForm extends Component
 
         $this->deleteOtherSessionRecords();
 
+        request()->session()->put([
+            'password_hash_' . Auth::getDefaultDriver() => Auth::user()->getAuthPassword(),
+        ]);
+
         $this->confirmingSignOut = false;
 
         $this->emit('signedOutBrowser');
@@ -76,13 +84,15 @@ class SignOutOtherSessionsForm extends Component
      *
      * @return void
      */
-    protected function deleteOtherSessionRecords()
+    protected function deleteOtherSessionRecords(): void
     {
-       Session::where('user_id', Auth::user()->id)
-           ->where('id', '!=', session()->getId())
-           ->get()
-           ->each
-           ->delete();
+        if (config('session.driver') !== 'database') {
+            return;
+        }
+
+        Session::where('user_id', Auth::user()->getAuthIdentifier())
+            ->where('id', '!=', request()->session()->getId())
+            ->delete();
     }
 
     /**
@@ -92,13 +102,17 @@ class SignOutOtherSessionsForm extends Component
      */
     public function getSessionsProperty(): Collection
     {
-        $otherSessions = Session::where('user_id', Auth::user()->id)
-            ->where('id', '!=', session()->getId())
+        if (config('session.driver') !== 'database') {
+            return collect();
+        }
+
+        $otherSessions = Session::where('user_id', Auth::user()->getAuthIdentifier())
+            ->where('id', '!=', request()->session()->getId())
             ->orderBy('last_activity', 'desc')
             ->get();
 
-        $currentSession = Session::where('user_id', Auth::user()->id)
-            ->where('id', session()->getId())
+        $currentSession = Session::where('user_id', Auth::user()->getAuthIdentifier())
+            ->where('id', request()->session()->getId())
             ->first();
 
         return $otherSessions->prepend($currentSession)
@@ -112,7 +126,7 @@ class SignOutOtherSessionsForm extends Component
                     'platform_version'  => $sessionAttribute->platform_version ?? 'Unknown',
                     'device_model'      => $sessionAttribute->device_model ?? 'Unknown',
                     'ip_address'        => $sessionAttribute->ip_address ?? 'Unknown',
-                    'is_current_device' => $session->id === session()->getId(),
+                    'is_current_device' => $session->id === request()->session()->getId(),
                     'last_activity'     => Carbon::createFromTimestamp($session->last_activity)->diffForHumans(),
                 ];
             });
