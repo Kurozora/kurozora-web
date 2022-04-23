@@ -2,6 +2,7 @@
 
 namespace App\Actions\Web\Auth;
 
+use App\Events\TwoFactorAuthenticationChallenged;
 use App\Helpers\SignInRateLimiter;
 use App\Models\User;
 use App\Traits\Web\Auth\TwoFactorAuthenticatable;
@@ -24,7 +25,7 @@ class RedirectIfTwoFactorAuthenticatable
     /**
      * Create a new controller instance.
      *
-     * @param SignInRateLimiter  $limiter
+     * @param SignInRateLimiter $limiter
      *
      * @return void
      */
@@ -40,17 +41,16 @@ class RedirectIfTwoFactorAuthenticatable
      * @param callable $next
      *
      * @return mixed
-     * @throws ValidationException
      */
     public function handle(Request $request, callable $next): mixed
     {
         $user = $this->validateCredentials($request);
 
         if (optional($user)->two_factor_secret &&
+            !is_null(optional($user)->two_factor_confirmed_at) &&
             in_array(TwoFactorAuthenticatable::class, class_uses_recursive($user))) {
             return $this->twoFactorChallengeResponse($request, $user);
         }
-
         return $next($request);
     }
 
@@ -60,7 +60,6 @@ class RedirectIfTwoFactorAuthenticatable
      * @param Request $request
      *
      * @return mixed
-     * @throws ValidationException
      */
     protected function validateCredentials(Request $request): mixed
     {
@@ -77,16 +76,14 @@ class RedirectIfTwoFactorAuthenticatable
      * Throw a failed authentication validation exception.
      *
      * @param Request $request
-     *
      * @return void
-     * @throws ValidationException
      */
-    protected function throwFailedAuthenticationException(Request $request)
+    protected function throwFailedAuthenticationException(Request $request): void
     {
         $this->limiter->increment($request);
 
         throw ValidationException::withMessages([
-            'email' => [__('auth.failed')],
+            'email' => [trans('auth.failed')],
         ]);
     }
 
@@ -95,10 +92,9 @@ class RedirectIfTwoFactorAuthenticatable
      *
      * @param Request $request
      * @param Authenticatable|null $user
-     *
      * @return void
      */
-    protected function fireFailedEvent(Request $request, Authenticatable|null $user = null)
+    protected function fireFailedEvent(Request $request, ?Authenticatable $user = null): void
     {
         event(new Failed('web', $user, [
             'email' => $request->email,
@@ -110,17 +106,20 @@ class RedirectIfTwoFactorAuthenticatable
      * Get the two factor authentication enabled response.
      *
      * @param Request $request
-     * @param mixed $user
-     *
+     * @param User|null $user
      * @return Response
      */
-    protected function twoFactorChallengeResponse(Request $request, mixed $user): Response
+    protected function twoFactorChallengeResponse(Request $request, ?User $user): Response
     {
         $request->session()->put([
             'sign-in.id' => $user->getKey(),
             'sign-in.remember' => $request->filled('remember'),
         ]);
 
-        return redirect()->route('two-factor.sign-in');
+        TwoFactorAuthenticationChallenged::dispatch($user);
+
+        return $request->wantsJson()
+            ? response()->json(['two_factor' => true])
+            : redirect()->route('two-factor.sign-in');
     }
 }

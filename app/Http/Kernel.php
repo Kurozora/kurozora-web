@@ -10,6 +10,7 @@ use App\Http\Middleware\ExploreCategoryAlwaysEnabled;
 use App\Http\Middleware\KAuthenticate;
 use App\Http\Middleware\NoSessionForBotsMiddleware;
 use App\Http\Middleware\PreventRequestsDuringMaintenance;
+use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\TrustProxies;
 use App\Http\Middleware\VerifyCsrfToken;
@@ -21,13 +22,13 @@ use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
 use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
+use Illuminate\Http\Middleware\HandleCors;
 use Illuminate\Http\Middleware\SetCacheHeaders;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Routing\Middleware\ValidateSignature;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Laravel\Nova\Http\Middleware\RedirectIfAuthenticated;
 
 class Kernel extends HttpKernel
 {
@@ -41,7 +42,7 @@ class Kernel extends HttpKernel
     protected $middleware = [
        // \App\Http\Middleware\TrustHosts::class,
         TrustProxies::class,
-       // \Illuminate\Http\Middleware\HandleCors::class,
+        HandleCors::class,
         PreventRequestsDuringMaintenance::class,
         ValidatePostSize::class,
         TrimStrings::class,
@@ -59,7 +60,7 @@ class Kernel extends HttpKernel
             AddQueuedCookiesToResponse::class,
             NoSessionForBotsMiddleware::class,
             StartSession::class,
-            AuthenticateSession::class,
+            'auth.session',
             ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
             SubstituteBindings::class,
@@ -83,6 +84,7 @@ class Kernel extends HttpKernel
         'auth' => KAuthenticate::class,
         'auth.basic' => AuthenticateWithBasicAuth::class,
         'auth.kurozora' => CheckKurozoraUserAuthentication::class,
+        'auth.session' => AuthenticateSession::class,
         'cache.headers' => SetCacheHeaders::class,
         'can' => Authorize::class,
         'guest' => RedirectIfAuthenticated::class,

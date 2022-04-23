@@ -9,6 +9,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException;
 use PragmaRX\Google2FA\Exceptions\InvalidCharactersException;
 use PragmaRX\Google2FA\Exceptions\SecretKeyTooShortException;
+use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response;
 
 class TwoFactorSignInRequest extends FormRequest
@@ -16,12 +17,12 @@ class TwoFactorSignInRequest extends FormRequest
     /**
      * The user attempting the two factor challenge.
      *
-     * @var mixed
+     * @var User|null
      */
-    protected mixed $challengedUser = null;
+    protected ?User $challengedUser = null;
 
     /**
-     * Indicates if the user wished to be remembered after login.
+     * Indicates if the user wished to be remembered after sign in.
      *
      * @var bool
      */
@@ -57,12 +58,17 @@ class TwoFactorSignInRequest extends FormRequest
      * @throws IncompatibleWithGoogleAuthenticatorException
      * @throws InvalidCharactersException
      * @throws SecretKeyTooShortException
+     * @throws InvalidArgumentException
      */
     public function hasValidCode(): bool
     {
-        return $this->code && app(TwoFactorAuthenticationProvider::class)->verify(
-                decrypt($this->challengedUser()->two_factor_secret), $this->code
-            );
+        return $this->code && tap(app(TwoFactorAuthenticationProvider::class)->verify(
+            decrypt($this->challengedUser()->two_factor_secret), $this->code
+        ), function ($result) {
+            if ($result) {
+                $this->session()->forget('sign-in.id');
+            }
+        });
     }
 
     /**
@@ -76,24 +82,43 @@ class TwoFactorSignInRequest extends FormRequest
             return null;
         }
 
-        return collect($this->challengedUser()->recoveryCodes())->first(function ($code) {
+        return tap(collect($this->challengedUser()->recoveryCodes())->first(function ($code) {
             return hash_equals($this->recovery_code, $code) ? $code : null;
+        }), function ($code) {
+            if ($code) {
+                $this->session()->forget('sign-in.id');
+            }
         });
+    }
+
+    /**
+     * Determine if there is a challenged user in the current session.
+     *
+     * @return bool
+     */
+    public function hasChallengedUser(): bool
+    {
+        if ($this->challengedUser) {
+            return true;
+        }
+
+        return $this->session()->has('sign-in.id') &&
+            User::find($this->session()->get('sign-in.id'));
     }
 
     /**
      * Get the user that is attempting the two factor challenge.
      *
-     * @return mixed
+     * @return User|null
      */
-    public function challengedUser(): mixed
+    public function challengedUser(): ?User
     {
         if ($this->challengedUser) {
             return $this->challengedUser;
         }
 
         if (!$this->session()->has('sign-in.id') ||
-            !$user = User::find($this->session()->pull('sign-in.id'))) {
+            !$user = User::find($this->session()->get('sign-in.id'))) {
             throw new HttpResponseException($this->failedTwoFactorSignInResponse());
         }
 
@@ -107,11 +132,12 @@ class TwoFactorSignInRequest extends FormRequest
      */
     public function failedTwoFactorSignInResponse(): Response
     {
-        return redirect()->route('sign-in')->withErrors(['email' => __('The provided two factor authentication code was invalid.')]);
+        return redirect()->route('two-factor.sign-in')
+            ->withErrors(['code' => __('The provided two factor authentication code was invalid.')]);
     }
 
     /**
-     * Determine if the user wanted to be remembered after login.
+     * Determine if the user wanted to be remembered after sign in.
      *
      * @return bool
      */

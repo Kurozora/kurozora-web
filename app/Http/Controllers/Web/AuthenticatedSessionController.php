@@ -36,7 +36,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(SignInRequest $request): RedirectResponse
     {
-        return $this->loginPipeline($request)->then(function () {
+        return $this->signInPipeline($request)->then(function () {
             return redirect()->intended();
         });
     }
@@ -47,7 +47,7 @@ class AuthenticatedSessionController extends Controller
      * @param SignInRequest $request
      * @return Pipeline
      */
-    protected function loginPipeline(SignInRequest $request): Pipeline
+    protected function signInPipeline(SignInRequest $request): Pipeline
     {
         return (new Pipeline(app()))->send($request)->through(array_filter([
             RedirectIfTwoFactorAuthenticatable::class,

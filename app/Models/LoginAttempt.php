@@ -4,7 +4,7 @@ namespace App\Models;
 
 class LoginAttempt extends KModel
 {
-    // How far back should we check for login attempts (minutes)
+    // How far back should we check for sign in attempts (minutes)
     const CHECK_TIMESPAN = 5;
 
     // How many failed attempts do we tolerate in the timespan
@@ -15,7 +15,7 @@ class LoginAttempt extends KModel
     protected $table = self::TABLE_NAME;
 
     /**
-     * Checks if the given IP is allowed to login (in terms of login requests)
+     * Checks if the given IP is allowed to sign in (in terms of sign in requests)
      *
      * @param string $ipAddress
      * @return bool
@@ -31,12 +31,12 @@ class LoginAttempt extends KModel
     }
 
     /**
-     * Registers a failed login attempt for an IP address
+     * Registers a failed sign in attempt for an IP address
      *
      * @param string $ipAddress
      */
     public static function registerFailedLoginAttempt(string $ipAddress)
     {
-        LoginAttempt::create(['ip_address'=> $ipAddress]);
+        LoginAttempt::create(['ip_address' => $ipAddress]);
     }
 }
