@@ -2,8 +2,8 @@
 
 namespace Tests\API;
 
-use Exception;
 use App\Notifications\ResetPassword;
+use Exception;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Notification;
 use Tests\TestCase;
@@ -30,7 +30,7 @@ class ResetPasswordTest extends TestCase
      * @return void
      * @test
      */
-    function password_reset_cannot_be_requested_with_an_invalid_email_address_format()
+    function password_reset_cannot_be_requested_with_an_invalid_email_address_format(): void
     {
         $response = $this->json('POST', 'v1/users/reset-password', [
             'email' => 'not_an_email'
@@ -44,7 +44,7 @@ class ResetPasswordTest extends TestCase
      * @return void
      * @test
      */
-    function password_request_can_be_requested_with_known_email_address()
+    function password_request_can_be_requested_with_known_email_address(): void
     {
         $response = $this->json('POST', 'v1/users/reset-password', [
             'email' => $this->user->email
@@ -59,7 +59,7 @@ class ResetPasswordTest extends TestCase
      * @test
      * @throws Exception
      */
-    function password_reset_email_is_sent_to_known_email_address()
+    function password_reset_email_is_sent_to_known_email_address(): void
     {
         // Attempt to request password reset
         $response = $this->json('POST', 'v1/users/reset-password', [
@@ -79,7 +79,7 @@ class ResetPasswordTest extends TestCase
      * @return void
      * @test
      */
-    function password_request_can_be_requested_with_unknown_email_address()
+    function password_request_can_be_requested_with_unknown_email_address(): void
     {
         $response = $this->json('POST', 'v1/users/reset-password', [
             'email' => 'unknown@example.com'
@@ -94,7 +94,7 @@ class ResetPasswordTest extends TestCase
      * @test
      * @throws Exception
      */
-    function password_reset_email_is_not_sent_to_unknown_email_address()
+    function password_reset_email_is_not_sent_to_unknown_email_address(): void
     {
         // Attempt to request password reset
         $response = $this->json('POST', 'v1/users/reset-password', [

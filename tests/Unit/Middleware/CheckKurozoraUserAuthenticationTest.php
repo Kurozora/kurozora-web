@@ -21,7 +21,7 @@ class CheckKurozoraUserAuthenticationTest extends TestCase
     }
 
     /** @test */
-    function routes_that_require_authentication_cannot_be_accessed_without_being_authenticated()
+    function routes_that_require_authentication_cannot_be_accessed_without_being_authenticated(): void
     {
         $response = $this->get('/auth-required');
 
@@ -29,7 +29,7 @@ class CheckKurozoraUserAuthenticationTest extends TestCase
     }
 
     /** @test */
-    function routes_that_require_authentication_can_be_accessed_when_authenticated()
+    function routes_that_require_authentication_can_be_accessed_when_authenticated(): void
     {
         $response = $this->auth()->get('/auth-required');
         $json = $response->json();
@@ -40,7 +40,7 @@ class CheckKurozoraUserAuthenticationTest extends TestCase
     }
 
     /** @test */
-    function routes_with_optional_authentication_can_be_accessed_without_being_authenticated()
+    function routes_with_optional_authentication_can_be_accessed_without_being_authenticated(): void
     {
         $response = $this->get('/auth-optional');
         $json = $response->json();
@@ -50,7 +50,7 @@ class CheckKurozoraUserAuthenticationTest extends TestCase
     }
 
     /** @test */
-    function routes_with_optional_authentication_can_be_accessed_when_authenticated()
+    function routes_with_optional_authentication_can_be_accessed_when_authenticated(): void
     {
         $response = $this->auth()->get('/auth-optional');
         $json = $response->json();
@@ -65,7 +65,7 @@ class CheckKurozoraUserAuthenticationTest extends TestCase
      *
      * @return void
      */
-    private function registerTestRoutes()
+    private function registerTestRoutes(): void
     {
         $userInfoResponse = function()
         {

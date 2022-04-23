@@ -188,7 +188,7 @@ class MALImportTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_import_mal_library_with_overwrite_behavior()
+    function user_can_import_mal_library_with_overwrite_behavior(): void
     {
         // Attach anime with id 21
         $anime = Anime::firstWhere('mal_id', 21);
@@ -226,7 +226,7 @@ class MALImportTest extends TestCase
      *
      * @test
      */
-    function user_can_import_mal_library_with_merge_behavior()
+    function user_can_import_mal_library_with_merge_behavior(): void
     {
         // Attach anime with id 21
         $anime = Anime::firstWhere('mal_id', 21);

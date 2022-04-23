@@ -16,7 +16,7 @@ class CharactersTest extends TestCase
      * @return void
      * @test
      */
-    public function a_user_can_view_specific_character_details()
+    public function a_user_can_view_specific_character_details(): void
     {
         $response = $this->get('v1/characters/'.$this->character->id);
 
@@ -33,7 +33,7 @@ class CharactersTest extends TestCase
      * @return void
      * @test
      */
-    public function a_user_can_view_specific_character_details_including_relationships()
+    public function a_user_can_view_specific_character_details_including_relationships(): void
     {
         $response = $this->get('v1/characters/'.$this->character->id . '?include=shows,people');
 
@@ -56,7 +56,7 @@ class CharactersTest extends TestCase
      * @return void
      * @test
      */
-    public function a_user_can_view_specific_character_people()
+    public function a_user_can_view_specific_character_people(): void
     {
         $response = $this->get('v1/characters/'.$this->character->id.'/people');
 
@@ -73,7 +73,7 @@ class CharactersTest extends TestCase
      * @return void
      * @test
      */
-    public function a_user_can_view_specific_character_anime()
+    public function a_user_can_view_specific_character_anime(): void
     {
         $response = $this->get('v1/characters/'.$this->character->id.'/anime');
 

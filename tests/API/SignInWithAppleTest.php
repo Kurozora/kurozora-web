@@ -18,7 +18,7 @@ class SignInWithAppleTest extends TestCase
      * @return void
      * @test
      */
-    function an_account_can_be_signed_up_via_siwa()
+    function an_account_can_be_signed_up_via_siwa(): void
     {
         $this->json('POST', 'v1/users/siwa/signin', [
             'token'             => 'eyJraWQiOiJZdXlYb1kiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwcGxlaWQuYXBwbGUuY29tIiwiYXVkIjoiYXBwLmt1cm96b3JhLnRyYWNrZXIiLCJleHAiOjE2NDY1MjMyMTksImlhdCI6MTY0NjQzNjgxOSwic3ViIjoiMDAxMTUxLjZhNTRmM2JhZmE1MDQxYmJhMDY5M2ZkMTA3OWIwZTc4LjEzNTQiLCJjX2hhc2giOiJwMlJEcUdXNmlsSmFxVnhtOVZpVHVBIiwiZW1haWwiOiJtdTR5NzZtN2Q3QHByaXZhdGVyZWxheS5hcHBsZWlkLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjoidHJ1ZSIsImlzX3ByaXZhdGVfZW1haWwiOiJ0cnVlIiwiYXV0aF90aW1lIjoxNjQ2NDM2ODE5LCJub25jZV9zdXBwb3J0ZWQiOnRydWV9.GbEOfQF7bYqcjliA0ppyjWCfwLgJ-S2c6C-Cb9r9TLYME_xMgwzvb3wNwcmoqGTJCnP36ScUP0rVhyLpxKzCCPUMGAkG7EUzrQUZ00y-g8YHRnLkJspMklYA3TnSMVe01DD4_hzEwY4JC-buNay24RX8JsJJa10EO2ZP7Olf-PGv0ORXLiU8zYeWpZ7dy_hq7aScoC6s3iaTNqpuqe2mGuWYEyKMnBIHNZqqejgHaGHf6xpWfIJVP7waLUAeU4g7wfzGxXFQLHc3RqdpsqT6aE7ueN5opotudqpZsMDX9QG0AZYhK4Jwr4c20GNwXJj3YjZPxwgLvxwqI_Gj7z4Ivw',
@@ -45,7 +45,7 @@ class SignInWithAppleTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_can_sign_in_via_SIWA()
+    function a_user_can_sign_in_via_SIWA(): void
     {
         // Create a SIWA user
         User::factory()->create([

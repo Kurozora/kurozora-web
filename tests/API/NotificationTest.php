@@ -20,7 +20,7 @@ class NotificationTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_can_get_their_own_notifications()
+    function a_user_can_get_their_own_notifications(): void
     {
         // Add 10 notifications to the user
         $this->addNotificationsToUser($this->user, 10);
@@ -46,7 +46,7 @@ class NotificationTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_can_get_the_details_of_their_notification()
+    function a_user_can_get_the_details_of_their_notification(): void
     {
         // Add a notification to the user
         $this->addNotificationsToUser($this->user, 1);
@@ -70,7 +70,7 @@ class NotificationTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_cannot_get_the_details_of_another_users_notification()
+    function a_user_cannot_get_the_details_of_another_users_notification(): void
     {
         /** @var User $otherUser */
         $otherUser = User::factory()->create();
@@ -94,7 +94,7 @@ class NotificationTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_can_delete_their_own_notification()
+    function a_user_can_delete_their_own_notification(): void
     {
         // Add a notification to the user
         $this->addNotificationsToUser($this->user, 1);
@@ -119,7 +119,7 @@ class NotificationTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_cannot_delete_the_notification_of_someone_else()
+    function a_user_cannot_delete_the_notification_of_someone_else(): void
     {
         /** @var User $otherUser */
         $otherUser = User::factory()->create();
@@ -143,7 +143,7 @@ class NotificationTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_can_mark_a_single_notification_as_read()
+    function a_user_can_mark_a_single_notification_as_read(): void
     {
         // Add a notification to the user
         $this->addNotificationsToUser($this->user, 1);
@@ -171,7 +171,7 @@ class NotificationTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_can_mark_a_single_notification_as_unread()
+    function a_user_can_mark_a_single_notification_as_unread(): void
     {
         // Add a notification to the user
         $this->addNotificationsToUser($this->user, 1);
@@ -203,7 +203,7 @@ class NotificationTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_can_mark_all_their_notifications_as_read_using_all_string()
+    function a_user_can_mark_all_their_notifications_as_read_using_all_string(): void
     {
         // Add 20 notifications to the user
         $this->addNotificationsToUser($this->user, 20);
@@ -230,7 +230,7 @@ class NotificationTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_can_mark_all_their_notifications_as_read_using_ids()
+    function a_user_can_mark_all_their_notifications_as_read_using_ids(): void
     {
         // Authenticate user for request
         $authUser = $this->auth();
@@ -271,7 +271,7 @@ class NotificationTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_can_mark_all_their_notifications_as_unread()
+    function a_user_can_mark_all_their_notifications_as_unread(): void
     {
         // Authenticate user for request
         $authUser = $this->auth();
@@ -315,7 +315,7 @@ class NotificationTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_can_mark_multiple_notifications_as_read()
+    function a_user_can_mark_multiple_notifications_as_read(): void
     {
         // Authenticate user for request
         $authUser = $this->auth();
@@ -362,7 +362,7 @@ class NotificationTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_can_mark_multiple_notifications_as_unread()
+    function a_user_can_mark_multiple_notifications_as_unread(): void
     {
         // Authenticate user for request
         $authUser = $this->auth();
@@ -412,7 +412,7 @@ class NotificationTest extends TestCase
      * @return void
      * @test
      */
-    function a_user_cannot_update_notifications_of_others()
+    function a_user_cannot_update_notifications_of_others(): void
     {
         /** @var User $otherUser */
         $otherUser = User::factory()->create();

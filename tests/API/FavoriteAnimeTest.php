@@ -18,7 +18,7 @@ class FavoriteAnimeTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_add_anime_to_their_favorites()
+    function user_can_add_anime_to_their_favorites(): void
     {
         // Send request to add anime to the user's favorites
         /** @var Anime $anime */
@@ -44,7 +44,7 @@ class FavoriteAnimeTest extends TestCase
      * @return void
      * @test
      */
-    function user_can_remove_anime_from_their_favorites()
+    function user_can_remove_anime_from_their_favorites(): void
     {
         // Add the anime to the user's favorites
         /** @var Anime $anime */

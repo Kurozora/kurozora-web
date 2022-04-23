@@ -17,7 +17,7 @@ class AnimeTest extends TestCase
      * @return void
      * @test
      */
-     public function a_user_can_view_the_cast_of_an_anime()
+     public function a_user_can_view_the_cast_of_an_anime(): void
      {
         $response = $this->json('GET', 'v1/anime/' . $this->anime->id . '/cast');
 
@@ -34,7 +34,7 @@ class AnimeTest extends TestCase
      * @return void
      * @test
      */
-    public function a_user_can_view_the_related_anime_of_an_anime()
+    public function a_user_can_view_the_related_anime_of_an_anime(): void
     {
         $response = $this->json('GET', 'v1/anime/' . $this->anime->id . '/related-shows');
 
@@ -51,7 +51,7 @@ class AnimeTest extends TestCase
      * @return void
      * @test
      */
-    public function an_authenticated_user_can_view_the_related_anime_of_an_anime_with_personal_information()
+    public function an_authenticated_user_can_view_the_related_anime_of_an_anime_with_personal_information(): void
     {
         $response = $this->auth()->json('GET', 'v1/anime/' . $this->anime->id . '/related-shows');
 

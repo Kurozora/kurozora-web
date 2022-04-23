@@ -8,13 +8,13 @@ use Tests\TestCase;
 class ValidateVendorNameTest extends TestCase
 {
     /** @var ValidateVendorName $rule */
-    private $rule;
+    private ValidateVendorName $rule;
 
-    private $validVendorNames = [
+    private array $validVendorNames = [
         'Apple'
     ];
 
-    private $invalidVendorNames = [
+    private array $invalidVendorNames = [
         'Samsung', 'Huawei', 'HP', 'Lenovo', 'Google', 'Acer', 'Asus', 'Coca Cola'
     ];
 
@@ -26,14 +26,14 @@ class ValidateVendorNameTest extends TestCase
     }
 
     /** @test */
-    function valid_vendor_names_pass()
+    function valid_vendor_names_pass(): void
     {
         foreach($this->validVendorNames as $validVendorName)
             $this->assertTrue($this->rule->passes('device_vendor', $validVendorName), "$validVendorName did not pass, while it should have!");
     }
 
     /** @test */
-    function invalid_vendor_names_dont_pass()
+    function invalid_vendor_names_dont_pass(): void
     {
         foreach($this->invalidVendorNames as $invalidVendorName)
             $this->assertFalse($this->rule->passes('device_vendor', $invalidVendorName), "$invalidVendorName passed, while it should not have!");
