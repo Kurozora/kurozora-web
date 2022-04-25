@@ -10,20 +10,21 @@ Route::prefix('/access-tokens')
             ->middleware('auth.kurozora')
             ->name('.index');
 
-        Route::prefix('{accessToken}')
+        Route::prefix('{personalAccessToken}')
             ->group(function () {
                 Route::get('/', [AccessTokenController::class, 'details'])
-                    ->middleware('auth.kurozora')
-                    ->middleware('can:get_accessToken,accessToken')
+                    ->middleware(['auth.kurozora'])
+                    ->can('get_access_token', 'personalAccessToken')
                     ->name('.details');
 
                 Route::post('/update', [AccessTokenController::class, 'update'])
-                    ->middleware('auth.kurozora')
-                    ->middleware('can:update_accessToken,accessToken')
+                    ->middleware(['auth.kurozora'])
+                    ->can('update', 'personalAccessToken')
                     ->name('.update');
 
                 Route::post('/delete', [AccessTokenController::class, 'delete'])
-                    ->middleware(['auth.kurozora', 'can:delete_accessToken,accessToken'])
+                    ->middleware(['auth.kurozora'])
+                    ->can('delete', 'personalAccessToken')
                     ->name('.delete');
             });
     });

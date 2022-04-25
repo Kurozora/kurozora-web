@@ -24,6 +24,17 @@ class SessionAttribute extends Resource
     public static $model = \App\Models\SessionAttribute::class;
 
     /**
+     * Determine if the resource should be available for the given request.
+     *
+     * @param Request $request
+     * @return bool
+     */
+    public static function authorizedToViewAny(Request $request): bool
+    {
+        return $request->user()->can('viewSessionAttributes');
+    }
+
+    /**
      * The underlying model resource instance.
      *
      * @var \App\Models\SessionAttribute|null

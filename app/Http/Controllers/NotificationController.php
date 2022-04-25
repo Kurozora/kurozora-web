@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
-use App\Http\Requests\UpdateUserNotificationsRequest;
+use App\Http\Requests\UpdateNotificationsRequest;
 use App\Http\Resources\NotificationResource;
 use App\Models\User;
 use Auth;
@@ -33,27 +33,27 @@ class NotificationController extends Controller
     /**
      * Retrieves details for a specific notification.
      *
-     * @param DatabaseNotification $notification
+     * @param DatabaseNotification $databaseNotification
      * @return JsonResponse
      */
-    public function details(DatabaseNotification $notification): JsonResponse
+    public function details(DatabaseNotification $databaseNotification): JsonResponse
     {
         return JSONResult::success([
-            'data' => NotificationResource::make($notification)
+            'data' => NotificationResource::make($databaseNotification)
         ]);
     }
 
     /**
      * Deletes the authenticated user's notification.
      *
-     * @param DatabaseNotification $notification
+     * @param DatabaseNotification $databaseNotification
      * @return JsonResponse
      * @throws Exception
      */
-    public function delete(DatabaseNotification $notification): JsonResponse
+    public function delete(DatabaseNotification $databaseNotification): JsonResponse
     {
         // Delete the notification
-        $notification->delete();
+        $databaseNotification->delete();
 
         return JSONResult::success();
     }
@@ -61,12 +61,12 @@ class NotificationController extends Controller
     /**
      * Updates a single, multiple or all notifications' status of the authenticated user.
      *
-     * @param UpdateUserNotificationsRequest $request
+     * @param UpdateNotificationsRequest $request
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws ConflictHttpException
      */
-    public function update(UpdateUserNotificationsRequest $request): JsonResponse
+    public function update(UpdateNotificationsRequest $request): JsonResponse
     {
         /** @var User $user */
         $user = $request->user();

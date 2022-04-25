@@ -167,9 +167,11 @@ class Person extends Resource
 
             HasMany::make('Cast'),
 
-            BelongsToMany::make('Anime'),
+            BelongsToMany::make('Anime')
+                ->searchable(),
 
-            BelongsToMany::make('Characters'),
+            BelongsToMany::make('Characters')
+                ->searchable(),
         ];
     }
 

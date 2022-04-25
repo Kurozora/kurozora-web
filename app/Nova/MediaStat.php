@@ -201,6 +201,17 @@ class MediaStat extends Resource
     }
 
     /**
+     * Determine if this resource is available for navigation.
+     *
+     * @param Request $request
+     * @return bool
+     */
+    public static function availableForNavigation(Request $request): bool
+    {
+        return $request->user()->can('viewMediaStats');
+    }
+
+    /**
      * Get the cards available for the request.
      *
      * @param Request $request
