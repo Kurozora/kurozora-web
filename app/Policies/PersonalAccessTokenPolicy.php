@@ -17,7 +17,7 @@ class PersonalAccessTokenPolicy
      * @param PersonalAccessToken $accessToken
      * @return bool
      */
-    public function get_accessToken(User $user, PersonalAccessToken $accessToken): bool
+    public function get_access_token(User $user, PersonalAccessToken $accessToken): bool
     {
         return $user->id === $accessToken->user->id;
     }
@@ -29,7 +29,7 @@ class PersonalAccessTokenPolicy
      * @param PersonalAccessToken $accessToken
      * @return bool
      */
-    public function update_accessToken(User $user, PersonalAccessToken $accessToken): bool
+    public function update(User $user, PersonalAccessToken $accessToken): bool
     {
         return $user->id === $accessToken->user->id;
     }
@@ -53,7 +53,7 @@ class PersonalAccessTokenPolicy
      * @param PersonalAccessToken $accessToken
      * @return bool
      */
-    public function delete_accessToken(User $user, PersonalAccessToken $accessToken): bool
+    public function delete(User $user, PersonalAccessToken $accessToken): bool
     {
         return $user->id === $accessToken->user->id;
     }

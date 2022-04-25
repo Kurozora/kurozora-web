@@ -402,7 +402,10 @@ class Anime extends Resource
         return [
             (new ScrapeAnime)
                 ->confirmText('Are you sure you want to scrape this anime?')
-                ->confirmButtonText('Scrape'),
+                ->confirmButtonText('Scrape')
+                ->canSee(function ($request) {
+                    return $request->user()->hasPermissionTo('updateAnime');
+                }),
         ];
     }
 

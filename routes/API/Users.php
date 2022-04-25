@@ -31,7 +31,8 @@ Route::prefix('/users')
         Route::prefix('{user}')
             ->group(function () {
                 Route::get('/favorite-anime', [FavoriteAnimeController::class, 'getFavorites'])
-                    ->middleware(['auth.kurozora', 'can:get_anime_favorites,user'])
+                    ->middleware(['auth.kurozora'])
+                    ->can('view_anime_favorites', 'user')
                     ->name('.favorite-anime');
 
                 Route::get('/feed-messages', [UserController::class, 'getFeedMessages'])
@@ -39,7 +40,8 @@ Route::prefix('/users')
                     ->name('.feed-messages');
 
                 Route::post('/follow', [FollowingController::class, 'followUser'])
-                    ->middleware(['auth.kurozora', 'can:follow,user'])
+                    ->middleware(['auth.kurozora'])
+                    ->can('follow', 'user')
                     ->name('.follow');
 
                 Route::get('/followers', [FollowingController::class, 'getFollowers'])

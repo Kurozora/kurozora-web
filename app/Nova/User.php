@@ -20,7 +20,6 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Ramsey\Uuid\Uuid;
 use Timothyasp\Color\Color;
-use Vyuldashev\NovaPermission\PermissionBooleanGroup;
 use Vyuldashev\NovaPermission\RoleBooleanGroup;
 
 class User extends Resource
@@ -31,6 +30,17 @@ class User extends Resource
      * @var string
      */
     public static string $model = \App\Models\User::class;
+
+    /**
+     * Determine if the resource should be available for the given request.
+     *
+     * @param Request $request
+     * @return bool
+     */
+    public static function authorizedToViewAny(Request $request): bool
+    {
+        return $request->user()->can('viewUser') || $request->user()->hasRole('admin');
+    }
 
     /**
      * The underlying model resource instance.
@@ -155,6 +165,9 @@ class User extends Resource
                 ->rules('required', 'max:255'),
 
             Text::make('Email')
+                ->canSee(function (Request $request) {
+                    return $request->user()->hasRole('admin');
+                })
                 ->sortable()
                 ->rules('required', new ValidateEmail),
 
@@ -176,8 +189,8 @@ class User extends Resource
             // Roles and permissions
             RoleBooleanGroup::make('Roles')
                 ->hideFromIndex(),
-            PermissionBooleanGroup::make('Permissions')
-                ->hideFromIndex(),
+//            PermissionBooleanGroup::make('Permissions')
+//                ->hideFromIndex(),
 
             // Display roles on index
             Text::make('Roles', function() { return $this->displayRolesForIndex(); })

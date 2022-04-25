@@ -29,7 +29,7 @@ class SessionPolicy
      * @param Session $session
      * @return bool
      */
-    public function update_session(User $user, Session $session): bool
+    public function update(User $user, Session $session): bool
     {
         return $user->id === (int) $session->user_id;
     }
@@ -53,7 +53,7 @@ class SessionPolicy
      * @param Session $session
      * @return bool
      */
-    public function delete_session(User $user, Session $session): bool
+    public function delete(User $user, Session $session): bool
     {
         return $user->id === (int) $session->user_id;
     }

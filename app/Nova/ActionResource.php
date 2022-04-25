@@ -24,10 +24,10 @@ class ActionResource extends \Laravel\Nova\Actions\ActionResource
     /**
      * Get the fields displayed by the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
-    public function fields(Request $request)
+    public function fields(Request $request): array
     {
         return [
             ID::make('ID', 'id'),
