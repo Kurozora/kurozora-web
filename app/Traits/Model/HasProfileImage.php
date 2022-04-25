@@ -48,7 +48,7 @@ trait HasProfileImage
      * @throws FileIsTooBig
      * @throws FileCannotBeAdded
      */
-    function updateProfileImage(string|UploadedFile $uploadFile, string $name = null, array $customProperties = [])
+    function updateProfileImage(string|UploadedFile $uploadFile, string $name = null, array $customProperties = []): void
     {
         // Determine media adder
         $addMedia = str($uploadFile)->startsWith(['http://', 'https://']) ? $this->addMediaFromUrl($uploadFile) : $this->addMedia($uploadFile);
@@ -76,7 +76,7 @@ trait HasProfileImage
      *
      * @return void
      */
-    public function deleteProfileImage()
+    public function deleteProfileImage(): void
     {
         $this->clearMediaCollection($this->profileImageCollectionName);
     }

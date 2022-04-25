@@ -38,6 +38,7 @@ use Spatie\IcalendarGenerator\Properties\Parameter;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Sitemap\Contracts\Sitemapable;
 use Spatie\Sluggable\HasSlug;
@@ -52,6 +53,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         HasFactory,
         HasProfileImage,
         HasRoles,
+        HasPermissions,
         HasSlug,
         HeartActionTrait,
         InteractsWithMedia,
@@ -572,7 +574,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
-     * Checks the cooldown whether the user can do a MAL import.
+     * Checks the cooldown whether the user can do an anime import.
      *
      * @return bool
      */

@@ -138,7 +138,7 @@ class LibraryController extends Controller
     }
 
     /**
-     * Allows the authenticated user to upload a MAL export file to be imported.
+     * Allows the authenticated user to upload an anime export file to be imported.
      *
      * @param ImportRequest $request
      * @return JsonResponse

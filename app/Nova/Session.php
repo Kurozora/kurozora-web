@@ -20,6 +20,17 @@ class Session extends Resource
     public static string $model = \App\Models\Session::class;
 
     /**
+     * Determine if the resource should be available for the given request.
+     *
+     * @param Request $request
+     * @return bool
+     */
+    public static function authorizedToViewAny(Request $request): bool
+    {
+        return $request->user()->can('viewSession');
+    }
+
+    /**
      * The underlying model resource instance.
      *
      * @var \App\Models\Session|null

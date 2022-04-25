@@ -20,13 +20,13 @@ class AccessTokenController
     /**
      * Displays token information
      *
-     * @param PersonalAccessToken $accessToken
+     * @param PersonalAccessToken $personalAccessToken
      * @return JsonResponse
      */
-    public function details(PersonalAccessToken $accessToken): JsonResponse
+    public function details(PersonalAccessToken $personalAccessToken): JsonResponse
     {
         return JSONResult::success([
-            'data' => AccessTokenResource::collection([$accessToken])
+            'data' => AccessTokenResource::collection([$personalAccessToken])
         ]);
     }
 
@@ -89,10 +89,10 @@ class AccessTokenController
      * Updates a session's information.
      *
      * @param UpdateSessionAttributeRequest $request
-     * @param PersonalAccessToken $accessToken
+     * @param PersonalAccessToken $personalAccessToken
      * @return JsonResponse
      */
-    function update(UpdateSessionAttributeRequest $request, PersonalAccessToken $accessToken): JsonResponse
+    function update(UpdateSessionAttributeRequest $request, PersonalAccessToken $personalAccessToken): JsonResponse
     {
         $data = $request->validated();
 
@@ -101,7 +101,7 @@ class AccessTokenController
 
         // Update APN device token
         if ($request->has('apn_device_token')) {
-            $accessToken->session_attribute->apn_device_token = $data['apn_device_token'];
+            $personalAccessToken->session_attribute->apn_device_token = $data['apn_device_token'];
             $changedFields[] = 'APN device token';
         }
 
@@ -110,7 +110,7 @@ class AccessTokenController
 
         if (count($changedFields)) {
             $displayMessage .= 'You have updated: ' . join(', ', $changedFields) . '.';
-            $accessToken->session_attribute->save();
+            $personalAccessToken->session_attribute->save();
         } else {
             $displayMessage .= 'No information was updated.';
         }
@@ -123,13 +123,13 @@ class AccessTokenController
     /**
      * Deletes a session
      *
-     * @param PersonalAccessToken $accessToken
+     * @param PersonalAccessToken $personalAccessToken
      * @return JsonResponse
      */
-    public function delete(PersonalAccessToken $accessToken): JsonResponse
+    public function delete(PersonalAccessToken $personalAccessToken): JsonResponse
     {
         // Delete the token
-        $accessToken->delete();
+        $personalAccessToken->delete();
 
         return JSONResult::success();
     }

@@ -87,6 +87,17 @@ class MediaTheme extends Resource
     }
 
     /**
+     * Determine if this resource is available for navigation.
+     *
+     * @param Request $request
+     * @return bool
+     */
+    public static function availableForNavigation(Request $request): bool
+    {
+        return $request->user()->can('viewMediaTheme');
+    }
+
+    /**
      * Handle any post-validation processing.
      *
      * @param NovaRequest $request
@@ -94,7 +105,7 @@ class MediaTheme extends Resource
      * @return void
      * @throws ValidationException
      */
-    protected static function afterValidation(NovaRequest $request, $validator)
+    protected static function afterValidation(NovaRequest $request, $validator): void
     {
         $resourceID = $request->resourceId;
         $anime = $request->post('anime');
