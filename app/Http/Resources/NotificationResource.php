@@ -34,7 +34,7 @@ class NotificationResource extends JsonResource
             'type'          => 'notifications',
             'href'          => route('api.me.notifications.details', $this->resource, false),
             'attributes'    => [
-                'type'          => class_basename($this->resource),
+                'type'          => class_basename($this->resource->type),
                 'description'   => self::getNotificationDescription($this->resource),
                 'payload'       => $this->resource->data,
                 'isRead'        => ($this->resource->read_at != null),
