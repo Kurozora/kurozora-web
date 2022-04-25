@@ -20,6 +20,17 @@ class UserLibrary extends Resource
     public static string $model = \App\Models\UserLibrary::class;
 
     /**
+     * Determine if the resource should be available for the given request.
+     *
+     * @param Request $request
+     * @return bool
+     */
+    public static function authorizedToViewAny(Request $request): bool
+    {
+        return $request->user()->can('viewUserLibrary');
+    }
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string

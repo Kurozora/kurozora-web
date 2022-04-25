@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Notifications\MALImportFinished;
+use App\Notifications\AnimeImportFinished;
 use App\Notifications\NewFeedMessageReply;
 use App\Notifications\NewFeedMessageReShare;
 use App\Notifications\NewFollower;
@@ -34,25 +34,13 @@ class NotificationResource extends JsonResource
             'type'          => 'notifications',
             'href'          => route('api.me.notifications.details', $this->resource, false),
             'attributes'    => [
-                'type'          => $this->typeWithoutNamespace($this->resource),
+                'type'          => class_basename($this->resource),
                 'description'   => self::getNotificationDescription($this->resource),
                 'payload'       => $this->resource->data,
                 'isRead'        => ($this->resource->read_at != null),
                 'createdAt'     => $this->resource->created_at->timestamp,
             ]
         ];
-    }
-
-    /**
-     * Returns the type of notification without the namespace.
-     *
-     * @param DatabaseNotification $notification
-     * @return string
-     */
-    private function typeWithoutNamespace(DatabaseNotification $notification): string
-    {
-        $class_parts = explode('\\', $notification->type);
-        return end($class_parts);
     }
 
     /**
@@ -91,8 +79,9 @@ class NotificationResource extends JsonResource
                 return $body;
 
             // Misc notifications
-            case MALImportFinished::class:
-                $body = 'Your "MyAnimeList" import request has been processed.';
+            case AnimeImportFinished::class:
+                $serviceName = self::getData($notification, 'service');
+                $body = 'Your "' . $serviceName . '" anime import request has been processed.';
 
                 if (self::hasData($notification, 'successful_count')) {
                     $body .= ' ' . self::getData($notification, 'successful_count') . ' Anime successfully imported.';

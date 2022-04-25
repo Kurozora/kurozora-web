@@ -8,12 +8,12 @@ use App\Models\User;
 use App\Nova\Metrics\ActivityLogCount;
 use App\Nova\Metrics\AnimeNSFWChart;
 use App\Nova\Metrics\NewUsers;
+use App\Nova\Tools\NovaPermissionTool;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Actions\ActionEvent;
 use Laravel\Nova\Http\Controllers\LoginController;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
-use Vyuldashev\NovaPermission\NovaPermissionTool;
 
 class NovaServiceProvider extends NovaApplicationServiceProvider
 {
@@ -22,7 +22,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         parent::boot();
 
@@ -36,29 +36,16 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     }
 
     /**
-     * Register the Nova routes.
-     *
-     * @return void
-     */
-    protected function routes()
-    {
-        Nova::routes()
-                ->withAuthenticationRoutes()
-                ->withPasswordResetRoutes()
-                ->register();
-    }
-
-    /**
      * Register the Nova gate.
      *
      * This gate determines who can access Nova in non-local environments.
      *
      * @return void
      */
-    protected function gate()
+    protected function gate(): void
     {
         Gate::define('viewNova', function (User $user) {
-            return $user->hasRole(['admin']);
+            return $user->hasRole(['superAdmin', 'admin', 'editor']);
         });
     }
 
@@ -67,7 +54,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      *
      * @return void
      */
-    protected function authorization()
+    protected function authorization(): void
     {
         $this->gate();
 
@@ -108,7 +95,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         // Disable action events
         ActionEvent::saving(function ($actionEvent) {

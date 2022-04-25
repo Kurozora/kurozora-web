@@ -14,21 +14,20 @@ class RoleSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         // Create roles
-        /** @var Role[] $roles */
-        $roles = [];
-
-        $roles['admin'] = Role::create(['name' => 'admin']);
+        Role::create(['name' => 'superAdmin']);
+        /** @var Role $adminRole */
+        $adminRole = Role::create(['name' => 'admin']);
 
         // Create permissions
         Permission::create(['name' => '*']);
 
         // Give permissions to roles
-        $roles['admin']->givePermissionTo('*');
+        $adminRole->givePermissionTo('*');
     }
 }
