@@ -42,5 +42,16 @@ return [
         'client_id' => env('APPLE_CLIENT_ID', 'app.kurozora.web.tracker'),
         'client_secret' => env('APPLE_CLIENT_SECRET'),
         'redirect' => env('APPLE_REDIRECT_URI', '/siwa/callback'),
-    ]
+    ],
+
+    'patreon' => [
+        'url' => 'https://patreon.com/' . env('PATREON_HANDLE'),
+        'username' => env('PATREON_HANDLE', 'kurozora'),
+    ],
+
+    'paypal' => [
+        'url' => 'https://paypal.com/paypalme/' . env('PAYPAL_HANDLE'),
+        'username' => env('PAYPAL_HANDLE', 'Kiritokatklian'),
+    ],
+
 ];

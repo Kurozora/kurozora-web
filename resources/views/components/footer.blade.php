@@ -1,7 +1,7 @@
 <footer class="bg-gray-100">
     <div class="max-w-7xl mx-auto px-4 pt-10 pb-6 sm:px-6">
         <div class="flex flex-wrap">
-            <div class="w-1/2 md:w-1/5 sm:w-1/3 text-center md:text-left">
+            <div class="w-1/2 sm:w-1/3 text-center md:w-1/4 md:text-left lg:w-1/6">
                 <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('Account') }}</h5>
                 <ul class="m-0 mb-4 list-none">
                     <li class="mt-2">
@@ -13,7 +13,7 @@
                 </ul>
             </div>
 
-            <div class="w-1/2 md:w-1/5 sm:w-1/3 text-center md:text-left">
+            <div class="w-1/2 sm:w-1/3 text-center md:w-1/4 md:text-left lg:w-1/6">
                 <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('Services') }}</h5>
                 <ul class="m-0 mb-4 list-none">
                     <li class="mt-2">
@@ -31,7 +31,7 @@
                 </ul>
             </div>
 
-            <div class="w-1/2 md:w-1/5 sm:w-1/3 text-center md:text-left">
+            <div class="w-1/2 sm:w-1/3 text-center md:w-1/4 md:text-left lg:w-1/6">
                 <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('About Kurozora') }}</h5>
                 <ul class="m-0 mb-4 list-none">
                     <li class="mt-2">
@@ -49,7 +49,7 @@
                 </ul>
             </div>
 
-            <div class="w-1/2 md:w-1/5 sm:w-1/3 text-center md:text-left">
+            <div class="w-1/2 sm:w-1/3 text-center md:w-1/4 md:text-left lg:w-1/6">
                 <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('Legal') }}</h5>
                 <ul class="m-0 mb-4 list-none">
                     <li class="mt-2">
@@ -61,20 +61,32 @@
                 </ul>
             </div>
 
-            <div class="w-1/2 md:w-1/5 sm:w-1/3 text-center md:text-left">
+            <div class="w-1/2 sm:w-1/3 text-center md:w-1/4 md:text-left lg:w-1/6">
                 <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('Socials') }}</h5>
                 <ul class="m-0 mb-4 list-none">
                     <li class="mt-2">
-                        <x-footer-link target="_blank" href="https://discord.gg/f3QFzGqsah">Discord</x-footer-link>
+                        <x-footer-link target="_blank" href="{{ config('social.discord.url') }}">Discord</x-footer-link>
                     </li>
                     <li class="mt-2">
-                        <x-footer-link target="_blank" href="https://www.instagram.com/kurozora_app">Instagram</x-footer-link>
+                        <x-footer-link target="_blank" href="{{ config('social.instagram.url') }}">Instagram</x-footer-link>
                     </li>
                     <li class="mt-2">
-                        <x-footer-link target="_blank" href="https://www.reddit.com/r/Kurozora">Reddit</x-footer-link>
+                        <x-footer-link target="_blank" href="{{ config('social.reddit.url') }}">Reddit</x-footer-link>
                     </li>
                     <li class="mt-2">
-                        <x-footer-link target="_blank" href="https://twitter.com/KurozoraApp">Twitter</x-footer-link>
+                        <x-footer-link target="_blank" href="{{ config('social.twitter.url') }}">Twitter</x-footer-link>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="w-1/2 sm:w-1/3 text-center md:w-1/4 md:text-left lg:w-1/6">
+                <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('Support Us') }}</h5>
+                <ul class="m-0 mb-4 list-none">
+                    <li class="mt-2">
+                        <x-footer-link target="_blank" href="{{ config('services.patreon.url') }}">Patreon</x-footer-link>
+                    </li>
+                    <li class="mt-2">
+                        <x-footer-link target="_blank" href="{{ config('services.paypal.url') }}">PayPal</x-footer-link>
                     </li>
                 </ul>
             </div>
