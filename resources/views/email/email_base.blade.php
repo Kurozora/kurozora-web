@@ -157,7 +157,7 @@
                         <tr>
                             <td style="word-break:break-word;font-size:0px;padding:0px;" align="center">
                                 <div style="cursor:auto;color:#99AAB5;font-family:Whitney, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:12px;line-height:24px;text-align:center;">
-                                    Kurozora • <a href="https://twitter.com/{{ config('social.twitter') }}" style="color:#1EB0F4;text-decoration:none;" target="_blank">{{ '@' . config('social.twitter') }}</a>
+                                    Kurozora • <a href="{{ config('social.twitter.url') }}" style="color:#1EB0F4;text-decoration:none;" target="_blank">{{ '@' . config('social.twitter') }}</a>
                                 </div>
                             </td>
                         </tr>
