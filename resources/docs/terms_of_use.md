@@ -287,7 +287,7 @@ Drenthe, Hoogeveen
 Netherlands  
 KVK: 85108596  
 BTW-ID: NL004052193B08  
-Email: kurozoraapp@gmail.com
+Email: redarkcompany@gmail.com
 
 The information contained in this web site is subject to change without notice.  
 Copyright © 2018-now Redark All rights reserved.
