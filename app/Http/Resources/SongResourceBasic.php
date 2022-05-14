@@ -30,7 +30,7 @@ class SongResourceBasic extends JsonResource
                 'amID'      => $this->resource->am_id,
                 'malID'     => $this->resource->mal_id,
                 'title'     => $this->resource->title,
-                'artist'    => $this->resource->artist,
+                'artist'    => $this->resource->artist ?? 'Unknown',
             ]
         ]);
     }
