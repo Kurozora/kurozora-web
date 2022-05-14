@@ -185,8 +185,8 @@ class Studio extends Resource
 
             Select::make('Type')
                 ->options([
-                    'anime',
-                    'manga'
+                    'anime' => 'anime',
+                    'manga' => 'manga'
                 ])
                 ->rules('required')
                 ->sortable(),
