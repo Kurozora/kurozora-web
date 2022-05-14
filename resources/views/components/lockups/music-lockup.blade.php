@@ -63,7 +63,7 @@
                 <span class="ml-1 px-2 py-1 h-full {{ $animeSong->type->color() }} text-white text-xs font-semibold whitespace-nowrap rounded-full">{{ $animeSong->type->abbreviated() . ' #' . $animeSong->position }}</span>
             </span>
 
-            <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ $animeSong->song->artist }}</p>
+            <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ $animeSong->song->artist ?? 'Unknown' }}</p>
             @if($showAnime)
                 <x-simple-link class="text-xs" href="{{ route('anime.details', $animeSong->anime) }}">{{ $animeSong->anime->original_title }}</x-simple-link>
             @endif
