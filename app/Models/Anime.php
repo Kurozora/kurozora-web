@@ -491,8 +491,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function characters(): BelongsToMany
     {
         return $this->belongsToMany(Character::class, AnimeCast::class)
-            ->distinct()
-            ->withTimestamps();
+            ->distinct();
     }
 
     /**
