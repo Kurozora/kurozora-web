@@ -109,7 +109,7 @@
         ],
         "operationId": "getExplore",
         "summary": "(optional authentication) Explore page.",
-        "description": "This endpoint will retrieve the details to for the explore page.",
+        "description": "This endpoint will retrieve the explore page.",
         "parameters": [
           {
             "in": "query",

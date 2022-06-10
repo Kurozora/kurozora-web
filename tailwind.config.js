@@ -12,6 +12,18 @@ module.exports = {
     theme: {
         extend: {
             colors: {
+                grayBlue: {
+                    DEFAULT: '#353A50',
+                    '100': '#EBEBEE',
+                    '200': '#CDCED3',
+                    '300': '#AEB0B9',
+                    '400': '#878EAF',
+                    '500': '#353A50',
+                    '600': '#2A2F48',
+                    '700': '#23273A',
+                    '800': '#202330',
+                    '900': '#101118',
+                },
                 orange: {
                     DEFAULT: '#FF9300',
                     '50': '#FFF4E5',

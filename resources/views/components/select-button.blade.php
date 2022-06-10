@@ -1,7 +1,14 @@
-@props(['disabled' => false, 'chevronClass' => 'h-6 w-6 text-white', 'chevronStrokeWidth' => '2'])
+@props(['disabled' => false, 'chevronClass' => 'h-6 w-6 text-white', 'chevronStrokeWidth' => '2', 'rounded' => 'md'])
+
+@php
+    $rounded = match ($rounded) {
+        'full' => 'rounded-full',
+        default => 'rounded-md'
+    }
+@endphp
 
 <div class="inline-block relative">
-    <select {{ $disabled ? 'disabled' : '' }} {!! $attributes->merge(['class' => 'form-select bg-none w-full rounded-md shadow-sm']) !!}>
+    <select {{ $disabled ? 'disabled' : '' }} {!! $attributes->merge(['class' => 'form-select bg-none w-full shadow-sm ' . $rounded]) !!}>
         {{ $slot }}
     </select>
 

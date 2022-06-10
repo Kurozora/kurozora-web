@@ -99,6 +99,9 @@ class Handler extends ExceptionHandler
                 $apiError->title = 'Conflict';
                 $apiError->detail = $e->getMessage();
                 return JSONResult::error([$apiError]);
+            } // Custom render for validation
+            else if ($e instanceof ValidationException) {
+                return $this->invalidJson($request, $e);
             } // Custom render for too many request
             else if ($e instanceof TooManyRequestsHttpException) {
                 $apiError = new APIError();
