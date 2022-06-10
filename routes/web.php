@@ -6,6 +6,10 @@ use App\Http\Livewire\Welcome;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Route;
 
+Route::get('chat', function () {
+    return view('chat');
+});
+
 Route::get(RouteServiceProvider::HOME, Home::class)
     ->name('home');
 

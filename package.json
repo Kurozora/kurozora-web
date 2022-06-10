@@ -28,7 +28,8 @@
         "@alpinejs/collapse": "^3.4.2",
         "@alpinejs/intersect": "^3.7.1",
         "@jaames/iro": "^5.3",
+        "@picmo/popup-picker": "^5.1.0",
         "lazysizes": "^5.3.2",
-        "npm": "^8.3.0"
+        "picmo": "^5.1.0"
     }
 }

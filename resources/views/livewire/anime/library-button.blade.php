@@ -3,7 +3,7 @@
         libraryStatus: $wire.entangle('libraryStatus'),
     }"
 >
-    <x-select-button chevronClass="w-4 h-4 text-white sm:w-6 sm:h-6" class="w-24 pl-1.5 pr-5 py-2 bg-orange-500 text-xs text-white font-semibold border-0 rounded-full shadow-md hover:bg-orange-400 active:bg-orange-600 focus:ring-0 sm:w-32 sm:pl-3 sm:pr-7 sm:text-base" x-model="libraryStatus" wire:model="libraryStatus" wire:change="updateLibraryStatus">
+    <x-select-button rounded="full" chevronClass="w-4 h-4 text-white sm:w-6 sm:h-6" class="w-24 pl-1.5 pr-5 py-2 bg-orange-500 text-xs text-white font-semibold border-0 shadow-md hover:bg-orange-400 active:bg-orange-600 focus:ring-0 sm:w-32 sm:pl-3 sm:pr-7 sm:text-base" x-model="libraryStatus" wire:model="libraryStatus" wire:change="updateLibraryStatus">
         <option value="-1" selected hidden disabled>{{ __('ADD') }}</option>
 
         @foreach(App\Enums\UserLibraryStatus::asSelectArray() as $key => $userLibraryStatus)

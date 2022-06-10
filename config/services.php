@@ -45,12 +45,12 @@ return [
     ],
 
     'patreon' => [
-        'url' => 'https://patreon.com/' . env('PATREON_HANDLE'),
+        'url' => 'https://patreon.com/' . env('PATREON_HANDLE', 'kurozora'),
         'username' => env('PATREON_HANDLE', 'kurozora'),
     ],
 
     'paypal' => [
-        'url' => 'https://paypal.com/paypalme/' . env('PAYPAL_HANDLE'),
+        'url' => 'https://paypal.com/paypalme/' . env('PAYPAL_HANDLE', 'Kiritokatklian'),
         'username' => env('PAYPAL_HANDLE', 'Kiritokatklian'),
     ],
 
