@@ -23,10 +23,8 @@ class PersonResourceBasic extends JsonResource
      */
     public function toArray($request): array
     {
-        return [
-            'id'            => $this->resource->id,
-            'type'          => 'people',
-            'href'          => route('api.people.details', $this->resource, false),
+        $resource = PersonResourceIdentity::make($this->resource)->toArray($request);
+        return array_merge($resource, [
             'attributes'    => [
                 'slug'              => $this->resource->slug,
                 'profile'           => ImageResource::make($this->resource->profile_image),
@@ -39,6 +37,6 @@ class PersonResourceBasic extends JsonResource
                 'websiteURLs'       => $this->resource->website_urls,
                 'astrologicalSign'  => $this->resource->astrological_sign_string,
             ]
-        ];
+        ]);
     }
 }

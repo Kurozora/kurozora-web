@@ -2,16 +2,16 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Song;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SongResourceIdentity extends JsonResource
+class UserResourceIdentity extends JsonResource
 {
     /**
      * The resource instance.
      *
-     * @var Song $resource
+     * @var User $resource
      */
     public $resource;
 
@@ -25,8 +25,8 @@ class SongResourceIdentity extends JsonResource
     {
         return [
             'id'    => $this->resource->id,
-            'type'  => 'songs',
-            'href'  => route('api.songs.details', $this->resource, false),
+            'type'  => 'show',
+            'href'  => route('api.users.profile', $this->resource, false),
         ];
     }
 }

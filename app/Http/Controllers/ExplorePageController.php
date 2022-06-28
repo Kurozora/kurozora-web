@@ -16,7 +16,7 @@ class ExplorePageController extends Controller
      * @param GetExplorePageRequest $request
      * @return JsonResponse
      */
-    function explore(GetExplorePageRequest $request): JsonResponse
+    function index(GetExplorePageRequest $request): JsonResponse
     {
         // Get explore categories
         $exploreCategories = ExploreCategory::orderBy('position');
@@ -27,7 +27,20 @@ class ExplorePageController extends Controller
         }
 
         return JSONResult::success([
-            'data' => ExploreCategoryResource::collection(($exploreCategories->get()))
+            'data' => ExploreCategoryResource::collection($exploreCategories->get())
+        ]);
+    }
+
+    /**
+     * Returns the details of the specified explore category.
+     *
+     * @param ExploreCategory $exploreCategory
+     * @return JsonResponse
+     */
+    function details(ExploreCategory $exploreCategory): JsonResponse
+    {
+        return JSONResult::success([
+            'data' => ExploreCategoryResource::collection([$exploreCategory])
         ]);
     }
 }
