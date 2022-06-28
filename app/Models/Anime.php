@@ -51,10 +51,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         Translatable;
 
     // Maximum amount of returned search results
-    const MAX_SEARCH_RESULTS = 25;
-
-    // Maximum amount of returned search results for the web
-    const MAX_WEB_SEARCH_RESULTS = 5;
+    const MAX_SEARCH_RESULTS = 5;
 
     // Minimum ratings required to calculate average
     const MINIMUM_RATINGS_REQUIRED = 130;
@@ -221,6 +218,58 @@ class Anime extends KModel implements HasMedia, Sitemapable
 
         $this->addMediaCollection($this->bannerImageCollectionName)
             ->singleFile();
+    }
+
+    /**
+     * Make all instances of the model searchable.
+     *
+     * @param  int  $chunk
+     * @return void
+     */
+    public static function makeAllSearchable($chunk = null): void
+    {
+        $self = new static;
+
+        $softDelete = static::usesSoftDelete() && config('scout.soft_delete', false);
+
+        $self->newQuery()
+            ->withoutGlobalScopes()
+            ->when(true, function ($query) use ($self) {
+                $self->makeAllSearchableUsing($query);
+            })
+            ->when($softDelete, function ($query) {
+                $query->withTrashed();
+            })
+            ->orderBy($self->getKeyName())
+            ->searchable($chunk);
+    }
+
+    /**
+     * Get the name of the index associated with the model.
+     *
+     * @return string
+     */
+    public function searchableAs(): string
+    {
+        return 'animes_index';
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+        $anime = $this->toArray();
+        $searchableArray = [
+            'user_ids' => $this->users()
+                ->get([User::TABLE_NAME . '.id'])
+                ->map(function ($user) {
+                    return $user['id'];
+                })
+        ];
+        return array_merge($searchableArray, $anime);
     }
 
     /**
@@ -1014,6 +1063,18 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function anime_translations(): HasMany
     {
         return $this->hasMany(AnimeTranslation::class);
+    }
+
+    /**
+     * Returns the Anime items in the user's library.
+     *
+     * @return BelongsToMany
+     */
+    function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, UserLibrary::class, 'anime_id', 'user_id')
+            ->using(UserLibrary::class)
+            ->withTimestamps();
     }
 
     /**

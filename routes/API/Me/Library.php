@@ -19,8 +19,4 @@ Route::prefix('/library')
         Route::post('/mal-import', [LibraryController::class, 'animeImport'])
             ->middleware('auth.kurozora')
             ->name('.import');
-
-        Route::get('/search', [LibraryController::class, 'search'])
-            ->middleware('auth.kurozora')
-            ->name('.search');
     });

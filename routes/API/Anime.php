@@ -9,10 +9,6 @@ Route::prefix('/anime')
             ->middleware('auth.kurozora:optional')
             ->name('.upcoming');
 
-        Route::get('/search', [AnimeController::class, 'search'])
-            ->middleware('auth.kurozora:optional')
-            ->name('.search');
-
         Route::prefix('{anime}')
             ->group(function () {
                 Route::get('/', [AnimeController::class, 'view'])

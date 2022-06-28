@@ -24,8 +24,8 @@ class GetAnimeSongsRequest extends FormRequest
     public function rules(): array
     {
         return [
-//            'limit'     => ['bail', 'integer', 'min:1', 'max:100'],
-//            'page'      => ['bail', 'integer', 'min:1']
+            'limit'     => ['bail', 'integer', 'min:-1', 'max:100', 'not_in:0'],
+            'page'      => ['bail', 'integer', 'min:1']
         ];
     }
 }

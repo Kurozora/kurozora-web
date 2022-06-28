@@ -13,7 +13,6 @@ use App\Http\Requests\GetAnimeStaffRequest;
 use App\Http\Requests\GetAnimeStudiosRequest;
 use App\Http\Requests\GetUpcomingAnimeRequest;
 use App\Http\Requests\RateAnimeRequest;
-use App\Http\Requests\SearchAnimeRequest;
 use App\Http\Resources\AnimeCastResourceIdentity;
 use App\Http\Resources\AnimeRelatedShowsResource;
 use App\Http\Resources\AnimeResource;
@@ -267,30 +266,6 @@ class AnimeController extends Controller
         }
 
         return JSONResult::success();
-    }
-
-    /**
-     * Retrieves Anime search results
-     *
-     * @param SearchAnimeRequest $request
-     * @return JsonResponse
-     */
-    public function search(SearchAnimeRequest $request): JsonResponse
-    {
-        $data = $request->validated();
-
-        // Search for the anime
-        $anime = Anime::kSearch($data['query'])
-            ->paginate($data['limit'] ?? Anime::MAX_SEARCH_RESULTS)
-            ->appends($data);
-
-        // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
-
-        return JSONResult::success([
-            'data' => AnimeResourceBasic::collection($anime),
-            'next' => empty($nextPageURL) ? null : $nextPageURL
-        ]);
     }
 
     /**
