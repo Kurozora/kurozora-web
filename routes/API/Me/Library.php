@@ -8,11 +8,11 @@ Route::prefix('/library')
         Route::get('/', [LibraryController::class, 'index'])
             ->middleware('auth.kurozora');
 
-        Route::post('/', [LibraryController::class, 'addLibrary'])
+        Route::post('/', [LibraryController::class, 'create'])
             ->middleware('auth.kurozora')
             ->name('.create');
 
-        Route::post('/delete', [LibraryController::class, 'delLibrary'])
+        Route::post('/delete', [LibraryController::class, 'delete'])
             ->middleware('auth.kurozora')
             ->name('.delete');
 
