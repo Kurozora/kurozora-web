@@ -23,7 +23,7 @@ class NavSearch extends Component
      *
      * @return void
      */
-    public function randomAnime()
+    public function randomAnime(): void
     {
         $this->redirect(route('anime.details', Anime::inRandomOrder()->first()));
     }
