@@ -27,6 +27,7 @@ class StudioResourceBasic extends JsonResource
         $resource = StudioResourceIdentity::make($this->resource)->toArray($request);
         return array_merge($resource, [
             'attributes'    => [
+                'slug'          => $this->resource->slug,
                 'logo'          => ImageResource::make($this->resource->profile_image),
                 'name'          => $this->resource->name,
                 'about'         => $this->resource->about,
