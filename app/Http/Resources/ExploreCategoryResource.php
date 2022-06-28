@@ -27,8 +27,9 @@ class ExploreCategoryResource extends JsonResource
     public function toArray($request): array
     {
         $resource = [
+            'id'            => $this->resource->id,
             'type'          => 'explore',
-            'href'          => route('api.explore', $this->resource, absolute: false),
+            'href'          => route('api.explore.details', $this->resource, absolute: false),
             'attributes'    => [
                 'title'         => $this->resource->title,
                 'description'   => $this->resource->description,
@@ -61,7 +62,7 @@ class ExploreCategoryResource extends JsonResource
             case ExploreCategoryTypes::People:
                 return [
                     'people' => [
-                        'data' => PersonResource::collection($this->resource
+                        'data' => PersonResourceIdentity::collection($this->resource
                             ->peopleBornToday()
                             ->explore_category_items
                             ->pluck('model')
@@ -71,7 +72,7 @@ class ExploreCategoryResource extends JsonResource
             case ExploreCategoryTypes::Characters:
                 return [
                     'characters' => [
-                        'data' => CharacterResource::collection($this->resource
+                        'data' => CharacterResourceIdentity::collection($this->resource
                             ->charactersBornToday()
                             ->explore_category_items
                             ->pluck('model')
@@ -81,7 +82,7 @@ class ExploreCategoryResource extends JsonResource
             case ExploreCategoryTypes::Genres:
                 return [
                     'genres' => [
-                        'data' => GenreResource::collection($this->resource
+                        'data' => GenreResourceIdentity::collection($this->resource
                             ->explore_category_items
                             ->pluck('model')
                         )
@@ -90,7 +91,7 @@ class ExploreCategoryResource extends JsonResource
             case ExploreCategoryTypes::Themes:
                 return [
                     'themes' => [
-                        'data' => ThemeResource::collection($this->resource
+                        'data' => ThemeResourceIdentity::collection($this->resource
                             ->explore_category_items
                             ->pluck('model')
                         )
@@ -114,7 +115,7 @@ class ExploreCategoryResource extends JsonResource
             case ExploreCategoryTypes::Shows:
                 return [
                     'shows' => [
-                        'data' => AnimeResource::collection($this->resource
+                        'data' => AnimeResourceIdentity::collection($this->resource
                             ->explore_category_items
                             ->pluck('model')
                         )
@@ -131,7 +132,7 @@ class ExploreCategoryResource extends JsonResource
 
                 return [
                     'shows' => [
-                        'data' => AnimeResource::collection($this->resource
+                        'data' => AnimeResourceIdentity::collection($this->resource
                             ->upcoming_shows($model)
                             ->explore_category_items
                             ->pluck('model')
@@ -149,7 +150,7 @@ class ExploreCategoryResource extends JsonResource
 
                 return [
                     'shows' => [
-                        'data' => AnimeResource::collection($this->resource
+                        'data' => AnimeResourceIdentity::collection($this->resource
                             ->most_popular_shows($model)
                             ->explore_category_items
                             ->pluck('model')

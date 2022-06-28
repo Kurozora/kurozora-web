@@ -2,19 +2,11 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Song;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SongResourceIdentity extends JsonResource
+class PersonResourceIdentity extends JsonResource
 {
-    /**
-     * The resource instance.
-     *
-     * @var Song $resource
-     */
-    public $resource;
-
     /**
      * Transform the resource into an array.
      *
@@ -24,9 +16,9 @@ class SongResourceIdentity extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id'    => $this->resource->id,
-            'type'  => 'songs',
-            'href'  => route('api.songs.details', $this->resource, false),
+            'id'            => $this->resource->id,
+            'type'          => 'people',
+            'href'          => route('api.people.details', $this->resource, false),
         ];
     }
 }

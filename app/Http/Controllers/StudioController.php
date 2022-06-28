@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
 use App\Http\Requests\GetStudioAnimeRequest;
-use App\Http\Resources\AnimeResourceBasic;
+use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\StudioResource;
 use App\Models\Studio;
 use Illuminate\Http\JsonResponse;
@@ -43,7 +43,7 @@ class StudioController extends Controller
         $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
 
         return JSONResult::success([
-            'data' => AnimeResourceBasic::collection($anime),
+            'data' => AnimeResourceIdentity::collection($anime),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

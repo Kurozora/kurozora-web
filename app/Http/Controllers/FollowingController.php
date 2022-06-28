@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\JSONResult;
 use App\Http\Requests\GetFollowersRequest;
 use App\Http\Requests\GetFollowingRequest;
-use App\Http\Resources\UserResourceBasic;
+use App\Http\Resources\UserResourceIdentity;
 use App\Models\User;
 use App\Notifications\NewFollower;
 use Auth;
@@ -62,7 +62,7 @@ class FollowingController extends Controller
         $nextPageURL = str_replace($request->root(), '', $followers->nextPageUrl());
 
         return JSONResult::success([
-            'data' => UserResourceBasic::collection($followers),
+            'data' => UserResourceIdentity::collection($followers),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
@@ -85,7 +85,7 @@ class FollowingController extends Controller
         $nextPageURL = str_replace($request->root(), '', $following->nextPageUrl());
 
         return JSONResult::success([
-            'data' => UserResourceBasic::collection($following),
+            'data' => UserResourceIdentity::collection($following),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

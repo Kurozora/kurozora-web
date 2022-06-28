@@ -63,7 +63,7 @@ class LibraryController extends Controller
      * @return JsonResponse
      * @throws InvalidEnumKeyException
      */
-    public function addLibrary(AddToLibraryRequest $request): JsonResponse
+    public function create(AddToLibraryRequest $request): JsonResponse
     {
         $data = $request->validated();
         $animeID = $data['anime_id'];
@@ -107,7 +107,7 @@ class LibraryController extends Controller
      * @return JsonResponse
      * @throws AuthorizationException
      */
-    public function delLibrary(DeleteFromLibraryRequest $request): JsonResponse
+    public function delete(DeleteFromLibraryRequest $request): JsonResponse
     {
         $data = $request->validated();
         $animeID = $data['anime_id'];

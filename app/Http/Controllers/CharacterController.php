@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\JSONResult;
 use App\Http\Requests\GetCharacterAnimeRequest;
 use App\Http\Requests\GetCharacterPeopleRequest;
-use App\Models\Character;
-use App\Helpers\JSONResult;
-use App\Http\Resources\PersonResource;
-use App\Http\Resources\AnimeResourceBasic;
+use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\CharacterResource;
+use App\Http\Resources\PersonResourceIdentity;
+use App\Models\Character;
 use Illuminate\Http\JsonResponse;
 
 class CharacterController extends Controller
@@ -46,7 +46,7 @@ class CharacterController extends Controller
 
         // Return character people
         return JSONResult::success([
-            'data' => PersonResource::collection($people),
+            'data' => PersonResourceIdentity::collection($people),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
@@ -70,7 +70,7 @@ class CharacterController extends Controller
 
         // Return character anime
         return JSONResult::success([
-            'data' => AnimeResourceBasic::collection($anime),
+            'data' => AnimeResourceIdentity::collection($anime),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

@@ -71,7 +71,7 @@
                         <x-lockups.music-lockup :anime-song="$categoryItem->model" :show-episodes="false" :show-anime="true" :onMusicKitLoad="true" :is-row="false" />
                     @break
                     @default
-                        @if (config('app.env') === 'local')
+                        @if (app()->environment('local'))
                             {{ 'Unhandled type: ' . $exploreCategory->type }}
                         @endif
                 @endswitch

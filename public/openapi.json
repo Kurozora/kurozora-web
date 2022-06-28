@@ -131,6 +131,43 @@
         }
       }
     },
+    "/explore/{exploreCategoryID}": {
+      "get": {
+        "security": [
+          {
+          },
+          {
+            "bearerAuth": [
+            ]
+          }
+        ],
+        "tags": [
+          "explore"
+        ],
+        "operationId": "getExploreDetails",
+        "summary": "(optional authentication) Explore category details.",
+        "description": "This endpoint will retrieve the details to for the explore category.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "exploreCategoryID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "ID of the explore category."
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/JSONSuccess"
+          },
+          "400": {
+            "$ref": "#/components/responses/JSONError"
+          }
+        }
+      }
+    },
     "/anime/{animeID}": {
       "get": {
         "security": [
