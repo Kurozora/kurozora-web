@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Helpers\JSONResult;
 use App\Http\Requests\GetPersonAnimeRequest;
 use App\Http\Requests\GetPersonCharactersRequest;
+use App\Http\Resources\AnimeResourceIdentity;
+use App\Http\Resources\CharacterResourceIdentity;
 use App\Http\Resources\PersonResource;
-use App\Http\Resources\AnimeResourceBasic;
-use App\Http\Resources\CharacterResourceBasic;
 use App\Models\Person;
 use Illuminate\Http\JsonResponse;
 
@@ -46,7 +46,7 @@ class PersonController extends Controller
 
         // Return character anime
         return JSONResult::success([
-            'data' => AnimeResourceBasic::collection($anime),
+            'data' => AnimeResourceIdentity::collection($anime),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
@@ -70,7 +70,7 @@ class PersonController extends Controller
 
         // Return person characters
         return JSONResult::success([
-            'data' => CharacterResourceBasic::collection($characters),
+            'data' => CharacterResourceIdentity::collection($characters),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

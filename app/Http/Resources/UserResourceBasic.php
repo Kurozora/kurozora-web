@@ -31,7 +31,8 @@ class UserResourceBasic extends JsonResource
      */
     public function toArray($request): array
     {
-        $resource = [
+        $resource = UserResourceIdentity::make($this->resource)->toArray($request);
+        $resource = array_merge($resource, [
             'id'                => $this->resource->id,
             'type'              => 'users',
             'href'              => route('api.users.profile', $this->resource, false),
@@ -48,7 +49,7 @@ class UserResourceBasic extends JsonResource
                 'joinDate'          => $this->resource->created_at->format('Y-m-d'),
                 'isPro'             => $this->resource->isPro(),
             ]
-        ];
+        ]);
 
         if (Auth::check()) {
             $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
