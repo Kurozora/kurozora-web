@@ -77,31 +77,6 @@ class UserController extends Controller
     }
 
     /**
-     * Retrieves User search results
-     *
-     * @param SearchUserRequest $request
-     * @return JsonResponse
-     */
-    public function search(SearchUserRequest $request): JsonResponse
-    {
-        $data = $request->validated();
-
-        // Search for the users
-        $users = User::kSearch($data['query'])
-            ->paginate(User::MAX_SEARCH_RESULTS)
-            ->appends($data);
-
-        // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $users->nextPageUrl());
-
-        // Show response
-        return JSONResult::success([
-            'data' => UserResourceBasic::collection($users),
-            'next' => empty($nextPageURL) ? null : $nextPageURL
-        ]);
-    }
-
-    /**
      * Deletes the user's account permanently.
      *
      * @param DeleteUserRequest $request

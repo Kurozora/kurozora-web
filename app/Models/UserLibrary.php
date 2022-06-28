@@ -5,9 +5,12 @@ namespace App\Models;
 use App\Enums\UserLibraryStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Laravel\Scout\Searchable;
 
 class UserLibrary extends Pivot
 {
+    use Searchable;
+
     // Table name
     const TABLE_NAME = 'user_libraries';
     protected $table = self::TABLE_NAME;
@@ -57,6 +60,35 @@ class UserLibrary extends Pivot
                     $model->end_date = null;
             }
         });
+    }
+
+    /**
+     * Get the name of the index associated with the model.
+     *
+     * @return string
+     */
+    public function searchableAs(): string
+    {
+        return 'animes_index';
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+        /** @var Anime $anime */
+        $anime = $this->anime()->withoutGlobalScopes()->first();
+        $searchableArray = [
+            'user_ids' => $anime->users()
+                ->get([User::TABLE_NAME . '.id'])
+                ->map(function ($user) {
+                    return $user['id'];
+                })
+        ];
+        return array_merge($searchableArray, $anime->toSearchableArray());
     }
 
     /**

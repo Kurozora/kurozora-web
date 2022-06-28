@@ -57,10 +57,6 @@ Route::prefix('/users')
                     ->name('.profile');
             });
 
-        Route::get('/search', [UserController::class, 'search'])
-            ->middleware('auth.kurozora:optional')
-            ->name('.search');
-
         Route::delete('/delete', [UserController::class, 'delete'])
             ->middleware('auth.kurozora')
             ->name('delete');

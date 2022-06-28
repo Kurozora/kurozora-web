@@ -12,12 +12,13 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create(Song::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('am_id')->unique()->nullable();
             $table->unsignedInteger('mal_id')->unique()->nullable();
+            $table->string('slug');
             $table->string('title');
             $table->string('artist', 500)->nullable();
             $table->timestamps();
@@ -25,6 +26,7 @@ return new class extends Migration
 
         Schema::table(Song::TABLE_NAME, function (Blueprint $table) {
             // Set unique key constraints
+            $table->unique(['slug']);
             $table->unique(['title', 'artist']);
         });
     }
@@ -34,7 +36,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists(Song::TABLE_NAME);
     }
