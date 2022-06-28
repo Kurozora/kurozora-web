@@ -1,9 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
-
+use App\Http\Controllers\APIController;
 use App\Http\Livewire\Misc\ApiIndex;
-use Illuminate\Support\Facades\Route;
 
 Route::get('/', [APIController::class, 'index'])
     ->name('api.index');
@@ -16,14 +14,11 @@ Route::prefix('/v1')
         Route::get('/info', [APIController::class, 'info'])
             ->name('.info');
 
-        Route::get('/explore', [ExplorePageController::class, 'explore'])
-            ->middleware('auth.kurozora:optional')
-            ->name('.explore');
-
         require 'API/Anime.php';
         require 'API/Cast.php';
         require 'API/Characters.php';
         require 'API/Episodes.php';
+        require 'API/Explore.php';
         require 'API/Genres.php';
         require 'API/Feed.php';
         require 'API/Languages.php';
