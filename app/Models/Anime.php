@@ -9,8 +9,8 @@ use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasBannerImage;
 use App\Traits\Model\HasPosterImage;
-use App\Traits\Searchable;
 use Astrotomic\Translatable\Translatable;
+use Auth;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Carbon\CarbonInterval;
@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Nova\Actions\Actionable;
+use Laravel\Scout\Searchable;
 use Request;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -748,7 +749,17 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function anime_relations(): morphMany
     {
-        return $this->morphMany(MediaRelation::class, 'model')->where('related_type', Anime::class);
+        return $this->morphMany(MediaRelation::class, 'model')
+            ->where('related_type', Anime::class)
+            ->join(Anime::TABLE_NAME, function ($join) {
+                $join->on(Anime::TABLE_NAME . '.id', '=', MediaRelation::TABLE_NAME . '.related_id');
+
+                if (Auth::check()) {
+                    if (settings('tv_rating') >= 0) {
+                        $join->where('tv_rating_id', '<=', settings('tv_rating'));
+                    }
+                }
+            });
     }
 
     /**

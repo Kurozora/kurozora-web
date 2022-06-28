@@ -12,7 +12,6 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use Str;
 use Swift_TransportException;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Console\Exception\RuntimeException;
@@ -149,7 +148,7 @@ class Handler extends ExceptionHandler
             $apiError->status = 422;
             $apiError->title = 'Unprocessable Entity';
             $apiError->detail = $error;
-            array_push($apiErrors, $apiError);
+            $apiErrors[] = $apiError;
         }
 
         return JSONResult::error($apiErrors);
