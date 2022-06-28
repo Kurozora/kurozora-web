@@ -47,7 +47,7 @@ class Tab extends Component
      * @param UserLibraryStatus $userLibraryStatus
      * @return void
      */
-    public function mount(UserLibraryStatus $userLibraryStatus)
+    public function mount(UserLibraryStatus $userLibraryStatus): void
     {
         $this->userLibraryStatusString = $userLibraryStatus->key;
     }
@@ -57,7 +57,7 @@ class Tab extends Component
      *
      * @return void
      */
-    public function loadResource()
+    public function loadResource(): void
     {
         $this->loadResourceIsEnabled = true;
     }
@@ -95,7 +95,6 @@ class Tab extends Component
         // Paginate
         return $library->paginate($this->filter['per_page'] ?? 25);
     }
-
 
     /**
      * Render the component.

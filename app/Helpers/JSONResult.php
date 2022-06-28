@@ -2,8 +2,8 @@
 
 namespace App\Helpers;
 
-use App\Models\APIError;
 use App\Http\Resources\JSONErrorResource;
+use App\Models\APIError;
 use App\Providers\AppServiceProvider;
 use Auth;
 use Illuminate\Http\JsonResponse;
@@ -53,13 +53,18 @@ class JSONResult
      */
     private static function getDefaultResponseArray(): array
     {
+        $meta = [
+            'version'               => Config::get('app.version'),
+            'isUserAuthenticated'   => Auth::check(),
+            'authenticatedUserID'   => Auth::id()
+        ];
+
+        if (app()->environment('local')) {
+            $meta['queryCount'] = (int) Config::get(AppServiceProvider::$queryCountConfigKey);
+        }
+
         return [
-            'meta' => [
-                'version'               => Config::get('app.version'),
-                'queryCount'            => (int) Config::get(AppServiceProvider::$queryCountConfigKey),
-                'isUserAuthenticated'   => Auth::check(),
-                'authenticatedUserID'   => Auth::id()
-            ]
+            'meta' => $meta
         ];
     }
 }
