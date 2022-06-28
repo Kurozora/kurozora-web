@@ -52,7 +52,7 @@ if (!function_exists('number_shorten')) {
         } else {
             $suffixes = ['', 'Thousand', 'Million', 'Billion', 'Trillion', 'Quadrillion', 'Quintillion', 'Sextillion', 'Septillion', 'Octillion', 'Nonillion ', 'Decillion', 'Undecillion', 'Duodecillion', 'Tredecillion', 'Quattuordecillion', 'Quinquadecillion', 'Sexdecillion', 'Septendecillion', 'Octodecillion', 'Novendecillion', 'Vigintillion', 'Vunvigintillion'];
         }
-        $index = (int)log(abs($number), 1000);
+        $index = (int) log(abs($number), 1000);
         $index = max(0, min(count($suffixes) - 1, $index)); // Clamps to a valid suffixes' index
         $formattedNumber = number_format($number / 1000 ** $index, $precision);
         if ($abbreviated) {
@@ -61,6 +61,35 @@ if (!function_exists('number_shorten')) {
             $unit = $suffixes[$index] ? ' ' . $suffixes[$index] : $suffixes[$index];
         }
         return $formattedNumber . $unit;
+    }
+}
+
+if (!function_exists('size_shorten')) {
+    /**
+     * Shorten the size and append a unit.
+     *
+     * Units: Bytes (B), Kilobytes (KB), Megabytes (MB), Gigabytes (GB), Terabytes (TB), Petabytes (PB)
+     *
+     * @param int|float $size
+     * @param int $precision
+     * @param bool $abbreviated
+     * @return string
+     */
+    function size_shorten(int|float $size, int $precision = 2, bool $abbreviated = false): string
+    {
+        if ($abbreviated) {
+            $suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+        } else {
+            $suffixes = ['Bytes', 'Kilobytes', 'Megabytes', 'Gigabytes', 'Terabytes', 'Petabytes'];
+        }
+        $index = log($size) / log(1024);
+        $formattedSize = round(pow(1024, $index - floor($index)), $precision);
+        if ($abbreviated) {
+            $unit = $suffixes[$index];
+        } else {
+            $unit = $suffixes[$index] ? ' ' . $suffixes[$index] : $suffixes[$index];
+        }
+        return $formattedSize . $unit;
     }
 }
 
