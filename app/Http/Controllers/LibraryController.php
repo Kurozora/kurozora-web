@@ -10,7 +10,6 @@ use App\Http\Requests\AddToLibraryRequest;
 use App\Http\Requests\DeleteFromLibraryRequest;
 use App\Http\Requests\GetLibraryRequest;
 use App\Http\Requests\ImportRequest;
-use App\Http\Requests\SearchLibraryRequest;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Jobs\ProcessMALImport;
 use App\Models\Anime;
@@ -182,35 +181,6 @@ class LibraryController extends Controller
 
         return JSONResult::success([
             'message' => 'Your anime import request has been submitted. You will be notified once it has been processed!'
-        ]);
-    }
-
-    /**
-     * Retrieves user library search results
-     *
-     * @param SearchLibraryRequest $request
-     * @return JsonResponse
-     */
-    public function search(SearchLibraryRequest $request): JsonResponse
-    {
-        $data = $request->validated();
-
-        // Get the authenticated user
-        $user = Auth::user();
-
-        // Search for the anime
-        $anime = $user->library()
-            ->search($data['query'], null, true, true)
-            ->paginate(Anime::MAX_SEARCH_RESULTS)
-            ->appends($data);
-
-        // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
-
-        // Show response
-        return JSONResult::success([
-            'data' => AnimeResourceBasic::collection($anime),
-            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 }

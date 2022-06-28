@@ -25,6 +25,7 @@ Route::prefix('/v1')
         require 'API/Legal.php';
         require 'API/Me.php';
         require 'API/People.php';
+        require 'API/Search.php';
         require 'API/Seasons.php';
         require 'API/Songs.php';
         require 'API/Studios.php';

@@ -12,7 +12,6 @@ use App\Traits\HeartActionTrait;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasBannerImage;
 use App\Traits\Model\HasProfileImage;
-use App\Traits\Searchable;
 use App\Traits\Web\Auth\TwoFactorAuthenticatable;
 use Carbon\Carbon;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
@@ -27,6 +26,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Scout\Searchable;
 use Ramsey\Uuid\Uuid;
 use Request;
 use Spatie\Activitylog\LogOptions;
@@ -65,10 +65,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         TwoFactorAuthenticatable;
 
     // Maximum amount of returned search results
-    const MAX_SEARCH_RESULTS = 25;
-
-    // Maximum amount of returned search results for the web
-    const MAX_WEB_SEARCH_RESULTS = 5;
+    const MAX_SEARCH_RESULTS = 5;
 
     // Cache user's badges
     const CACHE_KEY_BADGES = 'user-badges-%d';
@@ -172,6 +169,31 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     {
         return LogOptions::defaults()
             ->logAll();
+    }
+
+    /**
+     * Get the name of the index associated with the model.
+     *
+     * @return string
+     */
+    public function searchableAs(): string
+    {
+        return 'users_index';
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'slug' => $this->slug,
+            'username' => $this->username,
+            'biography' => $this->biography,
+        ];
     }
 
     /**

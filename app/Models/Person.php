@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
+use Laravel\Scout\Searchable;
 use Request;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -27,7 +28,8 @@ class Person extends KModel implements HasMedia, Sitemapable
         HasProfileImage,
         HasSlug,
         InteractsWithMedia,
-        InteractsWithMediaExtension;
+        InteractsWithMediaExtension,
+        Searchable;
 
     // Maximum relationships fetch limit
     const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
@@ -97,6 +99,36 @@ class Person extends KModel implements HasMedia, Sitemapable
         return SlugOptions::create()
             ->generateSlugsFrom('full_name')
             ->saveSlugsTo('slug');
+    }
+
+    /**
+     * Get the name of the index associated with the model.
+     *
+     * @return string
+     */
+    public function searchableAs(): string
+    {
+        return 'people_index';
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'mal_id' => $this->mal_id,
+            'slug' => $this->slug,
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
+            'family_name' => $this->family_name,
+            'given_name' => $this->given_name,
+            'alternative_names' => $this->alternative_names,
+            'about' => $this->about,
+        ];
     }
 
     /**
