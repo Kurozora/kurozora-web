@@ -40,10 +40,10 @@ class NavSearch extends Component
 
         if (!empty($this->searchQuery)) {
             $anime = Anime::kSearch($this->searchQuery)
-                ->paginate(Anime::MAX_WEB_SEARCH_RESULTS)
+                ->paginate(Anime::MAX_SEARCH_RESULTS)
                 ->appends('query', $this->searchQuery);
             $users = User::kSearch($this->searchQuery)
-                ->paginate(User::MAX_WEB_SEARCH_RESULTS)
+                ->paginate(User::MAX_SEARCH_RESULTS)
                 ->appends('query', $this->searchQuery);
 
             $searchResults['anime'] = $anime;

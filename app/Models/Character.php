@@ -8,13 +8,13 @@ use App\Scopes\BornTodayScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasProfileImage;
 use App\Traits\Model\HasTranslatableSlug;
-use App\Traits\Searchable;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
+use Laravel\Scout\Searchable;
 use Request;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -31,9 +31,6 @@ class Character extends KModel implements HasMedia, Sitemapable
         InteractsWithMediaExtension,
         Searchable,
         Translatable;
-
-    // Maximum amount of returned search results
-    const MAX_SEARCH_RESULTS = 10;
 
     // Maximum relationships fetch limit
     const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
@@ -130,6 +127,32 @@ class Character extends KModel implements HasMedia, Sitemapable
     {
         $this->addMediaCollection($this->profileImageCollectionName)
             ->singleFile();
+    }
+
+    /**
+     * Get the name of the index associated with the model.
+     *
+     * @return string
+     */
+    public function searchableAs(): string
+    {
+        return 'characters_index';
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'mal_id' => $this->mal_id,
+            'slug' => $this->slug,
+            'nicknames' => $this->nicknames,
+            'translations' => $this->translations
+        ];
     }
 
     /**
