@@ -14,14 +14,14 @@ use App\Http\Requests\GetAnimeStudiosRequest;
 use App\Http\Requests\GetUpcomingAnimeRequest;
 use App\Http\Requests\RateAnimeRequest;
 use App\Http\Requests\SearchAnimeRequest;
-use App\Http\Resources\AnimeCastResource;
+use App\Http\Resources\AnimeCastResourceIdentity;
 use App\Http\Resources\AnimeRelatedShowsResource;
 use App\Http\Resources\AnimeResource;
-use App\Http\Resources\AnimeResourceBasic;
+use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\AnimeSongResource;
 use App\Http\Resources\AnimeStaffResource;
-use App\Http\Resources\CharacterResourceBasic;
-use App\Http\Resources\SeasonResource;
+use App\Http\Resources\CharacterResourceIdentity;
+use App\Http\Resources\SeasonResourceIdentity;
 use App\Http\Resources\StudioResource;
 use App\Models\Anime;
 use App\Models\MediaRating;
@@ -67,7 +67,7 @@ class AnimeController extends Controller
         $nextPageURL = str_replace($request->root(), '', $characters->nextPageUrl());
 
         return JSONResult::success([
-            'data' => CharacterResourceBasic::collection($characters),
+            'data' => CharacterResourceIdentity::collection($characters),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
@@ -90,7 +90,7 @@ class AnimeController extends Controller
         $nextPageURL = str_replace($request->root(), '', $animeCast->nextPageUrl());
 
         return JSONResult::success([
-            'data' => AnimeCastResource::collection($animeCast),
+            'data' => AnimeCastResourceIdentity::collection($animeCast),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
@@ -136,7 +136,7 @@ class AnimeController extends Controller
         $nextPageURL = str_replace($request->root(), '', $seasons->nextPageUrl());
 
         return JSONResult::success([
-            'data' => SeasonResource::collection($seasons),
+            'data' => SeasonResourceIdentity::collection($seasons),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
@@ -150,17 +150,18 @@ class AnimeController extends Controller
      */
     public function songs(GetAnimeSongsRequest $request, Anime $anime): JsonResponse
     {
-//        $data = $request->validated();
-//
-//        // Get the seasons
-//        $animeSongs = $anime->getAnimeSongs($data['limit'] ?? 25, $data['page'] ?? 1);
-//
-//        // Get next page url minus domain
-//        $nextPageURL = str_replace($request->root(), '', $animeSongs->nextPageUrl());
+        $data = $request->validated();
+
+        // Get the seasons
+        $limit = ($data['limit'] ?? -1) == -1 ? 150 : $data['limit'];
+        $animeSongs = $anime->getAnimeSongs($limit, $data['page'] ?? 1);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $animeSongs->nextPageUrl());
 
         return JSONResult::success([
-            'data' => AnimeSongResource::collection($anime->getAnimeSongs(150)),
-//            'next' => empty($nextPageURL) ? null : $nextPageURL
+            'data' => AnimeSongResource::collection($animeSongs),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 
@@ -309,7 +310,7 @@ class AnimeController extends Controller
         $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
 
         return JSONResult::success([
-            'data' => AnimeResourceBasic::collection($anime),
+            'data' => AnimeResourceIdentity::collection($anime),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

@@ -23,10 +23,8 @@ class CharacterResourceBasic extends JsonResource
      */
     public function toArray($request): array
     {
-        return [
-            'id'            => $this->resource->id,
-            'type'          => 'characters',
-            'href'          => route('api.characters.details', $this->resource, false),
+        $resource = CharacterResourceIdentity::make($this->resource)->toArray($request);
+        return array_merge($resource, [
             'attributes'    => [
                 'slug'              => $this->resource->slug,
                 'profile'           => ImageResource::make($this->resource->profile_image),
@@ -46,6 +44,6 @@ class CharacterResourceBasic extends JsonResource
                 'birthdate'         => $this->resource->birthdate,
                 'astrologicalSign'  => $this->resource->astrological_sign_string,
             ]
-        ];
+        ]);
     }
 }
