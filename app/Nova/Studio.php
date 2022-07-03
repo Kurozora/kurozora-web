@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Enums\StudioType;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsToMany;
@@ -184,10 +185,8 @@ class Studio extends Resource
                 ->help('Used to identify the Studio in a URL: https://kurozora.app/studios/<strong>' . ($this->resource->slug ?? 'slug-identifier') . '</strong>. Leave empty to auto-generate from name.'),
 
             Select::make('Type')
-                ->options([
-                    'anime' => 'anime',
-                    'manga' => 'manga'
-                ])
+                ->options(StudioType::asSelectArray())
+                ->displayUsingLabels()
                 ->rules('required')
                 ->sortable(),
 
