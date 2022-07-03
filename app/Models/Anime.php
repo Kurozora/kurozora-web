@@ -91,25 +91,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     ];
 
     /**
-     * Searchable rules.
-     *
-     * @var array
-     */
-    protected $searchable = [
-        'columns' => [
-            'original_title' => 10,
-            'synonym_titles' => 10,
-            'title' => 10,
-        ],
-        'joins' => [
-            AnimeTranslation::TABLE_NAME => [
-                Anime::TABLE_NAME . '.id',
-                AnimeTranslation::TABLE_NAME . '.anime_id',
-            ],
-        ],
-    ];
-
-    /**
      * Casts rules.
      *
      * @var array
@@ -263,13 +244,15 @@ class Anime extends KModel implements HasMedia, Sitemapable
     {
         $anime = $this->toArray();
         $searchableArray = [
+            'first_aired' => $this->first_aired?->timestamp,
+            'last_aired' => $this->last_aired?->timestamp,
             'user_ids' => $this->users()
                 ->get([User::TABLE_NAME . '.id'])
                 ->map(function ($user) {
                     return $user['id'];
                 })
         ];
-        return array_merge($searchableArray, $anime);
+        return array_merge($anime, $searchableArray);
     }
 
     /**
