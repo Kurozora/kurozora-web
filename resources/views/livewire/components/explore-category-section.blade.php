@@ -41,7 +41,7 @@
                                         <x-lockups.video-lockup :anime="$categoryItem->model" />
                                     @break
                                     @default
-                                        @if (config('app.env') === 'local')
+                                        @if (app()->environment('local'))
                                             {{ 'Unhandled size: ' . $exploreCategory->size }}
                                         @endif
                                 @endswitch
@@ -72,7 +72,7 @@
                                 <x-lockups.music-lockup :anime-song="$categoryItem->model" :show-episodes="false" :show-anime="true" />
                             @break
                             @default
-                                @if (config('app.env') === 'local')
+                                @if (app()->environment('local'))
                                     {{ 'Unhandled type: ' . $exploreCategory->type }}
                                 @endif
                         @endswitch

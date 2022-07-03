@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\AsArrayObject;
+use App\Enums\StudioType;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasBannerImage;
 use App\Traits\Model\HasLogoImage;
@@ -57,12 +58,12 @@ class Studio extends KModel implements HasMedia, Sitemapable
      * @var array
      */
     protected $appends = [
-        'banner_image',
-        'banner_image_url',
-        'logo_image',
-        'logo_image_url',
-        'profile_image',
-        'profile_image_url',
+//        'banner_image',
+//        'banner_image_url',
+//        'logo_image',
+//        'logo_image_url',
+//        'profile_image',
+//        'profile_image_url',
     ];
 
     /**
@@ -120,13 +121,18 @@ class Studio extends KModel implements HasMedia, Sitemapable
      */
     public function toSearchableArray(): array
     {
-        return [
-            'id' => $this->id,
-            'mal_id' => $this->mal_id,
-            'slug' => $this->slug,
-            'name' => $this->name,
-            'about' => $this->about,
-        ];
+        return $this->toArray();
+    }
+
+    /**
+     * The type of the studio.
+     *
+     * @param int|null $value
+     * @return StudioType|null
+     */
+    public function getTypeAttribute(?int $value): ?StudioType
+    {
+        return isset($value) ? StudioType::fromValue($value) : null;
     }
 
     /**

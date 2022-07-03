@@ -68,12 +68,12 @@ class Person extends KModel implements HasMedia, Sitemapable
      * @var array
      */
     protected $appends = [
-        'age_string',
-        'astrological_sign_string',
-        'full_name',
-        'full_given_name',
-        'profile_image',
-        'profile_image_url',
+//        'age_string',
+//        'astrological_sign_string',
+//        'full_name',
+//        'full_given_name',
+//        'profile_image',
+//        'profile_image_url',
     ];
 
     /**
@@ -118,17 +118,12 @@ class Person extends KModel implements HasMedia, Sitemapable
      */
     public function toSearchableArray(): array
     {
-        return [
-            'id' => $this->id,
-            'mal_id' => $this->mal_id,
-            'slug' => $this->slug,
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
-            'family_name' => $this->family_name,
-            'given_name' => $this->given_name,
-            'alternative_names' => $this->alternative_names,
-            'about' => $this->about,
+        $person = $this->toArray();
+        $searchableArray = [
+            'full_name' => $this->full_name,
+            'full_given_name' => $this->full_given_name,
         ];
+        return array_merge($searchableArray, $person);
     }
 
     /**
