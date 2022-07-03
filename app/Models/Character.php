@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Casts\AsArrayObject;
 use App\Enums\AstrologicalSign;
+use App\Enums\CharacterStatus;
 use App\Scopes\BornTodayScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasProfileImage;
@@ -128,13 +129,18 @@ class Character extends KModel implements HasMedia, Sitemapable
      */
     public function toSearchableArray(): array
     {
-        return [
-            'id' => $this->id,
-            'mal_id' => $this->mal_id,
-            'slug' => $this->slug,
-            'nicknames' => $this->nicknames,
-            'translations' => $this->translations
-        ];
+        return $this->toArray();
+    }
+
+    /**
+     * The status of the character.
+     *
+     * @param int|null $value
+     * @return CharacterStatus|null
+     */
+    public function getStatusAttribute(?int $value): ?CharacterStatus
+    {
+        return isset($value) ? CharacterStatus::fromValue($value) : null;
     }
 
     /**

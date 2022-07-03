@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\CharacterStatus;
 use App\Models\Character;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -12,7 +13,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create(Character::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
@@ -20,7 +21,7 @@ return new class extends Migration
             $table->string('slug');
             $table->json('nicknames')->nullable();
             $table->string('debut')->nullable();
-            $table->string('status')->nullable();
+            $table->unsignedTinyInteger('status')->default(CharacterStatus::Unknown);
             $table->string('blood_type')->nullable();
             $table->string('favorite_food')->nullable();
             $table->unsignedDecimal('height', 32)->nullable();
@@ -46,7 +47,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists(Character::TABLE_NAME);
     }

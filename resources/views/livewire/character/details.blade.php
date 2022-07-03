@@ -70,9 +70,11 @@
                         {{ $character->debut ?? '-' }}
                     </x-slot>
 
-                    <x-slot:footer>
-                        {{ __('The character is :x.', ['x' => $character->status]) }}
-                    </x-slot>
+                    @if($character->status)
+                        <x-slot:footer>
+                            {{ __('The character is :x.', ['x' => $character->status->description]) }}
+                        </x-slot>
+                    @endif
                 </x-information-list>
 
                 <x-information-list id="age" title="{{ __('Age') }}" icon="{{ asset('images/symbols/calendar.svg') }}">
