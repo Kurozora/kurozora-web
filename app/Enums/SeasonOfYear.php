@@ -16,7 +16,7 @@ final class SeasonOfYear extends Enum
     const Winter = 0;
     const Spring = 1;
     const Summer = 2;
-    const Fall = 3;
+    const Fall   = 3;
 
     /**
      * The symbol of the season.

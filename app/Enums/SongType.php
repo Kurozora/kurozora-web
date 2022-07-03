@@ -5,15 +5,15 @@ namespace App\Enums;
 use BenSampo\Enum\Enum;
 
 /**
- * @method static static Opening()
- * @method static static Ending()
- * @method static static Background()
+ * @method static SongType Opening()
+ * @method static SongType Ending()
+ * @method static SongType Background()
  */
 final class SongType extends Enum
 {
-    const Opening       =   0;
-    const Ending        =   1;
-    const Background    =   2;
+    const Opening       = 0;
+    const Ending        = 1;
+    const Background    = 2;
 
     /**
      * Return the abbreviated string for the SongType type.
