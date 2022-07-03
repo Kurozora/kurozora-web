@@ -2,7 +2,9 @@
 
 namespace App\Http\Livewire\Person;
 
+use App\Enums\AstrologicalSign;
 use App\Models\Person;
+use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
@@ -15,22 +17,42 @@ class Index extends Component
     use WithPagination;
 
     /**
-     * The component's filters.
+     * The search string.
+     *
+     * @var string $search
+     */
+    public string $search = '';
+
+    /**
+     * The number of results per page.
+     *
+     * @var int $perPage
+     */
+    public int $perPage = 25;
+
+    /**
+     * The component's filter attributes.
      *
      * @var array $filter
      */
-    public array $filter = [
-        'search' => '',
-        'order_type' => '',
-        'per_page' => 25,
-    ];
+    public array $filter = [];
+
+    /**
+     * The component's order attributes.
+     *
+     * @var array $order
+     */
+    public array $order = [];
 
     /**
      * Prepare the component.
      *
      * @return void
      */
-    public function mount() {}
+    public function mount(): void {
+        $this->setFilterableAttributes();
+        $this->setOrderableAttributes();
+    }
 
     /**
      * Redirect the user to a random person.
@@ -49,35 +71,146 @@ class Index extends Component
      */
     public function getPeopleProperty(): LengthAwarePaginator
     {
-        $people = Person::query();
-
         // Search
-        if (!empty($this->filter['search'])) {
-            $searchTerms = explode(' ', str_replace([', ', ','], ' ', $this->filter['search']));
-
-            $people = $people->where(function ($query) use ($searchTerms) {
-                // Asian style
-                $query->orWhere('first_name', 'like','%' . ($searchTerms[1] ?? $this->filter['search']) . '%');
-                $query->orWhere('last_name', 'like','%' . $searchTerms[0] . '%');
-                $query->orWhere('given_name', 'like','%' . ($searchTerms[1] ?? $this->filter['search']) . '%');
-                $query->orWhere('family_name', 'like','%' . $searchTerms[0] . '%');
-
-                // Wester style
-                $query->orWhere('first_name', 'like','%' . $searchTerms[0] . '%');
-                $query->orWhere('last_name', 'like','%' . ($searchTerms[1] ?? $this->filter['search']) . '%');
-                $query->orWhere('given_name', 'like','%' . $searchTerms[0] . '%');
-                $query->orWhere('family_name', 'like','%' . ($searchTerms[1] ?? $this->filter['search']) . '%');
-
-            });
-        }
+        $people = Person::search($this->search);
 
         // Order
-        if (!empty($this->filter['order_type'])) {
-            $people = $people->orderBy('first_name', $this->filter['order_type']);
+        foreach ($this->order as $attribute => $order) {
+            $selected = $order['selected'];
+            if (!empty($selected)) {
+                $people = $people->orderBy($attribute, $selected);
+            }
+        }
+
+        // Filter
+        foreach ($this->filter as $attribute => $filter) {
+            $selected = $filter['selected'];
+            $type = $filter['type'];
+
+            if ((is_numeric($selected) && $selected >= 0) || !empty($selected)) {
+                switch ($type) {
+                    case 'date':
+                        $date = Carbon::createFromFormat('Y-m-d', $selected)
+                            ->setTime(0, 0)
+                            ->toISOString();
+                        $people = $people->where($attribute, $date);
+                        break;
+                    case 'time':
+                        $time = $selected . ':00';
+                        $people = $people->where($attribute, $time);
+                        break;
+                    case 'double':
+                        $number = number_format($selected, 2, '.', '');
+                        $people = $people->where($attribute, $number);
+                        break;
+                    default:
+                        $people = $people->where($attribute, $selected);
+                }
+            }
         }
 
         // Paginate
-        return $people->paginate($this->filter['per_page'] ?? 25);
+        return $people->paginate($this->perPage);
+    }
+
+    /**
+     * Set the orderable attributes of the model.
+     *
+     * @return void
+     */
+    public function setOrderableAttributes(): void
+    {
+        $this->order = [
+            'full_name' => [
+                'title' => __('Name'),
+                'options' => [
+                    'Default' => null,
+                    'A-Z' => 'asc',
+                    'Z-A' => 'desc',
+                ],
+                'selected' => null,
+            ],
+            'birthdate' => [
+                'title' => __('Birthday'),
+                'options' => [
+                    'Default' => null,
+                    'Youngest' => 'desc',
+                    'Oldest' => 'asc',
+                ],
+                'selected' => null,
+            ],
+            'deceased_date' => [
+                'title' => __('Deceased Date'),
+                'options' => [
+                    'Default' => null,
+                    'Recent' => 'desc',
+                    'Oldest' => 'asc',
+                ],
+                'selected' => null,
+            ],
+            'astrological_sign' => [
+                'title' => __('Astrological Sign'),
+                'options' => [
+                    'Default' => null,
+                    'Aries-Pisces' => 'asc',
+                    'Pisces-Aries' => 'desc',
+                ],
+                'selected' => null,
+            ],
+        ];
+    }
+
+    /**
+     * Set the filterable attributes of the model.
+     *
+     * @return void
+     */
+    public function setFilterableAttributes(): void
+    {
+        $this->filter = [
+            'birthdate' => [
+                'title' => __('Birthday'),
+                'type' => 'date',
+                'selected' => null,
+            ],
+            'deceased_date' => [
+                'title' => __('Deceased Date'),
+                'type' => 'date',
+                'selected' => null,
+            ],
+            'astrological_sign' => [
+                'title' => __('Astrological Sign'),
+                'type' => 'select',
+                'options' => AstrologicalSign::asSelectArray(),
+                'selected' => null,
+            ],
+        ];
+    }
+
+    /**
+     * Reset order to default values.
+     *
+     * @return void
+     */
+    public function resetOrder(): void
+    {
+        $this->order = array_map(function ($order) {
+            $order['selected'] = null;
+            return $order;
+        }, $this->order);
+    }
+
+    /**
+     * Reset filter to default values.
+     *
+     * @return void
+     */
+    public function resetFilter(): void
+    {
+        $this->filter = array_map(function ($filter) {
+            $filter['selected'] = null;
+            return $filter;
+        }, $this->filter);
     }
 
     /**
