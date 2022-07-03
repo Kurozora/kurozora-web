@@ -54,24 +54,6 @@ class Character extends KModel implements HasMedia, Sitemapable
     ];
 
     /**
-     * Searchable rules.
-     *
-     * @var array
-     */
-    protected $searchable = [
-        'columns' => [
-            'name' => 10,
-            'about' => 5,
-        ],
-        'joins' => [
-            'character_translations' => [
-                'characters.id',
-                'character_translations.character_id'
-            ],
-        ],
-    ];
-
-    /**
      * The attributes that should be cast.
      *
      * @var array
