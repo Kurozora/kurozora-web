@@ -33,7 +33,7 @@
                         <x-spinner />
 
                         <x-square-button wire:click="randomCharacter">
-                            @svg('dice', 'fill-current', ['aria-labelledby' => 'random anime', 'width' => '28'])
+                            @svg('dice', 'fill-current', ['aria-labelledby' => 'random character', 'width' => '28'])
                         </x-square-button>
 
                         {{-- Order --}}
