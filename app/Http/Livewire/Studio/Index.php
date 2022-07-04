@@ -49,7 +49,8 @@ class Index extends Component
      *
      * @return void
      */
-    public function mount(): void {
+    public function mount(): void
+    {
         $this->setFilterableAttributes();
         $this->setOrderableAttributes();
     }
@@ -92,7 +93,7 @@ class Index extends Component
                     case 'date':
                         $date = Carbon::createFromFormat('Y-m-d', $selected)
                             ->setTime(0, 0)
-                            ->toISOString();
+                            ->timestamp;
                         $studios = $studios->where($attribute, $date);
                         break;
                     case 'double':

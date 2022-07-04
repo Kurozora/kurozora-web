@@ -111,13 +111,9 @@
                                                     @endforeach
                                                 </x-select>
                                             @break
-                                            @case('bool')
-                                                <x-input id="{{ $key }}True" value="true" name="{{ $key }}" type="radio" wire:model="filter.{{ $key }}.selected" />
-                                                <label for="{{ $key }}True">{{ __('Enabled') }}</label>
-                                                <br>
-                                                <x-input id="{{ $key }}False" value="" name="{{ $key }}" type="radio" wire:model="filter.{{ $key }}.selected" />
-                                                <label for="{{ $key }}False">{{ __('Disabled') }}</label>
-                                            @break
+                                                @foreach($filter['options'] as $optionKey => $option)
+                                                    <option value="{{ (int) ($optionKey == 0) }}">{{ __($option) }}</option>
+                                                @endforeach
                                         @endswitch
                                     </div>
                                 @endforeach

@@ -55,7 +55,8 @@ class Index extends Component
      *
      * @return void
      */
-    public function mount(): void {
+    public function mount(): void
+    {
         $this->setFilterableAttributes();
         $this->setOrderableAttributes();
     }
@@ -98,7 +99,7 @@ class Index extends Component
                     case 'date':
                         $date = Carbon::createFromFormat('Y-m-d', $selected)
                             ->setTime(0, 0)
-                            ->toISOString();
+                            ->timestamp;
                         $animes = $animes->where($attribute, $date);
                         break;
                     case 'time':
@@ -132,15 +133,6 @@ class Index extends Component
                 ],
                 'selected' => null,
             ],
-            'duration' => [
-                'title' => __('Duration'),
-                'options' => [
-                    'Default' => null,
-                    'Shortest' => 'asc',
-                    'Longest' => 'desc',
-                ],
-                'selected' => null,
-            ],
             'first_aired' => [
                 'title' => __('First Aired'),
                 'options' => [
@@ -156,6 +148,15 @@ class Index extends Component
                     'Default' => null,
                     'Newest' => 'desc',
                     'Oldest' => 'asc',
+                ],
+                'selected' => null,
+            ],
+            'duration' => [
+                'title' => __('Duration'),
+                'options' => [
+                    'Default' => null,
+                    'Shortest' => 'asc',
+                    'Longest' => 'desc',
                 ],
                 'selected' => null,
             ],
@@ -233,6 +234,10 @@ class Index extends Component
                 $this->filter['is_nsfw'] = [
                     'title' => __('NSFW'),
                     'type' => 'bool',
+                    'options' => [
+                        'Shown',
+                        'Hidden'
+                    ],
                     'selected' => null,
                 ];
             }
