@@ -4,45 +4,22 @@ namespace App\Http\Livewire\Studio;
 
 use App\Enums\StudioType;
 use App\Models\Studio;
-use Carbon\Carbon;
+use App\Traits\Livewire\WithSearch;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
-use Livewire\WithPagination;
 
 class Index extends Component
 {
-    use WithPagination;
+    use WithSearch;
 
     /**
-     * The search string.
+     * The model used for searching.
      *
-     * @var string $search
+     * @var string $searchModel
      */
-    public string $search = '';
-
-    /**
-     * The number of results per page.
-     *
-     * @var int $perPage
-     */
-    public int $perPage = 25;
-
-    /**
-     * The component's filter attributes.
-     *
-     * @var array $filter
-     */
-    public array $filter = [];
-
-    /**
-     * The component's order attributes.
-     *
-     * @var array $order
-     */
-    public array $order = [];
+    public static string $searchModel = Studio::class;
 
     /**
      * Prepare the component.
@@ -62,52 +39,8 @@ class Index extends Component
      */
     public function randomStudio(): void
     {
-        $this->redirectRoute('studios.details', Studio::inRandomOrder()->first());
-    }
-
-    /**
-     * The computed studios property.
-     *
-     * @return LengthAwarePaginator
-     */
-    public function getStudiosProperty(): LengthAwarePaginator
-    {
-        // Search
-        $studios = Studio::search($this->search);
-
-        // Order
-        foreach ($this->order as $attribute => $order) {
-            $selected = $order['selected'];
-            if (!empty($selected)) {
-                $studios = $studios->orderBy($attribute, $selected);
-            }
-        }
-
-        // Filter
-        foreach ($this->filter as $attribute => $filter) {
-            $selected = $filter['selected'];
-            $type = $filter['type'];
-
-            if ((is_numeric($selected) && $selected >= 0) || !empty($selected)) {
-                switch ($type) {
-                    case 'date':
-                        $date = Carbon::createFromFormat('Y-m-d', $selected)
-                            ->setTime(0, 0)
-                            ->timestamp;
-                        $studios = $studios->where($attribute, $date);
-                        break;
-                    case 'double':
-                        $number = number_format($selected, 2, '.', '');
-                        $studios = $studios->where($attribute, $number);
-                        break;
-                    default:
-                        $studios = $studios->where($attribute, $selected);
-                }
-            }
-        }
-
-        // Paginate
-        return $studios->paginate($this->perPage);
+        $studio = Studio::inRandomOrder()->first();
+        $this->redirectRoute('studios.details', $studio);
     }
 
     /**
@@ -173,32 +106,6 @@ class Index extends Component
                 'selected' => null,
             ],
         ];
-    }
-
-    /**
-     * Reset order to default values.
-     *
-     * @return void
-     */
-    public function resetOrder(): void
-    {
-        $this->order = array_map(function ($order) {
-            $order['selected'] = null;
-            return $order;
-        }, $this->order);
-    }
-
-    /**
-     * Reset filter to default values.
-     *
-     * @return void
-     */
-    public function resetFilter(): void
-    {
-        $this->filter = array_map(function ($filter) {
-            $filter['selected'] = null;
-            return $filter;
-        }, $this->filter);
     }
 
     /**

@@ -89,16 +89,6 @@ class Episode extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Get the name of the index associated with the model.
-     *
-     * @return string
-     */
-    public function searchableAs(): string
-    {
-        return 'episodes_index';
-    }
-
-    /**
      * Get the indexable data array for the model.
      *
      * @return array
@@ -106,11 +96,9 @@ class Episode extends KModel implements HasMedia, Sitemapable
     public function toSearchableArray(): array
     {
         $episode = $this->toArray();
-        $searchableArray = [
-            'first_aired' => $this->first_aired?->timestamp,
-            'rating_average' => $this->stats?->rating_average ?? 0,
-        ];
-        return array_merge($episode, $searchableArray);
+        $episode['first_aired'] = $this->first_aired?->timestamp;
+        $episode['rating_average'] = $this->stats?->rating_average ?? 0;
+        return $episode;
     }
 
     /**

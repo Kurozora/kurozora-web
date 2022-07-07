@@ -113,16 +113,6 @@ class Character extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Get the name of the index associated with the model.
-     *
-     * @return string
-     */
-    public function searchableAs(): string
-    {
-        return 'characters_index';
-    }
-
-    /**
      * Get the indexable data array for the model.
      *
      * @return array

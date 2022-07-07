@@ -226,16 +226,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Get the name of the index associated with the model.
-     *
-     * @return string
-     */
-    public function searchableAs(): string
-    {
-        return 'animes_index';
-    }
-
-    /**
      * Get the indexable data array for the model.
      *
      * @return array
@@ -243,16 +233,9 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function toSearchableArray(): array
     {
         $anime = $this->toArray();
-        $searchableArray = [
-            'first_aired' => $this->first_aired?->timestamp,
-            'last_aired' => $this->last_aired?->timestamp,
-            'user_ids' => $this->users()
-                ->get([User::TABLE_NAME . '.id'])
-                ->map(function ($user) {
-                    return $user['id'];
-                })
-        ];
-        return array_merge($anime, $searchableArray);
+        $anime['first_aired'] = $this->first_aired?->timestamp;
+        $anime['last_aired'] = $this->last_aired?->timestamp;
+        return $anime;
     }
 
     /**
@@ -1058,6 +1041,16 @@ class Anime extends KModel implements HasMedia, Sitemapable
         return $this->belongsToMany(User::class, UserLibrary::class, 'anime_id', 'user_id')
             ->using(UserLibrary::class)
             ->withTimestamps();
+    }
+
+    /**
+     * Returns the Anime items in the user's library.
+     *
+     * @return HasMany
+     */
+    function library(): HasMany
+    {
+        return $this->hasMany(UserLibrary::class);
     }
 
     /**
