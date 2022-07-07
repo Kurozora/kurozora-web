@@ -50,6 +50,7 @@ class Person extends KModel implements HasMedia, Sitemapable
     protected $casts = [
         'alternative_names' => AsArrayObject::class,
         'birthdate'         => 'date',
+        'deceased_date'     => 'date',
         'website_urls'      => AsArrayObject::class,
     ];
 
@@ -102,16 +103,6 @@ class Person extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Get the name of the index associated with the model.
-     *
-     * @return string
-     */
-    public function searchableAs(): string
-    {
-        return 'people_index';
-    }
-
-    /**
      * Get the indexable data array for the model.
      *
      * @return array
@@ -119,11 +110,11 @@ class Person extends KModel implements HasMedia, Sitemapable
     public function toSearchableArray(): array
     {
         $person = $this->toArray();
-        $searchableArray = [
-            'full_name' => $this->full_name,
-            'full_given_name' => $this->full_given_name,
-        ];
-        return array_merge($searchableArray, $person);
+        $person['full_name'] = $this->full_name;
+        $person['full_given_name'] = $this->full_given_name;
+        $person['birthdate'] = $this->birthdate?->timestamp;
+        $person['deceased_date'] = $this->deceased_date?->timestamp;
+        return $person;
     }
 
     /**

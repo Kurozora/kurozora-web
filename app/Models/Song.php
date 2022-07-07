@@ -65,30 +65,13 @@ class Song extends KModel implements Sitemapable
     }
 
     /**
-     * Get the name of the index associated with the model.
-     *
-     * @return string
-     */
-    public function searchableAs(): string
-    {
-        return 'songs_index';
-    }
-
-    /**
      * Get the indexable data array for the model.
      *
      * @return array
      */
     public function toSearchableArray(): array
     {
-        return [
-            'id' => $this->id,
-            'am_id' => $this->am_id,
-            'mal_id' => $this->mal_id,
-            'slug' => $this->slug,
-            'title' => $this->title,
-            'artist' => $this->artist
-        ];
+        return $this->toArray();
     }
 
     /**

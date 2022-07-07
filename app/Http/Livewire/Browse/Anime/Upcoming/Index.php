@@ -9,46 +9,25 @@ use App\Models\MediaType;
 use App\Models\Source;
 use App\Models\Status;
 use App\Models\TvRating;
+use App\Traits\Livewire\WithSearch;
 use Auth;
-use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Laravel\Scout\Builder as ScoutBuilder;
 use Livewire\Component;
-use Livewire\WithPagination;
 
 class Index extends Component
 {
-    use WithPagination;
+    use WithSearch;
 
     /**
-     * The search string.
+     * The model used for searching.
      *
-     * @var string $search
+     * @var string $searchModel
      */
-    public string $search = '';
-
-    /**
-     * The number of results per page.
-     *
-     * @var int $perPage
-     */
-    public int $perPage = 25;
-
-    /**
-     * The component's filter attributes.
-     *
-     * @var array $filter
-     */
-    public array $filter = [];
-
-    /**
-     * The component's order attributes.
-     *
-     * @var array $order
-     */
-    public array $order = [];
+    public static string $searchModel = Anime::class;
 
     /**
      * Prepare the component.
@@ -68,7 +47,7 @@ class Index extends Component
      */
     public function randomAnime(): void
     {
-        $anime = Anime::search()->where('first_aired', ['>', yesterday()->timestamp])
+        $anime = Anime::search()->where('first_aired', ['>=', yesterday()->timestamp])
             ->get()
             ->random(1)
             ->first();
@@ -76,49 +55,25 @@ class Index extends Component
     }
 
     /**
-     * The computed upcoming anime property.
+     * Build an 'search index' query for the given resource.
      *
-     * @return LengthAwarePaginator
+     * @param EloquentBuilder $query
+     * @return EloquentBuilder
      */
-    public function getAnimesProperty(): LengthAwarePaginator
+    public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
     {
-        // Search
-        $animes = Anime::search($this->search);
-        $animes->where('first_aired', ['>', yesterday()->timestamp]);
+        return $query->whereDate('first_aired', '>=', yesterday());
+    }
 
-        // Order
-        foreach ($this->order as $attribute => $order) {
-            $selected = $order['selected'];
-            if (!empty($selected)) {
-                $animes = $animes->orderBy($attribute, $selected);
-            }
-        }
-
-        // Filter
-        foreach ($this->filter as $attribute => $filter) {
-            $selected = $filter['selected'];
-            $type = $filter['type'];
-
-            if ((is_numeric($selected) && $selected >= 0) || !empty($selected)) {
-                switch ($type) {
-                    case 'date':
-                        $date = Carbon::createFromFormat('Y-m-d', $selected)
-                            ->setTime(0, 0)
-                            ->timestamp;
-                        $animes = $animes->where($attribute, $date);
-                        break;
-                    case 'time':
-                        $time = $selected . ':00';
-                        $animes = $animes->where($attribute, $time);
-                        break;
-                    default:
-                        $animes = $animes->where($attribute, $selected);
-                }
-            }
-        }
-
-        // Paginate
-        return $animes->paginate($this->perPage);
+    /**
+     * Build an 'search' query for the given resource.
+     *
+     * @param ScoutBuilder $query
+     * @return ScoutBuilder
+     */
+    public function searchQuery(ScoutBuilder $query): ScoutBuilder
+    {
+        return $query->where('first_aired', ['>=', yesterday()->timestamp]);
     }
 
     /**
@@ -239,36 +194,14 @@ class Index extends Component
                 $this->filter['is_nsfw'] = [
                     'title' => __('NSFW'),
                     'type' => 'bool',
+                    'options' => [
+                        __('Shown'),
+                        __('Hidden'),
+                    ],
                     'selected' => null,
                 ];
             }
         }
-    }
-
-    /**
-     * Reset order to default values.
-     *
-     * @return void
-     */
-    public function resetOrder(): void
-    {
-        $this->order = array_map(function ($order) {
-            $order['selected'] = null;
-            return $order;
-        }, $this->order);
-    }
-
-    /**
-     * Reset filter to default values.
-     *
-     * @return void
-     */
-    public function resetFilter(): void
-    {
-        $this->filter = array_map(function ($filter) {
-            $filter['selected'] = null;
-            return $filter;
-        }, $this->filter);
     }
 
     /**

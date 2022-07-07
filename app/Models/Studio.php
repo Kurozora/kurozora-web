@@ -105,23 +105,15 @@ class Studio extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Get the name of the index associated with the model.
-     *
-     * @return string
-     */
-    public function searchableAs(): string
-    {
-        return 'studios_index';
-    }
-
-    /**
      * Get the indexable data array for the model.
      *
      * @return array
      */
     public function toSearchableArray(): array
     {
-        return $this->toArray();
+        $studio = $this->toArray();
+        $studio['founded'] = $this->founded?->timestamp;
+        return $studio;
     }
 
     /**

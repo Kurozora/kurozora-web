@@ -172,16 +172,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
-     * Get the name of the index associated with the model.
-     *
-     * @return string
-     */
-    public function searchableAs(): string
-    {
-        return 'users_index';
-    }
-
-    /**
      * Get the indexable data array for the model.
      *
      * @return array

@@ -5,51 +5,30 @@ namespace App\Http\Livewire\Character;
 use App\Enums\AstrologicalSign;
 use App\Enums\CharacterStatus;
 use App\Models\Character;
+use App\Traits\Livewire\WithSearch;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
-use Livewire\WithPagination;
 
 class Index extends Component
 {
-    use WithPagination;
+    use WithSearch;
 
     /**
-     * The search string.
+     * The model used for searching.
      *
-     * @var string $search
+     * @var string $searchModel
      */
-    public string $search = '';
-
-    /**
-     * The number of results per page.
-     *
-     * @var int $perPage
-     */
-    public int $perPage = 25;
-
-    /**
-     * The component's filter attributes.
-     *
-     * @var array $filter
-     */
-    public array $filter = [];
-
-    /**
-     * The component's order attributes.
-     *
-     * @var array $order
-     */
-    public array $order = [];
+    public static string $searchModel = Character::class;
 
     /**
      * Prepare the component.
      *
      * @return void
      */
-    public function mount(): void {
+    public function mount(): void
+    {
         $this->setFilterableAttributes();
         $this->setOrderableAttributes();
     }
@@ -61,46 +40,8 @@ class Index extends Component
      */
     public function randomCharacter(): void
     {
-        $this->redirectRoute('characters.details', Character::inRandomOrder()->first());
-    }
-
-    /**
-     * The computed characters property.
-     *
-     * @return LengthAwarePaginator
-     */
-    public function getCharactersProperty(): LengthAwarePaginator
-    {
-        // Search
-        $characters = Character::search($this->search);
-
-        // Order
-        foreach ($this->order as $attribute => $order) {
-            $selected = $order['selected'];
-            if (!empty($selected)) {
-                $characters = $characters->orderBy($attribute, $selected);
-            }
-        }
-
-        // Filter
-        foreach ($this->filter as $attribute => $filter) {
-            $selected = $filter['selected'];
-            $type = $filter['type'];
-
-            if ((is_numeric($selected) && $selected >= 0) || !empty($selected)) {
-                switch ($type) {
-                    case 'double':
-                        $number = number_format($selected, 2, '.', '');
-                        $characters = $characters->where($attribute, $number);
-                        break;
-                    default:
-                        $characters = $characters->where($attribute, $selected);
-                }
-            }
-        }
-
-        // Paginate
-        return $characters->paginate($this->perPage);
+        $character = Character::inRandomOrder()->first();
+        $this->redirectRoute('characters.details', $character);
     }
 
     /**
@@ -211,32 +152,6 @@ class Index extends Component
                 'selected' => null,
             ],
         ];
-    }
-
-    /**
-     * Reset order to default values.
-     *
-     * @return void
-     */
-    public function resetOrder(): void
-    {
-        $this->order = array_map(function ($order) {
-            $order['selected'] = null;
-            return $order;
-        }, $this->order);
-    }
-
-    /**
-     * Reset filter to default values.
-     *
-     * @return void
-     */
-    public function resetFilter(): void
-    {
-        $this->filter = array_map(function ($filter) {
-            $filter['selected'] = null;
-            return $filter;
-        }, $this->filter);
     }
 
     /**

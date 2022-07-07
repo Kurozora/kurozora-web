@@ -4,17 +4,24 @@ namespace App\Http\Livewire\Season;
 
 use App\Models\Episode;
 use App\Models\Season;
-use Carbon\Carbon;
+use App\Traits\Livewire\WithSearch;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Laravel\Scout\Builder as ScoutBuilder;
 use Livewire\Component;
-use Livewire\WithPagination;
 
 class Episodes extends Component
 {
-    use WithPagination;
+    use WithSearch;
+
+    /**
+     * The model used for searching.
+     *
+     * @var string $searchModel
+     */
+    public static string $searchModel = Episode::class;
 
     /**
      * The object containing the season data.
@@ -22,34 +29,6 @@ class Episodes extends Component
      * @var Season $season
      */
     public Season $season;
-
-    /**
-     * The search string.
-     *
-     * @var string $search
-     */
-    public string $search = '';
-
-    /**
-     * The number of results per page.
-     *
-     * @var int $perPage
-     */
-    public int $perPage = 25;
-
-    /**
-     * The component's filter attributes.
-     *
-     * @var array $filter
-     */
-    public array $filter = [];
-
-    /**
-     * The component's order attributes.
-     *
-     * @var array $order
-     */
-    public array $order = [];
 
     /**
      * Prepare the component.
@@ -78,45 +57,26 @@ class Episodes extends Component
         $this->redirectRoute('episodes.details', $episode);
     }
 
-    function getEpisodesProperty(): LengthAwarePaginator
+    /**
+     * Build an 'search index' query for the given resource.
+     *
+     * @param EloquentBuilder $query
+     * @return EloquentBuilder
+     */
+    public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
     {
-        // Search
-        $episodes = Episode::search($this->search);
-        $episodes = $episodes->where('season_id', $this->season->id);
+        return $query->where('season_id', $this->season->id);
+    }
 
-        // Order
-        foreach ($this->order as $attribute => $order) {
-            $selected = $order['selected'];
-            if (!empty($selected)) {
-                $episodes = $episodes->orderBy($attribute, $selected);
-            }
-        }
-
-        // Filter
-        foreach ($this->filter as $attribute => $filter) {
-            $selected = $filter['selected'];
-            $type = $filter['type'];
-
-            if ((is_numeric($selected) && $selected >= 0) || !empty($selected)) {
-                switch ($type) {
-                    case 'date':
-                        $date = Carbon::createFromFormat('Y-m-d', $selected)
-                            ->setTime(0, 0)
-                            ->timestamp;
-                        $episodes = $episodes->where($attribute, $date);
-                        break;
-                    case 'time':
-                        $time = $selected . ':00';
-                        $episodes = $episodes->where($attribute, $time);
-                        break;
-                    default:
-                        $episodes = $episodes->where($attribute, $selected);
-                }
-            }
-        }
-
-        // Paginate
-        return $episodes->paginate($this->perPage);
+    /**
+     * Build an 'search' query for the given resource.
+     *
+     * @param ScoutBuilder $query
+     * @return ScoutBuilder
+     */
+    public function searchQuery(ScoutBuilder $query): ScoutBuilder
+    {
+        return $query->where('season_id', $this->season->id);
     }
 
     /**
@@ -213,32 +173,6 @@ class Episodes extends Component
                 'selected' => null,
             ],
         ];
-    }
-
-    /**
-     * Reset order to default values.
-     *
-     * @return void
-     */
-    public function resetOrder(): void
-    {
-        $this->order = array_map(function ($order) {
-            $order['selected'] = null;
-            return $order;
-        }, $this->order);
-    }
-
-    /**
-     * Reset filter to default values.
-     *
-     * @return void
-     */
-    public function resetFilter(): void
-    {
-        $this->filter = array_map(function ($filter) {
-            $filter['selected'] = null;
-            return $filter;
-        }, $this->filter);
     }
 
     /**

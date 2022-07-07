@@ -63,32 +63,16 @@ class UserLibrary extends Pivot
     }
 
     /**
-     * Get the name of the index associated with the model.
-     *
-     * @return string
-     */
-    public function searchableAs(): string
-    {
-        return 'animes_index';
-    }
-
-    /**
      * Get the indexable data array for the model.
      *
      * @return array
      */
     public function toSearchableArray(): array
     {
-        /** @var Anime $anime */
-        $anime = $this->anime()->withoutGlobalScopes()->first();
-        $searchableArray = [
-            'user_ids' => $anime->users()
-                ->get([User::TABLE_NAME . '.id'])
-                ->map(function ($user) {
-                    return $user['id'];
-                })
-        ];
-        return array_merge($searchableArray, $anime->toSearchableArray());
+        $library = $this->toArray();
+        $library['start_date'] = $this->start_date?->timestamp;
+        $library['end_date'] = $this->end_date?->timestamp;
+        return $library;
     }
 
     /**
