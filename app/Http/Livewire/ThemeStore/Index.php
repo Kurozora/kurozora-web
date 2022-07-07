@@ -2,57 +2,99 @@
 
 namespace App\Http\Livewire\ThemeStore;
 
+use App\Enums\VisualEffectViewStyle;
 use App\Models\AppTheme;
+use App\Traits\Livewire\WithSearch;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
-use Livewire\WithPagination;
 
 class Index extends Component
 {
-    use WithPagination;
+    use WithSearch;
 
     /**
-     * The component's filters.
+     * The model used for searching.
      *
-     * @var array $filter
+     * @var string $searchModel
      */
-    public array $filter = [
-        'search' => '',
-        'order_type' => '',
-        'per_page' => 25,
-    ];
+    public static string $searchModel = AppTheme::class;
 
     /**
      * Prepare the component.
      *
      * @return void
      */
-    public function mount() {}
+    public function mount(): void
+    {
+        $this->setFilterableAttributes();
+        $this->setOrderableAttributes();
+    }
 
     /**
-     * The computed platform themes property.
+     * Set the orderable attributes of the model.
      *
-     * @return LengthAwarePaginator
+     * @return void
      */
-    private function getPlatformThemesAttribute(): LengthAwarePaginator
+    public function setOrderableAttributes(): void
     {
-        $platformThemes = AppTheme::query();
+        $this->order = [
+            'name' => [
+                'title' => __('Name'),
+                'options' => [
+                    'Default' => null,
+                    'A-Z' => 'asc',
+                    'Z-A' => 'desc',
+                ],
+                'selected' => null,
+            ],
+            'download_count' => [
+                'title' => __('Download Count'),
+                'options' => [
+                    'Default' => null,
+                    '0-9' => 'asc',
+                    '9-0' => 'desc',
+                ],
+                'selected' => null,
+            ],
+            'version' => [
+                'title' => __('Version'),
+                'options' => [
+                    'Default' => null,
+                    '0-9' => 'asc',
+                    '9-0' => 'desc',
+                ],
+                'selected' => null,
+            ],
+        ];
+    }
 
-        // Search
-        if (!empty($this->filter['search'])) {
-            $platformThemes = $platformThemes->where('name', 'like', '%' . $this->filter['search'] . '%');
-        }
-
-        // Order
-        if (!empty($this->filter['order_type'])) {
-            $platformThemes = $platformThemes->orderBy('name', $this->filter['order_type']);
-        }
-
-        // Paginate
-        return $platformThemes->paginate($this->filter['per_page'] ?? 25);
+    /**
+     * Set the filterable attributes of the model.
+     *
+     * @return void
+     */
+    public function setFilterableAttributes(): void
+    {
+        $this->filter = [
+            'download_count' => [
+                'title' => __('Download Count'),
+                'type' => 'number',
+                'selected' => null,
+            ],
+            'version' => [
+                'title' => __('Version'),
+                'type' => 'string',
+                'selected' => null,
+            ],
+            'ui_status_bar_style' => [
+                'title' => __('Appearance'),
+                'type' => 'select',
+                'options' => VisualEffectViewStyle::asSelectArray(),
+                'selected' => null,
+            ],
+        ];
     }
 
     /**
@@ -62,8 +104,6 @@ class Index extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.theme-store.index', [
-            'platformThemes' => $this->getPlatformThemesAttribute()
-        ]);
+        return view('livewire.theme-store.index');
     }
 }
