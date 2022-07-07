@@ -183,6 +183,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             'slug' => $this->slug,
             'username' => $this->username,
             'biography' => $this->biography,
+            'created_at' => $this->created_at?->timestamp,
+            'updated_at' => $this->updated_at?->timestamp,
         ];
     }
 

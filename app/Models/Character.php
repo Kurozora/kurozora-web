@@ -119,7 +119,10 @@ class Character extends KModel implements HasMedia, Sitemapable
      */
     public function toSearchableArray(): array
     {
-        return $this->toArray();
+        $character = $this->toArray();
+        $character['created_at'] = $this->created_at?->timestamp;
+        $character['updated_at'] = $this->updated_at?->timestamp;
+        return $character;
     }
 
     /**
