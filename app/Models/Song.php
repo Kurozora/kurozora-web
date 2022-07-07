@@ -71,7 +71,10 @@ class Song extends KModel implements Sitemapable
      */
     public function toSearchableArray(): array
     {
-        return $this->toArray();
+        $song = $this->toArray();
+        $song['created_at'] = $this->created_at?->timestamp;
+        $song['updated_at'] = $this->updated_at?->timestamp;
+        return $song;
     }
 
     /**

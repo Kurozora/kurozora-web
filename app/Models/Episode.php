@@ -98,6 +98,8 @@ class Episode extends KModel implements HasMedia, Sitemapable
         $episode = $this->toArray();
         $episode['first_aired'] = $this->first_aired?->timestamp;
         $episode['rating_average'] = $this->stats?->rating_average ?? 0;
+        $episode['created_at'] = $this->created_at?->timestamp;
+        $episode['updated_at'] = $this->updated_at?->timestamp;
         return $episode;
     }
 

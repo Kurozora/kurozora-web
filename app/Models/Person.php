@@ -114,6 +114,8 @@ class Person extends KModel implements HasMedia, Sitemapable
         $person['full_given_name'] = $this->full_given_name;
         $person['birthdate'] = $this->birthdate?->timestamp;
         $person['deceased_date'] = $this->deceased_date?->timestamp;
+        $person['created_at'] = $this->created_at?->timestamp;
+        $person['updated_at'] = $this->updated_at?->timestamp;
         return $person;
     }
 
