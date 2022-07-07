@@ -172,16 +172,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
-     * Get the name of the index associated with the model.
-     *
-     * @return string
-     */
-    public function searchableAs(): string
-    {
-        return 'users_index';
-    }
-
-    /**
      * Get the indexable data array for the model.
      *
      * @return array
@@ -193,6 +183,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             'slug' => $this->slug,
             'username' => $this->username,
             'biography' => $this->biography,
+            'created_at' => $this->created_at?->timestamp,
+            'updated_at' => $this->updated_at?->timestamp,
         ];
     }
 

@@ -12,13 +12,13 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create(Studio::TABLE_NAME, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('mal_id')->nullable();
             $table->string('slug');
-            $table->string('type');
+            $table->unsignedTinyInteger('type');
             $table->string('name');
             $table->mediumText('about')->nullable();
             $table->mediumText('address')->nullable();
@@ -39,7 +39,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists(Studio::TABLE_NAME);
     }

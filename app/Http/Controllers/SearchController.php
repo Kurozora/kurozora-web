@@ -18,6 +18,7 @@ use App\Models\Person;
 use App\Models\Song;
 use App\Models\Studio;
 use App\Models\User;
+use App\Models\UserLibrary;
 use Auth;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\JsonResponse;
@@ -37,9 +38,9 @@ class SearchController extends Controller
         $scope = $data['scope'];
         $types = $data['types'];
 
-//        if ($scope == SearchScope::Library && !Auth::check()) {
-//            throw new AuthenticationException('The request wasn’t accepted due to an issue with the credentials.');
-//        }
+        if ($scope == SearchScope::Library && !Auth::check()) {
+            throw new AuthenticationException('The request wasn’t accepted due to an issue with the credentials.');
+        }
 
         $response = [];
         foreach ($types as $type) {
@@ -93,16 +94,22 @@ class SearchController extends Controller
                     ];
                     break;
                 case SearchType::Shows:
-                    $resource = Anime::search($data['query'])
-                    ->when($scope == SearchScope::Library, function ($builder) {
-                        $builder->where('user_ids', Auth::id());
-                    });
+                    if ($scope == SearchScope::Library) {
+                        $resource = UserLibrary::search($data['query'])
+                            ->where('user_id', Auth::user()->id)
+                            ->paginate($data['limit'] ?? 5)
+                            ->appends($data);
+                        // Get next page url minus domain
+                        $nextPageURL = $this->nextPageUrlFor($resource, $type);
 
-                    $resource = $resource->paginate($data['limit'] ?? 5)
-                        ->appends($data);
-
-                    // Get next page url minus domain
-                    $nextPageURL = $this->nextPageUrlFor($resource, $type);
+                        $resource = collect($resource->items())->pluck('anime');
+                    } else {
+                        $resource = Anime::search($data['query']);
+                        $resource = $resource->paginate($data['limit'] ?? 5)
+                            ->appends($data);
+                        // Get next page url minus domain
+                        $nextPageURL = $this->nextPageUrlFor($resource, $type);
+                    }
 
                     $response[$type] = [
                         'data' => AnimeResourceIdentity::collection($resource),

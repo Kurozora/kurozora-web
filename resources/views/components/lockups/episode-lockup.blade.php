@@ -1,3 +1,5 @@
+@props(['episode'])
+
 <div class="relative">
     <div class="flex flex-nowrap">
         <picture class="relative w-full aspect-ratio-16-9 rounded-lg overflow-hidden">

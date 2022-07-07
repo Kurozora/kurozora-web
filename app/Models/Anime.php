@@ -91,25 +91,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     ];
 
     /**
-     * Searchable rules.
-     *
-     * @var array
-     */
-    protected $searchable = [
-        'columns' => [
-            'original_title' => 10,
-            'synonym_titles' => 10,
-            'title' => 10,
-        ],
-        'joins' => [
-            AnimeTranslation::TABLE_NAME => [
-                Anime::TABLE_NAME . '.id',
-                AnimeTranslation::TABLE_NAME . '.anime_id',
-            ],
-        ],
-    ];
-
-    /**
      * Casts rules.
      *
      * @var array
@@ -245,16 +226,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Get the name of the index associated with the model.
-     *
-     * @return string
-     */
-    public function searchableAs(): string
-    {
-        return 'animes_index';
-    }
-
-    /**
      * Get the indexable data array for the model.
      *
      * @return array
@@ -262,14 +233,11 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function toSearchableArray(): array
     {
         $anime = $this->toArray();
-        $searchableArray = [
-            'user_ids' => $this->users()
-                ->get([User::TABLE_NAME . '.id'])
-                ->map(function ($user) {
-                    return $user['id'];
-                })
-        ];
-        return array_merge($searchableArray, $anime);
+        $anime['first_aired'] = $this->first_aired?->timestamp;
+        $anime['last_aired'] = $this->last_aired?->timestamp;
+        $anime['created_at'] = $this->created_at?->timestamp;
+        $anime['updated_at'] = $this->updated_at?->timestamp;
+        return $anime;
     }
 
     /**
@@ -1075,6 +1043,16 @@ class Anime extends KModel implements HasMedia, Sitemapable
         return $this->belongsToMany(User::class, UserLibrary::class, 'anime_id', 'user_id')
             ->using(UserLibrary::class)
             ->withTimestamps();
+    }
+
+    /**
+     * Returns the Anime items in the user's library.
+     *
+     * @return HasMany
+     */
+    function library(): HasMany
+    {
+        return $this->hasMany(UserLibrary::class);
     }
 
     /**

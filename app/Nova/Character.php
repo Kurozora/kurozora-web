@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use App\Enums\AstrologicalSign;
+use App\Enums\CharacterStatus;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsToMany;
@@ -142,12 +143,11 @@ class Character extends Resource
                 ->sortable(),
 
             Select::make('Status')
-                ->options([
-                    'Alive' => 'Alive',
-                    'Deceased' => 'Deceased'
-                ])
-                ->nullable(true)
-                ->sortable(),
+                ->options(CharacterStatus::asSelectArray())
+                ->displayUsingLabels()
+                ->nullable()
+                ->sortable()
+                ->help('The life status of the character. E.g. Alive, or Dead.'),
 
             Text::make('Blood Type')
                 ->rules('nullable', 'max:3', 'string')
