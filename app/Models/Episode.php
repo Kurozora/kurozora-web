@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Cache;
+use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sitemap\Contracts\Sitemapable;
@@ -23,6 +24,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
         HasFactory,
         InteractsWithMedia,
         InteractsWithMediaExtension,
+        Searchable,
         Translatable;
 
     // How long to cache certain responses
@@ -60,9 +62,9 @@ class Episode extends KModel implements HasMedia, Sitemapable
      * @var array
      */
     protected $appends = [
-        'banner_image',
-        'banner_image_url',
-        'duration_string',
+//        'banner_image',
+//        'banner_image_url',
+//        'duration_string',
     ];
 
     /**
@@ -84,6 +86,21 @@ class Episode extends KModel implements HasMedia, Sitemapable
     {
         $runtime = $this->duration ?? 0;
         return CarbonInterval::seconds($runtime)->cascade()->forHumans();
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+        $episode = $this->toArray();
+        $episode['first_aired'] = $this->first_aired?->timestamp;
+        $episode['rating_average'] = $this->stats?->rating_average ?? 0;
+        $episode['created_at'] = $this->created_at?->timestamp;
+        $episode['updated_at'] = $this->updated_at?->timestamp;
+        return $episode;
     }
 
     /**

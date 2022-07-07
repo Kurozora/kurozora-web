@@ -22,68 +22,33 @@
     <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
         <section class="mb-4">
             <div>
-                <p class="text-2xl font-bold">{{ __('People') }}</p>
-
-                <div class="sm:flex items-center mt-4">
-                    <div class="flex-1 mb-4">
-                        <x-input id="search" type="text" placeholder="{{ __('I’m searching for…') }}" wire:model.debounce.500ms="filter.search" />
+                <div class="flex gap-1">
+                    <div class="flex flex-wrap items-center w-full">
+                        <p class="text-2xl font-bold">{{ __('People') }}</p>
                     </div>
 
-                    <div class="flex flex-1 items-center justify-end space-x-1">
-                        <x-spinner wire:target="filter" />
-
-                        <x-square-button wire:click="randomPerson">
-                            @svg('dice', 'fill-current', ['aria-labelledby' => 'random anime', 'width' => '28'])
-                        </x-square-button>
-
-                        <x-dropdown align="right" width="48">
-                            <x-slot:trigger>
-                                <x-square-button>
-                                    @svg('line_3_horizontal_decrease_circle', 'fill-current', ['aria-labelledby' => 'filter', 'width' => '28'])
-                                </x-square-button>
-                            </x-slot>
-
-                            <x-slot:content>
-                                {{-- Order --}}
-                                <div class="block px-4 py-2 bg-gray-100 text-xs text-gray-400 font-semibold">
-                                    {{ __('Order') }}
-                                </div>
-
-                                <div class="block px-4 py-2">
-                                    <x-select id="orderType" wire:model="filter.order_type">
-                                        <option value="">{{ __('Default') }}</option>
-                                        <option value="asc">{{ __('A-Z') }}</option>
-                                        <option value="desc">{{ __('Z-A') }}</option>
-                                    </x-select>
-                                </div>
-
-                                {{-- Per Page --}}
-                                <div class="block px-4 py-2 bg-gray-100 text-xs text-gray-400 font-semibold">
-                                    {{ __('Per Page') }}
-                                </div>
-
-                                <div class="block px-4 py-2">
-                                    <x-select id="perPage" wire:model="filter.per_page">
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                    </x-select>
-                                </div>
-                            </x-slot>
-                        </x-dropdown>
+                    <div class="flex flex-wrap justify-end items-center w-full">
                     </div>
                 </div>
+
+                <x-search-bar>
+                    <x-slot:rightBarButtonItems>
+                        <x-square-button wire:click="randomPerson">
+                            @svg('dice', 'fill-current', ['aria-labelledby' => 'random person', 'width' => '28'])
+                        </x-square-button>
+                    </x-slot>
+                </x-search-bar>
             </div>
         </section>
 
         <section class="grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7">
-            @foreach($this->people as $person)
+            @foreach($this->searchResults as $person)
                 <x-lockups.person-lockup :person="$person" />
             @endforeach
         </section>
 
         <section class="mt-4">
-            {{ $this->people->links() }}
+            {{ $this->searchResults->links() }}
         </section>
     </div>
 </main>

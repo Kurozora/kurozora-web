@@ -2,67 +2,156 @@
 
 namespace App\Http\Livewire\Character;
 
+use App\Enums\AstrologicalSign;
+use App\Enums\CharacterStatus;
 use App\Models\Character;
+use App\Traits\Livewire\WithSearch;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
-use Livewire\WithPagination;
 
 class Index extends Component
 {
-    use WithPagination;
+    use WithSearch;
 
     /**
-     * The component's filters.
+     * The model used for searching.
      *
-     * @var array $filter
+     * @var string $searchModel
      */
-    public array $filter = [
-        'search' => '',
-        'order_type' => '',
-        'per_page' => 25,
-    ];
+    public static string $searchModel = Character::class;
 
     /**
      * Prepare the component.
      *
      * @return void
      */
-    public function mount() {}
+    public function mount(): void
+    {
+        $this->setFilterableAttributes();
+        $this->setOrderableAttributes();
+    }
 
     /**
      * Redirect the user to a random character.
      *
      * @return void
      */
-    public function randomCharacter()
+    public function randomCharacter(): void
     {
-        $this->redirectRoute('characters.details', Character::inRandomOrder()->first());
+        $character = Character::inRandomOrder()->first();
+        $this->redirectRoute('characters.details', $character);
     }
 
     /**
-     * The computed characters property.
+     * Set the orderable attributes of the model.
      *
-     * @return LengthAwarePaginator
+     * @return void
      */
-    public function getCharactersProperty(): LengthAwarePaginator
+    public function setOrderableAttributes(): void
     {
-        $characters = Character::query();
+        $this->order = [
+            'name' => [
+                'title' => __('Name'),
+                'options' => [
+                    'Default' => null,
+                    'A-Z' => 'asc',
+                    'Z-A' => 'desc',
+                ],
+                'selected' => null,
+            ],
+            'age' => [
+                'title' => __('Age'),
+                'options' => [
+                    'Default' => null,
+                    'Youngest' => 'asc',
+                    'Oldest' => 'desc',
+                ],
+                'selected' => null,
+            ],
+            'height' => [
+                'title' => __('Height'),
+                'options' => [
+                    'Default' => null,
+                    'Shortest' => 'asc',
+                    'Tallest' => 'desc',
+                ],
+                'selected' => null,
+            ],
+            'weight' => [
+                'title' => __('Weight'),
+                'options' => [
+                    'Default' => null,
+                    'Lightest' => 'asc',
+                    'Heaviest' => 'desc',
+                ],
+                'selected' => null,
+            ],
+        ];
+    }
 
-        // Search
-        if (!empty($this->filter['search'])) {
-            $characters = $characters->whereTranslationLike('name', '%' . $this->filter['search'] . '%');
-        }
-
-        // Order
-        if (!empty($this->filter['order_type'])) {
-            $characters = $characters->orderByTranslation('name', $this->filter['order_type']);
-        }
-
-        // Paginate
-        return $characters->paginate($this->filter['per_page'] ?? 25);
+    /**
+     * Set the filterable attributes of the model.
+     *
+     * @return void
+     */
+    public function setFilterableAttributes(): void
+    {
+        $this->filter = [
+            'status' => [
+                'title' => __('Status'),
+                'type' => 'select',
+                'options' => CharacterStatus::asSelectArray(),
+                'selected' => null,
+            ],
+            'age' => [
+                'title' => __('Age'),
+                'type' => 'double',
+                'selected' => null,
+            ],
+            'birth_day' => [
+                'title' => __('Birth Day'),
+                'type' => 'day',
+                'selected' => null,
+            ],
+            'birth_month' => [
+                'title' => __('Birth Month'),
+                'type' => 'month',
+                'selected' => null,
+            ],
+            'height' => [
+                'title' => __('Height (cm)'),
+                'type' => 'double',
+                'selected' => null,
+            ],
+            'weight' => [
+                'title' => __('Weight (grams)'),
+                'type' => 'double',
+                'selected' => null,
+            ],
+            'bust' => [
+                'title' => __('Bust'),
+                'type' => 'double',
+                'selected' => null,
+            ],
+            'waist' => [
+                'title' => __('Waist'),
+                'type' => 'double',
+                'selected' => null,
+            ],
+            'hip' => [
+                'title' => __('Hip'),
+                'type' => 'double',
+                'selected' => null,
+            ],
+            'astrological_sign' => [
+                'title' => __('Astrological Sign'),
+                'type' => 'select',
+                'options' => AstrologicalSign::asSelectArray(),
+                'selected' => null,
+            ],
+        ];
     }
 
     /**

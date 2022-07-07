@@ -2,67 +2,110 @@
 
 namespace App\Http\Livewire\Studio;
 
+use App\Enums\StudioType;
 use App\Models\Studio;
+use App\Traits\Livewire\WithSearch;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
-use Livewire\WithPagination;
 
 class Index extends Component
 {
-    use WithPagination;
+    use WithSearch;
 
     /**
-     * The component's filters.
+     * The model used for searching.
      *
-     * @var array $filter
+     * @var string $searchModel
      */
-    public array $filter = [
-        'search' => '',
-        'order_type' => '',
-        'per_page' => 25,
-    ];
+    public static string $searchModel = Studio::class;
 
     /**
      * Prepare the component.
      *
      * @return void
      */
-    public function mount() {}
+    public function mount(): void
+    {
+        $this->setFilterableAttributes();
+        $this->setOrderableAttributes();
+    }
 
     /**
      * Redirect the user to a random studio.
      *
      * @return void
      */
-    public function randomStudio()
+    public function randomStudio(): void
     {
-        $this->redirectRoute('studios.details', Studio::inRandomOrder()->first());
+        $studio = Studio::inRandomOrder()->first();
+        $this->redirectRoute('studios.details', $studio);
     }
 
     /**
-     * The computed studios property.
+     * Set the orderable attributes of the model.
      *
-     * @return LengthAwarePaginator
+     * @return void
      */
-    public function getStudiosProperty(): LengthAwarePaginator
+    public function setOrderableAttributes(): void
     {
-        $studios = Studio::query();
+        $this->order = [
+            'name' => [
+                'title' => __('Name'),
+                'options' => [
+                    'Default' => null,
+                    'A-Z' => 'asc',
+                    'Z-A' => 'desc',
+                ],
+                'selected' => null,
+            ],
+            'address' => [
+                'title' => __('Address'),
+                'options' => [
+                    'Default' => null,
+                    'A-Z' => 'asc',
+                    'Z-A' => 'desc',
+                ],
+                'selected' => null,
+            ],
+            'founded' => [
+                'title' => __('Founded'),
+                'options' => [
+                    'Default' => null,
+                    'Recent' => 'desc',
+                    'Oldest' => 'asc',
+                ],
+                'selected' => null,
+            ],
+        ];
+    }
 
-        // Search
-        if (!empty($this->filter['search'])) {
-            $studios = $studios->where('name', 'like', '%' . $this->filter['search'] . '%');
-        }
-
-        // Order
-        if (!empty($this->filter['order_type'])) {
-            $studios = $studios->orderBy('name', $this->filter['order_type']);
-        }
-
-        // Paginate
-        return $studios->paginate($this->filter['per_page'] ?? 25);
+    /**
+     * Set the filterable attributes of the model.
+     *
+     * @return void
+     */
+    public function setFilterableAttributes(): void
+    {
+        $this->filter = [
+            'type' => [
+                'title' => __('Type'),
+                'type' => 'select',
+                'options' => StudioType::asSelectArray(),
+                'selected' => null,
+            ],
+            'address' => [
+                'title' => __('Address'),
+                'type' => 'string',
+                'selected' => null,
+            ],
+            'founded' => [
+                'title' => __('Founded'),
+                'type' => 'date',
+                'selected' => null,
+            ],
+        ];
     }
 
     /**

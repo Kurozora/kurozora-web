@@ -50,6 +50,7 @@ class Person extends KModel implements HasMedia, Sitemapable
     protected $casts = [
         'alternative_names' => AsArrayObject::class,
         'birthdate'         => 'date',
+        'deceased_date'     => 'date',
         'website_urls'      => AsArrayObject::class,
     ];
 
@@ -68,12 +69,12 @@ class Person extends KModel implements HasMedia, Sitemapable
      * @var array
      */
     protected $appends = [
-        'age_string',
-        'astrological_sign_string',
-        'full_name',
-        'full_given_name',
-        'profile_image',
-        'profile_image_url',
+//        'age_string',
+//        'astrological_sign_string',
+//        'full_name',
+//        'full_given_name',
+//        'profile_image',
+//        'profile_image_url',
     ];
 
     /**
@@ -102,33 +103,20 @@ class Person extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Get the name of the index associated with the model.
-     *
-     * @return string
-     */
-    public function searchableAs(): string
-    {
-        return 'people_index';
-    }
-
-    /**
      * Get the indexable data array for the model.
      *
      * @return array
      */
     public function toSearchableArray(): array
     {
-        return [
-            'id' => $this->id,
-            'mal_id' => $this->mal_id,
-            'slug' => $this->slug,
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
-            'family_name' => $this->family_name,
-            'given_name' => $this->given_name,
-            'alternative_names' => $this->alternative_names,
-            'about' => $this->about,
-        ];
+        $person = $this->toArray();
+        $person['full_name'] = $this->full_name;
+        $person['full_given_name'] = $this->full_given_name;
+        $person['birthdate'] = $this->birthdate?->timestamp;
+        $person['deceased_date'] = $this->deceased_date?->timestamp;
+        $person['created_at'] = $this->created_at?->timestamp;
+        $person['updated_at'] = $this->updated_at?->timestamp;
+        return $person;
     }
 
     /**

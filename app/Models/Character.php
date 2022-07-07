@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Casts\AsArrayObject;
 use App\Enums\AstrologicalSign;
+use App\Enums\CharacterStatus;
 use App\Scopes\BornTodayScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasProfileImage;
@@ -51,24 +52,6 @@ class Character extends KModel implements HasMedia, Sitemapable
     public array $translatedAttributes = [
         'name',
         'about',
-    ];
-
-    /**
-     * Searchable rules.
-     *
-     * @var array
-     */
-    protected $searchable = [
-        'columns' => [
-            'name' => 10,
-            'about' => 5,
-        ],
-        'joins' => [
-            'character_translations' => [
-                'characters.id',
-                'character_translations.character_id'
-            ],
-        ],
     ];
 
     /**
@@ -130,29 +113,27 @@ class Character extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Get the name of the index associated with the model.
-     *
-     * @return string
-     */
-    public function searchableAs(): string
-    {
-        return 'characters_index';
-    }
-
-    /**
      * Get the indexable data array for the model.
      *
      * @return array
      */
     public function toSearchableArray(): array
     {
-        return [
-            'id' => $this->id,
-            'mal_id' => $this->mal_id,
-            'slug' => $this->slug,
-            'nicknames' => $this->nicknames,
-            'translations' => $this->translations
-        ];
+        $character = $this->toArray();
+        $character['created_at'] = $this->created_at?->timestamp;
+        $character['updated_at'] = $this->updated_at?->timestamp;
+        return $character;
+    }
+
+    /**
+     * The status of the character.
+     *
+     * @param int|null $value
+     * @return CharacterStatus|null
+     */
+    public function getStatusAttribute(?int $value): ?CharacterStatus
+    {
+        return isset($value) ? CharacterStatus::fromValue($value) : null;
     }
 
     /**

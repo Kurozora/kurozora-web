@@ -63,32 +63,28 @@ class UserLibrary extends Pivot
     }
 
     /**
-     * Get the name of the index associated with the model.
-     *
-     * @return string
-     */
-    public function searchableAs(): string
-    {
-        return 'animes_index';
-    }
-
-    /**
      * Get the indexable data array for the model.
      *
      * @return array
      */
     public function toSearchableArray(): array
     {
-        /** @var Anime $anime */
-        $anime = $this->anime()->withoutGlobalScopes()->first();
-        $searchableArray = [
-            'user_ids' => $anime->users()
-                ->get([User::TABLE_NAME . '.id'])
-                ->map(function ($user) {
-                    return $user['id'];
-                })
+        $anime = $this->anime;
+        $library = $this->toArray();
+        $library['start_date'] = $this->start_date?->timestamp;
+        $library['end_date'] = $this->end_date?->timestamp;
+        $library['created_at'] = $this->created_at?->timestamp;
+        $library['updated_at'] = $this->updated_at?->timestamp;
+        $library['anime'] = [
+            'slug' => $anime->slug,
+            'original_title' => $anime->original_title,
+            'synonym_titles' => $anime->synonym_titles,
+            'title' => $anime->title,
+            'synopsis' => $anime->synopsis,
+            'tagline' => $anime->tagline,
+            'translations' => $anime->translations,
         ];
-        return array_merge($searchableArray, $anime->toSearchableArray());
+        return $library;
     }
 
     /**

@@ -9,6 +9,7 @@ use App\Traits\Model\HasScreenshotImage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
+use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -17,7 +18,8 @@ class AppTheme extends KModel implements HasMedia
     use HasFactory,
         HasScreenshotImage,
         InteractsWithMedia,
-        InteractsWithMediaExtension;
+        InteractsWithMediaExtension,
+        Searchable;
 
     // Table name
     const TABLE_NAME = 'app_themes';
@@ -29,12 +31,25 @@ class AppTheme extends KModel implements HasMedia
      * @var array
      */
     protected $appends = [
-        'screenshot_image',
-        'screenshot_image_collection',
-        'screenshot_image_url',
-        'status_bar_style',
-        'visual_effect_view_style',
+//        'screenshot_image',
+//        'screenshot_image_collection',
+//        'screenshot_image_url',
+//        'status_bar_style',
+//        'visual_effect_view_style',
     ];
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+        $appTheme = $this->toArray();
+        $appTheme['created_at'] = $this->created_at?->timestamp;
+        $appTheme['updated_at'] = $this->updated_at?->timestamp;
+        return $appTheme;
+    }
 
     /**
      * Generates the plist string for the theme
