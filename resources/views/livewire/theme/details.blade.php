@@ -32,7 +32,7 @@
                 <img class="aspect-ratio-1-1 lazyload" width="250px" data-sizes="auto" data-src="{{ $theme->symbol_image_url ?? asset('images/static/icon/logo.webp') }}" alt="{{ $theme->name }} Symbol" title="{{ $theme->name }}">
             </picture>
 
-            <div class="p-3 py-5 bg-black/30 backdrop-blur text-center">
+            <div class="p-3 py-4 bg-black/30 backdrop-blur text-center">
                 <p class="text-white font-bold leading-tight line-clamp-1">{{ $theme->name }}</p>
                 <p class="text-sm text-white/90 leading-tight">{{ $theme->description }}</p>
             </div>
