@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Components;
 
+use App\Enums\ExploreCategorySize;
 use App\Enums\ExploreCategoryTypes;
 use App\Models\Anime;
 use App\Models\Character;
@@ -101,15 +102,23 @@ class ExploreCategorySection extends Component
      *
      * @return void
      */
-    public function loadExploreCategoryItems()
+    public function loadExploreCategoryItems(): void
     {
-        $this->exploreCategoryItems = match ($this->exploreCategory->type) {
+        $exploreCategoryItems = match ($this->exploreCategory->type) {
             ExploreCategoryTypes::MostPopularShows => $this->exploreCategory->most_popular_shows($this->genre ?? $this->theme)->explore_category_items,
             ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcoming_shows($this->genre ?? $this->theme)->explore_category_items,
             ExploreCategoryTypes::Characters => $this->exploreCategory->charactersBornToday()->explore_category_items,
             ExploreCategoryTypes::People => $this->exploreCategory->peopleBornToday()->explore_category_items,
             default => $this->exploreCategory->explore_category_items()->limit(10)->get()
         };
+
+        if ($this->exploreCategory->type === ExploreCategoryTypes::Shows && $this->exploreCategory->size == ExploreCategorySize::Small) {
+            $this->exploreCategoryItems = $exploreCategoryItems->map(function ($exploreCategoryItem) {
+                return $exploreCategoryItem->model;
+            });
+        } else {
+            $this->exploreCategoryItems = $exploreCategoryItems;
+        }
     }
 
     /**

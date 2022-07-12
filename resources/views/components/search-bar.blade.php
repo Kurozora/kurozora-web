@@ -1,5 +1,5 @@
-<div class="sm:flex items-center mt-4">
-    <div class="flex-1 mb-4">
+<div class="gap-2 items-center mt-4 mb-4 space-y-2 sm:flex sm:space-y-0">
+    <div class="flex-1">
         <x-input id="search" type="text" placeholder="{{ __('I’m searching for…') }}" wire:model.debounce.500ms="search" />
     </div>
 

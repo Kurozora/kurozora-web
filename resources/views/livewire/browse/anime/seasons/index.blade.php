@@ -21,30 +21,40 @@
             selectedMediaType: null
         }"
     >
-        <p class="text-2xl font-bold">{{ __('Seasonal Anime') }}</p>
+        <section class="flex gap-1">
+            <div class="flex flex-wrap items-center w-full">
+                <p class="text-2xl font-bold">{{ __('Seasonal Anime') }}</p>
+            </div>
 
-        <div id="mediaTypeHeader" class="bg-white z-10">
-            <section class="pt-4 pb-5">
-                <x-season-pagination :season-of-year="$seasonOfYear" :year="$year" :on-each-side="2" />
-            </section>
+            <div class="flex flex-wrap justify-end items-center w-full">
+            </div>
+        </section>
 
-            <section class="flex flex-wrap gap-1 py-5 border-t-2">
+        <section id="mediaTypeHeader" class="bg-white py-4 z-10">
+            <x-season-pagination :season-of-year="$seasonOfYear" :year="$year" :on-each-side="2" />
+
+            <x-hr class="mt-4 mb-4" />
+
+            <div class="flex gap-2 overflow-x-scroll no-scrollbar">
                 <template x-if="selectedMediaType === null">
                     <x-button>{{ __('All') }}</x-button>
                 </template>
+
                 <template x-if="selectedMediaType !== null">
                     <x-outlined-button x-on:click="selectedMediaType = null">{{ __('All') }}</x-outlined-button>
                 </template>
+
                 @foreach($mediaTypes as $mediaType)
                     <template x-if="selectedMediaType === '{{ $mediaType->name }}'">
                         <x-button>{{ $mediaType->name }}</x-button>
                     </template>
+
                     <template x-if="selectedMediaType !== '{{ $mediaType->name }}'">
                         <x-outlined-button x-on:click="selectedMediaType = '{{ $mediaType->name }}'">{{ $mediaType->name }}</x-outlined-button>
                     </template>
                 @endforeach
-            </section>
-        </div>
+            </div>
+        </section>
 
         <section class="space-y-10">
             @foreach($mediaTypes as $mediaType)

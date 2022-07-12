@@ -20,6 +20,10 @@
         nextFocusableIndex() { return (this.focusables().indexOf(document.activeElement) + 1) % (this.focusables().length + 1) },
         prevFocusableIndex() { return Math.max(0, this.focusables().indexOf(document.activeElement)) -1 },
         focusOnSearch() { setTimeout(() => $refs.search.focus(), 0) },
+        submit() {
+            let search = document.getElementById('search');
+            search.submit();
+        }
     }"
     x-on:close.stop="resetAndClose()"
     x-on:keydown.escape.window="resetAndClose()"
@@ -27,6 +31,7 @@
     x-on:keydown.window.prevent.slash="isSearchEnabled = true"
     x-on:keydown.tab.prevent="$event.shiftKey || nextFocusable().focus()"
     x-on:keydown.shift.tab.prevent="prevFocusable().focus()"
+    x-on:keydown.enter="submit()"
     x-on:transitionstart="focusOnSearch()"
 >
     <div class="absolute top-0 right-0 left-0 mx-auto max-w-full z-[300] sm:max-w-2xl"
@@ -40,8 +45,11 @@
          x-transition:leave-end="opacity-0"
     >
         <div class="h-[64px]">
-            <span
+            <form
+                id="search"
                 class="absolute h-full w-full"
+                action="{{ route('search.index') }}"
+                method="get"
                 x-show="isSearchEnabled"
                 x-transition:enter="ease duration-[500ms] delay-300 transform"
                 x-transition:enter-start="opacity-0 translate-x-8"
@@ -59,11 +67,12 @@
                 <input
                     class="absolute top-0 left-0 px-10 h-full w-full border-0 bg-transparent text-black focus:ring-0"
                     type="text"
+                    name="q"
                     placeholder="{{ [__('I’m searching for…'), __('Search faster with ⌘+K, ctrl+K or /')][array_rand([0,1])] }}"
                     x-ref="search"
                     wire:model.debounce.500ms="searchQuery"
                 />
-            </span>
+            </form>
 
             {{-- Close button --}}
             <button
@@ -100,11 +109,24 @@
                                     @foreach($query as $key => $anime)
                                         <x-lockups.search-anime-lockup :anime="$anime" wire:key="{{ uniqid(md5($anime->title), true) }}" />
 
-                                        <x-hr class="my-4" />
+                                        <x-hr class="mt-4 mb-4" />
                                     @endforeach
                                 </div>
                             @endif
                         @break
+                        @case('character')
+                            @if(!empty($query->total()))
+                                <x-search-header>{{ __('Characters') }}</x-search-header>
+
+                                <div class="mt-4">
+                                    @foreach($query as $key => $anime)
+                                        <x-lockups.search-anime-lockup :anime="$anime" wire:key="{{ uniqid(md5($anime->title), true) }}" />
+
+                                        <x-hr class="mt-4 mb-4" />
+                                    @endforeach
+                                </div>
+                            @endif
+                            @break
                         @case('users')
                             @if(!empty($query->total()))
                                 <x-search-header>{{ __('Users') }}</x-search-header>
@@ -113,7 +135,7 @@
                                     @foreach($query as $user)
                                         <x-lockups.search-user-lockup :user="$user" wire:key="{{ uniqid(md5($user->username), true) }}" />
 
-                                        <x-hr class="my-4" />
+                                        <x-hr class="mt-4 mb-4" />
                                     @endforeach
                                 </div>
                             @endif

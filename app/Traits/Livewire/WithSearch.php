@@ -31,6 +31,17 @@ trait WithSearch
     public array $order = [];
 
     /**
+     * Prepare the component.
+     *
+     * @return void
+     */
+    public function mountWithSearch(): void
+    {
+        $this->setFilterableAttributes();
+        $this->setOrderableAttributes();
+    }
+
+    /**
      * The computed search results property.
      *
      * @return ?LengthAwarePaginator

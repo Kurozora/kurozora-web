@@ -24,11 +24,7 @@
     @if(!empty($this->searchResults))
         @if(!empty($this->searchResults->total()))
             <section class="mt-4" wire:key="not-empty-{{ $userLibraryStatusString }}">
-                <div class="grid gap-4 sm:grid-cols-2 sm:auto-cols-[unset] lg:grid-cols-3">
-                    @foreach($this->searchResults as $anime)
-                        <x-lockups.small-lockup :anime="$anime" wire:key="{{ $anime->id }}" />
-                    @endforeach
-                </div>
+                <x-rows.small-lockup :animes="$this->searchResults" :is-row="false" />
 
                 <div class="mt-4">
                     {{ $this->searchResults->links() }}

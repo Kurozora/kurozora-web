@@ -28,8 +28,6 @@ class Index extends Component
      */
     public function mount(): void
     {
-        $this->setFilterableAttributes();
-        $this->setOrderableAttributes();
     }
 
     /**

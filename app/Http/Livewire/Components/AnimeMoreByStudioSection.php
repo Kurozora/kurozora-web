@@ -38,7 +38,7 @@ class AnimeMoreByStudioSection extends Component
      *
      * @return void
      */
-    public function mount(Studio $studio)
+    public function mount(Studio $studio): void
     {
         $this->studio = $studio;
         $this->moreByStudioCount = $this->studio->anime_studio()->count();
@@ -49,7 +49,7 @@ class AnimeMoreByStudioSection extends Component
      *
      * @return void
      */
-    public function loadMoreByStudio()
+    public function loadMoreByStudio(): void
     {
         $this->moreByStudio = $this->studio->getAnime(Studio::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
     }
