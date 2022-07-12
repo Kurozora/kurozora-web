@@ -3,6 +3,9 @@
 namespace App\Http\Livewire;
 
 use App\Models\Anime;
+use App\Models\Character;
+use App\Models\Person;
+use App\Models\Studio;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -39,16 +42,23 @@ class NavSearch extends Component
         $searchResultsTotal = 0;
 
         if (!empty($this->searchQuery)) {
-            $anime = Anime::kSearch($this->searchQuery)
-                ->paginate(Anime::MAX_SEARCH_RESULTS)
-                ->appends('query', $this->searchQuery);
-            $users = User::kSearch($this->searchQuery)
-                ->paginate(User::MAX_SEARCH_RESULTS)
-                ->appends('query', $this->searchQuery);
+            $anime = Anime::search($this->searchQuery)
+                ->paginate(5);
+            $characters = Character::search($this->searchQuery)
+                ->paginate(5);
+            $people = Person::search($this->searchQuery)
+                ->paginate(5);
+            $studios = Studio::search($this->searchQuery)
+                ->paginate(5);
+            $users = User::search($this->searchQuery)
+                ->paginate(5);
 
             $searchResults['anime'] = $anime;
+            $searchResults['characters'] = $characters;
+            $searchResults['people'] = $people;
+            $searchResults['studios'] = $studios;
             $searchResults['users'] = $users;
-            $searchResultsTotal = $anime->total() + $users->total();
+            $searchResultsTotal = $anime->total() + $characters->total() + $people->total() + $studios->total() + $users->total();
         }
 
         return view('livewire.nav-search', [

@@ -7,6 +7,9 @@
                 </x-slot>
 
                 <x-slot:action>
+                    @hasrole('superAdmin')
+                        <x-button wire:click="loadAnimeRelations">{{ __('Refresh') }}</x-button>
+                    @endhasrole
                     <x-section-nav-link href="{{ route('anime.related-shows', $anime) }}">{{ __('See All') }}</x-section-nav-link>
                 </x-slot>
             </x-section-nav>
@@ -15,11 +18,7 @@
                 <x-spinner />
             </div>
 
-            <div class="grid grid-flow-col-dense gap-4 justify-start overflow-x-scroll no-scrollbar">
-                @foreach($animeRelations as $relatedAnime)
-                    <x-lockups.small-lockup :anime="$relatedAnime->related" :relation="$relatedAnime->relation" />
-                @endforeach
-            </div>
+            <x-rows.small-lockup :related-animes="$animeRelations" />
         </section>
     @endif
 </div>

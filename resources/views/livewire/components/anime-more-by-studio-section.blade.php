@@ -7,6 +7,9 @@
                 </x-slot>
 
                 <x-slot:action>
+                    @hasrole('superAdmin')
+                        <x-button wire:click="loadMoreByStudio">{{ __('Refresh') }}</x-button>
+                    @endhasrole
                     <x-section-nav-link href="{{ route('studios.details', $studio) }}">{{ __('See All') }}</x-section-nav-link>
                 </x-slot>
             </x-section-nav>
@@ -15,11 +18,7 @@
                 <x-spinner />
             </div>
 
-            <div class="grid grid-flow-col-dense gap-4 justify-start overflow-x-scroll no-scrollbar">
-                @foreach($moreByStudio as $moreByStudioAnime)
-                    <x-lockups.small-lockup :anime="$moreByStudioAnime" />
-                @endforeach
-            </div>
+            <x-rows.small-lockup :animes="$moreByStudio" />
         </section>
     @endif
 </div>

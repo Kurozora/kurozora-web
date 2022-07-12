@@ -112,7 +112,7 @@
         </section>
 
         @if (!empty($personAnime->total()))
-            <section class="pt-5 pb-8 border-t-2">
+            <section id="personAnime" class="pt-5 pb-8 border-t-2">
                 <x-section-nav>
                     <x-slot:title>
                         {{ __('Shows') }}
@@ -123,18 +123,12 @@
                     </x-slot>
                 </x-section-nav>
 
-                <div class="flex mt-5 overflow-x-scroll no-scrollbar">
-                    <div class="flex flex-row flex-nowrap gap-4">
-                        @foreach($personAnime as $anime)
-                            <x-lockups.small-lockup :anime="$anime" />
-                        @endforeach
-                    </div>
-                </div>
+                <x-rows.small-lockup :animes="$personAnime" />
             </section>
         @endif
 
         @if (!empty($personCharacters->total()))
-            <section class="pt-5 pb-8 border-t-2">
+            <section id="personCharacters" class="pt-5 pb-8 border-t-2">
                 <x-section-nav>
                     <x-slot:title>
                         {{ __('Characters') }}
