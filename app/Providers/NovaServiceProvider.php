@@ -10,6 +10,7 @@ use App\Nova\Metrics\AnimeNSFWChart;
 use App\Nova\Metrics\NewUsers;
 use App\Nova\Tools\NovaPermissionTool;
 use Illuminate\Support\Facades\Gate;
+use KABBOUCHI\LogsTool\LogsTool;
 use Laravel\Nova\Actions\ActionEvent;
 use Laravel\Nova\Http\Controllers\LoginController;
 use Laravel\Nova\Nova;
@@ -86,7 +87,17 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         return [
             new NovaSidebarIcons,
-            new NovaPermissionTool
+            new NovaPermissionTool,
+            (new LogsTool)
+                ->canSee(function ($request) {
+                    return auth()->user()->hasRole('superAdmin');
+                })
+                ->canDownload(function ($request) {
+                    return  auth()->user()->hasRole('superAdmin');
+                })
+                ->canDelete(function ($request) {
+                    return auth()->user()->hasRole('superAdmin');
+                }),
         ];
     }
 

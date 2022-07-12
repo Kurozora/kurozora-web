@@ -12,6 +12,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Log;
 use Swift_TransportException;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Console\Exception\RuntimeException;
@@ -127,6 +128,13 @@ class Handler extends ExceptionHandler
                 return JSONResult::error([$apiError]);
             }
         }
+
+        // Log some info to catch the issue in production
+        Log::info($e->getMessage(), [
+            'user' => auth()->user()?->username,
+            'url' => $request->url(),
+            'input' => $request->all(),
+        ]);
 
         return parent::render($request, $e);
     }
