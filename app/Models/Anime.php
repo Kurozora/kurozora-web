@@ -50,9 +50,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
         Searchable,
         Translatable;
 
-    // Maximum amount of returned search results
-    const MAX_SEARCH_RESULTS = 5;
-
     // Minimum ratings required to calculate average
     const MINIMUM_RATINGS_REQUIRED = 130;
 

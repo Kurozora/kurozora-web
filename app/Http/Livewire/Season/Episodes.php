@@ -40,8 +40,6 @@ class Episodes extends Component
     public function mount(Season $season): void
     {
         $this->season = $season;
-        $this->setFilterableAttributes();
-        $this->setOrderableAttributes();
     }
 
     /**

@@ -21,11 +21,7 @@
     </x-slot>
 
     <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
-        <section class="grid gap-4 sm:grid-cols-2 sm:auto-cols-[unset] lg:grid-cols-3">
-            @foreach($studioAnime as $anime)
-                <x-lockups.small-lockup :anime="$anime" wire:key="{{ $anime->id }}" />
-            @endforeach
-        </section>
+        <x-rows.small-lockup :animes="$studioAnime" :is-row="false" />
 
         <section class="mt-4">
             {{ $studioAnime->links() }}

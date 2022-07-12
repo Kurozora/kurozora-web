@@ -3,17 +3,13 @@
         <x-section-nav>
             <x-slot:title>
                 {{ $mediaType->name . ' (' . $animes->count() . ')' }}
-                </x-slot>
+            </x-slot>
         </x-section-nav>
 
         <div class="flex justify-center">
             <x-spinner />
         </div>
 
-        <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            @foreach($animes as $anime)
-                <x-lockups.small-lockup :anime="$anime" :is-row="false" />
-            @endforeach
-        </div>
+        <x-rows.small-lockup :animes="$animes" :is-row="false" />
     </section>
 </div>

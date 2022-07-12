@@ -12,7 +12,6 @@ use App\Models\Status;
 use App\Models\TvRating;
 use App\Models\UserLibrary;
 use App\Traits\Livewire\WithSearch;
-use Auth;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
@@ -55,8 +54,6 @@ class Tab extends Component
     public function mount(UserLibraryStatus $userLibraryStatus): void
     {
         $this->userLibraryStatusString = $userLibraryStatus->key;
-        $this->setFilterableAttributes();
-        $this->setOrderableAttributes();
     }
 
     /**
@@ -80,7 +77,7 @@ class Tab extends Component
         // Get library status
         $userLibraryStatus = UserLibraryStatus::fromKey($this->userLibraryStatusString);
 
-        $anime = Auth::user()
+        $anime = auth()->user()
             ->library()
             ->wherePivot('status', $userLibraryStatus->value)
             ->inRandomOrder()
@@ -134,15 +131,18 @@ class Tab extends Component
 
         // If no search was performed, return all anime
         if (empty($this->search) && empty($wheres) && empty($orders)) {
-            $animes = Auth::user()
+            $animes = auth()->user()
                 ->library()
                 ->wherePivot('status', $userLibraryStatus->value);
             return $animes->paginate($this->perPage);
         }
 
         // Search
-        $animeIDs = UserLibrary::where('user_id', Auth::user()->id)
+        $animeIDs = collect(UserLibrary::search($this->search)
+            ->where('user_id', auth()->user()->id)
             ->where('status', $userLibraryStatus->value)
+            ->paginate(perPage: 2000, page: 1)
+            ->items())
             ->pluck('anime_id')
             ->toArray();
         $animes = Anime::search($this->search);

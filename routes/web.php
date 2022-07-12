@@ -32,6 +32,7 @@ require 'Web/Library.php';
 require 'Web/Me.php';
 require 'Web/People.php';
 require 'Web/Profile.php';
+require 'Web/Search.php';
 require 'Web/Seasons.php';
 require 'Web/Studios.php';
 require 'Web/Theme.php';

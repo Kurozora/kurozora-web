@@ -19,66 +19,114 @@
                 <x-spinner />
             </div>
 
-            <div class="flex mt-5 overflow-x-scroll no-scrollbar">
-                <div class="flex flex-nowrap gap-4">
-                    @foreach($exploreCategoryItems as $categoryItem)
-                        @switch($exploreCategory->type)
-                            @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
-                                <x-lockups.banner-lockup :anime="$categoryItem->model" />
-                            @break
-                            @case(\App\Enums\ExploreCategoryTypes::UpcomingShows)
-                                <x-lockups.upcoming-lockup :anime="$categoryItem->model" />
-                            @break
-                            @case(\App\Enums\ExploreCategoryTypes::Shows)
-                                @switch($exploreCategory->size)
-                                    @case(\App\Enums\ExploreCategorySize::Large)
-                                        <x-lockups.large-lockup :anime="$categoryItem->model" />
-                                    @break
-                                    @case(\App\Enums\ExploreCategorySize::Small)
-                                        <x-lockups.small-lockup :anime="$categoryItem->model" />
-                                    @break
-                                    @case(\App\Enums\ExploreCategorySize::Video)
-                                        <x-lockups.video-lockup :anime="$categoryItem->model" />
-                                    @break
-                                    @default
-                                        @if (app()->environment('local'))
-                                            {{ 'Unhandled size: ' . $exploreCategory->size }}
-                                        @endif
-                                @endswitch
-                            @break
-                            @case(\App\Enums\ExploreCategoryTypes::Genres)
-                                <x-lockups.medium-lockup
-                                    :href="route('genres.details', ['genre' => $categoryItem->model])"
-                                    :title="$categoryItem->model->name"
-                                    :backgroundColor="$categoryItem->model->color"
-                                    :backgroundImage="$categoryItem->model->symbol_image_url ?? asset('images/static/icon/logo.webp')"
-                                />
-                            @break
-                            @case(\App\Enums\ExploreCategoryTypes::Themes)
-                                <x-lockups.medium-lockup
-                                    :href="route('themes.details', ['theme' => $categoryItem->model])"
-                                    :title="$categoryItem->model->name"
-                                    :backgroundColor="$categoryItem->model->color"
-                                    :backgroundImage="$categoryItem->model->symbol_image_url ?? asset('images/static/icon/logo.webp')"
-                                />
-                            @break
-                            @case(\App\Enums\ExploreCategoryTypes::Characters)
-                                <x-lockups.character-lockup :character="$categoryItem->model" />
-                            @break
-                            @case(\App\Enums\ExploreCategoryTypes::People)
-                                <x-lockups.person-lockup :person="$categoryItem->model" />
-                            @break
-                            @case(\App\Enums\ExploreCategoryTypes::Songs)
-                                <x-lockups.music-lockup :anime-song="$categoryItem->model" :show-episodes="false" :show-anime="true" />
-                            @break
-                            @default
-                                @if (app()->environment('local'))
-                                    {{ 'Unhandled type: ' . $exploreCategory->type }}
-                                @endif
-                        @endswitch
-                    @endforeach
-                </div>
-            </div>
+            @switch($exploreCategory->type)
+                @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
+                    <div class="flex mt-5 overflow-x-scroll no-scrollbar">
+                        <div class="flex flex-nowrap gap-4">
+                        @foreach($exploreCategoryItems as $categoryItem)
+                            <x-lockups.banner-lockup :anime="$categoryItem->model" />
+                        @endforeach
+                        </div>
+                    </div>
+                @break
+                @case(\App\Enums\ExploreCategoryTypes::UpcomingShows)
+                    <div class="flex mt-5 overflow-x-scroll no-scrollbar">
+                        <div class="flex flex-nowrap gap-4">
+                        @foreach($exploreCategoryItems as $categoryItem)
+                            <x-lockups.upcoming-lockup :anime="$categoryItem->model" />
+                        @endforeach
+                        </div>
+                    </div>
+                @break
+                @case(\App\Enums\ExploreCategoryTypes::Shows)
+                    @switch($exploreCategory->size)
+                        @case(\App\Enums\ExploreCategorySize::Large)
+                            <div class="flex mt-5 overflow-x-scroll no-scrollbar">
+                                <div class="flex flex-nowrap gap-4">
+                                @foreach($exploreCategoryItems as $categoryItem)
+                                    <x-lockups.large-lockup :anime="$categoryItem->model" />
+                                @endforeach
+                                </div>
+                            </div>
+                        @break
+                        @case(\App\Enums\ExploreCategorySize::Small)
+                            <x-rows.small-lockup :animes="$exploreCategoryItems" />
+                        @break
+                        @case(\App\Enums\ExploreCategorySize::Video)
+                            <div class="flex mt-5 overflow-x-scroll no-scrollbar">
+                                <div class="flex flex-nowrap gap-4">
+                                @foreach($exploreCategoryItems as $categoryItem)
+                                    <x-lockups.video-lockup :anime="$categoryItem->model" />
+                                @endforeach
+                                </div>
+                            </div>
+                        @break
+                        @default
+                            @if (app()->environment('local'))
+                                {{ 'Unhandled size: ' . $exploreCategory->size }}
+                            @endif
+                    @endswitch
+                @break
+                @case(\App\Enums\ExploreCategoryTypes::Genres)
+                    <div class="flex mt-5 overflow-x-scroll no-scrollbar">
+                        <div class="flex flex-nowrap gap-4">
+                        @foreach($exploreCategoryItems as $categoryItem)
+                            <x-lockups.medium-lockup
+                                :href="route('genres.details', ['genre' => $categoryItem->model])"
+                                :title="$categoryItem->model->name"
+                                :backgroundColor="$categoryItem->model->color"
+                                :backgroundImage="$categoryItem->model->symbol_image_url ?? asset('images/static/icon/logo.webp')"
+                            />
+                        @endforeach
+                        </div>
+                    </div>
+                @break
+                @case(\App\Enums\ExploreCategoryTypes::Themes)
+                    <div class="flex mt-5 overflow-x-scroll no-scrollbar">
+                        <div class="flex flex-nowrap gap-4">
+                        @foreach($exploreCategoryItems as $categoryItem)
+                            <x-lockups.medium-lockup
+                                :href="route('themes.details', ['theme' => $categoryItem->model])"
+                                :title="$categoryItem->model->name"
+                                :backgroundColor="$categoryItem->model->color"
+                                :backgroundImage="$categoryItem->model->symbol_image_url ?? asset('images/static/icon/logo.webp')"
+                            />
+                        @endforeach
+                        </div>
+                    </div>
+                @break
+                @case(\App\Enums\ExploreCategoryTypes::Characters)
+                    <div class="flex mt-5 overflow-x-scroll no-scrollbar">
+                        <div class="flex flex-nowrap gap-4">
+                        @foreach($exploreCategoryItems as $categoryItem)
+                            <x-lockups.character-lockup :character="$categoryItem->model" />
+                        @endforeach
+                        </div>
+                    </div>
+                @break
+                @case(\App\Enums\ExploreCategoryTypes::People)
+                    <div class="flex mt-5 overflow-x-scroll no-scrollbar">
+                        <div class="flex flex-nowrap gap-4">
+                        @foreach($exploreCategoryItems as $categoryItem)
+                            <x-lockups.person-lockup :person="$categoryItem->model" />
+                        @endforeach
+                        </div>
+                    </div>
+                @break
+                @case(\App\Enums\ExploreCategoryTypes::Songs)
+                    <div class="flex mt-5 overflow-x-scroll no-scrollbar">
+                        <div class="flex flex-nowrap gap-4">
+                        @foreach($exploreCategoryItems as $categoryItem)
+                            <x-lockups.music-lockup :anime-song="$categoryItem->model" :show-episodes="false" :show-anime="true" />
+                        @endforeach
+                        </div>
+                    </div>
+                @break
+                @default
+                    @if (app()->environment('local'))
+                        {{ 'Unhandled type: ' . $exploreCategory->type }}
+                    @endif
+            @endswitch
         </section>
     @endif
 </div>

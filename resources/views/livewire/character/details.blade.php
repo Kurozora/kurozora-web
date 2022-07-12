@@ -137,13 +137,7 @@
                     </x-slot>
                 </x-section-nav>
 
-                <div class="flex mt-5 overflow-x-scroll no-scrollbar">
-                    <div class="flex flex-row flex-nowrap gap-4">
-                        @foreach($characterAnime as $anime)
-                            <x-lockups.small-lockup :anime="$anime" />
-                        @endforeach
-                    </div>
-                </div>
+                <x-rows.small-lockup :animes="$characterAnime" />
             </section>
         @endif
 
