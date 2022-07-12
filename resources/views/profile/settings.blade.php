@@ -9,51 +9,49 @@
         </h2>
     </x-slot>
 
-    <div>
-        <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-            @livewire('profile.update-profile-information-form')
+    <div class="max-w-7xl mx-auto px-4 py-6 space-y-10 sm:px-6">
+        @livewire('profile.update-profile-information-form')
 
-            <x-section-border />
+        <x-hr class="hidden sm:block" />
 
-            <div class="mt-10 sm:mt-0">
-                @livewire('profile.select-preferred-tv-rating-form')
-            </div>
+        <div class="sm:mt-0">
+            @livewire('profile.select-preferred-tv-rating-form')
+        </div>
 
-            <x-section-border />
+        <x-hr class="hidden sm:block" />
 
-            <div class="mt-10 sm:mt-0">
-                @livewire('profile.import-form')
-            </div>
+        <div class="sm:mt-0">
+            @livewire('profile.import-form')
+        </div>
 
-            <x-section-border />
+        <x-hr class="hidden sm:block" />
 
-            <div class="mt-10 sm:mt-0">
-                @livewire('profile.update-password-form')
-            </div>
+        <div class="sm:mt-0">
+            @livewire('profile.update-password-form')
+        </div>
 
-            <x-section-border />
+        <x-hr class="hidden sm:block" />
 
-            <div class="mt-10 sm:mt-0">
-                @livewire('profile.two-factor-authentication-form')
-            </div>
+        <div class="sm:mt-0">
+            @livewire('profile.two-factor-authentication-form')
+        </div>
 
-            <x-section-border />
+        <x-hr class="hidden sm:block" />
 
-            <div class="mt-10 sm:mt-0">
-                @livewire('profile.sign-out-app-sessions-form')
-            </div>
+        <div class="sm:mt-0">
+            @livewire('profile.sign-out-app-sessions-form')
+        </div>
 
-            <x-section-border />
+        <x-hr class="hidden sm:block" />
 
-            <div class="mt-10 sm:mt-0">
-                @livewire('profile.sign-out-other-sessions-form')
-            </div>
+        <div class="sm:mt-0">
+            @livewire('profile.sign-out-other-sessions-form')
+        </div>
 
-            <x-section-border />
+        <x-hr class="hidden sm:block" />
 
-            <div class="mt-10 sm:mt-0">
-                @livewire('profile.delete-user-form')
-            </div>
+        <div class="sm:mt-0">
+            @livewire('profile.delete-user-form')
         </div>
     </div>
 </x-app-layout>

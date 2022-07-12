@@ -6,7 +6,7 @@
             </li>
 
             @if ($key != $this->followings->count() -1)
-                <x-hr class="my-4" />
+                <x-hr class="mt-4 mb-4" />
             @endif
         @endforeach
     </ul>

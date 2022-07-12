@@ -12,7 +12,7 @@
             }
         })"
     >
-        <div class="space-x-2 my-8">
+        <div class="space-x-2 mt-8 mb-8">
             <x-button
                 x-on:click="screenshot(document.getElementById('kuroChat1'))"
             >

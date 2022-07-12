@@ -19,7 +19,7 @@
             <img class="h-32 w-full object-cover object-center rounded-lg shadow-lg sm:h-44" src="{{ asset('images/static/banners/in-app_purchases.webp') }}"  alt="About Personalisation" />
         </x-picture>
 
-        <section class="my-4">
+        <section class="mt-4 mb-4">
             <p class="text-2xl font-bold">{{ __('About In-App Purchases') }}</p>
         </section>
 
@@ -27,7 +27,7 @@
         <section>
             <p>{{ __('Kurozora is free to download and use. However, some supplemental features can be unlocked using in-app purchases. The cost depends on which offer you choose. You can find in-app purchases in the settings of the Kurozora app.') }}</p>
 
-            <x-hr class="my-4" />
+            <x-hr class="mt-4 mb-4" />
         </section>
 
         {{-- Types of IAP --}}
@@ -51,7 +51,7 @@
                 </li>
             </ul>
 
-            <x-hr class="my-4" />
+            <x-hr class="mt-4 mb-4" />
         </section>
 
         {{-- Manage your subscriptions --}}
@@ -70,7 +70,7 @@
 
             <p>{{ __('You can also manage subscriptions through your Apple ID. Please refer to') }} <x-link target="_blank" href="https://support.apple.com/en-us/HT202039">{{ __('this') }}</x-link> {{ __('Apple support page for more information.') }}</p>
 
-            <x-hr class="my-4" />
+            <x-hr class="mt-4 mb-4" />
         </section>
 
         {{-- Subscriptions and privacy --}}
