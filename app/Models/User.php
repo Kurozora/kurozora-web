@@ -64,9 +64,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         Searchable,
         TwoFactorAuthenticatable;
 
-    // Maximum amount of returned search results
-    const MAX_SEARCH_RESULTS = 5;
-
     // Cache user's badges
     const CACHE_KEY_BADGES = 'user-badges-%d';
     const CACHE_KEY_BADGES_SECONDS = 120 * 60;
