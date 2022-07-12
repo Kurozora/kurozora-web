@@ -33,16 +33,20 @@ class Details extends Component
      *
      * @return void
      */
-    public function mount(ExploreCategory $exploreCategory)
+    public function mount(ExploreCategory $exploreCategory): void
     {
         $this->exploreCategory = $exploreCategory;
-        $this->exploreCategoryItems = match ($this->exploreCategory->type) {
-            ExploreCategoryTypes::MostPopularShows => $this->exploreCategory->most_popular_shows()->explore_category_items,
-            ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcoming_shows()->explore_category_items,
-            ExploreCategoryTypes::Characters => $this->exploreCategory->charactersBornToday(-1)->explore_category_items,
-            ExploreCategoryTypes::People => $this->exploreCategory->peopleBornToday(-1)->explore_category_items,
-            default => $this->exploreCategory->explore_category_items
+        $exploreCategoryItems = match ($exploreCategory->type) {
+            ExploreCategoryTypes::MostPopularShows => $exploreCategory->most_popular_shows(),
+            ExploreCategoryTypes::UpcomingShows => $exploreCategory->upcoming_shows(),
+            ExploreCategoryTypes::Characters => $exploreCategory->charactersBornToday(-1),
+            ExploreCategoryTypes::People => $exploreCategory->peopleBornToday(-1),
+            default => $exploreCategory
         };
+        $this->exploreCategoryItems = $exploreCategoryItems->explore_category_items
+            ->map(function ($exploreCategoryItem) {
+                return $exploreCategoryItem->model;
+            });
     }
 
     /**

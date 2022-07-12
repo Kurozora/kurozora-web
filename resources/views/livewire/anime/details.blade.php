@@ -75,9 +75,9 @@
         anime/{{ $anime->id }}
     </x-slot>
 
-    <div class="grid grid-rows-[repeat(2,minmax(0,min-content))] h-full lg:grid-rows-none lg:grid-cols-2 2xl:grid-cols-3 lg:mb-0">
+    <div class="grid grid-rows-[repeat(2,minmax(0,min-content))] h-full xl:grid-rows-none xl:grid-cols-2 2xl:grid-cols-3 xl:mb-0">
         <div class="relative">
-            <div class="relative flex flex-nowrap aspect-ratio-16-9 md:relative md:h-full lg:aspect-ratio-auto">
+            <div class="relative flex flex-nowrap aspect-ratio-16-9 md:relative md:h-full xl:aspect-ratio-auto">
                 <x-picture class="w-full overflow-hidden">
                     <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
                 </x-picture>
@@ -142,7 +142,7 @@
             </div>
         </div>
 
-        <div class="pt-4 2xl:col-span-2 lg:max-h-[calc(100vh-64px)] overflow-x-hidden overflow-y-scroll no-scrollbar">
+        <div class="pt-4 2xl:col-span-2 xl:max-h-[calc(100vh-64px)] overflow-x-hidden overflow-y-scroll no-scrollbar">
             <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between items-center text-center pb-5 px-4 overflow-x-scroll no-scrollbar">
                 <div id="ratingBadge" class="flex-grow pr-12">
                     <a href="#ratingsAndReviews">

@@ -3,7 +3,7 @@
         \App\Enums\ExploreCategoryTypes::Genres, \App\Enums\ExploreCategoryTypes::Themes => 'grid sm:grid-cols-2 lg:grid-cols-4 gap-4',
         \App\Enums\ExploreCategoryTypes::People, \App\Enums\ExploreCategoryTypes::Characters => 'grid grid-cols-3 gap-4 sm:grid-cols-4 sm:auto-cols-[unset] md:grid-cols-5 lg:grid-cols-7',
         \App\Enums\ExploreCategoryTypes::Songs => 'grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
-        default => 'grid sm:grid-cols-2 sm:auto-cols-[unset] lg:grid-cols-3 gap-4',
+        default => '',
     };
 @endphp
 
@@ -47,35 +47,51 @@
             <p class="text-gray-500 font-semibold">{{ $exploreCategory->description }}</p>
         </section>
 
-        <section class="{{ $gridClass }}">
-            @foreach($exploreCategoryItems as $categoryItem)
-                @switch($exploreCategory->type)
-                    @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
-                    @case(\App\Enums\ExploreCategoryTypes::UpcomingShows)
-                    @case(\App\Enums\ExploreCategoryTypes::Shows)
-                        <x-lockups.small-lockup :anime="$categoryItem->model" :isRow="false" />
-                    @break
-                    @case(\App\Enums\ExploreCategoryTypes::Genres)
-                        <x-lockups.genre-lockup :genre="$categoryItem->model" />
-                    @break
-                    @case(\App\Enums\ExploreCategoryTypes::Themes)
-                    <x-lockups.theme-lockup :theme="$categoryItem->model" />
-                    @break
-                    @case(\App\Enums\ExploreCategoryTypes::Characters)
-                        <x-lockups.character-lockup :character="$categoryItem->model" />
-                    @break
-                    @case(\App\Enums\ExploreCategoryTypes::People)
-                        <x-lockups.person-lockup :person="$categoryItem->model" />
-                    @break
-                    @case(\App\Enums\ExploreCategoryTypes::Songs)
-                        <x-lockups.music-lockup :anime-song="$categoryItem->model" :show-episodes="false" :show-anime="true" :onMusicKitLoad="true" :is-row="false" />
-                    @break
-                    @default
-                        @if (app()->environment('local'))
-                            {{ 'Unhandled type: ' . $exploreCategory->type }}
-                        @endif
-                @endswitch
-            @endforeach
-        </section>
+        @switch($exploreCategory->type)
+            @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
+            @case(\App\Enums\ExploreCategoryTypes::UpcomingShows)
+            @case(\App\Enums\ExploreCategoryTypes::Shows)
+                <x-rows.small-lockup :animes="$exploreCategoryItems" :is-row="false" />
+            @break
+            @case(\App\Enums\ExploreCategoryTypes::Genres)
+            <section class="{{ $gridClass }}">
+                @foreach($exploreCategoryItems as $categoryItem)
+                    <x-lockups.genre-lockup :genre="$categoryItem" />
+                @endforeach
+            </section>
+            @break
+            @case(\App\Enums\ExploreCategoryTypes::Themes)
+            <section class="{{ $gridClass }}">
+                @foreach($exploreCategoryItems as $categoryItem)
+                    <x-lockups.theme-lockup :theme="$categoryItem" />
+                @endforeach
+            </section>
+            @break
+            @case(\App\Enums\ExploreCategoryTypes::Characters)
+            <section class="{{ $gridClass }}">
+                @foreach($exploreCategoryItems as $categoryItem)
+                    <x-lockups.character-lockup :character="$categoryItem" />
+                @endforeach
+            </section>
+            @break
+            @case(\App\Enums\ExploreCategoryTypes::People)
+            <section class="{{ $gridClass }}">
+                @foreach($exploreCategoryItems as $categoryItem)
+                    <x-lockups.person-lockup :person="$categoryItem" />
+                @endforeach
+            </section>
+            @break
+            @case(\App\Enums\ExploreCategoryTypes::Songs)
+            <section class="{{ $gridClass }}">
+                @foreach($exploreCategoryItems as $categoryItem)
+                    <x-lockups.music-lockup :anime-song="$categoryItem" :show-episodes="false" :show-anime="true" :onMusicKitLoad="true" :is-row="false" />
+                @endforeach
+            </section>
+            @break
+            @default
+                @if (app()->environment('local'))
+                    {{ 'Unhandled type: ' . $exploreCategory->type }}
+                @endif
+        @endswitch
     </div>
 </main>
