@@ -28,6 +28,7 @@
         "imdhemy/laravel-purchases": "^0.10.2",
         "intervention/image": "^2.7",
         "jaybizzle/crawler-detect": "^1.2",
+        "kabbouchi/nova-logs-tool": "^1",
         "kiritokatklian/nova-permission": "^3.0",
         "kraenkvisuell/nova-astrotranslatable": "^2.0",
         "laraning/nova-time-field": "^1.0",
