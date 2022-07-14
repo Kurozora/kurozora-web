@@ -104,18 +104,6 @@ picture::before {
     scrollbar-width: none;  /* Firefox */
   }
 
-  .aspect-ratio-1-1 {
-    aspect-ratio: 1;
-  }
-
-  .aspect-ratio-16-9 {
-    aspect-ratio: 16/9;
-  }
-
-  .aspect-ratio-auto {
-    aspect-ratio: auto;
-  }
-
   .text-unset {
     text-align: unset;
   }

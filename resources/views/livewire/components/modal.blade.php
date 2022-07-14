@@ -5,7 +5,7 @@
         </x-slot>
         <x-slot:content>
             <iframe
-                class="w-full aspect-ratio-16-9 lazyload"
+                class="w-full aspect-video lazyload"
                 type="text/html"
                 scrolling="no"
                 frameborder="no"

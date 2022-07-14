@@ -29,7 +29,7 @@
     <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
         <section class="relative mb-8 rounded-lg shadow-md overflow-hidden" style="{{ $backgroundColor }}">
             <picture class="flex justify-center">
-                <img class="aspect-ratio-1-1 lazyload" width="250px" data-sizes="auto" data-src="{{ $theme->symbol_image_url ?? asset('images/static/icon/logo.webp') }}" alt="{{ $theme->name }} Symbol" title="{{ $theme->name }}">
+                <img class="aspect-square lazyload" width="250px" data-sizes="auto" data-src="{{ $theme->symbol_image_url ?? asset('images/static/icon/logo.webp') }}" alt="{{ $theme->name }} Symbol" title="{{ $theme->name }}">
             </picture>
 
             <div class="p-3 py-4 bg-black/30 backdrop-blur text-center">
