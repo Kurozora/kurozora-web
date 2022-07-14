@@ -6,18 +6,18 @@ use BenSampo\Enum\Enum;
 
 /**
  * @method static UserLibraryStatus Watching()
- * @method static UserLibraryStatus Dropped()
  * @method static UserLibraryStatus Planning()
  * @method static UserLibraryStatus Completed()
  * @method static UserLibraryStatus OnHold()
+ * @method static UserLibraryStatus Dropped()
  */
 final class UserLibraryStatus extends Enum
 {
     const Watching  = 0;
-    const Dropped   = 1;
     const Planning  = 2;
     const Completed = 3;
     const OnHold    = 4;
+    const Dropped   = 1;
 
     /**
      * Returns the description of the status
