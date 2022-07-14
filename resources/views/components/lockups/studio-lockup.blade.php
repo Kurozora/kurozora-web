@@ -6,7 +6,7 @@
 
 <div class="relative">
     <div class="flex flex-nowrap">
-        <picture class="relative w-full aspect-ratio-16-9 rounded-lg overflow-hidden">
+        <picture class="relative w-full aspect-video rounded-lg overflow-hidden">
             <img class="w-full h-full object-cover lazyload"
                  data-sizes="auto"
                  data-src="{{ $studio->banner_image_url ?? $studio->profile_image_url ?? asset('images/static/placeholders/studio_profile.webp') }}"
