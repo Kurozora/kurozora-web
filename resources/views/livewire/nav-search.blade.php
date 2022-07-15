@@ -98,45 +98,56 @@
                 <x-spinner wire:target="searchQuery" />
             </div>
 
-            @if(!empty($searchResults))
-                @foreach($searchResults as $key => $query)
+            @if (!empty($searchResults))
+                @foreach ($searchResults as $key => $query)
                     @switch($key)
                         @case('anime')
-                            @if(!empty($query->total()))
+                            @if (!empty($query->total()))
                                 <x-search-header>{{ __('Anime') }}</x-search-header>
 
                                 <div class="mt-4">
-                                    @foreach($query as $key => $anime)
-                                        <x-lockups.search-anime-lockup :anime="$anime" wire:key="{{ uniqid(md5($anime->title), true) }}" />
-
+                                    <x-rows.small-lockup :animes="$query" />
                                         <x-hr class="mt-4 mb-4" />
-                                    @endforeach
                                 </div>
                             @endif
                         @break
-                        @case('character')
-                            @if(!empty($query->total()))
+                        @case('characters')
+                            @if (!empty($query->total()))
                                 <x-search-header>{{ __('Characters') }}</x-search-header>
 
                                 <div class="mt-4">
-                                    @foreach($query as $key => $anime)
-                                        <x-lockups.search-anime-lockup :anime="$anime" wire:key="{{ uniqid(md5($anime->title), true) }}" />
+                                    <x-rows.character-lockup :characters="$query" />
+                                    <x-hr class="mt-4 mb-4" />
+                                </div>
+                            @endif
+                            @break
+                        @case('people')
+                            @if (!empty($query->total()))
+                                <x-search-header>{{ __('People') }}</x-search-header>
 
-                                        <x-hr class="mt-4 mb-4" />
-                                    @endforeach
+                                <div class="mt-4">
+                                    <x-rows.person-lockup :people="$query" />
+                                    <x-hr class="mt-4 mb-4" />
+                                </div>
+                            @endif
+                            @break
+                        @case('studios')
+                            @if (!empty($query->total()))
+                                <x-search-header>{{ __('Studios') }}</x-search-header>
+
+                                <div class="mt-4">
+                                    <x-rows.studio-lockup :studios="$query" />
+                                    <x-hr class="mt-4 mb-4" />
                                 </div>
                             @endif
                             @break
                         @case('users')
-                            @if(!empty($query->total()))
+                            @if (!empty($query->total()))
                                 <x-search-header>{{ __('Users') }}</x-search-header>
 
                                 <div class="mt-4">
-                                    @foreach($query as $user)
-                                        <x-lockups.search-user-lockup :user="$user" wire:key="{{ uniqid(md5($user->username), true) }}" />
-
-                                        <x-hr class="mt-4 mb-4" />
-                                    @endforeach
+                                    <x-rows.user-lockup :users="$query" />
+                                    <x-hr class="mt-4 mb-4" />
                                 </div>
                             @endif
                         @break
@@ -144,11 +155,11 @@
                 @endforeach
             @endif
 
-            @if($searchResultsTotal == 0 && !empty($searchQuery))
+            @if ($searchResultsTotal == 0 && !empty($searchQuery))
                 <p class="text-sm text-gray-500 text-center font-bold" wire:key="no-results-found">{{ __('No search results found :(') }}</p>
             @endif
 
-            @if(!empty($quickLinks))
+            @if (!empty($quickLinks))
                 <x-search-header
                     x-show="isSearchEnabled"
                     x-transition:enter="ease duration-[400ms] transform"
@@ -160,7 +171,7 @@
                 >{{ __('Quick Links') }}</x-search-header>
 
                 <ul class="space-y-4">
-                    @foreach($quickLinks as $key => $quickLink)
+                    @foreach ($quickLinks as $key => $quickLink)
                         <li
                             x-show="isSearchEnabled"
                             x-bind:style="isSearchEnabled ? 'transition-duration: {{ $key * 50 + 500 }}ms;' : ''"

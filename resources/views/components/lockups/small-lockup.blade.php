@@ -4,9 +4,9 @@
     $class = $isRow ? 'pb-2 shrink-0' : '';
 @endphp
 
-<div {{ $attributes->merge(['class' => 'relative w-64 md:w-80 flex-grow ' . $class]) }}>
+<div {{ $attributes->merge(['class' => 'relative flex-grow w-64 md:w-80 ' . $class]) }}>
     <div class="flex flex-nowrap">
-        <picture class="relative shrink-0 w-28 h-40 mr-2 mr-2 rounded-lg overflow-hidden md:w-32 md:h-48">
+        <picture class="relative shrink-0 w-32 h-48 mr-2 mr-2 rounded-lg overflow-hidden">
             <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->poster_image_url ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
 
             <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>

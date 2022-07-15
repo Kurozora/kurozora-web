@@ -41,11 +41,7 @@
             </div>
         </section>
 
-        <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            @foreach($this->searchResults as $studio)
-                <x-lockups.studio-lockup :studio="$studio" />
-            @endforeach
-        </section>
+        <x-rows.studio-lockup :studios="$this->searchResults" :is-row="false" />
 
         <section class="mt-4">
             {{ $this->searchResults->links() }}

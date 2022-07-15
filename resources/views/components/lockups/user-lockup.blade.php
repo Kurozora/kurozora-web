@@ -1,15 +1,16 @@
-@props(['user'])
+@props(['user', 'isRow' => true])
 
 @php
+    $class = $isRow ? 'pb-2 shrink-0' : '';
     $followersCount = $user->followers()->count();
 @endphp
 
-<div {{ $attributes->merge(['class' => 'relative w-full']) }}>
+<div {{ $attributes->merge(['class' => 'relative flex-grow w-64 md:w-80 ' . $class]) }}>
     <div class="flex flex-nowrap justify-between">
-        <div class="flex">
-            <picture class="relative w-16 h-16 overflow-hidden">
+        <div class="flex items-center">
+            <picture class="relative shrink-0 w-16 aspect-square rounded-full overflow-hidden">
                 <img
-                    class="w-full bg-white border-2 border-black/5 rounded-full lazyload"
+                    class="w-full h-full object-cover lazyload"
                     data-sizes="auto"
                     data-src="{{ $user->profile_image_url }}"
                     alt="{{ $user->username }} Profile Image"
@@ -18,7 +19,7 @@
                     height="{{ $user->profile_image?->custom_properties['height'] ?? 96 }}"
                 >
 
-                <div class="absolute top-0 left-0 h-full w-full rounded-full"></div>
+                <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-full"></div>
             </picture>
 
             <div class="px-2">
@@ -71,7 +72,7 @@
 
         <a class="absolute w-full h-full" href="{{ route('profile.details', $user) }}"></a>
 
-        <div class="flex flex-row flex-nowrap justify-between z-10 whitespace-nowrap">
+        <div class="flex flex-row flex-nowrap items-center justify-between z-10 whitespace-nowrap">
             @auth
                 @if ($user->id != Auth::user()->id)
                     <livewire:components.follow-button :user='$user' wire:key="{{ uniqid(more_entropy: true) }}" />

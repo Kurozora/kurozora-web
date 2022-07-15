@@ -38,7 +38,7 @@ class AnimeSeasonsSection extends Component
      *
      * @return void
      */
-    public function mount(Anime $anime)
+    public function mount(Anime $anime): void
     {
         $this->anime = $anime;
         $this->seasonsCount = $anime->seasons()->count();
@@ -49,7 +49,7 @@ class AnimeSeasonsSection extends Component
      *
      * @return void
      */
-    public function loadAnimeSeasons()
+    public function loadAnimeSeasons(): void
     {
         $this->seasons = $this->anime->getSeasons(Anime::MAXIMUM_RELATIONSHIPS_LIMIT, reversed: true)->items() ?? [];
     }

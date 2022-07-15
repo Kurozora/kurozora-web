@@ -106,28 +106,16 @@
                         <x-rows.small-lockup :animes="$this->searchResults" :is-row="false" />
                     @break
                     @case(\App\Enums\SearchType::Characters)
-                        <div class="grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7">
-                            @foreach($this->searchResults as $searchResult)
-                                <x-lockups.character-lockup :character="$searchResult" />
-                            @endforeach
-                        </div>
+                        <x-rows.character-lockup :characters="$this->searchResults" :is-row="false" />
                     @break
                     @case(\App\Enums\SearchType::People)
-                        <div class="grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7">
-                            @foreach($this->searchResults as $searchResult)
-                                <x-lockups.person-lockup :person="$searchResult" />
-                            @endforeach
-                        </div>
+                        <x-rows.person-lockup :people="$this->searchResults" :is-row="false" />
                     @break
                     @case(\App\Enums\SearchType::Studios)
-                        @foreach($this->searchResults as $searchResult)
-                            <x-lockups.studio-lockup :studio="$searchResult" />
-                        @endforeach
+                        <x-rows.studio-lockup :studios="$this->searchResults" :is-row="false" />
                     @break
                     @case(\App\Enums\SearchType::Users)
-                        @foreach($this->searchResults as $searchResult)
-                            <x-lockups.user-lockup :user="$searchResult" />
-                        @endforeach
+                        <x-rows.user-lockup :users="$this->searchResults" :is-row="false" />
                     @break
                 @endswitch
             </section>
