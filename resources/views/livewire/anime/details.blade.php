@@ -394,6 +394,8 @@
 
             <livewire:components.anime-songs-section :anime="$anime" />
 
+            <livewire:components.anime-studios-section :anime="$anime" />
+
             <div class="bg-orange-50">
                 @if(!empty($studio))
                     <livewire:components.anime-more-by-studio-section :studio="$studio" />
