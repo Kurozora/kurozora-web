@@ -81,6 +81,15 @@ class Index extends Component
     }
 
     /**
+     * Prepare the component.
+     *
+     * @return void
+     */
+    public function mount(): void
+    {
+    }
+
+    /**
      * Called when a property is updated.
      *
      * @param $propertyName
@@ -92,15 +101,6 @@ class Index extends Component
             $this->type = 'shows';
         }
         $this->validateOnly($propertyName);
-    }
-
-    /**
-     * Prepare the component.
-     *
-     * @return void
-     */
-    public function mount(): void
-    {
     }
 
     /**
@@ -153,21 +153,29 @@ class Index extends Component
                 'One Piece',
                 'Pokemon',
                 'Re:Zero',
+                'Death Note',
+                'アキラ',
             ],
             SearchType::Characters => [
                 'Kirito',
                 'Subaru',
                 'Issei',
-                'Koro',
-                'Izuku',
+                'Koro-sensei',
+                'Izuku Midoriya',
             ],
             SearchType::People => [
                 'Reki Kwahara',
                 'Gosho Aoyama',
+                'Mayumi Tanaka',
+                '長月',
+                'Hayao Miyazaki',
             ],
             SearchType::Studios => [
                 'White Fox',
                 'Rooster Teeth',
+                'NTT Plala',
+                'OLM',
+                'Fuji TV',
             ],
             SearchType::Users => [
                 'Kirito',

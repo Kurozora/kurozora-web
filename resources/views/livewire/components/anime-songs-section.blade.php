@@ -7,6 +7,9 @@
                 </x-slot>
 
                 <x-slot:action>
+                    @hasrole('superAdmin')
+                        <x-button wire:click="loadAnimeSongs">{{ __('Refresh') }}</x-button>
+                    @endhasrole
                     <x-section-nav-link href="{{ route('anime.songs', $anime) }}">{{ __('See All') }}</x-section-nav-link>
                 </x-slot>
             </x-section-nav>

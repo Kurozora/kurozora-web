@@ -24,7 +24,7 @@ class Songs extends Component
      *
      * @return void
      */
-    public function mount(Anime $anime)
+    public function mount(Anime $anime): void
     {
         $this->anime = $anime;
     }

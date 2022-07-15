@@ -1,7 +1,6 @@
 @php
     $gridClass = match($exploreCategory->type) {
         \App\Enums\ExploreCategoryTypes::Genres, \App\Enums\ExploreCategoryTypes::Themes => 'grid sm:grid-cols-2 lg:grid-cols-4 gap-4',
-        \App\Enums\ExploreCategoryTypes::People, \App\Enums\ExploreCategoryTypes::Characters => 'grid grid-cols-3 gap-4 sm:grid-cols-4 sm:auto-cols-[unset] md:grid-cols-5 lg:grid-cols-7',
         \App\Enums\ExploreCategoryTypes::Songs => 'grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
         default => '',
     };
@@ -68,18 +67,10 @@
             </section>
             @break
             @case(\App\Enums\ExploreCategoryTypes::Characters)
-            <section class="{{ $gridClass }}">
-                @foreach($exploreCategoryItems as $categoryItem)
-                    <x-lockups.character-lockup :character="$categoryItem" />
-                @endforeach
-            </section>
+                <x-rows.character-lockup :characters="$exploreCategoryItems" :is-row="false" />
             @break
             @case(\App\Enums\ExploreCategoryTypes::People)
-            <section class="{{ $gridClass }}">
-                @foreach($exploreCategoryItems as $categoryItem)
-                    <x-lockups.person-lockup :person="$categoryItem" />
-                @endforeach
-            </section>
+                <x-rows.person-lockup :people="$exploreCategoryItems" :is-row="false" />
             @break
             @case(\App\Enums\ExploreCategoryTypes::Songs)
             <section class="{{ $gridClass }}">
