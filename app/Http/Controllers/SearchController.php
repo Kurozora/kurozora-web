@@ -8,12 +8,14 @@ use App\Helpers\JSONResult;
 use App\Http\Requests\SearchRequest;
 use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\CharacterResourceIdentity;
+use App\Http\Resources\EpisodeResourceIdentity;
 use App\Http\Resources\PersonResourceIdentity;
 use App\Http\Resources\SongResourceIdentity;
 use App\Http\Resources\StudioResourceIdentity;
 use App\Http\Resources\UserResourceIdentity;
 use App\Models\Anime;
 use App\Models\Character;
+use App\Models\Episode;
 use App\Models\Person;
 use App\Models\Song;
 use App\Models\Studio;
@@ -54,6 +56,18 @@ class SearchController extends Controller
 
                     $response[$type] = [
                         'data' => CharacterResourceIdentity::collection($resource),
+                        'next' => empty($nextPageURL) ? null : $nextPageURL
+                    ];
+                    break;
+                case SearchType::Episodes:
+                    $resource = Episode::search($data['query'])
+                        ->paginate($data['limit'] ?? 20)
+                        ->appends($data);
+                    // Get next page url minus domain
+                    $nextPageURL = $this->nextPageUrlFor($resource, $type);
+
+                    $response[$type] = [
+                        'data' => EpisodeResourceIdentity::collection($resource),
                         'next' => empty($nextPageURL) ? null : $nextPageURL
                     ];
                     break;

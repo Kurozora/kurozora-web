@@ -2,11 +2,14 @@
 
 namespace App\Http\Livewire;
 
+use App\Enums\SearchType;
 use App\Models\Anime;
 use App\Models\Character;
+use App\Models\Episode;
 use App\Models\Person;
 use App\Models\Studio;
 use App\Models\User;
+use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -14,6 +17,20 @@ use Livewire\Component;
 
 class NavSearch extends Component
 {
+    /**
+     * The array of searchable models.
+     *
+     * @var array|string[] $searchableModels
+     */
+    protected array $searchableModels = [
+        Anime::class,
+        Episode::class,
+        Character::class,
+        Person::class,
+        Studio::class,
+        User::class,
+    ];
+
     /**
      * The search query string.
      *
@@ -35,35 +52,29 @@ class NavSearch extends Component
      * Render the component.
      *
      * @return Application|Factory|View
+     * @throws InvalidEnumKeyException
      */
     public function render(): Application|Factory|View
     {
         $searchResults = [];
-        $searchResultsTotal = 0;
 
         if (!empty($this->searchQuery)) {
-            $anime = Anime::search($this->searchQuery)
-                ->paginate(5);
-            $characters = Character::search($this->searchQuery)
-                ->paginate(5);
-            $people = Person::search($this->searchQuery)
-                ->paginate(5);
-            $studios = Studio::search($this->searchQuery)
-                ->paginate(5);
-            $users = User::search($this->searchQuery)
-                ->paginate(5);
-
-            $searchResults['anime'] = $anime;
-            $searchResults['characters'] = $characters;
-            $searchResults['people'] = $people;
-            $searchResults['studios'] = $studios;
-            $searchResults['users'] = $users;
-            $searchResultsTotal = $anime->total() + $characters->total() + $people->total() + $studios->total() + $users->total();
+            foreach ($this->searchableModels as $searchableModel) {
+                $results = $searchableModel::search($this->searchQuery)
+                    ->paginate(5);
+                if ($results->count()) {
+                    $result = [];
+                    $result['title'] = str($searchableModel::TABLE_NAME)->title();
+                    $result['type'] = $searchableModel::TABLE_NAME;
+                    $result['search_type'] = SearchType::fromModel($searchableModel)->value;
+                    $result['results'] = $results;
+                    $searchResults[] = $result;
+                }
+            }
         }
 
         return view('livewire.nav-search', [
             'searchResults' => $searchResults,
-            'searchResultsTotal' => $searchResultsTotal,
             'quickLinks'    => [
                 [
                     'title'  => __('Random Anime'),

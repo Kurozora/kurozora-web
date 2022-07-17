@@ -99,63 +99,45 @@
             </div>
 
             @if (!empty($searchResults))
-                @foreach ($searchResults as $key => $query)
-                    @switch($key)
-                        @case('anime')
-                            @if (!empty($query->total()))
-                                <x-search-header>{{ __('Anime') }}</x-search-header>
+                @foreach ($searchResults as $searchResult)
+                    <x-search-header>
+                        <x-slot:title>
+                            {{ $searchResult['title'] }}
+                        </x-slot>
 
-                                <div class="mt-4">
-                                    <x-rows.small-lockup :animes="$query" />
-                                        <x-hr class="mt-4 mb-4" />
-                                </div>
-                            @endif
-                        @break
-                        @case('characters')
-                            @if (!empty($query->total()))
-                                <x-search-header>{{ __('Characters') }}</x-search-header>
+                        <x-slot:action>
+                            <x-section-nav-link href="{{ route('search.index', ['q' => $this->searchQuery, 'type' => $searchResult['search_type']]) }}">{{ __('See All') }}</x-section-nav-link>
+                        </x-slot>
+                    </x-search-header>
 
-                                <div class="mt-4">
-                                    <x-rows.character-lockup :characters="$query" />
-                                    <x-hr class="mt-4 mb-4" />
-                                </div>
-                            @endif
+                    <div class="mt-4">
+                        @switch($searchResult['type'])
+                            @case(\App\Models\Anime::TABLE_NAME)
+                                <x-rows.small-lockup :animes="$searchResult['results']" />
                             @break
-                        @case('people')
-                            @if (!empty($query->total()))
-                                <x-search-header>{{ __('People') }}</x-search-header>
-
-                                <div class="mt-4">
-                                    <x-rows.person-lockup :people="$query" />
-                                    <x-hr class="mt-4 mb-4" />
-                                </div>
-                            @endif
+                            @case(\App\Models\Episode::TABLE_NAME)
+                                <x-rows.episode-lockup :episodes="$searchResult['results']" />
                             @break
-                        @case('studios')
-                            @if (!empty($query->total()))
-                                <x-search-header>{{ __('Studios') }}</x-search-header>
-
-                                <div class="mt-4">
-                                    <x-rows.studio-lockup :studios="$query" />
-                                    <x-hr class="mt-4 mb-4" />
-                                </div>
-                            @endif
+                            @case(\App\Models\Character::TABLE_NAME)
+                                <x-rows.character-lockup :characters="$searchResult['results']" />
                             @break
-                        @case('users')
-                            @if (!empty($query->total()))
-                                <x-search-header>{{ __('Users') }}</x-search-header>
+                            @case(\App\Models\Person::TABLE_NAME)
+                                <x-rows.person-lockup :people="$searchResult['results']" />
+                            @break
+                            @case(\App\Models\Studio::TABLE_NAME)
+                                <x-rows.studio-lockup :studios="$searchResult['results']" />
+                            @break
+                            @case(\App\Models\User::TABLE_NAME)
+                                <x-rows.user-lockup :users="$searchResult['results']" />
+                            @break
+                        @endswitch
 
-                                <div class="mt-4">
-                                    <x-rows.user-lockup :users="$query" />
-                                    <x-hr class="mt-4 mb-4" />
-                                </div>
-                            @endif
-                        @break
-                    @endswitch
+                        <x-hr class="mt-4 mb-4" />
+                    </div>
                 @endforeach
             @endif
 
-            @if ($searchResultsTotal == 0 && !empty($searchQuery))
+            @if (empty($searchResults) && !empty($searchQuery))
                 <p class="text-sm text-gray-500 text-center font-bold" wire:key="no-results-found">{{ __('No search results found :(') }}</p>
             @endif
 
@@ -168,7 +150,11 @@
                     x-transition:leave="ease-in duration-200"
                     x-transition:leave-start="opacity-100"
                     x-transition:leave-end="opacity-0"
-                >{{ __('Quick Links') }}</x-search-header>
+                >
+                    <x-slot:title>
+                        {{ __('Quick Links') }}
+                    </x-slot>
+                </x-search-header>
 
                 <ul class="space-y-4">
                     @foreach ($quickLinks as $key => $quickLink)
