@@ -88,7 +88,7 @@
             </div>
         </section>
 
-        @if (empty($this->searchResults))
+        @if (empty($this->searchResults) || empty($this->searchResults->total()))
             <section class="mt-4">
                 <ul class="flex flex-col gap-4 items-center mt-8">
                     @foreach ($this->searchSuggestions as $searchSuggestion)
@@ -104,6 +104,9 @@
                 @switch($this->type)
                     @case(\App\Enums\SearchType::Shows)
                         <x-rows.small-lockup :animes="$this->searchResults" :is-row="false" />
+                    @break
+                    @case(\App\Enums\SearchType::Episodes)
+                        <x-rows.episode-lockup :episodes="$this->searchResults" :is-row="false" />
                     @break
                     @case(\App\Enums\SearchType::Characters)
                         <x-rows.character-lockup :characters="$this->searchResults" :is-row="false" />

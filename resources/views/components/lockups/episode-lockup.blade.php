@@ -1,9 +1,13 @@
-@props(['episode'])
+@props(['episode', 'isRow' => true])
 
-<div class="relative">
+@php
+    $class = $isRow ? 'pb-2 shrink-0' : '';
+@endphp
+
+<div {{ $attributes->merge(['class' => 'relative flex-grow w-64 md:w-80 ' . $class]) }}>
     <div class="flex flex-nowrap">
         <picture class="relative w-full aspect-video rounded-lg overflow-hidden">
-            <img class="lazyload" data-sizes="auto" data-src="{{ $episode->banner_image_url ?? asset('images/static/placeholders/episode_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
+            <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $episode->banner_image_url ?? asset('images/static/placeholders/episode_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
 
             <div class="absolute bottom-0 left-0 right-0 p-3 pt-[15%] bg-gradient-to-t from-black/50 to-transparent">
                 <div>
