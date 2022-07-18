@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\CharacterStatus;
 use App\Models\Character;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -46,7 +47,7 @@ class CharacterFactory extends Factory
                 'about' => $jaFaker->paragraph
             ],
             'debut'             => $this->faker->numerify('Episode ##'),
-            'status'            => $this->faker->randomElement(['Alive', 'Deceased']),
+            'status'            => CharacterStatus::getRandomValue(),
             'blood_type'        => strtoupper($this->faker->randomLetter),
             'favorite_food'     => $this->faker->word,
             'height'            => $this->faker->numberBetween(10, 1000),
