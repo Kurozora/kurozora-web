@@ -23,7 +23,7 @@
                 @endphp
 
                 <a class="p-2 sm:w-2/4" href="{{ route('profile.details', $user) }}">
-                    <div class="{{ $backgroundColor }} px-6 py-8 rounded-lg shadow-lg text-center">
+                    <div class="{{ $backgroundColor }} px-6 py-6 rounded-lg shadow-lg text-center">
                         <div class="flex justify-center mb-3">
                             <picture class="relative w-40 h-40 rounded-full shadow-lg overflow-hidden">
                                 <img class="w-full h-full object-cover" width="160" height="160" src="{{ $user->profile_image_url }}" alt="{{ $user->username }} Profile Image" title="{{ $user->username }}">

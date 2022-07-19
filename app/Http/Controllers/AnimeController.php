@@ -129,7 +129,7 @@ class AnimeController extends Controller
         $data = $request->validated();
 
         // Get the seasons
-        $seasons = $anime->getSeasons($data['limit'] ?? 25, $data['page'] ?? 1);
+        $seasons = $anime->getSeasons($data['limit'] ?? 25, $data['page'] ?? 1, $data['reversed'] ?? false);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $seasons->nextPageUrl());

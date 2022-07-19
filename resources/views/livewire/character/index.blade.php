@@ -41,11 +41,7 @@
             </div>
         </section>
 
-        <section class="grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7">
-            @foreach($this->searchResults as $character)
-                <x-lockups.character-lockup :character="$character" />
-            @endforeach
-        </section>
+        <x-rows.character-lockup :characters="$this->searchResults" :is-row="false" />
 
         <section class="mt-4">
             {{ $this->searchResults->links() }}

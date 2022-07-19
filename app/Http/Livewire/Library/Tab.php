@@ -34,9 +34,9 @@ class Tab extends Component
     /**
      * The user library status string.
      *
-     * @var string $userLibraryStatusString
+     * @var string $status
      */
-    public string $userLibraryStatusString;
+    public string $status;
 
     /**
      * Whether to load the resource.
@@ -48,12 +48,13 @@ class Tab extends Component
     /**
      * Prepare the component.
      *
-     * @param UserLibraryStatus $userLibraryStatus
+     * @param string $status
      * @return void
      */
-    public function mount(UserLibraryStatus $userLibraryStatus): void
+    public function mount(string $status): void
     {
-        $this->userLibraryStatusString = $userLibraryStatus->key;
+        $status = str($status)->title();
+        $this->status = $status;
     }
 
     /**
@@ -75,7 +76,8 @@ class Tab extends Component
     public function randomAnime(): void
     {
         // Get library status
-        $userLibraryStatus = UserLibraryStatus::fromKey($this->userLibraryStatusString);
+        $status = str_replace('-', '', $this->status);
+        $userLibraryStatus = UserLibraryStatus::fromKey($status);
 
         $anime = auth()->user()
             ->library()
@@ -127,7 +129,8 @@ class Tab extends Component
         }
 
         // Get library status
-        $userLibraryStatus = UserLibraryStatus::fromKey($this->userLibraryStatusString);
+        $status = str_replace('-', '', $this->status);
+        $userLibraryStatus = UserLibraryStatus::fromKey($status);
 
         // If no search was performed, return all anime
         if (empty($this->search) && empty($wheres) && empty($orders)) {

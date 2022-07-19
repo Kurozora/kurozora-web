@@ -1,8 +1,12 @@
-@props(['character'])
+@props(['character', 'isRow' => true])
 
-<div {{ $attributes->merge(['class' => 'relative w-full pb-2']) }}>
+@php
+    $class = $isRow ? 'pb-2 shrink-0' : '';
+@endphp
+
+<div {{ $attributes->merge(['class' => 'relative flex-grow w-32 ' . $class]) }}>
     <div class="flex flex-col">
-        <picture class="relative w-28 h-40 rounded-lg shadow-md overflow-hidden md:w-32 md:h-48">
+        <picture class="relative aspect-square rounded-full shadow-md overflow-hidden">
             <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $character->profile_image_url ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $character->name }} Profile Image" title="{{ $character->name }}">
 
             <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
@@ -12,6 +16,6 @@
     </div>
 
     <div class="mt-2">
-        <p class="leading-tight line-clamp-2">{{ $character->name }}</p>
+        <p class="text-center leading-tight line-clamp-2">{{ $character->name }}</p>
     </div>
 </div>

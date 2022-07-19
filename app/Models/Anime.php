@@ -256,7 +256,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
      * @param int|null $value
      * @return void
      */
-    public function setAirSeasonAttribute(?int $value)
+    public function setAirSeasonAttribute(?int $value): void
     {
         $this->attributes['air_season'] = (int) $value;
     }

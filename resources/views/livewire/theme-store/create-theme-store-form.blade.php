@@ -18,7 +18,7 @@
     {{-- Header --}}
     <section class="bg-gray-100 shadow">
         <article>
-            <header class="flex max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <header class="flex max-w-7xl mx-auto py-6 px-4 sm:px-6">
                 <h1 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('Create Theme') }}</h1>
             </header>
         </article>

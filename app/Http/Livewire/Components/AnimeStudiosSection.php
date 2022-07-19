@@ -8,7 +8,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
-class AnimeSeasonsSection extends Component
+class AnimeStudiosSection extends Component
 {
     /**
      * The object containing the anime data.
@@ -18,18 +18,18 @@ class AnimeSeasonsSection extends Component
     public Anime $anime;
 
     /**
-     * The array containing the seasons data.
+     * The array containing the studios data.
      *
-     * @var array $seasons
+     * @var array $studios
      */
-    public array $seasons = [];
+    public array $studios = [];
 
     /**
-     * The number of seasons the anime has.
+     * The number of studios the anime has.
      *
-     * @var int $seasonsCount
+     * @var int $studiosCount
      */
-    public int $seasonsCount;
+    public int $studiosCount;
 
     /**
      * Prepare the component.
@@ -41,17 +41,17 @@ class AnimeSeasonsSection extends Component
     public function mount(Anime $anime): void
     {
         $this->anime = $anime;
-        $this->seasonsCount = $anime->seasons()->count();
+        $this->studiosCount = $anime->studios()->count();
     }
 
     /**
-     * Loads the anime seasons section.
+     * Loads the anime studios section.
      *
      * @return void
      */
-    public function loadAnimeSeasons(): void
+    public function loadAnimeStudios(): void
     {
-        $this->seasons = $this->anime->getSeasons(Anime::MAXIMUM_RELATIONSHIPS_LIMIT, reversed: true)->items() ?? [];
+        $this->studios = $this->anime->getStudios(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
     }
 
     /**
@@ -61,6 +61,6 @@ class AnimeSeasonsSection extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.components.anime-seasons-section');
+        return view('livewire.components.anime-studios-section');
     }
 }

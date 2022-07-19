@@ -28,7 +28,7 @@ class Index extends Component
      *
      * @return void
      */
-    public function mount(User $user)
+    public function mount(User $user): void
     {
         $this->user = $user;
     }

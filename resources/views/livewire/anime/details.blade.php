@@ -77,7 +77,7 @@
 
     <div class="grid grid-rows-[repeat(2,minmax(0,min-content))] h-full xl:grid-rows-none xl:grid-cols-2 2xl:grid-cols-3 xl:mb-0">
         <div class="relative">
-            <div class="relative flex flex-nowrap aspect-ratio-16-9 md:relative md:h-full xl:aspect-ratio-auto">
+            <div class="relative flex flex-nowrap aspect-video md:relative md:h-full xl:aspect-auto">
                 <x-picture class="w-full overflow-hidden">
                     <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
                 </x-picture>
@@ -394,6 +394,8 @@
 
             <livewire:components.anime-songs-section :anime="$anime" />
 
+            <livewire:components.anime-studios-section :anime="$anime" />
+
             <div class="bg-orange-50">
                 @if(!empty($studio))
                     <livewire:components.anime-more-by-studio-section :studio="$studio" />
@@ -415,7 +417,7 @@
                     </x-slot>
                     <x-slot:content>
                         <iframe
-                            class="w-full aspect-ratio-16-9 lazyload"
+                            class="w-full aspect-video lazyload"
                             type="text/html"
                             allowfullscreen="allowfullscreen"
                             mozallowfullscreen="mozallowfullscreen"

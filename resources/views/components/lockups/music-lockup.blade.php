@@ -25,7 +25,7 @@
     @endif
 >
     <div class="flex flex-col">
-        <x-picture class="rounded-lg shadow-md overflow-hidden aspect-ratio-1-1">
+        <x-picture class="aspect-square rounded-lg shadow-md overflow-hidden">
             <img class="w-full h-full object-cover"
                  alt="{{ $animeSong->song->title }} Banner" title="{{ $animeSong->song->title }}"
                  width="320" height="320"

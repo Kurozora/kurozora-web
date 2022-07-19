@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\StudioType;
 use App\Models\Studio;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -25,7 +26,7 @@ class StudioFactory extends Factory
         return [
             'slug'          => str($name)->slug(),
             'name'          => $name,
-            'type'          => 'anime',
+            'type'          => StudioType::Anime,
             'about'         => $this->faker->realText(),
             'address'       => $this->faker->address(),
             'founded'       => $this->faker->date(),

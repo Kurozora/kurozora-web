@@ -2,7 +2,7 @@
 
 <div class="max-w-lg sm:max-w-lg md:max-w-xs lg:max-w-sm rounded overflow-hidden shadow-lg">
     <x-picture>
-        <img class="w-full aspect-ratio-1-1 object-cover object-bottom lazyload" data-sizes="auto" data-src="{{ $theme->screenshot_image_url }}" alt="{{ $theme->name }}" title="{{ $theme->name}}" style="background-color: {{ $theme->screenshot_image?->custom_properties['background_color'] ?? '#FFFFFF' }};">
+        <img class="w-full aspect-square object-cover object-bottom lazyload" data-sizes="auto" data-src="{{ $theme->screenshot_image_url }}" alt="{{ $theme->name }}" title="{{ $theme->name}}" style="background-color: {{ $theme->screenshot_image?->custom_properties['background_color'] ?? '#FFFFFF' }};">
     </x-picture>
 
     <div class="px-6 py-4">

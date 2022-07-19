@@ -153,13 +153,7 @@
                     </x-slot>
                 </x-section-nav>
 
-                <div class="flex mt-5 overflow-x-scroll no-scrollbar">
-                    <div class="flex flex-row flex-nowrap gap-4">
-                        @foreach($characterPeople as $person)
-                            <x-lockups.person-lockup :person="$person" />
-                        @endforeach
-                    </div>
-                </div>
+                <x-rows.person-lockup :people="$characterPeople" />
             </section>
         @endif
     </div>

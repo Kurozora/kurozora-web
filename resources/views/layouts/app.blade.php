@@ -21,7 +21,7 @@
 
     <!-- Page Heading -->
     <header class="bg-gray-100 shadow">
-        <div class="flex max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <div class="flex max-w-7xl mx-auto px-4 py-6 sm:px-6">
             {{ $header }}
         </div>
     </header>

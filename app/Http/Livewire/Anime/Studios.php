@@ -8,7 +8,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
-class Songs extends Component
+class Studios extends Component
 {
     /**
      * The object containing the anime data.
@@ -36,8 +36,8 @@ class Songs extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.anime.songs', [
-            'animeSongs' => $this->anime->anime_songs
+        return view('livewire.anime.studios', [
+            'animeStudios' => $this->anime->studios()->paginate(25)
         ]);
     }
 }

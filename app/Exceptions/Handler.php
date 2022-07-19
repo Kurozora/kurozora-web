@@ -150,6 +150,7 @@ class Handler extends ExceptionHandler
     {
         $apiErrors = [];
         $errors = $exception->validator->errors()->all();
+
         foreach ($errors as $error) {
             $apiError = new APIError();
             $apiError->id = 40022;

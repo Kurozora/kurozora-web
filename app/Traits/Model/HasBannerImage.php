@@ -48,7 +48,7 @@ trait HasBannerImage
      * @throws FileIsTooBig
      * @throws FileCannotBeAdded
      */
-    function updateBannerImage(string|UploadedFile $uploadFile, string $name = null, array $customProperties = [])
+    function updateBannerImage(string|UploadedFile $uploadFile, string $name = null, array $customProperties = []): void
     {
         // Determine media adder
         $addMedia = str($uploadFile)->startsWith(['http://', 'https://']) ? $this->addMediaFromUrl($uploadFile) : $this->addMedia($uploadFile);
@@ -76,7 +76,7 @@ trait HasBannerImage
      *
      * @return void
      */
-    public function deleteBannerImage()
+    public function deleteBannerImage(): void
     {
         $this->clearMediaCollection($this->bannerImageCollectionName);
     }
