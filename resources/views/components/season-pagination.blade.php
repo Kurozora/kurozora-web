@@ -1,7 +1,7 @@
 @props(['seasonOfYear' => season_of_year(), 'year' => now()->year, 'onEachSide' => 2])
 
 <div class="flex flex-wrap gap-4 justify-between">
-    <div class="flex flex-wrap gap-1">
+    <div class="flex gap-2 overflow-x-scroll no-scrollbar">
         {{-- Previous page --}}
         @php
             // Capture current values

@@ -48,7 +48,7 @@ trait HasPosterImage
      * @throws FileIsTooBig
      * @throws FileCannotBeAdded
      */
-    function updatePosterImage(string|UploadedFile $uploadFile, string $name = null, array $customProperties = [])
+    function updatePosterImage(string|UploadedFile $uploadFile, string $name = null, array $customProperties = []): void
     {
         // Determine media adder
         $addMedia = str($uploadFile)->startsWith(['http://', 'https://']) ? $this->addMediaFromUrl($uploadFile) : $this->addMedia($uploadFile);
@@ -76,7 +76,7 @@ trait HasPosterImage
      *
      * @return void
      */
-    public function deletePosterImage()
+    public function deletePosterImage(): void
     {
         $this->clearMediaCollection($this->posterImageCollectionName);
     }

@@ -96,22 +96,10 @@
                     </div>
                 @break
                 @case(\App\Enums\ExploreCategoryTypes::Characters)
-                    <div class="flex mt-5 overflow-x-scroll no-scrollbar">
-                        <div class="flex flex-nowrap gap-4">
-                        @foreach($exploreCategoryItems as $categoryItem)
-                            <x-lockups.character-lockup :character="$categoryItem->model" />
-                        @endforeach
-                        </div>
-                    </div>
+                    <x-rows.character-lockup :characters="$exploreCategoryItems" />
                 @break
                 @case(\App\Enums\ExploreCategoryTypes::People)
-                    <div class="flex mt-5 overflow-x-scroll no-scrollbar">
-                        <div class="flex flex-nowrap gap-4">
-                        @foreach($exploreCategoryItems as $categoryItem)
-                            <x-lockups.person-lockup :person="$categoryItem->model" />
-                        @endforeach
-                        </div>
-                    </div>
+                    <x-rows.person-lockup :people="$exploreCategoryItems" />
                 @break
                 @case(\App\Enums\ExploreCategoryTypes::Songs)
                     <div class="flex mt-5 overflow-x-scroll no-scrollbar">

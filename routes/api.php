@@ -14,25 +14,25 @@ Route::prefix('/v1')
         Route::get('/info', [APIController::class, 'info'])
             ->name('.info');
 
-        require 'API/Anime.php';
-        require 'API/Cast.php';
-        require 'API/Characters.php';
-        require 'API/Episodes.php';
-        require 'API/Explore.php';
-        require 'API/Genres.php';
-        require 'API/Feed.php';
-        require 'API/Languages.php';
-        require 'API/Legal.php';
-        require 'API/Me.php';
-        require 'API/People.php';
-        require 'API/Search.php';
-        require 'API/Seasons.php';
-        require 'API/Songs.php';
-        require 'API/Studios.php';
-        require 'API/Store.php';
-        require 'API/Themes.php';
-        require 'API/Theme Store.php';
-        require 'API/Users.php';
+        require 'API/v1/Anime.php';
+        require 'API/v1/Cast.php';
+        require 'API/v1/Characters.php';
+        require 'API/v1/Episodes.php';
+        require 'API/v1/Explore.php';
+        require 'API/v1/Genres.php';
+        require 'API/v1/Feed.php';
+        require 'API/v1/Languages.php';
+        require 'API/v1/Legal.php';
+        require 'API/v1/Me.php';
+        require 'API/v1/People.php';
+        require 'API/v1/Search.php';
+        require 'API/v1/Seasons.php';
+        require 'API/v1/Songs.php';
+        require 'API/v1/Studios.php';
+        require 'API/v1/Store.php';
+        require 'API/v1/Themes.php';
+        require 'API/v1/Theme Store.php';
+        require 'API/v1/Users.php';
     });
 
 Route::fallback([APIController::class, 'error'])

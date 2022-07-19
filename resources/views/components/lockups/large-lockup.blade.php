@@ -2,7 +2,7 @@
 
 <div class="relative w-64 pb-2 md:w-80">
     <div class="flex flex-col">
-        <picture class="relative rounded-lg overflow-hidden aspect-ratio-16-9">
+        <picture class="relative aspect-video rounded-lg overflow-hidden">
         @if(empty($anime->video_url))
             <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
 

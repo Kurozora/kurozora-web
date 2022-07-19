@@ -19,14 +19,14 @@
             <img class="h-32 w-full object-cover object-center rounded-lg shadow-lg sm:h-44" src="{{ asset('images/static/banners/personalisation.webp') }}"  alt="About Personalisation" />
         </x-picture>
 
-        <section class="my-4">
+        <section class="mt-4 mb-4">
             <p class="text-2xl font-bold">{{ __('About Personalisation') }}</p>
         </section>
 
         <section>
             <p>{{ __('We use your interactions with the app and website—such as the anime you track, purchases you make, downloads and what you’ve previously searched for and viewed—to help you discover anime and manga that are most relevant to you through personalised recommendations.') }}</p>
 
-            <x-hr class="my-4" />
+            <x-hr class="mt-4 mb-4" />
 
             <p>{{ __('Personalised information are never sold or made accessible to any third party services. We use personalised information only on our platform to provide you with the best experience ever.') }}</p>
         </section>

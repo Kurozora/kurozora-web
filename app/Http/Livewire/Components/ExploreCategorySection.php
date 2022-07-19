@@ -107,8 +107,12 @@ class ExploreCategorySection extends Component
         $exploreCategoryItems = match ($this->exploreCategory->type) {
             ExploreCategoryTypes::MostPopularShows => $this->exploreCategory->most_popular_shows($this->genre ?? $this->theme)->explore_category_items,
             ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcoming_shows($this->genre ?? $this->theme)->explore_category_items,
-            ExploreCategoryTypes::Characters => $this->exploreCategory->charactersBornToday()->explore_category_items,
-            ExploreCategoryTypes::People => $this->exploreCategory->peopleBornToday()->explore_category_items,
+            ExploreCategoryTypes::Characters => $this->exploreCategory->charactersBornToday()->explore_category_items->map(function ($exploreCategoryItem) {
+                return $exploreCategoryItem->model;
+            }),
+            ExploreCategoryTypes::People => $this->exploreCategory->peopleBornToday()->explore_category_items->map(function ($exploreCategoryItem) {
+                return $exploreCategoryItem->model;
+            }),
             default => $this->exploreCategory->explore_category_items()->limit(10)->get()
         };
 

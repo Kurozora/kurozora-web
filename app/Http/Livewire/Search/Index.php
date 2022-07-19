@@ -7,6 +7,7 @@ use App\Enums\SearchSource;
 use App\Enums\SearchType;
 use App\Models\Anime;
 use App\Models\Character;
+use App\Models\Episode;
 use App\Models\Person;
 use App\Models\Studio;
 use App\Models\User;
@@ -81,6 +82,15 @@ class Index extends Component
     }
 
     /**
+     * Prepare the component.
+     *
+     * @return void
+     */
+    public function mount(): void
+    {
+    }
+
+    /**
      * Called when a property is updated.
      *
      * @param $propertyName
@@ -92,15 +102,6 @@ class Index extends Component
             $this->type = 'shows';
         }
         $this->validateOnly($propertyName);
-    }
-
-    /**
-     * Prepare the component.
-     *
-     * @return void
-     */
-    public function mount(): void
-    {
     }
 
     /**
@@ -118,6 +119,7 @@ class Index extends Component
             }
 
             $models = match ($this->type) {
+                SearchType::Episodes => Episode::class,
                 SearchType::Characters => Character::class,
                 SearchType::People => Person::class,
                 SearchType::Studios => Studio::class,
@@ -153,21 +155,36 @@ class Index extends Component
                 'One Piece',
                 'Pokemon',
                 'Re:Zero',
+                'Death Note',
+                'アキラ',
+            ],
+            SearchType::Episodes => [
+                'Zombie',
+                'Red Hat',
+                'Witch',
+                'Subaru',
+                'Cream Puff',
             ],
             SearchType::Characters => [
                 'Kirito',
                 'Subaru',
                 'Issei',
-                'Koro',
-                'Izuku',
+                'Koro-sensei',
+                'Izuku Midoriya',
             ],
             SearchType::People => [
                 'Reki Kwahara',
                 'Gosho Aoyama',
+                'Mayumi Tanaka',
+                '長月',
+                'Hayao Miyazaki',
             ],
             SearchType::Studios => [
                 'White Fox',
                 'Rooster Teeth',
+                'NTT Plala',
+                'OLM',
+                'Fuji TV',
             ],
             SearchType::Users => [
                 'Kirito',

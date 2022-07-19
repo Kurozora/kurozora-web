@@ -72,7 +72,7 @@
 
     <div class="grid grid-rows-[repeat(2,minmax(0,min-content))] h-full lg:grid-rows-none lg:grid-cols-2 2xl:grid-cols-3 lg:mb-0">
         <div class="relative">
-            <div class="relative flex flex-nowrap aspect-ratio-16-9 md:relative md:h-full lg:aspect-ratio-auto">
+            <div class="relative flex flex-nowrap aspect-video md:relative md:h-full lg:aspect-auto">
                 <x-picture class="w-full overflow-hidden">
                     <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $episode->banner_image_url ?? $season->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
                 </x-picture>
@@ -250,7 +250,7 @@
                     </x-slot>
                     <x-slot:content>
                         <iframe
-                            class="w-full aspect-ratio-16-9 lazyload"
+                            class="w-full aspect-video lazyload"
                             type="text/html"
                             scrolling="no"
                             frameborder="no"

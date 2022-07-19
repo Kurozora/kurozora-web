@@ -217,7 +217,7 @@
                 </ul>
 
                 <div
-                    class="flex flex-wrap justify-between space-y-8 sm:space-y-0 mt-16"
+                    class="flex flex-wrap justify-between space-y-10 sm:space-y-0 mt-16"
                     x-data="{shown: false}"
                     x-intersect.full.once="shown = true"
                 >
