@@ -38,6 +38,10 @@ Route::prefix('/anime')
                     ->middleware('auth.kurozora:optional')
                     ->name('.studios');
 
+                Route::get('/more-by-studio', [AnimeController::class, 'moreByStudio'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.more-by-studio');
+
                 Route::post('/rate', [AnimeController::class, 'rateAnime'])
                     ->middleware('auth.kurozora')
                 ->name('.rate');

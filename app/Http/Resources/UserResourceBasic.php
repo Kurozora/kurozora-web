@@ -46,7 +46,7 @@ class UserResourceBasic extends JsonResource
                 'followerCount'     => $this->resource->followers()->count(),
                 'followingCount'    => $this->resource->following()->count(),
                 'reputationCount'   => $this->resource->getReputationCount(),
-                'joinDate'          => $this->resource->created_at->format('Y-m-d'),
+                'joinDate'          => $this->resource->created_at->timestamp,
                 'isPro'             => $this->resource->isPro(),
             ]
         ]);

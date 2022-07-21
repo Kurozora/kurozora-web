@@ -29,7 +29,7 @@ class AccessTokenResource extends JsonResource
             'href'          => route('api.me.access-tokens.details', $this->resource, false),
             'attributes'    => [
                 'ipAddress'         => $this->resource->session_attribute->ip_address,
-                'lastValidatedAt'   => $this->resource->last_used_at?->format('Y-m-d H:i:s'),
+                'lastValidatedAt'   => $this->resource->last_used_at?->timestamp,
             ]
         ];
 
