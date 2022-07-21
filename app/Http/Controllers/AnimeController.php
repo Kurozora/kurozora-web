@@ -6,6 +6,7 @@ use App\Events\AnimeViewed;
 use App\Helpers\JSONResult;
 use App\Http\Requests\GetAnimeCastRequest;
 use App\Http\Requests\GetAnimeCharactersRequest;
+use App\Http\Requests\GetAnimeMoreByStudioRequest;
 use App\Http\Requests\GetAnimeRelatedShowsRequest;
 use App\Http\Requests\GetAnimeSeasonsRequest;
 use App\Http\Requests\GetAnimeSongsRequest;
@@ -28,6 +29,7 @@ use Auth;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class AnimeController extends Controller
 {
@@ -206,6 +208,34 @@ class AnimeController extends Controller
 
         return JSONResult::success([
             'data' => StudioResource::collection($animeStudios),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Returns the more anime made by the same studio.
+     *
+     * @param GetAnimeMoreByStudioRequest $request
+     * @param Anime $anime
+     * @return JsonResponse
+     */
+    public function moreByStudio(GetAnimeMoreByStudioRequest $request, Anime $anime): JsonResponse
+    {
+        $data = $request->validated();
+        $studioAnimes = new LengthAwarePaginator([], 0, 1);
+
+        // Get the anime studios
+        if ($animeStudio = $anime->studios()->firstWhere('is_studio', '=', true)) {
+            $studioAnimes = $animeStudio->getAnime($data['limit'] ?? 25, $data['page'] ?? 1);
+        } elseif ($animeStudio = $anime->studios()->first()) {
+            $studioAnimes = $animeStudio->getAnime($data['limit'] ?? 25, $data['page'] ?? 1);
+        }
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $studioAnimes->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => AnimeResourceIdentity::collection($studioAnimes),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
