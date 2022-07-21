@@ -26,6 +26,8 @@ class AnimeResourceBasic extends JsonResource
     public function toArray($request): array
     {
         $resource = AnimeResourceIdentity::make($this->resource)->toArray($request);
+        $studio = $this->resource->studios();
+        $studio = $studio->firstWhere('is_studio', '=', true) ?? $studio->first();
         $resource = array_merge($resource, [
             'attributes'    => [
                 'anidbID'               => $this->resource->anidb_id,
@@ -48,6 +50,7 @@ class AnimeResourceBasic extends JsonResource
                 'synopsis'              => $this->resource->synopsis,
                 'genres'                => $this->resource->genres->pluck('name'),
                 'themes'                => $this->resource->themes->pluck('name'),
+                'studio'                => $studio?->name,
                 'languages'             => LanguageResource::collection($this->resource->languages),
                 'tvRating'              => $this->resource->tv_rating->only(['name', 'description']),
                 'type'                  => $this->resource->media_type->only(['name', 'description']),
