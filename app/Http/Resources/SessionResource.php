@@ -30,7 +30,7 @@ class SessionResource extends JsonResource
             'href'          => route('api.me.sessions.details', $this->resource, false),
             'attributes'    => [
                 'ipAddress'         => $this->resource->ip_address,
-                'lastValidatedAt'   => Carbon::createFromTimestamp($this->resource->last_activity)->format('Y-m-d H:i:s'),
+                'lastValidatedAt'   => Carbon::createFromTimestamp($this->resource->last_activity)->timestamp,
             ]
         ];
 
