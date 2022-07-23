@@ -5,7 +5,6 @@ namespace App\Http\Resources;
 use App\Models\Session;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Carbon;
 
 class SessionResource extends JsonResource
 {
@@ -30,7 +29,7 @@ class SessionResource extends JsonResource
             'href'          => route('api.me.sessions.details', $this->resource, false),
             'attributes'    => [
                 'ipAddress'         => $this->resource->ip_address,
-                'lastValidatedAt'   => Carbon::createFromTimestamp($this->resource->last_activity)->timestamp,
+                'lastValidatedAt'   => $this->resource->last_activity,
             ]
         ];
 
