@@ -36,6 +36,7 @@ class Index extends Command
      * @var array|string[]
      */
     protected array $listHeaders = [
+        '#',
         'UID',
         'Name',
         'Created At',
@@ -152,13 +153,12 @@ class Index extends Command
 
                 $rows = [];
                 foreach ($statIndexes as $statIndex) {
-                    dd($statIndexes);
                     $row = $statIndex;
 
                     array_walk($row, function(&$stat) {
                         if (is_array($stat)) {
                             foreach ($stat as $key => $value) {
-                                $stat[$key] = $key . ' => ' . $value;
+                                $stat[$key] = sprintf('%-\'.20s%\'.20s', $key, $value);
                             }
                             $stat = implode(PHP_EOL, $stat);
                         }
@@ -184,7 +184,15 @@ class Index extends Command
                 $attributes[] = implode(PHP_EOL, $index->getFilterableAttributes());
                 $rows = [$attributes];
             } else {
-                $rows = $client->getAllRawIndexes();
+                $allIndexes = $client->getAllIndexes();
+                $rows = [];
+
+                foreach ($allIndexes as $key => $index) {
+                    $row = array_merge(['#' => $key], $index->fetchRawInfo());
+                    $row[] = implode(PHP_EOL, $index->getSortableAttributes());
+                    $row[] = implode(PHP_EOL, $index->getFilterableAttributes());
+                    $rows[] = $row;
+                }
             }
 
             $this->table($this->listHeaders, $rows);
