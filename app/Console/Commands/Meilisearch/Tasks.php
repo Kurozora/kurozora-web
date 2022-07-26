@@ -48,6 +48,9 @@ class Tasks extends Command
         $results = array_filter($results, function($result) use ($status) {
             return $result['status'] == $status;
         });
+
+        $this->info('Total: ' . count($results));
+
         $results = array_slice($results, 0, $rows);
 
         // Make sure the results aren't too long for the screen

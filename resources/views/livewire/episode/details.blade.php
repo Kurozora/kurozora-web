@@ -74,7 +74,7 @@
         <div class="relative">
             <div class="relative flex flex-nowrap aspect-video md:relative md:h-full lg:aspect-auto">
                 <x-picture class="w-full overflow-hidden">
-                    <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $episode->banner_image_url ?? $season->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
+                    <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $episode->banner_image_url ?? $season->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
                 </x-picture>
 
                 @if (!empty($episode->video_url))
