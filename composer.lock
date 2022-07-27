@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "38c27d10c63d0b829a6d2b7f904a8e59",
+    "content-hash": "060aeb0b626f9fe754d3d4307f509711",
     "packages": [
         {
             "name": "anaseqal/nova-sidebar-icons",
@@ -250,16 +250,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.231.12",
+            "version": "3.231.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "8f8742caa42b260950320c98ddc5da4926e2373d"
+                "reference": "6b79b9c8204813d9674ffa7badcd567d7f608165"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/8f8742caa42b260950320c98ddc5da4926e2373d",
-                "reference": "8f8742caa42b260950320c98ddc5da4926e2373d",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/6b79b9c8204813d9674ffa7badcd567d7f608165",
+                "reference": "6b79b9c8204813d9674ffa7badcd567d7f608165",
                 "shasum": ""
             },
             "require": {
@@ -336,9 +336,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.231.12"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.231.14"
             },
-            "time": "2022-07-22T18:19:47+00:00"
+            "time": "2022-07-26T18:20:14+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -4203,6 +4203,75 @@
             "time": "2022-04-08T19:24:30+00:00"
         },
         {
+            "name": "kiritokatklian/laravel-color-palette",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kiritokatklian/laravel-color-palette.git",
+                "reference": "24a04d3f67ac9b3850cdf1eb1dea72329b75880b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kiritokatklian/laravel-color-palette/zipball/24a04d3f67ac9b3850cdf1eb1dea72329b75880b",
+                "reference": "24a04d3f67ac9b3850cdf1eb1dea72329b75880b",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^9.18",
+                "ksubileau/color-thief-php": "^v2.0",
+                "php": "^8.0.2"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.9",
+                "nunomaduro/larastan": "^2.0",
+                "orchestra/testbench": "7.*",
+                "phpunit/phpunit": "9.*"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Kiritokatklian\\LaravelColorPalette\\ColorPaletteServiceProvider"
+                    ],
+                    "aliases": {
+                        "ColorPalette": "Kiritokatklian\\LaravelColorPalette\\ColorPaletteFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kiritokatklian\\LaravelColorPalette\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Kiritokatklian",
+                    "email": "fusible-band-0x@icloud.com",
+                    "homepage": "https://kurozora.app",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Laravel Wrapper for `ksubileau/color-thief-php`. Grabs the dominant color or a representative color palette from an image. Uses PHP and GD or Imagick.",
+            "homepage": "https://github.com/kiritokatklian/laravel-color-palette",
+            "keywords": [
+                "color-generator",
+                "color-palette",
+                "color-thief",
+                "gd",
+                "image",
+                "image-colors",
+                "kiritokatklian",
+                "kurozora",
+                "laravel",
+                "php"
+            ],
+            "support": {
+                "source": "https://github.com/kiritokatklian/laravel-color-palette/tree/2.0.0"
+            },
+            "time": "2022-07-27T17:18:46+00:00"
+        },
+        {
             "name": "kiritokatklian/nova-permission",
             "version": "v3.2.2",
             "source": {
@@ -4314,33 +4383,42 @@
         },
         {
             "name": "ksubileau/color-thief-php",
-            "version": "dev-master",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/kiritokatklian/color-thief-php/",
-                "reference": "598b0c8b64d45adffca961ece40f7d42279dd494"
+                "url": "https://github.com/ksubileau/color-thief-php.git",
+                "reference": "f905264d26c468f41989bb269546de6076aa7961"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ksubileau/color-thief-php/zipball/f905264d26c468f41989bb269546de6076aa7961",
+                "reference": "f905264d26c468f41989bb269546de6076aa7961",
+                "shasum": ""
             },
             "require": {
-                "php": ">=8.0"
+                "ext-fileinfo": "*",
+                "php": "^7.2|^8.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.2",
-                "phpunit/phpunit": "~8.5"
+                "friendsofphp/php-cs-fixer": "^3.4",
+                "phpstan/phpstan": "^1.2.0",
+                "phpstan/phpstan-phpunit": "^1.0.0",
+                "phpunit/phpunit": "^8.5"
             },
             "suggest": {
                 "ext-gd": "to use the GD image adapter.",
                 "ext-gmagick": "to use the Gmagick image adapter.",
                 "ext-imagick": "to use the Imagick image adapter."
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "ColorThief\\": "lib/ColorThief"
+                    "ColorThief\\": "src/ColorThief"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "CC-BY-2.5"
+                "MIT"
             ],
             "authors": [
                 {
@@ -4357,7 +4435,11 @@
                 "php",
                 "thief"
             ],
-            "time": "2021-10-21T23:03:54+00:00"
+            "support": {
+                "issues": "https://github.com/ksubileau/color-thief-php/issues",
+                "source": "https://github.com/ksubileau/color-thief-php/tree/v2.0.0"
+            },
+            "time": "2022-03-12T20:27:56+00:00"
         },
         {
             "name": "laminas/laminas-code",
@@ -4535,16 +4617,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v9.21.6",
+            "version": "v9.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "569d7a2e361895f90e66bb4e02db89c27691a0e7"
+                "reference": "b3b3dd43b9899f23df6d1d3e5390bd4662947a46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/569d7a2e361895f90e66bb4e02db89c27691a0e7",
-                "reference": "569d7a2e361895f90e66bb4e02db89c27691a0e7",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/b3b3dd43b9899f23df6d1d3e5390bd4662947a46",
+                "reference": "b3b3dd43b9899f23df6d1d3e5390bd4662947a46",
                 "shasum": ""
             },
             "require": {
@@ -4711,7 +4793,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2022-07-22T14:16:44+00:00"
+            "time": "2022-07-26T16:16:33+00:00"
         },
         {
             "name": "laravel/nova",
@@ -5003,28 +5085,28 @@
         },
         {
             "name": "laravel/socialite",
-            "version": "v5.5.2",
+            "version": "v5.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/socialite.git",
-                "reference": "68afb03259b82d898c68196cbcacd48596a9dd72"
+                "reference": "9dfc76b31ee041c45a7cae86f23339784abde46d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/socialite/zipball/68afb03259b82d898c68196cbcacd48596a9dd72",
-                "reference": "68afb03259b82d898c68196cbcacd48596a9dd72",
+                "url": "https://api.github.com/repos/laravel/socialite/zipball/9dfc76b31ee041c45a7cae86f23339784abde46d",
+                "reference": "9dfc76b31ee041c45a7cae86f23339784abde46d",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "guzzlehttp/guzzle": "^6.0|^7.0",
+                "illuminate/contracts": "^6.0|^7.0|^8.0|^9.0",
                 "illuminate/http": "^6.0|^7.0|^8.0|^9.0",
                 "illuminate/support": "^6.0|^7.0|^8.0|^9.0",
-                "league/oauth1-client": "^1.0",
+                "league/oauth1-client": "^1.10.1",
                 "php": "^7.2|^8.0"
             },
             "require-dev": {
-                "illuminate/contracts": "^6.0|^7.0|^8.0|^9.0",
                 "mockery/mockery": "^1.0",
                 "orchestra/testbench": "^4.0|^5.0|^6.0|^7.0",
                 "phpunit/phpunit": "^8.0|^9.3"
@@ -5068,7 +5150,7 @@
                 "issues": "https://github.com/laravel/socialite/issues",
                 "source": "https://github.com/laravel/socialite"
             },
-            "time": "2022-03-10T15:26:19+00:00"
+            "time": "2022-07-18T13:51:19+00:00"
         },
         {
             "name": "laravel/tinker",
@@ -5659,16 +5741,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "3.1.1",
+            "version": "3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "1a941703dfb649f9b821e7bc425e782f576a805e"
+                "reference": "ed0ecc7f9b5c2f4a9872185846974a808a3b052a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/1a941703dfb649f9b821e7bc425e782f576a805e",
-                "reference": "1a941703dfb649f9b821e7bc425e782f576a805e",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/ed0ecc7f9b5c2f4a9872185846974a808a3b052a",
+                "reference": "ed0ecc7f9b5c2f4a9872185846974a808a3b052a",
                 "shasum": ""
             },
             "require": {
@@ -5729,7 +5811,7 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/flysystem/issues",
-                "source": "https://github.com/thephpleague/flysystem/tree/3.1.1"
+                "source": "https://github.com/thephpleague/flysystem/tree/3.2.0"
             },
             "funding": [
                 {
@@ -5745,20 +5827,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-07-18T09:59:40+00:00"
+            "time": "2022-07-26T07:26:36+00:00"
         },
         {
             "name": "league/flysystem-aws-s3-v3",
-            "version": "3.1.1",
+            "version": "3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem-aws-s3-v3.git",
-                "reference": "fa46ce9fbad9bfc73d8b160ffeb2c1793fe9c73b"
+                "reference": "257893ef7398b3c9255b26dff8b0118bb93fc5ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/fa46ce9fbad9bfc73d8b160ffeb2c1793fe9c73b",
-                "reference": "fa46ce9fbad9bfc73d8b160ffeb2c1793fe9c73b",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/257893ef7398b3c9255b26dff8b0118bb93fc5ff",
+                "reference": "257893ef7398b3c9255b26dff8b0118bb93fc5ff",
                 "shasum": ""
             },
             "require": {
@@ -5799,7 +5881,7 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/flysystem-aws-s3-v3/issues",
-                "source": "https://github.com/thephpleague/flysystem-aws-s3-v3/tree/3.1.1"
+                "source": "https://github.com/thephpleague/flysystem-aws-s3-v3/tree/3.2.0"
             },
             "funding": [
                 {
@@ -5815,7 +5897,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-07-18T09:31:34+00:00"
+            "time": "2022-07-26T07:22:40+00:00"
         },
         {
             "name": "league/glide",
@@ -6473,16 +6555,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "2.7.0",
+            "version": "2.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "5579edf28aee1190a798bfa5be8bc16c563bd524"
+                "reference": "720488632c590286b88b80e62aa3d3d551ad4a50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/5579edf28aee1190a798bfa5be8bc16c563bd524",
-                "reference": "5579edf28aee1190a798bfa5be8bc16c563bd524",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/720488632c590286b88b80e62aa3d3d551ad4a50",
+                "reference": "720488632c590286b88b80e62aa3d3d551ad4a50",
                 "shasum": ""
             },
             "require": {
@@ -6502,11 +6584,10 @@
                 "guzzlehttp/psr7": "^2.2",
                 "mongodb/mongodb": "^1.8",
                 "php-amqplib/php-amqplib": "~2.4 || ^3",
-                "php-console/php-console": "^3.1.3",
                 "phpspec/prophecy": "^1.15",
                 "phpstan/phpstan": "^0.12.91",
                 "phpunit/phpunit": "^8.5.14",
-                "predis/predis": "^1.1",
+                "predis/predis": "^1.1 || ^2.0",
                 "rollbar/rollbar": "^1.3 || ^2 || ^3",
                 "ruflin/elastica": "^7",
                 "swiftmailer/swiftmailer": "^5.3|^6.0",
@@ -6526,7 +6607,6 @@
                 "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
                 "mongodb/mongodb": "Allow sending log messages to a MongoDB server (via library)",
                 "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
-                "php-console/php-console": "Allow sending log messages to Google Chrome",
                 "rollbar/rollbar": "Allow sending log messages to Rollbar",
                 "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
             },
@@ -6561,7 +6641,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Seldaek/monolog/issues",
-                "source": "https://github.com/Seldaek/monolog/tree/2.7.0"
+                "source": "https://github.com/Seldaek/monolog/tree/2.8.0"
             },
             "funding": [
                 {
@@ -6573,7 +6653,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-06-09T08:59:12+00:00"
+            "time": "2022-07-24T11:55:47+00:00"
         },
         {
             "name": "mtdowling/jmespath.php",
@@ -6861,16 +6941,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.59.1",
+            "version": "2.60.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "a9000603ea337c8df16cc41f8b6be95a65f4d0f5"
+                "reference": "00a259ae02b003c563158b54fb6743252b638ea6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/a9000603ea337c8df16cc41f8b6be95a65f4d0f5",
-                "reference": "a9000603ea337c8df16cc41f8b6be95a65f4d0f5",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/00a259ae02b003c563158b54fb6743252b638ea6",
+                "reference": "00a259ae02b003c563158b54fb6743252b638ea6",
                 "shasum": ""
             },
             "require": {
@@ -6959,7 +7039,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-06-29T21:43:55+00:00"
+            "time": "2022-07-27T15:57:48+00:00"
         },
         {
             "name": "nette/schema",
@@ -7259,54 +7339,6 @@
                 "source": "https://github.com/nikic/PHP-Parser/tree/v4.14.0"
             },
             "time": "2022-05-31T20:59:12+00:00"
-        },
-        {
-            "name": "nikkanetiya/laravel-color-palette",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kiritokatklian/laravel-color-palette/",
-                "reference": "e61a7302da9f99e3df1ec490e9b686b349e22447"
-            },
-            "require": {
-                "illuminate/support": ">=5.5",
-                "ksubileau/color-thief-php": "dev-master",
-                "php": ">=5.6.4"
-            },
-            "default-branch": true,
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "NikKanetiya\\LaravelColorPalette\\ColorPaletteServiceProvider"
-                    ],
-                    "aliases": {
-                        "ColorPalette": "NikKanetiya\\LaravelColorPalette\\ColorPaletteFacade"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "NikKanetiya\\LaravelColorPalette\\": "src"
-                }
-            },
-            "authors": [
-                {
-                    "name": "Nikunj Kanetiya",
-                    "email": "kanetiya@gmail.com"
-                }
-            ],
-            "description": "Laravel Wrapper for `ksubileau/color-thief-php`. Grabs the dominant color or a representative color palette from an image. Uses PHP and GD or Imagick.",
-            "homepage": "https://github.com/nikkanetiya/laravel-color-palette",
-            "keywords": [
-                "color-palette",
-                "color-thief",
-                "gd",
-                "image-colors",
-                "laravel",
-                "php"
-            ],
-            "time": "2021-10-21T23:13:40+00:00"
         },
         {
             "name": "nunomaduro/termwind",
@@ -17881,8 +17913,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "musa11971/laravel-sort-request": 20,
-        "musa11971/php-jwt-decoder": 20,
-        "nikkanetiya/laravel-color-palette": 20
+        "musa11971/php-jwt-decoder": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

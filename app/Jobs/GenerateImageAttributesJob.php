@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use NikKanetiya\LaravelColorPalette\Color;
+use Kiritokatklian\LaravelColorPalette\Color;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class GenerateImageAttributesJob implements ShouldQueue
@@ -38,7 +38,7 @@ class GenerateImageAttributesJob implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         // Get file contents for ColorThief, then generate colors.
         $image = file_get_contents($this->media->getFullUrl());
