@@ -3,6 +3,16 @@
     "type": "project",
     "description": "Kurozora web application.",
     "keywords": ["kurozora", "anime", "manga", "game", "character", "actor", "people", "studio", "hentai", "song", "music", "track", "watch"],
+    "funding": [
+        {
+            "type": "patreon",
+            "url": "https://patreon.com/kurozora"
+        },
+        {
+            "type": "paypal",
+            "url": "https://paypal.com/paypalme/kiritokatklian"
+        }
+    ],
     "require": {
         "php": "^8.0.2",
         "ext-curl": "*",
@@ -67,9 +77,11 @@
         "barryvdh/laravel-ide-helper": "^2.12",
         "brianium/paratest": "^6.4",
         "fakerphp/faker": "^1.19",
+        "friendsofphp/php-cs-fixer": "^3.9",
         "laravel/sail": "^1.13",
         "mockery/mockery": "^1.5",
         "nunomaduro/collision": "^6.1",
+        "nunomaduro/larastan": "^2.0",
         "phpunit/phpunit": "^9.5.10",
         "spatie/laravel-ignition": "^1.0",
         "spatie/phpunit-snapshot-assertions": "^4.2"
@@ -122,7 +134,11 @@
             "@php artisan ide-helper:generate",
             "@php artisan ide-helper:models -N",
             "@php artisan ide-helper:meta"
-        ]
+        ],
+        "analyse": "vendor/bin/phpstan analyse",
+        "baseline": "vendor/bin/phpstan analyse --generate-baseline",
+        "format": "vendor/bin/php-cs-fixer fix",
+        "test": "vendor/bin/phpunit"
     },
     "extra": {
         "laravel": {

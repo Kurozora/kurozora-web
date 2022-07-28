@@ -1,0 +1,9 @@
+includes:
+    - phpstan-baseline.neon
+
+parameters:
+    level: max
+    paths:
+        - app
+    tmpDir: build/phpstan
+    checkMissingIterableValueType: true
