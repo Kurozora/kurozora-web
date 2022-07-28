@@ -67,6 +67,10 @@ class GenerateImageAttributesJob implements ShouldQueue
         /** @var Color[] $palette */
         $palette = ColorPalette::getPalette($path, 5, 8);
 
+        if (!$palette) {
+            return [];
+        }
+
         return [
             'background_color' => $palette[0]->toHexString(),
             'text_color_1' => $palette[1]->toHexString(),

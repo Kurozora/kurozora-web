@@ -2,6 +2,9 @@
 /node_modules
 npm-debug.log
 
+# DS Store
+.DS_Store
+
 # Laravel
 /public/hot
 /public/storage
@@ -18,13 +21,18 @@ yarn-error.log
 # Rocketeer PHP task runner and deployment package. https://github.com/rocketeers/rocketeer
 .rocketeer/
 
+# PHP-CS-Fixer
+.php-cs-fixer.cache
+
+# PHP-Stan
+build
+phpstan*.neon
+
 # PHPStorm
 .idea
 
-# DS Store
-.DS_Store
-
 # PHPUnit result cache
+.run
 .phpunit.result.cache
 
 # laravel-ide-helper files. https://github.com/barryvdh/laravel-ide-helper
