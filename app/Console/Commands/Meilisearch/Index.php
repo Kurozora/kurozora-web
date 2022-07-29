@@ -179,7 +179,7 @@ class Index extends Command
             // Prepare the rows
             if ($index) {
                 $index = $client->index($index);
-                $attributes = $index->fetchRawInfo();
+                $attributes = array_merge(['#' => '1'], $index->fetchRawInfo());
                 $attributes[] = implode(PHP_EOL, $index->getSortableAttributes());
                 $attributes[] = implode(PHP_EOL, $index->getFilterableAttributes());
                 $rows = [$attributes];

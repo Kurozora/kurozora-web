@@ -243,7 +243,7 @@
                 </div>
             </section>
 
-            <x-dialog-modal maxWidth="md" wire:model="showPopup">
+            <x-dialog-modal wire:model="showPopup">
                 @if($showVideo)
                     <x-slot:title>
                         {{ __(':x — Episode :y', ['x' => $episode->title, 'y' => $episode->number_total]) }}
