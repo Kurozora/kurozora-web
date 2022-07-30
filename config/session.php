@@ -127,7 +127,7 @@ return [
     */
 
     'cookie' => env(
-        'SESSION_COOKIE', env('SESSION_COOKIE_PREFIX') .
+        'SESSION_COOKIE', env('SESSION_COOKIE_PREFIX', '__Secure-') .
         Str::slug(env('APP_NAME') . '-session')
     ),
 
@@ -168,7 +168,7 @@ return [
     |
     */
 
-    'secure' => env('SESSION_SECURE_COOKIE'),
+    'secure' => env('SESSION_SECURE_COOKIE', true),
 
     /*
     |--------------------------------------------------------------------------
