@@ -127,8 +127,8 @@ return [
     */
 
     'cookie' => env(
-        'SESSION_COOKIE',
-        Str::slug(env('APP_NAME', 'kurozora'), '_').'_session'
+        'SESSION_COOKIE', env('SESSION_COOKIE_PREFIX') .
+        Str::slug(env('APP_NAME') . '-session')
     ),
 
     /*
