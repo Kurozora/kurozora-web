@@ -2,8 +2,8 @@
 
 namespace App\Notifications;
 
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Auth\Notifications\VerifyEmail as VerifyEmailNotification;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class VerifyEmail extends VerifyEmailNotification
 {
@@ -19,7 +19,7 @@ class VerifyEmail extends VerifyEmailNotification
             ->subject(__('Verify your Kurozora ID email address'))
             ->line(__('You have recently created a Kurozora account. Please click the button below to verify this email address belongs to you.'))
             ->action(__('Verify Email Address'), $url)
-            ->line(__('If you did not creat an account, it’s likely that another user has entered your email address by mistake. Don’t worry, to reclaim ownership you can reset the password at [kurozora.app/forgot-password](:url).', ['url' => route('password.request')]))
+            ->line(__('If you did not create an account, it’s likely that another user has entered your email address by mistake. Don’t worry, to reclaim ownership you can reset the password at [kurozora.app/forgot-password](:url).', ['url' => route('password.request')]))
             ->salutation('Kurozora Support');
     }
 }

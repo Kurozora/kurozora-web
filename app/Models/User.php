@@ -638,7 +638,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return void
      */
-    public function sendEmailVerificationNotification()
+    public function sendEmailVerificationNotification(): void
     {
         // Force root url, because the API will send the request from the API subdomain.
         URL::forceRootUrl(config('app.url'));
@@ -653,7 +653,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      * @param  string  $token
      * @return void
      */
-    public function sendPasswordResetNotification($token)
+    public function sendPasswordResetNotification($token): void
     {
         // Force root url, because the API will send the request from the API subdomain.
         URL::forceRootUrl(config('app.url'));
