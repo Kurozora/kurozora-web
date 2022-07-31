@@ -25,42 +25,45 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $logFile = 'laravel.log';
-        $logFilePath = storage_path().'/logs/' . $logFile;
+//        $logFile = 'laravel.log';
+//        $logFilePath = storage_path().'/logs/' . $logFile;
 
         /**********************************************/
         // Run queue worker every hour
-        $schedule->command('queue:work --stop-when-empty --timeout=0')
+        $schedule->command('queue:work --timeout=0')
             ->hourly()
+            ->name('Queue worker')
             ->withoutOverlapping()
-            ->sendOutputTo($logFilePath);
+            ->runInBackground();
 
         /**********************************************/
         // Generate sitemap every day
 //        $schedule->command('sitemap:generate')
+//            ->daily()
+//            ->name('Generate sitemap')
 //            ->onOneServer()
-//            ->daily();
+//            ->runInBackground();
 
         /**********************************************/
         // Calculate anime ratings every day
         $schedule->command('calculate:anime_ratings')
             ->daily()
-            ->onOneServer()
-            ->sendOutputTo($logFilePath);
+            ->name('Calculate anime rating')
+            ->onOneServer();
 
         /**********************************************/
         // Calculate anime library stats every day
         $schedule->command('calculate:anime_library_stats')
             ->daily()
-            ->onOneServer()
-            ->sendOutputTo($logFilePath);
+            ->name('Calculate anime library stats')
+            ->onOneServer();
 
         /**********************************************/
 //        // Delete all users that did not confirm their email within 24 hrs every day
 //        $schedule->command('delete:inactive_unconfirmed_users')
 //            ->daily()
-//            ->onOneServer()
-//            ->sendOutputTo($logFilePath);
+//            ->name('Clear inactive unconfirmed users')
+//            ->onOneServer();
 
         /**********************************************/
         // Truncates login attempts every day
@@ -68,29 +71,29 @@ class Kernel extends ConsoleKernel
             LoginAttempt::truncate();
         })
             ->daily()
-            ->onOneServer()
-            ->sendOutputTo($logFilePath);
+            ->name('Clear login attempts')
+            ->onOneServer();
 
         /**********************************************/
         // Calculate episode ratings every week
         $schedule->command('calculate:episode_ratings')
             ->weekly()
-            ->onOneServer()
-            ->sendOutputTo($logFilePath);
+            ->name('Calculate episode rating')
+            ->onOneServer();
 
         /**********************************************/
         // Calculate episode ratings every week
         $schedule->command('calculate:episode_stats')
             ->weekly()
-            ->onOneServer()
-            ->sendOutputTo($logFilePath);
+            ->name('Calculate anime stats')
+            ->onOneServer();
 
         /**********************************************/
         // Delete all activity logs every week
         $schedule->command('activitylog:clean')
             ->weekly()
-            ->onOneServer()
-            ->sendOutputTo($logFilePath);
+            ->name('Clean activity log')
+            ->onOneServer();
     }
 
     /**
