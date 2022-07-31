@@ -42,7 +42,7 @@ class DeleteInactiveUnconfirmedUsers extends Command
         User::where([
                 ['siwa_id', '=', null],
                 ['email_verified_at', '=', null],
-                ['created_at', '<', Carbon::now()->subHours(24)]
+                ['created_at', '<', Carbon::now()->subDays(30)]
             ])
             ->get()
             ->each

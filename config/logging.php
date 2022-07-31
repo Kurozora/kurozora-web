@@ -63,7 +63,7 @@ return [
             'driver' => 'custom',
             'via' => \MarvinLabs\DiscordLogger\Logger::class,
             'url' => env('LOG_DISCORD_WEBHOOK_URL'),
-            'level' => env('LOG_LEVEL', 'critical'),
+            'level' => env('LOG_LEVEL', 'notice'),
         ],
 
         'slack' => [
