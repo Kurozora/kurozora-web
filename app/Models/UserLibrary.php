@@ -69,12 +69,15 @@ class UserLibrary extends Pivot
      */
     public function toSearchableArray(): array
     {
-        $anime = $this->anime;
+        $anime = $this->anime()
+            ->withoutGlobalScopes()
+            ->first();
         $library = $this->toArray();
         $library['start_date'] = $this->start_date?->timestamp;
         $library['end_date'] = $this->end_date?->timestamp;
         $library['created_at'] = $this->created_at?->timestamp;
         $library['updated_at'] = $this->updated_at?->timestamp;
+
         $library['anime'] = [
             'slug' => $anime->slug,
             'original_title' => $anime->original_title,
