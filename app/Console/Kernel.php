@@ -29,9 +29,9 @@ class Kernel extends ConsoleKernel
 //        $logFilePath = storage_path().'/logs/' . $logFile;
 
         /**********************************************/
-        // Run queue worker every hour
+        // Run queue worker every minute
         $schedule->command('queue:work --timeout=0')
-            ->hourly()
+            ->everyMinute()
             ->name('Queue worker')
             ->withoutOverlapping()
             ->runInBackground();
