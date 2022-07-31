@@ -54,6 +54,7 @@
         "league/flysystem-aws-s3-v3": "^3.0",
         "livewire/livewire": "^2.10",
         "lukeraymonddowning/honey": "^0.4",
+        "marvinlabs/laravel-discord-logger": "^1.2",
         "meilisearch/meilisearch-php": "^0.23.2",
         "musa11971/laravel-sort-request": "dev-php-7.4-and-8.0-support",
         "musa11971/php-jwt-decoder": "dev-php-7.4-and-8.0-support",
