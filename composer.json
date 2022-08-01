@@ -25,7 +25,6 @@
         "aws/aws-sdk-php": "^3.198",
         "bacon/bacon-qr-code": "^2.0",
         "bensampo/laravel-enum": "^5.1",
-        "beyondcode/laravel-websockets": "^2.0",
         "blade-ui-kit/blade-icons": "^1.0",
         "codercat/jwk-to-pem": "^1.0",
         "cybercog/laravel-love": "^8.0",
