@@ -59,11 +59,11 @@ class Kernel extends ConsoleKernel
             ->onOneServer();
 
         /**********************************************/
-//        // Delete all users that did not confirm their email within 24 hrs every day
-//        $schedule->command('delete:inactive_unconfirmed_users')
-//            ->daily()
-//            ->name('Clear inactive unconfirmed users')
-//            ->onOneServer();
+        // Prune all models that match their respective criteria every day
+        $schedule->command('model:prune')
+            ->daily()
+            ->name('Prune models')
+            ->onOneServer();
 
         /**********************************************/
         // Truncates login attempts every day
