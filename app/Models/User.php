@@ -17,7 +17,9 @@ use Carbon\Carbon;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
 use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\MassPrunable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -60,6 +62,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         InteractsWithMediaExtension,
         LogsActivity,
         Notifiable,
+        MassPrunable,
         Reacterable,
         Searchable,
         TwoFactorAuthenticatable;
@@ -183,6 +186,20 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             'created_at' => $this->created_at?->timestamp,
             'updated_at' => $this->updated_at?->timestamp,
         ];
+    }
+
+    /**
+     * Get the prunable model query.
+     *
+     * @return Builder
+     */
+    public function prunable(): Builder
+    {
+        return static::where([
+            ['siwa_id', '=', null],
+            ['email_verified_at', '=', null],
+            ['created_at', '<', Carbon::now()->subDays(30)]
+        ]);
     }
 
     /**
