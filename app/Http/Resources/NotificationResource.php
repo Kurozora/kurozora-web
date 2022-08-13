@@ -61,13 +61,11 @@ class NotificationResource extends JsonResource
                 }
 
                 return $body;
-
             // Follower notifications
             case NewFollower::class:
                 $body = (self::hasData($notification, 'username')) ? self::getData($notification, 'username') : 'Someone';
                 $body .= ' has started following you.';
                 return $body;
-
             // Feed notifications
             case NewFeedMessageReply::class:
                 $body = (self::hasData($notification, 'username')) ? self::getData($notification, 'username') : 'Someone';
@@ -77,8 +75,7 @@ class NotificationResource extends JsonResource
                 $body = (self::hasData($notification, 'username')) ? self::getData($notification, 'username') : 'Someone';
                 $body .= ' ReShared Your Message';
                 return $body;
-
-            // Misc notifications
+            // Anime import notifications
             case AnimeImportFinished::class:
                 $serviceName = self::getData($notification, 'service');
                 $body = 'Your "' . $serviceName . '" anime import request has been processed.';
@@ -92,6 +89,7 @@ class NotificationResource extends JsonResource
                 }
 
                 return $body;
+            // Subscription notifications
             case SubscriptionStatus::class:
                 return SubscriptionStatus::getDescription(self::getData($notification, 'subscriptionStatus')) ?? '';
         }
