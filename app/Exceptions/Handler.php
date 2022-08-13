@@ -12,6 +12,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\ViewException;
 use Swift_TransportException;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Console\Exception\RuntimeException;
@@ -69,12 +70,9 @@ class Handler extends ExceptionHandler
             return $this->renderAPI($request, $e);
         }
 
-        // Log some info to catch the issue in production
-        logger()->info($e->getMessage(), [
-            'user' => auth()->user()?->username,
-            'url' => $request->url(),
-            'input' => $request->all(),
-        ]);
+        if ($e instanceof ViewException) {
+            $this->logDebugDetails($request, $e);
+        }
 
         return parent::render($request, $e);
     }
@@ -110,6 +108,8 @@ class Handler extends ExceptionHandler
         }
         // Custom render for model not found
         else if ($e instanceof ModelNotFoundException) {
+            $this->logDebugDetails($request, $e);
+
             $apiError = new APIError();
             $apiError->id = 40004;
             $apiError->status = 404;
@@ -141,6 +141,8 @@ class Handler extends ExceptionHandler
         }
         // Custom render for not implemented
         else if ($e instanceof NotImplementedException) {
+            $this->logDebugDetails($request, $e);
+
             $apiError = new APIError();
             $apiError->id = 50001;
             $apiError->status = 501;
@@ -159,6 +161,23 @@ class Handler extends ExceptionHandler
         }
 
         return parent::render($request, $e);
+    }
+
+    /**
+     * Logs extra details to aid in debugging.
+     *
+     * @param Request $request
+     * @param Throwable $e
+     * @return void
+     */
+    protected function logDebugDetails(Request $request, Throwable $e): void
+    {
+        // Log some info to catch the issue in production
+        logger()->debug($e->getMessage(), [
+            'user' => auth()->user()?->username,
+            'url' => $request->url(),
+            'input' => $request->all(),
+        ]);
     }
 
     /**
