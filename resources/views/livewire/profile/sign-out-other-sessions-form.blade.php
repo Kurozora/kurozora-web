@@ -1,11 +1,11 @@
 <x-action-section>
     <x-slot:title>
         {{ __('Browser Sessions') }}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:description>
         {{ __('Manage and sign out your active sessions on other browsers and devices.') }}
-    </x-slot>
+    </x-slot:description>
 
     <x-slot:content>
         <div class="max-w-xl text-sm text-gray-600">
@@ -65,7 +65,7 @@
         <x-dialog-modal wire:model="confirmingSignOut">
             <x-slot:title>
                 {{ __('Sign Out Other Sessions') }}
-            </x-slot>
+            </x-slot:title>
 
             <x-slot:content>
                 {{ __('Please enter your password to confirm you would like to sign out of your other browser sessions across all of your devices.') }}
@@ -78,7 +78,7 @@
 
                     <x-input-error for="password" class="mt-2" />
                 </div>
-            </x-slot>
+            </x-slot:content>
 
             <x-slot:footer>
                 <x-outlined-button wire:click="$toggle('confirmingSignOut')" wire:loading.attr="disabled">
@@ -88,7 +88,7 @@
                 <x-button class="ml-2" wire:click="signOutOtherBrowserSessions" wire:loading.attr="disabled">
                     {{ __('Sign Out Other Sessions') }}
                 </x-button>
-            </x-slot>
+            </x-slot:footer>
         </x-dialog-modal>
-    </x-slot>
+    </x-slot:content>
 </x-action-section>

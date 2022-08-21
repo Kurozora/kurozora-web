@@ -4,15 +4,15 @@
             <x-section-nav class="flex flex-nowrap justify-between mb-5">
                 <x-slot:title>
                     {{ $exploreCategory->title }}
-                </x-slot>
+                </x-slot:title>
 
                 <x-slot:description>
                     {{ $exploreCategory->description }}
-                </x-slot>
+                </x-slot:description>
 
                 <x-slot:action>
                     <x-section-nav-link class="whitespace-nowrap" href="{{ $exploreCategory->secondary_slug ? url($exploreCategory->secondary_slug) : route('explore.details', $exploreCategory) }}">{{ __('See All') }}</x-section-nav-link>
-                </x-slot>
+                </x-slot:action>
             </x-section-nav>
 
             <div class="flex justify-center">

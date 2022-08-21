@@ -1,18 +1,18 @@
 <main>
     <x-slot:title>
         {{ __('About Personalisation') }}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:description>
         {{ __('Find out everything about personalisation on Kurozora. How does Kurozora handle my information? What information is saved? Does anyone else have access to this information?') }}
-    </x-slot>
+    </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('About Personalisation') }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ __('Find out everything about personalisation on Kurozora. How does Kurozora handle my information? What information is saved? Does anyone else have access to this information?') }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
-    </x-slot>
+    </x-slot:meta>
 
     <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
         <x-picture>

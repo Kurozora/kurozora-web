@@ -18,7 +18,7 @@
     <x-dialog-modal wire:model="confirmingPassword">
         <x-slot:title>
             {{ $title }}
-        </x-slot>
+        </x-slot:title>
 
         <x-slot:content>
             {{ $content }}
@@ -31,7 +31,7 @@
 
                 <x-input-error for="confirmable_password" class="mt-2" />
             </div>
-        </x-slot>
+        </x-slot:content>
 
         <x-slot:footer>
             <x-outlined-button wire:click="stopConfirmingPassword" wire:loading.attr="disabled">
@@ -41,6 +41,6 @@
             <x-button class="ml-2" wire:click="confirmPassword" wire:loading.attr="disabled">
                 {{ $button }}
             </x-button>
-        </x-slot>
+        </x-slot:footer>
     </x-dialog-modal>
 @endonce

@@ -1,11 +1,11 @@
 <x-form-section submit="updatePassword">
     <x-slot:title>
         {{ __('Update Password') }}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:description>
         {{ __('Ensure your account is using a long, random password to stay secure.') }}
-    </x-slot>
+    </x-slot:description>
 
     <x-slot:form>
         <div class="col-span-6 sm:col-span-4">
@@ -25,7 +25,7 @@
             <x-input id="password_confirmation" type="password" class="mt-1 block w-full" wire:model.defer="state.password_confirmation" autocomplete="new-password" />
             <x-input-error for="password_confirmation" class="mt-2" />
         </div>
-    </x-slot>
+    </x-slot:form>
 
     <x-slot:actions>
         <x-action-message class="mr-3" on="saved">
@@ -35,5 +35,5 @@
         <x-button>
             {{ __('Save') }}
         </x-button>
-    </x-slot>
+    </x-slot:actions>
 </x-form-section>

@@ -4,14 +4,14 @@
             <x-section-nav>
                 <x-slot:title>
                     {{ __('More By :x', ['x' => $studio->name]) }}
-                </x-slot>
+                </x-slot:title>
 
                 <x-slot:action>
                     @hasrole('superAdmin')
                         <x-button wire:click="loadMoreByStudio">{{ __('Refresh') }}</x-button>
                     @endhasrole
                     <x-section-nav-link href="{{ route('studios.details', $studio) }}">{{ __('See All') }}</x-section-nav-link>
-                </x-slot>
+                </x-slot:action>
             </x-section-nav>
 
             <div class="flex justify-center">

@@ -1,23 +1,23 @@
 <x-base-layout>
     <x-slot:title>
         {{ $title }}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:themeColor>
         {{ $themeColor ?? null }}
-    </x-slot>
+    </x-slot:themeColor>
 
     <x-slot:lightThemeColor>
         {{ $lightThemeColor ?? null }}
-    </x-slot>
+    </x-slot:lightThemeColor>
 
     <x-slot:darkThemeColor>
         {{ $darkThemeColor ?? null }}
-    </x-slot>
+    </x-slot:darkThemeColor>
 
     <x-slot:meta>
         {{ $meta ?? '' }}
-    </x-slot>
+    </x-slot:meta>
 
     <!-- Page Heading -->
     <header class="bg-gray-100 shadow">

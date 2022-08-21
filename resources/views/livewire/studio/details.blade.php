@@ -1,11 +1,11 @@
 <main>
     <x-slot:title>
         {!! $studio->name !!}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:description>
         {{ $studio->synopsis }}
-    </x-slot>
+    </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ $studio->name }} — {{ config('app.name') }}" />
@@ -14,11 +14,11 @@
         <meta property="og:type" content="profile" />
         <meta property="og:profile:username" content="{{ $studio->name }}" />
         <link rel="canonical" href="{{ route('studios.details', $studio) }}">
-    </x-slot>
+    </x-slot:meta>
 
     <x-slot:appArgument>
         studio/{{ $studio->id }}
-    </x-slot>
+    </x-slot:appArgument>
 
     <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
         <section class="pt-5 pb-8">
@@ -49,13 +49,13 @@
                 <x-section-nav>
                     <x-slot:title>
                         {{ __('About') }}
-                        </x-slot>
+                    </x-slot:title>
                 </x-section-nav>
 
                 <x-truncated-text>
                     <x-slot:text>
                         {!! nl2br($studio->about) !!}
-                        </x-slot>
+                    </x-slot:text>
                 </x-truncated-text>
             </section>
         @endif
@@ -64,26 +64,26 @@
             <x-section-nav>
                 <x-slot:title>
                     {{ __('Information') }}
-                </x-slot>
+                </x-slot:title>
             </x-section-nav>
 
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-4">
                 <x-information-list id="founded" title="{{ __('Founded') }}" icon="{{ asset('images/symbols/calendar.svg') }}">
                     <x-slot:information>
                         {{ $studio->founded?->toFormattedDateString() ?? '-' }}
-                    </x-slot>
+                    </x-slot:information>
 
                     <x-slot:footer>
                         @if (!empty($studio->founded))
                             {{ __('The studio was founded :x years ago.', ['x' => $studio->founded?->age]) }}
                         @endif
-                    </x-slot>
+                    </x-slot:footer>
                 </x-information-list>
 
                 <x-information-list id="headquarters" title="{{ __('Headquarters') }}" icon="{{ asset('images/symbols/building_2.svg') }}">
                     <x-slot:information>
                         {{ $studio->address ?? '-' }}
-                    </x-slot>
+                    </x-slot:information>
                 </x-information-list>
 
                 <x-information-list id="Website" title="{{ __('Website') }}" icon="{{ asset('images/symbols/safari.svg') }}">
@@ -101,7 +101,7 @@
                         @else
                             -
                         @endif
-                    </x-slot>
+                    </x-slot:information>
                 </x-information-list>
             </div>
         </section>
@@ -111,11 +111,11 @@
                 <x-section-nav>
                     <x-slot:title>
                         {{ __('Shows') }}
-                    </x-slot>
+                    </x-slot:title>
 
                     <x-slot:action>
                         <x-section-nav-link href="{{ route('studios.anime', $studio) }}">{{ __('See All') }}</x-section-nav-link>
-                    </x-slot>
+                    </x-slot:action>
                 </x-section-nav>
 
                 <x-rows.small-lockup :animes="$studioAnime" />

@@ -200,7 +200,7 @@
                                         role="img"
                                     ></div>
                                 </button>
-                            </x-slot>
+                            </x-slot:trigger>
 
                             <x-slot:content>
                                 <x-dropdown-link href="{{ route('me') }}">
@@ -259,7 +259,7 @@
                                         </x-dropdown-link>
                                     @endif
                                 @endauth
-                            </x-slot>
+                            </x-slot:content>
                         </x-dropdown>
                     </div>
                 </div>

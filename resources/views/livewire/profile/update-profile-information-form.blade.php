@@ -1,11 +1,11 @@
 <x-form-section submit="updateProfileInformation">
     <x-slot:title>
         {{ __('Profile Information') }}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:description>
         {{ __('Update your account’s profile information and email address.') }}
-    </x-slot>
+    </x-slot:description>
 
     <x-slot:form>
         {{-- Banner Image --}}
@@ -184,7 +184,7 @@
             <x-textarea id="biography" class="mt-1 block w-full" placeholder="{{ __('Describe yourself') }}" :autoresize="true" wire:model.defer="state.biography" />
             <x-input-error for="biography" class="mt-2" />
         </div>
-    </x-slot>
+    </x-slot:form>
 
     <x-slot:actions>
         <x-action-message class="mr-3" on="saved">
@@ -194,5 +194,5 @@
         <x-button wire:loading.attr="disabled" wire:target="profileImage,bannerImage">
             {{ __('Save') }}
         </x-button>
-    </x-slot>
+    </x-slot:actions>
 </x-form-section>

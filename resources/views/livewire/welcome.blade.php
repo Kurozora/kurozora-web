@@ -1,7 +1,7 @@
 <main>
     <x-slot:title>
         {{ __('Welcome') }}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:meta>
         <meta property="og:title" content="Welcome to {{ config('app.name') }}" />
@@ -9,11 +9,11 @@
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('welcome') }}">
-    </x-slot>
+    </x-slot:meta>
 
     <x-slot:appArgument>
         welcome
-    </x-slot>
+    </x-slot:appArgument>
 
     <div>
         {{-- Hero Video --}}

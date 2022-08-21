@@ -3,7 +3,7 @@
         <x-section-nav>
             <x-slot:title>
                 {{ $mediaType->name . ' (' . $animes->count() . ')' }}
-            </x-slot>
+            </x-slot:title>
         </x-section-nav>
 
         <div class="flex justify-center">

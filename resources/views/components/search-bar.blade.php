@@ -17,7 +17,7 @@
                     <x-square-button>
                         @svg('arrow_up_arrow_down_circle', 'fill-current', ['aria-labelledby' => 'filter', 'width' => '28'])
                     </x-square-button>
-                </x-slot>
+                </x-slot:trigger>
 
                 <x-slot:content>
                     @foreach($this->order as $order)
@@ -43,7 +43,7 @@
                             </x-select>
                         </div>
                     @endforeach
-                </x-slot>
+                </x-slot:content>
             </x-dropdown>
         @endif
 
@@ -54,7 +54,7 @@
                     <x-square-button>
                         @svg('line_3_horizontal_decrease_circle', 'fill-current', ['aria-labelledby' => 'filter', 'width' => '28'])
                     </x-square-button>
-                </x-slot>
+                </x-slot:trigger>
 
                 <x-slot:content>
                     @foreach($this->filter as $filter)
@@ -148,7 +148,7 @@
                             <option value="100">100</option>
                         </x-select>
                     </div>
-                </x-slot>
+                </x-slot:content>
             </x-dropdown>
         @endif
     </div>

@@ -4,14 +4,14 @@
             <x-section-nav>
                 <x-slot:title>
                     {{ __('Cast') }}
-                </x-slot>
+                </x-slot:title>
 
                 <x-slot:action>
                     @hasrole('superAdmin')
                         <x-button wire:click="loadAnimeCast">{{ __('Refresh') }}</x-button>
                     @endhasrole
                     <x-section-nav-link href="{{ route('anime.cast', $anime) }}">{{ __('See All') }}</x-section-nav-link>
-                </x-slot>
+                </x-slot:action>
             </x-section-nav>
 
             <div class="flex justify-center">

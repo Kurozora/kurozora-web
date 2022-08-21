@@ -9,7 +9,7 @@
 <main>
     <x-slot:title>
         {!! $exploreCategory->title !!}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:description>
         @switch($exploreCategory->type)
@@ -21,7 +21,7 @@
             @default
                 {{ __('Explore the latest :x only on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}
         @endswitch
-    </x-slot>
+    </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Explore') . ' ' . $exploreCategory->title }} — {{ config('app.name') }}" />
@@ -34,11 +34,11 @@
         <meta property="twitter:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="twitter:image:alt" content="{{ $exploreCategory->description ?? __('app.description') }}" />
         <link rel="canonical" href="{{ route('explore.details', $exploreCategory) }}">
-    </x-slot>
+    </x-slot:meta>
 
     <x-slot:appArgument>
         explore/{{ $exploreCategory->id }}
-    </x-slot>
+    </x-slot:appArgument>
 
     <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
         <section class="mb-4">

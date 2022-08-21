@@ -1,7 +1,7 @@
 <x-error-layout>
     <x-slot:title>
         {{ __('Unprocessable Entity') }}
-    </x-slot>
+    </x-slot:title>
 
     <div class="md:flex min-h-screen">
         <div class="w-full md:w-1/2 bg-white flex items-center justify-center">

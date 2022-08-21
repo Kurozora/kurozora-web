@@ -1,11 +1,11 @@
 <x-action-section>
     <x-slot:title>
         {{ __('Delete Account') }}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:description>
         {{ __('Permanently delete your account.') }}
-    </x-slot>
+    </x-slot:description>
 
     <x-slot:content>
         <div class="max-w-xl text-sm text-gray-600">
@@ -22,7 +22,7 @@
         <x-dialog-modal wire:model="confirmingUserDeletion">
             <x-slot:title>
                 {{ __('Delete Account') }}
-            </x-slot>
+            </x-slot:title>
 
             <x-slot:content>
                 {{ __('Are you sure you want to delete your account? Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.') }}
@@ -35,7 +35,7 @@
 
                     <x-input-error for="password" class="mt-2" />
                 </div>
-            </x-slot>
+            </x-slot:content>
 
             <x-slot:footer>
                 <x-outlined-button wire:click="$toggle('confirmingUserDeletion')" wire:loading.attr="disabled">
@@ -45,7 +45,7 @@
                 <x-danger-button class="ml-2" wire:click="deleteUser" wire:loading.attr="disabled">
                     {{ __('Delete Account') }}
                 </x-danger-button>
-            </x-slot>
+            </x-slot:footer>
         </x-dialog-modal>
-    </x-slot>
+    </x-slot:content>
 </x-action-section>

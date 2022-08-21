@@ -1,11 +1,11 @@
 <main>
     <x-slot:title>
         {!! $character->name !!}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:description>
         {{ $character->synopsis }}
-    </x-slot>
+    </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ $character->name }} — {{ config('app.name') }}" />
@@ -14,11 +14,11 @@
         <meta property="og:type" content="profile" />
         <meta property="og:profile:username" content="{{ $character->name }}" />
         <link rel="canonical" href="{{ route('characters.details', $character) }}">
-    </x-slot>
+    </x-slot:meta>
 
     <x-slot:appArgument>
         character/{{ $character->id }}
-    </x-slot>
+    </x-slot:appArgument>
 
     <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
         <section class="pt-5 pb-8">
@@ -46,13 +46,13 @@
                 <x-section-nav>
                     <x-slot:title>
                         {{ __('About') }}
-                    </x-slot>
+                    </x-slot:title>
                 </x-section-nav>
 
                 <x-truncated-text>
                     <x-slot:text>
                         {!! nl2br($character->about) !!}
-                    </x-slot>
+                    </x-slot:text>
                 </x-truncated-text>
             </section>
         @endif
@@ -61,30 +61,30 @@
             <x-section-nav>
                 <x-slot:title>
                     {{ __('Information') }}
-                </x-slot>
+                </x-slot:title>
             </x-section-nav>
 
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-4">
                 <x-information-list id="debut" title="{{ __('Debut') }}" icon="{{ asset('images/symbols/star.svg') }}">
                     <x-slot:information>
                         {{ $character->debut ?? '-' }}
-                    </x-slot>
+                    </x-slot:information>
 
                     @if($character->status)
                         <x-slot:footer>
                             {{ __('The character is :x.', ['x' => $character->status->description]) }}
-                        </x-slot>
+                        </x-slot:footer>
                     @endif
                 </x-information-list>
 
                 <x-information-list id="age" title="{{ __('Age') }}" icon="{{ asset('images/symbols/calendar.svg') }}">
                     <x-slot:information>
                         {{ $character->age_string ?? '-' }}
-                    </x-slot>
+                    </x-slot:information>
 
                     <x-slot:footer>
                         {{ $character->birthdate . ($character->astrological_sign_string ? ', ' . $character->astrological_sign_string : '') }}
-                    </x-slot>
+                    </x-slot:footer>
                 </x-information-list>
 
                 <x-information-list id="measurements" title="{{ __('Measurements') }}" icon="{{ asset('images/symbols/ruler.svg') }}">
@@ -108,7 +108,7 @@
                         @if ($character->hip)
                             {{ __('Hip: :x', ['x' => $character->hip]) }}
                         @endif
-                    </x-slot>
+                    </x-slot:information>
                 </x-information-list>
 
                 <x-information-list id="characteristics" title="{{ __('Characteristics') }}" icon="{{ asset('images/symbols/list_bullet_rectangle.svg') }}">
@@ -120,7 +120,7 @@
                         @if ($character->favorite_food)
                             {{ __('Favorite Food: :x', ['x' => $character->favorite_food]) }} <br/>
                         @endif
-                    </x-slot>
+                    </x-slot:information>
                 </x-information-list>
             </div>
         </section>
@@ -130,11 +130,11 @@
                 <x-section-nav>
                     <x-slot:title>
                         {{ __('Shows') }}
-                    </x-slot>
+                    </x-slot:title>
 
                     <x-slot:action>
                         <x-section-nav-link href="{{ route('characters.anime', $character) }}">{{ __('See All') }}</x-section-nav-link>
-                    </x-slot>
+                    </x-slot:action>
                 </x-section-nav>
 
                 <x-rows.small-lockup :animes="$characterAnime" />
@@ -146,11 +146,11 @@
                 <x-section-nav>
                     <x-slot:title>
                         {{ __('People') }}
-                    </x-slot>
+                    </x-slot:title>
 
                     <x-slot:action>
                         <x-section-nav-link href="{{ route('characters.people', $character) }}">{{ __('See All') }}</x-section-nav-link>
-                    </x-slot>
+                    </x-slot:action>
                 </x-section-nav>
 
                 <x-rows.person-lockup :people="$characterPeople" />

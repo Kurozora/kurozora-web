@@ -1,11 +1,11 @@
 <main>
     <x-slot:title>
         {{ $user->username }}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:description>
         {{ $user->biography }}
-    </x-slot>
+    </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ $user->username . __(' on Kurozora') }}" />
@@ -14,11 +14,11 @@
         <meta property="og:type" content="profile" />
         <meta property="og:profile:username" content="{{ $user->username }}" />
         <link rel="canonical" href="{{ route('profile.details', $user) }}">
-    </x-slot>
+    </x-slot:meta>
 
     <x-slot:appArgument>
         users/{{ $user->id }}
-    </x-slot>
+    </x-slot:appArgument>
 
     <div>
         <section>
@@ -58,23 +58,23 @@
 
             <div class="flex justify-between">
                 <x-profile-information-badge>
-                    <x-slot:title>{{ __('Reputation') }}</x-slot>
-                    <x-slot:description>0</x-slot>
+                    <x-slot:title>{{ __('Reputation') }}</x-slot:title>
+                    <x-slot:description>0</x-slot:description>
                 </x-profile-information-badge>
 
                 <x-profile-information-badge wire:click="togglePopupFor('badges')">
-                    <x-slot:title>{{ __('Badges') }}</x-slot>
-                    <x-slot:description>{{ $user->badges()->count() }}</x-slot>
+                    <x-slot:title>{{ __('Badges') }}</x-slot:title>
+                    <x-slot:description>{{ $user->badges()->count() }}</x-slot:description>
                 </x-profile-information-badge>
 
                 <x-profile-information-badge wire:click="togglePopupFor('following')">
-                    <x-slot:title>{{ __('Following') }}</x-slot>
-                    <x-slot:description>{{ $user->following()->count() }}</x-slot>
+                    <x-slot:title>{{ __('Following') }}</x-slot:title>
+                    <x-slot:description>{{ $user->following()->count() }}</x-slot:description>
                 </x-profile-information-badge>
 
                 <x-profile-information-badge wire:click="togglePopupFor('followers')">
-                    <x-slot:title>{{ __('Followers') }}</x-slot>
-                    <x-slot:description>{{ $user->followers()->count() }}</x-slot>
+                    <x-slot:title>{{ __('Followers') }}</x-slot:title>
+                    <x-slot:description>{{ $user->followers()->count() }}</x-slot:description>
                 </x-profile-information-badge>
             </div>
 
@@ -88,7 +88,7 @@
             <x-modal-form-section wire:model="showPopup" submit="">
                 <x-slot:title>
                     {{ __('Edit Profile') }}
-                </x-slot>
+                </x-slot:title>
 
                 <livewire:profile.update-profile-information-form />
             </x-modal-form-section>
@@ -98,7 +98,7 @@
         <x-page-modal maxWidth="sm" wire:model="showPopup">
             <x-slot:title>
                 {{ __('Badges') }}
-            </x-slot>
+            </x-slot:title>
 
             <livewire:profile.badges :user="$user" />
         </x-page-modal>
@@ -107,7 +107,7 @@
         <x-page-modal maxWidth="sm" wire:model="showPopup">
             <x-slot:title>
                 {{ __('Followers') }}
-            </x-slot>
+            </x-slot:title>
 
             <livewire:profile.followers.index :user="$user" />
         </x-page-modal>
@@ -116,7 +116,7 @@
         <x-page-modal maxWidth="sm" wire:model="showPopup">
             <x-slot:title>
                 {{ __('Following') }}
-            </x-slot>
+            </x-slot:title>
 
             <livewire:profile.following.index :user="$user" />
         </x-page-modal>

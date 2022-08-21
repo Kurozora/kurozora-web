@@ -18,7 +18,7 @@
                 <x-square-button wire:click="randomAnime">
                     @svg('dice', 'fill-current', ['aria-labelledby' => 'random anime from ' . strtolower($status) . ' library', 'width' => '28'])
                 </x-square-button>
-            </x-slot>
+            </x-slot:rightBarButtonItems>
         </x-search-bar>
     </section>
 

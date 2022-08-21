@@ -1,11 +1,11 @@
 <x-action-section>
     <x-slot:title>
         {{ __('App Sessions') }}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:description>
         {{ __('Manage and sign out your active app sessions on other devices.') }}
-    </x-slot>
+    </x-slot:description>
 
     <x-slot:content>
         <div class="max-w-xl text-sm text-gray-600">
@@ -53,7 +53,7 @@
         <x-dialog-modal wire:model="confirmingSignOut">
             <x-slot:title>
                 {{ __('Sign Out App Sessions') }}
-            </x-slot>
+            </x-slot:title>
 
             <x-slot:content>
                 {{ __('Please enter your password to confirm you would like to sign out of your app sessions across all of your devices.') }}
@@ -66,7 +66,7 @@
 
                     <x-input-error for="password" class="mt-2" />
                 </div>
-            </x-slot>
+            </x-slot:content>
 
             <x-slot:footer>
                 <x-outlined-button wire:click="$toggle('confirmingSignOut')" wire:loading.attr="disabled">
@@ -76,7 +76,7 @@
                 <x-button class="ml-2" wire:click="signOutAppSessions" wire:loading.attr="disabled">
                     {{ __('Sign Out App Sessions') }}
                 </x-button>
-            </x-slot>
+            </x-slot:footer>
         </x-dialog-modal>
-    </x-slot>
+    </x-slot:content>
 </x-action-section>

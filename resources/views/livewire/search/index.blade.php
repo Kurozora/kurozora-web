@@ -1,11 +1,11 @@
 <main class="">
     <x-slot:title>
         {{ __('Kurozora Search') }}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:description>
         {{ __('Search for anime, manga, games, characters, light novels, music, people, studios, and more...') }}
-    </x-slot>
+    </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Kurozora Search') }} — {{ config('app.name') }}" />
@@ -27,11 +27,11 @@
             "target":"{{ route('search.index') }}?q={search_term_string}&src=mc_google",
             "query-input": "required name=search_term_string"
         </x-misc.schema>
-    </x-slot>
+    </x-slot:meta>
 
     <x-slot:appArgument>
         search
-    </x-slot>
+    </x-slot:appArgument>
 
     <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
         <section class="mb-4">
