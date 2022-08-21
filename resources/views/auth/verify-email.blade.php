@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot:title>
         {{ __('Verify Email') }}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:header>
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Kurozora ID') }}
         </h2>
-    </x-slot>
+    </x-slot:header>
 
     <div class="flex flex-col justify-center w-screen h-full max-w-prose mx-auto px-4 py-6 sm:px-6">
         <div class="text-center mb-5">

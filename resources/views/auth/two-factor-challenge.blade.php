@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot:title>
         {{ __('Two Factor Authentication') }}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:header>
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Kurozora ID') }}
         </h2>
-    </x-slot>
+    </x-slot:header>
 
     <div x-data="{ recovery: false }"
          class="flex flex-col justify-center max-w-prose w-screen h-full max-w-prose mx-auto px-4 py-6 sm:px-6"
