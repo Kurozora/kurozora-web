@@ -13,10 +13,10 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create(Episode::TABLE_NAME, function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedInteger('next_episode_id')->nullable();
             $table->unsignedInteger('previous_episode_id')->nullable();
             $table->unsignedBigInteger('season_id');
@@ -46,7 +46,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists(Episode::TABLE_NAME);
     }
