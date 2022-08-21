@@ -13,10 +13,10 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create(Theme::TABLE_NAME, function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedInteger('mal_id')->nullable();
             $table->unsignedBigInteger('tv_rating_id')->nullable();
             $table->string('slug');
@@ -42,7 +42,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists(Theme::TABLE_NAME);
     }

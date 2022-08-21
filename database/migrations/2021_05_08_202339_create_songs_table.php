@@ -15,7 +15,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(Song::TABLE_NAME, function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedInteger('am_id')->unique()->nullable();
             $table->unsignedInteger('mal_id')->unique()->nullable();
             $table->string('slug');

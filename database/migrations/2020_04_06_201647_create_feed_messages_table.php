@@ -13,10 +13,10 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create(FeedMessage::TABLE_NAME, function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('love_reactant_id')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('parent_feed_message_id')->nullable();
@@ -41,7 +41,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists(FeedMessage::TABLE_NAME);
     }

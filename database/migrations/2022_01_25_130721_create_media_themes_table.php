@@ -13,10 +13,10 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create(MediaTheme::TABLE_NAME, function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('model_type');
             $table->unsignedBigInteger('model_id');
             $table->unsignedBigInteger('theme_id');
@@ -37,7 +37,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists(MediaTheme::TABLE_NAME);
     }

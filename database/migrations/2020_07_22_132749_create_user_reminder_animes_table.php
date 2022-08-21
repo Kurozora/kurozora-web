@@ -14,10 +14,10 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create(UserReminderAnime::TABLE_NAME, function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('user_id')->unsigned();
             $table->unsignedBigInteger('anime_id')->unsigned();
             $table->timestamps();
@@ -35,7 +35,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists(UserReminderAnime::TABLE_NAME);
     }

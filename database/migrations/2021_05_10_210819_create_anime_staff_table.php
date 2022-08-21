@@ -15,10 +15,10 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create(AnimeStaff::TABLE_NAME, function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('anime_id');
             $table->unsignedBigInteger('person_id');
             $table->unsignedBigInteger('staff_role_id')->nullable();
@@ -41,7 +41,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists(AnimeStaff::TABLE_NAME);
     }

@@ -16,10 +16,10 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create(Anime::TABLE_NAME, function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedInteger('anidb_id')->unique()->nullable();
             $table->unsignedInteger('anilist_id')->unique()->nullable();
             $table->string('imdb_id')->unique()->nullable();
@@ -67,7 +67,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists(Anime::TABLE_NAME);
     }

@@ -16,7 +16,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(Character::TABLE_NAME, function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedInteger('mal_id')->unique()->nullable();
             $table->string('slug');
             $table->json('nicknames')->nullable();
