@@ -1,11 +1,11 @@
 <main>
     <x-slot:title>
         {{ __('Episodes') }} | {!! $season->title !!}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:description>
         {{ $season->synopsis ?? __('Discover the extensive list of :x episodes only on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $season->anime->title]) }}
-    </x-slot>
+    </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Episodes') }} | {{ $season->title }} — {{ config('app.name') }}" />
@@ -15,11 +15,11 @@
         <meta property="video:duration" content="{{ $season->duration }}" />
         <meta property="video:release_date" content="{{ $season->first_aired }}" />
         <link rel="canonical" href="{{ route('seasons.episodes', $season) }}">
-    </x-slot>
+    </x-slot:meta>
 
     <x-slot:appArgument>
         seasons/{{ $season->id }}/episodes
-    </x-slot>
+    </x-slot:appArgument>
 
     <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
         <section class="mb-4">
@@ -38,7 +38,7 @@
                         <x-square-button wire:click="randomEpisode">
                             @svg('dice', 'fill-current', ['aria-labelledby' => 'random episode', 'width' => '28'])
                         </x-square-button>
-                    </x-slot>
+                    </x-slot:rightBarButtonItems>
                 </x-search-bar>
             </div>
         </section>

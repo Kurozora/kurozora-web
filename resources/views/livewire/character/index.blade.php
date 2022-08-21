@@ -1,11 +1,11 @@
 <main>
     <x-slot:title>
         {{ __('Characters') }}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:description>
         {{ __('Discover the extensive list of characters only on Kurozora, the largest, free online anime, manga & music database in the world.') }}
-    </x-slot>
+    </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Characters') }} — {{ config('app.name') }}" />
@@ -13,11 +13,11 @@
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('characters.index') }}">
-    </x-slot>
+    </x-slot:meta>
 
     <x-slot:appArgument>
         characters
-    </x-slot>
+    </x-slot:appArgument>
 
     <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
         <section class="mb-4">
@@ -36,7 +36,7 @@
                         <x-square-button wire:click="randomCharacter">
                             @svg('dice', 'fill-current', ['aria-labelledby' => 'random character', 'width' => '28'])
                         </x-square-button>
-                    </x-slot>
+                    </x-slot:rightBarButtonItems>
                 </x-search-bar>
             </div>
         </section>

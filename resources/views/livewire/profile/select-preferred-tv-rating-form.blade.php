@@ -1,11 +1,11 @@
 <x-form-section submit="updatePreferredTvRating">
     <x-slot:title>
         {{ __('Update TV Rating') }}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:description>
         {{ __('Select the shows that are allowed to be shown.') }}
-    </x-slot>
+    </x-slot:description>
 
     <x-slot:form>
         <div class="col-span-12">
@@ -23,7 +23,7 @@
                 <x-input-error for="tv_rating" class="mt-2" />
             </div>
         </div>
-    </x-slot>
+    </x-slot:form>
 
     <x-slot:actions>
         <x-action-message class="mr-3" on="saved">
@@ -33,5 +33,5 @@
         <x-button>
             {{ __('Save') }}
         </x-button>
-    </x-slot>
+    </x-slot:actions>
 </x-form-section>

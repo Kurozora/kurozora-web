@@ -103,11 +103,11 @@
                     <x-search-header>
                         <x-slot:title>
                             {{ $searchResult['title'] }}
-                        </x-slot>
+                        </x-slot:title>
 
                         <x-slot:action>
                             <x-section-nav-link href="{{ route('search.index', ['q' => $this->searchQuery, 'type' => $searchResult['search_type']]) }}">{{ __('See All') }}</x-section-nav-link>
-                        </x-slot>
+                        </x-slot:action>
                     </x-search-header>
 
                     <div class="mt-4">
@@ -153,7 +153,7 @@
                 >
                     <x-slot:title>
                         {{ __('Quick Links') }}
-                    </x-slot>
+                    </x-slot:title>
                 </x-search-header>
 
                 <ul class="space-y-4">

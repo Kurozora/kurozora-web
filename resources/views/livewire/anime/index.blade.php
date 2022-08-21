@@ -1,11 +1,11 @@
 <main>
     <x-slot:title>
         {{ __('Anime') }}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:description>
         {{ __('Browse all anime on Kurozora. Join the Kurozora community and create your anime and manga list. Discover songs, games and read reviews and news!') }}
-    </x-slot>
+    </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Anime') }} — {{ config('app.name') }}" />
@@ -13,7 +13,7 @@
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('anime.index') }}">
-    </x-slot>
+    </x-slot:meta>
 
     <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
         <section class="mb-4">
@@ -32,7 +32,7 @@
                         <x-square-button wire:click="randomAnime">
                             @svg('dice', 'fill-current', ['aria-labelledby' => 'random anime', 'width' => '28'])
                         </x-square-button>
-                    </x-slot>
+                    </x-slot:rightBarButtonItems>
                 </x-search-bar>
             </div>
         </section>

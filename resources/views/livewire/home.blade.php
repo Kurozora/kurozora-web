@@ -1,7 +1,7 @@
 <main>
     <x-slot:title>
         {{ __('Explore') }}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ config('app.name') }}" />
@@ -9,11 +9,11 @@
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('home') }}">
-    </x-slot>
+    </x-slot:meta>
 
     <x-slot:appArgument>
         explore
-    </x-slot>
+    </x-slot:appArgument>
 
     <div class="max-w-7xl mx-auto px-4 pb-6 sm:px-6">
         <div class="relative mt-4 p-5 bg-orange-500 text-white font-semibold rounded-lg">

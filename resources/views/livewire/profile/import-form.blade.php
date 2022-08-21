@@ -1,11 +1,11 @@
 <x-form-section submit="importAnimeLibrary">
     <x-slot:title>
         {{ __('Move From Another Service') }}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:description>
         {{ __('Export your anime library from other services, so you can import it to your Kurozora library.') }}
-    </x-slot>
+    </x-slot:description>
 
     <x-slot:form>
         <div class="col-span-12">
@@ -47,7 +47,7 @@
                 <x-input-error for="anime_file" class="mt-2"/>
             </div>
         </div>
-    </x-slot>
+    </x-slot:form>
 
     <x-slot:actions>
         <x-action-message class="mr-3" on="saved">
@@ -57,5 +57,5 @@
         <x-button>
             {{ __('Import') }}
         </x-button>
-    </x-slot>
+    </x-slot:actions>
 </x-form-section>

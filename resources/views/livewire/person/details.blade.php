@@ -1,11 +1,11 @@
 <main>
     <x-slot:title>
         {!! $person->full_name !!}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:description>
         {{ $person->about }}
-    </x-slot>
+    </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ $person->full_name }} — {{ config('app.name') }}" />
@@ -14,11 +14,11 @@
         <meta property="og:type" content="profile" />
         <meta property="og:profile:username" content="{{ $person->full_name }}" />
         <link rel="canonical" href="{{ route('people.details', $person) }}">
-    </x-slot>
+    </x-slot:meta>
 
     <x-slot:appArgument>
         person/{{ $person->id }}
-    </x-slot>
+    </x-slot:appArgument>
 
     <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
         <section class="pt-5 pb-8">
@@ -46,13 +46,13 @@
                 <x-section-nav>
                     <x-slot:title>
                         {{ __('About') }}
-                    </x-slot>
+                    </x-slot:title>
                 </x-section-nav>
 
                 <x-truncated-text>
                     <x-slot:text>
                         {!! nl2br($person->about) !!}
-                    </x-slot>
+                    </x-slot:text>
                 </x-truncated-text>
             </section>
         @endif
@@ -61,7 +61,7 @@
             <x-section-nav>
                 <x-slot:title>
                     {{ __('Information') }}
-                </x-slot>
+                </x-slot:title>
             </x-section-nav>
 
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-4">
@@ -78,17 +78,17 @@
                         @if (count(array_filter((array)$person->alternative_names)))
                             {{ __('Nicknames: :x', ['x' => collect(array_filter((array)$person->alternative_names))->join(',  ', ' and ')]) }} <br />
                         @endif
-                    </x-slot>
+                    </x-slot:information>
                 </x-information-list>
 
                 <x-information-list id="age" title="{{ __('Age') }}" icon="{{ asset('images/symbols/calendar.svg') }}">
                     <x-slot:information>
                         {{ $person->age_string ?? '-' }}
-                    </x-slot>
+                    </x-slot:information>
 
                     <x-slot:footer>
                         {{ $person->birthdate?->format('d F Y') }} {{ $person->astrological_sign_string }}
-                    </x-slot>
+                    </x-slot:footer>
                 </x-information-list>
 
                 <x-information-list id="website" title="{{ __('Websites') }}" icon="{{ asset('images/symbols/safari.svg') }}">
@@ -106,7 +106,7 @@
                         @else
                             -
                         @endif
-                    </x-slot>
+                    </x-slot:information>
                 </x-information-list>
             </div>
         </section>
@@ -116,11 +116,11 @@
                 <x-section-nav>
                     <x-slot:title>
                         {{ __('Shows') }}
-                    </x-slot>
+                    </x-slot:title>
 
                     <x-slot:action>
                         <x-section-nav-link href="{{ route('people.anime', $person) }}">{{ __('See All') }}</x-section-nav-link>
-                    </x-slot>
+                    </x-slot:action>
                 </x-section-nav>
 
                 <x-rows.small-lockup :animes="$personAnime" />
@@ -132,11 +132,11 @@
                 <x-section-nav>
                     <x-slot:title>
                         {{ __('Characters') }}
-                    </x-slot>
+                    </x-slot:title>
 
                     <x-slot:action>
                         <x-section-nav-link href="{{ route('people.characters', $person) }}">{{ __('See All') }}</x-section-nav-link>
-                    </x-slot>
+                    </x-slot:action>
                 </x-section-nav>
 
                 <x-rows.character-lockup :characters="$personCharacters" />

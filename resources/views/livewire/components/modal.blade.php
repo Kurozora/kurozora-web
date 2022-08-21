@@ -2,7 +2,7 @@
     @if($showVideo)
         <x-slot:title>
             {{ __(':x — Episode :y', ['x' => $episode->title, 'y' => $episode->number_total]) }}
-        </x-slot>
+        </x-slot:title>
         <x-slot:content>
             <iframe
                 class="w-full aspect-video lazyload"
@@ -19,19 +19,19 @@
                 data-src="{{ $episode->video_url }}"
             >
             </iframe>
-        </x-slot>
+        </x-slot:content>
         <x-slot:footer>
             <x-button wire:click="$toggle('showPopup')">{{ __('Close') }}</x-button>
-        </x-slot>
+        </x-slot:footer>
     @else
         <x-slot:title>
             {{ $popupData['title'] }}
-        </x-slot>
+        </x-slot:title>
         <x-slot:content>
             <p>{{ $popupData['message'] }}</p>
-            </x-slot>
+        </x-slot:content>
         <x-slot:footer>
             <x-button wire:click="$toggle('showPopup')">{{ __('Ok') }}</x-button>
-        </x-slot>
+        </x-slot:footer>
     @endif
 </x-dialog-modal>

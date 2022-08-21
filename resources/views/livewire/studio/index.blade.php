@@ -1,11 +1,11 @@
 <main>
     <x-slot:title>
         {{ __('Studios') }}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:description>
         {{ __('Discover an extensive list of anime studios, producers, and networks only on Kurozora, the largest, free online anime, manga & music database in the world.') }}
-    </x-slot>
+    </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Studios') }} — {{ config('app.name') }}" />
@@ -13,11 +13,11 @@
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('studios.index') }}">
-    </x-slot>
+    </x-slot:meta>
 
     <x-slot:appArgument>
         studios
-    </x-slot>
+    </x-slot:appArgument>
 
     <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
         <section class="mb-4">
@@ -36,7 +36,7 @@
                         <x-square-button wire:click="randomStudio">
                             @svg('dice', 'fill-current', ['aria-labelledby' => 'random studio', 'width' => '28'])
                         </x-square-button>
-                    </x-slot>
+                    </x-slot:rightBarButtonItems>
                 </x-search-bar>
             </div>
         </section>

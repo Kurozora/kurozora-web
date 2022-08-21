@@ -3,8 +3,6 @@
 @php
     $colorCSS = match ($color) {
         'orange' => 'text-orange-500 hover:text-orange-400 active:text-orange-500',
-        'red' => 'text-red-500 hover:text-red-600 active:text-red-500',
-        'yellow' => 'text-yellow-300 hover:text-yellow-500 active:text-yellow-300',
         default => '',
     }
 @endphp

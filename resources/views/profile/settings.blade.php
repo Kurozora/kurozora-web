@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot:title>
         {{ __('Settings') }}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:header>
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Kurozora ID') }}
         </h2>
-    </x-slot>
+    </x-slot:header>
 
     <div class="max-w-7xl mx-auto px-4 py-6 space-y-10 sm:px-6">
         @livewire('profile.update-profile-information-form')
