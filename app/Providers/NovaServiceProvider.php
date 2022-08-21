@@ -90,13 +90,13 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
             new NovaPermissionTool,
             (new LogsTool)
                 ->canSee(function ($request) {
-                    return auth()->user()->hasRole('superAdmin');
+                    return $request->user()->hasRole('superAdmin');
                 })
                 ->canDownload(function ($request) {
-                    return  auth()->user()->hasRole('superAdmin');
+                    return  $request->user()->hasRole('superAdmin');
                 })
                 ->canDelete(function ($request) {
-                    return auth()->user()->hasRole('superAdmin');
+                    return $request->user()->hasRole('superAdmin');
                 }),
         ];
     }

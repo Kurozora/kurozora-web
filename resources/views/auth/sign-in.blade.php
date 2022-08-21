@@ -1,20 +1,20 @@
 <x-app-layout>
     <x-slot:title>
         {{ __('Sign In') }}
-    </x-slot>
+    </x-slot:title>
 
     <x-slot:meta>
         <meta name="appleid-signin-client-id" content="{{ config('services.apple.client_id') }}">
         <meta name="appleid-signin-scope" content="name email">
         <meta name="appleid-signin-redirect-uri" content="{{ route('siwa.callback') }}">
         <meta name="appleid-signin-state" content="{{ Str::random(40) }}">
-    </x-slot>
+    </x-slot:meta>
 
     <x-slot:header>
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Kurozora ID') }}
         </h2>
-    </x-slot>
+    </x-slot:header>
 
     <div class="flex flex-col justify-center w-screen h-full max-w-prose mx-auto px-4 py-6 sm:px-6">
         {{-- Header --}}
