@@ -16,8 +16,6 @@
         "alpinejs": "^3.4.2",
         "autoprefixer": "^10.2.4",
         "cross-env": "^7.0.3",
-        "cssnano": "^5.0.17",
-        "cssnano-preset-advanced": "^5.1.12",
         "laravel-mix": "^6.0",
         "postcss": "^8.4.4",
         "postcss-import": "^14.0",
@@ -26,9 +24,12 @@
     "dependencies": {
         "@alpinejs/collapse": "^3.4.2",
         "@alpinejs/intersect": "^3.7.1",
+        "@alpinejs/persist": "^3.10.3",
         "@jaames/iro": "^5.3",
         "@picmo/popup-picker": "^5.1.0",
+        "hls.js": "^0.9.1",
         "lazysizes": "^5.3.2",
-        "picmo": "^5.1.0"
+        "picmo": "^5.1.0",
+        "plyr": "^3.7.2"
     }
 }
