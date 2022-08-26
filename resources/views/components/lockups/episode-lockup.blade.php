@@ -44,7 +44,7 @@
     @auth
         <div class="absolute top-0 right-0 left-0 p-3">
             <div class="flex justify-between">
-                <livewire:episode.watch-button :episode="$episode" wire:key="{{ md5($episode->id) }}" />
+                <livewire:episode.watch-button :episode="$episode" button-style="circle" wire:key="{{ md5($episode->id) }}" />
             </div>
         </div>
     @endif

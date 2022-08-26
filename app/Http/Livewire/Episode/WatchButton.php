@@ -21,6 +21,14 @@ class WatchButton extends Component
     public Episode $episode;
 
     /**
+     * The style of the button.
+     * Available options are: default, circle.
+     *
+     * @var string $style
+     */
+    public string $buttonStyle;
+
+    /**
      * Whether the auth user has watched the episode.
      *
      * @var bool $hasWatched
@@ -31,12 +39,13 @@ class WatchButton extends Component
      * Prepare the component.
      *
      * @param Episode $episode
-     *
+     * @param string $buttonStyle
      * @return void
      */
-    public function mount(Episode $episode)
+    public function mount(Episode $episode, string $buttonStyle = 'default'): void
     {
         $this->episode = $episode;
+        $this->buttonStyle = $buttonStyle;
 
         // Set watch status, else default to "disabled"
         $this->hasWatched = Auth::user()?->hasWatched($this->episode) ?? false;
