@@ -1,4 +1,8 @@
 <x-base-layout>
+    <x-slot:scripts>
+        <script src="{{ url(mix('js/chat.js')) }}" defer></script>
+    </x-slot:scripts>
+
     <main
         class="mx-auto"
         x-data="{

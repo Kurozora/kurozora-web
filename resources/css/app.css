@@ -32,9 +32,8 @@ input:invalid, textarea:invalid, select:invalid {
 /* Global styles */
 html, body {
   @apply h-full
-  w-full;
-
-  scroll-behavior: smooth;
+  w-full
+  scroll-smooth;
 }
 
 ul, ol {
@@ -66,26 +65,9 @@ picture::before {
   content: "";
 }
 
-/* Placeholder styles */
-/* User placeholders */
-.profile-image {
-  @apply bg-center
-  bg-cover
-  bg-no-repeat
-  border-2
-  border-gray-100
-  border-opacity-25
-  rounded-full
-  shadow-lg;
-  margin: 10px auto 0;
-  width: 150px;
-  height: 150px;
-  background-size: 150px 150px;
-}
-
 /* Hide reCAPTCHA */
 .grecaptcha-badge {
-  visibility: hidden;
+  @apply invisible;
 }
 
 /**
@@ -96,7 +78,7 @@ picture::before {
 @layer utilities {
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
-    display: none;
+    @apply hidden;
   }
 
   .no-scrollbar {

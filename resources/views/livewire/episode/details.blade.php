@@ -1,12 +1,12 @@
 <main>
     <x-slot:title>
-        {{ __('Watch :x episode :y', ['x' => $anime->title, 'y' => $episode->number_total]) }} | {!! $episode->title !!}
-    </x-slot>
+        {!! __('Watch :x episode :y', ['x' => $anime->title, 'y' => $episode->number_total]) !!} | {!! $episode->title !!}
+    </x-slot:title>
 
     <x-slot:description>
         {{ __('Watch English subbed anime episodes for free.') }}
         {{ $episode->synopsis }}
-    </x-slot>
+    </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __(':x episode :y', ['x' => $anime->title, 'y' => $episode->number_total]) }} | {{ $episode->title }} — {{ config('app.name') }}" />
@@ -64,11 +64,13 @@
                 }
             @endif
         </x-misc.schema>
-    </x-slot>
+
+        <link rel="stylesheet" href="{{ url(mix('css/watch.css')) }}">
+    </x-slot:meta>
 
     <x-slot:appArgument>
         episodes/{{ $episode->id }}
-    </x-slot>
+    </x-slot:appArgument>
 
     <div class="grid grid-rows-[repeat(2,minmax(0,min-content))] h-full lg:grid-rows-none lg:grid-cols-2 2xl:grid-cols-3 lg:mb-0">
         <div class="relative">
