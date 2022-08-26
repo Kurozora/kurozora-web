@@ -1,4 +1,7 @@
 {
-    "/js/app.js": "/js/app.js?id=b3860cc1c95fdf765d6dec6303a12c15",
-    "/css/app.css": "/css/app.css?id=4c173877bad773a95e46821ce31adb34"
+    "/js/app.js": "/js/app.js",
+    "/js/chat.js": "/js/chat.js",
+    "/js/watch.js": "/js/watch.js",
+    "/css/watch.css": "/css/watch.css",
+    "/css/app.css": "/css/app.css"
 }

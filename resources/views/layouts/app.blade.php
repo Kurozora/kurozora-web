@@ -38,4 +38,8 @@
             mainElement.style.opacity = "1";
         })();
     </script>
+
+    <x-slot:scripts>
+        {{ $scripts ?? '' }}
+    </x-slot:scripts>
 </x-base-layout>
