@@ -2,9 +2,12 @@
 
 namespace App\Http\Livewire\Episode;
 
+use App\Enums\VideoSource;
 use App\Models\Anime;
 use App\Models\Episode;
 use App\Models\Season;
+use App\Models\Video;
+use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -32,6 +35,13 @@ class Details extends Component
      * @var Anime $anime
      */
     public Anime $anime;
+
+    /**
+     * The user's preferred video source.
+     *
+     * @var string
+     */
+    public $preferredVideoSource = 'Default';
 
     /**
      * Whether to show the video to the user.
@@ -63,7 +73,7 @@ class Details extends Component
      * @param Episode $episode
      * @return void
      */
-    public function mount(Episode $episode)
+    public function mount(Episode $episode): void
     {
         $this->episode = $episode;
         $this->season = $this->episode->season;
@@ -72,11 +82,45 @@ class Details extends Component
 
     /**
      * Shows the trailer video to the user.
+     *
+     * @return void
      */
-    public function showVideo()
+    public function showVideo(): void
     {
         $this->showVideo = true;
-        $this->showPopup = true;
+    }
+
+    /**
+     * Select the preferred video source.
+     *
+     * @param string $source
+     * @return void
+     */
+    public function selectPreferredSource(string $source): void
+    {
+        $this->preferredVideoSource = $source;
+    }
+
+    /**
+     * Get the video object.
+     *
+     * @return Video|null
+     * @throws InvalidEnumKeyException
+     */
+    public function getVideoProperty(): Video|null
+    {
+        $videoSource = VideoSource::fromKey($this->preferredVideoSource);
+
+        if ($video = $this->episode->videos()->firstWhere('source', $videoSource->value)) {
+            return $video;
+        }
+
+        if ($video = $this->episode->videos()->first()) {
+            $this->selectPreferredSource($video->source->key);
+            return $video;
+        }
+
+        return $this->anime->orderedVideos()->first();
     }
 
     /**
