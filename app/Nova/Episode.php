@@ -9,6 +9,7 @@ use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\MorphMany;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
@@ -177,6 +178,8 @@ class Episode extends Resource
 
             Boolean::make('Verified')
                 ->help('Check the box if the information is correct.'),
+
+            MorphMany::make('Videos'),
         ];
     }
 
