@@ -85,7 +85,7 @@
     @switch ($selectedPopupType)
     @case('edit')
         @auth
-            <x-modal-form-section wire:model="showPopup" submit="">
+            <x-modal-form-section model="showPopup" submit="">
                 <x-slot:title>
                     {{ __('Edit Profile') }}
                 </x-slot:title>
@@ -95,7 +95,7 @@
         @endauth
         @break
     @case ('badges')
-        <x-page-modal maxWidth="sm" wire:model="showPopup">
+        <x-page-modal maxWidth="sm" model="showPopup">
             <x-slot:title>
                 {{ __('Badges') }}
             </x-slot:title>
@@ -104,7 +104,7 @@
         </x-page-modal>
         @break
     @case ('followers')
-        <x-page-modal maxWidth="sm" wire:model="showPopup">
+        <x-page-modal maxWidth="sm" model="showPopup">
             <x-slot:title>
                 {{ __('Followers') }}
             </x-slot:title>
@@ -113,7 +113,7 @@
         </x-page-modal>
         @break
     @case ('following')
-        <x-page-modal maxWidth="sm" wire:model="showPopup">
+        <x-page-modal maxWidth="sm" model="showPopup">
             <x-slot:title>
                 {{ __('Following') }}
             </x-slot:title>

@@ -410,7 +410,7 @@
                 @endif
             </div>
 
-            <x-dialog-modal maxWidth="md" wire:model="showPopup">
+            <x-dialog-modal maxWidth="md" model="showPopup">
                 @if($showVideo)
                     <x-slot:title>
                         {{ $anime->title . ' Official Trailer' }}
