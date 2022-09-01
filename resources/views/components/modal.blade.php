@@ -37,8 +37,7 @@
     x-cloak=""
     x-show="show"
     id="{{ $id }}"
-    style="display: none;"
-    {{ $attributes->merge(['class' => 'fixed top-0 inset-x-0 px-4 pt-6 z-[999] sm:px-0 sm:flex sm:items-top sm:justify-center']) }}
+    {{ $attributes->merge(['class' => 'fixed top-0 inset-x-0 pl-4 pr-4 pt-6 z-[999] sm:px-0 sm:flex sm:items-top sm:justify-center']) }}
 >
     <div
         class="fixed inset-0 transform transition-all"

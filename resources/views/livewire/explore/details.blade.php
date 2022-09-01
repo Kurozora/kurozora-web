@@ -40,7 +40,7 @@
         explore/{{ $exploreCategory->id }}
     </x-slot:appArgument>
 
-    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
+    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
         <section class="mb-4">
             <p class="text-2xl font-bold">{{ $exploreCategory->title }}</p>
             <p class="text-gray-500 font-semibold">{{ $exploreCategory->description }}</p>

@@ -9,7 +9,7 @@
         </h2>
     </x-slot:header>
 
-    <div class="max-w-7xl mx-auto px-4 py-6 space-y-10 sm:px-6">
+    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 space-y-10 sm:px-6">
         @livewire('profile.update-profile-information-form')
 
         <x-hr class="hidden sm:block" />

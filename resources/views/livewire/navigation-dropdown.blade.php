@@ -6,7 +6,7 @@
 >
     <nav class="relative bg-white border-b border-gray-100 z-[300]">
         {{-- Primary Navigation Menu --}}
-        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="max-w-7xl mx-auto pl-4 pr-4 sm:px-6">
             <div class="flex justify-between h-16">
                 {{-- Hamburger --}}
                 <div
@@ -158,7 +158,7 @@
                                         x-transition:leave-start="opacity-100 scale-100"
                                         x-transition:leave-end="opacity-0 scale-75"
                             >
-                                App <span class="ml-1 px-2 py-1 bg-orange-500 text-white text-xs font-bold rounded-full">{{ __('Beta') }}</span>
+                                App <span class="ml-1 px-2 pt-1 pb-1 bg-orange-500 text-white text-xs font-bold rounded-full">{{ __('Beta') }}</span>
                             </x-nav-link>
                         </div>
                     </span>
@@ -194,9 +194,9 @@
                                 >
                                     <div
                                         class="h-8 w-8 bg-cover rounded-full"
-                                        style="background-image: url({{ Auth::user()?->profile_image_url ?? asset('images/static/placeholders/user_profile.webp') }});"
-                                        alt="{{ Auth::user()?->username ?? 'Guest' }} Profile"
-                                        title="{{ Auth::user()?->username ?? 'Guest' }}"
+                                        style="background-image: url({{ auth()->user()?->profile_image_url ?? asset('images/static/placeholders/user_profile.webp') }});"
+                                        alt="{{ auth()->user()?->username ?? __('Guest') }} {{ __('Profile') }}"
+                                        title="{{ auth()->user()?->username ?? __('Guest') }}"
                                         role="img"
                                     ></div>
                                 </button>
@@ -215,7 +215,7 @@
                                 <div class="border-t border-gray-100"></div>
 
                                 {{-- More Pages --}}
-                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                <div class="block pl-4 pr-4 py-2 text-xs text-gray-400">
                                     {{ __('More') }}
                                 </div>
 
@@ -227,7 +227,7 @@
 
                                 @auth
                                     {{-- Account Management --}}
-                                    <div class="block px-4 py-2 text-xs text-gray-400">
+                                    <div class="block pl-4 pr-4 py-2 text-xs text-gray-400">
                                         {{ __('Manage Account') }}
                                     </div>
 
@@ -268,7 +268,7 @@
 
         {{-- Responsive Navigation Menu --}}
         <div
-            class="block absolute px-4 w-full bg-white rounded-b-2xl z-[300] sm:hidden"
+            class="block absolute pl-4 pr-4 w-full bg-white rounded-b-2xl z-[300] sm:hidden"
             x-show="isNavOpen"
             x-collapse.duration.400ms=""
         >
@@ -298,22 +298,21 @@
                 </x-responsive-nav-link>
 
                 <x-responsive-nav-link href="{{ config('app.ios.url') }}" target="_blank">
-                    App <span class="ml-1 px-2 py-1 bg-orange-500 text-white text-xs font-bold rounded-full">{{ __('Beta') }}</span>
+                    App <span class="ml-1 px-2 pt-1 pb-1 bg-orange-500 text-white text-xs font-bold rounded-full">{{ __('Beta') }}</span>
                 </x-responsive-nav-link>
             </div>
 
             {{-- Responsive Settings Options --}}
             <div class="pt-4 pb-1 border-t border-gray-200">
                 @auth
-                    <div class="flex items-center px-4 pb-4">
+                    <div class="flex items-center pl-4 pr-4 pb-4">
                         <div class="shrink-0">
-                            <div class="h-10 w-10 bg-cover rounded-full" style="background-image: url({{ Auth::user()->profile_image_url }});"
-                                 alt="{{ Auth::user()->username }}" role="img"></div>
+                            <div class="h-10 w-10 bg-cover rounded-full" style="background-image: url({{ auth()->user()->profile_image_url }});" alt="{{ auth()->user()->username }}" role="img"></div>
                         </div>
 
                         <div class="ml-3">
-                            <div class="font-medium text-base text-gray-800">{{ Auth::user()->username }}</div>
-                            <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                            <div class="font-medium text-base text-gray-800">{{ auth()->user()->username }}</div>
+                            <div class="font-medium text-sm text-gray-500">{{ auth()->user()->email }}</div>
                         </div>
                     </div>
                 @endauth
