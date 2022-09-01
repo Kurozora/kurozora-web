@@ -186,13 +186,7 @@
                         ></textarea>
 
                         <div class="flex space-x-2">
-                            <button
-                                class="flex justify-center text-orange-500 emoji-button"
-                                style="width: 44px; height: 44px;"
-                                x-on:click=""
-                            >
-                                @svg('face_smiling', 'fill-current', ['width' => 24])
-                            </button>
+                            <x-emoji />
 
                             <button
                                 class="flex justify-center text-orange-500"
@@ -353,13 +347,7 @@
                         ></textarea>
 
                         <div class="flex space-x-2">
-                            <button
-                                class="flex justify-center text-orange-500 emoji-button"
-                                style="width: 44px; height: 44px;"
-                                x-on:click=""
-                            >
-                                @svg('face_smiling', 'fill-current', ['width' => 24])
-                            </button>
+                            <x-emoji />
 
                             <button
                                 class="flex justify-center text-orange-500"
@@ -383,15 +371,16 @@
                 return (url.match(/\.(jpeg|jpg|gif|png)$/) != null)
             }
 
-        function toAMPM(dateString) {
-            let date = new Date(parseInt(dateString) * 1000)
-            let hours = date.getHours()
-            let minutes = date.getMinutes()
-            let ampm = hours >= 12 ? 'pm' : 'am'
-            hours = hours % 12
-            hours = hours ? hours : 12 // the hour '0' should be '12'
-            minutes = minutes.toString().padStart(2, '0')
-            return hours + ':' + minutes + ' ' + ampm
-        }
-    </script>
+            function toAMPM(dateString) {
+                let date = new Date(parseInt(dateString) * 1000)
+                let hours = date.getHours()
+                let minutes = date.getMinutes()
+                let ampm = hours >= 12 ? 'pm' : 'am'
+                hours = hours % 12
+                hours = hours ? hours : 12 // the hour '0' should be '12'
+                minutes = minutes.toString().padStart(2, '0')
+                return hours + ':' + minutes + ' ' + ampm
+            }
+        </script>
+    </x-slot:scripts>
 </x-base-layout>
