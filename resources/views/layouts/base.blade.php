@@ -34,13 +34,14 @@
         <link rel="shortcut icon" href="{{ url(asset('favicon.ico')) }}" />
 
         <!-- Fonts -->
-        <link rel="preload" href="https://rsms.me/inter/inter.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
-        <noscript><link rel="stylesheet" href="https://rsms.me/inter/inter.css" /></noscript>
+        <link rel="preload" href="https://rsms.me/inter/inter.css" as="style" />
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
 
         <!-- Styles -->
-        <link rel="preload" href="{{ url(mix('css/app.css')) }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="{{ url(mix('css/app.css')) }}" /></noscript>
+        <link rel="preload" href="{{ url(mix('css/app.css')) }}" as="style">
+        <link rel="stylesheet" href="{{ url(mix('css/app.css')) }}" />
         @livewireStyles
+        {{ $styles ?? '' }}
 
         <!-- Scripts -->
         <script src="{{ url(mix('js/app.js')) }}" defer></script>
