@@ -16,5 +16,6 @@
     allow="autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
     data-size="auto"
     data-src="{{ $url }}"
+    wire:ignore
 >
 </iframe>

@@ -17,11 +17,13 @@
                 },
                 youtube: {
                     origin: '{{ config('app.url') }}'
-                }
+                },
+                currentTime: {{ $currentTime ?? 0 }}
             })
         }
     }"
     x-init="initPlayer()"
+    wire:ignore
 >
     <iframe
         id="youtubePlayer"
