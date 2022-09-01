@@ -23,6 +23,7 @@ mix.js('resources/js/app.js', 'public/js/app.js')
     .js('resources/js/debug.js', 'public/js/debug.js')
     .postCss('resources/css/app.css', 'public/css/app.css')
     .postCss('resources/css/watch.css', 'public/css/watch.css')
+    .postCss('resources/css/chat.css', 'public/css/chat.css')
     .sourceMaps()
 
 if (mix.inProduction()) {

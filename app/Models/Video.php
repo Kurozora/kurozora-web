@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Enums\VideoSource;
 use App\Enums\VideoType;
 use App\Traits\Model\HasUuid;
-use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
@@ -96,21 +95,20 @@ class Video extends KModel
     /**
      * Get the embed link for the respective source.
      *
+     * @param array $data
      * @return string
-     * @throws InvalidEnumKeyException
      */
-    public function getEmbed(): string
+    public function getEmbed(array $data = []): string
     {
         $sourceClass = VideoSource::fromValue($this->source)->value;
 
-        return (new $sourceClass($this))->getEmbed();
+        return (new $sourceClass($this))->getEmbed($data);
     }
 
     /**
      * Get the embed link for the respective source.
      *
      * @return string
-     * @throws InvalidEnumKeyException
      */
     public function getUrl(): string
     {

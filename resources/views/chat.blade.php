@@ -1,7 +1,8 @@
 <x-base-layout>
-    <x-slot:scripts>
-        <script src="{{ url(mix('js/chat.js')) }}" defer></script>
-    </x-slot:scripts>
+    <x-slot:styles>
+        <link rel="preload" href="{{ url(mix('css/chat.css')) }}" as="style">
+        <link rel="stylesheet" href="{{ url(mix('css/chat.css')) }}">
+    </x-slot:styles>
 
     <main
         class="mx-auto"
@@ -374,10 +375,13 @@
         </section>
     </main>
 
-    <script>
-        function isImage(url) {
-            return (url.match(/\.(jpeg|jpg|gif|png)$/) != null)
-        }
+    <x-slot:scripts>
+        <script src="{{ url(mix('js/chat.js')) }}"></script>
+
+        <script>
+            function isImage(url) {
+                return (url.match(/\.(jpeg|jpg|gif|png)$/) != null)
+            }
 
         function toAMPM(dateString) {
             let date = new Date(parseInt(dateString) * 1000)
