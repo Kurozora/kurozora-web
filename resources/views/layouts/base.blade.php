@@ -45,6 +45,9 @@
         <!-- Scripts -->
         <script src="{{ url(mix('js/app.js')) }}" defer></script>
         <script src="https://js-cdn.music.apple.com/musickit/v1/musickit.js" defer></script>
+        @if (app()->environment('local'))
+            <script src="{{ url(mix('js/debug.js')) }}" defer></script>
+        @endif
 
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}" />
