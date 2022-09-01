@@ -97,7 +97,7 @@
             </div>
 
             <div class="md:absolute md:bottom-0 md:left-0 md:right-0 lg:px-4">
-                <div class="flex flex-nowrap pt-5 pb-8 px-4 md:mx-auto md:mb-8 md:p-6 md:max-w-lg md:bg-white md:bg-opacity-50 md:backdrop-filter md:backdrop-blur md:rounded-lg">
+                <div class="flex flex-nowrap pt-5 pb-8 pl-4 pr-4 md:mx-auto md:mb-8 md:p-6 md:max-w-lg md:bg-white md:bg-opacity-50 md:backdrop-filter md:backdrop-blur md:rounded-lg">
                     <x-picture :border="true" class="min-w-[100px] max-w-[100px] min-h-[150px] max-h-[150px] mr-2 rounded-lg overflow-hidden">
                         <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->poster_image_url ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
                     </x-picture>
@@ -143,7 +143,7 @@
         </div>
 
         <div class="pt-4 2xl:col-span-2 xl:max-h-[calc(100vh-64px)] overflow-x-hidden overflow-y-scroll no-scrollbar">
-            <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between items-center text-center pb-5 px-4 overflow-x-scroll no-scrollbar">
+            <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between items-center text-center pb-5 pl-4 pr-4 overflow-x-scroll no-scrollbar">
                 <div id="ratingBadge" class="flex-grow pr-12">
                     <a href="#ratingsAndReviews">
                         <p class="font-bold text-orange-500">
@@ -210,7 +210,7 @@
             </section>
 
             @if (!empty($anime->synopsis))
-                <section class="pt-5 pb-8 px-4 border-t-2">
+                <section class="pt-5 pb-8 pl-4 pr-4 border-t-2">
                     <x-section-nav class="flex flex-nowrap justify-between mb-5">
                         <x-slot:title>
                             {{ __('Synopsis') }}
@@ -225,7 +225,7 @@
                 </section>
             @endif
 
-            <section id="ratingsAndReviews" class="pt-5 pb-8 px-4 border-t-2">
+            <section id="ratingsAndReviews" class="pt-5 pb-8 pl-4 pr-4 border-t-2">
                 <x-section-nav>
                     <x-slot:title>
                         {{ __('Ratings & Reviews') }}
@@ -247,14 +247,14 @@
                 </div>
             </section>
 
-            <section class="pt-5 pb-8 px-4 border-t-2">
+            <section class="pt-5 pb-8 pl-4 pr-4 border-t-2">
                 <x-section-nav>
                     <x-slot:title>
                         {{ __('Information') }}
                     </x-slot:title>
                 </x-section-nav>
 
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-4">
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
                     <x-information-list id="type" title="{{ __('Type') }}" icon="{{ asset('images/symbols/tv_and_mediabox.svg') }}">
                         <x-slot:information>
                             {{ $anime->media_type->name }}
@@ -437,9 +437,11 @@
                     <x-slot:title>
                         {{ $popupData['title'] }}
                     </x-slot:title>
+
                     <x-slot:content>
                         <p>{{ $popupData['message'] }}</p>
                     </x-slot:content>
+
                     <x-slot:footer>
                         <x-button wire:click="$toggle('showPopup')">{{ __('Ok') }}</x-button>
                     </x-slot:footer>

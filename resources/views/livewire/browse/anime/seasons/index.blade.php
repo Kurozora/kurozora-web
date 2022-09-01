@@ -16,7 +16,7 @@
     </x-slot:meta>
 
     <div
-        class="max-w-7xl mx-auto px-4 py-6 sm:px-6"
+        class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6"
         x-data="{
             selectedMediaType: null
         }"
@@ -30,7 +30,7 @@
             </div>
         </section>
 
-        <section id="mediaTypeHeader" class="bg-white py-4 z-10">
+        <section id="mediaTypeHeader" class="bg-white pt-4 pb-4 z-10">
             <x-season-pagination :season-of-year="$seasonOfYear" :year="$year" :on-each-side="2" />
 
             <x-hr class="mt-4 mb-4" />

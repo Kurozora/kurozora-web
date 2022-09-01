@@ -19,7 +19,7 @@
         characters
     </x-slot:appArgument>
 
-    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
+    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
         <section class="mb-4">
             <div>
                 <div class="flex gap-1">

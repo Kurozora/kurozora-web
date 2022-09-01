@@ -91,7 +91,7 @@
         </div>
 
         {{-- Profile Image --}}
-        <div x-data="{profileImageName: null, profileImagePreview: @entangle('profileImage')}" class="-mt-14 px-4 col-span-6 z-10 sm:-mt-20 sm:px-6 sm:col-span-6">
+        <div x-data="{profileImageName: null, profileImagePreview: @entangle('profileImage')}" class="-mt-14 pl-4 pr-4 col-span-6 z-10 sm:-mt-20 sm:px-6 sm:col-span-6">
             {{-- Profile Image File Input --}}
             <input
                 type="file" class="hidden"
