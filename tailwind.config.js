@@ -1,12 +1,16 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
+    experimental: {
+        optimizeUniversalDefaults: true,
+    },
+
     darkMode: 'class',
 
     content: [
         './app/**/*.php',
         './public/**/*.html',
-        './resources/**/*.{html,js,jsx,md,php,ts,tsx,twig,vue}'
+        './resources/**/*.{html,js,jsx,md,mdx,php,ts,tsx,twig,vue}'
     ],
 
     theme: {
@@ -41,6 +45,9 @@ module.exports = {
 
             fontFamily: {
                 sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+                mono: ['Fira Code VF', ...defaultTheme.fontFamily.mono],
+                source: ['Source Sans Pro', ...defaultTheme.fontFamily.sans],
+                'ubuntu-mono': ['Ubuntu Mono', ...defaultTheme.fontFamily.mono],
             },
         },
     },
