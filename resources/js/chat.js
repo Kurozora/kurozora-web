@@ -8,14 +8,19 @@
  */
 import {createPopup} from "@picmo/popup-picker"
 
-let emojiButton = document.querySelector('.emoji-button')
-window.picmo = createPopup({}, {
-    // The element that triggers the popup
-    triggerElement: emojiButton,
+(function() {
+    let rootElement = document.querySelector('body')
 
-    // The element to position the picker relative to - often this is also the trigger element,
-    referenceElement: emojiButton,
+    window.picmo = createPopup({
+        // picker options go here
+        rootElement: rootElement,
+    }, {
+        className: 'z-50',
 
-    // specify how to position the popup
-    position: 'bottom-start'
-})
+        // Specify how to position the popup
+        position: 'bottom-start',
+
+        // Whether to show the close button
+        showCloseButton: false
+    })
+})()

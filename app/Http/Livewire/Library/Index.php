@@ -20,7 +20,7 @@ class Index extends Component
     /**
      * The query strings of the component.
      *
-     * @var array $queryString
+     * @var string[] $queryString
      */
     protected $queryString = [
         'status',

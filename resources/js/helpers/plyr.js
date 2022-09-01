@@ -205,6 +205,7 @@ export default class PlyrManager {
             playsinline: 1,
             origin: ''
         },
+        currentTime: 0
     }
 
     // MARK: - Initializers
@@ -368,7 +369,9 @@ export default class PlyrManager {
         // Handle can play event
         this.#player.once('canplay', (event) => {
             // Set current time
-            let progress = localStorage.getItem('_x_progress_' + window.location.pathname) ?? 0
+            let progress = this.playerOptions.currentTime === 0
+                ? (localStorage.getItem('_x_progress' + window.location.pathname.replaceAll('/', '_')) ?? 0)
+                : this.playerOptions.currentTime
             this.#player.currentTime = parseFloat(progress)
         })
 
@@ -381,7 +384,7 @@ export default class PlyrManager {
 
         // Keep track of time updates
         this.#player.on('timeupdate', (currentTime) => {
-            localStorage.setItem('_x_progress_' + window.location.pathname, this.#player.currentTime)
+            localStorage.setItem('_x_progress' + window.location.pathname.replaceAll('/', '_'), this.#player.currentTime)
         })
     }
 

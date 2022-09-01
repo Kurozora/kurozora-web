@@ -1,12 +1,5 @@
 export default class Storage {
     /**
-     * The Plyr instance.
-     *
-     * @param {Plyr} player - player
-     */
-    player
-
-    /**
      * @constructor
      *
      * @param {Plyr} player - player
