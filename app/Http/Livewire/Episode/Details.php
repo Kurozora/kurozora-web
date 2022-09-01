@@ -7,8 +7,10 @@ use App\Models\Anime;
 use App\Models\Episode;
 use App\Models\Season;
 use App\Models\Video;
+use Auth;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
@@ -37,11 +39,32 @@ class Details extends Component
     public Anime $anime;
 
     /**
+     * Whether the user is tracking the anime.
+     *
+     * @var bool $isTracking
+     */
+    public bool $isTracking = false;
+
+    /**
+     * Whether the user is reminded of the anime.
+     *
+     * @var bool $isReminded
+     */
+    public bool $isReminded = false;
+
+    /**
      * The user's preferred video source.
      *
      * @var string
      */
     public $preferredVideoSource = 'Default';
+
+    /**
+     * The start time of the video.
+     *
+     * @var int $t
+     */
+    public $t = 0;
 
     /**
      * Whether to show the video to the user.
@@ -58,6 +81,22 @@ class Details extends Component
     public bool $showPopup = false;
 
     /**
+     * Whether to show the share popup to the user.
+     *
+     * @var bool $showSharePopup
+     */
+    public bool $showSharePopup = false;
+
+    /**
+     * The query strings of the component.
+     *
+     * * @var string[] $queryString
+     */
+    protected $queryString = [
+        't' => ['except' => 0],
+    ];
+
+    /**
      * The data used to populate the popup.
      *
      * @var array|string[]
@@ -65,6 +104,7 @@ class Details extends Component
     public array $popupData = [
         'title' => '',
         'message' => '',
+        'type' => 'default'
     ];
 
     /**
@@ -78,6 +118,19 @@ class Details extends Component
         $this->episode = $episode;
         $this->season = $this->episode->season;
         $this->anime = $this->season->anime;
+        $this->setupActions();
+    }
+
+    /**
+     * Sets up the actions according to the user's settings.
+     */
+    protected function setupActions()
+    {
+        $user = Auth::user();
+        if (!empty($user)) {
+            $this->isTracking = $user->isTracking($this->anime);
+            $this->isReminded = $user->reminder_anime()->where('anime_id', $this->anime->id)->exists();
+        }
     }
 
     /**
@@ -121,6 +174,61 @@ class Details extends Component
         }
 
         return $this->anime->orderedVideos()->first();
+    }
+
+    /**
+     * Adds the anime to the user's reminder list.
+     */
+    public function remindAnime()
+    {
+        $user = Auth::user();
+
+        if ($user->isPro()) {
+            if ($this->isTracking) {
+                if ($this->isReminded) { // Don't remind the user
+                    $user->reminder_anime()->detach($this->anime->id);
+                } else { // Remind the user
+                    $user->reminder_anime()->attach($this->anime->id);
+                }
+
+                $this->isReminded = !$this->isReminded;
+            } else {
+                $this->popupData = [
+                    'title' => __('Are you tracking?'),
+                    'message' => __('Make sure to add the anime to your library first.'),
+                    'type' => 'default',
+                ];
+                $this->showPopup = true;
+            }
+        } else {
+            $this->popupData = [
+                'title' => __('That’s Unfortunate'),
+                'message' => __('This feature is only accessible to pro users 🧐'),
+                'type' => 'default',
+            ];
+            $this->showPopup = true;
+        }
+    }
+
+    /**
+     * Get the next episode.
+     *
+     * @return Episode|null
+     */
+    public function getNextEpisodeProperty(): Episode|null
+    {
+        return $this->episode->next_episode;
+    }
+
+    /**
+     * A list of episode suggestions based on current episode.
+     *
+     * @return LengthAwarePaginator
+     */
+    public function getSuggestedEpisodesProperty(): LengthAwarePaginator
+    {
+        return Episode::search(substr($this->episode->title, 0, 20))
+            ->paginate(10);
     }
 
     /**
