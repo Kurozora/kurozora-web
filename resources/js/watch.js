@@ -1,3 +1,3 @@
-import PlyrManager from "./helpers/plyr";
+import PlyrManager from './helpers/plyr'
 
 window.PlyrManager = PlyrManager

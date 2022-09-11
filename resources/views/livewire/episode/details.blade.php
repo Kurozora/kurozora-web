@@ -93,7 +93,7 @@
     >
         <div
             class="flex flex-col lg:flex-row"
-            x-bind:class="{'gap-6': !theaterMode, '': theaterMode}"
+            x-bind:class="{'lg:gap-6': !theaterMode, '': theaterMode}"
         >
             {{-- Video --}}
             <section
@@ -101,7 +101,7 @@
                 x-bind:class="{
                     'max-w-7xl': !theaterMode,
                     '': theaterMode || !showChat,
-                    'lg:w-3/4': showChat
+                    'lg:w-3/4': theaterMode && showChat
                 }"
             >
                 <article
@@ -116,7 +116,7 @@
                             @if (!empty($this->video))
                                 {!! $this->video->getEmbed(['currentTime' => $t]) !!}
                             @else
-                                <x-picture>
+                                <x-picture class="h-full">
                                     <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $episode->banner_image_url ?? $season->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
                                 </x-picture>
                             @endif
@@ -127,15 +127,15 @@
 
             {{-- Chat Box --}}
             <section
-                class="lg:w-1/2 border overflow-hidden aspect-video"
+                class="border overflow-hidden aspect-video"
                 x-bind:class="{
-                    'lg:rounded-3xl lg:shadow-md': !theaterMode,
-                    '': theaterMode
+                    'lg:w-1/2 lg:rounded-3xl lg:shadow-md': !theaterMode,
+                    'lg:w-1/4': theaterMode
                 }"
                 x-bind:style="theaterMode && {'height': '56.2vw', 'max-height': 'calc(100vh - 169px)'}"
                 x-show="theaterMode ? showChat : true"
             >
-                <livewire:components.chat-box />
+                <livewire:components.chat-box :model="$episode" />
             </section>
         </div>
 
@@ -144,7 +144,7 @@
             x-bind:class="{'': !theaterMode, 'lg:pt-4 lg:pl-4 lg:pr-4': theaterMode}"
         >
             <div
-                class="flex flex-col gap-6"
+                class="flex flex-col gap-6 lg:w-3/4"
                 x-bind:class="{'max-w-7xl': !theaterMode, '': theaterMode}"
             >
                 {{-- Bio lockup --}}
@@ -188,7 +188,13 @@
                                 x-bind:title="showChat ? '{{ __('Close Chat') }}' : '{{ __('Open Chat') }}'"
                                 x-show="theaterMode"
                             >
-                                @svg('crown', 'fill-current', ['width' => '28'])
+                                <template x-if="!showChat">
+                                    @svg('bubble_left_and_bubble_right', 'fill-current', ['width' => '28'])
+                                </template>
+
+                                <template x-if="showChat">
+                                    @svg('bubble_left_and_bubble_right_fill', 'fill-current', ['width' => '28'])
+                                </template>
                             </x-circle-button>
 
                             {{-- Video Source --}}
@@ -311,7 +317,7 @@
 
                         <x-truncated-text>
                             <x-slot:text>
-                                {!! nl2br($episode->synopsis) !!}
+                                {!! nl2br(e($episode->synopsis)) !!}
                             </x-slot:text>
                         </x-truncated-text>
                     </section>
@@ -389,7 +395,7 @@
                 </section>
             </div>
 
-            <div class="flex flex-col gap-4 pb-4 xl:w-1/4">
+            <div class="flex flex-col gap-4 pb-4 lg:w-1/4">
                 @if (!empty($this->episode->next_episode_id))
                     <section class="pl-4 pr-4">
                         <x-section-nav>
