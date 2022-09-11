@@ -3,7 +3,7 @@
 namespace App\Traits\Livewire;
 
 use Carbon\Carbon;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 trait WithSearch
 {

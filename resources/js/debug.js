@@ -10,7 +10,7 @@
 
     // Configure button
     let tailwindCssScreenButton = document.createElement('button')
-    tailwindCssScreenButton.setAttribute('class', 'fixed p-2 bg-black text-sm text-white')
+    tailwindCssScreenButton.setAttribute('class', 'fixed pt-2 pr-2 pb-2 pl-2 bg-black text-sm text-white')
     tailwindCssScreenButton.setAttribute('style', 'z-index: 999999999;')
     tailwindCssScreenButton.onload = calculateBreakpoint()
     document.querySelector('body').appendChild(tailwindCssScreenButton)

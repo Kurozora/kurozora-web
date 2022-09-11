@@ -43,7 +43,7 @@ class JSONResult
 
         $endResponse = array_merge(self::getDefaultResponseArray(), $data);
 
-        return Response::json($endResponse, 200);
+        return Response::json($endResponse);
     }
 
     /**

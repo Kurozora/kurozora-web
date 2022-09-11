@@ -22,10 +22,13 @@ trait HasTranslatableSlug
     }
 
     /**
+     * Make sure the slug is valid.
+     *
+     * @return void
      * @throws AttributeIsNotTranslatable
      * @throws TranslationNotFoundAlias
      */
-    protected function ensureValidSlugData()
+    protected function ensureValidSlugData(): void
     {
         $fieldNames = $this->slugOptions->generateSlugFrom;
 
@@ -39,6 +42,9 @@ trait HasTranslatableSlug
     }
 
     /**
+     * Add slug to the model.
+     *
+     * @return void
      * @throws AttributeIsNotTranslatable
      * @throws InvalidOption
      * @throws TranslationNotFoundAlias
@@ -56,10 +62,12 @@ trait HasTranslatableSlug
 
         $slugField = $this->slugOptions->slugField;
 
-        $this->$slugField = $slug;
+        $this->{$slugField} = $slug;
     }
 
     /**
+     * Generate a non-unique slug.
+     *
      * @return string
      */
     protected function generateNonUniqueSlug(): string
@@ -74,18 +82,22 @@ trait HasTranslatableSlug
     }
 
     /**
+     * Check whether the given key is a translatable attribute.
+     *
      * @param string $key
      * @return bool
      */
-    public function isTranslatableAttribute(string $key) : bool
+    public function isTranslatableAttribute(string $key): bool
     {
         return in_array($key, $this->getTranslatableAttributes());
     }
 
     /**
+     * Get all translatable attributes.
+     *
      * @return array
      */
-    public function getTranslatableAttributes() : array
+    public function getTranslatableAttributes(): array
     {
         return is_array($this->translatedAttributes)
             ? $this->translatedAttributes
@@ -93,9 +105,13 @@ trait HasTranslatableSlug
     }
 
     /**
+     * Throw an error if the given local is invalid.
+     *
+     * @param string $locale
+     * @return void
      * @throws TranslationNotFoundAlias
      */
-    protected function guardAgainstNonExistentTranslation(string $locale)
+    protected function guardAgainstNonExistentTranslation(string $locale): void
     {
         if (!$this->translate($locale)) {
             throw TranslationNotFoundAlias::make($locale, $this);
@@ -103,10 +119,13 @@ trait HasTranslatableSlug
     }
 
     /**
+     * Throw an error if the given attribute is not translatable.
+     *
      * @param string $key
+     * @return void
      * @throws AttributeIsNotTranslatable
      */
-    protected function guardAgainstUntranslatableAttribute(string $key)
+    protected function guardAgainstUntranslatableAttribute(string $key): void
     {
         if (!$this->isTranslatableAttribute($key)) {
             throw AttributeIsNotTranslatable::make($key, $this);

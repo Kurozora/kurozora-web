@@ -37,7 +37,7 @@ class FeedMessage extends KModel implements ReactableContract
      *
      * @return BelongsTo
      */
-    function user()
+    function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
@@ -47,7 +47,7 @@ class FeedMessage extends KModel implements ReactableContract
      *
      * @return HasOne
      */
-    function parentMessage()
+    function parentMessage(): HasOne
     {
         return $this->hasOne(FeedMessage::class, 'id', 'parent_feed_message_id');
     }
@@ -57,7 +57,7 @@ class FeedMessage extends KModel implements ReactableContract
      *
      * @return HasMany
      */
-    function replies()
+    function replies(): HasMany
     {
         return $this->hasMany(FeedMessage::class, 'parent_feed_message_id')
             ->where('is_reply', '=', true);
@@ -68,7 +68,7 @@ class FeedMessage extends KModel implements ReactableContract
      *
      * @return HasMany
      */
-    function reShares()
+    function reShares(): HasMany
     {
         return $this->hasMany(FeedMessage::class, 'parent_feed_message_id')
             ->where('is_reshare', '=', true);
