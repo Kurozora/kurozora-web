@@ -40,7 +40,7 @@ return [
             'password' => env('SK_APP_PASSWORD')
         ],
         'client_id' => env('APPLE_CLIENT_ID', 'app.kurozora.web.tracker'),
-        'client_secret' => env('APPLE_CLIENT_SECRET'),
+        'client_secret' => env('MIX_APPLE_CLIENT_SECRET'),
         'redirect' => env('APPLE_REDIRECT_URI', '/siwa/callback'),
     ],
 
