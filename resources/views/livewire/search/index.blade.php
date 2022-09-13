@@ -33,7 +33,7 @@
         search
     </x-slot:appArgument>
 
-    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
+    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
         <section class="mb-4">
             <div class="flex gap-1">
                 <div class="flex flex-wrap items-center w-full">
@@ -93,7 +93,7 @@
                 <ul class="flex flex-col gap-4 items-center mt-8">
                     @foreach ($this->searchSuggestions as $searchSuggestion)
                         <li>
-                            <button class="px-4 pb-2 text-orange-500" wire:click="$set('q', '{{ $searchSuggestion }}')">
+                            <button class="pl-4 pr-4 pb-2 text-orange-500" wire:click="$set('q', '{{ $searchSuggestion }}')">
                             {{ $searchSuggestion }}</button>
                         </li>
                     @endforeach

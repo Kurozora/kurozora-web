@@ -87,7 +87,7 @@ class Details extends Component
      *
      * @return void
      */
-    public function mount(Anime $anime)
+    public function mount(Anime $anime): void
     {
         $this->anime = $anime;
         $this->studio = $anime->studios()?->firstWhere('is_studio', '=', true) ?? $anime->studios->first();

@@ -20,7 +20,7 @@
         character/{{ $character->id }}
     </x-slot:appArgument>
 
-    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
+    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
         <section class="pt-5 pb-8">
             <div class="relative pb-2">
                 <div class="flex flex-col flex-wrap text-center items-center">
@@ -64,7 +64,7 @@
                 </x-slot:title>
             </x-section-nav>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-4">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
                 <x-information-list id="debut" title="{{ __('Debut') }}" icon="{{ asset('images/symbols/star.svg') }}">
                     <x-slot:information>
                         {{ $character->debut ?? '-' }}

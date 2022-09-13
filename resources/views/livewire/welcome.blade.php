@@ -136,7 +136,7 @@
         </section>
 
         {{-- App Showcase --}}
-        <section class="mt-36 px-4 sm:px-6">
+        <section class="mt-36 pl-4 pr-4 sm:px-6">
             <div class="flex flex-col items-center mx-auto max-w-2xl text-center">
                 <img class="m-10 mb-0" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="Kurozora">
 
@@ -155,7 +155,7 @@
         </section>
 
         {{-- Feature Showcase --}}
-        <section class="px-4 pt-36 pb-10 bg-gray-100 sm:px-6">
+        <section class="pl-4 pr-4 pt-36 pb-10 bg-gray-100 sm:px-6">
             <div class="max-w-sm md:max-w-2xl m-auto">
                 <ul class="m-auto text-center">
                     <span
@@ -268,7 +268,7 @@
 
         {{-- Anime Showcase --}}
         <section class="mt-36">
-            <div class="flex flex-col items-center mx-auto px-4 max-w-2xl text-center sm:px-6">
+            <div class="flex flex-col items-center mx-auto pl-4 pr-4 max-w-2xl text-center sm:px-6">
                 <p class="my-2 text-4xl font-bold leading-tight md:text-6xl">{{ __('Something for everyone.') }}</p>
 
                 <p class="font-semibold md:text-xl">{{ __('Action, drama, ecchi, fantasy, space, thriller and more — with new amazing anime and updates added every week. Enjoy free, uninterrupted access to the anime you love and the ones you’re going to love.') }}</p>
@@ -436,7 +436,7 @@
         </section>
 
         {{-- Call to Action --}}
-        <section class="px-4 pt-36 pb-10 bg-gray-100 sm:px-6">
+        <section class="pl-4 pr-4 pt-36 pb-10 bg-gray-100 sm:px-6">
             <div class="flex flex-col items-center m-auto max-w-2xl text-center">
                 <img class="m-10 mb-0" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="Kurozora">
 
@@ -508,12 +508,12 @@
         </section>
 
         {{-- FAQ --}}
-        <section class="mt-36 px-4 sm:px-6">
+        <section class="mt-36 pl-4 pr-4 sm:px-6">
             <div class="flex flex-col items-center m-auto max-w-2xl text-center">
                 <p class="my-2 text-4xl font-bold leading-tight md:text-6xl">{{ __('Let’s go over it one last time.') }}</p>
             </div>
 
-            <ul class="m-auto px-4 max-w-4xl">
+            <ul class="m-auto pl-4 pr-4 max-w-4xl">
                 <li>
                     <div x-data="{ expanded: false }">
                         <button

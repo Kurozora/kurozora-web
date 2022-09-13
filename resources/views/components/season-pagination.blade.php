@@ -18,11 +18,11 @@
         @endphp
 
         @if ($nextYear < 1917 && $nextSeasonOfYear->value === \App\Enums\SeasonOfYear::Fall)
-            <a class="px-4 pb-2 border-b-2 hover:border-orange-500" href="{{ route('anime.seasons.index') }}">
+            <a class="pl-4 pr-4 pb-2 border-b-2 hover:border-orange-500" href="{{ route('anime.seasons.index') }}">
                 {{ __('Current') }}
             </a>
         @else
-            <a class="px-4 pb-2 border-b-2 hover:border-orange-500" href="{{ route('anime.seasons.year.season', [$nextYear, $nextSeasonOfYear->key]) }}">
+            <a class="pl-4 pr-4 pb-2 border-b-2 hover:border-orange-500" href="{{ route('anime.seasons.year.season', [$nextYear, $nextSeasonOfYear->key]) }}">
                 {{ $nextSeasonOfYear->key . ' ' . $nextYear }}
             </a>
         @endif
@@ -31,7 +31,7 @@
         @php
             $active = request()->routeIs('anime.seasons.year.season', [$year, $seasonOfYear->key]);
         @endphp
-        <a class="px-4 pb-2 border-b-2 {{ $active ? 'border-orange-500' : 'hover:border-orange-500' }}" href="{{ route('anime.seasons.year.season', [$year, $seasonOfYear->key]) }}">
+        <a class="pl-4 pr-4 pb-2 border-b-2 {{ $active ? 'border-orange-500' : 'hover:border-orange-500' }}" href="{{ route('anime.seasons.year.season', [$year, $seasonOfYear->key]) }}">
             {{ $seasonOfYear->key . ' ' . $year }}
         </a>
 
@@ -52,7 +52,7 @@
                 $previousYear = $nextYear;
                 $previousSeasonOfYear = $nextSeasonOfYear;
             @endphp
-            <a class="px-4 pb-2 border-b-2 hover:border-orange-500" href="{{ route('anime.seasons.year.season', [$nextYear, $nextSeasonOfYear->key]) }}">
+            <a class="pl-4 pr-4 pb-2 border-b-2 hover:border-orange-500" href="{{ route('anime.seasons.year.season', [$nextYear, $nextSeasonOfYear->key]) }}">
                 {{ $nextSeasonOfYear->key . ' ' . $nextYear }}
             </a>
         @endforeach
@@ -61,7 +61,7 @@
         @php
             $active = request()->routeIs('anime.seasons.archive', [$year, $seasonOfYear->key]);
         @endphp
-        <a class="px-4 pb-2 border-b-2 {{ $active ? 'border-orange-500' : 'hover:border-orange-500' }}" href="{{ route('anime.seasons.archive') }}">
+        <a class="pl-4 pr-4 pb-2 border-b-2 {{ $active ? 'border-orange-500' : 'hover:border-orange-500' }}" href="{{ route('anime.seasons.archive') }}">
             {{ __('Archive') }}
         </a>
     </div>

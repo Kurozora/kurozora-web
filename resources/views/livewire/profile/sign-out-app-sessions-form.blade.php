@@ -50,7 +50,7 @@
         </div>
 
         <!-- Sign Out App Devices Confirmation Modal -->
-        <x-dialog-modal wire:model="confirmingSignOut">
+        <x-dialog-modal model="confirmingSignOut">
             <x-slot:title>
                 {{ __('Sign Out App Sessions') }}
             </x-slot:title>

@@ -10,7 +10,7 @@
     </x-slot:header>
 
     <div x-data="{ recovery: false }"
-         class="flex flex-col justify-center max-w-prose w-screen h-full max-w-prose mx-auto px-4 py-6 sm:px-6"
+         class="flex flex-col justify-center max-w-prose w-screen h-full max-w-prose mx-auto pl-4 pr-4 py-6 sm:px-6"
     >
         <div class="mb-5 text-center text-gray-600" x-show="!recovery">
             <p class="text-2xl font-bold">{{ __('Enter Authorization Code') }}</p>

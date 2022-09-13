@@ -21,7 +21,7 @@
         anime/{{ $anime->id }}/related-shows
     </x-slot:appArgument>
 
-    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
+    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
         <x-rows.small-lockup :related-animes="$animeRelations" :is-row="false" />
 
         <section class="mt-4">

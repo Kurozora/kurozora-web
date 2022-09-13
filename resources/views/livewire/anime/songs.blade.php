@@ -30,7 +30,7 @@
         anime/{{ $anime->id }}/songs
     </x-slot:appArgument>
 
-    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 space-y-10">
+    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6 space-y-10">
         @foreach($animeSongGroups as $animeSongType => $animeSongs)
             <section id="#{{ $animeSongType }}">
                 <x-section-nav>

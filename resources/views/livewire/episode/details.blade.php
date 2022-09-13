@@ -1,12 +1,12 @@
 <main>
     <x-slot:title>
-        {{ __('Watch :x episode :y', ['x' => $anime->title, 'y' => $episode->number_total]) }} | {!! $episode->title !!}
-    </x-slot>
+        {!! __('Watch :x episode :y', ['x' => $anime->title, 'y' => $episode->number_total]) !!} | {!! $episode->title !!}
+    </x-slot:title>
 
     <x-slot:description>
         {{ __('Watch English subbed anime episodes for free.') }}
         {{ $episode->synopsis }}
-    </x-slot>
+    </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __(':x episode :y', ['x' => $anime->title, 'y' => $episode->number_total]) }} | {{ $episode->title }} — {{ config('app.name') }}" />
@@ -64,222 +64,377 @@
                 }
             @endif
         </x-misc.schema>
-    </x-slot>
+    </x-slot:meta>
+
+    <x-slot:styles>
+        <link rel="preload" href="{{ url(mix('css/watch.css')) }}" as="style">
+        <link rel="stylesheet" href="{{ url(mix('css/watch.css')) }}">
+        <link rel="preload" href="{{ url(mix('css/chat.css')) }}" as="style">
+        <link rel="stylesheet" href="{{ url(mix('css/chat.css')) }}">
+    </x-slot:styles>
 
     <x-slot:appArgument>
         episodes/{{ $episode->id }}
-    </x-slot>
+    </x-slot:appArgument>
 
-    <div class="grid grid-rows-[repeat(2,minmax(0,min-content))] h-full lg:grid-rows-none lg:grid-cols-2 2xl:grid-cols-3 lg:mb-0">
-        <div class="relative">
-            <div class="relative flex flex-nowrap aspect-video md:relative md:h-full lg:aspect-auto">
-                <x-picture class="w-full overflow-hidden">
-                    <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $episode->banner_image_url ?? $season->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
-                </x-picture>
+    <x-slot:scripts>
+        <script src="{{ url(mix('js/watch.js')) }}"></script>
+        <script src="{{ url(mix('js/chat.js')) }}"></script>
+    </x-slot:scripts>
 
-                @if (!empty($episode->video_url))
-                    <div class="absolute top-0 bottom-0 left-0 right-0">
-                        <div class="flex flex-col justify-center items-center h-full md:pb-40 lg:pb-0">
-                            <button
-                                class="inline-flex items-center p-5 bg-white/60 backdrop-blur border border-transparent rounded-full font-semibold text-xs text-gray-500 uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
-                                wire:click="showVideo"
-                            >
-                                @svg('play_fill', 'fill-current', ['width' => '34'])
-                            </button>
+    <div
+        class="relative w-full"
+        x-bind:class="{'lg:pt-4 lg:pl-4 lg:pr-4': !theaterMode, '': theaterMode}"
+        x-data="{
+            preferredVideoSource: $persist(@entangle('preferredVideoSource')),
+            theaterMode: $persist(false),
+            showChat: $persist(false)
+        }"
+    >
+        <div
+            class="flex flex-col lg:flex-row"
+            x-bind:class="{'gap-6': !theaterMode, '': theaterMode}"
+        >
+            {{-- Video --}}
+            <section
+                class="w-full"
+                x-bind:class="{
+                    'max-w-7xl': !theaterMode,
+                    '': theaterMode || !showChat,
+                    'lg:w-3/4': showChat
+                }"
+            >
+                <article
+                    x-bind:style="theaterMode && {'height': '56.2vw', 'max-height': 'calc(100vh - 169px)'}"
+                >
+                    <div
+                        class="relative w-full h-full overflow-hidden z-0"
+                        :class="{'lg:rounded-3xl lg:shadow-xl': !theaterMode, '': theaterMode}"
+                        style="background-color: {{ $episode->banner_image?->custom_properties['background_color'] ?? '#000000' }};"
+                    >
+                        <div class="relative w-full h-full overflow-hidden z-10">
+                            @if (!empty($this->video))
+                                {!! $this->video->getEmbed(['currentTime' => $t]) !!}
+                            @else
+                                <x-picture>
+                                    <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $episode->banner_image_url ?? $season->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
+                                </x-picture>
+                            @endif
                         </div>
                     </div>
-                @endif
-            </div>
-
-            <div class="md:absolute md:bottom-0 md:left-0 md:right-0 lg:px-4">
-                <div class="flex flex-nowrap pt-5 pb-8 px-4 md:mx-auto md:mb-8 md:p-6 md:max-w-lg md:bg-white md:bg-opacity-50 md:backdrop-filter md:backdrop-blur md:rounded-lg">
-                    <picture class="relative min-w-[100px] max-w-[100px] min-h-[150px] max-h-[150px] mr-2 rounded-lg overflow-hidden">
-                        <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $season->poster_image_url ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $season->title }} Poster" title="{{ $season->title }}">
-                        <div class="absolute top-0 left-0 h-full w-full ring-1 ring-gray-100 ring-opacity-25 ring-inset rounded-lg"></div>
-                    </picture>
-
-                    <div class="flex flex-col gap-2 justify-between w-3/4">
-                        <div>
-                            <p class="font-semibold text-lg leading-tight break-all">{{ $episode->title }}</p>
-                        </div>
-
-                        <div class="flex flex-wrap gap-1 justify-between h-10">
-                            <livewire:episode.watch-button :episode="$episode" wire:key="{{ md5($episode->id) }}" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="pt-4 2xl:col-span-2 lg:max-h-[calc(100vh-64px)] overflow-x-hidden overflow-y-scroll no-scrollbar">
-            <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between text-center pb-5 px-4 overflow-x-scroll no-scrollbar">
-                <div id="ratingBadge" class="flex-grow pr-12">
-                    <a href="#ratingsAndReviews">
-                        <p class="inline-flex font-bold text-orange-500">
-                            {{ number_format($episode->stats?->rating_average, 1) }}
-                            <livewire:anime.star-rating :rating="$episode->stats?->rating_average" :star-size="'sm'" :disabled="true" />
-                        </p>
-                        <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $episode->stats?->rating_count, ['x' => number_shorten((int) $episode->stats?->rating_count, 0, true)]) }}</p>
-                    </a>
-                </div>
-
-                <div id="seasonBadge" class="flex-grow px-12 border-l-2">
-                    <a href="{{ route('anime.seasons', $anime) }}">
-                        <p class="font-bold">#{{ $season->number }}</p>
-                        <p class="text-sm text-gray-500">{{ __('Season') }}</p>
-                    </a>
-                </div>
-
-                @if($episode->previous_episode_id)
-                    <div id="episodeBadge" class="flex-grow px-12 border-l-2">
-                        <a href="{{ route('episodes.details', $episode->previous_episode_id) }}">
-                            <p class="font-bold">{{ __('Episode :x', ['x' => $episode->previous_episode->number_total]) }}</p>
-                            <p class="text-sm text-gray-500">{{ __('Previous') }}</p>
-                        </a>
-                    </div>
-                @endif
-
-                @if($episode->next_episode_id)
-                    <div id="episodeBadge" class="flex-grow px-12 border-l-2">
-                        <a href="{{ route('episodes.details', $episode->next_episode_id) }}">
-                            <p class="font-bold">{{ __('Episode :x', ['x' => $episode->next_episode->number_total]) }}</p>
-                            <p class="text-sm text-gray-500">{{ __('Up Next') }}</p>
-                        </a>
-                    </div>
-                @endif
-
-                <div id="animeBadge" class="flex-grow px-12 border-l-2">
-                    <a href="{{ route('anime.details', $anime) }}">
-                        <p class="font-bold line-clamp-1">{{ substr($anime->title, 0, 25) }}</p>
-                        <p class="text-sm text-gray-500">{{ __('Anime') }}</p>
-                    </a>
-                </div>
+                </article>
             </section>
 
-            @if (!empty($episode->synopsis))
-                <section class="pt-5 pb-8 px-4 border-t-2">
-                    <x-section-nav class="flex flex-nowrap justify-between mb-5">
-                        <x-slot:title>
-                            {{ __('Synopsis') }}
-                        </x-slot>
-                    </x-section-nav>
+            {{-- Chat Box --}}
+            <section
+                class="lg:w-1/2 border overflow-hidden aspect-video"
+                x-bind:class="{
+                    'lg:rounded-3xl lg:shadow-md': !theaterMode,
+                    '': theaterMode
+                }"
+                x-bind:style="theaterMode && {'height': '56.2vw', 'max-height': 'calc(100vh - 169px)'}"
+                x-show="theaterMode ? showChat : true"
+            >
+                <livewire:components.chat-box />
+            </section>
+        </div>
 
-                    <x-truncated-text>
-                        <x-slot:text>
-                            {!! nl2br($episode->synopsis) !!}
-                        </x-slot>
-                    </x-truncated-text>
-                </section>
-            @endif
+        <div
+            class="flex flex-col justify-between gap-6 pt-6 lg:flex-row"
+            x-bind:class="{'': !theaterMode, 'lg:pt-4 lg:pl-4 lg:pr-4': theaterMode}"
+        >
+            <div
+                class="flex flex-col gap-6"
+                x-bind:class="{'max-w-7xl': !theaterMode, '': theaterMode}"
+            >
+                {{-- Bio lockup --}}
+                <section class="flex flex-row flex-wrap justify-between gap-1 sm:flex-nowrap">
+                    <div class="flex justify-between gap-1 w-full">
+                        <div class="flex flex-nowrap">
+                            <picture class="relative min-w-[100px] max-w-[100px] min-h-[150px] max-h-[150px] mr-2 rounded-lg overflow-hidden">
+                                <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $season->poster_image_url ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $season->title }} Poster" title="{{ $season->title }}">
+                                <div class="absolute top-0 left-0 h-full w-full ring-1 ring-gray-100 ring-opacity-25 ring-inset rounded-lg"></div>
+                            </picture>
 
-            <section id="ratingsAndReviews" class="pt-5 pb-8 px-4 border-t-2">
-                <x-section-nav>
-                    <x-slot:title>
-                        {{ __('Ratings & Reviews') }}
-                    </x-slot>
-                </x-section-nav>
+                            <div class="flex flex-col gap-1">
+                                <p class="font-semibold text-lg leading-tight break-all">{{ $episode->title }}</p>
+                                <p class="">6.1K Watched</p>
+                                <p class="">612312 Views <span>{{ $episode->first_aired->toFormattedDateString() }}</span></p>
+                            </div>
+                        </div>
 
-                <div class="flex flex-row justify-between">
-                    <div class="text-center">
-                        <p class="font-bold text-6xl">{{ number_format($episode->stats?->rating_average, 1) }}</p>
-                        <p class="font-bold text-sm text-gray-500">{{ __('out of') }} 5</p>
+                        <div class="flex flex-nowrap justify-end gap-1 h-10">
+                            {{-- Watch --}}
+                            <livewire:episode.watch-button :episode="$episode" wire:key="{{ md5($episode->id) }}" />
+
+                            @if ($isTracking)
+                                {{-- Reminders --}}
+                                <x-circle-button color="yellow" wire:click="remindAnime">
+                                    @if ($isReminded)
+                                        @svg('bell_fill', 'fill-current', ['width' => '44'])
+                                    @else
+                                        @svg('bell', 'fill-current', ['width' => '44'])
+                                    @endif
+                                </x-circle-button>
+                            @endif
+                        </div>
                     </div>
 
-                    @auth
-                        <div class="text-right">
-                            <livewire:anime.star-rating :rating="$episode->stats?->rating_average" :star-size="'lg'" :disabled="true" />
-                            <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $episode->stats?->rating_count, ['x' => (int) $episode->stats?->rating_count]) }}</p>
+                    <div class="w-full sm:w-auto">
+                        <div class="flex flex-nowrap justify-end gap-1 h-10">
+                            {{-- Chat Toggle --}}
+                            <x-circle-button
+                                x-on:click="showChat = !showChat"
+                                x-bind:title="showChat ? '{{ __('Close Chat') }}' : '{{ __('Open Chat') }}'"
+                                x-show="theaterMode"
+                            >
+                                @svg('crown', 'fill-current', ['width' => '28'])
+                            </x-circle-button>
+
+                            {{-- Video Source --}}
+                            @if (!empty($episode->videos()->count()))
+                                <x-dropdown align="right" width="48">
+                                    <x-slot:trigger>
+                                        <x-circle-button
+                                            title="{{ __('Source') }}"
+                                        >
+                                            @svg('list_and_film', 'fill-current', ['width' => '28'])
+                                        </x-circle-button>
+                                    </x-slot:trigger>
+
+                                    <x-slot:content>
+                                        @foreach ($episode->videos as $video)
+                                            <button
+                                                :class="{'bg-white text-gray-400 hover:bg-gray-50 focus:bg-gray-200': preferredVideoSource !== '{{ $video->source->key }}', 'bg-orange-500 text-white': preferredVideoSource === '{{ $video->source->key }}'}"
+                                                class="block w-full pl-4 pr-4 py-2 text-xs text-center font-semibold"
+                                                wire:click="selectPreferredSource('{{ $video->source->key }}')"
+                                            >
+                                                {{ $video->source->description }}
+                                            </button>
+                                        @endforeach
+                                    </x-slot:content>
+                                </x-dropdown>
+                            @endif
+
+                            {{-- Theater Mode --}}
+                            <x-circle-button
+                                x-on:click="theaterMode = !theaterMode"
+                                x-bind:title="theaterMode ? '{{ __('Theater Mode') }}' : '{{ __('Default Mode') }}'"
+                            >
+                                <template x-if="theaterMode">
+                                    @svg('rectangle_inset_topleft_filled', 'fill-current', ['width' => '28'])
+                                </template>
+
+                                <template x-if="!theaterMode">
+                                    @svg('rectangle_fill', 'fill-current', ['width' => '28'])
+                                </template>
+                            </x-circle-button>
+
+                            {{-- More Options --}}
+                            <x-dropdown align="right" width="48">
+                                <x-slot:trigger>
+                                    <x-circle-button
+                                        title="{{ __('More Settings') }}"
+                                    >
+                                        @svg('ellipsis', 'fill-current', ['width' => '28'])
+                                    </x-circle-button>
+                                </x-slot:trigger>
+
+                                <x-slot:content>
+                                    <button
+                                        class="block w-full pl-4 pr-4 py-2 bg-white text-gray-400 text-xs text-center font-semibold hover:bg-gray-50 focus:bg-gray-200"
+                                        wire:click="$toggle('showSharePopup')"
+                                    >
+                                        {{ __('Share') }}
+                                    </button>
+
+                                    <button class="block w-full pl-4 pr-4 py-2 bg-white text-red-500 text-xs text-center font-semibold hover:bg-gray-50 focus:bg-gray-200">
+                                        {{ __('Report') }}
+                                    </button>
+                                </x-slot:content>
+                            </x-dropdown>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="badges" class="flex flex-row flex-nowrap whitespace-nowrap justify-between text-center pl-4 pr-4 overflow-x-scroll no-scrollbar">
+                    <div id="ratingBadge" class="flex-grow pr-12">
+                        <a href="#ratingsAndReviews">
+                            <p class="inline-flex font-bold text-orange-500">
+                                {{ number_format($episode->stats?->rating_average, 1) }}
+                                <livewire:anime.star-rating :rating="$episode->stats?->rating_average" :star-size="'sm'" :disabled="true" />
+                            </p>
+                            <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $episode->stats?->rating_count, ['x' => number_shorten((int) $episode->stats?->rating_count, 0, true)]) }}</p>
+                        </a>
+                    </div>
+
+                    <div id="seasonBadge" class="flex-grow px-12 border-l-2">
+                        <a href="{{ route('anime.seasons', $anime) }}">
+                            <p class="font-bold">#{{ $season->number }}</p>
+                            <p class="text-sm text-gray-500">{{ __('Season') }}</p>
+                        </a>
+                    </div>
+
+                    @if($episode->previous_episode_id)
+                        <div id="episodeBadge" class="flex-grow px-12 border-l-2">
+                            <a href="{{ route('episodes.details', $episode->previous_episode_id) }}">
+                                <p class="font-bold">{{ __('Episode :x', ['x' => $episode->previous_episode->number_total]) }}</p>
+                                <p class="text-sm text-gray-500">{{ __('Previous') }}</p>
+                            </a>
                         </div>
                     @endif
-                </div>
-            </section>
 
-            <section class="pt-5 pb-8 px-4 border-t-2">
-                <x-section-nav>
-                    <x-slot:title>
-                        {{ __('Information') }}
-                    </x-slot>
-                </x-section-nav>
+{{--                    @if($episode->next_episode_id)--}}
+{{--                        <div id="episodeBadge" class="flex-grow px-12 border-l-2">--}}
+{{--                            <a href="{{ route('episodes.details', $episode->next_episode_id) }}">--}}
+{{--                                <p class="font-bold">{{ __('Episode :x', ['x' => $episode->next_episode->number_total]) }}</p>--}}
+{{--                                <p class="text-sm text-gray-500">{{ __('Up Next') }}</p>--}}
+{{--                            </a>--}}
+{{--                        </div>--}}
+{{--                    @endif--}}
 
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-4">
-                    <x-information-list id="number" title="{{ __('Number') }}" icon="{{ asset('images/symbols/number.svg') }}">
-                        <x-slot:information>
-                            {{ $episode->number_total }}
-                        </x-slot>
+                    <div id="animeBadge" class="flex-grow px-12 border-l-2">
+                        <a href="{{ route('anime.details', $anime) }}">
+                            <p class="font-bold line-clamp-1">{{ substr($anime->title, 0, 25) }}</p>
+                            <p class="text-sm text-gray-500">{{ __('Anime') }}</p>
+                        </a>
+                    </div>
+                </section>
 
-                        <x-slot:footer>
-                            <p class="text-sm">{{ __('#:x in the current season.', ['x' => $episode->number]) }}</p>
-                        </x-slot>
-                    </x-information-list>
+                @if (!empty($episode->synopsis))
+                    <section class="pt-5 pb-8 pl-4 pr-4 border-t-2">
+                        <x-section-nav class="flex flex-nowrap justify-between mb-5">
+                            <x-slot:title>
+                                {{ __('Synopsis') }}
+                            </x-slot:title>
+                        </x-section-nav>
 
-                    <x-information-list id="duration" title="{{ __('Duration') }}" icon="{{ asset('images/symbols/hourglass.svg') }}">
-                        <x-slot:information>
-                            {{ $episode->duration_string ?? '-' }}
-                        </x-slot>
-                    </x-information-list>
-
-                    <x-information-list id="aired" title="{{ __('Aired') }}" icon="{{ asset('images/symbols/calendar.svg') }}">
-                        @if (!empty($episode->first_aired))
-                            <x-slot:information>
-                                🚀 {{ $episode->first_aired->toFormattedDateString() }}
-                            </x-slot>
-
-                            <x-slot:footer>
-                                @if ($episode->first_aired->isFuture())
-                                    {{ __('The episode will air on the announced date.') }}
-                                @else
-                                    {{ __('The episode has finished airing.') }}
-                                @endif
-                            </x-slot>
-                        @else
-                            <x-slot:information>
-                                -
-                            </x-slot>
-                            <x-slot:footer>
-                                {{ __('Airing date is unknown.') }}
-                            </x-slot>
-                        @endif
-                    </x-information-list>
-                </div>
-            </section>
-
-            <x-dialog-modal wire:model="showPopup">
-                @if($showVideo)
-                    <x-slot:title>
-                        {{ __(':x — Episode :y', ['x' => $episode->title, 'y' => $episode->number_total]) }}
-                    </x-slot>
-                    <x-slot:content>
-                        <iframe
-                            class="w-full aspect-video lazyload"
-                            type="text/html"
-                            scrolling="no"
-                            frameborder="no"
-                            allowfullscreen="allowfullscreen"
-                            mozallowfullscreen="mozallowfullscreen"
-                            msallowfullscreen="msallowfullscreen"
-                            oallowfullscreen="oallowfullscreen"
-                            webkitallowfullscreen="webkitallowfullscreen"
-                            allow="autoplay; fullscreen;"
-                            data-size="auto"
-                            data-src="{{ $episode->video_url }}"
-                        >
-                        </iframe>
-                    </x-slot>
-                    <x-slot:footer>
-                        <x-button wire:click="$toggle('showPopup')">{{ __('Close') }}</x-button>
-                    </x-slot>
-                @else
-                    <x-slot:title>
-                        {{ $popupData['title'] }}
-                    </x-slot>
-                    <x-slot:content>
-                        <p>{{ $popupData['message'] }}</p>
-                    </x-slot>
-                    <x-slot:footer>
-                        <x-button wire:click="$toggle('showPopup')">{{ __('Ok') }}</x-button>
-                    </x-slot>
+                        <x-truncated-text>
+                            <x-slot:text>
+                                {!! nl2br($episode->synopsis) !!}
+                            </x-slot:text>
+                        </x-truncated-text>
+                    </section>
                 @endif
-            </x-dialog-modal>
+
+                <section id="ratingsAndReviews" class="pt-5 pb-8 pl-4 pr-4 border-t-2">
+                    <x-section-nav>
+                        <x-slot:title>
+                            {{ __('Ratings & Reviews') }}
+                        </x-slot:title>
+                    </x-section-nav>
+
+                    <div class="flex flex-row justify-between">
+                        <div class="text-center">
+                            <p class="font-bold text-6xl">{{ number_format($episode->stats?->rating_average, 1) }}</p>
+                            <p class="font-bold text-sm text-gray-500">{{ __('out of') }} 5</p>
+                        </div>
+
+                        @auth
+                            <div class="text-right">
+                                <livewire:anime.star-rating :rating="$episode->stats?->rating_average" :star-size="'lg'" :disabled="true" />
+                                <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $episode->stats?->rating_count, ['x' => (int) $episode->stats?->rating_count]) }}</p>
+                            </div>
+                        @endif
+                    </div>
+                </section>
+
+                <section class="pt-5 pb-8 pl-4 pr-4 border-t-2">
+                    <x-section-nav>
+                        <x-slot:title>
+                            {{ __('Information') }}
+                        </x-slot:title>
+                    </x-section-nav>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+                        <x-information-list id="number" title="{{ __('Number') }}" icon="{{ asset('images/symbols/number.svg') }}">
+                            <x-slot:information>
+                                {{ $episode->number_total }}
+                            </x-slot:information>
+
+                            <x-slot:footer>
+                                <p class="text-sm">{{ __('#:x in the current season.', ['x' => $episode->number]) }}</p>
+                            </x-slot:footer>
+                        </x-information-list>
+
+                        <x-information-list id="duration" title="{{ __('Duration') }}" icon="{{ asset('images/symbols/hourglass.svg') }}">
+                            <x-slot:information>
+                                {{ $episode->duration_string ?? '-' }}
+                            </x-slot:information>
+                        </x-information-list>
+
+                        <x-information-list id="aired" title="{{ __('Aired') }}" icon="{{ asset('images/symbols/calendar.svg') }}">
+                            @if (!empty($episode->first_aired))
+                                <x-slot:information>
+                                    🚀 {{ $episode->first_aired->toFormattedDateString() }}
+                                </x-slot:information>
+
+                                <x-slot:footer>
+                                    @if ($episode->first_aired->isFuture())
+                                        {{ __('The episode will air on the announced date.') }}
+                                    @else
+                                        {{ __('The episode has finished airing.') }}
+                                    @endif
+                                </x-slot:footer>
+                            @else
+                                <x-slot:information>
+                                    -
+                                </x-slot:information>
+                                <x-slot:footer>
+                                    {{ __('Airing date is unknown.') }}
+                                </x-slot:footer>
+                            @endif
+                        </x-information-list>
+                    </div>
+                </section>
+            </div>
+
+            <div class="flex flex-col gap-4 pb-4 xl:w-1/4">
+                @if (!empty($this->episode->next_episode_id))
+                    <section class="pl-4 pr-4">
+                        <x-section-nav>
+                            <x-slot:title>
+                                {{ __('Up Next') }}
+                            </x-slot:title>
+                        </x-section-nav>
+
+                        <x-rows.episode-lockup :episodes="[$this->nextEpisode]" :is-row="false" />
+                    </section>
+                @endif
+
+                <section class="pt-5 pb-8 pl-4 pr-4 {{ !empty($this->episode->next_episode_id) ? 'border-t-2' : '' }}">
+                    @if ($this->suggestedEpisodes->count())
+                        <x-section-nav>
+                            <x-slot:title>
+                                {{ __('See Also') }}
+                            </x-slot:title>
+                        </x-section-nav>
+                    @endif
+
+                    <x-rows.episode-lockup :episodes="$this->suggestedEpisodes" :is-row="false" />
+                </section>
+            </div>
         </div>
     </div>
+
+    <x-dialog-modal maxWidth="md" model="showPopup">
+        <x-slot:title>
+            {{ $popupData['title'] }}
+        </x-slot:title>
+
+        <x-slot:content>
+            <p>{{ $popupData['message'] }}</p>
+        </x-slot:content>
+
+        <x-slot:footer>
+            <x-button wire:click="$toggle('showPopup')">{{ __('Ok') }}</x-button>
+        </x-slot:footer>
+    </x-dialog-modal>
+
+    <x-share-modal
+        model="showSharePopup"
+        :link="route('episodes.details', $this->episode)"
+        :title="$this->episode->title"
+        :image-url="$this->episode->banner_image_url ?? $anime->banner_image_url"
+    />
 </main>

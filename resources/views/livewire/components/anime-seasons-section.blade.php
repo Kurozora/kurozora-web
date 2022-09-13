@@ -1,6 +1,6 @@
 <div>
     @if ($seasonsCount)
-        <section class="pt-5 pb-8 px-4 border-t-2" wire:init="loadAnimeSeasons">
+        <section class="pt-5 pb-8 pl-4 pr-4 border-t-2" wire:init="loadAnimeSeasons">
             <x-section-nav>
                 <x-slot:title>
                     {{ __('Seasons') }}

@@ -1,0 +1,25 @@
+/* Light theme styles */
+div.light, .auto {
+    --accent-color: theme('colors.orange.500');
+    --background-color: theme('colors.white');
+    --category-name-background-color: theme('colors.white');
+    --focus-indicator-background-color: theme('colors.orange.500');
+    --category-name-text-color: theme('colors.orange.700');
+    --hover-background-color: theme('colors.orange.200');
+    --secondary-background-color: theme('colors.gray.50');
+    --tag-background-color: theme('colors.orange.50');
+    --text-color: theme('colors.black');
+}
+
+/* Dark theme styles */
+div.dark, .auto {
+    --accent-color: theme('colors.orange.500');
+    --background-color: theme('colors.black');
+    --category-name-background-color: theme('colors.black');
+    --focus-indicator-background-color: theme('colors.orange.500');
+    --category-name-text-color: theme('colors.orange.700');
+    --hover-background-color: theme('colors.orange.200');
+    --secondary-background-color: theme('colors.gray.700');
+    --tag-background-color: theme('colors.orange.50');
+    --text-color: theme('colors.white');
+}
