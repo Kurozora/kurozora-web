@@ -34,6 +34,7 @@ require 'Web/People.php';
 require 'Web/Profile.php';
 require 'Web/Search.php';
 require 'Web/Seasons.php';
+require 'Web/Songs.php';
 require 'Web/Studios.php';
 require 'Web/Theme.php';
 require 'Web/Theme Store.php';
