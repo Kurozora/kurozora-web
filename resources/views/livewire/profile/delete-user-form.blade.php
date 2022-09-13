@@ -19,7 +19,7 @@
         </div>
 
         <!-- Delete User Confirmation Modal -->
-        <x-dialog-modal wire:model="confirmingUserDeletion">
+        <x-dialog-modal model="confirmingUserDeletion">
             <x-slot:title>
                 {{ __('Delete Account') }}
             </x-slot:title>

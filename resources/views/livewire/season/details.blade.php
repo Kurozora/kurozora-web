@@ -21,7 +21,7 @@
         anime/{{ $anime->id }}/seasons
     </x-slot:appArgument>
 
-    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
+    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
         <section class="grid gap-4 sm:grid-cols-2 sm:auto-cols-[unset] lg:grid-cols-3">
             @foreach($seasons as $season)
                 <x-lockups.poster-lockup :season="$season" :isRow="false" />

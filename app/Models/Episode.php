@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasBannerImage;
+use App\Traits\Model\HasVideos;
 use Astrotomic\Translatable\Translatable;
 use Carbon\CarbonInterval;
 use Exception;
@@ -22,6 +23,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
 {
     use HasBannerImage,
         HasFactory,
+        HasVideos,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         Searchable,
@@ -169,6 +171,17 @@ class Episode extends KModel implements HasMedia, Sitemapable
     {
         return $this->morphMany(MediaRating::class, 'model')
             ->where('model_type', Episode::class);
+    }
+
+    /**
+     * Get the model's videos.
+     *
+     * @return MorphMany
+     */
+    public function videos(): MorphMany
+    {
+        return $this->morphMany(Video::class, 'videoable')
+            ->orderBy('source');
     }
 
     /**

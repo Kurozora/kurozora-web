@@ -1,49 +1,30 @@
 /**
  * A rugged, minimal framework for composing JavaScript behavior in your markup.
  */
-import Alpine from 'alpinejs';
-import collapse from '@alpinejs/collapse';
-import intersect from '@alpinejs/intersect';
+import Alpine from 'alpinejs'
+import collapse from '@alpinejs/collapse'
+import intersect from '@alpinejs/intersect'
+import persist from '@alpinejs/persist'
 /**
  * iro is a modular, design-conscious color picker widget.
  * It works with colors in hex, RGB, HSV and HSL formats.
  */
-import iro from "@jaames/iro";
+import iro from "@jaames/iro"
 /**
  * LazySizes is an SEO-friendly and self-initializing lazyloader for images
  * iframes, scripts/widgets and much more. It prioritizes resources  by
  * differentiating between crucial in view and near view elements to make
  * perceived performance even faster.
  */
-import 'lazysizes';
-/**
- * PicMo is a plain JavaScript emoji picker widget. It can be used in two ways:
- *
- * - As a standalone emoji picker inline in the page. The picker is rendered immediately on the page.
- * - As a popup emoji picker. The popup is triggered by a button or other interactive element.
- *
- * PicMo's emoji data comes from the Emojibase project. The data is cached locally in an IndexedDB database.
- */
-import {createPopup} from "@picmo/popup-picker";
+import 'lazysizes'
 
-window.Alpine = Alpine;
-Alpine.plugin(collapse);
-Alpine.plugin(intersect);
-Alpine.start();
+window.Alpine = Alpine
+Alpine.plugin(collapse)
+Alpine.plugin(intersect)
+Alpine.plugin(persist)
+Alpine.start()
 
-window.iro = iro;
-
-var emojiButton = document.querySelector('.emoji-button')
-window.picmo = createPopup({}, {
-    // The element that triggers the popup
-    triggerElement: emojiButton,
-
-    // The element to position the picker relative to - often this is also the trigger element,
-    referenceElement: emojiButton,
-
-    // specify how to position the popup
-    position: 'bottom-start'
-})
+window.iro = iro
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
@@ -53,11 +34,11 @@ window.picmo = createPopup({}, {
 
 // import Echo from "laravel-echo"
 
-// window.Pusher = require("pusher-js");
+// window.Pusher = require("pusher-js")
 
 // window.Echo = new Echo({
 //     broadcaster: "pusher",
 //     key: process.env.MIX_PUSHER_APP_KEY,
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
-// });
+// })

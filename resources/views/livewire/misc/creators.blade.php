@@ -1,5 +1,5 @@
 <main>
-    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
+    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
         <x-picture>
             <img class="h-32 w-full object-cover object-center rounded-lg shadow-lg sm:h-44" src="{{ asset('images/static/banners/made_with_love.webp') }}"  alt="Made with Love by 2 Students." />
         </x-picture>

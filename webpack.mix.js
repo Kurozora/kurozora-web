@@ -1,4 +1,4 @@
-const mix = require("laravel-mix");
+const mix = require('laravel-mix')
 
 /*
  |--------------------------------------------------------------------------
@@ -11,10 +11,21 @@ const mix = require("laravel-mix");
  |
  */
 
-mix.js("resources/js/app.js", "public/js/app.js")
-    .postCss("resources/css/app.css", "public/css/app.css")
-    .sourceMaps();
+mix.options({
+    terser: {
+        extractComments: false,
+    }
+})
+
+mix.js('resources/js/app.js', 'public/js/app.js')
+    .js('resources/js/chat.js', 'public/js/chat.js')
+    .js('resources/js/watch.js', 'public/js/watch.js')
+    .js('resources/js/debug.js', 'public/js/debug.js')
+    .postCss('resources/css/app.css', 'public/css/app.css')
+    .postCss('resources/css/watch.css', 'public/css/watch.css')
+    .postCss('resources/css/chat.css', 'public/css/chat.css')
+    .sourceMaps()
 
 if (mix.inProduction()) {
-    mix.version();
+    mix.version()
 }

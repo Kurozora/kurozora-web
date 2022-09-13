@@ -12,7 +12,7 @@
         {{ $slot }}
     </select>
 
-    <div class="absolute inset-y-0 right-0 flex items-center px-1 pointer-events-none">
+    <div class="absolute inset-y-0 right-0 flex items-center pr-1 pl-1 pointer-events-none">
         <svg class="stroke-current {{ $chevronClass }}" fill='none' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'>
             <path stroke-linecap='round' stroke-linejoin='round' stroke-width="{{ $chevronStrokeWidth }}" d='M6 8l4 4 4-4'/>
         </svg>

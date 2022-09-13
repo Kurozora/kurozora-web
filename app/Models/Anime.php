@@ -9,6 +9,7 @@ use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasBannerImage;
 use App\Traits\Model\HasPosterImage;
+use App\Traits\Model\HasVideos;
 use Astrotomic\Translatable\Translatable;
 use Auth;
 use Carbon\Carbon;
@@ -44,6 +45,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         HasFactory,
         HasPosterImage,
         HasSlug,
+        HasVideos,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         LogsActivity,
@@ -1018,6 +1020,17 @@ class Anime extends KModel implements HasMedia, Sitemapable
         return Cache::remember($cacheKey, self::CACHE_KEY_STAFF_SECONDS, function () use ($limit) {
             return $this->staff()->paginate($limit);
         });
+    }
+
+    /**
+     * Get the model's videos in order.
+     *
+     * @return MorphMany
+     */
+    public function orderedVideos(): MorphMany
+    {
+        return $this->videos()
+            ->orderBy('order', 'desc');
     }
 
     /**

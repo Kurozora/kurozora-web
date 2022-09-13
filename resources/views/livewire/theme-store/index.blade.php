@@ -19,7 +19,7 @@
         theme-store
     </x-slot:appArgument>
 
-    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6">
+    <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
         <section class="mb-4">
             <div>
                 <div class="flex gap-1">
@@ -36,7 +36,7 @@
             </div>
         </section>
 
-        <section class="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        <section class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             @foreach($this->searchResults as $platformTheme)
                 <x-lockups.platform-theme-lockup :theme="$platformTheme" />
             @endforeach

@@ -1,4 +1,9 @@
 <x-base-layout>
+    <x-slot:styles>
+        <link rel="preload" href="{{ url(mix('css/chat.css')) }}" as="style">
+        <link rel="stylesheet" href="{{ url(mix('css/chat.css')) }}">
+    </x-slot:styles>
+
     <main
         class="mx-auto"
         x-data="{
@@ -78,7 +83,7 @@
                 >
                 </div>
 
-                <section id="header" class="flex justify-between bg-grayBlue-800 px-4 py-3 z-10">
+                <section id="header" class="flex justify-between bg-grayBlue-800 pl-4 pr-4 py-3 z-10">
                     <div>
                         <button
                             class="flex justify-center text-orange-500"
@@ -114,7 +119,7 @@
                     </div>
                 </section>
 
-                <section id="body" class="flex flex-col h-full px-4 py-3 overflow-scroll z-10">
+                <section id="body" class="flex flex-col h-full pl-4 pr-4 py-3 overflow-scroll z-10">
                     <template x-for="(messageGroup, index) in messages ?? []">
                         <div
                             class="space-y-1"
@@ -132,7 +137,7 @@
                                 <template x-for="message in messageGroup.messages">
                                     <div
                                         class="max-w-[50%] rounded-3xl"
-                                        :class="isImage(message.content) ? 'flex' : (messageGroup.owner === chatOwner ? 'px-4 py-3 bg-indigo-700' : 'px-4 py-3 bg-grayBlue-800')"
+                                        :class="isImage(message.content) ? 'flex' : (messageGroup.owner === chatOwner ? 'pl-4 pr-4 py-3 bg-indigo-700' : 'pl-4 pr-4 py-3 bg-grayBlue-800')"
                                         :key="message.id"
                                     >
                                         <template x-if="!isImage(message.content)">
@@ -151,25 +156,25 @@
                             </div>
 
                             <template x-if="nextMessageGroup?.owner === chatOwner && nextMessageGroup?.owner !== chatOwner && nextMessageGroup?.owner !== undefined">
-                                <p class="px-4 font-semibold text-grayBlue-400 text-xs">
+                                <p class="pl-4 pr-4 font-semibold text-grayBlue-400 text-xs">
                                     @svg('double_check_mark', 'fill-current', ['width' => '14'])
                                 </p>
                             </template>
 
                             <template x-if="messageGroup.owner === chatOwner && nextMessageGroup?.owner === undefined">
-                                <p class="px-4 font-semibold text-grayBlue-400 text-xs">
+                                <p class="pl-4 pr-4 font-semibold text-grayBlue-400 text-xs">
                                     {{ __('Delivered') }}
                                 </p>
                             </template>
 
                             <template x-if="nextMessageGroup?.owner !== chatOwner && nextMessageGroup?.owner !== undefined">
-                                <p class="px-4 font-semibold text-grayBlue-400 text-xs" x-text="toAMPM(messageGroup.updated_at)"></p>
+                                <p class="pl-4 pr-4 font-semibold text-grayBlue-400 text-xs" x-text="toAMPM(messageGroup.updated_at)"></p>
                             </template>
                         </div>
                     </template>
                 </section>
 
-                <section id="footer" class="bg-grayBlue-800 px-4 py-3 z-10">
+                <section id="footer" class="bg-grayBlue-800 pl-4 pr-4 py-3 z-10">
                     <form class="flex space-x-2" @submit.stop.prevent="sendMessage()">
                         <textarea
                             id="messageBox"
@@ -181,13 +186,7 @@
                         ></textarea>
 
                         <div class="flex space-x-2">
-                            <button
-                                class="flex justify-center text-orange-500 emoji-button"
-                                style="width: 44px; height: 44px;"
-                                x-on:click=""
-                            >
-                                @svg('face_smiling', 'fill-current', ['width' => 24])
-                            </button>
+                            <x-emoji />
 
                             <button
                                 class="flex justify-center text-orange-500"
@@ -245,7 +244,7 @@
                 >
                 </div>
 
-                <section id="header" class="flex justify-between bg-grayBlue-800 px-4 py-3 z-10">
+                <section id="header" class="flex justify-between bg-grayBlue-800 pl-4 pr-4 py-3 z-10">
                     <div>
                         <button
                             class="flex justify-center text-orange-500"
@@ -281,7 +280,7 @@
                     </div>
                 </section>
 
-                <section id="body" class="flex flex-col h-full px-4 py-3 overflow-scroll z-10">
+                <section id="body" class="flex flex-col h-full pl-4 pr-4 py-3 overflow-scroll z-10">
                     <template x-for="(messageGroup, index) in messages ?? []">
                         <div
                             class="space-y-1"
@@ -299,7 +298,7 @@
                                 <template x-for="message in messageGroup.messages">
                                     <div
                                         class="max-w-[50%] rounded-3xl"
-                                        :class="{ 'flex': isImage(message.content), 'px-4 py-3 bg-indigo-700': !isImage(message.content) && messageGroup.owner === chatOwner, 'px-4 py-3 bg-grayBlue-800': !isImage(message.content) && messageGroup.owner !== chatOwner}"
+                                        :class="{ 'flex': isImage(message.content), 'pl-4 pr-4 py-3 bg-indigo-700': !isImage(message.content) && messageGroup.owner === chatOwner, 'pl-4 pr-4 py-3 bg-grayBlue-800': !isImage(message.content) && messageGroup.owner !== chatOwner}"
                                         :key="message.id"
                                     >
                                         <template x-if="!isImage(message.content)">
@@ -318,25 +317,25 @@
                             </div>
 
                             <template x-if="nextMessageGroup?.owner === chatOwner && nextMessageGroup?.owner !== chatOwner && nextMessageGroup?.owner !== undefined">
-                                <p class="px-4 font-semibold text-grayBlue-400 text-xs">
+                                <p class="pl-4 pr-4 font-semibold text-grayBlue-400 text-xs">
                                     @svg('double_check_mark', 'fill-current', ['width' => '14'])
                                 </p>
                             </template>
 
                             <template x-if="messageGroup.owner === chatOwner && nextMessageGroup?.owner === undefined">
-                                <p class="px-4 font-semibold text-grayBlue-400 text-xs">
+                                <p class="pl-4 pr-4 font-semibold text-grayBlue-400 text-xs">
                                     {{ __('Delivered') }}
                                 </p>
                             </template>
 
                             <template x-if="nextMessageGroup?.owner !== chatOwner && nextMessageGroup?.owner !== undefined">
-                                <p class="px-4 font-semibold text-grayBlue-400 text-xs" x-text="toAMPM(messageGroup.updated_at)"></p>
+                                <p class="pl-4 pr-4 font-semibold text-grayBlue-400 text-xs" x-text="toAMPM(messageGroup.updated_at)"></p>
                             </template>
                         </div>
                     </template>
                 </section>
 
-                <section id="footer" class="bg-grayBlue-800 px-4 py-3 z-10">
+                <section id="footer" class="bg-grayBlue-800 pl-4 pr-4 py-3 z-10">
                     <form class="flex space-x-2" @submit.stop.prevent="sendMessage()">
                         <textarea
                             id="messageBox"
@@ -348,13 +347,7 @@
                         ></textarea>
 
                         <div class="flex space-x-2">
-                            <button
-                                class="flex justify-center text-orange-500 emoji-button"
-                                style="width: 44px; height: 44px;"
-                                x-on:click=""
-                            >
-                                @svg('face_smiling', 'fill-current', ['width' => 24])
-                            </button>
+                            <x-emoji />
 
                             <button
                                 class="flex justify-center text-orange-500"
@@ -370,20 +363,24 @@
         </section>
     </main>
 
-    <script>
-        function isImage(url) {
-            return (url.match(/\.(jpeg|jpg|gif|png)$/) != null)
-        }
+    <x-slot:scripts>
+        <script src="{{ url(mix('js/chat.js')) }}"></script>
 
-        function toAMPM(dateString) {
-            let date = new Date(parseInt(dateString) * 1000)
-            let hours = date.getHours()
-            let minutes = date.getMinutes()
-            let ampm = hours >= 12 ? 'pm' : 'am'
-            hours = hours % 12
-            hours = hours ? hours : 12 // the hour '0' should be '12'
-            minutes = minutes.toString().padStart(2, '0')
-            return hours + ':' + minutes + ' ' + ampm
-        }
-    </script>
+        <script>
+            function isImage(url) {
+                return (url.match(/\.(jpeg|jpg|gif|png)$/) != null)
+            }
+
+            function toAMPM(dateString) {
+                let date = new Date(parseInt(dateString) * 1000)
+                let hours = date.getHours()
+                let minutes = date.getMinutes()
+                let ampm = hours >= 12 ? 'pm' : 'am'
+                hours = hours % 12
+                hours = hours ? hours : 12 // the hour '0' should be '12'
+                minutes = minutes.toString().padStart(2, '0')
+                return hours + ':' + minutes + ' ' + ampm
+            }
+        </script>
+    </x-slot:scripts>
 </x-base-layout>

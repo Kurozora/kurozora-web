@@ -60,7 +60,7 @@
         <div class="flex flex-col gap-1 justify-between">
             <span class="flex gap-2 justify-between">
                 <p class="leading-tight line-clamp-2">{{ $animeSong->song->title }}</p>
-                <span class="ml-1 px-2 py-1 h-full {{ $animeSong->type->color() }} text-white text-xs font-semibold whitespace-nowrap rounded-full">{{ $animeSong->type->abbreviated() . ' #' . $animeSong->position }}</span>
+                <span class="ml-1 px-2 pt-1 pb-1 h-full {{ $animeSong->type->color() }} text-white text-xs font-semibold whitespace-nowrap rounded-full">{{ $animeSong->type->abbreviated() . ' #' . $animeSong->position }}</span>
             </span>
 
             <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ $animeSong->song->artist ?? 'Unknown' }}</p>
