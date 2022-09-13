@@ -54,7 +54,7 @@
 
                 <x-truncated-text>
                     <x-slot:text>
-                        {!! nl2br($studio->about) !!}
+                        {!! nl2br(e($studio->about)) !!}
                     </x-slot:text>
                 </x-truncated-text>
             </section>

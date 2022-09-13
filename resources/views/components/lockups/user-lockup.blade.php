@@ -22,7 +22,7 @@
                 <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-full"></div>
             </picture>
 
-            <div class="px-2">
+            <div class="pl-2 pr-2">
                 <p class="leading-tight line-clamp-2">{{ $user->username }}</p>
                 <p class="text-xs leading-tight text-black/60">
                     @auth

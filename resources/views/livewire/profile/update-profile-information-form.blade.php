@@ -32,7 +32,7 @@
                 <div class="absolute top-0 right-0 bottom-0 left-0 flex justify-center bg-black/20">
                     <div class="flex items-center justify-center">
                         <button
-                            class="inline-flex items-center justify-center w-10 h-10 p-2 text-white rounded-full transition duration-150 ease-in-out hover:bg-white/20 focus:outline-none focus:bg-white/60 sm:w-12 sm:h-12"
+                            class="inline-flex items-center justify-center w-10 h-10 pt-2 pr-2 pb-2 pl-2 text-white rounded-full transition duration-150 ease-in-out hover:bg-white/20 focus:outline-none focus:bg-white/60 sm:w-12 sm:h-12"
                             x-on:click.prevent="$refs.bannerImage.click()"
                         >
                             @svg('camera', 'fill-current', ['width' => '24'])
@@ -40,7 +40,7 @@
 
                         @if (!empty(Auth::user()->banner_image_url))
                             <button
-                                class="inline-flex items-center justify-center w-10 h-10 p-2 text-red-500 rounded-full transition duration-150 ease-in-out hover:bg-white/20 focus:outline-none focus:bg-white/60 sm:w-12 sm:h-12"
+                                class="inline-flex items-center justify-center w-10 h-10 pt-2 pr-2 pb-2 pl-2 text-red-500 rounded-full transition duration-150 ease-in-out hover:bg-white/20 focus:outline-none focus:bg-white/60 sm:w-12 sm:h-12"
                                 wire:click="deleteBannerImage"
                             >
                                 @svg('trash', 'fill-current', ['width' => '24'])
@@ -69,7 +69,7 @@
                 <div class="absolute top-0 right-0 bottom-0 left-0 flex justify-center bg-black/20">
                     <div class="flex items-center justify-center">
                         <button
-                            class="inline-flex items-center justify-center w-12 h-12 p-2 text-white rounded-full hover:bg-white/20 focus:outline-none focus:bg-white/60 transition duration-150 ease-in-out"
+                            class="inline-flex items-center justify-center w-12 h-12 pt-2 pr-2 pb-2 pl-2 text-white rounded-full hover:bg-white/20 focus:outline-none focus:bg-white/60 transition duration-150 ease-in-out"
                             x-on:click.prevent="$refs.bannerImage.click()"
                         >
                             @svg('camera', 'fill-current text-white', ['width' => '24'])
@@ -77,7 +77,7 @@
 
                         @if (!empty(Auth::user()->banner_image_url))
                             <button
-                                class="inline-flex items-center justify-center w-12 h-12 p-2 text-red-500 rounded-full hover:bg-white/20 focus:outline-none focus:bg-white/60 transition duration-150 ease-in-out"
+                                class="inline-flex items-center justify-center w-12 h-12 pt-2 pr-2 pb-2 pl-2 text-red-500 rounded-full hover:bg-white/20 focus:outline-none focus:bg-white/60 transition duration-150 ease-in-out"
                                 wire:click="deleteBannerImage"
                             >
                                 @svg('trash', 'fill-current text-red-500', ['width' => '24'])
@@ -114,7 +114,7 @@
                 <div class="absolute top-0 right-0 bottom-0 left-0 flex justify-center bg-black/20">
                     <div class="flex items-center justify-center">
                         <button
-                            class="inline-flex items-center justify-center w-8 h-8 p-2 text-white rounded-full transition duration-150 ease-in-out hover:bg-white/20 focus:outline-none focus:bg-white/60 sm:w-12 sm:h-12"
+                            class="inline-flex items-center justify-center w-8 h-8 pt-2 pr-2 pb-2 pl-2 text-white rounded-full transition duration-150 ease-in-out hover:bg-white/20 focus:outline-none focus:bg-white/60 sm:w-12 sm:h-12"
                             x-on:click.prevent="$refs.profileImage.click()"
                         >
                             @svg('camera', 'fill-current', ['width' => '24'])
@@ -122,7 +122,7 @@
 
                         @if (!str_starts_with(Auth::user()->profile_image_url, 'https://ui-avatars.com/'))
                             <button
-                                class="inline-flex items-center justify-center w-8 h-8 p-2 text-red-500 rounded-full transition duration-150 ease-in-out hover:bg-white/20 focus:outline-none focus:bg-white/60 sm:w-12 sm:h-12"
+                                class="inline-flex items-center justify-center w-8 h-8 pt-2 pr-2 pb-2 pl-2 text-red-500 rounded-full transition duration-150 ease-in-out hover:bg-white/20 focus:outline-none focus:bg-white/60 sm:w-12 sm:h-12"
                                 wire:click="deleteProfileImage"
                             >
                                 @svg('trash', 'fill-current', ['width' => '24'])
@@ -143,7 +143,7 @@
                 <div class="absolute top-0 right-0 bottom-0 left-0 flex justify-center bg-black/20">
                     <div class="flex items-center justify-center">
                         <button
-                            class="inline-flex items-center justify-center w-8 h-8 p-2 text-white rounded-full transition duration-150 ease-in-out hover:bg-white/20 focus:outline-none focus:bg-white/60 sm:w-12 sm:h-12"
+                            class="inline-flex items-center justify-center w-8 h-8 pt-2 pr-2 pb-2 pl-2 text-white rounded-full transition duration-150 ease-in-out hover:bg-white/20 focus:outline-none focus:bg-white/60 sm:w-12 sm:h-12"
                             x-on:click.prevent="$refs.profileImage.click()"
                         >
                             @svg('camera', 'fill-current', ['width' => '24'])
@@ -151,7 +151,7 @@
 
                         @if (!str_starts_with(Auth::user()->profile_image_url, 'https://ui-avatars.com/'))
                             <button
-                                class="inline-flex items-center justify-center w-8 h-8 p-2 text-red-500 rounded-full transition duration-150 ease-in-out hover:bg-white/20 focus:outline-none focus:bg-white/60 sm:w-12 sm:h-12"
+                                class="inline-flex items-center justify-center w-8 h-8 pt-2 pr-2 pb-2 pl-2 text-red-500 rounded-full transition duration-150 ease-in-out hover:bg-white/20 focus:outline-none focus:bg-white/60 sm:w-12 sm:h-12"
                                 wire:click="deleteProfileImage"
                             >
                                 @svg('trash', 'fill-current', ['width' => '24'])

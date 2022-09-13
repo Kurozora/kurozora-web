@@ -26,27 +26,27 @@
             <table class="table-fixed w-full text-xs text-center border-2 sm:text-base">
                 <thead id="tableHeader" class="bg-gray-100 font-bold border-2">
                     <tr>
-                        <th class="p-2 sm:p-4 border-b-2">
+                        <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b-2">
                             <p>
                                 {{ __('Year') }}
                             </p>
                         </th>
-                        <th class="p-2 sm:p-4 border-b-2">
+                        <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b-2">
                             <div class="flex justify-center h-4 sm:h-full">
                                 {{ \App\Enums\SeasonOfYear::Winter()->symbol() }}
                             </div>
                         </th>
-                        <th class="p-2 sm:p-4 border-b-2">
+                        <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b-2">
                             <div class="flex justify-center h-4 sm:h-full">
                                 {{ \App\Enums\SeasonOfYear::Spring()->symbol() }}
                             </div>
                         </th>
-                        <th class="p-2 sm:p-4 border-b-2">
+                        <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b-2">
                             <div class="flex justify-center h-4 sm:h-full">
                                 {{ \App\Enums\SeasonOfYear::Summer()->symbol() }}
                             </div>
                         </th>
-                        <th class="p-2 sm:p-4 border-b-2">
+                        <th class="pt-2 pr-2 pb-2 pl-2 sm:p-4 border-b-2">
                             <div class="flex justify-center h-4 sm:h-full">
                                 {{ \App\Enums\SeasonOfYear::Fall()->symbol() }}
                             </div>
@@ -59,7 +59,7 @@
                             <td>{{ $year }}</td>
 
                             @foreach(\App\Enums\SeasonOfYear::asSelectArray() as $seasonOfYear)
-                                <td class="p-2 sm:p-4 {{ $year === now()->year && $seasonOfYear === season_of_year()->key ? 'font-semibold' : '' }}">
+                                <td class="pt-2 pr-2 pb-2 pl-2 sm:p-4 {{ $year === now()->year && $seasonOfYear === season_of_year()->key ? 'font-semibold' : '' }}">
                                     <x-simple-link href="{{ route('anime.seasons.year.season', [$year, $seasonOfYear]) }}">{{ $seasonOfYear }}</x-simple-link>
                                 </td>
                             @endforeach
