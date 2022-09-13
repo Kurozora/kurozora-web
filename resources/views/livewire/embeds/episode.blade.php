@@ -1,0 +1,103 @@
+<main>
+    <x-slot:title>
+        {!! __('Watch :x episode :y', ['x' => $anime->title, 'y' => $episode->number_total]) !!} | {!! $episode->title !!}
+    </x-slot:title>
+
+    <x-slot:description>
+        {{ __('Watch English subbed anime episodes for free.') }}
+        {{ $episode->synopsis }}
+    </x-slot:description>
+
+    <x-slot:meta>
+        <meta name="robots" content="noindex">
+
+        <meta property="og:title" content="{{ __(':x episode :y', ['x' => $anime->title, 'y' => $episode->number_total]) }} | {{ $episode->title }} — {{ config('app.name') }}" />
+        <meta property="og:description" content="{{ $episode->synopsis ?? __('app.description') }}" />
+        <meta property="og:image" content="{{ $episode->banner_image_url ?? $season->poster_image_url ?? asset('images/static/placeholders/episode_banner.webp') }}" />
+        <meta property="og:type" content="video.episode" />
+        <meta property="og:video:type" content="text/html">
+        <meta property="video:series" content="{{ $anime->title }}" />
+        <meta property="og:video:url" content="{{ route('embed.episodes', $episode) }}">
+        <meta property="og:video:height" content="1080">
+        <meta property="og:video:width" content="1920">
+        <meta property="video:duration" content="{{ $episode->duration }}" />
+        <meta property="video:release_date" content="{{ $episode->first_aired }}" />
+        <meta property="twitter:title" content="{{ $episode->title }} — {{ config('app.name') }}" />
+        <meta property="twitter:description" content="{{ $episode->synopsis }}" />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:image" content="{{ $episode->banner_image_url ?? $season->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
+        <meta property="twitter:image:alt" content="{{ $episode->synopsis }}" />
+        <link rel="canonical" href="{{ route('episodes.details', $episode) }}">
+        <x-misc.schema>
+            "@type":"TVEpisode",
+            "url":"/episode/{{ $episode->id }}/",
+            "name": "{{ $episode->title }}",
+            "alternateName": "{{ $anime->original_title }}",
+            "image": "{{ $episode->banner_image_url ?? $season->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
+            "description": "{{ $episode->synopsis }}",
+            "aggregateRating": {
+            "@type":"AggregateRating",
+            "itemReviewed": {
+            "@type": "TVEpisode",
+            "image": [
+            "{{ $episode->banner_image_url ?? $season->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}"
+            ],
+            "name": "{{ $episode->title }}"
+            },
+            "ratingCount": {{ $episode->stats?->rating_count ?? 1 }},
+            "bestRating": 5,
+            "worstRating": 0,
+            "ratingValue": {{ $episode->stats?->rating_average ?? 2.5 }}
+            },
+            "contentRating": "{{ $anime->tv_rating->name }}",
+            "genre": {!! $anime->genres()->pluck('name') !!},
+            "datePublished": "{{ $episode->first_aired?->format('Y-m-d') }}",
+            "keywords": "anime,episode{{ (',' . $anime->keywords) ?? '' }}",
+            "creator":[
+            {
+            "@type":"Organization",
+            "url":"/studio/{{ $anime->studios?->firstWhere('is_studio', '=', true)?->id ?? $anime->studios->first()?->id }}/"
+            }
+            ]
+            @if(!empty($episode->videos()->first()?->getUrl()) || !empty($anime->videos()->first()?->getUrl()))
+                ,"trailer": {
+                "@type":"VideoObject",
+                "name":"{{ $episode->title }}",
+                "description":"Official Trailer",
+                "embedUrl": "{{ $episode->videos()->first()->getUrl() ?? $anime->videos()->first()->getUrl() }}",
+                "thumbnailUrl": "{{ $episode->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
+                "uploadDate": "{{ $episode->first_aired?->format('Y-m-d') }}"
+                }
+            @endif
+        </x-misc.schema>
+    </x-slot:meta>
+
+    <x-slot:styles>
+        <link rel="preload" href="{{ url(mix('css/watch.css')) }}" as="style">
+        <link rel="stylesheet" href="{{ url(mix('css/watch.css')) }}">
+        <link rel="preload" href="{{ url(mix('css/chat.css')) }}" as="style">
+        <link rel="stylesheet" href="{{ url(mix('css/chat.css')) }}">
+    </x-slot:styles>
+
+    <x-slot:appArgument>
+        episodes/{{ $episode->id }}
+    </x-slot:appArgument>
+
+    <x-slot:scripts>
+        <script src="{{ url(mix('js/watch.js')) }}"></script>
+    </x-slot:scripts>
+
+    <div style="height: 100vh; max-height: calc(100vh)">
+        <div class="relative w-full h-full overflow-hidden z-0" style="background-color: {{ $episode->banner_image?->custom_properties['background_color'] ?? '#000000' }};">
+            <div class="relative w-full h-full overflow-hidden z-10">
+                @if (!empty($this->video))
+                    {!! $this->video->getEmbed(['currentTime' => $t]) !!}
+                @else
+                    <x-picture class="h-full">
+                        <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $episode->banner_image_url ?? $season->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
+                    </x-picture>
+                @endif
+            </div>
+        </div>
+    </div>
+</main>
