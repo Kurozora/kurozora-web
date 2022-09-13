@@ -6,11 +6,14 @@
  *
  * PicMo's emoji data comes from the Emojibase project. The data is cached locally in an IndexedDB database.
  */
-import {createPopup} from "@picmo/popup-picker"
+import {createPopup} from '@picmo/popup-picker'
+import {EmojiSelection} from 'picmo'
 
 (function() {
+    // MARK: - Properties
     let rootElement = document.querySelector('body')
 
+    // MARK: - Initializers
     window.picmo = createPopup({
         // picker options go here
         rootElement: rootElement,
@@ -23,4 +26,32 @@ import {createPopup} from "@picmo/popup-picker"
         // Whether to show the close button
         showCloseButton: false
     })
+
+    // MARK: - Events
+    window.picmo.addEventListener('emoji:select', handleEmojiSelect)
+
+    // MARK: - Functions
+    /**
+     * Inserts a text to the given textarea while preserving the selected start and end positions of the cursor.
+     *
+     * @param {HTMLTextAreaElement} element - textarea element
+     * @param {string} text - text to insert
+     */
+    function insertTextInTextarea(element, text) {
+        let [start, end] = [element.selectionStart, element.selectionEnd]
+        element.setRangeText(text, start, end, 'end')
+        element.focus()
+        element.dispatchEvent(new Event('input'))
+    }
+
+    /**
+     * Handle event when selecting an emoji.
+     *
+     * @param {EmojiSelection} event - event
+     */
+    function handleEmojiSelect(event) {
+        let id = localStorage.getItem('_x_selectedCommentBox')
+        let input = document.querySelector('#comment-box-' + id)
+        insertTextInTextarea(input, event.emoji)
+    }
 })()

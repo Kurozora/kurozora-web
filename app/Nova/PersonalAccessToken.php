@@ -16,7 +16,7 @@ class PersonalAccessToken extends Resource
      *
      * @var string
      */
-    public static $model = \App\Models\PersonalAccessToken::class;
+    public static string $model = \App\Models\PersonalAccessToken::class;
 
     /**
      * Determine if the resource should be available for the given request.

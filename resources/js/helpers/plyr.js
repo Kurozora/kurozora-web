@@ -5,6 +5,10 @@
 import Plyr from 'plyr'
 import Screenshot from './plyr/screenshot'
 import Storage from './plyr/storage'
+import Amplify from './plyr/amplify'
+import Audio from './plyr/audio'
+import is from './utilities/is'
+import element from './utilities/element'
 /**
  * HLS.js is a JavaScript library that implements an HTTP Live Streaming client.
  * It relies on HTML5 video and MediaSource Extensions for playback.
@@ -47,45 +51,6 @@ export default class PlyrManager {
      * @param {string} url - url
      */
     #url
-
-    /**
-     * List of available YouTube urls.
-     *
-     * @type {string[]}
-     */
-    #youtubeUrls = [
-        'youtube.com',
-        'youtu.be',
-        'youtube-nocookie.com',
-    ]
-
-    /**
-     * Whether the video is Mp4.
-     *
-     * @param {boolean} isMp4 - is Mp4
-     */
-    #isMp4 = false
-
-    /**
-     * Whether the video is Hls.
-     *
-     * @param {boolean} isHls - is Hls
-     */
-    #isHls = false
-
-    /**
-     * Whether the video is YouTube.
-     *
-     * @param {boolean} isYouTube - is YouTube
-     */
-    #isYouTube = false
-
-    /**
-     * Whether the video is iframe.
-     *
-     * @param {boolean} isIframe - is iframe
-     */
-    #isIframe = false
 
     /**
      * Whether the video was checked for errors.
@@ -161,6 +126,8 @@ export default class PlyrManager {
             restart: 'Restart (R)',
             screenshot: 'Screenshot (S)',
             unmute: 'Unmute (M)',
+            audio: 'Audio',
+            amplify: 'Amplify',
         },
         invertTime: true,
         mediaMetadata: {
@@ -226,12 +193,6 @@ export default class PlyrManager {
         this.#url = videoElement.getAttribute('player-src').repeat(1)
         videoElement.removeAttribute('player-src')
 
-        // Determine video type
-        this.#isMp4 = this.#url.includes('.mp4')
-        this.#isHls = this.#url.includes('.m3u8')
-        this.#isYouTube = this.#youtubeUrls.some(youtubeUrl => this.#url.includes(youtubeUrl))
-        this.#isIframe = this.#videoElement.querySelector('iframe') != null
-
         // Merge options.
         this.playerOptions = {
             ...this.playerOptions,
@@ -239,10 +200,10 @@ export default class PlyrManager {
         }
 
         // For more options see: https://github.com/sampotts/plyr/#options
-        if (this.#isYouTube || this.#isIframe) {
+        if (is.youTube(this.#url) || is.iframe(this.#videoElement)) {
             this.#videoElement.querySelector('iframe').setAttribute('src', this.#url)
 
-            if (this.#isYouTube) {
+            if (is.youTube(this.#url)) {
                 this.playerOptions.controls = this.playerOptions.controls.filter(control => {
                     return control !== 'screenshot'
                 })
@@ -250,7 +211,7 @@ export default class PlyrManager {
 
             this.#player = new Plyr(videoElement, this.playerOptions)
             this.#setupPlayer()
-        } else if (this.#isHls) {
+        } else if (is.hls(this.#url)) {
             if (this.#videoElement.canPlayType('application/vnd.apple.mpegurl')) {
                 this.#videoElement.src = this.#url
 
@@ -276,7 +237,7 @@ export default class PlyrManager {
                 // Save hls.
                 this.#hls.attachMedia(this.#videoElement)
             }
-        } else if (this.#isMp4) {
+        } else if (is.mp4(this.#url)) {
             this.#videoElement.setAttribute('src', this.#url)
 
             // Default options with no quality update in case Hls is not supported.
@@ -297,10 +258,13 @@ export default class PlyrManager {
         this.#player.on('ready', (event) => {
             this.#storage = new Storage(this.#player)
 
-            // Configure audio settings
-            if (this.#isHls) {
-                this.#configureAudio()
+            // Add audio settings
+            if (is.hls(this.#url)) {
+                this.#player.audio = new Audio(this.#player, this.#hls, this.#storage)
             }
+
+            // Add amplification settings
+            this.#player.amplify = new Amplify(this.#player, this.#storage)
 
             // Add screenshot capability
             this.#player.screenshot = new Screenshot(this.#player)
@@ -330,29 +294,14 @@ export default class PlyrManager {
                     // and any that accept key input http://webaim.org/techniques/keyboard/
                     const focused = document.activeElement
 
-                    if (!!(focused && Element && focused instanceof Element)) {
-                        function matches(element, selector) {
-                            const {
-                                prototype
-                            } = Element
+                    if (is.element(focused)) {
+                        const { editable } = this.#player.config.selectors
 
-                            function match() {
-                                return Array.from(document.querySelectorAll(selector)).includes(this)
-                            }
-
-                            const method = prototype.matches || prototype.webkitMatchesSelector || prototype.mozMatchesSelector || prototype.msMatchesSelector || match
-                            return method.call(element, selector)
-                        }
-
-                        const {
-                            editable
-                        } = this.#player.config.selectors
-
-                        if (matches(focused, editable)) {
+                        if (element.matches(focused, editable)) {
                             return
                         }
 
-                        if (event.key === 'Space' && matches(focused, 'button, [role^="menuitem"]')) {
+                        if (event.key === 'Space' && element.matches(focused, 'button, [role^="menuitem"]')) {
                             return
                         }
                     }
@@ -377,7 +326,7 @@ export default class PlyrManager {
 
         // Handle changing captions
         this.#player.on('languagechange', () => {
-            if (this.#isHls) {
+            if (is.hls(this.#url)) {
                 setTimeout(() => this.#hls.subtitleTrack = this.#player.currentTrack, 50)
             }
         })
@@ -386,89 +335,6 @@ export default class PlyrManager {
         this.#player.on('timeupdate', (currentTime) => {
             localStorage.setItem('_x_progress' + window.location.pathname.replaceAll('/', '_'), this.#player.currentTime)
         })
-    }
-
-    /**
-     * Configure the audio list in the player.
-     */
-    #configureAudio() {
-        let audioTracks = this.#hls.audioTrackController.audioTracks.filter((value, index, self) =>
-            index === self.findIndex((t) => (
-                t.name === value.name
-            ))
-        )
-        let settingID = document.querySelector('.plyr__menu__container').getAttribute('id').replace('plyr-settings-', '')
-        let audioMenu = 'plyr-settings-' + settingID + '-audio'
-        let audioButtons = ''
-        let audioDefault = ''
-        let audioSelected = this.#storage.get('audio_language')
-        let audioChecked = 'false'
-        let homeSetting = document.querySelector('#plyr-settings-' + settingID + '-home')
-
-        if (audioTracks.length > 1) {
-            // Create button for each audio track.
-            audioTracks.forEach(function (value, index) {
-                if (value.lang === audioSelected || (value.default && !this.#hls.audioTrackController.audioTracks.find((track) => track.lang === audioSelected))) {
-                    audioDefault = value.name
-                    audioChecked = 'true'
-                    this.#hls.audioTrack = value.id
-                } else {
-                    audioChecked = 'false'
-                }
-
-                audioButtons += '<button data-plyr="audio" type="button" role="menuitemradio" class="plyr__control" aria-checked="' + audioChecked + '" value="' + value.id + '" lang="' + value.lang + '"><span>' + value.name + '<span class="plyr__menu__value"><span class="plyr__badge">' + (typeof value.lang !== 'undefined' ? value.lang.toUpperCase() : '') + '</span></span></span></button>'
-            }.bind(this))
-
-            // Add audio menu button
-            const menuButton = document.createElement('button')
-            menuButton.setAttribute('data-plyr', 'audio-settings')
-            menuButton.setAttribute('type', 'button')
-            menuButton.setAttribute('class', 'plyr__control plyr__control--forward')
-            menuButton.setAttribute('aria-haspopup', 'true')
-            menuButton.innerHTML = '<span>Audio<span class="plyr__menu__value">' + audioDefault + '</span></span>'
-            homeSetting.querySelector('div[role=menu]').prepend(menuButton)
-
-            // Add audio menu options
-            homeSetting.insertAdjacentHTML('afterend', '<div id="' + audioMenu + '" hidden><button type="button" class="plyr__control plyr__control--back"><span aria-hidden="true">Audio</span><span class="plyr__sr-only">Go back to previous menu</span></button><div role="menu">' + audioButtons + '</div></div>')
-
-            // Make audio menu button clickable
-            document.querySelector('button[data-plyr="audio-settings"]').addEventListener('click', function () {
-                document.querySelector('#' + audioMenu).hidden = false
-                homeSetting.hidden = true
-            })
-
-            // Make audio menu back button clickable
-            document.querySelector('#' + audioMenu + ' .plyr__control--back').addEventListener('click', function () {
-                document.querySelector('#' + audioMenu).hidden = true
-                homeSetting.hidden = false
-            })
-
-            // Make audio menu options clickable
-            document.querySelectorAll('button[data-plyr="audio"]')
-                .forEach(function (audioButton) {
-                    audioButton.addEventListener('click', function () {
-                        // Set Hls audio track
-                        this.#hls.audioTrack = audioButton.value
-                        this.#storage.set({
-                            'audio_language': audioButton.getAttribute('lang')
-                        })
-
-                        // Update audio option selection
-                        document.querySelectorAll('button[data-plyr="audio"]').forEach(function (button) {
-                            button.setAttribute('aria-checked', 'false')
-                        })
-                        audioButton.setAttribute('aria-checked', 'true')
-
-                        // Update main menu audio label
-                        let audioSettings = document.querySelector('button[data-plyr="audio-settings"]').querySelector('.plyr__menu__value')
-                        audioSettings.textContent = audioButton.textContent.replace(audioButton.querySelector('.plyr__badge').textContent, '').trim()
-
-                        // Send back to main menu
-                        document.querySelector('#' + audioMenu).hidden = true
-                        homeSetting.hidden = false
-                    }.bind(this))
-            }.bind(this))
-        }
     }
 
     /**

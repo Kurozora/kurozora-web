@@ -19,14 +19,14 @@ class Video extends KModel
     /**
      * The "type" of the primary key ID.
      *
-     * @var string
+     * @var string $keyType
      */
     protected $keyType = 'string';
 
     /**
      * Indicates if the IDs are auto-incrementing.
      *
-     * @var bool
+     * @var bool $incrementing
      */
     public $incrementing = false;
 

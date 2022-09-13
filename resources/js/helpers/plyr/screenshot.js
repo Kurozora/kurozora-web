@@ -1,3 +1,5 @@
+import is from '../utilities/is'
+
 export default class Screenshot {
     /**
      * The Plyr instance.
@@ -17,7 +19,7 @@ export default class Screenshot {
         this.#player = player
         const { config } = this.#player
 
-        if (Array.isArray(config.controls) && config.controls.includes('screenshot')) {
+        if (is.array(config.controls) && config.controls.includes('screenshot')) {
             const screenshotLabel = config.i18n.screenshot || 'Screenshot (S)'
 
             const menu = document.querySelector('button[data-plyr="captions"]')
@@ -70,7 +72,7 @@ export default class Screenshot {
                     // and any that accept key input http://webaim.org/techniques/keyboard/
                     const focused = document.activeElement;
 
-                    if (!!(focused && Element && focused instanceof Element)) {
+                    if (is.element(focused)) {
                         function matches(element, selector) {
                             const {
                                 prototype
