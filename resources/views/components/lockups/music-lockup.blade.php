@@ -39,7 +39,7 @@
                 <div class="flex flex-col justify-center items-center h-full">
                     @if(!empty($animeSong->song->am_id))
                         <button
-                            class="inline-flex items-center p-5 bg-white/60 backdrop-blur border border-transparent rounded-full font-semibold text-xs text-gray-500 uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
+                            class="inline-flex items-center pt-5 pr-5 pb-5 pl-5 bg-white/60 backdrop-blur border border-transparent rounded-full font-semibold text-xs text-gray-500 uppercase tracking-widest shadow-md hover:opacity-75 active:opacity-50 focus:outline-none disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-default disabled:opacity-100 transition ease-in-out duration-150"
                             x-on:click="await playSong(song)"
                         >
                             <template x-if="musicIsPlaying && currentMusicID === '{{ $animeSong->song->am_id }}'">
@@ -60,7 +60,7 @@
         <div class="flex flex-col gap-1 justify-between">
             <span class="flex gap-2 justify-between">
                 <p class="leading-tight line-clamp-2">{{ $animeSong->song->title }}</p>
-                <span class="ml-1 px-2 pt-1 pb-1 h-full {{ $animeSong->type->color() }} text-white text-xs font-semibold whitespace-nowrap rounded-full">{{ $animeSong->type->abbreviated() . ' #' . $animeSong->position }}</span>
+                <span class="ml-1 pl-2 pr-2 pt-1 pb-1 h-full {{ $animeSong->type->color() }} text-white text-xs font-semibold whitespace-nowrap rounded-full">{{ $animeSong->type->abbreviated() . ' #' . $animeSong->position }}</span>
             </span>
 
             <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ $animeSong->song->artist ?? 'Unknown' }}</p>

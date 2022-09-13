@@ -51,7 +51,7 @@
 
                 <x-truncated-text>
                     <x-slot:text>
-                        {!! nl2br($person->about) !!}
+                        {!! nl2br(e($person->about)) !!}
                     </x-slot:text>
                 </x-truncated-text>
             </section>

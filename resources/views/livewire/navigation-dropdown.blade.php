@@ -20,10 +20,10 @@
                     x-transition:leave-end="opacity-0 scale-75"
                 >
                     <button
-                        class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
+                        class="inline-flex items-center justify-center pt-2 pr-2 pb-2 pl-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
                         x-on:click="isNavOpen = ! isNavOpen"
                     >
-                        <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                        <svg stroke="currentColor" fill="none" viewBox="0 0 24 24" width="24">
                             <path
                                 class="inline-flex transform origin-center"
                                 x-show="! isNavOpen"
@@ -158,7 +158,7 @@
                                         x-transition:leave-start="opacity-100 scale-100"
                                         x-transition:leave-end="opacity-0 scale-75"
                             >
-                                App <span class="ml-1 px-2 pt-1 pb-1 bg-orange-500 text-white text-xs font-bold rounded-full">{{ __('Beta') }}</span>
+                                App <span class="ml-1 pl-2 pr-2 pt-1 pb-1 bg-orange-500 text-white text-xs font-bold rounded-full">{{ __('Beta') }}</span>
                             </x-nav-link>
                         </div>
                     </span>
@@ -215,7 +215,7 @@
                                 <div class="border-t border-gray-100"></div>
 
                                 {{-- More Pages --}}
-                                <div class="block pl-4 pr-4 py-2 text-xs text-gray-400">
+                                <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-gray-400">
                                     {{ __('More') }}
                                 </div>
 
@@ -227,7 +227,7 @@
 
                                 @auth
                                     {{-- Account Management --}}
-                                    <div class="block pl-4 pr-4 py-2 text-xs text-gray-400">
+                                    <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-gray-400">
                                         {{ __('Manage Account') }}
                                     </div>
 
@@ -298,7 +298,7 @@
                 </x-responsive-nav-link>
 
                 <x-responsive-nav-link href="{{ config('app.ios.url') }}" target="_blank">
-                    App <span class="ml-1 px-2 pt-1 pb-1 bg-orange-500 text-white text-xs font-bold rounded-full">{{ __('Beta') }}</span>
+                    App <span class="ml-1 pl-2 pr-2 pt-1 pb-1 bg-orange-500 text-white text-xs font-bold rounded-full">{{ __('Beta') }}</span>
                 </x-responsive-nav-link>
             </div>
 
