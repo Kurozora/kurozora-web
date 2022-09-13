@@ -15,9 +15,9 @@ use App\Traits\Livewire\WithSearch;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Component;
 
 class Tab extends Component

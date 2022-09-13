@@ -23,13 +23,13 @@
 
     <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
         <section class="grid gap-4 sm:grid-cols-2 sm:auto-cols-[unset] lg:grid-cols-3">
-            @foreach($cast as $animeCast)
+            @foreach($this->cast as $animeCast)
                 <x-lockups.cast-lockup :cast="$animeCast" :isRow="false" />
             @endforeach
         </section>
 
         <section class="mt-4">
-            {{ $cast->links() }}
+            {{ $this->cast->links() }}
         </section>
     </div>
 </main>

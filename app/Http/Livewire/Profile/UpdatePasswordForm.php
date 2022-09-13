@@ -2,11 +2,11 @@
 
 namespace App\Http\Livewire\Profile;
 
+use App\Contracts\UpdatesUserPasswords;
 use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use App\Contracts\UpdatesUserPasswords;
 use Livewire\Component;
 
 class UpdatePasswordForm extends Component
@@ -28,7 +28,7 @@ class UpdatePasswordForm extends Component
      * @param UpdatesUserPasswords $updater
      * @return void
      */
-    public function updatePassword(UpdatesUserPasswords $updater)
+    public function updatePassword(UpdatesUserPasswords $updater): void
     {
         $this->resetErrorBag();
 

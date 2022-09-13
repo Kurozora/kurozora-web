@@ -16,7 +16,7 @@
     </x-slot:appArgument>
 
     <div class="max-w-7xl mx-auto pl-4 pr-4 pb-6 sm:px-6">
-        <div class="relative mt-4 p-5 bg-orange-500 text-white font-semibold rounded-lg">
+        <div class="relative mt-4 pt-5 pr-5 pb-5 pl-5 bg-orange-500 text-white font-semibold rounded-lg">
             <a class="after:absolute after:inset-0" href="{{ config('services.patreon.url') }}" target="_blank">
                 {{ __('Is Kurozora helpful? Please consider supporting me in keeping it online.') }}
             </a>

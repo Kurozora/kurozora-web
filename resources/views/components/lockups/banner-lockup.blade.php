@@ -15,7 +15,7 @@
                 height="{{ ($anime->banner_image ?? $anime->profile_image)?->custom_properties['height'] ?? 300 }}"
             >
 
-            <div class="absolute bottom-0 left-0 right-0 p-3 pt-[15%] bg-gradient-to-t from-black to-transparent">
+            <div class="absolute bottom-0 left-0 right-0 pr-3 pb-3 pl-3 pt-[15%] bg-gradient-to-t from-black to-transparent">
                 <div class="max-w-[50%]">
                     <p class="text-white leading-tight line-clamp-2">{{ $anime->title }}</p>
                     <p class="text-xs text-white/60 leading-tight line-clamp-2">{{ empty($anime->tagline) ? $anime->genres?->pluck('name')->join(',  ', ' and ') : $anime->tagline }}</p>
@@ -28,7 +28,7 @@
 
     <a class="absolute bottom-0 w-full h-full" href="{{ route('anime.details', $anime) }}"></a>
 
-    <div class="absolute bottom-0 right-0 p-3 pb-5">
+    <div class="absolute bottom-0 right-0 pt-3 pr-3 pl-3 pb-5">
         <div class="flex h-10 mt-auto">
             <livewire:anime.library-button :anime="$anime" wire:key="{{ md5($anime->id) }}" />
         </div>

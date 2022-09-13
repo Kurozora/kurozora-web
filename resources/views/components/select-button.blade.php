@@ -1,4 +1,4 @@
-@props(['disabled' => false, 'chevronClass' => 'h-6 w-6 text-white', 'chevronStrokeWidth' => '2', 'rounded' => 'md'])
+@props(['disabled' => false, 'chevronClass' => 'text-white', 'chevronStrokeWidth' => '2', 'rounded' => 'md'])
 
 @php
     $rounded = match ($rounded) {
@@ -13,7 +13,7 @@
     </select>
 
     <div class="absolute inset-y-0 right-0 flex items-center pr-1 pl-1 pointer-events-none">
-        <svg class="stroke-current {{ $chevronClass }}" fill='none' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'>
+        <svg class="stroke-current {{ $chevronClass }}" fill='none' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg' width="24">
             <path stroke-linecap='round' stroke-linejoin='round' stroke-width="{{ $chevronStrokeWidth }}" d='M6 8l4 4 4-4'/>
         </svg>
     </div>

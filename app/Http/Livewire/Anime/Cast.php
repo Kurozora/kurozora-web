@@ -3,9 +3,11 @@
 namespace App\Http\Livewire\Anime;
 
 use App\Models\Anime;
+use App\Models\AnimeCast;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -27,9 +29,19 @@ class Cast extends Component
      *
      * @return void
      */
-    public function mount(Anime $anime)
+    public function mount(Anime $anime): void
     {
         $this->anime = $anime;
+    }
+
+    /**
+     * Get the list of cast.
+     *
+     * @return AnimeCast[]|LengthAwarePaginator
+     */
+    public function getCastProperty(): array|LengthAwarePaginator
+    {
+        return $this->anime->cast()->paginate(25);
     }
 
     /**
@@ -39,8 +51,6 @@ class Cast extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.anime.cast', [
-            'cast' => $this->anime->cast()->paginate(25)
-        ]);
+        return view('livewire.anime.cast');
     }
 }

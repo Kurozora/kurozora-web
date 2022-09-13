@@ -23,7 +23,7 @@
                     @foreach($this->order as $order)
                         @if($order['selected'])
                             {{-- Reset Order --}}
-                            <button class="block w-full pl-4 pr-4 py-2 bg-gray-100 text-xs text-center text-gray-400 font-semibold hover:bg-gray-50 focus:bg-gray-200" wire:click="resetOrder">
+                            <button class="block w-full pl-4 pr-4 pt-2 pb-2 bg-gray-100 text-xs text-center text-gray-400 font-semibold hover:bg-gray-50 focus:bg-gray-200" wire:click="resetOrder">
                                 {{ __('Reset Order') }}
                             </button>
                             @break
@@ -31,11 +31,11 @@
                     @endforeach
 
                     @foreach($this->order as $key => $order)
-                        <div class="block pl-4 pr-4 py-2 bg-gray-100 text-xs text-gray-400 font-semibold">
+                        <div class="block pl-4 pr-4 pt-2 pb-2 bg-gray-100 text-xs text-gray-400 font-semibold">
                             {{ $order['title'] }}
                         </div>
 
-                        <div class="block pl-4 pr-4 py-2">
+                        <div class="block pl-4 pr-4 pt-2 pb-2">
                             <x-select id="{{ $key }}" wire:model="order.{{ $key }}.selected">
                                 @foreach($order['options'] as $optionKey => $option)
                                     <option value="{{ $option }}">{{ __($optionKey) }}</option>
@@ -60,7 +60,7 @@
                     @foreach($this->filter as $filter)
                         @if($filter['selected'] != null)
                             {{-- Reset Order --}}
-                            <button class="block w-full pl-4 pr-4 py-2 bg-gray-100 text-xs text-center text-gray-400 font-semibold hover:bg-gray-50 focus:bg-gray-200" wire:click="resetFilter">
+                            <button class="block w-full pl-4 pr-4 pt-2 pb-2 bg-gray-100 text-xs text-center text-gray-400 font-semibold hover:bg-gray-50 focus:bg-gray-200" wire:click="resetFilter">
                                 {{ __('Reset Filters') }}
                             </button>
                             @break
@@ -69,11 +69,11 @@
 
                     @foreach($this->filter as $key => $filter)
                         {{-- Per Page --}}
-                        <div class="block pl-4 pr-4 py-2 bg-gray-100 text-xs text-gray-400 font-semibold">
+                        <div class="block pl-4 pr-4 pt-2 pb-2 bg-gray-100 text-xs text-gray-400 font-semibold">
                             {{ $filter['title'] }}
                         </div>
 
-                        <div class="block pl-4 pr-4 py-2">
+                        <div class="block pl-4 pr-4 pt-2 pb-2">
                             @switch($filter['type'])
                                 @case('string')
                                     <x-input id="{{ $key }}" type="text" wire:model="filter.{{ $key }}.selected" />
@@ -137,11 +137,11 @@
                     @endforeach
 
                     {{-- Per Page --}}
-                    <div class="block pl-4 pr-4 py-2 bg-gray-100 text-xs text-gray-400 font-semibold">
+                    <div class="block pl-4 pr-4 pt-2 pb-2 bg-gray-100 text-xs text-gray-400 font-semibold">
                         {{ __('Per Page') }}
                     </div>
 
-                    <div class="block pl-4 pr-4 py-2">
+                    <div class="block pl-4 pr-4 pt-2 pb-2">
                         <x-select id="perPage" wire:model="perPage">
                             <option value="25">25</option>
                             <option value="50">50</option>
