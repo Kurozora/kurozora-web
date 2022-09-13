@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasBannerImage;
+use App\Traits\Model\HasComments;
 use App\Traits\Model\HasVideos;
 use Astrotomic\Translatable\Translatable;
 use Carbon\CarbonInterval;
@@ -22,6 +23,7 @@ use Spatie\Sitemap\Tags\Url;
 class Episode extends KModel implements HasMedia, Sitemapable
 {
     use HasBannerImage,
+        HasComments,
         HasFactory,
         HasVideos,
         InteractsWithMedia,

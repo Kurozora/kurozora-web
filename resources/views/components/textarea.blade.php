@@ -27,15 +27,13 @@
                     $el.style.height = this.defaultHeight
                 }
                 $el.style.height = $el.scrollHeight + 'px'
-            },
-            reset() {
-                $el.style.height = this.defaultHeight
             }
         }"
         x-bind:style="{'min-height': minHeight}"
-        x-init="resize()"
+        x-init="$nextTick(() => resize())"
         x-on:input="resize()"
-        x-on:focusin="resize()"
-        x-on:focusout="reset()"
     @endif
+
+    x-on:focusin="$el.classList.add('active-comment-box')"
+    x-on:focusout="$el.classList.remove('active-comment-box')"
 >{{ $slot }}</textarea>
