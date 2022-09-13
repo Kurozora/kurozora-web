@@ -13,9 +13,13 @@
         <meta property="og:description" content="{{ $episode->synopsis ?? __('app.description') }}" />
         <meta property="og:image" content="{{ $episode->banner_image_url ?? $season->poster_image_url ?? asset('images/static/placeholders/episode_banner.webp') }}" />
         <meta property="og:type" content="video.episode" />
+        <meta property="og:video:type" content="text/html">
+        <meta property="video:series" content="{{ $anime->title }}" />
+        <meta property="og:video:url" content="{{ route('embed.episodes', $episode) }}">
+        <meta property="og:video:height" content="1080">
+        <meta property="og:video:width" content="1920">
         <meta property="video:duration" content="{{ $episode->duration }}" />
         <meta property="video:release_date" content="{{ $episode->first_aired }}" />
-        <meta property="video:series" content="{{ $anime->title }}" />
         <meta property="twitter:title" content="{{ $episode->title }} — {{ config('app.name') }}" />
         <meta property="twitter:description" content="{{ $episode->synopsis }}" />
         <meta property="twitter:card" content="summary_large_image" />
@@ -53,17 +57,20 @@
                     "url":"/studio/{{ $anime->studios?->firstWhere('is_studio', '=', true)?->id ?? $anime->studios->first()?->id }}/"
                 }
             ]
-            @if(!empty($episode->video_url) || !empty($anime->video_url))
+            @if(!empty($episode->videos()->first()?->getUrl()) || !empty($anime->videos()->first()?->getUrl()))
                 ,"trailer": {
                     "@type":"VideoObject",
                     "name":"{{ $episode->title }}",
                     "description":"Official Trailer",
-                    "embedUrl": "{{ $episode->video_url ?? $anime->video_url }}",
+                    "embedUrl": "{{ $episode->videos()->first()->getUrl() ?? $anime->videos()->first()->getUrl() }}",
                     "thumbnailUrl": "{{ $episode->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
                     "uploadDate": "{{ $episode->first_aired?->format('Y-m-d') }}"
                 }
             @endif
         </x-misc.schema>
+
+        <link rel="alternate" type="application/json+oembed" href="{{ route('oembed', ['format' => 'json', 'url' => route('episodes.details', $episode)]) }}">
+        <link rel="alternate" type="application/json+oembed" href="{{ route('oembed', ['format' => 'xml', 'url' => route('episodes.details', $episode)]) }}">
     </x-slot:meta>
 
     <x-slot:styles>
@@ -148,7 +155,7 @@
                 x-bind:class="{'max-w-7xl': !theaterMode, '': theaterMode}"
             >
                 {{-- Bio lockup --}}
-                <section class="flex flex-row flex-wrap justify-between gap-1 sm:flex-nowrap">
+                <section class="flex flex-row flex-wrap justify-between gap-1 pl-4 pr-4 sm:flex-nowrap lg:pl-0 lg:pr-0">
                     <div class="flex justify-between gap-1 w-full">
                         <div class="flex flex-nowrap">
                             <picture class="relative min-w-[100px] max-w-[100px] min-h-[150px] max-h-[150px] mr-2 rounded-lg overflow-hidden">
@@ -212,7 +219,7 @@
                                         @foreach ($episode->videos as $video)
                                             <button
                                                 :class="{'bg-white text-gray-400 hover:bg-gray-50 focus:bg-gray-200': preferredVideoSource !== '{{ $video->source->key }}', 'bg-orange-500 text-white': preferredVideoSource === '{{ $video->source->key }}'}"
-                                                class="block w-full pl-4 pr-4 py-2 text-xs text-center font-semibold"
+                                                class="block w-full pl-4 pr-4 pt-2 pb-2 text-xs text-center font-semibold"
                                                 wire:click="selectPreferredSource('{{ $video->source->key }}')"
                                             >
                                                 {{ $video->source->description }}
@@ -248,15 +255,15 @@
 
                                 <x-slot:content>
                                     <button
-                                        class="block w-full pl-4 pr-4 py-2 bg-white text-gray-400 text-xs text-center font-semibold hover:bg-gray-50 focus:bg-gray-200"
+                                        class="block w-full pl-4 pr-4 pt-2 pb-2 bg-white text-gray-400 text-xs text-center font-semibold hover:bg-gray-50 focus:bg-gray-200"
                                         wire:click="$toggle('showSharePopup')"
                                     >
                                         {{ __('Share') }}
                                     </button>
 
-                                    <button class="block w-full pl-4 pr-4 py-2 bg-white text-red-500 text-xs text-center font-semibold hover:bg-gray-50 focus:bg-gray-200">
-                                        {{ __('Report') }}
-                                    </button>
+{{--                                    <button class="block w-full pl-4 pr-4 pt-2 pb-2 bg-white text-red-500 text-xs text-center font-semibold hover:bg-gray-50 focus:bg-gray-200">--}}
+{{--                                        {{ __('Report') }}--}}
+{{--                                    </button>--}}
                                 </x-slot:content>
                             </x-dropdown>
                         </div>
