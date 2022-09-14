@@ -66,35 +66,21 @@
     </div>
 
     {{-- Body --}}
-    <div class="flex flex-col flex-col-reverse gap-2 pt-2 pr-2 pb-2 pl-2 h-full overflow-scroll z-10">
-        @foreach($this->comments as $comment)
-            <div class="flex flex-row gap-2">
+    <div class="flex flex-col flex-col-reverse gap-2 pt-2 pb-2 h-full overflow-scroll z-10">
+        @if ($this->comments->count())
+            @foreach($this->comments as $comment)
                 @if ($selectedCommentDisplayOption === 0)
-                    <x-profile-image-view class="w-16 h-16" :user="$comment->user" />
-
-                    <div class="flex flex-col items-baseline">
-                        <div class="flex gap-2">
-                            <x-simple-link class="text-sm font-semibold text-gray-500 whitespace-nowrap" href="{{ route('profile.details', $comment->user) }}">{{ $comment->user->username }}</x-simple-link>
-
-                            @if ($showTime)
-                                <p class="text-sm text-gray-500 whitespace-nowrap">{{ $comment->created_at->format('g:i A') }}</p>
-                            @endif
-                        </div>
-
-                        <p style="word-break: break-word;">{!! nl2br(e($comment->content)) !!}</p>
-                    </div>
+                    <x-lockups.cozy-comment-lockup :comment="$comment" :showTime="$showTime" />
                 @else
-                    <div class="flex flex-row items-baseline gap-2">
-                        @if ($showTime)
-                            <p class="text-sm text-gray-500 whitespace-nowrap">{{ $comment->created_at->format('g:i A') }}</p>
-                        @endif
-
-                        <x-simple-link class="text-sm font-semibold text-gray-500 whitespace-nowrap" href="{{ route('profile.details', $comment->user) }}">{{ $comment->user->username }}</x-simple-link>
-                        <p style="word-break: break-word;">{!! nl2br(e($comment->content)) !!}</p>
-                    </div>
+                    <x-lockups.compact-comment-lockup :comment="$comment" :showTime="$showTime" />
                 @endif
+            @endforeach
+        @else
+            <div class="flex flex-col justify-center items-center h-full">
+                @svg('bubble_left_and_bubble_right', 'fill-current', ['width' => '64'])
+                <p>{{ __('Be the first to comment!') }}</p>
             </div>
-        @endforeach
+        @endif
     </div>
 
     {{-- Footer --}}

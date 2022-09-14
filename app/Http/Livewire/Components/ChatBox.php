@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Components;
 
+use App\Models\Comment;
 use App\Traits\Model\HasComments;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -101,6 +102,24 @@ class ChatBox extends Component
 
         // Reset
         $this->comment = '';
+    }
+
+    /**
+     * Remove the given comment.
+     *
+     * @param string $commentID
+     *
+     * @return void
+     */
+    public function removeComment(string $commentID): void
+    {
+        $comment = Comment::firstWhere('id', '=', $commentID);
+
+        if ($comment->user->id !== auth()->id()) {
+            return;
+        }
+
+        $comment->delete();
     }
 
     /**
