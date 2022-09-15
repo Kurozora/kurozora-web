@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Anime;
 
+use App\Events\AnimeViewed;
 use App\Models\Anime;
 use App\Models\Studio;
 use Auth;
@@ -89,6 +90,9 @@ class Details extends Component
      */
     public function mount(Anime $anime): void
     {
+        // Call the AnimeViewed event
+        AnimeViewed::dispatch($anime);
+
         $this->anime = $anime;
         $this->studio = $anime->studios()?->firstWhere('is_studio', '=', true) ?? $anime->studios->first();
         $this->setupActions();

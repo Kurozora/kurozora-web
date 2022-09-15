@@ -22,7 +22,7 @@ class EventListener
      * @param  Event  $event
      * @return void
      */
-    public function handle(Event $event)
+    public function handle(Event $event): void
     {
         //
     }

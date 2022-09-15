@@ -10,6 +10,7 @@ use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasBannerImage;
 use App\Traits\Model\HasPosterImage;
 use App\Traits\Model\HasVideos;
+use App\Traits\Model\HasViews;
 use Astrotomic\Translatable\Translatable;
 use Auth;
 use Carbon\Carbon;
@@ -46,6 +47,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         HasPosterImage,
         HasSlug,
         HasVideos,
+        HasViews,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         LogsActivity,
