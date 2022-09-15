@@ -3,9 +3,18 @@
 namespace App\Providers;
 
 use App\Events\AnimeViewed;
+use App\Events\CharacterViewed;
+use App\Events\EpisodeViewed;
 use App\Events\Event;
+use App\Events\PersonViewed;
+use App\Events\StudioViewed;
+use App\Listeners\AnimeViewedListener;
+use App\Listeners\CharacterViewedListener;
+use App\Listeners\EpisodeViewedListener;
 use App\Listeners\EventListener;
 use App\Listeners\MediaHasBeenAddedListener;
+use App\Listeners\PersonViewedListener;
+use App\Listeners\StudioViewedListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -31,7 +40,29 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         // Anime events
-        AnimeViewed::class => [],
+        AnimeViewed::class => [
+            AnimeViewedListener::class
+        ],
+
+        // Character events
+        CharacterViewed::class => [
+            CharacterViewedListener::class
+        ],
+
+        // Episode events
+        EpisodeViewed::class => [
+            EpisodeViewedListener::class
+        ],
+
+        // Person events
+        PersonViewed::class => [
+            PersonViewedListener::class
+        ],
+
+        // Studio events
+        StudioViewed::class => [
+            StudioViewedListener::class
+        ],
 
         // Media events
         MediaHasBeenAdded::class => [
@@ -49,7 +80,7 @@ class EventServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         //
     }

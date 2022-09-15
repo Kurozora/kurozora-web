@@ -165,8 +165,8 @@
 
                             <div class="flex flex-col gap-1">
                                 <p class="font-semibold text-lg leading-tight break-all">{{ $episode->title }}</p>
-                                <p class="">6.1K Watched</p>
-                                <p class="">612312 Views <span>{{ $episode->first_aired->toFormattedDateString() }}</span></p>
+{{--                                <p class="">6.1K Watched</p>--}}
+                                <p class="">{{ $episode->view_count ? __(':x views', ['x' => number_format($episode->view_count)]) . ' ' : '' }}<span>{{ $episode->first_aired->toFormattedDateString() }}</span></p>
                             </div>
                         </div>
 

@@ -9,6 +9,7 @@ use App\Scopes\BornTodayScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasProfileImage;
 use App\Traits\Model\HasTranslatableSlug;
+use App\Traits\Model\HasViews;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,6 +29,7 @@ class Character extends KModel implements HasMedia, Sitemapable
     use HasFactory,
         HasProfileImage,
         HasTranslatableSlug,
+        HasViews,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         Searchable,

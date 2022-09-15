@@ -43,7 +43,7 @@ class CalculateAnimeLibraryStats extends Command
     public function handle(): int
     {
         // Get anime_id, status and count per status
-        $userLibraries = UserLibrary::select(['anime_id', 'status', DB::raw('COUNT(*)')])
+        $userLibraries = UserLibrary::select(['anime_id', 'status', DB::raw('COUNT(*) as total')])
             ->groupBy(['anime_id', 'status'])
             ->get();
 
@@ -69,11 +69,11 @@ class CalculateAnimeLibraryStats extends Command
             $droppedCount = $animeInLibrary->where('status', '=', UserLibraryStatus::Dropped);
 
             // Get all counts
-            $planningCount = $planningCount->values()[0]['COUNT(*)'] ?? 0;
-            $watchingCount = $watchingCount->values()[0]['COUNT(*)'] ?? 0;
-            $completedCount = $completedCount->values()[0]['COUNT(*)'] ?? 0;
-            $onHoldCount = $onHoldCount->values()[0]['COUNT(*)'] ?? 0;
-            $droppedCount = $droppedCount->values()[0]['COUNT(*)'] ?? 0;
+            $planningCount = $planningCount->values()[0]['total'] ?? 0;
+            $watchingCount = $watchingCount->values()[0]['total'] ?? 0;
+            $completedCount = $completedCount->values()[0]['total'] ?? 0;
+            $onHoldCount = $onHoldCount->values()[0]['total'] ?? 0;
+            $droppedCount = $droppedCount->values()[0]['total'] ?? 0;
             $modelCount = $planningCount + $watchingCount + $completedCount + $onHoldCount + $droppedCount;
 
             // Update media stat

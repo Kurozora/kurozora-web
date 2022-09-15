@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Character;
 
+use App\Events\CharacterViewed;
 use App\Models\Character;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -24,8 +25,11 @@ class Details extends Component
      *
      * @return void
      */
-    public function mount(Character $character)
+    public function mount(Character $character): void
     {
+        // Call the CharacterViewed event
+        CharacterViewed::dispatch($character);
+
         $character->generateSlug();
         $character->save();
         $this->character = $character;

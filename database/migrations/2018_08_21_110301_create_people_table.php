@@ -28,6 +28,7 @@ return new class extends Migration
             $table->date('deceased_date')->nullable();
             $table->unsignedTinyInteger('astrological_sign')->nullable();
             $table->json('website_urls')->nullable();
+            $table->integer('view_count')->default(0);
             $table->timestamps();
         });
 

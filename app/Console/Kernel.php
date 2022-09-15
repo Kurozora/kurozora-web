@@ -59,6 +59,55 @@ class Kernel extends ConsoleKernel
             ->onOneServer();
 
         /**********************************************/
+        // Calculate anime views every week
+        $schedule->command('calculate:anime_views')
+            ->daily()
+            ->name('Calculate anime views')
+            ->onOneServer();
+
+        /**********************************************/
+        // Calculate character views every week
+        $schedule->command('calculate:character_views')
+            ->daily()
+            ->name('Calculate character views')
+            ->onOneServer();
+
+        /**********************************************/
+        // Calculate episode ratings every week
+        $schedule->command('calculate:episode_ratings')
+            ->daily()
+            ->name('Calculate episode rating')
+            ->onOneServer();
+
+        /**********************************************/
+        // Calculate episode ratings every week
+        $schedule->command('calculate:episode_stats')
+            ->daily()
+            ->name('Calculate episode stats')
+            ->onOneServer();
+
+        /**********************************************/
+        // Calculate episode views every week
+        $schedule->command('calculate:episode_views')
+            ->daily()
+            ->name('Calculate episode views')
+            ->onOneServer();
+
+        /**********************************************/
+        // Calculate person views every week
+        $schedule->command('calculate:person_views')
+            ->daily()
+            ->name('Calculate person views')
+            ->onOneServer();
+
+        /**********************************************/
+        // Calculate studio views every week
+        $schedule->command('calculate:studio_views')
+            ->daily()
+            ->name('Calculate studio views')
+            ->onOneServer();
+
+        /**********************************************/
         // Prune all models that match their respective criteria every day
         $schedule->command('model:prune')
             ->daily()
@@ -72,20 +121,6 @@ class Kernel extends ConsoleKernel
         })
             ->daily()
             ->name('Clear login attempts')
-            ->onOneServer();
-
-        /**********************************************/
-        // Calculate episode ratings every week
-        $schedule->command('calculate:episode_ratings')
-            ->weekly()
-            ->name('Calculate episode rating')
-            ->onOneServer();
-
-        /**********************************************/
-        // Calculate episode ratings every week
-        $schedule->command('calculate:episode_stats')
-            ->weekly()
-            ->name('Calculate anime stats')
             ->onOneServer();
 
         /**********************************************/

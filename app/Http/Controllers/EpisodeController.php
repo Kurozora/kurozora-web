@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\EpisodeViewed;
 use App\Helpers\JSONResult;
 use App\Http\Requests\MarkEpisodeAsWatchedRequest;
 use App\Http\Requests\RateEpisodeRequest;
@@ -23,6 +24,9 @@ class EpisodeController extends Controller
      */
     public function details(Episode $episode): JsonResponse
     {
+        // Call the EpisodeViewed event
+        EpisodeViewed::dispatch($episode);
+
         return JSONResult::success([
             'data' => EpisodeResource::collection([$episode])
         ]);
