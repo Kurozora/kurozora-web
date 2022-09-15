@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\StudioViewed;
 use App\Helpers\JSONResult;
 use App\Http\Requests\GetStudioAnimeRequest;
 use App\Http\Resources\AnimeResourceIdentity;
@@ -19,6 +20,9 @@ class StudioController extends Controller
      */
     public function details(Studio $studio): JsonResponse
     {
+        // Call the StudioViewed event
+        StudioViewed::dispatch($studio);
+
         // Show studio details
         return JSONResult::success([
             'data' => StudioResource::collection([$studio])

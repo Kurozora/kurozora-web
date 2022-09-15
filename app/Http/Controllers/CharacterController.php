@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CharacterViewed;
 use App\Helpers\JSONResult;
 use App\Http\Requests\GetCharacterAnimeRequest;
 use App\Http\Requests\GetCharacterPeopleRequest;
@@ -21,6 +22,9 @@ class CharacterController extends Controller
      */
     public function details(Character $character): JsonResponse
     {
+        // Call the CharacterViewed event
+        CharacterViewed::dispatch($character);
+
         // Return character details
         return JSONResult::success([
             'data' => CharacterResource::collection([$character])

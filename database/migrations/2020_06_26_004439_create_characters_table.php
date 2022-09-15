@@ -33,6 +33,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('birth_day')->nullable();
             $table->unsignedTinyInteger('birth_month')->nullable();
             $table->unsignedTinyInteger('astrological_sign')->nullable();
+            $table->integer('view_count')->default(0);
             $table->timestamps();
         });
 

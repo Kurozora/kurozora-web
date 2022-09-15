@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Person;
 
+use App\Events\PersonViewed;
 use App\Models\Person;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -24,8 +25,11 @@ class Details extends Component
      *
      * @return void
      */
-    public function mount(Person $person)
+    public function mount(Person $person): void
     {
+        // Call the PersonViewed event
+        PersonViewed::dispatch($person);
+
         $this->person = $person;
     }
 

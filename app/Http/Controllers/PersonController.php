@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PersonViewed;
 use App\Helpers\JSONResult;
 use App\Http\Requests\GetPersonAnimeRequest;
 use App\Http\Requests\GetPersonCharactersRequest;
@@ -21,6 +22,9 @@ class PersonController extends Controller
      */
     public function details(Person $person): JsonResponse
     {
+        // Call the PersonViewed event
+        PersonViewed::dispatch($person);
+
         // Return person details
         return JSONResult::success([
             'data' => PersonResource::collection([$person])

@@ -7,6 +7,7 @@ use App\Enums\AstrologicalSign;
 use App\Scopes\BornTodayScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasProfileImage;
+use App\Traits\Model\HasViews;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,6 +28,7 @@ class Person extends KModel implements HasMedia, Sitemapable
     use HasFactory,
         HasProfileImage,
         HasSlug,
+        HasViews,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         Searchable;

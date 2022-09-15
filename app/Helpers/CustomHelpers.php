@@ -94,7 +94,7 @@ if (!function_exists('size_shorten')) {
 }
 
 if (!function_exists('create_studio_banner_from')) {
-    function create_studio_banner_from($images, $filename_result)
+    function create_studio_banner_from($images, $filename_result): void
     {
         // Create a new banner image canvas
         $bannerImageCanvas = imagecreatetruecolor(1920, 1080);

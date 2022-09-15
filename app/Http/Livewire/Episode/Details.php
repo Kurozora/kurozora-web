@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Episode;
 
 use App\Enums\VideoSource;
+use App\Events\EpisodeViewed;
 use App\Models\Anime;
 use App\Models\Episode;
 use App\Models\Season;
@@ -115,6 +116,9 @@ class Details extends Component
      */
     public function mount(Episode $episode): void
     {
+        // Call the EpisodeViewed event
+        EpisodeViewed::dispatch($episode);
+
         $this->episode = $episode;
         $this->season = $this->episode->season;
         $this->anime = $this->season->anime;
