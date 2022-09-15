@@ -36,8 +36,6 @@ return new class extends Migration
             $table->unsignedBigInteger('media_type_id')->nullable();
             $table->unsignedBigInteger('source_id')->nullable();
             $table->unsignedBigInteger('status_id')->nullable();
-            $table->integer('episode_count')->default(0);
-            $table->integer('season_count')->default(0);
             $table->string('video_url')->nullable();
             $table->date('first_aired')->nullable();
             $table->date('last_aired')->nullable();
@@ -47,6 +45,9 @@ return new class extends Migration
             $table->unsignedTinyInteger('air_season')->nullable();
             $table->boolean('is_nsfw')->default(false);
             $table->string('copyright')->nullable();
+            $table->integer('episode_count')->default(0);
+            $table->integer('season_count')->default(0);
+            $table->integer('view_count')->default(0);
             $table->timestamps();
         });
 

@@ -8,6 +8,7 @@ use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasBannerImage;
 use App\Traits\Model\HasLogoImage;
 use App\Traits\Model\HasProfileImage;
+use App\Traits\Model\HasViews;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -28,6 +29,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
         HasLogoImage,
         HasProfileImage,
         HasSlug,
+        HasViews,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         Searchable;

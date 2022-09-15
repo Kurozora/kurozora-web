@@ -42,7 +42,7 @@ class CalculateEpisodeStats extends Command
     public function handle(): int
     {
         // Get episode_id, status and count per status
-        $userWatchedEpisodes = UserWatchedEpisode::select(['episode_id', DB::raw('COUNT(*)')])
+        $userWatchedEpisodes = UserWatchedEpisode::select(['episode_id', DB::raw('COUNT(*) as total')])
             ->groupBy('episode_id')
             ->get();
 
@@ -61,7 +61,7 @@ class CalculateEpisodeStats extends Command
             $episodeInLibrary = $userWatchedEpisodes->where('episode_id', '=', $episodeID);
 
             // Get all counts
-            $modelCount = $episodeInLibrary->values()[0]['COUNT(*)'] ?? 0;
+            $modelCount = $episodeInLibrary->values()[0]['total'] ?? 0;
 
             // Update media stat
             $mediaStat->update([

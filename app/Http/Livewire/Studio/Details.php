@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Studio;
 
+use App\Events\StudioViewed;
 use App\Models\Studio;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -24,8 +25,11 @@ class Details extends Component
      *
      * @return void
      */
-    public function mount(Studio $studio)
+    public function mount(Studio $studio): void
     {
+        // Call the StudioViewed event
+        StudioViewed::dispatch($studio);
+
         $this->studio = $studio;
     }
 

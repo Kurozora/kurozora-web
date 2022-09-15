@@ -46,7 +46,7 @@ class CalculateEpisodeRatings extends Command
             ->avg('rating');
 
         // Get model_id, rating and count per rating
-        $mediaRatings = MediaRating::select(['model_id', 'rating', DB::raw('COUNT(*)')])
+        $mediaRatings = MediaRating::select(['model_id', 'rating', DB::raw('COUNT(*) as total')])
             ->where('model_type', episode::class)
             ->groupBy(['model_id', 'rating'])
             ->get();
@@ -66,7 +66,7 @@ class CalculateEpisodeRatings extends Command
             $mediaRatingForEpisode = $mediaRatings->where('model_id', '=', $episodeID);
 
             // Total amount of ratings this Episode has
-            $totalRatingCount = $mediaRatingForEpisode->sum('COUNT(*)');
+            $totalRatingCount = $mediaRatingForEpisode->sum('total');
 
             if ($totalRatingCount >= Episode::MINIMUM_RATINGS_REQUIRED) {
                 // Average score for this episode
@@ -89,16 +89,16 @@ class CalculateEpisodeRatings extends Command
 
                 // Update media stat
                 $mediaStat->update([
-                    'rating_1' => $rating1->values()[0]['COUNT(*)'] ?? 0,
-                    'rating_2' => $rating2->values()[0]['COUNT(*)'] ?? 0,
-                    'rating_3' => $rating3->values()[0]['COUNT(*)'] ?? 0,
-                    'rating_4' => $rating4->values()[0]['COUNT(*)'] ?? 0,
-                    'rating_5' => $rating5->values()[0]['COUNT(*)'] ?? 0,
-                    'rating_6' => $rating6->values()[0]['COUNT(*)'] ?? 0,
-                    'rating_7' => $rating7->values()[0]['COUNT(*)'] ?? 0,
-                    'rating_8' => $rating8->values()[0]['COUNT(*)'] ?? 0,
-                    'rating_9' => $rating9->values()[0]['COUNT(*)'] ?? 0,
-                    'rating_10' => $rating10->values()[0]['COUNT(*)'] ?? 0,
+                    'rating_1' => $rating1->values()[0]['total'] ?? 0,
+                    'rating_2' => $rating2->values()[0]['total'] ?? 0,
+                    'rating_3' => $rating3->values()[0]['total'] ?? 0,
+                    'rating_4' => $rating4->values()[0]['total'] ?? 0,
+                    'rating_5' => $rating5->values()[0]['total'] ?? 0,
+                    'rating_6' => $rating6->values()[0]['total'] ?? 0,
+                    'rating_7' => $rating7->values()[0]['total'] ?? 0,
+                    'rating_8' => $rating8->values()[0]['total'] ?? 0,
+                    'rating_9' => $rating9->values()[0]['total'] ?? 0,
+                    'rating_10' => $rating10->values()[0]['total'] ?? 0,
                     'rating_average' => $weightedRating,
                     'rating_count' => $totalRatingCount,
                 ]);

@@ -6,6 +6,7 @@ use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasBannerImage;
 use App\Traits\Model\HasComments;
 use App\Traits\Model\HasVideos;
+use App\Traits\Model\HasViews;
 use Astrotomic\Translatable\Translatable;
 use Carbon\CarbonInterval;
 use Exception;
@@ -26,6 +27,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
         HasComments,
         HasFactory,
         HasVideos,
+        HasViews,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         Searchable,

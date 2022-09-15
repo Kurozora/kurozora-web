@@ -25,7 +25,7 @@ class MediaHasBeenAddedListener
      * @param  MediaHasBeenAdded  $event
      * @return void
      */
-    public function handle(MediaHasBeenAdded $event)
+    public function handle(MediaHasBeenAdded $event): void
     {
         Bus::chain([
             new ConvertImageToWebPJob($event->media),
