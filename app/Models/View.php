@@ -30,6 +30,15 @@ class View extends KModel
     public $incrementing = false;
 
     /**
+     * Casts rules.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'viewed_at' => 'datetime'
+    ];
+
+    /**
      * Get the view entity that the view belongs to.
      *
      * @return MorphTo
