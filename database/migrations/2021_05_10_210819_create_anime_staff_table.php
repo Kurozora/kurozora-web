@@ -23,6 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('person_id');
             $table->unsignedBigInteger('staff_role_id')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(AnimeStaff::TABLE_NAME, function (Blueprint $table) {

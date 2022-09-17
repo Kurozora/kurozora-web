@@ -24,6 +24,7 @@ return new class extends Migration
             $table->text('synopsis')->nullable();
             $table->string('tagline')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(AnimeTranslation::TABLE_NAME, function (Blueprint $table) {

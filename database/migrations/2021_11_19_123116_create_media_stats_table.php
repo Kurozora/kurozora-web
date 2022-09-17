@@ -37,6 +37,7 @@ return new class extends Migration
             $table->double('rating_average')->default(0.0);
             $table->unsignedBigInteger('rating_count')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(MediaStat::TABLE_NAME, function (Blueprint $table) {

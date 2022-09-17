@@ -7,6 +7,7 @@ use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasSymbolImage;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Request;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -20,7 +21,8 @@ class Theme extends KModel implements HasMedia, Sitemapable
     use HasSymbolImage,
         InteractsWithMedia,
         InteractsWithMediaExtension,
-        HasSlug;
+        HasSlug,
+        SoftDeletes;
 
     // Table name
     const TABLE_NAME = 'themes';

@@ -25,6 +25,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->boolean('is_nsfw')->default(false);
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(Genre::TABLE_NAME, function (Blueprint $table) {

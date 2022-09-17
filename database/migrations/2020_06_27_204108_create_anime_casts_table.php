@@ -27,6 +27,7 @@ return new class extends Migration
             $table->unsignedBigInteger('cast_role_id');
             $table->unsignedBigInteger('language_id')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(AnimeCast::TABLE_NAME, function(Blueprint $table) {

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('related_id');
             $table->string('related_type');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(MediaRelation::TABLE_NAME, function (Blueprint $table) {

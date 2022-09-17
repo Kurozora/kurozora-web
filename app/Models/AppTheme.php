@@ -7,6 +7,7 @@ use App\Enums\VisualEffectViewStyle;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasScreenshotImage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 use Laravel\Scout\Searchable;
@@ -19,7 +20,8 @@ class AppTheme extends KModel implements HasMedia
         HasScreenshotImage,
         InteractsWithMedia,
         InteractsWithMediaExtension,
-        Searchable;
+        Searchable,
+        SoftDeletes;
 
     // Table name
     const TABLE_NAME = 'app_themes';

@@ -52,6 +52,7 @@ return new class extends Migration
             $table->string('table_view_cell_action_default_color');
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
