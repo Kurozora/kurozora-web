@@ -12,6 +12,7 @@ use App\Traits\Model\HasViews;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Scout\Searchable;
 use Request;
@@ -32,7 +33,8 @@ class Studio extends KModel implements HasMedia, Sitemapable
         HasViews,
         InteractsWithMedia,
         InteractsWithMediaExtension,
-        Searchable;
+        Searchable,
+        SoftDeletes;
 
     // Maximum relationships fetch limit
     const MAXIMUM_RELATIONSHIPS_LIMIT = 10;

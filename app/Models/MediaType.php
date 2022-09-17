@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MediaType extends KModel
 {
-    use HasFactory;
+    use HasFactory,
+        SoftDeletes;
 
     // Table name
     const TABLE_NAME = 'media_types';

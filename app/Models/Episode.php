@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\HasMedia;
@@ -31,6 +32,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
         InteractsWithMedia,
         InteractsWithMediaExtension,
         Searchable,
+        SoftDeletes,
         Translatable;
 
     // How long to cache certain responses

@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StaffRole extends KModel
 {
-    use HasFactory;
+    use HasFactory,
+        SoftDeletes;
 
     // Table name
     const TABLE_NAME = 'staff_roles';

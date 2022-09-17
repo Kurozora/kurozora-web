@@ -8,6 +8,7 @@ use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sitemap\Contracts\Sitemapable;
@@ -19,6 +20,7 @@ class Season extends KModel implements HasMedia, Sitemapable
         HasPosterImage,
         InteractsWithMedia,
         InteractsWithMediaExtension,
+        SoftDeletes,
         Translatable;
 
     // Maximum relationships fetch limit

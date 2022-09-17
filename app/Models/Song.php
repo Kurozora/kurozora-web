@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Nova\Actions\Actionable;
 use Laravel\Scout\Searchable;
@@ -21,7 +22,8 @@ class Song extends KModel implements Sitemapable
         HasFactory,
         HasSlug,
         LogsActivity,
-        Searchable;
+        Searchable,
+        SoftDeletes;
 
     // How long to cache certain responses
     const CACHE_KEY_ANIMES_SECONDS = 120 * 60;

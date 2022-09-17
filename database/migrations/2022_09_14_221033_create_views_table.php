@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\View;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,7 +14,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create(\App\Models\View::TABLE_NAME, function (Blueprint $table) {
+        Schema::create(View::TABLE_NAME, function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->morphs('viewable');
             $table->timestamp('viewed_at')->useCurrent();
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists(\App\Models\View::TABLE_NAME);
+        Schema::dropIfExists(View::TABLE_NAME);
     }
 };

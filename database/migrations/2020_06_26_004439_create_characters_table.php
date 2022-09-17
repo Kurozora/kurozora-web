@@ -35,6 +35,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('astrological_sign')->nullable();
             $table->integer('view_count')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(Character::TABLE_NAME, function (Blueprint $table) {

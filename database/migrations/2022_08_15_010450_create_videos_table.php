@@ -27,6 +27,7 @@ return new class extends Migration
             $table->boolean('is_dub');
             $table->integer('order');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(Video::TABLE_NAME, function (Blueprint $table) {

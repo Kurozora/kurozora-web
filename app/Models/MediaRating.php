@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MediaRating extends KModel
 {
+    use SoftDeletes;
+
     // Rating boundaries
     const MIN_RATING_VALUE = 0.00;
     const MAX_RATING_VALUE = 5.00;

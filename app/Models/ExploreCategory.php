@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\ExploreCategoryTypes;
 use App\Scopes\ExploreCategoryIsEnabledScope;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Request;
 use Spatie\Sitemap\Contracts\Sitemapable;
 use Spatie\Sitemap\Tags\Url;
@@ -13,7 +14,8 @@ use Spatie\Sluggable\SlugOptions;
 
 class ExploreCategory extends KModel implements Sitemapable
 {
-    use HasSlug;
+    use HasSlug,
+        SoftDeletes;
 
     // Table name
     const TABLE_NAME = 'explore_categories';
