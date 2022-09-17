@@ -96,7 +96,7 @@
             class="flex flex-col items-center"
             target="_blank"
         >
-            @svg('brands-Telegram', '', ['width' => 64])
+            @svg('brands-telegram', '', ['width' => 64])
             <p class="text-sm whitespace-nowrap">Telegram</p>
         </a>
 
