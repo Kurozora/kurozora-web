@@ -22,6 +22,7 @@ return new class extends Migration
             $table->float('rating');
             $table->text('description')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(MediaRating::TABLE_NAME, function(Blueprint $table) {

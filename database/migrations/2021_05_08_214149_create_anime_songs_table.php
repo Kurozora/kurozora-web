@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer('position')->nullable();
             $table->string('episodes')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(AnimeSong::TABLE_NAME, function (Blueprint $table) {

@@ -7,10 +7,12 @@ use App\Enums\VideoType;
 use App\Traits\Model\HasUuid;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Video extends KModel
 {
-    use HasUuid;
+    use HasUuid,
+        SoftDeletes;
 
     // Table name
     const TABLE_NAME = 'videos';

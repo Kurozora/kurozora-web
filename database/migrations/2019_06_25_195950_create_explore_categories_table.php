@@ -25,6 +25,7 @@ return new class extends Migration
             $table->boolean('is_global');
             $table->boolean('is_enabled');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(ExploreCategory::TABLE_NAME, function (Blueprint $table) {

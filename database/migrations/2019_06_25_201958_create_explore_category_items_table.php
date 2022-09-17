@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('model_id');
             $table->string('model_type');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(ExploreCategoryItem::TABLE_NAME, function (Blueprint $table) {

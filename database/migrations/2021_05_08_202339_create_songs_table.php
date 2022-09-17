@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('artist', 500)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(Song::TABLE_NAME, function (Blueprint $table) {

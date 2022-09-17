@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('synopsis')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(EpisodeTranslation::TABLE_NAME, function (Blueprint $table) {

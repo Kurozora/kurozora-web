@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('code', 2);
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(Language::TABLE_NAME, function (Blueprint $table) {

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->boolean('is_producer');
             $table->boolean('is_studio');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(AnimeStudio::TABLE_NAME, function (Blueprint $table) {

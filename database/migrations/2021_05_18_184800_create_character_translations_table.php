@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('about')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(CharacterTranslation::TABLE_NAME, function (Blueprint $table) {

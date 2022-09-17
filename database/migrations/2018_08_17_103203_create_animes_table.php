@@ -49,6 +49,7 @@ return new class extends Migration
             $table->integer('season_count')->default(0);
             $table->integer('view_count')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(Anime::TABLE_NAME, function (Blueprint $table) {

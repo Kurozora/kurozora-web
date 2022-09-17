@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('description');
             $table->string('color');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(Status::TABLE_NAME, function (Blueprint $table) {
