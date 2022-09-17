@@ -26,12 +26,12 @@ class OEmbedResource extends JsonResource
                 return [
                     'type' => 'video',
                     'version' => '1.0',
+                    'cache_age' => 3600,
                     'provider_name' => config('app.name'),
                     'provider_url' => config('app.url'),
                     'title' => $episode->title,
                     'author_name' => $episode->season->anime->title,
                     'author_url' => route('anime.details', $episode->season->anime),
-                    'cache_age' => 3600,
                     'thumbnail_url' => $episode->banner_image_url,
                     'thumbnail_width' => 1920,
                     'thumbnail_height' => 1080,
@@ -48,10 +48,10 @@ class OEmbedResource extends JsonResource
                 return [
                     'type' => 'rich',
                     'version' => '1.0',
+                    'cache_age' => 3600,
                     'provider_name' => config('app.name'),
                     'provider_url' => config('app.url'),
                     'title' => $song->title,
-                    'cache_age' => 3600,
                     'width' => 456,
                     'height' => 152,
                     'html' => str(view('components.embeds.song', [

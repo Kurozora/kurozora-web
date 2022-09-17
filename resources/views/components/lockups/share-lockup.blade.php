@@ -65,7 +65,7 @@
         </a>
 
         <a
-            href="https://twitter.com/intent/tweet?url={{ $link }}&text={{ $title }}&via={{ config('social.twitter.username') }}&related={{ config('social.twitter.username') }}&hashtags={{ config('app.name') }},{{ config('social.twitter.username') }},anime,"
+            href="https://twitter.com/intent/tweet?url={{ $link }}&text={{ $title }}&via={{ config('social.twitter.username') }}&related={{ config('social.twitter.username') }}&hashtags={{ config('app.name') }},{{ config('social.twitter.username') }},anime"
             class="flex flex-col items-center"
             target="_blank"
         >
