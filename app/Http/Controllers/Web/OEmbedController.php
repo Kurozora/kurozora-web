@@ -21,9 +21,9 @@ class OEmbedController extends Controller
      * Return the oEmbed JSON.
      *
      * @param GetOEmbedRequest $request
-     * @return JsonResponse
+     * @return Application|Factory|JsonResponse|View
      */
-    public function show(GetOEmbedRequest $request): JsonResponse
+    public function show(GetOEmbedRequest $request): Application|Factory|JsonResponse|View
     {
         $data = $request->validated();
 
@@ -39,13 +39,16 @@ class OEmbedController extends Controller
         };
 
         return match ($data['format'] ?? 'json') {
-            'xml' => $this->xmlResponse($model),
+            'xml' => $this->xmlResponse($request, $model),
             default => $this->jsonResponse($model)
         };
     }
 
     /**
+     * Return the JSON response.
+     *
      * @param Model $model
+     *
      * @return JsonResponse
      */
     private function jsonResponse(Model $model): JsonResponse
@@ -54,15 +57,15 @@ class OEmbedController extends Controller
     }
 
     /**
+     * Return the XML response.
+     *
+     * @param GetOEmbedRequest $request
      * @param Model $model
+     *
      * @return Application|Factory|View
      */
-    private function xmlResponse(Model $model): Application|Factory|View
+    private function xmlResponse(GetOEmbedRequest $request, Model $model): Application|Factory|View
     {
-        dd($model::class);
-        return view('profile.settings', [
-            'request' => $request,
-            'user' => $request->user(),
-        ]);
+        return view('xml.oembed', OEmbedResource::make($model)->toArray($request));
     }
 }
