@@ -5,12 +5,14 @@ namespace App\Models;
 //use App\Scopes\TvRatingScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Sitemap\Contracts\Sitemapable;
 use Spatie\Sitemap\Tags\Url;
 
 class AnimeCast extends KModel implements Sitemapable
 {
-    use HasFactory;
+    use HasFactory,
+        SoftDeletes;
 
     // Table name
     const TABLE_NAME = 'anime_casts';

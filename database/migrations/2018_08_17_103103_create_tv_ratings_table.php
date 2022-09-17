@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('description');
             $table->unsignedTinyInteger('weight');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

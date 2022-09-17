@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('description');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(CastRole::TABLE_NAME, function(Blueprint $table) {

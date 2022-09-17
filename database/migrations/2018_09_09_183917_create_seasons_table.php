@@ -22,6 +22,7 @@ return new class extends Migration
             $table->dateTime('first_aired')->nullable();
             $table->dateTime('last_aired')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(Season::TABLE_NAME, function (Blueprint $table) {

@@ -30,6 +30,7 @@ return new class extends Migration
             $table->integer('view_count')->default(0);
             $table->integer('watch_count')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(Episode::TABLE_NAME, function (Blueprint $table) {

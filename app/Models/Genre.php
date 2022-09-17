@@ -7,6 +7,7 @@ use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasSymbolImage;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Request;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -17,10 +18,11 @@ use Spatie\Sluggable\SlugOptions;
 
 class Genre extends KModel implements HasMedia, Sitemapable
 {
-    use HasSymbolImage,
+    use HasSlug,
+        HasSymbolImage,
         InteractsWithMedia,
         InteractsWithMediaExtension,
-        HasSlug;
+        SoftDeletes;
 
     // Table name
     const TABLE_NAME = 'genres';

@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Nova\Actions\Actionable;
 use Laravel\Scout\Searchable;
@@ -52,6 +53,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         InteractsWithMediaExtension,
         LogsActivity,
         Searchable,
+        SoftDeletes,
         Translatable;
 
     // Minimum ratings required to calculate average

@@ -30,6 +30,7 @@ return new class extends Migration
             $table->json('website_urls')->nullable();
             $table->integer('view_count')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(Person::TABLE_NAME, function (Blueprint $table) {

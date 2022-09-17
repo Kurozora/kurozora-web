@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('model_id');
             $table->unsignedBigInteger('genre_id');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table(MediaGenre::TABLE_NAME, function (Blueprint $table) {

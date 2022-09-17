@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('text_color', 10)->default('#000000');
             $table->string('background_color', 10)->default('#FFFFFF');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
