@@ -29,9 +29,15 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->routes(function () {
-            Route::domain('api.' . config('app.domain'))
-                ->middleware('api')
-                ->group(base_path('routes/api.php'));
+            if (App::isLocal()) {
+                Route::prefix('api')
+                    ->middleware(['api'])
+                    ->group(base_path('routes/api.php'));
+            } else {
+                Route::domain('api.' . config('app.domain'))
+                    ->middleware(['api', 'auth:sanctum'])
+                    ->group(base_path('routes/api.php'));
+            }
 
             Route::domain(config('app.domain'))
                 ->middleware('web')
