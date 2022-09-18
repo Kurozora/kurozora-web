@@ -54,6 +54,7 @@
                 <div>
                     <x-picture
                         class="aspect-square rounded-lg shadow-md overflow-hidden"
+                        style="height: calc(100vh - 2.50rem);max-height: 200px;min-height: 164px;"
                         x-on:click="await musicManager.playSong(song)"
                     >
                         <img class="object-cover"
@@ -68,7 +69,7 @@
                 </div>
 
                 <div class="flex flex-col gap-4 justify-between w-full">
-                    <div class="flex gap-4 justify-between">
+                    <div class="flex gap-4 justify-between items-start">
                         <div class="flex flex-col gap-4">
                             <div class="flex flex-col gap-1">
                                 <p
@@ -106,11 +107,15 @@
                             </div>
                         </div>
 
-                        <a href="{{ route('home') }}">
+                        <a class="flex items-center gap-1" href="{{ route('home') }}">
                             <x-logo
-                                class="block h-9 w-auto"
-                                x-bind:style="{color: '#' + song.attributes.artwork.textColor1}"
+                                class="block h-5 w-auto"
+                                x-bind:style="{color: '#' + song.attributes.artwork.textColor2}"
                             />
+                            <p
+                                class="font-semibold"
+                                x-bind:style="{color: '#' + song.attributes.artwork.textColor2}"
+                            >{{ __('Music') }}</p>
                         </a>
                     </div>
 
@@ -150,6 +155,12 @@
                         >00:30</div>
                     </div>
                 </div>
+            </div>
+        </template>
+
+        <template x-if="!song">
+            <div class="flex justify-center items-center w-screen h-screen bg-gray-100">
+                @svg('music_note_fill', 'current-fill opacity-25', ['width' => '128'])
             </div>
         </template>
     </div>
