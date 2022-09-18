@@ -173,7 +173,6 @@
                     let input = document.querySelector('#link')
 
                     navigator.clipboard.writeText(input.value).then(function() {
-                        console.log('Async: Copying to clipboard was successful!')
                     }, function(err) {
                         console.error('Async: Could not copy text: ', err)
                     })

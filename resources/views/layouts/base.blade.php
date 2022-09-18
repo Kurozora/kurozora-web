@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta property="og:url" content="{{ url()->current() }}" />
         <meta property="og:site_name" content="{{ config('app.name') }}" />
-        <meta property="twitter:site" content="{{ config('social.twitter.username') }}" />
+        <meta property="twitter:site" content="{{ '@' . config('social.twitter.username') }}" />
         <meta name="theme-color" content="{{ $themeColor ?? '#F3F4F6'}}">
         <meta name="theme-color" content="{{ $lightThemeColor ?? '#F3F4F6'}}" media="(prefers-color-scheme: light)">
         <meta name="theme-color" content="{{ $darkThemeColor ?? '#353A50'}}" media="(prefers-color-scheme: dark)">
@@ -108,7 +108,7 @@
                 this.music = MusicKit.getInstance();
             }
         }"
-        x-on:musickitloaded.window="initMusicKit(); $watch('music.player.currentPlaybackTime', value => console.log('playback time:', value));"
+        x-on:musickitloaded.window="initMusicKit()"
     >
         @livewire('navigation-dropdown')
 
