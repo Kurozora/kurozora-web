@@ -7,6 +7,8 @@ use App\Http\Middleware\CheckKurozoraUserAuthentication;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\EnsureAPIRequestsAreStateful;
 use App\Http\Middleware\ExploreCategoryAlwaysEnabled;
+use App\Http\Middleware\HttpAccept;
+use App\Http\Middleware\HttpContentSecurityPolicy;
 use App\Http\Middleware\KAuthenticate;
 use App\Http\Middleware\NoSessionForBotsMiddleware;
 use App\Http\Middleware\PreventRequestsDuringMaintenance;
@@ -88,6 +90,8 @@ class Kernel extends HttpKernel
         'cache.headers' => SetCacheHeaders::class,
         'can' => Authorize::class,
         'guest' => RedirectIfAuthenticated::class,
+        'headers.http-accept' => HttpAccept::class,
+        'headers.http-csp' => HttpContentSecurityPolicy::class,
         'password.confirm' => RequirePassword::class,
         'signed' => ValidateSignature::class,
         'throttle' => ThrottleRequests::class,
