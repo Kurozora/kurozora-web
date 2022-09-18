@@ -19,8 +19,7 @@ class GetOEmbedRequest extends FormRequest
      */
     protected function failedValidation(Validator $validator): void
     {
-        request()->headers->set('Accept', 'application/json');
-        throw new ModelNotFoundException();
+        throw new ModelNotFoundException($validator->getMessageBag()->first());
     }
 
     /**

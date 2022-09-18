@@ -6,12 +6,14 @@ use App\Http\Livewire\Embeds\Song as EmbedsSong;
 
 Route::prefix('/oembed')
     ->name('oembed')
+    ->middleware(['headers.http-accept:json'])
     ->group(function () {
         Route::get('/', [OEmbedController::class, 'show']);
     });
 
 Route::prefix('/embed')
     ->name('embed')
+    ->middleware(['headers.http-csp'])
     ->group(function () {
         Route::prefix('/episodes/{episode}')
             ->group(function () {
