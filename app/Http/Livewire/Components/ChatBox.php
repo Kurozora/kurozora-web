@@ -94,6 +94,11 @@ class ChatBox extends Component
      */
     public function postComment(): void
     {
+        if (auth()->guest()) {
+            $this->redirectRoute('sign-in');
+            return;
+        }
+
         // Validate
         $this->validate();
 
