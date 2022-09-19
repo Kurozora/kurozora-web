@@ -46,7 +46,10 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     protected function gate(): void
     {
         Gate::define('viewNova', function (User $user) {
-            return $user->hasRole(['superAdmin', 'admin', 'mod', 'editor']);
+            if (!$user->hasRole(['superAdmin', 'admin', 'mod', 'editor'])) {
+                abort(redirect('https://discord.com/channels/449250093623934977/1021013118408724480/1021150221054521344'));
+            }
+            return true;
         });
     }
 
