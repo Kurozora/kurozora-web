@@ -26,6 +26,9 @@ class KModel extends Model
         // Add an ID
         if (isset($options['id'])) $key .= '-' . $options['id'];
 
+        // Add a tv rating
+        if (isset($options['tvRating'])) $key .= '-' . $options['tvRating'];
+
         // Add a limit
         if (isset($options['limit'])) $key .= '-' . $options['limit'];
 

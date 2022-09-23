@@ -60,7 +60,7 @@ class Episode extends Component
     {
         $this->episode = $episode;
         $this->season = $this->episode->season;
-        $this->anime = $this->season->anime;
+        $this->anime = $this->episode->anime;
     }
 
 

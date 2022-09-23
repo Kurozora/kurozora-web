@@ -109,7 +109,7 @@ class Song extends KModel implements Sitemapable
     public function getAnime(int $limit = 25, int $page = 1): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'song.anime', 'id' => $this->id, 'limit' => $limit, 'page' => $page]);
+        $cacheKey = self::cacheKey(['name' => 'song.anime', 'id' => $this->id, 'tvRating' => settings('tv_rating'), 'limit' => $limit, 'page' => $page]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_ANIMES_SECONDS, function () use ($limit) {

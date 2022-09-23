@@ -6,7 +6,6 @@ use App\Enums\DayOfWeek;
 use App\Enums\SeasonOfYear;
 use App\Nova\Actions\ScrapeAnime;
 use App\Nova\Lenses\UnmoderatedAnime;
-use App\Scopes\TvRatingScope;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -194,7 +193,7 @@ class Anime extends Resource
 
             Text::make('Slug')
                 ->onlyOnForms()
-                ->help('Used to identify the Anime in a URL: https://kurozora.app/anime/<strong>' . ($this->resource->slug ?? 'slug-identifier') . '</strong>. Leave empty to auto-generate from title.'),
+                ->help('Used to identify the Anime in a URL: ' . config('app.url') . '/anime/<strong>' . ($this->resource->slug ?? 'slug-identifier') . '</strong>. Leave empty to auto-generate from title.'),
 
             Text::make('Title', 'original_title')
                 ->sortable()
@@ -429,18 +428,6 @@ class Anime extends Resource
         }
 
         return '<span class="py-1 px-2 mr-1 inline-block rounded align-middle" style="background-color: #465161; color: #fff;">' . $modCount . ' ' . str('mod')->plural($modCount) . '</span>';
-    }
-
-    /**
-     * Build an "index" query for the given resource.
-     *
-     * @param NovaRequest $request
-     * @param  Builder  $query
-     * @return Builder
-     */
-    public static function indexQuery(NovaRequest $request, $query): Builder
-    {
-        return parent::indexQuery($request, $query)->withoutGlobalScope(new TvRatingScope);
     }
 
     /**

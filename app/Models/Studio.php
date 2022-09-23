@@ -9,7 +9,9 @@ use App\Traits\Model\HasBannerImage;
 use App\Traits\Model\HasLogoImage;
 use App\Traits\Model\HasProfileImage;
 use App\Traits\Model\HasViews;
+use App\Traits\Model\TvRated;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -34,7 +36,8 @@ class Studio extends KModel implements HasMedia, Sitemapable
         InteractsWithMedia,
         InteractsWithMediaExtension,
         Searchable,
-        SoftDeletes;
+        SoftDeletes,
+        TvRated;
 
     // Maximum relationships fetch limit
     const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
@@ -155,6 +158,16 @@ class Studio extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * The anime's TV rating.
+     *
+     * @return BelongsTo
+     */
+    public function tv_rating(): BelongsTo
+    {
+        return $this->belongsTo(TvRating::class);
+    }
+
+    /**
      * Retrieves the anime for a Studio item in an array
      *
      * @param int $limit
@@ -165,7 +178,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
     public function getAnime(int $limit = 25, int $page = 1, array $where = []): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'studios.anime', 'id' => $this->id, 'limit' => $limit, 'page' => $page, 'where' => $where]);
+        $cacheKey = self::cacheKey(['name' => 'studios.anime', 'id' => $this->id, 'tvRating' => settings('tv_rating'), 'limit' => $limit, 'page' => $page, 'where' => $where]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_ANIME_SECONDS, function () use ($limit, $where) {

@@ -2,6 +2,7 @@
 
 use App\Models\Episode;
 use App\Models\Season;
+use App\Models\TvRating;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,6 +21,7 @@ return new class extends Migration
             $table->unsignedInteger('next_episode_id')->nullable();
             $table->unsignedInteger('previous_episode_id')->nullable();
             $table->unsignedBigInteger('season_id');
+            $table->unsignedBigInteger('tv_rating_id')->nullable();
             $table->unsignedInteger('number');
             $table->unsignedInteger('number_total');
             $table->unsignedMediumInteger('duration')->default(0);
@@ -38,9 +40,10 @@ return new class extends Migration
             $table->unique(['season_id', 'number']);
 
             // Set foreign key constraints
-            $table->foreign('season_id')->references('id')->on(Season::TABLE_NAME)->onDelete('cascade');
             $table->foreign('next_episode_id')->references('id')->on(Episode::TABLE_NAME)->onDelete('set null');
             $table->foreign('previous_episode_id')->references('id')->on(Episode::TABLE_NAME)->onDelete('set null');
+            $table->foreign('season_id')->references('id')->on(Season::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('tv_rating_id')->references('id')->on(TvRating::TABLE_NAME)->onDelete('set null');
         });
     }
 
