@@ -5,6 +5,7 @@ namespace App\Nova;
 use App\Enums\StudioType;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\Date;
@@ -180,13 +181,22 @@ class Studio extends Resource
                         ->help('The maximum height available for the image.'),
                 ]),
 
+            Heading::make('Meta'),
+
+            BelongsTo::make('TV rating', 'tv_rating')
+                ->sortable()
+                ->help('The TV rating of the anime. For example NR, G, PG-12, etc.')
+                ->required(),
+
             Text::make('Slug')
                 ->onlyOnForms()
-                ->help('Used to identify the Studio in a URL: https://kurozora.app/studios/<strong>' . ($this->resource->slug ?? 'slug-identifier') . '</strong>. Leave empty to auto-generate from name.'),
+                ->help('Used to identify the Studio in a URL: ' . config('app.url') . '/studios/<strong>' . ($this->resource->slug ?? 'slug-identifier') . '</strong>. Leave empty to auto-generate from name.'),
 
             Select::make('Type')
                 ->options(StudioType::asSelectArray())
-                ->displayUsingLabels()
+                ->displayUsing(function (StudioType $model) {
+                    return $model->key;
+                })
                 ->rules('required')
                 ->sortable(),
 

@@ -20,7 +20,7 @@ class EpisodePolicy
      */
     public function mark_as_watched(User $user, Episode $episode): bool
     {
-        return $user->isTracking($episode->season->anime);
+        return $user->isTracking($episode->anime);
     }
 
     use HandlesAuthorization;

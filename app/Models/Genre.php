@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasSymbolImage;
+use App\Traits\Model\TvRated;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -22,7 +22,8 @@ class Genre extends KModel implements HasMedia, Sitemapable
         HasSymbolImage,
         InteractsWithMedia,
         InteractsWithMediaExtension,
-        SoftDeletes;
+        SoftDeletes,
+        TvRated;
 
     // Table name
     const TABLE_NAME = 'genres';
@@ -37,18 +38,6 @@ class Genre extends KModel implements HasMedia, Sitemapable
         'symbol_image',
         'symbol_image_url',
     ];
-
-    /**
-     * Bootstrap the model and its traits.
-     *
-     * @return void
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::addGlobalScope(new TvRatingScope);
-    }
 
     /**
      * Get the route key for the model.

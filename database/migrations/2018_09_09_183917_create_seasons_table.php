@@ -2,6 +2,7 @@
 
 use App\Models\Anime;
 use App\Models\Season;
+use App\Models\TvRating;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,6 +19,7 @@ return new class extends Migration
         Schema::create(Season::TABLE_NAME, function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('anime_id');
+            $table->unsignedBigInteger('tv_rating_id')->nullable();
             $table->integer('number');
             $table->dateTime('first_aired')->nullable();
             $table->dateTime('last_aired')->nullable();
@@ -31,6 +33,7 @@ return new class extends Migration
 
             // Set foreign key constraints
             $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('tv_rating_id')->references('id')->on(TvRating::TABLE_NAME)->onDelete('set null');
         });
     }
 

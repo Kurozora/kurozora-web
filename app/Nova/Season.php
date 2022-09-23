@@ -111,6 +111,11 @@ class Season extends Resource
                 ->sortable()
                 ->required(),
 
+            BelongsTo::make('TV rating', 'tv_rating')
+                ->sortable()
+                ->help('The TV rating of the episode. For example NR, G, PG-12, etc.')
+                ->required(),
+
             Number::make('Season Number', 'number')
                 ->rules('required', 'min:1')
                 ->hideFromIndex()
@@ -182,7 +187,7 @@ class Season extends Resource
      * @param Request $request
      * @return array
      */
-    public function lenses(Request $request)
+    public function lenses(Request $request): array
     {
         return [];
     }
