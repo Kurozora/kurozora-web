@@ -1,4 +1,4 @@
-@props(['link', 'title', 'imageUrl' => null])
+@props(['link', 'embedLink' => null, 'title', 'imageUrl' => null, 'type' => null])
 
 <x-dialog-modal {{ $attributes }} maxWidth="md">
     <x-slot:title>
@@ -6,7 +6,7 @@
     </x-slot:title>
 
     <x-slot:content>
-        <x-lockups.share-lockup :link="$link" :title="$title" :image="$imageUrl" />
+        <x-lockups.share-lockup :link="$link" :embed-link="$embedLink" :title="$title" :image="$imageUrl" :type="$type" />
     </x-slot:content>
 
     <x-slot:footer>
