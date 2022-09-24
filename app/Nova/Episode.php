@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\HasOneThrough;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphMany;
@@ -49,15 +50,6 @@ class Episode extends Resource
      */
     public static $search = [
         'id'
-    ];
-
-    /**
-     * The relationship columns that should be searched.
-     *
-     * @var array
-     */
-    public static $searchRelations = [
-        'translations' => [\App\Models\EpisodeTranslation::TABLE_NAME . '.title'],
     ];
 
     /**
@@ -119,9 +111,17 @@ class Episode extends Resource
 
             Heading::make('Meta information'),
 
+            HasOneThrough::make('Anime')
+                ->readonly(),
+
             BelongsTo::make('Season')
                 ->searchable()
                 ->sortable(),
+
+            BelongsTo::make('TV rating', 'tv_rating')
+                ->sortable()
+                ->help('The TV rating of the episode. For example NR, G, PG-12, etc.')
+                ->required(),
 
             BelongsTo::make('Previous Episode', 'previous_episode', Episode::class)
                 ->hideFromIndex()

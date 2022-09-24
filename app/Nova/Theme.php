@@ -2,9 +2,7 @@
 
 namespace App\Nova;
 
-use App\Scopes\TvRatingScope;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
@@ -13,7 +11,6 @@ use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Ramsey\Uuid\Uuid;
 use Timothyasp\Color\Color;
 
@@ -110,7 +107,7 @@ class Theme extends Resource
 
             Text::make('Slug')
                 ->onlyOnForms()
-                ->help('Used to identify the theme in a URL: https://kurozora.app/theme/<strong>' . ($this->resource->slug ?? 'slug-identifier') . '</strong>. Leave empty to auto-generate from name.'),
+                ->help('Used to identify the theme in a URL: ' . config('app.url') . '/theme/<strong>' . ($this->resource->slug ?? 'slug-identifier') . '</strong>. Leave empty to auto-generate from name.'),
 
             Text::make('Name')
                 ->rules('required')
@@ -206,18 +203,6 @@ class Theme extends Resource
     public function actions(Request $request): array
     {
         return [];
-    }
-
-    /**
-     * Build an "index" query for the given resource.
-     *
-     * @param NovaRequest $request
-     * @param  Builder  $query
-     * @return Builder
-     */
-    public static function indexQuery(NovaRequest $request, $query): Builder
-    {
-        return parent::indexQuery($request, $query)->withoutGlobalScope(new TvRatingScope);
     }
 
     /**

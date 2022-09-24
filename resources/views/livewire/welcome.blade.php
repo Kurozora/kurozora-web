@@ -17,7 +17,7 @@
 
     <div>
         {{-- Hero Video --}}
-        <section class="h-screen max-h-[calc(100vh-64px)] bg-gray-200 overflow-hidden">
+        <section class="h-screen bg-gray-200 overflow-hidden" style="max-height: calc(100vh - 64px);">
             <div class="absolute left-0 h-screen w-full">
                 <div class="absolute top-1/2 left-0 w-full text-white text-center z-10" style="transform: translateY(-50%); transition: opacity .6s,transform .6s;">
                     <h1 class="flex items-center justify-center space-x-1" style="text-shadow: 0 0 20px rgba(0,0,0,.6);">

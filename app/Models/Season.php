@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasPosterImage;
+use App\Traits\Model\TvRated;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,7 +22,8 @@ class Season extends KModel implements HasMedia, Sitemapable
         InteractsWithMedia,
         InteractsWithMediaExtension,
         SoftDeletes,
-        Translatable;
+        Translatable,
+        TvRated;
 
     // Maximum relationships fetch limit
     const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
@@ -49,6 +51,22 @@ class Season extends KModel implements HasMedia, Sitemapable
         'first_aired' => 'datetime',
         'last_aired' => 'datetime',
     ];
+
+    /**
+     * Bootstrap the model and its traits.
+     *
+     * @return void
+     */
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::creating(function (Season $season) {
+            if (empty($season->tv_rating_id)) {
+                $season->tv_rating_id = $season->anime->tv_rating_id;
+            }
+        });
+    }
 
     /**
      * Registers the media collections for the model.
@@ -84,6 +102,16 @@ class Season extends KModel implements HasMedia, Sitemapable
     public function episodes(): HasMany
     {
         return $this->hasMany(Episode::class);
+    }
+
+    /**
+     * The season's TV rating.
+     *
+     * @return BelongsTo
+     */
+    public function tv_rating(): BelongsTo
+    {
+        return $this->belongsTo(TvRating::class);
     }
 
     /**

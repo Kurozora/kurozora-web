@@ -113,7 +113,7 @@ class Person extends Resource
 
             Text::make('Slug')
                 ->onlyOnForms()
-                ->help('Used to identify the Person in a URL: https://kurozora.app/people/<strong>' . ($this->resource->slug ?? 'slug-identifier') . '</strong>. Leave empty to auto-generate from first and last name.'),
+                ->help('Used to identify the Person in a URL: ' . config('app.url') . '/people/<strong>' . ($this->resource->slug ?? 'slug-identifier') . '</strong>. Leave empty to auto-generate from first and last name.'),
 
             Text::make('First name')
                 ->help('The first name of the person as known in the industry. Usually in English.')

@@ -20,7 +20,7 @@ class ImportAnimeGenreProcessor
      * @param Collection|KMediaGenre[] $kMediaGenres
      * @return void
      */
-    public function process(Collection|array $kMediaGenres)
+    public function process(Collection|array $kMediaGenres): void
     {
         foreach ($kMediaGenres as $kMediaGenre) {
             try {
@@ -32,7 +32,7 @@ class ImportAnimeGenreProcessor
                     ->firstWhere('mal_id', $kMediaGenre->genre_id);
 
                 if (!$anime) {
-                    \Log::info('Anime not found: ' . $kMediaGenre->media_id);
+                    info('Anime not found: ' . $kMediaGenre->media_id);
                     return;
                 }
 
@@ -67,9 +67,9 @@ class ImportAnimeGenreProcessor
                 }
             } catch (Exception $e) {
                 if (empty($kMediaGenre)) {
-                    \Log::info('Missing genre:' . $kMediaGenre->genre_id);
+                    info('Missing genre:' . $kMediaGenre->genre_id);
                 } else {
-                    \Log::error($e->getMessage());
+                    logger()->error($e->getMessage());
                 }
             }
         }

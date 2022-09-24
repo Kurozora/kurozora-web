@@ -58,7 +58,7 @@ class EpisodeResource extends JsonResource
     protected function getUserSpecificDetails(): array
     {
         $user = Auth::user();
-        $anime = $this->resource->season->anime;
+        $anime = $this->resource->anime;
 
         // Get the user rating for this episode
         $givenRating = $this->resource->ratings()
