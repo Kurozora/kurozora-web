@@ -15,7 +15,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(View::TABLE_NAME, function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->ulid('id')->primary();
             $table->morphs('viewable');
             $table->timestamp('viewed_at')->useCurrent();
             $table->timestamps();
