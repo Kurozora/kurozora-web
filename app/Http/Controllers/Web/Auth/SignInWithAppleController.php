@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Web\Auth;
 use App\Actions\Web\Auth\PrepareAuthenticatedSession;
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Auth;
 use Exception;
 use Hash;
 use Illuminate\Http\RedirectResponse;
@@ -82,7 +81,7 @@ class SignInWithAppleController extends Controller
         }
 
         // Sign in the user.
-        Auth::login($user);
+        auth()->login($user);
     }
 
     /**

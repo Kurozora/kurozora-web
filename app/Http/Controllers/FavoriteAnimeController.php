@@ -7,7 +7,6 @@ use App\Http\Requests\AddAnimeFavoriteRequest;
 use App\Http\Requests\GetAnimeFavoritesRequest;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Models\User;
-use Auth;
 use Illuminate\Http\JsonResponse;
 
 class FavoriteAnimeController extends Controller
@@ -44,7 +43,7 @@ class FavoriteAnimeController extends Controller
     function addFavorite(AddAnimeFavoriteRequest $request): JsonResponse
     {
         $animeID = $request->input('anime_id');
-        $user = Auth::user();
+        $user = auth()->user();
 
         $isAlreadyFavorited = $user->favorite_anime()->where('anime_id', $animeID)->exists();
 

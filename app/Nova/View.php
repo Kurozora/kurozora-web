@@ -45,7 +45,7 @@ class View extends Resource
             Heading::make('Identification')
                 ->onlyOnDetail(),
 
-            Text::make('UUID', 'id')
+            Text::make('ULID', 'id')
                 ->onlyOnDetail()
                 ->sortable(),
 

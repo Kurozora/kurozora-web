@@ -10,7 +10,6 @@ use App\Models\Source;
 use App\Models\Status;
 use App\Models\TvRating;
 use App\Traits\Livewire\WithSearch;
-use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -160,7 +159,7 @@ class Index extends Component
             ]
         ];
 
-        if (Auth::check()) {
+        if (auth()->check()) {
             if (settings('tv_rating') >= 4) {
                 $this->filter['is_nsfw'] = [
                     'title' => __('NSFW'),

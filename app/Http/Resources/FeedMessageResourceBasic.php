@@ -4,7 +4,6 @@ namespace App\Http\Resources;
 
 use App\Enums\FeedVoteType;
 use App\Models\FeedMessage;
-use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -23,7 +22,7 @@ class FeedMessageResourceBasic extends JsonResource
 
         $totalHearts = $feedMessage->viaLoveReactant()->getReactionCounterOfType(FeedVoteType::Heart()->description);
 
-        $user = Auth::user();
+        $user = auth()->user();
         $isReShared = $user && $feedMessage->reShares()->where('user_id', $user->id)->exists();
 
         $resource = [
@@ -50,7 +49,7 @@ class FeedMessageResourceBasic extends JsonResource
         $relationships = [];
         $relationships = array_merge($relationships, $this->getUserDetails());
 
-        if (Auth::check())
+        if (auth()->check())
             $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
 
         return array_merge($resource, ['relationships' => $relationships]);
@@ -66,7 +65,7 @@ class FeedMessageResourceBasic extends JsonResource
         /** @var FeedMessage $feedMessage */
         $feedMessage = $this->resource;
 
-        $user = Auth::user();
+        $user = auth()->user();
 
         return [
             'isHearted' => $user->getCurrentHeartValueFor($feedMessage) == FeedVoteType::Heart

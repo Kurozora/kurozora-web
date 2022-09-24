@@ -5,7 +5,6 @@ namespace App\Http\Livewire\Anime;
 use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
 use App\Models\UserLibrary;
-use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -36,13 +35,13 @@ class LibraryButton extends Component
      *
      * @return void
      */
-    public function mount(Anime $anime)
+    public function mount(Anime $anime): void
     {
         $this->anime = $anime;
 
         // Set library status, else default to "ADD"
         $this->libraryStatus = UserLibrary::firstWhere([
-            ['user_id', Auth::user()?->id],
+            ['user_id', auth()->user()?->id],
             ['anime_id', $anime->id],
         ])?->status ?? -1;
     }
@@ -54,7 +53,7 @@ class LibraryButton extends Component
      */
     public function updateLibraryStatus(): Application|RedirectResponse|Redirector|null
     {
-        $user = Auth::user();
+        $user = auth()->user();
 
         // Require user to authenticate if necessary.
         if (empty($user)) {

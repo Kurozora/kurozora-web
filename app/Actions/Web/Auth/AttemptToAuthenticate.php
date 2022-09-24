@@ -3,7 +3,6 @@
 namespace App\Actions\Web\Auth;
 
 use App\Helpers\SignInRateLimiter;
-use Auth;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -40,7 +39,7 @@ class AttemptToAuthenticate
      */
     public function handle(Request $request, callable $next): mixed
     {
-        if (Auth::attempt(
+        if (auth()->attempt(
             $request->only('email', 'password'),
             $request->filled('remember'))
         ) {

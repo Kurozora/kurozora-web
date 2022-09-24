@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Components;
 
 use App\Models\User;
 use App\Notifications\NewFollower;
-use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -40,7 +39,7 @@ class FollowButton extends Component
      */
     public function toggleFollow(): Application|RedirectResponse|Redirector|null
     {
-        $authUser = Auth::user();
+        $authUser = auth()->user();
 
         // Require user to authenticate if necessary.
         if (empty($authUser)) {

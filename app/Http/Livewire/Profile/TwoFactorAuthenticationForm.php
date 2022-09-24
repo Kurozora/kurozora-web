@@ -8,7 +8,6 @@ use App\Actions\Web\Auth\EnableTwoFactorAuthentication;
 use App\Actions\Web\Auth\GenerateNewRecoveryCodes;
 use App\Models\User;
 use App\Traits\Web\Auth\ConfirmsPasswords;
-use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -53,8 +52,8 @@ class TwoFactorAuthenticationForm extends Component
      */
     public function mount(): void
     {
-        if (is_null(Auth::user()->two_factor_confirmed_at)) {
-            app(DisableTwoFactorAuthentication::class)(Auth::user());
+        if (is_null(auth()->user()->two_factor_confirmed_at)) {
+            app(DisableTwoFactorAuthentication::class)(auth()->user());
         }
     }
 
@@ -68,7 +67,7 @@ class TwoFactorAuthenticationForm extends Component
     {
         $this->ensurePasswordIsConfirmed();
 
-        $enable(Auth::user());
+        $enable(auth()->user());
 
         $this->showingQrCode = true;
         $this->showingConfirmation = true;
@@ -84,7 +83,7 @@ class TwoFactorAuthenticationForm extends Component
     {
         $this->ensurePasswordIsConfirmed();
 
-        $confirm(Auth::user(), $this->code);
+        $confirm(auth()->user(), $this->code);
 
         $this->showingQrCode = false;
         $this->showingConfirmation = false;
@@ -113,7 +112,7 @@ class TwoFactorAuthenticationForm extends Component
     {
         $this->ensurePasswordIsConfirmed();
 
-        $generate(Auth::user());
+        $generate(auth()->user());
 
         $this->showingRecoveryCodes = true;
     }
@@ -128,7 +127,7 @@ class TwoFactorAuthenticationForm extends Component
     {
         $this->ensurePasswordIsConfirmed();
 
-        $disable(Auth::user());
+        $disable(auth()->user());
 
         $this->showingQrCode = false;
         $this->showingConfirmation = false;
@@ -142,7 +141,7 @@ class TwoFactorAuthenticationForm extends Component
      */
     public function getUserProperty(): User|null
     {
-        return Auth::user();
+        return auth()->user();
     }
 
     /**

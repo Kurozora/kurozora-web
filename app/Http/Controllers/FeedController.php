@@ -11,7 +11,6 @@ use App\Models\FeedMessage;
 use App\Models\User;
 use App\Notifications\NewFeedMessageReply;
 use App\Notifications\NewFeedMessageReShare;
-use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 
@@ -29,7 +28,7 @@ class FeedController extends Controller
         $data = $request->validated();
 
         // Get the auth user
-        $user = Auth::user();
+        $user = auth()->user();
 
         // Check if the message has already been re-shared as user is allowed only one re-share per message
         if ($data['is_reshare'] ?? false) {
@@ -87,7 +86,7 @@ class FeedController extends Controller
         $data = $request->validated();
 
         // Get the auth user
-        $user = Auth::user();
+        $user = auth()->user();
 
         // Get the user IDs of all the users that should appear on the user's personal feed.
         $userIDs = $user->following()

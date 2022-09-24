@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Anime;
 
 use App\Models\Anime;
-use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
@@ -49,7 +48,7 @@ class StarRating extends Component
      *
      * @return void
      */
-    function mount($anime = null, ?float $rating = null, string $starSize = 'md', bool $disabled = false)
+    function mount($anime = null, ?float $rating = null, string $starSize = 'md', bool $disabled = false): void
     {
         $this->anime = $anime;
         $this->rating = $rating ?? 0.0;
@@ -66,7 +65,7 @@ class StarRating extends Component
      */
     public function rate()
     {
-        $user = Auth::user();
+        $user = auth()->user();
         if (empty($user)) {
             return;
         }

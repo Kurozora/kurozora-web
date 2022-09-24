@@ -27,37 +27,37 @@
                 <p class="text-xs leading-tight text-black/60">
                     @auth
                         @if ($followersCount === 0)
-                            @if ($user->id === Auth::user()->id)
+                            @if ($user->id === auth()->user()->id)
                                 {{ __('You, followed by you!') }}
                             @else
                                 {{ __('Be the first to follow!') }}
                             @endif
                         @elseif ($followersCount === 1)
-                            @if ($user->id == Auth::user()->id)
+                            @if ($user->id == auth()->user()->id)
                                 {{ __('Followed by you... and one fan!') }}
                             @else
                                 {{
-                                   $user->followers()->where('user_id', Auth::user()->id)->exists() ?
+                                   $user->followers()->where('user_id', auth()->user()->id)->exists() ?
                                    __('Followed by you.') :
                                    __('Followed by one user.')
                                 }}
                             @endif
                         @elseif ($followersCount >= 2 && $followersCount <= 999)
-                            @if ($user->id == Auth::user()->id)
+                            @if ($user->id == auth()->user()->id)
                                 {{ __('Followed by you and :x fans.', ['x' => $followersCount]) }}
                             @else
                                 {{
-                                    $user->followers()->where('user_id', Auth::user()->id)->exists() ?
+                                    $user->followers()->where('user_id', auth()->user()->id)->exists() ?
                                     __('Followed by you and :x users.', ['x' => $followersCount - 1]) :
                                     __('Followed by :x users.', ['x' => $followersCount])
                                 }}
                             @endif
                         @else
-                            @if ($user->id == Auth::user()->id)
+                            @if ($user->id == auth()->user()->id)
                                 {{ __('Followed by :x fans.', ['x' => number_shorten($followersCount)]) }}
                             @else
                                 {{
-                                    $user->followers()->where('user_id', Auth::user()->id)->exists() ?
+                                    $user->followers()->where('user_id', auth()->user()->id)->exists() ?
                                     __('Followed by you and :x users.', ['x' => number_shorten($followersCount - 1)]) :
                                     __('Followed by :x users.', ['x' => number_shorten($followersCount)])
                                 }}
@@ -74,7 +74,7 @@
 
         <div class="flex flex-row flex-nowrap items-center justify-between z-10 whitespace-nowrap">
             @auth
-                @if ($user->id != Auth::user()->id)
+                @if ($user->id != auth()->user()->id)
                     <livewire:components.follow-button :user='$user' wire:key="{{ uniqid(more_entropy: true) }}" />
                 @endif
             @else

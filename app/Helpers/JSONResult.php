@@ -5,7 +5,6 @@ namespace App\Helpers;
 use App\Http\Resources\JSONErrorResource;
 use App\Models\APIError;
 use App\Providers\AppServiceProvider;
-use Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
@@ -55,8 +54,8 @@ class JSONResult
     {
         $meta = [
             'version'               => Config::get('app.version'),
-            'isUserAuthenticated'   => Auth::check(),
-            'authenticatedUserID'   => Auth::id()
+            'isUserAuthenticated'   => auth()->check(),
+            'authenticatedUserID'   => auth()->id()
         ];
 
         if (app()->environment('local')) {

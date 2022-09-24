@@ -6,7 +6,6 @@ use App\Helpers\JSONResult;
 use App\Http\Requests\AddAnimeReminderRequest;
 use App\Http\Requests\GetAnimeReminderRequest;
 use App\Http\Resources\AnimeResource;
-use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -25,7 +24,7 @@ class ReminderAnimeController extends Controller
         $data = $request->validated();
 
         // Get the authenticated user
-        $user = Auth::user();
+        $user = auth()->user();
 
         // Paginate the reminder anime
         $reminderAnime = $user->reminder_anime()->paginate($data['limit'] ?? 25);
@@ -50,7 +49,7 @@ class ReminderAnimeController extends Controller
     function addReminder(AddAnimeReminderRequest $request): JsonResponse
     {
         $animeID = $request->input('anime_id');
-        $user = Auth::user();
+        $user = auth()->user();
 
 //        if (empty($user->receipt) || !$user->receipt->is_subscribed ?? true) {
 //            throw new AuthorizationException('Reminders are only available to pro users.');
@@ -80,7 +79,7 @@ class ReminderAnimeController extends Controller
      */
     function download(Request $request): \Illuminate\Http\Response
     {
-        $user = Auth::user();
+        $user = auth()->user();
 
 //        if (empty($user->receipt) || !$user->receipt->is_subscribed ?? true) {
 //            throw new AuthorizationException('Reminders are only available to pro users.');

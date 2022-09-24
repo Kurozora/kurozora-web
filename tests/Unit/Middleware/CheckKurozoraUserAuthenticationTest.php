@@ -3,7 +3,6 @@
 namespace Tests\Unit\Middleware;
 
 use App\Helpers\JSONResult;
-use Auth;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
@@ -70,8 +69,8 @@ class CheckKurozoraUserAuthenticationTest extends TestCase
         $userInfoResponse = function()
         {
             return JSONResult::success([
-                'is_authenticated'      => Auth::check(),
-                'authenticated_user_id' => Auth::check() ? Auth::id() : null
+                'is_authenticated'      => auth()->check(),
+                'authenticated_user_id' => auth()->check() ? auth()->id() : null
             ]);
         };
 
