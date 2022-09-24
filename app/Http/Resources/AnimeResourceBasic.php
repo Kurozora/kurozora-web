@@ -4,7 +4,6 @@ namespace App\Http\Resources;
 
 use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
-use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -71,7 +70,7 @@ class AnimeResourceBasic extends JsonResource
             ]
         ]);
 
-        if (Auth::check()) {
+        if (auth()->check()) {
             $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
         }
 
@@ -85,7 +84,7 @@ class AnimeResourceBasic extends JsonResource
      */
     protected function getUserSpecificDetails(): array
     {
-        $user = Auth::user();
+        $user = auth()->user();
 
         // Get the user rating for this Anime
         $givenRating = $this->resource->ratings()

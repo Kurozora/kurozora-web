@@ -14,7 +14,6 @@ use App\Http\Resources\AnimeResourceBasic;
 use App\Jobs\ProcessMALImport;
 use App\Models\Anime;
 use App\Models\UserLibrary;
-use Auth;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -35,7 +34,7 @@ class LibraryController extends Controller
         $data = $request->validated();
 
         // Get the authenticated user
-        $user = Auth::user();
+        $user = auth()->user();
 
         // Get the status
         $foundStatus = UserLibraryStatus::getValue($data['status']);
@@ -68,7 +67,7 @@ class LibraryController extends Controller
         $animeID = $data['anime_id'];
 
         // Get the authenticated user
-        $user = Auth::user();
+        $user = auth()->user();
 
         // Get the Anime
         $anime = Anime::findOrFail($animeID);
@@ -112,7 +111,7 @@ class LibraryController extends Controller
         $animeID = $data['anime_id'];
 
         // Get the authenticated user
-        $user = Auth::user();
+        $user = auth()->user();
 
         // Remove this Anime from their library if it can be found
         if ($user->library()->where('anime_id', $animeID)->count()) {
@@ -149,7 +148,7 @@ class LibraryController extends Controller
         $data = $request->validated();
 
         // Get the authenticated user
-        $user = Auth::user();
+        $user = auth()->user();
 
         if (!$user->canDoAnimeImport()) {
             $cooldownDays = config('import.cooldown_in_days');

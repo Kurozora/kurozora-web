@@ -6,7 +6,6 @@ use App\Actions\Web\Auth\PrepareAuthenticatedSession;
 use App\Events\RecoveryCodeReplaced;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\TwoFactorSignInRequest;
-use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -58,7 +57,7 @@ class TwoFactorAuthenticatedSessionController extends Controller
             return redirect()->route('two-factor.sign-in')->withErrors(['code' => __('The provided two factor authentication code was invalid.')]);
         }
 
-        Auth::login($user, $request->remember());
+        auth()->login($user, $request->remember());
 
         return $this->signInPipeline($request)->then(function () {
             return redirect()->intended();

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,6 +18,6 @@ class MeController extends Controller
      */
     public function index(Request $request): Application|Redirector|RedirectResponse
     {
-        return redirect(route('profile.details', ['user' => Auth::user()]));
+        return redirect(route('profile.details', ['user' => auth()->user()]));
     }
 }

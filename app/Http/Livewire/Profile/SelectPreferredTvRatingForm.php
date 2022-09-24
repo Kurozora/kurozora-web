@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Profile;
 
 use App\Contracts\Web\Profile\UpdatesUserPreferredTvRating;
-use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
@@ -23,7 +22,7 @@ class SelectPreferredTvRatingForm extends Component
      *
      * @return void
      */
-    public function mount()
+    public function mount(): void
     {
         $this->state = [
             'tv_rating' => settings('tv_rating')
@@ -39,7 +38,7 @@ class SelectPreferredTvRatingForm extends Component
     {
         $this->resetErrorBag();
 
-        $updater->update(Auth::user(), $this->state);
+        $updater->update(auth()->user(), $this->state);
 
         $this->emit('saved');
     }

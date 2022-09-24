@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Profile;
 
 use App\Models\Session;
-use Auth;
 use Browser;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Foundation\Application;
@@ -60,18 +59,18 @@ class SignOutOtherSessionsForm extends Component
 
         $this->resetErrorBag();
 
-        if (!Hash::check($this->password, Auth::user()->password)) {
+        if (!Hash::check($this->password, auth()->user()->password)) {
             throw ValidationException::withMessages([
                 'password' => [__('This password does not match our records.')],
             ]);
         }
 
-        Auth::logoutOtherDevices($this->password);
+        auth()->logoutOtherDevices($this->password);
 
         $this->deleteOtherSessionRecords();
 
         request()->session()->put([
-            'password_hash_' . Auth::getDefaultDriver() => Auth::user()->getAuthPassword(),
+            'password_hash_' . auth()->getDefaultDriver() => auth()->user()->getAuthPassword(),
         ]);
 
         $this->confirmingSignOut = false;
@@ -90,7 +89,7 @@ class SignOutOtherSessionsForm extends Component
             return;
         }
 
-        Session::where('user_id', Auth::user()->getAuthIdentifier())
+        Session::where('user_id', auth()->user()->getAuthIdentifier())
             ->where('id', '!=', request()->session()->getId())
             ->delete();
     }
@@ -106,12 +105,12 @@ class SignOutOtherSessionsForm extends Component
             return collect();
         }
 
-        $otherSessions = Session::where('user_id', Auth::user()->getAuthIdentifier())
+        $otherSessions = Session::where('user_id', auth()->user()->getAuthIdentifier())
             ->where('id', '!=', request()->session()->getId())
             ->orderBy('last_activity', 'desc')
             ->get();
 
-        $currentSession = Session::where('user_id', Auth::user()->getAuthIdentifier())
+        $currentSession = Session::where('user_id', auth()->user()->getAuthIdentifier())
             ->where('id', request()->session()->getId())
             ->first();
 

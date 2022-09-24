@@ -27,7 +27,7 @@
 
             {{-- Current Banner Image --}}
             <div class="relative" x-show="!bannerImagePreview">
-                @livewire('components.banner-image-view', ['user' => Auth::user()])
+                @livewire('components.banner-image-view', ['user' => auth()->user()])
 
                 <div class="absolute top-0 right-0 bottom-0 left-0 flex justify-center bg-black/20">
                     <div class="flex items-center justify-center">
@@ -38,7 +38,7 @@
                             @svg('camera', 'fill-current', ['width' => '24'])
                         </button>
 
-                        @if (!empty(Auth::user()->banner_image_url))
+                        @if (!empty(auth()->user()->banner_image_url))
                             <button
                                 class="inline-flex items-center justify-center w-10 h-10 pt-2 pr-2 pb-2 pl-2 text-red-500 rounded-full transition duration-150 ease-in-out hover:bg-white/20 focus:outline-none focus:bg-white/60 sm:w-12 sm:h-12"
                                 wire:click="deleteBannerImage"
@@ -56,10 +56,10 @@
                     <picture class="relative w-full overflow-hidden">
                         <img
                             class="inline-block w-full h-40 object-cover sm:h-80"
-                            style="background-color: {{ Auth::user()->banner_image?->custom_properties['background_color'] ?? '#FF9300' }}"
+                            style="background-color: {{ auth()->user()->banner_image?->custom_properties['background_color'] ?? '#FF9300' }}"
                             src=""
                             x-bind:src="bannerImagePreview"
-                            alt="{{ Auth::user()->username }} Banner Image"
+                            alt="{{ auth()->user()->username }} Banner Image"
                         >
 
                         <div class="absolute top-0 left-0 h-full w-full"></div>
@@ -75,7 +75,7 @@
                             @svg('camera', 'fill-current text-white', ['width' => '24'])
                         </button>
 
-                        @if (!empty(Auth::user()->banner_image_url))
+                        @if (!empty(auth()->user()->banner_image_url))
                             <button
                                 class="inline-flex items-center justify-center w-12 h-12 pt-2 pr-2 pb-2 pl-2 text-red-500 rounded-full hover:bg-white/20 focus:outline-none focus:bg-white/60 transition duration-150 ease-in-out"
                                 wire:click="deleteBannerImage"
@@ -109,7 +109,7 @@
 
             {{-- Current Profile Image --}}
             <div class="relative w-16 h-16 rounded-full overflow-hidden sm:w-24 sm:h-24" x-show="!profileImagePreview">
-                @livewire('components.profile-image-view', ['user' => Auth::user()])
+                @livewire('components.profile-image-view', ['user' => auth()->user()])
 
                 <div class="absolute top-0 right-0 bottom-0 left-0 flex justify-center bg-black/20">
                     <div class="flex items-center justify-center">
@@ -120,7 +120,7 @@
                             @svg('camera', 'fill-current', ['width' => '24'])
                         </button>
 
-                        @if (!str_starts_with(Auth::user()->profile_image_url, 'https://ui-avatars.com/'))
+                        @if (!str_starts_with(auth()->user()->profile_image_url, 'https://ui-avatars.com/'))
                             <button
                                 class="inline-flex items-center justify-center w-8 h-8 pt-2 pr-2 pb-2 pl-2 text-red-500 rounded-full transition duration-150 ease-in-out hover:bg-white/20 focus:outline-none focus:bg-white/60 sm:w-12 sm:h-12"
                                 wire:click="deleteProfileImage"
@@ -137,7 +137,7 @@
                 <img class="w-16 h-16 bg-white border-2 border-black/5 rounded-full sm:w-24 sm:h-24"
                      src=""
                      x-bind:src="profileImagePreview"
-                     alt="{{ Auth::user()->username }} Profile Image"
+                     alt="{{ auth()->user()->username }} Profile Image"
                 >
 
                 <div class="absolute top-0 right-0 bottom-0 left-0 flex justify-center bg-black/20">
@@ -149,7 +149,7 @@
                             @svg('camera', 'fill-current', ['width' => '24'])
                         </button>
 
-                        @if (!str_starts_with(Auth::user()->profile_image_url, 'https://ui-avatars.com/'))
+                        @if (!str_starts_with(auth()->user()->profile_image_url, 'https://ui-avatars.com/'))
                             <button
                                 class="inline-flex items-center justify-center w-8 h-8 pt-2 pr-2 pb-2 pl-2 text-red-500 rounded-full transition duration-150 ease-in-out hover:bg-white/20 focus:outline-none focus:bg-white/60 sm:w-12 sm:h-12"
                                 wire:click="deleteProfileImage"

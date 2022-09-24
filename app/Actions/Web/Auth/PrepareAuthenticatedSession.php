@@ -4,7 +4,6 @@ namespace App\Actions\Web\Auth;
 
 use App\Helpers\SignInRateLimiter;
 use App\Models\Session;
-use Auth;
 use Browser;
 use Illuminate\Http\Request;
 
@@ -43,7 +42,7 @@ class PrepareAuthenticatedSession
         $session = Session::firstWhere('id', $request->session()->getId());
         $browser = Browser::detect();
 
-        Auth::user()->createSessionAttributes($session, [
+        auth()->user()->createSessionAttributes($session, [
             'platform'          => $browser->platformFamily(),
             'platform_version'  => $browser->platformVersion(),
             'device_vendor'     => $browser->deviceFamily(),

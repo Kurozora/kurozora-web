@@ -48,7 +48,7 @@ class AppThemeController extends Controller
     function download(AppTheme $appTheme): Response
     {
         // Get the auth user
-//        $user = Auth::user();
+//        $user = auth()->user();
 //
 //        if (empty($user->receipt) || !$user->receipt->is_subscribed ?? true) {
 //            throw new AuthorizationException('Premium platform themes are only available to pro users.');

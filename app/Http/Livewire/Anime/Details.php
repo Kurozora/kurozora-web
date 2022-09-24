@@ -5,7 +5,6 @@ namespace App\Http\Livewire\Anime;
 use App\Events\AnimeViewed;
 use App\Models\Anime;
 use App\Models\Studio;
-use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -103,7 +102,7 @@ class Details extends Component
      */
     protected function setupActions()
     {
-        $user = Auth::user();
+        $user = auth()->user();
         if (!empty($user)) {
             $this->isTracking = $user->isTracking($this->anime);
             $this->isFavorited = $user->favorite_anime()->where('anime_id', $this->anime->id)->exists();
@@ -133,7 +132,7 @@ class Details extends Component
      */
     public function favoriteAnime()
     {
-        $user = Auth::user();
+        $user = auth()->user();
 
         if ($this->isTracking) {
             if ($this->isFavorited) { // Unfavorite the show
@@ -151,7 +150,7 @@ class Details extends Component
      */
     public function remindAnime()
     {
-        $user = Auth::user();
+        $user = auth()->user();
 
         if ($user->isPro()) {
             if ($this->isTracking) {
