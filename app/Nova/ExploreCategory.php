@@ -93,12 +93,12 @@ class ExploreCategory extends Resource
 
             Text::make('Slug')
                 ->onlyOnForms()
-                ->help('Used to identify the explore category in a URL: https://kurozora.app/explore/<strong>' . ($this->resource->slug ?? 'slug-identifier') . '</strong>. Leave empty to auto-generate from title.'),
+                ->help('Used to identify the explore category in a URL: ' . config('app.url') . '/explore/<strong>' . ($this->resource->slug ?? 'slug-identifier') . '</strong>. Leave empty to auto-generate from title.'),
 
             Text::make('Secondary Slug')
                 ->rules('max:2083')
                 ->sortable()
-                ->help('If the category shouldn\'t link to itself, then add a secondary slug here. This slug starts from the root URL: https://kurozora.app/<strong>' . ($this->resource->secondary_slug ?? 'slug-identifier') . '</strong>'),
+                ->help('If the category shouldn’t link to itself, then add a secondary slug here. This slug starts from the root URL: ' . config('app.url') . '/<strong>' . ($this->resource->secondary_slug ?? 'slug-identifier') . '</strong>'),
 
             Number::make('Position/order', 'position')
                 ->rules('required', 'numeric', 'min:1', 'max:100')

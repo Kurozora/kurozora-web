@@ -102,8 +102,8 @@ class Cast extends Resource
     {
         $animeCast = $this->resource;
 
-        $animeTitle = $animeCast->anime->title;
-        $characterName = $animeCast->character->name;
+        $animeTitle = $animeCast->anime?->title ?? 'Unknown';
+        $characterName = $animeCast->character?->name ?? 'Unknown';
         $personName = $animeCast->person?->full_name ?? 'Unknown';
 
         return $personName . ' as ' . $characterName . ' in ' . $animeTitle . ' (ID: ' . $animeCast->id . ')';

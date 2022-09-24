@@ -99,7 +99,7 @@ abstract class Embed
     {
         return match($this->resource->videoable_type) {
             Anime::class => config('app.name'),
-            Episode::class => $this->resource->videoable->season->anime->title,
+            Episode::class => $this->resource->videoable->anime->title,
             default => class_basename($this->resource->videoable_type)
         };
     }
@@ -128,7 +128,7 @@ abstract class Embed
                 return $artworks;
             case Episode::class:
                 /** @var Anime $anime */
-                $anime = $this->resource->videoable->season->anime;
+                $anime = $this->resource->videoable->anime;
                 $artworks = [];
 
                 foreach ($this->sizes as $size) {

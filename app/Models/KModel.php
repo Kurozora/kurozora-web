@@ -6,7 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class KModel extends Model
 {
-    // Remove column guards
+    /**
+     * The name of the "deleted at" column.
+     *
+     * @var string|null
+     */
+    const DELETED_AT = 'deleted_at';
+
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array<string>|bool
+     */
     protected $guarded = [];
 
     /**
@@ -26,6 +37,9 @@ class KModel extends Model
         // Add an ID
         if (isset($options['id'])) $key .= '-' . $options['id'];
 
+        // Add a tv rating
+        if (isset($options['tvRating'])) $key .= '-' . $options['tvRating'];
+
         // Add a limit
         if (isset($options['limit'])) $key .= '-' . $options['limit'];
 
@@ -42,5 +56,19 @@ class KModel extends Model
         if (isset($options['whereBetween'])) $key .= '-' . implode(',', $options['whereBetween']);
 
         return $key;
+    }
+
+    /**
+     * Get the user's preferred "tv rating".
+     *
+     * @return int
+     */
+    static function getTvRatingSettings(): int
+    {
+        if (auth()->check()) {
+            return settings('tv_rating');
+        }
+
+        return 4;
     }
 }

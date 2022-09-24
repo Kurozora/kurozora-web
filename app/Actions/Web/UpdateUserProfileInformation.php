@@ -29,7 +29,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
      * @throws FileIsTooBig
      * @throws FileCannotBeAdded
      */
-    public function update(User $user, array $input)
+    public function update(User $user, array $input): void
     {
         $rules = [
             'email' => ['required', new ValidateEmail, Rule::unique(User::TABLE_NAME)->ignore($user->id)],
@@ -89,7 +89,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
      * @param array $input
      * @return void
      */
-    protected function updateVerifiedUser(User|MustVerifyEmail $user, array $input)
+    protected function updateVerifiedUser(User|MustVerifyEmail $user, array $input): void
     {
         $user->forceFill([
             'email' => $input['email'],

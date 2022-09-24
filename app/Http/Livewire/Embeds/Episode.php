@@ -21,20 +21,6 @@ class Episode extends Component
     public \App\Models\Episode $episode;
 
     /**
-     * The object containing the season data.
-     *
-     * @var Season $season
-     */
-    public Season $season;
-
-    /**
-     * The object containing the anime data.
-     *
-     * @var Anime $anime
-     */
-    public Anime $anime;
-
-    /**
      * The start time of the video.
      *
      * @var int $t
@@ -59,10 +45,7 @@ class Episode extends Component
     public function mount(\App\Models\Episode $episode): void
     {
         $this->episode = $episode;
-        $this->season = $this->episode->season;
-        $this->anime = $this->season->anime;
     }
-
 
     /**
      * Get the video object.
@@ -81,7 +64,27 @@ class Episode extends Component
             return $video;
         }
 
-        return $this->anime->orderedVideos()->first();
+        return $this->anime?->orderedVideos()->first();
+    }
+
+    /**
+     * The object containing the anime data.
+     *
+     * @return Anime|null
+     */
+    public function getAnimeProperty(): ?Anime
+    {
+        return $this->episode->anime;
+    }
+
+    /**
+     * The object containing the season data.
+     *
+     * @return Season|null
+     */
+    public function getSeasonProperty(): ?Season
+    {
+        return $this->episode->season;
     }
 
     /**
