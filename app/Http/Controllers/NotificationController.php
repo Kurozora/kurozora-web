@@ -6,7 +6,6 @@ use App\Helpers\JSONResult;
 use App\Http\Requests\UpdateNotificationsRequest;
 use App\Http\Resources\NotificationResource;
 use App\Models\User;
-use Auth;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -22,8 +21,7 @@ class NotificationController extends Controller
      */
     public function index(): JsonResponse
     {
-        /** @var User $user */
-        $user = Auth::user();
+        $user = auth()->user();
 
         return JSONResult::success([
             'data' => NotificationResource::collection($user->notifications)

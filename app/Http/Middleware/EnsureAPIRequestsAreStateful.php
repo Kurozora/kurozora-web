@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use Auth;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -18,11 +17,11 @@ class EnsureAPIRequestsAreStateful
     public function handle(Request $request, Closure $next): mixed
     {
         // Bearer is empty or user is empty
-        $user = Auth::guard('sanctum')->user();
+        $user = auth()->guard('sanctum')->user();
 
         if ($user) {
             // Set user if bearer is valid
-            Auth::setUser($user);
+            auth()->setUser($user);
         }
 
         return $next($request);

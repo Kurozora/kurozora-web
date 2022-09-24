@@ -10,7 +10,6 @@ use App\Http\Requests\ResetPassword;
 use App\Http\Resources\FeedMessageResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
@@ -89,15 +88,15 @@ class UserController extends Controller
         $data = $request->validated();
 
         // Validate the password
-        if (!Hash::check($data['password'], Auth::user()->password)) {
+        if (!Hash::check($data['password'], auth()->user()->password)) {
             throw new AuthorizationException(__('This password does not match our records.'));
         }
 
         // Delete the user and any relevant records
-        $deleter->delete(Auth::user()->fresh());
+        $deleter->delete(auth()->user()->fresh());
 
         // Logout the user
-        Auth::logout();
+        auth()->logout();
 
         return JSONResult::success();
     }

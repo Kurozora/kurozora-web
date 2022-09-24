@@ -3,7 +3,6 @@
 namespace Tests\Unit\Helpers;
 
 use App\Helpers\Settings;
-use Auth;
 use Exception;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
@@ -35,7 +34,7 @@ class SettingsTest extends TestCase
     function can_get_all_settings(): void
     {
         // Authenticate the user.
-        Auth::login($this->user);
+        auth()->login($this->user);
 
         // Assert settings array is not empty.
         $this->assertNotEmpty(settings()->all());
@@ -49,7 +48,7 @@ class SettingsTest extends TestCase
     function can_get_a_specific_setting(): void
     {
         // Authenticate the user.
-        Auth::login($this->user);
+        auth()->login($this->user);
 
         // Assert value type is bool when using the get method.
         $this->assertIsBool(settings()->get('can_change_username'));
@@ -66,7 +65,7 @@ class SettingsTest extends TestCase
     function cannot_get_a_setting_that_does_not_exist(): void
     {
         // Authenticate the user.
-        Auth::login($this->user);
+        auth()->login($this->user);
 
         // Assert that an instance of Exception was thrown.
         $this->expectException(Exception::class);
@@ -83,7 +82,7 @@ class SettingsTest extends TestCase
     function can_set_a_setting_that_already_exist(): void
     {
         // Authenticate the user.
-        Auth::login($this->user);
+        auth()->login($this->user);
 
         // Asser the can_change_username setting is false.
         $this->assertFalse(settings()->get('can_change_username'));
@@ -106,7 +105,7 @@ class SettingsTest extends TestCase
     function can_set_a_new_setting_that_does_not_exist(): void
     {
         // Authenticate the user.
-        Auth::login($this->user);
+        auth()->login($this->user);
 
         // Assert the new_setting_exists setting is null.
         $this->assertNull(settings()->get('new_setting_exists'));
@@ -129,7 +128,7 @@ class SettingsTest extends TestCase
     function can_determine_whether_a_setting_exists(): void
     {
         // Authenticate the user.
-        Auth::login($this->user);
+        auth()->login($this->user);
 
         // Assert the settings contains a can_change_username setting.
         $this->assertTrue(settings()->has('can_change_username'));
@@ -143,7 +142,7 @@ class SettingsTest extends TestCase
     function can_determine_whether_a_setting_does_not_exists(): void
     {
         // Authenticate the user.
-        Auth::login($this->user);
+        auth()->login($this->user);
 
         // Assert the settings does not contain a new_setting_exists setting.
         $this->assertFalse(settings()->has('new_setting_exists'));
@@ -164,7 +163,7 @@ class SettingsTest extends TestCase
         ];
 
         // Authenticate the user.
-        Auth::login($this->user);
+        auth()->login($this->user);
 
         // Assert the existing settings are how we expect them.
         $this->assertFalse(settings('can_change_username'));
@@ -192,7 +191,7 @@ class SettingsTest extends TestCase
     function settings_method_returns_the_settings_object_if_nothing_is_provided(): void
     {
         // Authenticate the user.
-        Auth::login($this->user);
+        auth()->login($this->user);
 
         // Assert a Settings instance is returned.
         $this->assertInstanceOf(Settings::class, settings());
@@ -206,7 +205,7 @@ class SettingsTest extends TestCase
     function settings_method_can_get_a_setting_if_key_is_provided(): void
     {
         // Authenticate the user.
-        Auth::login($this->user);
+        auth()->login($this->user);
 
         // Assert the can_change_username setting is false.
         $this->assertFalse(settings('can_change_username'));
@@ -220,7 +219,7 @@ class SettingsTest extends TestCase
     function settings_method_cannot_get_a_setting_if_the_provided_key_does_not_exist(): void
     {
         // Authenticate the user.
-        Auth::login($this->user);
+        auth()->login($this->user);
 
         // Assert the new_setting_exists setting is null.
         $this->assertNull(settings('new_setting_exists'));
@@ -234,7 +233,7 @@ class SettingsTest extends TestCase
     function settings_method_can_set_an_existing_setting_if_a_key_and_a_value_is_provided(): void
     {
         // Authenticate the user.
-        Auth::login($this->user);
+        auth()->login($this->user);
 
         // Assert can_change_username is false before setting.
         $this->assertFalse(settings()->get('can_change_username'));
@@ -257,7 +256,7 @@ class SettingsTest extends TestCase
     function settings_method_can_set_a_new_setting_if_a_key_and_a_value_is_provided(): void
     {
         // Authenticate the user.
-        Auth::login($this->user);
+        auth()->login($this->user);
 
         // Add a new setting.
         $isSet = settings('new_setting_exists', true);

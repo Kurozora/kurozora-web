@@ -8,7 +8,6 @@ use App\Models\Anime;
 use App\Models\Episode;
 use App\Models\Season;
 use App\Models\Video;
-use Auth;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -130,7 +129,7 @@ class Details extends Component
      */
     protected function setupActions()
     {
-        $user = Auth::user();
+        $user = auth()->user();
         if (!empty($user)) {
             $this->isTracking = $user->isTracking($this->anime);
             $this->isReminded = $user->reminder_anime()->where('anime_id', $this->anime->id)->exists();
@@ -185,7 +184,7 @@ class Details extends Component
      */
     public function remindAnime()
     {
-        $user = Auth::user();
+        $user = auth()->user();
 
         if ($user->isPro()) {
             if ($this->isTracking) {

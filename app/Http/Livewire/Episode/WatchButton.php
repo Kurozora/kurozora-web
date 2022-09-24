@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Episode;
 
 use App\Models\Episode;
-use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -48,7 +47,7 @@ class WatchButton extends Component
         $this->buttonStyle = $buttonStyle;
 
         // Set watch status, else default to "disabled"
-        $this->hasWatched = Auth::user()?->hasWatched($this->episode) ?? false;
+        $this->hasWatched = auth()->user()?->hasWatched($this->episode) ?? false;
     }
 
     /**
@@ -58,7 +57,7 @@ class WatchButton extends Component
      */
     public function updateWatchStatus(): Application|RedirectResponse|Redirector|null
     {
-        $user = Auth::user();
+        $user = auth()->user();
 
         // Require user to authenticate if necessary.
         if (empty($user)) {

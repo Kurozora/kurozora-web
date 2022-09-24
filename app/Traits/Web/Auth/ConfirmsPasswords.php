@@ -2,7 +2,6 @@
 
 namespace App\Traits\Web\Auth;
 
-use Auth;
 use Illuminate\Validation\ValidationException;
 
 trait ConfirmsPasswords
@@ -34,14 +33,15 @@ trait ConfirmsPasswords
      * @param string $confirmableId
      * @return void
      */
-    public function startConfirmingPassword(string $confirmableId)
+    public function startConfirmingPassword(string $confirmableId): void
     {
         $this->resetErrorBag();
 
         if ($this->passwordIsConfirmed()) {
-            return $this->dispatchBrowserEvent('password-confirmed', [
+            $this->dispatchBrowserEvent('password-confirmed', [
                 'id' => $confirmableId,
             ]);
+            return;
         }
 
         $this->confirmingPassword = true;
@@ -70,8 +70,8 @@ trait ConfirmsPasswords
      */
     public function confirmPassword(): void
     {
-        if (!Auth::validate([
-            'username' => Auth::user()->username,
+        if (!auth()->validate([
+            'username' => auth()->user()->username,
             'password' => $this->confirmablePassword
         ])) {
             throw ValidationException::withMessages([

@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use App\Models\User;
-use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -51,7 +50,7 @@ class UserResourceBasic extends JsonResource
             ]
         ]);
 
-        if (Auth::check()) {
+        if (auth()->check()) {
             $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
         }
 
@@ -70,7 +69,7 @@ class UserResourceBasic extends JsonResource
     protected function getUserSpecificDetails(): array
     {
         $followedUser = $this->resource;
-        $user = Auth::user();
+        $user = auth()->user();
 
         $isFollowed = null;
         if ($followedUser->id != $user->id) {

@@ -16,7 +16,6 @@ use App\Http\Resources\SessionResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceBasic;
 use App\Models\PersonalAccessToken;
-use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -58,7 +57,7 @@ class MeController extends Controller
     public function updateProfile(UpdateProfileRequest $request): JsonResponse
     {
         $data = $request->validated();
-        $user = Auth::user();
+        $user = auth()->user();
 
         // Track if anything changed
         $changedFields = [];
@@ -144,7 +143,7 @@ class MeController extends Controller
         $data = $request->validated();
 
         // Get the authenticated user
-        $user = Auth::user();
+        $user = auth()->user();
 
         // Get paginated sessions except current session
         $tokens = $user->tokens()->paginate($data['limit'] ?? 25);
@@ -169,7 +168,7 @@ class MeController extends Controller
         $data = $request->validated();
 
         // Get the authenticated user
-        $user = Auth::user();
+        $user = auth()->user();
 
         // Paginate the favorite anime
         $favoriteAnime = $user->favorite_anime()->paginate($data['limit'] ?? 25);
@@ -195,7 +194,7 @@ class MeController extends Controller
         $data = $request->validated();
 
         // Get the authenticated user
-        $user = Auth::user();
+        $user = auth()->user();
 
         // Get the feed messages
         $feedMessages = $user->feed_messages()
@@ -222,7 +221,7 @@ class MeController extends Controller
         $data = $request->validated();
 
         // Get the authenticated user
-        $user = Auth::user();
+        $user = auth()->user();
 
         // Get the followers
         $followers = $user->followers()->paginate($data['limit'] ?? 25);
@@ -247,7 +246,7 @@ class MeController extends Controller
         $data = $request->validated();
 
         // Get the authenticated user
-        $user = Auth::user();
+        $user = auth()->user();
 
         // Get the following
         $following = $user->following()->paginate($data['limit'] ?? 25);
@@ -272,7 +271,7 @@ class MeController extends Controller
         $data = $request->validated();
 
         // Get the authenticated user
-        $user = Auth::user();
+        $user = auth()->user();
 
         // Get paginated sessions except current session
         $sessions = $user->sessions()->paginate($data['limit'] ?? 25);

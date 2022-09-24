@@ -8,7 +8,6 @@ use App\Http\Requests\FeedMessageRepliesRequest;
 use App\Http\Requests\FeedMessageUpdateRequest;
 use App\Http\Resources\FeedMessageResource;
 use App\Models\FeedMessage;
-use Auth;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -41,7 +40,7 @@ class FeedMessageController extends Controller
         $data = $request->validated();
 
         // Get the authenticated user
-        $user = Auth::user();
+        $user = auth()->user();
 
         // Check if user is allowed to edit the feed message.
         if ($user->id !== $feedMessage->user_id) {
@@ -99,7 +98,7 @@ class FeedMessageController extends Controller
     function heart(FeedMessage $feedMessage): JsonResponse
     {
         // Get the authenticated user
-        $user = Auth::user();
+        $user = auth()->user();
 
         // Get the vote
         $voteAction = $user->toggleHeart($feedMessage);
@@ -122,7 +121,7 @@ class FeedMessageController extends Controller
     public function delete(FeedMessage $feedMessage): JsonResponse
     {
         // Get the authenticated user
-        $user = Auth::user();
+        $user = auth()->user();
 
         // Check if user is allowed to edit the feed message.
         if ($user->id !== $feedMessage->user_id) {

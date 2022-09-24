@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Profile;
 
 use App\Contracts\UpdatesUserPasswords;
-use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -32,7 +31,7 @@ class UpdatePasswordForm extends Component
     {
         $this->resetErrorBag();
 
-        $updater->update(Auth::user(), $this->state);
+        $updater->update(auth()->user(), $this->state);
 
         $this->state = [
             'current_password' => '',

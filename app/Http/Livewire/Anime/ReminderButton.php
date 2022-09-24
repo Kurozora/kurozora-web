@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Anime;
 
 use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
-use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -59,7 +58,7 @@ class ReminderButton extends Component
      */
     protected function setupActions()
     {
-        $user = Auth::user();
+        $user = auth()->user();
         if (!empty($user)) {
             $this->isTracking = $user->isTracking($this->anime);
             $this->isReminded = $user->reminder_anime()->where('anime_id', $this->anime->id)->exists();
@@ -74,7 +73,7 @@ class ReminderButton extends Component
     public function remindAnime()
     {
         if (!$this->isReminded) {
-            $user = Auth::user();
+            $user = auth()->user();
 
             if (!$user->isPro()) {
                 if (!$this->isTracking) {
