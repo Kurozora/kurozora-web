@@ -218,7 +218,7 @@ class Person extends KModel implements HasMedia, Sitemapable
     public function getAnime(int $limit = 25, int $page = 1): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'person.anime', 'id' => $this->id, 'tvRating' => settings('tv_rating'), 'limit' => $limit, 'page' => $page]);
+        $cacheKey = self::cacheKey(['name' => 'person.anime', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_ANIME_SECONDS, function () use ($limit) {

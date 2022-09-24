@@ -194,8 +194,8 @@ class Studio extends Resource
 
             Select::make('Type')
                 ->options(StudioType::asSelectArray())
-                ->displayUsing(function (StudioType $model) {
-                    return $model->key;
+                ->displayUsing(function (StudioType $studioType) {
+                    return $studioType->key;
                 })
                 ->rules('required')
                 ->sortable(),
