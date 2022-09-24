@@ -1,20 +1,33 @@
-@props(['link', 'title', 'imageUrl' => null])
+@props(['link', 'embedLink', 'title', 'imageUrl', 'type'])
 
 <div
     {{ $attributes->merge(['class' => 'flex flex-col gap-4']) }}
     x-data="{
-        shareLink: '',
+        shareLink: '{{ $link }}',
         updateShareLink() {
+            let link = this.generateShareLink()
+
+            if ('{{ $type }}' === 'episode' && this.shouldEmbed) {
+                this.shareLink = `<iframe scrolling=&quot;no&quot; frameborder=&quot;no&quot; marginwidth=0 marginheight=0 width=&quot;853&quot; height=&quot;480&quot; allowfullscreen=&quot;allowfullscreen&quot; mozallowfullscreen=&quot;mozallowfullscreen&quot; msallowfullscreen=&quot;msallowfullscreen&quot; oallowfullscreen=&quot;oallowfullscreen&quot; webkitallowfullscreen=&quot;webkitallowfullscreen&quot; allow=&quot;autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; src=&quot;` + link + `&quot; title=&quot;{{ $title }}&quot;></iframe>`
+            } else if ('{{ $type }}' === 'song' && this.shouldEmbed) {
+                this.shareLink = '{{ str(view('components.embeds.song', ['url' => $embedLink, 'title' => $title]))->trim() }}'
+            } else {
+                this.shareLink = link
+            }
+        },
+        generateShareLink() {
+            let link = this.shouldEmbed ? '{{ $embedLink }}' : '{{ $link }}'
+
             if (this.shouldStartAt) {
                 let preferredProgress = Math.round(this.preferredProgress)
-                this.shareLink = '{{ $link }}' + (preferredProgress ? '?t=' + preferredProgress : '')
-            } else {
-                this.shareLink = '{{ $link }}'
+                return link + (preferredProgress ? '?t=' + preferredProgress : '')
             }
+
+            return link
         },
         convertProgressToTime(progress) {
             if (isNaN(progress)) {
-                return '00:00'
+                return progress
             } else if (progress < 3600) {
                 return new Date(progress * 1000).toISOString().substring(14, 19)
             }
@@ -37,7 +50,8 @@
         currentProgress: $persist(0).as('_x_progress' + window.location.pathname.replaceAll('/', '_')),
         preferredProgress: 0,
         displayedProgress: 0,
-        shouldStartAt: false
+        shouldStartAt: false,
+        shouldEmbed: false,
     }"
     x-init="
         $watch('preferredProgress', function() {
@@ -50,11 +64,17 @@
         $watch('shouldStartAt', function() {
             updateShareLink()
         })
+        $watch('shouldEmbed', function () {
+            updateShareLink()
+        })
         preferredProgress = Math.round(currentProgress)
         displayedProgress = normalizeDisplayedProgress(preferredProgress)
     "
 >
-    <div class="flex flex-row flex-nowrap gap-4 overflow-scroll no-scrollbar">
+    <div
+        class="flex flex-row flex-nowrap gap-4 overflow-scroll no-scrollbar"
+        x-show="!shouldEmbed"
+    >
         <a
             href="https://api.whatsapp.com/send/?text={{ $link }}&type=custom_url&app_absent=0"
             class="flex flex-col items-center"
@@ -164,6 +184,17 @@
         </a>
     </div>
 
+    <div x-show="shouldEmbed">
+        @switch ($type)
+            @case('episode')
+                <iframe scrolling="no" frameborder="no" marginwidth=0 marginheight=0 width="853" height="480" src="{{ $embedLink }}" title="{{ $title }}" class="w-full"></iframe>
+                @break
+            @case('song')
+                <iframe scrolling="no" frameborder="no" style="width:100%;overflow:hidden;background:transparent;" height="240" loading="lazy" src="{{ $embedLink }}" title="{{ $title }}"></iframe>
+                @break
+        @endswitch
+    </div>
+
     <div class="flex gap-2">
         <x-input id="link" x-model="shareLink" readonly />
 
@@ -185,16 +216,24 @@
         </x-button>
     </div>
 
-    <div class="flex gap-2">
-        <x-checkbox x-model="shouldStartAt">
-            {{ __('Start at') }}
-        </x-checkbox>
+    @if ($type === 'episode')
+        <div class="flex gap-2">
+            <x-checkbox x-model="shouldStartAt">
+                {{ __('Start at') }}
+            </x-checkbox>
 
-        <x-input
-            id="startsAt"
-            type="text"
-            x-model.debounce.750ms="displayedProgress"
-            x-bind:disabled="!shouldStartAt"
-        />
+            <x-input
+                id="startsAt"
+                type="text"
+                x-model.debounce.750ms="displayedProgress"
+                x-bind:disabled="!shouldStartAt"
+            />
+        </div>
+    @endif
+
+    <div class="flex gap-2">
+        <x-checkbox x-model="shouldEmbed">
+            {{ __('Embed') }}
+        </x-checkbox>
     </div>
 </div>
