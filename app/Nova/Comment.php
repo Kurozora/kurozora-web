@@ -59,7 +59,7 @@ class Comment extends Resource
         return [
             Heading::make('Identification'),
 
-            Text::make('UUID', 'id')
+            Text::make('ULID', 'id')
                 ->required()
                 ->hideFromIndex(),
 

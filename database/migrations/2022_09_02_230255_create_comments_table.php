@@ -16,8 +16,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(Comment::TABLE_NAME, function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuid('comment_id')->nullable();
+            $table->ulid('id')->primary();
+            $table->ulid('comment_id')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->morphs('commentable');
             $table->text('content');
