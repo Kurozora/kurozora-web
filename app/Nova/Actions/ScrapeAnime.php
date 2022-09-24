@@ -4,7 +4,6 @@ namespace App\Nova\Actions;
 
 use App\Models\Anime;
 use Artisan;
-use Auth;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -25,7 +24,7 @@ class ScrapeAnime extends Action
      */
     public function handle(ActionFields $fields, Collection $models): mixed
     {
-        $isOwner = Auth::user()->id == 2;
+        $isOwner = auth()->user()->id == 2;
         $nextUpdateTime = $isOwner ? 0 : 15;
 
         if (!$isOwner && $models->count() != 1) {

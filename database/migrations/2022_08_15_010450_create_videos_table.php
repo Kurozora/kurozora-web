@@ -17,7 +17,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(Video::TABLE_NAME, function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->ulid('id')->primary();
             $table->morphs('videoable');
             $table->unsignedBigInteger('language_id');
             $table->string('source');

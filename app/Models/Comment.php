@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Model\HasComments;
-use App\Traits\Model\HasUuid;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -12,19 +12,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Comment extends KModel
 {
     use HasComments,
-        HasUuid,
+        HasUlids,
         SoftDeletes;
 
     // Table name
     const TABLE_NAME = 'comments';
     protected $table = self::TABLE_NAME;
-
-    /**
-     * The "type" of the primary key ID.
-     *
-     * @var string $keyType
-     */
-    protected $keyType = 'string';
 
     /**
      * Indicates if the IDs are auto-incrementing.

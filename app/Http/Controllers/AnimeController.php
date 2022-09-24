@@ -25,7 +25,6 @@ use App\Http\Resources\SeasonResourceIdentity;
 use App\Http\Resources\StudioResource;
 use App\Models\Anime;
 use App\Models\MediaRating;
-use Auth;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -251,7 +250,7 @@ class AnimeController extends Controller
      */
     public function rateAnime(RateAnimeRequest $request, Anime $anime): JsonResponse
     {
-        $user = Auth::user();
+        $user = auth()->user();
 
         // Check if the user is already tracking the anime
         if (!$user->isTracking($anime)) {

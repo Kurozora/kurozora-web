@@ -46,7 +46,7 @@
                 </div>
 
                 @auth
-                    @if ($user->id == Auth::user()->id)
+                    @if ($user->id == auth()->user()->id)
                         <x-button wire:click="togglePopupFor('edit')">{{ __('Edit') }}</x-button>
                     @else
                         <livewire:components.follow-button :user="$user" />

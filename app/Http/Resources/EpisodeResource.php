@@ -4,7 +4,6 @@ namespace App\Http\Resources;
 
 use App\Enums\WatchStatus;
 use App\Models\Episode;
-use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -43,7 +42,7 @@ class EpisodeResource extends JsonResource
             ]
         ]);
 
-        if (Auth::check()) {
+        if (auth()->check()) {
             $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
         }
 
@@ -57,7 +56,7 @@ class EpisodeResource extends JsonResource
      */
     protected function getUserSpecificDetails(): array
     {
-        $user = Auth::user();
+        $user = auth()->user();
         $anime = $this->resource->anime;
 
         // Get the user rating for this episode

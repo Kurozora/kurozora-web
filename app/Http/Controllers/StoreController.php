@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Helpers\JSONResult;
 use App\Http\Requests\VerifyReceiptRequest;
 use App\Models\UserReceipt;
-use Auth;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
 use Imdhemy\AppStore\Exceptions\InvalidReceiptException;
@@ -52,7 +51,7 @@ class StoreController extends Controller
         $willAutoRenew = $pendingRenewalInfo->isAutoRenewStatus();
 
         // Get authenticated user.
-        $userID = Auth::id();
+        $userID = auth()->id();
 
         /** @var UserReceipt $foundReceipt */
         $foundReceipt = UserReceipt::whereUserId($userID)->first();

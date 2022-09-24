@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Helpers\Settings;
 use App\Models\PersonalAccessToken;
-use Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
@@ -51,7 +50,7 @@ class AppServiceProvider extends ServiceProvider
     {
         // Register the user settings helper class.
         $this->app->singleton(Settings::class, function() {
-            $user = Auth::user();
+            $user = auth()->user();
 
             return new Settings($user->settings, $user);
         });

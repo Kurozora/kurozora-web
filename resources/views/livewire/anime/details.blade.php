@@ -240,7 +240,7 @@
 
                     @auth
                         <div class="text-right">
-                            <livewire:anime.star-rating :anime="$anime" :rating="$anime->ratings()->firstWhere('user_id', Auth::user()->id)?->rating" :star-size="'lg'" />
+                            <livewire:anime.star-rating :anime="$anime" :rating="$anime->ratings()->firstWhere('user_id', auth()->user()->id)?->rating" :star-size="'lg'" />
                             <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', $anime->stats?->rating_count, ['x' => $anime->stats?->rating_count]) }}</p>
                         </div>
                     @endif

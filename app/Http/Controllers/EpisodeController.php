@@ -9,7 +9,6 @@ use App\Http\Requests\RateEpisodeRequest;
 use App\Http\Resources\EpisodeResource;
 use App\Models\Episode;
 use App\Models\MediaRating;
-use Auth;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -43,7 +42,7 @@ class EpisodeController extends Controller
      */
     public function watched(MarkEpisodeAsWatchedRequest $request, Episode $episode): JSONResponse
     {
-        $user = Auth::user();
+        $user = auth()->user();
 
         // Find if the user has watched the episode
         $isAlreadyWatched = $user->hasWatched($episode);
@@ -72,7 +71,7 @@ class EpisodeController extends Controller
      */
     public function rateEpisode(RateEpisodeRequest $request, Episode $episode): JsonResponse
     {
-        $user = Auth::user();
+        $user = auth()->user();
 
         // Check if the episode has been watched
         if (!$user->hasWatched($episode)) {

@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Profile;
 
-use Auth;
+use App\Contracts\DeletesUsers;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -10,7 +10,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use App\Contracts\DeletesUsers;
 use Livewire\Component;
 
 class DeleteUserForm extends Component
@@ -34,7 +33,7 @@ class DeleteUserForm extends Component
      *
      * @return void
      */
-    public function confirmUserDeletion()
+    public function confirmUserDeletion(): void
     {
         $this->resetErrorBag();
 
@@ -57,15 +56,15 @@ class DeleteUserForm extends Component
     {
         $this->resetErrorBag();
 
-        if (!Hash::check($this->password, Auth::user()->password)) {
+        if (!Hash::check($this->password, auth()->user()->password)) {
             throw ValidationException::withMessages([
                 'password' => [__('This password does not match our records.')],
             ]);
         }
 
-        $deleter->delete(Auth::user()->fresh());
+        $deleter->delete(auth()->user()->fresh());
 
-        Auth::logout();
+        auth()->logout();
 
         return redirect('/');
     }

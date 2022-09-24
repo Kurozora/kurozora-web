@@ -57,7 +57,7 @@ class Video extends Resource
             Heading::make('Identification')
                 ->onlyOnDetail(),
 
-            Text::make('UUID', 'id')
+            Text::make('ULID', 'id')
                 ->onlyOnDetail()
                 ->sortable(),
 
@@ -92,7 +92,9 @@ class Video extends Resource
 
             Select::make('Type')
                 ->options(VideoType::asSelectArray())
-                ->displayUsingLabels()
+                ->displayUsing(function (VideoType $videoType) {
+                    return $videoType->key;
+                })
                 ->required()
                 ->sortable()
                 ->help('The type of the video. For example: Promotional Video.<br />Choose <strong>Default</strong> for Episode.'),

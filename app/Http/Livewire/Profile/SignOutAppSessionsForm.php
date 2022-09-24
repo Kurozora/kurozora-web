@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Profile;
 
 use App\Models\PersonalAccessToken;
-use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -33,7 +32,7 @@ class SignOutAppSessionsForm extends Component
      *
      * @return void
      */
-    public function confirmSignOut()
+    public function confirmSignOut(): void
     {
         $this->password = '';
 
@@ -52,13 +51,13 @@ class SignOutAppSessionsForm extends Component
     {
         $this->resetErrorBag();
 
-        if (!Hash::check($this->password, Auth::user()->password)) {
+        if (!Hash::check($this->password, auth()->user()->password)) {
             throw ValidationException::withMessages([
                 'password' => [__('This password does not match our records.')],
             ]);
         }
 
-        Auth::user()->tokens()
+        auth()->user()->tokens()
             ->get()
             ->each
             ->delete();
@@ -75,7 +74,7 @@ class SignOutAppSessionsForm extends Component
      */
     public function getTokensProperty(): Collection
     {
-        $currentTokens = Auth::user()->tokens;
+        $currentTokens = auth()->user()->tokens;
 
         return $currentTokens->map(function (PersonalAccessToken $personalAccessToken) {
             return (object) [

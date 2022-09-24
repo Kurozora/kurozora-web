@@ -19,7 +19,7 @@ class ValidateProfileImage implements Rule
      */
     public function passes($attribute, $value): bool
     {
-//        $user = Auth::user();
+//        $user = auth()->user();
 //        $userReceipt = $user->receipt;
 
         $rules = ['nullable', 'image', 'max:2048'];

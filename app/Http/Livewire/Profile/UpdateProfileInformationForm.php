@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Profile;
 
 use App\Contracts\UpdatesUserProfileInformation;
-use Auth;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
@@ -49,9 +48,9 @@ class UpdateProfileInformationForm extends Component
      *
      * @return void
      */
-    public function mount()
+    public function mount(): void
     {
-        $this->state = Auth::user()->withoutRelations()->toArray();
+        $this->state = auth()->user()->withoutRelations()->toArray();
     }
 
     /**
@@ -60,7 +59,7 @@ class UpdateProfileInformationForm extends Component
      * @param UpdatesUserProfileInformation $updater
      * @return void
      */
-    public function updateProfileInformation(UpdatesUserProfileInformation $updater)
+    public function updateProfileInformation(UpdatesUserProfileInformation $updater): void
     {
         $this->resetErrorBag();
 
@@ -74,7 +73,7 @@ class UpdateProfileInformationForm extends Component
             $attributes = array_merge($attributes, ['bannerImage' => $this->bannerImage]);
         }
 
-        $updater->update(Auth::user(), $attributes);
+        $updater->update(auth()->user(), $attributes);
 
         $this->emit('saved');
 
@@ -95,9 +94,9 @@ class UpdateProfileInformationForm extends Component
      *
      * @return void
      */
-    public function deleteProfileImage()
+    public function deleteProfileImage(): void
     {
-        Auth::user()->deleteProfileImage();
+        auth()->user()->deleteProfileImage();
 
         $this->emitSelf('refresh-component');
         $this->emit('refresh-profile-image');
@@ -109,9 +108,9 @@ class UpdateProfileInformationForm extends Component
      *
      * @return void
      */
-    public function deleteBannerImage()
+    public function deleteBannerImage(): void
     {
-        Auth::user()->deleteBannerImage();
+        auth()->user()->deleteBannerImage();
 
         $this->emitSelf('refresh-component');
         $this->emit('refresh-banner-image');
