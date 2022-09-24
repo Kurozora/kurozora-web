@@ -25,20 +25,6 @@ class Details extends Component
     public Episode $episode;
 
     /**
-     * The object containing the season data.
-     *
-     * @var Season $season
-     */
-    public Season $season;
-
-    /**
-     * The object containing the anime data.
-     *
-     * @var Anime $anime
-     */
-    public Anime $anime;
-
-    /**
      * Whether the user is tracking the anime.
      *
      * @var bool $isTracking
@@ -119,8 +105,6 @@ class Details extends Component
         EpisodeViewed::dispatch($episode);
 
         $this->episode = $episode;
-        $this->season = $this->episode->season;
-        $this->anime = $this->episode->anime;
         $this->setupActions();
     }
 
@@ -211,6 +195,26 @@ class Details extends Component
             ];
             $this->showPopup = true;
         }
+    }
+
+    /**
+     * The object containing the anime data.
+     *
+     * @return Anime|null
+     */
+    public function getAnimeProperty(): ?Anime
+    {
+        return $this->episode->anime;
+    }
+
+    /**
+     * The object containing the season data.
+     *
+     * @return Season|null
+     */
+    public function getSeasonProperty(): ?Season
+    {
+        return $this->episode->season;
     }
 
     /**

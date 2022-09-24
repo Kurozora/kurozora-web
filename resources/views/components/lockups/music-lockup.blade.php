@@ -59,7 +59,7 @@
     <div class="relative mt-4">
         <div class="flex flex-col gap-1 justify-between">
             <span class="flex gap-2 justify-between">
-                <p class="leading-tight line-clamp-2">{{ $animeSong->song->title }}</p>
+                <a class="leading-tight line-clamp-2" href="{{ route('songs.details', $animeSong->song) }}">{{ $animeSong->song->title }}</a>
                 <span class="ml-1 pl-2 pr-2 pt-1 pb-1 h-full {{ $animeSong->type->color() }} text-white text-xs font-semibold whitespace-nowrap rounded-full">{{ $animeSong->type->abbreviated() . ' #' . $animeSong->position }}</span>
             </span>
 
