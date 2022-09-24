@@ -178,7 +178,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
     public function getAnime(int $limit = 25, int $page = 1, array $where = []): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'studios.anime', 'id' => $this->id, 'tvRating' => settings('tv_rating'), 'limit' => $limit, 'page' => $page, 'where' => $where]);
+        $cacheKey = self::cacheKey(['name' => 'studios.anime', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page, 'where' => $where]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_ANIME_SECONDS, function () use ($limit, $where) {

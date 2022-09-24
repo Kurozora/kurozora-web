@@ -13,7 +13,6 @@ use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\TvRated;
 use Astrotomic\Translatable\Translatable;
-use Auth;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Carbon\CarbonInterval;
@@ -229,21 +228,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Get the indexable data array for the model.
-     *
-     * @return array
-     */
-    public function toSearchableArray(): array
-    {
-        $anime = $this->toArray();
-        $anime['first_aired'] = $this->first_aired?->timestamp;
-        $anime['last_aired'] = $this->last_aired?->timestamp;
-        $anime['created_at'] = $this->created_at?->timestamp;
-        $anime['updated_at'] = $this->updated_at?->timestamp;
-        return $anime;
-    }
-
-    /**
      * Get the season in which the anime aired.
      *
      * @param int|null $value
@@ -427,7 +411,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function getStudios(int $limit = 25, int $page = 1): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.studios', 'id' => $this->id, 'tvRating' => settings('tv_rating'), 'limit' => $limit, 'page' => $page]);
+        $cacheKey = self::cacheKey(['name' => 'anime.studios', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_STUDIOS_SECONDS, function () use ($limit) {
@@ -457,7 +441,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function getAnimeStudios(?int $limit = null): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.anime_studios', 'id' => $this->id, 'tvRating' => settings('tv_rating'), 'limit' => $limit]);
+        $cacheKey = self::cacheKey(['name' => 'anime.anime_studios', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_STUDIOS_SECONDS, function () use ($limit) {
@@ -496,7 +480,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function getCharacters(int $limit = 25, int $page = 1): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.characters', 'id' => $this->id, 'tvRating' => settings('tv_rating'), 'limit' => $limit, 'page' => $page]);
+        $cacheKey = self::cacheKey(['name' => 'anime.characters', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_CHARACTERS_SECONDS, function () use ($limit) {
@@ -525,7 +509,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function getCast(int $limit = 25, int $page = 1): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.cast', 'id' => $this->id, 'tvRating' => settings('tv_rating'), 'limit' => $limit, 'page' => $page]);
+        $cacheKey = self::cacheKey(['name' => 'anime.cast', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_ANIME_CAST_SECONDS, function () use ($limit) {
@@ -554,7 +538,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function getEpisodes(array $whereBetween = [], ?int $limit = null): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.episodes', 'id' => $this->id, 'tvRating' => settings('tv_rating'), 'limit' => $limit, 'whereBetween' => $whereBetween]);
+        $cacheKey = self::cacheKey(['name' => 'anime.episodes', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'whereBetween' => $whereBetween]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_EPISODES_SECONDS, function () use ($whereBetween, $limit) {
@@ -589,7 +573,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function getSeasons(int $limit = 25, int $page = 1, bool $reversed = false): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.seasons', 'id' => $this->id, 'tvRating' => settings('tv_rating'), 'limit' => $limit, 'page' => $page, 'reversed' => $reversed]);
+        $cacheKey = self::cacheKey(['name' => 'anime.seasons', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page, 'reversed' => $reversed]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_SEASONS_SECONDS, function () use ($reversed, $limit) {
@@ -754,7 +738,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function getAnimeRelations(int $limit = 25, int $page = 1): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.anime_relations', 'id' => $this->id, 'tvRating' => settings('tv_rating'), 'limit' => $limit, 'page' => $page]);
+        $cacheKey = self::cacheKey(['name' => 'anime.anime_relations', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_RELATIONS_SECONDS, function () use ($limit) {
@@ -774,9 +758,10 @@ class Anime extends KModel implements HasMedia, Sitemapable
             ->join(Anime::TABLE_NAME, function ($join) {
                 $join->on(Anime::TABLE_NAME . '.id', '=', MediaRelation::TABLE_NAME . '.related_id');
 
-                if (Auth::check()) {
-                    if (settings('tv_rating') >= 0) {
-                        $join->where('tv_rating_id', '<=', settings('tv_rating'));
+                if (auth()->check()) {
+                    $tvRating = settings('tv_rating');
+                    if ($tvRating >= 0) {
+                        $join->where('tv_rating_id', '<=', $tvRating);
                     }
                 }
             });
@@ -791,7 +776,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function getRelations(?int $limit = null): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.relations', 'id' => $this->id, 'tvRating' => settings('tv_rating'), 'limit' => $limit]);
+        $cacheKey = self::cacheKey(['name' => 'anime.relations', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_RELATIONS_SECONDS, function () use ($limit) {
@@ -952,7 +937,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function getSongs(int $limit = 25, int $page = 1): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.songs', 'id' => $this->id, 'tvRating' => settings('tv_rating'), 'limit' => $limit, 'page' => $page]);
+        $cacheKey = self::cacheKey(['name' => 'anime.songs', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_SONGS_SECONDS, function () use ($limit) {
@@ -980,7 +965,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function getAnimeSongs(int $limit = 25, int $page = 1): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.anime-songs', 'id' => $this->id, 'tvRating' => settings('tv_rating'), 'limit' => $limit, 'page' => $page]);
+        $cacheKey = self::cacheKey(['name' => 'anime.anime-songs', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_ANIME_SONGS_SECONDS, function () use ($limit) {
@@ -1018,7 +1003,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function getStaff(int $limit = 25, int $page = 1): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.staff', 'id' => $this->id, 'tvRating' => settings('tv_rating'), 'limit' => $limit, 'page' => $page]);
+        $cacheKey = self::cacheKey(['name' => 'anime.staff', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_STAFF_SECONDS, function () use ($limit) {
@@ -1079,6 +1064,21 @@ class Anime extends KModel implements HasMedia, Sitemapable
     {
         $scope = new TvRatingScope();
         $scope->apply($query , $this);
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+        $anime = $this->toArray();
+        $anime['first_aired'] = $this->first_aired?->timestamp;
+        $anime['last_aired'] = $this->last_aired?->timestamp;
+        $anime['created_at'] = $this->created_at?->timestamp;
+        $anime['updated_at'] = $this->updated_at?->timestamp;
+        return $anime;
     }
 
     /**
