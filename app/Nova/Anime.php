@@ -88,6 +88,10 @@ class Anime extends Resource
                 ->hideFromIndex()
                 ->help('Used to identify the Anime on <a target="_blank" href="https://anilist.co/anime/' . ($this->resource->anilist_id ?? 'slug-identifier') . '">AniList</a>'),
 
+            Text::make('Animix ID')
+                ->hideFromIndex()
+                ->help('Used to identify the Anime on <a target="_blank" href="https://animixplay.to/v1/' . ($this->resource->animix_id ?? 'slug-identifier') . '">AnimixPlay</a>'),
+
             Text::make('IMDB ID')
                 ->onlyOnForms()
                 ->help('Used to identify the Anime on <a target="_blank" href="https://imdb.com/title/' . ($this->resource->imdb_id ?? 'slug-identifier') . '">IMDB</a>'),
@@ -403,10 +407,16 @@ class Anime extends Resource
         return [
             (new ScrapeAnime)
                 ->confirmText('Are you sure you want to scrape this anime?')
-                ->confirmButtonText('Scrape')
+                ->confirmButtonText('Scrape Anime')
                 ->canSee(function ($request) {
-                    return $request->user()->hasPermissionTo('updateAnime');
+                    return $request->user()->can('updateAnime');
                 }),
+//            (new ScrapeEpisodes)
+//                ->confirmText('Are you sure you want to scrape episodes for this anime?')
+//                ->confirmButtonText('Scrape Episodes')
+//                ->canSee(function ($request) {
+//                    return $request->user()->can('updateAnime');
+//                }),
         ];
     }
 
