@@ -1,4 +1,4 @@
 User-agent: *
-Disallow: /nova*
+Disallow:
 
 Sitemap: https://cdn.kurozora.app/sitemaps/sitemap_index.xml

@@ -6,7 +6,6 @@ use App\Models\Anime;
 use App\Models\KDashboard\MediaRelated as KMediaRelated;
 use App\Models\MediaRelation;
 use App\Models\Relation;
-use App\Scopes\TvRatingScope;
 use Illuminate\Database\Eloquent\Collection;
 
 class ImportAnimeRelationProcessor
@@ -20,8 +19,8 @@ class ImportAnimeRelationProcessor
     public function process(Collection|array $kMediaRelated)
     {
         foreach ($kMediaRelated as $kRelatedMedia) {
-            $anime = Anime::withoutGlobalScope(new TvRatingScope)->firstWhere('mal_id', $kRelatedMedia->media_id);
-            $relatedAnime = Anime::withoutGlobalScope(new TvRatingScope)->firstWhere('mal_id', $kRelatedMedia->related_id);
+            $anime = Anime::withoutGlobalScopes()->firstWhere('mal_id', $kRelatedMedia->media_id);
+            $relatedAnime = Anime::withoutGlobalScopes()->firstWhere('mal_id', $kRelatedMedia->related_id);
             $relation = Relation::firstWhere('name', str($kRelatedMedia->related->related)->title());
 
             if (!empty($anime) && !empty($relatedAnime)) {

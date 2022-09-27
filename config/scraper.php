@@ -16,7 +16,11 @@ return [
 
     'domains' => [
         'mal' => 'https://myanimelist.net',
-        'tvdb' => 'https://tvdb.com'
+        'tvdb' => 'https://tvdb.com',
+        'animix_play' => [
+            'base' => 'https://animixplay.to',
+            'api' => 'https://animixplay.to/v1',
+        ]
     ]
 
 ];

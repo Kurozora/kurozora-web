@@ -9,7 +9,6 @@ use App\Models\Character;
 use App\Models\KDashboard\AnimeCharacter as KAnimeCast;
 use App\Models\Language;
 use App\Models\Person;
-use App\Scopes\TvRatingScope;
 use Illuminate\Database\Eloquent\Collection;
 
 class ImportAnimeCastProcessor
@@ -23,9 +22,9 @@ class ImportAnimeCastProcessor
     public function process(Collection|array $kAnimeCasts)
     {
         foreach ($kAnimeCasts as $kAnimeCast) {
-            $animeId = Anime::withoutGlobalScope(new TvRatingScope)->firstWhere('mal_id', $kAnimeCast->anime_id)->id;
-            $characterId = Character::firstWhere('mal_id' , $kAnimeCast->character_id)?->id;
-            $personId = Person::firstWhere('mal_id', $kAnimeCast->people_id)?->id;
+            $animeId = Anime::withoutGlobalScopes()->firstWhere('mal_id', $kAnimeCast->anime_id)->id;
+            $characterId = Character::withoutGlobalScopes()->firstWhere('mal_id' , $kAnimeCast->character_id)?->id;
+            $personId = Person::withoutGlobalScopes()->firstWhere('mal_id', $kAnimeCast->people_id)?->id;
 
             if (!empty($characterId)) {
                 $animeCast = AnimeCast::where([
