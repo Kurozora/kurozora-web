@@ -10,7 +10,6 @@ use App\Models\MediaRating;
 use App\Models\User;
 use App\Models\UserLibrary;
 use App\Notifications\AnimeImportFinished;
-use App\Scopes\TvRatingScope;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -129,7 +128,8 @@ class ProcessMALImport implements ShouldQueue
     protected function handleXMLFileAnime(int $malID, string $malStatus, int $malRating, ?string $malStartDate, ?string $malEndDate)
     {
         // Try to find the Anime in our DB
-        $anime = Anime::withoutGlobalScope(new TvRatingScope)->firstWhere('mal_id', $malID);
+        $anime = Anime::withoutGlobalScopes()
+            ->firstWhere('mal_id', $malID);
 
         // If a match was found
         if (!empty($anime)) {
