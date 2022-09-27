@@ -22,10 +22,10 @@
     </x-slot:appArgument>
 
     <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
-        <x-rows.small-lockup :related-animes="$animeRelations" :is-row="false" />
+        <x-rows.small-lockup :related-animes="$this->animeRelations" :is-row="false" />
 
         <section class="mt-4">
-            {{ $animeRelations->links() }}
+            {{ $this->animeRelations->links() }}
         </section>
     </div>
 </main>

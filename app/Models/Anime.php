@@ -763,6 +763,8 @@ class Anime extends KModel implements HasMedia, Sitemapable
                     if ($tvRating >= 0) {
                         $join->where('tv_rating_id', '<=', $tvRating);
                     }
+                } else {
+                    $join->where('tv_rating_id', '<=', 4);
                 }
             });
     }

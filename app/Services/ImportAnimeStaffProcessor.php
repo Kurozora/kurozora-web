@@ -7,7 +7,6 @@ use App\Models\AnimeStaff;
 use App\Models\KDashboard\AnimeStaff as KAnimeStaff;
 use App\Models\Person;
 use App\Models\StaffRole;
-use App\Scopes\TvRatingScope;
 use Illuminate\Database\Eloquent\Collection;
 
 class ImportAnimeStaffProcessor
@@ -27,9 +26,10 @@ class ImportAnimeStaffProcessor
                 default => $kStaff->position->position
             };
 
-            $anime = Anime::withoutGlobalScope(new TvRatingScope)->where([
-                ['mal_id', $kStaff->anime_id],
-            ])->first();
+            $anime = Anime::withoutGlobalScopes()
+                ->where([
+                    ['mal_id', $kStaff->anime_id],
+                ])->first();
             $person = Person::where([
                 ['mal_id', $kStaff->people_id],
             ])->first();
