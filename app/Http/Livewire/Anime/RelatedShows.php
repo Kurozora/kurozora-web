@@ -6,6 +6,7 @@ use App\Models\Anime;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -33,14 +34,22 @@ class RelatedShows extends Component
     }
 
     /**
+     * The object containing the related anime.
+     *
+     * @return LengthAwarePaginator
+     */
+    public function getAnimeRelationsProperty(): LengthAwarePaginator
+    {
+        return $this->anime->anime_relations()->paginate(25);
+    }
+
+    /**
      * Render the component.
      *
      * @return Application|Factory|View
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.anime.related-shows', [
-            'animeRelations' => $this->anime->anime_relations()->paginate(25)
-        ]);
+        return view('livewire.anime.related-shows');
     }
 }

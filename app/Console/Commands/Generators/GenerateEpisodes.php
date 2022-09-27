@@ -5,7 +5,6 @@ namespace App\Console\Commands\Generators;
 use App\Models\Anime;
 use App\Models\Episode;
 use App\Models\Season;
-use App\Scopes\TvRatingScope;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
@@ -45,7 +44,7 @@ class GenerateEpisodes extends Command
     {
         $totalSeasonsAdded = 0;
         $totalEpisodesAdded = 0;
-        Anime::withoutGlobalScope(new TvRatingScope)
+        Anime::withoutGlobalScopes()
             ->where([
                 ['first_aired', '!=', null],
                 ['last_aired', '!=', null],

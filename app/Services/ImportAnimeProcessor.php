@@ -10,7 +10,6 @@ use App\Models\MediaType;
 use App\Models\Source;
 use App\Models\Status;
 use App\Models\TvRating;
-use App\Scopes\TvRatingScope;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Carbon\Carbon;
 use Exception;
@@ -42,9 +41,10 @@ class ImportAnimeProcessor
     public function process(Collection|array $kAnimes)
     {
         foreach ($kAnimes as $kAnime) {
-            $anime = Anime::withoutGlobalScope(new TvRatingScope)->where([
-                ['mal_id', $kAnime->id],
-            ])->first();
+            $anime = Anime::withoutGlobalScopes()
+                ->where([
+                    ['mal_id', $kAnime->id],
+                ])->first();
 
             // Create or update the anime
             if (empty($anime)) {

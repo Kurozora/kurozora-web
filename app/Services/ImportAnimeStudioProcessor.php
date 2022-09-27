@@ -6,7 +6,6 @@ use App\Models\Anime;
 use App\Models\AnimeStudio;
 use App\Models\KDashboard\AnimeProducer as KAnimeProducer;
 use App\Models\Studio;
-use App\Scopes\TvRatingScope;
 use Illuminate\Database\Eloquent\Collection;
 
 class ImportAnimeStudioProcessor
@@ -20,7 +19,7 @@ class ImportAnimeStudioProcessor
     public function process(Collection|array $kAnimeProducers)
     {
         foreach ($kAnimeProducers as $kAnimeProducer) {
-            $anime = Anime::withoutGlobalScope(new TvRatingScope)->firstWhere('mal_id', $kAnimeProducer->anime_id);
+            $anime = Anime::withoutGlobalScopes()->firstWhere('mal_id', $kAnimeProducer->anime_id);
             $studio = Studio::firstWhere([
                 ['type', 'anime'],
                 ['mal_id', $kAnimeProducer->producer_id],

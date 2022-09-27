@@ -8,7 +8,6 @@ use App\Models\KDashboard\MediaGenre as KMediaGenre;
 use App\Models\MediaGenre;
 use App\Models\MediaTheme;
 use App\Models\Theme;
-use App\Scopes\TvRatingScope;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -24,11 +23,11 @@ class ImportAnimeGenreProcessor
     {
         foreach ($kMediaGenres as $kMediaGenre) {
             try {
-                $anime = Anime::withoutGlobalScope(new TvRatingScope)
+                $anime = Anime::withoutGlobalScopes()
                     ->firstWhere('mal_id', $kMediaGenre->media_id);
-                $genre = Genre::withoutGlobalScope(new TvRatingScope)
+                $genre = Genre::withoutGlobalScopes()
                     ->firstWhere('mal_id', $kMediaGenre->genre_id);
-                $theme = Theme::withoutGlobalScope(new TvRatingScope)
+                $theme = Theme::withoutGlobalScopes()
                     ->firstWhere('mal_id', $kMediaGenre->genre_id);
 
                 if (!$anime) {
