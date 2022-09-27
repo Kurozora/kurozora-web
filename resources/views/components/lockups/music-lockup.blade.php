@@ -57,18 +57,18 @@
     </div>
 
     <div class="relative mt-4">
-        <div class="flex flex-col gap-1 justify-between">
-            <span class="flex gap-2 justify-between">
-                <a class="leading-tight line-clamp-2" href="{{ route('songs.details', $animeSong->song) }}">{{ $animeSong->song->title }}</a>
+        <div class="flex flex-col justify-between">
+            <a class="flex gap-2 justify-between" href="{{ route('songs.details', $animeSong->song) }}">
+                <p class="line-clamp-2">{{ $animeSong->song->title }}</p>
                 <span class="ml-1 pl-2 pr-2 pt-1 pb-1 h-full {{ $animeSong->type->color() }} text-white text-xs font-semibold whitespace-nowrap rounded-full">{{ $animeSong->type->abbreviated() . ' #' . $animeSong->position }}</span>
-            </span>
+            </a>
 
-            <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ $animeSong->song->artist ?? 'Unknown' }}</p>
+            <p class="text-black/60 line-clamp-2">{{ $animeSong->song->artist ?? 'Unknown' }}</p>
             @if($showAnime)
-                <x-simple-link class="text-xs" href="{{ route('anime.details', $animeSong->anime) }}">{{ $animeSong->anime->title }}</x-simple-link>
+                <x-simple-link class="text-sm" href="{{ route('anime.details', $animeSong->anime) }}">{{ $animeSong->anime->title }}</x-simple-link>
             @endif
             @if(!empty($animeSong->episodes) && $showEpisodes)
-                <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ __('Episodes: :x', ['x' => $animeSong->episodes]) }}</p>
+                <p class="text-sm text-black/60 line-clamp-2">{{ __('Episodes: :x', ['x' => $animeSong->episodes]) }}</p>
             @endif
         </div>
     </div>
