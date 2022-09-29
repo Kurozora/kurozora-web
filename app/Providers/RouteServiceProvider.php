@@ -36,7 +36,7 @@ class RouteServiceProvider extends ServiceProvider
                     ->group(base_path('routes/api.php'));
             } else {
                 Route::domain('api.' . config('app.domain'))
-                    ->middleware(['api', 'auth:sanctum'])
+                    ->middleware(['api'])
                     ->group(base_path('routes/api.php'));
             }
 

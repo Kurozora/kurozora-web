@@ -63,6 +63,7 @@
         "pusher/pusher-php-server": "^7.0",
         "roach-php/laravel": "^0.3.1",
         "socialiteproviders/apple": "^5.0",
+        "spatie/browsershot": "^3.57",
         "spatie/icalendar-generator": "^2.3",
         "spatie/laravel-activitylog": "^4.4",
         "spatie/laravel-medialibrary": "^10.0",

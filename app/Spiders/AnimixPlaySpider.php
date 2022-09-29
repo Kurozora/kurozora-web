@@ -89,8 +89,8 @@ class AnimixPlaySpider extends BasicSpider
      */
     public function parse(Response $response): Generator
     {
-        logger()->channel('stderr')->info('🕷 Parsing response');
         $uri = trim(parse_url($response->getUri(), PHP_URL_PATH));
+        logger()->channel('stderr')->info('🕷 [ANIMIX_ID:' . $uri . '] Parsing response');
         $playerType = $response
             ->filter('span.altsourcenotif')
             ->text();
@@ -102,16 +102,16 @@ class AnimixPlaySpider extends BasicSpider
                     ->attr('src');
                 $videoUrl = $this->getVideoUrl(config('scraper.domains.animix_play.base') . $url);
 
-                logger()->channel('stderr')->info('✅️ Done parsing');
+                logger()->channel('stderr')->info('✅️ [ANIMIX_ID:' . $uri . '] Done parsing');
                 yield $this->item([
                     'uri' => $uri,
                     'video_url' => $videoUrl,
                 ]);
             } catch (Exception $e) {
-                logger()->error($e->getMessage());
+                logger()->channel('stderr')->error('❌ [ANIMIX_ID:' . $uri . '] ' . $e->getMessage());
             }
         } else {
-            logger()->channel('stderr')->error('❌️ No internal player found');
+            logger()->channel('stderr')->error('❌ [ANIMIX_ID:' . $uri . '] No internal player found');
         }
     }
 

@@ -88,8 +88,8 @@ class MALAnimeSpider extends BasicSpider
      */
     public function parse(Response $response): Generator
     {
-        logger()->channel('stderr')->info('🕷 Parsing response');
         $id = basename($response->getUri());
+        logger()->channel('stderr')->info('🕷 [MAL_ID:' . $id . '] Parsing response');
         $originalTitle = $response->filter('h1.title-name')
             ->text();
         $attributes = $response->filter('div.leftside')
@@ -116,7 +116,7 @@ class MALAnimeSpider extends BasicSpider
         $openings = $this->cleanSongs($response, 'div[class*="theme-songs opnening"] table'); // typo on the website
         $ending = $this->cleanSongs($response, 'div[class*="theme-songs ending"] table');
 
-        logger()->channel('stderr')->info('✅️ Done parsing');
+        logger()->channel('stderr')->info('✅️ [MAL_ID:' . $id . '] Done parsing');
         yield $this->item([
             'id'                => $id,
             'original_title'    => $originalTitle,

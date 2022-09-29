@@ -32,7 +32,9 @@ class ImportVideos extends Command
     public function handle(): int
     {
         $slug = $this->argument('slug');
-        $anime = Anime::withoutGlobalScopes()->firstWhere('animix_id', '=', $slug);
+        $anime = Anime::on('elb')
+            ->withoutGlobalScopes()
+            ->firstWhere('animix_id', '=', $slug);
 
         if (empty($slug)) {
             $slug = $this->ask('Kurozora Anime slug from the url');
