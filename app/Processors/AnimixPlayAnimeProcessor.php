@@ -20,60 +20,27 @@ class AnimixPlayAnimeProcessor implements ItemProcessorInterface
      */
     private ?ItemInterface $item = null;
 
-    /**
-     * The available attributes.
-     *
-     * @var string[]
-     */
-    private array $attributes = [
-        'Synonyms',
-        'Japanese',
-        'English',
-        'German',
-        'Spanish',
-        'French',
-        'Type',
-        'Episodes',
-        'Status',
-        'Aired',
-        'Premiered',
-        'Broadcast',
-        'Producers',
-        'Licensors',
-        'Studios',
-        'Source',
-        'Genres',
-        'Themes',
-        'Demographic',
-        'Duration',
-        'Rating',
-        'Score',
-        'Ranked',
-        'Popularity',
-        'Members',
-        'Favorites',
-    ];
-
     public function processItem(ItemInterface $item): ItemInterface
     {
         $slug = $this->getSlug($item->get('uri'));
         $episodeNumber = $this->getEpisodeNumber($item->get('uri'));
         $this->item = $item;
 
-        logger()->channel('stderr')->info('🔄 Processing ' . $slug . ' episode ' . $episodeNumber);
+        logger()->channel('stderr')->info('🔄 [ANIMIX_ID:' . $slug . '] Processing episode ' . $episodeNumber);
 
-        $anime = Anime::withoutGlobalScopes()
+        $anime = Anime::on('elb')
+            ->withoutGlobalScopes()
             ->firstWhere('animix_id', '=', $slug);
         $videoUrl = $this->getCleanVideoUrl($item->get('video_url'));
 
 //        dd([
 //            'slug' => $slug,
-//            '$episode_number' => $episodeNumber,
+//            'episode_number' => $episodeNumber,
 //            'video_url' => $videoUrl,
 //        ]);
 
         if (empty($anime)) {
-            logger()->channel('stderr')->info('⚠️ Anime with `' . $slug . '` slug not found.');
+            logger()->channel('stderr')->info('⚠️ [ANIMIX_ID:' . $slug . '] Anime not found');
         } else {
             $episode = $anime->episodes()
                 ->withoutGlobalScopes()
@@ -86,7 +53,7 @@ class AnimixPlayAnimeProcessor implements ItemProcessorInterface
                 ]);
 
             if (empty($video)) {
-                logger()->channel('stderr')->info('🖨️ Creating ' . $slug . ' episode ' . $episodeNumber . ' video');
+                logger()->channel('stderr')->info('🖨️ [ANIMIX_ID:' . $slug . '] Creating episode `' . $episodeNumber . '` video');
                 $video = $episode->videos()->create([
                     'language_id' => 73, // Japanese
                     'source' => VideoSource::Default,
@@ -95,17 +62,17 @@ class AnimixPlayAnimeProcessor implements ItemProcessorInterface
                     'is_dub' => false,
                     'code' => $videoUrl,
                 ]);
-                logger()->channel('stderr')->info('✅️ Done creating `' . $slug . '` episode `' . $episodeNumber . '` video');
+                logger()->channel('stderr')->info('✅️ [ANIMIX_ID:' . $slug . '] Done creating episode `' . $episodeNumber . '` video');
             } else {
-                logger()->channel('stderr')->info('🛠️Updating video url');
+                logger()->channel('stderr')->info('🛠️ [ANIMIX_ID:' . $slug . '] Updating video url');
                 $video->update([
                     'code' => $videoUrl,
                 ]);
-                logger()->channel('stderr')->info('✅️ Done updating video url');
+                logger()->channel('stderr')->info('✅️ [ANIMIX_ID:' . $slug . '] Done updating video url');
             }
         }
 
-        logger()->channel('stderr')->info('✅️ Done processing ' . $slug);
+        logger()->channel('stderr')->info('✅️ [ANIMIX_ID:' . $slug . '] Done processing ' . $slug);
         return $item;
     }
 

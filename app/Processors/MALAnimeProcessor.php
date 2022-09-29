@@ -76,7 +76,7 @@ class MALAnimeProcessor implements ItemProcessorInterface
         $malID = $item->get('id');
         $this->item = $item;
 
-        logger()->channel('stderr')->info('🔄 Processing ' . $malID);
+        logger()->channel('stderr')->info('🔄 [MAL_ID:' . $malID . '] Processing ' . $malID);
 
         $anime = Anime::withoutGlobalScopes()
             ->firstWhere('mal_id', '=', $malID);
@@ -172,7 +172,7 @@ class MALAnimeProcessor implements ItemProcessorInterface
 //        ], $attributes));
 
         if (empty($anime)) {
-            logger()->channel('stderr')->info('🖨️ Creating ' . $malID);
+            logger()->channel('stderr')->info('🖨️ [MAL_ID:' . $malID . '] Creating anime');
             $anime = Anime::withoutGlobalScopes()
                 ->create(array_merge([
                     'mal_id' => $malID,
@@ -195,9 +195,9 @@ class MALAnimeProcessor implements ItemProcessorInterface
                     'tv_rating_id' => $tvRating->id,
                     'is_nsfw' => $isNSFW,
                 ], $attributes));
-            logger()->channel('stderr')->info('✅️ Done creating ' . $malID);
+            logger()->channel('stderr')->info('✅️ [MAL_ID:' . $malID . '] Done creating anime');
         } else {
-            logger()->channel('stderr')->info('🛠️Updating attributes');
+            logger()->channel('stderr')->info('🛠️ [MAL_ID:' . $malID . '] Updating attributes');
             $newTitle = $title ?? $originalTitle;
             $newEpisodeCount = empty($episodeCount) ? $anime->episode_count : $episodeCount;
             $newDuration = empty($anime->duration) ? $duration : $anime->duration;
@@ -224,35 +224,35 @@ class MALAnimeProcessor implements ItemProcessorInterface
                 'tv_rating_id' => $tvRating->id,
                 'is_nsfw' => $isNSFW,
             ], $attributes));
-            logger()->channel('stderr')->info('✅️ Done updating attributes');
+            logger()->channel('stderr')->info('✅️ [MAL_ID:' . $malID . '] Done updating attributes');
         }
 
         // Add poster image
-        logger()->channel('stderr')->info('🌄️Adding poster');
+        logger()->channel('stderr')->info('🌄️ [MAL_ID:' . $malID . '] Adding poster');
         $this->addPosterImage($imageUrl, $anime);
-        logger()->channel('stderr')->info('✅️ Done adding poster');
+        logger()->channel('stderr')->info('✅️ [MAL_ID:' . $malID . '] Done adding poster');
 
         // Add different studio relations
-        logger()->channel('stderr')->info('🏢 Adding studios');
+        logger()->channel('stderr')->info('🏢 [MAL_ID:' . $malID . '] Adding studios');
         $this->addStudios($producers, $anime, 'is_producer');
         $this->addStudios($licensors, $anime, 'is_licensor');
         $this->addStudios($studios, $anime, 'is_studio');
-        logger()->channel('stderr')->info('✅️ Done adding studios');
+        logger()->channel('stderr')->info('✅️ [MAL_ID:' . $malID . '] Done adding studios');
 
         // Add genre and theme relations
-        logger()->channel('stderr')->info('🎭 Adding genres and themes');
+        logger()->channel('stderr')->info('🎭 [MAL_ID:' . $malID . '] Adding genres and themes');
         $this->addGenres($genres, $anime);
         $this->addGenres($demographics, $anime);
         $this->addThemes($themes, $anime);
-        logger()->channel('stderr')->info('✅️ Done adding genres');
+        logger()->channel('stderr')->info('✅️ [MAL_ID:' . $malID . '] Done adding genres');
 
         // Add songs
-        logger()->channel('stderr')->info('🎸 Adding songs');
+        logger()->channel('stderr')->info('🎸 [MAL_ID:' . $malID . '] Adding songs');
         $this->addSongs(SongType::Opening(), $openingSongs, $anime);
         $this->addSongs(SongType::Ending(), $endingSongs, $anime);
-        logger()->channel('stderr')->info('✅️ Done adding songs');
+        logger()->channel('stderr')->info('✅️ [MAL_ID:' . $malID . '] Done adding songs');
 
-        logger()->channel('stderr')->info('✅️ Done processing ' . $malID);
+        logger()->channel('stderr')->info('✅️ [MAL_ID:' . $malID . '] Done processing anime');
         return $item;
     }
 
