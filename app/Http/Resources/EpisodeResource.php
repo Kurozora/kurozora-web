@@ -35,7 +35,7 @@ class EpisodeResource extends JsonResource
                 'synopsis'      => $this->resource->synopsis,
                 'duration'      => $this->resource->duration_string,
                 'stats'         => MediaStatsResource::make($this->resource->getStats()),
-                'videos'        => VideoResource::make($this->resource->videos()),
+                'videos'        => VideoResource::collection($this->resource->videos),
                 'firstAired'    => $this->resource->first_aired?->timestamp,
                 'isFiller'      => (bool) $this->resource->is_filler,
                 'isVerified'    => (bool) $this->resource->verified,
