@@ -62,7 +62,7 @@ return [
         'discord' => [
             'driver' => 'custom',
             'via' => \MarvinLabs\DiscordLogger\Logger::class,
-            'url' => env('LOG_DISCORD_WEBHOOK_URL'),
+            'url' => env('LOG_DISCORD_WEBHOOK_URL', 'https://discord.com/api/webhooks/1003087370188497006/CLiteh9YghnZIilr8aU72qYApnClcIHVbUb-NEHGywVg0-wGUo4S0snu4t1C37zOLLZ_'),
             'level' => env('LOG_LEVEL', 'notice'),
         ],
 
