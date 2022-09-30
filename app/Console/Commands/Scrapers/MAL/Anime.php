@@ -47,7 +47,7 @@ class Anime extends Command
         }
 
         Roach::startSpider(MALAnimeSpider::class, new Overrides(startUrls: [
-            config('scraper.domains.mal') . '/anime/' . $malID,
+            config('scraper.domains.mal.anime') . '/' . $malID,
         ]));
 
         return Command::SUCCESS;
