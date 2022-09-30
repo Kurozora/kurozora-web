@@ -22,7 +22,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('anidb_id')->unique()->nullable();
             $table->unsignedInteger('anilist_id')->unique()->nullable();
-            $table->string('animix_id')->unique();
+            $table->string('animix_id')->unique()->nullable();
+            $table->string('filler_id')->nullable();
             $table->string('imdb_id')->unique()->nullable();
             $table->unsignedInteger('kitsu_id')->unique()->nullable();
             $table->unsignedInteger('mal_id')->unique()->nullable();

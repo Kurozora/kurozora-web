@@ -5,6 +5,7 @@ namespace App\Nova;
 use App\Enums\DayOfWeek;
 use App\Enums\SeasonOfYear;
 use App\Nova\Actions\ScrapeAnime;
+use App\Nova\Actions\ScrapeFiller;
 use App\Nova\Lenses\UnmoderatedAnime;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Database\Eloquent\Builder;
@@ -91,6 +92,10 @@ class Anime extends Resource
             Text::make('Animix ID')
                 ->hideFromIndex()
                 ->help('Used to identify the Anime on <a target="_blank" href="https://animixplay.to/v1/' . ($this->resource->animix_id ?? 'slug-identifier') . '">AnimixPlay</a>'),
+
+            Text::make('Filler ID')
+                ->hideFromIndex()
+                ->help('Used to identify the Anime on <a target="_blank" href="https://animefillerlist.com/shows/' . ($this->resource->filler_id ?? 'slug-identifier') . '">Anime Filler List</a>'),
 
             Text::make('IMDB ID')
                 ->onlyOnForms()
@@ -410,6 +415,12 @@ class Anime extends Resource
                 ->confirmButtonText('Scrape Anime')
                 ->canSee(function ($request) {
                     return $request->user()->can('updateAnime');
+                }),
+            (new ScrapeFiller)
+                ->confirmText('Are you sure you want to scrape this anime’s filler list?')
+                ->confirmButtonText('Scrape Fillers')
+                ->canSee(function ($request) {
+                    return $request->user()->can('updateAnime') && $request->user()->can('updateEpisode');
                 }),
 //            (new ScrapeEpisodes)
 //                ->confirmText('Are you sure you want to scrape episodes for this anime?')
