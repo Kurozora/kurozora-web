@@ -15,12 +15,21 @@ return [
     */
 
     'domains' => [
-        'mal' => 'https://myanimelist.net',
-        'tvdb' => 'https://tvdb.com',
+        'mal' => [
+            'base' => 'https://myanimelist.net',
+            'anime' => 'https://myanimelist.net/anime',
+        ],
+        'tvdb' => [
+            'base' => 'https://tvdb.com'
+        ],
         'animix_play' => [
             'base' => 'https://animixplay.to',
             'api' => 'https://animixplay.to/v1',
-        ]
+        ],
+        'anime_filler_list' => [
+            'base' => 'https://www.animefillerlist.com',
+            'shows' => 'https://www.animefillerlist.com/shows',
+        ],
     ]
 
 ];
