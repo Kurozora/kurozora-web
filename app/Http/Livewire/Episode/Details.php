@@ -234,7 +234,7 @@ class Details extends Component
      */
     public function getSuggestedEpisodesProperty(): LengthAwarePaginator
     {
-        return Episode::search(substr($this->episode->title, 0, 20))
+        return Episode::search(utf8_encode(substr($this->episode->title, 0, 20)))
             ->paginate(10);
     }
 
