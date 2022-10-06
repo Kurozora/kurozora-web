@@ -7,7 +7,6 @@ use App\Enums\ExploreCategoryTypes;
 use App\Models\Anime;
 use App\Models\Character;
 use App\Models\ExploreCategory;
-use App\Models\ExploreCategoryItem;
 use App\Models\Genre;
 use App\Models\Person;
 use App\Models\Theme;
@@ -41,18 +40,18 @@ class ExploreCategorySection extends Component
     public ?Theme $theme = null;
 
     /**
-     * The array containing the explore category item data.
-     *
-     * @var ExploreCategoryItem[] $exploreCategoryItems
-     */
-    public array|Collection $exploreCategoryItems = [];
-
-    /**
      * The number of items the explore category has.
      *
      * @var int $exploreCategoryCount
      */
     public int $exploreCategoryCount = 0;
+
+    /**
+     * Whether the component is initialized.
+     *
+     * @var bool $isInit
+     */
+    public bool $isInit = false;
 
     /**
      * Prepare the component.
@@ -62,7 +61,7 @@ class ExploreCategorySection extends Component
      * @param Theme|null $theme
      * @return void
      */
-    public function mount(ExploreCategory $exploreCategory, ?Genre $genre = null, ?Theme $theme = null)
+    public function mount(ExploreCategory $exploreCategory, ?Genre $genre = null, ?Theme $theme = null): void
     {
         $this->exploreCategory = $exploreCategory;
         $mostPopularShows = null;
@@ -104,6 +103,16 @@ class ExploreCategorySection extends Component
      */
     public function loadExploreCategoryItems(): void
     {
+        $this->isInit = true;
+    }
+
+    /**
+     * The array containing the explore category item data.
+     *
+     * @return array|Collection
+     */
+    public function getExploreCategoryItemsProperty(): array|Collection
+    {
         $exploreCategoryItems = match ($this->exploreCategory->type) {
             ExploreCategoryTypes::MostPopularShows => $this->exploreCategory->most_popular_shows($this->genre ?? $this->theme)->explore_category_items,
             ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcoming_shows($this->genre ?? $this->theme)->explore_category_items,
@@ -117,12 +126,12 @@ class ExploreCategorySection extends Component
         };
 
         if ($this->exploreCategory->type === ExploreCategoryTypes::Shows && $this->exploreCategory->size == ExploreCategorySize::Small) {
-            $this->exploreCategoryItems = $exploreCategoryItems->map(function ($exploreCategoryItem) {
+            return $exploreCategoryItems->map(function ($exploreCategoryItem) {
                 return $exploreCategoryItem->model;
             });
-        } else {
-            $this->exploreCategoryItems = $exploreCategoryItems;
         }
+
+        return $exploreCategoryItems;
     }
 
     /**

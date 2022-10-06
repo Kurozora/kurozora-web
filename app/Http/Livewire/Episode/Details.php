@@ -170,7 +170,7 @@ class Details extends Component
     {
         $user = auth()->user();
 
-        if ($user->isPro()) {
+        if ($user->is_pro) {
             if ($this->isTracking) {
                 if ($this->isReminded) { // Don't remind the user
                     $user->reminder_anime()->detach($this->anime->id);

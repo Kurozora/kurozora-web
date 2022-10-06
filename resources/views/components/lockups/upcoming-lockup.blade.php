@@ -3,7 +3,7 @@
 <div class="relative pb-2">
     <div class="flex flex-nowrap">
         <picture class="relative w-64 h-80 rounded-lg overflow-hidden sm:w-80 sm:h-[25rem] md:w-[22rem] md:h-[27rem]">
-            <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
+            <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}" />
 
             <div class="absolute bottom-0 left-0 right-0 h-[20%] pr-3 pb-3 pl-3 pt-[15%] bg-gradient-to-t from-black/60 to-transparent"></div>
 
@@ -12,7 +12,7 @@
                     <p class="relative top-1/2 -translate-y-1/2 px-8 text-3xl text-white font-bold line-clamp-2" style="text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);">{{ $anime->title }}</p>
                 @else
                     <img class="relative top-1/2 -translate-y-1/2 px-8 lazyload" data-sizes="auto" data-src="{{ $anime->logo_image_url }}"
-                    alt="{{ $anime->title }} Logo" title="{{ $anime->title }}">
+                    alt="{{ $anime->title }} Logo" title="{{ $anime->title }}" />
                 @endif
             </div>
 
@@ -26,7 +26,7 @@
         <div class="flex flex-col text-center mt-auto">
             <div class="h-10">
                 @auth
-                    @if(!auth()->user()->isPro())
+                    @if(auth()->user()->is_pro)
                         <livewire:anime.reminder-button :anime="$anime" wire:key="{{ md5($anime->id) }}" />
                     @else
                         <livewire:anime.library-button :anime="$anime" wire:key="{{ md5($anime->id) }}" />

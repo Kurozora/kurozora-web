@@ -9,6 +9,7 @@ use App\Rules\ValidatePassword;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Heading;
@@ -178,6 +179,10 @@ class User extends Resource
 
             Textarea::make('Biography'),
 
+            Boolean::make('Is Pro'),
+
+            Boolean::make('Is Subscribed'),
+
             Date::make('Last Anime Import date', 'last_anime_import_at')
                 ->help('The date at which the user last imported an anime export file. The cooldown is <strong>' . config('import.cooldown_in_days') . '</strong> day(s).')
                 ->hideFromIndex(),
@@ -189,8 +194,6 @@ class User extends Resource
             // Roles and permissions
             RoleBooleanGroup::make('Roles')
                 ->hideFromIndex(),
-//            PermissionBooleanGroup::make('Permissions')
-//                ->hideFromIndex(),
 
             // Display roles on index
             Text::make('Roles', function() { return $this->displayRolesForIndex(); })

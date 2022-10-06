@@ -12,20 +12,23 @@ use Livewire\Component;
 class Home extends Component
 {
     /**
-     * The object containing the collection of explore category data.
-     *
-     * @var ExploreCategory[]|Collection $exploreCategories
-     */
-    public array|Collection $exploreCategories;
-
-    /**
      * Prepare the component.
      *
      * @return void
      */
-    function mount()
+    function mount(): void
     {
-        $this->exploreCategories = ExploreCategory::orderBy('position')->get();
+        //
+    }
+
+    /**
+     * The object containing the collection of explore category data.
+     *
+     * @return array|Collection
+     */
+    function getExploreCategoriesProperty(): array|Collection
+    {
+        return ExploreCategory::orderBy('position')->get();
     }
 
     /**
