@@ -97,6 +97,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         'last_anime_import_at' => 'datetime',
         'last_manga_import_at' => 'datetime',
         'settings' => 'json',
+        'is_pro' => 'bool',
+        'is_subscribed' => 'bool',
     ];
 
     /**
@@ -109,17 +111,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         'banner_image_url',
         'profile_image',
         'profile_image_url',
-    ];
-
-    /**
-     * Searchable rules.
-     *
-     * @var array
-     */
-    protected $searchable = [
-        'columns' => [
-            'username' => 10,
-        ]
     ];
 
     /**
@@ -197,6 +188,9 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     {
         return static::where([
             ['siwa_id', '=', null],
+            ['email_verified_at', '=', null],
+            ['is_pro', '=', false],
+            ['is_subscribed', '=', false],
             ['email_verified_at', '=', null],
             ['created_at', '<', Carbon::now()->subDays(30)]
         ]);
@@ -400,17 +394,17 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             ->withTimestamps();
     }
 
-    /**
-     * Returns a boolean indicating whether the user is a pro user.
-     *
-     * @return bool
-     */
-    function isPro(): bool
-    {
-        $purchaseReceipt = $this->receipt;
-
-        return !empty($purchaseReceipt) && $purchaseReceipt->is_subscribed;
-    }
+//    /**
+//     * Returns a boolean indicating whether the user is a pro user.
+//     *
+//     * @return bool
+//     */
+//    function isPro(): bool
+//    {
+//        $purchaseReceipt = $this->receipt;
+//
+//        return !empty($purchaseReceipt) && $purchaseReceipt->is_subscribed;
+//    }
 
     /**
      * Returns a boolean indicating whether the user has the given anime in their library.

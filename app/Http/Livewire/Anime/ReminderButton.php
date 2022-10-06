@@ -75,7 +75,7 @@ class ReminderButton extends Component
         if (!$this->isReminded) {
             $user = auth()->user();
 
-            if (!$user->isPro()) {
+            if (!$user->is_pro) {
                 if (!$this->isTracking) {
                     $user->library()->attach($this->anime->id, ['status' => UserLibraryStatus::Planning]);
                 }

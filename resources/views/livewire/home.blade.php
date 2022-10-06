@@ -23,7 +23,7 @@
             <a target="_blank"></a>
         </div>
 
-        @foreach($exploreCategories as $key => $exploreCategory)
+        @foreach($this->exploreCategories as $key => $exploreCategory)
             @switch($exploreCategory->type)
             @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
                 <section class="pb-8">

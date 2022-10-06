@@ -30,6 +30,8 @@ return new class extends Migration
             $table->rememberToken();
             $table->text('biography')->nullable();
             $table->json('settings');
+            $table->boolean('is_pro')->default(false);
+            $table->boolean('is_subscribed')->default(false);
             $table->timestamp('last_anime_import_at')->nullable();
             $table->timestamp('last_manga_import_at')->nullable();
             $table->timestamps();
