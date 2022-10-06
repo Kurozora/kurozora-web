@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Spiders;
+namespace App\Spiders\MAL;
 
-use App\Processors\MALAnimeProcessor;
+use App\Processors\MAL\AnimeProcessor;
 use Exception;
 use Generator;
 use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
@@ -14,7 +14,7 @@ use RoachPHP\Spider\BasicSpider;
 use RoachPHP\Spider\ParseResult;
 use Symfony\Component\DomCrawler\Crawler;
 
-class MALAnimeSpider extends BasicSpider
+class AnimeSpider extends BasicSpider
 {
     /**
      * @var array $startUrls
@@ -51,7 +51,7 @@ class MALAnimeSpider extends BasicSpider
      * @var array $itemProcessors
      */
     public array $itemProcessors = [
-        MALAnimeProcessor::class
+        AnimeProcessor::class
     ];
 
     /**

@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Scrapers\MAL;
 
-use App\Spiders\MALAnimeSpider;
+use App\Spiders\MAL\AnimeSpider;
 use Exception;
 use Illuminate\Console\Command;
 use RoachPHP\Roach;
@@ -46,7 +46,7 @@ class Anime extends Command
             return Command::INVALID;
         }
 
-        Roach::startSpider(MALAnimeSpider::class, new Overrides(startUrls: [
+        Roach::startSpider(AnimeSpider::class, new Overrides(startUrls: [
             config('scraper.domains.mal.anime') . '/' . $malID,
         ]));
 
