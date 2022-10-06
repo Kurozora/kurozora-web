@@ -91,7 +91,8 @@ class FillerSpider extends BasicSpider
         $fillerID = trim(basename($response->getUri()));
         logger()->channel('stderr')->info('🕷 [filler_id:' . $fillerID . '] Parsing response');
 
-        $episodeList = $response->filter('table.EpisodeList tbody')->filter('tr')
+        $episodeList = $response->filter('table.EpisodeList tbody')
+            ->filter('tr')
             ->each(function(Crawler $item) {
                 $episode = [];
                 $episode['number'] = $item->filter('td.Number')->text();

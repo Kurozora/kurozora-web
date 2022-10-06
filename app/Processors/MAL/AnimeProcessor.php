@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Processors;
+namespace App\Processors\MAL;
 
 use App\Enums\SongType;
 use App\Models\Anime;
@@ -26,7 +26,7 @@ use RoachPHP\ItemPipeline\ItemInterface;
 use RoachPHP\ItemPipeline\Processors\ItemProcessorInterface;
 use RoachPHP\Support\Configurable;
 
-class MALAnimeProcessor implements ItemProcessorInterface
+class AnimeProcessor implements ItemProcessorInterface
 {
     use Configurable;
 
