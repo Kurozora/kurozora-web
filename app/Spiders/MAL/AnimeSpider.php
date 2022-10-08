@@ -102,12 +102,13 @@ class AnimeSpider extends BasicSpider
 
         $studios = $response->filter('div.leftside a[href*="/anime/producer/"]')
             ->each(function(Crawler $item) {
-                $id = str_replace(['/anime/producer/', '/' . $item->text()], '', $item->attr('href'));
+                $studioName = str($item->text())->slug('_');
+                $id = str_replace(['/anime/producer/', '/' . $studioName], '', strtolower($item->attr('href')));
                 return [$id => $item->text()];
             });
         $genres = $response->filter('div.leftside a[href*="/anime/genre/"]')
             ->each(function(Crawler $item) {
-                $id = str_replace(['/anime/genre/', '/' . $item->text()], '', $item->attr('href'));
+                $id = str_replace(['/anime/genre/', '/' . str($item->text())->replace(' ', '_')->value()], '', $item->attr('href'));
                 return [$id => $item->text()];
             });
 
