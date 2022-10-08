@@ -18,6 +18,7 @@ return [
         'mal' => [
             'base' => 'https://myanimelist.net',
             'anime' => 'https://myanimelist.net/anime',
+            'upcoming_anime' => 'https://myanimelist.net/anime.php?o=9',
         ],
         'tvdb' => [
             'base' => 'https://tvdb.com'

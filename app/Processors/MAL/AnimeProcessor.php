@@ -3,6 +3,7 @@
 namespace App\Processors\MAL;
 
 use App\Enums\SongType;
+use App\Enums\StudioType;
 use App\Models\Anime;
 use App\Models\AnimeSong;
 use App\Models\AnimeStudio;
@@ -98,7 +99,7 @@ class AnimeProcessor implements ItemProcessorInterface
         $producers = $this->getAttribute('Producers');
         $licensors = $this->getAttribute('Licensors');
         $studios = $this->getAttribute('Studios');
-        $genres = $this->getAttribute('Genres');
+        $genres = $this->getAttribute('Genre');
         $themes = $this->getAttribute('Themes');
         $demographics = $this->getAttribute('Demographic');
         $imageUrl = $item->get('image_url');
@@ -172,7 +173,7 @@ class AnimeProcessor implements ItemProcessorInterface
 //        ], $attributes));
 
         if (empty($anime)) {
-            logger()->channel('stderr')->info('🖨️ [MAL_ID:' . $malID . '] Creating anime');
+            logger()->channel('stderr')->info('🖨 [MAL_ID:' . $malID . '] Creating anime');
             $anime = Anime::withoutGlobalScopes()
                 ->create(array_merge([
                     'mal_id' => $malID,
@@ -197,11 +198,11 @@ class AnimeProcessor implements ItemProcessorInterface
                 ], $attributes));
             logger()->channel('stderr')->info('✅️ [MAL_ID:' . $malID . '] Done creating anime');
         } else {
-            logger()->channel('stderr')->info('🛠️ [MAL_ID:' . $malID . '] Updating attributes');
+            logger()->channel('stderr')->info('🛠 [MAL_ID:' . $malID . '] Updating attributes');
             $newTitle = $title ?? $originalTitle;
             $newEpisodeCount = empty($episodeCount) ? $anime->episode_count : $episodeCount;
             $newDuration = empty($anime->duration) ? $duration : $anime->duration;
-            $newLastAired = $anime?->last_aired ?? $lastAired;
+            $newLastAired = $anime->last_aired ?? $lastAired;
             $newAirDay = empty($anime->air_day) ? $airDay : $anime->air_day->value;
 
             $anime->update(array_merge([
@@ -228,7 +229,7 @@ class AnimeProcessor implements ItemProcessorInterface
         }
 
         // Add poster image
-        logger()->channel('stderr')->info('🌄️ [MAL_ID:' . $malID . '] Adding poster');
+        logger()->channel('stderr')->info('🌄 [MAL_ID:' . $malID . '] Adding poster');
         $this->addPosterImage($imageUrl, $anime);
         logger()->channel('stderr')->info('✅️ [MAL_ID:' . $malID . '] Done adding poster');
 
@@ -284,18 +285,18 @@ class AnimeProcessor implements ItemProcessorInterface
                     case 'Rating':
                         return empty($value) ? null : $value;
                     case 'Episodes':
-                        return is_numeric($value) ? (int) $value : null;
+                        return is_numeric($value) ? (int) $value : 0;
                     case 'Type':
                         return $this->getMediaType($value);
                     case 'Status':
                         return $this->getStatus($value);
                     case 'Producers':
                     case 'Licensors':
-                    case 'Studios': // 49709
+                    case 'Studios':
                         return empty($value) ? [] : array_intersect($this->item->get('studios'), explode(', ', $value));
                     case 'Themes':
                     case 'Demographic':
-                    case 'Genres':
+                    case 'Genre':
                         $genres = explode(', ', $value);
                         foreach ($genres as $key => $genre) {
                             $genres[$key] = substr($genre, 0, strlen($genre) / 2);
@@ -340,6 +341,7 @@ class AnimeProcessor implements ItemProcessorInterface
      */
     private function getMediaType(string $value): int
     {
+        $value = empty($value) ? 'Unknown' : $value;
         $mediaType = MediaType::where('name', '=', trim($value))
             ->firstOrFail();
         return $mediaType->id;
@@ -370,8 +372,12 @@ class AnimeProcessor implements ItemProcessorInterface
      */
     private function getSource(string $value): int
     {
-        $status = Source::where('name', '=', trim($value))
-            ->firstOrFail();
+        $value = empty($value) ? 'Unknown' : $value;
+        $status = Source::firstOrCreate([
+            'name' => trim($value)
+        ], [
+            'description' => ''
+        ]);
         return $status->id;
     }
 
@@ -389,7 +395,7 @@ class AnimeProcessor implements ItemProcessorInterface
             $regex = '/.+-/';
             $value = str($value);
             $value = $value->match($regex);
-            $value = $value->replaceLast('-', '')->trim();
+            $value = $value->replaceLast('-', '')->trim()->value();
 
             $tvRatingName = match ($value) {
                 'G', 'PG' => 'G',
@@ -467,15 +473,14 @@ class AnimeProcessor implements ItemProcessorInterface
                 ->firstOrCreate([
                     'mal_id' => $genreID,
                 ], [
-                    'mal_id' => $genreID,
                     'name' => $genreName,
                 ]);
-            $mediaGenre = $anime->media_genres()->firstWhere('genre_id', '=', $genre->id);
+            $mediaGenre = $anime?->media_genres()->firstWhere('genre_id', '=', $genre->id);
 
             if (empty($mediaGenre)) {
                 MediaGenre::create([
                     'model_type' => get_class($anime),
-                    'model_id' => $anime->id,
+                    'model_id' => $anime?->id,
                     'genre_id' => $genre->id,
                 ]);
             }
@@ -503,15 +508,14 @@ class AnimeProcessor implements ItemProcessorInterface
                 ->firstOrCreate([
                     'mal_id' => $themeID,
                 ], [
-                    'mal_id' => $themeID,
                     'name' => $themeName,
                 ]);
-            $mediaTheme = $anime->media_themes()->firstWhere('theme_id', '=', $theme->id);
+            $mediaTheme = $anime?->media_themes()->firstWhere('theme_id', '=', $theme->id);
 
             if (empty($mediaTheme)) {
                 MediaTheme::create([
                     'model_type' => get_class($anime),
-                    'model_id' => $anime->id,
+                    'model_id' => $anime?->id,
                     'theme_id' => $theme->id,
                 ]);
             }
@@ -533,18 +537,18 @@ class AnimeProcessor implements ItemProcessorInterface
         }
 
         foreach ($malStudios as $malStudioID => $malStudioName) {
-            $studio = Studio::firstOrCreate([
-                'mal_id' => $malStudioID
-            ], [
-                'mal_id' => $malStudioID,
-                'name' => $malStudioName,
-                'type' => 'anime',
-            ]);
-            $animeStudio = $anime->anime_studios()->firstWhere('studio_id', '=', $studio->id);
+            $studio = Studio::withoutGlobalScopes()
+                ->firstOrCreate([
+                    'mal_id' => $malStudioID
+                ], [
+                    'name' => $malStudioName,
+                    'type' => StudioType::Anime,
+                ]);
+            $animeStudio = $anime?->anime_studios()->firstWhere('studio_id', '=', $studio->id);
 
             if (empty($animeStudio)) {
                 AnimeStudio::create([
-                    'anime_id' => $anime->id,
+                    'anime_id' => $anime?->id,
                     'studio_id' => $studio->id,
                     $attribute => true,
                 ]);
@@ -620,8 +624,8 @@ class AnimeProcessor implements ItemProcessorInterface
     private function getSynonymTitles(Model|Anime|null $anime): ?array
     {
         $synonymTitles = $this->getAttribute('Synonyms') ?? [];
-        $currentSynonymTitles = $anime->synonym_titles?->toArray();
-        $newSynonymTitles = empty(count($synonymTitles)) || empty($anime->synonym_titles?->count()) ? $currentSynonymTitles : array_merge($currentSynonymTitles, $synonymTitles);
+        $currentSynonymTitles = $anime?->synonym_titles?->toArray();
+        $newSynonymTitles = empty(count($synonymTitles)) || empty($anime?->synonym_titles?->count()) ? $currentSynonymTitles : array_merge($currentSynonymTitles, $synonymTitles);
 
         return count($newSynonymTitles ?? []) ? array_unique($newSynonymTitles) : null;
     }
@@ -651,9 +655,11 @@ class AnimeProcessor implements ItemProcessorInterface
     {
         if (empty($broadcast) || $broadcast == 'Unknown') {
             return '09:00';
+        } elseif (str($broadcast)->contains('at')) {
+            $airTime = trim(preg_replace('/(.+ at)/', '', $broadcast));
+            return trim(preg_replace('/(\(.+)/', '', $airTime));
         }
-        $airTime = trim(preg_replace('/(.+ at)/', '', $broadcast));
-        return trim(preg_replace('/(\(.+)/', '', $airTime));
+        return '09:00';
     }
 
     /**
@@ -703,11 +709,11 @@ class AnimeProcessor implements ItemProcessorInterface
                 ]);
             }
 
-            $animeSongs = $anime->anime_songs()->firstWhere('song_id', '=', $song->id);
+            $animeSongs = $anime?->anime_songs()->firstWhere('song_id', '=', $song->id);
 
             if (empty($animeSongs)) {
                 AnimeSong::create([
-                    'anime_id' => $anime->id,
+                    'anime_id' => $anime?->id,
                     'song_id' => $song->id,
                     'position' => $key,
                     'type' => $songType->value,
