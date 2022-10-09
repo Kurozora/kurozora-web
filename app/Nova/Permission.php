@@ -30,7 +30,7 @@ class Permission extends BasePermission
      */
     public static function authorizedToViewAny(Request $request): bool
     {
-        return $request->user()->can('viewPermission');
+        return $request->user()?->can('viewPermission') ?? false;
     }
 
     /**

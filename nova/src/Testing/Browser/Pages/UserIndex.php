@@ -7,10 +7,11 @@ class UserIndex extends Index
     /**
      * Create a new page instance.
      *
+     * @param  array  $queryParams
      * @return void
      */
-    public function __construct()
+    public function __construct($queryParams = [])
     {
-        parent::__construct('users');
+        parent::__construct('users', $queryParams);
     }
 }

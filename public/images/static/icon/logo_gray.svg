@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg class="h-10 fill-current" viewBox="0 0 137 136" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <filter x="-8.8%" y="-8.8%" width="117.6%" height="117.6%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1" />
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1" />
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.15 0" in="shadowBlurOuter1" result="shadowMatrixOuter1" />
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1" />
+                <feMergeNode in="SourceGraphic" />
+            </feMerge>
+        </filter>
+        <linearGradient x1="99.119863%" y1="100%" x2="0.880136997%" y2="0%" id="linearGradient-2">
+            <stop stop-color="#B8B8B8" offset="0%" />
+            <stop stop-color="#FFFFFF" offset="100%" />
+        </linearGradient>
+        <linearGradient x1="0.609131371%" y1="0%" x2="99.3908686%" y2="100%" id="linearGradient-3">
+            <stop stop-color="#7E8EA1" offset="0%" />
+            <stop stop-color="#3C4655" offset="100%" />
+        </linearGradient>
+        <linearGradient x1="0%" y1="8.67054422%" x2="100%" y2="91.3294558%" id="linearGradient-4">
+            <stop stop-color="#7E8EA1" offset="0%" />
+            <stop stop-color="#3C4655" offset="100%" />
+        </linearGradient>
+    </defs>
+    <g transform="translate(-60.000000, -63.000000)">
+        <g filter="url(#filter-1)" transform="translate(60.124031, 63.000000)">
+            <path d="M16.2950789,75.7499715 C16.2807722,88.6277302 21.6893254,100.905267 31.1730114,109.523146 C21.4856254,99.6136732 21.0565793,83.8277481 30.1911501,73.3974488 C39.3257208,62.9671495 54.904527,61.454338 65.842861,69.9354174 C76.781195,78.4164968 79.3437049,93.9952476 71.7071014,105.587002 C64.0704978,117.178755 48.8426185,120.825023 36.858478,113.931395 C44.1581333,118.721001 52.6813112,121.263886 61.3886111,121.25 C86.30049,121.25 106.490598,100.879555 106.490598,75.7499715 C106.490598,50.6203876 86.30049,30.25 61.3886111,30.25 C36.4852155,30.25 16.2950789,50.6220995 16.2950789,75.7499715 Z" fill="url(#linearGradient-2)" />
+            <path d="M6.85312367,67.7491459 C6.85312367,72.0347052 7.29671004,76.3086128 8.17911305,80.5011993 C7.96032735,78.5072664 7.8503707,76.5027631 7.84973825,74.496716 C7.84973825,44.3820544 32.1148135,19.9678083 62.0454749,19.9678083 C91.9761363,19.9678083 116.241212,44.3871791 116.241212,74.496716 C116.241212,103.584722 93.6026366,127.351543 65.0879473,128.938503 C65.9640163,128.976085 66.843481,129 67.7297369,129 C101.34634,129 128.604651,101.577533 128.604651,67.7491459 C128.604651,33.9207583 101.349736,6.5 67.7297369,6.5 C34.1131338,6.5 6.85312367,33.9224666 6.85312367,67.7491459 Z" fill="url(#linearGradient-3)" />
+            <path d="M6.60465116,38.5 C12.6147975,19.9553107 29.4721104,6.72303586 47.851087,1 C26.2434632,1 6.60465116,14.9508623 6.60465116,38.5 Z" fill="url(#linearGradient-4)" />
+        </g>
+    </g>
+</svg>

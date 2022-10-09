@@ -15,13 +15,11 @@ class RelatableAttachment extends Relatable
      */
     protected function authorize($resource, $model)
     {
-        $parentResource = Nova::resourceForModel(
-            $parentModel = $this->request->findModelOrFail()
-        );
+        $parentResource = Nova::newResourceFromModel($this->request->findModelOrFail());
 
-        return (new $parentResource($parentModel))->authorizedToAttachAny(
+        return $parentResource->authorizedToAttachAny(
             $this->request, $model
-        ) || (new $parentResource($parentModel))->authorizedToAttach(
+        ) || $parentResource->authorizedToAttach(
             $this->request, $model
         );
     }

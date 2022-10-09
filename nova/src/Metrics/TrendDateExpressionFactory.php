@@ -18,6 +18,8 @@ class TrendDateExpressionFactory
      * @param  string  $unit
      * @param  string  $timezone
      * @return \Laravel\Nova\Metrics\TrendDateExpression
+     *
+     * @throws \InvalidArgumentException
      */
     public static function make(Builder $query, $column, $unit, $timezone)
     {

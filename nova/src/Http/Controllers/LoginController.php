@@ -4,9 +4,11 @@ namespace Laravel\Nova\Http\Controllers;
 
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 use Laravel\Nova\Nova;
 
 class LoginController extends Controller
@@ -37,18 +39,40 @@ class LoginController extends Controller
     /**
      * Show the application's login form.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Symfony\Component\HttpFoundation\Response
      */
     public function showLoginForm()
     {
-        return view('nova::auth.login');
+        if ($loginPath = config('nova.routes.login', false)) {
+            return Inertia::location($loginPath);
+        }
+
+        return Inertia::render('Nova.Login', []);
+    }
+
+    /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        $redirect = redirect()->intended($this->redirectPath());
+
+        return $request->wantsJson()
+            ? new JsonResponse([
+                'redirect' => $redirect->getTargetUrl(),
+            ], 200)
+            : $redirect;
     }
 
     /**
      * Log the user out of the application.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function logout(Request $request)
     {
@@ -56,7 +80,7 @@ class LoginController extends Controller
 
         $request->session()->invalidate();
 
-        return redirect($this->redirectPath());
+        return redirect()->intended($this->redirectPath());
     }
 
     /**
@@ -66,7 +90,7 @@ class LoginController extends Controller
      */
     public function redirectPath()
     {
-        return Nova::path();
+        return Nova::url(Nova::$initialPath);
     }
 
     /**

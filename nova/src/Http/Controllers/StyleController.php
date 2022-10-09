@@ -2,9 +2,7 @@
 
 namespace Laravel\Nova\Http\Controllers;
 
-use DateTime;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Arr;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Nova;
 
@@ -14,22 +12,19 @@ class StyleController extends Controller
      * Serve the requested stylesheet.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return \Laravel\Nova\Style
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function show(NovaRequest $request)
+    public function __invoke(NovaRequest $request)
     {
-        $path = Arr::get(Nova::allStyles(), $request->style);
+        $asset = collect(Nova::allStyles())
+                    ->filter(function ($asset) use ($request) {
+                        return $asset->name() === $request->style;
+                    })->first();
 
-        abort_if(is_null($path), 404);
+        abort_if(is_null($asset), 404);
 
-        return response(
-            file_get_contents($path),
-            200,
-            [
-                'Content-Type' => 'text/css',
-            ]
-        )->setLastModified(DateTime::createFromFormat('U', (string) filemtime($path)));
+        return $asset;
     }
 }

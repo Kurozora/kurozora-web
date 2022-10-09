@@ -1,120 +1,116 @@
 <template>
-  <div v-on:click.prevent="toggleDropDown">
-    <div class="filter-menu-dropdown">
-      <dropdown
-        v-if="filters.length > 0 || softDeletes || !viaResource"
-        dusk="filter-selector"
-        :autoHide="false"
-        trigger="manual"
-        :show="showDropDown"
+  <Dropdown
+    v-if="filters.length > 0 || softDeletes || !viaResource"
+    :class="{
+      'bg-primary-500 hover:bg-primary-600 border-primary-500':
+        filtersAreApplied,
+      'dark:bg-primary-500 dark:hover:bg-primary-600 dark:border-primary-500':
+        filtersAreApplied,
+    }"
+    :handle-internal-clicks="false"
+    class="flex h-9 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+    dusk="filter-selector"
+    @menu-opened="handleMenuOpened"
+  >
+    <span class="sr-only">{{ __('Filter Dropdown') }}</span>
+    <DropdownTrigger
+      :class="{
+        'text-white hover:text-white dark:text-gray-800 dark:hover:text-gray-800':
+          filtersAreApplied,
+      }"
+      class="toolbar-button px-2"
+    >
+      <Icon type="filter" />
+
+      <span
+        v-if="filtersAreApplied"
+        :class="{
+          'text-white dark:text-gray-800': filtersAreApplied,
+        }"
+        class="ml-2 font-bold"
       >
-        <dropdown-trigger
-          class="bg-30 px-3 border-2 border-30 rounded"
-          :class="{ 'bg-primary border-primary': filtersAreApplied }"
-          :active="filtersAreApplied"
-        >
-          <icon
-            type="filter"
-            :class="filtersAreApplied ? 'text-white' : 'text-80'"
-          />
+        {{ activeFilterCount }}
+      </span>
+    </DropdownTrigger>
 
-          <span
-            v-if="filtersAreApplied"
-            class="ml-2 font-bold text-white text-80"
+    <template #menu>
+      <DropdownMenu width="260">
+        <ScrollWrap :height="350" class="bg-white dark:bg-gray-900">
+          <div
+            ref="theForm"
+            class="divide-y divide-gray-200 dark:divide-gray-800 divide-solid"
           >
-            {{ activeFilterCount }}
-          </span>
-        </dropdown-trigger>
-
-        <dropdown-menu
-          slot="menu"
-          width="290"
-          direction="rtl"
-          :dark="true"
-          v-on-clickaway="close"
-        >
-          <scroll-wrap :height="350">
-            <div v-if="filtersAreApplied" class="bg-30 border-b border-60">
+            <div v-if="filtersAreApplied" class="bg-gray-100">
               <button
-                @click="$emit('clear-selected-filters')"
-                class="py-2 w-full block text-xs uppercase tracking-wide text-center text-80 dim font-bold focus:outline-none"
+                class="py-2 w-full block text-xs uppercase tracking-wide text-center text-gray-500 dark:bg-gray-800 dark:hover:bg-gray-700 font-bold focus:outline-none"
+                @click="handleClearSelectedFiltersClick"
               >
                 {{ __('Reset Filters') }}
               </button>
             </div>
 
             <!-- Custom Filters -->
-            <component
-              v-for="filter in filters"
-              :resource-name="resourceName"
-              :key="filter.name"
-              :filter-key="filter.class"
-              :is="filter.component"
-              :lens="lens"
-              @input="$emit('filter-changed')"
-              @change="$emit('filter-changed')"
-            />
+            <div v-for="filter in filters" :key="filter.name">
+              <component
+                :is="filter.component"
+                :filter-key="filter.class"
+                :lens="lens"
+                :resource-name="resourceName"
+                @change="$emit('filter-changed')"
+                @input="$emit('filter-changed')"
+              />
+            </div>
 
             <!-- Soft Deletes -->
-            <div v-if="softDeletes" dusk="filter-soft-deletes">
-              <h3
-                slot="default"
-                class="text-sm uppercase tracking-wide text-80 bg-30 p-3"
-              >
-                {{ __('Trashed') }}
-              </h3>
+            <FilterContainer v-if="softDeletes" dusk="filter-soft-deletes">
+              <span>{{ __('Trashed') }}</span>
 
-              <div class="p-2">
-                <select
-                  slot="select"
-                  class="block w-full form-control-sm form-select"
+              <template #filter>
+                <SelectControl
+                  v-model:selected="trashedValue"
+                  :options="[
+                    { value: '', label: '—' },
+                    { value: 'with', label: __('With Trashed') },
+                    { value: 'only', label: __('Only Trashed') },
+                  ]"
                   dusk="trashed-select"
-                  :value="trashed"
-                  @change="trashedChanged"
-                >
-                  <option value="" selected>&mdash;</option>
-                  <option value="with">{{ __('With Trashed') }}</option>
-                  <option value="only">{{ __('Only Trashed') }}</option>
-                </select>
-              </div>
-            </div>
+                  size="sm"
+                  @change="trashedValue = $event"
+                />
+              </template>
+            </FilterContainer>
 
             <!-- Per Page -->
-            <div v-if="!viaResource" dusk="filter-per-page">
-              <h3
-                slot="default"
-                class="text-sm uppercase tracking-wide text-80 bg-30 p-3"
-              >
-                {{ __('Per Page') }}
-              </h3>
+            <FilterContainer v-if="!viaResource" dusk="filter-per-page">
+              <span>{{ __('Per Page') }}</span>
 
-              <div class="p-2">
-                <select
-                  slot="select"
+              <template #filter>
+                <SelectControl
+                  v-model:selected="perPageValue"
+                  :options="perPageOptionsForFilter"
                   dusk="per-page-select"
-                  class="block w-full form-control-sm form-select"
-                  :value="perPage"
-                  @change="perPageChanged"
-                >
-                  <option v-for="option in perPageOptions" :key="option">
-                    {{ option }}
-                  </option>
-                </select>
-              </div>
-            </div>
-          </scroll-wrap>
-        </dropdown-menu>
-      </dropdown>
-    </div>
-  </div>
+                  size="sm"
+                  @change="perPageValue = $event"
+                />
+              </template>
+            </FilterContainer>
+          </div>
+        </ScrollWrap>
+      </DropdownMenu>
+    </template>
+  </Dropdown>
 </template>
 
 <script>
-import {mixin as clickaway} from 'vue-clickaway'
-import composedPath from '@/polyfills/composedPath'
+import map from 'lodash/map'
 
 export default {
-  mixins: [clickaway],
+  emits: [
+    'filter-changed',
+    'clear-selected-filters',
+    'trashed-changed',
+    'per-page-changed',
+  ],
 
   props: {
     resourceName: String,
@@ -133,51 +129,53 @@ export default {
     perPageOptions: Array,
   },
 
-  data: () => ({
-    showDropDown: false,
-    classWhitelist: [
-      'filter-menu-dropdown',
-      'flatpickr-current-month',
-      'flatpickr-next-month',
-      'flatpickr-prev-month',
-      'flatpickr-weekday',
-      'flatpickr-weekdays',
-      'flatpickr-calendar',
-    ],
-  }),
-
   methods: {
-    trashedChanged(event) {
-      this.$emit('trashed-changed', event.target.value)
+    handleClearSelectedFiltersClick() {
+      Nova.$emit('clear-filter-values')
+
+      setTimeout(() => {
+        this.$emit('clear-selected-filters')
+      }, 500)
     },
 
-    perPageChanged(event) {
-      this.$emit('per-page-changed', event.target.value)
-    },
+    handleMenuOpened() {
+      this.$nextTick(() => {
+        let formFields = this.$refs.theForm.querySelectorAll(
+          'input, textarea, select'
+        )
 
-    toggleDropDown() {
-      this.showDropDown = !this.showDropDown
-    },
-
-    close(e) {
-      if (!e.isTrusted) return
-
-      let classArray = Array.isArray(this.classWhitelist)
-        ? this.classWhitelist
-        : [this.classWhitelist]
-
-      if (
-        _.filter(classArray, className => pathIncludesClass(e, className))
-          .length > 0
-      ) {
-        return
-      }
-
-      this.showDropDown = false
+        if (formFields.length > 0) {
+          formFields[0].focus({
+            preventScroll: true,
+          })
+        }
+      })
     },
   },
 
   computed: {
+    trashedValue: {
+      set(event) {
+        let value = event?.target?.value || event
+
+        this.$emit('trashed-changed', value)
+      },
+      get() {
+        return this.trashed
+      },
+    },
+
+    perPageValue: {
+      set(event) {
+        let value = event?.target?.value || event
+
+        this.$emit('per-page-changed', value)
+      },
+      get() {
+        return this.perPage
+      },
+    },
+
     /**
      * Return the filters from state
      */
@@ -198,13 +196,15 @@ export default {
     activeFilterCount() {
       return this.$store.getters[`${this.resourceName}/activeFilterCount`]
     },
-  },
-}
 
-function pathIncludesClass(event, className) {
-  return composedPath(event)
-    .filter(el => el !== document && el !== window)
-    .reduce((acc, e) => acc.concat([...e.classList]), [])
-    .includes(className)
+    /**
+     * Return the values for the per page filter
+     */
+    perPageOptionsForFilter() {
+      return map(this.perPageOptions, option => {
+        return { value: option, label: option }
+      })
+    },
+  },
 }
 </script>

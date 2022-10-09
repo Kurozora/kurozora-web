@@ -11,13 +11,17 @@ trait FillsFields
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @return array
+     * @return array{\Illuminate\Database\Eloquent\Model, array<int, callable>}
      */
     public static function fill(NovaRequest $request, $model)
     {
         return static::fillFields(
             $request, $model,
-            (new static($model))->creationFieldsWithoutReadonly($request)
+            (new static($model))
+                ->creationFields($request)
+                ->applyDependsOn($request)
+                ->withoutReadonly($request)
+                ->withoutUnfillable()
         );
     }
 
@@ -26,13 +30,17 @@ trait FillsFields
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @return array
+     * @return array{\Illuminate\Database\Eloquent\Model, array<int, callable>}
      */
     public static function fillForUpdate(NovaRequest $request, $model)
     {
         return static::fillFields(
             $request, $model,
-            (new static($model))->updateFieldsWithoutReadonly($request)
+            (new static($model))
+                ->updateFields($request)
+                ->applyDependsOn($request)
+                ->withoutReadonly($request)
+                ->withoutUnfillable()
         );
     }
 
@@ -42,7 +50,7 @@ trait FillsFields
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @param  \Illuminate\Database\Eloquent\Relations\Pivot  $pivot
-     * @return array
+     * @return array{\Illuminate\Database\Eloquent\Model, array<int, callable>}
      */
     public static function fillPivot(NovaRequest $request, $model, $pivot)
     {
@@ -50,7 +58,11 @@ trait FillsFields
 
         return static::fillFields(
             $request, $pivot,
-            $instance->creationPivotFields($request, $request->relatedResource)
+            $instance
+                ->creationPivotFields($request, $request->relatedResource)
+                ->applyDependsOn($request)
+                ->withoutReadonly($request)
+                ->withoutUnfillable()
         );
     }
 
@@ -60,7 +72,7 @@ trait FillsFields
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @param  \Illuminate\Database\Eloquent\Relations\Pivot  $pivot
-     * @return array
+     * @return array{\Illuminate\Database\Eloquent\Model, array<int, callable>}
      */
     public static function fillPivotForUpdate(NovaRequest $request, $model, $pivot)
     {
@@ -69,6 +81,9 @@ trait FillsFields
         return static::fillFields(
             $request, $pivot,
             $instance->updatePivotFields($request, $request->relatedResource)
+                ->applyDependsOn($request)
+                ->withoutReadonly($request)
+                ->withoutUnfillable()
         );
     }
 
@@ -77,8 +92,8 @@ trait FillsFields
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @param  \Illuminate\Support\Collection  $fields
-     * @return array
+     * @param  \Illuminate\Support\Collection<int, \Laravel\Nova\Fields\Field>  $fields
+     * @return array{\Illuminate\Database\Eloquent\Model, array<int, callable>}
      */
     protected static function fillFields(NovaRequest $request, $model, $fields)
     {

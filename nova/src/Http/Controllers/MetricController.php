@@ -11,18 +11,20 @@ class MetricController extends Controller
      * List the metrics for the given resource.
      *
      * @param  \Laravel\Nova\Http\Requests\MetricRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(MetricRequest $request)
     {
-        return $request->availableMetrics();
+        return response()->json(
+            $request->availableMetrics()
+        );
     }
 
     /**
      * Get the specified metric's value.
      *
      * @param  \Laravel\Nova\Http\Requests\MetricRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(MetricRequest $request)
     {

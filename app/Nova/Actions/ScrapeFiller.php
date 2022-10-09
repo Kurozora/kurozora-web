@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 class ScrapeFiller extends Action
 {
@@ -76,9 +77,10 @@ class ScrapeFiller extends Action
     /**
      * Get the fields available on the action.
      *
+     * @param NovaRequest $request
      * @return array
      */
-    public function fields(): array
+    public function fields(NovaRequest $request): array
     {
         return [];
     }

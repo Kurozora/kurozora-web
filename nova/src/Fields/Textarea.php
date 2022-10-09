@@ -2,9 +2,14 @@
 
 namespace Laravel\Nova\Fields;
 
-class Textarea extends Field
+use Laravel\Nova\Contracts\FilterableField;
+use Laravel\Nova\Exceptions\NovaException;
+use Laravel\Nova\Fields\Filters\TextFilter;
+use Laravel\Nova\Http\Requests\NovaRequest;
+
+class Textarea extends Field implements FilterableField
 {
-    use Expandable;
+    use Expandable, FieldFilterable, SupportsDependentFields;
 
     /**
      * The field's component.
@@ -51,16 +56,39 @@ class Textarea extends Field
     {
         parent::resolveForDisplay($resource, $attribute);
 
-        return $this->value = e($this->value);
+        $this->value = e($this->value);
+    }
+
+    /**
+     * Make the field filter.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @return \Laravel\Nova\Fields\Filters\Filter
+     */
+    protected function makeFilter(NovaRequest $request)
+    {
+        return new TextFilter($this);
+    }
+
+    /**
+     * Specify that the element should be visible on the index view.
+     *
+     * @param  (callable():bool)|bool  $callback
+     * @return $this
+     *
+     * @throws \Laravel\Nova\Exceptions\NovaException
+     */
+    public function showOnIndex($callback = true)
+    {
+        throw NovaException::helperNotSupported(__FUNCTION__, static::class);
     }
 
     /**
      * Prepare the element for JSON serialization.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return array_merge(parent::jsonSerialize(), [
             'rows' => $this->rows,

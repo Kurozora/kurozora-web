@@ -2,12 +2,12 @@
 
 namespace Laravel\Nova;
 
+use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Laravel\Nova\Events\ServingNova;
 
 class NovaServiceProvider extends ServiceProvider
 {
@@ -25,7 +25,7 @@ class NovaServiceProvider extends ServiceProvider
         $this->registerResources();
         $this->registerCarbonMacros();
         $this->registerCollectionMacros();
-        $this->registerJsonVariables();
+        $this->registerRelationsMacros();
     }
 
     /**
@@ -45,15 +45,11 @@ class NovaServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/../public' => public_path('vendor/nova'),
-        ], 'nova-assets');
+        ], ['nova-assets', 'laravel-assets']);
 
         $this->publishes([
             __DIR__.'/../resources/lang' => lang_path('vendor/nova'),
         ], 'nova-lang');
-
-        $this->publishes([
-            __DIR__.'/../resources/views/partials' => resource_path('views/vendor/nova/partials'),
-        ], 'nova-views');
 
         $this->publishes([
             __DIR__.'/../database/migrations' => database_path('migrations'),
@@ -67,43 +63,7 @@ class NovaServiceProvider extends ServiceProvider
      */
     protected function registerResources()
     {
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'nova');
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'nova');
         $this->loadJsonTranslationsFrom(lang_path('vendor/nova'));
-
-        if (Nova::runsMigrations()) {
-            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        }
-
-        $this->registerRoutes();
-    }
-
-    /**
-     * Register the package routes.
-     *
-     * @return void
-     */
-    protected function registerRoutes()
-    {
-        Route::group($this->routeConfiguration(), function () {
-            $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
-        });
-    }
-
-    /**
-     * Get the Nova route group configuration array.
-     *
-     * @return array
-     */
-    protected function routeConfiguration()
-    {
-        return [
-            'namespace' => 'Laravel\Nova\Http\Controllers',
-            'domain' => config('nova.domain', null),
-            // 'as' => 'nova.api.',
-            'prefix' => 'nova-api',
-            'middleware' => 'nova',
-        ];
     }
 
     /**
@@ -115,33 +75,8 @@ class NovaServiceProvider extends ServiceProvider
     {
         Carbon::mixin(new Macros\FirstDayOfQuarter);
         Carbon::mixin(new Macros\FirstDayOfPreviousQuarter);
-    }
-
-    /**
-     * Register the Nova JSON variables.
-     *
-     * @return void
-     */
-    protected function registerJsonVariables()
-    {
-        Nova::serving(function (ServingNova $event) {
-            // Load the default Nova translations.
-            Nova::translations(
-                lang_path('vendor/nova/'.app()->getLocale().'.json')
-            );
-
-            Nova::provideToScript([
-                'appName' => Nova::name() ?? config('app.name', 'Laravel Nova'),
-                'timezone' => config('app.timezone', 'UTC'),
-                'translations' => Nova::allTranslations(),
-                'userTimezone' => Nova::resolveUserTimezone($event->request),
-                'pagination' => config('nova.pagination', 'links'),
-                'locale' => config('app.locale', 'en'),
-                'algoliaAppId' => config('services.algolia.appId'),
-                'algoliaApiKey' => config('services.algolia.apiKey'),
-                'version' => Nova::version(),
-            ]);
-        });
+        CarbonImmutable::mixin(new Macros\FirstDayOfQuarter);
+        CarbonImmutable::mixin(new Macros\FirstDayOfPreviousQuarter);
     }
 
     /**
@@ -162,24 +97,42 @@ class NovaServiceProvider extends ServiceProvider
             Console\FieldCommand::class,
             Console\InstallCommand::class,
             Console\LensCommand::class,
+            Console\CheckLicenseCommand::class,
             Console\PartitionCommand::class,
+            Console\ProgressCommand::class,
             Console\PublishCommand::class,
             Console\ResourceCommand::class,
             Console\ResourceToolCommand::class,
             Console\StubPublishCommand::class,
+            Console\TableCommand::class,
             Console\TranslateCommand::class,
-            Console\ThemeCommand::class,
             Console\ToolCommand::class,
             Console\TrendCommand::class,
             Console\UserCommand::class,
+            Console\UpgradeCommand::class,
             Console\ValueCommand::class,
         ]);
     }
 
+    /**
+     * Register Collection macros.
+     *
+     * @return void
+     */
     protected function registerCollectionMacros()
     {
         Collection::macro('isAssoc', function () {
             return Arr::isAssoc($this->toBase()->all());
         });
+    }
+
+    /**
+     * Register Relations macros.
+     *
+     * @return void
+     */
+    protected function registerRelationsMacros()
+    {
+        BelongsToMany::mixin(new Query\Mixin\BelongsToMany());
     }
 }

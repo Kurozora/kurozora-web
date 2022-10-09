@@ -2,10 +2,10 @@
   <div class="relative" :class="{ 'overflow-hidden': loading }">
     <div
       v-if="loading"
-      class="flex items-center justify-center z-50 p-6"
+      class="flex items-center justify-center z-30 p-6"
       style="min-height: 150px"
     >
-      <loader class="text-60" />
+      <Loader class="text-gray-300" />
     </div>
 
     <slot v-else />

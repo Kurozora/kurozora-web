@@ -6,6 +6,8 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Code extends Field
 {
+    use SupportsDependentFields;
+
     /**
      * The field's component.
      *
@@ -158,10 +160,9 @@ class Code extends Field
     /**
      * Prepare the field for JSON serialization.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return array_merge(parent::jsonSerialize(), [
             'height' => $this->height,

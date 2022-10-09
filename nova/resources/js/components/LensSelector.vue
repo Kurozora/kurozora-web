@@ -1,18 +1,30 @@
 <template>
-  <div>
-    <!-- Available Lenses -->
-    <div v-for="lens in lenses" class="px-3">
-      <router-link
-        :to="{
-          name: 'lens',
-          params: { resourceName: resourceName, lens: lens.uriKey },
-        }"
-        class="dim block text-base text-90 no-underline leading-normal my-2"
+  <Dropdown
+    v-if="lenses.length > 0"
+    class="hover:bg-gray-100 dark:hover:bg-gray-600 rounded"
+  >
+    <span class="sr-only">{{ __('Lens Dropdown') }}</span>
+    <DropdownTrigger class="toolbar-button px-2">
+      <Icon class="dark:text-gray-400" height="23" type="video-camera" />
+    </DropdownTrigger>
+
+    <template #menu>
+      <DropdownMenu
+        class="divide-y divide-gray-100 dark:divide-gray-800 divide-solid"
+        width="auto"
       >
-        {{ lens.name }}
-      </router-link>
-    </div>
-  </div>
+        <DropdownMenuItem
+          v-for="lens in lenses"
+          :key="lens.uriKey"
+          :href="$url(`/resources/${resourceName}/lens/${lens.uriKey}`)"
+          as="link"
+          class="px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-800"
+        >
+          {{ lens.name }}
+        </DropdownMenuItem>
+      </DropdownMenu>
+    </template>
+  </Dropdown>
 </template>
 
 <script>

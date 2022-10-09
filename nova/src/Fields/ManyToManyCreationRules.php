@@ -12,14 +12,21 @@ trait ManyToManyCreationRules
     /**
      * The callback that should be used to set creation rules callback for the pivot actions.
      *
-     * @var callable
+     * @var (callable(\Laravel\Nova\Http\Requests\NovaRequest):array)|null
      */
     public $creationRulesCallback;
 
     /**
+     * Determine if field allow duplicate relations.
+     *
+     * @var bool
+     */
+    public $allowDuplicateRelations = false;
+
+    /**
      * Set creation rules callback for this relation.
      *
-     * @param  \Closure|null  $callback
+     * @param  (callable(\Laravel\Nova\Http\Requests\NovaRequest):array)|null  $callback
      * @return $this
      */
     public function creationRules($callback = null)
@@ -36,6 +43,8 @@ trait ManyToManyCreationRules
      */
     public function allowDuplicateRelations()
     {
+        $this->allowDuplicateRelations = true;
+
         return $this->creationRules(function ($request) {
             return [
                 new NotExactlyAttached($request, $request->findModelOrFail()),
@@ -50,6 +59,8 @@ trait ManyToManyCreationRules
      */
     public function noDuplicateRelations()
     {
+        $this->allowDuplicateRelations = false;
+
         return $this->creationRules(function ($request) {
             return [
                 new NotAttached($request, $request->findModelOrFail()),
@@ -61,7 +72,7 @@ trait ManyToManyCreationRules
      * Get the creation rules for this field.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @return array
+     * @return array<int, string|\Illuminate\Validation\Rule|\Illuminate\Contracts\Validation\Rule|callable>
      */
     public function getManyToManyCreationRules(NovaRequest $request)
     {

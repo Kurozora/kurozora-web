@@ -1,20 +1,22 @@
 <template>
-  <div class="bg-20 p-3 text-center rounded-b-lg flex justify-between">
-    <p class="leading-normal text-sm text-80">{{ resourceCountLabel }}</p>
+  <div
+    class="bg-20 h-9 px-3 text-center rounded-b-lg flex items-center justify-between"
+  >
+    <p class="leading-normal text-sm text-gray-500">{{ resourceCountLabel }}</p>
 
-    <p v-if="allResourcesLoaded" class="leading-normal text-sm text-80">
+    <p v-if="allResourcesLoaded" class="leading-normal text-sm">
       {{ __('All resources loaded.') }}
     </p>
 
     <button
       v-else
       @click="loadMore"
-      class="btn btn btn-link px-4 text-primary dim"
+      class="h-9 focus:outline-none focus:ring ring-inset rounded-lg px-4 font-bold text-primary-500 hover:text-primary-600 active:text-primary-400"
     >
       {{ buttonLabel }}
     </button>
 
-    <p class="leading-normal text-sm text-80">
+    <p class="leading-normal text-sm text-gray-500">
       {{ __(':amount Total', { amount: resourceTotalCountLabel }) }}
     </p>
   </div>
@@ -22,6 +24,8 @@
 
 <script>
 export default {
+  emits: ['load-more'],
+
   props: {
     currentResourceCount: {
       type: Number,

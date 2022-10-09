@@ -3,26 +3,40 @@
 namespace Laravel\Nova\Http\Controllers;
 
 use Illuminate\Routing\Controller;
-use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Http\Requests\ResourceUpdateOrUpdateAttachedRequest;
+use Laravel\Nova\Http\Resources\UpdateViewResource;
 
 class UpdateFieldController extends Controller
 {
     /**
      * List the update fields for the given resource.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param  \Laravel\Nova\Http\Requests\ResourceUpdateOrUpdateAttachedRequest  $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index(NovaRequest $request)
+    public function __invoke(ResourceUpdateOrUpdateAttachedRequest $request)
     {
-        $resource = $request->newResourceWith($request->findModelOrFail());
+        return UpdateViewResource::make()->toResponse($request);
+    }
 
-        $resource->authorizeToUpdate($request);
+    /**
+     * Synchronize the field for updating.
+     *
+     * @param  \Laravel\Nova\Http\Requests\ResourceUpdateOrUpdateAttachedRequest  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function sync(ResourceUpdateOrUpdateAttachedRequest $request)
+    {
+        UpdateViewResource::make()->newResourceWith($request);
 
-        return response()->json([
-            'title' => (string) $resource->title(),
-            'fields' => $resource->updateFieldsWithinPanels($request, $resource),
-            'panels' => $resource->availablePanelsForUpdate($request, $resource),
-        ]);
+        return response()->json(
+            $request->newResource()
+                ->updateFields($request)
+                ->filter(function ($field) use ($request) {
+                    return $request->query('field') === $field->attribute &&
+                            $request->query('component') === $field->dependentComponentKey();
+                })->each->syncDependsOn($request)
+                ->first()
+        );
     }
 }

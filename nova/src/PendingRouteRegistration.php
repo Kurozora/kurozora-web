@@ -2,7 +2,11 @@
 
 namespace Laravel\Nova;
 
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
+use Laravel\Nova\Http\Controllers\ForgotPasswordController;
+use Laravel\Nova\Http\Controllers\LoginController;
+use Laravel\Nova\Http\Controllers\ResetPasswordController;
 
 class PendingRouteRegistration
 {
@@ -16,26 +20,28 @@ class PendingRouteRegistration
     /**
      * Register the Nova authentication routes.
      *
-     * @param  array  $middleware
+     * @param  array<int, class-string|string>  $middleware
      * @return $this
      */
-    public function withAuthenticationRoutes($middleware = ['web'])
+    public function withAuthenticationRoutes($middleware = ['nova'])
     {
+        Nova::withAuthentication();
+
         Route::namespace('Laravel\Nova\Http\Controllers')
             ->domain(config('nova.domain', null))
             ->middleware($middleware)
             ->prefix(Nova::path())
-            ->group(function () {
-                Route::get('/login', 'LoginController@showLoginForm');
-                Route::post('/login', 'LoginController@login')->name('nova.login');
+            ->group(function (Router $router) {
+                $router->get('/login', [LoginController::class, 'showLoginForm'])->name('nova.pages.login');
+                $router->post('/login', [LoginController::class, 'login'])->name('nova.login');
             });
 
         Route::namespace('Laravel\Nova\Http\Controllers')
             ->domain(config('nova.domain', null))
             ->middleware(config('nova.middleware', []))
             ->prefix(Nova::path())
-            ->group(function () {
-                Route::get('/logout', 'LoginController@logout')->name('nova.logout');
+            ->group(function (Router $router) {
+                $router->post('/logout', [LoginController::class, 'logout'])->name('nova.logout');
             });
 
         return $this;
@@ -44,22 +50,21 @@ class PendingRouteRegistration
     /**
      * Register the Nova password reset routes.
      *
-     * @param  array  $middleware
+     * @param  array<int, class-string|string>  $middleware
      * @return $this
      */
-    public function withPasswordResetRoutes($middleware = ['web'])
+    public function withPasswordResetRoutes($middleware = ['nova'])
     {
-        Nova::$resetsPasswords = true;
+        Nova::withPasswordReset();
 
-        Route::namespace('Laravel\Nova\Http\Controllers')
-            ->domain(config('nova.domain', null))
+        Route::domain(config('nova.domain', null))
             ->middleware($middleware)
             ->prefix(Nova::path())
-            ->group(function () {
-                Route::get('/password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('nova.password.request');
-                Route::post('/password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('nova.password.email');
-                Route::get('/password/reset/{token}', 'ResetPasswordController@showResetForm')->name('nova.password.reset');
-                Route::post('/password/reset', 'ResetPasswordController@reset');
+            ->group(function (Router $router) {
+                $router->get('/password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('nova.pages.password.email');
+                $router->post('/password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('nova.password.email');
+                $router->get('/password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('nova.pages.password.reset');
+                $router->post('/password/reset', [ResetPasswordController::class, 'reset'])->name('nova.password.reset');
             });
 
         return $this;
@@ -74,25 +79,36 @@ class PendingRouteRegistration
     {
         $this->registered = true;
 
-        $defineRouterControllerRoutes = function () {
-            Route::middleware(config('nova.middleware', []))
-                ->domain(config('nova.domain', null))
-                ->group(function () {
-                    Route::get(Nova::path(), 'Laravel\Nova\Http\Controllers\RouterController@show')->name('nova.index');
-                });
+        Route::namespace('Laravel\Nova\Http\Controllers')
+            ->domain(config('nova.domain', null))
+            ->middleware(config('nova.middleware', []))
+            ->prefix(Nova::path())
+            ->as('nova.pages.')
+            ->group(function (Router $router) {
+                $router->get('/403', 'Pages\Error403Controller')->name('403');
+                $router->get('/404', 'Pages\Error404Controller')->name('404');
+            });
 
-            Route::middleware(config('nova.middleware', []))
-                ->domain(config('nova.domain', null))
-                ->prefix(Nova::path())
-                ->get('/{view}', 'Laravel\Nova\Http\Controllers\RouterController@show')
-                 ->where('view', '.*');
-        };
+        Route::namespace('Laravel\Nova\Http\Controllers')
+            ->domain(config('nova.domain', null))
+            ->middleware(config('nova.api_middleware', []))
+            ->prefix(Nova::path())
+            ->as('nova.pages.')
+            ->group(function (Router $router) {
+                $router->get('/', 'Pages\HomeController')->name('home');
+                $router->redirect('dashboard', Nova::url('/'))->name('dashboard');
+                $router->get('dashboards/{name}', 'Pages\DashboardController')->name('dashboard.custom');
 
-        if (app()->runningInConsole() && ! app()->runningUnitTests()) {
-            app()->booted($defineRouterControllerRoutes);
-        } else {
-            Nova::booted($defineRouterControllerRoutes);
-        }
+                $router->get('resources/{resource}', 'Pages\ResourceIndexController')->name('index');
+                $router->get('resources/{resource}/new', 'Pages\ResourceCreateController')->name('create');
+                $router->get('resources/{resource}/{resourceId}', 'Pages\ResourceDetailController')->name('detail');
+                $router->get('resources/{resource}/{resourceId}/edit', 'Pages\ResourceUpdateController')->name('edit');
+                $router->get('resources/{resource}/{resourceId}/replicate', 'Pages\ResourceReplicateController')->name('replicate');
+                $router->get('resources/{resource}/lens/{lens}', 'Pages\LensController')->name('lens');
+
+                $router->get('resources/{resource}/{resourceId}/attach/{relatedResource}', 'Pages\AttachableController')->name('attach');
+                $router->get('resources/{resource}/{resourceId}/edit-attached/{relatedResource}/{relatedResourceId}', 'Pages\AttachedResourceUpdateController')->name('edit-attached');
+            });
     }
 
     /**

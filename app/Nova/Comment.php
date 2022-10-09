@@ -87,9 +87,10 @@ class Comment extends Resource
                 ->rules('required')
                 ->help('The content of the comment.'),
 
-            Text::make('Content')->displayUsing(function ($value) {
-                return str($value)->limit(50);
-            })
+            Text::make('Content')
+                ->displayUsing(function ($value) {
+                    return str($value)->limit(50);
+                })
                 ->onlyOnIndex(),
 
             Boolean::make('Is Spoiler')

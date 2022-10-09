@@ -34,13 +34,16 @@ class StubPublishCommand extends Command
 
         $files = [
             __DIR__.'/stubs/action.stub' => $stubsPath.'/action.stub',
+            __DIR__.'/stubs/action.queued.stub' => $stubsPath.'/action.queued.stub',
             __DIR__.'/stubs/base-resource.stub' => $stubsPath.'/base-resource.stub',
             __DIR__.'/stubs/boolean-filter.stub' => $stubsPath.'/boolean-filter.stub',
             __DIR__.'/stubs/dashboard.stub' => $stubsPath.'/dashboard.stub',
             __DIR__.'/stubs/date-filter.stub' => $stubsPath.'/date-filter.stub',
             __DIR__.'/stubs/destructive-action.stub' => $stubsPath.'/destructive-action.stub',
+            __DIR__.'/stubs/destructive-action.queued.stub' => $stubsPath.'/destructive-action.queued.stub',
             __DIR__.'/stubs/filter.stub' => $stubsPath.'/filter.stub',
             __DIR__.'/stubs/lens.stub' => $stubsPath.'/lens.stub',
+            __DIR__.'/stubs/main-dashboard.stub' => $stubsPath.'/main-dashboard.stub',
             __DIR__.'/stubs/partition.stub' => $stubsPath.'/partition.stub',
             __DIR__.'/stubs/resource.stub' => $stubsPath.'/resource.stub',
             __DIR__.'/stubs/trend.stub' => $stubsPath.'/trend.stub',

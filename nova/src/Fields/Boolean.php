@@ -2,10 +2,15 @@
 
 namespace Laravel\Nova\Fields;
 
+use Illuminate\Support\Arr;
+use Laravel\Nova\Contracts\FilterableField;
+use Laravel\Nova\Fields\Filters\BooleanFilter;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Boolean extends Field
+class Boolean extends Field implements FilterableField
 {
+    use FieldFilterable, SupportsDependentFields;
+
     /**
      * The field's component.
      *
@@ -46,7 +51,7 @@ class Boolean extends Field
         $value = parent::resolveAttribute($resource, $attribute);
 
         return ! is_null($value)
-                    ? $value == $this->trueValue ? true : false
+                    ? ($value == $this->trueValue ? true : false)
                     : null;
     }
 
@@ -114,5 +119,28 @@ class Boolean extends Field
         $this->falseValue = $value;
 
         return $this;
+    }
+
+    /**
+     * Make the field filter.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @return \Laravel\Nova\Fields\Filters\Filter
+     */
+    protected function makeFilter(NovaRequest $request)
+    {
+        return new BooleanFilter($this);
+    }
+
+    /**
+     * Prepare the field for JSON serialization.
+     *
+     * @return array
+     */
+    public function serializeForFilter()
+    {
+        return transform($this->jsonSerialize(), function ($field) {
+            return Arr::only($field, ['uniqueKey']);
+        });
     }
 }

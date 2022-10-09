@@ -4,6 +4,9 @@ namespace Laravel\Nova\Http\Requests;
 
 use Laravel\Nova\FilterDecoder;
 
+/**
+ * @property-read string $filters
+ */
 trait DecodesFilters
 {
     /**

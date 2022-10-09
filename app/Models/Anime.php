@@ -389,19 +389,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Returns the moderators of this Anime.
-     *
-     * @return BelongsToMany
-     */
-    public function moderators(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, AnimeModerator::TABLE_NAME, 'anime_id', 'user_id')
-            ->using(AnimeModerator::class)
-            ->withPivot('created_at')
-            ->withTimestamps();
-    }
-
-    /**
      * Retrieves the studios for an Anime item in an array
      *
      * @param int $limit

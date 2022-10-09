@@ -3,14 +3,15 @@
 namespace Laravel\Nova\Testing\Browser\Pages;
 
 use Laravel\Dusk\Browser;
-use Laravel\Nova\Nova;
 
 class Update extends Page
 {
-    use HasSearchableRelations;
+    use InteractsWithRelations;
 
     public $resourceName;
+
     public $resourceId;
+
     public $queryParams;
 
     /**
@@ -26,22 +27,8 @@ class Update extends Page
         $this->resourceName = $resourceName;
         $this->resourceId = $resourceId;
         $this->queryParams = $queryParams;
-    }
 
-    /**
-     * Get the URL for the page.
-     *
-     * @return string
-     */
-    public function url()
-    {
-        $url = Nova::path().'/resources/'.$this->resourceName.'/'.$this->resourceId.'/edit';
-
-        if ($this->queryParams) {
-            $url .= '?'.http_build_query($this->queryParams);
-        }
-
-        return $url;
+        $this->setNovaPage("/resources/{$this->resourceName}/{$this->resourceId}/edit");
     }
 
     /**
@@ -58,12 +45,10 @@ class Update extends Page
     {
         $browser->whenAvailable("@{$uriKey}-inline-create", function ($browser) use ($fieldCallback) {
             $browser->click('')
-                ->elsewhere('', function ($browser) use ($fieldCallback) {
-                    $browser->whenAvailable('.modal', function ($browser) use ($fieldCallback) {
-                        $fieldCallback($browser);
+                ->elsewhereWhenAvailable('.modal[data-modal-open=true]', function ($browser) use ($fieldCallback) {
+                    $fieldCallback($browser);
 
-                        $browser->create()->pause(250);
-                    });
+                    $browser->create()->pause(250);
                 });
         });
     }
@@ -78,9 +63,10 @@ class Update extends Page
      */
     public function update(Browser $browser)
     {
-        $browser->waitFor('@update-button')
-                ->click('@update-button')
-                ->pause(500);
+        $browser->dismissToasted()
+            ->waitFor('@update-button')
+            ->click('@update-button')
+            ->pause(500);
     }
 
     /**
@@ -93,9 +79,22 @@ class Update extends Page
      */
     public function updateAndContinueEditing(Browser $browser)
     {
-        $browser->waitFor('@update-and-continue-editing-button')
-                ->click('@update-and-continue-editing-button')
-                ->pause(500);
+        $browser->dismissToasted()
+            ->waitFor('@update-and-continue-editing-button')
+            ->click('@update-and-continue-editing-button')
+            ->pause(500);
+    }
+
+    /**
+     * Click the cancel button.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
+     */
+    public function cancel(Browser $browser)
+    {
+        $browser->dismissToasted()
+            ->click('@cancel-update-button');
     }
 
     /**
@@ -106,16 +105,6 @@ class Update extends Page
      */
     public function assert(Browser $browser)
     {
-        $browser->pause(500);
-    }
-
-    /**
-     * Get the element shortcuts for the page.
-     *
-     * @return array
-     */
-    public function elements()
-    {
-        return [];
+        $browser->assertOk()->waitFor('@nova-form');
     }
 }

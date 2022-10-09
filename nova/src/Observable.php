@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use InvalidArgumentException;
 
+/**
+ * @method static static make(\Illuminate\Database\Eloquent\Model|string $eloquent, array|string $classes)
+ */
 class Observable
 {
     use Makeable;
@@ -14,8 +17,8 @@ class Observable
     /**
      * Construct a new observable for an Eloquent model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model|string  $eloquent
-     * @param  mixed  $classes
+     * @param  \Illuminate\Database\Eloquent\Model|class-string<\Illuminate\Database\Eloquent\Model>  $eloquent
+     * @param  array<int, class-string>|class-string  $classes
      */
     public function __construct($eloquent, $classes)
     {
@@ -33,7 +36,7 @@ class Observable
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @param  \Illuminate\Contracts\Events\Dispatcher  $eventDispatcher
-     * @param  object|string  $observer
+     * @param  object|class-string  $observer
      * @return void
      *
      * @throws \RuntimeException
@@ -56,7 +59,7 @@ class Observable
      *
      * @param  mixed  $listener
      * @param  string  $method
-     * @return \Closure
+     * @return \Closure():mixed
      */
     protected function createCallbackForListenerOnServingNova($listener, $method)
     {
@@ -72,8 +75,8 @@ class Observable
     /**
      * Resolve the observer's class name from an object or string.
      *
-     * @param  object|string  $class
-     * @return string
+     * @param  object|class-string  $class
+     * @return class-string
      *
      * @throws \InvalidArgumentException
      */

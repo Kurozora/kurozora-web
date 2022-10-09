@@ -44,7 +44,7 @@ trait InteractsWithRelatedResources
     {
         return once(function () {
             if (! $this->viaRelationship()) {
-                return;
+                return null;
             }
 
             return Nova::modelInstanceForKey($this->viaResource)
@@ -114,21 +114,9 @@ trait InteractsWithRelatedResources
     }
 
     /**
-     * Get a new instance of the "via" resource being requested.
-     *
-     * @return \Laravel\Nova\Resource
-     */
-    public function newViaResource()
-    {
-        $resource = $this->viaResource();
-
-        return new $resource($resource::newModel());
-    }
-
-    /**
      * Get the class name of the "related" resource being requested.
      *
-     * @return string
+     * @return class-string<\Laravel\Nova\Resource>
      */
     public function relatedResource()
     {
@@ -150,11 +138,23 @@ trait InteractsWithRelatedResources
     /**
      * Get the class name of the "via" resource being requested.
      *
-     * @return string
+     * @return class-string<\Laravel\Nova\Resource>
      */
     public function viaResource()
     {
         return Nova::resourceForKey($this->viaResource);
+    }
+
+    /**
+     * Get a new instance of the "via" resource being requested.
+     *
+     * @return \Laravel\Nova\Resource
+     */
+    public function newViaResource()
+    {
+        $resource = $this->viaResource();
+
+        return new $resource($resource::newModel());
     }
 
     /**

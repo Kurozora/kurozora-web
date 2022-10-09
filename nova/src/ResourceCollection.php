@@ -5,13 +5,19 @@ namespace Laravel\Nova;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
+/**
+ * @template TKey of array-key
+ * @template TValue
+ *
+ * @extends \Illuminate\Support\Collection<TKey, TValue>
+ */
 class ResourceCollection extends Collection
 {
     /**
      * Return the authorized resources of the collection.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Laravel\Nova\ResourceCollection
+     * @return static
      */
     public function authorized(Request $request)
     {
@@ -24,7 +30,7 @@ class ResourceCollection extends Collection
      * Return the resources available to be displayed in the navigation.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Laravel\Nova\ResourceCollection
+     * @return static
      */
     public function availableForNavigation(Request $request)
     {
@@ -36,7 +42,7 @@ class ResourceCollection extends Collection
     /**
      * Return the searchable resources for the collection.
      *
-     * @return \Laravel\Nova\ResourceCollection
+     * @return static
      */
     public function searchable()
     {
@@ -48,20 +54,20 @@ class ResourceCollection extends Collection
     /**
      * Sort the resources by their group property.
      *
-     * @return \Laravel\Nova\ResourceCollection
+     * @return \Illuminate\Support\Collection<string, \Illuminate\Support\Collection<array-key, TValue>>
      */
     public function grouped()
     {
-        return $this->groupBy(function ($item, $key) {
-            return $item::group();
-        })->sortKeys();
+        return $this->groupBy(function ($resource, $key) {
+            return $resource::group();
+        })->toBase()->sortKeys();
     }
 
     /**
      * Group the resources for display in navigation.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Laravel\Nova\ResourceCollection
+     * @return \Illuminate\Support\Collection<string, \Illuminate\Support\Collection<array-key, TValue>>
      */
     public function groupedForNavigation(Request $request)
     {

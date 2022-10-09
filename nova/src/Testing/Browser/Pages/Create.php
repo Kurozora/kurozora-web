@@ -3,14 +3,12 @@
 namespace Laravel\Nova\Testing\Browser\Pages;
 
 use Laravel\Dusk\Browser;
-use Laravel\Nova\Nova;
 
 class Create extends Page
 {
-    use HasSearchableRelations;
+    use InteractsWithRelations;
 
     public $resourceName;
-    public $queryParams;
 
     /**
      * Create a new page instance.
@@ -23,46 +21,8 @@ class Create extends Page
     {
         $this->resourceName = $resourceName;
         $this->queryParams = $queryParams;
-    }
 
-    /**
-     * Get the URL for the page.
-     *
-     * @return string
-     */
-    public function url()
-    {
-        $url = Nova::path().'/resources/'.$this->resourceName.'/new';
-
-        if ($this->queryParams) {
-            $url .= '?'.http_build_query($this->queryParams);
-        }
-
-        return $url;
-    }
-
-    /**
-     * Run the inline create relation.
-     *
-     * @param  \Laravel\Dusk\Browser  $browser
-     * @param  string  $uriKey
-     * @param  callable  $fieldCallback
-     * @return void
-     *
-     * @throws \Facebook\WebDriver\Exception\TimeOutException
-     */
-    public function runInlineCreate(Browser $browser, $uriKey, callable $fieldCallback)
-    {
-        $browser->whenAvailable("@{$uriKey}-inline-create", function ($browser) use ($fieldCallback) {
-            $browser->click('')
-                ->elsewhere('', function ($browser) use ($fieldCallback) {
-                    $browser->whenAvailable('.modal', function ($browser) use ($fieldCallback) {
-                        $fieldCallback($browser);
-
-                        $browser->create()->pause(250);
-                    });
-                });
-        });
+        $this->setNovaPage("/resources/{$this->resourceName}/new");
     }
 
     /**
@@ -73,7 +33,9 @@ class Create extends Page
      */
     public function create(Browser $browser)
     {
-        $browser->click('@create-button')->pause(500);
+        $browser->dismissToasted()
+            ->click('@create-button')
+            ->pause(500);
     }
 
     /**
@@ -84,7 +46,21 @@ class Create extends Page
      */
     public function createAndAddAnother(Browser $browser)
     {
-        $browser->click('@create-and-add-another-button')->pause(500);
+        $browser->dismissToasted()
+            ->click('@create-and-add-another-button')
+            ->pause(500);
+    }
+
+    /**
+     * Click the cancel button.
+     *
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
+     */
+    public function cancel(Browser $browser)
+    {
+        $browser->dismissToasted()
+            ->click('@cancel-create-button');
     }
 
     /**
@@ -95,7 +71,7 @@ class Create extends Page
      */
     public function assert(Browser $browser)
     {
-        $browser->pause(500);
+        $browser->assertOk()->waitFor('@nova-form');
     }
 
     /**
@@ -108,15 +84,5 @@ class Create extends Page
     public function assertNoRelationSearchResults(Browser $browser, $resourceName)
     {
         $browser->assertMissing('@'.$resourceName.'-search-input-result-0');
-    }
-
-    /**
-     * Get the element shortcuts for the page.
-     *
-     * @return array
-     */
-    public function elements()
-    {
-        return [];
     }
 }

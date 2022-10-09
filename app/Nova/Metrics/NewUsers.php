@@ -3,7 +3,7 @@
 namespace App\Nova\Metrics;
 
 use App\Models\User;
-use Illuminate\Http\Request;
+use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\Value;
 
 class NewUsers extends Value
@@ -11,10 +11,10 @@ class NewUsers extends Value
     /**
      * Calculate the value of the metric.
      *
-     * @param Request $request
+     * @param NovaRequest $request
      * @return mixed
      */
-    public function calculate(Request $request): mixed
+    public function calculate(NovaRequest $request): mixed
     {
         return $this->count($request, User::class);
     }

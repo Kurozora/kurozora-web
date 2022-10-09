@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 class GenerateColorsFromImage extends Action
 {
@@ -44,9 +45,10 @@ class GenerateColorsFromImage extends Action
     /**
      * Get the fields available on the action.
      *
+     * @param NovaRequest $request
      * @return array
      */
-    public function fields(): array
+    public function fields(NovaRequest $request): array
     {
         return [];
     }

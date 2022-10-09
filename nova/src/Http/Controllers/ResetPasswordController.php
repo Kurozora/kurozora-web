@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
+use Inertia\Inertia;
 use Laravel\Nova\Nova;
 
 class ResetPasswordController extends Controller
@@ -42,14 +43,16 @@ class ResetPasswordController extends Controller
      * If no token is present, display the link request form.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  string|null  $token
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Inertia\Response
      */
-    public function showResetForm(Request $request, $token = null)
+    public function showResetForm(Request $request)
     {
-        return view('nova::auth.passwords.reset')->with(
-            ['token' => $token, 'email' => $request->email]
-        );
+        $token = $request->route()->parameter('token');
+
+        return Inertia::render('Nova.ResetPassword', [
+            'token' => $token,
+            'email' => $request->email,
+        ]);
     }
 
     /**

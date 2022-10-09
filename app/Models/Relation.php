@@ -22,6 +22,6 @@ class Relation extends KModel
      */
     public function anime(): HasMany
     {
-        return $this->hasMany(MediaRelation::class, 'relation_id')->where('media_type', 'anime');
+        return $this->hasMany(MediaRelation::class, 'relation_id')->where('model_type', Anime::class);
     }
 }

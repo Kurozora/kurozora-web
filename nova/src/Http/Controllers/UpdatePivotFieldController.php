@@ -3,45 +3,40 @@
 namespace Laravel\Nova\Http\Controllers;
 
 use Illuminate\Routing\Controller;
-use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Http\Requests\ResourceUpdateOrUpdateAttachedRequest;
+use Laravel\Nova\Http\Resources\UpdatePivotFieldResource;
 
 class UpdatePivotFieldController extends Controller
 {
     /**
      * List the pivot fields for the given resource and relation.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param  \Laravel\Nova\Http\Requests\ResourceUpdateOrUpdateAttachedRequest  $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index(NovaRequest $request)
+    public function __invoke(ResourceUpdateOrUpdateAttachedRequest $request)
     {
-        $resource = tap($request->findResourceOrFail(), function ($resource) use ($request) {
-            abort_unless($resource->hasRelatableField($request, $request->viaRelationship), 404);
-        });
+        return UpdatePivotFieldResource::make()->toResponse($request);
+    }
 
-        $model = $resource->model();
+    /**
+     * Synchronize the pivot field for updating.
+     *
+     * @param  \Laravel\Nova\Http\Requests\ResourceUpdateOrUpdateAttachedRequest  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function sync(ResourceUpdateOrUpdateAttachedRequest $request)
+    {
+        $resource = UpdatePivotFieldResource::make()->newResourceWith($request);
 
-        $relation = $model->{$request->viaRelationship}();
-
-        $accessor = $relation->getPivotAccessor();
-
-        if ($request->viaPivotId) {
-            tap($relation->getPivotClass(), function ($pivotClass) use ($relation, $request) {
-                $relation->wherePivot((new $pivotClass())->getKeyName(), $request->viaPivotId);
-            });
-        }
-
-        $model->setRelation(
-            $accessor,
-            $relation->withoutGlobalScopes()->findOrFail($request->relatedResourceId)->{$accessor}
+        return response()->json(
+            $resource->updatePivotFields(
+                $request, $request->relatedResource
+            )->filter(function ($field) use ($request) {
+                return $request->query('field') === $field->attribute &&
+                        $request->query('component') === $field->dependentComponentKey();
+            })->applyDependsOn($request)
+            ->first()
         );
-
-        return response()->json([
-            'title' => $resource->title(),
-            'fields' => $resource->updatePivotFields(
-                $request,
-                $request->relatedResource
-            )->all(),
-        ]);
     }
 }

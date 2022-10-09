@@ -1,6 +1,6 @@
 <template>
   <label class="flex items-center select-none">
-    <checkbox
+    <Checkbox
       @input="$emit('input', $event)"
       :checked="checked"
       class="mr-2"
@@ -13,6 +13,8 @@
 
 <script>
 export default {
+  emits: ['input'],
+
   props: {
     checked: Boolean,
     name: { type: String, required: false },

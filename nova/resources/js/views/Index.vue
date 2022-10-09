@@ -1,295 +1,153 @@
 <template>
-  <loading-view
+  <LoadingView
     :loading="initialLoading"
     :dusk="resourceName + '-index-component'"
     :data-relationship="viaRelationship"
   >
-    <custom-index-header
-      v-if="!viaResource"
-      class="mb-3"
+    <template v-if="shouldOverrideMeta && resourceInformation">
+      <Head :title="__(`${resourceInformation.label}`)" />
+    </template>
+
+    <Cards
+      v-if="shouldShowCards"
+      :cards="cards"
       :resource-name="resourceName"
     />
 
-    <div v-if="shouldShowCards">
-      <cards
-        v-if="smallCards.length > 0"
-        :cards="smallCards"
-        class="mb-3"
-        :resource-name="resourceName"
-      />
-
-      <cards
-        v-if="largeCards.length > 0"
-        :cards="largeCards"
-        size="large"
-        :resource-name="resourceName"
-      />
-    </div>
-
-    <heading :level="1" class="mb-3" v-html="headingTitle" />
-
-    <div class="flex">
-      <!-- Search -->
-      <div
-        v-if="resourceInformation.searchable && !viaHasOne"
-        class="relative h-9 flex-no-shrink"
-        :class="{
-          'mb-6': resourceInformation.searchable && !viaHasOne,
-        }"
+    <Heading
+      :level="1"
+      class="mb-3 flex items-center"
+      :class="{ 'mt-6': shouldShowCards && cards.length > 0 }"
+    >
+      <span v-html="headingTitle" />
+      <button
+        v-if="!loading && viaRelationship"
+        @click="handleCollapsableChange"
+        class="rounded border border-transparent h-6 w-6 ml-1 inline-flex items-center justify-center focus:outline-none focus:ring ring-primary-200"
+        :aria-label="__('Toggle Collapsed')"
+        :aria-expanded="shouldBeCollapsed === false ? 'true' : 'false'"
       >
-        <icon type="search" class="absolute search-icon-center ml-3 text-70" />
+        <CollapseButton :collapsed="shouldBeCollapsed" />
+      </button>
+    </Heading>
 
-        <input
-          data-testid="search-input"
-          dusk="search"
-          class="appearance-none form-search w-search pl-search shadow"
-          :placeholder="__('Search')"
-          type="search"
-          v-model="search"
-          @keydown.stop="performSearch"
-          @search="performSearch"
-          spellcheck="false"
-        />
-      </div>
-
-      <div class="w-full flex items-center" :class="{ 'mb-6': !viaResource }">
-        <custom-index-toolbar
-          v-if="!viaResource"
-          :resource-name="resourceName"
+    <template v-if="!shouldBeCollapsed">
+      <div class="flex">
+        <IndexSearchInput
+          :class="{ 'mb-6': !viaResource }"
+          v-if="
+            resourceInformation && resourceInformation.searchable && !viaHasOne
+          "
+          :searchable="
+            resourceInformation && resourceInformation.searchable && !viaHasOne
+          "
+          v-model:keyword="search"
+          @update:keyword="search = $event"
         />
 
-        <!-- Create / Attach Button -->
-        <create-resource-button
-          :label="createButtonLabel"
-          :singular-name="singularName"
-          :resource-name="resourceName"
-          :via-resource="viaResource"
-          :via-resource-id="viaResourceId"
-          :via-relationship="viaRelationship"
-          :relationship-type="relationshipType"
-          :authorized-to-create="authorizedToCreate && !resourceIsFull"
-          :authorized-to-relate="authorizedToRelate"
-          class="flex-no-shrink ml-auto"
-          :class="{ 'mb-6': viaResource }"
-        />
-      </div>
-    </div>
-
-    <card>
-      <div
-        class="flex items-center"
-        :class="{
-          'py-3 border-b border-50':
-            shouldShowCheckBoxes ||
-            shouldShowDeleteMenu ||
-            softDeletes ||
-            !viaResource ||
-            hasFilters ||
-            haveStandaloneActions,
-        }"
-      >
-        <div class="flex items-center">
-          <div class="px-3" v-if="shouldShowCheckBoxes">
-            <!-- Select All -->
-            <dropdown
-              dusk="select-all-dropdown"
-              placement="bottom-end"
-              class="-mx-2"
-            >
-              <dropdown-trigger class="px-2">
-                <fake-checkbox :checked="selectAllChecked" />
-              </dropdown-trigger>
-
-              <dropdown-menu slot="menu" direction="ltr" width="250">
-                <div class="p-4">
-                  <ul class="list-reset">
-                    <li class="flex items-center mb-4">
-                      <checkbox-with-label
-                        :checked="selectAllChecked"
-                        @input="toggleSelectAll"
-                        dusk="select-all-button"
-                      >
-                        {{ __('Select All') }}
-                      </checkbox-with-label>
-                    </li>
-                    <li class="flex items-center">
-                      <checkbox-with-label
-                        dusk="select-all-matching-button"
-                        :checked="selectAllMatchingChecked"
-                        @input="toggleSelectAllMatching"
-                      >
-                        <template>
-                          <span class="mr-1">
-                            {{ __('Select All Matching') }} ({{
-                              allMatchingResourceCount
-                            }})
-                          </span>
-                        </template>
-                      </checkbox-with-label>
-                    </li>
-                  </ul>
-                </div>
-              </dropdown-menu>
-            </dropdown>
-          </div>
-        </div>
-
-        <div class="flex items-center ml-auto px-3">
-          <resource-polling-button
-            v-if="shouldShowPollingToggle"
-            :currently-polling="currentlyPolling"
-            @start-polling="startPolling"
-            @stop-polling="stopPolling"
-            class="mr-1"
-          />
-
-          <!-- Action Selector -->
-          <action-selector
-            v-if="selectedResources.length > 0 || haveStandaloneActions"
+        <div class="w-full flex items-center" :class="{ 'mb-6': !viaResource }">
+          <!-- Create / Attach Button -->
+          <CreateResourceButton
+            :label="createButtonLabel"
+            :singular-name="singularName"
             :resource-name="resourceName"
-            :actions="availableActions"
-            :pivot-actions="pivotActions"
-            :pivot-name="pivotName"
-            :query-string="{
-              currentSearch,
-              encodedFilters,
-              currentTrashed,
-              viaResource,
-              viaResourceId,
-              viaRelationship,
-            }"
-            :selected-resources="selectedResourcesForActionSelector"
-            @actionExecuted="getResources"
-          />
-
-          <!-- Lenses -->
-          <dropdown
-            class="bg-30 hover:bg-40 mr-3 rounded"
-            v-if="lenses.length > 0"
-          >
-            <dropdown-trigger class="px-3">
-              <h3
-                slot="default"
-                class="flex items-center font-normal text-base text-90 h-9"
-              >
-                {{ __('Lens') }}
-              </h3>
-            </dropdown-trigger>
-
-            <dropdown-menu slot="menu" width="240" direction="rtl">
-              <lens-selector :resource-name="resourceName" :lenses="lenses" />
-            </dropdown-menu>
-          </dropdown>
-
-          <!-- Filters -->
-          <filter-menu
-            :resource-name="resourceName"
-            :soft-deletes="softDeletes"
             :via-resource="viaResource"
-            :via-has-one="viaHasOne"
-            :trashed="trashed"
-            :per-page="perPage"
-            :per-page-options="
-              perPageOptions || resourceInformation.perPageOptions
-            "
-            @clear-selected-filters="clearSelectedFilters"
-            @filter-changed="filterChanged"
-            @trashed-changed="trashedChanged"
-            @per-page-changed="updatePerPageChanged"
-          />
-
-          <delete-menu
-            v-if="shouldShowDeleteMenu"
-            dusk="delete-menu"
-            :soft-deletes="softDeletes"
-            :resources="resources"
-            :selected-resources="selectedResources"
-            :via-many-to-many="viaManyToMany"
-            :all-matching-resource-count="allMatchingResourceCount"
-            :all-matching-selected="selectAllMatchingChecked"
-            :authorized-to-delete-selected-resources="
-              authorizedToDeleteSelectedResources
-            "
-            :authorized-to-force-delete-selected-resources="
-              authorizedToForceDeleteSelectedResources
-            "
-            :authorized-to-delete-any-resources="authorizedToDeleteAnyResources"
-            :authorized-to-force-delete-any-resources="
-              authorizedToForceDeleteAnyResources
-            "
-            :authorized-to-restore-selected-resources="
-              authorizedToRestoreSelectedResources
-            "
-            :authorized-to-restore-any-resources="
-              authorizedToRestoreAnyResources
-            "
-            @deleteSelected="deleteSelectedResources"
-            @deleteAllMatching="deleteAllMatchingResources"
-            @forceDeleteSelected="forceDeleteSelectedResources"
-            @forceDeleteAllMatching="forceDeleteAllMatchingResources"
-            @restoreSelected="restoreSelectedResources"
-            @restoreAllMatching="restoreAllMatchingResources"
-            @close="deleteModalOpen = false"
+            :via-resource-id="viaResourceId"
+            :via-relationship="viaRelationship"
+            :relationship-type="relationshipType"
+            :authorized-to-create="authorizedToCreate && !resourceIsFull"
+            :authorized-to-relate="authorizedToRelate"
+            class="flex-shrink-0 ml-auto"
+            :class="{ 'mb-6': viaResource }"
           />
         </div>
       </div>
 
-      <loading-view :loading="loading">
-        <index-error-dialog
-          v-if="resourceResponseError != null"
-          :resource="resourceInformation"
-          @click="getResources"
+      <Card>
+        <ResourceTableToolbar
+          :action-query-string="actionQueryString"
+          :all-matching-resource-count="allMatchingResourceCount"
+          :authorized-to-delete-any-resources="authorizedToDeleteAnyResources"
+          :authorized-to-delete-selected-resources="
+            authorizedToDeleteSelectedResources
+          "
+          :authorized-to-force-delete-any-resources="
+            authorizedToForceDeleteAnyResources
+          "
+          :authorized-to-force-delete-selected-resources="
+            authorizedToForceDeleteSelectedResources
+          "
+          :authorized-to-restore-any-resources="authorizedToRestoreAnyResources"
+          :authorized-to-restore-selected-resources="
+            authorizedToRestoreSelectedResources
+          "
+          :available-actions="availableActions"
+          :clear-selected-filters="clearSelectedFilters"
+          :close-delete-modal="closeDeleteModal"
+          :currently-polling="currentlyPolling"
+          :delete-all-matching-resources="deleteAllMatchingResources"
+          :delete-selected-resources="deleteSelectedResources"
+          :filter-changed="filterChanged"
+          :force-delete-all-matching-resources="forceDeleteAllMatchingResources"
+          :force-delete-selected-resources="forceDeleteSelectedResources"
+          :get-resources="getResources"
+          :has-filters="hasFilters"
+          :have-standalone-actions="haveStandaloneActions"
+          :lenses="lenses"
+          :per-page-options="perPageOptions"
+          :per-page="perPage"
+          :pivot-actions="pivotActions"
+          :pivot-name="pivotName"
+          :resources="resources"
+          :resource-information="resourceInformation"
+          :resource-name="resourceName"
+          :restore-all-matching-resources="restoreAllMatchingResources"
+          :restore-selected-resources="restoreSelectedResources"
+          :select-all-matching-checked="selectAllMatchingResources"
+          :selected-resources="selectedResources"
+          :selected-resources-for-action-selector="
+            selectedResourcesForActionSelector
+          "
+          :should-show-action-selector="shouldShowActionSelector"
+          :should-show-check-boxes="shouldShowCheckBoxes"
+          :should-show-delete-menu="shouldShowDeleteMenu"
+          :should-show-polling-toggle="shouldShowPollingToggle"
+          :soft-deletes="softDeletes"
+          @start-polling="startPolling"
+          @stop-polling="stopPolling"
+          :toggle-select-all-matching="toggleSelectAllMatching"
+          :toggle-select-all="toggleSelectAll"
+          :trashed-changed="trashedChanged"
+          :trashed-parameter="trashedParameter"
+          :trashed="trashed"
+          :update-per-page-changed="updatePerPageChanged"
+          :via-has-one="viaHasOne"
+          :via-many-to-many="viaManyToMany"
+          :via-resource="viaResource"
         />
 
-        <template v-else>
-          <div
-            v-if="!resources.length"
-            class="flex justify-center items-center px-6 py-8"
-          >
-            <div class="text-center">
-              <svg
-                class="mb-3"
-                xmlns="http://www.w3.org/2000/svg"
-                width="65"
-                height="51"
-                viewBox="0 0 65 51"
-              >
-                <path
-                  fill="#A8B9C5"
-                  d="M56 40h2c.552285 0 1 .447715 1 1s-.447715 1-1 1h-2v2c0 .552285-.447715 1-1 1s-1-.447715-1-1v-2h-2c-.552285 0-1-.447715-1-1s.447715-1 1-1h2v-2c0-.552285.447715-1 1-1s1 .447715 1 1v2zm-5.364125-8H38v8h7.049375c.350333-3.528515 2.534789-6.517471 5.5865-8zm-5.5865 10H6c-3.313708 0-6-2.686292-6-6V6c0-3.313708 2.686292-6 6-6h44c3.313708 0 6 2.686292 6 6v25.049375C61.053323 31.5511 65 35.814652 65 41c0 5.522847-4.477153 10-10 10-5.185348 0-9.4489-3.946677-9.950625-9zM20 30h16v-8H20v8zm0 2v8h16v-8H20zm34-2v-8H38v8h16zM2 30h16v-8H2v8zm0 2v4c0 2.209139 1.790861 4 4 4h12v-8H2zm18-12h16v-8H20v8zm34 0v-8H38v8h16zM2 20h16v-8H2v8zm52-10V6c0-2.209139-1.790861-4-4-4H6C3.790861 2 2 3.790861 2 6v4h52zm1 39c4.418278 0 8-3.581722 8-8s-3.581722-8-8-8-8 3.581722-8 8 3.581722 8 8 8z"
-                />
-              </svg>
+        <LoadingView :loading="loading">
+          <IndexErrorDialog
+            v-if="resourceResponseError != null"
+            :resource="resourceInformation"
+            @click="getResources"
+          />
 
-              <h3
-                class="text-base text-80 font-normal"
-                :class="{ 'mb-6': authorizedToCreate && !resourceIsFull }"
-              >
-                {{
-                  __('No :resource matched the given criteria.', {
-                    resource: singularName.toLowerCase(),
-                  })
-                }}
-              </h3>
+          <template v-else>
+            <IndexEmptyDialog
+              v-if="!resources.length"
+              :create-button-label="createButtonLabel"
+              :singular-name="singularName"
+              :resource-name="resourceName"
+              :via-resource="viaResource"
+              :via-resource-id="viaResourceId"
+              :via-relationship="viaRelationship"
+              :relationship-type="relationshipType"
+              :authorized-to-create="authorizedToCreate"
+              :authorized-to-relate="authorizedToRelate"
+            />
 
-              <create-resource-button
-                classes="btn btn-sm btn-outline inline-flex items-center focus:outline-none focus:shadow-outline active:outline-none active:shadow-outline"
-                :label="createButtonLabel"
-                :singular-name="singularName"
-                :resource-name="resourceName"
-                :via-resource="viaResource"
-                :via-resource-id="viaResourceId"
-                :via-relationship="viaRelationship"
-                :relationship-type="relationshipType"
-                :authorized-to-create="authorizedToCreate && !resourceIsFull"
-                :authorized-to-relate="authorizedToRelate"
-              >
-              </create-resource-button>
-            </div>
-          </div>
-
-          <div class="overflow-hidden overflow-x-auto relative">
-            <!-- Resource Table -->
-            <resource-table
+            <ResourceTable
               :authorized-to-relate="authorizedToRelate"
               :resource-name="resourceName"
               :resources="resources"
@@ -311,226 +169,127 @@
               @actionExecuted="getResources"
               ref="resourceTable"
             />
-          </div>
 
-          <!-- Pagination -->
-          <component
-            :is="paginationComponent"
-            v-if="shouldShowPagination"
-            :next="hasNextPage"
-            :previous="hasPreviousPage"
-            @load-more="loadMore"
-            @page="selectPage"
-            :pages="totalPages"
-            :page="currentPage"
-            :per-page="perPage"
-            :resource-count-label="resourceCountLabel"
-            :current-resource-count="resources.length"
-            :all-matching-resource-count="allMatchingResourceCount"
-          >
-            <span
-              v-if="resourceCountLabel"
-              class="text-sm text-80 px-4"
-              :class="{
-                'ml-auto': paginationComponent == 'pagination-links',
-              }"
-            >
-              {{ resourceCountLabel }}
-            </span>
-          </component>
-        </template>
-      </loading-view>
-    </card>
-  </loading-view>
+            <ResourcePagination
+              :pagination-component="paginationComponent"
+              :should-show-pagination="shouldShowPagination"
+              :has-next-page="hasNextPage"
+              :has-previous-page="hasPreviousPage"
+              :load-more="loadMore"
+              :select-page="selectPage"
+              :total-pages="totalPages"
+              :current-page="currentPage"
+              :per-page="perPage"
+              :resource-count-label="resourceCountLabel"
+              :current-resource-count="currentResourceCount"
+              :all-matching-resource-count="allMatchingResourceCount"
+            />
+          </template>
+        </LoadingView>
+      </Card>
+    </template>
+  </LoadingView>
 </template>
 
 <script>
+import debounce from 'lodash/debounce'
+import {Cancel, CancelToken} from 'axios'
 import {
-    Capitalize,
+    Collapsable,
     Deletable,
-    Filterable,
     HasCards,
+    IndexConcerns,
     InteractsWithQueryString,
     InteractsWithResourceInformation,
-    mapProps,
-    Minimum,
+    LoadsResources,
     Paginatable,
     PerPageable,
-} from 'laravel-nova'
-import HasActions from '@/mixins/HasActions'
-import {Cancel, CancelToken} from 'axios'
+    SupportsPolling,
+} from '@/mixins'
+import {minimum} from '@/util'
 
 export default {
+  name: 'ResourceIndex',
+
   mixins: [
-    HasActions,
+    Collapsable,
     Deletable,
-    Filterable,
     HasCards,
     Paginatable,
     PerPageable,
+    LoadsResources,
+    IndexConcerns,
     InteractsWithResourceInformation,
     InteractsWithQueryString,
+    SupportsPolling,
   ],
-
-  metaInfo() {
-    if (this.shouldOverrideMeta) {
-      return {
-        title: this.__(`${this.resourceInformation.label}`),
-      }
-    }
-  },
 
   props: {
     shouldOverrideMeta: {
       type: Boolean,
-      default: true,
-    },
-
-    field: {
-      type: Object,
-    },
-
-    ...mapProps([
-      'resourceName',
-      'viaResource',
-      'viaResourceId',
-      'viaRelationship',
-    ]),
-
-    relationshipType: {
-      type: String,
-      default: '',
-    },
-
-    disablePagination: {
-      type: Boolean,
       default: false,
     },
 
-    initialPerPage: {
-      type: Number,
-      required: false,
+    shouldEnableShortcut: {
+      type: Boolean,
+      default: false,
     },
   },
 
   data: () => ({
     debouncer: null,
-    canceller: null,
-    pollingListener: null,
-    initialLoading: true,
-    loading: true,
-
-    resourceResponse: null,
-    resourceResponseError: null,
-    resources: [],
-    softDeletes: false,
-    selectedResources: [],
-    selectAllMatchingResources: false,
-    allMatchingResourceCount: 0,
-    sortable: true,
-
-    deleteModalOpen: false,
-
     search: '',
     lenses: [],
-
-    authorizedToRelate: false,
-
-    orderBy: '',
-    orderByDirection: '',
-    trashed: '',
-
-    // Load More Pagination
-    currentPageLoadMore: null,
-
-    currentlyPolling: false,
+    sortable: true,
+    actionCanceller: null,
   }),
+
+  setup() {
+    //
+  },
 
   /**
    * Mount the component and retrieve its initial data.
    */
   async created() {
-    if (Nova.missingResource(this.resourceName))
-      return this.$router.push({ name: '404' })
+    if (!this.resourceInformation) {
+      return
+    }
 
-    this.debouncer = _.debounce(
+    this.debouncer = debounce(
       callback => callback(),
       this.resourceInformation.debounce
     )
 
-    // Bind the keydown even listener when the router is visited if this
+    this.$watch('search', newValue => {
+      this.search = newValue
+      this.performSearch()
+    })
+
+    // Bind the keydown event listener when the router is visited if this
     // component is not a relation on a Detail page
-    if (!this.viaResource && !this.viaResourceId) {
+    if (this.shouldEnableShortcut === true) {
       Nova.addShortcut('c', this.handleKeydown)
     }
 
-    this.initializeSearchFromQueryString()
-    this.initializePerPageFromQueryString()
-    this.initializeTrashedFromQueryString()
-    this.initializeOrderingFromQueryString()
-
-    this.currentlyPolling = this.resourceInformation.polling
-
-    await this.initializeFilters()
-    await this.getResources()
-    await this.getAuthorizationToRelate()
-
     this.getLenses()
-    this.getActions()
 
-    this.initialLoading = false
+    Nova.$on('refresh-resources', this.getResources)
 
-    this.$watch(
-      () => {
-        return (
-          this.resourceName +
-          this.encodedFilters +
-          this.currentSearch +
-          this.currentPage +
-          this.perPage +
-          this.currentOrderBy +
-          this.currentOrderByDirection +
-          this.currentTrashed
-        )
-      },
-      () => {
-        if (this.canceller !== null) this.canceller()
-
-        if (this.currentPage === 1) {
-          this.currentPageLoadMore = null
-        }
-
-        this.getResources()
-      }
-    )
-
-    Nova.$on('refresh-resources', () => {
-      this.getResources()
-    })
-
-    if (this.resourceInformation.polling) {
-      this.startPolling()
-    }
+    if (this.actionCanceller !== null) this.actionCanceller()
   },
 
   /**
    * Unbind the keydown even listener when the before component is destroyed
    */
-  beforeDestroy() {
-    if (this.pollingListener) {
-      clearInterval(this.pollingListener)
-    }
-
-    if (!this.viaResource && !this.viaResourceId) {
+  beforeUnmount() {
+    if (this.shouldEnableShortcut) {
       Nova.disableShortcut('c')
     }
-  },
 
-  watch: {
-    $route(to, from) {
-      this.initializeSearchFromQueryString()
-      this.initializeState(false)
-    },
+    Nova.$off('refresh-resources', this.getResources)
+
+    if (this.actionCanceller !== null) this.actionCanceller()
   },
 
   methods: {
@@ -545,63 +304,26 @@ export default {
         e.target.tagName != 'TEXTAREA' &&
         e.target.contentEditable != 'true'
       ) {
-        this.$router.push({
-          name: 'create',
-          params: { resourceName: this.resourceName },
-        })
+        Nova.visit(`/resources/${this.resourceName}/new`)
       }
-    },
-
-    /**
-     * Select all of the available resources
-     */
-    selectAllResources() {
-      this.selectedResources = this.resources.slice(0)
-    },
-
-    /**
-     * Toggle the selection of all resources
-     */
-    toggleSelectAll(event) {
-      if (this.selectAllChecked) return this.clearResourceSelections()
-      this.selectAllResources()
-    },
-
-    /**
-     * Toggle the selection of all matching resources in the database
-     */
-    toggleSelectAllMatching() {
-      if (!this.selectAllMatchingResources) {
-        this.selectAllResources()
-        this.selectAllMatchingResources = true
-
-        return
-      }
-
-      this.selectAllMatchingResources = false
-    },
-
-    /*
-     * Update the resource selection status
-     */
-    updateSelectionStatus(resource) {
-      if (!_(this.selectedResources).includes(resource))
-        return this.selectedResources.push(resource)
-      const index = this.selectedResources.indexOf(resource)
-      if (index > -1) return this.selectedResources.splice(index, 1)
     },
 
     /**
      * Get the resources based on the current page, search, filters, etc.
      */
     getResources() {
+      if (this.shouldBeCollapsed) {
+        this.loading = false
+        return
+      }
+
       this.loading = true
       this.resourceResponseError = null
 
       this.$nextTick(() => {
         this.clearResourceSelections()
 
-        return Minimum(
+        return minimum(
           Nova.request().get('/nova-api/' + this.resourceName, {
             params: this.resourceRequestQueryString,
             cancelToken: new CancelToken(canceller => {
@@ -619,15 +341,7 @@ export default {
             this.perPage = data.per_page
             this.sortable = data.sortable
 
-            this.loading = false
-
-            if (data.total !== null) {
-              this.allMatchingResourceCount = data.total
-            } else {
-              this.getAllMatchingResourceCount()
-            }
-
-            Nova.$emit('resources-loaded')
+            this.handleResourcesLoaded()
           })
           .catch(e => {
             if (e instanceof Cancel) {
@@ -647,9 +361,10 @@ export default {
      */
     getAuthorizationToRelate() {
       if (
-        !this.authorizedToCreate &&
-        this.relationshipType != 'belongsToMany' &&
-        this.relationshipType != 'morphToMany'
+        this.shouldBeCollapsed ||
+        (!this.authorizedToCreate &&
+          this.relationshipType != 'belongsToMany' &&
+          this.relationshipType != 'morphToMany')
       ) {
         return
       }
@@ -698,8 +413,14 @@ export default {
      * Get the actions available for the current resource.
      */
     getActions() {
+      if (this.actionCanceller !== null) this.actionCanceller()
+
       this.actions = []
       this.pivotActions = null
+
+      if (this.shouldBeCollapsed) {
+        return
+      }
 
       return Nova.request()
         .get(`/nova-api/${this.resourceName}/actions`, {
@@ -709,35 +430,24 @@ export default {
             viaRelationship: this.viaRelationship,
             relationshipType: this.relationshipType,
             display: 'index',
+            resources: this.selectedResourcesForActionSelector,
           },
+          cancelToken: new CancelToken(canceller => {
+            this.actionCanceller = canceller
+          }),
         })
         .then(response => {
           this.actions = response.data.actions
           this.pivotActions = response.data.pivotActions
+          this.resourceHasActions = response.data.counts.resource > 0
         })
-    },
+        .catch(e => {
+          if (e instanceof Cancel) {
+            return
+          }
 
-    /**
-     * Execute a search against the resource.
-     */
-    performSearch(event) {
-      this.debouncer(() => {
-        // Only search if we're not tabbing into the field
-        if (event.which != 9) {
-          this.updateQueryString({
-            [this.pageParameter]: 1,
-            [this.searchParameter]: this.search,
-          })
-        }
-      })
-    },
-
-    /**
-     * Clear the selected resouces and the "select all" states.
-     */
-    clearResourceSelections() {
-      this.selectAllMatchingResources = false
-      this.selectedResources = []
+          throw e
+        })
     },
 
     /**
@@ -754,70 +464,6 @@ export default {
     },
 
     /**
-     * Sort the resources by the given field.
-     */
-    orderByField(field) {
-      let direction = this.currentOrderByDirection == 'asc' ? 'desc' : 'asc'
-
-      if (this.currentOrderBy != field.sortableUriKey) {
-        direction = 'asc'
-      }
-
-      this.updateQueryString({
-        [this.orderByParameter]: field.sortableUriKey,
-        [this.orderByDirectionParameter]: direction,
-      })
-    },
-
-    /**
-     * Reset the order by to its default state
-     */
-    resetOrderBy(field) {
-      this.updateQueryString({
-        [this.orderByParameter]: field.sortableUriKey,
-        [this.orderByDirectionParameter]: null,
-      })
-    },
-
-    /**
-     * Sync the current search value from the query string.
-     */
-    initializeSearchFromQueryString() {
-      this.search = this.currentSearch
-    },
-
-    /**
-     * Sync the current order by values from the query string.
-     */
-    initializeOrderingFromQueryString() {
-      this.orderBy = this.currentOrderBy
-      this.orderByDirection = this.currentOrderByDirection
-    },
-
-    /**
-     * Sync the trashed state values from the query string.
-     */
-    initializeTrashedFromQueryString() {
-      this.trashed = this.currentTrashed
-    },
-
-    /**
-     * Update the trashed constraint for the resource listing.
-     */
-    trashedChanged(trashedStatus) {
-      this.trashed = trashedStatus
-      this.updateQueryString({ [this.trashedParameter]: this.trashed })
-    },
-
-    /**
-     * Update the per page parameter in the query string
-     */
-    updatePerPageChanged(perPage) {
-      this.perPage = perPage
-      this.perPageChanged()
-    },
-
-    /**
      * Load more resources.
      */
     loadMore() {
@@ -827,7 +473,7 @@ export default {
 
       this.currentPageLoadMore = this.currentPageLoadMore + 1
 
-      return Minimum(
+      return minimum(
         Nova.request().get('/nova-api/' + this.resourceName, {
           params: {
             ...this.resourceRequestQueryString,
@@ -845,70 +491,46 @@ export default {
           this.getAllMatchingResourceCount()
         }
 
-        Nova.$emit('resources-loaded')
+        Nova.$emit('resources-loaded', {
+          resourceName: this.resourceName,
+          mode: this.isRelation ? 'related' : 'index',
+        })
       })
     },
 
-    /**
-     * Select the next page.
-     */
-    selectPage(page) {
-      this.updateQueryString({ [this.pageParameter]: page })
-    },
+    async handleCollapsableChange() {
+      this.loading = true
 
-    /**
-     * Sync the per page values from the query string.
-     */
-    initializePerPageFromQueryString() {
-      this.perPage =
-        this.$route.query[this.perPageParameter] ||
-        this.initialPerPage ||
-        this.resourceInformation.perPageOptions[0]
-    },
+      this.toggleCollapse()
 
-    /**
-     * Pause polling for new resources.
-     */
-    stopPolling() {
-      clearInterval(this.pollingListener)
-
-      this.$nextTick(() => (this.currentlyPolling = false))
-    },
-
-    /**
-     * Start polling for new resources.
-     */
-    startPolling() {
-      this.pollingListener = setInterval(() => {
-        if (
-          document.hasFocus() &&
-          document.querySelectorAll('div.modal').length < 1
-        ) {
-          this.getResources()
-        }
-      }, this.resourceInformation.pollingInterval)
-
-      this.$nextTick(() => (this.currentlyPolling = true))
+      if (!this.collapsed) {
+        await this.getResources()
+        await this.getAuthorizationToRelate()
+        await this.getActions()
+        this.restartPolling()
+      } else {
+        this.loading = false
+      }
     },
   },
 
   computed: {
-    /**
-     * Determine if the resource has any filters
-     */
-    hasFilters() {
-      return this.$store.getters[`${this.resourceName}/hasFilters`]
+    actionQueryString() {
+      return {
+        currentSearch: this.currentSearch,
+        encodedFilters: this.encodedFilters,
+        currentTrashed: this.currentTrashed,
+        viaResource: this.viaResource,
+        viaResourceId: this.viaResourceId,
+        viaRelationship: this.viaRelationship,
+      }
     },
 
     /**
-     * Determine if the resource should show any cards
+     * Determine if the index view should be collapsed.
      */
-    shouldShowCards() {
-      // Don't show cards if this resource is beings shown via a relations
-      return (
-        this.cards.length > 0 &&
-        this.resourceName == this.$route.params.resourceName
-      )
+    shouldBeCollapsed() {
+      return this.collapsed && this.viaRelationship != null
     },
 
     /**
@@ -916,60 +538,6 @@ export default {
      */
     cardsEndpoint() {
       return `/nova-api/${this.resourceName}/cards`
-    },
-
-    /**
-     * Get the name of the search query string variable.
-     */
-    searchParameter() {
-      return this.viaRelationship
-        ? this.viaRelationship + '_search'
-        : this.resourceName + '_search'
-    },
-
-    /**
-     * Get the name of the order by query string variable.
-     */
-    orderByParameter() {
-      return this.viaRelationship
-        ? this.viaRelationship + '_order'
-        : this.resourceName + '_order'
-    },
-
-    /**
-     * Get the name of the order by direction query string variable.
-     */
-    orderByDirectionParameter() {
-      return this.viaRelationship
-        ? this.viaRelationship + '_direction'
-        : this.resourceName + '_direction'
-    },
-
-    /**
-     * Get the name of the trashed constraint query string variable.
-     */
-    trashedParameter() {
-      return this.viaRelationship
-        ? this.viaRelationship + '_trashed'
-        : this.resourceName + '_trashed'
-    },
-
-    /**
-     * Get the name of the per page query string variable.
-     */
-    perPageParameter() {
-      return this.viaRelationship
-        ? this.viaRelationship + '_per_page'
-        : this.resourceName + '_per_page'
-    },
-
-    /**
-     * Get the name of the page query string variable.
-     */
-    pageParameter() {
-      return this.viaRelationship
-        ? this.viaRelationship + '_page'
-        : this.resourceName + '_page'
     },
 
     /**
@@ -993,210 +561,6 @@ export default {
     },
 
     /**
-     * Determine if all resources are selected.
-     */
-    selectAllChecked() {
-      return this.selectedResources.length == this.resources.length
-    },
-
-    /**
-     * Determine if all matching resources are selected.
-     */
-    selectAllMatchingChecked() {
-      return (
-        this.selectedResources.length == this.resources.length &&
-        this.selectAllMatchingResources
-      )
-    },
-
-    /**
-     * Get the IDs for the selected resources.
-     */
-    selectedResourceIds() {
-      return _.map(this.selectedResources, resource => resource.id.value)
-    },
-
-    /**
-     * Get the current search value from the query string.
-     */
-    currentSearch() {
-      return this.$route.query[this.searchParameter] || ''
-    },
-
-    /**
-     * Get the current order by value from the query string.
-     */
-    currentOrderBy() {
-      return this.$route.query[this.orderByParameter] || ''
-    },
-
-    /**
-     * Get the current order by direction from the query string.
-     */
-    currentOrderByDirection() {
-      return this.$route.query[this.orderByDirectionParameter] || null
-    },
-
-    /**
-     * Get the current trashed constraint value from the query string.
-     */
-    currentTrashed() {
-      return this.$route.query[this.trashedParameter] || ''
-    },
-
-    /**
-     * Determine if the current resource listing is via a many-to-many relationship.
-     */
-    viaManyToMany() {
-      return (
-        this.relationshipType == 'belongsToMany' ||
-        this.relationshipType == 'morphToMany'
-      )
-    },
-
-    /**
-     * Determine if the resource / relationship is "full".
-     */
-    resourceIsFull() {
-      return (
-        (Boolean(this.viaHasOne) && this.resources.length > 0) ||
-        Boolean(this.viaHasOneThrough && this.resources.length > 0)
-      )
-    },
-
-    /**
-     * Determine if the current resource listing is via a has-one relationship.
-     */
-    viaHasOne() {
-      return (
-        this.relationshipType == 'hasOne' || this.relationshipType == 'morphOne'
-      )
-    },
-
-    viaHasOneThrough() {
-      return this.relationshipType == 'hasOneThrough'
-    },
-
-    /**
-     * Get the singular name for the resource
-     */
-    singularName() {
-      if (this.isRelation && this.field) {
-        return Capitalize(this.field.singularLabel)
-      }
-
-      return Capitalize(this.resourceInformation.singularLabel)
-    },
-
-    /**
-     * Get the default label for the create button
-     */
-    createButtonLabel() {
-      return this.resourceInformation.createButtonLabel
-    },
-
-    /**
-     * Determine if there are any resources for the view
-     */
-    hasResources() {
-      return Boolean(this.resources.length > 0)
-    },
-
-    /**
-     * Determine if there any lenses for this resource
-     */
-    hasLenses() {
-      return Boolean(this.lenses.length > 0)
-    },
-
-    /**
-     * Determine whether to show the selection checkboxes for resources
-     */
-    shouldShowCheckBoxes() {
-      return (
-        Boolean(this.hasResources && !this.viaHasOne) &&
-        Boolean(
-          this.actionsAreAvailable ||
-            this.authorizedToDeleteAnyResources ||
-            this.canShowDeleteMenu
-        )
-      )
-    },
-
-    /**
-     * Determine if any selected resources may be deleted.
-     */
-    authorizedToDeleteSelectedResources() {
-      return Boolean(
-        _.find(this.selectedResources, resource => resource.authorizedToDelete)
-      )
-    },
-
-    /**
-     * Determine if any selected resources may be force deleted.
-     */
-    authorizedToForceDeleteSelectedResources() {
-      return Boolean(
-        _.find(
-          this.selectedResources,
-          resource => resource.authorizedToForceDelete
-        )
-      )
-    },
-
-    /**
-     * Determine if the user is authorized to delete any listed resource.
-     */
-    authorizedToDeleteAnyResources() {
-      return (
-        this.resources.length > 0 &&
-        Boolean(_.find(this.resources, resource => resource.authorizedToDelete))
-      )
-    },
-
-    /**
-     * Determine if the user is authorized to force delete any listed resource.
-     */
-    authorizedToForceDeleteAnyResources() {
-      return (
-        this.resources.length > 0 &&
-        Boolean(
-          _.find(this.resources, resource => resource.authorizedToForceDelete)
-        )
-      )
-    },
-
-    /**
-     * Determine if any selected resources may be restored.
-     */
-    authorizedToRestoreSelectedResources() {
-      return Boolean(
-        _.find(this.selectedResources, resource => resource.authorizedToRestore)
-      )
-    },
-
-    /**
-     * Determine if the user is authorized to restore any listed resource.
-     */
-    authorizedToRestoreAnyResources() {
-      return (
-        this.resources.length > 0 &&
-        Boolean(
-          _.find(this.resources, resource => resource.authorizedToRestore)
-        )
-      )
-    },
-
-    /**
-     * Determine whether the delete menu should be shown to the user
-     */
-    shouldShowDeleteMenu() {
-      return (
-        Boolean(this.selectedResources.length > 0) && this.canShowDeleteMenu
-      )
-    },
-
-    /**
      * Determine whether the user is authorized to perform actions on the delete menu
      */
     canShowDeleteMenu() {
@@ -1209,105 +573,22 @@ export default {
     },
 
     /**
-     * Determine if the index is a relation field
-     */
-    isRelation() {
-      return Boolean(this.viaResourceId && this.viaRelationship)
-    },
-
-    /**
      * Return the heading for the view
      */
     headingTitle() {
-      return this.loading
-        ? '&nbsp;'
-        : this.isRelation && this.field
-        ? this.field.name
-        : this.resourceResponse !== null
-        ? this.resourceResponse.label
-        : null
-    },
-
-    /**
-     * Return the resource count label
-     */
-    resourceCountLabel() {
-      const first = this.perPage * (this.currentPage - 1)
-
-      return (
-        this.resources.length &&
-        `${Nova.formatNumber(first + 1)}-${Nova.formatNumber(
-          first + this.resources.length
-        )} ${this.__('of')} ${Nova.formatNumber(this.allMatchingResourceCount)}`
-      )
-    },
-
-    /**
-     * Return the currently encoded filter string from the store
-     */
-    encodedFilters() {
-      return this.$store.getters[`${this.resourceName}/currentEncodedFilters`]
-    },
-
-    /**
-     * Return the initial encoded filters from the query string
-     */
-    initialEncodedFilters() {
-      return this.$route.query[this.filterParameter] || ''
-    },
-
-    paginationComponent() {
-      return `pagination-${Nova.config['pagination'] || 'links'}`
-    },
-
-    hasNextPage() {
-      return Boolean(
-        this.resourceResponse && this.resourceResponse.next_page_url
-      )
-    },
-
-    hasPreviousPage() {
-      return Boolean(
-        this.resourceResponse && this.resourceResponse.prev_page_url
-      )
-    },
-
-    totalPages() {
-      return Math.ceil(this.allMatchingResourceCount / this.currentPerPage)
-    },
-
-    /**
-     * Get the current per page value from the query string.
-     */
-    currentPerPage() {
-      return this.perPage
-    },
-
-    /**
-     * The per-page options configured for this resource.
-     */
-    perPageOptions() {
-      if (this.resourceResponse) {
-        return this.resourceResponse.per_page_options
+      if (this.initialLoading) {
+        return '&nbsp;'
+      } else {
+        if (this.isRelation && this.field) {
+          return this.field.name
+        } else {
+          if (this.resourceResponse !== null) {
+            return this.resourceResponse.label
+          } else {
+            return this.resourceInformation.label
+          }
+        }
       }
-    },
-
-    /**
-     * Determine whether the pagination component should be shown.
-     */
-    shouldShowPagination() {
-      return (
-        this.disablePagination !== true &&
-        this.resourceResponse &&
-        this.resources.length > 0
-      )
-    },
-
-    /**
-     * Determine if the polling toggle button should be shown.
-     */
-    shouldShowPollingToggle() {
-      return this.resourceInformation.showPollingToggle
     },
   },
 }

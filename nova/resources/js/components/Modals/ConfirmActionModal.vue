@@ -1,35 +1,47 @@
 <template>
-  <modal
+  <Modal
+    :show="show"
+    @showing="handleShowingModal"
+    @close-via-escape="handlePreventModalAbandonmentOnClose"
     data-testid="confirm-action-modal"
     tabindex="-1"
     role="dialog"
-    :closes-via-backdrop="canLeave"
-    @modal-close="handleClose"
+    :size="action.modalSize"
+    :modal-style="action.modalStyle"
   >
     <form
+      ref="theForm"
       autocomplete="off"
-      @keydown="handleKeydown"
-      @submit.prevent.stop="handleConfirm"
-      class="bg-white rounded-lg shadow-lg overflow-hidden"
+      @change="onUpdateFormStatus"
+      @submit.prevent.stop="$emit('confirm')"
+      :data-form-unique-id="formUniqueId"
+      class="bg-white dark:bg-gray-800"
       :class="{
-        'w-action-fields': action.fields.length > 0,
-        'w-action': action.fields.length == 0,
+        'rounded-lg shadow-lg overflow-hidden space-y-6':
+          action.modalStyle === 'window',
+        'flex flex-col justify-between h-full':
+          action.modalStyle === 'fullscreen',
       }"
     >
-      <div>
-        <heading :level="2" class="border-b border-40 py-8 px-8">{{
-          action.name
-        }}</heading>
+      <div
+        class="space-y-6"
+        :class="{
+          'overflow-hidden overflow-y-auto': action.modalStyle === 'fullscreen',
+        }"
+      >
+        <ModalHeader v-text="action.name" />
 
-        <p v-if="action.fields.length == 0" class="text-80 px-8 my-8">
+        <!-- Confirmation Text -->
+        <p
+          v-if="action.confirmText"
+          class="px-8"
+          :class="{ 'text-red-500': action.destructive }"
+        >
           {{ action.confirmText }}
         </p>
 
-        <div v-else>
-          <!-- Validation Errors -->
-          <validation-errors :errors="errors" />
-
-          <!-- Action Fields -->
+        <!-- Action Fields -->
+        <div v-if="action.fields.length > 0">
           <div
             class="action"
             v-for="field in action.fields"
@@ -40,109 +52,133 @@
               :errors="errors"
               :resource-name="resourceName"
               :field="field"
-              :show-help-text="field.helpText != null"
+              :show-help-text="true"
+              :form-unique-id="formUniqueId"
+              mode="modal"
+              :sync-endpoint="syncEndpoint"
+              @field-changed="onUpdateFormStatus"
             />
           </div>
         </div>
       </div>
 
-      <div class="bg-30 px-6 py-3 flex">
+      <ModalFooter>
         <div class="flex items-center ml-auto">
-          <button
-            dusk="cancel-action-button"
+          <CancelButton
+            component="button"
             type="button"
-            @click.prevent="handleClose"
-            class="btn btn-link dim cursor-pointer text-80 ml-auto mr-6"
+            dusk="cancel-action-button"
+            class="ml-auto mr-3"
+            @click="$emit('close')"
           >
             {{ action.cancelButtonText }}
-          </button>
+          </CancelButton>
 
-          <loading-button
+          <LoadingButton
+            type="submit"
             ref="runButton"
             dusk="confirm-action-button"
-            :processing="working"
             :disabled="working"
-            type="submit"
-            class="btn btn-default"
-            :class="action.class"
+            :loading="working"
+            :component="action.destructive ? 'DangerButton' : 'DefaultButton'"
           >
             {{ action.confirmButtonText }}
-          </loading-button>
+          </LoadingButton>
         </div>
-      </div>
+      </ModalFooter>
     </form>
-  </modal>
+  </Modal>
 </template>
 
 <script>
+import {PreventsModalAbandonment} from '@/mixins'
+import {uid} from 'uid/single'
+
 export default {
+  emits: ['confirm', 'close'],
+
+  mixins: [PreventsModalAbandonment],
+
   props: {
-    working: Boolean,
-    resourceName: { type: String, required: true },
     action: { type: Object, required: true },
-    selectedResources: { type: [Array, String], required: true },
+    endpoint: { type: String, required: false },
     errors: { type: Object, required: true },
-  },
-
-  created() {
-    const listenToDatePickerOpened = event => {
-      this.canLeave = false
-    }
-
-    const listenToDatePickerClosed = event => {
-      this.canLeave = true
-    }
-
-    Nova.$on('datepicker-opened', listenToDatePickerOpened)
-    Nova.$on('datepicker-closed', listenToDatePickerClosed)
-
-    this.$once('hook:beforeDestroy', () => {
-      Nova.$off('datepicker-opened', listenToDatePickerOpened)
-      Nova.$off('datepicker-closed', listenToDatePickerClosed)
-    })
-  },
-
-  /**
-   * Mount the component.
-   */
-  mounted() {
-    // If the modal has inputs, let's highlight the first one, otherwise
-    // let's highlight the submit button
-    if (document.querySelectorAll('.modal input').length) {
-      document.querySelectorAll('.modal input')[0].focus()
-    } else {
-      this.$refs.runButton.focus()
-    }
+    resourceName: { type: String, required: true },
+    selectedResources: { type: [Array, String], required: true },
+    show: { type: Boolean, default: false },
+    working: Boolean,
   },
 
   data: () => ({
-    canLeave: true,
+    formUniqueId: uid(),
   }),
+
+  created() {
+    document.addEventListener('keydown', this.handleKeydown)
+  },
+
+  beforeUnmount() {
+    document.removeEventListener('keydown', this.handleKeydown)
+  },
 
   methods: {
     /**
-     * Stop propogation of input events unless it's for an escape or enter keypress
+     * Prevent accidental abandonment only if form was changed.
      */
-    handleKeydown(e) {
-      if (['Escape', 'Enter'].indexOf(e.key) !== -1) {
-        return
+    onUpdateFormStatus() {
+      this.updateModalStatus()
+    },
+
+    /**
+     * Handle focus when modal being shown.
+     */
+    handleShowingModal(e) {
+      // If the modal has inputs, let's highlight the first one, otherwise
+      // let's highlight the submit button
+      this.$nextTick(() => {
+        if (this.$refs.theForm) {
+          let formFields = this.$refs.theForm.querySelectorAll(
+            'input, textarea, select'
+          )
+
+          formFields.length > 0
+            ? formFields[0].focus()
+            : this.$refs.runButton.focus()
+        } else {
+          this.$refs.runButton.focus()
+        }
+      })
+    },
+
+    handlePreventModalAbandonmentOnClose() {
+      this.handlePreventModalAbandonment(
+        () => {
+          this.$emit('close')
+        },
+        () => {
+          e.stopPropagation()
+        }
+      )
+    },
+  },
+
+  computed: {
+    syncEndpoint() {
+      let searchParams = new URLSearchParams({ action: this.action.uriKey })
+
+      if (this.selectedResources === 'all') {
+        searchParams.append('resources', 'all')
+      } else {
+        this.selectedResources.forEach(resourceId => {
+          searchParams.append('resources[]', resourceId)
+        })
       }
 
-      e.stopPropagation()
-    },
-
-    /**
-     * Execute the selected action.
-     */
-    handleConfirm() {
-      this.$emit('confirm')
-    },
-
-    /**
-     * Close the modal.
-     */
-    handleClose() {
-      this.$emit('close')
+      return (
+        (this.endpoint || `/nova-api/${this.resourceName}/action`) +
+        '?' +
+        searchParams.toString()
+      )
     },
   },
 }

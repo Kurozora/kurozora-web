@@ -42,7 +42,7 @@ class CharacterResourceBasic extends JsonResource
                 'weight'            => $this->resource->weight_string,
                 'age'               => $this->resource->age_string,
                 'birthdate'         => $this->resource->birthdate,
-                'astrologicalSign'  => $this->resource->astrological_sign_string,
+                'astrologicalSign'  => $this->resource->astrological_sign?->description,
             ]
         ]);
     }

@@ -5,7 +5,11 @@ namespace Laravel\Nova\Fields;
 use Illuminate\Http\Request;
 use Laravel\Nova\Contracts\ListableField;
 use Laravel\Nova\Contracts\RelatableField;
+use Laravel\Nova\Panel;
 
+/**
+ * @method static static make(mixed $name, string|null $attribute = null, string|null $resource = null)
+ */
 class HasMany extends Field implements ListableField, RelatableField
 {
     /**
@@ -18,7 +22,7 @@ class HasMany extends Field implements ListableField, RelatableField
     /**
      * The class name of the related resource.
      *
-     * @var string
+     * @var class-string<\Laravel\Nova\Resource>
      */
     public $resourceClass;
 
@@ -39,7 +43,7 @@ class HasMany extends Field implements ListableField, RelatableField
     /**
      * The displayable singular label of the relation.
      *
-     * @var string
+     * @var string|null
      */
     public $singularLabel;
 
@@ -48,7 +52,7 @@ class HasMany extends Field implements ListableField, RelatableField
      *
      * @param  string  $name
      * @param  string|null  $attribute
-     * @param  string|null  $resource
+     * @param  class-string<\Laravel\Nova\Resource>|null  $resource
      * @return void
      */
     public function __construct($name, $attribute = null, $resource = null)
@@ -59,7 +63,27 @@ class HasMany extends Field implements ListableField, RelatableField
 
         $this->resourceClass = $resource;
         $this->resourceName = $resource::uriKey();
-        $this->hasManyRelationship = $this->attribute;
+        $this->hasManyRelationship = $this->attribute = $attribute ?? ResourceRelationshipGuesser::guessRelation($name);
+    }
+
+    /**
+     * Get the relationship name.
+     *
+     * @return string
+     */
+    public function relationshipName()
+    {
+        return $this->hasManyRelationship;
+    }
+
+    /**
+     * Get the relationship type.
+     *
+     * @return string
+     */
+    public function relationshipType()
+    {
+        return 'hasMany';
     }
 
     /**
@@ -90,6 +114,7 @@ class HasMany extends Field implements ListableField, RelatableField
     /**
      * Set the displayable singular label of the resource.
      *
+     * @param  string  $singularLabel
      * @return $this
      */
     public function singularLabel($singularLabel)
@@ -100,17 +125,29 @@ class HasMany extends Field implements ListableField, RelatableField
     }
 
     /**
+     * Make current field behaves as panel.
+     *
+     * @return \Laravel\Nova\Panel
+     */
+    public function asPanel()
+    {
+        return Panel::make($this->name, [$this])
+                    ->withMeta([
+                        'prefixComponent' => true,
+                    ])->withComponent('relationship-panel');
+    }
+
+    /**
      * Prepare the field for JSON serialization.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return array_merge([
             'hasManyRelationship' => $this->hasManyRelationship,
-            'listable' => true,
-            'perPage'=> $this->resourceClass::$perPageViaRelationship,
+            'relatable' => true,
+            'perPage' => $this->resourceClass::$perPageViaRelationship,
             'resourceName' => $this->resourceName,
             'singularLabel' => $this->singularLabel ?? $this->resourceClass::singularLabel(),
         ], parent::jsonSerialize());

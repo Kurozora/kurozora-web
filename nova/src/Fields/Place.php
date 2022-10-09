@@ -2,6 +2,9 @@
 
 namespace Laravel\Nova\Fields;
 
+/**
+ * @deprecated Places API will stop functioning on May 31st, 2022
+ */
 class Place extends Text
 {
     /**
@@ -15,11 +18,11 @@ class Place extends Text
      * Create a new field.
      *
      * @param  string  $name
-     * @param  string|null  $attribute
-     * @param  mixed|null  $resolveCallback
+     * @param  string|\Closure|callable|object|null  $attribute
+     * @param  (callable(mixed, mixed, ?string):mixed)|null  $resolveCallback
      * @return void
      */
-    public function __construct($name, $attribute = null, $resolveCallback = null)
+    public function __construct($name, $attribute = null, callable $resolveCallback = null)
     {
         parent::__construct($name, $attribute, $resolveCallback);
 
@@ -72,7 +75,7 @@ class Place extends Text
     /**
      * Specify the field that contains the second address line.
      *
-     * @param  string  $field
+     * @param  string|null  $field
      * @return $this
      */
     public function secondAddressLine($field)
@@ -83,7 +86,7 @@ class Place extends Text
     /**
      * Specify the field that contains the city.
      *
-     * @param  string  $field
+     * @param  string|null  $field
      * @return $this
      */
     public function city($field)
@@ -105,7 +108,7 @@ class Place extends Text
     /**
      * Specify the field that contains the postal code.
      *
-     * @param  string  $field
+     * @param  string|null  $field
      * @return $this
      */
     public function postalCode($field)
@@ -166,5 +169,17 @@ class Place extends Text
     public function longitude($field)
     {
         return $this->withMeta([__FUNCTION__ => $field]);
+    }
+
+    /**
+     * Register depends on to a field.
+     *
+     * @param  string|array  $attributes
+     * @param  callable|string  $mixin
+     * @return $this
+     */
+    public function dependsOn($attributes, $mixin)
+    {
+        throw new \Exception('The `dependsOn` option is not available on Place fields.');
     }
 }

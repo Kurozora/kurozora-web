@@ -1,6 +1,17 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import {createStore} from 'vuex'
+import nova from './nova'
+import notifications from './notifications'
 
-Vue.use(Vuex)
-
-export default new Vuex.Store()
+export function createNovaStore() {
+  return createStore({
+    ...nova,
+    modules: {
+      nova: {
+        namespaced: true,
+        modules: {
+          notifications,
+        },
+      },
+    },
+  })
+}

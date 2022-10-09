@@ -24,7 +24,7 @@ class FilterDecoder
      * Create a new FilterDecoder instance.
      *
      * @param  string  $filterString
-     * @param  array|null  $availableFilters
+     * @param  \Illuminate\Support\Collection|array|null  $availableFilters
      */
     public function __construct($filterString, $availableFilters = null)
     {
@@ -35,7 +35,7 @@ class FilterDecoder
     /**
      * Decode the given filters.
      *
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection<int, \Laravel\Nova\Query\ApplyFilter>
      */
     public function filters()
     {
@@ -44,12 +44,15 @@ class FilterDecoder
         }
 
         return collect($filters)->map(function ($filter) {
-            $matchingFilter = $this->availableFilters->first(function ($availableFilter) use ($filter) {
-                return $filter['class'] === $availableFilter->key();
+            $class = key($filter);
+            $value = $filter[$class];
+
+            $matchingFilter = $this->availableFilters->first(function ($availableFilter) use ($class) {
+                return $class === $availableFilter->key();
             });
 
             if ($matchingFilter) {
-                return ['filter' => $matchingFilter, 'value' => $filter['value']];
+                return ['filter' => $matchingFilter, 'value' => $value];
             }
         })
             ->filter()
@@ -69,7 +72,7 @@ class FilterDecoder
     /**
      * Decode the filter string from base64 encoding.
      *
-     * @return array
+     * @return array<int, array<class-string<\Laravel\Nova\Filters\Filter>|string, mixed>>
      */
     public function decodeFromBase64String()
     {

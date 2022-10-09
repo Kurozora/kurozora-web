@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
 use Laravel\Nova\Contracts\RelatableField;
 
+/**
+ * @property-read string|null $orderBy
+ * @property-read string|null $orderByDirection
+ */
 class LensRequest extends NovaRequest
 {
     use DecodesFilters, InteractsWithLenses;
@@ -107,18 +111,19 @@ class LensRequest extends NovaRequest
     {
         $resource = $this->resource();
 
-        $lens = get_class($this->lens());
-
-        return $models->map(function ($model) use ($resource, $lens) {
-            $lenResource = new $lens($model);
+        return $models->map(function ($model) use ($resource) {
+            $lensResource = $this->lens()->setResource($model);
 
             return transform((new $resource($model))->serializeForIndex(
-                $this, $lenResource->resolveFields($this)
-            ), function ($payload) use ($lenResource) {
-                $payload['actions'] = collect(array_values($lenResource->actions($this)))
+                $this, $lensResource->resolveFields($this)
+            ), function ($payload) use ($model, $lensResource) {
+                $payload['actions'] = collect(array_values($lensResource->actions($this)))
                         ->filter(function ($action) {
                             return $action->shownOnIndex() || $action->shownOnTableRow();
-                        })->filter->authorizedToSee($this)->values();
+                        })
+                        ->filter->authorizedToSee($this)
+                        ->filter->authorizedToRun($this, $model)
+                        ->values();
 
                 return $payload;
             });

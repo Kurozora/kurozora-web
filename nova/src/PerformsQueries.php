@@ -4,6 +4,8 @@ namespace Laravel\Nova;
 
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Query\ApplySoftDeleteConstraint;
+use Laravel\Nova\Query\Search;
+use Laravel\Nova\Query\Search\PrimaryKey;
 
 trait PerformsQueries
 {
@@ -13,14 +15,14 @@ trait PerformsQueries
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  string|null  $search
-     * @param  array  $filters
-     * @param  array  $orderings
+     * @param  array<int, \Laravel\Nova\Query\ApplyFilter>  $filters
+     * @param  array<string, string>  $orderings
      * @param  string  $withTrashed
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public static function buildIndexQuery(NovaRequest $request, $query, $search = null,
-                                      array $filters = [], array $orderings = [],
-                                      $withTrashed = TrashedStatus::DEFAULT)
+        array $filters = [], array $orderings = [],
+        $withTrashed = TrashedStatus::DEFAULT)
     {
         return static::applyOrderings(static::applyFilters(
             $request, static::initializeQuery($request, $query, (string) $search, $withTrashed), $filters
@@ -58,30 +60,34 @@ trait PerformsQueries
      */
     protected static function applySearch($query, $search)
     {
-        return $query->where(function ($query) use ($search) {
-            $model = $query->getModel();
+        $modelKeyName = $query->getModel()->getKeyName();
 
-            $connectionType = $model->getConnection()->getDriverName();
+        $searchColumns = collect(static::searchableColumns() ?? [])
+                            ->transform(function ($column) use ($modelKeyName) {
+                                if ($column === $modelKeyName) {
+                                    return new PrimaryKey($column, static::maxPrimaryKeySize());
+                                }
 
-            $canSearchPrimaryKey = ctype_digit($search) &&
-                                   in_array($model->getKeyType(), ['int', 'integer']) &&
-                                   ($connectionType != 'pgsql' || $search <= static::maxPrimaryKeySize()) &&
-                                   in_array($model->getKeyName(), static::$search);
+                                return $column;
+                            })->all();
 
-            if ($canSearchPrimaryKey) {
-                $query->orWhere($model->getQualifiedKeyName(), $search);
-            }
+        return static::initializeSearch($query, $search, $searchColumns);
+    }
 
-            $likeOperator = $connectionType == 'pgsql' ? 'ilike' : 'like';
-
-            foreach (static::searchableColumns() as $column) {
-                $query->orWhere(
-                    $model->qualifyColumn($column),
-                    $likeOperator,
-                    static::searchableKeyword($column, $search)
-                );
-            }
-        });
+    /**
+     * Initialize the search configuration.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $search
+     * @param  array  $searchColumns
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected static function initializeSearch($query, $search, $searchColumns)
+    {
+        return app(Search::class, [
+            'queryBuilder' => $query,
+            'searchKeyword' => $search,
+        ])->handle(__CLASS__, $searchColumns);
     }
 
     /**
@@ -111,7 +117,7 @@ trait PerformsQueries
      * @return \Laravel\Scout\Builder
      */
     public static function buildIndexQueryUsingScout(NovaRequest $request, $search = null,
-                                          $withTrashed = TrashedStatus::DEFAULT)
+        $withTrashed = TrashedStatus::DEFAULT)
     {
         return tap(static::applySoftDeleteConstraint(
             static::newModel()->search($search), $withTrashed
@@ -139,7 +145,7 @@ trait PerformsQueries
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  array  $filters
+     * @param  array<int, \Laravel\Nova\Query\ApplyFilter>  $filters
      * @return \Illuminate\Database\Eloquent\Builder
      */
     protected static function applyFilters(NovaRequest $request, $query, array $filters)
@@ -153,7 +159,7 @@ trait PerformsQueries
      * Apply any applicable orderings to the query.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  array  $orderings
+     * @param  array<string, string>  $orderings
      * @return \Illuminate\Database\Eloquent\Builder
      */
     protected static function applyOrderings($query, array $orderings)
@@ -205,6 +211,30 @@ trait PerformsQueries
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public static function detailQuery(NovaRequest $request, $query)
+    {
+        return $query;
+    }
+
+    /**
+     * Build an "edit" query for the given resource.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public static function editQuery(NovaRequest $request, $query)
+    {
+        return $query;
+    }
+
+    /**
+     * Build a "replicate" query for the given resource.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public static function replicateQuery(NovaRequest $request, $query)
     {
         return $query;
     }

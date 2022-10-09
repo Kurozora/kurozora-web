@@ -1,106 +1,122 @@
 <template>
-  <loading-view :loading="loading">
-    <custom-update-attached-header
-      class="mb-3"
-      :resource-name="resourceName"
-      :resource-id="resourceId"
-    />
+  <LoadingView :loading="initialLoading">
+    <template v-if="relatedResourceLabel && title">
+      <Head
+        :title="
+          __('Update attached :resource: :title', {
+            resource: relatedResourceLabel,
+            title: title,
+          })
+        "
+      />
+    </template>
 
-    <heading class="mb-3" v-if="relatedResourceLabel && title">
+    <Heading class="mb-3" v-if="relatedResourceLabel && title">
       {{
         __('Update attached :resource: :title', {
           resource: relatedResourceLabel,
           title: title,
         })
       }}
-    </heading>
+    </Heading>
 
     <form
       v-if="field"
       @submit.prevent="updateAttachedResource"
       @change="onUpdateFormStatus"
+      :data-form-unique-id="formUniqueId"
       autocomplete="off"
     >
-      <card class="overflow-hidden mb-8">
+      <Card class="overflow-hidden mb-8">
         <!-- Related Resource -->
         <div
-          v-if="viaResourceField"
+          v-if="parentResource"
           dusk="via-resource-field"
-          class="flex border-b border-40"
+          class="field-wrapper flex flex-col md:flex-row border-b border-gray-100 dark:border-gray-700"
         >
           <div class="w-1/5 px-8 py-6">
             <label
-              :for="viaResourceField.name"
-              class="inline-block text-80 pt-2 leading-tight"
+              :for="parentResource.name"
+              class="inline-block text-gray-500 pt-2 leading-tight"
             >
-              {{ viaResourceField.name }}
+              {{ parentResource.name }}
             </label>
           </div>
           <div class="py-6 px-8 w-1/2">
-            <span class="inline-block font-bold text-80 pt-2">
-              {{ viaResourceField.display }}
+            <span class="inline-block font-bold text-gray-500 pt-2">
+              {{ parentResource.display }}
             </span>
           </div>
         </div>
-        <default-field
+        <DefaultField
           :field="field"
           :errors="validationErrors"
-          :show-help-text="field.helpText != null"
+          :show-help-text="true"
         >
-          <template slot="field">
-            <select-control
-              class="form-control form-select w-full"
+          <template #field>
+            <SelectControl
+              class="w-full"
               dusk="attachable-select"
               :class="{
-                'border-danger': validationErrors.has(field.attribute),
+                'form-input-border-error': validationErrors.has(
+                  field.attribute
+                ),
               }"
               :data-testid="`${field.resourceName}-select`"
+              v-model:selected="selectedResourceId"
               @change="selectResourceFromSelectControl"
               disabled
               :options="availableResources"
               :label="'display'"
-              :selected="selectedResourceId"
-              :value="selectedResourceId"
             >
               <option value="" disabled selected>
                 {{ __('Choose :field', { field: field.name }) }}
               </option>
-            </select-control>
+            </SelectControl>
           </template>
-        </default-field>
+        </DefaultField>
 
-        <!-- Pivot Fields -->
-        <div v-for="field in fields">
-          <component
-            :is="'form-' + field.component"
-            :resource-name="resourceName"
-            :resource-id="resourceId"
-            :field="field"
-            :errors="validationErrors"
-            :related-resource-name="relatedResourceName"
-            :related-resource-id="relatedResourceId"
-            :via-resource="viaResource"
-            :via-resource-id="viaResourceId"
-            :via-relationship="viaRelationship"
-            :show-help-text="field.helpText != null"
-          />
-        </div>
-      </card>
+        <LoadingView :loading="loading">
+          <!-- Pivot Fields -->
+          <div v-for="field in fields">
+            <component
+              :is="'form-' + field.component"
+              :resource-name="resourceName"
+              :resource-id="resourceId"
+              :field="field"
+              :form-unique-id="formUniqueId"
+              :errors="validationErrors"
+              :related-resource-name="relatedResourceName"
+              :related-resource-id="relatedResourceId"
+              :via-resource="viaResource"
+              :via-resource-id="viaResourceId"
+              :via-relationship="viaRelationship"
+              :show-help-text="true"
+            />
+          </div>
+        </LoadingView>
+      </Card>
       <!-- Attach Button -->
-      <div class="flex items-center">
-        <cancel-button @click="$router.back()" />
+      <div
+        class="flex flex-col mt-3 md:mt-6 md:flex-row items-center justify-center md:justify-end"
+      >
+        <CancelButton
+          dusk="cancel-update-attached-button"
+          type="button"
+          @click="cancelUpdatingAttachedResource"
+        />
 
-        <progress-button
+        <LoadingButton
           class="mr-3"
           dusk="update-and-continue-editing-button"
-          @click.native="updateAndContinueEditing"
+          @click.prevent="updateAndContinueEditing"
           :disabled="isWorking"
           :processing="submittedViaUpdateAndContinueEditing"
         >
           {{ __('Update & Continue Editing') }}
-        </progress-button>
+        </LoadingButton>
 
-        <progress-button
+        <LoadingButton
           dusk="update-button"
           type="submit"
           :disabled="isWorking"
@@ -111,35 +127,34 @@
               resource: relatedResourceLabel,
             })
           }}
-        </progress-button>
+        </LoadingButton>
       </div>
     </form>
-  </loading-view>
+  </LoadingView>
 </template>
 
 <script>
-import _ from 'lodash'
-import {Errors, PerformsSearches, PreventsFormAbandonment, TogglesTrashed,} from 'laravel-nova'
-import HandlesFormRequest from '@/mixins/HandlesFormRequest'
+import each from 'lodash/each'
+import find from 'lodash/find'
+import tap from 'lodash/tap'
+import {
+    Errors,
+    FormEvents,
+    HandlesFormRequest,
+    PerformsSearches,
+    PreventsFormAbandonment,
+    TogglesTrashed,
+} from '@/mixins'
+import {mapActions} from 'vuex'
 
 export default {
   mixins: [
+    FormEvents,
     HandlesFormRequest,
     PerformsSearches,
     TogglesTrashed,
     PreventsFormAbandonment,
   ],
-
-  metaInfo() {
-    if (this.relatedResourceLabel && this.title) {
-      return {
-        title: this.__('Update attached :resource: :title', {
-          resource: this.relatedResourceLabel,
-          title: this.title,
-        }),
-      }
-    }
-  },
 
   props: {
     resourceName: {
@@ -162,6 +177,9 @@ export default {
     viaResourceId: {
       default: '',
     },
+    parentResource: {
+      type: Object,
+    },
     viaRelationship: {
       default: '',
     },
@@ -174,10 +192,11 @@ export default {
   },
 
   data: () => ({
+    initialLoading: true,
     loading: true,
     submittedViaUpdateAndContinueEditing: false,
     submittedViaUpdateAttachedResource: false,
-    viaResourceField: null,
+
     field: null,
     softDeletes: false,
     fields: [],
@@ -188,8 +207,7 @@ export default {
   }),
 
   created() {
-    if (Nova.missingResource(this.resourceName))
-      return this.$router.push({ name: '404' })
+    if (Nova.missingResource(this.resourceName)) return Nova.visit('/404')
   },
 
   /**
@@ -200,6 +218,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(['fetchPolicies']),
+
     /**
      * Initialize the component's data.
      */
@@ -217,6 +237,20 @@ export default {
       this.selectInitialResource()
 
       this.updateLastRetrievedAtTimestamp()
+      this.allowLeavingForm()
+    },
+
+    /**
+     * Handle pivot fields loaded event.
+     */
+    handlePivotFieldsLoaded() {
+      this.loading = false
+
+      each(this.fields, field => {
+        if (field) {
+          field.fill = () => ''
+        }
+      })
     },
 
     /**
@@ -240,7 +274,7 @@ export default {
         this.determineIfSoftDeletes()
       }
 
-      this.loading = false
+      this.initialLoading = false
     },
 
     /**
@@ -265,7 +299,7 @@ export default {
         )
         .catch(error => {
           if (error.response.status == 404) {
-            this.$router.push({ name: '404' })
+            Nova.visit('/404')
             return
           }
         })
@@ -273,11 +307,7 @@ export default {
       this.title = title
       this.fields = fields
 
-      _.each(this.fields, field => {
-        if (field) {
-          field.fill = () => ''
-        }
-      })
+      this.handlePivotFieldsLoaded()
     },
 
     resetErrors() {
@@ -297,11 +327,11 @@ export default {
               current: this.relatedResourceId,
               first: true,
               withTrashed: this.withTrashed,
+              viaRelationship: this.viaRelationship,
             },
           }
         )
 
-        this.viaResourceField = response.data.viaResource
         this.availableResources = response.data.resources
         this.withTrashed = response.data.withTrashed
         this.softDeletes = response.data.softDeletes
@@ -329,27 +359,18 @@ export default {
         await this.updateRequest()
 
         this.submittedViaUpdateAttachedResource = false
-        this.canLeave = true
+        this.allowLeavingForm()
 
-        Nova.success(this.__('The resource was updated!'))
+        await this.fetchPolicies(),
+          Nova.success(this.__('The resource was updated!'))
 
-        this.$router.push({
-          name: 'detail',
-          params: {
-            resourceName: this.resourceName,
-            resourceId: this.resourceId,
-          },
-        })
+        Nova.visit(`/resources/${this.resourceName}/${this.resourceId}`)
       } catch (error) {
         window.scrollTo(0, 0)
 
         this.submittedViaUpdateAttachedResource = false
-        if (
-          this.resourceInformation &&
-          this.resourceInformation.preventFormAbandonment
-        ) {
-          this.canLeave = false
-        }
+
+        this.preventLeavingForm()
 
         this.handleOnUpdateResponseError(error)
       }
@@ -364,6 +385,8 @@ export default {
       try {
         await this.updateRequest()
 
+        this.allowLeavingForm()
+
         this.submittedViaUpdateAndContinueEditing = false
 
         Nova.success(this.__('The resource was updated!'))
@@ -377,13 +400,24 @@ export default {
       }
     },
 
+    cancelUpdatingAttachedResource() {
+      this.handleProceedingToPreviousPage()
+      this.allowLeavingForm()
+
+      if (window.history.length > 1) {
+        window.history.back()
+      } else {
+        Nova.visit('/')
+      }
+    },
+
     /**
      * Send an update request for this resource
      */
     updateRequest() {
       return Nova.request().post(
         `/nova-api/${this.resourceName}/${this.resourceId}/update-attached/${this.relatedResourceName}/${this.relatedResourceId}`,
-        this.updateAttachmentFormData,
+        this.updateAttachmentFormData(),
         {
           params: {
             editing: true,
@@ -394,15 +428,37 @@ export default {
       )
     },
 
+    /*
+     * Get the form data for the resource attachment update.
+     */
+    updateAttachmentFormData() {
+      return tap(new FormData(), formData => {
+        each(this.fields, field => {
+          field.fill(formData)
+        })
+
+        formData.append('viaRelationship', this.viaRelationship)
+
+        if (!this.selectedResource) {
+          formData.append(this.relatedResourceName, '')
+        } else {
+          formData.append(this.relatedResourceName, this.selectedResource.value)
+        }
+
+        formData.append(this.relatedResourceName + '_trashed', this.withTrashed)
+        formData.append('_retrieved_at', this.lastRetrievedAt)
+      })
+    },
+
     /**
      * Select a resource using the <select> control
      */
-    selectResourceFromSelectControl(e) {
-      this.selectedResourceId = e.target.value
+    selectResourceFromSelectControl(value) {
+      this.selectedResourceId = value
       this.selectInitialResource()
 
       if (this.field) {
-        Nova.$emit(this.field.attribute + '-change', this.selectedResourceId)
+        this.emitFieldValueChange(this.field.attribute, this.selectedResourceId)
       }
     },
 
@@ -422,7 +478,7 @@ export default {
      * Select the initial selected resource
      */
     selectInitialResource() {
-      this.selectedResource = _.find(
+      this.selectedResource = find(
         this.availableResources,
         r => r.value == this.selectedResourceId
       )
@@ -439,12 +495,7 @@ export default {
      * Prevent accidental abandonment only if form was changed.
      */
     onUpdateFormStatus() {
-      if (
-        this.resourceInformation &&
-        this.resourceInformation.preventFormAbandonment
-      ) {
-        this.updateFormStatus()
-      }
+      this.updateFormStatus()
     },
   },
 
@@ -466,28 +517,6 @@ export default {
             this.resourceId +
             '/attach/' +
             this.relatedResourceName
-    },
-
-    /*
-     * Get the form data for the resource attachment update.
-     */
-    updateAttachmentFormData() {
-      return _.tap(new FormData(), formData => {
-        _.each(this.fields, field => {
-          field.fill(formData)
-        })
-
-        formData.append('viaRelationship', this.viaRelationship)
-
-        if (!this.selectedResource) {
-          formData.append(this.relatedResourceName, '')
-        } else {
-          formData.append(this.relatedResourceName, this.selectedResource.value)
-        }
-
-        formData.append(this.relatedResourceName + '_trashed', this.withTrashed)
-        formData.append('_retrieved_at', this.lastRetrievedAt)
-      })
     },
 
     /**

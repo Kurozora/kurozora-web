@@ -9,14 +9,14 @@ trait DeterminesIfCreateRelationCanBeShown
     /**
      * The callback used to determine if the create relation button should be shown.
      *
-     * @var bool|\Laravel\Nova\Fields\Closure
+     * @var (callable(\Laravel\Nova\Http\Requests\NovaRequest):bool)|bool
      */
     public $showCreateRelationButtonCallback;
 
     /**
      * Set the callback used to determine if the field is required.
      *
-     * @param  Closure|bool  $callback
+     * @param  (callable(\Laravel\Nova\Http\Requests\NovaRequest):bool)|bool  $callback
      * @return $this
      */
     public function showCreateRelationButton($callback = true)

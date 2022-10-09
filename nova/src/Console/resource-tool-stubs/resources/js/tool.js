@@ -1,3 +1,5 @@
-Nova.booting((Vue, router, store) => {
-  Vue.component('{{ component }}', require('./components/Tool'))
+import Tool from './components/Tool'
+
+Nova.booting((app, store) => {
+  app.component('{{ component }}', Tool)
 })

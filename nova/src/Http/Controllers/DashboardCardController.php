@@ -3,19 +3,21 @@
 namespace Laravel\Nova\Http\Controllers;
 
 use Illuminate\Routing\Controller;
-use Laravel\Nova\Http\Requests\DashboardCardRequest;
+use Laravel\Nova\Http\Requests\DashboardRequest;
 
 class DashboardCardController extends Controller
 {
     /**
      * List the cards for the dashboard.
      *
-     * @param  \Laravel\Nova\Http\Requests\DashboardCardRequest  $request
+     * @param  \Laravel\Nova\Http\Requests\DashboardRequest  $request
      * @param  string  $dashboard
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index(DashboardCardRequest $request, $dashboard = 'main')
+    public function __invoke(DashboardRequest $request, $dashboard = 'main')
     {
-        return $request->availableCards($dashboard);
+        return response()->json(
+            $request->availableCards($dashboard)
+        );
     }
 }
