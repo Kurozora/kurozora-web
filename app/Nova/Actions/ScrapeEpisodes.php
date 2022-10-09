@@ -6,13 +6,14 @@ use App\Models\Anime;
 use Artisan;
 use Exception;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class ScrapeEpisodes extends Action
+class ScrapeEpisodes extends Action implements ShouldQueue
 {
     use InteractsWithQueue, Queueable;
 
