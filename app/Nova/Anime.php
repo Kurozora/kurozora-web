@@ -6,6 +6,7 @@ use App\Enums\DayOfWeek;
 use App\Enums\SeasonOfYear;
 use App\Nova\Actions\ScrapeAnime;
 use App\Nova\Actions\ScrapeFiller;
+use App\Nova\Actions\ScrapeUpcomingAnime;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -401,6 +402,7 @@ class Anime extends Resource
     public function actions(NovaRequest $request): array
     {
         return [
+            ScrapeUpcomingAnime::make()->standalone(),
             ScrapeAnime::make()
                 ->confirmText('Are you sure you want to scrape this anime?')
                 ->confirmButtonText('Scrape Anime')

@@ -103,15 +103,20 @@ class UpcomingAnimeSpider extends BasicSpider
             });
         $ids = array_values(array_filter($ids));
 
-        // Only interested in anime not in the database
-        // So first get all from the database that match the IDs we scraped.
-        // Then check difference of what's missing between scraped vs. what's found in database.
-        $databaseIDs = Anime::withoutGlobalScopes()
-            ->select(['mal_id'])
-            ->whereIn('mal_id', $ids)
-            ->pluck('mal_id')
-            ->toArray();
-        $cleanIDs = array_diff($ids, $databaseIDs);
+        if (isset($this->context['force']) && $this->context['force']) {
+            // Scrape all found IDs
+            $cleanIDs = $ids;
+        } else {
+            // Only interested in anime not in the database
+            // So first get all from the database that match the IDs we scraped.
+            // Then check for what's missing between scraped vs. what's found in database.
+            $databaseIDs = Anime::withoutGlobalScopes()
+                ->select(['mal_id'])
+                ->whereIn('mal_id', $ids)
+                ->pluck('mal_id')
+                ->toArray();
+            $cleanIDs = array_diff($ids, $databaseIDs);
+        }
 
         yield $this->item($cleanIDs);
     }
