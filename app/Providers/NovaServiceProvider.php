@@ -2,13 +2,11 @@
 
 namespace App\Providers;
 
-use Anaseqal\NovaSidebarIcons\NovaSidebarIcons;
 use App\Http\Controllers\Web\Nova\SignInController;
 use App\Models\User;
-use App\Nova\Metrics\ActivityLogCount;
-use App\Nova\Metrics\AnimeNSFWChart;
-use App\Nova\Metrics\NewUsers;
+use App\Nova\Dashboards\Main;
 use App\Nova\Tools\NovaPermissionTool;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use KABBOUCHI\LogsTool\LogsTool;
 use Laravel\Nova\Actions\ActionEvent;
@@ -31,7 +29,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         $this->app->alias(SignInController::class, LoginController::class);
 
         // Set timezone to JST
-        Nova::userTimezone(function () {
+        Nova::userTimezone(function (Request $request) {
             return 'Asia/Tokyo';
         });
     }
@@ -68,16 +66,14 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     }
 
     /**
-     * Get the cards that should be displayed on the Nova dashboard.
+     * Get the dashboards that should be listed in the Nova sidebar.
      *
      * @return array
      */
-    protected function cards(): array
+    protected function dashboards(): array
     {
         return [
-            new AnimeNSFWChart,
-            new NewUsers,
-            new ActivityLogCount,
+            new Main,
         ];
     }
 
@@ -89,7 +85,6 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     public function tools(): array
     {
         return [
-            new NovaSidebarIcons,
             new NovaPermissionTool,
             (new LogsTool)
                 ->canSee(function ($request) {
