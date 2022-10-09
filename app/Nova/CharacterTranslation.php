@@ -9,19 +9,19 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 
-class EpisodeTranslation extends Resource
+class CharacterTranslation extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static string $model = \App\Models\EpisodeTranslation::class;
+    public static string $model = \App\Models\CharacterTranslation::class;
 
     /**
      * The underlying model resource instance.
      *
-     * @var \App\Models\EpisodeTranslation|null
+     * @var \App\Models\CharacterTranslation|null
      */
     public $resource;
 
@@ -30,7 +30,7 @@ class EpisodeTranslation extends Resource
      *
      * @var string
      */
-    public static $title = 'title';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -38,7 +38,7 @@ class EpisodeTranslation extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'title', 'locale'
+        'id', 'name', 'locale'
     ];
 
     /**
@@ -46,7 +46,7 @@ class EpisodeTranslation extends Resource
      *
      * @var string
      */
-    public static $group = 'Episode';
+    public static $group = 'Character';
 
     /**
      * Get the fields displayed by the resource.
@@ -64,18 +64,18 @@ class EpisodeTranslation extends Resource
 
             Heading::make('Meta information'),
 
-            BelongsTo::make('Episode')
+            BelongsTo::make('Character')
                 ->searchable()
                 ->sortable(),
 
             BelongsTo::make('Language')
                 ->sortable(),
 
-            Text::make('Title')
+            Text::make('Name')
                 ->sortable()
                 ->required(),
 
-            Textarea::make('Synopsis')
+            Textarea::make('About')
                 ->required(),
         ];
     }
@@ -87,9 +87,9 @@ class EpisodeTranslation extends Resource
      */
     public function title(): string
     {
-        $episodeTranslation = $this->resource;
+        $characterTranslation = $this->resource;
 
-        return $episodeTranslation->title . ' (ID: ' . $episodeTranslation->id . ')';
+        return $characterTranslation->name . ' (ID: ' . $characterTranslation->id . ')';
     }
 
     /**
@@ -100,7 +100,7 @@ class EpisodeTranslation extends Resource
      */
     public static function availableForNavigation(Request $request): bool
     {
-        return $request->user()->can('viewEpisodeTranslation');
+        return $request->user()->can('viewCharacterTranslation');
     }
 
     /**

@@ -432,18 +432,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
-     * Returns the Anime that the user is moderating.
-     *
-     * @return BelongsToMany
-     */
-    function moderating_anime(): BelongsToMany
-    {
-        return $this->belongsToMany(Anime::class, AnimeModerator::class, 'user_id', 'anime_id')
-            ->withPivot('created_at')
-            ->withTimestamps();
-    }
-
-    /**
      * Returns a boolean indicating whether the user has watched the given episode.
      *
      * @param Episode $episode The episode to be searched for in the user's watched list.

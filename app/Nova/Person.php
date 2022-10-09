@@ -66,7 +66,9 @@ class Person extends Resource
     public function fields(Request $request): array
     {
         return [
-            ID::make(__('ID'), 'id')->sortable(),
+            Heading::make('Identification'),
+
+            ID::make()->sortable(),
 
             Number::make('MAL ID')
                 ->hideFromIndex()
@@ -151,7 +153,9 @@ class Person extends Resource
 
             Select::make('Astrological Sign')
                 ->options(AstrologicalSign::asSelectArray())
-                ->displayUsingLabels()
+                ->displayUsing(function (?AstrologicalSign $astrologicalSign) {
+                    return $astrologicalSign?->key;
+                })
                 ->sortable(),
 
             Textarea::make('About')

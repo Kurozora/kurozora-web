@@ -36,7 +36,7 @@ class Notification extends Resource
      */
     public static function authorizedToViewAny(Request $request): bool
     {
-        return $request->user()->can('viewDatabaseNotification');
+        return $request->user()?->can('viewDatabaseNotification') ?? false;
     }
 
     /**

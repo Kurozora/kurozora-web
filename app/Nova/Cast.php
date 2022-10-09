@@ -49,7 +49,7 @@ class Cast extends Resource
      *
      * @var string
      */
-    public static $group = 'Anime Cast';
+    public static $group = 'Anime';
 
     /**
      * Get the fields displayed by the resource.
@@ -60,7 +60,8 @@ class Cast extends Resource
     public function fields(Request $request): array
     {
         return [
-            Heading::make('Identification'),
+            Heading::make('Identification')
+                ->onlyOnDetail(),
 
             ID::make()->sortable(),
 
@@ -82,7 +83,7 @@ class Cast extends Resource
                 ->nullable()
                 ->help('Sometimes unknown if the anime is a hentai. Leave empty in that case.'),
 
-            BelongsTo::make('Cast Role')
+            BelongsTo::make('Cast Role', 'cast_role')
                 ->sortable()
                 ->help('If you’re not sure what role the character has, choose "Supporting Character".'),
 
@@ -110,6 +111,16 @@ class Cast extends Resource
     }
 
     /**
+     * Get the displayable label of the resource.
+     *
+     * @return string
+     */
+    public static function label(): string
+    {
+        return __('Cast');
+    }
+
+    /**
      * Handle any post-validation processing.
      *
      * @param NovaRequest $request
@@ -117,7 +128,7 @@ class Cast extends Resource
      * @return void
      * @throws ValidationException
      */
-    protected static function afterValidation(NovaRequest $request, $validator)
+    protected static function afterValidation(NovaRequest $request, $validator): void
     {
         $resourceID = $request->resourceId;
         $anime = $request->post('anime');

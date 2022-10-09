@@ -83,7 +83,7 @@
                     </x-slot:information>
 
                     <x-slot:footer>
-                        {{ $character->birthdate . ($character->astrological_sign_string ? ', ' . $character->astrological_sign_string : '') }}
+                        {{ $character->birthdate . ($character->astrological_sign?->description ? ', ' . $character->astrological_sign?->description : '') }}
                     </x-slot:footer>
                 </x-information-list>
 

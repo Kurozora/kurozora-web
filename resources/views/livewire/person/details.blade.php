@@ -87,7 +87,7 @@
                     </x-slot:information>
 
                     <x-slot:footer>
-                        {{ $person->birthdate?->format('d F Y') }} {{ $person->astrological_sign_string }}
+                        {{ $person->birthdate?->format('d F Y') }}{{ $person->astrological_sign?->description ? ', ' . $person->astrological_sign?->description : '' }}
                     </x-slot:footer>
                 </x-information-list>
 

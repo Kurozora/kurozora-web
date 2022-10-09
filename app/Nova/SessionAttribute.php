@@ -6,6 +6,7 @@ use App\Rules\ValidateAPNDeviceToken;
 use App\Rules\ValidatePlatformName;
 use App\Rules\ValidatePlatformVersion;
 use App\Rules\ValidateVendorName;
+use Exception;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Heading;
@@ -31,7 +32,7 @@ class SessionAttribute extends Resource
      */
     public static function authorizedToViewAny(Request $request): bool
     {
-        return $request->user()->can('viewSessionAttributes');
+        return $request->user()?->can('viewSessionAttributes') ?? false;
     }
 
     /**
@@ -69,11 +70,13 @@ class SessionAttribute extends Resource
      *
      * @param Request $request
      * @return array
+     * @throws Exception
      */
     public function fields(Request $request): array
     {
         return [
-            Heading::make('Identification'),
+            Heading::make('Identification')
+                ->onlyOnDetail(),
 
             ID::make()->sortable(),
 

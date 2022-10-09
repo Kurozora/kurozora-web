@@ -51,7 +51,7 @@ class AnimeSong extends Resource
      *
      * @var array
      */
-    public static $searchRelations = [
+    public static array $searchRelations = [
         'song' => ['id', 'title', 'artist'],
         'anime' => ['id', 'original_title'],
     ];
@@ -72,7 +72,8 @@ class AnimeSong extends Resource
     public function fields(Request $request): array
     {
         return [
-            Heading::make('Identification'),
+            Heading::make('Identification')
+                ->onlyOnDetail(),
 
             ID::make()->sortable(),
 

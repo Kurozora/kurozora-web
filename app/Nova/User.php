@@ -2,11 +2,15 @@
 
 namespace App\Nova;
 
+use App\Nova\Filters\IsPro;
+use App\Nova\Filters\IsSubscribed;
+use App\Nova\Filters\PremiumStatus;
 use App\Nova\Filters\UserRole;
 use App\Nova\Lenses\UnconfirmedUsers;
 use App\Rules\ValidateEmail;
 use App\Rules\ValidatePassword;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
+use Exception;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
@@ -40,7 +44,7 @@ class User extends Resource
      */
     public static function authorizedToViewAny(Request $request): bool
     {
-        return $request->user()->can('viewUser') || $request->user()->hasRole('admin');
+        return $request->user()?->can('viewUser') || $request->user()?->hasRole('admin');
     }
 
     /**
@@ -78,6 +82,7 @@ class User extends Resource
      *
      * @param Request $request
      * @return array
+     * @throws Exception
      */
     public function fields(Request $request): array
     {
@@ -203,17 +208,6 @@ class User extends Resource
 
             MorphMany::make('Notifications'),
 
-            BelongsToMany::make('Moderating Anime', 'moderating_anime', Anime::class)
-// @TODO
-// This has been commented out, because it conflicts with the favoriteAnime relationship.
-//                ->fields(function() {
-//                    return [
-//                        DateTime::make('Moderating since', 'created_at')
-//                            ->rules('required')
-//                    ];
-//                })
-                ->searchable(),
-
             BelongsToMany::make('Favorite Anime', 'favorite_anime', Anime::class),
 
             BelongsToMany::make('Badges')
@@ -255,7 +249,8 @@ class User extends Resource
     public function filters(Request $request): array
     {
         return [
-            new UserRole
+            new UserRole,
+            new PremiumStatus,
         ];
     }
 

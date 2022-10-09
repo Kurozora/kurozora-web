@@ -34,7 +34,7 @@ class Badge extends Resource
      */
     public static function authorizedToViewAny(Request $request): bool
     {
-        return $request->user()->can('viewBadge');
+        return $request->user()?->can('viewBadge') ?? false;
     }
 
     /**
@@ -69,9 +69,12 @@ class Badge extends Resource
     public function fields(Request $request): array
     {
         return [
-            Heading::make('Identification'),
+            Heading::make('Identification')
+                ->onlyOnDetail(),
 
             ID::make()->sortable(),
+
+            Heading::make('Meta Information'),
 
             Text::make('Name'),
 

@@ -84,7 +84,7 @@ class Song extends Resource
             Text::make('Artist')
                 ->sortable(),
 
-            HasMany::make('Anime Songs'),
+            HasMany::make('Anime Songs', 'anime_songs'),
 
             HasManyThrough::make('Anime'),
         ];
