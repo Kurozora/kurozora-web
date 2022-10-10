@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Nova\Fields\Trix;
 
+/**
+ * @property string $attachment
+ * @property string $disk
+ */
 class PendingAttachment extends Model
 {
     /**

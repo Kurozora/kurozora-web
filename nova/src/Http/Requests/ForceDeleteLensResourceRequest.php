@@ -11,7 +11,7 @@ class ForceDeleteLensResourceRequest extends LensResourceDeletionRequest
      * Get the selected models for the action in chunks.
      *
      * @param  int  $count
-     * @param  \Closure  $callback
+     * @param  \Closure(\Illuminate\Support\Collection):void  $callback
      * @return mixed
      */
     public function chunks($count, Closure $callback)

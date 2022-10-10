@@ -6,7 +6,7 @@ use Brick\Money\Context;
 use Brick\Money\Context\CustomContext;
 use Brick\Money\Money;
 use NumberFormatter;
-use Symfony\Component\Intl\Currencies;
+use Symfony\Polyfill\Intl\Icu\Currencies;
 
 class Currency extends Number
 {
@@ -55,7 +55,7 @@ class Currency extends Number
     /**
      * The context to use when creating the Money instance.
      *
-     * @var Context|null
+     * @var \Brick\Money\Context|null
      */
     public $context = null;
 
@@ -63,8 +63,8 @@ class Currency extends Number
      * Create a new field.
      *
      * @param  string  $name
-     * @param  string|null  $attribute
-     * @param  mixed|null  $resolveCallback
+     * @param  string|\Closure|callable|object|null  $attribute
+     * @param  (callable(mixed, mixed, ?string):mixed)|null  $resolveCallback
      * @return void
      */
     public function __construct($name, $attribute = null, $resolveCallback = null)
@@ -74,26 +74,28 @@ class Currency extends Number
         $this->locale = config('app.locale', 'en');
         $this->currency = config('nova.currency', 'USD');
 
-        $this->step($this->getStepValue());
+        $this->step($this->getStepValue())
+            ->fillUsing(function ($request, $model, $attribute, $requestAttribute) {
+                $value = $request->$requestAttribute;
 
-        $this->fillUsing(function ($request, $model, $attribute) {
-            $value = $request->$attribute;
-
-            if ($this->minorUnits && ! $this->isNullValue($value)) {
-                $model->$attribute = $this->toMoneyInstance($value)->getMinorAmount()->toInt();
-            } else {
-                $model->$attribute = $value;
-            }
-        })
+                if ($this->minorUnits && ! $this->isValidNullValue($value)) {
+                    $model->$attribute = $this->toMoneyInstance(
+                        $value * (10 ** Currencies::getFractionDigits($this->currency)),
+                        $this->currency
+                    )->getMinorAmount()->toInt();
+                } else {
+                    $model->$attribute = $value;
+                }
+            })
             ->displayUsing(function ($value) {
-                return ! $this->isNullValue($value) ? $this->formatMoney($value) : null;
+                return ! $this->isValidNullValue($value) ? $this->formatMoney($value) : null;
             })
             ->resolveUsing(function ($value) {
-                if ($this->isNullValue($value) || ! $this->minorUnits) {
+                if ($this->isValidNullValue($value) || ! $this->minorUnits) {
                     return $value;
                 }
 
-                return $this->toMoneyInstance($value)->getMinorAmount()->toInt();
+                return $this->toMoneyInstance($value)->getAmount()->toFloat();
             });
     }
 
@@ -189,7 +191,6 @@ class Currency extends Number
     public function asMinorUnits()
     {
         $this->minorUnits = true;
-        $this->step('1.0');
 
         return $this;
     }
@@ -202,7 +203,6 @@ class Currency extends Number
     public function asMajorUnits()
     {
         $this->minorUnits = false;
-        $this->step($this->getStepValue());
 
         return $this;
     }
@@ -224,7 +224,7 @@ class Currency extends Number
     /**
      * Set the context used to create the Money instance.
      *
-     * @param  Context  $context
+     * @param  \Brick\Money\Context  $context
      * @return $this
      */
     public function context(Context $context)
@@ -240,13 +240,13 @@ class Currency extends Number
      * @param  mixed  $value
      * @return bool
      */
-    protected function isNullValue($value)
+    public function isValidNullValue($value)
     {
         if (is_null($value)) {
             return true;
         }
 
-        return parent::isNullValue($value);
+        return parent::isValidNullValue($value);
     }
 
     /**
@@ -256,24 +256,18 @@ class Currency extends Number
      */
     protected function getStepValue()
     {
-        if ($this->minorUnits) {
-            return '1.0';
-        }
-
         return (string) 0.1 ** Currencies::getFractionDigits($this->currency);
     }
 
     /**
      * Prepare the field for JSON serialization.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return array_merge(parent::jsonSerialize(), [
             'currency' => $this->resolveCurrencySymbol(),
-            'currency_name' => Currencies::getName($this->currency),
         ]);
     }
 }

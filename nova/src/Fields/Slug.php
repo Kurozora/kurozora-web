@@ -3,9 +3,10 @@
 namespace Laravel\Nova\Fields;
 
 use Illuminate\Support\Str;
+use Laravel\Nova\Contracts\Previewable;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Slug extends Field
+class Slug extends Field implements Previewable
 {
     /**
      * The field's component.
@@ -31,7 +32,7 @@ class Slug extends Field
     /**
      * Whether to show the field's customize button.
      *
-     * @var string
+     * @var bool
      */
     public $showCustomizeButton = false;
 
@@ -39,8 +40,8 @@ class Slug extends Field
      * Create a new field.
      *
      * @param  string  $name
-     * @param  string|callable|null  $attribute
-     * @param  callable|null  $resolveCallback
+     * @param  string|\Closure|callable|object|null  $attribute
+     * @param  (callable(mixed, mixed, ?string):mixed)|null  $resolveCallback
      * @return void
      */
     public function __construct($name, $attribute = null, callable $resolveCallback = null)
@@ -75,12 +76,22 @@ class Slug extends Field
     }
 
     /**
+     * Return a preview for the given field value.
+     *
+     * @param  string  $value
+     * @return mixed
+     */
+    public function previewFor($value)
+    {
+        return Str::slug($value, $this->separator);
+    }
+
+    /**
      * Prepare the element for JSON serialization.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $request = app(NovaRequest::class);
 
@@ -91,7 +102,7 @@ class Slug extends Field
 
         return array_merge([
             'updating' => $request->isUpdateOrUpdateAttachedRequest(),
-            'from' => $this->from instanceof Field ? $this->from->attribute : Str::lower($this->from),
+            'from' => $this->from instanceof Field ? $this->from->attribute : str_replace(' ', '_', Str::lower($this->from)),
             'separator' => $this->separator,
             'showCustomizeButton' => $this->showCustomizeButton,
         ], parent::jsonSerialize());

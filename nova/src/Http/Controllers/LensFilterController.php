@@ -11,7 +11,7 @@ class LensFilterController extends Controller
      * List the lenses for the given resource.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(NovaRequest $request)
     {

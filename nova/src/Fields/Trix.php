@@ -2,8 +2,11 @@
 
 namespace Laravel\Nova\Fields;
 
+use Illuminate\Support\Arr;
 use Laravel\Nova\Contracts\Deletable as DeletableContract;
+use Laravel\Nova\Contracts\FilterableField;
 use Laravel\Nova\Contracts\Storable as StorableContract;
+use Laravel\Nova\Fields\Filters\TextFilter;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Trix\DeleteAttachments;
 use Laravel\Nova\Trix\DetachAttachment;
@@ -11,9 +14,12 @@ use Laravel\Nova\Trix\DiscardPendingAttachments;
 use Laravel\Nova\Trix\PendingAttachment;
 use Laravel\Nova\Trix\StorePendingAttachment;
 
-class Trix extends Field implements StorableContract, DeletableContract
+class Trix extends Field implements FilterableField, StorableContract, DeletableContract
 {
-    use Storable, Deletable, Expandable;
+    use FieldFilterable,
+        Storable,
+        Deletable,
+        Expandable;
 
     /**
      * The field's component.
@@ -131,9 +137,9 @@ class Trix extends Field implements StorableContract, DeletableContract
         $this->disk($disk)->path($path);
 
         $this->attach(new StorePendingAttachment($this))
-             ->detach(new DetachAttachment($this))
+             ->detach(new DetachAttachment())
              ->delete(new DeleteAttachments($this))
-             ->discard(new DiscardPendingAttachments($this))
+             ->discard(new DiscardPendingAttachments())
              ->prunable();
 
         return $this;
@@ -181,15 +187,42 @@ class Trix extends Field implements StorableContract, DeletableContract
      */
     public function getStoragePath()
     {
+        return null;
+    }
+
+    /**
+     * Make the field filter.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @return \Laravel\Nova\Fields\Filters\Filter
+     */
+    protected function makeFilter(NovaRequest $request)
+    {
+        return new TextFilter($this);
+    }
+
+    /**
+     * Prepare the field for JSON serialization.
+     *
+     * @return array
+     */
+    public function serializeForFilter()
+    {
+        return transform($this->jsonSerialize(), function ($field) {
+            return Arr::only($field, [
+                'uniqueKey',
+                'name',
+                'attribute',
+            ]);
+        });
     }
 
     /**
      * Prepare the element for JSON serialization.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return array_merge(parent::jsonSerialize(), [
             'shouldShow' => $this->shouldBeExpanded(),

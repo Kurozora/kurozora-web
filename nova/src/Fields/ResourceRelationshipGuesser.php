@@ -8,10 +8,21 @@ use Illuminate\Support\Str;
 class ResourceRelationshipGuesser
 {
     /**
-     * Guess the resource class name from the displayable name.
+     * Guess the relationship name from the displayable name or attribute.
      *
      * @param  string  $name
      * @return string
+     */
+    public static function guessRelation($name)
+    {
+        return Str::camel(str_replace(' ', '_', $name));
+    }
+
+    /**
+     * Guess the resource class name from the displayable name.
+     *
+     * @param  string  $name
+     * @return class-string<\Laravel\Nova\Resource>
      */
     public static function guessResource($name)
     {

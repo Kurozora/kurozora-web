@@ -3,7 +3,7 @@
 namespace Laravel\Nova\Testing\Browser\Pages;
 
 use Laravel\Dusk\Browser;
-use Laravel\Nova\Nova;
+use Laravel\Nova\Testing\Browser\Components\IndexComponent;
 
 class Index extends Page
 {
@@ -13,21 +13,30 @@ class Index extends Page
      * Create a new page instance.
      *
      * @param  string  $resourceName
+     * @param  array  $queryParams
      * @return void
      */
-    public function __construct($resourceName)
+    public function __construct($resourceName, $queryParams = [])
     {
         $this->resourceName = $resourceName;
+        $this->queryParams = $queryParams;
+
+        $this->setNovaPage("/resources/{$this->resourceName}");
     }
 
     /**
-     * Get the URL for the page.
+     * Create the related resource.
      *
-     * @return string
+     * @param  \Laravel\Dusk\Browser  $browser
+     * @return void
+     *
+     * @throws \Facebook\WebDriver\Exception\TimeOutException
      */
-    public function url()
+    public function runCreate(Browser $browser)
     {
-        return Nova::path().'/resources/'.$this->resourceName;
+        $browser->within(new IndexComponent($this->resourceName), function ($browser) {
+            $browser->waitFor('@create-button')->click('@create-button');
+        })->on(new Create($this->resourceName));
     }
 
     /**
@@ -38,7 +47,7 @@ class Index extends Page
      */
     public function assert(Browser $browser)
     {
-        //
+        $browser->assertOk()->waitFor('@nova-resource-index');
     }
 
     /**
@@ -48,6 +57,8 @@ class Index extends Page
      */
     public function elements()
     {
-        return [];
+        return [
+            '@nova-resource-index' => '#app [data-testid="content"] [dusk="'.$this->resourceName.'-index-component"]',
+        ];
     }
 }

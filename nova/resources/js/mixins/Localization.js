@@ -1,14 +1,16 @@
-export default {
+import forEach from 'lodash/forEach'
+
+const mixin = {
   methods: {
     /**
      * Translate the given key.
      */
     __(key, replace) {
-      var translation = window.config.translations[key]
-        ? window.config.translations[key]
+      let translation = Nova.config('translations')[key]
+        ? Nova.config('translations')[key]
         : key
 
-      _.forEach(replace, (value, key) => {
+      forEach(replace, (value, key) => {
         key = new String(key)
 
         if (value === null) {
@@ -33,7 +35,7 @@ export default {
           value.charAt(0).toUpperCase() + value.slice(1),
         ]
 
-        for (var i = searches.length - 1; i >= 0; i--) {
+        for (let i = searches.length - 1; i >= 0; i--) {
           translation = translation.replace(searches[i], replacements[i])
         }
       })
@@ -41,4 +43,12 @@ export default {
       return translation
     },
   },
+}
+
+export default mixin
+
+export function useLocalization() {
+  return {
+    __: (key, replace) => mixin.methods.__(key, replace),
+  }
 }

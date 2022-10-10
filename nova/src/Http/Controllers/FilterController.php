@@ -11,9 +11,9 @@ class FilterController extends Controller
      * List the filters for the given resource.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index(NovaRequest $request)
+    public function __invoke(NovaRequest $request)
     {
         return response()->json($request->newResource()->availableFilters($request));
     }

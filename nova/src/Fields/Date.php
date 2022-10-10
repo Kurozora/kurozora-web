@@ -2,40 +2,64 @@
 
 namespace Laravel\Nova\Fields;
 
+use Carbon\Carbon;
+use Carbon\CarbonInterface;
+use Carbon\CarbonInterval;
 use DateTimeInterface;
 use Exception;
+use Illuminate\Support\Arr;
+use Laravel\Nova\Contracts\FilterableField;
+use Laravel\Nova\Fields\Filters\DateFilter;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Date extends Field
+class Date extends Field implements FilterableField
 {
+    use FieldFilterable, SupportsDependentFields;
+
     /**
      * The field's component.
      *
      * @var string
      */
-    public $component = 'date';
+    public $component = 'date-field';
 
     /**
-     * Cast format from DateTime instance.
+     * The minimum value that can be assigned to the field.
      *
-     * @var string
+     * @var string|null
      */
-    protected $dateFormat = 'Y-m-d';
+    public $min;
+
+    /**
+     * The maximum value that can be assigned to the field.
+     *
+     * @var string|null
+     */
+    public $max;
+
+    /**
+     * The step size the field will increment and decrement by.
+     *
+     * @var string|int|null
+     */
+    public $step;
 
     /**
      * Create a new field.
      *
      * @param  string  $name
-     * @param  string|null  $attribute
-     * @param  mixed|null  $resolveCallback
+     * @param  string|\Closure|callable|object|null  $attribute
+     * @param  (callable(mixed, mixed, ?string):mixed)|null  $resolveCallback
      * @return void
      */
-    public function __construct($name, $attribute = null, $resolveCallback = null)
+    public function __construct($name, $attribute = null, callable $resolveCallback = null)
     {
         parent::__construct($name, $attribute, $resolveCallback ?? function ($value) {
             if (! is_null($value)) {
                 if ($value instanceof DateTimeInterface) {
-                    return $value->format($this->dateFormat);
+                    return $value instanceof CarbonInterface
+                                ? $value->toIso8601String()
+                                : $value->format(DateTimeInterface::ATOM);
                 }
 
                 throw new Exception("Date field must cast to 'date' in Eloquent model.");
@@ -44,69 +68,50 @@ class Date extends Field
     }
 
     /**
-     * Set the first day of the week.
+     * The minimum value that can be assigned to the field.
      *
-     * @param  int  $day
+     * @param  \Carbon\CarbonInterface|string  $min
      * @return $this
      */
-    public function firstDayOfWeek($day)
+    public function min($min)
     {
-        return $this->withMeta([__FUNCTION__ => $day]);
+        if (is_string($min)) {
+            $min = Carbon::parse($min);
+        }
+
+        $this->min = $min->toDateString();
+
+        return $this;
     }
 
     /**
-     * Set the date format (Moment.js) that should be used to display the date.
+     * The maximum value that can be assigned to the field.
      *
-     * @param  string  $format
+     * @param  \Carbon\CarbonInterface|string  $max
      * @return $this
      */
-    public function format($format)
+    public function max($max)
     {
-        return $this->withMeta([__FUNCTION__ => $format]);
+        if (is_string($max)) {
+            $max = Carbon::parse($max);
+        }
+
+        $this->max = $max->toDateString();
+
+        return $this;
     }
 
     /**
-     * Set the date format (flatpickr.js) that should be used in the input field (picker).
+     * The step size the field will increment and decrement by.
      *
-     * @param  string  $format
+     * @param  string|int|\Carbon\CarbonInterval  $step
      * @return $this
      */
-    public function pickerFormat($format)
+    public function step($step)
     {
-        return $this->withMeta([__FUNCTION__ => $format]);
-    }
+        $this->step = $step instanceof CarbonInterval ? $step->totalDays : $step;
 
-    /**
-     * Set a readable date format, that should be used to display the date to the user.
-     *
-     * @param  string  $format
-     * @return $this
-     */
-    public function pickerDisplayFormat($format)
-    {
-        return $this->withMeta([__FUNCTION__ => $format]);
-    }
-
-    /**
-     * Set picker hour increment.
-     *
-     * @param  int  $increment
-     * @return $this
-     */
-    public function incrementPickerHourBy($increment)
-    {
-        throw new \Exception('The `incrementPickerHourBy` option is not available on Date fields.');
-    }
-
-    /**
-     * Set picker minute increment.
-     *
-     * @param  int  $increment
-     * @return $this
-     */
-    public function incrementPickerMinuteBy($increment)
-    {
-        throw new \Exception('The `incrementPickerMinuteBy` option is not available on Date fields.');
+        return $this;
     }
 
     /**
@@ -120,9 +125,76 @@ class Date extends Field
         $value = parent::resolveDefaultValue($request);
 
         if ($value instanceof DateTimeInterface) {
-            return $value->format($this->dateFormat);
+            return $value instanceof CarbonInterface
+                        ? $value->toIso8601String()
+                        : $value->format(DateTimeInterface::ATOM);
         }
 
         return $value;
+    }
+
+    /**
+     * Make the field filter.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @return \Laravel\Nova\Fields\Filters\Filter
+     */
+    protected function makeFilter(NovaRequest $request)
+    {
+        return new DateFilter($this);
+    }
+
+    /**
+     * Define the default filterable callback.
+     *
+     * @return callable(\Laravel\Nova\Http\Requests\NovaRequest, \Illuminate\Database\Eloquent\Builder, mixed, string):\Illuminate\Database\Eloquent\Builder
+     */
+    protected function defaultFilterableCallback()
+    {
+        return function (NovaRequest $request, $query, $value, $attribute) {
+            [$min, $max] = $value;
+
+            if (! is_null($min) && ! is_null($max)) {
+                return $query->whereDate($attribute, '>=', $min)
+                             ->whereDate($attribute, '<=', $max);
+            } elseif (! is_null($min)) {
+                return $query->whereDate($attribute, '>=', $min);
+            }
+
+            return $query->whereDate($attribute, '<=', $max);
+        };
+    }
+
+    /**
+     * Prepare the field for JSON serialization.
+     *
+     * @return array
+     */
+    public function serializeForFilter()
+    {
+        return transform($this->jsonSerialize(), function ($field) {
+            return Arr::only($field, [
+                'uniqueKey',
+                'name',
+                'attribute',
+                'type',
+                'placeholder',
+                'extraAttributes',
+            ]);
+        });
+    }
+
+    /**
+     * Prepare the element for JSON serialization.
+     *
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return array_merge(parent::jsonSerialize(), array_filter([
+            'min' => $this->min,
+            'max' => $this->max,
+            'step' => $this->step ?? 'any',
+        ]));
     }
 }

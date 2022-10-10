@@ -11,6 +11,12 @@ class CardRequest extends NovaRequest
      */
     public function availableCards()
     {
+        $resource = $this->newResource();
+
+        if ($this->resourceId) {
+            return $this->newResource()->availableCardsForDetail($this);
+        }
+
         return $this->newResource()->availableCards($this);
     }
 }

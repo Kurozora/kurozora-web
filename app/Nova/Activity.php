@@ -27,7 +27,7 @@ class Activity extends Resource
      */
     public static function authorizedToViewAny(Request $request): bool
     {
-        return $request->user()->can('viewActivity');
+        return $request->user()?->can('viewActivity') ?? false;
     }
 
     /**
@@ -55,7 +55,8 @@ class Activity extends Resource
     public function fields(Request $request): array
     {
         return [
-            Heading::make('Identification'),
+            Heading::make('Identification')
+                ->onlyOnDetail(),
 
             ID::make()->sortable(),
 

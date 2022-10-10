@@ -48,6 +48,7 @@ class Relatable implements Rule
     {
         $model = $this->query->tap(function ($query) {
             tap($query->getQuery(), function ($builder) {
+                /** @var \Illuminate\Database\Query\Builder $builder */
                 $builder->orders = [];
 
                 $builder->select(
@@ -83,7 +84,7 @@ class Relatable implements Rule
     {
         $inverseRelation = $this->request->newResource()
                     ->resolveInverseFieldsForAttribute($this->request, $attribute)->first(function ($field) {
-                        return $field instanceof HasOne || $field instanceof MorphOne;
+                        return ($field instanceof MorphOne || $field instanceof HasOne) && ! $field->ofManyRelationship();
                     });
 
         if ($inverseRelation && $this->request->resourceId) {
@@ -105,13 +106,13 @@ class Relatable implements Rule
     /**
      * Authorize that the user is allowed to relate this resource.
      *
-     * @param  string  $resource
+     * @param  class-string<\Laravel\Nova\Resource>  $resourceClass
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return bool
      */
-    protected function authorize($resource, $model)
+    protected function authorize($resourceClass, $model)
     {
-        return (new $resource($model))->authorizedToAdd(
+        return (new $resourceClass($model))->authorizedToAdd(
             $this->request, $this->request->model()
         );
     }

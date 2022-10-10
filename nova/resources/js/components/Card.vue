@@ -1,3 +1,11 @@
 <template>
-  <div class="card"><slot /></div>
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
+    <slot />
+  </div>
 </template>
+
+<script>
+export default {
+  //
+}
+</script>

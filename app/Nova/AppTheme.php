@@ -39,7 +39,7 @@ class AppTheme extends Resource
      */
     public static function authorizedToViewAny(Request $request): bool
     {
-        return $request->user()->can('viewAppTheme');
+        return $request->user()?->can('viewAppTheme') ?? false;
     }
 
     /**
@@ -74,7 +74,8 @@ class AppTheme extends Resource
     public function fields(Request $request): array
     {
         return [
-            Heading::make('Identification'),
+            Heading::make('Identification')
+                ->onlyOnDetail(),
 
             ID::make()->sortable(),
 

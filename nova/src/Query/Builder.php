@@ -16,28 +16,28 @@ class Builder implements QueryBuilder
     /**
      * The resource class.
      *
-     * @var string
+     * @var class-string<\Laravel\Nova\Resource>
      */
-    protected $resource;
+    protected $resourceClass;
 
     /**
      * The original query builder instance.
      *
-     * @var \Illuminate\Database\Eloquent\Builder
+     * @var \Illuminate\Database\Eloquent\Builder|null
      */
     protected $originalQueryBuilder;
 
     /**
      * The query builder instance.
      *
-     * @var \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+     * @var \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder|null
      */
     protected $queryBuilder;
 
     /**
      * Optional callbacks before model query execution.
      *
-     * @var array
+     * @var array<int, callable(\Illuminate\Database\Eloquent\Builder):void>
      */
     protected $queryCallbacks = [];
 
@@ -51,12 +51,12 @@ class Builder implements QueryBuilder
     /**
      * Construct a new query builder for a resource.
      *
-     * @param  string  $resource
+     * @param  class-string<\Laravel\Nova\Resource>  $resourceClass
      * @return void
      */
-    public function __construct($resource)
+    public function __construct($resourceClass)
     {
-        $this->resource = $resource;
+        $this->resourceClass = $resourceClass;
     }
 
     /**
@@ -64,6 +64,7 @@ class Builder implements QueryBuilder
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  string  $key
+     * @return $this
      */
     public function whereKey($query, $key)
     {
@@ -72,6 +73,8 @@ class Builder implements QueryBuilder
         $this->tap(function ($query) use ($key) {
             $query->whereKey($key);
         });
+
+        return $this;
     }
 
     /**
@@ -80,23 +83,23 @@ class Builder implements QueryBuilder
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  string|null  $search
-     * @param  array  $filters
-     * @param  array  $orderings
+     * @param  array<int, \Laravel\Nova\Query\ApplyFilter>  $filters
+     * @param  array<string, string>  $orderings
      * @param  string  $withTrashed
      * @return $this
      */
     public function search(NovaRequest $request, $query, $search = null,
-                                      array $filters = [], array $orderings = [],
-                                      $withTrashed = TrashedStatus::DEFAULT)
+        array $filters = [], array $orderings = [],
+        $withTrashed = TrashedStatus::DEFAULT)
     {
         $this->setOriginalQueryBuilder($query);
 
         $hasSearchKeyword = ! empty(trim($search ?? ''));
         $hasOrderings = collect($orderings)->filter()->isNotEmpty();
 
-        if ($this->resource::usesScout()) {
+        if ($this->resourceClass::usesScout()) {
             if ($hasSearchKeyword) {
-                $this->queryBuilder = $this->resource::buildIndexQueryUsingScout($request, $search, $withTrashed);
+                $this->queryBuilder = $this->resourceClass::buildIndexQueryUsingScout($request, $search, $withTrashed);
                 $search = '';
             }
 
@@ -112,7 +115,7 @@ class Builder implements QueryBuilder
         }
 
         $this->tap(function ($query) use ($request, $search, $filters, $orderings, $withTrashed) {
-            $this->resource::buildIndexQuery(
+            $this->resourceClass::buildIndexQuery(
                 $request, $query, $search, $filters, $orderings, $withTrashed
             );
         });
@@ -123,7 +126,7 @@ class Builder implements QueryBuilder
     /**
      * Pass the query to a given callback.
      *
-     * @param  \Closure  $callback
+     * @param  callable(\Illuminate\Database\Eloquent\Builder):void  $callback
      * @return $this
      */
     public function tap($callback)
@@ -134,31 +137,29 @@ class Builder implements QueryBuilder
     }
 
     /**
-     * Set the "take" for the search query.
+     * Set the "take" directly to Scout or Eloquent builder.
      *
      * @param  int  $limit
      * @return $this
      */
     public function take($limit)
     {
-        return $this->limit($limit);
+        $this->queryBuilder->take($limit);
+
+        return $this;
     }
 
     /**
-     * Set the "limit" for the search query.
+     * Defer setting a "limit" using query callback and only executed via Eloquent builder.
      *
      * @param  int  $limit
      * @return $this
      */
     public function limit($limit)
     {
-        if ($this->queryBuilder instanceof ScoutBuilder) {
-            $this->queryBuilder->take($limit);
-        } else {
-            $this->queryBuilder->limit($limit);
-        }
-
-        return $this;
+        return $this->tap(function ($query) use ($limit) {
+            $query->limit($limit);
+        });
     }
 
     /**
@@ -169,6 +170,22 @@ class Builder implements QueryBuilder
     public function get()
     {
         return $this->applyQueryCallbacks($this->queryBuilder)->get();
+    }
+
+    /**
+     * Get a lazy collection for the given query by chunks of the given size.
+     *
+     * @param  int  $chunkSize
+     * @return \Illuminate\Support\LazyCollection
+     */
+    public function lazy($chunkSize = 1000)
+    {
+        if (! method_exists($this->queryBuilder, 'lazy')) {
+            return $this->cursor();
+        }
+
+        return $this->applyQueryCallbacks($this->queryBuilder)
+                    ->lazy($chunkSize);
     }
 
     /**
@@ -196,7 +213,7 @@ class Builder implements QueryBuilder
      * Get the paginated results of the query.
      *
      * @param  int  $perPage
-     * @return array
+     * @return array{0: \Illuminate\Contracts\Pagination\Paginator, 1: int|null, 2: bool}
      */
     public function paginate($perPage)
     {

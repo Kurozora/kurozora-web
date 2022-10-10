@@ -1,15 +1,15 @@
 <template>
-  <card class="relative">
+  <Card class="relative">
     <div
       v-if="loading"
-      class="rounded-lg flex items-center justify-center absolute pin z-50"
+      class="rounded-lg flex items-center justify-center absolute inset-0 z-30"
       :class="modeClass"
     >
-      <loader class="text-60" />
+      <Loader class="text-gray-300" width="30" />
     </div>
 
     <slot />
-  </card>
+  </Card>
 </template>
 
 <script>
@@ -31,7 +31,7 @@ export default {
 
   computed: {
     modeClass() {
-      return this.mode == 'light' ? 'bg-white' : 'bg-90'
+      return this.mode == 'light' ? 'bg-white dark:bg-gray-800' : 'bg-90'
     },
   },
 }

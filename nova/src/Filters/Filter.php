@@ -2,11 +2,10 @@
 
 namespace Laravel\Nova\Filters;
 
-use Illuminate\Container\Container;
-use Illuminate\Http\Request;
 use JsonSerializable;
 use Laravel\Nova\AuthorizedToSee;
 use Laravel\Nova\Contracts\Filter as FilterContract;
+use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Makeable;
 use Laravel\Nova\Metable;
 use Laravel\Nova\Nova;
@@ -33,20 +32,23 @@ abstract class Filter implements FilterContract, JsonSerializable
     /**
      * Apply the filter to the given query.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  mixed  $value
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    abstract public function apply(Request $request, $query, $value);
+    abstract public function apply(NovaRequest $request, $query, $value);
 
     /**
      * Get the filter's available options.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return array
      */
-    abstract public function options(Request $request);
+    public function options(NovaRequest $request)
+    {
+        return [];
+    }
 
     /**
      * Get the component name for the filter.
@@ -91,19 +93,22 @@ abstract class Filter implements FilterContract, JsonSerializable
     /**
      * Prepare the filter for JSON serialization.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
-        $container = Container::getInstance();
-
         return array_merge([
             'class' => $this->key(),
             'name' => $this->name(),
             'component' => $this->component(),
-            'options' => collect($this->options($container->make(Request::class)))->map(function ($value, $key) {
-                return is_array($value) ? ($value + ['value' => $key]) : ['name' => $key, 'value' => $value];
+            'options' => collect($this->options(app(NovaRequest::class)))->map(function ($value, $label) {
+                if (is_array($value)) {
+                    return array_merge(['label' => $label], $value);
+                } elseif (is_string($label)) {
+                    return ['label' => $label, 'value' => $value];
+                }
+
+                return ['label' => $value, 'value' => $value];
             })->values()->all(),
             'currentValue' => $this->default() ?? '',
         ], $this->meta());

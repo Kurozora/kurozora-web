@@ -12,7 +12,7 @@ class MorphedResourceAttachController extends ResourceAttachController
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @param  \Illuminate\Database\Eloquent\Relations\MorphToMany  $relationship
-     * @return \Illuminate\Database\Eloquent\Pivot
+     * @return \Illuminate\Database\Eloquent\Relations\Pivot
      */
     protected function initializePivot(NovaRequest $request, $relationship)
     {

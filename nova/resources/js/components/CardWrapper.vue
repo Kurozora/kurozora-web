@@ -1,24 +1,18 @@
 <template>
-  <div
-    class="px-3 mb-6"
-    :class="widthClass"
+  <component
+    :class="[widthClass, heightClass]"
     :key="`${card.component}.${card.uriKey}`"
-  >
-    <component
-      :class="cardSizeClass"
-      :is="card.component"
-      :card="card"
-      :resource="resource"
-      :resourceName="resourceName"
-      :resourceId="resourceId"
-      :lens="lens"
-    />
-  </div>
+    class="h-full"
+    :is="card.component"
+    :card="card"
+    :resource="resource"
+    :resourceName="resourceName"
+    :resourceId="resourceId"
+    :lens="lens"
+  />
 </template>
 
 <script>
-import { CardSizes } from 'laravel-nova'
-
 export default {
   props: {
     card: {
@@ -26,21 +20,19 @@ export default {
       required: true,
     },
 
-    size: {
-      type: String,
-      default: '',
-    },
-
     resource: {
       type: Object,
+      required: false,
     },
 
     resourceName: {
       type: String,
+      default: '',
     },
 
     resourceId: {
       type: [Number, String],
+      default: '',
     },
 
     lens: {
@@ -54,25 +46,19 @@ export default {
      * The class given to the card wrappers based on its width
      */
     widthClass() {
-      // return 'w-full'
-      // If we're passing in 'large' as the value we want to force the
-      // cards to be given the `w-full` class, otherwise we're letting
-      // the card decide for itself based on its configuration
-      return this.size == 'large' ? 'w-full' : calculateCardWidth(this.card)
+      return {
+        full: 'md:col-span-12',
+        '1/3': 'md:col-span-4',
+        '1/2': 'md:col-span-6',
+        '1/4': 'md:col-span-3',
+        '2/3': 'md:col-span-8',
+        '3/4': 'md:col-span-9',
+      }[this.card.width]
     },
 
-    /**
-     * The class given to the card based on its size
-     */
-    cardSizeClass() {
-      return this.size !== 'large' ? 'card-panel' : ''
+    heightClass() {
+      return this.card.height == 'fixed' ? 'min-h-40' : ''
     },
   },
-}
-
-function calculateCardWidth(card) {
-  // If the card's width is found in the accepted sizes return that class,
-  // or return the default 1/3 class
-  return CardSizes.indexOf(card.width) !== -1 ? `w-${card.width}` : 'w-1/3'
 }
 </script>

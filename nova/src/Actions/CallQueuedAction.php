@@ -2,14 +2,16 @@
 
 namespace Laravel\Nova\Actions;
 
+use Illuminate\Bus\Batchable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Laravel\Nova\Contracts\BatchableAction;
 use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Nova;
 
 class CallQueuedAction
 {
-    use CallsQueuedActions;
+    use Batchable, CallsQueuedActions;
 
     /**
      * The Eloquent model/data collection.
@@ -25,16 +27,16 @@ class CallQueuedAction
      * @param  string  $method
      * @param  \Laravel\Nova\Fields\ActionFields  $fields
      * @param  \Illuminate\Support\Collection  $models
-     * @param  string  $batchId
+     * @param  string  $actionBatchId
      * @return void
      */
-    public function __construct(Action $action, $method, ActionFields $fields, Collection $models, $batchId)
+    public function __construct(Action $action, $method, ActionFields $fields, Collection $models, $actionBatchId)
     {
         $this->action = $action;
         $this->method = $method;
         $this->fields = $fields;
         $this->models = $models;
-        $this->batchId = $batchId;
+        $this->actionBatchId = $actionBatchId;
     }
 
     /**
@@ -44,8 +46,13 @@ class CallQueuedAction
      */
     public function handle()
     {
-        return $this->callAction(function ($action) {
-            return $action->withBatchId($this->batchId)->{$this->method}($this->fields, $this->models);
+        $this->callAction(function ($action) {
+            if ($action instanceof BatchableAction) {
+                $action->withBatchId($this->batchId);
+            }
+
+            return $action->withActionBatchId($this->actionBatchId)
+                        ->{$this->method}($this->fields, $this->models);
         });
     }
 
@@ -57,7 +64,9 @@ class CallQueuedAction
      */
     public function failed($e)
     {
-        Nova::actionEvent()->markBatchAsFailed($this->batchId, $e);
+        Nova::usingActionEvent(function ($actionEvent) use ($e) {
+            $actionEvent->markBatchAsFailed($this->actionBatchId, $e);
+        });
 
         if ($method = $this->failedMethodName()) {
             call_user_func([$this->action, $method], $this->fields, $this->models, $e);

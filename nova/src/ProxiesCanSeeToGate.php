@@ -22,7 +22,7 @@ trait ProxiesCanSeeToGate
         }
 
         return $this->canSee(function ($request) use ($ability, $arguments) {
-            return $request->user()->can($ability, $arguments);
+            return Nova::user($request)->can($ability, $arguments);
         });
     }
 }

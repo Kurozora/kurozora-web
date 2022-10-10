@@ -20,6 +20,6 @@ class Help extends Card
      */
     public function component()
     {
-        return 'help';
+        return 'help-card';
     }
 }

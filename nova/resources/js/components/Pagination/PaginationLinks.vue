@@ -1,91 +1,91 @@
 <template>
-  <div class="bg-20 rounded-b-lg">
-    <nav class="flex items-center">
-      <div class="flex text-sm">
-        <!-- First Link -->
-        <button
-          :disabled="!hasPreviousPages || linksDisabled"
-          class="font-mono btn btn-link h-9 min-w-9 px-2 border-r border-50"
-          :class="{
-            'text-primary dim': hasPreviousPages,
-            'text-80 opacity-50': !hasPreviousPages || linksDisabled,
-          }"
-          rel="first"
-          @click.prevent="selectPage(1)"
-          dusk="first"
-        >
-          &laquo;
-        </button>
+  <nav class="rounded-b-lg font-bold flex items-center">
+    <div class="flex text-sm">
+      <!-- First Link -->
+      <button
+        :disabled="!hasPreviousPages || linksDisabled"
+        class="border-r border-gray-200 dark:border-gray-700 text-xl h-9 min-w-9 px-2 rounded-bl-lg focus:outline-none focus:bg-gray-50 hover:bg-gray-50 dark:hover:bg-gray-700"
+        :class="{
+          'text-gray-500': hasPreviousPages,
+          'text-gray-500': !hasPreviousPages || linksDisabled,
+        }"
+        rel="first"
+        @click.prevent="selectPage(1)"
+        dusk="first"
+      >
+        &laquo;
+      </button>
 
-        <!-- Previous Link -->
-        <button
-          :disabled="!hasPreviousPages || linksDisabled"
-          class="font-mono btn btn-link h-9 min-w-9 px-2 border-r border-50"
-          :class="{
-            'text-primary dim': hasPreviousPages,
-            'text-80 opacity-50': !hasPreviousPages || linksDisabled,
-          }"
-          rel="prev"
-          @click.prevent="selectPreviousPage()"
-          dusk="previous"
-        >
-          &lsaquo;
-        </button>
+      <!-- Previous Link -->
+      <button
+        :disabled="!hasPreviousPages || linksDisabled"
+        class="border-r border-gray-200 dark:border-gray-700 text-xl h-9 min-w-9 px-2 focus:outline-none focus:bg-gray-50 hover:bg-gray-50 dark:hover:bg-gray-700"
+        :class="{
+          'text-gray-500': hasPreviousPages,
+          'text-gray-500': !hasPreviousPages || linksDisabled,
+        }"
+        rel="prev"
+        @click.prevent="selectPreviousPage()"
+        dusk="previous"
+      >
+        &lsaquo;
+      </button>
 
-        <!-- Pages Links -->
-        <button
-          :disabled="linksDisabled"
-          v-for="n in printPages"
-          :key="n"
-          class="btn btn-link h-9 min-w-9 px-2 border-r border-50"
-          :class="{
-            'text-primary dim': page !== n,
-            'text-80 opacity-50': page === n,
-          }"
-          @click.prevent="selectPage(n)"
-          :dusk="`page:${n}`"
-        >
-          {{ n }}
-        </button>
+      <!-- Pages Links -->
+      <button
+        :disabled="linksDisabled"
+        v-for="n in printPages"
+        :key="n"
+        class="border-r border-gray-200 dark:border-gray-700 h-9 min-w-9 px-2 focus:outline-none focus:bg-gray-50 hover:bg-gray-50 dark:hover:bg-gray-700"
+        :class="{
+          'text-gray-500': page !== n,
+          'text-gray-500 bg-gray-50 dark:bg-gray-700': page === n,
+        }"
+        @click.prevent="selectPage(n)"
+        :dusk="`page:${n}`"
+      >
+        {{ n }}
+      </button>
 
-        <!-- Next Link -->
-        <button
-          :disabled="!hasMorePages || linksDisabled"
-          class="font-mono btn btn-link h-9 min-w-9 px-2 border-r border-50"
-          :class="{
-            'text-primary dim': hasMorePages,
-            'text-80 opacity-50': !hasMorePages || linksDisabled,
-          }"
-          rel="next"
-          @click.prevent="selectNextPage()"
-          dusk="next"
-        >
-          &rsaquo;
-        </button>
+      <!-- Next Link -->
+      <button
+        :disabled="!hasMorePages || linksDisabled"
+        class="border-r border-gray-200 dark:border-gray-700 text-xl h-9 min-w-9 px-2 focus:outline-none focus:bg-gray-50 hover:bg-gray-50 dark:hover:bg-gray-700"
+        :class="{
+          'text-gray-500': hasMorePages,
+          'text-gray-500': !hasMorePages || linksDisabled,
+        }"
+        rel="next"
+        @click.prevent="selectNextPage()"
+        dusk="next"
+      >
+        &rsaquo;
+      </button>
 
-        <!-- Last Link -->
-        <button
-          :disabled="!hasMorePages || linksDisabled"
-          class="font-mono btn btn-link h-9 min-w-9 px-2 border-r border-50"
-          :class="{
-            'text-primary dim': hasMorePages,
-            'text-80 opacity-50': !hasMorePages || linksDisabled,
-          }"
-          rel="last"
-          @click.prevent="selectPage(pages)"
-          dusk="last"
-        >
-          &raquo;
-        </button>
-      </div>
+      <!-- Last Link -->
+      <button
+        :disabled="!hasMorePages || linksDisabled"
+        class="border-r border-gray-200 dark:border-gray-700 text-xl h-9 min-w-9 px-2 focus:outline-none focus:bg-gray-50 hover:bg-gray-50 dark:hover:bg-gray-700"
+        :class="{
+          'text-gray-500': hasMorePages,
+          'text-gray-500': !hasMorePages || linksDisabled,
+        }"
+        rel="last"
+        @click.prevent="selectPage(pages)"
+        dusk="last"
+      >
+        &raquo;
+      </button>
+    </div>
 
-      <slot />
-    </nav>
-  </div>
+    <slot />
+  </nav>
 </template>
 
 <script>
 export default {
+  emits: ['page'],
+
   props: {
     page: {
       type: Number,
@@ -108,9 +108,11 @@ export default {
   data: () => ({ linksDisabled: false }),
 
   mounted() {
-    Nova.$on('resources-loaded', () => {
-      this.linksDisabled = false
-    })
+    Nova.$on('resources-loaded', this.listenToResourcesLoaded)
+  },
+
+  beforeUnmount() {
+    Nova.$off('resources-loaded', this.listenToResourcesLoaded)
   },
 
   methods: {
@@ -136,6 +138,10 @@ export default {
      */
     selectNextPage() {
       this.selectPage(this.page + 1)
+    },
+
+    listenToResourcesLoaded() {
+      this.linksDisabled = false
     },
   },
 

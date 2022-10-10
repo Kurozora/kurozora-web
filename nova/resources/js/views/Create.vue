@@ -1,22 +1,26 @@
 <template>
-  <create-form
+  <CreateForm
     @resource-created="handleResourceCreated"
-    @cancelled-create="handleCancelledCreate"
+    @create-cancelled="handleCreateCancelled"
     :mode="mode"
     :resource-name="resourceName"
     :via-resource="viaResource"
     :via-resource-id="viaResourceId"
     :via-relationship="viaRelationship"
-    :update-form-status="updateFormStatus"
+    @update-form-status="onUpdateFormStatus"
     :should-override-meta="mode == 'form' ? true : false"
+    :form-unique-id="formUniqueId"
   />
 </template>
 
 <script>
-import { mapProps, PreventsFormAbandonment } from 'laravel-nova'
+import {mapProps, PreventsFormAbandonment, PreventsModalAbandonment,} from '@/mixins'
+import {uid} from 'uid/single'
 
 export default {
-  mixins: [PreventsFormAbandonment],
+  emits: ['refresh', 'create-cancelled'],
+
+  mixins: [PreventsFormAbandonment, PreventsModalAbandonment],
 
   props: {
     mode: {
@@ -33,23 +37,49 @@ export default {
     ]),
   },
 
+  data: () => ({
+    formUniqueId: uid(),
+  }),
+
   methods: {
     handleResourceCreated({ redirect, id }) {
-      this.canLeave = true
+      this.mode === 'form' ? this.allowLeavingForm() : this.allowLeavingModal()
+
+      Nova.$emit('resource-created', {
+        resourceName: this.resourceName,
+        resourceId: id,
+      })
 
       if (this.mode == 'form') {
-        return this.$router.push({ path: redirect })
+        return Nova.visit(redirect)
       }
 
       return this.$emit('refresh', { redirect, id })
     },
 
-    handleCancelledCreate() {
+    handleCreateCancelled() {
       if (this.mode == 'form') {
-        return this.$router.back()
+        this.handleProceedingToPreviousPage()
+        this.allowLeavingForm()
+
+        if (window.history.length > 1) {
+          window.history.back()
+        } else {
+          Nova.visit('/')
+        }
+
+        return
       }
 
-      return this.$emit('cancelled-create')
+      this.allowLeavingModal()
+      return this.$emit('create-cancelled')
+    },
+
+    /**
+     * Prevent accidental abandonment only if form was changed.
+     */
+    onUpdateFormStatus() {
+      this.mode == 'form' ? this.updateFormStatus() : this.updateModalStatus()
     },
   },
 }

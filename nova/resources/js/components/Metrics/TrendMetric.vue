@@ -17,19 +17,14 @@
 </template>
 
 <script>
-import _ from 'lodash'
-import { InteractsWithDates, Minimum } from 'laravel-nova'
-import BaseTrendMetric from './Base/TrendMetric'
-import MetricBehavior from './MetricBehavior'
+import map from 'lodash/map'
+import {InteractsWithDates, MetricBehavior} from '@/mixins'
+import {minimum} from '@/util'
 
 export default {
   name: 'TrendMetric',
 
   mixins: [InteractsWithDates, MetricBehavior],
-
-  components: {
-    BaseTrendMetric,
-  },
 
   props: {
     card: {
@@ -75,10 +70,20 @@ export default {
       this.selectedRangeKey =
         this.card.selectedRangeKey || this.card.ranges[0].value
     }
+
+    this.fetch()
   },
 
   mounted() {
-    this.fetch()
+    if (this.card && this.card.refreshWhenFiltersChange === true) {
+      Nova.$on('filter-changed', this.fetch)
+    }
+  },
+
+  beforeUnmount() {
+    if (this.card && this.card.refreshWhenFiltersChange === true) {
+      Nova.$off('filter-changed', this.fetch)
+    }
   },
 
   methods: {
@@ -90,7 +95,7 @@ export default {
     fetch() {
       this.loading = true
 
-      Minimum(Nova.request().get(this.metricEndpoint, this.metricPayload)).then(
+      minimum(Nova.request().get(this.metricEndpoint, this.metricPayload)).then(
         ({
           data: {
             value: {
@@ -109,7 +114,7 @@ export default {
           this.data = {
             labels: Object.keys(trend),
             series: [
-              _.map(trend, (value, label) => {
+              map(trend, (value, label) => {
                 return {
                   meta: label,
                   value: value,
@@ -138,6 +143,15 @@ export default {
           timezone: this.userTimezone,
           twelveHourTime: this.usesTwelveHourTime,
         },
+      }
+
+      if (
+        !Nova.missingResource(this.resourceName) &&
+        this.card &&
+        this.card.refreshWhenFiltersChange === true
+      ) {
+        payload.params.filter =
+          this.$store.getters[`${this.resourceName}/currentEncodedFilters`]
       }
 
       if (this.hasRanges) {

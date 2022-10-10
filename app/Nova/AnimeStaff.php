@@ -9,10 +9,13 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Titasgailius\SearchRelations\SearchesRelations;
 use Validator;
 
 class AnimeStaff extends Resource
 {
+    use SearchesRelations;
+
     /**
      * The model the resource corresponds to.
      *
@@ -44,6 +47,16 @@ class AnimeStaff extends Resource
     ];
 
     /**
+     * The relationship columns that should be searched.
+     *
+     * @var array
+     */
+    public static array $searchRelations = [
+        'person' => ['id', 'first_name', 'last_name', 'family_name', 'given_name'],
+        'anime' => ['id', 'original_title'],
+    ];
+
+    /**
      * The logical group associated with the resource.
      *
      * @var string
@@ -59,7 +72,8 @@ class AnimeStaff extends Resource
     public function fields(Request $request): array
     {
         return [
-            Heading::make('Identification'),
+            Heading::make('Identification')
+                ->onlyOnDetail(),
 
             ID::make()->sortable(),
 
@@ -75,7 +89,7 @@ class AnimeStaff extends Resource
                 ->sortable()
                 ->required(),
 
-            BelongsTo::make('Staff Role')
+            BelongsTo::make('Staff Role', 'staff_role')
                 ->searchable()
                 ->sortable(),
         ];

@@ -2,7 +2,7 @@
 
 namespace Laravel\Nova\Metrics;
 
-use Cake\Chronos\Chronos;
+use Carbon\CarbonImmutable;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,7 +13,7 @@ abstract class TrendDateExpression extends Expression
     /**
      * The query builder being used to build the trend.
      *
-     * @var \Illuminate\Database\Query\Builder
+     * @var \Illuminate\Database\Eloquent\Builder
      */
     public $query;
 
@@ -32,7 +32,7 @@ abstract class TrendDateExpression extends Expression
     public $unit;
 
     /**
-     * The users's local timezone.
+     * The user's local timezone.
      *
      * @var string
      */
@@ -63,7 +63,7 @@ abstract class TrendDateExpression extends Expression
     public function offset()
     {
         $timezoneOffset = function ($timezone) {
-            return (new DateTime(Chronos::now()->format('Y-m-d H:i:s'), new DateTimeZone($timezone)))->getOffset() / 60 / 60;
+            return (new DateTime(CarbonImmutable::now()->format('Y-m-d H:i:s'), new DateTimeZone($timezone)))->getOffset() / 60 / 60;
         };
 
         if ($this->timezone) {

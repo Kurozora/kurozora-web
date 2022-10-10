@@ -9,7 +9,7 @@ trait Storable
     /**
      * The name of the disk the file uses by default.
      *
-     * @var string
+     * @var string|null
      */
     public $disk;
 

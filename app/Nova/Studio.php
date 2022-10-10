@@ -211,7 +211,9 @@ class Studio extends Resource
                 ->help('The address of the studio.'),
 
             Date::make('Founded')
-                ->format('YYYY-MM-DD')
+                ->displayUsing(function ($founded) {
+                    return $founded?->format('Y-m-d');
+                })
                 ->help('The date on which the studio was founded. For example: 2015-12-03'),
 
             Code::make('Website URLs')

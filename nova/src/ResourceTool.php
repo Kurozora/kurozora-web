@@ -5,9 +5,12 @@ namespace Laravel\Nova;
 use Closure;
 use Illuminate\Support\Str;
 
+/**
+ * @method static static make()
+ */
 class ResourceTool extends Panel
 {
-    use ProxiesCanSeeToGate;
+    use Makeable, ProxiesCanSeeToGate;
 
     /**
      * The resource tool element.
@@ -19,7 +22,7 @@ class ResourceTool extends Panel
     /**
      * The resource tool's component.
      *
-     * @var string
+     * @var string|null
      */
     public $toolComponent;
 
@@ -33,16 +36,6 @@ class ResourceTool extends Panel
         parent::__construct($this->name(), [new ResourceToolElement($this->toolComponent())]);
 
         $this->element = $this->data[0];
-    }
-
-    /**
-     * Create a new resource tool instance.
-     *
-     * @return static
-     */
-    public static function make(...$arguments)
-    {
-        return new static(...$arguments);
     }
 
     /**
@@ -68,7 +61,7 @@ class ResourceTool extends Panel
     /**
      * Set the callback to be run to authorize viewing the card.
      *
-     * @param  \Closure  $callback
+     * @param  \Closure(\Illuminate\Http\Request):bool  $callback
      * @return $this
      */
     public function canSee(Closure $callback)
@@ -81,7 +74,7 @@ class ResourceTool extends Panel
     /**
      * Set additional meta information for the resource tool.
      *
-     * @param  array  $meta
+     * @param  array<string, mixed>  $meta
      * @return $this
      */
     public function withMeta(array $meta)

@@ -1,20 +1,16 @@
 <template>
-  <div>
-    <checkbox-with-label
-      class="m-2"
-      :checked="isChecked"
-      @input="updateCheckedState(option.value, $event.target.checked)"
-    >
-      {{ option.name }}
-    </checkbox-with-label>
-  </div>
+  <CheckboxWithLabel
+    :dusk="`${option.value}-checkbox`"
+    :checked="isChecked"
+    @input="updateCheckedState(option.value, $event.target.checked)"
+  >
+    {{ labelFor(option) }}
+  </CheckboxWithLabel>
 </template>
 
 <script>
-import Checkbox from '@/components/Index/Checkbox'
-
 export default {
-  components: { Checkbox },
+  emits: ['change'],
 
   props: {
     resourceName: {
@@ -23,9 +19,14 @@ export default {
     },
     filter: Object,
     option: Object,
+    label: { default: 'name' },
   },
 
   methods: {
+    labelFor(option) {
+      return option[this.label] || ''
+    },
+
     updateCheckedState(optionKey, checked) {
       let oldValue = this.filter.currentValue
       let newValue = { ...oldValue, [optionKey]: checked }

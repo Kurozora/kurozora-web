@@ -1,8 +1,15 @@
+<template>
+  <component :is="component" :class="classes">
+    <slot />
+  </component>
+</template>
+
 <script>
 const classes = {
-  1: 'text-90 font-normal text-2xl',
-  2: 'text-90 font-normal text-xl',
-  3: 'text-90 uppercase tracking-wide font-bold text-sm',
+  1: 'text-90 font-normal text-xl md:text-2xl',
+  2: 'text-90 font-normal md:text-xl',
+  3: 'text-90 uppercase tracking-wide font-bold md:text-sm',
+  4: 'text-90 font-normal md:text-2xl',
 }
 
 export default {
@@ -13,12 +20,13 @@ export default {
     },
   },
 
-  render(h) {
-    return h(
-      'h' + this.level,
-      { class: classes[this.level] },
-      this.$slots.default
-    )
+  computed: {
+    component() {
+      return 'h' + this.level
+    },
+    classes() {
+      return classes[this.level]
+    },
   },
 }
 </script>

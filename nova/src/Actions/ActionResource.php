@@ -11,16 +11,28 @@ use Laravel\Nova\Fields\Status;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Nova;
 use Laravel\Nova\Resource;
 
+/**
+ * @template TActionModel of \Laravel\Nova\Actions\ActionEvent
+ * @extends \Laravel\Nova\Resource<TActionModel>
+ */
 class ActionResource extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var string
+     * @var class-string<TActionModel>
      */
     public static $model = ActionEvent::class;
+
+    /**
+     * The single value that should be used to represent the resource when being displayed.
+     *
+     * @var string
+     */
+    public static $title = 'name';
 
     /**
      * Indicates if the resource should be globally searchable.
@@ -59,6 +71,17 @@ class ActionResource extends Resource
     }
 
     /**
+     * Determine if the current user can replicate the given resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    public function authorizedToReplicate(Request $request)
+    {
+        return false;
+    }
+
+    /**
      * Determine if the current user can delete resources.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -72,38 +95,38 @@ class ActionResource extends Resource
     /**
      * Get the fields displayed by the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return array
      */
-    public function fields(Request $request)
+    public function fields(NovaRequest $request)
     {
         return [
-            ID::make('ID', 'id'),
+            ID::make(Nova::__('ID'), 'id')->showOnPreview(),
             Text::make(__('Action Name'), 'name', function ($value) {
-                return __($value);
-            }),
+                return Nova::__($value);
+            })->showOnPreview(),
 
             Text::make(__('Action Initiated By'), function () {
                 return $this->user->name ?? $this->user->email ?? __('Nova User');
-            }),
+            })->showOnPreview(),
 
-            MorphToActionTarget::make(__('Action Target'), 'target'),
+            MorphToActionTarget::make(__('Action Target'), 'target')->showOnPreview(),
 
             Status::make(__('Action Status'), 'status', function ($value) {
                 return __(ucfirst($value));
-            })->loadingWhen([__('Waiting'), __('Running')])->failedWhen([__('Failed')]),
+            })->loadingWhen([Nova::__('Waiting'), Nova::__('Running')])->failedWhen([Nova::__('Failed')]),
 
             $this->when(isset($this->original), function () {
-                return KeyValue::make(__('Original'), 'original');
+                return KeyValue::make(Nova::__('Original'), 'original')->showOnPreview();
             }),
 
             $this->when(isset($this->changes), function () {
-                return KeyValue::make(__('Changes'), 'changes');
+                return KeyValue::make(Nova::__('Changes'), 'changes')->showOnPreview();
             }),
 
-            Textarea::make(__('Exception'), 'exception'),
+            Textarea::make(Nova::__('Exception'), 'exception')->showOnPreview(),
 
-            DateTime::make(__('Action Happened At'), 'created_at')->exceptOnForms(),
+            DateTime::make(__('Action Happened At'), 'created_at')->exceptOnForms()->showOnPreview(),
         ];
     }
 
@@ -147,7 +170,7 @@ class ActionResource extends Resource
      */
     public static function label()
     {
-        return __('Actions');
+        return Nova::__('Actions');
     }
 
     /**
@@ -157,7 +180,7 @@ class ActionResource extends Resource
      */
     public static function singularLabel()
     {
-        return __('Action');
+        return Nova::__('Action');
     }
 
     /**

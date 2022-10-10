@@ -24,6 +24,16 @@ class LensActionRequest extends ActionRequest
     }
 
     /**
+     * Transform the request into a query without scope.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function toQueryWithoutScopes()
+    {
+        return $this->toQuery();
+    }
+
+    /**
      * Get the all actions for the request.
      *
      * @return \Illuminate\Support\Collection

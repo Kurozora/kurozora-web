@@ -5,6 +5,10 @@ namespace Laravel\Nova\Trix;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * @property string $attachment
+ * @property string $disk
+ */
 class Attachment extends Model
 {
     /**

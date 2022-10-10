@@ -27,7 +27,7 @@ class UserLibrary extends Resource
      */
     public static function authorizedToViewAny(Request $request): bool
     {
-        return $request->user()->can('viewUserLibrary');
+        return $request->user()?->can('viewUserLibrary') ?? false;
     }
 
     /**
@@ -62,7 +62,8 @@ class UserLibrary extends Resource
     public function fields(Request $request): array
     {
         return [
-            Heading::make('Identification'),
+            Heading::make('Identification')
+                ->onlyOnDetail(),
 
             ID::make()->sortable(),
 
@@ -85,13 +86,17 @@ class UserLibrary extends Resource
 
             Date::make('Start Date')
                 ->default(now())
-                ->format('DD-MM-YYYY')
+                ->displayUsing(function ($startDate) {
+                    return $startDate?->format('Y-m-d');
+                })
                 ->required()
                 ->sortable()
                 ->help('The date on which the user started tracking. For example: 2015-12-03'),
 
             Date::make('End Date')
-                ->format('DD-MM-YYYY')
+                ->displayUsing(function ($startDate) {
+                    return $startDate?->format('Y-m-d');
+                })
                 ->sortable()
                 ->help('The date on which the user finished tracking. For example: 2015-12-03'),
         ];

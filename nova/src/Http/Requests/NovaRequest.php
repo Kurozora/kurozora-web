@@ -3,14 +3,25 @@
 namespace Laravel\Nova\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Laravel\Nova\MemoizesMethods;
 
+/**
+ * @property-read string|null $resource
+ * @property-read mixed|null $resourceId
+ * @property-read string|null $relatedResource
+ * @property-read mixed|null $relatedResourceId
+ * @property-read string|null $viaResource
+ * @property-read mixed|null $viaResourceId
+ * @property-read string|null $viaRelationship
+ * @property-read string|null $relationshipType
+ */
 class NovaRequest extends FormRequest
 {
-    use InteractsWithResources, InteractsWithRelatedResources, MemoizesMethods;
+    use InteractsWithResources;
+    use InteractsWithRelatedResources;
+    use InteractsWithResourcesSelection;
 
     /**
-     * Determine if this request is via a many to many relationship.
+     * Determine if this request is via a many-to-many relationship.
      *
      * @return bool
      */
@@ -23,13 +34,24 @@ class NovaRequest extends FormRequest
     }
 
     /**
-     * Determine if this request is an attach or create request.
+     * Determine if this request is an inline create or attach request.
+     *
+     * @return bool
+     */
+    public function isInlineCreateRequest()
+    {
+        return $this->isCreateOrAttachRequest() && $this->inline === 'true';
+    }
+
+    /**
+     * Determine if this request is a create or attach request.
      *
      * @return bool
      */
     public function isCreateOrAttachRequest()
     {
-        return $this->editing && in_array($this->editMode, ['create', 'attach']);
+        return $this instanceof ResourceCreateOrAttachRequest
+            || ($this->editing === 'true' && in_array($this->editMode, ['create', 'attach']));
     }
 
     /**
@@ -39,7 +61,8 @@ class NovaRequest extends FormRequest
      */
     public function isUpdateOrUpdateAttachedRequest()
     {
-        return $this->editing && in_array($this->editMode, ['update', 'update-attached']);
+        return $this instanceof ResourceUpdateOrUpdateAttachedRequest
+            || ($this->editing === 'true' && in_array($this->editMode, ['update', 'update-attached']));
     }
 
     /**
@@ -70,5 +93,17 @@ class NovaRequest extends FormRequest
     public function isActionRequest()
     {
         return $this->segment(3) == 'actions';
+    }
+
+    /**
+     * Determine if this request is either create, attach, update, update-attached or action request.
+     *
+     * @return bool
+     */
+    public function isFormRequest()
+    {
+        return $this->isCreateOrAttachRequest()
+            || $this->isUpdateOrUpdateAttachedRequest()
+            || $this->isActionRequest();
     }
 }

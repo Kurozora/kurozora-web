@@ -2,10 +2,16 @@
 
 namespace Laravel\Nova\Fields;
 
+use Illuminate\Support\Arr;
+use Laravel\Nova\Contracts\FilterableField;
+use Laravel\Nova\Fields\Filters\BooleanGroupFilter;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Nova;
 
-class BooleanGroup extends Field
+class BooleanGroup extends Field implements FilterableField
 {
+    use FieldFilterable, SupportsDependentFields;
+
     /**
      * The field's component.
      *
@@ -35,11 +41,15 @@ class BooleanGroup extends Field
     public $options;
 
     /**
+     * Determine false values should be hidden.
+     *
      * @var bool
      */
     public $hideFalseValues;
 
     /**
+     * Determine true values should be hidden.
+     *
      * @var bool
      */
     public $hideTrueValues;
@@ -47,7 +57,7 @@ class BooleanGroup extends Field
     /**
      * Set the options for the field.
      *
-     * @param  array|\Closure|\Illuminate\Support\Collection
+     * @param  \Closure():(array|\Illuminate\Support\Collection)|array|\Illuminate\Support\Collection  $options
      * @return $this
      */
     public function options($options)
@@ -123,18 +133,65 @@ class BooleanGroup extends Field
     }
 
     /**
+     * Make the field filter.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @return \Laravel\Nova\Fields\Filters\Filter
+     */
+    protected function makeFilter(NovaRequest $request)
+    {
+        return new BooleanGroupFilter($this);
+    }
+
+    /**
+     * Define the default filterable callback.
+     *
+     * @return callable(\Laravel\Nova\Http\Requests\NovaRequest, \Illuminate\Database\Eloquent\Builder, mixed, string):void
+     */
+    protected function defaultFilterableCallback()
+    {
+        return function (NovaRequest $request, $query, $value, $attribute) {
+            $value = collect($value)->reject(function ($value) {
+                return is_null($value);
+            })->all();
+
+            $query->when(! empty($value), function ($query) use ($value, $attribute) {
+                return $query->whereJsonContains($attribute, $value);
+            });
+        };
+    }
+
+    /**
      * Prepare the field for JSON serialization.
      *
      * @return array
      */
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function serializeForFilter()
+    {
+        return transform($this->jsonSerialize(), function ($field) {
+            $field['options'] = collect($field['options'])->transform(function ($option) {
+                return [
+                    'label' => $option['label'],
+                    'value' => $option['name'],
+                ];
+            });
+
+            return Arr::only($field, ['uniqueKey', 'options']);
+        });
+    }
+
+    /**
+     * Prepare the field for JSON serialization.
+     *
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
     {
         return array_merge(parent::jsonSerialize(), [
             'hideTrueValues' => $this->hideTrueValues,
             'hideFalseValues' => $this->hideFalseValues,
             'options' => $this->options,
-            'noValueText' => __($this->noValueText),
+            'noValueText' => Nova::__($this->noValueText),
         ]);
     }
 }

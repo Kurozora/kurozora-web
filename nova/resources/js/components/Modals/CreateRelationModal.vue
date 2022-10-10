@@ -1,27 +1,17 @@
 <template>
-  <modal
+  <Modal
     dusk="new-relation-modal"
-    tabindex="-1"
-    role="dialog"
-    @modal-close="handleClose"
-    :classWhitelist="[
-      'flatpickr-current-month',
-      'flatpickr-next-month',
-      'flatpickr-prev-month',
-      'flatpickr-weekday',
-      'flatpickr-weekdays',
-      'flatpickr-calendar',
-      'form-file-input',
-    ]"
+    :show="show"
+    @close-via-escape="handlePreventModalAbandonmentOnClose"
+    size="2xl"
   >
     <div
-      class="bg-40 rounded-lg shadow-lg overflow-hidden p-8"
-      style="width: 800px"
+      class="bg-gray-100 dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden p-8"
     >
-      <Create
+      <CreateResource
         mode="modal"
         @refresh="handleRefresh"
-        @cancelled-create="handleCancelledCreate"
+        @create-cancelled="handleCreateCancelled"
         :resource-name="resourceName"
         resource-id=""
         via-resource=""
@@ -29,16 +19,24 @@
         via-relationship=""
       />
     </div>
-  </modal>
+  </Modal>
 </template>
 
 <script>
-import Create from '@/views/Create'
+import {PreventsModalAbandonment} from '@/mixins'
+import CreateResource from '@/views/Create'
 
 export default {
-  components: { Create },
+  emits: ['set-resource', 'create-cancelled'],
+
+  mixins: [PreventsModalAbandonment],
+
+  components: {
+    CreateResource,
+  },
 
   props: {
+    show: { type: Boolean, default: false },
     resourceName: {},
     resourceId: {},
     viaResource: {},
@@ -48,19 +46,22 @@ export default {
 
   methods: {
     handleRefresh(data) {
-      // alert('wew refreshing')
       this.$emit('set-resource', data)
     },
 
-    handleCancelledCreate() {
-      return this.$emit('cancelled-create')
+    handleCreateCancelled() {
+      return this.$emit('create-cancelled')
     },
 
-    /**
-     * Close the modal.
-     */
-    handleClose() {
-      this.$emit('cancelled-create')
+    handlePreventModalAbandonmentOnClose() {
+      this.handlePreventModalAbandonment(
+        () => {
+          this.$emit('create-cancelled')
+        },
+        () => {
+          e.stopPropagation()
+        }
+      )
     },
   },
 }

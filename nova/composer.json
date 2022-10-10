@@ -14,24 +14,28 @@
   ],
   "require": {
     "php": "^7.3|^8.0",
-    "brick/money": "^0.5.0",
-    "cakephp/chronos": "^1.0|^2.0",
+    "brick/money": "^0.5.0|^0.6.0",
     "doctrine/dbal": "^2.13.3|^3.1.2",
-    "illuminate/support": "^8.67|^9.0",
-    "laravel/ui": "^3.3",
+    "illuminate/support": "^8.83.4|^9.3.1",
+    "inertiajs/inertia-laravel": "^0.4.5|^0.5.2|^0.6.0",
+    "laravel/ui": "^3.3|^4.0",
+    "nesbot/carbon": "^2.53.1",
+    "rap2hpoutre/fast-excel": "^3.2|^4.1",
     "spatie/once": "^1.1|^2.0|^3.0",
     "symfony/console": "^5.4|^6.0",
     "symfony/finder": "^5.4|^6.0",
-    "symfony/intl": "^5.4|^6.0",
+    "symfony/polyfill-intl-icu": "^1.22.1",
     "symfony/process": "^5.4|^6.0"
   },
   "require-dev": {
-    "laravel/legacy-factories": "^1.3",
-    "laravel/nova-dusk-suite": "8.3.x-dev|9.3.x-dev",
+    "laravel/nova-dusk-suite": "8.4.x-dev|9.4.x-dev",
+    "laravel/pint": "^1.0",
+    "laravel/scout": "^9.4",
     "mockery/mockery": "^1.4.4",
-    "orchestra/testbench-dusk": "^6.23|^7.0",
+    "nunomaduro/larastan": "^1.0.1|^2.0",
+    "orchestra/testbench-dusk": "^6.24|^7.0",
     "phpunit/phpunit": "^9.5.10",
-    "predis/predis": "^1.1"
+    "predis/predis": "^1.1.9|^2.0"
   },
   "autoload": {
     "psr-4": {
@@ -60,6 +64,10 @@
     "allow-plugins": {
       "composer/package-versions-deprecated": true
     },
+    "preferred-install": {
+      "laravel/nova-dusk-suite": "source",
+      "*": "auto"
+    },
     "sort-packages": true
   },
   "scripts": {
@@ -70,18 +78,25 @@
       "./vendor/bin/testbench-dusk package:discover"
     ],
     "dusk:dev-assets": [
-      "yarn install",
-      "yarn run dev",
-      "./vendor/bin/testbench-dusk nova:publish"
+      "npm ci",
+      "TAILWIND_MODE=build npm run dev",
+      "./vendor/bin/testbench-dusk nova:publish --force"
     ],
     "dusk:assets": [
-      "yarn install",
-      "yarn run prod",
-      "./vendor/bin/testbench-dusk nova:publish"
+      "npm ci",
+      "TAILWIND_MODE=build npm run prod",
+      "./vendor/bin/testbench-dusk nova:publish --force"
     ],
     "dusk:test": [
+      "./vendor/bin/testbench-dusk package:dusk-purge",
       "./vendor/bin/phpunit -c phpunit.dusk.xml"
+    ],
+    "dusk:filter": [
+      "./vendor/bin/testbench-dusk package:dusk-purge && ./vendor/bin/phpunit -c phpunit.dusk.xml --filter"
     ]
+  },
+  "suggest": {
+    "ext-intl": "Required to format Currency field"
   },
   "repositories": [
     {
@@ -91,5 +106,5 @@
   ],
   "minimum-stability": "dev",
   "prefer-stable": true,
-  "version": "3.31.0"
+  "version": "4.15.2"
 }

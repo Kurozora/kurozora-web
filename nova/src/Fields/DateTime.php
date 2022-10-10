@@ -2,40 +2,71 @@
 
 namespace Laravel\Nova\Fields;
 
+use Carbon\Carbon;
+use Carbon\CarbonInterface;
+use Carbon\CarbonInterval;
 use DateTimeInterface;
 use Exception;
+use Illuminate\Support\Arr;
+use Laravel\Nova\Contracts\FilterableField;
+use Laravel\Nova\Fields\Filters\DateTimeFilter;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class DateTime extends Field
+class DateTime extends Field implements FilterableField
 {
+    use FieldFilterable, SupportsDependentFields;
+
     /**
      * The field's component.
      *
      * @var string
      */
-    public $component = 'date-time';
+    public $component = 'date-time-field';
 
     /**
-     * Cast format from DateTime instance.
+     * The original raw value of the field.
      *
      * @var string
      */
-    protected $dateFormat = 'Y-m-d H:i:s.u';
+    public $originalValue;
+
+    /**
+     * The minimum value that can be assigned to the field.
+     *
+     * @var string|null
+     */
+    public $min;
+
+    /**
+     * The maximum value that can be assigned to the field.
+     *
+     * @var string|null
+     */
+    public $max;
+
+    /**
+     * The step size the field will increment and decrement by.
+     *
+     * @var int|null
+     */
+    public $step;
 
     /**
      * Create a new field.
      *
      * @param  string  $name
-     * @param  string|null  $attribute
-     * @param  mixed|null  $resolveCallback
+     * @param  string|\Closure|callable|object|null  $attribute
+     * @param  (callable(mixed, mixed, ?string):mixed)|null  $resolveCallback
      * @return void
      */
-    public function __construct($name, $attribute = null, $resolveCallback = null)
+    public function __construct($name, $attribute = null, callable $resolveCallback = null)
     {
-        parent::__construct($name, $attribute, $resolveCallback ?? function ($value) {
+        parent::__construct($name, $attribute, $resolveCallback ?? function ($value, $request) {
             if (! is_null($value)) {
                 if ($value instanceof DateTimeInterface) {
-                    return $value->format($this->dateFormat);
+                    return $value instanceof CarbonInterface
+                        ? $value->toIso8601String()
+                        : $value->format(DateTimeInterface::ATOM);
                 }
 
                 throw new Exception("DateTime field must cast to 'datetime' in Eloquent model.");
@@ -44,79 +75,48 @@ class DateTime extends Field
     }
 
     /**
-     * Set the first day of the week.
+     * The minimum value that can be assigned to the field.
      *
-     * @param  int  $day
+     * @param  \Carbon\CarbonInterface|string  $min
      * @return $this
      */
-    public function firstDayOfWeek($day)
+    public function min($min)
     {
-        return $this->withMeta([__FUNCTION__ => $day]);
-    }
-
-    /**
-     * Set the date format (Moment.js) that should be used to display the date.
-     *
-     * @param  string  $format
-     * @return $this
-     */
-    public function format($format)
-    {
-        return $this->withMeta([__FUNCTION__ => $format]);
-    }
-
-    /**
-     * Set the date format (flatpickr.js) that should be used in the input field (picker).
-     *
-     * @param  string  $format
-     * @return $this
-     */
-    public function pickerFormat($format)
-    {
-        return $this->withMeta([__FUNCTION__ => $format]);
-    }
-
-    /**
-     * Set a readable date format, that should be used to display the date to the user.
-     *
-     * @param  string  $format
-     * @return $this
-     */
-    public function pickerDisplayFormat($format)
-    {
-        return $this->withMeta([__FUNCTION__ => $format]);
-    }
-
-    /**
-     * Set picker hour increment.
-     *
-     * @param  int  $increment
-     * @return $this
-     */
-    public function incrementPickerHourBy($increment)
-    {
-        $increment = intval($increment);
-
-        if ($increment > 0 && $increment < 24) {
-            return $this->withMeta(['pickerHourIncrement' => $increment]);
+        if (is_string($min)) {
+            $min = Carbon::parse($min);
         }
+
+        $this->min = $min->toDateTimeLocalString();
 
         return $this;
     }
 
     /**
-     * Set picker minute increment.
+     * The maximum value that can be assigned to the field.
      *
-     * @param  int  $increment
+     * @param  \Carbon\CarbonInterface|string  $max
      * @return $this
      */
-    public function incrementPickerMinuteBy($increment)
+    public function max($max)
     {
-        $increment = intval($increment);
-
-        if ($increment > 0 && $increment < 60) {
-            return $this->withMeta(['pickerMinuteIncrement' => $increment]);
+        if (is_string($max)) {
+            $max = Carbon::parse($max);
         }
+
+        $this->max = $max->toDateTimeLocalString();
+
+        return $this;
+    }
+
+    /**
+     * The step size the field will increment and decrement by.
+     *
+     * @param  int|\Carbon\CarbonInterval  $step
+     * @return $this
+     */
+    public function step($step)
+    {
+        $this->step = $step instanceof CarbonInterval ? $step->totalSeconds : $step;
 
         return $this;
     }
@@ -132,9 +132,99 @@ class DateTime extends Field
         $value = parent::resolveDefaultValue($request);
 
         if ($value instanceof DateTimeInterface) {
-            return $value->format($this->dateFormat);
+            return $value instanceof CarbonInterface
+                ? $value->toIso8601String()
+                : $value->format(DateTimeInterface::ATOM);
         }
 
         return $value;
+    }
+
+    /**
+     * Resolve the field's value using the display callback.
+     *
+     * @param  mixed  $value
+     * @param  mixed  $resource
+     * @param  string  $attribute
+     * @return void
+     */
+    protected function resolveUsingDisplayCallback($value, $resource, $attribute)
+    {
+        $this->usesCustomizedDisplay = true;
+
+        if ($value instanceof DateTimeInterface) {
+            $this->value = $value instanceof CarbonInterface
+                ? $value->toIso8601String()
+                : $value->format(DateTimeInterface::ATOM);
+        }
+
+        $this->originalValue = $this->value;
+        $this->displayedAs = call_user_func($this->displayCallback, $value, $resource, $attribute);
+    }
+
+    /**
+     * Make the field filter.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @return \Laravel\Nova\Fields\Filters\Filter
+     */
+    protected function makeFilter(NovaRequest $request)
+    {
+        return new DateTimeFilter($this);
+    }
+
+    /**
+     * Define the default filterable callback.
+     *
+     * @return callable(\Laravel\Nova\Http\Requests\NovaRequest, \Illuminate\Database\Eloquent\Builder, mixed, string):\Illuminate\Database\Eloquent\Builder
+     */
+    protected function defaultFilterableCallback()
+    {
+        return function (NovaRequest $request, $query, $value, $attribute) {
+            [$min, $max] = $value;
+
+            if (! is_null($min) && ! is_null($max)) {
+                return $query->whereBetween($attribute, [$min, $max]);
+            } elseif (! is_null($min)) {
+                return $query->whereDate($attribute, '>=', $min);
+            }
+
+            return $query->whereDate($attribute, '<=', $max);
+        };
+    }
+
+    /**
+     * Prepare the field for JSON serialization.
+     *
+     * @return array
+     */
+    public function serializeForFilter()
+    {
+        return transform($this->jsonSerialize(), function ($field) {
+            return Arr::only($field, [
+                'uniqueKey',
+                'name',
+                'attribute',
+                'type',
+                'placeholder',
+                'extraAttributes',
+            ]);
+        });
+    }
+
+    /**
+     * Prepare the field for JSON serialization.
+     *
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return array_merge([
+            'originalValue' => $this->originalValue,
+        ], array_filter([
+            'min' => $this->min,
+            'max' => $this->max,
+            'step' => $this->step ?? 1,
+        ]), parent::jsonSerialize());
     }
 }

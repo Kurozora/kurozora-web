@@ -2,8 +2,13 @@
 
 namespace Laravel\Nova\Fields;
 
-class Heading extends Field
+/**
+ * @method static static make(mixed $name, string|null $attribute = null, callable|null $resolveCallback = null)
+ */
+class Heading extends Field implements Unfillable
 {
+    use SupportsDependentFields;
+
     /**
      * The field's component.
      *
@@ -16,12 +21,12 @@ class Heading extends Field
      *
      * @param  string  $name
      * @param  string|null  $attribute
-     * @param  mixed|null  $resolveCallback
+     * @param  (callable(mixed, mixed, ?string):mixed)|null  $resolveCallback
      * @return void
      */
-    public function __construct($name, $attribute = null, $resolveCallback = null)
+    public function __construct($name, $attribute = null, callable $resolveCallback = null)
     {
-        parent::__construct(null, $attribute, $resolveCallback);
+        parent::__construct($name, $attribute, $resolveCallback);
 
         $this->withMeta(['value' => $name]);
         $this->hideFromIndex();

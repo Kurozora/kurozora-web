@@ -7,7 +7,7 @@ abstract class RangedMetric extends Metric
     /**
      * The ranges available for the metric.
      *
-     * @var array
+     * @var array<string|int, string>
      */
     public $ranges = [];
 
@@ -44,14 +44,13 @@ abstract class RangedMetric extends Metric
     /**
      * Prepare the metric for JSON serialization.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return array_merge(parent::jsonSerialize(), [
             'selectedRangeKey' => $this->selectedRangeKey,
-            'ranges' => collect($this->ranges() ?? [])->map(function ($range, $key) {
+            'ranges' => collect($this->ranges())->map(function ($range, $key) {
                 return ['label' => $range, 'value' => $key];
             })->values()->all(),
         ]);

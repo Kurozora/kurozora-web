@@ -27,7 +27,7 @@ class Session extends Resource
      */
     public static function authorizedToViewAny(Request $request): bool
     {
-        return $request->user()->can('viewSession');
+        return $request->user()?->can('viewSession') ?? false;
     }
 
     /**
@@ -69,7 +69,8 @@ class Session extends Resource
     public function fields(Request $request): array
     {
         return [
-            Heading::make('Identification'),
+            Heading::make('Identification')
+                ->onlyOnDetail(),
 
             ID::make()->sortable(),
 
@@ -78,7 +79,7 @@ class Session extends Resource
             Text::make('IP Address', 'ip_address')
                 ->sortable(),
 
-            Text::make('User Agent')
+            Text::make('User Agent', 'user_agent')
                 ->hideFromIndex(),
 
             Code::make('Payload'),
@@ -86,7 +87,7 @@ class Session extends Resource
             BelongsTo::make('User')
                 ->searchable(),
 
-            MorphOne::make('Session Attribute'),
+            MorphOne::make('Session Attribute', 'session_attribute'),
         ];
     }
 

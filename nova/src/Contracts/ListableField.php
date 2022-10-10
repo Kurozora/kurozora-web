@@ -2,7 +2,10 @@
 
 namespace Laravel\Nova\Contracts;
 
-interface ListableField
+/**
+ * @mixin \Laravel\Nova\Fields\Field
+ */
+interface ListableField extends BehavesAsPanel
 {
     //
 }

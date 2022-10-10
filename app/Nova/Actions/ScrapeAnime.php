@@ -6,12 +6,14 @@ use App\Models\Anime;
 use Artisan;
 use Exception;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
-class ScrapeAnime extends Action
+class ScrapeAnime extends Action implements ShouldQueue
 {
     use InteractsWithQueue, Queueable;
 
@@ -68,9 +70,10 @@ class ScrapeAnime extends Action
     /**
      * Get the fields available on the action.
      *
+     * @param NovaRequest $request
      * @return array
      */
-    public function fields(): array
+    public function fields(NovaRequest $request): array
     {
         return [];
     }

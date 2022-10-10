@@ -9,12 +9,12 @@ trait HasDownload
     /**
      * The callback used to generate the download HTTP response.
      *
-     * @var callable
+     * @var (callable(\Laravel\Nova\Http\Requests\NovaRequest, \Laravel\Nova\Resource, ?string, ?string):mixed)|null
      */
     public $downloadResponseCallback;
 
     /**
-     * Determin if the file is able to be downloaded.
+     * Determine if the file is able to be downloaded.
      *
      * @var bool
      */
@@ -35,7 +35,7 @@ trait HasDownload
     /**
      * Specify the callback that should be used to create a download HTTP response.
      *
-     * @param  callable  $downloadResponseCallback
+     * @param  callable(\Laravel\Nova\Http\Requests\NovaRequest, \Laravel\Nova\Resource, ?string, ?string):mixed  $downloadResponseCallback
      * @return $this
      */
     public function download(callable $downloadResponseCallback)

@@ -21,10 +21,10 @@ class Image extends File
      * @param  string  $name
      * @param  string|null  $attribute
      * @param  string|null  $disk
-     * @param  callable|null  $storageCallback
+     * @param  (callable(\Laravel\Nova\Http\Requests\NovaRequest, object, string, string, ?string, ?string):mixed)|null  $storageCallback
      * @return void
      */
-    public function __construct($name, $attribute = null, $disk = 'public', $storageCallback = null)
+    public function __construct($name, $attribute = null, $disk = null, $storageCallback = null)
     {
         parent::__construct($name, $attribute, $disk, $storageCallback);
 
@@ -40,10 +40,9 @@ class Image extends File
     /**
      * Prepare the field element for JSON serialization.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return array_merge(parent::jsonSerialize(), $this->imageAttributes());
     }

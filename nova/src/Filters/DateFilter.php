@@ -2,8 +2,6 @@
 
 namespace Laravel\Nova\Filters;
 
-use Illuminate\Http\Request;
-
 abstract class DateFilter extends Filter
 {
     /**
@@ -22,16 +20,5 @@ abstract class DateFilter extends Filter
     public function firstDayOfWeek($day)
     {
         return $this->withMeta([__FUNCTION__ => $day]);
-    }
-
-    /**
-     * Get the filter's available options.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    public function options(Request $request)
-    {
-        //
     }
 }

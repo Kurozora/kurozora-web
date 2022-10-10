@@ -66,6 +66,10 @@ class Theme extends Resource
 
             ID::make()->sortable(),
 
+            Number::make('MAL ID')
+                ->hideFromIndex()
+                ->help('Used to identify the Theme on <a target="_blank" href="https://myanimelist.net/anime/genre/' . ($this->resource->mal_id ?? 'slug-identifier') . '">MyAnimeList</a>'),
+
             Heading::make('Media'),
 
             Images::make('Symbol')

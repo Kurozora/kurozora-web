@@ -52,6 +52,10 @@ class DashboardCommand extends GeneratorCommand
      */
     protected function getStub()
     {
+        if ($this->argument('name') === 'Main') {
+            return $this->resolveStubPath('/stubs/nova/main-dashboard.stub');
+        }
+
         return $this->resolveStubPath('/stubs/nova/dashboard.stub');
     }
 

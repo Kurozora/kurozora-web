@@ -55,7 +55,7 @@ class Character extends Resource
      *
      * @var string
      */
-    public static $group = 'Characters';
+    public static $group = 'Character';
 
     /**
      * Get the fields displayed by the resource.
@@ -144,7 +144,9 @@ class Character extends Resource
 
             Select::make('Status')
                 ->options(CharacterStatus::asSelectArray())
-                ->displayUsingLabels()
+                ->displayUsing(function (?CharacterStatus $characterStatus) {
+                    return $characterStatus?->key;
+                })
                 ->nullable()
                 ->sortable()
                 ->help('The life status of the character. E.g. Alive, or Dead.'),
@@ -209,7 +211,9 @@ class Character extends Resource
 
             Select::make('Astrological Sign')
                 ->options(AstrologicalSign::asSelectArray())
-                ->displayUsingLabels()
+                ->displayUsing(function (?AstrologicalSign $astrologicalSign) {
+                    return $astrologicalSign?->key;
+                })
                 ->sortable(),
 
             HasMany::make('Cast'),

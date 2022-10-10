@@ -1,30 +1,45 @@
 <template>
-  <div :dusk="'dashboard-' + this.name">
-    <custom-dashboard-header class="mb-3" :dashboard-name="name" />
+  <LoadingView
+    :loading="loading"
+    :dusk="'dashboard-' + this.name"
+    class="space-y-3"
+  >
+    <Head :title="label" />
 
-    <heading v-if="cards.length > 1" class="mb-6">{{
-      __('Dashboard')
-    }}</heading>
+    <div
+      v-if="(label && !isHelpCard) || showRefreshButton"
+      class="flex items-center"
+    >
+      <Heading v-if="label && !isHelpCard">
+        {{ __(label) }}
+      </Heading>
+
+      <button
+        @click.stop="refreshDashboard"
+        type="button"
+        class="ml-1 hover:opacity-50 active:ring"
+        v-if="showRefreshButton"
+        tabindex="0"
+      >
+        <Icon
+          class="text-gray-500 dark:text-gray-400"
+          :solid="true"
+          type="refresh"
+          width="14"
+          v-tooltip="__('Refresh')"
+        />
+      </button>
+    </div>
 
     <div v-if="shouldShowCards">
-      <cards v-if="smallCards.length > 0" :cards="smallCards" class="mb-3" />
-      <cards v-if="largeCards.length > 0" :cards="largeCards" size="large" />
+      <Cards v-if="cards.length > 0" :cards="cards" />
     </div>
-  </div>
+  </LoadingView>
 </template>
-
 <script>
-import { CardSizes } from 'laravel-nova'
+import {minimum} from '@/util'
 
 export default {
-  metaInfo() {
-    return {
-      title: `${this.label}`,
-    }
-  },
-
-  data: () => ({ label: '', cards: '' }),
-
   props: {
     name: {
       type: String,
@@ -33,11 +48,13 @@ export default {
     },
   },
 
-  watch: {
-    name() {
-      this.fetchDashboard()
-    },
-  },
+  data: () => ({
+    loading: true,
+    label: '',
+    cards: [],
+    showRefreshButton: false,
+    isHelpCard: false,
+  }),
 
   created() {
     this.fetchDashboard()
@@ -45,18 +62,34 @@ export default {
 
   methods: {
     async fetchDashboard() {
-      const {
-        data: { label, cards },
-      } = await Nova.request()
-        .get(this.dashboardEndpoint, {
-          params: this.extraCardParams,
-        })
-        .catch(e => {
-          this.$router.push({ name: '404' })
-        })
+      this.loading = true
 
-      this.label = label
-      this.cards = cards
+      try {
+        const {
+          data: { label, cards, showRefreshButton, isHelpCard },
+        } = await minimum(
+          Nova.request().get(this.dashboardEndpoint, {
+            params: this.extraCardParams,
+          }),
+          200
+        )
+
+        this.loading = false
+        this.label = label
+        this.cards = cards
+        this.showRefreshButton = showRefreshButton
+        this.isHelpCard = isHelpCard
+      } catch (error) {
+        if (error.response.status == 401) {
+          return Nova.redirectToLogin()
+        }
+
+        Nova.visit('/404')
+      }
+    },
+
+    refreshDashboard() {
+      Nova.$emit('metric-refresh')
     },
   },
 
@@ -73,20 +106,6 @@ export default {
      */
     shouldShowCards() {
       return this.cards.length > 0
-    },
-
-    /**
-     * Return the small cards used for the Dashboard
-     */
-    smallCards() {
-      return _.filter(this.cards, c => CardSizes.indexOf(c.width) !== -1)
-    },
-
-    /**
-     * Return the full-width cards used for the Dashboard
-     */
-    largeCards() {
-      return _.filter(this.cards, c => c.width == 'full')
     },
 
     /**

@@ -13,7 +13,7 @@ class FieldDownloadController extends Controller
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function show(NovaRequest $request)
+    public function __invoke(NovaRequest $request)
     {
         $resource = $request->findResourceOrFail();
 

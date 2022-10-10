@@ -7,14 +7,14 @@ trait HasThumbnail
     /**
      * The callback used to retrieve the thumbnail URL.
      *
-     * @var callable
+     * @var (callable(mixed, string, mixed):?string)|null
      */
     public $thumbnailUrlCallback;
 
     /**
      * Specify the callback that should be used to retrieve the thumbnail URL.
      *
-     * @param  callable  $thumbnailUrlCallback
+     * @param  callable(mixed, string, mixed):?string  $thumbnailUrlCallback
      * @return $this
      */
     public function thumbnail(callable $thumbnailUrlCallback)
@@ -31,6 +31,8 @@ trait HasThumbnail
      */
     public function resolveThumbnailUrl()
     {
-        return call_user_func($this->thumbnailUrlCallback, $this->value, $this->getStorageDisk(), $this->resource);
+        return is_callable($this->thumbnailUrlCallback)
+                    ? call_user_func($this->thumbnailUrlCallback, $this->value, $this->getStorageDisk(), $this->resource)
+                    : null;
     }
 }

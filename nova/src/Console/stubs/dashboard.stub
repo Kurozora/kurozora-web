@@ -23,7 +23,7 @@ class {{ class }} extends Dashboard
      *
      * @return string
      */
-    public static function uriKey()
+    public function uriKey()
     {
         return 'uri-key';
     }
