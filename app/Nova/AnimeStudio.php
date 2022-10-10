@@ -10,10 +10,13 @@ use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Titasgailius\SearchRelations\SearchesRelations;
 use Validator;
 
 class AnimeStudio extends Resource
 {
+    use SearchesRelations;
+
     /**
      * The model the resource corresponds to.
      *
@@ -45,6 +48,16 @@ class AnimeStudio extends Resource
     ];
 
     /**
+     * The relationship columns that should be searched.
+     *
+     * @var array
+     */
+    public static array $searchRelations = [
+        'studio' => ['id', 'name'],
+        'anime' => ['id', 'original_title'],
+    ];
+
+    /**
      * The logical group associated with the resource.
      *
      * @var string
@@ -60,7 +73,8 @@ class AnimeStudio extends Resource
     public function fields(Request $request): array
     {
         return [
-            Heading::make('Identification'),
+            Heading::make('Identification')
+                ->onlyOnDetail(),
 
             ID::make()->sortable(),
 

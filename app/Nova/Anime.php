@@ -6,13 +6,12 @@ use App\Enums\DayOfWeek;
 use App\Enums\SeasonOfYear;
 use App\Nova\Actions\ScrapeAnime;
 use App\Nova\Actions\ScrapeFiller;
-use App\Nova\Lenses\UnmoderatedAnime;
+use App\Nova\Actions\ScrapeUpcomingAnime;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
-use Laraning\NovaTimeField\TimeField as Time;
+use Illuminate\Support\Carbon;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\Date;
@@ -71,10 +70,11 @@ class Anime extends Resource
     /**
      * Get the fields displayed by the resource.
      *
-     * @param Request $request
+     * @param NovaRequest $request
      * @return array
+     * @throws Exception
      */
-    public function fields(Request $request): array
+    public function fields(NovaRequest $request): array
     {
         return [
             Heading::make('Identification'),
@@ -232,7 +232,7 @@ class Anime extends Resource
                 ->help('The adaptation source of the anime. For example Manga, Game, Original, etc. If no source is available, especially for older anime, then choose Unknown.')
                 ->required(),
 
-            BelongsTo::make('Media Type')
+            BelongsTo::make('Media Type', 'media_type')
                 ->sortable()
                 ->help('The general type of the anime. For example TV, Movie, Music, etc.')
                 ->required(),
@@ -255,12 +255,6 @@ class Anime extends Resource
                 ->sortable()
                 ->help('NSFW: Not Safe For Work (not suitable for watchers under the age of 18).'),
 
-            // Display moderation indicator on index
-            Text::make('Moderated by', function() { return $this->displayModIndicatorForIndex(); })
-                ->asHtml()
-                ->readonly()
-                ->onlyOnIndex(),
-
             Heading::make('Aggregates'),
 
             Number::make('Season Count')
@@ -272,12 +266,16 @@ class Anime extends Resource
             Heading::make('Schedule'),
 
             Date::make('First aired')
-                ->format('DD-MM-YYYY')
+                ->displayUsing(function ($firstAired) {
+                    return $firstAired?->format('Y-m-d');
+                })
                 ->hideFromIndex()
                 ->help('The date on which the show first aired. For example: 2015-12-03'),
 
             Date::make('Last aired')
-                ->format('DD-MM-YYYY')
+                ->displayUsing(function ($lastAired) {
+                    return $lastAired?->format('Y-m-d');
+                })
                 ->hideFromIndex()
                 ->help('The date on which the show last aired. For example: 2016-03-08'),
 
@@ -286,21 +284,28 @@ class Anime extends Resource
                 ->help('For series: The average runtime in <b>seconds</b> of a single episode.<br />For movies: The total amount of seconds the movie takes.')
                 ->required(),
 
-            Time::make('Air time')
-                ->withTwelveHourTime()
+            Text::make('Air time')
+                ->withMeta(['type' => 'time'])
+                ->displayUsing(function($time) {
+                    return Carbon::parse($time)->format('h:i A');
+                })
                 ->hideFromIndex()
                 ->help('The exact time the show airs at in JST timezone. For example: 1:30 PM (13:30)')
                 ->nullable(),
 
             Select::make('Air day')
                 ->options(DayOfWeek::asSelectArray())
-                ->displayUsingLabels()
+                ->displayUsing(function (DayOfWeek $dayOfWeek) {
+                    return $dayOfWeek->key;
+                })
                 ->hideFromIndex()
                 ->help('The day of the week the show airs at. For example: Thursday'),
 
             Select::make('Air season')
                 ->options(SeasonOfYear::asSelectArray())
-                ->displayUsingLabels()
+                ->displayUsing(function (SeasonOfYear $seasonOfYear) {
+                    return $seasonOfYear->key;
+                })
                 ->help('The season of the year the show airs in.<br />Jan-Mar: Winter<br />Apr-Jun: Spring<br />Jul-Sep: Summer<br />Oct-Dec: Fall'),
 
             Heading::make('Legal'),
@@ -330,17 +335,6 @@ class Anime extends Resource
             HasMany::make('Studios', 'anime_studios', AnimeStudio::class),
 
             HasOne::make('Stats', 'stats', MediaStat::class),
-
-            BelongsToMany::make('Moderators', 'moderators', User::class)
-                // @TODO
-                // This has been commented out, because it conflicts with the favoriteAnime relationship.
-                //                ->fields(function() {
-                //                    return [
-                //                        DateTime::make('Moderating since', 'created_at')
-                //                            ->rules('required')
-                //                    ];
-                //                })
-                ->searchable(),
         ];
     }
 
@@ -369,10 +363,10 @@ class Anime extends Resource
     /**
      * Get the cards available for the request.
      *
-     * @param Request $request
+     * @param NovaRequest $request
      * @return array
      */
-    public function cards(Request $request): array
+    public function cards(NovaRequest $request): array
     {
         return [];
     }
@@ -380,10 +374,10 @@ class Anime extends Resource
     /**
      * Get the filters available for the resource.
      *
-     * @param Request $request
+     * @param NovaRequest $request
      * @return array
      */
-    public function filters(Request $request): array
+    public function filters(NovaRequest $request): array
     {
         return [];
     }
@@ -391,64 +385,43 @@ class Anime extends Resource
     /**
      * Get the lenses available for the resource.
      *
-     * @param Request $request
+     * @param NovaRequest $request
      * @return array
      */
-    public function lenses(Request $request): array
+    public function lenses(NovaRequest $request): array
     {
-        return [
-            new UnmoderatedAnime
-        ];
+        return [];
     }
 
     /**
      * Get the actions available for the resource.
      *
-     * @param Request $request
+     * @param NovaRequest $request
      * @return array
      */
-    public function actions(Request $request): array
+    public function actions(NovaRequest $request): array
     {
         return [
-            (new ScrapeAnime)
+            ScrapeUpcomingAnime::make()->standalone(),
+            ScrapeAnime::make()
                 ->confirmText('Are you sure you want to scrape this anime?')
                 ->confirmButtonText('Scrape Anime')
                 ->canSee(function ($request) {
                     return $request->user()->can('updateAnime');
-                }),
-            (new ScrapeFiller)
+                })->showInline(),
+            ScrapeFiller::make()
                 ->confirmText('Are you sure you want to scrape this anime’s filler list?')
                 ->confirmButtonText('Scrape Fillers')
                 ->canSee(function ($request) {
                     return $request->user()->can('updateAnime') && $request->user()->can('updateEpisode');
                 }),
-//            (new ScrapeEpisodes)
+//            ScrapeEpisodes::make()
 //                ->confirmText('Are you sure you want to scrape episodes for this anime?')
 //                ->confirmButtonText('Scrape Episodes')
 //                ->canSee(function ($request) {
 //                    return $request->user()->can('updateAnime');
 //                }),
         ];
-    }
-
-    /**
-     * Returns an indication of whether the Anime is moderated.
-     *
-     * @return ?string
-     */
-    private function displayModIndicatorForIndex(): ?string
-    {
-        // Get the anime and moderator count
-        /** @var \App\Models\Anime $anime */
-        $anime = $this->resource;
-        $modCount = $anime->moderators->count();
-
-        // Return null when there are no mods to properly format the empty value
-        if ($modCount <= 0) {
-            return null;
-        }
-
-        return '<span class="py-1 px-2 mr-1 inline-block rounded align-middle" style="background-color: #465161; color: #fff;">' . $modCount . ' ' . str('mod')->plural($modCount) . '</span>';
     }
 
     /**

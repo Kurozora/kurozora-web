@@ -16,7 +16,7 @@ class MediaStat extends Resource
      *
      * @var string
      */
-    public static $model = \App\Models\MediaStat::class;
+    public static string $model = \App\Models\MediaStat::class;
 
     /**
      * The underlying model resource instance.
@@ -57,11 +57,13 @@ class MediaStat extends Resource
     public function fields(Request $request): array
     {
         return [
-            Heading::make('Identification'),
+            Heading::make('Identification')
+                ->onlyOnDetail(),
 
             ID::make()->sortable(),
 
-            Heading::make('Model'),
+            Heading::make('Model')
+                ->onlyOnDetail(),
 
             MorphTo::make('Model')
                 ->types([
@@ -76,7 +78,8 @@ class MediaStat extends Resource
                 ->onlyOnDetail()
                 ->sortable(),
 
-            Heading::make('Stats'),
+            Heading::make('Stats')
+                ->onlyOnDetail(),
 
             Number::make('Planning', 'planning_count')
                 ->default(0)
@@ -175,8 +178,7 @@ class MediaStat extends Resource
 
             Number::make('Rating Average')
                 ->default(0.0)
-                ->step(0.1)
-                ->rules(['required', 'numeric'])
+                ->readonly()
                 ->sortable()
                 ->help('The average of all ratings.'),
 

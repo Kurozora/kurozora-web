@@ -2,11 +2,11 @@
 
 namespace App\Nova\Metrics;
 
-use App\Models\User;
+use App\Models\View;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\Value;
 
-class NewUsers extends Value
+class NewViews extends Value
 {
     /**
      * Calculate the value of the metric.
@@ -16,7 +16,7 @@ class NewUsers extends Value
      */
     public function calculate(NovaRequest $request): mixed
     {
-        return $this->count($request, User::class);
+        return $this->count($request, View::class);
     }
 
     /**
@@ -43,6 +43,6 @@ class NewUsers extends Value
      */
     public function uriKey(): string
     {
-        return 'new-users-metric';
+        return 'new-views-metric';
     }
 }

@@ -74,7 +74,6 @@ class Person extends KModel implements HasMedia, Sitemapable
      */
     protected $appends = [
 //        'age_string',
-//        'astrological_sign_string',
 //        'full_name',
 //        'full_given_name',
 //        'profile_image',
@@ -190,11 +189,12 @@ class Person extends KModel implements HasMedia, Sitemapable
     /**
      * The astrological sign of the character.
      *
-     * @return string|null
+     * @param int|null $value
+     * @return AstrologicalSign|null
      */
-    public function getAstrologicalSignStringAttribute(): ?string
+    public function getAstrologicalSignAttribute(?int $value): ?AstrologicalSign
     {
-        return AstrologicalSign::getDescription($this->astrological_sign) ?: null;
+        return isset($value) ? AstrologicalSign::fromValue($value) : null;
     }
 
     /**

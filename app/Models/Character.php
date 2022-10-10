@@ -74,7 +74,6 @@ class Character extends KModel implements HasMedia, Sitemapable
      */
     protected $appends = [
 //        'age_string',
-//        'astrological_sign_string',
 //        'birthdate',
 //        'height_string',
 //        'profile_image',
@@ -138,6 +137,17 @@ class Character extends KModel implements HasMedia, Sitemapable
     public function getStatusAttribute(?int $value): ?CharacterStatus
     {
         return isset($value) ? CharacterStatus::fromValue($value) : null;
+    }
+
+    /**
+     * The astrological sign of the character.
+     *
+     * @param int|null $value
+     * @return AstrologicalSign|null
+     */
+    public function getAstrologicalSignAttribute(?int $value): ?AstrologicalSign
+    {
+        return isset($value) ? AstrologicalSign::fromValue($value) : null;
     }
 
     /**
@@ -229,16 +239,6 @@ class Character extends KModel implements HasMedia, Sitemapable
         }
 
         return $format ? $birthdate->format($format) : null;
-    }
-
-    /**
-     * The astrological sign of the character.
-     *
-     * @return string|null
-     */
-    public function getAstrologicalSignStringAttribute(): ?string
-    {
-        return AstrologicalSign::getDescription($this->astrological_sign) ?: null;
     }
 
     /**

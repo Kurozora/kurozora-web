@@ -26,7 +26,7 @@ class PersonalAccessToken extends Resource
      */
     public static function authorizedToViewAny(Request $request): bool
     {
-        return $request->user()->can('viewPersonalAccessToken');
+        return $request->user()?->can('viewPersonalAccessToken') ?? false;
     }
 
     /**
@@ -68,7 +68,8 @@ class PersonalAccessToken extends Resource
     public function fields(Request $request): array
     {
         return [
-            Heading::make('Identification'),
+            Heading::make('Identification')
+                ->onlyOnDetail(),
 
             ID::make()->sortable(),
 
@@ -86,7 +87,7 @@ class PersonalAccessToken extends Resource
             DateTime::make('Last used at')
                 ->readonly(),
 
-            MorphOne::make('Session Attribute'),
+            MorphOne::make('Session Attribute', 'session_attribute'),
         ];
     }
 

@@ -20,7 +20,7 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
      *
      * @return void
      */
-    static function boot()
+    static function boot(): void
     {
         parent::boot();
 

@@ -86,6 +86,9 @@ class Video extends Resource
                 ->help('The source of the video. For example: YouTube.'),
 
             Text::make('Code')
+                ->displayUsing(function ($value) {
+                    return str($value)->limit(50);
+                })
                 ->required()
                 ->sortable()
                 ->help('The code of the video. Usually the gibberish part of the link.'),

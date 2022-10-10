@@ -30,7 +30,7 @@ class Role extends BaseRole
      */
     public static function authorizedToViewAny(Request $request): bool
     {
-        return $request->user()->can('viewRole');
+        return $request->user()?->can('viewRole') ?? false;
     }
 
     /**
