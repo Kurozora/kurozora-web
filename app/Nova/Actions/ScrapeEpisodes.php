@@ -26,48 +26,23 @@ class ScrapeEpisodes extends Action implements ShouldQueue
      */
     public function handle(ActionFields $fields, Collection $models): mixed
     {
-        $isOwner = auth()->user()->id == 2;
-        $nextUpdateTime = $isOwner ? 0 : 15;
-
-        if (!$isOwner && $models->count() != 1) {
-            return Action::danger('You may only scrape 1 anime’s episodes at a time.');
-        }
-
         $scrapeCount = 0;
         $nonScrapeCount = 0;
 
         /** @var Anime $model */
         foreach ($models as $model) {
-            $elapsedUpdatedAt = $model->updated_at->diffInMinutes(now());
-
-            if ($elapsedUpdatedAt >= $nextUpdateTime) {
-                if (empty($model->animix_id)) {
-                    $nonScrapeCount += 1;
-
-                    if (!$isOwner) {
-                        return Action::danger(__(':x has no AnimixPlay ID specified. Please add it, and try again.', ['x' => $model->original_title]));
-                    }
-                } else {
-                    try {
-                        Artisan::call('scrape:animix_episode', ['slug' => $model->animix_id]);
-
-                        $this->markAsFinished($model);
-                        $scrapeCount += 1;
-                    } catch (Exception $e) {
-                        $this->markAsFailed($model, $e);
-                        $nonScrapeCount += 1;
-
-                        if (!$isOwner) {
-                            return Action::danger(__('There was an error scraping the episodes. Please check the error message in the "Actions" section at the bottom of the anime’s detail page.'));
-                        }
-                    }
-                }
+            if (empty($model->animix_id)) {
+                $this->markAsFailed($model, $model->original_title . ' has no AnimixPlay ID specified. Please add it, and try again.');
+                $nonScrapeCount++;
             } else {
-                $this->markAsFailed($model, __('Please wait :x minutes before scraping again.', ['x' => $nextUpdateTime - $elapsedUpdatedAt]));
-                $nonScrapeCount += 1;
+                try {
+                    Artisan::call('scrape:animix_episode', ['slug' => $model->animix_id]);
 
-                if (!$isOwner) {
-                    return Action::danger(__('Please wait :x minutes before scraping again.', ['x' => $nextUpdateTime - $elapsedUpdatedAt]));
+                    $this->markAsFinished($model);
+                    $scrapeCount++;
+                } catch (Exception $e) {
+                    $this->markAsFailed($model, $e);
+                    $nonScrapeCount++;
                 }
             }
         }

@@ -56,7 +56,6 @@ class ImportEpisodes extends Command
                             'duration' => $episode->duration,
                             'first_aired' => $episode->first_aired,
                             'is_filler' => $episode->is_filler,
-                            'video_url' => $episode->video_url,
                             'verified' => $episode->verified,
                         ]);
                     } catch (Exception $exception) {
