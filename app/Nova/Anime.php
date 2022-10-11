@@ -295,16 +295,16 @@ class Anime extends Resource
 
             Select::make('Air day')
                 ->options(DayOfWeek::asSelectArray())
-                ->displayUsing(function (DayOfWeek $dayOfWeek) {
-                    return $dayOfWeek->key;
+                ->displayUsing(function (?DayOfWeek $dayOfWeek) {
+                    return $dayOfWeek?->key;
                 })
                 ->hideFromIndex()
                 ->help('The day of the week the show airs at. For example: Thursday'),
 
             Select::make('Air season')
                 ->options(SeasonOfYear::asSelectArray())
-                ->displayUsing(function (SeasonOfYear $seasonOfYear) {
-                    return $seasonOfYear->key;
+                ->displayUsing(function (?SeasonOfYear $seasonOfYear) {
+                    return $seasonOfYear?->key;
                 })
                 ->help('The season of the year the show airs in.<br />Jan-Mar: Winter<br />Apr-Jun: Spring<br />Jul-Sep: Summer<br />Oct-Dec: Fall'),
 
