@@ -31,8 +31,8 @@ class ScrapeAnime extends Action implements ShouldQueue
 
         /** @var Anime $model */
         foreach ($models as $model) {
-            if (empty($model->animix_id)) {
-                $this->markAsFailed($model, $model->original_title . ' has no AnimixPlay ID specified. Please add it, and try again.');
+            if (empty($model->mal_id)) {
+                $this->markAsFailed($model, $model->original_title . ' has no MAL ID specified. Please add it, and try again.');
                 $nonScrapeCount++;
             } else {
                 try {
