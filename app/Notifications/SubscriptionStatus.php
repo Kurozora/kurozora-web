@@ -61,14 +61,10 @@ class SubscriptionStatus extends Notification
      */
     public function toApn(User $notifiable): ApnMessage
     {
-        $apnMessage = ApnMessage::create()
+        return ApnMessage::create()
             ->title('Subscription Update')
             ->body(self::getDescription($this->subscriptionStatus))
             ->badge($notifiable->unreadNotifications()->count());
-
-        $apnMessage->body('Your subscription renewal preference has been successfully updated.');
-
-        return $apnMessage;
     }
 
     /**

@@ -23,7 +23,7 @@ class GenerateColorsFromImage extends Action
      */
     public function handle(ActionFields $fields, Collection $models): mixed
     {
-        $amountSuccess = 0;
+        $successCount = 0;
 
         foreach($models as $model) {
             // Skip the image asset if colors were already fetched
@@ -32,14 +32,14 @@ class GenerateColorsFromImage extends Action
             }
 
             Artisan::call('anime_images:generate_colors', ['id' => $model->id]);
-            $amountSuccess++;
+            $successCount++;
         }
 
-        if (!$amountSuccess) {
+        if (!$successCount) {
             return Action::danger('The colors for these image assets were already generated.');
         }
 
-        return Action::message('Generated colors for ' . $amountSuccess .' image assets.');
+        return Action::message('Generated colors for ' . $successCount .' image assets.');
     }
 
     /**
