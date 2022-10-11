@@ -4,6 +4,7 @@ namespace App\Nova\Dashboards;
 
 use App\Nova\Metrics\ActivityLogCount;
 use App\Nova\Metrics\AnimeNSFWChart;
+use App\Nova\Metrics\EpisodeFillerChart;
 use App\Nova\Metrics\NewAnime;
 use App\Nova\Metrics\NewEpisodes;
 use App\Nova\Metrics\NewUsers;
@@ -21,6 +22,7 @@ class Main extends Dashboard
     {
         return [
             new AnimeNSFWChart,
+            new EpisodeFillerChart,
             new NewAnime,
             new NewEpisodes,
             new NewUsers,
