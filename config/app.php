@@ -55,7 +55,8 @@ return [
         'id'        => '1476153872',
         'bundle_id' => env('APP_BUNDLE_ID', 'app.kurozora.tracker'),
         'protocol'  => 'kurozora://',
-        'url'       => env('APP_ENV', 'production') == 'local' ? 'https://apps.apple.com/us/app/kurozora/id1476153872' : 'https://testflight.apple.com/join/Bzr2TrDi',
+        'store_url' => 'https://apps.apple.com/us/app/kurozora/id1476153872',
+        'beta_url'  => 'https://testflight.apple.com/join/Bzr2TrDi',
     ],
 
     /*
