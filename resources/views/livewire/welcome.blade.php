@@ -91,13 +91,13 @@
                         </span>
                     </h2>
 
-                    <div class="mt-12 space-y-4 md:space-x-4 md:space-y-0">
-                        <x-link-button class="md:text-lg" href="{{ route('home') }}" aria-label="visit kurozora website">
-                            <span>{{ __('Visit the website') }}</span>
+                    <div class="flex flex-wrap gap-4 justify-center mt-12 pr-5 pl-5">
+                        <x-link-button class="text-lg" href="{{ route('home') }}" aria-label="Visit the Kurozora website">
+                            <span>{{ __('Visit the Website') }}</span>
                         </x-link-button>
 
-                        <x-link-button class="md:text-lg" href="{{ config('app.ios.url') }}" aria-label="download kurozora app">
-                            <span>{{ __('Download the app') }}</span>
+                        <x-link-button class="text-lg" href="{{ config('app.ios.store_url') }}" aria-label="Download the Kurozora app">
+                            <span>{{ __('Download the App') }}</span>
                         </x-link-button>
                     </div>
                 </div>
@@ -232,7 +232,7 @@
                         <p class="text-lg font-bold">{{ __('$3.99 / mo.') }}</p>
                         <p class="mt-4 text-gray-400">{{ __('A monthly subscription is just $3.99 per month after a free 7-day trial.') }}</p>
 
-                        <x-link-button href="{{ config('app.ios.url') }}" class="mt-4">{{ __('Try it free') }}</x-link-button>
+                        <x-link-button href="{{ config('app.ios.store_url') }}" class="mt-4">{{ __('Try it free') }}</x-link-button>
                     </div>
 
                     <div
@@ -246,7 +246,7 @@
                         <p class="text-lg font-bold">{{ __('$11.99 / 6 mo.') }}</p>
                         <p class="mt-4 text-gray-400">{{ __('A half yearly subscription is just $11.99 per 6 months after a free 14-days trial.') }}</p>
 
-                        <x-link-button href="{{ config('app.ios.url') }}" class="mt-4">{{ __('Try it free') }}</x-link-button>
+                        <x-link-button href="{{ config('app.ios.store_url') }}" class="mt-4">{{ __('Try it free') }}</x-link-button>
                     </div>
 
                     <div
@@ -260,7 +260,7 @@
                         <p class="text-lg font-bold">{{ __('$18.99 / 12 mo.') }}</p>
                         <p class="mt-4 text-gray-400">{{ __('A yearly subscription is just $18.99 per 12 months after a free 1-month trial.') }}</p>
 
-                        <x-link-button href="{{ config('app.ios.url') }}" class="mt-4">{{ __('Try it free') }}</x-link-button>
+                        <x-link-button href="{{ config('app.ios.store_url') }}" class="mt-4">{{ __('Try it free') }}</x-link-button>
                     </div>
                 </div>
             </div>
@@ -496,13 +496,13 @@
                 </div>
             </div>
 
-            <div class="mt-12 space-y-4 md:space-x-4 md:space-y-0 text-center">
-                <x-link-button class="md:text-lg" href="{{ route('home') }}" aria-label="visit kurozora website">
-                    <span>{{ __('Visit the website') }}</span>
+            <div class="flex flex-wrap gap-4 justify-center mt-12 pr-5 pl-5">
+                <x-link-button class="text-lg" href="{{ route('home') }}" aria-label="Visit the Kurozora website">
+                    <span>{{ __('Visit the Website') }}</span>
                 </x-link-button>
 
-                <x-link-button class="md:text-lg" href="{{ config('app.ios.url') }}" aria-label="download kurozora app">
-                    <span>{{ __('Download the app') }}</span>
+                <x-link-button class="text-lg" href="{{ config('app.ios.store_url') }}" aria-label="Download the Kurozora app">
+                    <span>{{ __('Download The App') }}</span>
                 </x-link-button>
             </div>
         </section>
@@ -602,7 +602,7 @@
                             x-show="expanded"
                             x-collapse
                         >
-                            <p>{{ __('You can join the beta of Kurozora through') }} <x-link target="_blank" href="{{ config('app.ios.url') }}">TestFlight</x-link> {{ __('on your favorite Apple device. Kurozora works on iPhone, iPad, iPod Touch and Mac.') }}</p>
+                            <p>{{ __('You can download the app on') }} <x-link target="_blank" href="{{ config('app.ios.store_url') }}">App Store</x-link> {{ __('on your favorite Apple device. Kurozora works on iPhone, iPad, iPod Touch and Mac.') }}</p>
                             <br />
                             <br />
                             <p>{{ __('Kurozora can also be used on all other devices through the website at') }} <x-link href="{{ route('home') }}">kurozora.app</x-link>.</p>

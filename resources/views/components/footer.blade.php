@@ -20,7 +20,7 @@
                         <x-footer-link href="#">{{ __('Kurozora+') }}</x-footer-link>
                     </li>
                     <li class="mt-2">
-                        <x-footer-link href="{{ config('app.ios.url') }}" target="_blank">{{ __('Kurozora App') }}</x-footer-link>
+                        <x-footer-link href="{{ config('app.ios.store_url') }}" target="_blank">{{ __('Kurozora App') }}</x-footer-link>
                     </li>
                     <li class="mt-2">
                         <x-footer-link href="{{ route('api') }}" target="_blank">{{ __('Kurozora API') }}</x-footer-link>

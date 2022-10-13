@@ -148,7 +148,7 @@
                                 {{ __('Studios') }}
                             </x-nav-link>
 
-                            <x-nav-link href="{{ config('app.ios.url') }}"
+                            <x-nav-link href="{{ config('app.ios.store_url') }}"
                                         target="_blank"
                                         x-show="! isSearchEnabled"
                                         x-transition:enter="ease-out duration-150 delay-[350ms] transform"
@@ -158,7 +158,7 @@
                                         x-transition:leave-start="opacity-100 scale-100"
                                         x-transition:leave-end="opacity-0 scale-75"
                             >
-                                App <span class="ml-1 pl-2 pr-2 pt-1 pb-1 bg-orange-500 text-white text-xs font-bold rounded-full">{{ __('Beta') }}</span>
+                                App
                             </x-nav-link>
                         </div>
                     </span>
@@ -297,8 +297,8 @@
                     {{ __('Studios') }}
                 </x-responsive-nav-link>
 
-                <x-responsive-nav-link href="{{ config('app.ios.url') }}" target="_blank">
-                    App <span class="ml-1 pl-2 pr-2 pt-1 pb-1 bg-orange-500 text-white text-xs font-bold rounded-full">{{ __('Beta') }}</span>
+                <x-responsive-nav-link href="{{ config('app.ios.store_url') }}" target="_blank">
+                    App
                 </x-responsive-nav-link>
             </div>
 
