@@ -4,6 +4,7 @@ namespace App\Nova;
 
 use App\Enums\DayOfWeek;
 use App\Enums\SeasonOfYear;
+use App\Nova\Actions\FixAnimeAiringSeason;
 use App\Nova\Actions\ScrapeAnime;
 use App\Nova\Actions\ScrapeFiller;
 use App\Nova\Actions\ScrapeUpcomingAnime;
@@ -403,6 +404,7 @@ class Anime extends Resource
     {
         return [
             ScrapeUpcomingAnime::make()->standalone(),
+            FixAnimeAiringSeason::make()->standalone(),
             ScrapeAnime::make()
                 ->confirmText('Are you sure you want to scrape this anime?')
                 ->confirmButtonText('Scrape Anime')
