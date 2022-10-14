@@ -144,7 +144,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
      *
      * @return ?int
      */
-    protected function generateAiringSeason(): ?int
+    public function generateAiringSeason(): ?int
     {
         $firstAired = $this->first_aired;
 
