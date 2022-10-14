@@ -32,7 +32,7 @@ class Details extends Component
      * @param Genre $genre
      * @return void
      */
-    public function mount(Genre $genre)
+    public function mount(Genre $genre): void
     {
         $this->genre = $genre;
         $this->exploreCategories = ExploreCategory::where('is_global', true)

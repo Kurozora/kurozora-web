@@ -136,16 +136,17 @@ if (!function_exists('season_of_year')) {
     function season_of_year(?Carbon $date = null): SeasonOfYear
     {
         $date = $date ?? now();
+        $year = $date->year;
 
-        $winter = Carbon::createFromDate(null, 1, 1);
-        $spring = Carbon::createFromDate(null, 4, 4);
-        $summer = Carbon::createFromDate(null, 7, 7);
-        $fall = Carbon::createFromDate(null, 10, 10);
+        $winter = Carbon::createFromDate($year, 1, 1);
+        $spring = Carbon::createFromDate($year, 4, 1);
+        $summer = Carbon::createFromDate($year, 7, 1);
+        $fall = Carbon::createFromDate($year, 10, 1);
 
         return match (true) {
             $date >= $spring && $date < $summer => SeasonOfYear::Spring(),
             $date >= $summer && $date < $fall => SeasonOfYear::Summer(),
-            $date >= $fall && $date < $winter => SeasonOfYear::Fall(),
+            $date >= $fall && $date > $winter => SeasonOfYear::Fall(),
             default => SeasonOfYear::Winter(),
         };
     }

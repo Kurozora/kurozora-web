@@ -3,7 +3,13 @@
         <section class="pt-5 pb-8 border-t-2" wire:init="loadExploreCategoryItems">
             <x-section-nav class="flex flex-nowrap justify-between mb-5">
                 <x-slot:title>
-                    {{ $exploreCategory->title }}
+                    @switch($exploreCategory->type)
+                    @case(\App\Enums\ExploreCategoryTypes::AnimeSeason)
+                        {{ season_of_year()->key . ' ' . now()->year }}
+                    @break
+                    @default
+                        {{ $exploreCategory->title }}
+                    @endswitch
                 </x-slot:title>
 
                 <x-slot:description>
@@ -35,6 +41,15 @@
                             <div class="flex flex-nowrap gap-4">
                             @foreach($this->exploreCategoryItems as $categoryItem)
                                 <x-lockups.upcoming-lockup :anime="$categoryItem->model" />
+                            @endforeach
+                            </div>
+                        </div>
+                    @break
+                    @case(\App\Enums\ExploreCategoryTypes::AnimeSeason)
+                        <div class="flex mt-5 overflow-x-scroll no-scrollbar">
+                            <div class="flex flex-nowrap gap-4">
+                            @foreach($this->exploreCategoryItems as $categoryItem)
+                                <x-lockups.small-lockup :anime="$categoryItem->model" />
                             @endforeach
                             </div>
                         </div>

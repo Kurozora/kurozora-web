@@ -31,7 +31,7 @@ class ExploreCategoryResource extends JsonResource
             'type'          => 'explore',
             'href'          => route('api.explore.details', $this->resource, absolute: false),
             'attributes'    => [
-                'title'         => $this->resource->title,
+                'title'         => $this->getTypeSpecificTitle($request),
                 'description'   => $this->resource->description,
                 'slug'          => $this->resource->slug,
                 'position'      => $this->resource->position,
@@ -49,6 +49,21 @@ class ExploreCategoryResource extends JsonResource
     }
 
     /**
+     * Returns specific title that should be added depending on the type of
+     * category.
+     *
+     * @param Request $request
+     * @return string
+     */
+    private function getTypeSpecificTitle(Request $request): string
+    {
+        return match ($this->resource->type) {
+            ExploreCategoryTypes::AnimeSeason => season_of_year()->key . ' ' . now()->year,
+            default => $this->resource->title,
+        };
+    }
+
+    /**
      * Returns specific data that should be added depending on the type of
      * category.
      *
@@ -57,7 +72,6 @@ class ExploreCategoryResource extends JsonResource
      */
     private function getTypeSpecificData(Request $request): array
     {
-        // Genres category
         switch ($this->resource->type) {
             case ExploreCategoryTypes::People:
                 return [
@@ -134,6 +148,24 @@ class ExploreCategoryResource extends JsonResource
                     'shows' => [
                         'data' => AnimeResourceIdentity::collection($this->resource
                             ->upcoming_shows($model)
+                            ->explore_category_items
+                            ->pluck('model')
+                        )
+                    ]
+                ];
+            case ExploreCategoryTypes::AnimeSeason:
+                $model = null;
+
+                if (!empty($request->input('genre_id'))) {
+                    $model = Genre::find($request->input('genre_id'));
+                } else if (!empty($request->input('theme_id'))) {
+                    $model = Theme::find($request->input('theme_id'));
+                }
+
+                return [
+                    'shows' => [
+                        'data' => AnimeResourceIdentity::collection($this->resource
+                            ->anime_season($model)
                             ->explore_category_items
                             ->pluck('model')
                         )

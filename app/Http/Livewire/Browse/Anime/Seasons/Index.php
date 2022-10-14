@@ -42,7 +42,7 @@ class Index extends Component
      *
      * @return void
      */
-    public function mount($year, $season)
+    public function mount(int $year, string $season): void
     {
         if (!is_numeric($year)) {
             to_route('anime.seasons.index');

@@ -39,6 +39,7 @@ class Details extends Component
         $exploreCategoryItems = match ($exploreCategory->type) {
             ExploreCategoryTypes::MostPopularShows => $exploreCategory->most_popular_shows(),
             ExploreCategoryTypes::UpcomingShows => $exploreCategory->upcoming_shows(),
+            ExploreCategoryTypes::AnimeSeason => $exploreCategory->anime_season(),
             ExploreCategoryTypes::Characters => $exploreCategory->charactersBornToday(-1),
             ExploreCategoryTypes::People => $exploreCategory->peopleBornToday(-1),
             default => $exploreCategory

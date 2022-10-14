@@ -111,7 +111,7 @@ class ExploreCategory extends Resource
                 ->displayUsingLabels()
                 ->rules('required')
                 ->sortable()
-                ->help('<b>Most Popular Shows</b> is automatically generated.'),
+                ->help('The following are automtically generated:<br/><b>Most Popular Shows</b><br/><b>Upcoming Shows</b><br/><b>Anime Season</b><br/><b>Characters</b><br/><b>People</b>'),
 
             Select::make('Size')
                 ->options(ExploreCategorySize::asSelectArray())
