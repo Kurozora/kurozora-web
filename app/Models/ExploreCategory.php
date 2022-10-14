@@ -26,7 +26,7 @@ class ExploreCategory extends KModel implements Sitemapable
      *
      * @return void
      */
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
@@ -127,6 +127,38 @@ class ExploreCategory extends KModel implements Sitemapable
                 $this->explore_category_items->add(new ExploreCategoryItem([
                     'model_id' => $upcomingShow->id,
                     'model_type' => get_class($upcomingShow)
+                ]));
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Append the characters born today to the category's items.
+     *
+     * @param Genre|Theme|null $model
+     * @return ExploreCategory
+     */
+    public function anime_season(Genre|Theme|null $model = null): ExploreCategory
+    {
+        if ($this->type === ExploreCategoryTypes::AnimeSeason) {
+            if (is_a($model, Genre::class)) {
+                $animeSeason = Anime::whereGenre($model)
+                    ->animeSeason()
+                    ->get('id');
+            } else if (is_a($model, Theme::class)) {
+                $animeSeason = Anime::whereTheme($model)
+                    ->animeSeason()
+                    ->get('id');
+            } else {
+                $animeSeason = Anime::animeSeason()
+                    ->get('id');
+            }
+
+            foreach($animeSeason as $anime) {
+                $this->explore_category_items->add(new ExploreCategoryItem([
+                    'model_id' => $anime->id,
+                    'model_type' => get_class($anime)
                 ]));
             }
         }
