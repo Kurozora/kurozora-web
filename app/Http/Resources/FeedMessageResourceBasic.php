@@ -84,7 +84,7 @@ class FeedMessageResourceBasic extends JsonResource
 
         return [
             'users' => [
-                'data' => UserResourceBasic::collection([$feedMessage->user]),
+                'data' => UserResource::collection([$feedMessage->user]),
             ]
         ];
     }
