@@ -7,17 +7,22 @@
 
     <ul id="badgesList" class="m-0 space-y-4">
         @foreach($this->badges as $badge)
-            <li class="flex space-x-2 pt-4 pr-4 pb-4 pl-4 rounded-lg" style="background-color: {{ $badge->background_color }};">
-                <picture class="relative w-16 h-16 aspect-square overflow-hidden">
-                    <img class="w-full bg-white border-2 border-black/5 rounded-full" src="{{ $badge->symbol_image_url }}" alt="{{ $badge->name }} Badge Image" width="{{ $badge->symbol_image?->custom_properties['width'] ?? 96 }}" height="{{ $badge->symbol_image?->custom_properties['height'] ?? 96 }}">
+            @php
+                $borderColor = strtolower($badge->text_color) == '#ffffffff' ? '#ffffff80' : $badge->text_color;
+            @endphp
+            <li class="relative flex space-x-2 pt-4 pr-4 pb-4 pl-4 rounded-lg" style="background-color: {{ $badge->background_color }};">
+                <picture class="relative w-16 h-16 aspect-square rounded-full overflow-hidden">
+                    <img class="w-full" src="{{ $badge->symbol_image_url }}" alt="{{ $badge->name }} Badge Image" width="{{ $badge->symbol_image?->custom_properties['width'] ?? 96 }}" height="{{ $badge->symbol_image?->custom_properties['height'] ?? 96 }}">
 
-                    <div class="absolute top-0 left-0 h-full w-full"></div>
+                    <div class="absolute top-0 left-0 h-full w-full border-2 rounded-full" style="border-color: {{ $borderColor }};"></div>
                 </picture>
 
                 <div class="flex-1" style="color: {{ $badge->text_color }};">
                     <p class="font-semibold">{{ $badge->name }}</p>
                     <p class="text-sm">{{ $badge->description }}</p>
                 </div>
+
+                <div class="absolute top-0 right-0 w-full h-full border-2 rounded-lg" style="border-color: {{ $borderColor }};"></div>
             </li>
         @endforeach
     </ul>
