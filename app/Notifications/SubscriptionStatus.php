@@ -76,17 +76,18 @@ class SubscriptionStatus extends Notification
     static function getDescription(string $subscriptionStatus): string
     {
         return match ($subscriptionStatus) {
-            'CANCEL' => 'Your subscription has been successfully canceled.',
             'DID_CHANGE_RENEWAL_PREF' => 'Your subscription renewal preference has been successfully updated.',
             'DID_CHANGE_RENEWAL_STATUS' => 'Your subscription renewal status has been successfully changed.',
             'DID_FAIL_TO_RENEW' => 'Failed to renew subscription due to a billing issue.',
-            'DID_RECOVER' => 'Your expired subscription has been successfully recovered.',
             'DID_RENEW' => 'Your subscription has been auto-renewed successfully for a new transaction period.',
-            'INITIAL_BUY' => 'Your transaction has been successfully completed.',
-            'INTERACTIVE_RENEWAL' => 'You have successfully renewed your subscription.',
-            'PRICE_INCREASE_CONSENT' => 'The subscription price increase has been accepted.',
-            'REFUND' => 'AppleCare has successfully refunded your subscription transaction.',
+            'EXPIRED' => 'Your subscription has expired.',
+            'GRACE_PERIOD_EXPIRED' => 'Your billing grace period has ended without renewing the subscription due to a billing issue.',
+            'OFFER_REDEEMED' => 'You have successfully redeemed a promotional offer.',
+            'PRICE_INCREASE' => 'The subscription price increase has been accepted.',
+            'REFUND' => 'Your subscription transaction was successfully refunded.',
+            'RENEWAL_EXTENDED' => 'Your subscription renewal date has successfully extended.',
             'REVOKE' => 'Your subscription was revoked due to the purchaser disabling Family Sharing.',
+            'SUBSCRIBED' => 'Your subscription transaction was successful. You can now enjoy Kurozora+.',
             default => 'Your transaction has been completed.',
         };
     }

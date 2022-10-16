@@ -37,7 +37,8 @@ return [
 
     'apple' => [
         'store_kit' => [
-            'password' => env('SK_APP_PASSWORD')
+            'password' => env('SK_APP_PASSWORD'),
+            'issuer_id' => env('SK_ISSUER_ID'),
         ],
         'client_id' => env('APPLE_CLIENT_ID', 'app.kurozora.web.tracker'),
         'client_secret' => env('MIX_APPLE_CLIENT_SECRET'),

@@ -33,6 +33,7 @@ class UserResourceBasic extends JsonResource
         $resource = UserResourceIdentity::make($this->resource)->toArray($request);
         $resource = array_merge($resource, [
             'id'                => $this->resource->id,
+            'uuid'              => $this->resource->uuid,
             'type'              => 'users',
             'href'              => route('api.users.profile', $this->resource, false),
             'attributes'        => [
