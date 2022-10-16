@@ -1,5 +1,5 @@
-import {mapGetters, mapMutations} from 'vuex'
-import {Inertia} from '@inertiajs/inertia'
+import { mapGetters, mapMutations } from 'vuex'
+import { Inertia } from '@inertiajs/inertia'
 
 export default {
   created() {

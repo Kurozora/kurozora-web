@@ -192,6 +192,7 @@
 
         <LoadingButton
           dusk="attach-and-attach-another-button"
+          type="button"
           @click.native.prevent="attachAndAttachAnother"
           :disabled="isWorking"
           :processing="submittedViaAttachAndAttachAnother"
@@ -219,16 +220,17 @@
 <script>
 import each from 'lodash/each'
 import find from 'lodash/find'
+import isNil from 'lodash/isNil'
 import tap from 'lodash/tap'
 import {
-    Errors,
-    FormEvents,
-    HandlesFormRequest,
-    PerformsSearches,
-    PreventsFormAbandonment,
-    TogglesTrashed,
+  PerformsSearches,
+  TogglesTrashed,
+  Errors,
+  FormEvents,
+  HandlesFormRequest,
+  PreventsFormAbandonment,
 } from '@/mixins'
-import {mapActions} from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   mixins: [

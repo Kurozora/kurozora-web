@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import {HandlesPanelVisibility, mapProps} from '@/mixins'
+import { HandlesPanelVisibility, mapProps } from '@/mixins'
 
 export default {
   name: 'FormPanel',

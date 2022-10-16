@@ -32,16 +32,6 @@ class Email extends Text implements FilterableField
     }
 
     /**
-     * Display the field as raw HTML using Vue.
-     *
-     * @return $this
-     */
-    public function copyable()
-    {
-        throw new \Exception('Email fields are not copyable since they display a mailto: link. You should use a Text field instead.');
-    }
-
-    /**
      * Make the field filter.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request

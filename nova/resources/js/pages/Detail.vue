@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import {mapProps} from '@/mixins'
+import { mapProps } from '@/mixins'
 
 export default {
   name: 'Detail',

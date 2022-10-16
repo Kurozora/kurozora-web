@@ -1,5 +1,5 @@
-import {Inertia} from '@inertiajs/inertia'
-import {InertiaProgress} from '@inertiajs/progress'
+import { Inertia } from '@inertiajs/inertia'
+import { InertiaProgress } from '@inertiajs/progress'
 import debounce from 'lodash/debounce'
 
 export function setupInertia() {

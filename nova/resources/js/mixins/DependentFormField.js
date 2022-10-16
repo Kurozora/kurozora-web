@@ -1,4 +1,4 @@
-import {CancelToken} from 'axios'
+import { CancelToken } from 'axios'
 import debounce from 'lodash/debounce'
 import forIn from 'lodash/forIn'
 import get from 'lodash/get'
@@ -7,7 +7,7 @@ import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 import pickBy from 'lodash/pickBy'
 import FormField from './FormField'
-import {mapProps} from './propTypes'
+import { mapProps } from './propTypes'
 
 export default {
   extends: FormField,
@@ -64,7 +64,11 @@ export default {
         this.watchedEvents[dependsOn] = value => {
           this.watchedFields[dependsOn] = value
 
-          this.dependentFieldDebouncer(() => this.syncField())
+          this.dependentFieldDebouncer(() => {
+            this.watchedFields[dependsOn] = value
+
+            this.syncField()
+          })
         }
 
         this.watchedFields[dependsOn] = defaultValue
@@ -78,6 +82,8 @@ export default {
   },
 
   beforeUnmount() {
+    if (this.canceller !== null) this.canceller()
+
     if (!isEmpty(this.watchedEvents)) {
       forIn(this.watchedEvents, (event, dependsOn) => {
         Nova.$off(this.getFieldAttributeChangeEventName(event.dependsOn), event)
@@ -163,7 +169,7 @@ export default {
 
   computed: {
     /**
-     * Determine if the field is in readonly mode
+     * Determine the current field
      */
     currentField() {
       return this.syncedField || this.field

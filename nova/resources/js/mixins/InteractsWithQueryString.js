@@ -1,5 +1,5 @@
 import forEach from 'lodash/forEach'
-import {Inertia} from '@inertiajs/inertia'
+import { Inertia } from '@inertiajs/inertia'
 
 let compiledSearchParams = null
 

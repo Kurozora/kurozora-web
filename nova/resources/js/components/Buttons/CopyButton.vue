@@ -2,11 +2,11 @@
   <button
     type="button"
     @click="handleClick"
-    class="inline-flex items-center rounded-full px-2 -mx-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 hover:text-gray-500 active:text-gray-600 dark:hover:bg-gray-900"
+    class="inline-flex items-center rounded-full px-2 space-x-1 -mx-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 hover:text-gray-500 active:text-gray-600 dark:hover:bg-gray-900"
   >
     <slot />
 
-    <CopyIcon :copied="copied" class="ml-1" />
+    <CopyIcon :copied="copied" />
   </button>
 </template>
 

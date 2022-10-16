@@ -19,7 +19,9 @@
             >Soft-deleted</span
           >
         </ModalHeader>
-        <ModalContent class="px-8">
+        <ModalContent
+          class="px-8 divide-y divide-gray-100 dark:divide-gray-800 -mx-3"
+        >
           <template v-if="resource">
             <component
               :key="index"

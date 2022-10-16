@@ -136,16 +136,17 @@
 <script>
 import each from 'lodash/each'
 import find from 'lodash/find'
+import isNil from 'lodash/isNil'
 import tap from 'lodash/tap'
 import {
-    Errors,
-    FormEvents,
-    HandlesFormRequest,
-    PerformsSearches,
-    PreventsFormAbandonment,
-    TogglesTrashed,
+  PerformsSearches,
+  TogglesTrashed,
+  Errors,
+  FormEvents,
+  PreventsFormAbandonment,
+  HandlesFormRequest,
 } from '@/mixins'
-import {mapActions} from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   mixins: [

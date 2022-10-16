@@ -4,7 +4,7 @@ namespace Laravel\Nova\Fields;
 
 use Illuminate\Support\Arr;
 
-class Line extends Text
+class Line extends Text implements Unfillable
 {
     const HEADING = 'extra-large';
 

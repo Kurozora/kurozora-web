@@ -2,6 +2,7 @@
 
 namespace Laravel\Nova\Http\Controllers;
 
+use Laravel\Nova\Contracts\Deletable;
 use Laravel\Nova\DeleteField;
 use Laravel\Nova\Http\Requests\NovaRequest;
 

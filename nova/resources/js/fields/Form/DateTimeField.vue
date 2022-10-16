@@ -3,6 +3,7 @@
     :field="currentField"
     :errors="errors"
     :show-help-text="showHelpText"
+    :full-width-content="fullWidthContent"
   >
     <template #field>
       <div class="flex items-center">
@@ -32,8 +33,8 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import {DateTime} from 'luxon'
-import {DependentFormField, HandlesValidationErrors} from '@/mixins'
+import { DateTime } from 'luxon'
+import { DependentFormField, HandlesValidationErrors } from '@/mixins'
 import filled from '@/util/filled'
 
 export default {

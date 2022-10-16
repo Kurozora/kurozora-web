@@ -57,6 +57,28 @@ trait ResolvesFields
     }
 
     /**
+     * Resolve the authorized preview fields.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @return \Laravel\Nova\Fields\FieldCollection<int, \Laravel\Nova\Fields\Field>
+     */
+    protected function previewFieldsCollection(NovaRequest $request)
+    {
+        // If the user has specified the `fieldsForPreview` method, we're going to ignore any fields
+        // using `showOnPreview` inside the resource's `fields`, `fieldsForIndex`, and `fieldsForDetail` methods.
+        if (method_exists($this, 'fieldsForPreview')) {
+            return FieldCollection::make(array_values($this->filter($this->fieldsForPreview($request))));
+        }
+
+        return $this->buildAvailableFields($request, ['fieldsForIndex', 'fieldsForDetail'])
+                    ->when($request->viaRelationship(), $this->fieldResolverCallback($request))
+                    ->withoutResourceTools()
+                    ->withoutListableFields()
+                    ->filter
+                    ->isShownOnPreview($request, $this->resource);
+    }
+
+    /**
      * Resolve the preview fields.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
@@ -64,11 +86,7 @@ trait ResolvesFields
      */
     public function previewFields(NovaRequest $request)
     {
-        return $this->buildAvailableFields($request, ['fieldsForDetail'])
-            ->when($request->viaRelationship(), $this->fieldResolverCallback($request))
-            ->withoutResourceTools()
-            ->withoutListableFields()
-            ->filterForPreview($request, $this->resource)
+        return $this->previewFieldsCollection($request)
             ->authorized($request)
             ->resolveForDisplay($this->resource);
     }
@@ -81,11 +99,55 @@ trait ResolvesFields
      */
     public function previewFieldsCount(NovaRequest $request)
     {
-        return $this->buildAvailableFields($request, ['fieldsForDetail'])
-            ->when($request->viaRelationship(), $this->fieldResolverCallback($request))
-            ->withoutResourceTools()
-            ->withoutListableFields()
-            ->filterForPreview($request, $this->resource)
+        return $this->previewFields($request)->count();
+    }
+
+    /**
+     * Resolve the authorized preview fields.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @return \Laravel\Nova\Fields\FieldCollection<int, \Laravel\Nova\Fields\Field>
+     */
+    protected function peekableFieldsCollection(NovaRequest $request)
+    {
+        // If the user has specified the `fieldsForPeeking` method, we're going to ignore any fields
+        // using `showWhenPeeking` inside the resource's `fields`, `fieldsForIndex`, and `fieldsForDetail` methods.
+        if (method_exists($this, 'fieldsForPeeking')) {
+            return FieldCollection::make(array_values($this->filter($this->fieldsForPeeking($request))));
+        } else {
+            return $this->buildAvailableFields($request, ['fieldsForIndex', 'fieldsForDetail'])
+                    ->when($request->viaRelationship(), $this->fieldResolverCallback($request))
+                    ->withoutResourceTools()
+                    ->withoutListableFields()
+                    ->filterForPeeking($request);
+        }
+    }
+
+    /**
+     * Resolve the peekable fields.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @return \Laravel\Nova\Fields\FieldCollection<int, \Laravel\Nova\Fields\Field>
+     */
+    public function peekableFields(NovaRequest $request)
+    {
+        return $this->peekableFieldsCollection($request)
+            ->authorized($request)
+            ->resolveForDisplay($this->resource)
+                ->each(function ($field) {
+                    $field->copyable = false;
+                });
+    }
+
+    /**
+     * Return the count of peekable fields available.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @return int
+     */
+    public function peekableFieldsCount(NovaRequest $request)
+    {
+        return $this->peekableFieldsCollection($request)
             ->authorized($request)
             ->count();
     }

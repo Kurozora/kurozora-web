@@ -1,5 +1,10 @@
 <template>
-  <DefaultField :field="field" :errors="errors" :show-help-text="showHelpText">
+  <DefaultField
+    :field="field"
+    :errors="errors"
+    :show-help-text="showHelpText"
+    :full-width-content="fullWidthContent"
+  >
     <template #field>
       <input
         :ref="field.attribute"
@@ -18,7 +23,7 @@
 
 <script>
 import find from 'lodash/find'
-import {FormField, HandlesValidationErrors} from '@/mixins'
+import { FormField, HandlesValidationErrors } from '@/mixins'
 
 export default {
   mixins: [HandlesValidationErrors, FormField],

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import {mapProps} from '@/mixins'
+import { mapProps } from '@/mixins'
 import ResourceLens from '@/views/Lens'
 
 export default {

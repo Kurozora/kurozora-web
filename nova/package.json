@@ -45,7 +45,7 @@
     "browser-sync": "^2.27.7",
     "browser-sync-webpack-plugin": "^2.3.0",
     "chartist": "^0.11.0",
-    "chartist-plugin-tooltips": "^0.0.17",
+    "chartist-plugin-tooltips-updated": "^0.1.4",
     "codemirror": "^5.65.1",
     "colortranslator": "^1.9.2",
     "floating-vue": "^2.0.0-beta.16",

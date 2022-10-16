@@ -1,4 +1,5 @@
 import isNil from 'lodash/isNil'
+import { mapProps } from './propTypes'
 
 export default {
   props: {

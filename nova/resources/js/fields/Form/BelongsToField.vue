@@ -3,6 +3,7 @@
     :field="currentField"
     :errors="errors"
     :show-help-text="showHelpText"
+    :full-width-content="fullWidthContent"
   >
     <template #field>
       <div class="flex items-center">
@@ -110,7 +111,12 @@
 import find from 'lodash/find'
 import isNil from 'lodash/isNil'
 import storage from '@/storage/BelongsToFieldStorage'
-import {DependentFormField, HandlesValidationErrors, PerformsSearches, TogglesTrashed,} from '@/mixins'
+import {
+  DependentFormField,
+  HandlesValidationErrors,
+  PerformsSearches,
+  TogglesTrashed,
+} from '@/mixins'
 
 export default {
   mixins: [

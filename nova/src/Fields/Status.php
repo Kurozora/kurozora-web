@@ -6,7 +6,7 @@ use Illuminate\Support\Arr;
 use Laravel\Nova\Fields\Filters\StatusFilter;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Status extends Text
+class Status extends Text implements Unfillable
 {
     /**
      * The field's component.

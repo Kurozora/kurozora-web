@@ -3,6 +3,7 @@
     :field="currentField"
     :errors="errors"
     :show-help-text="showHelpText"
+    :full-width-content="fullWidthContent"
   >
     <template #field>
       <!-- Search Input -->
@@ -60,7 +61,7 @@
 import find from 'lodash/find'
 import first from 'lodash/first'
 import isNil from 'lodash/isNil'
-import {DependentFormField, HandlesValidationErrors} from '@/mixins'
+import { DependentFormField, HandlesValidationErrors } from '@/mixins'
 
 export default {
   mixins: [HandlesValidationErrors, DependentFormField],
@@ -215,7 +216,7 @@ export default {
     },
 
     /**
-     * Return value has been setted.
+     * Determine if the field has a non-empty value.
      */
     hasValue() {
       return Boolean(

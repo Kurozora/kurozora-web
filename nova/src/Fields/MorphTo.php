@@ -26,6 +26,7 @@ class MorphTo extends Field implements FilterableField, RelatableField
     use AssociatableRelation,
         DeterminesIfCreateRelationCanBeShown,
         EloquentFilterable,
+        Peekable,
         ResolvesReverseRelation,
         Searchable,
         SupportsDependentFields;
@@ -696,6 +697,8 @@ class MorphTo extends Field implements FilterableField, RelatableField
                 'morphToType' => $this->morphToType,
                 'morphToId' => $this->morphToId,
                 'morphToTypes' => $this->morphToTypes,
+                'peekable' => $this->isPeekable($request),
+                'hasFieldsToPeekAt' => $this->hasFieldsToPeekAt($request),
                 'resourceLabel' => $resourceClass ? $resourceClass::singularLabel() : null,
                 'resourceName' => $this->resourceName,
                 'reverse' => $this->isReverseRelation($request),

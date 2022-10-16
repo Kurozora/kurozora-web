@@ -34,10 +34,10 @@
 <script>
 import debounce from 'lodash/debounce'
 import Chartist from 'chartist'
-import 'chartist-plugin-tooltips'
 import 'chartist/dist/chartist.min.css'
 import {singularOrPlural} from '@/util'
-import 'chartist-plugin-tooltips/dist/chartist-plugin-tooltip.css'
+import ChartistTooltip from 'chartist-plugin-tooltips-updated'
+import 'chartist-plugin-tooltips-updated/dist/chartist-plugin-tooltip.css'
 
 export default {
   name: 'BaseTrendMetric',
@@ -122,30 +122,39 @@ export default {
         offset: 0,
       },
       plugins: [
-        Chartist.plugins.tooltip({
-          anchorToPoint: true,
-          transformTooltipTextFnc: value => {
-            let formattedValue = Nova.formatNumber(
-              new String(value),
-              this.format
-            )
-
-            if (this.prefix) {
-              return `${this.prefix}${formattedValue}`
-            }
-
-            if (this.suffix) {
-              const suffix = this.suffixInflection
-                ? singularOrPlural(value, this.suffix)
-                : this.suffix
-
-              return `${formattedValue} ${suffix}`
-            }
-
-            return `${formattedValue}`
+        ChartistTooltip({
+          pointClass: 'ct-point',
+          anchorToPoint: false,
+        }),
+        ChartistTooltip({
+          pointClass: 'ct-point__left',
+          anchorToPoint: false,
+          tooltipOffset: {
+            x: 50,
+            y: -20,
+          },
+        }),
+        ChartistTooltip({
+          pointClass: 'ct-point__right',
+          anchorToPoint: false,
+          tooltipOffset: {
+            x: -50,
+            y: -20,
           },
         }),
       ],
+    })
+
+    this.chartist.on('draw', data => {
+      if (data.type === 'point') {
+        data.element.attr({
+          'ct:value': this.transformTooltipText(data.value.y),
+        })
+
+        data.element.addClass(
+          this.transformTooltipClass(data.axisX.ticks.length, data.index) ?? ''
+        )
+      }
     })
 
     this.resizeObserver.observe(this.$refs.chart)
@@ -164,6 +173,34 @@ export default {
       const value = event?.target?.value || event
 
       this.$emit('selected', value)
+    },
+
+    transformTooltipText(value) {
+      let formattedValue = Nova.formatNumber(new String(value), this.format)
+
+      if (this.prefix) {
+        return `${this.prefix}${formattedValue}`
+      }
+
+      if (this.suffix) {
+        const suffix = this.suffixInflection
+          ? singularOrPlural(value, this.suffix)
+          : this.suffix
+
+        return `${formattedValue} ${suffix}`
+      }
+
+      return `${formattedValue}`
+    },
+
+    transformTooltipClass(total, index) {
+      if (index < 2) {
+        return 'ct-point__left'
+      } else if (index > total - 3) {
+        return 'ct-point__right'
+      }
+
+      return 'ct-point'
     },
   },
 

@@ -15,18 +15,17 @@ class RelatableAuthorizationController extends Controller
      */
     public function __invoke(NovaRequest $request)
     {
-        $model = $request->findParentModelOrFail();
-
-        $resource = $request->viaResource();
+        $parentResource = $request->findParentResourceOrFail();
+        $resource = $request->resource();
 
         if ($request->viaManyToMany()) {
-            return ['authorized' => (new $resource($model))->authorizedToAttachAny(
+            return ['authorized' => $parentResource->authorizedToAttachAny(
                 $request, $request->model()
             )];
         }
 
-        return ['authorized' => (new $resource($model))->authorizedToAdd(
+        return ['authorized' => $parentResource->authorizedToAdd(
             $request, $request->model()
-        )];
+        ) && $resource::authorizedToCreate($request)];
     }
 }

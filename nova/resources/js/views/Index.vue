@@ -193,20 +193,20 @@
 
 <script>
 import debounce from 'lodash/debounce'
-import {Cancel, CancelToken} from 'axios'
+import { CancelToken, Cancel } from 'axios'
 import {
-    Collapsable,
-    Deletable,
-    HasCards,
-    IndexConcerns,
-    InteractsWithQueryString,
-    InteractsWithResourceInformation,
-    LoadsResources,
-    Paginatable,
-    PerPageable,
-    SupportsPolling,
+  HasCards,
+  Paginatable,
+  PerPageable,
+  Deletable,
+  Collapsable,
+  LoadsResources,
+  IndexConcerns,
+  InteractsWithResourceInformation,
+  InteractsWithQueryString,
+  SupportsPolling,
 } from '@/mixins'
-import {minimum} from '@/util'
+import { minimum } from '@/util'
 
 export default {
   name: 'ResourceIndex',

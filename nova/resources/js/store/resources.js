@@ -4,7 +4,7 @@ import find from 'lodash/find'
 import filter from 'lodash/filter'
 import map from 'lodash/map'
 import reduce from 'lodash/reduce'
-import {escapeUnicode} from '@/util/escapeUnicode'
+import { escapeUnicode } from '@/util/escapeUnicode'
 
 export default {
   namespaced: true,

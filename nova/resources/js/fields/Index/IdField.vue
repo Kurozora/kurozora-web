@@ -17,7 +17,7 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import {FieldValue} from '@/mixins'
+import { FieldValue } from '@/mixins'
 
 export default {
   mixins: [FieldValue],

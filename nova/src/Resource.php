@@ -515,6 +515,20 @@ abstract class Resource implements ArrayAccess, JsonSerializable, UrlRoutable
     }
 
     /**
+     * Prepare the resource for JSON serialization.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @return array<string, mixed>
+     */
+    public function serializeForPeeking(NovaRequest $request)
+    {
+        return array_merge($this->serializeWithId($this->peekableFields($request)), [
+            'title' => $this->title(),
+            'softDeleted' => $this->isSoftDeleted(),
+        ]);
+    }
+
+    /**
      * Determine if the resource may be updated, factoring in attachments.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request

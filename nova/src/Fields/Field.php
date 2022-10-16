@@ -3,6 +3,7 @@
 namespace Laravel\Nova\Fields;
 
 use Closure;
+use Illuminate\Contracts\Validation\InvokableRule;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Macroable;
@@ -15,6 +16,8 @@ use Laravel\Nova\Metrics\HasHelpText;
 use Laravel\Nova\Util;
 
 /**
+ * @template TValidationRules of array<int, \Stringable|string|\Illuminate\Contracts\Validation\Rule|\Illuminate\Contracts\Validation\InvokableRule|callable>|\Stringable|string|(callable(string, mixed, \Closure):void)
+ *
  * @method static static make(mixed $name, string|\Closure|callable|object|null $attribute = null, callable|null $resolveCallback = null)
  */
 abstract class Field extends FieldElement implements JsonSerializable, Resolvable
@@ -22,7 +25,9 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
     use DependentFields;
     use HasHelpText;
     use Macroable;
+    use PeekableFields;
     use PreviewableFields;
+    use SupportsFullWidthFields;
     use Tappable;
 
     /**
@@ -105,21 +110,21 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
     /**
      * The validation rules for creation and updates.
      *
-     * @var array<int, string|\Illuminate\Validation\Rule|\Illuminate\Contracts\Validation\Rule|callable>
+     * @var TValidationRules
      */
     public $rules = [];
 
     /**
      * The validation rules for creation.
      *
-     * @var array<int, string|\Illuminate\Validation\Rule|\Illuminate\Contracts\Validation\Rule|callable>
+     * @var TValidationRules
      */
     public $creationRules = [];
 
     /**
      * The validation rules for updates.
      *
-     * @var array<int, string|\Illuminate\Validation\Rule|\Illuminate\Contracts\Validation\Rule|callable>
+     * @var TValidationRules
      */
     public $updateRules = [];
 
@@ -219,6 +224,13 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
      * @var bool
      */
     public $visible = true;
+
+    /**
+     * The placeholder for the field.
+     *
+     * @var string|null
+     */
+    public $placeholder;
 
     /**
      * Create a new field.
@@ -539,12 +551,19 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
     /**
      * Set the validation rules for the field.
      *
-     * @param  callable|array<int, string|\Illuminate\Validation\Rule|\Illuminate\Contracts\Validation\Rule|callable>|string  ...$rules
+     * @param  (callable(\Laravel\Nova\Http\Requests\NovaRequest):TValidationRules)|TValidationRules  ...$rules
      * @return $this
      */
     public function rules($rules)
     {
-        $this->rules = ($rules instanceof Rule || is_string($rules)) ? func_get_args() : $rules;
+        $parameters = func_get_args();
+
+        $this->rules = (
+            $rules instanceof Rule ||
+            $rules instanceof InvokableRule ||
+            is_string($rules) ||
+            count($parameters) > 1
+        ) ? $parameters : $rules;
 
         return $this;
     }
@@ -553,7 +572,7 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
      * Get the validation rules for this field.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @return array<string, array<int, string|\Illuminate\Validation\Rule|\Illuminate\Contracts\Validation\Rule|callable>>
+     * @return array<string, TValidationRules>
      */
     public function getRules(NovaRequest $request)
     {
@@ -566,7 +585,7 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
      * Get the creation rules for this field.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @return array<string, array<int, string|\Illuminate\Validation\Rule|\Illuminate\Contracts\Validation\Rule|callable>>
+     * @return array<string, TValidationRules>
      */
     public function getCreationRules(NovaRequest $request)
     {
@@ -583,12 +602,19 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
     /**
      * Set the creation validation rules for the field.
      *
-     * @param  callable|array<int, string|\Illuminate\Validation\Rule|\Illuminate\Contracts\Validation\Rule|callable>|string  ...$rules
+     * @param  (callable(\Laravel\Nova\Http\Requests\NovaRequest):TValidationRules)|TValidationRules  ...$rules
      * @return $this
      */
     public function creationRules($rules)
     {
-        $this->creationRules = ($rules instanceof Rule || is_string($rules)) ? func_get_args() : $rules;
+        $parameters = func_get_args();
+
+        $this->creationRules = (
+            $rules instanceof Rule ||
+            $rules instanceof InvokableRule ||
+            is_string($rules) ||
+            count($parameters) > 1
+        ) ? $parameters : $rules;
 
         return $this;
     }
@@ -597,7 +623,7 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
      * Get the update rules for this field.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @return array<string, array<int, string|\Illuminate\Validation\Rule|\Illuminate\Contracts\Validation\Rule|callable>>
+     * @return array<string, TValidationRules>
      */
     public function getUpdateRules(NovaRequest $request)
     {
@@ -614,12 +640,19 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
     /**
      * Set the creation validation rules for the field.
      *
-     * @param  callable|array<int, string|\Illuminate\Validation\Rule|\Illuminate\Contracts\Validation\Rule|callable>|string  ...$rules
+     * @param  (callable(\Laravel\Nova\Http\Requests\NovaRequest):TValidationRules)|TValidationRules  ...$rules
      * @return $this
      */
     public function updateRules($rules)
     {
-        $this->updateRules = ($rules instanceof Rule || is_string($rules)) ? func_get_args() : $rules;
+        $parameters = func_get_args();
+
+        $this->updateRules = (
+            $rules instanceof Rule ||
+            $rules instanceof InvokableRule ||
+            is_string($rules) ||
+            count($parameters) > 1
+        ) ? $parameters : $rules;
 
         return $this;
     }
@@ -911,6 +944,8 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
      */
     public function placeholder($text)
     {
+        $this->placeholder = $text;
+
         $this->withMeta(['extraAttributes' => ['placeholder' => $text]]);
 
         return $this;
@@ -955,11 +990,13 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
                 'dependentComponentKey' => $this->dependentComponentKey(),
                 'dependsOn' => $this->getDependentsAttributes($request),
                 'displayedAs' => $this->displayedAs,
+                'fullWidth' => $this->fullWidth,
                 'helpText' => $this->getHelpText(),
                 'indexName' => $this->name,
                 'name' => $this->name,
                 'nullable' => $this->nullable,
                 'panel' => $this->panel,
+                'placeholder' => $this->placeholder,
                 'prefixComponent' => true,
                 'readonly' => $this->isReadonly($request),
                 'required' => $this->isRequired($request),

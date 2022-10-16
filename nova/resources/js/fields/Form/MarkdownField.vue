@@ -2,7 +2,7 @@
   <DefaultField
     :field="currentField"
     :errors="errors"
-    :full-width-content="true"
+    :full-width-content="fullWidthContent"
     :show-help-text="showHelpText"
   >
     <template #field>
@@ -77,7 +77,7 @@ import isNil from 'lodash/isNil'
 import map from 'lodash/map'
 
 import CodeMirror from 'codemirror'
-import {DependentFormField, HandlesValidationErrors, mapProps} from '@/mixins'
+import { DependentFormField, HandlesValidationErrors, mapProps } from '@/mixins'
 
 export default {
   mixins: [HandlesValidationErrors, DependentFormField],

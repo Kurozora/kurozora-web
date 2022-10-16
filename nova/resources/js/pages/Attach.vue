@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import {uid} from 'uid/single'
+import { uid } from 'uid/single'
 
 export default {
   name: 'Attach',

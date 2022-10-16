@@ -26,6 +26,7 @@ class BelongsTo extends Field implements FilterableField, RelatableField
         DeterminesIfCreateRelationCanBeShown,
         EloquentFilterable,
         FormatsRelatableDisplayValues,
+        Peekable,
         ResolvesReverseRelation,
         Searchable,
         SupportsDependentFields;
@@ -528,6 +529,8 @@ class BelongsTo extends Field implements FilterableField, RelatableField
                 'debounce' => $this->debounce,
                 'displaysWithTrashed' => $this->displaysWithTrashed,
                 'label' => $this->resourceClass::label(),
+                'peekable' => $this->isPeekable($request),
+                'hasFieldsToPeekAt' => $this->hasFieldsToPeekAt($request),
                 'resourceName' => $this->resourceName,
                 'reverse' => $this->isReverseRelation($request),
                 'searchable' => $this->isSearchable($request),

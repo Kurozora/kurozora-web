@@ -3,8 +3,8 @@ import filter from 'lodash/filter'
 import find from 'lodash/find'
 import isNil from 'lodash/isNil'
 import tap from 'lodash/tap'
-import {Errors} from 'form-backend-validation'
-import {mapActions} from 'vuex'
+import { Errors } from 'form-backend-validation'
+import { mapActions } from 'vuex'
 
 export default {
   emits: ['actionExecuted'],

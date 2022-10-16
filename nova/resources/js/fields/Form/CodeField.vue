@@ -2,7 +2,7 @@
   <DefaultField
     :field="currentField"
     :errors="errors"
-    :full-width-content="true"
+    :full-width-content="fullWidthContent"
     :show-help-text="showHelpText"
   >
     <template #field>
@@ -19,7 +19,8 @@
 import CodeMirror from 'codemirror'
 
 // Modes
-import {DependentFormField, HandlesValidationErrors} from '@/mixins'
+
+import { DependentFormField, HandlesValidationErrors } from '@/mixins'
 
 export default {
   mixins: [HandlesValidationErrors, DependentFormField],

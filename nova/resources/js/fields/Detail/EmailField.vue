@@ -5,6 +5,13 @@
         <a :href="`mailto:${field.value}`" class="link-default">
           {{ fieldValue }}
         </a>
+
+        <CopyButton
+          v-if="fieldHasValue && field.copyable && !shouldDisplayAsHtml"
+          @click.prevent.stop="copy"
+          v-tooltip="__('Copy to clipboard')"
+          class="mx-0"
+        />
       </p>
       <p v-else>&mdash;</p>
     </template>
@@ -12,11 +19,17 @@
 </template>
 
 <script>
-import {FieldValue} from '@/mixins'
+import {CopiesToClipboard, FieldValue} from '@/mixins'
 
 export default {
-  mixins: [FieldValue],
+  mixins: [CopiesToClipboard, FieldValue],
 
   props: ['index', 'resource', 'resourceName', 'resourceId', 'field'],
+
+  methods: {
+    copy() {
+      this.copyValueToClipboard(this.field.value)
+    },
+  },
 }
 </script>

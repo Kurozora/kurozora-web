@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import {DateTime} from 'luxon'
-import {FieldValue} from '@/mixins'
+import { DateTime } from 'luxon'
+import { FieldValue } from '@/mixins'
 
 export default {
   mixins: [FieldValue],

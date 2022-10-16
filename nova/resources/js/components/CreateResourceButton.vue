@@ -16,7 +16,14 @@
         )
       "
     >
-      <slot>{{ __('Attach :resource', { resource: singularName }) }}</slot>
+      <slot>
+        <span class="hidden md:inline-block">
+          {{ __('Attach :resource', { resource: singularName }) }}
+        </span>
+        <span class="inline-block md:hidden">
+          {{ __('Attach') }}
+        </span>
+      </slot>
     </component>
 
     <!-- Create Related Models -->

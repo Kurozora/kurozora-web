@@ -7,7 +7,6 @@ import ResourceIndex from '@/views/Index'
 import ResourceDetail from '@/views/Detail'
 import Attach from '@/views/Attach'
 import UpdateAttached from '@/views/UpdateAttached'
-
 // import Lens from '@/views/Lens'
 
 export function registerViews(app) {
