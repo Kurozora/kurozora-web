@@ -51,9 +51,9 @@ class ReminderAnimeController extends Controller
         $animeID = $request->input('anime_id');
         $user = auth()->user();
 
-//        if (empty($user->receipt) || !$user->receipt->is_subscribed ?? true) {
-//            throw new AuthorizationException('Reminders are only available to pro users.');
-//        }
+        if (!$user->is_subscribed) {
+            throw new AuthorizationException('Reminders are only available to subscribed users.');
+        }
 
         $isAlreadyReminded = $user->user_reminder_anime()->where('anime_id', $animeID)->exists();
 
@@ -81,9 +81,9 @@ class ReminderAnimeController extends Controller
     {
         $user = auth()->user();
 
-//        if (empty($user->receipt) || !$user->receipt->is_subscribed ?? true) {
-//            throw new AuthorizationException('Reminders are only available to pro users.');
-//        }
+        if (!$user->is_subscribed) {
+            throw new AuthorizationException('Reminders are only available to subscribed users.');
+        }
 
         $calendarExportStream = $user->getCalendar();
 

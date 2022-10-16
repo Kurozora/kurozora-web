@@ -18,11 +18,11 @@ use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
 use Cog\Laravel\Love\Reacterable\Models\Traits\Reacterable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\MassPrunable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -57,6 +57,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         HasRoles,
         HasPermissions,
         HasSlug,
+        HasUuids,
         HeartActionTrait,
         InteractsWithMedia,
         InteractsWithMediaExtension,
@@ -112,6 +113,18 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         'profile_image',
         'profile_image_url',
     ];
+
+    /**
+     * Get the columns that should receive a unique identifier.
+     *
+     * @return array
+     */
+    public function uniqueIds(): array
+    {
+        return [
+            'uuid'
+        ];
+    }
 
     /**
      * Registers the media collections for the model.
@@ -623,13 +636,13 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
-     * Returns the store receipt of the user.
+     * Returns the store receipts of the user.
      *
-     * @return HasOne
+     * @return HasMany
      */
-    function receipt(): HasOne
+    function receipts(): HasMany
     {
-        return $this->hasOne(UserReceipt::class);
+        return $this->hasMany(UserReceipt::class, 'user_id', 'uuid');
     }
 
     /**
