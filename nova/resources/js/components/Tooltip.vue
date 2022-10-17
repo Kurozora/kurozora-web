@@ -6,7 +6,8 @@
     :placement="placement"
     :boundary="boundary"
     :prevent-overflow="preventOverflow"
-    theme="Nova"
+    :handle-resize="true"
+    :theme="theme"
   >
     <span>
       <slot />
@@ -19,7 +20,7 @@
 </template>
 
 <script>
-import { PopperWrapper } from 'floating-vue'
+import {PopperWrapper} from 'floating-vue'
 
 export default {
   ...PopperWrapper,
@@ -53,6 +54,11 @@ export default {
     preventOverflow: {
       type: Boolean,
       default: true,
+    },
+
+    theme: {
+      type: String,
+      default: 'Nova',
     },
   },
 }

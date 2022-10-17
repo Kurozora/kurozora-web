@@ -3,6 +3,7 @@
     :field="currentField"
     :errors="errors"
     :show-help-text="showHelpText"
+    :full-width-content="fullWidthContent"
   >
     <template #field>
       <!-- Select Input Field -->
@@ -26,7 +27,7 @@
 
 <script>
 import find from 'lodash/find'
-import {DependentFormField, HandlesValidationErrors} from '@/mixins'
+import { DependentFormField, HandlesValidationErrors } from '@/mixins'
 
 export default {
   mixins: [HandlesValidationErrors, DependentFormField],

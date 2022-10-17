@@ -4,6 +4,7 @@
     :label-for="labelFor"
     :errors="errors"
     :show-help-text="!isReadonly && showHelpText"
+    :full-width-content="fullWidthContent"
   >
     <template #field>
       <!-- Existing Image -->
@@ -47,7 +48,7 @@
 </template>
 
 <script>
-import {DependentFormField, Errors, HandlesValidationErrors} from '@/mixins'
+import { DependentFormField, Errors, HandlesValidationErrors } from '@/mixins'
 import Vapor from 'laravel-vapor'
 
 function createFile(file) {

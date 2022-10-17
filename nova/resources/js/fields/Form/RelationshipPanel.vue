@@ -31,8 +31,9 @@
 </template>
 
 <script>
-import {uid} from 'uid/single'
-import {BehavesAsPanel, mapProps} from '@/mixins'
+import { uid } from 'uid/single'
+import { BehavesAsPanel } from '@/mixins'
+import { mapProps } from '@/mixins'
 
 export default {
   name: 'FormRelationshipPanel',

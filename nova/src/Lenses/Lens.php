@@ -5,6 +5,7 @@ namespace Laravel\Nova\Lenses;
 use ArrayAccess;
 use Illuminate\Contracts\Routing\UrlRoutable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 use Illuminate\Http\Resources\DelegatesToResource;
 use Illuminate\Support\Str;

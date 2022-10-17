@@ -3,6 +3,7 @@
     :field="currentField"
     :errors="errors"
     :show-help-text="showHelpText"
+    :full-width-content="fullWidthContent"
   >
     <template #field>
       <input
@@ -28,7 +29,11 @@
 </template>
 
 <script>
-import {DependentFormField, FieldSuggestions, HandlesValidationErrors,} from '@/mixins'
+import {
+  DependentFormField,
+  FieldSuggestions,
+  HandlesValidationErrors,
+} from '@/mixins'
 
 export default {
   mixins: [DependentFormField, FieldSuggestions, HandlesValidationErrors],

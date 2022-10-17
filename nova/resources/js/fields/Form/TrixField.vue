@@ -2,7 +2,7 @@
   <DefaultField
     :field="field"
     :errors="errors"
-    :full-width-content="true"
+    :full-width-content="fullWidthContent"
     :key="index"
     :show-help-text="showHelpText"
   >
@@ -16,7 +16,7 @@
           @file-removed="handleFileRemoved"
           :class="{ 'form-input-border-error': hasError }"
           :with-files="field.withFiles"
-          v-bind="extraAttributes"
+          v-bind="field.extraAttributes"
           :disabled="isReadonly"
           class="rounded-lg"
         />
@@ -26,14 +26,24 @@
 </template>
 
 <script>
-import {FormField, HandlesValidationErrors} from '@/mixins'
+import { FormField, HandlesValidationErrors } from '@/mixins'
 
 export default {
   emits: ['field-changed'],
 
   mixins: [HandlesValidationErrors, FormField],
 
-  data: () => ({ draftId: uuidv4(), index: 0 }),
+  data: () => ({ draftId: null, index: 0 }),
+
+  async created() {
+    const {
+      data: { draftId },
+    } = await Nova.request().get(
+      `/nova-api/{resourceName}/trix-attachment/{field}/draftId`
+    )
+
+    this.draftId = draftId
+  },
 
   mounted() {
     Nova.$on(this.fieldAttributeValueEventName, this.listenToValueChanges)
@@ -41,9 +51,7 @@ export default {
 
   beforeUnmount() {
     Nova.$off(this.fieldAttributeValueEventName, this.listenToValueChanges)
-  },
 
-  beforeUnmount() {
     this.cleanUp()
   },
 
@@ -104,7 +112,7 @@ export default {
         })
         .catch(error => {
           this.$toasted.show(
-            __('An error occured while uploading your file.'),
+            __('An error occurred while uploading the file.'),
             { type: 'error' }
           )
         })
@@ -145,31 +153,5 @@ export default {
       this.index++
     },
   },
-
-  computed: {
-    defaultAttributes() {
-      return {
-        placeholder: this.field.placeholder || this.field.name,
-      }
-    },
-
-    extraAttributes() {
-      const attrs = this.field.extraAttributes
-
-      return {
-        ...this.defaultAttributes,
-        ...attrs,
-      }
-    },
-  },
-}
-
-function uuidv4() {
-  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-    (
-      c ^
-      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-    ).toString(16)
-  )
 }
 </script>

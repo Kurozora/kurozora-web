@@ -1,5 +1,5 @@
-import {usePage} from '@inertiajs/inertia-vue3'
-import {Inertia} from '@inertiajs/inertia'
+import { usePage } from '@inertiajs/inertia-vue3'
+import { Inertia } from '@inertiajs/inertia'
 
 export default {
   state: () => ({

@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import {CopiesToClipboard, FieldValue} from '@/mixins'
+import { CopiesToClipboard, FieldValue } from '@/mixins'
 
 export default {
   mixins: [CopiesToClipboard, FieldValue],

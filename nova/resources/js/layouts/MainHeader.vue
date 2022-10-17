@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import {mapGetters, mapMutations} from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import LicenseWarning from '@/components/LicenseWarning'
 
 export default {

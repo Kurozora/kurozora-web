@@ -2,6 +2,7 @@
 
 namespace Laravel\Nova\Query;
 
+use Illuminate\Database\Eloquent\Builder;
 use Laravel\Nova\Query\Search\Column;
 
 class Search

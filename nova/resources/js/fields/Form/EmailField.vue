@@ -3,6 +3,7 @@
     :field="currentField"
     :errors="errors"
     :show-help-text="showHelpText"
+    :full-width-content="fullWidthContent"
   >
     <template #field>
       <input
@@ -19,7 +20,7 @@
 </template>
 
 <script>
-import {DependentFormField, HandlesValidationErrors} from '@/mixins'
+import { DependentFormField, HandlesValidationErrors } from '@/mixins'
 
 export default {
   mixins: [HandlesValidationErrors, DependentFormField],

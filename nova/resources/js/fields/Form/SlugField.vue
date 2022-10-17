@@ -1,5 +1,10 @@
 <template>
-  <DefaultField :field="field" :errors="errors" :show-help-text="showHelpText">
+  <DefaultField
+    :field="field"
+    :errors="errors"
+    :show-help-text="showHelpText"
+    :full-width-content="fullWidthContent"
+  >
     <template #field>
       <div class="flex items-center">
         <input
@@ -26,7 +31,7 @@
 </template>
 
 <script>
-import {FormField, HandlesValidationErrors} from '@/mixins'
+import { FormField, HandlesValidationErrors } from '@/mixins'
 import debounce from 'lodash/debounce'
 
 export default {

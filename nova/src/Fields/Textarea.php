@@ -9,7 +9,10 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Textarea extends Field implements FilterableField
 {
-    use Expandable, FieldFilterable, SupportsDependentFields;
+    use Expandable;
+    use FieldFilterable;
+    use SupportsDependentFields;
+    use SupportsMaxlength;
 
     /**
      * The field's component.

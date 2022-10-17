@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import {singularOrPlural} from '@/util'
+import {increaseOrDecrease, singularOrPlural} from '@/util'
 
 export default {
   name: 'BaseValueMetric',
@@ -147,7 +147,7 @@ export default {
       if (this.previous == 0 || this.previous == null || this.value == 0)
         return 0
 
-      return (((this.value - this.previous) / this.previous) * 100).toFixed(2)
+      return increaseOrDecrease(this.value, this.previous).toFixed(2)
     },
 
     increaseOrDecreaseLabel() {

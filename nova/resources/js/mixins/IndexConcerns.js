@@ -1,9 +1,9 @@
 import find from 'lodash/find'
 import includes from 'lodash/includes'
 import map from 'lodash/map'
-import {Filterable, HasActions, mapProps, RouteParameters} from './index'
-import {capitalize} from '@/util'
-import {computed} from 'vue'
+import { Filterable, HasActions, RouteParameters, mapProps } from './index'
+import { capitalize } from '@/util'
+import { computed } from 'vue'
 
 export default {
   mixins: [Filterable, HasActions, RouteParameters],

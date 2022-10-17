@@ -3,6 +3,7 @@
 namespace Laravel\Nova\Http\Controllers;
 
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Str;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class TrixAttachmentController extends Controller
@@ -69,5 +70,18 @@ class TrixAttachmentController extends Controller
         );
 
         return response()->noContent(200);
+    }
+
+    /**
+     * Return a new draft ID for the field.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function draftId(NovaRequest $request)
+    {
+        return response()->json([
+            'draftId' => Str::uuid(),
+        ]);
     }
 }

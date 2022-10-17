@@ -193,6 +193,20 @@ html.dark .checkbox:checked {
   visibility: hidden;
 }
 
+/* Plain Theme */
+
+.v-popper--theme-plain .v-popper__inner {
+  @apply rounded-lg shadow bg-white dark:bg-gray-900 text-gray-500 dark:text-white !important;
+}
+
+.v-popper--theme-plain .v-popper__arrow-outer {
+  visibility: hidden;
+}
+
+.v-popper--theme-plain .v-popper__arrow-inner {
+  visibility: hidden;
+}
+
 /* Forms
 ---------------------------------------------------------------------------- */
 .form-control {
@@ -883,7 +897,7 @@ input.form-input[type='color']:not(:disabled) {
 
 .chartist-tooltip:before {
   display: none;
-  border-top-color: var(--white) !important;
+  border-top-color: rgba(var(--colors-white), 1) !important;
 }
 
 /* Spin Animation
@@ -985,7 +999,7 @@ input.form-input[type='color']:not(:disabled) {
 .ct-series-a .ct-bar,
 .ct-series-a .ct-line,
 .ct-series-a .ct-point {
-  stroke: rgba(var(--colors-primary-500, 1)) !important;
+  stroke: rgba(var(--colors-primary-500), 1) !important;
   stroke-width: 2px;
 }
 
@@ -1011,7 +1025,7 @@ trix-editor {
 }
 
 .disabled trix-editor {
-  background-color: var(--30);
+  background-color: rgba(var(--colors-primary-100), 1);
 }
 
 .disabled trix-toolbar {
@@ -1019,7 +1033,7 @@ trix-editor {
 }
 
 trix-editor:empty:not(:focus)::before {
-  color: var(--70);
+  color: rgba(var(--colors-gray-500), 1);
 }
 
 trix-editor.disabled {
@@ -1106,7 +1120,7 @@ trix-editor.disabled {
 }
 
 #nprogress .bar {
-  background: rgba(var(--colors-primary-500));
+  background: rgba(var(--colors-primary-500), 1);
   position: fixed;
   z-index: 1031;
   top: 0;

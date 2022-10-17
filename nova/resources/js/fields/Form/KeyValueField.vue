@@ -58,7 +58,7 @@ import fromPairs from 'lodash/fromPairs'
 import map from 'lodash/map'
 import reject from 'lodash/reject'
 import tap from 'lodash/tap'
-import {DependentFormField, HandlesValidationErrors} from '@/mixins'
+import { DependentFormField, HandlesValidationErrors } from '@/mixins'
 
 function guid() {
   var S4 = function () {

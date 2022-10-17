@@ -5,7 +5,7 @@ namespace Laravel\Nova\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * @property-read string|null $resource
+ * @property-read \Illuminate\Database\Eloquent\Model|string|null $resource
  * @property-read mixed|null $resourceId
  * @property-read string|null $relatedResource
  * @property-read mixed|null $relatedResourceId
@@ -86,6 +86,26 @@ class NovaRequest extends FormRequest
     }
 
     /**
+     * Determine if this request is a resource preview request.
+     *
+     * @return bool
+     */
+    public function isResourcePreviewRequest()
+    {
+        return $this instanceof ResourcePreviewRequest;
+    }
+
+    /**
+     * Determine if this request is a resource peeking request.
+     *
+     * @return bool
+     */
+    public function isResourcePeekingRequest()
+    {
+        return $this instanceof ResourcePeekRequest;
+    }
+
+    /**
      * Determine if this request is an action request.
      *
      * @return bool
@@ -105,5 +125,15 @@ class NovaRequest extends FormRequest
         return $this->isCreateOrAttachRequest()
             || $this->isUpdateOrUpdateAttachedRequest()
             || $this->isActionRequest();
+    }
+
+    /**
+     * Determine if this request is an index or detail request.
+     *
+     * @return bool
+     */
+    public function isPresentationRequest()
+    {
+        return $this->isResourceIndexRequest() || $this->isResourceDetailRequest();
     }
 }

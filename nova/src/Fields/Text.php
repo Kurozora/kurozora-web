@@ -9,7 +9,10 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Text extends Field implements FilterableField
 {
-    use FieldFilterable, HasSuggestions, SupportsDependentFields;
+    use FieldFilterable;
+    use HasSuggestions;
+    use SupportsDependentFields;
+    use SupportsMaxlength;
 
     /**
      * The field's component.

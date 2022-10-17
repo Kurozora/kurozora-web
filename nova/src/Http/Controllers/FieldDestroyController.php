@@ -5,6 +5,7 @@ namespace Laravel\Nova\Http\Controllers;
 use Illuminate\Routing\Controller;
 use Laravel\Nova\Contracts\Downloadable;
 use Laravel\Nova\DeleteField;
+use Laravel\Nova\Fields\File;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Nova;
 

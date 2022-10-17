@@ -37,7 +37,7 @@
   </LoadingView>
 </template>
 <script>
-import {minimum} from '@/util'
+import { minimum } from '@/util'
 
 export default {
   props: {

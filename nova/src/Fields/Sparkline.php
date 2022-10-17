@@ -6,7 +6,7 @@ use Closure;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Metrics\Trend;
 
-class Sparkline extends Field
+class Sparkline extends Field implements Unfillable
 {
     /**
      * The field's component.

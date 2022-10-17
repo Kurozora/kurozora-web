@@ -9,7 +9,7 @@ use Laravel\Nova\Contracts\FilterableField;
 use Laravel\Nova\Fields\Filters\SelectFilter;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Badge extends Field implements FilterableField
+class Badge extends Field implements FilterableField, Unfillable
 {
     use FieldFilterable;
 
@@ -266,7 +266,13 @@ class Badge extends Field implements FilterableField
      */
     public function resolveIcon()
     {
-        return $this->icons[$this->value];
+        $mappedValue = $this->map[$this->value] ?? $this->value;
+
+        if (! isset($this->icons[$mappedValue])) {
+            throw new Exception("Error trying to find icon [{$mappedValue}] inside of the field's icon mapping.");
+        }
+
+        return $this->icons[$mappedValue];
     }
 
     /**

@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { RouteParameters } from '@/mixins'
+import {RouteParameters} from '@/mixins'
 
 export default {
   emits: ['sort', 'reset'],
@@ -46,7 +46,7 @@ export default {
 
   methods: {
     /**
-     * Handle the clicke event.
+     * Handle the click event.
      */
     handleClick() {
       if (this.isSorted && this.isDescDirection) {

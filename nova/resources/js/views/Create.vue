@@ -14,8 +14,12 @@
 </template>
 
 <script>
-import {mapProps, PreventsFormAbandonment, PreventsModalAbandonment,} from '@/mixins'
-import {uid} from 'uid/single'
+import {
+  mapProps,
+  PreventsFormAbandonment,
+  PreventsModalAbandonment,
+} from '@/mixins'
+import { uid } from 'uid/single'
 
 export default {
   emits: ['refresh', 'create-cancelled'],

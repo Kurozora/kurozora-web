@@ -55,3 +55,9 @@ onMounted(async () => {
   loading.value = false
 })
 </script>
+
+<script>
+export default {
+  inheritAttrs: false,
+}
+</script>

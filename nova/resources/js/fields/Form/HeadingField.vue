@@ -31,8 +31,13 @@ export default {
     },
   },
 
-  created() {
-    this.field.fill = () => {}
+  methods: {
+    /**
+     * Provide a function to fills FormData when field is visible.
+     */
+    fillIfVisible(formData, attribute, value) {
+      //
+    },
   },
 
   computed: {

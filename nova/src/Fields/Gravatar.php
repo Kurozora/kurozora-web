@@ -5,7 +5,7 @@ namespace Laravel\Nova\Fields;
 /**
  * @method static static make(mixed $name = 'Avatar', string|null $attribute = 'email')
  */
-class Gravatar extends Avatar
+class Gravatar extends Avatar implements Unfillable
 {
     /**
      * Create a new field.

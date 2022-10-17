@@ -56,6 +56,7 @@
 
         <LoadingButton
           dusk="update-and-continue-editing-button"
+          type="button"
           @click="submitViaUpdateResourceAndContinueEditing"
           :disabled="isWorking"
           align="center"
@@ -82,14 +83,14 @@
 import each from 'lodash/each'
 import tap from 'lodash/tap'
 import {
-    Errors,
-    HandlesFormRequest,
-    HandlesUploads,
-    InteractsWithResourceInformation,
-    mapProps,
-    PreventsFormAbandonment,
+  Errors,
+  HandlesFormRequest,
+  HandlesUploads,
+  InteractsWithResourceInformation,
+  mapProps,
+  PreventsFormAbandonment,
 } from '@/mixins'
-import {mapActions} from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   mixins: [

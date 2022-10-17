@@ -1,4 +1,4 @@
-import {Errors} from 'form-backend-validation'
+import { Errors } from 'form-backend-validation'
 
 export default {
   props: {

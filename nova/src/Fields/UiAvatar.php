@@ -5,7 +5,7 @@ namespace Laravel\Nova\Fields;
 /**
  * @method static static make(mixed $name = 'Avatar', string|null $attribute = 'name')
  */
-class UiAvatar extends Avatar
+class UiAvatar extends Avatar implements Unfillable
 {
     /**
      * UI-Avatars settings.

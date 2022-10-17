@@ -1,4 +1,4 @@
-import {hourCycle} from '@/util'
+import { hourCycle } from '@/util'
 
 export default {
   computed: {

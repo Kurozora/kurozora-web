@@ -3,6 +3,7 @@
     :field="currentField"
     :errors="errors"
     :show-help-text="showHelpText"
+    :full-width-content="fullWidthContent"
   >
     <template #field>
       <div class="space-y-2">
@@ -26,7 +27,7 @@ import find from 'lodash/find'
 import isNil from 'lodash/isNil'
 import fromPairs from 'lodash/fromPairs'
 import map from 'lodash/map'
-import {DependentFormField, HandlesValidationErrors} from '@/mixins'
+import { DependentFormField, HandlesValidationErrors } from '@/mixins'
 
 export default {
   mixins: [HandlesValidationErrors, DependentFormField],

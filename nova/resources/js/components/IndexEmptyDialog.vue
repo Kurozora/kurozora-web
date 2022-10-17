@@ -28,7 +28,7 @@
     <CreateResourceButton
       type="outline-button"
       class="flex-shrink-0"
-      :class="{ 'mt-6': authorizedToCreate }"
+      :class="{ 'mt-6': authorizedToCreate || authorizedToRelate }"
       :label="createButtonLabel"
       :singular-name="singularName"
       :resource-name="resourceName"

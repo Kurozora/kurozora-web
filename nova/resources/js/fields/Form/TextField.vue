@@ -3,31 +3,45 @@
     :field="currentField"
     :errors="errors"
     :show-help-text="showHelpText"
+    :full-width-content="fullWidthContent"
   >
     <template #field>
-      <input
-        v-bind="extraAttributes"
-        class="w-full form-control form-input form-input-bordered"
-        @input="handleChange"
-        :value="value"
-        :id="currentField.uniqueKey"
-        :dusk="field.attribute"
-        :disabled="currentlyIsReadonly"
-      />
-
-      <datalist v-if="suggestions.length > 0" :id="suggestionsId">
-        <option
-          :key="suggestion"
-          v-for="suggestion in suggestions"
-          :value="suggestion"
+      <div class="space-y-1">
+        <input
+          v-bind="extraAttributes"
+          class="w-full form-control form-input form-input-bordered"
+          @input="handleChange"
+          :value="value"
+          :id="currentField.uniqueKey"
+          :dusk="field.attribute"
+          :disabled="currentlyIsReadonly"
+          :maxlength="field.enforceMaxlength ? field.maxlength : -1"
         />
-      </datalist>
+
+        <datalist v-if="suggestions.length > 0" :id="suggestionsId">
+          <option
+            :key="suggestion"
+            v-for="suggestion in suggestions"
+            :value="suggestion"
+          />
+        </datalist>
+
+        <CharacterCounter
+          v-if="field.maxlength"
+          :count="value.length"
+          :limit="field.maxlength"
+        />
+      </div>
     </template>
   </DefaultField>
 </template>
 
 <script>
-import {DependentFormField, FieldSuggestions, HandlesValidationErrors,} from '@/mixins'
+import {
+  DependentFormField,
+  FieldSuggestions,
+  HandlesValidationErrors,
+} from '@/mixins'
 
 export default {
   mixins: [DependentFormField, FieldSuggestions, HandlesValidationErrors],

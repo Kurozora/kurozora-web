@@ -10,9 +10,9 @@
 </template>
 
 <script>
-import {mapProps} from '@/mixins'
+import { mapProps } from '@/mixins'
 import ResourceUpdate from '@/views/Update'
-import {uid} from 'uid/single'
+import { uid } from 'uid/single'
 
 export default {
   name: 'Update',

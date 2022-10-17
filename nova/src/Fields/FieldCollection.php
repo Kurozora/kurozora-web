@@ -124,9 +124,23 @@ class FieldCollection extends Collection
      */
     public function filterForPreview(NovaRequest $request, $resource)
     {
-        return $this->filter(function ($field) use ($resource, $request) {
+        return $this->filter(function (Field $field) use ($resource, $request) {
             return $field->isShownOnPreview($request, $resource);
         })->values();
+    }
+
+    /**
+     * Filter fields for showing when peeking.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @return static<int, \Laravel\Nova\Fields\Field>
+     */
+    public function filterForPeeking(NovaRequest $request)
+    {
+        return $this
+            ->filter(function (Field $field) use ($request) {
+                return $field->isShownWhenPeeking($request);
+            })->values();
     }
 
     /**

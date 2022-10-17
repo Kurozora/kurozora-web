@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import {FieldValue} from '@/mixins'
+import { FieldValue } from '@/mixins'
 
 export default {
   mixins: [FieldValue],

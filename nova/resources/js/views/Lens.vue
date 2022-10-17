@@ -149,17 +149,17 @@
 
 <script>
 import {
-    Deletable,
-    HasCards,
-    IndexConcerns,
-    InteractsWithQueryString,
-    InteractsWithResourceInformation,
-    Paginatable,
-    PerPageable,
-    SupportsPolling,
+  HasCards,
+  Paginatable,
+  PerPageable,
+  Deletable,
+  IndexConcerns,
+  InteractsWithQueryString,
+  InteractsWithResourceInformation,
+  SupportsPolling,
 } from '@/mixins'
-import {Cancel, CancelToken} from 'axios'
-import {minimum} from '@/util'
+import { CancelToken, Cancel } from 'axios'
+import { minimum } from '@/util'
 
 export default {
   mixins: [

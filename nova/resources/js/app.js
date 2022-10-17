@@ -1,16 +1,16 @@
 import Localization from '@/mixins/Localization'
-import {setupAxios} from '@/util/axios'
-import {setupNumbro} from '@/util/numbro'
-import {setupInertia} from '@/util/inertia'
+import { setupAxios } from '@/util/axios'
+import { setupNumbro } from '@/util/numbro'
+import { setupInertia } from '@/util/inertia'
 import url from '@/util/url'
-import {createInertiaApp, Head, Link} from '@inertiajs/inertia-vue3'
-import {Inertia} from '@inertiajs/inertia'
+import { createInertiaApp, Head, Link } from '@inertiajs/inertia-vue3'
+import { Inertia } from '@inertiajs/inertia'
 import NProgress from 'nprogress'
-import {registerViews} from './components'
-import {registerFields} from './fields'
+import { registerViews } from './components'
+import { registerFields } from './fields'
 import Mousetrap from 'mousetrap'
 import Form from 'form-backend-validation'
-import {createNovaStore} from './store'
+import { createNovaStore } from './store'
 import resourceStore from './store/resources'
 import FloatingVue from 'floating-vue'
 import find from 'lodash/find'
@@ -37,7 +37,7 @@ import 'codemirror/keymap/vim'
 import 'codemirror/mode/sql/sql'
 import 'codemirror/mode/twig/twig'
 import 'codemirror/mode/htmlmixed/htmlmixed'
-import {ColorTranslator} from 'colortranslator'
+import { ColorTranslator } from 'colortranslator'
 
 import 'floating-vue/dist/style.css'
 
@@ -138,6 +138,8 @@ class Nova {
 
         this.app.use(plugin)
         this.app.use(FloatingVue, {
+          preventOverflow: true,
+          flip: true,
           themes: {
             Nova: {
               $extend: 'tooltip',

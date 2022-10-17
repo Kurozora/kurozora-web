@@ -92,9 +92,14 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import {Errors, HasCards, InteractsWithResourceInformation, mapProps,} from '@/mixins'
-import {minimum} from '@/util'
-import {mapActions} from 'vuex'
+import {
+  Errors,
+  HasCards,
+  InteractsWithResourceInformation,
+  mapProps,
+} from '@/mixins'
+import { minimum } from '@/util'
+import { mapActions } from 'vuex'
 
 export default {
   props: {
