@@ -32,7 +32,8 @@ class BadgeResource extends JsonResource
                 'name'              => $badge->name,
                 'description'       => $badge->description,
                 'textColor'         => $badge->text_color,
-                'backgroundColor'   => $badge->background_color
+                'backgroundColor'   => $badge->background_color,
+                'symbol'            => ImageResource::make($this->resource->symbol_image),
             ]
         ];
     }

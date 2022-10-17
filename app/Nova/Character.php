@@ -15,8 +15,8 @@ use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
+use Outl1ne\NovaColorField\Color;
 use Ramsey\Uuid\Uuid;
-use Timothyasp\Color\Color;
 
 class Character extends Resource
 {
@@ -88,18 +88,23 @@ class Character extends Resource
                     Heading::make('Colors (automatically generated if empty)'),
 
                     Color::make('Background Color')
+                        ->slider()
                         ->help('The average background color of the image.'),
 
                     Color::make('Text Color 1')
+                        ->slider()
                         ->help('The primary text color that may be used if the background color is displayed.'),
 
                     Color::make('Text Color 2')
+                        ->slider()
                         ->help('The secondary text color that may be used if the background color is displayed.'),
 
                     Color::make('Text Color 3')
+                        ->slider()
                         ->help('The tertiary text color that may be used if the background color is displayed.'),
 
                     Color::make('Text Color 4')
+                        ->slider()
                         ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
 
                     Heading::make('Dimensions (automatically generated if empty)'),
