@@ -31,9 +31,9 @@
                     <div class="relative">
                         <livewire:components.profile-image-view :user="$user" />
 
-                        @if ($badge = $user->badges()->first())
-                            <span class="absolute bottom-0 pl-2 pr-2 border-2 whitespace-nowrap rounded-full" style="color: {{ $badge->text_color }}; background-color: {{ $badge->background_color }}; border-color: {{ $badge->text_color }};" title="{{ $badge->name }} Badge">{{ $badge->name }}</span>
-                        @endif
+{{--                        @if ($badge = $user->badges()->first())--}}
+{{--                            <span class="absolute bottom-0 pl-2 pr-2 border-2 whitespace-nowrap rounded-full" style="color: {{ $badge->text_color }}; background-color: {{ $badge->background_color }}; border-color: {{ $badge->text_color }};" title="{{ $badge->name }} Badge">{{ $badge->name }}</span>--}}
+{{--                        @endif--}}
                     </div>
 
                     <div>

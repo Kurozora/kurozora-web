@@ -106,7 +106,10 @@ class Tab extends Component
             $selected = $order['selected'];
 
             if (!empty($selected)) {
-                $orders[$attribute] = $selected;
+                $orders[] = [
+                    'column' => $attribute,
+                    'direction' => $selected,
+                ];
             }
         }
 
