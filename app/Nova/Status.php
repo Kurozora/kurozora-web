@@ -8,7 +8,7 @@ use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
-use Timothyasp\Color\Color;
+use Outl1ne\NovaColorField\Color;
 
 class Status extends Resource
 {
@@ -84,6 +84,7 @@ class Status extends Resource
                 ->required(),
 
             Color::make('Color')
+                ->slider()
                 ->help('The color associated with the status. Should be unique and make the status identifiable just by looking at the color.'),
 
             HasMany::make('Anime'),
