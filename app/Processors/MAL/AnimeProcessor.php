@@ -22,7 +22,6 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Stringable;
-use Log;
 use RoachPHP\ItemPipeline\ItemInterface;
 use RoachPHP\ItemPipeline\Processors\ItemProcessorInterface;
 use RoachPHP\Support\Configurable;
@@ -736,7 +735,7 @@ class AnimeProcessor implements ItemProcessorInterface
             try {
                 $anime->updatePosterImage($imageUrl, $anime->original_title);
             } catch (Exception $e) {
-                Log::error($e->getMessage());
+                logger()->channel('stderr')->error($e->getMessage());
             }
         }
     }
