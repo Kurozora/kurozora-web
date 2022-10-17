@@ -3,6 +3,8 @@
 namespace App\Contracts\AppStore;
 
 use App\Models\User;
+use App\Models\UserReceipt;
+use Imdhemy\Purchases\Events\PurchaseEvent;
 
 interface HandlesSubscription
 {
@@ -14,18 +16,19 @@ interface HandlesSubscription
     public function handle($event);
 
     /**
-     * Finds the user to which the subscription belongs.
+     * Returns the user to which the subscription belongs.
      *
-     * @param string $uniqueIdentifier
-     * @return User
+     * @param string $userID
+     * @param string $originalTransactionID
+     * @return UserReceipt|null
      */
-    public function findUserBySubscriptionId(string $uniqueIdentifier): User;
+    public function findUserReceipt(string $userID, string $originalTransactionID): ?UserReceipt;
 
     /**
      * Notify the user of the changes applied to the subscription.
      *
      * @param User $user
-     * @param $event
+     * @param PurchaseEvent $event
      */
-    public function notifyUserAboutUpdate(User $user, $event);
+    public function notifyUserAboutUpdate(User $user, PurchaseEvent $event);
 }

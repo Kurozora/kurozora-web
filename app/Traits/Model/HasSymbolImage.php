@@ -48,7 +48,7 @@ trait HasSymbolImage
      * @throws FileIsTooBig
      * @throws FileCannotBeAdded
      */
-    function updateSymbolImage(string|UploadedFile $uploadFile, string $name = null, array $customProperties = [])
+    function updateSymbolImage(string|UploadedFile $uploadFile, string $name = null, array $customProperties = []): void
     {
         // Determine media adder
         $addMedia = str($uploadFile)->startsWith(['http://', 'https://']) ? $this->addMediaFromUrl($uploadFile) : $this->addMedia($uploadFile);
@@ -76,7 +76,7 @@ trait HasSymbolImage
      *
      * @return void
      */
-    public function deleteSymbolImage()
+    public function deleteSymbolImage(): void
     {
         $this->clearMediaCollection($this->symbolImageCollectionName);
     }
