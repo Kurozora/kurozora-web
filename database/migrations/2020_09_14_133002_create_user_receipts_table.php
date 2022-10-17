@@ -17,16 +17,19 @@ return new class extends Migration
     {
         Schema::create(UserReceipt::TABLE_NAME, function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->uuid('user_id');
             $table->string('original_transaction_id');
-            $table->string('web_order_line_item_id');
-            $table->dateTime('latest_expires_date');
-            $table->longText('latest_receipt_data');
+            $table->string('web_order_line_item_id')->nullable();
+            $table->string('offer_id')->nullable();
+            $table->string('subscription_group_id')->nullable();
+            $table->string('product_id');
             $table->boolean('is_subscribed');
             $table->boolean('will_auto_renew');
-            $table->dateTime('upgrade_date')->nullable();
-            $table->dateTime('cancellation_date')->nullable();
-            $table->string('subscription_product_id');
+            $table->dateTime('original_purchased_at');
+            $table->dateTime('purchased_at');
+            $table->dateTime('expired_at')->nullable();
+            $table->dateTime('upgraded_at')->nullable();
+            $table->dateTime('revoked_at')->nullable();
             $table->timestamps();
         });
 
@@ -35,7 +38,7 @@ return new class extends Migration
             $table->unique(['user_id', 'original_transaction_id']);
 
             // Set foreign key constraints
-            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('user_id')->references('uuid')->on(User::TABLE_NAME);
         });
     }
 

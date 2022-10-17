@@ -29,58 +29,79 @@ class StoreController extends Controller
     {
         $data = $request->validated();
         $receipt = $data['receipt'];
-        $receiptData = $this->validated($receipt);
+        $receiptResponse = $this->validated($receipt);
 
-        if (!$receiptData->getStatus()->isValid() &&
-            $receiptData->getReceipt()->getBundleId() != config('app.ios.bundle_id')) {
+        if (!$receiptResponse->getStatus()->isValid() &&
+            $receiptResponse->getReceipt()->getBundleId() != config('app.ios.bundle_id')) {
             throw new ConflictHttpException('The generated receipt is invalid.');
         }
 
-        $latestReceiptInfo = $receiptData->getLatestReceiptInfo()[0];
-        $expiresDate = $latestReceiptInfo->getExpiresDate();
-        $originalTransactionID = $latestReceiptInfo->getOriginalTransactionId();
-        $webOrderLineItemID = $latestReceiptInfo->getWebOrderLineItemId();
-        $subscriptionProductId = $latestReceiptInfo->getProductId();
+        // Get the receipt status
+        $receiptStatus = $receiptResponse->getStatus();
 
-        // Check for grace period.
-        $pendingRenewalInfo = $receiptData->getPendingRenewalInfo()[0];
-        $isInGracePeriod = $this->isInGracePeriod($pendingRenewalInfo);
+        if ($receiptStatus->isValid()) {
+            // We can loop all of them or either get the first one (recently purchased).
+            // Currently, we only need to verify recent purchase.
+            $latestReceiptInfo = $receiptResponse->getLatestReceiptInfo();
+            $receiptInfo = $latestReceiptInfo[0];
 
-        // Decide validity of the subscription and whether it will auto-renew.
-        $subscriptionIsValid = $expiresDate->isFuture() || $isInGracePeriod;
-        $willAutoRenew = $pendingRenewalInfo->isAutoRenewStatus();
+            // Collect IDs
+            $userID = $receiptInfo->getAppAccountToken();
+            $originalTransactionID = $receiptInfo->getOriginalTransactionId();
+            $webOrderLineItemID = $receiptInfo->getWebOrderLineItemId();
+            $offerID = $receiptInfo->getPromotionalOfferId();
+            $subscriptionGroupID = $receiptInfo->getSubscriptionGroupIdentifier();
+            $productID = $receiptInfo->getProductId();
 
-        // Get authenticated user.
-        $userID = auth()->id();
+            // Collect dates
+            $originalPurchaseDate = $receiptInfo->getOriginalPurchaseDate();
+            $purchaseDate = $receiptInfo->getPurchaseDate();
+            $expiresDate = $receiptInfo->getExpiresDate();
+            $revokedDate = $receiptInfo->getCancellationDate();
 
-        /** @var UserReceipt $foundReceipt */
-        $foundReceipt = UserReceipt::whereUserId($userID)->first();
+            // Check for grace period
+            $pendingRenewalInfo = $receiptResponse->getPendingRenewalInfo()[0];
+            $isInGracePeriod = $this->isInGracePeriod($pendingRenewalInfo);
 
-        if ($foundReceipt) {
-            $foundReceipt->save([
-                'latest_receipt_data' => $receipt,
-                'latest_expires_date' => $expiresDate->toDateTime(),
-                'is_subscribed' => $subscriptionIsValid,
-                'subscription_product_id' => $subscriptionProductId
+            // Decide validity of the subscription and whether it will auto-renew
+            $isSubscriptionValid = $expiresDate?->isFuture() || $isInGracePeriod;
+            $willAutoRenew = $pendingRenewalInfo->getAutoRenewStatus();
+
+            // Save user receipt
+            $userReceipt = UserReceipt::firstWhere([
+                ['user_id', '=', $userID],
+                ['original_transaction_id', '=', $originalTransactionID]
             ]);
+
+            if (empty($userReceipt)) {
+                $userReceipt = UserReceipt::create([
+                    'user_id'                   => $userID,
+                    'original_transaction_id'   => $originalTransactionID,
+                    'web_order_line_item_id'    => $webOrderLineItemID,
+                    'offer_id'                  => $offerID,
+                    'subscription_group_id'     => $subscriptionGroupID,
+                    'product_id'                => $productID,
+                    'is_subscribed'             => $isSubscriptionValid,
+                    'will_auto_renew'           => $willAutoRenew,
+                    'original_purchased_at'     => $originalPurchaseDate?->toDateTime(),
+                    'purchased_at'              => $purchaseDate?->toDateTime(),
+                    'expired_at'                => $expiresDate?->toDateTime(),
+                    'revoked_at'                => $revokedDate?->toDateTime(),
+                ]);
+            }
+
+            $userReceipt->user->is_subscribed = $isSubscriptionValid;
+            $userReceipt->user->save();
         } else {
-            UserReceipt::create([
-                'user_id'                   => $userID,
-                'original_transaction_id'   => $originalTransactionID,
-                'web_order_line_item_id'    => $webOrderLineItemID,
-                'latest_receipt_data'       => $receipt,
-                'latest_expires_date'       => $expiresDate->toDateTime(),
-                'is_subscribed'             => $subscriptionIsValid,
-                'will_auto_renew'           => $willAutoRenew,
-                'subscription_product_id'   => $subscriptionProductId
-            ]);
+            // The receipt is invalid
+            $isSubscriptionValid = false;
         }
 
         return JSONResult::success([
             'data' => [
                 'type' => 'subscription',
                 'attributes' => [
-                    'isValid' => $subscriptionIsValid
+                    'isValid' => $isSubscriptionValid
                 ]
             ]
         ]);
@@ -91,9 +112,7 @@ class StoreController extends Controller
      *
      * @param string $receiptData
      *
-     *
      * @return ReceiptResponse
-     *
      * @throws GuzzleException
      * @throws InvalidReceiptException
      */
@@ -114,8 +133,8 @@ class StoreController extends Controller
      */
     public function isInGracePeriod(PendingRenewal $pendingRenewalInfo): bool
     {
-        return $pendingRenewalInfo->isInBillingRetryPeriod() &&
+        return $pendingRenewalInfo->getIsInBillingRetryPeriod() &&
             $pendingRenewalInfo->getGracePeriodExpiresDate() !== null &&
-            $pendingRenewalInfo->getGracePeriodExpiresDate()->isFuture();
+            $pendingRenewalInfo->getGracePeriodExpiresDate()?->isFuture();
     }
 }

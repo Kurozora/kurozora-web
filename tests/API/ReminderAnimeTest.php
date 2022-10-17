@@ -54,14 +54,13 @@ class ReminderAnimeTest extends TestCase
         $this->user->library()->attach($anime, ['status' => UserLibraryStatus::Watching]);
 
         // Attach a receipt to the user
-        $this->user->receipt()->create([
+        $this->user->receipts()->create([
             'original_transaction_id' => '1',
             'web_order_line_item_id' => '1',
-            'latest_expires_date' => now()->addDay(),
-            'latest_receipt_data' => '1',
+            'latest_expires_at' => now()->addDay(),
             'is_subscribed' => 1,
             'will_auto_renew' => 0,
-            'subscription_product_id' => 'SKU'
+            'product_id' => 'SKU'
         ]);
 
         // Send request to add the anime from the user's reminders
@@ -93,14 +92,13 @@ class ReminderAnimeTest extends TestCase
         $this->user->reminder_anime()->attach($anime->id);
 
         // Attach a receipt to the user
-        $this->user->receipt()->create([
+        $this->user->receipts()->create([
             'original_transaction_id' => '1',
             'web_order_line_item_id' => '1',
-            'latest_expires_date' => now()->addDay(),
-            'latest_receipt_data' => '1',
+            'latest_expires_at' => now()->addDay(),
             'is_subscribed' => 1,
             'will_auto_renew' => 0,
-            'subscription_product_id' => 'SKU'
+            'product_id' => 'SKU'
         ]);
 
         // Send request to remove the anime from the user's reminders

@@ -33,7 +33,7 @@
         "halaxa/json-machine": "^1.0",
         "hisorange/browser-detect": "^4.4",
         "http-interop/http-factory-guzzle": "^1.2",
-        "imdhemy/laravel-purchases": "^0.10.2",
+        "imdhemy/laravel-purchases": "^1.0",
         "intervention/image": "^2.7",
         "jaybizzle/crawler-detect": "^1.2",
         "kabbouchi/nova-logs-tool": "^2.0",

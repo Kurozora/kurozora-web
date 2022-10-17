@@ -51,7 +51,13 @@ trait HasPosterImage
     function updatePosterImage(string|UploadedFile $uploadFile, string $name = null, array $customProperties = []): void
     {
         // Determine media adder
-        $addMedia = str($uploadFile)->startsWith(['http://', 'https://']) ? $this->addMediaFromUrl($uploadFile) : $this->addMedia($uploadFile);
+        if ($isUrl = str($uploadFile)->startsWith(['http://', 'https://'])) {
+            $addMedia = $this->addMediaFromUrl($uploadFile);
+        } elseif ($isUploadFile = $uploadFile instanceof UploadedFile) {
+            $addMedia = $this->addMedia($uploadFile);
+        } else {
+            $addMedia = $this->addMediaFromStream($uploadFile);
+        }
 
         // Configure properties
         if (!empty($name)) {
@@ -60,11 +66,15 @@ trait HasPosterImage
         if (!empty($customProperties)) {
             $addMedia->withCustomProperties($customProperties);
         }
-        if (is_string($uploadFile)) {
+
+        if ($isUrl) {
             $extension = pathinfo($uploadFile, PATHINFO_EXTENSION);
             $addMedia->usingFileName(Uuid::uuid4() . '.' . $extension);
-        } else {
+        } elseif ($isUploadFile) {
             $addMedia->usingFileName(Uuid::uuid4() . '.' . $uploadFile->extension());
+        } else {
+            $extension = pathinfo($uploadFile, PATHINFO_EXTENSION);
+            $addMedia->usingFileName(Uuid::uuid4() . '.' . $extension);
         }
 
         // Add media
