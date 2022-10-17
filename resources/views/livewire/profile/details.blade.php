@@ -28,21 +28,32 @@
         <section class="relative max-w-7xl mx-auto pl-4 pr-4 py-6 z-10 sm:px-6">
             <div class="flex items-end justify-between -mt-14 sm:-mt-20">
                 <div class="flex items-end">
-                    <livewire:components.profile-image-view :user="$user" />
+                    <div class="relative">
+                        <livewire:components.profile-image-view :user="$user" />
 
-                    <span class="flex items-baseline">
-                        <p class="ml-2 text-xl font-bold">{{ $user->username }}</p>
-                        @switch ($user->getActivityStatus()->value)
-                            @case(\App\Enums\UserActivityStatus::SeenRecently)
-                                <span class="block ml-1 w-2 h-2 bg-yellow-500 rounded-full" title="{{ __('Seen Recently') }}"></span>
-                                @break
-                            @case(\App\Enums\UserActivityStatus::Online)
-                                <span class="block ml-1 w-2 h-2 bg-green-500 rounded-full" title="{{ __('Online') }}"></span>
-                                @break
-                            @case(\App\Enums\UserActivityStatus::Offline)
-                                <span class="block ml-1 w-2 h-2 bg-red-500 rounded-full" title="{{ __('Offline') }}"></span>
-                        @endswitch
-                    </span>
+                        @if ($badge = $user->badges()->first())
+                            <span class="absolute bottom-0 pl-2 pr-2 border-2 whitespace-nowrap rounded-full" style="color: {{ $badge->text_color }}; background-color: {{ $badge->background_color }}; border-color: {{ $badge->text_color }};" title="{{ $badge->name }} Badge">{{ $badge->name }}</span>
+                        @endif
+                    </div>
+
+                    <div>
+                        <span class="flex items-baseline">
+                            <p class="ml-2 text-xl font-bold">{{ $user->username }}</p>
+                            @switch ($user->getActivityStatus()->value)
+                                @case(\App\Enums\UserActivityStatus::SeenRecently)
+                                    <span class="block ml-1 w-2 h-2 bg-yellow-500 rounded-full" title="{{ __('Seen Recently') }}"></span>
+                                    @break
+                                @case(\App\Enums\UserActivityStatus::Online)
+                                    <span class="block ml-1 w-2 h-2 bg-green-500 rounded-full" title="{{ __('Online') }}"></span>
+                                    @break
+                                @case(\App\Enums\UserActivityStatus::Offline)
+                                    <span class="block ml-1 w-2 h-2 bg-red-500 rounded-full" title="{{ __('Offline') }}"></span>
+                            @endswitch
+                            @if ($user->is_pro || $user->is_subscribed)
+                                <span class="block ml-1 pl-2 pr-2 border-2 rounded-full text-xs" style="color: #ffd200; border-color: #ffd200;" title="{{ __('Pro account') }}">{{ __('PRO') }}</span>
+                            @endif
+                        </span>
+                    </div>
                 </div>
 
                 @auth

@@ -4456,11 +4456,11 @@
         },
         {
             "name": "laravel/nova",
-            "version": "4.16.1",
+            "version": "4.15.2",
             "dist": {
                 "type": "path",
                 "url": "./nova",
-                "reference": "0b2e7b27c1df73f81ad1058da6c81ccffdc6706c"
+                "reference": "dfcbe85d662f97d9fe549bcb1800f0fa9276d7d0"
             },
             "require": {
                 "brick/money": "^0.5.0|^0.6.0",
@@ -7034,20 +7034,20 @@
         },
         {
             "name": "nova-kit/nova-packages-tool",
-            "version": "v1.5.1",
+            "version": "v1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nova-kit/nova-packages-tool.git",
-                "reference": "1077c1c7ff011b59396b80a1f5d92251d2aa44d7"
+                "reference": "1af44e3422e6a885f51d8d2cad7a9234bc3ca088"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nova-kit/nova-packages-tool/zipball/1077c1c7ff011b59396b80a1f5d92251d2aa44d7",
-                "reference": "1077c1c7ff011b59396b80a1f5d92251d2aa44d7",
+                "url": "https://api.github.com/repos/nova-kit/nova-packages-tool/zipball/1af44e3422e6a885f51d8d2cad7a9234bc3ca088",
+                "reference": "1af44e3422e6a885f51d8d2cad7a9234bc3ca088",
                 "shasum": ""
             },
             "require": {
-                "laravel/nova": ">=4.16.0 <4.17.0",
+                "laravel/nova": ">=4.15.0 <4.16.0",
                 "php": "^7.3 || ^8.0"
             },
             "require-dev": {
@@ -7055,6 +7055,9 @@
             },
             "type": "library",
             "extra": {
+                "branch-alias": {
+                    "dev-main": "1.4.x-dev"
+                },
                 "laravel": {
                     "providers": [
                         "NovaKit\\NovaPackagesTool\\LaravelServiceProvider"
@@ -7078,9 +7081,10 @@
             ],
             "description": "Tool for Laravel Nova Packages Development",
             "support": {
-                "source": "https://github.com/nova-kit/nova-packages-tool/tree/v1.5.1"
+                "issues": "https://github.com/nova-kit/nova-packages-tool/issues",
+                "source": "https://github.com/nova-kit/nova-packages-tool/tree/v1.4.0"
             },
-            "time": "2022-10-12T23:39:12+00:00"
+            "time": "2022-09-21T00:26:00+00:00"
         },
         {
             "name": "nunomaduro/termwind",
@@ -13562,16 +13566,16 @@
         },
         {
             "name": "vlucas/phpdotenv",
-            "version": "v5.4.1",
+            "version": "v5.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vlucas/phpdotenv.git",
-                "reference": "264dce589e7ce37a7ba99cb901eed8249fbec92f"
+                "reference": "1a7ea2afc49c3ee6d87061f5a233e3a035d0eae7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/264dce589e7ce37a7ba99cb901eed8249fbec92f",
-                "reference": "264dce589e7ce37a7ba99cb901eed8249fbec92f",
+                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/1a7ea2afc49c3ee6d87061f5a233e3a035d0eae7",
+                "reference": "1a7ea2afc49c3ee6d87061f5a233e3a035d0eae7",
                 "shasum": ""
             },
             "require": {
@@ -13586,15 +13590,19 @@
             "require-dev": {
                 "bamarni/composer-bin-plugin": "^1.4.1",
                 "ext-filter": "*",
-                "phpunit/phpunit": "^7.5.20 || ^8.5.21 || ^9.5.10"
+                "phpunit/phpunit": "^7.5.20 || ^8.5.30 || ^9.5.25"
             },
             "suggest": {
                 "ext-filter": "Required to use the boolean validator."
             },
             "type": "library",
             "extra": {
+                "bamarni-bin": {
+                    "bin-links": true,
+                    "forward-command": true
+                },
                 "branch-alias": {
-                    "dev-master": "5.4-dev"
+                    "dev-master": "5.5-dev"
                 }
             },
             "autoload": {
@@ -13626,7 +13634,7 @@
             ],
             "support": {
                 "issues": "https://github.com/vlucas/phpdotenv/issues",
-                "source": "https://github.com/vlucas/phpdotenv/tree/v5.4.1"
+                "source": "https://github.com/vlucas/phpdotenv/tree/v5.5.0"
             },
             "funding": [
                 {
@@ -13638,7 +13646,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-12-12T23:22:04+00:00"
+            "time": "2022-10-16T01:01:54+00:00"
         },
         {
             "name": "voku/portable-ascii",
