@@ -19,12 +19,12 @@ class UpdateUserPreferredTvRating implements UpdatesUserPreferredTvRating
      * @return void
      * @throws ValidationException
      */
-    public function update(User $user, array $input)
+    public function update(User $user, array $input): void
     {
         $rules = ['required', 'integer', 'not_in:0,1'];
 
         if ($input['tv_rating'] != -1) {
-            array_push($rules, 'exists:' . TvRating::TABLE_NAME . ',id');
+            $rules[] = 'exists:' . TvRating::TABLE_NAME . ',id';
         }
 
         Validator::make($input, [

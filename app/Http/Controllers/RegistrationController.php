@@ -35,7 +35,7 @@ class RegistrationController extends Controller
             'password'  => Hash::make($data['password']),
             'settings'  => [
                 'can_change_username'   => false,
-                'tv_rating'             => -1,
+                'tv_rating'             => 4,
             ],
         ]);
 
