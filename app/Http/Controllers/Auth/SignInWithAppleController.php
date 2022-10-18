@@ -225,7 +225,7 @@ class SignInWithAppleController extends Controller
             'password'          => Hash::make(Str::random(30)),
             'settings'          => [
                 'can_change_username'   => true,
-                'tv_rating'             => -1
+                'tv_rating'             => 4
             ],
         ]);
     }
