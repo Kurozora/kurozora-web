@@ -6324,9 +6324,5 @@
         }
       }
     }
-  },
-  "externalDocs": {
-    "description": "View KurozoraKit Documentation",
-    "url": "https://developer.kurozora.app/kurozorakit/"
   }
 }
