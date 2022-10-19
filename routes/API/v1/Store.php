@@ -10,10 +10,10 @@ Route::prefix('/store')
         Route::prefix('/subscriptions')
             ->name('.subscriptions')
             ->group(function () {
-                Route::post('/google', [ServerNotificationController::class, 'google'])
+                Route::post('/google', ServerNotificationController::class)
                     ->name('.google');
 
-                Route::post('/apple', [ServerNotificationController::class, 'apple'])
+                Route::post('/apple', ServerNotificationController::class)
                     ->name('.apple');
             });
 
