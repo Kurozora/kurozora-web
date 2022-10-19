@@ -46,6 +46,9 @@
                     <li class="mt-2">
                         <x-footer-link href="{{ route('misc.contact') }}">{{ __('Contact Kurozora') }}</x-footer-link>
                     </li>
+                    <li class="mt-2">
+                        <x-footer-link href="{{ route('misc.press-kit') }}">{{ __('Press-Kit') }}</x-footer-link>
+                    </li>
                 </ul>
             </div>
 
