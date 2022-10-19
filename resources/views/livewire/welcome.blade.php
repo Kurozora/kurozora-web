@@ -136,7 +136,7 @@
         </section>
 
         {{-- App Showcase --}}
-        <section class="mt-36 pl-4 pr-4 sm:px-6">
+        <section class="pl-4 pr-4 pt-36 pb-10 sm:px-6">
             <div class="flex flex-col items-center mx-auto max-w-2xl text-center">
                 <img class="m-10 mb-0" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="Kurozora">
 
