@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use App\Helpers\JSONResult;
 use App\Models\APIError;
 use FG\ASN1\Exception\NotImplementedException;
+use Http;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -72,6 +73,9 @@ class Handler extends ExceptionHandler
 
         if ($e instanceof ViewException) {
             $this->logDebugDetails($request, $e);
+        } else if (str($e->getTraceAsString())->contains('ServerNotificationController') && !$request->has('provider')) {
+            logger()->channel('stack')->critical(print_r($request->all(), true));
+            Http::post(route('liap.serverNotifications', ['provider' => 'app-store']), $request->all());
         }
 
         return parent::render($request, $e);
