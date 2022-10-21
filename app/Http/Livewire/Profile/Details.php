@@ -3,7 +3,9 @@
 namespace App\Http\Livewire\Profile;
 
 use App\Models\User;
+use App\Models\UserLibrary;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
@@ -60,7 +62,7 @@ class Details extends Component
      *
      * @return void
      */
-    public function mount(User $user)
+    public function mount(User $user): void
     {
         $this->user = $user;
     }
@@ -71,7 +73,7 @@ class Details extends Component
      * @param string|null $type
      * @return void
      */
-    public function togglePopupFor(?string $type)
+    public function togglePopupFor(?string $type): void
     {
         if (!is_string($type) && !in_array($type, $this->popupTypes)) {
             return;
@@ -79,6 +81,18 @@ class Details extends Component
 
         $this->selectedPopupType = $type;
         $this->showPopup = true;
+    }
+
+    /**
+     * Returns the user's library.
+     *
+     * @return LengthAwarePaginator
+     */
+    public function getUserLibraryProperty(): LengthAwarePaginator
+    {
+        return UserLibrary::search()
+            ->where('user_id', $this->user->id)
+            ->paginate(10);
     }
 
     /**
