@@ -2,15 +2,15 @@
     x-data="{
         loadResourceIsEnabled: @entangle('loadResourceIsEnabled'),
         loadResource() {
-            if (selectedStatus === '{{ strtolower($status) }}' && !this.loadResourceIsEnabled) {
-                @this.call('loadResource');
+            if (selectedStatus.toLowerCase() === '{{ strtolower($status) }}' && !this.loadResourceIsEnabled) {
+                @this.call('loadResource')
                 return true;
             }
 
-            return selectedStatus === '{{ strtolower($status) }}';
+            return selectedStatus.toLowerCase() === '{{ strtolower($status) }}'
         }
     }"
-    x-show="selectedStatus === '{{ strtolower($status) }}' && loadResource()"
+    x-show="selectedStatus.toLowerCase() === '{{ strtolower($status) }}' && loadResource()"
 >
     <section>
         <x-search-bar>

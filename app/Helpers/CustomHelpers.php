@@ -30,7 +30,7 @@ if (!function_exists('settings')) {
         /** @var Settings $settings */
         $settings = app(Settings::class);
 
-        return $settings->settings($key, $value, $setEmptyValue);
+        return $settings?->settings($key, $value, $setEmptyValue);
     }
 }
 
