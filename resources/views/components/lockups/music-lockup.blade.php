@@ -1,11 +1,11 @@
 @props(['animeSong', 'showEpisodes' => true, 'showAnime' => false, 'onMusicKitLoad' => false, 'isRow' => true])
 
 @php
-    /** @var \App\Models\AnimeSong $animeSong */
+    $class = $isRow ? 'w-64' : '';
 @endphp
 
 <div
-    class="relative pb-2 {{ $isRow ? 'w-64' : '' }}"
+    class="relative pb-2 snap-normal snap-center {{ $class }}"
     x-data="{
         song: null,
         bgColor: '#A660B2',
@@ -14,7 +14,7 @@
             if (!!songID) {
                 this.song = await MusicKit.getInstance().api.song(songID);
                 this.artworkURL = MusicKit.formatArtworkURL(this.song.attributes.artwork, 200, 200);
-                this.bgColor = '#'+this.song.attributes.artwork.bgColor;
+                this.bgColor = '#' + this.song.attributes.artwork.bgColor;
             }
         }
     }"

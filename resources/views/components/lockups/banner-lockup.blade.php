@@ -1,6 +1,6 @@
 @props(['anime'])
 
-<div class="relative pb-2">
+<div class="relative pb-2 snap-normal snap-center">
     <x-hr class="mb-4" />
 
     <div class="flex flex-nowrap">

@@ -1,7 +1,7 @@
 @props(['people' => [], 'isRow' => true])
 
 @php
-    $class = $isRow ? 'overflow-x-scroll no-scrollbar' : 'flex-wrap';
+    $class = $isRow ? 'snap-x overflow-x-scroll no-scrollbar' : 'flex-wrap';
 @endphp
 
 <div {{ $attributes->merge(['class' => 'flex gap-4 justify-between ' . $class]) }}>
