@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Profile;
+namespace App\Http\Livewire\Profile\Library\Anime;
 
 use App\Enums\UserLibraryStatus;
 use App\Models\User;
@@ -9,7 +9,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
-class AnimeLibrary extends Component
+class Index extends Component
 {
     /**
      * The object containing the user data.
@@ -59,6 +59,6 @@ class AnimeLibrary extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.profile.anime-library');
+        return view('livewire.profile.library.anime.index');
     }
 }

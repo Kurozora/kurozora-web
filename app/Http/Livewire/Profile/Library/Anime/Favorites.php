@@ -1,13 +1,10 @@
 <?php
 
-namespace App\Http\Livewire\Library;
+namespace App\Http\Livewire\Profile\Library\Anime;
 
-use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
 use App\Models\User;
-use App\Models\UserLibrary;
 use App\Traits\Livewire\WithAnimeSearch;
-use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -15,7 +12,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Component;
 
-class Tab extends Component
+class Favorites extends Component
 {
     use WithAnimeSearch;
 
@@ -27,58 +24,26 @@ class Tab extends Component
     public User $user;
 
     /**
-     * The user library status string.
-     *
-     * @var string $status
-     */
-    public string $status;
-
-    /**
-     * Whether to load the resource.
-     *
-     * @var bool $loadResourceIsEnabled
-     */
-    public bool $loadResourceIsEnabled = false;
-
-    /**
      * Prepare the component.
      *
      * @param User $user
-     * @param string $status
      * @return void
      */
-    public function mount(User $user, string $status): void
+    public function mount(User $user): void
     {
-        $status = str($status)->title();
         $this->user = $user;
-        $this->status = $status;
     }
 
-    /**
-     * Enable resource loading.
-     *
-     * @return void
-     */
-    public function loadResource(): void
-    {
-        $this->loadResourceIsEnabled = true;
-    }
 
     /**
      * Redirect the user to a random model.
      *
      * @return void
-     * @throws InvalidEnumKeyException
      */
     public function randomAnime(): void
     {
-        // Get library status
-        $status = str_replace('-', '', $this->status);
-        $userLibraryStatus = UserLibraryStatus::fromKey($status);
-
         $anime = $this->user
-            ->library()
-            ->wherePivot('status', $userLibraryStatus->value)
+            ->favorite_anime()
             ->inRandomOrder()
             ->first();
         $this->redirectRoute('anime.details', $anime);
@@ -88,14 +53,9 @@ class Tab extends Component
      * The computed search results property.
      *
      * @return ?LengthAwarePaginator
-     * @throws InvalidEnumKeyException
      */
     public function getSearchResultsProperty(): ?LengthAwarePaginator
     {
-        if (!$this->loadResourceIsEnabled) {
-            return null;
-        }
-
         // Order
         $orders = [];
         foreach ($this->order as $attribute => $order) {
@@ -128,25 +88,17 @@ class Tab extends Component
             }
         }
 
-        // Get library status
-        $status = str_replace('-', '', $this->status);
-        $userLibraryStatus = UserLibraryStatus::fromKey($status);
-
         // If no search was performed, return all anime
         if (empty($this->search) && empty($wheres) && empty($orders)) {
             $animes = $this->user
-                ->library()
-                ->wherePivot('status', $userLibraryStatus->value);
+                ->favorite_anime();
             return $animes->paginate($this->perPage);
         }
 
-        // Search
-        $animeIDs = collect(UserLibrary::search($this->search)
-            ->where('user_id', $this->user->id)
-            ->where('status', $userLibraryStatus->value)
+        $animeIDs = $this->user
+            ->favorite_anime()
             ->paginate(perPage: 2000, page: 1)
-            ->items())
-            ->pluck('anime_id')
+            ->pluck('id')
             ->toArray();
         $animes = Anime::search($this->search);
         $animes->whereIn('id', $animeIDs);
@@ -164,6 +116,6 @@ class Tab extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.library.tab');
+        return view('livewire.profile.library.anime.favorites');
     }
 }

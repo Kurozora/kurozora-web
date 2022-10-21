@@ -96,6 +96,18 @@ class Details extends Component
     }
 
     /**
+     * Returns the user's library.
+     *
+     * @return LengthAwarePaginator
+     */
+    public function getFavoriteAnimeProperty(): LengthAwarePaginator
+    {
+        return $this->user
+            ->favorite_anime()
+            ->paginate(10);
+    }
+
+    /**
      * Render the component.
      *
      * @return Application|Factory|View
