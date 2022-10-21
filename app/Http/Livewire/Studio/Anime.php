@@ -27,7 +27,7 @@ class Anime extends Component
      *
      * @return void
      */
-    public function mount(Studio $studio)
+    public function mount(Studio $studio): void
     {
         $this->studio = $studio;
     }
