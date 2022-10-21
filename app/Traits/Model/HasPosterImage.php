@@ -70,7 +70,7 @@ trait HasPosterImage
         if ($isUrl) {
             $extension = pathinfo($uploadFile, PATHINFO_EXTENSION);
             $addMedia->usingFileName(Uuid::uuid4() . '.' . $extension);
-        } elseif ($isUploadFile) {
+        } elseif (!empty($isUploadFile)) {
             $addMedia->usingFileName(Uuid::uuid4() . '.' . $uploadFile->extension());
         } else {
             $extension = pathinfo($uploadFile, PATHINFO_EXTENSION);
