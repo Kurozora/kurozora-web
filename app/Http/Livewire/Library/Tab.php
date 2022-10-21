@@ -10,6 +10,7 @@ use App\Models\MediaType;
 use App\Models\Source;
 use App\Models\Status;
 use App\Models\TvRating;
+use App\Models\User;
 use App\Models\UserLibrary;
 use App\Traits\Livewire\WithSearch;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
@@ -32,6 +33,13 @@ class Tab extends Component
     public static string $searchModel = Anime::class;
 
     /**
+     * The object containing the user data.
+     *
+     * @var User $user
+     */
+    public User $user;
+
+    /**
      * The user library status string.
      *
      * @var string $status
@@ -48,12 +56,14 @@ class Tab extends Component
     /**
      * Prepare the component.
      *
+     * @param User $user
      * @param string $status
      * @return void
      */
-    public function mount(string $status): void
+    public function mount(User $user, string $status): void
     {
         $status = str($status)->title();
+        $this->user = $user;
         $this->status = $status;
     }
 
@@ -79,7 +89,7 @@ class Tab extends Component
         $status = str_replace('-', '', $this->status);
         $userLibraryStatus = UserLibraryStatus::fromKey($status);
 
-        $anime = auth()->user()
+        $anime = $this->user
             ->library()
             ->wherePivot('status', $userLibraryStatus->value)
             ->inRandomOrder()
@@ -137,7 +147,7 @@ class Tab extends Component
 
         // If no search was performed, return all anime
         if (empty($this->search) && empty($wheres) && empty($orders)) {
-            $animes = auth()->user()
+            $animes = $this->user
                 ->library()
                 ->wherePivot('status', $userLibraryStatus->value);
             return $animes->paginate($this->perPage);
@@ -145,7 +155,7 @@ class Tab extends Component
 
         // Search
         $animeIDs = collect(UserLibrary::search($this->search)
-            ->where('user_id', auth()->user()->id)
+            ->where('user_id', $this->user->id)
             ->where('status', $userLibraryStatus->value)
             ->paginate(perPage: 2000, page: 1)
             ->items())
