@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('anime_id');
             $table->unsignedBigInteger('tv_rating_id')->nullable();
             $table->integer('number');
+            $table->boolean('is_nsfw')->default(false);
             $table->dateTime('first_aired')->nullable();
             $table->dateTime('last_aired')->nullable();
             $table->timestamps();

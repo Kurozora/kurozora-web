@@ -27,6 +27,7 @@ return new class extends Migration
             $table->unsignedMediumInteger('duration')->default(0);
             $table->dateTime('first_aired')->nullable();
             $table->boolean('is_filler')->default(false);
+            $table->boolean('is_nsfw')->default(false);
             $table->boolean('verified')->default(false);
             $table->integer('view_count')->default(0);
             $table->integer('watch_count')->default(0);

@@ -18,11 +18,11 @@ interface HandlesSubscription
     /**
      * Returns the user to which the subscription belongs.
      *
-     * @param string $userID
+     * @param ?string $userID
      * @param string $originalTransactionID
      * @return UserReceipt|null
      */
-    public function findUserReceipt(string $userID, string $originalTransactionID): ?UserReceipt;
+    public function findUserReceipt(?string $userID, string $originalTransactionID): ?UserReceipt;
 
     /**
      * Notify the user of the changes applied to the subscription.
