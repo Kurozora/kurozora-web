@@ -12,8 +12,8 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
+use Outl1ne\NovaColorField\Color;
 use Ramsey\Uuid\Uuid;
-use Timothyasp\Color\Color;
 
 class AppTheme extends Resource
 {
@@ -158,62 +158,107 @@ class AppTheme extends Resource
             Heading::make('Global'),
 
             Color::make('Background color', 'global_background_color')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
 
             Color::make('Tinted background color', 'global_tinted_background_color')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
 
             Color::make('Bar tint color', 'global_bar_tint_color')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
 
             Color::make('Bar title text color', 'global_bar_title_text_color')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
 
             Color::make('Blur background color', 'global_blur_background_color')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
 
             Color::make('Border color', 'global_border_color')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
 
             Color::make('Text color', 'global_text_color')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
 
             Color::make('Text field background color', 'global_text_field_background_color')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
 
             Color::make('Text field text color', 'global_text_field_text_color')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
 
             Color::make('Text field placeholder text color', 'global_text_field_placeholder_text_color')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
 
             Color::make('Tint color', 'global_tint_color')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
 
             Color::make('Tinted button text color', 'global_tinted_button_text_color')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
 
             Color::make('Separator color', 'global_separator_color')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
 
             Color::make('Separator color light', 'global_separator_color_light')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
 
             Color::make('Sub text color light', 'global_sub_text_color')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
 
@@ -221,38 +266,65 @@ class AppTheme extends Resource
                 ->hideFromIndex(),
 
             Color::make('Background color', 'table_view_cell_background_color')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
 
             Color::make('Title text color', 'table_view_cell_title_text_color')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
 
             Color::make('Sub text color', 'table_view_cell_sub_text_color')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
 
             Color::make('Chevron color', 'table_view_cell_chevron_color')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
 
             Color::make('Selected background color', 'table_view_cell_selected_background_color')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
 
             Color::make('Selected title text color', 'table_view_cell_selected_title_text_color')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
 
             Color::make('Selected sub text color', 'table_view_cell_selected_sub_text_color')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
 
             Color::make('Selected chevron color', 'table_view_cell_selected_chevron_color')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
 
             Color::make('Action default color', 'table_view_cell_action_default_color')
+                ->slider()
+                ->displayAs('hex8')
+                ->saveAs('hex8')
                 ->hideFromIndex()
                 ->required(),
         ];
