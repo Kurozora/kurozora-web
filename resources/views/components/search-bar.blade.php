@@ -12,7 +12,7 @@
 
         {{-- Order --}}
         @if (!empty($this->order))
-            <x-dropdown align="right" width="48">
+            <x-dropdown align="right" width="48" max-height="350px">
                 <x-slot:trigger>
                     <x-square-button>
                         @svg('arrow_up_arrow_down_circle', 'fill-current', ['aria-labelledby' => 'filter', 'width' => '28'])
@@ -49,7 +49,7 @@
 
         {{-- Filter --}}
         @if (!empty($this->filter))
-            <x-dropdown align="right" width="48">
+            <x-dropdown align="right" width="48" max-height="350px">
                 <x-slot:trigger>
                     <x-square-button>
                         @svg('line_3_horizontal_decrease_circle', 'fill-current', ['aria-labelledby' => 'filter', 'width' => '28'])
