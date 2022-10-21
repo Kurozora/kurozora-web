@@ -24,6 +24,7 @@ return new class extends Migration
             $table->mediumText('address')->nullable();
             $table->date('founded')->nullable();
             $table->json('website_urls')->nullable();
+            $table->boolean('is_nsfw')->default(false);
             $table->integer('view_count')->default(0);
             $table->timestamps();
             $table->softDeletes();
