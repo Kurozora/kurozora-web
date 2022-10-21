@@ -50,9 +50,11 @@ class AppServiceProvider extends ServiceProvider
     {
         // Register the user settings helper class.
         $this->app->singleton(Settings::class, function() {
-            $user = auth()->user();
+            if ($user = auth()->user()) {
+                return new Settings($user->settings, $user);
+            }
 
-            return new Settings($user->settings, $user);
+            return null;
         });
 
         // Register explore category scope. This makes sure only enabled categories are included.

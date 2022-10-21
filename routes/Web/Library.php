@@ -1,11 +1,13 @@
 <?php
 
-use App\Http\Livewire\Library\Index as LibraryIndex;
-
 Route::prefix('/library')
     ->name('library')
     ->middleware(['auth'])
     ->group(function () {
-        Route::get('/', LibraryIndex::class)
+        Route::get('/', function (\Illuminate\Http\Request $request) {
+            $parameters = $request->all();
+            $parameters['user'] = auth()->user();
+            return to_route('profile.anime-library', $parameters);
+        })
             ->name('.index');
     });

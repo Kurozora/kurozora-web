@@ -33,7 +33,7 @@
 
         <section class="mt-8">
             @foreach(\App\Enums\UserLibraryStatus::asSelectArray() as $key => $value)
-                <livewire:library.tab id="{{ $value }}" :status="$value" wire:key="{{ md5($value) }}" />
+                <livewire:library.tab id="{{ $value }}" :user="$user" :status="$value" wire:key="{{ md5($value) }}" />
             @endforeach
         </section>
     </div>
