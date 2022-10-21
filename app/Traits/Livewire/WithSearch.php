@@ -3,7 +3,9 @@
 namespace App\Traits\Livewire;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Laravel\Scout\Builder as ScoutBuilder;
 
 trait WithSearch
 {
@@ -101,10 +103,10 @@ trait WithSearch
     /**
      * Build an 'search index' query for the given resource.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param EloquentBuilder $query
+     * @return EloquentBuilder
      */
-    public function searchIndexQuery(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
     {
         return $query;
     }
@@ -112,10 +114,10 @@ trait WithSearch
     /**
      * Build an 'search' query for the given resource.
      *
-     * @param \Laravel\Scout\Builder $query
-     * @return \Laravel\Scout\Builder
+     * @param ScoutBuilder $query
+     * @return ScoutBuilder
      */
-    public function searchQuery(\Laravel\Scout\Builder $query): \Laravel\Scout\Builder
+    public function searchQuery(ScoutBuilder $query): ScoutBuilder
     {
         return $query;
     }

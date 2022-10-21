@@ -19,11 +19,11 @@ abstract class AppStoreListener implements HandlesSubscription
 
     /** Finds the user to which the subscription belongs.
      *
-     * @param string $userID
+     * @param ?string $userID
      * @param string $originalTransactionID
      * @return UserReceipt|null
      */
-    public function findUserReceipt(string $userID, string $originalTransactionID): ?UserReceipt
+    public function findUserReceipt(?string $userID, string $originalTransactionID): ?UserReceipt
     {
         return UserReceipt::firstWhere([
                 ['user_id', '=', $userID],

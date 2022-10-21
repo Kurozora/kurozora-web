@@ -2,7 +2,8 @@
 
 use App\Http\Controllers\Web\Profile\AnimeLibraryController;
 use App\Http\Controllers\Web\UserProfileController;
-use App\Http\Livewire\Profile\AnimeLibrary;
+use App\Http\Livewire\Profile\Library\Anime\Favorites as FavoriteAnime;
+use App\Http\Livewire\Profile\Library\Anime\Index as AnimeLibrary;
 use App\Http\Livewire\Profile\Details;
 
 Route::prefix('/profile')
@@ -13,6 +14,9 @@ Route::prefix('/profile')
 
         Route::get('/{user}/anime', AnimeLibrary::class)
             ->name('.anime-library');
+
+        Route::get('/{user}/anime/favorites', FavoriteAnime::class)
+            ->name('.favorite-anime');
     });
 
  Route::get('/animelist/{user?}', [AnimeLibraryController::class, 'index'])
