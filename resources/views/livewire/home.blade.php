@@ -23,7 +23,7 @@
             <a target="_blank"></a>
         </div>
 
-        <section class="relative pb-8">
+        <section class="relative mb-8">
             <a href="{{ config('social.discord.url') }}" target="_blank" class="after:absolute after:inset-0">
                 <x-picture>
                     <img class="h-32 w-full object-cover object-center rounded-lg shadow-lg sm:h-44" src="{{ asset('images/static/banners/kurozora_art_challenge_2022.webp') }}"  alt="Kurozora Art Challenge 2022" />
@@ -35,12 +35,10 @@
             @switch($exploreCategory->type)
             @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
                 <section class="pb-8">
-                    <div class="flex overflow-x-scroll no-scrollbar">
-                        <div class="flex flex-nowrap gap-4">
-                            @foreach($exploreCategory->most_popular_shows()->explore_category_items as $categoryItem)
-                                <x-lockups.banner-lockup :anime="$categoryItem->model" />
-                            @endforeach
-                        </div>
+                    <div class="flex flex-nowrap gap-4 mt-5 snap-x overflow-x-scroll no-scrollbar">
+                        @foreach($exploreCategory->most_popular_shows()->explore_category_items as $categoryItem)
+                            <x-lockups.banner-lockup :anime="$categoryItem->model" />
+                        @endforeach
                     </div>
                 </section>
                 @break

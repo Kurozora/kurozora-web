@@ -1,6 +1,6 @@
 @props(['anime'])
 
-<div class="relative w-64 pb-2 md:w-80">
+<div class="relative w-64 pb-2 snap-normal snap-center md:w-80">
     <div class="flex flex-col">
         <picture class="relative aspect-video rounded-lg overflow-hidden">
         @if(empty($anime->video_url))
