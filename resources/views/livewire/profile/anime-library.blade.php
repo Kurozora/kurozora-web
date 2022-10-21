@@ -1,6 +1,6 @@
 <main>
     <x-slot:title>
-        {{ __('Library') }}
+        {{ __(':x’s Anime Library', ['x' => $user->username]) }}
     </x-slot:title>
 
     <x-slot:description>
