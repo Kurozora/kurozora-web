@@ -107,6 +107,22 @@
                 <x-rows.small-lockup :animes="$this->userLibrary->map(function($userLibrary) { return $userLibrary->anime; })" />
             </section>
         @endif
+
+        @if ($this->favoriteAnime->count())
+            <section class="relative max-w-7xl mx-auto pl-4 pr-4 pb-6 mb-8 z-10 sm:px-6">
+                <x-section-nav class="flex flex-nowrap justify-between mb-5">
+                    <x-slot:title>
+                        {{ __('Favorite Anime') }}
+                    </x-slot:title>
+
+                    <x-slot:action>
+                        <x-section-nav-link class="whitespace-nowrap" href="{{ route('profile.favorite-anime', $user) }}">{{ __('See All') }}</x-section-nav-link>
+                    </x-slot:action>
+                </x-section-nav>
+
+                <x-rows.small-lockup :animes="$this->favoriteAnime" />
+            </section>
+        @endif
     </div>
 
     @switch ($selectedPopupType)

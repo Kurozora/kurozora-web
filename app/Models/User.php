@@ -407,18 +407,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             ->withTimestamps();
     }
 
-//    /**
-//     * Returns a boolean indicating whether the user is a pro user.
-//     *
-//     * @return bool
-//     */
-//    function isPro(): bool
-//    {
-//        $purchaseReceipt = $this->receipt;
-//
-//        return !empty($purchaseReceipt) && $purchaseReceipt->is_subscribed;
-//    }
-
     /**
      * Returns a boolean indicating whether the user has the given anime in their library.
      *
