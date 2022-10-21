@@ -1,7 +1,7 @@
 @props(['person', 'isRow' => true])
 
 @php
-    $class = $isRow ? 'pb-2 shrink-0' : '';
+    $class = $isRow ? 'pb-2 shrink-0 snap-normal snap-center' : '';
 @endphp
 
 <div {{ $attributes->merge(['class' => 'relative flex-grow w-32 ' . $class]) }}>

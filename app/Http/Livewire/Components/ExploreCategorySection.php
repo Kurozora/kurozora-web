@@ -125,7 +125,9 @@ class ExploreCategorySection extends Component
         $exploreCategoryItems = match ($this->exploreCategory->type) {
             ExploreCategoryTypes::MostPopularShows => $this->exploreCategory->most_popular_shows($this->genre ?? $this->theme)->explore_category_items,
             ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcoming_shows($this->genre ?? $this->theme)->explore_category_items,
-            ExploreCategoryTypes::AnimeSeason => $this->exploreCategory->anime_season($this->genre ?? $this->theme)->explore_category_items,
+            ExploreCategoryTypes::AnimeSeason => $this->exploreCategory->anime_season($this->genre ?? $this->theme)->explore_category_items->map(function ($exploreCategoryItem) {
+                return $exploreCategoryItem->model;
+            }),
             ExploreCategoryTypes::Characters => $this->exploreCategory->charactersBornToday()->explore_category_items->map(function ($exploreCategoryItem) {
                 return $exploreCategoryItem->model;
             }),
