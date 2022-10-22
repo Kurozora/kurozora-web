@@ -32,10 +32,14 @@ class PriceIncrease extends AppStoreListener
 
         // Find the user and update their receipt.
         $userReceipt = $this->findUserReceipt($userID, $originalTransactionID);
-        $userReceipt->will_auto_renew = $willAutoRenew;
-        $userReceipt->save();
+        $userReceipt->update([
+            'will_auto_renew' => $willAutoRenew
+        ]);
+
+        // Update user values.
+        $user = $userReceipt->user;
 
         // Notify the user about the subscription update.
-        $this->notifyUserAboutUpdate($userReceipt->user, $event);
+        $this->notifyUserAboutUpdate($user, $event);
     }
 }

@@ -64,25 +64,29 @@ class Subscribed extends AppStoreListener
                 'revoked_at'                => $revocationDate?->toDateTime()
             ]);
         } else {
-            $userReceipt->web_order_line_item_id = $webOrderLineItemID;
-            $userReceipt->offer_id = $offerID;
-            $userReceipt->subscription_group_id = $subscriptionGroupID;
-            $userReceipt->product_id = $productID;
-            $userReceipt->is_subscribed = $isSubscriptionValid;
-            $userReceipt->will_auto_renew = $willAutoRenew;
-            $userReceipt->original_purchased_at = $originalPurchaseDate?->toDateTime();
-            $userReceipt->purchased_at = $purchaseDate?->toDateTime();
-            $userReceipt->expired_at = $expiresDate->toDateTime();
-            $userReceipt->revoked_at = $revocationDate?->toDateTime();
+            // Update receipt values.
+            $userReceipt->update([
+                'web_order_line_item_id' => $webOrderLineItemID,
+                'offer_id' => $offerID,
+                'subscription_group_id' => $subscriptionGroupID,
+                'product_id' => $productID,
+                'is_subscribed' => $isSubscriptionValid,
+                'will_auto_renew' => $willAutoRenew,
+                'original_purchased_at' => $originalPurchaseDate?->toDateTime(),
+                'purchased_at' => $purchaseDate?->toDateTime(),
+                'expired_at' => $expiresDate->toDateTime(),
+                'revoked_at' => $revocationDate?->toDateTime(),
+            ]);
         }
 
-        // Update values.
-        $userReceipt->save();
-        $userReceipt->user->is_subscribed = $isSubscriptionValid;
-        $userReceipt->user->save();
+        // Update user values.
+        $user = $userReceipt->user;
+        $user->update([
+            'is_subscribed' => $isSubscriptionValid
+        ]);
 
         // Notify the user about the subscription update.
-        $this->notifyUserAboutUpdate($userReceipt->user, $event);
+        $this->notifyUserAboutUpdate($user, $event);
     }
 
     /**

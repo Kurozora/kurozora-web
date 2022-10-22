@@ -28,10 +28,14 @@ class DidChangeRenewalPref extends AppStoreListener
 
         // Find the user and update their receipt.
         $userReceipt = $this->findUserReceipt($userID, $originalTransactionID);
-        $userReceipt->product_id = $productID;
-        $userReceipt->save();
+        $userReceipt->update([
+            'product_id' => $productID
+        ]);
+
+        // Update user values.
+        $user = $userReceipt->user;
 
         // Notify the user about the subscription update.
-        $this->notifyUserAboutUpdate($userReceipt->user, $event);
+        $this->notifyUserAboutUpdate($user, $event);
     }
 }

@@ -31,15 +31,19 @@ class Revoke extends AppStoreListener
 
         // Find the user and update their receipt.
         $userReceipt = $this->findUserReceipt($userID, $originalTransactionID);
-        $userReceipt->is_subscribed = false;
-        $userReceipt->expired_at = $expiresDate->toDateTime();
-        $userReceipt->revoked_at = $revocationDate?->toDateTime();
-        $userReceipt->save();
+        $userReceipt->update([
+            'is_subscribed' => false,
+            'expired_at' => $expiresDate->toDateTime(),
+            'revoked_at' => $revocationDate?->toDateTime(),
+        ]);
 
-        $userReceipt->user->is_subscribed = false;
-        $userReceipt->user->save();
+        // Update user values.
+        $user = $userReceipt->user;
+        $user->update([
+            'is_subscribed' => false
+        ]);
 
         // Notify the user about the subscription update.
-        $this->notifyUserAboutUpdate($userReceipt->user, $event);
+        $this->notifyUserAboutUpdate($user, $event);
     }
 }
