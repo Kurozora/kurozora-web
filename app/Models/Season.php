@@ -65,6 +65,10 @@ class Season extends KModel implements HasMedia, Sitemapable
             if (empty($season->tv_rating_id)) {
                 $season->tv_rating_id = $season->anime->tv_rating_id;
             }
+
+            if (empty($season->is_nsfw)) {
+                $season->is_nsfw = $season->anime->is_nsfw;
+            }
         });
     }
 

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('code', 2);
+            $table->string('iso_639_3', 3);
             $table->timestamps();
             $table->softDeletes();
         });
