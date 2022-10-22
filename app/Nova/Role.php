@@ -45,7 +45,7 @@ class Role extends BaseRole
             return [$key => $key];
         });
 
-        $userResource = Nova::resourceForModel(getModelForGuard($this->guard_name));
+        $userResource = Nova::resourceForModel(getModelForGuard($this->guard_name ?? config('auth.defaults.guard')));
 
         return [
             ID::make()->sortable(),
