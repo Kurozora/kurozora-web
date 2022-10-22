@@ -38,11 +38,17 @@ class CalculatePersonViews extends Command
             ->chunk(1000, function (Collection $persons) {
                 /** @var Person $person */
                 foreach ($persons as $person) {
+                    $totalViewCount = $person->views_count + $person->views()->count();
+
                     $person->update([
-                        'view_count' => $person->views()->count()
+                        'view_count' => $totalViewCount
                     ]);
                 }
             });
+
+        // Delete the calculated views
+        View::where('viewable_type', '=', Person::class)
+            ->forceDelete();
 
         return Command::SUCCESS;
     }

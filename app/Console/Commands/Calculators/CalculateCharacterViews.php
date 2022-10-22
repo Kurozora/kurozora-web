@@ -38,11 +38,17 @@ class CalculateCharacterViews extends Command
             ->chunk(1000, function (Collection $characters) {
                 /** @var Character $character */
                 foreach ($characters as $character) {
+                    $totalViewCount = $character->views_count + $character->views()->count();
+
                     $character->update([
-                        'view_count' => $character->views()->count()
+                        'view_count' => $totalViewCount
                     ]);
                 }
             });
+
+        // Delete the calculated views
+        View::where('viewable_type', '=', Character::class)
+            ->forceDelete();
 
         return Command::SUCCESS;
     }

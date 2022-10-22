@@ -38,11 +38,17 @@ class CalculateStudioViews extends Command
             ->chunk(1000, function (Collection $studios) {
                 /** @var Studio $studio */
                 foreach ($studios as $studio) {
+                    $totalViewCount = $studio->views_count + $studio->views()->count();
+
                     $studio->update([
-                        'view_count' => $studio->views()->count()
+                        'view_count' => $totalViewCount
                     ]);
                 }
             });
+
+        // Delete the calculated views
+        View::where('viewable_type', '=', Studio::class)
+            ->forceDelete();
 
         return Command::SUCCESS;
     }
