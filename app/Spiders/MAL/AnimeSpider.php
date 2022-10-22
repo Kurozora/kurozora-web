@@ -145,8 +145,12 @@ class AnimeSpider extends BasicSpider
      */
     private function cleanImageUrl(Response $response, ?string $div): ?string
     {
-        $imageUrl = $response->filter($div)
-            ->attr('data-src');
+        try {
+            $imageUrl = $response->filter($div)
+                ->attr('data-src');
+        } catch (Exception $exception) {
+            return null;
+        }
 
         // If empty then return
         $imageUrl = str(trim($imageUrl));

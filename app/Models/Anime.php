@@ -30,7 +30,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Nova\Actions\Actionable;
 use Laravel\Scout\Searchable;
-use Request;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
@@ -162,7 +161,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function getRouteKeyName(): string
     {
-        if (Request::wantsJson()) {
+        if (request()->wantsJson()) {
             return parent::getRouteKeyName();
         }
         return 'slug';

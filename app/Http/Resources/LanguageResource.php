@@ -30,6 +30,7 @@ class LanguageResource extends JsonResource
             'attributes'    => [
                 'name'          => $this->resource->name,
                 'code'          => $this->resource->code,
+                'iso6393'       => $this->resource->iso_639_3,
             ]
         ];
     }
