@@ -38,11 +38,17 @@ class CalculateEpisodeViews extends Command
             ->chunk(1000, function (Collection $episodes) {
                 /** @var Episode $episode */
                 foreach ($episodes as $episode) {
+                    $totalViewCount = $episode->views_count + $episode->views()->count();
+
                     $episode->update([
-                        'view_count' => $episode->views()->count()
+                        'view_count' => $totalViewCount
                     ]);
                 }
             });
+
+        // Delete the calculated views
+        View::where('viewable_type', '=', Episode::class)
+            ->forceDelete();
 
         return Command::SUCCESS;
     }

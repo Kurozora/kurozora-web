@@ -38,11 +38,17 @@ class CalculateAnimeViews extends Command
             ->chunk(1000, function (Collection $animes) {
                 /** @var Anime $anime */
                 foreach ($animes as $anime) {
+                    $totalViewCount = $anime->views_count + $anime->views()->count();
+
                     $anime->update([
-                        'view_count' => $anime->views()->count()
+                        'view_count' => $totalViewCount
                     ]);
                 }
             });
+
+        // Delete the calculated views
+        View::where('viewable_type', '=', Anime::class)
+            ->forceDelete();
 
         return Command::SUCCESS;
     }
