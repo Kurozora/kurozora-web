@@ -37,15 +37,19 @@ class DidFailToRenew extends AppStoreListener
 
         // Find the user and update their receipt.
         $userReceipt = $this->findUserReceipt($userID, $originalTransactionID);
-        $userReceipt->is_subscribed = $isSubscriptionValid;
-        $userReceipt->expired_at = $expiresDate?->toDateTime();
-        $userReceipt->save();
+        $userReceipt->update([
+            'is_subscribed' => $isSubscriptionValid,
+            'expired_at' => $expiresDate?->toDateTime()
+        ]);
 
-        $userReceipt->user->is_subscribed = $isSubscriptionValid;
-        $userReceipt->user->save();
+        // Update user values.
+        $user = $userReceipt->user;
+        $user->update([
+            'is_subscribed' => $isSubscriptionValid
+        ]);
 
         // Notify the user about the subscription update.
-        $this->notifyUserAboutUpdate($userReceipt->user, $event);
+        $this->notifyUserAboutUpdate($user, $event);
     }
 
     /**

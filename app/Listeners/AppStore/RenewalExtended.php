@@ -29,15 +29,19 @@ class RenewalExtended extends AppStoreListener
 
         // Find the user and update their receipt.
         $userReceipt = $this->findUserReceipt($userID, $originalTransactionID);
-        $userReceipt->is_subscribed = true;
-        $userReceipt->expired_at = $expirationTime->toDateTime();
-        $userReceipt->revoked_at = null;
-        $userReceipt->save();
+        $userReceipt->update([
+            'is_subscribed' => true,
+            'expired_at' => $expirationTime->toDateTime(),
+            'revoked_at' => null
+        ]);
 
-        $userReceipt->user->is_subscribed = true;
-        $userReceipt->user->save();
+        // Update user values.
+        $user = $userReceipt->user;
+        $user->update([
+            'is_subscribed' => true
+        ]);
 
         // Notify the user about the subscription update.
-        $this->notifyUserAboutUpdate($userReceipt->user, $event);
+        $this->notifyUserAboutUpdate($user, $event);
     }
 }
