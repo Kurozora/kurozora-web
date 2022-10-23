@@ -17,6 +17,9 @@
                 </x-slot:description>
 
                 <x-slot:action>
+                    @hasrole('superAdmin')
+                        <x-button wire:click="$refresh">{{ __('Refresh') }}</x-button>
+                    @endhasrole
                     <x-section-nav-link class="whitespace-nowrap" href="{{ $exploreCategory->secondary_slug ? url($exploreCategory->secondary_slug) : route('explore.details', $exploreCategory) }}">{{ __('See All') }}</x-section-nav-link>
                 </x-slot:action>
             </x-section-nav>
@@ -40,6 +43,9 @@
                                 <x-lockups.upcoming-lockup :anime="$categoryItem->model" />
                             @endforeach
                         </div>
+                    @break
+                    @case(\App\Enums\ExploreCategoryTypes::AnimeContinuing)
+                        <x-rows.small-lockup :animes="$this->exploreCategoryItems" />
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::AnimeSeason)
                         <x-rows.small-lockup :animes="$this->exploreCategoryItems" />

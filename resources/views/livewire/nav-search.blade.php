@@ -34,7 +34,8 @@
     x-on:keydown.enter="submit()"
     x-on:transitionstart="focusOnSearch()"
 >
-    <div class="absolute top-0 right-0 left-0 mx-auto max-w-full z-[300] sm:max-w-2xl"
+    <div class="absolute top-0 right-0 left-0 mx-auto max-w-full sm:max-w-2xl"
+         style="z-index: 300; max-height: 85vh"
          x-cloak=""
          x-show="isSearchEnabled"
          x-transition:enter="ease-out duration-300"
@@ -44,7 +45,7 @@
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0"
     >
-        <div class="h-[64px]">
+        <div style="height: 64px;">
             <form
                 id="search"
                 class="absolute h-full w-full"
@@ -91,7 +92,10 @@
         </div>
 
         {{-- Quick Links --}}
-        <div class="absolute right-0 left-0 mx-auto pt-4 pr-4 pb-4 pl-4 max-w-7xl bg-white rounded-b-2xl sm:px-10">
+        <div
+            class="absolute right-0 left-0 mx-auto pt-4 pr-4 pb-4 pl-4 max-w-7xl bg-white rounded-b-2xl overflow-x-scroll sm:px-10"
+            style="max-height: 85vh;"
+        >
             <div class="flex justify-center">
                 <x-spinner wire:target="searchQuery" />
             </div>
@@ -180,7 +184,9 @@
 
     {{-- Overlay --}}
     <div
-        class="fixed inset-0 transform transition-all z-[299]"
+        class="fixed inset-0 transform transition-all"
+        style="z-index: 299;"
+        x-cloak=""
         x-show="isSearchEnabled"
         x-on:click="resetAndClose()"
         x-transition:enter="ease-out duration-300"

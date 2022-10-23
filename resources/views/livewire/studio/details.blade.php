@@ -24,7 +24,10 @@
         <section class="pt-5 pb-8">
             <div class="relative pb-2">
                 <div class="flex flex-col flex-wrap text-center items-center">
-                    <picture class="relative h-[128px] aspect-square rounded-full overflow-hidden">
+                    <picture
+                        class="relative aspect-square rounded-full overflow-hidden"
+                        style="height: 128px;"
+                    >
                         <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $studio->profile_image_url ?? asset('images/static/placeholders/studio_profile.webp') }}" alt="{{ $studio->name }} Profile" title="{{ $studio->name }}">
 
                         <div class="absolute top-0 left-0 h-full w-full border-2 border-solid border-black/20 rounded-full"></div>

@@ -5,7 +5,10 @@
         <picture class="relative w-64 h-80 rounded-lg overflow-hidden sm:w-80 sm:h-[25rem] md:w-[22rem] md:h-[27rem]">
             <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}" />
 
-            <div class="absolute bottom-0 left-0 right-0 h-[20%] pr-3 pb-3 pl-3 pt-[15%] bg-gradient-to-t from-black/60 to-transparent"></div>
+            <div
+                class="absolute bottom-0 left-0 right-0 pr-3 pb-3 pl-3 bg-gradient-to-t from-black/60 to-transparent"
+                style="height: 20%; padding-top: 15%;"
+            ></div>
 
             <div class="absolute top-0 bottom-0 left-0 right-0 h-full w-full text-center">
                 @if (empty($anime->logo_image_url))
