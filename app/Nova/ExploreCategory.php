@@ -93,7 +93,8 @@ class ExploreCategory extends Resource
                 ->help('Give the category a description if necessary.'),
 
             Text::make('Slug')
-                ->onlyOnForms()
+                ->rules('max:2083')
+                ->sortable()
                 ->help('Used to identify the explore category in a URL: ' . config('app.url') . '/explore/<strong>' . ($this->resource->slug ?? 'slug-identifier') . '</strong>. Leave empty to auto-generate from title.'),
 
             Text::make('Secondary Slug')
@@ -111,7 +112,7 @@ class ExploreCategory extends Resource
                 ->displayUsingLabels()
                 ->rules('required')
                 ->sortable()
-                ->help('The following are automtically generated:<br/><b>Most Popular Shows</b><br/><b>Upcoming Shows</b><br/><b>Anime Season</b><br/><b>Characters</b><br/><b>People</b>'),
+                ->help('The following are automtically generated:<br/><b>Most Popular Shows</b><br/><b>Upcoming Shows</b><br/><b>Anime Continuing</b><br/><b>Anime Season</b><br/><b>Characters</b><br/><b>People</b>'),
 
             Select::make('Size')
                 ->options(ExploreCategorySize::asSelectArray())
