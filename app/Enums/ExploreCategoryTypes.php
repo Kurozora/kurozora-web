@@ -7,6 +7,7 @@ use BenSampo\Enum\Enum;
 /**
  * @method static static MostPopularShows()
  * @method static static UpcomingShows()
+ * @method static static AnimeContinuing()
  * @method static static AnimeSeason()
  * @method static static Shows()
  * @method static static Characters()
@@ -18,8 +19,9 @@ use BenSampo\Enum\Enum;
 final class ExploreCategoryTypes extends Enum
 {
     const MostPopularShows = 'most-popular-shows';
-    const UpcomingShows = 'upcoming-shows';
+    const AnimeContinuing = 'anime-continuing';
     const AnimeSeason = 'anime-season';
+    const UpcomingShows = 'upcoming-shows';
     const Shows = 'shows';
     const Characters = 'characters';
     const People = 'people';
