@@ -134,7 +134,39 @@ class ExploreCategory extends KModel implements Sitemapable
     }
 
     /**
-     * Append the characters born today to the category's items.
+     * Append the shows continuing since past season(s) to the category's items.
+     *
+     * @param Genre|Theme|null $model
+     * @return ExploreCategory
+     */
+    public function anime_continuing(Genre|Theme|null $model = null): ExploreCategory
+    {
+        if ($this->type === ExploreCategoryTypes::AnimeContinuing) {
+            if (is_a($model, Genre::class)) {
+                $animeContinuing = Anime::whereGenre($model)
+                    ->animeContinuing()
+                    ->get('id');
+            } else if (is_a($model, Theme::class)) {
+                $animeContinuing = Anime::whereTheme($model)
+                    ->animeContinuing()
+                    ->get('id');
+            } else {
+                $animeContinuing = Anime::animeContinuing()
+                    ->get('id');
+            }
+
+            foreach($animeContinuing as $anime) {
+                $this->explore_category_items->add(new ExploreCategoryItem([
+                    'model_id' => $anime->id,
+                    'model_type' => get_class($anime)
+                ]));
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Append the shows of the current season to the category's items.
      *
      * @param Genre|Theme|null $model
      * @return ExploreCategory

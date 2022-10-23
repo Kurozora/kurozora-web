@@ -19,12 +19,12 @@ class Details extends Component
      */
     public ExploreCategory $exploreCategory;
 
-    /**
-     * The array containing the explore category items data.
-     *
-     * @var Collection exploreCategoryItems
-     */
-    public Collection $exploreCategoryItems;
+//    /**
+//     * The array containing the explore category items data.
+//     *
+//     * @var Collection exploreCategoryItems
+//     */
+//    public Collection $exploreCategoryItems;
 
     /**
      * Prepare the component.
@@ -36,15 +36,26 @@ class Details extends Component
     public function mount(ExploreCategory $exploreCategory): void
     {
         $this->exploreCategory = $exploreCategory;
-        $exploreCategoryItems = match ($exploreCategory->type) {
-            ExploreCategoryTypes::MostPopularShows => $exploreCategory->most_popular_shows(),
-            ExploreCategoryTypes::UpcomingShows => $exploreCategory->upcoming_shows(),
-            ExploreCategoryTypes::AnimeSeason => $exploreCategory->anime_season(),
-            ExploreCategoryTypes::Characters => $exploreCategory->charactersBornToday(-1),
-            ExploreCategoryTypes::People => $exploreCategory->peopleBornToday(-1),
-            default => $exploreCategory
+    }
+
+    /**
+     * The array containing the explore category items data.
+     *
+     * @return Collection exploreCategoryItems
+     */
+    public function getExploreCategoryItemsProperty(): \Illuminate\Support\Collection
+    {
+        $exploreCategoryItems = match ($this->exploreCategory->type) {
+            ExploreCategoryTypes::MostPopularShows => $this->exploreCategory->most_popular_shows(),
+            ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcoming_shows(),
+            ExploreCategoryTypes::AnimeContinuing => $this->exploreCategory->anime_continuing(),
+            ExploreCategoryTypes::AnimeSeason => $this->exploreCategory->anime_season(),
+            ExploreCategoryTypes::Characters => $this->exploreCategory->charactersBornToday(-1),
+            ExploreCategoryTypes::People => $this->exploreCategory->peopleBornToday(-1),
+            default => $this->exploreCategory
         };
-        $this->exploreCategoryItems = $exploreCategoryItems->explore_category_items
+
+        return $exploreCategoryItems->explore_category_items
             ->map(function ($exploreCategoryItem) {
                 return $exploreCategoryItem->model;
             });

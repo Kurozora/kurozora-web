@@ -153,6 +153,24 @@ class ExploreCategoryResource extends JsonResource
                         )
                     ]
                 ];
+            case ExploreCategoryTypes::AnimeContinuing:
+                $model = null;
+
+                if (!empty($request->input('genre_id'))) {
+                    $model = Genre::find($request->input('genre_id'));
+                } else if (!empty($request->input('theme_id'))) {
+                    $model = Theme::find($request->input('theme_id'));
+                }
+
+                return [
+                    'shows' => [
+                        'data' => AnimeResourceIdentity::collection($this->resource
+                            ->anime_continuing($model)
+                            ->explore_category_items
+                            ->pluck('model')
+                        )
+                    ]
+                ];
             case ExploreCategoryTypes::AnimeSeason:
                 $model = null;
 
