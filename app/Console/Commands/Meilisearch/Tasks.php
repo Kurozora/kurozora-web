@@ -14,6 +14,8 @@ class Tasks extends Command
      */
     protected $signature = 'meilisearch:tasks
             {index? : The name of the index.}
+            {uid? : The unique ID of the task.}
+            {--d|details : Show the details of the task.}
             {--s|status=enqueued : Choose from: enqueued, succeeded, or failed.}
             {--r|rows=50 : The number of rows to show.}';
 
@@ -33,6 +35,8 @@ class Tasks extends Command
     {
         // Get options
         $index = $this->argument('index');
+        $uid = $this->argument('uid');
+        $details = $this->option('details');
         $status = $this->option('status') ?? 'enqueued';
         $rows = $this->option('rows') ?? null;
 
@@ -40,14 +44,27 @@ class Tasks extends Command
         $client = new Client(config('scout.meilisearch.host'), config('scout.meilisearch.key'));
 
         // Get results
-        $results = $index ? $client->index($index)->getTasks()['results'] : $client->getTasks()['results'];
-        $headers = array_keys($results[0]);
+        if (empty($uid)) {
+            $results = $index ? $client->index($index)->getTasks()->getResults() : $client->getTasks()->getResults();
+            $headers = array_keys($results[0]);
+        } else {
+            $result = $client->index($index)->getTask($uid);
+            $results = [$result];
+            $headers = array_keys($result);
+
+            if (!empty($details)) {
+                print_r($result['details']);
+                return Command::SUCCESS;
+            }
+        }
         $tasks = [];
 
-        // Filter results according to options
-        $results = array_filter($results, function($result) use ($status) {
-            return $result['status'] == $status;
-        });
+        if (empty($uid)) {
+            // Filter results according to options
+            $results = array_filter($results, function($result) use ($status) {
+                return $result['status'] == $status;
+            });
+        }
 
         $this->info('Total: ' . count($results));
 

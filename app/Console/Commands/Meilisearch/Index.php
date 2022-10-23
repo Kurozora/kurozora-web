@@ -38,7 +38,6 @@ class Index extends Command
     protected array $listHeaders = [
         '#',
         'UID',
-        'Name',
         'Created At',
         'Updated At',
         'Primary Key',
@@ -52,6 +51,7 @@ class Index extends Command
      * @var array|string[]
      */
     protected array $statHeaders = [
+        'Index',
         'Number of Documents',
         'Is Indexing',
         'Field Distribution'
@@ -148,17 +148,17 @@ class Index extends Command
                     $this->info('Last Update: ' . $allStats['lastUpdate']);
                 } else {
                     $indexStats = $client->index($index)->stats();
-                    $statIndexes = [$indexStats];
+                    $statIndexes = [$index => $indexStats];
                 }
 
                 $rows = [];
-                foreach ($statIndexes as $statIndex) {
-                    $row = $statIndex;
+                foreach ($statIndexes as $index => $statIndex) {
+                    $row = ['index' => $index] + $statIndex;
 
                     array_walk($row, function(&$stat) {
                         if (is_array($stat)) {
                             foreach ($stat as $key => $value) {
-                                $stat[$key] = sprintf('%-\'.20s%\'.20s', $key, $value);
+                                $stat[$key] = sprintf('%-\'.42s%\'.42s', $key, $value);
                             }
                             $stat = implode(PHP_EOL, $stat);
                         }
@@ -179,7 +179,7 @@ class Index extends Command
             // Prepare the rows
             if ($index) {
                 $index = $client->index($index);
-                $attributes = array_merge(['#' => '1'], $index->fetchRawInfo());
+                $attributes = ['#' => '1'] + $index->fetchRawInfo();
                 $attributes[] = implode(PHP_EOL, $index->getSortableAttributes());
                 $attributes[] = implode(PHP_EOL, $index->getFilterableAttributes());
                 $rows = [$attributes];
@@ -188,7 +188,7 @@ class Index extends Command
                 $rows = [];
 
                 foreach ($allIndexes as $key => $index) {
-                    $row = array_merge(['#' => $key], $index->fetchRawInfo());
+                    $row = ['#' => $key] + $index->fetchRawInfo();
                     $row[] = implode(PHP_EOL, $index->getSortableAttributes());
                     $row[] = implode(PHP_EOL, $index->getFilterableAttributes());
                     $rows[] = $row;
