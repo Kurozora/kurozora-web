@@ -72,6 +72,7 @@ class ExploreCategorySection extends Component
             $this->exploreCategoryCount = match ($exploreCategory->type) {
                 ExploreCategoryTypes::MostPopularShows => $anime->mostPopular()->count(),
                 ExploreCategoryTypes::UpcomingShows => $anime->upcomingShows()->count(),
+                ExploreCategoryTypes::AnimeContinuing => $anime->animeContinuing()->count(),
                 ExploreCategoryTypes::AnimeSeason => $anime->animeSeason()->count(),
                 default => 0
             };
@@ -87,6 +88,7 @@ class ExploreCategorySection extends Component
             $this->exploreCategoryCount = match ($exploreCategory->type) {
                 ExploreCategoryTypes::MostPopularShows => $anime->mostPopular()->count(),
                 ExploreCategoryTypes::UpcomingShows => $anime->upcomingShows()->count(),
+                ExploreCategoryTypes::AnimeContinuing => $anime->animeContinuing()->count(),
                 ExploreCategoryTypes::AnimeSeason => $anime->animeSeason()->count(),
                 default => 0
             };
@@ -98,6 +100,7 @@ class ExploreCategorySection extends Component
         $this->exploreCategoryCount = match ($exploreCategory->type) {
             ExploreCategoryTypes::MostPopularShows => Anime::mostPopular()->count(),
             ExploreCategoryTypes::UpcomingShows => Anime::upcomingShows()->count(),
+            ExploreCategoryTypes::AnimeContinuing => Anime::animeContinuing()->count(),
             ExploreCategoryTypes::AnimeSeason => Anime::animeSeason()->count(),
             ExploreCategoryTypes::Characters => Character::bornToday()->count(),
             ExploreCategoryTypes::People => Person::bornToday()->count(),
@@ -125,6 +128,9 @@ class ExploreCategorySection extends Component
         $exploreCategoryItems = match ($this->exploreCategory->type) {
             ExploreCategoryTypes::MostPopularShows => $this->exploreCategory->most_popular_shows($this->genre ?? $this->theme)->explore_category_items,
             ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcoming_shows($this->genre ?? $this->theme)->explore_category_items,
+            ExploreCategoryTypes::AnimeContinuing => $this->exploreCategory->anime_continuing($this->genre ?? $this->theme)->explore_category_items->map(function ($exploreCategoryItem) {
+                return $exploreCategoryItem->model;
+            }),
             ExploreCategoryTypes::AnimeSeason => $this->exploreCategory->anime_season($this->genre ?? $this->theme)->explore_category_items->map(function ($exploreCategoryItem) {
                 return $exploreCategoryItem->model;
             }),
