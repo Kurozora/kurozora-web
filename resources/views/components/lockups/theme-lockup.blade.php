@@ -12,7 +12,10 @@
         <picture class="relative rounded-lg overflow-hidden" style="{{ $backgroundColor }};">
             <img class="pt-3 pr-3 pb-3 pl-3 aspect-square lazyload" data-sizes="auto" data-src="{{ $theme->symbol_image_url ?? asset('images/static/icon/logo.webp') }}" alt="{{ $theme->name }} Symbol" title="{{ $theme->name }}">
 
-            <div class="h-[95px] pr-3 pl-3 pt-4 pb-4 bg-black/30 backdrop-blur text-center">
+            <div
+                class="pr-3 pl-3 pt-4 pb-4 bg-black/30 backdrop-blur text-center"
+                style="height: 95px;"
+            >
                 <p class="text-white font-bold leading-tight line-clamp-1">{{ $theme->name }}</p>
                 <p class="text-sm text-white/90 leading-tight line-clamp-2">{{ $theme->description }}</p>
             </div>

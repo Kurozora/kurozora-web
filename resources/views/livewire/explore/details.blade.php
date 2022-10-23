@@ -49,32 +49,34 @@
         @switch($exploreCategory->type)
             @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
             @case(\App\Enums\ExploreCategoryTypes::UpcomingShows)
+            @case(\App\Enums\ExploreCategoryTypes::AnimeContinuing)
+            @case(\App\Enums\ExploreCategoryTypes::AnimeSeason)
             @case(\App\Enums\ExploreCategoryTypes::Shows)
-                <x-rows.small-lockup :animes="$exploreCategoryItems" :is-row="false" />
+                <x-rows.small-lockup :animes="$this->exploreCategoryItems" :is-row="false" />
             @break
             @case(\App\Enums\ExploreCategoryTypes::Genres)
             <section class="{{ $gridClass }}">
-                @foreach($exploreCategoryItems as $categoryItem)
+                @foreach($this->exploreCategoryItems as $categoryItem)
                     <x-lockups.genre-lockup :genre="$categoryItem" />
                 @endforeach
             </section>
             @break
             @case(\App\Enums\ExploreCategoryTypes::Themes)
             <section class="{{ $gridClass }}">
-                @foreach($exploreCategoryItems as $categoryItem)
+                @foreach($this->exploreCategoryItems as $categoryItem)
                     <x-lockups.theme-lockup :theme="$categoryItem" />
                 @endforeach
             </section>
             @break
             @case(\App\Enums\ExploreCategoryTypes::Characters)
-                <x-rows.character-lockup :characters="$exploreCategoryItems" :is-row="false" />
+                <x-rows.character-lockup :characters="$this->exploreCategoryItems" :is-row="false" />
             @break
             @case(\App\Enums\ExploreCategoryTypes::People)
-                <x-rows.person-lockup :people="$exploreCategoryItems" :is-row="false" />
+                <x-rows.person-lockup :people="$this->exploreCategoryItems" :is-row="false" />
             @break
             @case(\App\Enums\ExploreCategoryTypes::Songs)
             <section class="{{ $gridClass }}">
-                @foreach($exploreCategoryItems as $categoryItem)
+                @foreach($this->exploreCategoryItems as $categoryItem)
                     <x-lockups.music-lockup :anime-song="$categoryItem" :show-episodes="false" :show-anime="true" :onMusicKitLoad="true" :is-row="false" />
                 @endforeach
             </section>
