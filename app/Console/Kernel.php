@@ -37,6 +37,13 @@ class Kernel extends ConsoleKernel
             ->runInBackground();
 
         /**********************************************/
+        // Run queue worker every hour
+        $schedule->command('delete:stale_cache')
+            ->everyTwoHours()
+            ->name('Delete stale cache')
+            ->onOneServer();
+
+        /**********************************************/
         // Generate sitemap every day
 //        $schedule->command('sitemap:generate')
 //            ->daily()
