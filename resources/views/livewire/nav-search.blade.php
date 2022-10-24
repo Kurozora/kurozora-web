@@ -93,7 +93,7 @@
 
         {{-- Quick Links --}}
         <div
-            class="absolute right-0 left-0 mx-auto pt-4 pr-4 pb-4 pl-4 max-w-7xl bg-white rounded-b-2xl overflow-x-scroll sm:px-10"
+            class="absolute right-0 left-0 mx-auto pt-4 pr-4 pb-4 pl-4 max-w-7xl bg-white rounded-b-2xl overflow-y-scroll sm:px-10"
             style="max-height: 85vh;"
         >
             <div class="flex justify-center">
@@ -131,6 +131,9 @@
                             @break
                             @case(\App\Models\User::TABLE_NAME)
                                 <x-rows.user-lockup :users="$searchResult['results']" />
+                            @break
+                            @case(\App\Models\Song::TABLE_NAME)
+                                <x-rows.music-lockup :songs="$searchResult['results']" />
                             @break
                         @endswitch
 

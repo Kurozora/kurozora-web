@@ -114,6 +114,9 @@
                     @case(\App\Enums\SearchType::People)
                         <x-rows.person-lockup :people="$this->searchResults" :is-row="false" />
                     @break
+                    @case(\App\Enums\SearchType::Songs)
+                        <x-rows.music-lockup :songs="$this->searchResults" :is-row="false" />
+                    @break
                     @case(\App\Enums\SearchType::Studios)
                         <x-rows.studio-lockup :studios="$this->searchResults" :is-row="false" />
                     @break

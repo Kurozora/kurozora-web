@@ -7,6 +7,7 @@ use App\Models\Anime;
 use App\Models\Character;
 use App\Models\Episode;
 use App\Models\Person;
+use App\Models\Song;
 use App\Models\Studio;
 use App\Models\User;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
@@ -27,6 +28,7 @@ class NavSearch extends Component
         Episode::class,
         Character::class,
         Person::class,
+        Song::class,
         Studio::class,
         User::class,
     ];

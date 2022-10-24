@@ -45,7 +45,6 @@
 
         <!-- Scripts -->
         <script src="{{ url(mix('js/app.js')) }}" defer></script>
-        <script src="https://js-cdn.music.apple.com/musickit/v1/musickit.js" defer></script>
         @if (app()->environment('local'))
             <script src="{{ url(mix('js/debug.js')) }}" defer></script>
         @endif
@@ -54,62 +53,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}" />
     </head>
 
-    <body
-        class="bg-white dark:bg-black"
-        x-data="{
-            music: null,
-            musicIsPlaying: false,
-            currentMusicID: '',
-            async playSong(song) {
-                if (!!song) {
-                    if (this.currentMusicID === song.id && MusicKit.getInstance().player.isPlaying) {
-                        MusicKit.getInstance().player.pause()
-                        this.musicIsPlaying = false;
-                    } else if (this.currentMusicID === song.id) {
-                        MusicKit.getInstance().player.play()
-                        this.musicIsPlaying = true;
-                    } else {
-                        await this.setQueueItems([song]).then(function () {
-                            MusicKit.getInstance().player.play()
-                        })
-                        this.musicIsPlaying = true;
-                    }
-
-                    this.currentMusicID = song.id;
-                }
-            },
-            async setQueueItems(items) {
-                const filteredItems = items.filter(item => item);
-                if (filteredItems.length === 0) { return; }
-
-                await MusicKit.getInstance().setQueue({
-                    items: filteredItems.map(item => this.createMediaItem(item))
-                });
-            },
-            createMediaItem(song) {
-                return {
-                    ...song,
-                    container: {
-                      id: song.id
-                    }
-                };
-            },
-            initMusicKit() {
-                MusicKit.configure({
-                    // MusicKit global is now defined
-                    developerToken: '{{ config('services.apple.client_secret') }}',
-                    app: {
-                        build: '{{ config('app.version') }}',
-                        icon: '{{ asset('images/static/icon/app_icon.webp') }}',
-                        name: '{{ config('app.name') }}',
-                        version: '{{ config('app.version') }}'
-                    }
-                });
-                this.music = MusicKit.getInstance();
-            }
-        }"
-        x-on:musickitloaded.window="initMusicKit()"
-    >
+    <body class="bg-white dark:bg-black">
         @livewire('navigation-dropdown')
 
         @if(Session::has('success'))
@@ -121,6 +65,8 @@
         <x-footer />
 
         @livewireScripts
+        <script src="{{ url(mix('js/listen.js')) }}"></script>
+        <script src="https://js-cdn.music.apple.com/musickit/v1/musickit.js"></script>
         {{ $scripts ?? '' }}
     </body>
 </html>
