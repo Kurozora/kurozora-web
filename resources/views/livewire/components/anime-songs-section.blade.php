@@ -18,11 +18,7 @@
                 <x-spinner />
             </div>
 
-            <div class="grid grid-flow-col-dense gap-4 justify-start overflow-x-scroll no-scrollbar">
-                @foreach($animeSongs as $animeSong)
-                    <x-lockups.music-lockup :anime-song="$animeSong" />
-                @endforeach
-            </div>
+            <x-rows.music-lockup :anime-songs="$animeSongs" />
         </section>
     @endif
 </div>

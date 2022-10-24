@@ -85,7 +85,7 @@
                                 <p
                                     class="text-sm leading-tight text-black/60 line-clamp-2"
                                     x-bind:style="{color: '#' + song.attributes.artwork.textColor3}"
-                                   x-text="song.attributes.albumName"
+                                    x-text="song.attributes.albumName"
                                 ></p>
                             </div>
 
