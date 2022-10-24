@@ -28,7 +28,7 @@
 
                 <div class="space-y-1">
                     <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ empty($anime->tagline) ? $anime->genres?->pluck('name')->join(',  ', ' and ') : $anime->tagline }}</p>
-{{--                    <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ $anime->tv_rating->name }}</p>--}}
+                    <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ $anime->tv_rating->name }}</p>
 
 {{--                    <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ trans_choice('[0,1] :x Episode|[2,*] :x Episodes', $anime->episode_count, ['x' => $anime->episode_count]) }}</p>--}}
 
