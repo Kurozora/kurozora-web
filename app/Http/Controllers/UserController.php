@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\DeletesUsers;
+use App\Events\UserViewed;
 use App\Helpers\JSONResult;
 use App\Http\Requests\DeleteUserRequest;
 use App\Http\Requests\GetFeedMessagesRequest;
@@ -25,6 +26,9 @@ class UserController extends Controller
      */
     public function profile(User $user): JsonResponse
     {
+        // Call the UserViewed event
+        UserViewed::dispatch($user);
+
         // Show profile response
         return JSONResult::success([
             'data' => UserResource::collection([$user])

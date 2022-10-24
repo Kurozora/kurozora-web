@@ -27,7 +27,7 @@
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:image" content="{{ $episode->banner_image_url ?? $this->season?->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="twitter:image:alt" content="{{ $episode->synopsis }}" />
-        <link rel="canonical" href="{{ route('episodes.details', $episode) }}">
+        <link rel="canonical" href="{{ route('embed.episodes', $episode) }}">
         <x-misc.schema>
             "@type":"TVEpisode",
             "url":"/episode/{{ $episode->id }}/",

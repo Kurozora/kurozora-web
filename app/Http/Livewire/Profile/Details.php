@@ -2,12 +2,13 @@
 
 namespace App\Http\Livewire\Profile;
 
+use App\Events\UserViewed;
 use App\Models\User;
 use App\Models\UserLibrary;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Component;
 
 class Details extends Component
@@ -64,6 +65,9 @@ class Details extends Component
      */
     public function mount(User $user): void
     {
+        // Call the UserViewed event
+        UserViewed::dispatch($user);
+
         $this->user = $user;
     }
 

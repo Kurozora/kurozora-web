@@ -6,6 +6,7 @@ use App\Models\Anime;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -27,9 +28,21 @@ class Details extends Component
      *
      * @return void
      */
-    public function mount(Anime $anime)
+    public function mount(Anime $anime): void
     {
         $this->anime = $anime;
+    }
+
+    /**
+     * Get the season property.
+     *
+     * @return LengthAwarePaginator
+     */
+    public function getSeasonsProperty(): LengthAwarePaginator
+    {
+        return $this->anime
+            ->seasons()
+            ->paginate(25);
     }
 
     /**
@@ -39,8 +52,6 @@ class Details extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.season.details', [
-            'seasons' => $this->anime->seasons()->paginate(25)
-        ]);
+        return view('livewire.season.details');
     }
 }

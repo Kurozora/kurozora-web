@@ -73,6 +73,7 @@ final class SearchType extends Enum
                 'episodes',
                 'characters',
                 'people',
+                'songs',
                 'studios',
                 'users',
             ],
@@ -94,6 +95,7 @@ final class SearchType extends Enum
             $selectArray['episodes'] = 'Episodes';
             $selectArray['characters'] = 'Characters';
             $selectArray['people'] = 'People';
+            $selectArray['songs'] = 'Songs';
             $selectArray['studios'] = 'Studios';
             $selectArray['users'] = 'Users';
         }
