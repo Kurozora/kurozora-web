@@ -7,14 +7,20 @@ use App\Events\CharacterViewed;
 use App\Events\EpisodeViewed;
 use App\Events\Event;
 use App\Events\PersonViewed;
+use App\Events\SeasonViewed;
+use App\Events\SongViewed;
 use App\Events\StudioViewed;
+use App\Events\UserViewed;
 use App\Listeners\AnimeViewedListener;
 use App\Listeners\CharacterViewedListener;
 use App\Listeners\EpisodeViewedListener;
 use App\Listeners\EventListener;
 use App\Listeners\MediaHasBeenAddedListener;
 use App\Listeners\PersonViewedListener;
+use App\Listeners\SeasonViewedListener;
+use App\Listeners\SongViewedListener;
 use App\Listeners\StudioViewedListener;
+use App\Listeners\UserViewedListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -59,9 +65,24 @@ class EventServiceProvider extends ServiceProvider
             PersonViewedListener::class
         ],
 
+        // Song events
+        SeasonViewed::class => [
+            SeasonViewedListener::class
+        ],
+
+        // Song events
+        SongViewed::class => [
+            SongViewedListener::class
+        ],
+
         // Studio events
         StudioViewed::class => [
             StudioViewedListener::class
+        ],
+
+        // User events
+        UserViewed::class => [
+            UserViewedListener::class
         ],
 
         // Media events

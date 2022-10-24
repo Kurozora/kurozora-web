@@ -15,7 +15,7 @@
         <meta property="og:url" content="{{ route('embed.songs', $song) }}">
         <meta property="twitter:title" content="{{ $song->title }} — {{ config('app.name') }}" />
 
-        <link rel="canonical" href="{{ route('songs.details', $song) }}">
+        <link rel="canonical" href="{{ route('embed.songs', $song) }}">
         <link rel="alternate" type="application/json+oembed" href="{{ route('oembed', ['format' => 'json', 'url' => route('songs.details', $song)]) }}">
         <link rel="alternate" type="application/json+oembed" href="{{ route('oembed', ['format' => 'xml', 'url' => route('songs.details', $song)]) }}">
     </x-slot:meta>

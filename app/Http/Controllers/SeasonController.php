@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SeasonViewed;
 use App\Helpers\JSONResult;
 use App\Http\Requests\GetSeasonEpisodesRequest;
 use App\Http\Resources\EpisodeResourceIdentity;
@@ -19,6 +20,9 @@ class SeasonController extends Controller
      */
     public function details(Season $season): JsonResponse
     {
+        // Call the SeasonViewed event
+        SeasonViewed::dispatch($season);
+
         return JSONResult::success([
             'data' => SeasonResource::collection([$season])
         ]);

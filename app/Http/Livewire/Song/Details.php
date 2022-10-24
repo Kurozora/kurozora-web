@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Song;
 
+use App\Events\SongViewed;
 use App\Models\Anime;
 use App\Models\Song;
 use Illuminate\Contracts\Foundation\Application;
@@ -34,6 +35,9 @@ class Details extends Component
      */
     public function mount(Song $song): void
     {
+        // Call the SongViewed event
+        SongViewed::dispatch($song);
+
         $this->song = $song;
     }
 

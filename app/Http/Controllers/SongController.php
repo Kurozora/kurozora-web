@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SongViewed;
 use App\Helpers\JSONResult;
 use App\Http\Requests\GetSongAnimesRequest;
 use App\Http\Resources\AnimeResource;
@@ -19,6 +20,9 @@ class SongController extends Controller
      */
     public function details(Song $song): JsonResponse
     {
+        // Call the SongViewed event
+        SongViewed::dispatch($song);
+
         return JSONResult::success([
             'data' => SongResource::collection([$song])
         ]);

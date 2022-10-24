@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('slug');
             $table->string('title');
             $table->string('artist', 500)->nullable();
+            $table->integer('view_count')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
