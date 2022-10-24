@@ -33,6 +33,7 @@
             song: null,
             bgColor: '#A660B2',
             artworkURL: '{{ asset('images/static/placeholders/music_album.webp') }}',
+            songURL: null,
             musicManager: null,
             async fetchSongData(songID) {
                 if (!!songID) {
@@ -41,6 +42,7 @@
                     window.song = this.song
                     this.bgColor = '#' + this.song.attributes.artwork.bgColor
                     this.artworkURL = musicManager.getArtworkURL(song)
+                    this.songURL = this.song.attributes.url
                 }
             }
         }"
@@ -107,6 +109,16 @@
                         >
                             {{ __('Share') }}
                         </button>
+                        @if ($song->am_id)
+                            <a
+                                class="block w-full pl-4 pr-4 pt-2 pb-2 bg-white text-gray-400 text-xs text-center font-semibold hover:bg-gray-50 focus:bg-gray-200"
+                                x-bind:href="songURL"
+                                target="_blank"
+                                x-show="songURL"
+                            >
+                                {{ __('View on Apple Music') }}
+                            </a>
+                        @endif
                     </x-slot:content>
                 </x-dropdown>
             </div>
