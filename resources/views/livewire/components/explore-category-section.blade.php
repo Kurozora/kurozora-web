@@ -107,13 +107,7 @@
                         <x-rows.person-lockup :people="$this->exploreCategoryItems" />
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::Songs)
-                        <div class="flex overflow-x-scroll no-scrollbar">
-                            <div class="flex flex-nowrap gap-4">
-                                @foreach($this->exploreCategoryItems as $categoryItem)
-                                    <x-lockups.music-lockup :anime-song="$categoryItem->model" :show-episodes="false" :show-anime="true" />
-                                @endforeach
-                            </div>
-                        </div>
+                        <x-rows.music-lockup :anime-songs="$this->exploreCategoryItems" :show-episodes="false" :show-anime="true" />
                     @break
                     @default
                         @if (app()->environment('local'))

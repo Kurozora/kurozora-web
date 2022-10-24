@@ -9,6 +9,7 @@ use App\Models\Anime;
 use App\Models\Character;
 use App\Models\Episode;
 use App\Models\Person;
+use App\Models\Song;
 use App\Models\Studio;
 use App\Models\User;
 use App\Models\UserLibrary;
@@ -122,6 +123,7 @@ class Index extends Component
                 SearchType::Episodes => Episode::class,
                 SearchType::Characters => Character::class,
                 SearchType::People => Person::class,
+                SearchType::Songs => Song::class,
                 SearchType::Studios => Studio::class,
                 SearchType::Users => User::class,
                 default => Anime::class,
@@ -178,6 +180,13 @@ class Index extends Component
                 'Mayumi Tanaka',
                 '長月',
                 'Hayao Miyazaki',
+            ],
+            SearchType::Songs => [
+                'We are',
+                'Strike It Out',
+                'The Rumbling',
+                'Wo Ai Ni',
+                '爆走夢歌',
             ],
             SearchType::Studios => [
                 'White Fox',

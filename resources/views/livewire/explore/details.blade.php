@@ -1,7 +1,6 @@
 @php
     $gridClass = match($exploreCategory->type) {
         \App\Enums\ExploreCategoryTypes::Genres, \App\Enums\ExploreCategoryTypes::Themes => 'grid sm:grid-cols-2 lg:grid-cols-4 gap-4',
-        \App\Enums\ExploreCategoryTypes::Songs => 'grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
         default => '',
     };
 @endphp
@@ -55,18 +54,18 @@
                 <x-rows.small-lockup :animes="$this->exploreCategoryItems" :is-row="false" />
             @break
             @case(\App\Enums\ExploreCategoryTypes::Genres)
-            <section class="{{ $gridClass }}">
-                @foreach($this->exploreCategoryItems as $categoryItem)
-                    <x-lockups.genre-lockup :genre="$categoryItem" />
-                @endforeach
-            </section>
+                <section class="{{ $gridClass }}">
+                    @foreach($this->exploreCategoryItems as $categoryItem)
+                        <x-lockups.genre-lockup :genre="$categoryItem" />
+                    @endforeach
+                </section>
             @break
             @case(\App\Enums\ExploreCategoryTypes::Themes)
-            <section class="{{ $gridClass }}">
-                @foreach($this->exploreCategoryItems as $categoryItem)
-                    <x-lockups.theme-lockup :theme="$categoryItem" />
-                @endforeach
-            </section>
+                <section class="{{ $gridClass }}">
+                    @foreach($this->exploreCategoryItems as $categoryItem)
+                        <x-lockups.theme-lockup :theme="$categoryItem" />
+                    @endforeach
+                </section>
             @break
             @case(\App\Enums\ExploreCategoryTypes::Characters)
                 <x-rows.character-lockup :characters="$this->exploreCategoryItems" :is-row="false" />
@@ -75,11 +74,7 @@
                 <x-rows.person-lockup :people="$this->exploreCategoryItems" :is-row="false" />
             @break
             @case(\App\Enums\ExploreCategoryTypes::Songs)
-            <section class="{{ $gridClass }}">
-                @foreach($this->exploreCategoryItems as $categoryItem)
-                    <x-lockups.music-lockup :anime-song="$categoryItem" :show-episodes="false" :show-anime="true" :onMusicKitLoad="true" :is-row="false" />
-                @endforeach
-            </section>
+                <x-rows.music-lockup :anime-songs="$this->exploreCategoryItems" :show-episodes="false" :show-anime="true" :is-row="false" />
             @break
             @default
                 @if (app()->environment('local'))

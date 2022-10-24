@@ -27,10 +27,6 @@
         songs/{{ $song->id }}
     </x-slot:appArgument>
 
-    <x-slot:scripts>
-        <script src="{{ url(mix('js/listen.js')) }}"></script>
-    </x-slot:scripts>
-
     <div
         class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6"
         x-data="{
@@ -45,8 +41,6 @@
                     window.song = this.song
                     this.bgColor = '#' + this.song.attributes.artwork.bgColor
                     this.artworkURL = musicManager.getArtworkURL(song)
-
-                    console.log('running again', this.song, this.musicManager)
                 }
             }
         }"

@@ -140,6 +140,9 @@ class ExploreCategorySection extends Component
             ExploreCategoryTypes::People => $this->exploreCategory->peopleBornToday()->explore_category_items->map(function ($exploreCategoryItem) {
                 return $exploreCategoryItem->model;
             }),
+            ExploreCategoryTypes::Songs => $this->exploreCategory->explore_category_items()->limit(10)->get()->map(function ($exploreCategoryItem) {
+                return $exploreCategoryItem->model;
+            }),
             default => $this->exploreCategory->explore_category_items()->limit(10)->get()
         };
 
