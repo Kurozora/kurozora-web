@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 trait HasVideos
 {
     /**
-     * Bootstrap the model with UUID.
+     * Bootstrap the model with Videos.
      *
      * @return void
      */

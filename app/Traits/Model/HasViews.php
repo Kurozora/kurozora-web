@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 trait HasViews
 {
     /**
-     * Bootstrap the model with UUID.
+     * Bootstrap the model with Views.
      *
      * @return void
      */

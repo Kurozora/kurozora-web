@@ -9,6 +9,7 @@ use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasBannerImage;
 use App\Traits\Model\HasPosterImage;
+use App\Traits\Model\HasMediaTags;
 use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\TvRated;
@@ -46,6 +47,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         HasFactory,
         HasPosterImage,
         HasSlug,
+        HasMediaTags,
         HasVideos,
         HasViews,
         InteractsWithMedia,
@@ -431,7 +433,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_STUDIOS_SECONDS, function () use ($limit) {
-            return $this->anime_studios()->limit($limit)->get();
+            return $this->animeStudios()->limit($limit)->get();
         });
     }
 
@@ -440,7 +442,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
      *
      * @return HasMany
      */
-    public function anime_studios(): HasMany
+    public function animeStudios(): HasMany
     {
         return $this->hasMany(AnimeStudio::class);
     }
@@ -1064,6 +1066,17 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * Get the model's tags.
+     *
+     * @return HasManyThrough
+     */
+    public function tags(): HasManyThrough
+    {
+        return $this->hasManyThrough(Tag::class, MediaTag::class, 'taggable_id', 'id', 'id', 'tag_id')
+            ->where('taggable_type', '=', Anime::class);
+    }
+
+    /**
      * Returns the Anime items in the user's library.
      *
      * @return HasMany
@@ -1097,6 +1110,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         $anime['last_aired'] = $this->last_aired?->timestamp;
         $anime['created_at'] = $this->created_at?->timestamp;
         $anime['updated_at'] = $this->updated_at?->timestamp;
+        $anime['tags'] = $this->tags()->pluck('name')->toArray();
         return $anime;
     }
 

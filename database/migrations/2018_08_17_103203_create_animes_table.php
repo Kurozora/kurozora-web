@@ -22,10 +22,13 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('anidb_id')->unique()->nullable();
             $table->unsignedInteger('anilist_id')->unique()->nullable();
+            $table->string('animeplanet_id')->nullable();
             $table->string('animix_id')->unique()->nullable();
+            $table->unsignedInteger('anisearch_id')->nullable();
             $table->string('filler_id')->nullable();
             $table->string('imdb_id')->unique()->nullable();
             $table->unsignedInteger('kitsu_id')->unique()->nullable();
+            $table->unsignedInteger('livechart_id')->nullable();
             $table->unsignedInteger('mal_id')->unique()->nullable();
             $table->string('notify_id')->unique()->nullable();
             $table->unsignedInteger('syoboi_id')->nullable();

@@ -86,23 +86,24 @@ class AnimeStudio extends Resource
                 ->required(),
 
             BelongsTo::make('Studio')
+                ->sortable()
                 ->searchable()
                 ->sortable(),
 
             Boolean::make('Is Licensor')
+                ->required()
                 ->sortable()
-                ->help('The studio is responsible for licensing the anime.')
-                ->required(),
+                ->help('The studio is responsible for licensing the anime.'),
 
             Boolean::make('Is Producer')
                 ->sortable()
-                ->help('The studio is responsible for producing the anime. Usually sponsors.')
-                ->required(),
+                ->required()
+                ->help('The studio is responsible for producing the anime. Usually sponsors.'),
 
             Boolean::make('Is Studio')
                 ->sortable()
-                ->help('The studio responsible for creating (drawing) the anime.')
-                ->required(),
+                ->required()
+                ->help('The studio responsible for creating (drawing) the anime.'),
         ];
     }
 
