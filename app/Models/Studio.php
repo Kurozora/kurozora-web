@@ -141,7 +141,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
      *
      * @return HasMany
      */
-    public function anime_studios(): HasMany
+    public function animeStudios(): HasMany
     {
         return $this->hasMany(AnimeStudio::class);
     }
