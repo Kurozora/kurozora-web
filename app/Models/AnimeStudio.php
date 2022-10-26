@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\StudioType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
@@ -15,13 +16,6 @@ class AnimeStudio extends Pivot
     // Table name
     const TABLE_NAME = 'anime_studio';
     protected $table = self::TABLE_NAME;
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-    public $incrementing = true;
 
     /**
      * The attributes that should be cast.
@@ -51,6 +45,7 @@ class AnimeStudio extends Pivot
      */
     public function studio(): BelongsTo
     {
-        return $this->belongsTo(Studio::class)->where('type', 'anime');
+        return $this->belongsTo(Studio::class)
+            ->where('type', StudioType::Anime);
     }
 }
