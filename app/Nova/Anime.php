@@ -90,9 +90,17 @@ class Anime extends Resource
                 ->hideFromIndex()
                 ->help('Used to identify the Anime on <a target="_blank" href="https://anilist.co/anime/' . ($this->resource->anilist_id ?? 'slug-identifier') . '">AniList</a>'),
 
+            Text::make('AnimePlanet ID')
+                ->hideFromIndex()
+                ->help('Used to identify the Anime on <a target="_blank" href="https://anime-planet.com/anime/' . ($this->resource->animeplanet_id ?? 'slug-identifier') . '">Anim-Planet</a>'),
+
             Text::make('Animix ID')
                 ->hideFromIndex()
                 ->help('Used to identify the Anime on <a target="_blank" href="https://animixplay.to/v1/' . ($this->resource->animix_id ?? 'slug-identifier') . '">AnimixPlay</a>'),
+
+            Number::make('AniSearch ID')
+                ->hideFromIndex()
+                ->help('Used to identify the Anime on <a target="_blank" href="https://anisearch.com/anime/' . ($this->resource->anisearch_id ?? 'slug-identifier') . '">AniSearch</a>'),
 
             Text::make('Filler ID')
                 ->hideFromIndex()
@@ -105,6 +113,10 @@ class Anime extends Resource
             Number::make('Kitsu ID')
                 ->hideFromIndex()
                 ->help('Used to identify the Anime on <a target="_blank" href="https://kitsu.io/anime/' . ($this->resource->kitsu_id ?? 'slug-identifier') . '">Kitsu</a>'),
+
+            Number::make('LiveChart ID')
+                ->hideFromIndex()
+                ->help('Used to identify the Anime on <a target="_blank" href="https://livechart.me/anime/' . ($this->resource->livechart_id ?? 'slug-identifier') . '">LiveChart</a>'),
 
             Number::make('MAL ID')
                 ->hideFromIndex()
@@ -333,6 +345,8 @@ class Anime extends Resource
 
             HasMany::make('Themes', 'media_themes', MediaTheme::class),
 
+            MorphMany::make('Media Tags'),
+
             HasMany::make('Seasons'),
 
             HasMany::make('Cast'),
@@ -343,7 +357,7 @@ class Anime extends Resource
 
             HasMany::make('Staff', 'staff', AnimeStaff::class),
 
-            HasMany::make('Studios', 'anime_studios', AnimeStudio::class),
+            HasMany::make('Studios', 'animeStudios', AnimeStudio::class),
 
             HasOne::make('Stats', 'stats', MediaStat::class),
         ];
