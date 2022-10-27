@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MediaTag extends KModel
 {
-    use HasUlids;
+    use HasUlids,
+        SoftDeletes;
 
     // Table name
     const TABLE_NAME = 'media_tags';
