@@ -2,17 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class MediaTag extends KModel
 {
-    use HasUuids;
+    use HasUlids;
 
     // Table name
     const TABLE_NAME = 'media_tags';
     protected $table = self::TABLE_NAME;
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool $incrementing
+     */
+    public $incrementing = false;
 
     /**
      * The tag relationship of the media tag.
