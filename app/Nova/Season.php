@@ -144,6 +144,8 @@ class Season extends Resource
                     ->sortable()
                     ->help('Last air date of the of the season in JST timezone. Leave empty if not announced yet.'),
 
+            HasMany::make('Translations', 'translations', SeasonTranslation::class),
+
             HasMany::make('Episodes'),
         ];
     }
