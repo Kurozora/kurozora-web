@@ -543,7 +543,7 @@ class AnimeProcessor implements ItemProcessorInterface
                     'name' => $malStudioName,
                     'type' => StudioType::Anime,
                 ]);
-            $animeStudio = $anime?->anime_studios()->firstWhere('studio_id', '=', $studio->id);
+            $animeStudio = $anime?->animeStudios()->firstWhere('studio_id', '=', $studio->id);
 
             if (empty($animeStudio)) {
                 AnimeStudio::create([

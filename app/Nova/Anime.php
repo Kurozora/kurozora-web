@@ -337,9 +337,9 @@ class Anime extends Resource
                 ->hideFromIndex()
                 ->help('For example: © ' . date('Y') . ' Redark'),
 
-            MorphMany::make('Videos'),
-
             HasMany::make('Translations', 'anime_translations', AnimeTranslation::class),
+
+            MorphMany::make('Videos'),
 
             HasMany::make('Genres', 'media_genres', MediaGenre::class),
 
