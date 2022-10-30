@@ -19,17 +19,12 @@ class DidChangeRenewalStatus extends AppStoreListener
 
         /** @var V2DecodedPayload $providerRepresentation */
         $providerRepresentation = $subscription->getProviderRepresentation();
-        $receiptInfo = $providerRepresentation->getTransactionInfo();
-
-        // Collect IDs
-        $userID = $receiptInfo->getAppAccountToken();
-        $originalTransactionID = $receiptInfo->getOriginalTransactionId();
 
         // Decide whether it will auto-renew
         $willAutoRenew = $providerRepresentation->getRenewalInfo()->getAutoRenewStatus();
 
         // Find the user and update their receipt.
-        $userReceipt = $this->findUserReceipt($userID, $originalTransactionID);
+        $userReceipt = $this->findOrCreateUserReceipt($providerRepresentation);
         $userReceipt->update([
             'will_auto_renew' => (int) $willAutoRenew
         ]);

@@ -16,13 +16,10 @@ class Expired extends AppStoreListener
         // Retrieve the necessary data from the event
         $notification = $event->getServerNotification();
         $subscription = $notification->getSubscription();
+
         /** @var V2DecodedPayload $providerRepresentation */
         $providerRepresentation = $subscription->getProviderRepresentation();
         $receiptInfo = $providerRepresentation->getTransactionInfo();
-
-        // Collect IDs
-        $userID = $receiptInfo->getAppAccountToken();
-        $originalTransactionID = $receiptInfo->getOriginalTransactionId();
 
         // Collect dates
         $expiresDate = $receiptInfo->getExpiresDate();
@@ -31,7 +28,7 @@ class Expired extends AppStoreListener
         $isSubscriptionValid = $expiresDate->isFuture();
 
         // Find the user and update their receipt.
-        $userReceipt = $this->findUserReceipt($userID, $originalTransactionID);
+        $userReceipt = $this->findOrCreateUserReceipt($providerRepresentation);
         $userReceipt->update([
             'is_subscribed' => $isSubscriptionValid,
             'expired_at' => $expiresDate->toDateTime()

@@ -16,13 +16,9 @@ class PriceIncrease extends AppStoreListener
         // Retrieve the necessary data from the event
         $notification = $event->getServerNotification();
         $subscription = $notification->getSubscription();
+
         /** @var V2DecodedPayload $providerRepresentation */
         $providerRepresentation = $subscription->getProviderRepresentation();
-        $receiptInfo = $providerRepresentation->getTransactionInfo();
-
-        // Collect IDs
-        $userID = $receiptInfo->getAppAccountToken();
-        $originalTransactionID = $receiptInfo->getOriginalTransactionId();
 
         // Decide whether it will auto-renew
         $renewalInfo = $providerRepresentation->getRenewalInfo();
@@ -31,7 +27,7 @@ class PriceIncrease extends AppStoreListener
         $willAutoRenew = $renewalInfo->getPriceIncreaseStatus() ?? 0;
 
         // Find the user and update their receipt.
-        $userReceipt = $this->findUserReceipt($userID, $originalTransactionID);
+        $userReceipt = $this->findOrCreateUserReceipt($providerRepresentation);
         $userReceipt->update([
             'will_auto_renew' => $willAutoRenew
         ]);

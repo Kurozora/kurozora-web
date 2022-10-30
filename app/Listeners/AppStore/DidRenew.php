@@ -19,17 +19,12 @@ class DidRenew extends AppStoreListener
 
         /** @var V2DecodedPayload $providerRepresentation */
         $providerRepresentation = $subscription->getProviderRepresentation();
-        $receiptInfo = $providerRepresentation->getTransactionInfo();
-
-        // Collect IDs
-        $userID = $receiptInfo->getAppAccountToken();
-        $originalTransactionID = $receiptInfo->getOriginalTransactionId();
 
         // Collect Dates
         $expirationDate = $subscription->getExpiryTime();
 
         // Find the user and update their receipt.
-        $userReceipt = $this->findUserReceipt($userID, $originalTransactionID);
+        $userReceipt = $this->findOrCreateUserReceipt($providerRepresentation);
         $userReceipt->update([
             'is_subscribed' => true,
             'expired_at' => $expirationDate->toDateTime(),

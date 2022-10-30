@@ -17,13 +17,10 @@ class DidFailToRenew extends AppStoreListener
         // Retrieve the necessary data from the event
         $notification = $event->getServerNotification();
         $subscription = $notification->getSubscription();
+
         /** @var V2DecodedPayload $providerRepresentation */
         $providerRepresentation = $subscription->getProviderRepresentation();
         $receiptInfo = $providerRepresentation->getTransactionInfo();
-
-        // Collect IDs
-        $userID = $receiptInfo->getAppAccountToken();
-        $originalTransactionID = $receiptInfo->getOriginalTransactionId();
 
         // Collect dates
         $expiresDate = $receiptInfo->getExpiresDate();
@@ -36,7 +33,7 @@ class DidFailToRenew extends AppStoreListener
         $isSubscriptionValid = $expiresDate->isFuture() || $isInGracePeriod;
 
         // Find the user and update their receipt.
-        $userReceipt = $this->findUserReceipt($userID, $originalTransactionID);
+        $userReceipt = $this->findOrCreateUserReceipt($providerRepresentation);
         $userReceipt->update([
             'is_subscribed' => $isSubscriptionValid,
             'expired_at' => $expiresDate?->toDateTime()
@@ -50,19 +47,5 @@ class DidFailToRenew extends AppStoreListener
 
         // Notify the user about the subscription update.
         $this->notifyUserAboutUpdate($user, $event);
-    }
-
-    /**
-     * Whether bill is in retrying period and grace period expiry date is in the future.
-     *
-     * @param JwsRenewalInfo $renewalInfo
-     *
-     * @return bool
-     */
-    public function isInGracePeriod(JwsRenewalInfo $renewalInfo): bool
-    {
-        return $renewalInfo->getIsInBillingRetryPeriod() &&
-            $renewalInfo->getGracePeriodExpiresDate() !== null &&
-            $renewalInfo->getGracePeriodExpiresDate()->isFuture();
     }
 }
