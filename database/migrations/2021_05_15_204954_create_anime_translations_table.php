@@ -33,7 +33,7 @@ return new class extends Migration
 
             // Set foreign key constraints
             $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
-            $table->foreign('locale')->references('code')->on(Language::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('locale')->references('code')->on(Language::TABLE_NAME);
         });
     }
 

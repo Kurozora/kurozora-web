@@ -32,7 +32,7 @@ return new class extends Migration
 
             // Set foreign key constraints
             $table->foreign('character_id')->references('id')->on(Character::TABLE_NAME)->onDelete('cascade');
-            $table->foreign('locale')->references('code')->on(Language::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('locale')->references('code')->on(Language::TABLE_NAME);
         });
     }
 
