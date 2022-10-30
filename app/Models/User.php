@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\MassPrunable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\Access\Authorizable;
@@ -207,6 +208,16 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             ['email_verified_at', '=', null],
             ['created_at', '<', Carbon::now()->subDays(30)]
         ]);
+    }
+
+    /**
+     * Returns the language the user has.
+     *
+     * @return BelongsTo
+     */
+    public function language(): BelongsTo
+    {
+        return $this->belongsTo(Language::class, 'language_id', 'code');
     }
 
     /**
