@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Scrapers\TVDB;
 
+use App\Models\Anime;
 use App\Spiders\TVDB\EpisodeSpider;
 use Illuminate\Console\Command;
 use RoachPHP\Roach;
@@ -47,6 +48,30 @@ class Episode extends Command
         Roach::startSpider(EpisodeSpider::class, new Overrides(startUrls: [
             config('scraper.domains.tvdb.dereferrer.series') . '/' . $tvdbID,
         ]));
+
+        $episodes = Anime::withoutGlobalScopes()
+            ->firstWhere('tvdb_id', '=', $tvdbID)
+            ->episodes()
+            ->orderBy('number_total')
+            ->get();
+
+        foreach ($episodes as $key => $episode) {
+            $nextEpisode = null;
+            $previousEpisode = null;
+
+            if ($key != count($episodes) - 1) {
+                $nextEpisode = $episodes[$key + 1]->id;
+            }
+
+            if ($key != 0) {
+                $previousEpisode = $episodes[$key - 1]->id;
+            }
+
+            $episode->update([
+                'next_episode_id' => $nextEpisode,
+                'previous_episode_id' => $previousEpisode,
+            ]);
+        }
 
         return Command::SUCCESS;
     }

@@ -28,7 +28,7 @@
                         class="relative aspect-square rounded-full overflow-hidden"
                         style="height: 128px;"
                     >
-                        <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $person->profile_image_url ?? asset('images/static/placeholders/person_poster_square.webp') }}" alt="{{ $person->full_name }} Profile Image" title="{{ $person->full_name }}">
+                        <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $person->profile_image_url ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $person->full_name }} Profile Image" title="{{ $person->full_name }}">
 
                         <div class="absolute top-0 left-0 h-full w-full border-2 border-solid border-black/20 rounded-full"></div>
                     </picture>

@@ -243,6 +243,11 @@
                                 </template>
                             </x-circle-button>
 
+                            {{-- Nova --}}
+                            <x-nova-link :resource="\App\Nova\Episode::class" :model="$episode">
+                                @svg('pencil', 'fill-current', ['width' => '44'])
+                            </x-nova-link>
+
                             {{-- More Options --}}
                             <x-dropdown align="right" width="48">
                                 <x-slot:trigger>
