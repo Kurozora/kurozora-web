@@ -27,7 +27,7 @@
 
             {{-- Current Banner Image --}}
             <div class="relative" x-show="!bannerImagePreview">
-                @livewire('components.banner-image-view', ['user' => auth()->user()])
+                <livewire:components.banner-image-view :user="auth()->user()" />
 
                 <div class="absolute top-0 right-0 bottom-0 left-0 flex justify-center bg-black/20">
                     <div class="flex items-center justify-center">
@@ -109,7 +109,7 @@
 
             {{-- Current Profile Image --}}
             <div class="relative w-16 h-16 rounded-full overflow-hidden sm:w-24 sm:h-24" x-show="!profileImagePreview">
-                @livewire('components.profile-image-view', ['user' => auth()->user()])
+                <livewire:components.profile-image-view :user="auth()->user()" />
 
                 <div class="absolute top-0 right-0 bottom-0 left-0 flex justify-center bg-black/20">
                     <div class="flex items-center justify-center">

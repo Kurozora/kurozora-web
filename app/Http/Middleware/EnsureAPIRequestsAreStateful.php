@@ -3,7 +3,9 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class EnsureAPIRequestsAreStateful
 {
@@ -11,7 +13,7 @@ class EnsureAPIRequestsAreStateful
      * Handle an incoming request.
      *
      * @param Request $request
-     * @param Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @param Closure(Request): (Response|RedirectResponse)  $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next): mixed
