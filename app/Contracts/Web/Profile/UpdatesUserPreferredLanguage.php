@@ -4,10 +4,10 @@ namespace App\Contracts\Web\Profile;
 
 use App\Models\User;
 
-interface UpdatesUserPreferredTvRating
+interface UpdatesUserPreferredLanguage
 {
     /**
-     * Validate and update the given user's preferred TV rating.
+     * Validate and update the given user's preferred language.
      *
      * @param User  $user
      * @param array  $input

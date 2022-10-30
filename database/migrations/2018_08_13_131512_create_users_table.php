@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Language;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->uuid();
             $table->unsignedBigInteger('love_reacter_id')->nullable();
             $table->string('siwa_id')->nullable();
+            $table->string('language_id', 2)->default('en')->index();
             $table->string('slug');
             $table->string('username', 50)->nullable();
             $table->string('email');
@@ -45,6 +47,7 @@ return new class extends Migration
 
             // Set foreign key constraints
             $table->foreign('love_reacter_id')->references('id')->on('love_reacters');
+            $table->foreign('locale')->references('code')->on(Language::TABLE_NAME);
         });
     }
 
