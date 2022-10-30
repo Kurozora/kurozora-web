@@ -54,7 +54,7 @@
     </head>
 
     <body class="bg-white dark:bg-black">
-        @livewire('navigation-dropdown')
+        <livewire:navigation-dropdown />
 
         @if(Session::has('success'))
             <x-alert :message="Session::get('success')"></x-alert>

@@ -10,48 +10,54 @@
     </x-slot:header>
 
     <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 space-y-10 sm:px-6">
-        @livewire('profile.update-profile-information-form')
+        <livewire:profile.update-profile-information-form />
 
         <x-hr class="hidden sm:block" />
 
         <div class="sm:mt-0">
-            @livewire('profile.select-preferred-tv-rating-form')
+            <livewire:profile.select-preferred-language-form />
         </div>
 
         <x-hr class="hidden sm:block" />
 
         <div class="sm:mt-0">
-            @livewire('profile.import-form')
+            <livewire:profile.select-preferred-tv-rating-form />
         </div>
 
         <x-hr class="hidden sm:block" />
 
         <div class="sm:mt-0">
-            @livewire('profile.update-password-form')
+            <livewire:profile.import-form />
         </div>
 
         <x-hr class="hidden sm:block" />
 
         <div class="sm:mt-0">
-            @livewire('profile.two-factor-authentication-form')
+            <livewire:profile.update-password-form />
         </div>
 
         <x-hr class="hidden sm:block" />
 
         <div class="sm:mt-0">
-            @livewire('profile.sign-out-app-sessions-form')
+            <livewire:profile.two-factor-authentication-form />
         </div>
 
         <x-hr class="hidden sm:block" />
 
         <div class="sm:mt-0">
-            @livewire('profile.sign-out-other-sessions-form')
+            <livewire:profile.sign-out-app-sessions-form />
         </div>
 
         <x-hr class="hidden sm:block" />
 
         <div class="sm:mt-0">
-            @livewire('profile.delete-user-form')
+            <livewire:profile.sign-out-other-sessions-form />
+        </div>
+
+        <x-hr class="hidden sm:block" />
+
+        <div class="sm:mt-0">
+            <livewire:profile.delete-user-form />
         </div>
     </div>
 </x-app-layout>
