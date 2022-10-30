@@ -19,15 +19,12 @@ class DidChangeRenewalPref extends AppStoreListener
 
         /** @var V2DecodedPayload $providerRepresentation */
         $providerRepresentation = $subscription->getProviderRepresentation();
-        $receiptInfo = $providerRepresentation->getTransactionInfo();
 
         // Collect IDs
-        $userID = $receiptInfo->getAppAccountToken();
-        $originalTransactionID = $receiptInfo->getOriginalTransactionId();
         $productID = $subscription->getItemId();
 
         // Find the user and update their receipt.
-        $userReceipt = $this->findUserReceipt($userID, $originalTransactionID);
+        $userReceipt = $this->findOrCreateUserReceipt($providerRepresentation);
         $userReceipt->update([
             'product_id' => $productID
         ]);

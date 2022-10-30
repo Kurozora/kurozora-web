@@ -18,6 +18,7 @@ class Subscribed extends AppStoreListener
         // Retrieve the necessary data from the event
         $notification = $event->getServerNotification();
         $subscription = $notification->getSubscription();
+
         /** @var V2DecodedPayload $providerRepresentation */
         $providerRepresentation = $subscription->getProviderRepresentation();
         $receiptInfo = $providerRepresentation->getTransactionInfo();
@@ -87,19 +88,5 @@ class Subscribed extends AppStoreListener
 
         // Notify the user about the subscription update.
         $this->notifyUserAboutUpdate($user, $event);
-    }
-
-    /**
-     * Whether bill is in retrying period and grace period expiry date is in the future.
-     *
-     * @param JwsRenewalInfo $renewalInfo
-     *
-     * @return bool
-     */
-    public function isInGracePeriod(JwsRenewalInfo $renewalInfo): bool
-    {
-        return $renewalInfo->getIsInBillingRetryPeriod() &&
-            $renewalInfo->getGracePeriodExpiresDate() !== null &&
-            $renewalInfo->getGracePeriodExpiresDate()->isFuture();
     }
 }
