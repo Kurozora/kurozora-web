@@ -2,8 +2,6 @@
 
 namespace App\Nova;
 
-use App\Nova\Filters\IsPro;
-use App\Nova\Filters\IsSubscribed;
 use App\Nova\Filters\PremiumStatus;
 use App\Nova\Filters\UserRole;
 use App\Nova\Lenses\UnconfirmedUsers;
@@ -12,6 +10,7 @@ use App\Rules\ValidatePassword;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Exception;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
@@ -193,6 +192,8 @@ class User extends Resource
                 ->updateRules(['nullable', new ValidatePassword]),
 
             Textarea::make('Biography'),
+
+            BelongsTo::make('Language'),
 
             Boolean::make('Is Pro'),
 
