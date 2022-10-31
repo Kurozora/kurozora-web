@@ -42,6 +42,8 @@ abstract class AppStoreListener implements HandlesSubscription
      */
     public function findOrCreateUserReceipt(V2DecodedPayload $providerRepresentation): UserReceipt
     {
+        logger()->channel('stack')->critical(print_r(request()->all(), true));
+        logger()->channel('stack')->critical(print_r($providerRepresentation->toArray(), true));
         $receiptInfo = $providerRepresentation->getTransactionInfo();
         $userID = $receiptInfo->getAppAccountToken();
         $originalTransactionID = $receiptInfo->getOriginalTransactionId();

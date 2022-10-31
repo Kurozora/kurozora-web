@@ -76,6 +76,8 @@ class Handler extends ExceptionHandler
         } else if (str($e->getTraceAsString())->contains('ServerNotificationController') && !$request->has('provider')) {
             logger()->channel('stack')->critical(print_r($request->all(), true));
             Http::post(route('liap.serverNotifications', ['provider' => 'app-store']), $request->all());
+        } else if ($request->routeIs('liap.serverNotifications')) {
+            logger()->channel('stack')->critical(print_r($request->all(), true));
         }
 
         return parent::render($request, $e);
