@@ -36,8 +36,8 @@ interface HandlesSubscription
     /**
      * Notify the user of the changes applied to the subscription.
      *
-     * @param User $user
+     * @param User|null $user
      * @param PurchaseEvent $event
      */
-    public function notifyUserAboutUpdate(User $user, PurchaseEvent $event);
+    public function notifyUserAboutUpdate(?User $user, PurchaseEvent $event);
 }

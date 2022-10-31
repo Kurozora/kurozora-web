@@ -36,7 +36,7 @@ class Expired extends AppStoreListener
 
         // Update user values.
         $user = $userReceipt->user;
-        $user->update([
+        $user?->update([
             'is_subscribed' => $isSubscriptionValid
         ]);
 
