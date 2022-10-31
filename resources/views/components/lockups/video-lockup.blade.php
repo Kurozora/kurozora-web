@@ -2,12 +2,14 @@
 
 <div class="relative w-64 pb-2 snap-normal snap-center md:w-80">
     <div class="flex flex-col">
+        @if(empty($anime->video_url))
         <picture class="relative aspect-video rounded-lg overflow-hidden">
-            @if(empty($anime->video_url))
-                <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
+            <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
 
-                <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
-            @else
+            <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
+        </picture>
+        @else
+            <div class="relative aspect-video rounded-lg overflow-hidden">
                 <iframe
                     class="w-full h-full lazyload"
                     type="text/html"
@@ -21,8 +23,8 @@
                     data-src="https://www.youtube-nocookie.com/embed/{{ str($anime->video_url)->after('?v=') }}?autoplay=0&iv_load_policy=3&disablekb=1&color=red&rel=0&cc_load_policy=0&start=0&end=0&origin={{ config('app.url') }}&modestbranding=1&playsinline=1&loop=1&playlist={{ str($anime->video_url)->after('?v=') }}"
                 >
                 </iframe>
-            @endif
-        </picture>
+            </div>
+        @endif
     </div>
 
     <div class="relative mt-4">
