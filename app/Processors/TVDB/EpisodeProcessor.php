@@ -2,6 +2,7 @@
 
 namespace App\Processors\TVDB;
 
+use App\Helpers\ResmushIt;
 use App\Models\Anime;
 use App\Models\Episode;
 use App\Models\Language;
@@ -97,7 +98,7 @@ class EpisodeProcessor implements ItemProcessorInterface
                 ], $episodeAttributes);
 
                 // Add banner image to episode
-                $this->addBannerImage($episodeBannerImageURL, $episode);
+                $this->addBannerImage($episodeBannerImageURL, $episode, $tvdbID);
 
                 logger()->channel('stderr')->info('✅️ [tvdb_id:' . $tvdbID . '] Done creating episode');
             } catch (Exception $e) {
@@ -267,15 +268,22 @@ class EpisodeProcessor implements ItemProcessorInterface
      *
      * @param string|null $imageUrl
      * @param Model|Builder|Episode $episode
+     * @param string $tvdbID
      * @return void
      */
-    private function addBannerImage(?string $imageUrl, Model|Builder|Episode $episode): void
+    private function addBannerImage(?string $imageUrl, Model|Builder|Episode $episode, string $tvdbID): void
     {
         if (!empty($imageUrl) && empty($episode->banner_image)) {
-            try {
-                $episode->updateBannerImage($imageUrl, $episode->title);
-            } catch (Exception $e) {
-                logger()->channel('stderr')->error($e->getMessage());
+            if ($response = ResmushIt::compress($imageUrl)) {
+                try {
+                    $extension = pathinfo($imageUrl, PATHINFO_EXTENSION);
+                    $episode->updateBannerImage($response, $episode->title, [], $extension);
+                    logger()->channel('stderr')->info('✅️ [tvdb_id:' . $tvdbID . '] Done creating banner');
+                } catch (Exception $e) {
+                    logger()->channel('stderr')->error('❌️ [tvdb_id:' . $tvdbID . '] ' . $e->getMessage());
+                }
+            } else {
+                logger()->channel('stderr')->error('❌️ [tvdb_id:' . $tvdbID . '] Resmush failed.');
             }
         }
     }

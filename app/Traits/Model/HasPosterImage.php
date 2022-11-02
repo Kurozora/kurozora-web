@@ -44,11 +44,12 @@ trait HasPosterImage
      * @param string|UploadedFile $uploadFile
      * @param string|null $name
      * @param array $customProperties
+     * @param string|null $extension
+     * @throws FileCannotBeAdded
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
-     * @throws FileCannotBeAdded
      */
-    function updatePosterImage(string|UploadedFile $uploadFile, string $name = null, array $customProperties = []): void
+    function updatePosterImage(string|UploadedFile $uploadFile, string $name = null, array $customProperties = [], ?string $extension = null): void
     {
         // Determine media adder
         if ($isUrl = str($uploadFile)->startsWith(['http://', 'https://'])) {
@@ -68,12 +69,12 @@ trait HasPosterImage
         }
 
         if ($isUrl) {
-            $extension = pathinfo($uploadFile, PATHINFO_EXTENSION);
+            $extension = $extension ?? pathinfo($uploadFile, PATHINFO_EXTENSION);
             $addMedia->usingFileName(Uuid::uuid4() . '.' . $extension);
         } elseif (!empty($isUploadFile)) {
             $addMedia->usingFileName(Uuid::uuid4() . '.' . $uploadFile->extension());
         } else {
-            $extension = pathinfo($uploadFile, PATHINFO_EXTENSION);
+            $extension = $extension ?? 'jpg';
             $addMedia->usingFileName(Uuid::uuid4() . '.' . $extension);
         }
 
