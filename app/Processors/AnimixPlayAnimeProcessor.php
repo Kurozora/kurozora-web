@@ -40,7 +40,7 @@ class AnimixPlayAnimeProcessor implements ItemProcessorInterface
 //        ]);
 
         if (empty($anime)) {
-            logger()->channel('stderr')->info('⚠️ [ANIMIX_ID:' . $slug . '] Anime not found');
+            logger()->channel('stderr')->warning('⚠️ [ANIMIX_ID:' . $slug . '] Anime not found');
         } else {
             $episode = $anime->episodes()
                 ->withoutGlobalScopes()

@@ -28,8 +28,7 @@ class BannerProcessor implements ItemProcessorInterface
 
         logger()->channel('stderr')->info('🔄 [tvdb_id:' . $tvdbID . '] Processing banner');
 
-        $anime = Anime::on('elb')
-            ->withoutGlobalScopes()
+        $anime = Anime::withoutGlobalScopes()
             ->firstWhere('tvdb_id', '=', $tvdbID);
 
 //        dd([
@@ -38,13 +37,13 @@ class BannerProcessor implements ItemProcessorInterface
 //        ]);
 
         if (empty($anime)) {
-            logger()->channel('stderr')->info('⚠️ [tvdb_id:' . $tvdbID . '] Anime not found');
+            logger()->channel('stderr')->warning('⚠️ [tvdb_id:' . $tvdbID . '] Anime not found');
         } else {
             logger()->channel('stderr')->info('🖨️ [tvdb_id:' . $tvdbID . '] Creating banner');
             if ($response = ResmushIt::compress($imageUrl)) {
                 try {
                     $extension = pathinfo($imageUrl, PATHINFO_EXTENSION);
-                    $anime->updatePosterImage($response, $anime->original_title, [], $extension);
+                    $anime->updateBannerImage($response, $anime->original_title, [], $extension);
                     logger()->channel('stderr')->info('✅️ [tvdb_id:' . $tvdbID . '] Done creating banner');
                 } catch (Exception $e) {
                     logger()->channel('stderr')->error('❌️ [tvdb_id:' . $tvdbID . '] ' . $e->getMessage());

@@ -37,14 +37,14 @@ class FillerProcessor implements ItemProcessorInterface
 //        ]);
 
         if (empty($anime)) {
-            logger()->channel('stderr')->info('⚠️ [filler_id:' . $fillerID . '] Anime not found');
+            logger()->channel('stderr')->warning('⚠️ [filler_id:' . $fillerID . '] Anime not found');
         } else {
             $episode = $anime->episodes()
                 ->withoutGlobalScopes()
                 ->firstWhere('number_total', '=', $episodeNumber);
 
             if (empty($episode)) {
-                logger()->channel('stderr')->info('⚠️ [filler_id:' . $fillerID . '] Episode `' . $episodeNumber . '` not found');
+                logger()->channel('stderr')->warning('⚠️ [filler_id:' . $fillerID . '] Episode `' . $episodeNumber . '` not found');
             } else {
                 logger()->channel('stderr')->info('🛠️ [filler_id:' . $fillerID . '] Updating episode `' . $episodeNumber . '` filler status');
                 $episode->update([

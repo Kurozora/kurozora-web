@@ -55,7 +55,7 @@ class EpisodeProcessor implements ItemProcessorInterface
 //        ]);
 
         if (empty($anime)) {
-            logger()->channel('stderr')->info('⚠️ [tvdb_id:' . $tvdbID . '] Anime not found');
+            logger()->channel('stderr')->warning('⚠️ [tvdb_id:' . $tvdbID . '] Anime not found');
         } else {
             $season = $anime->seasons()
                 ->firstWhere('number', '=', $seasonNumber);

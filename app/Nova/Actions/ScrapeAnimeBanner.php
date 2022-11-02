@@ -13,7 +13,7 @@ use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class ScrapeAnime extends Action implements ShouldQueue
+class ScrapeAnimeBanner extends Action implements ShouldQueue
 {
     use InteractsWithQueue, Queueable;
 
@@ -31,17 +31,12 @@ class ScrapeAnime extends Action implements ShouldQueue
 
         /** @var Anime $model */
         foreach ($models as $model) {
-            if (empty($model->mal_id)) {
-                $this->markAsFailed($model, $model->original_title . ' has no MAL ID specified. Please add it, and try again.');
+            if (empty($model->tvdb_id)) {
+                $this->markAsFailed($model, $model->original_title . ' has no TVDB ID specified. Please add it, and try again.');
                 $nonScrapeCount++;
             } else {
                 try {
-                    Artisan::call('scrape:mal_anime', ['malID' => $model->mal_id]);
-
-                    if ($model->tvdb_id) {
-                        Artisan::call('scrape:tvdb_banners', ['tvdbID' => $model->tvdb_id]);
-                        Artisan::call('scrape:tvdb_episode', ['tvdbID' => $model->tvdb_id]);
-                    }
+                    Artisan::call('scrape:tvdb_banners', ['tvdbID' => $model->tvdb_id]);
 
                     $this->markAsFinished($model);
                     $scrapeCount++;
