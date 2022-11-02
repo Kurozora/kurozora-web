@@ -303,7 +303,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
             ->setTimezone('UTC');
 
         if (!is_null($airDay) && !empty($airTime)) {
-            $broadcast = $dayTime->getTranslatedDayName() . ' ' . __('at') . ' ' . $dayTime->format('H:i e');
+            $broadcast = $dayTime->englishDayOfWeek . ' at ' . $dayTime->format('H:i e');
         }
 
         return $broadcast;

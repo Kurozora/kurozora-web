@@ -150,7 +150,7 @@ return [
          * user. This informs the recaptcha middleware of
          * minimum score a user can get to pass.
          */
-        'minimum_score' => env("RECAPTCHA_MINIMUM_SCORE", 0.5),
+        'minimum_score' => env("RECAPTCHA_MINIMUM_SCORE", 0.3),
         /**
          * The Recaptcha input will request a token on page load. As
          * Recaptcha tokens only last for 2 minutes, the input
