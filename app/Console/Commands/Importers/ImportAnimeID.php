@@ -3,10 +3,17 @@
 namespace App\Console\Commands\Importers;
 
 use App\Models\Anime;
+use App\Models\Genre;
+use App\Models\MediaType;
+use App\Models\Relation;
+use App\Models\Source;
+use App\Models\Tag;
+use App\Models\Theme;
 use Http;
 use Illuminate\Console\Command;
+use JsonMachine\Exception\InvalidArgumentException;
+use JsonMachine\Items;
 use JsonMachine\JsonDecoder\ExtJsonDecoder;
-use JsonMachine\JsonMachine;
 use function storage_path;
 
 class ImportAnimeID extends Command
@@ -39,12 +46,16 @@ class ImportAnimeID extends Command
      * Execute the console command.
      *
      * @return int
+     * @throws InvalidArgumentException
      */
     public function handle(): int
     {
-        $file = storage_path('app/anime-offline-database.json');
+        $file = storage_path('app/anime-offline-database-minified.json');
         $fileSize = filesize($file);
-        $animes = JsonMachine::fromFile($file, '/data', new ExtJsonDecoder);
+        $animes = Items::fromFile($file, [
+            'pointer' => '/data',
+            'decoder' => new ExtJsonDecoder
+        ]);
 
         $progressBar = $this->output->createProgressBar($fileSize);
         $progressBar->start();
@@ -53,20 +64,28 @@ class ImportAnimeID extends Command
 //            if ($animes->getPosition() >= 24594500) {
                 $sources = $this->filterSources($data->sources);
 
-                if (array_key_exists('mal_id', $sources) && array_key_exists('notify_id', $sources)) {
+                if (array_key_exists('mal_id', $sources)) {
                     $anime = Anime::withoutGlobalScopes()
                         ->firstWhere([
                             ['mal_id', $sources['mal_id']],
                         ]);
 
-                    if (!empty($anime)) {
+                    if (!empty($anime) && $anime->tags()->count() == 0) {
+                        if (!empty($anime->kitsu_id)) {
+                            unset($sources['kitsu_id']);
+                        }
                         $anime->update($sources);
+//                        $anime->touch();
+
+                        // Add tags
+                        $this->addTags($data->tags, $anime);
                     }
                 }
-//            }
 
-            $progress = $animes->getPosition();
-            $progressBar->setProgress($progress);
+                $progress = $animes->getPosition();
+//                echo intval($animes->getPosition() / $fileSize * 100) . ' %' . PHP_EOL;
+                $progressBar->setProgress($progress);
+//            }
         }
 
         $progressBar->finish();
@@ -87,11 +106,14 @@ class ImportAnimeID extends Command
         }
 
         $regexSearch = [
-            'anidb_id' => '#https:\/\/anidb.net\/anime\/(\w+)$#i',
-            'anilist_id' => '#https:\/\/anilist.co\/anime\/(\w+)$#i',
-            'kitsu_id' => '#https:\/\/kitsu.io\/anime\/(\w+)$#i',
-            'mal_id' => '#https:\/\/myanimelist.net\/anime/(\w+)$#i',
-            'notify_id' => '#https:\/\/notify.moe\/anime/(\w+)$#i',
+            'anidb_id' => '#https:\/\/anidb\.net\/anime\/(\w+)$#i',
+            'anilist_id' => '#https:\/\/anilist\.co\/anime\/(\w+)$#i',
+            'animeplanet_id' => '#https:\/\/anime-planet\.com\/anime\/(.+)$#i',
+            'anisearch_id' => '#https:\/\/anisearch\.com\/anime\/(\w+)$#i',
+            'kitsu_id' => '#https:\/\/kitsu\.io\/anime\/(\w+)$#i',
+            'livechart_id' => '#https:\/\/livechart\.me\/anime\/(\w+)$#i',
+            'mal_id' => '#https:\/\/myanimelist\.net\/anime/(\w+)$#i',
+            'notify_id' => '#https:\/\/notify\.moe\/anime/(\w+)$#i',
         ];
         $matchedSources = [];
 
@@ -171,5 +193,47 @@ class ImportAnimeID extends Command
         }
 
         return $id;
+    }
+
+    /**
+     * Add tags to anime.
+     *
+     * @param array $tags
+     * @param Anime $anime
+     * @return void
+     */
+    protected function addTags(array $tags, Anime $anime): void
+    {
+        foreach($tags as $tagName) {
+            $tagName = str($tagName)
+                ->remove('Based on an', false)
+                ->remove('Based on a', false)
+                ->remove('Based on', false)
+                ->trim()
+                ->singular()
+                ->ucfirst();
+
+            if (Genre::withoutGlobalScopes()->where('name', '=', $tagName)->exists()) {
+                continue;
+            } elseif (Theme::withoutGlobalScopes()->where('name', '=', $tagName)->exists()) {
+                continue;
+            } elseif (MediaType::withoutGlobalScopes()->where('name', '=', $tagName)->exists()) {
+                continue;
+            }  elseif (Relation::withoutGlobalScopes()->where('name', '=', $tagName)->exists()) {
+                continue;
+            } elseif (Source::withoutGlobalScopes()->where('name', '=', $tagName)->exists()) {
+                continue;
+            }
+
+            $tag = Tag::firstOrCreate([
+                    'name' => $tagName
+                ], [
+                    'description' => null
+                ]);
+
+            $anime->mediaTags()->updateOrCreate([
+                'tag_id' => $tag->id
+            ]);
+        }
     }
 }

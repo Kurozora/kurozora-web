@@ -4,9 +4,9 @@ namespace App\Console\Commands\Importers;
 
 use App\Models\Episode;
 use Illuminate\Console\Command;
+use JsonMachine\Exception\InvalidArgumentException;
+use JsonMachine\Items;
 use JsonMachine\JsonDecoder\ExtJsonDecoder;
-use JsonMachine\JsonMachine;
-use function storage_path;
 
 class ImportEpisodes extends Command
 {
@@ -38,12 +38,16 @@ class ImportEpisodes extends Command
      * Execute the console command.
      *
      * @return int
+     * @throws InvalidArgumentException
      */
     public function handle(): int
     {
         $file = storage_path('app/episodes.json');
         $fileSize = filesize($file);
-        $episodes = JsonMachine::fromFile($file, '/data', new ExtJsonDecoder);
+        $episodes = Items::fromFile($file, [
+            'pointer' => '/data',
+            'decoder' => new ExtJsonDecoder
+        ]);
 
         $progressBar = $this->output->createProgressBar($fileSize);
         $progressBar->start();

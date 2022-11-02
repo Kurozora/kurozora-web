@@ -6,6 +6,7 @@ use App\Enums\DayOfWeek;
 use App\Enums\SeasonOfYear;
 use App\Nova\Actions\FixAnimeAiringSeason;
 use App\Nova\Actions\ScrapeAnime;
+use App\Nova\Actions\ScrapeAnimeBanner;
 use App\Nova\Actions\ScrapeFiller;
 use App\Nova\Actions\ScrapeUpcomingAnime;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
@@ -427,11 +428,25 @@ class Anime extends Resource
     public function actions(NovaRequest $request): array
     {
         return [
-            ScrapeUpcomingAnime::make()->standalone(),
-            FixAnimeAiringSeason::make()->standalone(),
+            ScrapeUpcomingAnime::make()
+                ->canSee(function ($request) {
+                    return $request->user()->can('updateAnime');
+                })
+                ->standalone(),
+            FixAnimeAiringSeason::make()
+                ->canSee(function ($request) {
+                    return $request->user()->hasRole('superAdmin');
+                })
+                ->standalone(),
             ScrapeAnime::make()
                 ->confirmText('Are you sure you want to scrape this anime?')
                 ->confirmButtonText('Scrape Anime')
+                ->canSee(function ($request) {
+                    return $request->user()->can('updateAnime');
+                })->showInline(),
+            ScrapeAnimeBanner::make()
+                ->confirmText('Are you sure you want to scrape this anime’s banner?')
+                ->confirmButtonText('Scrape Anime Banner')
                 ->canSee(function ($request) {
                     return $request->user()->can('updateAnime');
                 })->showInline(),
