@@ -14,7 +14,7 @@ class Banner extends Command
      *
      * @var string
      */
-    protected $signature = 'scrape:tvdb_banners {tvdbID? : The id of the anime}';
+    protected $signature = 'scrape:tvdb_banners {tvdbID? : The id of the anime. Accepts an array of comma seperated IDs}';
 
     /**
      * The console command description.
@@ -30,23 +30,27 @@ class Banner extends Command
      */
     public function handle(): int
     {
-        $tvdbID = $this->argument('tvdbID');
+        $tvdbIDs = $this->argument('tvdbID');
 
-        if (empty($tvdbID)) {
-            $tvdbID = $this->ask('TVDB id');
+        if (empty($tvdbIDs)) {
+            $tvdbIDs = $this->ask('TVDB id');
         }
 
-        if (empty($tvdbID)) {
+        $tvdbIDs = explode(',', $tvdbIDs);
+
+        if (empty($tvdbIDs)) {
             $this->info('ID is empty. Exiting...');
             return Command::INVALID;
-        } else if (!is_numeric($tvdbID)) {
-            $this->info('ID must be of a numeric value. Adios...');
-            return Command::INVALID;
         }
 
-        Roach::startSpider(BannerSpider::class, new Overrides(startUrls: [
-            config('scraper.domains.tvdb.dereferrer.series') . '/' . $tvdbID,
-        ]));
+        // Generate URLs
+        $urls = [];
+        foreach ($tvdbIDs as $tvdbID) {
+            $urls[] = config('scraper.domains.tvdb.dereferrer.series') . '/' . $tvdbID;
+        }
+
+        // Scrape
+        Roach::startSpider(BannerSpider::class, new Overrides(startUrls: $urls));
 
         return Command::SUCCESS;
     }

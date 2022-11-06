@@ -46,7 +46,8 @@ class ImportEpisodes extends Command
         $fileSize = filesize($file);
         $episodes = Items::fromFile($file, [
             'pointer' => '/data',
-            'decoder' => new ExtJsonDecoder
+            'decoder' => new ExtJsonDecoder,
+            'debug' => true
         ]);
 
         $progressBar = $this->output->createProgressBar($fileSize);

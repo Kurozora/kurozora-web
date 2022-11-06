@@ -89,6 +89,15 @@ class AnimeSpider extends BasicSpider
     public function parse(Response $response): Generator
     {
         $id = basename($response->getUri());
+
+        if ($response->getStatus() >= 400) {
+            logger()->error($id);
+            if ($response->getStatus() != 404) {
+                logger()->warning($response->getStatus());
+            }
+            return $this->item([]);
+        }
+
         logger()->channel('stderr')->info('🕷 [MAL_ID:' . $id . '] Parsing response');
         $originalTitle = $response->filter('h1.title-name')
             ->text();
@@ -102,13 +111,21 @@ class AnimeSpider extends BasicSpider
 
         $studios = $response->filter('div.leftside a[href*="/anime/producer/"]')
             ->each(function(Crawler $item) {
-                $studioName = str($item->text())->slug('_');
-                $id = str_replace(['/anime/producer/', '/' . $studioName], '', strtolower($item->attr('href')));
+                $regex = '/(\d+)\//';
+                $id = str($item->attr('href'))
+                    ->remove(['/anime/producer/'])
+                    ->match($regex)
+                    ->value();
                 return [$id => $item->text()];
             });
+
         $genres = $response->filter('div.leftside a[href*="/anime/genre/"]')
             ->each(function(Crawler $item) {
-                $id = str_replace(['/anime/genre/', '/' . str($item->text())->replace(' ', '_')->value()], '', $item->attr('href'));
+                $regex = '/(\d+)\//';
+                $id = str($item->attr('href'))
+                    ->remove(['/anime/genre/'])
+                    ->match($regex)
+                    ->value();
                 return [$id => $item->text()];
             });
 
