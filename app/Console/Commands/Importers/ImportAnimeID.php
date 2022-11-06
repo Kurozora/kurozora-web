@@ -54,23 +54,28 @@ class ImportAnimeID extends Command
         $fileSize = filesize($file);
         $animes = Items::fromFile($file, [
             'pointer' => '/data',
-            'decoder' => new ExtJsonDecoder
+            'decoder' => new ExtJsonDecoder,
+            'debug' => true
         ]);
 
         $progressBar = $this->output->createProgressBar($fileSize);
         $progressBar->start();
 
         foreach ($animes as $data) {
-//            if ($animes->getPosition() >= 24594500) {
+            if ($animes->getPosition() >= 23433173) {
                 $sources = $this->filterSources($data->sources);
 
                 if (array_key_exists('mal_id', $sources)) {
                     $anime = Anime::withoutGlobalScopes()
-                        ->firstWhere([
+                        ->where([
                             ['mal_id', $sources['mal_id']],
-                        ]);
+                        ])
+//                        ->whereDate('updated_at', '<', today())
+                        ->first();
 
-                    if (!empty($anime) && $anime->tags()->count() == 0) {
+                    if (!empty($anime)
+//                        && $anime->tags()->count() == 0
+                    ) {
                         if (!empty($anime->kitsu_id)) {
                             unset($sources['kitsu_id']);
                         }
@@ -78,14 +83,14 @@ class ImportAnimeID extends Command
 //                        $anime->touch();
 
                         // Add tags
-                        $this->addTags($data->tags, $anime);
+//                        $this->addTags($data->tags, $anime);
                     }
                 }
 
                 $progress = $animes->getPosition();
 //                echo intval($animes->getPosition() / $fileSize * 100) . ' %' . PHP_EOL;
                 $progressBar->setProgress($progress);
-//            }
+            }
         }
 
         $progressBar->finish();

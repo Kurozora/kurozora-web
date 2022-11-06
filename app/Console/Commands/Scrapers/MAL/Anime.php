@@ -15,7 +15,7 @@ class Anime extends Command
      *
      * @var string
      */
-    protected $signature = 'scrape:mal_anime {malID? : The id of the anime}';
+    protected $signature = 'scrape:mal_anime {malID? : The id of the anime. Accepts an array of comma seperated IDs}';
 
     /**
      * The console command description.
@@ -32,23 +32,27 @@ class Anime extends Command
      */
     public function handle(): int
     {
-        $malID = $this->argument('malID');
+        $malIDs = $this->argument('malID');
 
-        if (empty($malID)) {
-            $malID = $this->ask('MAL id');
+        if (empty($malIDs)) {
+            $malIDs = $this->ask('MAL id');
         }
 
-        if (empty($malID)) {
+        $malIDs = explode(',', $malIDs);
+
+        if (empty($malIDs)) {
             $this->info('ID is empty. Exiting...');
             return Command::INVALID;
-        } else if (!is_numeric($malID)) {
-            $this->info('ID must be of a numeric value. Adios...');
-            return Command::INVALID;
         }
 
-        Roach::startSpider(AnimeSpider::class, new Overrides(startUrls: [
-            config('scraper.domains.mal.anime') . '/' . $malID,
-        ]));
+        // Generate URLs
+        $urls = [];
+        foreach ($malIDs as $malID) {
+            $urls[] = config('scraper.domains.mal.anime') . '/' . $malID;
+        }
+
+        // Scrape
+        Roach::startSpider(AnimeSpider::class, new Overrides(startUrls: $urls));
 
         return Command::SUCCESS;
     }
