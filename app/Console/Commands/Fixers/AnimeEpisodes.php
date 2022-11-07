@@ -6,21 +6,21 @@ use App\Models\Anime;
 use Artisan;
 use Illuminate\Console\Command;
 
-class AnimeBanner extends Command
+class AnimeEpisodes extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'fix:anime_banner';
+    protected $signature = 'fix:anime_episodes';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Fixes anime banners.';
+    protected $description = 'Fix anime episodes';
 
     /**
      * Execute the console command.
@@ -31,14 +31,12 @@ class AnimeBanner extends Command
     {
         $animes = Anime::withoutGlobalScopes()
             ->where('tvdb_id', '!=', null)
-            ->whereHas('media', function ($query) {
-                return $query->where('collection_name', '=', 'banner');
-            }, '=', 0)
+            ->whereHas('episodes', null, '=', 0)
             ->pluck('tvdb_id');
 
-        $this->info('Fixing ' . $animes->count() . ' banners');
+        $this->info('Fixing ' . $animes->count() . ' anime episodes');
 
-        Artisan::call('scrape:tvdb_banners', ['tvdbID' => $animes->implode(',')]);
+        Artisan::call('scrape:tvdb_episode', ['tvdbID' => $animes->implode(',')]);
 
         return Command::SUCCESS;
     }
