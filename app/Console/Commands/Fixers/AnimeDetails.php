@@ -29,16 +29,16 @@ class AnimeDetails extends Command
      */
     public function handle(): int
     {
-        $animes = Anime::withoutGlobalScopes()
+        $animes = Anime::on('elb')
+            ->withoutGlobalScopes()
             ->where('mal_id', '!=', null)
             ->where('status_id', '!=', 4)
             ->whereDate('updated_at', '<', today())
-            ->pluck('mal_id')
-            ->implode(',');
-//            ->count();
-//        dd($animes);
+            ->pluck('mal_id');
 
-        Artisan::call('scrape:mal_anime', ['malID' => $animes]);
+        $this->info('Fixing ' . $animes->count() . ' anime');
+
+        Artisan::call('scrape:mal_anime', ['malID' => $animes->implode(',')]);
 
         return Command::SUCCESS;
     }

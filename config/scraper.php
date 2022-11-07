@@ -21,12 +21,12 @@ return [
             'upcoming_anime' => 'https://myanimelist.net/anime.php?o=9',
         ],
         'tvdb' => [
-            'base' => 'https://tvdb.com',
+            'base' => 'https://thetvdb.com',
             'dereferrer' => [
-                'series' => 'https://www.thetvdb.com/dereferrer/series'
+                'series' => 'https://thetvdb.com/dereferrer/series'
             ],
             'tab' => [
-                'series' => 'https://www.thetvdb.com/?tab=series&id='
+                'series' => 'https://thetvdb.com/?tab=series&id='
             ]
         ],
         'animix_play' => [

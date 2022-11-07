@@ -15,7 +15,7 @@ class Episode extends Command
      *
      * @var string
      */
-    protected $signature = 'scrape:tvdb_episode {tvdbID? : The id of the anime}';
+    protected $signature = 'scrape:tvdb_episode {tvdbID? : The id of the anime. Accepts an array of comma seperated IDs}';
 
     /**
      * The console command description.
@@ -31,46 +31,61 @@ class Episode extends Command
      */
     public function handle(): int
     {
-        $tvdbID = $this->argument('tvdbID');
+        $tvdbIDs = $this->argument('tvdbID');
 
-        if (empty($tvdbID)) {
-            $tvdbID = $this->ask('TVDB id');
+        if (empty($tvdbIDs)) {
+            $tvdbIDs = $this->ask('TVDB id');
         }
 
-        if (empty($tvdbID)) {
+        $tvdbIDs = explode(',', $tvdbIDs);
+
+        if (empty($tvdbIDs)) {
             $this->info('ID is empty. Exiting...');
             return Command::INVALID;
-        } else if (!is_numeric($tvdbID)) {
-            $this->info('ID must be of a numeric value. Adios...');
-            return Command::INVALID;
         }
 
-        Roach::startSpider(EpisodeSpider::class, new Overrides(startUrls: [
-            config('scraper.domains.tvdb.dereferrer.series') . '/' . $tvdbID,
-        ]));
+        // Generate URLs
+        $urls = [];
+        foreach ($tvdbIDs as $tvdbID) {
+            $urls[] = config('scraper.domains.tvdb.dereferrer.series') . '/' . $tvdbID;
+        }
 
-        $episodes = Anime::withoutGlobalScopes()
-            ->firstWhere('tvdb_id', '=', $tvdbID)
-            ->episodes()
-            ->orderBy('number_total')
-            ->get();
+        // Scrape
+        Roach::startSpider(EpisodeSpider::class, new Overrides(startUrls: $urls));
 
-        foreach ($episodes as $key => $episode) {
-            $nextEpisode = null;
-            $previousEpisode = null;
+        // Post-process episodes
+        foreach ($tvdbIDs as $tvdbID) {
+            $anime = Anime::withoutGlobalScopes()
+                ->firstWhere('tvdb_id', '=', $tvdbID);
+            $episodes = $anime
+                ->episodes()
+                ->orderBy('number_total')
+                ->get();
 
-            if ($key != count($episodes) - 1) {
-                $nextEpisode = $episodes[$key + 1]->id;
-            }
-
-            if ($key != 0) {
-                $previousEpisode = $episodes[$key - 1]->id;
-            }
-
-            $episode->update([
-                'next_episode_id' => $nextEpisode,
-                'previous_episode_id' => $previousEpisode,
+            // Update anime season and episode count
+            $anime->update([
+                'season_count' => $anime->seasons()->count(),
+                'episode_count' => $episodes->count()
             ]);
+
+            // Chain episodes
+            foreach ($episodes as $key => $episode) {
+                $nextEpisode = null;
+                $previousEpisode = null;
+
+                if ($key != count($episodes) - 1) {
+                    $nextEpisode = $episodes[$key + 1]->id;
+                }
+
+                if ($key != 0) {
+                    $previousEpisode = $episodes[$key - 1]->id;
+                }
+
+                $episode->update([
+                    'next_episode_id' => $nextEpisode,
+                    'previous_episode_id' => $previousEpisode,
+                ]);
+            }
         }
 
         return Command::SUCCESS;
