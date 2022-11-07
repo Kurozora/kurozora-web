@@ -16,7 +16,7 @@ use Laravel\Nova\Metrics\HasHelpText;
 use Laravel\Nova\Util;
 
 /**
- * @template TValidationRules of array<int, \Stringable|string|\Illuminate\Contracts\Validation\Rule|\Illuminate\Contracts\Validation\InvokableRule|callable>|\Stringable|string|(callable(string, mixed, \Closure):void)
+ * @phpstan-type TValidationRules array<int, \Stringable|string|\Illuminate\Contracts\Validation\Rule|\Illuminate\Contracts\Validation\InvokableRule|callable>|\Stringable|string|(callable(string, mixed, \Closure):void)
  *
  * @method static static make(mixed $name, string|\Closure|callable|object|null $attribute = null, callable|null $resolveCallback = null)
  */
@@ -477,7 +477,7 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
         if ($request->exists($requestAttribute)) {
             $value = $request[$requestAttribute];
 
-            $model->{$attribute} = $this->isValidNullValue($value) ? null : $value;
+            data_set($model, Str::of($attribute)->replace('->', '.'), $this->isValidNullValue($value) ? null : $value);
         }
     }
 
@@ -939,7 +939,7 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
     /**
      * Set the placeholder text for the field if supported.
      *
-     * @param  string  $text
+     * @param  string|null  $text
      * @return $this
      */
     public function placeholder($text)
@@ -982,7 +982,7 @@ abstract class Field extends FieldElement implements JsonSerializable, Resolvabl
      */
     public function jsonSerialize(): array
     {
-        /* @phpstan-ignore-next-line */
+        /** @phpstan-ignore-next-line */
         return with(app(NovaRequest::class), function ($request) {
             return array_merge([
                 'attribute' => $this->attribute,

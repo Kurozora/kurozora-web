@@ -30,6 +30,7 @@ class ResourceStoreController extends Controller
      */
     public function __invoke(CreateResourceRequest $request)
     {
+        /** @var \Laravel\Nova\Resource $resource */
         $resource = $request->resource();
 
         $resource::authorizeToCreate($request);

@@ -16,7 +16,8 @@
 </template>
 
 <script>
-import {uid} from 'uid/single'
+import { uid } from 'uid/single'
+import Trix from 'trix'
 import 'trix/dist/trix.css'
 
 export default {

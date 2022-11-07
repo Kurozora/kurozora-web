@@ -2,11 +2,11 @@
   <div :class="`text-${field.textAlign}`">
     <span>
       <span v-if="field.viewable && field.value">
-        <Tooltip
+        <RelationPeek
           v-if="field.peekable && field.hasFieldsToPeekAt"
-          :triggers="['hover']"
-          placement="top-start"
-          theme="plain"
+          :resource-name="field.resourceName"
+          :resource-id="field.belongsToId"
+          :resource="resource"
         >
           <Link
             @click.stop
@@ -17,14 +17,7 @@
           >
             {{ field.value }}
           </Link>
-
-          <template #content>
-            <RelationPeek
-              :resource-name="field.resourceName"
-              :resource-id="field.belongsToId"
-            />
-          </template>
-        </Tooltip>
+        </RelationPeek>
 
         <Link
           v-else
@@ -43,6 +36,7 @@
 
 <script setup>
 const props = defineProps({
+  resource: { type: Object },
   resourceName: { type: String },
   field: { type: Object },
 })

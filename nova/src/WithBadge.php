@@ -7,7 +7,7 @@ trait WithBadge
     /**
      * The badge content for the menu item.
      *
-     * @var (\Closure():\Laravel\Nova\Badge)|(callable():\Laravel\Nova\Badge)|\Laravel\Nova\Badge|null
+     * @var (\Closure():\Laravel\Nova\Badge|string)|(callable():\Laravel\Nova\Badge|string)|\Laravel\Nova\Badge|string|null
      */
     public $badgeCallback;
 
@@ -28,7 +28,7 @@ trait WithBadge
     /**
      * Set the content to be used for the item's badge.
      *
-     * @param  (\Closure():\Laravel\Nova\Badge)|(callable():\Laravel\Nova\Badge)|\Laravel\Nova\Badge|string  $badgeCallback
+     * @param  (\Closure():\Laravel\Nova\Badge|string)|(callable():\Laravel\Nova\Badge|string)|\Laravel\Nova\Badge|string  $badgeCallback
      * @param  string|null  $type
      * @return $this
      */
@@ -52,7 +52,7 @@ trait WithBadge
     /**
      * Set the content to be used for the item's badge if the condition matches.
      *
-     * @param  (\Closure():\Laravel\Nova\Badge)|(callable():\Laravel\Nova\Badge)|\Laravel\Nova\Badge|string  $badgeCallback
+     * @param  (\Closure():\Laravel\Nova\Badge|string)|(callable():\Laravel\Nova\Badge|string)|\Laravel\Nova\Badge|string  $badgeCallback
      * @param  string|null  $type
      * @param  (\Closure():bool)|bool  $condition
      * @return $this

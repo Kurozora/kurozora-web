@@ -53,7 +53,7 @@ export default {
       required: true,
     },
     resourceCountLabel: {
-      type: String,
+      type: [Number, String],
       required: true,
     },
     page: {

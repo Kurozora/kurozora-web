@@ -1,7 +1,7 @@
 <template>
   <PanelItem :index="index" :field="field">
     <template #value>
-      <p v-if="fieldHasValue" class="text-90 flex items-center">
+      <p v-if="fieldHasValue" class="flex items-center">
         <a :href="`mailto:${field.value}`" class="link-default">
           {{ fieldValue }}
         </a>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import {CopiesToClipboard, FieldValue} from '@/mixins'
+import { CopiesToClipboard, FieldValue } from '@/mixins'
 
 export default {
   mixins: [CopiesToClipboard, FieldValue],

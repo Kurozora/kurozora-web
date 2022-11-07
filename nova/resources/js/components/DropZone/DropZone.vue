@@ -54,8 +54,8 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
-import {useLocalization} from '@/mixins/Localization'
+import { ref } from 'vue'
+import { useLocalization } from '@/mixins/Localization'
 
 const emit = defineEmits(['change', 'fileRemoved'])
 const { __ } = useLocalization()

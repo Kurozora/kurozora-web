@@ -86,7 +86,7 @@ export default {
 
     if (!isEmpty(this.watchedEvents)) {
       forIn(this.watchedEvents, (event, dependsOn) => {
-        Nova.$off(this.getFieldAttributeChangeEventName(event.dependsOn), event)
+        Nova.$off(this.getFieldAttributeChangeEventName(dependsOn), event)
       })
     }
   },

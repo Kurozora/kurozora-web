@@ -357,6 +357,12 @@ class HasOne extends Field implements RelatableField, BehavesAsPanel
         $resource = new $resourceClass($relation);
 
         $callbacks = $resource->availableFields($request)
+            ->when($editMode === 'create', function (FieldCollection $fields) use ($request, $relation) {
+                return $fields->onlyCreateFields($request, $relation);
+            })
+            ->when($editMode === 'update', function (FieldCollection $fields) use ($request, $relation) {
+                return $fields->onlyUpdateFields($request, $relation);
+            })
             ->withoutReadonly($request)
             ->withoutUnfillable()
             ->map(function (Field $field) use ($request, $relation, $attribute) {

@@ -18,6 +18,8 @@ class ResourceReplicateController extends Controller
      */
     public function __invoke(ResourceCreateOrAttachRequest $request)
     {
+        abort_unless($request->findModelQuery()->exists(), 404);
+
         $resourceClass = $request->resource();
 
         return Inertia::render('Nova.Replicate', [

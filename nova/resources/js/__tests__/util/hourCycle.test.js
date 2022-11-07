@@ -1,4 +1,4 @@
-import {default as hourCycle} from '@/util/hourCycle'
+import { default as hourCycle } from '@/util/hourCycle'
 
 it('can uses 12 hour cycles', () => {
   expect(hourCycle('en-US')).toEqual(12)

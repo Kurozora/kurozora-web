@@ -55,13 +55,18 @@ class NotExactlyAttached implements Rule
 
         $resource = Nova::newResourceFromModel($this->model);
 
-        $resource->resolvePivotFields($this->request, $this->request->relatedResource)
+        $fields = $resource->resolvePivotFields($this->request, $this->request->relatedResource)
             ->reject(function ($field) {
                 return $field instanceof ResourceToolElement || $field->computed();
-            })
-            ->each(function ($field) use ($pivot) {
-                $field->fill($this->request, $pivot, $field->attribute);
             });
+
+        if ($fields->isEmpty()) {
+            return true;
+        }
+
+        $fields->each(function ($field) use ($pivot) {
+            $field->fill($this->request, $pivot, $field->attribute);
+        });
 
         $attributes = $pivot->toArray();
 

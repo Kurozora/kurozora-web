@@ -1,7 +1,7 @@
 <template>
   <PanelItem :index="index" :field="field">
     <template v-slot:value>
-      <p v-if="fieldHasValue && !shouldDisplayAsHtml" class="text-90">
+      <p v-if="fieldHasValue && !shouldDisplayAsHtml">
         <a
           class="link-default"
           :href="field.value"
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import {FieldValue} from '@/mixins'
+import { FieldValue } from '@/mixins'
 
 export default {
   mixins: [FieldValue],

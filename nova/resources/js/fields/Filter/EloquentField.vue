@@ -74,7 +74,7 @@
 import debounce from 'lodash/debounce'
 import find from 'lodash/find'
 import isNil from 'lodash/isNil'
-import {PerformsSearches} from '@/mixins'
+import { PerformsSearches } from '@/mixins'
 
 export default {
   emits: ['change'],

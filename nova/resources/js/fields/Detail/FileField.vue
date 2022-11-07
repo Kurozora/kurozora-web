@@ -2,24 +2,12 @@
   <PanelItem :index="index" :field="field">
     <template #value>
       <ImageLoader
-        class="min-h-8"
         v-if="shouldShowLoader"
         :src="imageUrl"
-        :maxWidth="field.maxWidth"
+        :maxWidth="field.maxWidth || field.detailWidth"
         :rounded="field.rounded"
-        align="left"
-      >
-        <template #missing>
-          <a :href="imageUrl" class="link-default-error ml-1">
-            <Icon
-              type="exclamation-circle"
-              class="text-red-500"
-              v-tooltip="__('The image could not be loaded.')"
-            />
-            {{ __('The image could not be loaded.') }}
-          </a>
-        </template>
-      </ImageLoader>
+        :aspect="field.aspect"
+      />
 
       <span v-if="fieldValue && !imageUrl" class="break-words">
         {{ fieldValue }}
@@ -51,7 +39,7 @@
 </template>
 
 <script>
-import {FieldValue} from '@/mixins'
+import { FieldValue } from '@/mixins'
 
 export default {
   mixins: [FieldValue],

@@ -11,7 +11,7 @@ class {{ class }} extends Resource
     /**
      * The model the resource corresponds to.
      *
-     * @var string
+     * @var class-string<\{{ namespacedModel }}>
      */
     public static $model = \{{ namespacedModel }}::class;
 

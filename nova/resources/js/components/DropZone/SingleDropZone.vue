@@ -43,8 +43,8 @@
 </template>
 
 <script setup>
-import {useLocalization} from '@/mixins/Localization'
-import {useDragAndDrop} from '@/composables/useDragAndDrop'
+import { useLocalization } from '@/mixins/Localization'
+import { useDragAndDrop } from '@/composables/useDragAndDrop'
 
 const { __ } = useLocalization()
 

@@ -105,11 +105,7 @@
     </div>
 
     <teleport to="body">
-      <div
-        @click="show = !show"
-        v-show="show"
-        class="absolute inset-0 z-[35]"
-      />
+      <Backdrop @click="show = !show" :show="show" class="z-[35]" />
     </teleport>
   </div>
 </template>
@@ -118,8 +114,8 @@
 import debounce from 'lodash/debounce'
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
-import {createPopper} from '@popperjs/core'
-import {mapProps} from '@/mixins'
+import { createPopper } from '@popperjs/core'
+import { mapProps } from '@/mixins'
 
 export default {
   emits: ['clear', 'input', 'selected'],

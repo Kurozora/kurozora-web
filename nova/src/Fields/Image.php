@@ -3,8 +3,9 @@
 namespace Laravel\Nova\Fields;
 
 use Illuminate\Support\Facades\Storage;
+use Laravel\Nova\Contracts\Cover;
 
-class Image extends File
+class Image extends File implements Cover
 {
     use PresentsImages;
 
@@ -14,6 +15,10 @@ class Image extends File
      * @var bool
      */
     public $showOnIndex = true;
+
+    const ASPECT_AUTO = 'aspect-auto';
+
+    const ASPECT_SQUARE = 'aspect-square';
 
     /**
      * Create a new field.

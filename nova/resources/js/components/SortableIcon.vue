@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import {RouteParameters} from '@/mixins'
+import { RouteParameters } from '@/mixins'
 
 export default {
   emits: ['sort', 'reset'],

@@ -23,7 +23,7 @@
           {{ item.name }}
 
           <span v-if="item.badge" class="mx-2 absolute right-3">
-            <Badge :extra-classes="item.badge.typeClass" class="">
+            <Badge :extra-classes="item.badge.typeClass">
               {{ item.badge.value }}
             </Badge>
           </span>
@@ -52,7 +52,7 @@
         </span>
 
         <span v-if="item.badge" class="mx-2 absolute right-8">
-          <Badge :extra-classes="item.badge.typeClass" class="">
+          <Badge :extra-classes="item.badge.typeClass">
             {{ item.badge.value }}
           </Badge>
         </span>
@@ -91,8 +91,8 @@
 </template>
 
 <script>
-import {Collapsable} from '@/mixins'
-import {mapGetters, mapMutations} from 'vuex'
+import { Collapsable } from '@/mixins'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   mixins: [Collapsable],

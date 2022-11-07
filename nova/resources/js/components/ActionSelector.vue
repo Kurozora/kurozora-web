@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import {HandlesActions, InteractsWithResourceInformation} from '@/mixins'
+import { HandlesActions, InteractsWithResourceInformation } from '@/mixins'
 
 export default {
   inheritAttrs: false,

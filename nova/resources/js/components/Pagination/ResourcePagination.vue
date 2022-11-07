@@ -3,7 +3,6 @@
   <div class="border-t border-gray-200 dark:border-gray-700">
     <component
       :is="paginationComponent"
-      v-if="shouldShowPagination"
       :next="hasNextPage"
       :previous="hasPreviousPage"
       @load-more="loadMore"
@@ -32,7 +31,6 @@
 export default {
   props: [
     'paginationComponent',
-    'shouldShowPagination',
     'hasNextPage',
     'hasPreviousPage',
     'loadMore',

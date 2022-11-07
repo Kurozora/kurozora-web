@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import {MetricBehavior} from '@/mixins'
-import {minimum} from '@/util'
+import { MetricBehavior } from '@/mixins'
+import { minimum } from '@/util'
 
 export default {
   mixins: [MetricBehavior],

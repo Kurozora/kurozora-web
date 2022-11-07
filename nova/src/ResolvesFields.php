@@ -296,10 +296,10 @@ trait ResolvesFields
      */
     public function creationFields(NovaRequest $request)
     {
-        $fields = $this->removeNonCreationFields(
-            $request,
-            $this->availableFields($request)->authorized($request)
-        )->resolve($this->resource);
+        $fields = $this->availableFields($request)
+            ->authorized($request)
+            ->onlyCreateFields($request, $this->resource)
+            ->resolve($this->resource);
 
         return $request->viaRelationship()
             ? $this->withPivotFields($request, $fields->all())
@@ -339,28 +339,8 @@ trait ResolvesFields
      */
     public function creationPivotFields(NovaRequest $request, $relatedResource)
     {
-        return $this->removeNonCreationFields(
-            $request,
-            $this->resolvePivotFields($request, $relatedResource)
-        );
-    }
-
-    /**
-     * Remove non-creation fields from the given collection.
-     *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @param  \Laravel\Nova\Fields\FieldCollection<int, \Laravel\Nova\Fields\Field>  $fields
-     * @return \Laravel\Nova\Fields\FieldCollection<int, \Laravel\Nova\Fields\Field>
-     */
-    protected function removeNonCreationFields(NovaRequest $request, FieldCollection $fields)
-    {
-        return $fields->reject(function ($field) use ($request) {
-            return $field instanceof ListableField ||
-                ($field instanceof ResourceTool || $field instanceof ResourceToolElement) ||
-                $field->attribute === 'ComputedField' ||
-                ($field instanceof ID && $field->attribute === $this->resource->getKeyName()) ||
-                ! $field->isShownOnCreation($request);
-        });
+        return $this->resolvePivotFields($request, $relatedResource)
+            ->onlyCreateFields($request, $this->resource);
     }
 
     /**
@@ -371,9 +351,8 @@ trait ResolvesFields
      */
     public function updateFields(NovaRequest $request)
     {
-        return $this->resolveFields($request, function ($fields) use ($request) {
-            return $this->removeNonUpdateFields($request, $fields);
-        });
+        return $this->resolveFields($request)
+                    ->onlyUpdateFields($request, $this->resource);
     }
 
     /**
@@ -410,28 +389,8 @@ trait ResolvesFields
      */
     public function updatePivotFields(NovaRequest $request, $relatedResource)
     {
-        return $this->removeNonUpdateFields(
-            $request,
-            $this->resolvePivotFields($request, $relatedResource)
-        );
-    }
-
-    /**
-     * Remove non-update fields from the given collection.
-     *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @param  \Laravel\Nova\Fields\FieldCollection<int, \Laravel\Nova\Fields\Field>  $fields
-     * @return \Laravel\Nova\Fields\FieldCollection<int, \Laravel\Nova\Fields\Field>
-     */
-    protected function removeNonUpdateFields(NovaRequest $request, FieldCollection $fields)
-    {
-        return $fields->reject(function ($field) use ($request) {
-            return $field instanceof ListableField ||
-                ($field instanceof ResourceTool || $field instanceof ResourceToolElement) ||
-                $field->attribute === 'ComputedField' ||
-                ($field instanceof ID && $field->attribute === $this->resource->getKeyName()) ||
-                ! $field->isShownOnUpdate($request, $this->resource);
-        });
+        return $this->resolvePivotFields($request, $relatedResource)
+                    ->onlyUpdateFields($request, $this->resource);
     }
 
     /**
@@ -600,12 +559,9 @@ trait ResolvesFields
     {
         $method = $this->fieldsMethod($request);
 
-        $fields = $fields ?? $this->removeNonCreationFields(
-            $request,
-            FieldCollection::make(value(function () use ($request, $method) {
-                return array_values($this->{$method}($request));
-            }))
-        );
+        $fields = $fields ?? FieldCollection::make(value(function () use ($request, $method) {
+            return array_values($this->{$method}($request));
+        }))->onlyCreateFields($request, $this->resource);
 
         return $this->resolvePanelsFromFields(
             $request,
@@ -626,12 +582,9 @@ trait ResolvesFields
     {
         $method = $this->fieldsMethod($request);
 
-        $fields = $fields ?? $this->removeNonUpdateFields(
-            $request,
-            FieldCollection::make(value(function () use ($request, $method) {
-                return array_values($this->{$method}($request));
-            }))
-        );
+        $fields = $fields ?? FieldCollection::make(value(function () use ($request, $method) {
+            return array_values($this->{$method}($request));
+        }))->onlyUpdateFields($request, $this->resource);
 
         return $this->resolvePanelsFromFields(
             $request,
@@ -800,7 +753,8 @@ trait ResolvesFields
             });
 
         if ($field && isset($field->fieldsCallback)) {
-            $pivotRelation = $this->resource->{$field->manyToManyRelationship}();
+            $model = $this->model() ?? static::newModel();
+            $pivotRelation = $model->{$field->manyToManyRelationship}();
             $field->pivotAccessor = $pivotAccessor = $pivotRelation->getPivotAccessor();
 
             return FieldCollection::make(array_values(

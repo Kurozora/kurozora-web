@@ -15,7 +15,7 @@
         class="w-full"
         :class="errorClasses"
         :options="currentField.options"
-        :disabled="isReadonly"
+        :disabled="currentlyIsReadonly"
       >
         <option value="" :selected="!hasValue" :disabled="!field.nullable">
           {{ placeholder }}

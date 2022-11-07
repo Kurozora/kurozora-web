@@ -78,7 +78,7 @@
                   />
 
                   <div class="flex-auto text-left">
-                    <p class="text-90">{{ item.title }}</p>
+                    <p>{{ item.title }}</p>
                     <p v-if="item.subTitle" class="text-xs mt-1">
                       {{ item.subTitle }}
                     </p>
@@ -102,10 +102,10 @@
       </div>
 
       <teleport to="#dropdowns">
-        <div
-          v-show="showOverlay"
+        <Backdrop
           @click="closeSearch"
-          class="absolute inset-0 bg-gray-500 dark:bg-gray-900 opacity-75 z-[45]"
+          :show="showOverlay"
+          class="bg-gray-500 dark:bg-gray-900 opacity-75 z-[45]"
         />
       </teleport>
     </div>
@@ -113,8 +113,8 @@
 </template>
 
 <script>
-import {createPopper} from '@popperjs/core'
-import {Cancel, CancelToken} from 'axios'
+import { createPopper } from '@popperjs/core'
+import { CancelToken, Cancel } from 'axios'
 import map from 'lodash/map'
 import debounce from 'lodash/debounce'
 import filter from 'lodash/filter'

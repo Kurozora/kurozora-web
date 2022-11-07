@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import {Collapsable} from '@/mixins'
+import { Collapsable } from '@/mixins'
 
 export default {
   mixins: [Collapsable],

@@ -5,7 +5,7 @@
   >
     <div class="md:w-1/4 md:py-3">
       <slot>
-        <h4 class="font-bold md:font-normal">
+        <h4 class="font-normal">
           <span>{{ label }}</span>
         </h4>
       </slot>
@@ -24,7 +24,7 @@
 
         <p
           v-else-if="fieldValue && !field.copyable && !shouldDisplayAsHtml"
-          class="text-90 flex items-center"
+          class="flex items-center"
         >
           {{ fieldValue }}
         </p>
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import {CopiesToClipboard, FieldValue} from '@/mixins'
+import { CopiesToClipboard, FieldValue } from '@/mixins'
 
 export default {
   mixins: [CopiesToClipboard, FieldValue],

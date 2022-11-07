@@ -1,6 +1,6 @@
 <template>
   <FilterContainer>
-    <div class="" @click="handleChange">
+    <div @click="handleChange">
       <label class="block">{{ filter.name }}</label>
 
       <IconBoolean
@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import isNil from 'lodash/isNil'
 
 export default {
   emits: ['change'],

@@ -1,11 +1,7 @@
 <template>
   <PanelItem :index="index" :field="field">
     <template #value>
-      <p
-        v-if="fieldHasValue || usesCustomizedDisplay"
-        class="text-90"
-        :title="field.value"
-      >
+      <p v-if="fieldHasValue || usesCustomizedDisplay" :title="field.value">
         {{ formattedDateTime }}
       </p>
       <p v-else>&mdash;</p>
@@ -14,8 +10,8 @@
 </template>
 
 <script>
-import {DateTime} from 'luxon'
-import {FieldValue} from '@/mixins'
+import { DateTime } from 'luxon'
+import { FieldValue } from '@/mixins'
 
 export default {
   mixins: [FieldValue],

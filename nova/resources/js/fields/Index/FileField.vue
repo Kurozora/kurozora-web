@@ -3,18 +3,11 @@
     <ImageLoader
       v-if="shouldShowLoader"
       :src="imageUrl"
+      :max-width="field.maxWidth || field.indexWidth"
       :rounded="field.rounded"
-      :max-width="30"
-      :align="field.textAlign"
-    >
-      <template #missing>
-        <Icon
-          type="exclamation-circle"
-          class="text-red-500"
-          v-tooltip="__('The image could not be loaded.')"
-        />
-      </template>
-    </ImageLoader>
+      :aspect="field.aspect"
+    />
+
     <span
       v-if="usesCustomizedDisplay && !imageUrl"
       class="break-words"
@@ -50,11 +43,7 @@ export default {
     },
 
     imageUrl() {
-      if (this.field.previewUrl && !this.field.thumbnailUrl) {
-        return this.field.previewUrl
-      }
-
-      return this.field.thumbnailUrl
+      return this.field?.previewUrl || this.field?.thumbnailUrl
     },
 
     alignmentClass() {

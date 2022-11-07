@@ -171,8 +171,8 @@
             />
 
             <ResourcePagination
+              v-if="shouldShowPagination"
               :pagination-component="paginationComponent"
-              :should-show-pagination="shouldShowPagination"
               :has-next-page="hasNextPage"
               :has-previous-page="hasPreviousPage"
               :load-more="loadMore"

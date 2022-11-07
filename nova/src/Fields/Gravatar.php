@@ -19,8 +19,6 @@ class Gravatar extends Avatar implements Unfillable
         parent::__construct($name, $attribute ?? 'email');
 
         $this->exceptOnForms();
-
-        $this->maxWidth(50);
     }
 
     /**

@@ -14,7 +14,7 @@
   ],
   "require": {
     "php": "^7.3|^8.0",
-    "brick/money": "^0.5.0|^0.6.0",
+    "brick/money": "^0.5.0|^0.6.0|^0.7.0",
     "doctrine/dbal": "^2.13.3|^3.1.2",
     "illuminate/support": "^8.83.4|^9.3.1",
     "inertiajs/inertia-laravel": "^0.4.5|^0.5.2|^0.6.0",
@@ -25,7 +25,8 @@
     "symfony/console": "^5.4|^6.0",
     "symfony/finder": "^5.4|^6.0",
     "symfony/polyfill-intl-icu": "^1.22.1",
-    "symfony/process": "^5.4|^6.0"
+    "symfony/process": "^5.4|^6.0",
+    "ext-json": "*"
   },
   "require-dev": {
     "laravel/nova-dusk-suite": "8.4.x-dev|9.4.x-dev",
@@ -106,5 +107,5 @@
   ],
   "minimum-stability": "dev",
   "prefer-stable": true,
-  "version": "4.16.1"
+  "version": "4.18.2"
 }

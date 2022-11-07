@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import {PopperWrapper} from 'floating-vue'
+import { PopperWrapper } from 'floating-vue'
 
 export default {
   ...PopperWrapper,

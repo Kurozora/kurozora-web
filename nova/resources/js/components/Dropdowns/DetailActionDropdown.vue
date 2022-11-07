@@ -154,8 +154,13 @@
 </template>
 
 <script>
-import {Deletable, HandlesActions, InteractsWithResourceInformation, mapProps,} from '@/mixins'
-import {mapActions, mapGetters} from 'vuex'
+import {
+  Deletable,
+  HandlesActions,
+  InteractsWithResourceInformation,
+  mapProps,
+} from '@/mixins'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   emits: ['resource-deleted', 'resource-restored'],

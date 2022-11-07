@@ -252,7 +252,7 @@ html.dark .checkbox:checked {
 }
 
 .form-input-border-error {
-  @apply border border-red-400 dark:border-red-500 ring focus:ring ring-red-100 dark:ring-red-300 dark:ring-opacity-20 !important;
+  @apply border border-red-400 dark:border-red-500 !important;
 }
 
 .form-input-row {

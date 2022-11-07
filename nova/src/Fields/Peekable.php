@@ -4,7 +4,6 @@ namespace Laravel\Nova\Fields;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Laravel\Nova\Nova;
 
 trait Peekable
 {
@@ -67,35 +66,24 @@ trait Peekable
             return false;
         }
 
-        if ($this instanceof MorphTo) {
-            $resourceClass = class_exists($this->morphToType)
-                ? $this->resolveResourceClass(new $this->morphToType)
-                : Nova::resourceForKey($this->morphToType);
-            $this->resourceClass = null;
-
-            if (! is_string($resourceClass)) {
-                return false;
-            }
-        } else {
-            $resourceClass = $this->resourceClass;
+        if (is_null($relatedResource = $this->relatedResource())) {
+            return false;
         }
 
-        $relationship = $resourceClass::newModel()->query()->find($this->relatedId());
-
-        return (new $resourceClass($relationship))->peekableFieldsCount($request) > 0;
+        return $relatedResource->peekableFieldsCount($request) > 0;
     }
 
     /**
-     * Return the appropriate related ID for the field.
+     * Return the appropriate related Resource for the field.
      *
-     * @return string
+     * @return \Laravel\Nova\Resource|null
      */
-    protected function relatedId()
+    protected function relatedResource()
     {
         if ($this instanceof MorphTo) {
-            return $this->morphToId;
+            return $this->morphToResource;
         }
 
-        return $this->belongsToId;
+        return $this->belongsToResource;
     }
 }

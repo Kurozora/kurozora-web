@@ -1,4 +1,7 @@
-import {generateRootCSSVars, generateTailwindColors,} from '../../../../generators'
+import {
+  generateRootCSSVars,
+  generateTailwindColors,
+} from '../../../../generators'
 
 it('generates Tailwind colors', () => {
   expect(generateTailwindColors()).toEqual(

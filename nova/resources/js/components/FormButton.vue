@@ -27,6 +27,7 @@
 
 <script>
 import isNil from 'lodash/isNil'
+import omit from 'lodash/omit'
 
 export default {
   inheritAttrs: false,

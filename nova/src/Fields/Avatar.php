@@ -7,13 +7,6 @@ use Laravel\Nova\Contracts\Cover;
 class Avatar extends Image implements Cover
 {
     /**
-     * The maximum width of the component.
-     *
-     * @var int
-     */
-    public $maxWidth = 104;
-
-    /**
      * Create a new field.
      *
      * @param  string|null  $name

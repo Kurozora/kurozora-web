@@ -1,6 +1,6 @@
 <script>
 import DropdownComponent from './Dropdown'
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   extends: DropdownComponent,

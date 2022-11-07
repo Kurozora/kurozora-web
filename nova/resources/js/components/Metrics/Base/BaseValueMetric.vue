@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import {increaseOrDecrease, singularOrPlural} from '@/util'
+import { increaseOrDecrease, singularOrPlural } from '@/util'
 
 export default {
   name: 'BaseValueMetric',

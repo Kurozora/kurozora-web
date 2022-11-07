@@ -7,6 +7,8 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Makeable;
 
 /**
+ * @phpstan-type TMenu \Laravel\Nova\Menu\MenuGroup|\Laravel\Nova\Menu\MenuItem|\Laravel\Nova\Menu\MenuList|\Laravel\Nova\Menu\MenuSection|\Laravel\Nova\Menu\MenuSeparator
+ *
  * @method static static make(array|iterable $items = [])
  */
 class Menu implements JsonSerializable
@@ -46,7 +48,7 @@ class Menu implements JsonSerializable
     /**
      * Push items into the menu.
      *
-     * @param  \Laravel\Nova\Menu\MenuItem|array|iterable  $items
+     * @param  TMenu|array|iterable  $items
      * @return $this
      */
     public function push($items = [])
@@ -57,7 +59,7 @@ class Menu implements JsonSerializable
     /**
      * Append items into the menu.
      *
-     * @param  \Laravel\Nova\Menu\MenuItem|array|iterable  $items
+     * @param  TMenu|array|iterable  $items
      * @return $this
      */
     public function append($items = [])
@@ -70,7 +72,7 @@ class Menu implements JsonSerializable
     /**
      * Prepend items to the menu.
      *
-     * @param  \Laravel\Nova\Menu\MenuItem|array|iterable  $items
+     * @param  TMenu|array|iterable  $items
      * @return $this
      */
     public function prepend($items = [])

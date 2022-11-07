@@ -25,26 +25,4 @@ class CreationFieldController extends Controller
 
         return CreateViewResource::make()->toResponse($request);
     }
-
-    /**
-     * Synchronize the field for creation view.
-     *
-     * @param  \Laravel\Nova\Http\Requests\ResourceCreateOrAttachRequest  $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function sync(ResourceCreateOrAttachRequest $request)
-    {
-        $resource = $request->has('fromResourceId')
-                        ? ReplicateViewResource::make($request->fromResourceId)->newResourceWith($request)
-                        : CreateViewResource::make()->newResourceWith($request);
-
-        return response()->json(
-            $resource->creationFields($request)
-                ->filter(function ($field) use ($request) {
-                    return $request->query('field') === $field->attribute &&
-                            $request->query('component') === $field->dependentComponentKey();
-                })->each->syncDependsOn($request)
-                ->first()
-        );
-    }
 }

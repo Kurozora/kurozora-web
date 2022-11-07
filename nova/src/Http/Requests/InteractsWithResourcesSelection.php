@@ -22,6 +22,28 @@ trait InteractsWithResourcesSelection
     }
 
     /**
+     * Get selected resource IDs.
+     *
+     * @return \Illuminate\Support\Collection<int, string|int>|null
+     */
+    public function selectedResourceIds()
+    {
+        if ($this->allResourcesSelected()) {
+            return null;
+        }
+
+        $resourceIds = array_filter(! empty($this->resources) ? Arr::wrap($this->resources) : [$this->resourceId]);
+
+        if (count($resourceIds) < 1) {
+            return collect(
+                $this->resource instanceof Model ? [$this->resource->getKey()] : []
+            );
+        }
+
+        return collect($resourceIds);
+    }
+
+    /**
      * Get selected resources.
      *
      * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection|null

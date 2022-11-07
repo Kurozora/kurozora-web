@@ -13,7 +13,7 @@
 
       <span
         v-else-if="fieldValue && !field.copyable && !shouldDisplayAsHtml"
-        class="text-90 whitespace-nowrap"
+        class="whitespace-nowrap"
       >
         {{ fieldValue }}
       </span>

@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import {singularOrPlural} from '@/util'
+import { singularOrPlural } from '@/util'
 
 export default {
   name: 'BaseProgressMetric',

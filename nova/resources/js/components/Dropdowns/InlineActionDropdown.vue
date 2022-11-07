@@ -112,8 +112,8 @@
 </template>
 
 <script>
-import {HandlesActions, mapProps} from '@/mixins'
-import {mapActions, mapGetters} from 'vuex'
+import { HandlesActions, mapProps } from '@/mixins'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   mixins: [HandlesActions],

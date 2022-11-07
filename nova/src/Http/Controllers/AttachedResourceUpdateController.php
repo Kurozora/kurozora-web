@@ -144,11 +144,11 @@ class AttachedResourceUpdateController extends Controller
     {
         $column = $model->getUpdatedAtColumn();
 
-        if (! $model->{$column}) {
+        if (! ($model->usesTimestamps() && $model->{$column})) {
             return false;
         }
 
-        return $request->input('_retrieved_at') && $model->usesTimestamps() && $model->{$column}->gt(
+        return $request->input('_retrieved_at') && $model->{$column}->gt(
             Carbon::createFromTimestamp($request->input('_retrieved_at'))
         );
     }

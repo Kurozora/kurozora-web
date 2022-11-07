@@ -124,11 +124,11 @@ abstract class Partition extends Metric
      *
      * @param  \Illuminate\Database\Eloquent\Model  $result
      * @param  string  $groupBy
-     * @return array
+     * @return array<string, int|float>
      */
     protected function formatAggregateResult($result, $groupBy)
     {
-        $key = with($result->{last(explode('.', $groupBy))}, function ($key) {
+        $key = (string) with($result->{last(explode('.', $groupBy))}, function ($key) {
             return Util::value($key);
         });
 

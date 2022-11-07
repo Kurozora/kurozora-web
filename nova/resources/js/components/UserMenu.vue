@@ -80,12 +80,12 @@
 </template>
 
 <script>
-import {Inertia} from '@inertiajs/inertia'
+import { Inertia } from '@inertiajs/inertia'
 import identity from 'lodash/identity'
 import isNull from 'lodash/isNull'
 import omitBy from 'lodash/omitBy'
 import pickBy from 'lodash/pickBy'
-import {mapActions, mapGetters} from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   props: {

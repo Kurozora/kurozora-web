@@ -6,7 +6,7 @@
     :full-width-content="fullWidthContent"
   >
     <template #field>
-      <div class="flex items-center">
+      <div class="flex items-center space-x-2">
         <SearchInput
           v-if="isSearchable && !isLocked && !currentlyIsReadonly"
           :data-testid="`${field.resourceName}-search-input`"
@@ -34,29 +34,11 @@
           </div>
 
           <template #option="{ selected, option }">
-            <div class="flex items-center">
-              <div v-if="option.avatar" class="flex-none mr-3">
-                <img :src="option.avatar" class="w-8 h-8 rounded-full block" />
-              </div>
-
-              <div class="flex-auto">
-                <div
-                  class="text-sm font-semibold leading-normal"
-                  :class="{ 'text-white dark:text-gray-900': selected }"
-                >
-                  {{ option.display }}
-                </div>
-
-                <div
-                  v-if="currentField.withSubtitles"
-                  class="text-xs font-semibold leading-normal text-gray-500"
-                  :class="{ 'text-white dark:text-gray-700': selected }"
-                >
-                  <span v-if="option.subtitle">{{ option.subtitle }}</span>
-                  <span v-else>{{ __('No additional information...') }}</span>
-                </div>
-              </div>
-            </div>
+            <SearchInputResult
+              :option="option"
+              :selected="selected"
+              :with-subtitles="currentField.withSubtitles"
+            />
           </template>
         </SearchInput>
 
@@ -79,14 +61,15 @@
 
         <CreateRelationButton
           v-if="canShowNewRelationModal"
+          v-tooltip="__('Create :resource', { resource: field.singularLabel })"
           @click="openRelationModal"
-          class="ml-2"
           :dusk="`${field.attribute}-inline-create`"
         />
       </div>
 
       <CreateRelationModal
         :show="canShowNewRelationModal && relationModalOpen"
+        :size="field.modalSize"
         @set-resource="handleSetResource"
         @create-cancelled="closeRelationModal"
         :resource-name="field.resourceName"

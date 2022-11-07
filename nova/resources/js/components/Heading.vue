@@ -6,10 +6,10 @@
 
 <script>
 const classes = {
-  1: 'text-90 font-normal text-xl md:text-2xl',
-  2: 'text-90 font-normal md:text-xl',
-  3: 'text-90 uppercase tracking-wide font-bold md:text-sm',
-  4: 'text-90 font-normal md:text-2xl',
+  1: 'font-normal text-xl md:text-xl',
+  2: 'font-normal md:text-xl',
+  3: 'uppercase tracking-wide font-bold text-xs',
+  4: 'font-normal md:text-2xl',
 }
 
 export default {

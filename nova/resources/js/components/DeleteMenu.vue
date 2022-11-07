@@ -82,7 +82,7 @@
 
 <script>
 import find from 'lodash/find'
-import {RouteParameters} from '@/mixins'
+import { RouteParameters } from '@/mixins'
 
 export default {
   emits: [

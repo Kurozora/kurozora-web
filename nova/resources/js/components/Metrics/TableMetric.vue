@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import {minimum} from '@/util'
-import {InteractsWithDates, MetricBehavior} from '@/mixins'
+import { minimum } from '@/util'
+import { InteractsWithDates, MetricBehavior } from '@/mixins'
 
 export default {
   name: 'TableCard',

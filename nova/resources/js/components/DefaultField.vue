@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import {HandlesValidationErrors, mapProps} from '@/mixins'
+import { HandlesValidationErrors, mapProps } from '@/mixins'
 
 export default {
   mixins: [HandlesValidationErrors],

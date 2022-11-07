@@ -16,6 +16,8 @@ class ResourceUpdateController extends Controller
      */
     public function __invoke(ResourceUpdateOrUpdateAttachedRequest $request)
     {
+        abort_unless($request->findModelQuery()->exists(), 404);
+
         $resourceClass = $request->resource();
 
         return Inertia::render('Nova.Update', [

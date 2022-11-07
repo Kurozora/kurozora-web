@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import {BehavesAsPanel, Collapsable} from '@/mixins'
+import { Collapsable, BehavesAsPanel } from '@/mixins'
 
 export default {
   mixins: [Collapsable, BehavesAsPanel],

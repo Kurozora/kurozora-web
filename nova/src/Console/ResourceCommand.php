@@ -73,19 +73,18 @@ class ResourceCommand extends GeneratorCommand
      */
     protected function buildClass($name)
     {
+        $resourceName = $this->argument('name');
         $model = $this->option('model');
 
         $modelNamespace = $this->getModelNamespace();
 
         if (is_null($model)) {
-            $model = $modelNamespace.str_replace('/', '\\', $this->argument('name'));
+            $model = $modelNamespace.str_replace('/', '\\', $resourceName);
         } elseif (! Str::startsWith($model, [
             $modelNamespace, '\\',
         ])) {
             $model = $modelNamespace.$model;
         }
-
-        $resourceName = $this->argument('name');
 
         if (in_array(strtolower($resourceName), $this->protectedNames)) {
             $this->warn("You *must* override the uriKey method for your {$resourceName} resource.");
@@ -97,8 +96,30 @@ class ResourceCommand extends GeneratorCommand
             '{{namespacedModel}}' => $model,
         ];
 
-        return str_replace(
+        $result = str_replace(
             array_keys($replace), array_values($replace), parent::buildClass($name)
+        );
+
+        $baseResourceClass = $this->getBaseResourceClass();
+
+        if (! class_exists($baseResourceClass)) {
+            $baseResourceClass = 'Laravel\Nova\Resource';
+        } elseif (! Str::contains($resourceName, '/') && class_exists($baseResourceClass)) {
+            return $result;
+        }
+
+        $lineEndingCount = [
+            "\r\n" => substr_count($result, "\r\n"),
+            "\r" => substr_count($result, "\r"),
+            "\n" => substr_count($result, "\n"),
+        ];
+
+        $eol = array_keys($lineEndingCount, max($lineEndingCount))[0];
+
+        return str_replace(
+            'use Laravel\Nova\Http\Requests\NovaRequest;'.$eol,
+            'use Laravel\Nova\Http\Requests\NovaRequest;'.$eol."use {$baseResourceClass};".$eol,
+            $result
         );
     }
 
@@ -121,6 +142,18 @@ class ResourceCommand extends GeneratorCommand
     protected function getDefaultNamespace($rootNamespace)
     {
         return $rootNamespace.'\Nova';
+    }
+
+    /**
+     * Get the base resource class.
+     *
+     * @return class-string
+     */
+    protected function getBaseResourceClass()
+    {
+        $rootNamespace = $this->laravel->getNamespace();
+
+        return "{$rootNamespace}Nova\Resource";
     }
 
     /**

@@ -1,4 +1,4 @@
-import {computed} from 'vue'
+import { computed } from 'vue'
 
 export function useFilePreviews(file) {
   const imageTypes = ['image/png', 'image/jpeg', 'image/gif']

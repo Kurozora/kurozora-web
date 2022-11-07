@@ -30,8 +30,6 @@ class UiAvatar extends Avatar implements Unfillable
         parent::__construct($name, $attribute ?? 'name');
 
         $this->exceptOnForms();
-
-        $this->maxWidth(50);
     }
 
     /**

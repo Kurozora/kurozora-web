@@ -2,7 +2,7 @@
   <div class="overflow-hidden overflow-x-auto relative">
     <table
       v-if="resources.length > 0"
-      class="w-full"
+      class="w-full divide-y divide-gray-100 dark:divide-gray-700"
       data-testid="resource-table"
     >
       <ResourceTableHeader
@@ -14,7 +14,7 @@
         @order="requestOrderByChange"
         @reset-order-by="resetOrderBy"
       />
-      <tbody>
+      <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
         <ResourceTableRow
           v-for="(resource, index) in resources"
           @actionExecuted="$emit('actionExecuted')"
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import {InteractsWithResourceInformation} from '@/mixins'
+import { InteractsWithResourceInformation } from '@/mixins'
 
 export default {
   emits: ['actionExecuted', 'delete', 'restore', 'order', 'reset-order-by'],

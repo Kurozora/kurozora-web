@@ -45,6 +45,7 @@
 
 <script>
 import groupBy from 'lodash/groupBy'
+import map from 'lodash/map'
 import omit from 'lodash/omit'
 
 export default {

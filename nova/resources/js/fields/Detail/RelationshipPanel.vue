@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import {BehavesAsPanel} from '@/mixins'
+import { BehavesAsPanel } from '@/mixins'
 
 export default {
   mixins: [BehavesAsPanel],

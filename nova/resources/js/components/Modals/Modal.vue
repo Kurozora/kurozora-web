@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import {mapGetters, mapMutations} from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import filter from 'lodash/filter'
 import omit from 'lodash/omit'
 import trapFocus from '@/util/trapFocus'

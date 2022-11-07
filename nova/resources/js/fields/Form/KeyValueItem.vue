@@ -18,7 +18,7 @@
           @focus="handleKeyFieldFocus"
           ref="keyField"
           type="text"
-          class="font-mono text-xs resize-none block w-full px-3 py-3 text-90 dark:text-gray-400 bg-clip-border focus:outline-none focus:ring focus:ring-inset"
+          class="font-mono text-xs resize-none block w-full px-3 py-3 dark:text-gray-400 bg-clip-border focus:outline-none focus:ring focus:ring-inset"
           :readonly="!isEditable || readOnlyKeys"
           :tabindex="!isEditable || readOnlyKeys ? -1 : 0"
           style="background-clip: border-box"
@@ -47,7 +47,7 @@
           @focus="handleValueFieldFocus"
           ref="valueField"
           type="text"
-          class="font-mono text-xs block w-full px-3 py-3 text-90 dark:text-gray-400"
+          class="font-mono text-xs block w-full px-3 py-3 dark:text-gray-400"
           :readonly="!isEditable"
           :tabindex="!isEditable ? -1 : 0"
           :class="{
@@ -69,7 +69,7 @@
         type="button"
         tabindex="0"
         class="flex items-center appearance-none cursor-pointer text-red-500 hover:text-red-600 active:outline-none active:ring focus:outline-none focus:ring ring-primary-200 dark:ring-gray-600"
-        title="Delete"
+        :title="__('Delete')"
       >
         <Icon type="minus-circle" />
       </BasicButton>

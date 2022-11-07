@@ -57,8 +57,8 @@
 </template>
 
 <script>
-import {mapProps} from '@/mixins'
-import {minimum} from '@/util'
+import { mapProps } from '@/mixins'
+import { minimum } from '@/util'
 
 export default {
   emits: ['confirm', 'close'],

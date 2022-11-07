@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
+import { ref } from 'vue'
 import debounce from 'lodash/debounce'
 
 const copied = ref(false)

@@ -1,15 +1,13 @@
 <template>
-  <FieldWrapper
-    class="bg-gray-100 dark:bg-gray-700"
-    v-if="currentField.visible"
-  >
+  <FieldWrapper v-if="currentField.visible">
+    <!--    :class="{ 'rounded-t-lg': index === 0 }"-->
     <div
       v-if="shouldDisplayAsHtml"
       v-html="currentField.value"
       :class="classes"
     />
     <div v-else :class="classes">
-      <p>{{ currentField.value }}</p>
+      <Heading level="3">{{ currentField.value }}</Heading>
     </div>
   </FieldWrapper>
 </template>
@@ -21,14 +19,9 @@ export default {
   mixins: [DependentFormField],
 
   props: {
-    resourceName: {
-      type: String,
-      require: true,
-    },
-    field: {
-      type: Object,
-      require: true,
-    },
+    index: { type: Number },
+    resourceName: { type: String, require: true },
+    field: { type: Object, require: true },
   },
 
   methods: {

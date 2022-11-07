@@ -16,6 +16,8 @@ class ResourceDetailController extends Controller
      */
     public function __invoke(ResourceDetailRequest $request)
     {
+        abort_unless($request->findModelQuery()->exists(), 404);
+
         $resourceClass = $request->resource();
 
         return Inertia::render('Nova.Detail', [

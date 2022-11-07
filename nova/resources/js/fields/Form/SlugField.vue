@@ -107,7 +107,10 @@ export default {
     },
 
     extraAttributes() {
-      return this.field.extraAttributes || {}
+      return {
+        ...this.field.extraAttributes,
+        class: this.errorClasses,
+      }
     },
   },
 }

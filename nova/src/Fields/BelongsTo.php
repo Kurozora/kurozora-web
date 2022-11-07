@@ -53,6 +53,13 @@ class BelongsTo extends Field implements FilterableField, RelatableField
     public $resourceName;
 
     /**
+     * The resolved BelongsTo Resource.
+     *
+     * @var \Laravel\Nova\Resource|null
+     */
+    public $belongsToResource;
+
+    /**
      * The name of the Eloquent "belongs to" relationship.
      *
      * @var string
@@ -185,13 +192,13 @@ class BelongsTo extends Field implements FilterableField, RelatableField
         }
 
         if ($value) {
-            $resource = new $this->resourceClass($value);
+            $this->belongsToResource = new $this->resourceClass($value);
 
             $this->belongsToId = Util::safeInt($value->getKey());
 
-            $this->value = $this->formatDisplayValue($resource);
+            $this->value = $this->formatDisplayValue($this->belongsToResource);
 
-            $this->viewable = ($this->viewable ?? true) && $resource->authorizedToView(app(NovaRequest::class));
+            $this->viewable = ($this->viewable ?? true) && $this->belongsToResource->authorizedToView(app(NovaRequest::class));
         }
     }
 

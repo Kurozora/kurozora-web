@@ -26,7 +26,7 @@
 
 <script>
 import filter from 'lodash/filter'
-import {Collapsable} from '@/mixins'
+import { Collapsable } from '@/mixins'
 
 export default {
   mixins: [Collapsable],

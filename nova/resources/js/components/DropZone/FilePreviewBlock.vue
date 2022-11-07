@@ -11,8 +11,7 @@
       />
 
       <div
-        class="bg-gray-50 relative aspect-square flex items-center justify-center border-2 border-gray-200 dark:border-gray-700 overflow-hidden"
-        :class="rounded ? 'rounded-full' : 'rounded-lg'"
+        class="bg-gray-50 relative aspect-square flex items-center justify-center border-2 border-gray-200 dark:border-gray-700 overflow-hidden rounded-lg"
       >
         <!-- Upload Overlay -->
         <div
@@ -20,7 +19,7 @@
           class="absolute inset-0 flex items-center justify-center"
         >
           <Loader class="text-white z-10" />
-          <div class="bg-primary-900 opacity-75 absolute inset-0 rounded-lg" />
+          <div class="bg-primary-900 opacity-75 absolute inset-0" />
         </div>
 
         <!-- Image Preview -->
@@ -28,10 +27,9 @@
           v-if="isImage"
           :src="previewUrl"
           class="aspect-square object-scale-down"
-          :class="{ 'rounded-full': rounded }"
         />
         <div v-else>
-          <div class="rounded-full bg-gray-200 border-2 border-gray-200 p-4">
+          <div class="rounded bg-gray-200 border-2 border-gray-200 p-4">
             <Icon type="document-text" width="50" height="50" />
           </div>
         </div>
@@ -44,13 +42,11 @@
 </template>
 
 <script setup>
-import {useFilePreviews} from '@/composables/useFilePreviews'
-import {toRef} from 'vue'
-
+import { useFilePreviews } from '@/composables/useFilePreviews'
+import { toRef } from 'vue'
 const emit = defineEmits(['removed'])
 const props = defineProps({
   file: { type: Object },
-  rounded: { type: Boolean, default: false },
   removable: { type: Boolean, default: true },
 })
 

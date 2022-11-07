@@ -21,6 +21,13 @@ use Laravel\Nova\Nova;
 use Laravel\Nova\ProxiesCanSeeToGate;
 use ReflectionClass;
 
+/**
+ * @phpstan-type TAuthoriseCallback \Closure(\Laravel\Nova\Http\Requests\NovaRequest):bool
+ *
+ * @property TAuthoriseCallback|null $seeCallback
+ *
+ * @method $this canSee(TAuthoriseCallback $callback)
+ */
 class Action implements JsonSerializable
 {
     use AuthorizedToSee,
@@ -172,14 +179,6 @@ class Action implements JsonSerializable
     public const FULLSCREEN_STYLE = 'fullscreen';
 
     public const WINDOW_STYLE = 'window';
-
-    public const SMALL_WIDTH = 'sm';
-
-    public const MEDIUM_WIDTH = 'md';
-
-    public const LARGE_WIDTH = 'lg';
-
-    public const EXTRA_LARGE_WIDTH = 'xl';
 
     /**
      * Determine if the action is executable for the given request.

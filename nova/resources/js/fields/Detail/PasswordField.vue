@@ -1,7 +1,7 @@
 <template>
   <PanelItem :index="index" :field="field">
     <template #value>
-      <p class="text-90">
+      <p>
         &middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;
       </p>
     </template>

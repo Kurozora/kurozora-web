@@ -53,6 +53,13 @@ class MorphTo extends Field implements FilterableField, RelatableField
     public $resourceName;
 
     /**
+     * The resolved MorphTo Resource.
+     *
+     * @var \Laravel\Nova\Resource|null
+     */
+    public $morphToResource;
+
+    /**
      * The name of the Eloquent "morph to" relationship.
      *
      * @var string
@@ -220,7 +227,7 @@ class MorphTo extends Field implements FilterableField, RelatableField
 
                 $this->viewable = false;
             } else {
-                $resource = new $this->resourceClass($value);
+                $this->morphToResource = new $this->resourceClass($value);
 
                 $this->morphToId = Util::safeInt($this->morphToId);
 
@@ -228,7 +235,7 @@ class MorphTo extends Field implements FilterableField, RelatableField
                     $value, Nova::resourceForModel($value)
                 );
 
-                $this->viewable = ($this->viewable ?? true) && $resource->authorizedToView(app(NovaRequest::class));
+                $this->viewable = ($this->viewable ?? true) && $this->morphToResource->authorizedToView(app(NovaRequest::class));
             }
         }
     }

@@ -35,7 +35,7 @@
 import debounce from 'lodash/debounce'
 import Chartist from 'chartist'
 import 'chartist/dist/chartist.min.css'
-import {singularOrPlural} from '@/util'
+import { singularOrPlural } from '@/util'
 import ChartistTooltip from 'chartist-plugin-tooltips-updated'
 import 'chartist-plugin-tooltips-updated/dist/chartist-plugin-tooltip.css'
 

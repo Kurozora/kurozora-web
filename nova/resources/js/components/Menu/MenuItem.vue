@@ -12,7 +12,7 @@
         {{ item.name }}
 
         <span v-if="item.badge" class="mx-2 absolute right-0">
-          <Badge :extra-classes="item.badge.typeClass" class="">
+          <Badge :extra-classes="item.badge.typeClass">
             {{ item.badge.value }}
           </Badge>
         </span>
@@ -26,7 +26,7 @@ import identity from 'lodash/identity'
 import isNull from 'lodash/isNull'
 import omitBy from 'lodash/omitBy'
 import pickBy from 'lodash/pickBy'
-import {mapGetters, mapMutations} from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   props: {

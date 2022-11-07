@@ -91,8 +91,8 @@
 </template>
 
 <script>
-import {PreventsModalAbandonment} from '@/mixins'
-import {uid} from 'uid/single'
+import { PreventsModalAbandonment } from '@/mixins'
+import { uid } from 'uid/single'
 
 export default {
   emits: ['confirm', 'close'],

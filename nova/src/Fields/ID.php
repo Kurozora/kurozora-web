@@ -2,6 +2,7 @@
 
 namespace Laravel\Nova\Fields;
 
+use Illuminate\Database\Eloquent\Model;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Util;
 
@@ -95,8 +96,12 @@ class ID extends Field
      */
     protected function resolveAttribute($resource, $attribute)
     {
-        if (! is_null($resource)) {
-            $pivotValue = isset($resource->pivot) ? optional($resource->pivot)->getKey() : null;
+        if ($resource instanceof Model) {
+            $pivotAccessor = $this->pivotAccessor ?? 'pivot';
+
+            $pivotValue = $resource->relationLoaded($pivotAccessor)
+                ? optional($resource->{$pivotAccessor})->getKey()
+                : null;
 
             if (is_int($pivotValue) || is_string($pivotValue)) {
                 $this->pivotValue = $pivotValue;

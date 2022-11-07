@@ -11,6 +11,7 @@
     </template>
 
     <form
+      class="space-y-8"
       v-if="panels"
       @submit="submitViaCreateResource"
       @change="onUpdateFormStatus"
@@ -18,7 +19,7 @@
       autocomplete="off"
       ref="form"
     >
-      <div class="mb-8 space-y-4">
+      <div class="space-y-4">
         <component
           v-for="panel in panels"
           :key="panel.id"
@@ -79,8 +80,14 @@
 <script>
 import each from 'lodash/each'
 import tap from 'lodash/tap'
-import {Errors, HandlesFormRequest, HandlesUploads, InteractsWithResourceInformation, mapProps,} from '@/mixins'
-import {mapActions, mapMutations} from 'vuex'
+import {
+  Errors,
+  HandlesFormRequest,
+  HandlesUploads,
+  InteractsWithResourceInformation,
+  mapProps,
+} from '@/mixins'
+import { mapActions, mapMutations } from 'vuex'
 
 export default {
   emits: ['resource-created', 'create-cancelled', 'update-form-status'],
