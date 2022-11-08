@@ -24,33 +24,43 @@ class BannerProcessor implements ItemProcessorInterface
     {
         $this->item = $item;
         $tvdbID = $item->get('tvdb_id');
-        $imageUrl = $item->get('image_url');
-
-        logger()->channel('stderr')->info('🔄 [tvdb_id:' . $tvdbID . '] Processing banner');
-
-        $anime = Anime::withoutGlobalScopes()
-            ->firstWhere('tvdb_id', '=', $tvdbID);
+        $imageURLs = $item->get('image_urls');
 
 //        dd([
 //            'tvdb_id' => $tvdbID,
 //            'image_url' => $imageUrl,
 //        ]);
 
-        if (empty($anime)) {
-            logger()->channel('stderr')->warning('⚠️ [tvdb_id:' . $tvdbID . '] Anime not found');
-        } else {
+        logger()->channel('stderr')->info('🔄 [tvdb_id:' . $tvdbID . '] Processing banner');
+
+        $anime = Anime::withoutGlobalScopes()
+            ->where('tvdb_id', '=', $tvdbID)
+            ->whereHas('media', function ($query) {
+                return $query->where('collection_name', '=', 'banner');
+            }, '=', 0);
+        $animeCount = $anime->count();
+
+        if ($animeCount) {
             logger()->channel('stderr')->info('🖨️ [tvdb_id:' . $tvdbID . '] Creating banner');
-            if ($response = ResmushIt::compress($imageUrl)) {
-                try {
-                    $extension = pathinfo($imageUrl, PATHINFO_EXTENSION);
-                    $anime->updateBannerImage($response, $anime->original_title, [], $extension);
-                    logger()->channel('stderr')->info('✅️ [tvdb_id:' . $tvdbID . '] Done creating banner');
-                } catch (Exception $e) {
-                    logger()->channel('stderr')->error('❌️ [tvdb_id:' . $tvdbID . '] ' . $e->getMessage());
+            $randomKey = array_rand($imageURLs, $animeCount);
+
+            $anime->each(function (Anime $anime, $key) use ($randomKey, $tvdbID, $imageURLs) {
+                $imageURL = count($randomKey) >= $key ? $imageURLs[$randomKey[$key]] : $imageURLs[$randomKey];
+
+                if ($response = ResmushIt::compress($imageURL)) {
+                    try {
+                        $extension = pathinfo($imageURL, PATHINFO_EXTENSION);
+                        $anime->updateBannerImage($response, $anime->original_title, [], $extension);
+                        logger()->channel('stderr')->info('✅️ [tvdb_id:' . $tvdbID . '] Done creating banner');
+                    } catch (Exception $e) {
+                        logger()->channel('stderr')->error('❌️ [tvdb_id:' . $tvdbID . '] ' . $e->getMessage());
+                    }
+                } else {
+                    logger()->channel('stderr')->error('❌️ [tvdb_id:' . $tvdbID . '] Resmush failed.');
                 }
-            } else {
-                logger()->channel('stderr')->error('❌️ [tvdb_id:' . $tvdbID . '] Resmush failed.');
-            }
+            });
+        } else {
+            logger()->channel('stderr')->warning('⚠️ [tvdb_id:' . $tvdbID . '] Anime not found');
         }
 
         logger()->channel('stderr')->info('✅️ [tvdb_id:' . $tvdbID . '] Done processing');
