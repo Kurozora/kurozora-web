@@ -5,6 +5,7 @@ namespace App\Console\Commands\Fixers;
 use App\Models\Anime;
 use Artisan;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Collection;
 
 class AnimeBanner extends Command
 {
@@ -29,16 +30,23 @@ class AnimeBanner extends Command
      */
     public function handle(): int
     {
-        $animes = Anime::withoutGlobalScopes()
+        Anime::withoutGlobalScopes()
             ->where('tvdb_id', '!=', null)
             ->whereHas('media', function ($query) {
                 return $query->where('collection_name', '=', 'banner');
             }, '=', 0)
-            ->pluck('tvdb_id');
+            ->chunk(5, function (Collection $animes, $count) {
+                if ($count != 1) {
+                    return;
+                }
 
-        $this->info('Fixing ' . $animes->count() . ' banners');
+                $this->info('Fixing ' . $animes->count() . ' banners');
 
-        Artisan::call('scrape:tvdb_banners', ['tvdbID' => $animes->implode(',')]);
+                /** @var Anime $anime */
+                foreach ($animes as $anime) {
+                    Artisan::call('scrape:tvdb_banners', ['tvdbID' => $anime->tvdb_id]);
+                }
+            });
 
         return Command::SUCCESS;
     }

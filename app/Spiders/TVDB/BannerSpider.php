@@ -121,15 +121,12 @@ class BannerSpider extends BasicSpider
     public function parseBanner(Response $response): Generator
     {
         logger()->channel('stderr')->info('🕷 [tvdb_id:' . $this->tvdbID . '] Parsing banner response');
-        $images = $response->filter('img.lazy.img-responsive')->extract(['data-src']);
+        $imageURLs = $response->filter('img.lazy.img-responsive')->extract(['data-src']);
 
         try {
-            $randomKey = array_rand($images);
-            $imageUrl = $images[$randomKey];
-
             yield $this->item([
                 'tvdb_id' => $this->tvdbID,
-                'image_url' => $imageUrl,
+                'image_urls' => $imageURLs,
             ]);
 
             logger()->channel('stderr')->info('✅️ [tvdb_id:' . $this->tvdbID . '] Done banner parsing');
