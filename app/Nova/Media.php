@@ -64,7 +64,9 @@ class Media extends Resource
             Text::make('UUID')
                 ->readonly(),
 
-            Image::make('Image', 'original_url', 's3')
+            Image::make('Image', function(\App\Models\Media $resource) {
+                return $resource->getPathRelativeToRoot();
+            }, 's3')
                 ->readonly(),
 
             MorphTo::make('Model')
