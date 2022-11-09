@@ -49,7 +49,7 @@ class BannerProcessor implements ItemProcessorInterface
                 if (is_int($randomKey)) {
                     $imageURL = $imageURLs[$randomKey];
                 } else {
-                    $imageURL = count($randomKey) >= $key ? $imageURLs[$randomKey[$key]] : $imageURLs[$randomKey];
+                    $imageURL = (count($randomKey)-1) >= $key ? $imageURLs[$randomKey[$key]] : $imageURLs[$randomKey];
                 }
 
                 if ($response = ResmushIt::compress($imageURL)) {
