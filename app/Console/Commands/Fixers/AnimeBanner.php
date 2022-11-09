@@ -35,7 +35,7 @@ class AnimeBanner extends Command
             ->whereHas('media', function ($query) {
                 return $query->where('collection_name', '=', 'banner');
             }, '=', 0)
-            ->chunk(5, function (Collection $animes, $count) {
+            ->chunk(100, function (Collection $animes, $count) {
                 if ($count != 1) {
                     return;
                 }

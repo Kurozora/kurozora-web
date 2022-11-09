@@ -40,12 +40,17 @@ class BannerProcessor implements ItemProcessorInterface
             }, '=', 0);
         $animeCount = $anime->count();
 
-        if ($animeCount) {
+        if ($animeCount && count($imageURLs)) {
             logger()->channel('stderr')->info('🖨️ [tvdb_id:' . $tvdbID . '] Creating banner');
-            $randomKey = array_rand($imageURLs, $animeCount);
+            $num = min(count($imageURLs), $animeCount);
+            $randomKey = array_rand($imageURLs, $num);
 
             $anime->each(function (Anime $anime, $key) use ($randomKey, $tvdbID, $imageURLs) {
-                $imageURL = count($randomKey) >= $key ? $imageURLs[$randomKey[$key]] : $imageURLs[$randomKey];
+                if (is_int($randomKey)) {
+                    $imageURL = $imageURLs[$randomKey];
+                } else {
+                    $imageURL = count($randomKey) >= $key ? $imageURLs[$randomKey[$key]] : $imageURLs[$randomKey];
+                }
 
                 if ($response = ResmushIt::compress($imageURL)) {
                     try {
