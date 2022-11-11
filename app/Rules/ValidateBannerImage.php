@@ -19,9 +19,15 @@ class ValidateBannerImage implements Rule
      */
     public function passes($attribute, $value): bool
     {
+        $user = auth()->user();
+        $isProOrSubscribed = $user?->is_pro || $user?->is_subscribed;
+
+        $allowedMimes = $isProOrSubscribed ? 'mimes:webp,jpg,png,gif' : 'mimes:webp,jpg,png';
+        $rules = ['nullable', 'image', 'max:2048', $allowedMimes];
+
         $value = $value == 'null' ? null : $value;
         $imgValidator = Validator::make([$attribute => $value], [
-            $attribute => 'nullable|image|mimes:webp,jpg,png|max:2048',
+            $attribute => $rules,
         ]);
 
         if ($imgValidator->fails()) {

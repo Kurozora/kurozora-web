@@ -134,7 +134,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     {
         $this->addMediaCollection($this->profileImageCollectionName)
             ->singleFile()
-            ->useFallbackUrl('https://ui-avatars.com/api/?name=' . $this->username . '&color=000000&background=e0e0e0&length=1&bold=true');
+            ->useFallbackUrl('https://ui-avatars.com/api/?name=' . $this->username . '&color=FFFFFF&background=AAAAAA&length=1&bold=true&size=256');
 
         $this->addMediaCollection($this->bannerImageCollectionName)
             ->singleFile();
