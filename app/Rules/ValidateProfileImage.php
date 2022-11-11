@@ -19,14 +19,11 @@ class ValidateProfileImage implements Rule
      */
     public function passes($attribute, $value): bool
     {
-//        $user = auth()->user();
-//        $userReceipt = $user->receipt;
+        $user = auth()->user();
+        $isProOrSubscribed = $user?->is_pro || $user?->is_subscribed;
 
-        $rules = ['nullable', 'image', 'max:2048'];
-//        $allowedMimes = 'mimes:webp,jpg,png';
-        $allowedMimes = empty($userReceipt) ? 'mimes:webp,jpg,png' : 'mimes:webp,jpg,png,gif';
-//        || !$userReceipt->is_subscribed ?
-        $rules[] = $allowedMimes;
+        $allowedMimes = $isProOrSubscribed ? 'mimes:webp,jpg,png,gif' : 'mimes:webp,jpg,png';
+        $rules = ['nullable', 'image', 'max:2048', $allowedMimes];
 
         $value = $value == 'null' ? null : $value;
         $imgValidator = Validator::make([$attribute => $value], [

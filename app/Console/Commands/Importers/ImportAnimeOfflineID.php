@@ -14,23 +14,22 @@ use Illuminate\Console\Command;
 use JsonMachine\Exception\InvalidArgumentException;
 use JsonMachine\Items;
 use JsonMachine\JsonDecoder\ExtJsonDecoder;
-use function storage_path;
 
-class ImportAnimeID extends Command
+class ImportAnimeOfflineID extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'import:anime_ids';
+    protected $signature = 'import:anime_offline_ids';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Imports anime ids for different services.';
+    protected $description = 'Imports anime ids from anime offline database.';
 
     /**
      * Create a new command instance.
@@ -62,14 +61,12 @@ class ImportAnimeID extends Command
         $progressBar->start();
 
         foreach ($animes as $data) {
-            if ($animes->getPosition() >= 23433173) {
+//            if ($animes->getPosition() >= 23433173) {
                 $sources = $this->filterSources($data->sources);
 
                 if (array_key_exists('mal_id', $sources)) {
                     $anime = Anime::withoutGlobalScopes()
-                        ->where([
-                            ['mal_id', $sources['mal_id']],
-                        ])
+                        ->where('mal_id', '=', $sources['mal_id'])
 //                        ->whereDate('updated_at', '<', today())
                         ->first();
 
@@ -90,7 +87,7 @@ class ImportAnimeID extends Command
                 $progress = $animes->getPosition();
 //                echo intval($animes->getPosition() / $fileSize * 100) . ' %' . PHP_EOL;
                 $progressBar->setProgress($progress);
-            }
+//            }
         }
 
         $progressBar->finish();
