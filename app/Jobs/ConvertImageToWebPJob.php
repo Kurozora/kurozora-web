@@ -38,7 +38,7 @@ class ConvertImageToWebPJob implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         // Get the old paths, and prepare the new paths.
         $oldImageFullPath = $this->media->getFullUrl();
@@ -66,6 +66,7 @@ class ConvertImageToWebPJob implements ShouldQueue
         $imageFolder = $this->media->id;
         $oldImageName = $this->media->file_name;
         $oldFilePath = $imageFolder . '/' . $oldImageName;
+
         if (config('filesystems.default') != 's3') {
             Storage::put($oldFilePath, $image);
         } else {

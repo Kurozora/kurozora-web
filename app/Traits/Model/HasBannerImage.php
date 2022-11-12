@@ -56,6 +56,8 @@ trait HasBannerImage
             $addMedia = $this->addMediaFromUrl($uploadFile);
         } elseif ($isUploadFile = $uploadFile instanceof UploadedFile) {
             $addMedia = $this->addMedia($uploadFile);
+        } elseif ($isPath = @file_exists($uploadFile)) {
+            $addMedia = $this->addMedia($uploadFile);
         } else {
             $addMedia = $this->addMediaFromStream($uploadFile);
         }
@@ -73,6 +75,9 @@ trait HasBannerImage
             $addMedia->usingFileName(Uuid::uuid4() . '.' . $extension);
         } elseif (!empty($isUploadFile)) {
             $addMedia->usingFileName(Uuid::uuid4() . '.' . $uploadFile->extension());
+        } elseif (!empty($isPath)) {
+            $extension = $extension ?? pathinfo($uploadFile, PATHINFO_EXTENSION);
+            $addMedia->usingFileName(Uuid::uuid4() . '.' . $extension);
         } else {
             $extension = $extension ?? 'jpg';
             $addMedia->usingFileName(Uuid::uuid4() . '.' . $extension);
