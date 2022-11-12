@@ -51,7 +51,15 @@ trait HasProfileImage
     function updateProfileImage(string|UploadedFile $uploadFile, string $name = null, array $customProperties = []): void
     {
         // Determine media adder
-        $addMedia = str($uploadFile)->startsWith(['http://', 'https://']) ? $this->addMediaFromUrl($uploadFile) : $this->addMedia($uploadFile);
+        if ($isUrl = str($uploadFile)->startsWith(['http://', 'https://'])) {
+            $addMedia = $this->addMediaFromUrl($uploadFile);
+        } elseif ($isUploadFile = $uploadFile instanceof UploadedFile) {
+            $addMedia = $this->addMedia($uploadFile);
+        } elseif ($isPath = @file_exists($uploadFile)) {
+            $addMedia = $this->addMedia($uploadFile);
+        } else {
+            $addMedia = $this->addMediaFromStream($uploadFile);
+        }
 
         // Configure properties
         if (!empty($name)) {
@@ -60,11 +68,18 @@ trait HasProfileImage
         if (!empty($customProperties)) {
             $addMedia->withCustomProperties($customProperties);
         }
-        if (is_string($uploadFile)) {
-            $extension = pathinfo($uploadFile, PATHINFO_EXTENSION);
+
+        if ($isUrl) {
+            $extension = $extension ?? pathinfo($uploadFile, PATHINFO_EXTENSION);
+            $addMedia->usingFileName(Uuid::uuid4() . '.' . $extension);
+        } elseif (!empty($isUploadFile)) {
+            $addMedia->usingFileName(Uuid::uuid4() . '.' . $uploadFile->extension());
+        } elseif (!empty($isPath)) {
+            $extension = $extension ?? pathinfo($uploadFile, PATHINFO_EXTENSION);
             $addMedia->usingFileName(Uuid::uuid4() . '.' . $extension);
         } else {
-            $addMedia->usingFileName(Uuid::uuid4() . '.' . $uploadFile->extension());
+            $extension = $extension ?? 'jpg';
+            $addMedia->usingFileName(Uuid::uuid4() . '.' . $extension);
         }
 
         // Add media

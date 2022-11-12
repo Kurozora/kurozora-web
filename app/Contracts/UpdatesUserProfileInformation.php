@@ -13,5 +13,5 @@ interface UpdatesUserProfileInformation
      * @param array  $input
      * @return void
      */
-    public function update(User $user, array $input);
+    public function update(User $user, array $input): void;
 }
