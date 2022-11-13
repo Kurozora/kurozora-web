@@ -1,4 +1,4 @@
-@props(['person', 'isRow' => true])
+@props(['person', 'staffRole' => null, 'isRow' => true])
 
 @php
     $class = $isRow ? 'pb-2 shrink-0 snap-normal snap-center' : '';
@@ -15,7 +15,11 @@
         <a class="absolute w-full h-full" href="{{ route('people.details', $person) }}"></a>
     </div>
 
-    <div class="mt-2">
+    <div class="flex flex-col mt-2 gap-2">
         <p class="text-center leading-tight line-clamp-2">{{ $person->full_name }}</p>
+
+        @if (!empty($staffRole))
+            <p class="text-md text-gray-500 text-center leading-tight line-clamp-2">{{ $staffRole }}</p>
+        @endif
     </div>
 </div>

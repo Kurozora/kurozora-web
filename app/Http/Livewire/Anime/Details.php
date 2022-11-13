@@ -20,13 +20,6 @@ class Details extends Component
     public Anime $anime;
 
     /**
-     * The object containing the studio data.
-     *
-     * @var Studio|null
-     */
-    public ?Studio $studio = null;
-
-    /**
      * Whether the user has favorited the anime.
      *
      * @var bool $isFavorited
@@ -93,7 +86,6 @@ class Details extends Component
         AnimeViewed::dispatch($anime);
 
         $this->anime = $anime;
-        $this->studio = $anime->studios()?->firstWhere('is_studio', '=', true) ?? $anime->studios->first();
         $this->setupActions();
     }
 
@@ -175,6 +167,16 @@ class Details extends Component
             ];
             $this->showPopup = true;
         }
+    }
+
+    /**
+     * Returns the studio relationship of the anime.
+     *
+     * @return Studio|null
+     */
+    public function getStudioProperty(): ?Studio
+    {
+        return $this->anime->studios()?->firstWhere('is_studio', '=', true) ?? $this->anime->studios->first();
     }
 
     /**

@@ -5,6 +5,7 @@ use App\Http\Livewire\Anime\Details as AnimeDetails;
 use App\Http\Livewire\Anime\Index as AnimeIndex;
 use App\Http\Livewire\Anime\RelatedShows;
 use App\Http\Livewire\Anime\Songs as AnimeSongs;
+use App\Http\Livewire\Anime\Staff as AnimeStaff;
 use App\Http\Livewire\Anime\Studios as AnimeStudios;
 use App\Http\Livewire\Browse\Anime\Continuing\Index as BrowseAnimeContinuingIndex;
 use App\Http\Livewire\Browse\Anime\Seasons\Archive as BrowseAnimeSeasonsArchive;
@@ -63,6 +64,9 @@ Route::prefix('/anime')
 
                 Route::get('/cast', AnimeCast::class)
                     ->name('.cast');
+
+                Route::get('/staff', AnimeStaff::class)
+                    ->name('.staff');
 
                 Route::get('/seasons', SeasonDetails::class)
                     ->name('.seasons');

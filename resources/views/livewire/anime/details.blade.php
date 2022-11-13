@@ -50,11 +50,11 @@
             "genre": {!! $anime->genres()->pluck('name') !!},
             "datePublished": "{{ $anime->first_aired?->format('Y-m-d') }}",
             "keywords": "anime{{ (',' . $anime->keywords) ?? '' }}"
-            @if (!empty($studio))
+            @if (!empty($this->studio))
                 ,"creator":[
                     {
                         "@type":"Organization",
-                        "url":"/studio/{{ $studio->id }}/"
+                        "url":"/studio/{{ $this->studio->id }}/"
                     }
                 ]
             @endif
@@ -186,10 +186,10 @@
                     </a>
                 </div>
 
-                @if (!empty($studio))
+                @if (!empty($this->studio))
                     <div id="studioBadge" class="flex-grow px-12 border-l-2">
-                        <a class="flex flex-col items-center" href="{{ route('studios.details', $studio) }}">
-                            <p class="font-bold">{{ $studio->name }}</p>
+                        <a class="flex flex-col items-center" href="{{ route('studios.details', $this->studio) }}">
+                            <p class="font-bold">{{ $this->studio->name }}</p>
                             <p class="text-orange-500">
                                 @svg('building_2_fill', 'fill-current', ['width' => '20'])
                             </p>
@@ -392,13 +392,15 @@
 
             <livewire:components.anime-cast-section :anime="$anime" />
 
+            <livewire:components.anime-staff-section :anime="$anime" />
+
             <livewire:components.anime-songs-section :anime="$anime" />
 
             <livewire:components.anime-studios-section :anime="$anime" />
 
             <div class="bg-orange-50">
-                @if(!empty($studio))
-                    <livewire:components.anime-more-by-studio-section :studio="$studio" />
+                @if(!empty($this->studio))
+                    <livewire:components.anime-more-by-studio-section :studio="$this->studio" />
                 @endif
 
                 <livewire:components.anime-relations-section :anime="$anime" />

@@ -3,14 +3,18 @@
 namespace App\Http\Livewire\Anime;
 
 use App\Models\Anime;
+use App\Models\AnimeStaff;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Component;
+use Livewire\WithPagination;
 
-class Studios extends Component
+class Staff extends Component
 {
+    use WithPagination;
+
     /**
      * The object containing the anime data.
      *
@@ -31,13 +35,13 @@ class Studios extends Component
     }
 
     /**
-     * Get the list of studios.
+     * Get the list of staff.
      *
-     * @return array|LengthAwarePaginator
+     * @return AnimeStaff[]|LengthAwarePaginator
      */
-    public function getStudiosProperty(): array|LengthAwarePaginator
+    public function getStaffProperty(): array|LengthAwarePaginator
     {
-        return $this->anime->studios()->paginate(25);
+        return $this->anime->staff()->paginate(25);
     }
 
     /**
@@ -47,6 +51,6 @@ class Studios extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.anime.studios');
+        return view('livewire.anime.staff');
     }
 }
