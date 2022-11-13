@@ -65,20 +65,19 @@ class Anime extends KModel implements HasMedia, Sitemapable
     const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
 
     // How long to cache certain responses
-    const CACHE_KEY_EXPLORE_SECONDS = 120 * 60;
-    const CACHE_KEY_ANIME_CAST_SECONDS = 120 * 60;
-    const CACHE_KEY_ANIME_SONGS_SECONDS = 120 * 60;
-    const CACHE_KEY_CHARACTERS_SECONDS = 120 * 60;
-    const CACHE_KEY_EPISODES_SECONDS = 120 * 60;
-    const CACHE_KEY_GENRES_SECONDS = 120 * 60;
-    const CACHE_KEY_THEMES_SECONDS = 120 * 60;
-    const CACHE_KEY_LANGUAGES_SECONDS = 120 * 60;
-    const CACHE_KEY_RELATIONS_SECONDS = 120 * 60;
-    const CACHE_KEY_SEASONS_SECONDS = 120 * 60;
-    const CACHE_KEY_SONGS_SECONDS = 120 * 60;
-    const CACHE_KEY_STAFF_SECONDS = 120 * 60;
-    const CACHE_KEY_STATS_SECONDS = 120 * 60;
-    const CACHE_KEY_STUDIOS_SECONDS = 120 * 60;
+    const CACHE_KEY_ANIME_CAST_SECONDS = 60 * 60 * 2;
+    const CACHE_KEY_ANIME_SONGS_SECONDS = 60 * 60 * 2;
+    const CACHE_KEY_CHARACTERS_SECONDS = 60 * 60 * 2;
+    const CACHE_KEY_EPISODES_SECONDS = 60 * 60 * 2;
+    const CACHE_KEY_GENRES_SECONDS = 60 * 60 * 24;
+    const CACHE_KEY_THEMES_SECONDS = 60 * 60 * 24;
+    const CACHE_KEY_LANGUAGES_SECONDS = 60 * 60 * 24;
+    const CACHE_KEY_RELATIONS_SECONDS = 60 * 60 * 2;
+    const CACHE_KEY_SEASONS_SECONDS = 60 * 60 * 24;
+    const CACHE_KEY_SONGS_SECONDS = 60 * 60 * 2;
+    const CACHE_KEY_STAFF_SECONDS = 60 * 60 * 2;
+    const CACHE_KEY_STATS_SECONDS = 60 * 60 * 2;
+    const CACHE_KEY_STUDIOS_SECONDS = 60 * 60 * 2;
 
     // Table name
     const TABLE_NAME = 'animes';
