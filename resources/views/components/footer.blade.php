@@ -5,7 +5,7 @@
                 <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('Account') }}</h5>
                 <ul class="m-0 mb-4 list-none">
                     <li class="mt-2">
-                        <x-footer-link href="{{ route('profile.settings') }}">{{ __('Kurozora Account') }}</x-footer-link>
+                        <x-footer-link href="{{ route('me') }}">{{ __('Kurozora Profile') }}</x-footer-link>
                     </li>
                     <li class="mt-2">
                         <x-footer-link href="{{ route('profile.settings') }}">{{ __('Manage Your Settings') }}</x-footer-link>
