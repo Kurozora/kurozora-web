@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Livewire\Anime;
+namespace App\Http\Livewire\Components;
 
 use App\Models\Anime;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Component;
 
-class Studios extends Component
+class AnimeStaffSection extends Component
 {
     /**
      * The object containing the anime data.
@@ -17,6 +16,13 @@ class Studios extends Component
      * @var Anime $anime
      */
     public Anime $anime;
+
+    /**
+     * The number of staff the anime has.
+     *
+     * @var int $staffCount
+     */
+    public int $staffCount;
 
     /**
      * Prepare the component.
@@ -28,16 +34,17 @@ class Studios extends Component
     public function mount(Anime $anime): void
     {
         $this->anime = $anime;
+        $this->staffCount = $anime->staff()->count();
     }
 
     /**
-     * Get the list of studios.
+     * Loads the anime staff section.
      *
-     * @return array|LengthAwarePaginator
+     * @return array
      */
-    public function getStudiosProperty(): array|LengthAwarePaginator
+    public function getStaffProperty(): array
     {
-        return $this->anime->studios()->paginate(25);
+        return $this->anime->getStaff(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
     }
 
     /**
@@ -47,6 +54,6 @@ class Studios extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.anime.studios');
+        return view('livewire.components.anime-staff-section');
     }
 }

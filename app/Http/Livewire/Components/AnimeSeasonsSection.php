@@ -6,6 +6,7 @@ use App\Models\Anime;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Component;
 
 class AnimeSeasonsSection extends Component
@@ -16,13 +17,6 @@ class AnimeSeasonsSection extends Component
      * @var Anime $anime
      */
     public Anime $anime;
-
-    /**
-     * The array containing the seasons data.
-     *
-     * @var array $seasons
-     */
-    public array $seasons = [];
 
     /**
      * The number of seasons the anime has.
@@ -45,13 +39,13 @@ class AnimeSeasonsSection extends Component
     }
 
     /**
-     * Loads the anime seasons section.
+     * Get the anime seasons.
      *
-     * @return void
+     * @return array|LengthAwarePaginator
      */
-    public function loadAnimeSeasons(): void
+    public function getSeasonsProperty(): array|LengthAwarePaginator
     {
-        $this->seasons = $this->anime->getSeasons(Anime::MAXIMUM_RELATIONSHIPS_LIMIT, reversed: true)->items() ?? [];
+        return $this->anime->getSeasons(Anime::MAXIMUM_RELATIONSHIPS_LIMIT, reversed: true);
     }
 
     /**

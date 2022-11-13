@@ -20,9 +20,9 @@ class AnimeCastSection extends Component
     /**
      * The array containing the cast data.
      *
-     * @var array $cast
+     * @var array $animeCast
      */
-    public array $cast = [];
+    public array $animeCast = [];
 
     /**
      * The number of cast the anime has.
@@ -38,7 +38,7 @@ class AnimeCastSection extends Component
      *
      * @return void
      */
-    public function mount(Anime $anime)
+    public function mount(Anime $anime): void
     {
         $this->anime = $anime;
         $this->castCount = $anime->cast()->count();
@@ -49,9 +49,9 @@ class AnimeCastSection extends Component
      *
      * @return void
      */
-    public function loadAnimeCast()
+    public function loadAnimeCast(): void
     {
-        $this->cast = $this->anime->getCast(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
+        $this->animeCast = $this->anime->getCast(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
     }
 
     /**
