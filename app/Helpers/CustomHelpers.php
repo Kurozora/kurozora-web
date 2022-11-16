@@ -3,6 +3,7 @@
 use App\Enums\SeasonOfYear;
 use App\Helpers\Settings;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Date;
 
 // Create a deeplink iOS URL
@@ -94,10 +95,18 @@ if (!function_exists('size_shorten')) {
 }
 
 if (!function_exists('create_studio_banner_from')) {
-    function create_studio_banner_from($images, $filename_result): void
+    /**
+     * Creates a banner image for a studio and returns the path.
+     *
+     * @param Collection $images
+     * @param string $absoluteFilePath
+     * @return string
+     */
+    function create_studio_banner_from(Collection $images, string $absoluteFilePath): string
     {
         // Create a new banner image canvas
         $bannerImageCanvas = imagecreatetruecolor(1920, 1080);
+        $imageCount = $images->count();
 
         // Get dimensions, load images and copy to the canvas
         foreach ($images as $key => $image) {
@@ -107,22 +116,44 @@ if (!function_exists('create_studio_banner_from')) {
             // Load the image
             ${'image_' . $key} = imagecreatefromwebp($image);
 
-            // Copy the image to the banner canvas
-            if ($key >= 5) { // Copy image to bottom row when reaching 5th image
-                imagecopyresized($bannerImageCanvas, ${'image_' . $key}, ($key - 5) * 384, 540, 0, 0, 384, 540, ${'width_' . $key}, ${'height_' . $key});
-            } else { // Copy image to top row
-                imagecopyresized($bannerImageCanvas, ${'image_' . $key}, $key * 384, 0, 0, 0, 384, 540, ${'width_' . $key}, ${'height_' . $key});
+            if ($imageCount == 10) {
+                // Copy the image to the banner canvas
+                if ($key >= 5) { // Copy image to bottom row when reaching 5th image
+                    imagecopyresized($bannerImageCanvas, ${'image_' . $key}, ($key - 5) * 384, 540, 0, 0, 384, 540, ${'width_' . $key}, ${'height_' . $key});
+                } else { // Copy image to top row
+                    imagecopyresized($bannerImageCanvas, ${'image_' . $key}, $key * 384, 0, 0, 0, 384, 540, ${'width_' . $key}, ${'height_' . $key});
+                }
+            } elseif ($imageCount == 7) {
+                // Copy the image to the banner canvas
+                if ($key == 0) {
+                    imagecopyresized($bannerImageCanvas, ${'image_' . $key}, 0, 0, 0, 0, 770, 1080, ${'width_' . $key}, ${'height_' . $key});
+                } elseif ($key >= 4) { // Copy image to bottom row
+                    imagecopyresized($bannerImageCanvas, ${'image_' . $key}, 770 + (($key - 4) * 384), 540, 0, 0, 384, 540, ${'width_' . $key}, ${'height_' . $key});
+                } else { // Copy image to top row
+                    imagecopyresized($bannerImageCanvas, ${'image_' . $key}, 770 + (($key - 1) * 384), 0, 0, 0, 384, 540, ${'width_' . $key}, ${'height_' . $key});
+                }
+            } elseif ($imageCount == 4) {
+                // Copy the image to the banner canvas
+                if ($key <= 1) {
+                    imagecopyresized($bannerImageCanvas, ${'image_' . $key}, $key * 770, 0, 0, 0, 770, 1080, ${'width_' . $key}, ${'height_' . $key});
+                } elseif ($key % 2 != 0) { // Copy image to bottom row
+                    imagecopyresized($bannerImageCanvas, ${'image_' . $key}, 770 * 2, 540, 0, 0, 384, 540, ${'width_' . $key}, ${'height_' . $key});
+                } else { // Copy image to top row
+                    imagecopyresized($bannerImageCanvas, ${'image_' . $key}, 770 * 2, 0, 0, 0, 384, 540, ${'width_' . $key}, ${'height_' . $key});
+                }
             }
         }
 
         // Save the resulting image to disk as WebP
-        imagewebp($bannerImageCanvas, $filename_result);
+        imagewebp($bannerImageCanvas, $absoluteFilePath);
 
         // Remove images from memory
         imagedestroy($bannerImageCanvas);
         foreach ($images as $key => $image) {
             imagedestroy(${'image_' . $key});
         }
+
+        return $absoluteFilePath;
     }
 }
 

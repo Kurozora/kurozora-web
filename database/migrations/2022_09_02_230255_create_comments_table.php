@@ -25,6 +25,7 @@ return new class extends Migration
             $table->boolean('is_nsfw')->default(false);
             $table->boolean('is_nsfl')->default(false);
             $table->boolean('is_locked')->default(false);
+            $table->boolean('is_pinned')->default(false);
             $table->unsignedInteger('replies_count')->default(0);
             $table->unsignedInteger('likes_count')->default(0);
             $table->unsignedInteger('reports_count')->default(0);

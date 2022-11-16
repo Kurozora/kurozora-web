@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use App\Enums\StudioType;
+use App\Nova\Actions\FixStudioBanner;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
@@ -300,7 +301,12 @@ class Studio extends Resource
      */
     public function actions(Request $request): array
     {
-        return [];
+        return [
+            FixStudioBanner::make()
+                ->canSee(function ($request) {
+                    return $request->user()->can('updateStudio');
+                })->showInline(),
+        ];
     }
 
     /**
