@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\MediaCollection;
 use App\Enums\UserActivityStatus;
 use App\Helpers\OptionsBag;
 use App\Jobs\FetchSessionLocation;
@@ -10,8 +11,6 @@ use App\Notifications\ResetPassword as ResetPasswordNotification;
 use App\Notifications\VerifyEmail as VerifyEmailNotification;
 use App\Traits\HeartActionTrait;
 use App\Traits\InteractsWithMediaExtension;
-use App\Traits\Model\HasBannerImage;
-use App\Traits\Model\HasProfileImage;
 use App\Traits\Web\Auth\TwoFactorAuthenticatable;
 use Carbon\Carbon;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
@@ -52,9 +51,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
 {
     use Authorizable,
         HasApiTokens,
-        HasBannerImage,
         HasFactory,
-        HasProfileImage,
         HasRoles,
         HasPermissions,
         HasSlug,
@@ -104,18 +101,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     ];
 
     /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [
-        'banner_image',
-        'banner_image_url',
-        'profile_image',
-        'profile_image_url',
-    ];
-
-    /**
      * Get the columns that should receive a unique identifier.
      *
      * @return array
@@ -132,11 +117,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection($this->profileImageCollectionName)
+        $this->addMediaCollection(MediaCollection::Profile)
             ->singleFile()
             ->useFallbackUrl('https://ui-avatars.com/api/?name=' . $this->username . '&color=FFFFFF&background=AAAAAA&length=1&bold=true&size=256');
-
-        $this->addMediaCollection($this->bannerImageCollectionName)
+        $this->addMediaCollection(MediaCollection::Banner)
             ->singleFile();
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MediaCollection;
 use App\Helpers\JSONResult;
 use App\Http\Requests\GetAccessTokensRequest;
 use App\Http\Requests\GetAnimeFavoritesRequest;
@@ -81,12 +82,12 @@ class MeController extends Controller
         // Update profile image
         if ($request->has('profileImage')) {
             // Remove previous profile image
-            $user->deleteProfileImage();
+            $user->clearMediaCollection(MediaCollection::Profile);
 
             if ($data['profileImage'] != null) {
                 // Upload a new profile image, if one was uploaded
                 if ($request->hasFile('profileImage') && $request->file('profileImage')->isValid()) {
-                    $user->updateProfileImage($request->file('profileImage'));
+                    $user->updateImageMedia(MediaCollection::Profile(), $request->file('profileImage'));
                 }
             }
 
@@ -96,12 +97,12 @@ class MeController extends Controller
         // Update banner
         if ($request->has('bannerImage')) {
             // Remove previous banner
-            $user->deleteBannerImage();
+            $user->clearMediaCollection(MediaCollection::Banner);
 
             if ($data['bannerImage'] != null) {
                 // Save the uploaded banner, if one was uploaded
                 if ($request->hasFile('bannerImage') && $request->file('bannerImage')->isValid()) {
-                    $user->updateBannerImage($request->file('bannerImage'));
+                    $user->updateImageMedia(MediaCollection::Banner(), $request->file('bannerImage'));
                 }
             }
 
@@ -125,8 +126,8 @@ class MeController extends Controller
         return JSONResult::success([
             'data'      => [
                 'biography'         => $user->biography,
-                'profileImageURL'   => $user->profile_image_url,
-                'bannerImageURL'    => $user->banner_image_url
+                'profileImageURL'   => $user->getFirstMediaFullUrl(MediaCollection::Profile()),
+                'bannerImageURL'    => $user->getFirstMediaFullUrl(MediaCollection::Banner())
             ],
             'message'   => $displayMessage,
         ]);

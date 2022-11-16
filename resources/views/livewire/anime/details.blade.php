@@ -1,6 +1,6 @@
 <main>
     <x-slot:themeColor>
-        {{ $anime->banner_image?->custom_properties['background_color'] ?? $anime->poster_image?->custom_properties['background_color'] ?? null }}
+        {{ $anime->getFirstMedia(\App\Enums\MediaCollection::Banner) ?? $anime->getFirstMedia(\App\Enums\MediaCollection::Poster)?->custom_properties['background_color'] ?? null }}
     </x-slot:themeColor>
 
     <x-slot:title>
@@ -14,7 +14,7 @@
     <x-slot:meta>
         <meta property="og:title" content="{{ $anime->title }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ $anime->synopsis ?? __('app.description') }}" />
-        <meta property="og:image" content="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
+        <meta property="og:image" content="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:video" content="{{ $anime->video_url ?? '' }}" />
         <meta property="og:type" content="video.tv_show" />
         <meta property="video:duration" content="{{ $anime->duration }}" />
@@ -22,7 +22,7 @@
         <meta property="twitter:title" content="{{ $anime->title }} — {{ config('app.name') }}" />
         <meta property="twitter:description" content="{{ $anime->synopsis }}" />
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:image" content="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
+        <meta property="twitter:image" content="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="twitter:image:alt" content="{{ $anime->synopsis }}" />
         <link rel="canonical" href="{{ route('anime.details', $anime) }}">
         <x-misc.schema>
@@ -30,14 +30,14 @@
             "url":"/anime/{{ $anime->slug }}/",
             "name": "{{ $anime->title }}",
             "alternateName": "{{ $anime->original_title }}",
-            "image": "{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
+            "image": "{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
             "description": "{{ $anime->synopsis }}",
             "aggregateRating": {
                 "@type":"AggregateRating",
                 "itemReviewed": {
                     "@type": "TVSeries",
                     "image": [
-                        "{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}"
+                        "{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}"
                     ],
                     "name": "{{ $anime->title }}"
                 },
@@ -64,7 +64,7 @@
                     "name":"{{ $anime->title }}",
                     "embedUrl": "{{ $anime->video_url }}",
                     "description":"Official Trailer",
-                    "thumbnailUrl": "{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
+                    "thumbnailUrl": "{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
                     "uploadDate": "{{ $anime->first_aired?->format('Y-m-d') }}"
                 }
             @endif
@@ -79,7 +79,7 @@
         <div class="relative">
             <div class="relative flex flex-nowrap aspect-video md:relative md:h-full xl:aspect-auto">
                 <x-picture class="w-full overflow-hidden">
-                    <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
+                    <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
                 </x-picture>
 
                 @if (!empty($anime->video_url))
@@ -99,7 +99,7 @@
             <div class="md:absolute md:bottom-0 md:left-0 md:right-0 lg:px-4">
                 <div class="flex flex-nowrap pt-5 pb-8 pl-4 pr-4 md:mx-auto md:mb-8 md:p-6 md:max-w-lg md:bg-white md:bg-opacity-50 md:backdrop-filter md:backdrop-blur md:rounded-lg">
                     <x-picture :border="true" class="min-w-[100px] max-w-[100px] min-h-[150px] max-h-[150px] mr-2 rounded-lg overflow-hidden">
-                        <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->poster_image_url ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
+                        <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
                     </x-picture>
 
                     <div class="flex flex-col gap-2 justify-between w-3/4">

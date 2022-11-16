@@ -12,7 +12,7 @@
             @endphp
             <li class="relative flex space-x-2 pt-4 pr-4 pb-4 pl-4 rounded-lg" style="background-color: {{ $badge->background_color }};">
                 <picture class="relative w-16 h-16 aspect-square rounded-full overflow-hidden">
-                    <img class="w-full" src="{{ $badge->symbol_image_url }}" alt="{{ $badge->name }} Badge Image" width="{{ $badge->symbol_image?->custom_properties['width'] ?? 96 }}" height="{{ $badge->symbol_image?->custom_properties['height'] ?? 96 }}">
+                    <img class="w-full" src="{{ $badge->getFirstMediaFullUrl(\App\Enums\MediaCollection::Symbol()) }}" alt="{{ $badge->name }} Badge Image" width="{{ $badge->getFirstMedia(\App\Enums\MediaCollection::Symbol)?->custom_properties['width'] ?? 96 }}" height="{{ $badge->getFirstMedia(\App\Enums\MediaCollection::Symbol)?->custom_properties['height'] ?? 96 }}">
 
                     <div class="absolute top-0 left-0 h-full w-full border-2 rounded-full" style="border-color: {{ $borderColor }};"></div>
                 </picture>

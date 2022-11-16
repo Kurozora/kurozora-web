@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\MediaCollection;
 use App\Traits\InteractsWithMediaExtension;
-use App\Traits\Model\HasSymbolImage;
 use App\Traits\Model\TvRated;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -18,8 +18,7 @@ use Spatie\Sluggable\SlugOptions;
 
 class Theme extends KModel implements HasMedia, Sitemapable
 {
-    use HasSymbolImage,
-        InteractsWithMedia,
+    use InteractsWithMedia,
         InteractsWithMediaExtension,
         HasSlug,
         SoftDeletes,
@@ -28,16 +27,6 @@ class Theme extends KModel implements HasMedia, Sitemapable
     // Table name
     const TABLE_NAME = 'themes';
     protected $table = self::TABLE_NAME;
-
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [
-        'symbol_image',
-        'symbol_image_url',
-    ];
 
     /**
      * Get the route key for the model.
@@ -69,7 +58,7 @@ class Theme extends KModel implements HasMedia, Sitemapable
      */
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection($this->symbolImageCollectionName)
+        $this->addMediaCollection(MediaCollection::Symbol)
             ->singleFile();
     }
 

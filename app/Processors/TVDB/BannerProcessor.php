@@ -2,6 +2,7 @@
 
 namespace App\Processors\TVDB;
 
+use App\Enums\MediaCollection;
 use App\Helpers\ResmushIt;
 use App\Models\Anime;
 use Exception;
@@ -55,7 +56,7 @@ class BannerProcessor implements ItemProcessorInterface
                 if ($response = ResmushIt::compress($imageURL)) {
                     try {
                         $extension = pathinfo($imageURL, PATHINFO_EXTENSION);
-                        $anime->updateBannerImage($response, $anime->original_title, [], $extension);
+                        $anime->updateImageMedia(MediaCollection::Banner(), $response, $anime->original_title, [], $extension);
                         logger()->channel('stderr')->info('✅️ [tvdb_id:' . $tvdbID . '] Done creating banner');
                     } catch (Exception $e) {
                         logger()->channel('stderr')->error('❌️ [tvdb_id:' . $tvdbID . '] ' . $e->getMessage());

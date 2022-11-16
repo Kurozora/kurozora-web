@@ -8,11 +8,11 @@
             <img
                 class="w-full h-full object-cover lazyload"
                 data-sizes="auto"
-                data-src="{{ $anime->banner_image_url ?? $anime->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}"
+                data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_banner.webp') }}"
                 alt="{{ $anime->title }} Banner"
                 title="{{ $anime->title }}"
-                width="{{ ($anime->banner_image ?? $anime->profile_image)?->custom_properties['width'] ?? 300}}"
-                height="{{ ($anime->banner_image ?? $anime->profile_image)?->custom_properties['height'] ?? 300 }}"
+                width="{{ ($anime->getFirstMedia(\App\Enums\MediaCollection::Banner) ?? $anime->getFirstMedia(\App\Enums\MediaCollection::Poster))?->custom_properties['width'] ?? 300}}"
+                height="{{ ($anime->getFirstMedia(\App\Enums\MediaCollection::Banner) ?? $anime->getFirstMedia(\App\Enums\MediaCollection::Poster))?->custom_properties['height'] ?? 300 }}"
             >
 
             <div

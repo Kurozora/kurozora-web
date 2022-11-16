@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Enums\MediaCollection;
 use App\Models\FeedMessage;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
@@ -53,7 +54,7 @@ class NewFeedMessageReply extends Notification implements ShouldQueue
         return [
             'userID'            => $this->feedMessage->user->id,
             'username'          => $this->feedMessage->user->username,
-            'profileImageURL'   => $this->feedMessage->user->profile_image_url,
+            'profileImageURL'   => $this->feedMessage->user->getFirstMediaFullUrl(MediaCollection::Profile()),
             'feedMessageID'     => $this->feedMessage->id,
         ];
     }

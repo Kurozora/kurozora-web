@@ -5,9 +5,9 @@ namespace App\Models;
 use App\Casts\AsArrayObject;
 use App\Enums\AstrologicalSign;
 use App\Enums\CharacterStatus;
+use App\Enums\MediaCollection;
 use App\Scopes\BornTodayScope;
 use App\Traits\InteractsWithMediaExtension;
-use App\Traits\Model\HasProfileImage;
 use App\Traits\Model\HasTranslatableSlug;
 use App\Traits\Model\HasViews;
 use Astrotomic\Translatable\Translatable;
@@ -28,7 +28,6 @@ use Spatie\Sluggable\SlugOptions;
 class Character extends KModel implements HasMedia, Sitemapable
 {
     use HasFactory,
-        HasProfileImage,
         HasTranslatableSlug,
         HasViews,
         InteractsWithMedia,
@@ -76,8 +75,6 @@ class Character extends KModel implements HasMedia, Sitemapable
 //        'age_string',
 //        'birthdate',
 //        'height_string',
-//        'profile_image',
-//        'profile_image_url',
 //        'weight_string',
     ];
 
@@ -111,7 +108,7 @@ class Character extends KModel implements HasMedia, Sitemapable
      */
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection($this->profileImageCollectionName)
+        $this->addMediaCollection(MediaCollection::Profile)
             ->singleFile();
     }
 

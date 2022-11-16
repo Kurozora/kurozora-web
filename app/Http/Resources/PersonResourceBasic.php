@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\MediaCollection;
 use App\Models\Person;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -27,7 +28,7 @@ class PersonResourceBasic extends JsonResource
         return array_merge($resource, [
             'attributes'    => [
                 'slug'              => $this->resource->slug,
-                'profile'           => ImageResource::make($this->resource->profile_image),
+                'profile'           => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Profile)),
                 'fullName'          => $this->resource->full_name,
                 'fullGivenName'     => $this->resource->full_given_name,
                 'alternativeNames'  => $this->resource->alternative_names,

@@ -2,6 +2,7 @@
 
 namespace Tests\API;
 
+use App\Enums\MediaCollection;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
@@ -80,13 +81,13 @@ class AccountRegistrationTest extends TestCase
         $this->assertEquals(1, User::count());
 
         // Assert that the profile image was uploaded properly
-        $profileImage = $user->profile_image;
+        $profileImage = $user->getFirstMedia(MediaCollection::Profile);
 
         $this->assertNotNull($profileImage);
         $this->assertFileExists($profileImage->first()->getPath());
 
         // Delete the media
-        $user->deleteProfileImage();
+        $user->clearMediaCollection(MediaCollection::Profile);
     }
 
     /**

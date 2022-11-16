@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\MediaCollection;
 use App\Models\Character;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -27,7 +28,7 @@ class CharacterResourceBasic extends JsonResource
         return array_merge($resource, [
             'attributes'    => [
                 'slug'              => $this->resource->slug,
-                'profile'           => ImageResource::make($this->resource->profile_image),
+                'profile'           => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Profile)),
                 'name'              => $this->resource->name,
                 'nicknames'         => $this->resource->nicknames,
                 'about'             => $this->resource->about,

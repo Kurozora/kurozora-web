@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\MediaCollection;
 use App\Models\Season;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -26,7 +27,7 @@ class SeasonResource extends JsonResource
         $resource = SeasonResourceIdentity::make($this->resource)->toArray($request);
         return array_merge($resource, [
             'attributes'    => [
-                'poster'        => ImageResource::make($this->resource->poster_image),
+                'poster'        => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Poster)),
                 'number'        => $this->resource->number,
                 'title'         => $this->resource->title,
                 'synopsis'      => $this->resource->synopsis,

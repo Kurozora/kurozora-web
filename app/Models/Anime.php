@@ -4,11 +4,10 @@ namespace App\Models;
 
 use App\Casts\AsArrayObject;
 use App\Enums\DayOfWeek;
+use App\Enums\MediaCollection;
 use App\Enums\SeasonOfYear;
 use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
-use App\Traits\Model\HasBannerImage;
-use App\Traits\Model\HasPosterImage;
 use App\Traits\Model\HasMediaTags;
 use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasViews;
@@ -43,9 +42,7 @@ use Spatie\Sluggable\SlugOptions;
 class Anime extends KModel implements HasMedia, Sitemapable
 {
     use Actionable,
-        HasBannerImage,
         HasFactory,
-        HasPosterImage,
         HasSlug,
         HasMediaTags,
         HasVideos,
@@ -112,14 +109,10 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     protected $appends = [
 //        'air_time_utc',
-//        'banner_image',
-//        'banner_image_url',
 //        'broadcast',
 //        'duration_string',
 //        'duration_total',
 //        'information_summary',
-//        'poster_image',
-//        'poster_image_url',
 //        'time_until_broadcast',
     ];
 
@@ -196,10 +189,11 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection($this->posterImageCollectionName)
+        $this->addMediaCollection(MediaCollection::Poster)
             ->singleFile();
-
-        $this->addMediaCollection($this->bannerImageCollectionName)
+        $this->addMediaCollection(MediaCollection::Banner)
+            ->singleFile();
+        $this->addMediaCollection(MediaCollection::Logo)
             ->singleFile();
     }
 

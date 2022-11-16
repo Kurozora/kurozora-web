@@ -83,7 +83,7 @@
                                     :href="route('genres.details', ['genre' => $categoryItem->model])"
                                     :title="$categoryItem->model->name"
                                     :backgroundColor="$categoryItem->model->color"
-                                    :backgroundImage="$categoryItem->model->symbol_image_url ?? asset('images/static/icon/logo.webp')"
+                                    :backgroundImage="$categoryItem->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Symbol()) ?? asset('images/static/icon/logo.webp')"
                                 />
                             @endforeach
                         </div>
@@ -95,7 +95,7 @@
                                     :href="route('themes.details', ['theme' => $categoryItem->model])"
                                     :title="$categoryItem->model->name"
                                     :backgroundColor="$categoryItem->model->color"
-                                    :backgroundImage="$categoryItem->model->symbol_image_url ?? asset('images/static/icon/logo.webp')"
+                                    :backgroundImage="$categoryItem->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Symbol()) ?? asset('images/static/icon/logo.webp')"
                                 />
                             @endforeach
                         </div>

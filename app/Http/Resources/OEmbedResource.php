@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\MediaCollection;
 use App\Models\Episode;
 use App\Models\Song;
 use Illuminate\Contracts\Support\Arrayable;
@@ -32,7 +33,7 @@ class OEmbedResource extends JsonResource
                     'title' => $episode->title,
                     'author_name' => $episode->anime->title,
                     'author_url' => route('anime.details', $episode->anime),
-                    'thumbnail_url' => $episode->banner_image_url,
+                    'thumbnail_url' => $episode->getFirstMediaFullUrl(MediaCollection::Banner()),
                     'thumbnail_width' => 853,
                     'thumbnail_height' => 480,
                     'width' => 853,

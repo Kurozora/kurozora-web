@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\MediaCollection;
 use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
 use Illuminate\Http\Request;
@@ -40,8 +41,9 @@ class AnimeResourceBasic extends JsonResource
                 'tvdbID'                => $this->resource->tvdb_id,
                 'slug'                  => $this->resource->slug,
                 'videoUrl'              => $this->resource->video_url,
-                'poster'                => ImageResource::make($this->resource->poster_image),
-                'banner'                => ImageResource::make($this->resource->banner_image),
+                'poster'                => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Poster)),
+                'banner'                => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Banner)),
+                'logo'                  => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Logo)),
                 'originalTitle'         => $this->resource->original_title,
                 'title'                 => $this->resource->title,
                 'synonymTitles'         => $this->resource->synonym_titles,

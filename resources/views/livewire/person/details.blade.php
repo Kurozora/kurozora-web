@@ -10,7 +10,7 @@
     <x-slot:meta>
         <meta property="og:title" content="{{ $person->full_name }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ $person->about ?? __('app.description') }}" />
-        <meta property="og:image" content="{{ $person->profile_image_url ?? asset('images/static/placeholders/person_poster.webp') }}" />
+        <meta property="og:image" content="{{ $person->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" />
         <meta property="og:type" content="profile" />
         <meta property="og:profile:username" content="{{ $person->full_name }}" />
         <link rel="canonical" href="{{ route('people.details', $person) }}">
@@ -28,7 +28,7 @@
                         class="relative aspect-square rounded-full overflow-hidden"
                         style="height: 128px;"
                     >
-                        <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $person->profile_image_url ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $person->full_name }} Profile Image" title="{{ $person->full_name }}">
+                        <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $person->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $person->full_name }} Profile Image" title="{{ $person->full_name }}">
 
                         <div class="absolute top-0 left-0 h-full w-full border-2 border-solid border-black/20 rounded-full"></div>
                     </picture>

@@ -2,6 +2,7 @@
 
 namespace App\Embeds;
 
+use App\Enums\MediaCollection;
 use App\Models\Anime;
 use App\Models\Episode;
 use App\Models\Video;
@@ -62,7 +63,7 @@ abstract class Embed
     public function getPoster(): string
     {
         return match($this->resource->videoable_type) {
-            Anime::class, Episode::class => $this->resource->videoable->banner_image_url ?? '',
+            Anime::class, Episode::class => $this->resource->videoable->getFirstMediaFullUrl(MediaCollection::Banner()) ?? '',
             default => ''
         };
     }
@@ -119,7 +120,7 @@ abstract class Embed
 
                 foreach ($this->sizes as $size) {
                     $artworks[] = [
-                        'src' => $anime->poster_image_url,
+                        'src' => $anime->getFirstMediaFullUrl(MediaCollection::Poster()),
                         'sizes' => $size,
                         'type' => 'image/webp'
                     ];
@@ -133,7 +134,7 @@ abstract class Embed
 
                 foreach ($this->sizes as $size) {
                     $artworks[] = [
-                        'src' => $anime->poster_image_url,
+                        'src' => $anime->getFirstMediaFullUrl(MediaCollection::Poster()),
                         'sizes' => $size,
                         'type' => 'image/webp'
                     ];

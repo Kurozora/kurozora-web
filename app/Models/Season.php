@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\MediaCollection;
 use App\Traits\InteractsWithMediaExtension;
-use App\Traits\Model\HasPosterImage;
 use App\Traits\Model\TvRated;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,7 +18,6 @@ use Spatie\Sitemap\Tags\Url;
 class Season extends KModel implements HasMedia, Sitemapable
 {
     use HasFactory,
-        HasPosterImage,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         SoftDeletes,
@@ -77,7 +76,7 @@ class Season extends KModel implements HasMedia, Sitemapable
      */
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection($this->posterImageCollectionName)
+        $this->addMediaCollection(MediaCollection::Poster)
             ->singleFile();
     }
 

@@ -12,11 +12,11 @@
                 <img
                     class="w-full h-full object-cover lazyload"
                     data-sizes="auto"
-                    data-src="{{ $user->profile_image_url }}"
+                    data-src="{{ $user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }}"
                     alt="{{ $user->username }} Profile Image"
                     title="{{ $user->username }}"
-                    width="{{ $user->profile_image?->custom_properties['width'] ?? 96 }}"
-                    height="{{ $user->profile_image?->custom_properties['height'] ?? 96 }}"
+                    width="{{ $user->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['width'] ?? 96 }}"
+                    height="{{ $user->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['height'] ?? 96 }}"
                 >
 
                 <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-full"></div>

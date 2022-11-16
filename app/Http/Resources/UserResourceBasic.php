@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\MediaCollection;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -38,8 +39,8 @@ class UserResourceBasic extends JsonResource
             'href'              => route('api.users.profile', $this->resource, false),
             'attributes'        => [
                 'slug'              => $this->resource->slug,
-                'profile'           => ImageResource::make($this->resource->profile_image),
-                'banner'            => ImageResource::make($this->resource->banner_image),
+                'profile'           => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Profile)),
+                'banner'            => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Banner)),
                 'username'          => $this->resource->username,
                 'biography'         => $this->resource->biography,
                 'activityStatus'    => $this->resource->getActivityStatus()->description,

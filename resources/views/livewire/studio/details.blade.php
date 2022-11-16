@@ -10,7 +10,7 @@
     <x-slot:meta>
         <meta property="og:title" content="{{ $studio->name }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ $studio->synopsis ?? __('app.description') }}" />
-        <meta property="og:image" content="{{ $studio->profile_image_url ?? asset('images/static/placeholders/person_poster.webp') }}" />
+        <meta property="og:image" content="{{ $studio->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" />
         <meta property="og:type" content="profile" />
         <meta property="og:profile:username" content="{{ $studio->name }}" />
         <link rel="canonical" href="{{ route('studios.details', $studio) }}">
@@ -28,7 +28,7 @@
                         class="relative aspect-square rounded-full overflow-hidden"
                         style="height: 128px;"
                     >
-                        <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $studio->profile_image_url ?? asset('images/static/placeholders/studio_profile.webp') }}" alt="{{ $studio->name }} Profile" title="{{ $studio->name }}">
+                        <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $studio->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/studio_profile.webp') }}" alt="{{ $studio->name }} Profile" title="{{ $studio->name }}">
 
                         <div class="absolute top-0 left-0 h-full w-full border-2 border-solid border-black/20 rounded-full"></div>
                     </picture>

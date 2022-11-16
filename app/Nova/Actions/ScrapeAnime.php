@@ -2,6 +2,7 @@
 
 namespace App\Nova\Actions;
 
+use App\Enums\MediaCollection;
 use App\Models\Anime;
 use Artisan;
 use Exception;
@@ -39,7 +40,7 @@ class ScrapeAnime extends Action implements ShouldQueue
                     Artisan::call('scrape:mal_anime', ['malID' => $model->mal_id]);
 
                     if ($model->tvdb_id) {
-                        if (empty($model->banner_image)) {
+                        if (empty($model->getFirstMedia(MediaCollection::Banner))) {
                             Artisan::call('scrape:tvdb_banners', ['tvdbID' => $model->tvdb_id]);
                         }
                         Artisan::call('scrape:tvdb_episode', ['tvdbID' => $model->tvdb_id]);

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\MediaCollection;
 use App\Traits\InteractsWithMediaExtension;
-use App\Traits\Model\HasSymbolImage;
 use App\Traits\Model\TvRated;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -19,7 +19,6 @@ use Spatie\Sluggable\SlugOptions;
 class Genre extends KModel implements HasMedia, Sitemapable
 {
     use HasSlug,
-        HasSymbolImage,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         SoftDeletes,
@@ -28,16 +27,6 @@ class Genre extends KModel implements HasMedia, Sitemapable
     // Table name
     const TABLE_NAME = 'genres';
     protected $table = self::TABLE_NAME;
-
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [
-        'symbol_image',
-        'symbol_image_url',
-    ];
 
     /**
      * Get the route key for the model.
@@ -69,7 +58,7 @@ class Genre extends KModel implements HasMedia, Sitemapable
      */
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection($this->symbolImageCollectionName)
+        $this->addMediaCollection(MediaCollection::Symbol)
             ->singleFile();
     }
 

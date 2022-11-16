@@ -2,16 +2,15 @@
 
 namespace App\Models;
 
+use App\Enums\MediaCollection;
 use App\Traits\InteractsWithMediaExtension;
-use App\Traits\Model\HasSymbolImage;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Badge extends KModel implements HasMedia
 {
-    use HasSymbolImage,
-        InteractsWithMedia,
+    use InteractsWithMedia,
         InteractsWithMediaExtension;
 
     // Table name
@@ -23,7 +22,7 @@ class Badge extends KModel implements HasMedia
      */
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection($this->symbolImageCollectionName)
+        $this->addMediaCollection(MediaCollection::Symbol)
             ->singleFile();
     }
 

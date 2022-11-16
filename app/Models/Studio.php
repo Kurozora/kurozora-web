@@ -3,11 +3,9 @@
 namespace App\Models;
 
 use App\Casts\AsArrayObject;
+use App\Enums\MediaCollection;
 use App\Enums\StudioType;
 use App\Traits\InteractsWithMediaExtension;
-use App\Traits\Model\HasBannerImage;
-use App\Traits\Model\HasLogoImage;
-use App\Traits\Model\HasProfileImage;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\TvRated;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,9 +26,6 @@ use Spatie\Sluggable\SlugOptions;
 class Studio extends KModel implements HasMedia, Sitemapable
 {
     use HasFactory,
-        HasBannerImage,
-        HasLogoImage,
-        HasProfileImage,
         HasSlug,
         HasViews,
         InteractsWithMedia,
@@ -57,20 +52,6 @@ class Studio extends KModel implements HasMedia, Sitemapable
     protected $casts = [
         'founded' => 'date',
         'website_urls' => AsArrayObject::class,
-    ];
-
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [
-//        'banner_image',
-//        'banner_image_url',
-//        'logo_image',
-//        'logo_image_url',
-//        'profile_image',
-//        'profile_image_url',
     ];
 
     /**
@@ -103,11 +84,11 @@ class Studio extends KModel implements HasMedia, Sitemapable
      */
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection($this->bannerImageCollectionName)
+        $this->addMediaCollection(MediaCollection::Profile)
             ->singleFile();
-        $this->addMediaCollection($this->logoImageCollectionName)
+        $this->addMediaCollection(MediaCollection::Banner)
             ->singleFile();
-        $this->addMediaCollection($this->profileImageCollectionName)
+        $this->addMediaCollection(MediaCollection::Logo)
             ->singleFile();
     }
 

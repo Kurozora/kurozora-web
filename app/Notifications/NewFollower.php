@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Enums\MediaCollection;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -52,7 +53,7 @@ class NewFollower extends Notification implements ShouldQueue
         return [
             'userID'            => $this->follower->id,
             'username'          => $this->follower->username,
-            'profileImageURL'   => $this->follower->profile_image_url
+            'profileImageURL'   => $this->follower->getFirstMediaFullUrl(MediaCollection::Profile())
         ];
     }
 

@@ -38,7 +38,7 @@
                             @svg('camera', 'fill-current', ['width' => '24'])
                         </button>
 
-                        @if (!empty(auth()->user()->banner_image_url))
+                        @if (!empty(auth()->user()->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner())))
                             <button
                                 class="inline-flex items-center justify-center w-10 h-10 pt-2 pr-2 pb-2 pl-2 text-red-500 rounded-full transition duration-150 ease-in-out hover:bg-white/20 focus:outline-none focus:bg-white/60 sm:w-12 sm:h-12"
                                 wire:click="deleteBannerImage"
@@ -56,7 +56,7 @@
                     <picture class="relative w-full overflow-hidden">
                         <img
                             class="inline-block w-full h-40 object-cover sm:h-80"
-                            style="background-color: {{ auth()->user()->banner_image?->custom_properties['background_color'] ?? '#FF9300' }}"
+                            style="background-color: {{ auth()->user()->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#FF9300' }}"
                             src=""
                             x-bind:src="bannerImagePreview"
                             alt="{{ auth()->user()->username }} Banner Image"
@@ -75,7 +75,7 @@
                             @svg('camera', 'fill-current text-white', ['width' => '24'])
                         </button>
 
-                        @if (!empty(auth()->user()->banner_image_url))
+                        @if (!empty(auth()->user()->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner())))
                             <button
                                 class="inline-flex items-center justify-center w-12 h-12 pt-2 pr-2 pb-2 pl-2 text-red-500 rounded-full hover:bg-white/20 focus:outline-none focus:bg-white/60 transition duration-150 ease-in-out"
                                 wire:click="deleteBannerImage"
@@ -120,7 +120,7 @@
                             @svg('camera', 'fill-current', ['width' => '24'])
                         </button>
 
-                        @if (!str_starts_with(auth()->user()->profile_image_url, 'https://ui-avatars.com/'))
+                        @if (!str_starts_with(auth()->user()->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()), 'https://ui-avatars.com/'))
                             <button
                                 class="inline-flex items-center justify-center w-8 h-8 pt-2 pr-2 pb-2 pl-2 text-red-500 rounded-full transition duration-150 ease-in-out hover:bg-white/20 focus:outline-none focus:bg-white/60 sm:w-12 sm:h-12"
                                 wire:click="deleteProfileImage"
@@ -149,7 +149,7 @@
                             @svg('camera', 'fill-current', ['width' => '24'])
                         </button>
 
-                        @if (!str_starts_with(auth()->user()->profile_image_url, 'https://ui-avatars.com/'))
+                        @if (!str_starts_with(auth()->user()->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()), 'https://ui-avatars.com/'))
                             <button
                                 class="inline-flex items-center justify-center w-8 h-8 pt-2 pr-2 pb-2 pl-2 text-red-500 rounded-full transition duration-150 ease-in-out hover:bg-white/20 focus:outline-none focus:bg-white/60 sm:w-12 sm:h-12"
                                 wire:click="deleteProfileImage"

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MediaCollection;
 use App\Helpers\JSONResult;
 use App\Http\Requests\Web\SignUpRequest;
 use App\Models\User;
@@ -42,7 +43,7 @@ class RegistrationController extends Controller
         if ($request->hasFile('profileImage') &&
             $request->file('profileImage')->isValid()) {
             // Save the uploaded profile image
-            $newUser->updateProfileImage($request->file('profileImage'));
+            $newUser->updateImageMedia(MediaCollection::Profile(), $request->file('profileImage'));
         }
 
         event(new Registered($newUser));

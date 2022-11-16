@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\MediaCollection;
 use App\Traits\InteractsWithMediaExtension;
-use App\Traits\Model\HasBannerImage;
 use App\Traits\Model\HasComments;
 use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasViews;
@@ -26,8 +26,7 @@ use Spatie\Sitemap\Tags\Url;
 
 class Episode extends KModel implements HasMedia, Sitemapable
 {
-    use HasBannerImage,
-        HasComments,
+    use HasComments,
         HasFactory,
         HasVideos,
         HasViews,
@@ -73,8 +72,6 @@ class Episode extends KModel implements HasMedia, Sitemapable
      * @var array
      */
     protected $appends = [
-//        'banner_image',
-//        'banner_image_url',
 //        'duration_string',
     ];
 
@@ -103,7 +100,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
      */
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection($this->bannerImageCollectionName)
+        $this->addMediaCollection(MediaCollection::Banner)
             ->singleFile();
     }
 

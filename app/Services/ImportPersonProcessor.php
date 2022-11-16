@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\MediaCollection;
 use App\Models\KDashboard\People as KPerson;
 use App\Models\Person;
 use Carbon\Carbon;
@@ -17,7 +18,7 @@ class ImportPersonProcessor
      * @param Collection|KPerson[] $kPeople
      * @return void
      */
-    public function process(Collection|array $kPeople)
+    public function process(Collection|array $kPeople): void
     {
         foreach ($kPeople as $kPerson) {
             $person = Person::where([
@@ -48,10 +49,10 @@ class ImportPersonProcessor
             }
 
             // Download poster when available and if not already present
-            if (!empty($kPerson->image_url) && !empty($person) && empty($person->profile_image)) {
+            if (!empty($kPerson->image_url) && !empty($person) && empty($person->getFirstMedia(MediaCollection::Profile))) {
                 try {
                     $name = $person->full_name ?: $person->full_given_name;
-                    $person->updateProfileImage($kPerson->image_url, $name);
+                    $person->updateImageMedia(MediaCollection::Profile(), $kPerson->image_url, $name);
                 } catch (Exception $e) {
                     Log::info('person: ' . $e->getMessage());
                     Log::info('person mal id: ' . $kPerson->id);

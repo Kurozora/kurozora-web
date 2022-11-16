@@ -194,7 +194,7 @@
                                 >
                                     <div
                                         class="h-8 w-8 bg-cover rounded-full"
-                                        style="background-image: url({{ auth()->user()?->profile_image_url ?? asset('images/static/placeholders/user_profile.webp') }});"
+                                        style="background-image: url({{ auth()->user()?->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/user_profile.webp') }});"
                                         alt="{{ auth()->user()?->username ?? __('Guest') }} {{ __('Profile') }}"
                                         title="{{ auth()->user()?->username ?? __('Guest') }}"
                                         role="img"
@@ -307,7 +307,7 @@
                 @auth
                     <div class="flex items-center pl-4 pr-4 pb-4">
                         <div class="shrink-0">
-                            <div class="h-10 w-10 bg-cover rounded-full" style="background-image: url({{ auth()->user()->profile_image_url }});" alt="{{ auth()->user()->username }}" role="img"></div>
+                            <div class="h-10 w-10 bg-cover rounded-full" style="background-image: url({{ auth()->user()->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }});" alt="{{ auth()->user()->username }}" role="img"></div>
                         </div>
 
                         <div class="ml-3">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\MediaCollection;
 use App\Models\Badge;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -23,17 +24,15 @@ class BadgeResource extends JsonResource
      */
     public function toArray($request): array
     {
-        $badge = $this->resource;
-
         return [
-            'id'            => $badge->id,
+            'id'            => $this->resource->id,
             'type'          => 'badges',
             'attributes'    => [
-                'name'              => $badge->name,
-                'description'       => $badge->description,
-                'textColor'         => $badge->text_color,
-                'backgroundColor'   => $badge->background_color,
-                'symbol'            => ImageResource::make($this->resource->symbol_image),
+                'name'              => $this->resource->name,
+                'description'       => $this->resource->description,
+                'textColor'         => $this->resource->text_color,
+                'backgroundColor'   => $this->resource->background_color,
+                'symbol'            => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Symbol)),
             ]
         ];
     }

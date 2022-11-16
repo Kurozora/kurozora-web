@@ -2,12 +2,14 @@
 
 namespace Tests\API;
 
+use App\Enums\MediaCollection;
 use App\Models\Anime;
 use App\Models\SessionAttribute;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Tests\TestCase;
@@ -122,13 +124,13 @@ class MeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Assert that the profile image was uploaded properly
-        $profileImage = $this->user->profile_image;
+        $profileImage = $this->user->getFirstMedia(MediaCollection::Profile);
 
         $this->assertNotNull($profileImage);
         $this->assertFileExists($profileImage->first()->getPath());
 
         // Delete the profile image
-        $this->user->deleteProfileImage();
+        $this->user->clearMediaCollection(MediaCollection::Profile);
     }
 
     /**
@@ -137,6 +139,7 @@ class MeTest extends TestCase
      * @return void
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
+     * @throws FileCannotBeAdded
      * @test
      */
     function user_can_remove_their_profile_image(): void
@@ -147,7 +150,7 @@ class MeTest extends TestCase
         // Create fake 100kb image and set it as the profile image
         $uploadFile = UploadedFile::fake()->image('ProfileImage.jpg', 250, 250)->size(100);
 
-        $this->user->updateProfileImage($uploadFile);
+        $this->user->updateImageMedia(MediaCollection::Profile(), $uploadFile);
 
         // Send the update request
         $response = $this->auth()->json('POST', 'v1/me', [
@@ -158,7 +161,7 @@ class MeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Assert that the profile image was removed properly
-        $profileImage = $this->user->profile_image;
+        $profileImage = $this->user->getFirstMedia(MediaCollection::Profile);
 
         $this->assertNull($profileImage);
     }
@@ -186,13 +189,13 @@ class MeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Assert that the banner image was uploaded properly
-        $bannerImageImage = $this->user->banner_image;
+        $bannerImageImage = $this->user->getFirstMedia(MediaCollection::Banner);
 
         $this->assertNotNull($bannerImageImage);
         $this->assertFileExists($bannerImageImage->first()->getPath());
 
         // Delete the banner
-        $this->user->deleteBannerImage();
+        $this->user->clearMediaCollection(MediaCollection::Banner);
     }
 
     /**
@@ -201,6 +204,7 @@ class MeTest extends TestCase
      * @return void
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
+     * @throws FileCannotBeAdded
      * @test
      */
     function user_can_remove_their_banner(): void
@@ -211,7 +215,7 @@ class MeTest extends TestCase
         // Create fake 100kb image and set it as the banner
         $uploadFile = UploadedFile::fake()->image('banner.jpg', 250, 250)->size(100);
 
-        $this->user->updateBannerImage($uploadFile);
+        $this->user->updateImageMedia(MediaCollection::Banner(), $uploadFile);
 
         // Send the update request
         $response = $this->auth()->json('POST', 'v1/me', [
@@ -222,7 +226,7 @@ class MeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Assert that the banner was removed properly
-        $bannerImage = $this->user->banner_image;
+        $bannerImage = $this->user->getFirstMedia(MediaCollection::Banner);
 
         $this->assertNull($bannerImage);
     }

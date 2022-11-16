@@ -2,6 +2,7 @@
 
 namespace App\Processors\MAL;
 
+use App\Enums\MediaCollection;
 use App\Enums\SongType;
 use App\Enums\StudioType;
 use App\Models\Anime;
@@ -731,9 +732,9 @@ class AnimeProcessor implements ItemProcessorInterface
      */
     private function addPosterImage(?string $imageUrl, Model|Builder|Anime $anime): void
     {
-        if (!empty($imageUrl) && empty($anime->poster_image)) {
+        if (!empty($imageUrl) && empty($anime->getFirstMedia(MediaCollection::Poster))) {
             try {
-                $anime->updatePosterImage($imageUrl, $anime->original_title);
+                $anime->updateImageMedia(MediaCollection::Poster(), $imageUrl, $anime->original_title);
             } catch (Exception $e) {
                 logger()->channel('stderr')->error($e->getMessage());
             }

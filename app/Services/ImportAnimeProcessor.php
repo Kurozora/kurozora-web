@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\DayOfWeek;
+use App\Enums\MediaCollection;
 use App\Enums\SeasonOfYear;
 use App\Models\Anime;
 use App\Models\KDashboard\Anime as KAnime;
@@ -38,7 +39,7 @@ class ImportAnimeProcessor
      * @param Collection|KAnime[] $kAnimes
      * @return void
      */
-    public function process(Collection|array $kAnimes)
+    public function process(Collection|array $kAnimes): void
     {
         foreach ($kAnimes as $kAnime) {
             $anime = Anime::withoutGlobalScopes()
@@ -123,9 +124,9 @@ class ImportAnimeProcessor
             }
 
             // Download poster when available and if not already present
-            if (!empty($kAnime->image_url) && empty($anime->poster_image)) {
+            if (!empty($kAnime->image_url) && empty($anime->getFirstMedia(MediaCollection::Poster))) {
                 try {
-                    $anime->updatePosterImage($kAnime->image_url, $anime->original_title);
+                    $anime->updateImageMedia(MediaCollection::Poster(), $kAnime->image_url, $anime->original_title);
                 } catch (Exception $e) {
                     Log::info($e->getMessage());
                 }

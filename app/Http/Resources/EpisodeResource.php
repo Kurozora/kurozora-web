@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\MediaCollection;
 use App\Enums\WatchStatus;
 use App\Models\Episode;
 use Illuminate\Http\Request;
@@ -27,8 +28,8 @@ class EpisodeResource extends JsonResource
         $resource = EpisodeResourceIdentity::make($this->resource)->toArray($request);
         $resource = array_merge($resource, [
             'attributes'    => [
-                'poster'        => ImageResource::make($this->resource->season->poster_image),
-                'banner'        => ImageResource::make($this->resource->banner_image),
+                'poster'        => ImageResource::make($this->resource->season->getFirstMedia(MediaCollection::Poster)),
+                'banner'        => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Banner)),
                 'number'        => $this->resource->number,
                 'numberTotal'   => $this->resource->number_total,
                 'title'         => $this->resource->title,

@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Profile;
 
 use App\Contracts\UpdatesUserProfileInformation;
+use App\Enums\MediaCollection;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
@@ -96,7 +97,7 @@ class UpdateProfileInformationForm extends Component
      */
     public function deleteProfileImage(): void
     {
-        auth()->user()->deleteProfileImage();
+        auth()->user()->clearMediaCollection(MediaCollection::Profile);
 
         $this->emitSelf('refresh-component');
         $this->emit('refresh-profile-image');
@@ -110,7 +111,7 @@ class UpdateProfileInformationForm extends Component
      */
     public function deleteBannerImage(): void
     {
-        auth()->user()->deleteBannerImage();
+        auth()->user()->clearMediaCollection(MediaCollection::Banner);
 
         $this->emitSelf('refresh-component');
         $this->emit('refresh-banner-image');

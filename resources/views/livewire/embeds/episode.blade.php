@@ -13,7 +13,7 @@
 
         <meta property="og:title" content="{{ __(':x episode :y', ['x' => $this->anime?->title, 'y' => $episode->number_total]) }} | {{ $episode->title }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ $episode->synopsis ?? __('app.description') }}" />
-        <meta property="og:image" content="{{ $episode->banner_image_url ?? $this->season?->poster_image_url ?? asset('images/static/placeholders/episode_banner.webp') }}" />
+        <meta property="og:image" content="{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $this->season?->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/episode_banner.webp') }}" />
         <meta property="og:type" content="video.episode" />
         <meta property="og:video:type" content="text/html">
         <meta property="video:series" content="{{ $this->anime?->title }}" />
@@ -25,7 +25,7 @@
         <meta property="twitter:title" content="{{ $episode->title }} — {{ config('app.name') }}" />
         <meta property="twitter:description" content="{{ $episode->synopsis }}" />
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:image" content="{{ $episode->banner_image_url ?? $this->season?->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
+        <meta property="twitter:image" content="{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $this->season?->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="twitter:image:alt" content="{{ $episode->synopsis }}" />
         <link rel="canonical" href="{{ route('embed.episodes', $episode) }}">
         <x-misc.schema>
@@ -33,14 +33,14 @@
             "url":"/episode/{{ $episode->id }}/",
             "name": "{{ $episode->title }}",
             "alternateName": "{{ $this->anime?->original_title }}",
-            "image": "{{ $episode->banner_image_url ?? $this->season?->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
+            "image": "{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $this->season?->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
             "description": "{{ $episode->synopsis }}",
             "aggregateRating": {
                 "@type":"AggregateRating",
                 "itemReviewed": {
                     "@type": "TVEpisode",
                     "image": [
-                        "{{ $episode->banner_image_url ?? $this->season?->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}"
+                        "{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $this->season?->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}"
                     ],
                     "name": "{{ $episode->title }}"
                 },
@@ -65,7 +65,7 @@
                     "name":"{{ $episode->title }}",
                     "description":"Official Trailer",
                     "embedUrl": "{{ $episode->videos()->first()->getUrl() ?? $this->anime?->videos()->first()->getUrl() }}",
-                    "thumbnailUrl": "{{ $episode->banner_image_url ?? $this->anime?->poster_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
+                    "thumbnailUrl": "{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $this->anime?->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
                     "uploadDate": "{{ $episode->first_aired?->format('Y-m-d') }}"
                 }
             @endif
@@ -88,13 +88,13 @@
     </x-slot:scripts>
 
     <div style="height: 100vh; max-height: calc(100vh)">
-        <div class="relative w-full h-full overflow-hidden z-0" style="background-color: {{ $episode->banner_image?->custom_properties['background_color'] ?? '#000000' }};">
+        <div class="relative w-full h-full overflow-hidden z-0" style="background-color: {{ $episode->getFirstMedia(\App\Enums\MediaCollection::Banner)?->custom_properties['background_color'] ?? '#000000' }};">
             <div class="relative w-full h-full overflow-hidden z-10">
                 @if (!empty($this->video))
                     {!! $this->video->getEmbed(['currentTime' => $t]) !!}
                 @else
                     <x-picture class="h-full">
-                        <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $episode->banner_image_url ?? $this->season?->poster_image_url ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
+                        <img class="w-full h-full aspect-video object-cover lazyload" data-sizes="auto" data-src="{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $this->season?->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $episode->title }} Banner" title="{{ $episode->title }}">
                     </x-picture>
                 @endif
             </div>

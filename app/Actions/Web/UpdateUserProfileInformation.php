@@ -3,6 +3,7 @@
 namespace App\Actions\Web;
 
 use App\Contracts\UpdatesUserProfileInformation;
+use App\Enums\MediaCollection;
 use App\Models\User;
 use App\Rules\ValidateBannerImage;
 use App\Rules\ValidateEmail;
@@ -47,11 +48,11 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         Validator::make($input, $rules)->validateWithBag('updateProfileInformation');
 
         if (isset($input['profileImage'])) {
-            $user->updateProfileImage($input['profileImage']->getRealPath());
+            $user->updateImageMedia(MediaCollection::Profile(), $input['profileImage']->getRealPath());
         }
 
         if (isset($input['bannerImage'])) {
-            $user->updateBannerImage($input['bannerImage']->getRealPath());
+            $user->updateImageMedia(MediaCollection::Banner(), $input['bannerImage']->getRealPath());
         }
 
         if ($input['email'] !== $user->email &&

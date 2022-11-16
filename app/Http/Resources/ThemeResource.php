@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\MediaCollection;
 use App\Models\Theme;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -30,7 +31,7 @@ class ThemeResource extends JsonResource
                 'slug'          => $this->resource->slug,
                 'name'          => $this->resource->name,
                 'color'         => $this->resource->color,
-                'symbol'        => ImageResource::make($this->resource->symbol_image),
+                'symbol'        => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Symbol)),
                 'description'   => $this->resource->description,
                 'isNSFW'        => (bool) $this->resource->is_nsfw
             ]

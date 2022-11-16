@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\MediaCollection;
+use App\Traits\InteractsWithMediaExtension;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -11,16 +13,20 @@ use Laravel\Nova\Actions\Actionable;
 use Laravel\Scout\Searchable;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sitemap\Contracts\Sitemapable;
 use Spatie\Sitemap\Tags\Url;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Song extends KModel implements Sitemapable
+class Song extends KModel implements HasMedia, Sitemapable
 {
     use Actionable,
         HasFactory,
         HasSlug,
+        InteractsWithMedia,
+        InteractsWithMediaExtension,
         LogsActivity,
         Searchable,
         SoftDeletes;
@@ -53,6 +59,15 @@ class Song extends KModel implements Sitemapable
     {
         return LogOptions::defaults()
             ->logAll();
+    }
+
+    /**
+     * Registers the media collections for the model.
+     */
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection(MediaCollection::Poster)
+            ->singleFile();
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\MediaCollection;
 use App\Models\Character;
 use App\Models\KDashboard\Character as KCharacter;
 use Exception;
@@ -16,7 +17,7 @@ class ImportCharacterProcessor
      * @param Collection|KCharacter[] $kCharacters
      * @return void
      */
-    public function process(Collection|array $kCharacters)
+    public function process(Collection|array $kCharacters): void
     {
         foreach ($kCharacters as $kCharacter) {
             $character = Character::where([
@@ -43,9 +44,9 @@ class ImportCharacterProcessor
             }
 
             // Download poster when available and if not already present
-            if (!empty($kCharacter->image_url) && !empty($character) && empty($character->profile_image)) {
+            if (!empty($kCharacter->image_url) && !empty($character) && empty($character->getFirstMedia(MediaCollection::Profile))) {
                 try {
-                    $character->updateProfileImage($kCharacter->image_url, $character->name);
+                    $character->updateImageMedia(MediaCollection::Profile(), $kCharacter->image_url, $character->name);
                 } catch (Exception $e) {
                     Log::info('character:' . $e->getMessage());
                     Log::info('character mal id: ' . $kCharacter->id);

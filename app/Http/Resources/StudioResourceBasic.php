@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\MediaCollection;
 use App\Models\AnimeStudio;
 use App\Models\Studio;
 use Illuminate\Http\Request;
@@ -28,7 +29,9 @@ class StudioResourceBasic extends JsonResource
         return array_merge($resource, [
             'attributes'    => [
                 'slug'          => $this->resource->slug,
-                'logo'          => ImageResource::make($this->resource->profile_image),
+                'profile'       => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Profile)),
+                'banner'        => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Banner)),
+                'logo'          => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Logo)),
                 'name'          => $this->resource->name,
                 'about'         => $this->resource->about,
                 'address'       => $this->resource->address,

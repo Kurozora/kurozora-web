@@ -2,6 +2,7 @@
 
 namespace App\Processors\TVDB;
 
+use App\Enums\MediaCollection;
 use App\Helpers\ResmushIt;
 use App\Models\Anime;
 use App\Models\Episode;
@@ -273,11 +274,11 @@ class EpisodeProcessor implements ItemProcessorInterface
      */
     private function addBannerImage(?string $imageUrl, Model|Builder|Episode $episode, string $tvdbID): void
     {
-        if (!empty($imageUrl) && empty($episode->banner_image)) {
+        if (!empty($imageUrl) && empty($episode->getFirstMedia(MediaCollection::Banner))) {
             if ($response = ResmushIt::compress($imageUrl)) {
                 try {
                     $extension = pathinfo($imageUrl, PATHINFO_EXTENSION);
-                    $episode->updateBannerImage($response, $episode->title, [], $extension);
+                    $episode->updateImageMedia(MediaCollection::Banner(), $response, $episode->title, [], $extension);
                     logger()->channel('stderr')->info('✅️ [tvdb_id:' . $tvdbID . '] Done creating banner');
                 } catch (Exception $e) {
                     logger()->channel('stderr')->error('❌️ [tvdb_id:' . $tvdbID . '] ' . $e->getMessage());

@@ -10,7 +10,7 @@
     <div class="flex flex-nowrap">
         <section class="relative flex">
             <picture class="relative shrink-0 w-28 h-40 mr-2 rounded-lg overflow-hidden md:w-32 md:h-48">
-                <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $staff->person->profile_image_url ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $staff->person->full_name }} Profile Image" title="{{ $staff->person->full_name }}">
+                <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $staff->person->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp') }}" alt="{{ $staff->person->full_name }} Profile Image" title="{{ $staff->person->full_name }}">
 
                 <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
             </picture>

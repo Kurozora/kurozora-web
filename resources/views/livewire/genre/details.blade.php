@@ -17,7 +17,7 @@
     <x-slot:meta>
         <meta property="og:title" content="{{ $genre->name }} — {{ config('app.name') }}" />
         <meta property="og:description" content="{{ __('Discover the extensive list of :x anime only on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $genre->name]) }} {{ $genre->description }}" />
-        <meta property="og:image" content="{{ $genre->symbol_image_url ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
+        <meta property="og:image" content="{{ $genre->getFirstMediaFullUrl(\App\Enums\MediaCollection::Symbol()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('genres.details', $genre) }}">
     </x-slot:meta>
@@ -29,7 +29,7 @@
     <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
         <section class="relative mb-8 rounded-lg shadow-md overflow-hidden" style="{{ $backgroundColor }}">
             <picture class="flex justify-center">
-                <img class="aspect-square lazyload" width="250px" data-sizes="auto" data-src="{{ $genre->symbol_image_url ?? asset('images/static/icon/logo.webp') }}" alt="{{ $genre->name }} Symbol" title="{{ $genre->name }}">
+                <img class="aspect-square lazyload" width="250px" data-sizes="auto" data-src="{{ $genre->getFirstMediaFullUrl(\App\Enums\MediaCollection::Symbol()) ?? asset('images/static/icon/logo.webp') }}" alt="{{ $genre->name }} Symbol" title="{{ $genre->name }}">
             </picture>
 
             <div class="pr-3 pl-3 pt-4 pb-4 bg-black/30 backdrop-blur text-center">
