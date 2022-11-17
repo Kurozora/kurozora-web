@@ -139,7 +139,7 @@ class Character extends Resource
                 ->rules(['nullable', 'json']),
 
             Textarea::make('About')
-                ->onlyOnForms()
+                ->translatable()
                 ->help('A short description of the character.'),
 
             Text::make('Debut')

@@ -29,8 +29,7 @@ class AnimeDetails extends Command
      */
     public function handle(): int
     {
-        $animes = Anime::on('elb')
-            ->withoutGlobalScopes()
+        $animes = Anime::withoutGlobalScopes()
             ->where('mal_id', '!=', null)
             ->where('status_id', '!=', 4)
             ->whereDate('updated_at', '<', today())

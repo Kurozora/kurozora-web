@@ -44,6 +44,20 @@ class Kernel extends ConsoleKernel
             ->onOneServer();
 
         /**********************************************/
+        // Scrape upcoming anime twice a day
+        $schedule->command('scrape:mal_upcoming_anime')
+            ->twiceDaily()
+            ->name('Scrape upcoming anime')
+            ->onOneServer();
+
+        /**********************************************/
+        // Scrape upcoming anime twice a day
+        $schedule->command('fix:anime_details')
+            ->twiceDaily()
+            ->name('Fix anime details')
+            ->onOneServer();
+
+        /**********************************************/
         // Generate sitemap every day
 //        $schedule->command('sitemap:generate')
 //            ->daily()
@@ -63,13 +77,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('calculate:anime_library_stats')
             ->daily()
             ->name('Calculate anime library stats')
-            ->onOneServer();
-
-        /**********************************************/
-        // Scrape upcoming anime twice a day
-        $schedule->command('scrape:mal_upcoming_anime')
-            ->twiceDaily()
-            ->name('Scrape upcoming anime')
             ->onOneServer();
 
         /**********************************************/
