@@ -4,6 +4,7 @@ namespace App\Nova;
 
 use App\Enums\AstrologicalSign;
 use App\Enums\CharacterStatus;
+use App\Enums\MediaCollection;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsToMany;
@@ -76,45 +77,45 @@ class Character extends Resource
 
             Heading::make('Media'),
 
-            Images::make('Profile Image', 'profile')
+            Images::make('Profile Image', MediaCollection::Profile)
                 ->showStatistics()
                 ->setFileName(function($originalFilename, $extension, $model) {
                     return Uuid::uuid4() . '.' . $extension;
                 })
                 ->setName(function($originalFilename, $model) {
                     return $this->resource->name;
-                })
-                ->customPropertiesFields([
-                    Heading::make('Colors (automatically generated if empty)'),
-
-                    Color::make('Background Color')
-                        ->slider()
-                        ->help('The average background color of the image.'),
-
-                    Color::make('Text Color 1')
-                        ->slider()
-                        ->help('The primary text color that may be used if the background color is displayed.'),
-
-                    Color::make('Text Color 2')
-                        ->slider()
-                        ->help('The secondary text color that may be used if the background color is displayed.'),
-
-                    Color::make('Text Color 3')
-                        ->slider()
-                        ->help('The tertiary text color that may be used if the background color is displayed.'),
-
-                    Color::make('Text Color 4')
-                        ->slider()
-                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
-
-                    Heading::make('Dimensions (automatically generated if empty)'),
-
-                    Number::make('Width')
-                        ->help('The maximum width available for the image.'),
-
-                    Number::make('Height')
-                        ->help('The maximum height available for the image.'),
-                ]),
+                }),
+//                ->customPropertiesFields([
+//                    Heading::make('Colors (automatically generated if empty)'),
+//
+//                    Color::make('Background Color')
+//                        ->slider()
+//                        ->help('The average background color of the image.'),
+//
+//                    Color::make('Text Color 1')
+//                        ->slider()
+//                        ->help('The primary text color that may be used if the background color is displayed.'),
+//
+//                    Color::make('Text Color 2')
+//                        ->slider()
+//                        ->help('The secondary text color that may be used if the background color is displayed.'),
+//
+//                    Color::make('Text Color 3')
+//                        ->slider()
+//                        ->help('The tertiary text color that may be used if the background color is displayed.'),
+//
+//                    Color::make('Text Color 4')
+//                        ->slider()
+//                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
+//
+//                    Heading::make('Dimensions (automatically generated if empty)'),
+//
+//                    Number::make('Width')
+//                        ->help('The maximum width available for the image.'),
+//
+//                    Number::make('Height')
+//                        ->help('The maximum height available for the image.'),
+//                ]),
 
             Heading::make('Personal Information'),
 

@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use App\Enums\DayOfWeek;
+use App\Enums\MediaCollection;
 use App\Enums\SeasonOfYear;
 use App\Nova\Actions\FixAnimeAiringSeason;
 use App\Nova\Actions\ScrapeAnime;
@@ -141,47 +142,47 @@ class Anime extends Resource
 
             Heading::make('Media'),
 
-            Images::make('Poster')
+            Images::make('Poster', MediaCollection::Poster)
                 ->showStatistics()
                 ->setFileName(function($originalFilename, $extension, $model) {
                     return Uuid::uuid4() . '.' . $extension;
                 })
                 ->setName(function($originalFilename, $model) {
                     return $this->resource->original_title;
-                })
-                ->customPropertiesFields([
-                    Heading::make('Colors (automatically generated if empty)'),
+                }),
+//                ->customPropertiesFields([
+//                    Heading::make('Colors (automatically generated if empty)'),
+//
+//                    Color::make('Background Color')
+//                        ->slider()
+//                        ->help('The average background color of the image.'),
+//
+//                    Color::make('Text Color 1')
+//                        ->slider()
+//                        ->help('The primary text color that may be used if the background color is displayed.'),
+//
+//                    Color::make('Text Color 2')
+//                        ->slider()
+//                        ->help('The secondary text color that may be used if the background color is displayed.'),
+//
+//                    Color::make('Text Color 3')
+//                        ->slider()
+//                        ->help('The tertiary text color that may be used if the background color is displayed.'),
+//
+//                    Color::make('Text Color 4')
+//                        ->slider()
+//                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
+//
+//                    Heading::make('Dimensions (automatically generated if empty)'),
+//
+//                    Number::make('Width')
+//                        ->help('The maximum width available for the image.'),
+//
+//                    Number::make('Height')
+//                        ->help('The maximum height available for the image.'),
+//                ]),
 
-                    Color::make('Background Color')
-                        ->slider()
-                        ->help('The average background color of the image.'),
-
-                    Color::make('Text Color 1')
-                        ->slider()
-                        ->help('The primary text color that may be used if the background color is displayed.'),
-
-                    Color::make('Text Color 2')
-                        ->slider()
-                        ->help('The secondary text color that may be used if the background color is displayed.'),
-
-                    Color::make('Text Color 3')
-                        ->slider()
-                        ->help('The tertiary text color that may be used if the background color is displayed.'),
-
-                    Color::make('Text Color 4')
-                        ->slider()
-                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
-
-                    Heading::make('Dimensions (automatically generated if empty)'),
-
-                    Number::make('Width')
-                        ->help('The maximum width available for the image.'),
-
-                    Number::make('Height')
-                        ->help('The maximum height available for the image.'),
-                ]),
-
-            Images::make('Banner')
+            Images::make('Banner', MediaCollection::Banner)
                 ->hideFromIndex()
                 ->showStatistics()
                 ->setFileName(function($originalFilename, $extension, $model) {
@@ -189,38 +190,38 @@ class Anime extends Resource
                 })
                 ->setName(function($originalFilename, $model) {
                     return $this->resource->original_title;
-                })
-                ->customPropertiesFields([
-                    Heading::make('Colors (automatically generated if empty)'),
-
-                    Color::make('Background Color')
-                        ->slider()
-                        ->help('The average background color of the image.'),
-
-                    Color::make('Text Color 1')
-                        ->slider()
-                        ->help('The primary text color that may be used if the background color is displayed.'),
-
-                    Color::make('Text Color 2')
-                        ->slider()
-                        ->help('The secondary text color that may be used if the background color is displayed.'),
-
-                    Color::make('Text Color 3')
-                        ->slider()
-                        ->help('The tertiary text color that may be used if the background color is displayed.'),
-
-                    Color::make('Text Color 4')
-                        ->slider()
-                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
-
-                    Heading::make('Dimensions (automatically generated if empty)'),
-
-                    Number::make('Width')
-                        ->help('The maximum width available for the image.'),
-
-                    Number::make('Height')
-                        ->help('The maximum height available for the image.'),
-                ]),
+                }),
+//                ->customPropertiesFields([
+//                    Heading::make('Colors (automatically generated if empty)'),
+//
+//                    Color::make('Background Color')
+//                        ->slider()
+//                        ->help('The average background color of the image.'),
+//
+//                    Color::make('Text Color 1')
+//                        ->slider()
+//                        ->help('The primary text color that may be used if the background color is displayed.'),
+//
+//                    Color::make('Text Color 2')
+//                        ->slider()
+//                        ->help('The secondary text color that may be used if the background color is displayed.'),
+//
+//                    Color::make('Text Color 3')
+//                        ->slider()
+//                        ->help('The tertiary text color that may be used if the background color is displayed.'),
+//
+//                    Color::make('Text Color 4')
+//                        ->slider()
+//                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
+//
+//                    Heading::make('Dimensions (automatically generated if empty)'),
+//
+//                    Number::make('Width')
+//                        ->help('The maximum width available for the image.'),
+//
+//                    Number::make('Height')
+//                        ->help('The maximum height available for the image.'),
+//                ]),
 
             Heading::make('Meta information'),
 
