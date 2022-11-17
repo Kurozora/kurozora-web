@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\MediaCollection;
 use App\Enums\StatusBarStyle;
 use App\Enums\VisualEffectViewStyle;
 use App\Traits\InteractsWithMediaExtension;
-use App\Traits\Model\HasScreenshotImage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Response;
@@ -17,7 +17,6 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class AppTheme extends KModel implements HasMedia
 {
     use HasFactory,
-        HasScreenshotImage,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         Searchable,
@@ -33,12 +32,18 @@ class AppTheme extends KModel implements HasMedia
      * @var array
      */
     protected $appends = [
-//        'screenshot_image',
-//        'screenshot_image_collection',
-//        'screenshot_image_url',
 //        'status_bar_style',
 //        'visual_effect_view_style',
     ];
+
+    /**
+     * Registers the media collections for the model.
+     */
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection(MediaCollection::Screenshot)
+            ->singleFile();
+    }
 
     /**
      * Get the indexable data array for the model.

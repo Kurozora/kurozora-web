@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\MediaCollection;
 use App\Models\AppTheme;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -28,7 +29,7 @@ class AppThemeResource extends JsonResource
             'type'          => 'themes',
             'href'          => route('api.theme-store.details', $this->resource, false),
             'attributes'        => [
-                'screenshots'   => ImageResource::collection($this->resource->screenshot_image_collection),
+                'screenshots'   => ImageResource::collection($this->resource->getMedia(MediaCollection::Screenshot)),
                 'name'          => $this->resource->name,
                 'downloadLink'  => route('api.theme-store.download', ['appTheme' => $this->resource->id]),
                 'downloadCount' => $this->resource->download_count,
