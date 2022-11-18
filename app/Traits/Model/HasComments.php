@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 trait HasComments
 {
@@ -17,6 +18,12 @@ trait HasComments
     public static function bootHasComments(): void
     {
         static::deleting(function (Model $model) {
+            if (in_array(SoftDeletes::class, class_uses_recursive($model))) {
+                if (!$model->forceDeleting) {
+                    return;
+                }
+            }
+
             $model->comments()->delete();
         });
     }

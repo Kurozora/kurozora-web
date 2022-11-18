@@ -5,6 +5,7 @@ namespace App\Traits\Model;
 use App\Models\Video;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 trait HasVideos
 {
@@ -16,6 +17,12 @@ trait HasVideos
     public static function bootHasVideos(): void
     {
         static::deleting(function (Model $model) {
+            if (in_array(SoftDeletes::class, class_uses_recursive($model))) {
+                if (!$model->forceDeleting) {
+                    return;
+                }
+            }
+
             $model->videos()->delete();
         });
     }
