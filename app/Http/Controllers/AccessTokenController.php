@@ -75,7 +75,7 @@ class AccessTokenController
             'platform_version'  => $data['platform_version'],
             'device_vendor'     => $data['device_vendor'],
             'device_model'      => $data['device_model'],
-        ]);
+        ], true);
 
         return JSONResult::success([
             'data'                  => [

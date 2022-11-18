@@ -71,7 +71,7 @@ class SignInWithAppleController extends Controller
             'platform_version'  => $data['platform_version'],
             'device_vendor'     => $data['device_vendor'],
             'device_model'      => $data['device_model'],
-        ]);
+        ], true);
 
         // Prepare response
         $shouldSetupAccount = $user->username == null;

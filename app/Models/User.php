@@ -489,9 +489,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @param Session|PersonalAccessToken $model
      * @param array $options
+     * @param bool $notify
      * @return SessionAttribute
      */
-    function createSessionAttributes(Session|PersonalAccessToken $model, array $options = []): SessionAttribute
+    function createSessionAttributes(Session|PersonalAccessToken $model, array $options = [], bool $notify = false): SessionAttribute
     {
         $options = new OptionsBag($options);
 
@@ -516,7 +517,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         }
 
         // Send notification
-        if ($options->get('notify', true)) {
+        if ($notify) {
             $this->notify(new NewSession($sessionAttribute));
         }
 
