@@ -88,6 +88,15 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     protected $guarded = [];
 
     /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = [
+        'media',
+    ];
+
+    /**
      * The attributes that should be cast to native types.
      *
      * @var array

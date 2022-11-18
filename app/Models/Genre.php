@@ -29,6 +29,16 @@ class Genre extends KModel implements HasMedia, Sitemapable
     protected $table = self::TABLE_NAME;
 
     /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = [
+        'media',
+        'tv_rating',
+    ];
+
+    /**
      * Get the route key for the model.
      *
      * @return string
