@@ -1,4 +1,24 @@
 <main>
+    <x-slot:title>
+        {{ __('Press-Kit') }}
+    </x-slot:title>
+
+    <x-slot:description>
+        {{ __('Get Started! Download the full Kurozora press-kit which includes logos and banners. Download Press-Kit.') }}
+    </x-slot:description>
+
+    <x-slot:meta>
+        <meta property="og:title" content="{{ __('Press-Kit') }} — {{ config('app.name') }}" />
+        <meta property="og:description" content="{{ __('Get Started! Download the full Kurozora press-kit which includes logos and banners. Download Press-Kit.') }}" />
+        <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href="{{ route('misc.press-kit') }}">
+    </x-slot:meta>
+
+    <x-slot:appArgument>
+        explore
+    </x-slot:appArgument>
+
     <div>
         {{-- Brand --}}
         <section class="relative pl-4 pr-4 pt-36 pb-10 overflow-hidden sm:px-6">
@@ -123,6 +143,7 @@
                         <p>RGB 53, 58, 80</p>
                         <p>CMYK 34, 28, 0, 69</p>
                         <p>HSL 229°, 20%, 26%</p>
+                        <p>CIELab 24.83, 3.92, -14.05</p>
                     </div>
                 </div>
 
@@ -133,6 +154,7 @@
                         <p>RGB 255, 147, 0</p>
                         <p>CMYK 0, 42, 100, 0</p>
                         <p>HSL 35°, 100%, 50%</p>
+                        <p>CIELab 70.96, 33.26, 76.41</p>
                     </div>
                 </div>
 
@@ -143,6 +165,7 @@
                         <p>RGB 234, 179, 8</p>
                         <p>CMYK 0, 24, 97, 8</p>
                         <p>HSL 45°, 93%, 47%</p>
+                        <p>CIELab 75.92, 7.70, 77.63</p>
                     </div>
                 </div>
 
@@ -153,6 +176,7 @@
                         <p>RGB 132, 204, 22</p>
                         <p>CMYK 35, 0, 89, 20</p>
                         <p>HSL 84°, 81%, 44%</p>
+                        <p>CIELab 74.92, -46.78, 71.60</p>
                     </div>
                 </div>
 
@@ -163,6 +187,7 @@
                         <p>RGB 14, 165, 233</p>
                         <p>CMYK 94, 29, 0, 9</p>
                         <p>HSL 199°, 89%, 48%</p>
+                        <p>CIELab 64.07, -11.08, -43.87</p>
                     </div>
                 </div>
 
@@ -173,6 +198,7 @@
                         <p>RGB 236, 72, 153</p>
                         <p>CMYK 0, 69, 35, 7</p>
                         <p>HSL 330°, 81%, 60%</p>
+                        <p>CIELab 56.85, 68.82, -8.29</p>
                     </div>
                 </div>
 
@@ -183,6 +209,7 @@
                         <p>RGB 239, 68, 68</p>
                         <p>CMYK 0, 72, 72, 6</p>
                         <p>HSL 0°, 84%, 60%</p>
+                        <p>CIELab 54.97, 64.70, 39.13</p>
                     </div>
                 </div>
 
@@ -193,6 +220,7 @@
                         <p>RGB 255, 255, 255</p>
                         <p>CMYK 0, 0, 0, 0</p>
                         <p>HSL 0°, 0%, 100%</p>
+                        <p>CIELab 100.00, 0.01, -0.01</p>
                     </div>
                 </div>
 
@@ -203,6 +231,7 @@
                         <p>RGB 0, 0, 0</p>
                         <p>CMYK 60, 60, 60, 100</p>
                         <p>HSL 0°, 0%, 0%</p>
+                        <p>CIELab 0.00, 0.00, 0.00</p>
                     </div>
                 </div>
                 <div class="w-64 md:w-80 flex-grow"></div>
