@@ -16,6 +16,7 @@ use App\Http\Middleware\PreventRequestsDuringMaintenance;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\TrustProxies;
+use App\Http\Middleware\UserIsProOrSubscribed;
 use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
 use Illuminate\Auth\Middleware\Authorize;
@@ -99,6 +100,7 @@ class Kernel extends HttpKernel
         'password.confirm' => RequirePassword::class,
         'signed' => ValidateSignature::class,
         'throttle' => ThrottleRequests::class,
+        'user.is-pro-or-subscribed' => UserIsProOrSubscribed::class,
         'verified' => EnsureEmailIsVerified::class,
         'explore.always-enabled' => ExploreCategoryAlwaysEnabled::class
     ];

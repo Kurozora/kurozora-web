@@ -24,21 +24,34 @@ require 'Web/Authentication.php';
 
 // Landing pages
 require 'Web/Anime.php';
+require 'Web/AniDB.php';
+require 'Web/AniList.php';
+require 'Web/AnimePlanet.php';
+require 'Web/AniMixPlay.php';
+require 'Web/AniSearch.php';
 require 'Web/Characters.php';
 require 'Web/Embed.php';
 require 'Web/Episodes.php';
 require 'Web/Explore.php';
 require 'Web/Genres.php';
+require 'Web/IMDB.php';
+require 'Web/Kitsu.php';
 require 'Web/Library.php';
+require 'Web/LiveChart.php';
 require 'Web/Me.php';
+require 'Web/MyAnimeList.php';
+require 'Web/Notify.php';
 require 'Web/People.php';
 require 'Web/Profile.php';
+require 'Web/Syoboi.php';
 require 'Web/Search.php';
 require 'Web/Seasons.php';
 require 'Web/Songs.php';
 require 'Web/Studios.php';
 require 'Web/Theme.php';
 require 'Web/Theme Store.php';
+require 'Web/Trakt.php';
+require 'Web/TVDB.php';
 
 // Knowledge Base
 require 'Web/Knowledge Base.php';
