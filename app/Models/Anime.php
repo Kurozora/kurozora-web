@@ -92,6 +92,19 @@ class Anime extends KModel implements HasMedia, Sitemapable
     ];
 
     /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = [
+        'genres',
+        'media',
+        'stats',
+        'translations',
+        'tv_rating',
+    ];
+
+    /**
      * Casts rules.
      *
      * @var array
@@ -756,10 +769,10 @@ class Anime extends KModel implements HasMedia, Sitemapable
      * @param ?int $limit
      * @return mixed
      */
-    public function getRelations(?int $limit = null): mixed
+    public function getMediaRelations(?int $limit = null): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.relations', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit]);
+        $cacheKey = self::cacheKey(['name' => 'anime.media_relations', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_RELATIONS_SECONDS, function () use ($limit) {

@@ -46,6 +46,15 @@ class Person extends KModel implements HasMedia, Sitemapable
     protected $table = self::TABLE_NAME;
 
     /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = [
+        'media',
+    ];
+
+    /**
      * The attributes that should be cast.
      *
      * @var array

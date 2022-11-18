@@ -58,6 +58,16 @@ class Character extends KModel implements HasMedia, Sitemapable
     ];
 
     /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = [
+        'media',
+        'translations',
+    ];
+
+    /**
      * The attributes that should be cast.
      *
      * @var array
