@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Model\HasSessionAttribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -9,25 +10,21 @@ use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
 
 class PersonalAccessToken extends SanctumPersonalAccessToken
 {
-    use HasFactory;
+    use HasFactory,
+        HasSessionAttribute;
 
     // Table name
     const TABLE_NAME = 'personal_access_tokens';
     protected $table = self::TABLE_NAME;
 
     /**
-     * Bootstrap the model and its traits.
+     * The relations to eager load on every query.
      *
-     * @return void
+     * @var array
      */
-    static function boot(): void
-    {
-        parent::boot();
-
-        static::deleting(function(PersonalAccessToken $personalAccessToken) {
-            $personalAccessToken->session_attribute()->delete();
-        });
-    }
+    protected $with = [
+        'session_attribute',
+    ];
 
     /**
      * The user relationship of the access token.
@@ -46,6 +43,6 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
      */
     public function session_attribute(): MorphOne
     {
-        return $this->morphOne(SessionAttribute::class, 'model', localKey: 'token')->where('model_type', PersonalAccessToken::class);
+        return $this->morphOne(SessionAttribute::class, 'model', localKey: 'token');
     }
 }

@@ -5,20 +5,18 @@ namespace App\Models;
 use App\Rules\ValidatePlatformName;
 use App\Rules\ValidatePlatformVersion;
 use App\Rules\ValidateVendorName;
+use App\Traits\Model\HasSessionAttribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Session extends KModel
 {
-    use HasFactory;
+    use HasFactory,
+        HasSessionAttribute;
 
     // Table name
     const TABLE_NAME = 'sessions';
     protected $table = self::TABLE_NAME;
-
-    // How many days sessions are valid for by default
-    const VALID_FOR_DAYS = 10;
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -35,18 +33,13 @@ class Session extends KModel
     public $timestamps = false;
 
     /**
-     * Bootstrap the model and its traits.
+     * The relations to eager load on every query.
      *
-     * @return void
+     * @var array
      */
-    static function boot(): void
-    {
-        parent::boot();
-
-        static::deleting(function($session) {
-            $session->session_attribute()->delete();
-        });
-    }
+    protected $with = [
+        'session_attribute',
+    ];
 
     /**
      * Returns the user that owns the session.
@@ -56,16 +49,6 @@ class Session extends KModel
     function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * The session attribute of the session.
-     *
-     * @return MorphOne
-     */
-    function session_attribute(): MorphOne
-    {
-        return $this->morphOne(SessionAttribute::class, 'model')->where('model_type', Session::class);
     }
 
     /**

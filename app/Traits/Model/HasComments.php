@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 trait HasComments
 {
     /**
-     * Bootstrap the model with UUID.
+     * Bootstrap the model with Comments.
      *
      * @return void
      */
