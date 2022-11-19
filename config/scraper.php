@@ -18,6 +18,7 @@ return [
         'mal' => [
             'base' => 'https://myanimelist.net',
             'anime' => 'https://myanimelist.net/anime',
+            'anime_season' => 'https://myanimelist.net/anime/season',
             'upcoming_anime' => 'https://myanimelist.net/anime.php?o=9',
         ],
         'tvdb' => [

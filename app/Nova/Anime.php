@@ -8,6 +8,7 @@ use App\Enums\SeasonOfYear;
 use App\Nova\Actions\FixAnimeAiringSeason;
 use App\Nova\Actions\ScrapeAnime;
 use App\Nova\Actions\ScrapeAnimeBanner;
+use App\Nova\Actions\ScrapeAnimeSeason;
 use App\Nova\Actions\ScrapeFiller;
 use App\Nova\Actions\ScrapeUpcomingAnime;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
@@ -429,9 +430,14 @@ class Anime extends Resource
     public function actions(NovaRequest $request): array
     {
         return [
+            ScrapeAnimeSeason::make()
+                ->canSee(function ($request) {
+                    return $request->user()->hasRole('superAdmin');
+                })
+                ->standalone(),
             ScrapeUpcomingAnime::make()
                 ->canSee(function ($request) {
-                    return $request->user()->can('updateAnime');
+                    return $request->user()->hasRole('superAdmin');
                 })
                 ->standalone(),
             FixAnimeAiringSeason::make()
