@@ -153,7 +153,7 @@ class Character extends Resource
                 ->displayUsing(function (?CharacterStatus $characterStatus) {
                     return $characterStatus?->key;
                 })
-                ->nullable()
+                ->required()
                 ->sortable()
                 ->help('The life status of the character. E.g. Alive, or Dead.'),
 
