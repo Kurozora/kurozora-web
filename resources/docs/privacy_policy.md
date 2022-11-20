@@ -160,7 +160,7 @@ KVK: 85108596
 BTW-ID: NL004052193B08  
 Email: redarkcompany@gmail.com
 
-Copyright © 2018-now Redark All rights reserved.
+Copyright © 2018-now Redark. All rights reserved.
 <div></div>
 </div>
 

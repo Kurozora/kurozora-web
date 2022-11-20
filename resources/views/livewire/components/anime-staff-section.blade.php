@@ -19,9 +19,7 @@
             </div>
 
             <div class="grid grid-flow-col-dense gap-4 justify-start overflow-x-scroll no-scrollbar">
-                @foreach($this->staff as $animeStaff)
-                    <x-lockups.staff-lockup :staff="$animeStaff" />
-                @endforeach
+                <x-rows.person-lockup :anime-staff="$this->staff" />
             </div>
         </section>
     @endif

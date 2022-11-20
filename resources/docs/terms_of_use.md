@@ -290,6 +290,6 @@ BTW-ID: NL004052193B08
 Email: redarkcompany@gmail.com
 
 The information contained in this web site is subject to change without notice.  
-Copyright © 2018-now Redark All rights reserved.
+Copyright © 2018-now Redark. All rights reserved.
 </div>
 </section>
