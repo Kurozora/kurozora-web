@@ -5,13 +5,16 @@ namespace App\Console\Commands\Generators;
 use App\Models\Anime;
 use App\Models\AnimeCast;
 use App\Models\AnimeSong;
+use App\Models\AnimeStaff;
 use App\Models\Character;
 use App\Models\Episode;
 use App\Models\ExploreCategory;
 use App\Models\Genre;
 use App\Models\Person;
 use App\Models\Season;
+use App\Models\Song;
 use App\Models\Studio;
+use App\Models\Theme;
 use App\Models\User;
 use DB;
 use Illuminate\Console\Command;
@@ -76,6 +79,7 @@ class GenerateSitemap extends Command
         $this->info('- Generating anime cast...');
         DB::statement("SET SQL_MODE=''");
         AnimeCast::withoutGlobalScopes()
+            ->with('anime')
             ->select(['anime_id'])
             ->groupBy('anime_id')
             ->chunk(20000, function ($animeCast, int $page) use ($sitemapIndex) {
@@ -88,10 +92,28 @@ class GenerateSitemap extends Command
             });
         DB::statement('SET SQL_MODE=only_full_group_by');
 
+        //========== Anime Staff sitemap ==========//
+        $this->info('- Generating anime staff...');
+        DB::statement("SET SQL_MODE=''");
+        AnimeStaff::withoutGlobalScopes()
+            ->with('anime')
+            ->select(['anime_id'])
+            ->groupBy('anime_id')
+            ->chunk(20000, function ($animeStaff, int $page) use ($sitemapIndex) {
+                $path = 'sitemaps/anime_staff_' . $page . '_sitemap.xml';
+                $this->info($path);
+                Sitemap::create()
+                    ->add($animeStaff)
+                    ->writeToFile(public_path($path));
+                $sitemapIndex->add($path);
+            });
+        DB::statement('SET SQL_MODE=only_full_group_by');
+
         //========== Anime Songs sitemap ==========//
         $this->info('- Generating anime songs...');
         DB::statement("SET SQL_MODE=''");
         AnimeSong::withoutGlobalScopes()
+            ->with('anime')
             ->select(['anime_id'])
             ->groupBy('anime_id')
             ->chunk(20000, function ($animeSongs, int $page) use ($sitemapIndex) {
@@ -145,7 +167,7 @@ class GenerateSitemap extends Command
 
         //========== Themes sitemap ==========//
         $this->info('- Generating themes...');
-        Genre::withoutGlobalScopes()
+        Theme::withoutGlobalScopes()
             ->select(['slug'])
             ->chunk(20000, function($genres, int $page) use ($sitemapIndex) {
                 $path = 'sitemaps/themes_' . $page . '_sitemap.xml';
@@ -161,8 +183,8 @@ class GenerateSitemap extends Command
         Person::withoutGlobalScopes()
             ->select(['slug'])
             ->chunk(20000, function($people, int $page) use ($sitemapIndex) {
-            $path = 'sitemaps/people_' . $page . '_sitemap.xml';
-            $this->info($path);
+                $path = 'sitemaps/people_' . $page . '_sitemap.xml';
+                $this->info($path);
                 Sitemap::create()
                     ->add($people)
                     ->writeToFile(public_path($path));
@@ -178,6 +200,19 @@ class GenerateSitemap extends Command
                 $this->info($path);
                 Sitemap::create()
                     ->add($seasons)
+                    ->writeToFile(public_path($path));
+                $sitemapIndex->add($path);
+            });
+
+        //========== Studios sitemap ==========//
+        $this->info('- Generating songs...');
+        Song::withoutGlobalScopes()
+            ->select(['id'])
+            ->chunk(20000, function($songs, int $page) use ($sitemapIndex) {
+                $path = 'sitemaps/songs_' . $page . '_sitemap.xml';
+                $this->info($path);
+                Sitemap::create()
+                    ->add($songs)
                     ->writeToFile(public_path($path));
                 $sitemapIndex->add($path);
             });

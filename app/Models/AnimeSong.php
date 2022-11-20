@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\SongType;
+//use App\Scopes\TvRatingScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -26,7 +27,7 @@ class AnimeSong extends KModel implements Sitemapable
     public function anime(): BelongsTo
     {
         return $this->belongsTo(Anime::class);
-//                        ->withoutGlobalScope(new TvRatingScope());
+//            ->withoutGlobalScope(new TvRatingScope());
     }
 
     /**
@@ -58,6 +59,6 @@ class AnimeSong extends KModel implements Sitemapable
     public function toSitemapTag(): Url|string|array
     {
         return Url::create(route('anime.songs', $this->anime))
-            ->setChangeFrequency('monthly');
+            ->setChangeFrequency('weekly');
     }
 }

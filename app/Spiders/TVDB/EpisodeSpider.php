@@ -200,7 +200,7 @@ class EpisodeSpider extends BasicSpider
 
         // Episode image
         try {
-            $episodeBannerImageUrl = $response->filter('.thumbnail.platypus-image.lightbox img[src*="/episode/"]')
+            $episodeBannerImageUrl = $response->filter('.thumbnail.platypus-image.lightbox img[src*="/episodes/"]')
                 ->attr('src');
         } catch (Exception $exception) {
             $episodeBannerImageUrl = null;
