@@ -32,6 +32,14 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         // Register custom sign-in controller
         $this->app->alias(SignInController::class, LoginController::class);
 
+        // Breadcrumbs
+        Nova::withBreadcrumbs();
+
+//        // Right-to-Left
+//        Nova::enableRTL(function (Request $request) {
+//            return $request->user()->wantsRTL();
+//        });
+
         // Set timezone to JST
         Nova::userTimezone(function (Request $request) {
             return 'Asia/Tokyo';
