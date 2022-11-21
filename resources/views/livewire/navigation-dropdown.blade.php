@@ -240,6 +240,18 @@
 
                                 {{-- Authentication --}}
                                 @auth
+                                    @if (session()->has('nova_impersonated_by'))
+                                        <form method="POST" action="{{ route('impersonation.stop') }}">
+                                            @method('DELETE')
+                                            @csrf
+
+                                            <x-dropdown-link href="{{ route('impersonation.stop') }}"
+                                                             onclick="event.preventDefault(); this.closest('form').submit();">
+                                                {{ __('Stop impersonation') }}
+                                            </x-dropdown-link>
+                                        </form>
+                                    @endif
+
                                     <form method="POST" action="{{ route('sign-out') }}">
                                         @csrf
 
@@ -355,11 +367,23 @@
                 {{-- Authentication --}}
                 <div class="space-y-1">
                     @auth
+                        @if (session()->has('nova_impersonated_by'))
+                            <form method="POST" action="{{ route('impersonation.stop') }}">
+                                @method('DELETE')
+                                @csrf
+
+                                <x-responsive-nav-link href="{{ route('impersonation.stop') }}"
+                                                       onclick="event.preventDefault(); this.closest('form').submit();">
+                                    {{ __('Stop impersonation') }}
+                                </x-responsive-nav-link>
+                            </form>
+                        @endif
+
                         <form method="POST" action="{{ route('sign-out') }}">
                             @csrf
 
-                            <x-responsive-nav-link href="{{ route('sign-out') }}" onclick="event.preventDefault();
-                                                                                this.closest('form').submit();">
+                            <x-responsive-nav-link href="{{ route('sign-out') }}"
+                                                   onclick="event.preventDefault(); this.closest('form').submit();">
                                 {{ __('Sign out') }}
                             </x-responsive-nav-link>
                         </form>

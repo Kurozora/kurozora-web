@@ -27,6 +27,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
+use Laravel\Nova\Auth\Impersonatable;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
 use Ramsey\Uuid\Uuid;
@@ -57,6 +58,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         HasSlug,
         HasUuids,
         HeartActionTrait,
+        Impersonatable,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         LogsActivity,
@@ -201,6 +203,26 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             ['email_verified_at', '=', null],
             ['created_at', '<', Carbon::now()->subDays(30)]
         ]);
+    }
+
+    /**
+     * Determine if the user can impersonate another user.
+     *
+     * @return bool
+     */
+    public function canImpersonate(): bool
+    {
+        return $this->hasRole('superAdmin');
+    }
+
+    /**
+     * Determine if the user can be impersonated.
+     *
+     * @return bool
+     */
+    public function canBeImpersonated(): bool
+    {
+        return !$this->hasRole('superAdmin');
     }
 
     /**

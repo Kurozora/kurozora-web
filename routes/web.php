@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Web\Misc\HealthCheckController;
+use App\Http\Controllers\Web\Auth\ImpersonateController;
 use App\Http\Livewire\Home;
 use App\Http\Livewire\Welcome;
 use App\Providers\RouteServiceProvider;
@@ -18,6 +19,9 @@ Route::get('welcome', Welcome::class)
 
 Route::get('health-check', [HealthCheckController::class, 'index'])
     ->name('misc.health-check');
+
+Route::delete('impersonation', [ImpersonateController::class, 'stopImpersonating'])
+    ->name('impersonation.stop');
 
 // Authentication routes
 require 'Web/Authentication.php';
