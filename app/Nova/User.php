@@ -196,9 +196,14 @@ class User extends Resource
 
             BelongsTo::make('Language'),
 
-            Boolean::make('Is Pro'),
+            Boolean::make('Is Pro')
+                ->help('Indicates whether the user has bought Kurozora Pro.'),
 
-            Boolean::make('Is Subscribed'),
+            Boolean::make('Is Subscribed')
+                ->help('Indicates whether the user is subscribed to Kurozora+ services.'),
+
+            Boolean::make('Is Verified')
+                ->help('Indicates whether the user is verified, because it’s notable in animators, voice actors, entertainment studios, or another designated category.'),
 
             Date::make('Last Anime Import date', 'last_anime_import_at')
                 ->help('The date at which the user last imported an anime export file. The cooldown is <strong>' . config('import.cooldown_in_days') . '</strong> day(s).')
