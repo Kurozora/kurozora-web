@@ -35,6 +35,7 @@ return new class extends Migration
             $table->json('settings');
             $table->boolean('is_pro')->default(false);
             $table->boolean('is_subscribed')->default(false);
+            $table->boolean('is_verified')->default(false);
             $table->integer('view_count')->default(0);
             $table->timestamp('last_anime_import_at')->nullable();
             $table->timestamp('last_manga_import_at')->nullable();
