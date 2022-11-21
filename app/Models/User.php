@@ -109,6 +109,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         'settings' => 'json',
         'is_pro' => 'bool',
         'is_subscribed' => 'bool',
+        'is_verified' => 'bool',
     ];
 
     /**

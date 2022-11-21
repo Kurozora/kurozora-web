@@ -33,14 +33,14 @@ class FeedMessageResourceBasic extends JsonResource
                 'body'          => $feedMessage->body,
                 'metrics'       => [
                     'heartCount'    => $totalHearts->getCount(),
-                    'replyCount'    => $feedMessage->replies->count(),
-                    'reShareCount'  => $feedMessage->reShares->count()
+                    'replyCount'    => $feedMessage->replies()->count(),
+                    'reShareCount'  => $feedMessage->reShares()->count()
                 ],
-                'isReply'       => $feedMessage->is_reply == 1,
-                'isReShare'     => $feedMessage->is_reshare == 1,
+                'isReply'       => $feedMessage->is_reply,
+                'isReShare'     => $feedMessage->is_reshare,
                 'isReShared'    => $isReShared,
-                'isNSFW'        => $feedMessage->is_nsfw == 1,
-                'isSpoiler'     => $feedMessage->is_spoiler == 1,
+                'isNSFW'        => $feedMessage->is_nsfw,
+                'isSpoiler'     => $feedMessage->is_spoiler,
                 'createdAt'     => $feedMessage->created_at->timestamp,
             ]
         ];
@@ -49,8 +49,9 @@ class FeedMessageResourceBasic extends JsonResource
         $relationships = [];
         $relationships = array_merge($relationships, $this->getUserDetails());
 
-        if (auth()->check())
+        if (auth()->check()) {
             $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
+        }
 
         return array_merge($resource, ['relationships' => $relationships]);
     }

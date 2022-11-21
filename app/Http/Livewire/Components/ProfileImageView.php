@@ -18,6 +18,13 @@ class ProfileImageView extends Component
     public User $user;
 
     /**
+     * Whether the image is shown on a user's profile page.
+     *
+     * @var bool $onProfile
+     */
+    public bool $onProfile;
+
+    /**
      * The component's listeners.
      *
      * @var array
@@ -30,12 +37,13 @@ class ProfileImageView extends Component
      * Prepare the component.
      *
      * @param User $user
-     *
+     * @param bool $onProfile
      * @return void
      */
-    public function mount(User $user)
+    public function mount(User $user, bool $onProfile = false): void
     {
         $this->user = $user;
+        $this->onProfile = $onProfile;
     }
 
     /**

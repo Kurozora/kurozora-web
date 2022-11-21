@@ -23,6 +23,31 @@ class FeedMessage extends KModel implements ReactableContract
     const MAX_BODY_LENGTH = 240;
 
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_nsfw' => 'bool',
+        'is_spoiler' => 'bool',
+        'is_reshare' => 'bool',
+        'is_reply' => 'bool',
+    ];
+
+    /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = [
+        'user',
+        'loveReactant.reactions.reacter.reacterable',
+        'loveReactant.reactions.type',
+        'loveReactant.reactionCounters',
+        'loveReactant.reactionTotal',
+    ];
+
+    /**
      * Returns whether the feed message is a reply.
      *
      * @return bool
