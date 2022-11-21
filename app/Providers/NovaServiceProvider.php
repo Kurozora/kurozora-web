@@ -5,7 +5,10 @@ namespace App\Providers;
 use App\Http\Controllers\Web\Nova\SignInController;
 use App\Models\User;
 use App\Nova\Dashboards\Main;
-use App\Nova\Tools\NovaPermissionTool;
+use App\Nova\Permission;
+use App\Nova\Role;
+use App\Policies\PermissionPolicy;
+use App\Policies\RolePolicy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use KABBOUCHI\LogsTool\LogsTool;
@@ -13,6 +16,7 @@ use Laravel\Nova\Actions\ActionEvent;
 use Laravel\Nova\Http\Controllers\LoginController;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
+use Vyuldashev\NovaPermission\NovaPermissionTool;
 
 class NovaServiceProvider extends NovaApplicationServiceProvider
 {
@@ -85,7 +89,11 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     public function tools(): array
     {
         return [
-            new NovaPermissionTool,
+            (new NovaPermissionTool)
+                ->rolePolicy(RolePolicy::class)
+                ->permissionPolicy(PermissionPolicy::class)
+                ->roleResource(Role::class)
+                ->permissionResource(Permission::class),
             (new LogsTool)
                 ->canSee(function ($request) {
                     return $request->user()->hasRole('superAdmin');
