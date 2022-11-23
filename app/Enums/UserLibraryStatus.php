@@ -25,7 +25,7 @@ final class UserLibraryStatus extends Enum
      * @param int|string $value
      * @return string
      */
-    static function getDescription($value): string
+    public static function getDescription(mixed $value): string
     {
         return match ((int) $value) {
             self::OnHold => 'On-Hold',

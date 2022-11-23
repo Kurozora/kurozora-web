@@ -42,7 +42,7 @@ final class VideoSource extends Enum
      * @param  mixed  $value
      * @return string
      */
-    public static function getDescription($value): string
+    public static function getDescription(mixed $value): string
     {
         return match ($value) {
             self::YouTube => 'YouTube',

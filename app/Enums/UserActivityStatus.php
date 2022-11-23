@@ -21,7 +21,7 @@ final class UserActivityStatus extends Enum
      * @param  mixed  $value
      * @return string
      */
-    public static function getDescription($value): string
+    public static function getDescription(mixed $value): string
     {
         return match ((int) $value) {
             self::Online => __('Online'),
