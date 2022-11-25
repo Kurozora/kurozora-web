@@ -20,16 +20,26 @@ class NewPasswordController extends Controller
      * Display the password reset view.
      *
      * @param Request $request
-     * @return Application|Factory|View
+     * @return Application|Factory|RedirectResponse|View
      */
-    public function create(Request $request): Application|Factory|View
+    public function create(Request $request): Application|Factory|RedirectResponse|View
     {
+        $request->validate([
+            'email' => 'email'
+        ], $request->all());
+
+        if (!$request->has('email')) {
+            return back()->withErrors('your error message');
+        }
+
+        $email = $request->email;
+
         // Obfuscate the email for privacy.
-        $em = explode('@', $request->email);
+        $em = explode('@', $email);
         $name = implode('@', array_slice($em, 0, count($em) - 1));
         $len = strlen($name);
 
-        $email = substr($name, 0, 1 - $len) . str_repeat('*', $len - 1) . '@' . end($em);
+        $email = str($email)->mask('*', 1, $len - 1);
 
         return view('auth.reset-password', [
             'email' => $email,
@@ -53,10 +63,9 @@ class NewPasswordController extends Controller
 
         // Here we will attempt to reset the user's password. If it is successful we
         // will update the password on an actual user model and persist it to the
-        // database. Otherwise we will parse the error and return the response.
+        // database. Otherwise, we will parse the error and return the response.
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
-
             function ($user) use ($request) {
                 $user->forceFill([
                     'password' => Hash::make($request->password),
