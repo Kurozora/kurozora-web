@@ -29,6 +29,7 @@ class ActivityLogCount extends Value
     public function ranges(): array
     {
         return [
+            7 => '7 Days',
             30 => '30 Days',
             60 => '60 Days',
             365 => '365 Days',
