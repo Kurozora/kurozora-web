@@ -1,7 +1,7 @@
 <div class="relative flex">
     @if ($onProfile)
         <span title="{{ $user->getActivityStatus()->description }}">
-            <svg class="relative w-full overflow-hidden" width="96" height="96" viewBox="0 0 96 96">
+            <svg class="relative overflow-hidden" width="96" height="96" viewBox="0 0 96 96">
                 <mask id="svg-mask-avatar-status-round-80" maskContentUnits="objectBoundingBox" viewBox="0 0 1 1">
                     <circle fill="white" cx="0.5" cy="0.5" r="0.5"></circle>
                     <circle fill="black" cx="0.85" cy="0.85" r="0.155"></circle>
