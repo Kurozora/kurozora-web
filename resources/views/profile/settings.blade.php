@@ -10,7 +10,13 @@
     </x-slot:header>
 
     <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 space-y-10 sm:px-6">
-        <livewire:profile.update-profile-information-form />
+        <livewire:profile.update-account-information-form />
+
+        <x-hr class="hidden sm:block" />
+
+        <div class="sm:mt-0">
+            <livewire:profile.update-profile-information-form />
+        </div>
 
         <x-hr class="hidden sm:block" />
 

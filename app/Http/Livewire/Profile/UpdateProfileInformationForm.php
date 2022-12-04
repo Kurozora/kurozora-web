@@ -51,7 +51,13 @@ class UpdateProfileInformationForm extends Component
      */
     public function mount(): void
     {
-        $this->state = auth()->user()->withoutRelations()->toArray();
+        $state = auth()->user()
+            ->only(['username', 'biography']);
+
+        $this->state = [
+            'nickname' => $state['username'],
+            'biography' => $state['biography']
+        ];
     }
 
     /**

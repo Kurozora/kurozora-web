@@ -4,7 +4,7 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Select the language you would like the.') }}
+        {{ __('Select the language you would like used throughout Kurozora.') }}
     </x-slot:description>
 
     <x-slot:form>

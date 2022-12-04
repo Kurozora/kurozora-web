@@ -58,7 +58,7 @@ class ValidateEmail implements Rule
         }
 
         if (!empty($availabilityRule)) {
-            array_push($validationRules, $availabilityRule);
+            $validationRules[] = $availabilityRule;
         }
 
         $validator = Validator::make([$attribute => $value], [

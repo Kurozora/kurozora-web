@@ -6,13 +6,11 @@ use App\Contracts\UpdatesUserProfileInformation;
 use App\Enums\MediaCollection;
 use App\Models\User;
 use App\Rules\ValidateBannerImage;
-use App\Rules\ValidateEmail;
+use App\Rules\ValidateNickname;
 use App\Rules\ValidateProfileImage;
 use App\Rules\ValidateUserBiography;
-use App\Rules\ValidateUsername;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
@@ -32,18 +30,13 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
      */
     public function update(User $user, array $input): void
     {
+        $updatedAttributes = [];
         $rules = [
-            'email' => ['required', new ValidateEmail, Rule::unique(User::TABLE_NAME)->ignore($user->id)],
+            'nickname' => ['required', new ValidateNickname],
             'biography' => ['bail', new ValidateUserBiography],
-            'profileImage' => [new ValidateProfileImage],
-            'bannerImage' => [new ValidateBannerImage],
+            'profileImage' => ['bail', new ValidateProfileImage],
+            'bannerImage' => ['bail', new ValidateBannerImage],
         ];
-
-        if (settings('can_change_username')) {
-            $rules = array_merge($rules, [
-                'username' => ['required', new ValidateUsername]
-            ]);
-        }
 
         Validator::make($input, $rules)->validateWithBag('updateProfileInformation');
 
@@ -55,32 +48,15 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             $user->updateImageMedia(MediaCollection::Banner(), $input['bannerImage']->getRealPath());
         }
 
-        if ($input['email'] !== $user->email &&
-            $user instanceof MustVerifyEmail) {
-            $this->updateVerifiedUser($user, $input);
-        } else {
-            $user->forceFill([
-                'email' => $input['email'],
-            ])->save();
-        }
-
         if (isset($input['biography'])) {
-            $user->update([
-                'biography' => $input['biography']
-            ]);
+            $updatedAttributes['biography'] = $input['biography'];
         }
 
-        if (settings('can_change_username')) {
-            if ($input['username'] !== $user->username) {
-                $user->forceFill([
-                    'username' => $input['username']
-                ]);
-                $user->generateSlug();
-                $user->save();
-
-                settings('can_change_username', false, true);
-            }
+        if ($input['nickname'] !== $user->username) {
+            $updatedAttributes['username'] = $input['nickname'];
         }
+
+        $user->update($updatedAttributes);
     }
 
     /**

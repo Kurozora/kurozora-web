@@ -4,7 +4,7 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Update your account’s profile information and email address.') }}
+        {{ __('Update your account’s profile information, such as nickname and profile image.') }}
     </x-slot:description>
 
     <x-slot:form>
@@ -26,7 +26,10 @@
             />
 
             {{-- Current Banner Image --}}
-            <div class="relative" x-show="!bannerImagePreview">
+            <div
+                class="relative"
+                x-show="!bannerImagePreview"
+            >
                 <livewire:components.banner-image-view :user="auth()->user()" />
 
                 <div class="absolute top-0 right-0 bottom-0 left-0 flex justify-center bg-black/20">
@@ -51,7 +54,11 @@
             </div>
 
             {{-- New Banner Image Preview --}}
-            <div class="relative" x-show="bannerImagePreview">
+            <div
+                class="relative"
+                x-show="bannerImagePreview"
+                x-cloak=""
+            >
                 <div class="flex">
                     <picture class="relative w-full overflow-hidden">
                         <img
@@ -108,7 +115,10 @@
             />
 
             {{-- Current Profile Image --}}
-            <div class="relative w-16 h-16 rounded-full overflow-hidden sm:w-24 sm:h-24" x-show="!profileImagePreview">
+            <div
+                class="relative w-16 h-16 rounded-full overflow-hidden sm:w-24 sm:h-24"
+                x-show="!profileImagePreview"
+            >
                 <livewire:components.profile-image-view :user="auth()->user()" />
 
                 <div class="absolute top-0 right-0 bottom-0 left-0 flex justify-center bg-black/20">
@@ -133,7 +143,11 @@
             </div>
 
             {{-- New Profile Image Preview --}}
-            <div class="relative w-16 h-16 rounded-full overflow-hidden sm:w-24 sm:h-24" x-show="profileImagePreview">
+            <div
+                class="relative w-16 h-16 rounded-full overflow-hidden sm:w-24 sm:h-24"
+                x-show="profileImagePreview"
+                x-cloak=""
+            >
                 <img class="w-16 h-16 bg-white border-2 border-black/5 rounded-full sm:w-24 sm:h-24"
                      src=""
                      x-bind:src="profileImagePreview"
@@ -164,18 +178,11 @@
             <x-input-error for="profileImage" class="mt-2" />
         </div>
 
-        {{-- Username --}}
-        <div class="col-span-3 sm:col-span-2">
-            <x-label for="username" value="{{ __('Username') }}" />
-            <x-input id="username" type="text" class="mt-1 block w-full {{ settings('can_change_username') ?: 'select-none opacity-25' }}" wire:model.defer="state.username" autocomplete="username" disabled="{{ !settings('can_change_username') }}" />
-            <x-input-error for="username" class="mt-2" />
-        </div>
-
-        {{-- Email --}}
-        <div class="col-span-6 sm:col-span-4">
-            <x-label for="email" value="{{ __('Email') }}" />
-            <x-input id="email" type="email" class="mt-1 block w-full" wire:model.defer="state.email" />
-            <x-input-error for="email" class="mt-2" />
+        {{-- Nickname --}}
+        <div class="col-span-6">
+            <x-label for="nickname" value="{{ __('Nickname') }}" />
+            <x-input id="nickname" type="text" class="mt-1 block w-full" wire:model.defer="state.nickname" autocomplete="nickname" />
+            <x-input-error for="nickname" class="mt-2" />
         </div>
 
         {{-- Biography --}}

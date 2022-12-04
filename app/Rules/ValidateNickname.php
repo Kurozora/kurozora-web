@@ -5,7 +5,7 @@ namespace App\Rules;
 use App\Models\User;
 use Illuminate\Contracts\Validation\Rule;
 
-class ValidateUsername implements Rule
+class ValidateNickname implements Rule
 {
     const MINIMUM_USERNAME_LENGTH = 3;
     const MAXIMUM_USERNAME_LENGTH = 50;
@@ -41,24 +41,23 @@ class ValidateUsername implements Rule
         }
 
         // Check alphanumeric and space
-        if (!ctype_alnum(str_replace(['-', '_'], '', $value))) {
+        if (!ctype_alnum(str_replace([' ', '-', '_'], '', $value))) {
             $this->errorType = 'alpha-num';
             return false;
         }
 
         // Check if username taken
         $user = auth()->user();
-
         if (!empty($user)) {
             if (User::whereNotIn('id', [$user->id])
-                ->where('slug', $value)
+                ->where('username', $value)
                 ->exists()
             ) {
                 $this->errorType = 'exists';
                 return false;
             }
         } else {
-            if (User::where('slug', $value)->exists()) {
+            if (User::where('username', $value)->exists()) {
                 $this->errorType = 'exists';
                 return false;
             }
@@ -76,7 +75,7 @@ class ValidateUsername implements Rule
     {
         return match ($this->errorType) {
             'length' => __('validation.between.string', ['min' => self::MINIMUM_USERNAME_LENGTH, 'max' => self::MAXIMUM_USERNAME_LENGTH]),
-            'alpha-num' => __('validation.alpha_dash'),
+            'alpha-num' => __('validation.alpha_num'),
             'exists' => __('validation.unique'),
             default => __('The :attribute is invalid.'),
         };

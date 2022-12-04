@@ -65,10 +65,6 @@ class MeController extends Controller
 
         // Update username
         if ($request->has('username')) {
-            if (!settings('can_change_username')) {
-                throw new AuthorizationException('The request wasn’t accepted due to not being allowed to change the username.');
-            }
-
             $user->username = $data['username'];
             $changedFields[] = 'username';
         }
@@ -115,16 +111,13 @@ class MeController extends Controller
         if (count($changedFields)) {
             $displayMessage .= 'You have updated your ' . join(', ', $changedFields) . '.';
             $user->save();
-
-            if (in_array('username', $changedFields)) {
-                settings('can_change_username', false, true);
-            }
         } else {
             $displayMessage .= 'No information was updated.';
         }
 
         return JSONResult::success([
             'data'      => [
+                'username'          => $user->username,
                 'biography'         => $user->biography,
                 'profileImageURL'   => $user->getFirstMediaFullUrl(MediaCollection::Profile()),
                 'bannerImageURL'    => $user->getFirstMediaFullUrl(MediaCollection::Banner())
