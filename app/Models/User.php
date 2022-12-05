@@ -158,7 +158,9 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     {
         return SlugOptions::create()
             ->generateSlugsFrom('username')
-            ->doNotGenerateSlugsOnUpdate()
+            ->skipGenerateWhen(function () {
+                return !empty($this->slug);
+            })
             ->saveSlugsTo('slug');
     }
 

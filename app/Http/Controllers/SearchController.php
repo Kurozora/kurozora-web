@@ -130,7 +130,8 @@ class SearchController extends Controller
                     ];
                     break;
                 case SearchType::Songs:
-                    $resource = Song::search($data['query'])->paginate($data['limit'] ?? 5)
+                    $resource = Song::search($data['query'])
+                        ->paginate($data['limit'] ?? 5)
                         ->appends($data);
                     // Get next page url minus domain
                     $nextPageURL = $this->nextPageUrlFor($resource, $type);

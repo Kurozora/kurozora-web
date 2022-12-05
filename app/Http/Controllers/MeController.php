@@ -65,8 +65,16 @@ class MeController extends Controller
 
         // Update username
         if ($request->has('username')) {
-            $user->username = $data['username'];
-            $changedFields[] = 'username';
+            if (empty($user->username) || $user->is_subscribed) {
+                $user->slug = $data['username'];
+                $changedFields[] = 'username';
+            }
+        }
+
+        // Update nickname
+        if ($request->has('nickname')) {
+            $user->username = $data['nickname'];
+            $changedFields[] = 'nickname';
         }
 
         // Update biography
@@ -117,7 +125,8 @@ class MeController extends Controller
 
         return JSONResult::success([
             'data'      => [
-                'username'          => $user->username,
+                'username'          => $user->slug,
+                'nickname'          => $user->username,
                 'biography'         => $user->biography,
                 'profileImageURL'   => $user->getFirstMediaFullUrl(MediaCollection::Profile()),
                 'bannerImageURL'    => $user->getFirstMediaFullUrl(MediaCollection::Banner())
