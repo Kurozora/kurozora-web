@@ -8,7 +8,7 @@ use Illuminate\Contracts\Validation\Rule;
 class ValidateUsername implements Rule
 {
     const MINIMUM_USERNAME_LENGTH = 3;
-    const MAXIMUM_USERNAME_LENGTH = 50;
+    const MAXIMUM_USERNAME_LENGTH = 30;
 
     /** @var string $errorType */
     protected string $errorType;

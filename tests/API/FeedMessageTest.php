@@ -29,7 +29,7 @@ class FeedMessageTest extends TestCase
     function user_can_post_a_normal_message_to_the_feed(): void
     {
         $this->auth()->json('POST', 'v1/feed', [
-            'body'          => 'Hello, Kurozora!',
+            'content'       => 'Hello, Kurozora!',
             'is_nsfw'       => 0,
             'is_spoiler'    => 0,
         ])->assertSuccessfulAPIResponse();
@@ -47,7 +47,7 @@ class FeedMessageTest extends TestCase
     function user_can_post_an_nsfw_message_to_the_feed(): void
     {
         $this->auth()->json('POST', 'v1/feed', [
-            'body'          => 'Hello, Kurozora!',
+            'content'       => 'Hello, Kurozora!',
             'is_nsfw'       => 1,
             'is_spoiler'    => 0,
         ])->assertSuccessfulAPIResponse();
@@ -65,7 +65,7 @@ class FeedMessageTest extends TestCase
     function user_can_post_a_spoiler_message_to_the_feed(): void
     {
         $this->auth()->json('POST', 'v1/feed', [
-            'body'          => 'Hello, Kurozora!',
+            'content'       => 'Hello, Kurozora!',
             'is_nsfw'       => 0,
             'is_spoiler'    => 1,
         ])->assertSuccessfulAPIResponse();
@@ -83,7 +83,7 @@ class FeedMessageTest extends TestCase
     function user_can_post_an_nsfw_and_spoiler_message_to_the_feed(): void
     {
         $this->auth()->json('POST', 'v1/feed', [
-            'body'          => 'Hello, Kurozora!',
+            'content'       => 'Hello, Kurozora!',
             'is_nsfw'       => 1,
             'is_spoiler'    => 1,
         ])->assertSuccessfulAPIResponse();
@@ -103,7 +103,7 @@ class FeedMessageTest extends TestCase
         $parent = FeedMessage::factory()->create();
 
         $response = $this->auth()->json('POST', 'v1/feed', [
-            'body'          => 'Hello, Kurozora!',
+            'content'       => 'Hello, Kurozora!',
             'parent_id'     => $parent->id,
             'is_reply'      => 1,
             'is_reshare'    => 0,
@@ -128,7 +128,7 @@ class FeedMessageTest extends TestCase
         $parent = FeedMessage::factory()->create();
 
         $this->auth()->json('POST', 'v1/feed', [
-            'body'          => 'Hello, Kurozora!',
+            'content'       => 'Hello, Kurozora!',
             'parent_id'     => $parent->id,
             'is_reply'      => 0,
             'is_reshare'    => 1,
@@ -140,7 +140,7 @@ class FeedMessageTest extends TestCase
         $this->assertEquals(1, $this->user->feed_messages()->where('is_reshare', 1)->count());
 
         $this->auth()->json('POST', 'v1/feed', [
-            'body'          => 'Hello, Kurozora!',
+            'content'       => 'Hello, Kurozora!',
             'parent_id'     => $parent->id,
             'is_reply'      => 0,
             'is_reshare'    => 1,
@@ -162,7 +162,7 @@ class FeedMessageTest extends TestCase
         ]);
 
         $this->auth()->json('POST', 'v1/feed', [
-            'body'          => 'Hello, Kurozora!',
+            'content'       => 'Hello, Kurozora!',
             'parent_id'     => $parent->id,
             'is_reply'      => 1,
             'is_reshare'    => 0,
@@ -180,7 +180,7 @@ class FeedMessageTest extends TestCase
     function user_cannot_post_to_the_feed_if_not_logged_in(): void
     {
         $this->json('POST', 'v1/feed', [
-            'body'          => 'Hello, Kurozora!',
+            'content'       => 'Hello, Kurozora!',
             'is_nsfw'       => 0,
             'is_spoiler'    => 0,
         ])->assertUnsuccessfulAPIResponse();
@@ -195,13 +195,13 @@ class FeedMessageTest extends TestCase
     function feed_messages_can_have_a_maximum_length_of_240_characters(): void
     {
         $this->auth()->json('POST', 'v1/feed', [
-            'body' => Str::random(240),
+            'content'       => Str::random(240),
             'is_nsfw'       => 0,
             'is_spoiler'    => 0,
         ])->assertSuccessfulAPIResponse();
 
         $this->auth()->json('POST', 'v1/feed', [
-            'body' => Str::random(241),
+            'content'       => Str::random(241),
             'is_nsfw'       => 0,
             'is_spoiler'    => 0,
         ])->assertUnsuccessfulAPIResponse();

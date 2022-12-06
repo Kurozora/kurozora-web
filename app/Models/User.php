@@ -9,6 +9,7 @@ use App\Jobs\FetchSessionLocation;
 use App\Notifications\NewSession;
 use App\Notifications\ResetPassword as ResetPasswordNotification;
 use App\Notifications\VerifyEmail as VerifyEmailNotification;
+use App\Parsers\MentionParser;
 use App\Traits\HeartActionTrait;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Web\Auth\TwoFactorAuthenticatable;
@@ -30,6 +31,7 @@ use Illuminate\Support\Facades\Cache;
 use Laravel\Nova\Auth\Impersonatable;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
+use Markdown;
 use Ramsey\Uuid\Uuid;
 use Request;
 use Spatie\Activitylog\LogOptions;
@@ -47,14 +49,16 @@ use Spatie\Sitemap\Contracts\Sitemapable;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use URL;
+use Xetaio\Mentions\Models\Traits\HasMentionsTrait;
 
 class User extends Authenticatable implements HasMedia, MustVerifyEmail, ReacterableContract, Sitemapable
 {
     use Authorizable,
         HasApiTokens,
         HasFactory,
-        HasRoles,
+        HasMentionsTrait,
         HasPermissions,
+        HasRoles,
         HasSlug,
         HasUuids,
         HeartActionTrait,
@@ -111,6 +115,30 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         'is_subscribed' => 'bool',
         'is_verified' => 'bool',
     ];
+
+    /**
+     * Bootstrap the model and its traits.
+     *
+     * @return void
+     */
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::saving(function (User $user) {
+            // Strip HTML tags
+            $user->biography = trim(strip_tags(Markdown::parse(nl2br($user->biography))));
+
+            // Parse user mentions
+            $parser = new MentionParser($user, [
+                'notify' => false
+            ]);
+            $user->biography_markdown = $parser->parse($user->biography);
+
+            // Parse user mentions
+            $user->biography_html = Markdown::parse(nl2br($user->biography_markdown));
+        });
+    }
 
     /**
      * Get the columns that should receive a unique identifier.

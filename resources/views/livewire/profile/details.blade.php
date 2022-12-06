@@ -30,10 +30,6 @@
                 <div class="flex items-end">
                     <div class="relative">
                         <livewire:components.profile-image-view :user="$user" :on-profile="true" />
-
-{{--                        @if ($badge = $user->badges()->first())--}}
-{{--                            <span class="absolute bottom-0 pl-2 pr-2 border-2 whitespace-nowrap rounded-full" style="color: {{ $badge->text_color }}; background-color: {{ $badge->background_color }}; border-color: {{ $badge->text_color }};" title="{{ $badge->name }} Badge">{{ $badge->name }}</span>--}}
-{{--                        @endif--}}
                     </div>
 
                     <div>
@@ -60,7 +56,7 @@
                 @endif
             </div>
 
-            <div class="mt-2 pt-2 pb-2 px-3">{!! nl2br(e($user->biography)) !!}</div>
+            <div class="mt-2 pt-2 pb-2 px-3">{!! $user->biography_html !!}</div>
 
             <div class="flex justify-between">
                 <x-profile-information-badge>
@@ -118,6 +114,24 @@
                 <x-rows.small-lockup :animes="$this->favoriteAnime" />
             </section>
         @endif
+
+        <section class="relative max-w-7xl mx-auto pl-4 pr-4 pb-6 mb-8 z-10 sm:px-6">
+            <x-section-nav class="flex flex-nowrap justify-between mb-5">
+                <x-slot:title>
+                    {{ __('Feed') }}
+                </x-slot:title>
+            </x-section-nav>
+
+            <div class="flex flex-col gap-6">
+                @foreach ($this->feedMessages as $feedMessage)
+                    <x-lockups.feed-message-lockup :feed-message="$feedMessage" />
+                @endforeach
+            </div>
+
+            <div class="mt-4">
+                {{ $this->feedMessages->links() }}
+            </div>
+        </section>
     </div>
 
     @switch ($selectedPopupType)

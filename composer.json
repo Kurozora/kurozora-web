@@ -67,7 +67,8 @@
         "spatie/laravel-sitemap": "^6.0",
         "spatie/laravel-sluggable": "^3.0",
         "timothyasp/nova-color-field": "^2.0",
-        "titasgailius/search-relations": "^2.0"
+        "titasgailius/search-relations": "^2.0",
+        "xetaio/xetaravel-mentions": "^9.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",

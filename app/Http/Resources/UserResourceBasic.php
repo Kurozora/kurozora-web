@@ -43,6 +43,8 @@ class UserResourceBasic extends JsonResource
                 'banner'            => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Banner)),
                 'username'          => $this->resource->username,
                 'biography'         => $this->resource->biography,
+                'biographyHTML'     => $this->resource->biography_html,
+                'biographyMarkdown' => $this->resource->biography_markdown,
                 'activityStatus'    => $this->resource->getActivityStatus()->description,
                 'followerCount'     => $this->resource->followers()->count(),
                 'followingCount'    => $this->resource->following()->count(),

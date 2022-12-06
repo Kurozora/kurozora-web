@@ -49,7 +49,7 @@ class FeedMessageController extends Controller
 
         // Update feed message
         $feedMessage->update([
-            'body'          => $data['body'],
+            'content'       => $request->input('content') ?? $request->input('body'),
             'is_nsfw'       => $data['is_nsfw'],
             'is_spoiler'    => $data['is_spoiler']
         ]);
@@ -57,9 +57,11 @@ class FeedMessageController extends Controller
         // Show successful response
         return JSONResult::success([
             'data' => [
-                'body'          => $data['body'],
-                'isNSFW'       => (bool) $data['is_nsfw'],
-                'isSpoiler'    => (bool) $data['is_spoiler']
+                'content'           => $feedMessage->content,
+                'contentHTML'       => $feedMessage->content_html,
+                'contentMarkdown'   => $feedMessage->content_markdown,
+                'isNSFW'            => (bool) $data['is_nsfw'],
+                'isSpoiler'         => (bool) $data['is_spoiler']
             ]
         ]);
     }

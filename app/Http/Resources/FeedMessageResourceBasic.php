@@ -30,18 +30,21 @@ class FeedMessageResourceBasic extends JsonResource
             'type'          => 'feed-messages',
             'href'          => route('api.feed.messages.details', $feedMessage, false),
             'attributes'    => [
-                'body'          => $feedMessage->body,
-                'metrics'       => [
-                    'heartCount'    => $totalHearts->getCount(),
-                    'replyCount'    => $feedMessage->replies()->count(),
-                    'reShareCount'  => $feedMessage->reShares()->count()
+                'body'              => $feedMessage->content,
+                'content'           => $feedMessage->content,
+                'contentHTML'       => $feedMessage->content_html ?? '',
+                'contentMarkdown'   => $feedMessage->content_markdown ?? '',
+                'metrics'           => [
+                    'heartCount'        => $totalHearts->getCount(),
+                    'replyCount'        => $feedMessage->replies()->count(),
+                    'reShareCount'      => $feedMessage->reShares()->count()
                 ],
-                'isReply'       => $feedMessage->is_reply,
-                'isReShare'     => $feedMessage->is_reshare,
-                'isReShared'    => $isReShared,
-                'isNSFW'        => $feedMessage->is_nsfw,
-                'isSpoiler'     => $feedMessage->is_spoiler,
-                'createdAt'     => $feedMessage->created_at->timestamp,
+                'isReply'           => $feedMessage->is_reply,
+                'isReShare'         => $feedMessage->is_reshare,
+                'isReShared'        => $isReShared,
+                'isNSFW'            => $feedMessage->is_nsfw,
+                'isSpoiler'         => $feedMessage->is_spoiler,
+                'createdAt'         => $feedMessage->created_at->timestamp,
             ]
         ];
 

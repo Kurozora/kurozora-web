@@ -32,6 +32,8 @@ return new class extends Migration
             $table->timestamp('two_factor_confirmed_at')->nullable();
             $table->rememberToken();
             $table->text('biography')->nullable();
+            $table->text('biography_html')->nullable();
+            $table->text('biography_markdown')->nullable();
             $table->json('settings');
             $table->boolean('is_pro')->default(false);
             $table->boolean('is_subscribed')->default(false);

@@ -10,9 +10,12 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Details extends Component
 {
+    use WithPagination;
+
     /**
      * The object containing the user data.
      *
@@ -109,6 +112,18 @@ class Details extends Component
         return $this->user
             ->favorite_anime()
             ->paginate(10);
+    }
+
+    /**
+     * Returns the user's feed messages.
+     *
+     * @return LengthAwarePaginator
+     */
+    public function getFeedMessagesProperty(): LengthAwarePaginator
+    {
+        return $this->user->feed_messages()
+            ->orderByDesc('created_at')
+            ->paginate(25);
     }
 
     /**

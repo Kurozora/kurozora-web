@@ -31,7 +31,7 @@ class FeedMessageFactory extends Factory
         return [
             'user_id'                   => $user,
             'parent_feed_message_id'    => null,
-            'body'                      => $this->faker->sentence,
+            'content'                   => $this->faker->sentence,
             'created_at'                => now(),
             'updated_at'                => now(),
         ];
