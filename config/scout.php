@@ -132,6 +132,44 @@ return [
     'meilisearch' => [
         'host' => env('MEILISEARCH_HOST', 'http://localhost:7700'),
         'key' => env('MEILISEARCH_KEY', null),
+        'index-settings' => [
+            'animes' => [
+                'sortableAttributes'=> ['air_day', 'air_season', 'air_time', 'duration', 'first_aired', 'is_nsfw', 'last_aired', 'original_title', 'title'],
+                'filterableAttributes'=> ['id', 'air_day', 'air_season', 'air_time', 'duration', 'first_aired', 'is_nsfw', 'last_aired', 'media_type_id', 'original_title', 'source_id', 'status_id', 'title', 'tv_rating_id'],
+            ],
+            'app_themes' => [
+                'sortableAttributes'=> ['download_count', 'name', 'version'],
+                'filterableAttributes'=> ['id', 'download_count', 'name', 'ui_status_bar_style', 'version'],
+            ],
+            'characters' => [
+                'sortableAttributes'=> ['age', 'astrological_sign', 'height', 'name', 'weight'],
+                'filterableAttributes'=> ['id', 'age', 'astrological_sign', 'birth_day', 'birth_month', 'bust', 'height', 'hip', 'status', 'waist', 'weight'],
+            ],
+            'episodes' => [
+                'sortableAttributes'=> ['duration', 'first_aired', 'number', 'number_total', 'title'],
+                'filterableAttributes'=> ['id', 'duration', 'first_aired', 'is_filler', 'is_nsfw', 'number', 'number_total', 'season_id', 'tv_rating_id'],
+            ],
+            'people' => [
+                'sortableAttributes'=> ['astrological_sign', 'birthdate', 'deceased_date', 'full_name'],
+                'filterableAttributes'=> ['id', 'astrological_sign', 'birthdate', 'deceased_date'],
+            ],
+            'songs' => [
+                'sortableAttributes'=> ['artist', 'title'],
+                'filterableAttributes'=> ['id', 'am_id', 'artist', 'mal_id', 'title'],
+            ],
+            'studios' => [
+                'sortableAttributes'=> ['address', 'founded', 'name'],
+                'filterableAttributes'=> ['id', 'address', 'founded', 'is_nsfw', 'type'],
+            ],
+            'user_libraries' => [
+                'sortableAttributes'=> ['end_date', 'start_date', 'status'],
+                'filterableAttributes'=> ['id', 'anime', 'anime_id', 'end_date', 'start_date', 'status', 'user_id'],
+            ],
+            'users' => [
+                'sortableAttributes'=> ['username', 'slug', 'created_at'],
+                'filterableAttributes'=> ['id', 'username', 'slug', 'biography', 'created_at'],
+            ],
+        ],
     ],
 
 ];
