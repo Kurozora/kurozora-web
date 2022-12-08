@@ -127,7 +127,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
 
         static::saving(function (User $user) {
             // Strip HTML tags
-            $user->biography = trim(strip_tags(Markdown::parse(nl2br($user->biography))));
+            $user->biography = strip_tags(trim(Markdown::parse(nl2br($user->biography))));
 
             // Parse user mentions
             $parser = new MentionParser($user, [
@@ -136,7 +136,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             $user->biography_markdown = $parser->parse($user->biography);
 
             // Parse user mentions
-            $user->biography_html = Markdown::parse(nl2br($user->biography_markdown));
+            $user->biography_html = trim(Markdown::parse(nl2br($user->biography_markdown)));
         });
     }
 

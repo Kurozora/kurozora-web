@@ -62,14 +62,14 @@ class FeedMessage extends KModel implements ReactableContract
 
         static::saving(function (FeedMessage $feedMessage) {
             // Strip HTML tags
-            $feedMessage->content = trim(strip_tags(Markdown::parse(nl2br($feedMessage->content))));
+            $feedMessage->content = strip_tags(trim(Markdown::parse(nl2br($feedMessage->content))));
 
             // Parse user mentions
             $parser = new MentionParser($feedMessage);
             $feedMessage->content_markdown = $parser->parse($feedMessage->content);
 
             // Parse user mentions
-            $feedMessage->content_html = Markdown::parse(nl2br($feedMessage->content_markdown));
+            $feedMessage->content_html = trim(Markdown::parse(nl2br($feedMessage->content_markdown)));
         });
     }
 
