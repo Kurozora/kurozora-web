@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\JSONResult;
+use App\Http\Resources\SettingsResource;
 use FG\ASN1\Exception\NotImplementedException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\JsonResponse;
@@ -29,6 +30,18 @@ class APIController extends Controller
     function info(): JsonResponse
     {
         return JSONResult::success();
+    }
+
+    /**
+     * Returns a plain JSON response for the API.
+     *
+     * @return JsonResponse
+     */
+    function settings(): JsonResponse
+    {
+        return JSONResult::success([
+            'data' => SettingsResource::make([])
+        ]);
     }
 
     /**

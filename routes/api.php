@@ -14,6 +14,9 @@ Route::prefix('/v1')
         Route::get('/info', [APIController::class, 'info'])
             ->name('.info');
 
+        Route::get('/settings', [APIController::class, 'settings'])
+            ->name('.settings');
+
         require 'API/v1/Anime.php';
         require 'API/v1/Cast.php';
         require 'API/v1/Characters.php';
