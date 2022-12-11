@@ -22,6 +22,15 @@ class ExploreCategory extends KModel implements Sitemapable
     protected $table = self::TABLE_NAME;
 
     /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = [
+        'explore_category_items'
+    ];
+
+    /**
      * Bootstrap the model and its traits.
      *
      * @return void

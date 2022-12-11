@@ -11,7 +11,7 @@ class AnimeResourceIdentity extends JsonResource
     /**
      * The resource instance.
      *
-     * @var Anime $resource
+     * @var Anime|int $resource
      */
     public $resource;
 
@@ -24,7 +24,7 @@ class AnimeResourceIdentity extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id'    => $this->resource->id,
+            'id'    => $this->resource?->id ?? $this->resource,
             'type'  => 'show',
             'href'  => route('api.anime.view', $this->resource, false),
         ];

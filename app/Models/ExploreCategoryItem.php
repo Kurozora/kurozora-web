@@ -18,6 +18,15 @@ class ExploreCategoryItem extends KModel
     protected $table = self::TABLE_NAME;
 
     /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = [
+        'model'
+    ];
+
+    /**
      * Returns the explore category which the item belongs to.
      *
      * @return BelongsTo

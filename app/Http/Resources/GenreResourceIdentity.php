@@ -11,7 +11,7 @@ class GenreResourceIdentity extends JsonResource
     /**
      * The resource instance.
      *
-     * @var Genre $resource
+     * @var Genre|int $resource
      */
     public $resource;
 
@@ -24,7 +24,7 @@ class GenreResourceIdentity extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id'            => $this->resource->id,
+            'id'            => $this->resource?->id ?? $this->resource,
             'type'          => 'genres',
             'href'          => route('api.genres.details', $this->resource, false),
         ];

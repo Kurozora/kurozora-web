@@ -79,7 +79,7 @@ class ExploreCategoryResource extends JsonResource
                         'data' => PersonResourceIdentity::collection($this->resource
                             ->peopleBornToday()
                             ->explore_category_items
-                            ->pluck('model')
+                            ->pluck('model_id')
                         )
                     ]
                 ];
@@ -89,7 +89,7 @@ class ExploreCategoryResource extends JsonResource
                         'data' => CharacterResourceIdentity::collection($this->resource
                             ->charactersBornToday()
                             ->explore_category_items
-                            ->pluck('model')
+                            ->pluck('model_id')
                         )
                     ]
                 ];
@@ -98,7 +98,7 @@ class ExploreCategoryResource extends JsonResource
                     'genres' => [
                         'data' => GenreResourceIdentity::collection($this->resource
                             ->explore_category_items
-                            ->pluck('model')
+                            ->pluck('model_id')
                         )
                     ]
                 ];
@@ -107,7 +107,7 @@ class ExploreCategoryResource extends JsonResource
                     'themes' => [
                         'data' => ThemeResourceIdentity::collection($this->resource
                             ->explore_category_items
-                            ->pluck('model')
+                            ->pluck('model_id')
                         )
                     ]
                 ];
@@ -131,7 +131,7 @@ class ExploreCategoryResource extends JsonResource
                     'shows' => [
                         'data' => AnimeResourceIdentity::collection($this->resource
                             ->explore_category_items
-                            ->pluck('model')
+                            ->pluck('model_id')
                         )
                     ]
                 ];
@@ -149,7 +149,7 @@ class ExploreCategoryResource extends JsonResource
                         'data' => AnimeResourceIdentity::collection($this->resource
                             ->upcoming_shows($model)
                             ->explore_category_items
-                            ->pluck('model')
+                            ->pluck('model_id')
                         )
                     ]
                 ];
@@ -167,7 +167,7 @@ class ExploreCategoryResource extends JsonResource
                         'data' => AnimeResourceIdentity::collection($this->resource
                             ->anime_continuing($model)
                             ->explore_category_items
-                            ->pluck('model')
+                            ->pluck('model_id')
                         )
                     ]
                 ];
@@ -185,7 +185,7 @@ class ExploreCategoryResource extends JsonResource
                         'data' => AnimeResourceIdentity::collection($this->resource
                             ->anime_season($model)
                             ->explore_category_items
-                            ->pluck('model')
+                            ->pluck('model_id')
                         )
                     ]
                 ];
@@ -203,7 +203,7 @@ class ExploreCategoryResource extends JsonResource
                         'data' => AnimeResourceIdentity::collection($this->resource
                             ->most_popular_shows($model)
                             ->explore_category_items
-                            ->pluck('model')
+                            ->pluck('model_id')
                         )
                     ]
                 ];
