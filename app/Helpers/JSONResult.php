@@ -53,8 +53,9 @@ class JSONResult
     private static function getDefaultResponseArray(): array
     {
         $meta = [
-            'version'               => config('app.version'),
-            'minimumAppVersion'     => config('app.ios.version')
+            'version'                   => config('app.version'),
+            'minimumAppVersion'         => config('app.ios.version'),
+            'isMaintenanceModeEnabled'  => app()->isDownForMaintenance(),
         ];
 
         if (app()->environment('local')) {
