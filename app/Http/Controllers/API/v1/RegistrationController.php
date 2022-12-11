@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
 use App\Enums\MediaCollection;
 use App\Helpers\JSONResult;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\SignUpRequest;
 use App\Models\User;
 use Hash;

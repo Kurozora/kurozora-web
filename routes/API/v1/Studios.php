@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\StudioController;
+use App\Http\Controllers\API\v1\StudioController;
 
 Route::prefix('/studios')
     ->name('.studios')

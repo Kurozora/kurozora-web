@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\CharacterController;
+use App\Http\Controllers\API\v1\CharacterController;
 
 Route::prefix('/characters')
     ->name('.characters')

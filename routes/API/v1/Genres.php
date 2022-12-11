@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\GenreController;
+use App\Http\Controllers\API\v1\GenreController;
 
 Route::prefix('/genres')
     ->name('.genres')

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\MeController;
+use App\Http\Controllers\API\v1\MeController;
 
 Route::prefix('/feed-messages')
     ->name('.feed-messages')

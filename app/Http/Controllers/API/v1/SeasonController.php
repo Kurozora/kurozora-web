@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
 use App\Events\SeasonViewed;
 use App\Helpers\JSONResult;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\GetSeasonEpisodesRequest;
 use App\Http\Resources\EpisodeResourceIdentity;
 use App\Http\Resources\SeasonResource;

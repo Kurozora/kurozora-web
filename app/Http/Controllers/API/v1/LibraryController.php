@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
 use App\Enums\ImportBehavior;
 use App\Enums\ImportService;
 use App\Enums\UserLibraryStatus;
 use App\Helpers\JSONResult;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\AddToLibraryRequest;
 use App\Http\Requests\DeleteFromLibraryRequest;
 use App\Http\Requests\GetLibraryRequest;

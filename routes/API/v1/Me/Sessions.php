@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\MeController;
-use App\Http\Controllers\SessionController;
+use App\Http\Controllers\API\v1\MeController;
+use App\Http\Controllers\API\v1\SessionController;
 
 Route::prefix('/sessions')
     ->name('.sessions')

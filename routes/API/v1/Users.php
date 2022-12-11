@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\AccessTokenController;
+use App\Http\Controllers\API\v1\AccessTokenController;
+use App\Http\Controllers\API\v1\FavoriteAnimeController;
+use App\Http\Controllers\API\v1\FollowingController;
+use App\Http\Controllers\API\v1\RegistrationController;
+use App\Http\Controllers\API\v1\UserController;
 use App\Http\Controllers\Auth\SignInWithAppleController;
-use App\Http\Controllers\FavoriteAnimeController;
-use App\Http\Controllers\FollowingController;
-use App\Http\Controllers\RegistrationController;
-use App\Http\Controllers\UserController;
 
 Route::prefix('/users')
     ->name('.users')

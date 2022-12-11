@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AnimeController;
+use App\Http\Controllers\API\v1\AnimeController;
 
 Route::prefix('/anime')
     ->name('.anime')

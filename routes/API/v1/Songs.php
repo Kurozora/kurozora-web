@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\SongController;
+use App\Http\Controllers\API\v1\SongController;
 
 Route::prefix('/songs')
     ->name('.songs')

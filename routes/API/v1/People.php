@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\PersonController;
+use App\Http\Controllers\API\v1\PersonController;
 
 Route::prefix('/people')
     ->name('.people')

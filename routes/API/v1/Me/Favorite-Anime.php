@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\FavoriteAnimeController;
-use App\Http\Controllers\MeController;
+use App\Http\Controllers\API\v1\FavoriteAnimeController;
+use App\Http\Controllers\API\v1\MeController;
 
 Route::prefix('/favorite-anime')
     ->name('.favorite-anime')

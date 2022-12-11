@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
 use App\Events\AnimeViewed;
 use App\Helpers\JSONResult;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\GetAnimeCastRequest;
 use App\Http\Requests\GetAnimeCharactersRequest;
 use App\Http\Requests\GetAnimeMoreByStudioRequest;

@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
 use App\Helpers\JSONResult;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\ThemeResource;
 use App\Models\Theme;
 use Illuminate\Http\JsonResponse;

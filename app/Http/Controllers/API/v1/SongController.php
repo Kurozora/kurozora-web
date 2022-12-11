@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
 use App\Events\SongViewed;
 use App\Helpers\JSONResult;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\GetSongAnimesRequest;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\SongResource;

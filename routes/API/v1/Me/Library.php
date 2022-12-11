@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\LibraryController;
+use App\Http\Controllers\API\v1\LibraryController;
 
 Route::prefix('/library')
     ->name('.library')

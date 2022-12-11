@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AnimeCastController;
+use App\Http\Controllers\API\v1\AnimeCastController;
 
 Route::prefix('/cast')
     ->name('.cast')

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\FeedController;
+use App\Http\Controllers\API\v1\FeedController;
 
 Route::prefix('/feed')
     ->name('.feed')

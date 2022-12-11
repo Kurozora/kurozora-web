@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ReminderAnimeController;
+use App\Http\Controllers\API\v1\ReminderAnimeController;
 
 Route::prefix('/reminder-anime')
     ->name('.reminder-anime')

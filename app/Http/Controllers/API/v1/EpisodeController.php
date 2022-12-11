@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
 use App\Events\EpisodeViewed;
 use App\Helpers\JSONResult;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\MarkEpisodeAsWatchedRequest;
 use App\Http\Requests\RateEpisodeRequest;
 use App\Http\Resources\EpisodeResource;

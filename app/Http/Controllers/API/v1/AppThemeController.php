@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
 use App\Helpers\JSONResult;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\AppThemeResource;
 use App\Models\AppTheme;
 use Illuminate\Auth\Access\AuthorizationException;

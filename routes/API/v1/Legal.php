@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\MiscController;
+use App\Http\Controllers\API\v1\MiscController;
 
 Route::prefix('/legal')
     ->name('.legal')

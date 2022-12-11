@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
 use App\Helpers\JSONResult;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\GetFeedMessagesExploreRequest;
 use App\Http\Requests\GetFeedMessagesHomeRequest;
 use App\Http\Requests\PostFeedRequest;

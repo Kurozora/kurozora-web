@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
 use App\Contracts\DeletesUsers;
 use App\Events\UserViewed;
 use App\Helpers\JSONResult;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\DeleteUserRequest;
 use App\Http\Requests\GetFeedMessagesRequest;
 use App\Http\Requests\ResetPassword;

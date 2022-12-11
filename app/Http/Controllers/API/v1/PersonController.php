@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
 use App\Events\PersonViewed;
 use App\Helpers\JSONResult;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\GetPersonAnimeRequest;
 use App\Http\Requests\GetPersonCharactersRequest;
 use App\Http\Resources\AnimeResourceIdentity;

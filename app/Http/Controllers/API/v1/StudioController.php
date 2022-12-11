@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
 use App\Events\StudioViewed;
 use App\Helpers\JSONResult;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\GetStudioAnimeRequest;
 use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\StudioResource;

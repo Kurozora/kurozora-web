@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
 use App\Helpers\JSONResult;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\GetFollowersRequest;
 use App\Http\Requests\GetFollowingRequest;
 use App\Http\Resources\UserResourceIdentity;

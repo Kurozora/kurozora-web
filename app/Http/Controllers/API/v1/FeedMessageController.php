@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
 use App\Enums\FeedVoteType;
 use App\Helpers\JSONResult;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\FeedMessageRepliesRequest;
 use App\Http\Requests\FeedMessageUpdateRequest;
 use App\Http\Resources\FeedMessageResource;

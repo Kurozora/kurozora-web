@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AppThemeController;
+use App\Http\Controllers\API\v1\AppThemeController;
 
 Route::prefix('/theme-store')
     ->name('.theme-store')

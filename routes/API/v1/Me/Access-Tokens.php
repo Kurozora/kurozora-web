@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\AccessTokenController;
-use App\Http\Controllers\MeController;
+use App\Http\Controllers\API\v1\AccessTokenController;
+use App\Http\Controllers\API\v1\MeController;
 
 Route::prefix('/access-tokens')
     ->name('.access-tokens')

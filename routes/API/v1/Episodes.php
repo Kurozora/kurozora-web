@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\EpisodeController;
+use App\Http\Controllers\API\v1\EpisodeController;
 
 Route::prefix('/episodes')
     ->name('.episodes')

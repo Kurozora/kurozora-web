@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ExplorePageController;
+use App\Http\Controllers\API\v1\ExplorePageController;
 
 Route::prefix('/explore')
     ->name('.explore')

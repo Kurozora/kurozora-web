@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\SeasonController;
+use App\Http\Controllers\API\v1\SeasonController;
 
 Route::prefix('/seasons')
     ->name('.seasons')

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\API\v1\NotificationController;
 
 Route::prefix('/notifications')
     ->name('.notifications')
