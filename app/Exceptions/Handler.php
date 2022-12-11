@@ -14,7 +14,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\ViewException;
-use Swift_TransportException;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,9 +39,7 @@ class Handler extends ExceptionHandler
         // Access denied exception
         AccessDeniedHttpException::class,
         // Missing arguments exception
-        RuntimeException::class,
-        // Swift Mailer too many mails exception
-        Swift_TransportException::class
+        RuntimeException::class
     ];
 
     /**
@@ -163,6 +160,13 @@ class Handler extends ExceptionHandler
             $apiError->status = 503;
             $apiError->title = 'The service is currently unavailable to process requests.';
             $apiError->detail = $e->getMessage();
+            return JSONResult::error([$apiError]);
+        } else if (app()->isDownForMaintenance()) {
+            $apiError = new APIError();
+            $apiError->id = 50003;
+            $apiError->status = 503;
+            $apiError->title = __('Scheduled Maintenance');
+            $apiError->detail = __('Kurozora is currently under maintenance. All services will be available shortly. If this continues for more than an hour, you can follow the status on Twitter.');
             return JSONResult::error([$apiError]);
         }
 
