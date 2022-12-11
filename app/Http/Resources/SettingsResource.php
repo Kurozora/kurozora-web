@@ -23,7 +23,8 @@ class SettingsResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'appleMusicDeveloperToken' => config('services.apple.client_secret')
+            'appleMusicDeveloperToken' => config('services.apple.client_secret'),
+            'youtubeAPIKey' => config('services.youtube.api_key')
         ];
     }
 }

@@ -55,4 +55,8 @@ return [
         'username' => env('PAYPAL_HANDLE', 'Kiritokatklian'),
     ],
 
+    'youtube' => [
+        'api_key' => env('YOUTUBE_API_KEY'),
+    ],
+
 ];
