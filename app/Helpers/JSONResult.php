@@ -53,13 +53,14 @@ class JSONResult
     private static function getDefaultResponseArray(): array
     {
         $meta = [
-            'version'               => Config::get('app.version'),
-            'isUserAuthenticated'   => auth()->check(),
-            'authenticatedUserID'   => auth()->id()
+            'version'               => config('app.version'),
+            'minimumAppVersion'     => config('app.ios.version')
         ];
 
         if (app()->environment('local')) {
-            $meta['queryCount'] = (int) Config::get(AppServiceProvider::$queryCountConfigKey);
+            $meta['isUserAuthenticated'] = auth()->check();
+            $meta['authenticatedUserID'] = (int) auth()->id();
+            $meta['queryCount'] = (int) config(AppServiceProvider::$queryCountConfigKey);
         }
 
         return [
