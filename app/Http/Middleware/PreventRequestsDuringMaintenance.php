@@ -14,4 +14,16 @@ class PreventRequestsDuringMaintenance extends Middleware
     protected $except = [
         //
     ];
+
+    /**
+     * Get the URIs that should be accessible even when maintenance mode is enabled.
+     *
+     * @return array
+     */
+    public function getExcludedPaths(): array
+    {
+        return array_merge(parent::getExcludedPaths(), [
+            route('api.info')
+        ]);
+    }
 }
