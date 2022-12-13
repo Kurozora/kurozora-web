@@ -37,17 +37,17 @@
 
             <ul class="list-disc">
                 <li>
-                    <p><strong>{{ __('Kurozora+') }}—</strong> {{ __('a membership that unlocks all features within kurozora.') }}</p>
+                    <p><strong>{{ __('Kurozora+') }} —</strong> {{ __('a membership that unlocks all features within kurozora.') }}</p>
                     <p>{{ __('There are 3 options to choose from. All offers unlock the same features.') }}</p>
                     <p>{{ __('(1) Free to try for 1 week and $3.99 per month after that.') }}</p>
                     <p>{{ __('(2) Free to try for 14 days and $11.99 per 6 months after that. Save up to 50%.') }}</p>
                     <p>{{ __('(3) Free to try for 1 month and $18.99 per 12 months after that. Save up to 60%.') }}</p>
                 </li>
                 <li>
-                    <p><strong>{{ __('Kurozora One') }}—</strong> {{ __('a one time purchase for the price of $34.99 which unlocks most features forever.') }}</p>
+                    <p><strong>{{ __('Kurozora One') }} —</strong> {{ __('a one time purchase for the price of $34.99 which unlocks most features forever.') }}</p>
                 </li>
                 <li>
-                    <p><strong>{{ __('Donations') }}—</strong> {{ __('a small amount of your choice to help with the development of the app. No commitments or recurring fees.') }}</p>
+                    <p><strong>{{ __('Donations') }} —</strong> {{ __('a small amount of your choice to help with the development of the app. No commitments or recurring fees.') }}</p>
                 </li>
             </ul>
 
