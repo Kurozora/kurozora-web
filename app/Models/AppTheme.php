@@ -50,8 +50,7 @@ class AppTheme extends KModel implements HasMedia
      */
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection(MediaCollection::Screenshot)
-            ->singleFile();
+        $this->addMediaCollection(MediaCollection::Screenshot);
     }
 
     /**

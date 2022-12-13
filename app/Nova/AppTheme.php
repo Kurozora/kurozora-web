@@ -6,11 +6,11 @@ use App\Enums\MediaCollection;
 use App\Enums\StatusBarStyle;
 use App\Enums\VisualEffectViewStyle;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
+use Exception;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\File;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Outl1ne\NovaColorField\Color;
@@ -71,6 +71,7 @@ class AppTheme extends Resource
      *
      * @param Request $request
      * @return array
+     * @throws Exception
      */
     public function fields(Request $request): array
     {
