@@ -11,6 +11,7 @@ use App\Http\Requests\GetFeedMessagesRequest;
 use App\Http\Requests\ResetPassword;
 use App\Http\Resources\FeedMessageResource;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\UserResourceIdentity;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -33,6 +34,20 @@ class UserController extends Controller
         // Show profile response
         return JSONResult::success([
             'data' => UserResource::collection([$user])
+        ]);
+    }
+
+    /**
+     * Returns the profile details for a user
+     *
+     * @param User $user
+     * @return JsonResponse
+     */
+    public function search(User $user): JsonResponse
+    {
+        // Show profile response
+        return JSONResult::success([
+            'data' => UserResourceIdentity::collection([$user])
         ]);
     }
 
