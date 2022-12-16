@@ -56,7 +56,7 @@ class NewUserMention extends Notification
         if ($this->model instanceof Comment) {
             $link = route('comment', $modelID);
         } else {
-            $link = route('api.feed-messages.details', $modelID);
+            $link = route('api.feed.messages.details', $modelID);
         }
 
         return [
