@@ -65,6 +65,25 @@ class MiscController extends Controller
     }
 
     /**
+     * Returns the Apple-App-Site-Association JSON.
+     *
+     * @return mixed
+     *
+     * @throws FileNotFoundException
+     */
+    public function appleAppSiteAssociation(): mixed
+    {
+        // Get the resource path
+        $resourcePath = resource_path('docs/apple-app-site-association.json');
+
+        // Get the file content
+        $fileContent = File::get($resourcePath);
+
+        // Return the file as JSON
+        return json_decode($fileContent);
+    }
+
+    /**
      * Get the content of a file with the given name.
      *
      * @param string $fileName
@@ -74,7 +93,7 @@ class MiscController extends Controller
      */
     protected function getContentOfFile(string $fileName): string
     {
-        $filePath = resource_path('docs/'. $fileName);
+        $filePath = resource_path('docs/' . $fileName);
 
         // Get the last update date
         $lastUpdateUnix = Carbon::createFromTimestamp(File::lastModified($filePath));

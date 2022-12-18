@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\v1\MiscController;
 use App\Http\Controllers\Web\Misc\HealthCheckController;
 use App\Http\Controllers\Web\Auth\ImpersonateController;
 use App\Http\Livewire\Home;
@@ -22,6 +23,13 @@ Route::get('health-check', [HealthCheckController::class, 'index'])
 
 Route::delete('impersonation', [ImpersonateController::class, 'stopImpersonating'])
     ->name('impersonation.stop');
+
+Route::prefix('.well-known')
+    ->name('.well-known')
+    ->group(function () {
+        Route::get('apple-app-site-association', [MiscController::class, 'appleAppSiteAssociation'])
+            ->name('.apple-app-site-association');
+    });
 
 // Authentication routes
 require 'Web/Authentication.php';
