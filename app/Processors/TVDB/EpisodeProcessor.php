@@ -83,12 +83,12 @@ class EpisodeProcessor implements ItemProcessorInterface
 
             try {
                 logger()->channel('stderr')->info('🖨️ [tvdb_id:' . $tvdbID . '] Creating episode');
-                $episodeFirstAiredDateTime = $this->updateEpisodeFirstAiredTime($animeFirstAired, $episodeFirstAired);
+                $episodeStartedAtDateTime = $this->updateEpisodeFirstAiredTime($animeFirstAired, $episodeFirstAired);
                 $episodeAttributes = array_merge([
                     'tv_rating_id' => $season->tv_rating_id,
                     'number' => $episodeNumber,
                     'number_total' => $episodeNumberTotal,
-                    'first_aired' => $episodeFirstAiredDateTime,
+                    'started_at' => $episodeStartedAtDateTime,
                     'duration' => $anime->duration ?: $episodeDuration,
                     'is_nsfw' => $season->is_nsfw,
                 ], $translations);

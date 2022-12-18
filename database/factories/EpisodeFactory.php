@@ -41,7 +41,7 @@ class EpisodeFactory extends Factory
                 'synopsis'  => $jaFaker->realText(),
             ],
             'duration'      => $this->faker->numberBetween(600, 1440),
-            'first_aired'   => $this->faker->dateTime(),
+            'started_at'    => $this->faker->dateTime(),
             'created_at'    => now(),
             'updated_at'    => now(),
         ];

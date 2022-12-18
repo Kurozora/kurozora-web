@@ -73,16 +73,14 @@ class Episode extends KModel implements HasMedia, Sitemapable
      * @var array
      */
     protected $casts = [
-        'first_aired' => 'datetime',
-    ];
-
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [
-//        'duration_string',
+        'is_filler' => 'bool',
+        'is_nsfw' => 'bool',
+        'is_premiere' => 'bool',
+        'is_finale' => 'bool',
+        'is_special' => 'bool',
+        'is_verified' => 'bool',
+        'started_at' => 'datetime',
+        'ended_at' => 'datetime'
     ];
 
     /**
@@ -94,7 +92,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
     {
         parent::boot();
 
-        static::creating(function (Episode $episode) {
+        $creationCallback = function (Episode $episode) {
             if (empty($episode->tv_rating_id)) {
                 $episode->tv_rating_id = $episode->anime->tv_rating_id;
             }
@@ -102,7 +100,18 @@ class Episode extends KModel implements HasMedia, Sitemapable
             if (empty($episode->is_nsfw)) {
                 $episode->is_nsfw = $episode->anime->is_nsfw;
             }
-        });
+
+            if (!empty($episode->started)) {
+                if (!empty($episode->duration) && empty($episode->ended_at)) {
+                    $episode->ended_at = $episode->started_at->addSeconds($episode->duration);
+                } else if (empty($episode->duration) && !empty($episode->ended_at)) {
+                    $episode->duration = $episode->started_at->secondsUntil($episode->ended_at);
+                }
+            }
+        };
+
+        static::creating($creationCallback);
+        static::saving($creationCallback);
     }
 
     /**
@@ -134,8 +143,9 @@ class Episode extends KModel implements HasMedia, Sitemapable
     public function toSearchableArray(): array
     {
         $episode = $this->toArray();
-        $episode['first_aired'] = $this->first_aired?->timestamp;
         $episode['rating_average'] = $this->stats?->rating_average ?? 0;
+        $episode['started_at'] = $this->started_at?->timestamp;
+        $episode['ended_at'] = $this->ended_at?->timestamp;
         $episode['created_at'] = $this->created_at?->timestamp;
         $episode['updated_at'] = $this->updated_at?->timestamp;
         return $episode;

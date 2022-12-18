@@ -21,7 +21,7 @@
         <meta property="og:video:height" content="1080">
         <meta property="og:video:width" content="1920">
         <meta property="video:duration" content="{{ $episode->duration }}" />
-        <meta property="video:release_date" content="{{ $episode->first_aired }}" />
+        <meta property="video:release_date" content="{{ $episode->started_at }}" />
         <meta property="twitter:title" content="{{ $episode->title }} — {{ config('app.name') }}" />
         <meta property="twitter:description" content="{{ $episode->synopsis }}" />
         <meta property="twitter:card" content="summary_large_image" />
@@ -51,7 +51,7 @@
             },
             "contentRating": "{{ $this->anime?->tv_rating->name }}",
             "genre": {!! $this->anime?->genres()->pluck('name') !!},
-            "datePublished": "{{ $episode->first_aired?->format('Y-m-d') }}",
+            "datePublished": "{{ $episode->started_at?->format('Y-m-d') }}",
             "keywords": "anime,episode{{ (',' . $this->anime?->keywords) ?? '' }}",
             "creator":[
                 {
@@ -66,7 +66,7 @@
                     "description":"Official Trailer",
                     "embedUrl": "{{ $episode->videos()->first()->getUrl() ?? $this->anime?->videos()->first()->getUrl() }}",
                     "thumbnailUrl": "{{ $episode->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $this->anime?->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
-                    "uploadDate": "{{ $episode->first_aired?->format('Y-m-d') }}"
+                    "uploadDate": "{{ $episode->started_at?->format('Y-m-d') }}"
                 }
             @endif
         </x-misc.schema>

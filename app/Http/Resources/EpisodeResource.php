@@ -37,9 +37,15 @@ class EpisodeResource extends JsonResource
                 'duration'      => $this->resource->duration_string,
                 'stats'         => MediaStatsResource::make($this->resource->getStats()),
                 'videos'        => VideoResource::collection($this->resource->videos),
-                'firstAired'    => $this->resource->first_aired?->timestamp,
-                'isFiller'      => (bool) $this->resource->is_filler,
-                'isVerified'    => (bool) $this->resource->verified,
+                'isFiller'      => $this->resource->is_filler,
+                'isNsfw'        => $this->resource->is_nsfw,
+                'isPremiere'    => $this->resource->is_premiere,
+                'isFinale'      => $this->resource->is_finale,
+                'isSpecial'     => $this->resource->is_special,
+                'isVerified'    => $this->resource->is_verified,
+                'firstAired'    => $this->resource->started_at?->timestamp,
+                'startedAt'     => $this->resource->started_at?->timestamp,
+                'endedAt'       => $this->resource->ended_at?->timestamp,
             ]
         ]);
 

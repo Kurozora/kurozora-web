@@ -19,7 +19,7 @@
                 </div>
 
                 <div class="mt-1">
-                    <p class="text-xs text-white/90 leading-tight line-clamp-2">{{ $episode->first_aired?->toFormattedDateString() }}</p>
+                    <p class="text-xs text-white/90 leading-tight line-clamp-2">{{ $episode->started_at?->toFormattedDateString() }}</p>
                 </div>
             </div>
 

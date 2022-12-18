@@ -410,8 +410,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
                 foreach ($episodes as $episode) {
                     $uniqueIdentifier = Uuid::uuid4() . '@kurozora.app';
                     $eventName = $anime->title . ' Episode ' . $episode->number_total;
-                    $startsAt = $episode->first_aired->setTimezone('Asia/Tokyo');
-                    $endsAt = $episode->first_aired->addSeconds($anime->duration)->setTimezone('Asia/Tokyo');
+                    $startsAt = $episode->started_at->setTimezone('Asia/Tokyo');
+                    $endsAt = $episode->ended_at->setTimezone('Asia/Tokyo');
 
                     // Create event
                     $calendarEvent = Event::create($eventName)

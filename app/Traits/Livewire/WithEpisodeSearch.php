@@ -87,7 +87,7 @@ trait WithEpisodeSearch
                 ],
                 'selected' => null,
             ],
-            'first_aired' => [
+            'started_at' => [
                 'title' => __('First Aired'),
                 'options' => [
                     'Default' => null,
@@ -126,7 +126,7 @@ trait WithEpisodeSearch
                 'type' => 'number',
                 'selected' => null,
             ],
-            'first_aired' => [
+            'started_at' => [
                 'title' => __('First Aired'),
                 'type' => 'date',
                 'selected' => null,

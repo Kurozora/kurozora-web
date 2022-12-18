@@ -164,10 +164,6 @@ class Episode extends Resource
                 ->help('A short description of the episode.')
                 ->translatable(),
 
-            DateTime::make('First Aired')
-                ->sortable()
-                ->help('The air date of the of the episode in JST timezone. Leave empty if not announced yet.'),
-
             Number::make('Duration')
                 ->rules('required')
                 ->sortable()
@@ -179,8 +175,42 @@ class Episode extends Resource
                 ->sortable()
                 ->help('Check the box if the episode is a filler, and the story is understood even if this episode is skipped.'),
 
-            Boolean::make('Verified')
+            Boolean::make('Is NSFW')
+                ->default(false)
+                ->required()
+                ->sortable()
+                ->help('Check the box if the episode is <b>Not Safe For Work</b>.'),
+
+            Boolean::make('Is Special')
+                ->default(false)
+                ->required()
+                ->sortable()
+                ->help('Check the box if the episode is special. This usually means an episode that runs longer than the average episode length.'),
+
+            Boolean::make('Is Premiere')
+                ->default(false)
+                ->required()
+                ->sortable()
+                ->help('Check the box if the episode is the <b>first episode</b> of the anime or season.'),
+
+            Boolean::make('Is Finale')
+                ->default(false)
+                ->required()
+                ->sortable()
+                ->help('Check the box if the episode is the <b>last episode</b> of the anime or season.'),
+
+            Boolean::make('Is Verified')
                 ->help('Check the box if the information is correct.'),
+
+            Heading::make('Broadcast'),
+
+            DateTime::make('Started At')
+                ->sortable()
+                ->help('The air date of the episode in JST timezone. Leave empty if not announced yet.'),
+
+            DateTime::make('Ended At')
+                ->sortable()
+                ->help('The end date of the episode in JST timezone. Leave empty if not announced yet, or to auto-generate from the value in <b>Started At</b> if <b>Duration</b> is also specified.'),
 
             MorphMany::make('Videos'),
 

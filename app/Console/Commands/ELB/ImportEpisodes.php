@@ -54,9 +54,14 @@ class ImportEpisodes extends Command
                                 'synopsis' => $episode->translate('ja')->synopsis,
                             ],
                             'duration' => $episode->duration,
-                            'first_aired' => $episode->first_aired,
                             'is_filler' => $episode->is_filler,
-                            'verified' => $episode->verified,
+                            'is_nsfw' => $episode->is_nsfw,
+                            'is_special' => $episode->is_special,
+                            'is_premiere' => $episode->is_premiere,
+                            'is_finale' => $episode->is_finale,
+                            'is_verified' => $episode->is_verified,
+                            'started_at' => $episode->started_at,
+                            'ended_at' => $episode->ended_at
                         ]);
                     } catch (Exception $exception) {
                         print 'Exception at: ' . $episode->id . PHP_EOL;

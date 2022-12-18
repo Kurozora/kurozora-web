@@ -53,24 +53,24 @@ class ImportEpisodes extends Command
         $progressBar = $this->output->createProgressBar($fileSize);
         $progressBar->start();
 
-        foreach ($episodes as $data) {
+        foreach ($episodes as $episode) {
             Episode::firstOrCreate([
                 'season_id' => 0,
-                'number' => $data->number,
-                'number_total' => $data->number + 0
+                'number' => $episode->number,
+                'number_total' => $episode->number + 0
             ],
             [
-                'number' => $data->number,
-                'number_total' => $data->number + 0,
-                'title' => $data->title,
-                'synopsis' => $data->synopsis ?? null,
+                'number' => $episode->number,
+                'number_total' => $episode->number + 0,
+                'title' => $episode->title,
+                'synopsis' => $episode->synopsis ?? null,
                 'ja' => [
-                   'title' => $data->japaneseTitle,
+                   'title' => $episode->japaneseTitle,
                    'synopsis' => null
                 ],
                 'duration' => 1440,
-                'first_aired' => $data->firstAired,
-                'verified' => true,
+                'started_at' => $episode->firstAired,
+                'is_verified' => true,
             ]);
 
             $progress = $episodes->getPosition();

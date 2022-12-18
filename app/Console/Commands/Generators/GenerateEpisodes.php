@@ -97,9 +97,9 @@ class GenerateEpisodes extends Command
                                         'synopsis' => null,
                                     ],
                                     'duration' => $anime->duration,
-                                    'first_aired' => $sameDayRelease ? $season->first_aired->setTimezone('UTC') : $season->first_aired->addWeeks($count - 1)->setTimezone('UTC'),
                                     'is_filler' => false,
-                                    'verified' => false,
+                                    'is_verified' => false,
+                                    'started_at' => $sameDayRelease ? $season->first_aired->setTimezone('UTC') : $season->first_aired->addWeeks($count - 1)->setTimezone('UTC'),
                                 ]);
                                 $episodes[] = $episode;
 

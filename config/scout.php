@@ -146,8 +146,8 @@ return [
                 'filterableAttributes'=> ['id', 'age', 'astrological_sign', 'birth_day', 'birth_month', 'bust', 'height', 'hip', 'status', 'waist', 'weight'],
             ],
             'episodes' => [
-                'sortableAttributes'=> ['duration', 'first_aired', 'number', 'number_total', 'title'],
-                'filterableAttributes'=> ['id', 'duration', 'first_aired', 'is_filler', 'is_nsfw', 'number', 'number_total', 'season_id', 'tv_rating_id'],
+                'sortableAttributes'=> ['duration', 'started_aired', 'ended_at', 'number', 'number_total', 'title'],
+                'filterableAttributes'=> ['id', 'duration', 'started_at', 'ended_at', 'is_filler', 'is_nsfw', 'is_special', 'is_premiere', 'is_finale', 'is_verified', 'number', 'number_total', 'season_id', 'tv_rating_id'],
             ],
             'people' => [
                 'sortableAttributes'=> ['astrological_sign', 'birthdate', 'deceased_date', 'full_name'],
