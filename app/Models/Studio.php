@@ -103,6 +103,30 @@ class Studio extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * Make all instances of the model searchable.
+     *
+     * @param  int  $chunk
+     * @return void
+     */
+    public static function makeAllSearchable($chunk = null): void
+    {
+        $self = new static;
+
+        $softDelete = static::usesSoftDelete() && config('scout.soft_delete', false);
+
+        $self->newQuery()
+            ->withoutGlobalScopes()
+            ->when(true, function ($query) use ($self) {
+                $self->makeAllSearchableUsing($query);
+            })
+            ->when($softDelete, function ($query) {
+                $query->withTrashed();
+            })
+            ->orderBy($self->getKeyName())
+            ->searchable($chunk);
+    }
+
+    /**
      * Get the indexable data array for the model.
      *
      * @return array
