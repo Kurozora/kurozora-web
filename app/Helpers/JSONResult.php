@@ -56,6 +56,8 @@ class JSONResult
             'version'                   => config('app.version'),
             'minimumAppVersion'         => config('app.ios.version'),
             'isMaintenanceModeEnabled'  => app()->isDownForMaintenance(),
+            'isUserAuthenticated'       => auth()->check(),
+            'authenticatedUserID'       => 0
         ];
 
         if (app()->environment('local')) {
