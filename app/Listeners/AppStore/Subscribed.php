@@ -61,7 +61,7 @@ class Subscribed extends AppStoreListener
                 'will_auto_renew'           => $willAutoRenew,
                 'original_purchased_at'     => $originalPurchaseDate?->toDateTime(),
                 'purchased_at'              => $purchaseDate?->toDateTime(),
-                'expired_at'                => $expiresDate->toDateTime(),
+                'expired_at'                => $expiresDate?->toDateTime(),
                 'revoked_at'                => $revocationDate?->toDateTime()
             ]);
         } else {
@@ -75,7 +75,7 @@ class Subscribed extends AppStoreListener
                 'will_auto_renew' => $willAutoRenew,
                 'original_purchased_at' => $originalPurchaseDate?->toDateTime(),
                 'purchased_at' => $purchaseDate?->toDateTime(),
-                'expired_at' => $expiresDate->toDateTime(),
+                'expired_at' => $expiresDate?->toDateTime(),
                 'revoked_at' => $revocationDate?->toDateTime(),
             ]);
         }

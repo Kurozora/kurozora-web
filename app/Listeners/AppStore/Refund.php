@@ -22,14 +22,14 @@ class Refund extends AppStoreListener
         $receiptInfo = $providerRepresentation->getTransactionInfo();
 
         // Collect dates
-        $expiresDate = $subscription->getExpiryTime();
+        $expiresDate = $receiptInfo->getExpiresDate();
         $revocationDate = $receiptInfo->getRevocationDate();
 
         // Find the user and update their receipt.
         $userReceipt = $this->findOrCreateUserReceipt($providerRepresentation);
         $userReceipt->update([
             'is_subscribed' => false,
-            'expired_at' => $expiresDate->toDateTime(),
+            'expired_at' => $expiresDate?->toDateTime(),
             'revoked_at' => $revocationDate?->toDateTime()
         ]);
 

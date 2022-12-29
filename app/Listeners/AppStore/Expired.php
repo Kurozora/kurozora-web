@@ -31,7 +31,7 @@ class Expired extends AppStoreListener
         $userReceipt = $this->findOrCreateUserReceipt($providerRepresentation);
         $userReceipt->update([
             'is_subscribed' => $isSubscriptionValid,
-            'expired_at' => $expiresDate->toDateTime()
+            'expired_at' => $expiresDate?->toDateTime()
         ]);
 
         // Update user values.

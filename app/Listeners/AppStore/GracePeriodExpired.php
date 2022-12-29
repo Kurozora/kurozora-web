@@ -19,14 +19,15 @@ class GracePeriodExpired extends AppStoreListener
 
         /** @var V2DecodedPayload $providerRepresentation */
         $providerRepresentation = $subscription->getProviderRepresentation();
+        $receiptInfo = $providerRepresentation->getTransactionInfo();
 
-        // Collect dates
-        $expiresDate = $subscription->getExpiryTime();
+        // Collect Dates
+        $expiresDate = $receiptInfo->getExpiresDate();
 
         // Find the user and update their receipt.
         $userReceipt = $this->findOrCreateUserReceipt($providerRepresentation);
         $userReceipt->update([
-            'expired_at' => $expiresDate->toDateTime()
+            'expired_at' => $expiresDate?->toDateTime()
         ]);
 
         // Update user values.

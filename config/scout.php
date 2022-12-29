@@ -134,39 +134,39 @@ return [
         'key' => env('MEILISEARCH_KEY', null),
         'index-settings' => [
             'animes' => [
-                'sortableAttributes'=> ['air_day', 'air_season', 'air_time', 'duration', 'first_aired', 'is_nsfw', 'last_aired', 'original_title', 'title'],
+                'sortableAttributes'=> ['air_day', 'air_season', 'air_time', 'duration', 'first_aired', 'is_nsfw', 'last_aired', 'original_title', 'title', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'air_day', 'air_season', 'air_time', 'duration', 'first_aired', 'is_nsfw', 'last_aired', 'media_type_id', 'original_title', 'source_id', 'status_id', 'title', 'tv_rating_id'],
             ],
             'app_themes' => [
-                'sortableAttributes'=> ['download_count', 'name', 'version'],
+                'sortableAttributes'=> ['download_count', 'name', 'version', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'download_count', 'name', 'ui_status_bar_style', 'version'],
             ],
             'characters' => [
-                'sortableAttributes'=> ['age', 'astrological_sign', 'height', 'name', 'weight'],
+                'sortableAttributes'=> ['age', 'astrological_sign', 'height', 'name', 'weight', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'age', 'astrological_sign', 'birth_day', 'birth_month', 'bust', 'height', 'hip', 'status', 'waist', 'weight'],
             ],
             'episodes' => [
-                'sortableAttributes'=> ['duration', 'started_aired', 'ended_at', 'number', 'number_total', 'title'],
+                'sortableAttributes'=> ['duration', 'started_aired', 'ended_at', 'number', 'number_total', 'title', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'duration', 'started_at', 'ended_at', 'is_filler', 'is_nsfw', 'is_special', 'is_premiere', 'is_finale', 'is_verified', 'number', 'number_total', 'season_id', 'tv_rating_id'],
             ],
             'people' => [
-                'sortableAttributes'=> ['astrological_sign', 'birthdate', 'deceased_date', 'full_name'],
+                'sortableAttributes'=> ['astrological_sign', 'birthdate', 'deceased_date', 'full_name', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'astrological_sign', 'birthdate', 'deceased_date'],
             ],
             'songs' => [
-                'sortableAttributes'=> ['artist', 'title'],
+                'sortableAttributes'=> ['artist', 'title', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'am_id', 'artist', 'mal_id', 'title'],
             ],
             'studios' => [
-                'sortableAttributes'=> ['address', 'founded', 'name'],
+                'sortableAttributes'=> ['address', 'founded', 'name', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'address', 'founded', 'is_nsfw', 'type'],
             ],
             'user_libraries' => [
-                'sortableAttributes'=> ['end_date', 'start_date', 'status'],
+                'sortableAttributes'=> ['end_date', 'start_date', 'status', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'anime', 'anime_id', 'end_date', 'start_date', 'status', 'user_id'],
             ],
             'users' => [
-                'sortableAttributes'=> ['username', 'slug', 'created_at'],
+                'sortableAttributes'=> ['username', 'slug', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'username', 'slug', 'biography', 'created_at'],
             ],
         ],
