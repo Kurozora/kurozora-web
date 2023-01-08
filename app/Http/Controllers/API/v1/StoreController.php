@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\VerifyReceiptRequest;
+use App\Models\User;
 use App\Models\UserReceipt;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
@@ -92,7 +93,8 @@ class StoreController extends Controller
             }
 
             $user = $userReceipt->user;
-            $user->update([
+            $user?->update([
+                'is_pro'        => $isSubscriptionValid,
                 'is_subscribed' => $isSubscriptionValid
             ]);
         } else {
