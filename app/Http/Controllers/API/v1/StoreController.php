@@ -91,8 +91,10 @@ class StoreController extends Controller
                 ]);
             }
 
-            $userReceipt->user->is_subscribed = $isSubscriptionValid;
-            $userReceipt->user->save();
+            $user = $userReceipt->user;
+            $user->update([
+                'is_subscribed' => $isSubscriptionValid
+            ]);
         } else {
             // The receipt is invalid
             $isSubscriptionValid = false;
