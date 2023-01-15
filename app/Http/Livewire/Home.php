@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\ExploreCategory;
+use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -29,6 +30,16 @@ class Home extends Component
     function getExploreCategoriesProperty(): array|Collection
     {
         return ExploreCategory::orderBy('position')->get();
+    }
+
+    /**
+     * Get the list of users.
+     *
+     * @return User[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function getUsersProperty(): array|Collection
+    {
+        return User::whereIn('id', [363, 765])->get();
     }
 
     /**

@@ -2,12 +2,12 @@
 
 <div class="relative w-64 pb-2 snap-normal snap-center md:w-80">
     <div class="flex flex-col">
-        @if(empty($anime->video_url))
-        <picture class="relative aspect-video rounded-lg overflow-hidden">
-            <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
+        @if (empty($anime->video_url))
+            <picture class="relative aspect-video rounded-lg overflow-hidden">
+                <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_banner.webp') }}" alt="{{ $anime->title }} Banner" title="{{ $anime->title }}">
 
-            <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
-        </picture>
+                <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
+            </picture>
         @else
             <div class="relative aspect-video rounded-lg overflow-hidden">
                 <iframe

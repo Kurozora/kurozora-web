@@ -2,14 +2,6 @@
     @if ($onProfile)
         <span title="{{ $user->getActivityStatus()->description }}">
             <svg class="relative overflow-hidden" width="96" height="96" viewBox="0 0 96 96">
-                <mask id="svg-mask-avatar-status-round-80" maskContentUnits="objectBoundingBox" viewBox="0 0 1 1">
-                    <circle fill="white" cx="0.5" cy="0.5" r="0.5"></circle>
-                    <circle fill="black" cx="0.85" cy="0.85" r="0.155"></circle>
-                </mask>
-                <mask id="svg-mask-status-online" maskContentUnits="objectBoundingBox" viewBox="0 0 1 1">
-                    <circle fill="white" cx="0.5" cy="0.5" r="0.5"></circle>
-                </mask>
-
                 <foreignObject height="96" width="96" mask="url(#svg-mask-avatar-status-round-80)">
                     <img class="bg-white" src="{{ $user->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) }}" alt="{{ $user->username }} Profile Image" width="{{ $user->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['width'] ?? 96 }}" height="{{ $user->getFirstMedia(\App\Enums\MediaCollection::Profile)?->custom_properties['height'] ?? 96 }}">
 
