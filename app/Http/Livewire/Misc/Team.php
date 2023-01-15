@@ -9,7 +9,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
 
-class Creators extends Component
+class Team extends Component
 {
     /**
      * Get the list of users.
@@ -18,7 +18,16 @@ class Creators extends Component
      */
     public function getUsersProperty(): array|Collection
     {
-        return User::whereIn('id', [1, 2])->get();
+        $users = User::whereIn('id', [
+            1, 2, 380, 668
+        ])->get();
+
+        return [
+            $users[1],
+            $users[0],
+            $users[3],
+            $users[2],
+        ];
     }
 
     /**
@@ -28,6 +37,6 @@ class Creators extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.misc.creators');
+        return view('livewire.misc.team');
     }
 }

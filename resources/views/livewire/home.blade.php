@@ -71,7 +71,7 @@
                     @endphp
 
                     <a class="relative pb-2 snap-normal snap-center min-w-[18rem] md:min-w-[30rem]" href="{{ route('profile.details', $user) }}">
-                        <div class="{{ $backgroundColor }} rounded-lg shadow-sm overflow-hidden" style="background-color: {{ $backgroundColor }};">
+                        <div class="rounded-lg shadow-sm overflow-hidden" style="background-color: {{ $backgroundColor }};">
                             <div class="relative flex justify-center bg-gray-800">
                                 <picture class="relative overflow-hidden">
                                     <img class="w-full h-full object-cover" style="max-height: 16rem;" width="300" height="168" src="{{ $imageURL }}" alt="{{ $user->username }} KAIOS ’22 submission" title="{{ $user->username }} KAIOS ’22 submission">
