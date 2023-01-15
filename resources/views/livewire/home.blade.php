@@ -56,7 +56,7 @@
                             $imageURL = 'https://cdn.discordapp.com/attachments/1027527900896956416/1061404084860620851/ChrismasThemedWallpaper.png';
                             $text = '1st Place';
                             break;
-                        case 2:
+                        case 765:
                             $backgroundColor = '#ECECEC';
                             $textColor = '#FF8B13';
                             $imageURL = 'https://cdn.discordapp.com/attachments/1027527900896956416/1062558851662102538/Happy_New_Years_.jpg';
@@ -104,7 +104,7 @@
                                             <li>$75 Giftcard of Choice</li>
                                             <li>50 Raffle Tickets for Upcoming Events</li>
                                         </ul>
-                                    @elseif ($user->id == 2)
+                                    @elseif ($user->id == 765)
                                         <ul class="list-disc block">
                                             <li>6 Months Discord Nitro</li>
                                             <li>1 Year Kurozora+</li>
