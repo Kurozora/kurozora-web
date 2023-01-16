@@ -210,6 +210,39 @@ class ExploreCategory extends KModel implements Sitemapable
     }
 
     /**
+     * Returns anime that's finished recently.
+     *
+     * @param Genre|Theme|null $model
+     * @param int $limit
+     * @return ExploreCategory
+     */
+    public function recentlyFinishedShows(Genre|Theme|null $model = null, int $limit = 10): ExploreCategory
+    {
+        if ($this->type === ExploreCategoryTypes::RecentlyFinishedShows) {
+            if (is_a($model, Genre::class)) {
+                $recentlyFinishedShows = Anime::whereGenre($model)
+                    ->recentlyFinishedShows($limit)
+                    ->get('id');
+            } else if (is_a($model, Theme::class)) {
+                $recentlyFinishedShows = Anime::whereTheme($model)
+                    ->recentlyFinishedShows($limit)
+                    ->get('id');
+            } else {
+                $recentlyFinishedShows = Anime::recentlyFinishedShows($limit)
+                    ->get('id');
+            }
+
+            foreach($recentlyFinishedShows as $recentlyFinishedShow) {
+                $this->explore_category_items->add(new ExploreCategoryItem([
+                    'model_id' => $recentlyFinishedShow->id,
+                    'model_type' => get_class($recentlyFinishedShow)
+                ]));
+            }
+        }
+        return $this;
+    }
+
+    /**
      * Append the shows continuing since past season(s) to the category's items.
      *
      * @param Genre|Theme|null $model
