@@ -20,16 +20,21 @@
                         break;
                     case 380:
                         $backgroundColor = '#F1C9BF';
-                        $usernameColor = '#1F2937';
+                        $usernameColor = '#E862AA';
                         $text = 'Event Manager';
                         break;
+                    case 461:
+                        $backgroundColor = '#3D155F';
+                        $usernameColor = '#DF678C';
+                        $text = 'Artisan Ace';
+                        break;
                     case 668:
-                        $backgroundColor = '#ECECEC';
-                        $usernameColor = '#1F2937';
+                        $backgroundColor = '#6B38C4';
+                        $usernameColor = '#EAEAEA';
                         $text = 'Queen of Kurozora (VTuber)';
                         break;
                     default:
-                        $backgroundColor = 'bg-white';
+                        $backgroundColor = '#FFFFFF';
                         $usernameColor = '#1F2937';
                         $text = '';
                     }
