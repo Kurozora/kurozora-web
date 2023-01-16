@@ -93,7 +93,7 @@ class ExploreCategorySection extends Component
                 ExploreCategoryTypes::UpcomingShows => $anime->upcomingShows()->count(),
                 ExploreCategoryTypes::NewShows => $anime->newShows()->count(),
                 ExploreCategoryTypes::RecentlyUpdateShows => $anime->recentlyUpdatedShows()->count(),
-                ExploreCategoryTypes::RecentlyFinishedShows => $anime->recentlyFinisheddShows()->count(),
+                ExploreCategoryTypes::RecentlyFinishedShows => $anime->recentlyFinishedShows()->count(),
                 ExploreCategoryTypes::AnimeContinuing => $anime->animeContinuing()->count(),
                 ExploreCategoryTypes::AnimeSeason => $anime->animeSeason()->count(),
                 default => 0
