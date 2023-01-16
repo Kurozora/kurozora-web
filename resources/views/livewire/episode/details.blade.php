@@ -279,7 +279,7 @@
                     <div id="ratingBadge" class="flex-grow pr-12">
                         <a href="#ratingsAndReviews">
                             <p class="inline-flex font-bold text-orange-500">
-                                {{ number_format($episode->stats?->rating_average, 1) }}
+                                {{ number_format($episode->stats?->rating_average ?? 0, 1) }}
                                 <livewire:anime.star-rating :rating="$episode->stats?->rating_average" :star-size="'sm'" :disabled="true" />
                             </p>
                             <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $episode->stats?->rating_count, ['x' => number_shorten((int) $episode->stats?->rating_count, 0, true)]) }}</p>
@@ -344,7 +344,7 @@
 
                     <div class="flex flex-row justify-between">
                         <div class="text-center">
-                            <p class="font-bold text-6xl">{{ number_format($episode->stats?->rating_average, 1) }}</p>
+                            <p class="font-bold text-6xl">{{ number_format($episode->stats?->rating_average ?? 0, 1) }}</p>
                             <p class="font-bold text-sm text-gray-500">{{ __('out of') }} 5</p>
                         </div>
 

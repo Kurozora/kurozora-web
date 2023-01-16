@@ -72,6 +72,8 @@ class ExploreCategorySection extends Component
             $this->exploreCategoryCount = match ($exploreCategory->type) {
                 ExploreCategoryTypes::MostPopularShows => $anime->mostPopular()->count(),
                 ExploreCategoryTypes::UpcomingShows => $anime->upcomingShows()->count(),
+                ExploreCategoryTypes::NewShows => $anime->newShows()->count(),
+                ExploreCategoryTypes::RecentlyUpdateShows => $anime->recentlyUpdatedShows()->count(),
                 ExploreCategoryTypes::AnimeContinuing => $anime->animeContinuing()->count(),
                 ExploreCategoryTypes::AnimeSeason => $anime->animeSeason()->count(),
                 default => 0
@@ -88,6 +90,8 @@ class ExploreCategorySection extends Component
             $this->exploreCategoryCount = match ($exploreCategory->type) {
                 ExploreCategoryTypes::MostPopularShows => $anime->mostPopular()->count(),
                 ExploreCategoryTypes::UpcomingShows => $anime->upcomingShows()->count(),
+                ExploreCategoryTypes::NewShows => $anime->newShows()->count(),
+                ExploreCategoryTypes::RecentlyUpdateShows => $anime->recentlyUpdatedShows()->count(),
                 ExploreCategoryTypes::AnimeContinuing => $anime->animeContinuing()->count(),
                 ExploreCategoryTypes::AnimeSeason => $anime->animeSeason()->count(),
                 default => 0
@@ -100,6 +104,8 @@ class ExploreCategorySection extends Component
         $this->exploreCategoryCount = match ($exploreCategory->type) {
             ExploreCategoryTypes::MostPopularShows => Anime::mostPopular()->count(),
             ExploreCategoryTypes::UpcomingShows => Anime::upcomingShows()->count(),
+            ExploreCategoryTypes::NewShows => Anime::newShows()->count(),
+            ExploreCategoryTypes::RecentlyUpdateShows => Anime::recentlyUpdatedShows()->count(),
             ExploreCategoryTypes::AnimeContinuing => Anime::animeContinuing()->count(),
             ExploreCategoryTypes::AnimeSeason => Anime::animeSeason()->count(),
             ExploreCategoryTypes::Characters => Character::bornToday()->count(),
@@ -128,6 +134,12 @@ class ExploreCategorySection extends Component
         $exploreCategoryItems = match ($this->exploreCategory->type) {
             ExploreCategoryTypes::MostPopularShows => $this->exploreCategory->most_popular_shows($this->genre ?? $this->theme)->explore_category_items,
             ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcoming_shows($this->genre ?? $this->theme)->explore_category_items,
+            ExploreCategoryTypes::NewShows => $this->exploreCategory->newShows($this->genre ?? $this->theme)->explore_category_items->map(function ($exploreCategoryItem) {
+                return $exploreCategoryItem->model;
+            }),
+            ExploreCategoryTypes::RecentlyUpdateShows => $this->exploreCategory->recentlyUpdatedShows($this->genre ?? $this->theme)->explore_category_items->map(function ($exploreCategoryItem) {
+                return $exploreCategoryItem->model;
+            }),
             ExploreCategoryTypes::AnimeContinuing => $this->exploreCategory->anime_continuing($this->genre ?? $this->theme)->explore_category_items->map(function ($exploreCategoryItem) {
                 return $exploreCategoryItem->model;
             }),

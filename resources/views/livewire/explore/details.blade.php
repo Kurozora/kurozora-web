@@ -14,6 +14,8 @@
         @switch($exploreCategory->type)
             @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
             @case(\App\Enums\ExploreCategoryTypes::UpcomingShows)
+            @case(\App\Enums\ExploreCategoryTypes::NewShows)
+            @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateShows)
             @case(\App\Enums\ExploreCategoryTypes::Shows)
                 {{ __('Explore the latest :x anime only on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}
             @break
@@ -48,6 +50,8 @@
         @switch($exploreCategory->type)
             @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
             @case(\App\Enums\ExploreCategoryTypes::UpcomingShows)
+            @case(\App\Enums\ExploreCategoryTypes::NewShows)
+            @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateShows)
             @case(\App\Enums\ExploreCategoryTypes::AnimeContinuing)
             @case(\App\Enums\ExploreCategoryTypes::AnimeSeason)
             @case(\App\Enums\ExploreCategoryTypes::Shows)

@@ -19,13 +19,6 @@ class Details extends Component
      */
     public ExploreCategory $exploreCategory;
 
-//    /**
-//     * The array containing the explore category items data.
-//     *
-//     * @var Collection exploreCategoryItems
-//     */
-//    public Collection $exploreCategoryItems;
-
     /**
      * Prepare the component.
      *
@@ -48,6 +41,8 @@ class Details extends Component
         $exploreCategoryItems = match ($this->exploreCategory->type) {
             ExploreCategoryTypes::MostPopularShows => $this->exploreCategory->most_popular_shows(),
             ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcoming_shows(),
+            ExploreCategoryTypes::NewShows => $this->exploreCategory->newShows(limit: 25),
+            ExploreCategoryTypes::RecentlyUpdateShows => $this->exploreCategory->recentlyUpdatedShows(limit: 25),
             ExploreCategoryTypes::AnimeContinuing => $this->exploreCategory->anime_continuing(),
             ExploreCategoryTypes::AnimeSeason => $this->exploreCategory->anime_season(),
             ExploreCategoryTypes::Characters => $this->exploreCategory->charactersBornToday(-1),

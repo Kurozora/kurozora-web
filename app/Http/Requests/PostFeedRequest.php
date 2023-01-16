@@ -28,7 +28,7 @@ class PostFeedRequest extends FormRequest
             // TODO: - Remove body and make content always required
             'body'          => ['bail', 'required_without:content', 'string', 'min:2', 'max:' . FeedMessage::MAX_CONTENT_LENGTH],
             'content'       => ['bail', 'required_without:body', 'string', 'min:2', 'max:' . FeedMessage::MAX_CONTENT_LENGTH],
-            'parent_id'     => ['bail', 'integer', 'required_with:is_reply,is_reshare', 'exists:' . FeedMessage::TABLE_NAME . ',id'],
+            'parent_id'     => ['bail', 'required_with:is_reply,is_reshare', 'integer', 'exists:' . FeedMessage::TABLE_NAME . ',id'],
             'is_reply'      => ['bail', 'required_with:parent_id', 'different:is_reshare', 'integer', 'in:0,1', 'nullable'],
             'is_reshare'    => ['bail', 'required_with:parent_id', 'different:is_reply', 'integer', 'in:0,1', 'nullable'],
             'is_nsfw'       => ['bail', 'required', 'integer', 'in:0,1', 'nullable'],

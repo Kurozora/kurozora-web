@@ -95,6 +95,7 @@ class AnimeResourceBasic extends JsonResource
         // Get the current library status
         $libraryEntry = $user->library()->firstWhere('anime_id', $this->resource->id);
         $currentLibraryStatus = null;
+
         if ($libraryEntry) {
             $currentLibraryStatus = UserLibraryStatus::getDescription($libraryEntry->pivot->status);
         }

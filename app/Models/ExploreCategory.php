@@ -97,7 +97,8 @@ class ExploreCategory extends KModel implements Sitemapable
                     ->mostPopular(10, 3, $model->is_nsfw) // look above
                     ->get('id');
             } else {
-                $popularShows = Anime::mostPopular()->get('id');
+                $popularShows = Anime::mostPopular()
+                    ->get('id');
             }
 
             foreach($popularShows as $popularShow) {
@@ -136,6 +137,72 @@ class ExploreCategory extends KModel implements Sitemapable
                 $this->explore_category_items->add(new ExploreCategoryItem([
                     'model_id' => $upcomingShow->id,
                     'model_type' => get_class($upcomingShow)
+                ]));
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Returns anime that's been added recently.
+     *
+     * @param Genre|Theme|null $model
+     * @param int $limit
+     * @return ExploreCategory
+     */
+    public function newShows(Genre|Theme|null $model = null, int $limit = 10): ExploreCategory
+    {
+        if ($this->type === ExploreCategoryTypes::NewShows) {
+            if (is_a($model, Genre::class)) {
+                $newShows = Anime::whereGenre($model)
+                    ->newShows($limit)
+                    ->get('id');
+            } else if (is_a($model, Theme::class)) {
+                $newShows = Anime::whereTheme($model)
+                    ->newShows($limit)
+                    ->get('id');
+            } else {
+                $newShows = Anime::newShows($limit)
+                    ->get('id');
+            }
+
+            foreach($newShows as $newShow) {
+                $this->explore_category_items->add(new ExploreCategoryItem([
+                    'model_id' => $newShow->id,
+                    'model_type' => get_class($newShow)
+                ]));
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Returns anime that's been added recently.
+     *
+     * @param Genre|Theme|null $model
+     * @param int $limit
+     * @return ExploreCategory
+     */
+    public function recentlyUpdatedShows(Genre|Theme|null $model = null, int $limit = 10): ExploreCategory
+    {
+        if ($this->type === ExploreCategoryTypes::RecentlyUpdateShows) {
+            if (is_a($model, Genre::class)) {
+                $recentlyUpdatedShows = Anime::whereGenre($model)
+                    ->recentlyUpdatedShows($limit)
+                    ->get('id');
+            } else if (is_a($model, Theme::class)) {
+                $recentlyUpdatedShows = Anime::whereTheme($model)
+                    ->recentlyUpdatedShows($limit)
+                    ->get('id');
+            } else {
+                $recentlyUpdatedShows = Anime::recentlyUpdatedShows($limit)
+                    ->get('id');
+            }
+
+            foreach($recentlyUpdatedShows as $recentlyUpdatedShow) {
+                $this->explore_category_items->add(new ExploreCategoryItem([
+                    'model_id' => $recentlyUpdatedShow->id,
+                    'model_type' => get_class($recentlyUpdatedShow)
                 ]));
             }
         }

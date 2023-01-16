@@ -63,6 +63,8 @@ class Episode extends KModel implements HasMedia, Sitemapable
      * @var array
      */
     protected $with = [
+        'anime',
+        'season',
         'translations',
         'tv_rating',
     ];

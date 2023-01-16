@@ -101,7 +101,7 @@
                                             <li>1 Year Kurozora Early Access</li>
                                             <li>Kurozora PRO</li>
                                             <li>KAIROS ’22 Event Badge</li>
-                                            <li>$75 Giftcard of Choice</li>
+                                            <li>$75 Gift Card of Choice</li>
                                             <li>50 Raffle Tickets for Upcoming Events</li>
                                         </ul>
                                     @elseif ($user->id == 765)
@@ -111,7 +111,7 @@
                                             <li>1 Year Kurozora Early Access</li>
                                             <li>Kurozora PRO</li>
                                             <li>KAIROS ’22 Event Badge</li>
-                                            <li>$50 Giftcard of Choice</li>
+                                            <li>$50 Gift Card of Choice</li>
                                             <li>25 Raffle Tickets for Upcoming Events</li>
                                         </ul>
                                     @endif

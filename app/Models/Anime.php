@@ -883,6 +883,33 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * Eloquent builder scope that limits the query to newly added shows.
+     *
+     * @param Builder $query
+     * @param int $limit
+     * @return Builder
+     */
+    public function scopeNewShows(Builder $query, int $limit = 10): Builder
+    {
+        return $query->orderBy('created_at', 'desc')
+            ->limit($limit);
+    }
+
+    /**
+     * Eloquent builder scope that limits the query to recently updated shows.
+     *
+     * @param Builder $query
+     * @param int $limit
+     * @return Builder
+     */
+    public function scopeRecentlyUpdatedShows(Builder $query, int $limit = 10): Builder
+    {
+        return $query->orderBy('updated_at', 'desc')
+            ->whereDate('created_at', '<', today())
+            ->limit($limit);
+    }
+
+    /**
      * Eloquent builder scope that limits the query to shows continuing since past season(s).
      *
      * @param Builder $query
