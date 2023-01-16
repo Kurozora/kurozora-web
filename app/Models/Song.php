@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\MediaCollection;
 use App\Traits\InteractsWithMediaExtension;
+use App\Traits\Model\HasViews;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -25,6 +26,7 @@ class Song extends KModel implements HasMedia, Sitemapable
     use Actionable,
         HasFactory,
         HasSlug,
+        HasViews,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         LogsActivity,

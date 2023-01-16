@@ -12,6 +12,7 @@ use App\Notifications\VerifyEmail as VerifyEmailNotification;
 use App\Parsers\MentionParser;
 use App\Traits\HeartActionTrait;
 use App\Traits\InteractsWithMediaExtension;
+use App\Traits\Model\HasViews;
 use App\Traits\Web\Auth\TwoFactorAuthenticatable;
 use Carbon\Carbon;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
@@ -61,6 +62,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         HasRoles,
         HasSlug,
         HasUuids,
+        HasViews,
         HeartActionTrait,
         Impersonatable,
         InteractsWithMedia,
@@ -709,7 +711,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     /**
      * Send the password reset notification.
      *
-     * @param  string  $token
+     * @param string $token
      * @return void
      */
     public function sendPasswordResetNotification($token): void

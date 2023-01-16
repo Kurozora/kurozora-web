@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\MediaCollection;
 use App\Traits\InteractsWithMediaExtension;
+use App\Traits\Model\HasViews;
 use App\Traits\Model\TvRated;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,6 +19,7 @@ use Spatie\Sitemap\Tags\Url;
 class Season extends KModel implements HasMedia, Sitemapable
 {
     use HasFactory,
+        HasViews,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         SoftDeletes,
