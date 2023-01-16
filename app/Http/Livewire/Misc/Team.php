@@ -25,7 +25,7 @@ class Team extends Component
         return [
             $users[1],
             $users[0],
-//            $users[4],
+            $users[4],
             $users[3],
             $users[2],
         ];
