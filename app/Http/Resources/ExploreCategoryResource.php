@@ -189,6 +189,24 @@ class ExploreCategoryResource extends JsonResource
                         )
                     ]
                 ];
+            case ExploreCategoryTypes::RecentlyFinishedShows:
+                $model = null;
+
+                if (!empty($request->input('genre_id'))) {
+                    $model = Genre::find($request->input('genre_id'));
+                } else if (!empty($request->input('theme_id'))) {
+                    $model = Theme::find($request->input('theme_id'));
+                }
+
+                return [
+                    'shows' => [
+                        'data' => AnimeResourceIdentity::collection($this->resource
+                            ->recentlyFinishedShows($model)
+                            ->explore_category_items
+                            ->pluck('model_id')
+                        )
+                    ]
+                ];
             case ExploreCategoryTypes::AnimeContinuing:
                 $model = null;
 

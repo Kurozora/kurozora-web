@@ -52,6 +52,7 @@
             @case(\App\Enums\ExploreCategoryTypes::UpcomingShows)
             @case(\App\Enums\ExploreCategoryTypes::NewShows)
             @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateShows)
+            @case(\App\Enums\ExploreCategoryTypes::RecentlyFinishedShows)
             @case(\App\Enums\ExploreCategoryTypes::AnimeContinuing)
             @case(\App\Enums\ExploreCategoryTypes::AnimeSeason)
             @case(\App\Enums\ExploreCategoryTypes::Shows)

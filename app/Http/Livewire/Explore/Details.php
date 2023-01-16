@@ -43,6 +43,7 @@ class Details extends Component
             ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcoming_shows(),
             ExploreCategoryTypes::NewShows => $this->exploreCategory->newShows(limit: 25),
             ExploreCategoryTypes::RecentlyUpdateShows => $this->exploreCategory->recentlyUpdatedShows(limit: 25),
+            ExploreCategoryTypes::RecentlyFinishedShows => $this->exploreCategory->recentlyFinishedShows(limit: 25),
             ExploreCategoryTypes::AnimeContinuing => $this->exploreCategory->anime_continuing(),
             ExploreCategoryTypes::AnimeSeason => $this->exploreCategory->anime_season(),
             ExploreCategoryTypes::Characters => $this->exploreCategory->charactersBornToday(-1),

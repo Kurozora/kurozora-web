@@ -74,6 +74,7 @@ class ExploreCategorySection extends Component
                 ExploreCategoryTypes::UpcomingShows => $anime->upcomingShows()->count(),
                 ExploreCategoryTypes::NewShows => $anime->newShows()->count(),
                 ExploreCategoryTypes::RecentlyUpdateShows => $anime->recentlyUpdatedShows()->count(),
+                ExploreCategoryTypes::RecentlyFinishedShows => $anime->recentlyFinishedShows()->count(),
                 ExploreCategoryTypes::AnimeContinuing => $anime->animeContinuing()->count(),
                 ExploreCategoryTypes::AnimeSeason => $anime->animeSeason()->count(),
                 default => 0
@@ -92,6 +93,7 @@ class ExploreCategorySection extends Component
                 ExploreCategoryTypes::UpcomingShows => $anime->upcomingShows()->count(),
                 ExploreCategoryTypes::NewShows => $anime->newShows()->count(),
                 ExploreCategoryTypes::RecentlyUpdateShows => $anime->recentlyUpdatedShows()->count(),
+                ExploreCategoryTypes::RecentlyFinishedShows => $anime->recentlyFinisheddShows()->count(),
                 ExploreCategoryTypes::AnimeContinuing => $anime->animeContinuing()->count(),
                 ExploreCategoryTypes::AnimeSeason => $anime->animeSeason()->count(),
                 default => 0
@@ -106,6 +108,7 @@ class ExploreCategorySection extends Component
             ExploreCategoryTypes::UpcomingShows => Anime::upcomingShows()->count(),
             ExploreCategoryTypes::NewShows => Anime::newShows()->count(),
             ExploreCategoryTypes::RecentlyUpdateShows => Anime::recentlyUpdatedShows()->count(),
+            ExploreCategoryTypes::RecentlyFinishedShows => Anime::recentlyFinishedShows()->count(),
             ExploreCategoryTypes::AnimeContinuing => Anime::animeContinuing()->count(),
             ExploreCategoryTypes::AnimeSeason => Anime::animeSeason()->count(),
             ExploreCategoryTypes::Characters => Character::bornToday()->count(),
@@ -138,6 +141,9 @@ class ExploreCategorySection extends Component
                 return $exploreCategoryItem->model;
             }),
             ExploreCategoryTypes::RecentlyUpdateShows => $this->exploreCategory->recentlyUpdatedShows($this->genre ?? $this->theme)->explore_category_items->map(function ($exploreCategoryItem) {
+                return $exploreCategoryItem->model;
+            }),
+            ExploreCategoryTypes::RecentlyFinishedShows => $this->exploreCategory->recentlyFinishedShows($this->genre ?? $this->theme)->explore_category_items->map(function ($exploreCategoryItem) {
                 return $exploreCategoryItem->model;
             }),
             ExploreCategoryTypes::AnimeContinuing => $this->exploreCategory->anime_continuing($this->genre ?? $this->theme)->explore_category_items->map(function ($exploreCategoryItem) {

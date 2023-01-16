@@ -50,6 +50,9 @@
                     @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateShows)
                         <x-rows.small-lockup :animes="$this->exploreCategoryItems" />
                     @break
+                    @case(\App\Enums\ExploreCategoryTypes::RecentlyFinishedShows)
+                        <x-rows.small-lockup :animes="$this->exploreCategoryItems" />
+                    @break
                     @case(\App\Enums\ExploreCategoryTypes::AnimeContinuing)
                         <x-rows.small-lockup :animes="$this->exploreCategoryItems" />
                     @break
