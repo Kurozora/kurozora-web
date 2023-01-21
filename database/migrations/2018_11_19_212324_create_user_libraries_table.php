@@ -19,23 +19,22 @@ return new class extends Migration
         Schema::create(UserLibrary::TABLE_NAME, function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('anime_id');
+            $table->uuidMorphs('trackable');
             $table->tinyInteger('status');
-            $table->timestamp('start_date')->nullable();
-            $table->timestamp('end_date')->nullable();
+            $table->timestamp('started_at')->nullable();
+            $table->timestamp('ended_at')->nullable();
             $table->timestamps();
         });
 
         Schema::table(UserLibrary::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
-            $table->index(['user_id', 'anime_id']);
+            $table->index('user_id');
 
             // Set unique key constraints
-            $table->unique(['user_id', 'anime_id']);
+            $table->unique(['user_id', 'trackable_type', 'trackable_id']);
 
             // Set foreign key constraints
             $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
-            $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
         });
     }
 

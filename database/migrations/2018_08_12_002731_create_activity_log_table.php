@@ -18,10 +18,8 @@ return new class extends Migration
                 $table->id();
                 $table->string('log_name')->nullable();
                 $table->text('description');
-                $table->unsignedBigInteger('subject_id')->nullable();
-                $table->string('subject_type')->nullable();
-                $table->unsignedBigInteger('causer_id')->nullable();
-                $table->string('causer_type')->nullable();
+                $table->nullableUuidMorphs('subject');
+                $table->nullableUuidMorphs('causer');
                 $table->json('properties')->nullable();
                 $table->timestamps();
 

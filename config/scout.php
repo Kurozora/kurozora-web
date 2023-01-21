@@ -133,19 +133,19 @@ return [
         'host' => env('MEILISEARCH_HOST', 'http://localhost:7700'),
         'key' => env('MEILISEARCH_KEY', null),
         'index-settings' => [
-            'animes' => [
+            \App\Models\Anime::TABLE_NAME => [
                 'sortableAttributes'=> ['air_day', 'air_season', 'air_time', 'duration', 'first_aired', 'is_nsfw', 'last_aired', 'original_title', 'title', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'air_day', 'air_season', 'air_time', 'duration', 'first_aired', 'is_nsfw', 'last_aired', 'media_type_id', 'original_title', 'source_id', 'status_id', 'title', 'tv_rating_id'],
             ],
-            'app_themes' => [
+            \App\Models\AppTheme::TABLE_NAME => [
                 'sortableAttributes'=> ['download_count', 'name', 'version', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'download_count', 'name', 'ui_status_bar_style', 'version'],
             ],
-            'characters' => [
+            \App\Models\Character::TABLE_NAME => [
                 'sortableAttributes'=> ['age', 'astrological_sign', 'height', 'name', 'weight', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'age', 'astrological_sign', 'birth_day', 'birth_month', 'bust', 'height', 'hip', 'status', 'waist', 'weight'],
             ],
-            'episodes' => [
+            \App\Models\Episode::TABLE_NAME => [
                 'sortableAttributes'=> ['duration', 'started_aired', 'ended_at', 'number', 'number_total', 'title', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'duration', 'started_at', 'ended_at', 'is_filler', 'is_nsfw', 'is_special', 'is_premiere', 'is_finale', 'is_verified', 'number', 'number_total', 'season_id', 'tv_rating_id'],
             ],
@@ -153,11 +153,11 @@ return [
                 'sortableAttributes'=> ['astrological_sign', 'birthdate', 'deceased_date', 'full_name', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'astrological_sign', 'birthdate', 'deceased_date'],
             ],
-            'songs' => [
+            \App\Models\Song::TABLE_NAME => [
                 'sortableAttributes'=> ['artist', 'title', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'am_id', 'artist', 'mal_id', 'title'],
             ],
-            'studios' => [
+            \App\Models\Studio::TABLE_NAME => [
                 'sortableAttributes'=> ['address', 'founded', 'name', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'address', 'founded', 'is_nsfw', 'type'],
             ],
@@ -165,7 +165,7 @@ return [
                 'sortableAttributes'=> ['end_date', 'start_date', 'status', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'anime', 'anime_id', 'end_date', 'start_date', 'status', 'user_id'],
             ],
-            'users' => [
+            \App\Models\User::TABLE_NAME => [
                 'sortableAttributes'=> ['username', 'slug', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'username', 'slug', 'biography', 'created_at'],
             ],

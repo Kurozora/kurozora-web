@@ -19,7 +19,7 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->ulid('comment_id')->nullable();
             $table->unsignedBigInteger('user_id');
-            $table->morphs('commentable');
+            $table->uuidMorphs('commentable');
             $table->text('content');
             $table->boolean('is_spoiler')->default(false);
             $table->boolean('is_nsfw')->default(false);

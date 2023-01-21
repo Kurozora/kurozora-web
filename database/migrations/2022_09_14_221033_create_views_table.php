@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create(View::TABLE_NAME, function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->morphs('viewable');
+            $table->uuidMorphs('viewable');
             $table->timestamp('viewed_at')->useCurrent();
             $table->timestamps();
             $table->softDeletes();

@@ -6,6 +6,8 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateMentionsTable extends Migration
 {
+    const TABLE_NAME = 'mentions';
+
     /**
      * Run the migrations.
      *
@@ -13,10 +15,10 @@ class CreateMentionsTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('mentions', function(Blueprint $table) {
+        Schema::create(self::TABLE_NAME, function(Blueprint $table) {
             $table->increments('id');
-            $table->morphs('model');
-            $table->morphs('recipient');
+            $table->uuidMorphs('model');
+            $table->uuidMorphs('recipient');
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ class CreateMentionsTable extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mentions');
+        Schema::dropIfExists(self::TABLE_NAME);
     }
 }

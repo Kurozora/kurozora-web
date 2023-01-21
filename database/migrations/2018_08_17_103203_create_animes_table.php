@@ -42,8 +42,6 @@ return new class extends Migration
             $table->unsignedBigInteger('source_id')->nullable();
             $table->unsignedBigInteger('status_id')->nullable();
             $table->string('video_url')->nullable();
-            $table->date('first_aired')->nullable();
-            $table->date('last_aired')->nullable();
             $table->unsignedMediumInteger('duration')->default(0);
             $table->time('air_time')->nullable();
             $table->unsignedTinyInteger('air_day')->nullable();
@@ -53,6 +51,8 @@ return new class extends Migration
             $table->integer('episode_count')->default(0);
             $table->integer('season_count')->default(0);
             $table->integer('view_count')->default(0);
+            $table->date('first_aired')->nullable();
+            $table->date('last_aired')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

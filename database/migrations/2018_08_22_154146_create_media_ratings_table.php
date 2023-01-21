@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::create(MediaRating::TABLE_NAME, function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->morphs('model');
+            $table->uuidMorphs('model');
             $table->float('rating');
             $table->text('description')->nullable();
             $table->timestamps();
