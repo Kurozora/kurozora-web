@@ -10,7 +10,7 @@
             <div class="flex justify-between h-16">
                 {{-- Hamburger --}}
                 <div
-                    class="-mr-2 flex items-center sm:hidden"
+                    class="-mr-2 flex items-center md:hidden"
                     x-show="! isSearchEnabled"
                     x-transition:enter="ease-out duration-150 delay-[50ms] transform sm:delay-300"
                     x-transition:enter-start="opacity-0 scale-75"
@@ -61,7 +61,7 @@
                     {{-- Left Side --}}
                     <span class="flex w-full">
                         {{-- Logo --}}
-                        <a class="inline-flex items-center m-auto text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700 sm:my-0 sm:ml-0 sm:mr-8 sm:pt-1"
+                        <a class="inline-flex items-center m-auto text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700 md:my-0 md:ml-0 md:mr-8 md:pt-1"
                            href="/"
                            x-show="! isSearchEnabled"
                            x-transition:enter="ease-out duration-150 delay-100 transform sm:delay-[0ms]"
@@ -75,7 +75,7 @@
                         </a>
 
                         {{-- Navigation Links --}}
-                        <div class="hidden sm:flex sm:justify-between sm:-my-px sm:w-full md:w-auto md:space-x-8">
+                        <div class="hidden md:flex md:justify-between md:-my-px md:w-full lg:w-auto lg:space-x-8">
                             <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')"
                                         x-show="! isSearchEnabled"
                                         x-transition:enter="ease-out duration-150 delay-[50ms] transform"
@@ -121,10 +121,10 @@
                                         x-transition:leave-start="opacity-100 scale-100"
                                         x-transition:leave-end="opacity-0 scale-75"
                             >
-                                {{ __('Characters') }}
+                                {{ __('Genres') }}
                             </x-nav-link>
 
-                            <x-nav-link href="{{ route('people.index') }}" :active="request()->routeIs('people.index')"
+                            <x-nav-link href="{{ route('characters.index') }}" :active="request()->routeIs('characters.index')"
                                         x-show="! isSearchEnabled"
                                         x-transition:enter="ease-out duration-150 delay-[250ms] transform"
                                         x-transition:enter-start="opacity-0 scale-75"
@@ -133,15 +133,27 @@
                                         x-transition:leave-start="opacity-100 scale-100"
                                         x-transition:leave-end="opacity-0 scale-75"
                             >
-                                {{ __('People') }}
+                                {{ __('Characters') }}
                             </x-nav-link>
 
-                            <x-nav-link href="{{ route('studios.index') }}" :active="request()->routeIs('studios.index')"
+                            <x-nav-link href="{{ route('people.index') }}" :active="request()->routeIs('people.index')"
                                         x-show="! isSearchEnabled"
                                         x-transition:enter="ease-out duration-150 delay-300 transform"
                                         x-transition:enter-start="opacity-0 scale-75"
                                         x-transition:enter-end="opacity-100 scale-100"
                                         x-transition:leave="ease-in duration-200 delay-100 transform"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-75"
+                            >
+                                {{ __('People') }}
+                            </x-nav-link>
+
+                            <x-nav-link href="{{ route('studios.index') }}" :active="request()->routeIs('studios.index')"
+                                        x-show="! isSearchEnabled"
+                                        x-transition:enter="ease-out duration-150 delay-[350ms] transform"
+                                        x-transition:enter-start="opacity-0 scale-75"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="ease-in duration-200 delay-75 transform"
                                         x-transition:leave-start="opacity-100 scale-100"
                                         x-transition:leave-end="opacity-0 scale-75"
                             >
@@ -151,10 +163,10 @@
                             <x-nav-link href="{{ config('app.ios.store_url') }}"
                                         target="_blank"
                                         x-show="! isSearchEnabled"
-                                        x-transition:enter="ease-out duration-150 delay-[350ms] transform"
+                                        x-transition:enter="ease-out duration-150 delay-[400ms] transform"
                                         x-transition:enter-start="opacity-0 scale-75"
                                         x-transition:enter-end="opacity-100 scale-100"
-                                        x-transition:leave="ease-in duration-200 delay-75 transform"
+                                        x-transition:leave="ease-in duration-200 delay-[50ms] transform"
                                         x-transition:leave-start="opacity-100 scale-100"
                                         x-transition:leave-end="opacity-0 scale-75"
                             >
@@ -164,12 +176,12 @@
                     </span>
 
                     {{-- Right Side --}}
-                    <div class="flex items-center sm:justify-between sm:ml-8 sm:-my-px sm:space-x-8">
+                    <div class="flex items-center md:justify-between md:ml-8 md:-my-px md:space-x-8">
                         {{-- Search --}}
                         <a class="inline-flex items-center text-gray-500 cursor-pointer transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:text-gray-700"
                            x-show="! isSearchEnabled"
                            x-on:click="isNavOpen = false; isSearchEnabled = ! isSearchEnabled;"
-                           x-transition:enter="ease-out duration-150 delay-150 transform dm:delay-300"
+                           x-transition:enter="ease-out duration-150 delay-150 transform sm:delay-300"
                            x-transition:enter-start="opacity-0 scale-75"
                            x-transition:enter-end="opacity-100 scale-100"
                            x-transition:leave="ease-in duration-200 transform sm:delay-[50ms]"
@@ -180,10 +192,10 @@
                         </a>
 
                         {{-- Settings Dropdown --}}
-                        <x-dropdown align="right" width="48">
+                        <x-dropdown align="right" width="48" content-classes="hidden bg-white md:block">
                             <x-slot:trigger>
                                 <button
-                                    class="hidden sm:flex text-sm border-2 border-transparent rounded-full transition duration-150 ease-in-out focus:outline-none focus:border-gray-300"
+                                    class="hidden md:flex text-sm border-2 border-transparent rounded-full transition duration-150 ease-in-out focus:outline-none focus:border-gray-300"
                                     x-show="! isSearchEnabled"
                                     x-transition:enter="ease-out duration-150 delay-[350ms] transform"
                                     x-transition:enter-start="opacity-0 scale-75"
@@ -207,9 +219,15 @@
                                     {{ __('Profile') }}
                                 </x-dropdown-link>
 
+                                <div class="border-t border-gray-100"></div>
+
                                 {{-- Library --}}
-                                <x-dropdown-link href="{{ route('library.index') }}">
+                                <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-gray-400">
                                     {{ __('Library') }}
+                                </div>
+
+                                <x-dropdown-link href="{{ route('profile.anime-library', auth()->user()) }}">
+                                    {{ __('Anime Library') }}
                                 </x-dropdown-link>
 
                                 <div class="border-t border-gray-100"></div>
@@ -280,7 +298,7 @@
 
         {{-- Responsive Navigation Menu --}}
         <div
-            class="block absolute pl-4 pr-4 w-full bg-white rounded-b-2xl z-[300] sm:hidden"
+            class="block absolute pl-4 pr-4 w-full bg-white rounded-b-2xl z-[300] md:hidden"
             x-show="isNavOpen"
             x-collapse.duration.400ms=""
         >
@@ -334,15 +352,20 @@
                         {{ __('Profile') }}
                     </x-responsive-nav-link>
 
-                    {{-- Library --}}
-                    <x-responsive-nav-link href="{{ route('library.index') }}">
-                        {{ __('Library') }}
+                    <div class="border-t border-gray-100"></div>
+                </div>
+
+                {{-- Library --}}
+                <div class="space-y-1">
+                    <x-responsive-nav-link href="{{ route('profile.anime-library', auth()->user()) }}"
+                                           :active="request()->routeIs('profile.anime-library')">
+                        {{ __('Anime Library') }}
                     </x-responsive-nav-link>
 
                     <div class="border-t border-gray-100"></div>
                 </div>
 
-                {{-- Themes --}}
+                {{-- More Pages --}}
                 <div class="space-y-1">
                     <x-responsive-nav-link href="{{ route('theme-store.index') }}"
                                            :active="request()->routeIs('theme-store.index')">
@@ -405,7 +428,7 @@
 
     {{-- Responsive Overlay --}}
     <div
-        class="fixed inset-0 transform transition-all z-[299] sm:hidden"
+        class="fixed inset-0 transform transition-all z-[299] md:hidden"
         x-show="isNavOpen"
         x-on:click="isNavOpen = false;"
         x-transition:enter="ease-out duration-300"
