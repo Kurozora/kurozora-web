@@ -243,8 +243,9 @@ class MeTest extends TestCase
         /** @var Anime[] $anime */
         $animeList = Anime::factory(25)->create();
 
-        foreach($animeList as $anime)
-            $this->user->favorite_anime()->attach($anime->id);
+        foreach($animeList as $anime) {
+            $this->user->favorite($anime);
+        }
 
         // Send request for the list of anime
         $response = $this->auth()->json('GET', 'v1/me/favorite-anime');
@@ -255,7 +256,6 @@ class MeTest extends TestCase
         // Check whether the response contains the correct amount of anime
         $this->assertCount(25, $response->json()['data']);
     }
-
 
     /**
      * User can get their list of followers.

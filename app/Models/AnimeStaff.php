@@ -19,17 +19,6 @@ class AnimeStaff extends KModel implements Sitemapable
     protected $table = self::TABLE_NAME;
 
     /**
-     * Convert the model to its sitemap representation.
-     *
-     * @return Url|string|array
-     */
-    public function toSitemapTag(): Url|string|array
-    {
-        return Url::create(route('anime.staff', $this->anime))
-            ->setChangeFrequency('weekly');
-    }
-
-    /**
      * The anime relationship of anime staff.
      *
      * @return BelongsTo
@@ -58,5 +47,16 @@ class AnimeStaff extends KModel implements Sitemapable
     public function staff_role(): BelongsTo
     {
         return $this->belongsTo(StaffRole::class);
+    }
+
+    /**
+     * Convert the model to its sitemap representation.
+     *
+     * @return Url|string|array
+     */
+    public function toSitemapTag(): Url|string|array
+    {
+        return Url::create(route('anime.staff', $this->anime))
+            ->setChangeFrequency('weekly');
     }
 }

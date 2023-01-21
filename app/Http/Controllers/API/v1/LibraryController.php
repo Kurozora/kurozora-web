@@ -110,6 +110,7 @@ class LibraryController extends Controller
     {
         $data = $request->validated();
         $animeID = $data['anime_id'];
+        $anime = Anime::findOrFail($animeID);
 
         // Get the authenticated user
         $user = auth()->user();
@@ -119,7 +120,8 @@ class LibraryController extends Controller
             $user->library()->detach($animeID);
 
             // Remove from favorites as you can't favorite and not have anime in library
-            $user->favorite_anime()->detach($animeID);
+            $user->unfavorite($anime);
+
             // Remove from reminders as you can't remind and not have anime in library
             $user->reminder_anime()->detach($animeID);
 

@@ -12,6 +12,7 @@ use App\Notifications\VerifyEmail as VerifyEmailNotification;
 use App\Parsers\MentionParser;
 use App\Traits\HeartActionTrait;
 use App\Traits\InteractsWithMediaExtension;
+use App\Traits\Model\Favoriter;
 use App\Traits\Model\HasViews;
 use App\Traits\Web\Auth\TwoFactorAuthenticatable;
 use Carbon\Carbon;
@@ -55,6 +56,7 @@ use Xetaio\Mentions\Models\Traits\HasMentionsTrait;
 class User extends Authenticatable implements HasMedia, MustVerifyEmail, ReacterableContract, Sitemapable
 {
     use Authorizable,
+        Favoriter,
         HasApiTokens,
         HasFactory,
         HasMentionsTrait,
@@ -351,17 +353,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     function sessions(): HasMany
     {
         return $this->hasMany(Session::class);
-    }
-
-    /**
-     * Returns the Anime that the user has added to their favorites.
-     *
-     * @return BelongsToMany
-     */
-    function favorite_anime(): BelongsToMany
-    {
-        return $this->belongsToMany(Anime::class, UserFavoriteAnime::class, 'user_id', 'anime_id')
-            ->withTimestamps();
     }
 
     /**
@@ -730,6 +721,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     public function toSitemapTag(): \Spatie\Sitemap\Tags\Url|string|array
     {
-        return route('profile.details', $this);
+        return route('profile.details', $this)
+            ->setChangeFrequency('weekly');
     }
 }

@@ -36,9 +36,23 @@
             </div>
         </section>
 
-        <section class="mt-4">
-            <x-rows.small-lockup :animes="$this->searchResults" :is-row="false" />
-        </section>
+        @if(!empty($this->searchResults))
+            @if(!empty($this->searchResults->total()))
+                <section class="mt-4">
+                    <x-rows.small-lockup :animes="$this->searchResults" :is-row="false" />
+                </section>
+            @else
+                <section class="flex flex-col items-center mt-4 text-center">
+                    <x-picture>
+                        <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_anime_library.webp') }}" alt="Empty Favorite Anime" title="Empty Favorite Anime">
+                    </x-picture>
+
+                    <p class="font-bold">{{ __('No Favorite Anime') }}</p>
+
+                    <p class="text-md text-gray-500">{{ __('Favorite an anime and it will show up here.') }}</p>
+                </section>
+            @endif
+        @endif
 
         <section class="mt-4">
             {{ $this->searchResults->links() }}

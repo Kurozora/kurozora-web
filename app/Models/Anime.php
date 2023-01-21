@@ -8,6 +8,7 @@ use App\Enums\MediaCollection;
 use App\Enums\SeasonOfYear;
 use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
+use App\Traits\Model\Favorable;
 use App\Traits\Model\HasMediaTags;
 use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasViews;
@@ -42,6 +43,7 @@ use Spatie\Sluggable\SlugOptions;
 class Anime extends KModel implements HasMedia, Sitemapable
 {
     use Actionable,
+        Favorable,
         HasFactory,
         HasSlug,
         HasMediaTags,
@@ -382,17 +384,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
         }
 
         return CarbonInterval::seconds($this->duration * $this->episode_count)->cascade()->forHumans();
-    }
-
-    /**
-     * Returns the users who have this Anime in their favorites.
-     *
-     * @return BelongsToMany
-     */
-    public function favoredBy(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, UserFavoriteAnime::TABLE_NAME, 'anime_id', 'user_id')
-            ->withTimestamps();
     }
 
     /**

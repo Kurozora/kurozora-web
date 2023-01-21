@@ -73,17 +73,6 @@ class Song extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Convert the model to its sitemap representation.
-     *
-     * @return Url|string|array
-     */
-    public function toSitemapTag(): Url|string|array
-    {
-        return Url::create(route('songs.details', $this))
-            ->setChangeFrequency('weekly');
-    }
-
-    /**
      * Get the indexable data array for the model.
      *
      * @return array
@@ -132,5 +121,16 @@ class Song extends KModel implements HasMedia, Sitemapable
         return Cache::remember($cacheKey, self::CACHE_KEY_ANIMES_SECONDS, function () use ($limit) {
             return $this->anime()->paginate($limit);
         });
+    }
+
+    /**
+     * Convert the model to its sitemap representation.
+     *
+     * @return Url|string|array
+     */
+    public function toSitemapTag(): Url|string|array
+    {
+        return Url::create(route('songs.details', $this))
+            ->setChangeFrequency('weekly');
     }
 }

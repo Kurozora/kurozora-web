@@ -101,10 +101,10 @@ class AnimeResourceBasic extends JsonResource
         }
 
         // Get the favorite status
-        $isTrackingAnime = $user->isTracking($this->resource);
+        $isTrackingAnime = $user->isTrackingAnime($this->resource);
         $favoriteStatus = null;
         if ($isTrackingAnime) {
-            $favoriteStatus = $user->favorite_anime()->wherePivot('anime_id', $this->resource->id)->exists();
+            $favoriteStatus = $user->hasFavorited($this->resource);
         }
 
         // Get the reminder status

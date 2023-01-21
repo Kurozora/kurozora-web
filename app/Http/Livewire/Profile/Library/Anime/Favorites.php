@@ -34,7 +34,6 @@ class Favorites extends Component
         $this->user = $user;
     }
 
-
     /**
      * Redirect the user to a random model.
      *
@@ -43,7 +42,7 @@ class Favorites extends Component
     public function randomAnime(): void
     {
         $anime = $this->user
-            ->favorite_anime()
+            ->whereFavorited(Anime::class)
             ->inRandomOrder()
             ->first();
         $this->redirectRoute('anime.details', $anime);
@@ -91,14 +90,14 @@ class Favorites extends Component
         // If no search was performed, return all anime
         if (empty($this->search) && empty($wheres) && empty($orders)) {
             $animes = $this->user
-                ->favorite_anime();
+                ->whereFavorited(Anime::class);
             return $animes->paginate($this->perPage);
         }
 
         $animeIDs = $this->user
-            ->favorite_anime()
-            ->paginate(perPage: 2000, page: 1)
-            ->pluck('id')
+            ->whereFavorited(Anime::class)
+            ->limit(2000)
+            ->pluck('favorable_id')
             ->toArray();
         $animes = Anime::search($this->search);
         $animes->whereIn('id', $animeIDs);

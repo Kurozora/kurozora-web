@@ -225,7 +225,7 @@ class User extends Resource
 
             MorphMany::make('Notifications'),
 
-            BelongsToMany::make('Favorite Anime', 'favorite_anime', Anime::class),
+            HasMany::make('Favorites', 'favorites', UserFavorite::class),
 
             BelongsToMany::make('Badges')
                 ->searchable(),

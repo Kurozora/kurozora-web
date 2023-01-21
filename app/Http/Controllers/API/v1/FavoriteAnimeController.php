@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AddAnimeFavoriteRequest;
 use App\Http\Requests\GetAnimeFavoritesRequest;
 use App\Http\Resources\AnimeResourceBasic;
+use App\Models\Anime;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 
@@ -24,7 +25,8 @@ class FavoriteAnimeController extends Controller
         $data = $request->validated();
 
         // Paginate the favorited anime
-        $favoriteAnime = $user->favorite_anime()->paginate($data['limit'] ?? 25);
+        $favoriteAnime = $user->whereFavorited(Anime::class)
+            ->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $favoriteAnime->nextPageUrl());
@@ -44,19 +46,12 @@ class FavoriteAnimeController extends Controller
     function addFavorite(AddAnimeFavoriteRequest $request): JsonResponse
     {
         $animeID = $request->input('anime_id');
+        $anime = Anime::findOrFail($animeID);
         $user = auth()->user();
-
-        $isAlreadyFavorited = $user->favorite_anime()->where('anime_id', $animeID)->exists();
-
-        if ($isAlreadyFavorited) { // Unfavorite the show
-            $user->favorite_anime()->detach($animeID);
-        } else { // Favorite the show
-            $user->favorite_anime()->attach($animeID);
-        }
 
         return JSONResult::success([
             'data' => [
-                'isFavorited' => !$isAlreadyFavorited
+                'isFavorited' => !empty($user->toggleFavorite($anime))
             ]
         ]);
     }

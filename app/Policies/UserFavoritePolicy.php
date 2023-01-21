@@ -3,11 +3,11 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\UserFavoriteAnime;
+use App\Models\UserFavorite;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
-class UserFavoriteAnimePolicy
+class UserFavoritePolicy
 {
     use HandlesAuthorization;
 
@@ -26,10 +26,10 @@ class UserFavoriteAnimePolicy
      * Determine whether the user can view the model.
      *
      * @param User $user
-     * @param UserFavoriteAnime $userFavoriteAnime
+     * @param UserFavorite $userFavorite
      * @return Response|bool
      */
-    public function view(User $user, UserFavoriteAnime $userFavoriteAnime): Response|bool
+    public function view(User $user, UserFavorite $userFavorite): Response|bool
     {
         return true;
     }
@@ -42,54 +42,54 @@ class UserFavoriteAnimePolicy
      */
     public function create(User $user): Response|bool
     {
-        return $user->can('createUserFavoriteAnime');
+        return $user->can('createUserFavorite');
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param User $user
-     * @param UserFavoriteAnime $userFavoriteAnime
+     * @param UserFavorite $userFavorite
      * @return Response|bool
      */
-    public function update(User $user, UserFavoriteAnime $userFavoriteAnime): Response|bool
+    public function update(User $user, UserFavorite $userFavorite): Response|bool
     {
-        return $user->can('updateUserFavoriteAnime');
+        return $user->can('updateUserFavorite');
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param User $user
-     * @param UserFavoriteAnime $userFavoriteAnime
+     * @param UserFavorite $userFavorite
      * @return Response|bool
      */
-    public function delete(User $user, UserFavoriteAnime $userFavoriteAnime): Response|bool
+    public function delete(User $user, UserFavorite $userFavorite): Response|bool
     {
-        return $user->can('deleteUserFavoriteAnime');
+        return $user->can('deleteUserFavorite');
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param User $user
-     * @param UserFavoriteAnime $userFavoriteAnime
+     * @param UserFavorite $userFavorite
      * @return Response|bool
      */
-    public function restore(User $user, UserFavoriteAnime $userFavoriteAnime): Response|bool
+    public function restore(User $user, UserFavorite $userFavorite): Response|bool
     {
-        return $user->can('restoreUserFavoriteAnime');
+        return $user->can('restoreUserFavorite');
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      *
      * @param User $user
-     * @param UserFavoriteAnime $userFavoriteAnime
+     * @param UserFavorite $userFavorite
      * @return Response|bool
      */
-    public function forceDelete(User $user, UserFavoriteAnime $userFavoriteAnime): Response|bool
+    public function forceDelete(User $user, UserFavorite $userFavorite): Response|bool
     {
-        return $user->can('forceDeleteUserFavoriteAnime');
+        return $user->can('forceDeleteUserFavorite');
     }
 }

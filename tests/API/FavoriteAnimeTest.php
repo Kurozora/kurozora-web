@@ -24,7 +24,7 @@ class FavoriteAnimeTest extends TestCase
         /** @var Anime $anime */
         $anime = Anime::factory()->create();
 
-        $this->user->library()->attach($anime, ['status' => UserLibraryStatus::Watching]);
+        $this->user->animeLibrary()->attach($anime, ['status' => UserLibraryStatus::InProgress]);
 
         $response = $this->auth()->json('POST', 'v1/me/favorite-anime', [
             'anime_id'      => $anime->id,
@@ -34,8 +34,8 @@ class FavoriteAnimeTest extends TestCase
         // Check whether the request was successful
         $response->assertSuccessfulAPIResponse();
 
-        // Check whether the user now has 1 anime in their favorites
-        $this->assertEquals(1, $this->user->favorite_anime()->count());
+        // Check whether the user has favorited the anime
+        $this->assertTrue($this->user->hasFavorited($anime));
     }
 
     /**
@@ -50,8 +50,8 @@ class FavoriteAnimeTest extends TestCase
         /** @var Anime $anime */
         $anime = Anime::factory()->create();
 
-        $this->user->library()->attach($anime, ['status' => UserLibraryStatus::Watching]);
-        $this->user->favorite_anime()->attach($anime->id);
+        $this->user->animeLibrary()->attach($anime, ['status' => UserLibraryStatus::InProgress]);
+        $this->user->favorite($anime);
 
         // Send request to remove the anime from the user's favorites
         $response = $this->auth()->json('POST', 'v1/me/favorite-anime', [
@@ -62,8 +62,8 @@ class FavoriteAnimeTest extends TestCase
         // Check whether the request was successful
         $response->assertSuccessfulAPIResponse();
 
-        // Check whether the user now has no anime in their favorites
-        $this->assertEquals(0, $this->user->favorite_anime()->count());
+        // Check whether the user now not favorited the anime
+        $this->assertFalse($this->user->hasFavorited($anime));
     }
 
 //    /**

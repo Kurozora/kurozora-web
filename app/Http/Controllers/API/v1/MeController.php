@@ -17,6 +17,7 @@ use App\Http\Resources\FeedMessageResource;
 use App\Http\Resources\SessionResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceBasic;
+use App\Models\Anime;
 use App\Models\PersonalAccessToken;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -175,7 +176,8 @@ class MeController extends Controller
         $user = auth()->user();
 
         // Paginate the favorite anime
-        $favoriteAnime = $user->favorite_anime()->paginate($data['limit'] ?? 25);
+        $favoriteAnime = $user->whereFavorited(Anime::class)
+            ->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $favoriteAnime->nextPageUrl());
