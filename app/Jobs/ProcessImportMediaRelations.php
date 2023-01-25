@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\KDashboard\MediaRelated as KMediaRelated;
-use App\Services\ImportAnimeRelationProcessor;
+use App\Services\ImportMediaRelationProcessor;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Collection;
@@ -11,12 +11,12 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ProcessImportAnimeRelations implements ShouldQueue
+class ProcessImportMediaRelations implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * The list of anime cast to process.
+     * The list of media cast to process.
      *
      * @var Collection|KMediaRelated[] $kMediaRelated
      */
@@ -35,11 +35,11 @@ class ProcessImportAnimeRelations implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param ImportAnimeRelationProcessor $importAnimeRelationProcessor
+     * @param ImportMediaRelationProcessor $importMediaRelationProcessor
      * @return void
      */
-    public function handle(ImportAnimeRelationProcessor $importAnimeRelationProcessor)
+    public function handle(ImportMediaRelationProcessor $importMediaRelationProcessor): void
     {
-        $importAnimeRelationProcessor->process($this->kMediaRelated);
+        $importMediaRelationProcessor->process($this->kMediaRelated);
     }
 }

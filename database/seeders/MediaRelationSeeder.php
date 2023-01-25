@@ -12,7 +12,7 @@ class MediaRelationSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         // 10 random media relations
         MediaRelation::factory(10)->create();

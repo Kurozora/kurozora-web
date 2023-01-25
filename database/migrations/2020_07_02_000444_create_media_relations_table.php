@@ -17,21 +17,23 @@ return new class extends Migration
     {
         Schema::create(MediaRelation::TABLE_NAME, function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('model_id');
-            $table->string('model_type');
+            $table->uuidMorphs('model');
             $table->unsignedBigInteger('relation_id');
-            $table->unsignedBigInteger('related_id');
-            $table->string('related_type');
+            $table->uuidMorphs('related');
             $table->timestamps();
             $table->softDeletes();
         });
 
         Schema::table(MediaRelation::TABLE_NAME, function (Blueprint $table) {
-            // Set unique index constraints
+            // Set unique key constraints
             $table->unique(['model_id', 'model_type', 'relation_id', 'related_id', 'related_type'], 'model_relation_related_unique');
 
             // Set foreign key constraints
-            $table->foreign('relation_id')->references('id')->on(Relation::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('relation_id')
+                ->references('id')
+                ->on(Relation::TABLE_NAME)
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 
