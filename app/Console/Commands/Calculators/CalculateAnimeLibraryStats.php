@@ -42,14 +42,15 @@ class CalculateAnimeLibraryStats extends Command
      */
     public function handle(): int
     {
-        // Get anime_id, status and count per status
-        $userLibraries = UserLibrary::select(['anime_id', 'status', DB::raw('COUNT(*) as total')])
-            ->groupBy(['anime_id', 'status'])
+        // Get trackable_id, status and count per status
+        $userLibraries = UserLibrary::select(['trackable_id', 'trackable_type', 'status', DB::raw('COUNT(*) as total')])
+            ->where('trackable_type', '=', Anime::class)
+            ->groupBy(['trackable_id', 'trackable_type', 'status'])
             ->get();
 
         // Get unique anime id's
-        $animeIDs = $userLibraries->unique('anime_id')
-            ->pluck('anime_id');
+        $animeIDs = $userLibraries->unique('trackable_id')
+            ->pluck('trackable_id');
 
         foreach ($animeIDs as $animeID) {
             // Find or create media stat for the anime
@@ -59,11 +60,11 @@ class CalculateAnimeLibraryStats extends Command
             ]);
 
             // Get all current anime records from user library
-            $animeInLibrary = $userLibraries->where('anime_id', '=', $animeID);
+            $animeInLibrary = $userLibraries->where('trackable_id', '=', $animeID);
 
             // Get library status' for the anime
             $planningCount = $animeInLibrary->where('status', '=', UserLibraryStatus::Planning);
-            $watchingCount = $animeInLibrary->where('status', '=', UserLibraryStatus::Watching);
+            $watchingCount = $animeInLibrary->where('status', '=', UserLibraryStatus::InProgress);
             $completedCount = $animeInLibrary->where('status', '=', UserLibraryStatus::Completed);
             $onHoldCount = $animeInLibrary->where('status', '=', UserLibraryStatus::OnHold);
             $droppedCount = $animeInLibrary->where('status', '=', UserLibraryStatus::Dropped);
