@@ -20,4 +20,18 @@ Route::prefix('/{mal_url}')
                             ->name('.any');
                     });
             });
+
+        Route::prefix('/manga')
+            ->name('.manga')
+            ->group(function () {
+                Route::prefix('{manga:mal_id}')
+                    ->name('.details')
+                    ->group(function () {
+                        Route::get('/', AnimeDetails::class)
+                            ->name('.index');
+
+                        Route::get('/{any}', AnimeDetails::class)
+                            ->name('.any');
+                    });
+            });
     });

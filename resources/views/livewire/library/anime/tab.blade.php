@@ -11,6 +11,7 @@
         }
     }"
     x-show="selectedStatus.toLowerCase() === '{{ strtolower($status) }}' && loadResource()"
+    x-cloak=""
 >
     <section>
         <x-search-bar>
@@ -34,7 +35,7 @@
         @else
             <section class="flex flex-col items-center mt-4 text-center" wire:key="empty-{{ strtolower($status) }}">
                 <x-picture>
-                    <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_library.webp') }}" alt="Empty Library" title="Empty Library">
+                    <img class="w-full max-w-sm" src="{{ asset('images/static/placeholders/empty_anime_library.webp') }}" alt="Empty Library" title="Empty Library">
                 </x-picture>
 
                 <p class="font-bold">{{ __('No Shows') }}</p>

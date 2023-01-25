@@ -40,7 +40,7 @@ class RelatedShows extends Component
      */
     public function getAnimeRelationsProperty(): LengthAwarePaginator
     {
-        return $this->anime->anime_relations()->paginate(25);
+        return $this->anime->animeRelations()->paginate(25);
     }
 
     /**

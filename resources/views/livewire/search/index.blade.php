@@ -105,6 +105,9 @@
                     @case(\App\Enums\SearchType::Shows)
                         <x-rows.small-lockup :animes="$this->searchResults" :is-row="false" />
                     @break
+                    @case(\App\Enums\SearchType::Literature)
+                        <x-rows.small-lockup :mangas="$this->searchResults" :is-row="false" />
+                    @break
                     @case(\App\Enums\SearchType::Episodes)
                         <x-rows.episode-lockup :episodes="$this->searchResults" :is-row="false" />
                     @break

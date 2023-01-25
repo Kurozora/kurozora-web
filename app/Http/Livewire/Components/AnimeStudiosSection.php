@@ -45,7 +45,7 @@ class AnimeStudiosSection extends Component
     }
 
     /**
-     * Loads the anime studios section.
+     * Loads the media studios section.
      *
      * @return void
      */

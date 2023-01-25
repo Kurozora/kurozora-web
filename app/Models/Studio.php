@@ -39,6 +39,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
 
     // How long to cache certain responses
     const CACHE_KEY_ANIME_SECONDS = 120 * 60;
+    const CACHE_KEY_MANGA_SECONDS = 120 * 60;
 
     // Table name
     const TABLE_NAME = 'studios';
@@ -152,13 +153,13 @@ class Studio extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Returns the anime that belongs to the studio
+     * Returns the media studios that belongs to the studio
      *
      * @return HasMany
      */
-    public function animeStudios(): HasMany
+    public function mediaStudios(): HasMany
     {
-        return $this->hasMany(AnimeStudio::class);
+        return $this->hasMany(MediaStudio::class);
     }
 
     /**
@@ -168,18 +169,9 @@ class Studio extends KModel implements HasMedia, Sitemapable
      */
     public function anime(): BelongsToMany
     {
-        return $this->belongsToMany(Anime::class)
+        return $this->belongsToMany(Anime::class, MediaStudio::class, 'studio_id', 'model_id')
+            ->where('model_type', '=', Anime::class)
             ->withTimestamps();
-    }
-
-    /**
-     * The anime's TV rating.
-     *
-     * @return BelongsTo
-     */
-    public function tv_rating(): BelongsTo
-    {
-        return $this->belongsTo(TvRating::class);
     }
 
     /**
@@ -199,6 +191,47 @@ class Studio extends KModel implements HasMedia, Sitemapable
         return Cache::remember($cacheKey, self::CACHE_KEY_ANIME_SECONDS, function () use ($limit, $where) {
             return $this->anime()->where($where)->paginate($limit);
         });
+    }
+
+    /**
+     * Returns the manga that belongs to the studio
+     *
+     * @return BelongsToMany
+     */
+    public function manga(): BelongsToMany
+    {
+        return $this->belongsToMany(Manga::class, MediaStudio::class, 'studio_id', 'model_id')
+            ->where('model_type', '=', Manga::class)
+            ->withTimestamps();
+    }
+
+    /**
+     * Retrieves the manga for a Studio item in an array
+     *
+     * @param int $limit
+     * @param int $page
+     * @param array $where
+     * @return mixed
+     */
+    public function getManga(int $limit = 25, int $page = 1, array $where = []): mixed
+    {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'studios.manga', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page, 'where' => $where]);
+
+        // Retrieve or save cached result
+        return Cache::remember($cacheKey, self::CACHE_KEY_MANGA_SECONDS, function () use ($limit, $where) {
+            return $this->manga()->where($where)->paginate($limit);
+        });
+    }
+
+    /**
+     * The anime's TV rating.
+     *
+     * @return BelongsTo
+     */
+    public function tv_rating(): BelongsTo
+    {
+        return $this->belongsTo(TvRating::class);
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Models\Person;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -27,9 +28,19 @@ class Anime extends Component
      *
      * @return void
      */
-    public function mount(Person $person)
+    public function mount(Person $person): void
     {
         $this->person = $person;
+    }
+
+    /**
+     * Get the anime property.
+     *
+     * @return LengthAwarePaginator
+     */
+    public function getAnimeProperty(): LengthAwarePaginator
+    {
+        return $this->person->anime()->paginate(25);
     }
 
     /**
@@ -39,8 +50,6 @@ class Anime extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.person.anime', [
-            'personAnime' => $this->person->anime()->paginate(25)
-        ]);
+        return view('livewire.person.anime');
     }
 }

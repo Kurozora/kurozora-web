@@ -41,7 +41,7 @@ class AnimeMoreByStudioSection extends Component
     public function mount(Studio $studio): void
     {
         $this->studio = $studio;
-        $this->moreByStudioCount = $this->studio->animeStudios()->count();
+        $this->moreByStudioCount = $this->studio->mediaStudios()->count();
     }
 
     /**

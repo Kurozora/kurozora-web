@@ -19,7 +19,7 @@
         <meta property="og:video:height" content="1080">
         <meta property="og:video:width" content="1920">
         <meta property="video:duration" content="{{ $episode->duration }}" />
-        <meta property="video:release_date" content="{{ $episode->started_at }}" />
+        <meta property="video:release_date" content="{{ $episode->started_at?->toIso8601String() }}" />
         <meta property="twitter:title" content="{{ $episode->title }} — {{ config('app.name') }}" />
         <meta property="twitter:description" content="{{ $episode->synopsis }}" />
         <meta property="twitter:card" content="summary_large_image" />
@@ -42,10 +42,10 @@
                     ],
                     "name": "{{ $episode->title }}"
                 },
-                "ratingCount": {{ $episode->stats?->rating_count ?? 1 }},
+                "ratingCount": {{ $episode->mediaStat?->rating_count ?? 1 }},
                 "bestRating": 5,
                 "worstRating": 0,
-                "ratingValue": {{ $episode->stats?->rating_average ?? 2.5 }}
+                "ratingValue": {{ $episode->mediaStat?->rating_average ?? 2.5 }}
             },
             "contentRating": "{{ $this->anime->tv_rating->name }}",
             "genre": {!! $this->anime->genres()->pluck('name') !!},
@@ -279,10 +279,10 @@
                     <div id="ratingBadge" class="flex-grow pr-12">
                         <a href="#ratingsAndReviews">
                             <p class="inline-flex font-bold text-orange-500">
-                                {{ number_format($episode->stats?->rating_average ?? 0, 1) }}
-                                <livewire:anime.star-rating :rating="$episode->stats?->rating_average" :star-size="'sm'" :disabled="true" />
+                                {{ number_format($episode->mediaStat?->rating_average ?? 0, 1) }}
+                                <livewire:anime.star-rating :rating="$episode->mediaStat?->rating_average" :star-size="'sm'" :disabled="true" />
                             </p>
-                            <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $episode->stats?->rating_count, ['x' => number_shorten((int) $episode->stats?->rating_count, 0, true)]) }}</p>
+                            <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $episode->mediaStat?->rating_count, ['x' => number_shorten((int) $episode->mediaStat?->rating_count, 0, true)]) }}</p>
                         </a>
                     </div>
 
@@ -344,14 +344,14 @@
 
                     <div class="flex flex-row justify-between">
                         <div class="text-center">
-                            <p class="font-bold text-6xl">{{ number_format($episode->stats?->rating_average ?? 0, 1) }}</p>
+                            <p class="font-bold text-6xl">{{ number_format($episode->mediaStat?->rating_average ?? 0, 1) }}</p>
                             <p class="font-bold text-sm text-gray-500">{{ __('out of') }} 5</p>
                         </div>
 
                         @auth
                             <div class="text-right">
-                                <livewire:anime.star-rating :rating="$episode->stats?->rating_average" :star-size="'lg'" :disabled="true" />
-                                <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $episode->stats?->rating_count, ['x' => (int) $episode->stats?->rating_count]) }}</p>
+                                <livewire:anime.star-rating :rating="$episode->mediaStat?->rating_average" :star-size="'lg'" :disabled="true" />
+                                <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $episode->mediaStat?->rating_count, ['x' => (int) $episode->mediaStat?->rating_count]) }}</p>
                             </div>
                         @endif
                     </div>

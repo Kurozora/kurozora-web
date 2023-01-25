@@ -1,4 +1,4 @@
-@props(['people' => [], 'animeStaff' => [], 'isRow' => true])
+@props(['people' => [], 'mediaStaff' => [], 'isRow' => true])
 
 @php
     $class = $isRow ? 'snap-x overflow-x-scroll no-scrollbar' : 'flex-wrap';
@@ -9,7 +9,7 @@
         <x-lockups.person-lockup :person="$person" :is-row="$isRow" />
     @endforeach
 
-    @foreach($animeStaff as $staff)
+    @foreach($mediaStaff as $staff)
         <x-lockups.person-lockup :person="$staff->person" :staff-role="$staff->staff_role->name" :is-row="$isRow" />
     @endforeach
 

@@ -5,8 +5,10 @@ namespace App\Nova\Dashboards;
 use App\Nova\Metrics\ActivityLogCount;
 use App\Nova\Metrics\AnimeNSFWChart;
 use App\Nova\Metrics\EpisodeFillerChart;
+use App\Nova\Metrics\MangaNSFWChart;
 use App\Nova\Metrics\NewAnime;
 use App\Nova\Metrics\NewEpisodes;
+use App\Nova\Metrics\NewManga;
 use App\Nova\Metrics\NewUsers;
 use App\Nova\Metrics\NewViews;
 use Laravel\Nova\Dashboards\Main as Dashboard;
@@ -22,8 +24,10 @@ class Main extends Dashboard
     {
         return [
             new AnimeNSFWChart,
+            new MangaNSFWChart,
             new EpisodeFillerChart,
             new NewAnime,
+            new NewManga,
             new NewEpisodes,
             new NewUsers,
             new NewViews,

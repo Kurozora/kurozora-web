@@ -3,6 +3,7 @@
 use App\Http\Livewire\Studio\Anime as StudioAnime;
 use App\Http\Livewire\Studio\Details as StudioDetails;
 use App\Http\Livewire\Studio\Index as StudioIndex;
+use App\Http\Livewire\Studio\Manga as StudioManga;
 
 Route::prefix('/studios')
     ->name('studios')
@@ -17,5 +18,8 @@ Route::prefix('/studios')
 
                 Route::get('/anime', StudioAnime::class)
                     ->name('.anime');
+
+                Route::get('/manga', StudioManga::class)
+                    ->name('.manga');
             });
     });

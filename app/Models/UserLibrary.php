@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\UserLibraryStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Laravel\Scout\Searchable;
 
@@ -28,8 +29,8 @@ class UserLibrary extends Pivot
      * @var array
      */
     protected $casts = [
-        'start_date' => 'datetime',
-        'end_date' => 'datetime',
+        'started_at' => 'datetime',
+        'ended_at' => 'datetime',
     ];
 
     /**
@@ -44,20 +45,20 @@ class UserLibrary extends Pivot
         static::saving(function (UserLibrary $model) {
             // Check if the anime needs an end date
             switch ($model->status) {
+                case UserLibraryStatus::InProgress:
                 case UserLibraryStatus::OnHold:
-                case UserLibraryStatus::Watching:
-                    $model->start_date = $model->start_date ?? now();
-                    $model->end_date = null;
+                    $model->started_at = $model->started_at ?? now();
+                    $model->ended_at = null;
                     break;
-                case UserLibraryStatus::Dropped:
                 case UserLibraryStatus::Completed:
-                    $model->start_date = $model->start_date ?? now();
-                    $model->end_date = $model->end_date ?? now();
+                case UserLibraryStatus::Dropped:
+                    $model->started_at = $model->started_at ?? now();
+                    $model->ended_at = $model->ended_at ?? now();
                     break;
                 case UserLibraryStatus::Planning:
                 default:
-                    $model->start_date = null;
-                    $model->end_date = null;
+                    $model->started_at = null;
+                    $model->ended_at = null;
             }
         });
     }
@@ -69,35 +70,54 @@ class UserLibrary extends Pivot
      */
     public function toSearchableArray(): array
     {
-        $anime = $this->anime()
+        $trackable = $this->trackable()
             ->withoutGlobalScopes()
             ->first();
+
         $library = $this->toArray();
-        $library['start_date'] = $this->start_date?->timestamp;
-        $library['end_date'] = $this->end_date?->timestamp;
+        $library['started_at'] = $this->started_at?->timestamp;
+        $library['ended_at'] = $this->ended_at?->timestamp;
         $library['created_at'] = $this->created_at?->timestamp;
         $library['updated_at'] = $this->updated_at?->timestamp;
 
-        $library['anime'] = [
-            'slug' => $anime->slug,
-            'original_title' => $anime->original_title,
-            'synonym_titles' => $anime->synonym_titles,
-            'title' => $anime->title,
-            'synopsis' => $anime->synopsis,
-            'tagline' => $anime->tagline,
-            'translations' => $anime->translations,
-        ];
+        switch ($this->trackable_type) {
+            case Anime::class:
+                $library['anime'] = [
+                    'slug' => $trackable->slug,
+                    'original_title' => $trackable->original_title,
+                    'synonym_titles' => $trackable->synonym_titles,
+                    'title' => $trackable->title,
+                    'synopsis' => $trackable->synopsis,
+                    'tagline' => $trackable->tagline,
+                    'translations' => $trackable->translations,
+                ];
+
+                break;
+            case Manga::class:
+                $library['manga'] = [
+                    'slug' => $trackable->slug,
+                    'original_title' => $trackable->original_title,
+                    'synonym_titles' => $trackable->synonym_titles,
+                    'title' => $trackable->title,
+                    'synopsis' => $trackable->synopsis,
+                    'translations' => $trackable->translations,
+                ];
+
+                break;
+            default: break;
+        }
+
         return $library;
     }
 
     /**
      * The anime the library belongs to.
      *
-     * @return BelongsTo
+     * @return MorphTo
      */
-    public function anime(): BelongsTo
+    public function trackable(): MorphTo
     {
-        return $this->belongsTo(Anime::class);
+        return $this->morphTo();
     }
 
     /**

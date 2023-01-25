@@ -3,8 +3,9 @@
 namespace App\Http\Livewire\Profile;
 
 use App\Events\UserViewed;
+use App\Models\Anime;
+use App\Models\Manga;
 use App\Models\User;
-use App\Models\UserLibrary;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -91,26 +92,50 @@ class Details extends Component
     }
 
     /**
-     * Returns the user's library.
+     * Returns the user's anime library.
      *
      * @return LengthAwarePaginator
      */
-    public function getUserLibraryProperty(): LengthAwarePaginator
+    public function getUserAnimeLibraryProperty(): LengthAwarePaginator
     {
-        return UserLibrary::search()
-            ->where('user_id', $this->user->id)
+        return $this->user->whereTracked(Anime::class)
+            ->orderBy('updated_at', 'desc')
             ->paginate(10);
     }
 
     /**
-     * Returns the user's library.
+     * Returns the user's manga library.
+     *
+     * @return LengthAwarePaginator
+     */
+    public function getUserMangaLibraryProperty(): LengthAwarePaginator
+    {
+        return $this->user->whereTracked(Manga::class)
+            ->orderBy('updated_at', 'desc')
+            ->paginate(10);
+    }
+
+    /**
+     * Returns the user's favorited anime.
      *
      * @return LengthAwarePaginator
      */
     public function getFavoriteAnimeProperty(): LengthAwarePaginator
     {
         return $this->user
-            ->favorite_anime()
+            ->whereFavorited(Anime::class)
+            ->paginate(10);
+    }
+
+    /**
+     * Returns the user's favorited manga.
+     *
+     * @return LengthAwarePaginator
+     */
+    public function getFavoriteMangaProperty(): LengthAwarePaginator
+    {
+        return $this->user
+            ->whereFavorited(Manga::class)
             ->paginate(10);
     }
 
@@ -122,7 +147,7 @@ class Details extends Component
     public function getFeedMessagesProperty(): LengthAwarePaginator
     {
         return $this->user->feed_messages()
-            ->orderByDesc('created_at')
+            ->orderBy('created_at', 'desc')
             ->paginate(25);
     }
 

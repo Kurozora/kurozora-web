@@ -9,9 +9,17 @@ use App\Enums\SeasonOfYear;
 use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Favorable;
+use App\Traits\Model\HasMediaGenres;
+use App\Traits\Model\HasMediaRelations;
+use App\Traits\Model\HasMediaStaff;
+use App\Traits\Model\HasMediaStat;
+use App\Traits\Model\HasMediaStudios;
 use App\Traits\Model\HasMediaTags;
+use App\Traits\Model\HasMediaThemes;
 use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasViews;
+use App\Traits\Model\MediaRelated;
+use App\Traits\Model\Trackable;
 use App\Traits\Model\TvRated;
 use Astrotomic\Translatable\Translatable;
 use Carbon\Carbon;
@@ -25,7 +33,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
@@ -46,14 +53,22 @@ class Anime extends KModel implements HasMedia, Sitemapable
         Favorable,
         HasFactory,
         HasSlug,
+        HasMediaGenres,
+        HasMediaRelations,
+        HasMediaStaff,
+        HasMediaStat,
+        HasMediaStudios,
         HasMediaTags,
+        HasMediaThemes,
         HasVideos,
         HasViews,
         InteractsWithMedia,
         InteractsWithMediaExtension,
         LogsActivity,
+        MediaRelated,
         Searchable,
         SoftDeletes,
+        Trackable,
         Translatable,
         TvRated;
 
@@ -68,8 +83,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     const CACHE_KEY_ANIME_SONGS_SECONDS = 60 * 60 * 2;
     const CACHE_KEY_CHARACTERS_SECONDS = 60 * 60 * 2;
     const CACHE_KEY_EPISODES_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_GENRES_SECONDS = 60 * 60 * 24;
-    const CACHE_KEY_THEMES_SECONDS = 60 * 60 * 24;
     const CACHE_KEY_LANGUAGES_SECONDS = 60 * 60 * 24;
     const CACHE_KEY_RELATIONS_SECONDS = 60 * 60 * 2;
     const CACHE_KEY_SEASONS_SECONDS = 60 * 60 * 24;
@@ -101,7 +114,8 @@ class Anime extends KModel implements HasMedia, Sitemapable
     protected $with = [
         'genres',
         'media',
-        'stats',
+        'mediaStat',
+        'themes',
         'translations',
         'tv_rating',
     ];
@@ -405,46 +419,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Get the Anime's studios
-     *
-     * @return BelongsToMany
-     */
-    public function studios(): BelongsToMany
-    {
-        return $this->belongsToMany(Studio::class)
-            ->using(AnimeStudio::class)
-            ->withPivot('is_licensor', 'is_producer', 'is_studio')
-            ->withTimestamps();
-    }
-
-    /**
-     * Retrieves the studios for an Anime item in an array
-     *
-     * @param ?int $limit
-     * @return mixed
-     */
-    public function getAnimeStudios(?int $limit = null): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.anime_studios', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_STUDIOS_SECONDS, function () use ($limit) {
-            return $this->animeStudios()->limit($limit)->get();
-        });
-    }
-
-    /**
-     * Get the Anime's studios
-     *
-     * @return HasMany
-     */
-    public function animeStudios(): HasMany
-    {
-        return $this->hasMany(AnimeStudio::class);
-    }
-
-    /**
      * Get the Anime's ratings
      *
      * @return MorphMany
@@ -579,114 +553,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The genres of this Anime
-     *
-     * @return HasManyThrough
-     */
-    public function genres(): HasManyThrough
-    {
-        return $this->hasManyThrough(Genre::class, MediaGenre::class, 'model_id', 'id', 'id', 'genre_id')
-            ->where('model_type', '=', Anime::class);
-    }
-
-    /**
-     * Returns this anime's genres
-     *
-     * @return mixed
-     */
-    public function getGenres(): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.genres', 'id' => $this->id]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_GENRES_SECONDS, function () {
-            return $this->genres;
-        });
-    }
-
-    /**
-     * The genres of this Anime
-     *
-     * @return HasMany
-     */
-    public function media_genres(): HasMany
-    {
-        return $this->hasMany(MediaGenre::class, 'model_id')
-            ->where('model_type', '=', Anime::class);
-    }
-
-    /**
-     * Returns this anime's genres
-     *
-     * @return mixed
-     */
-    public function getMediaGenres(): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.media_genres', 'id' => $this->id]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_GENRES_SECONDS, function () {
-            return $this->media_genres;
-        });
-    }
-
-    /**
-     * The themes of this Anime
-     *
-     * @return HasManyThrough
-     */
-    public function themes(): HasManyThrough
-    {
-        return $this->hasManyThrough(Theme::class, MediaTheme::class, 'model_id', 'id', 'id', 'theme_id')
-            ->where('model_type', '=', Anime::class);
-    }
-
-    /**
-     * Returns this anime's themes
-     *
-     * @return mixed
-     */
-    public function getThemes(): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.themes', 'id' => $this->id]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_THEMES_SECONDS, function () {
-            return $this->themes;
-        });
-    }
-
-    /**
-     * The themes of this Anime
-     *
-     * @return HasMany
-     */
-    public function media_themes(): HasMany
-    {
-        return $this->hasMany(MediaTheme::class, 'model_id')
-            ->where('model_type', '=', Anime::class);
-    }
-
-    /**
-     * Returns this anime's themes
-     *
-     * @return mixed
-     */
-    public function getMediaThemes(): mixed
-    {
-        // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.media_themes', 'id' => $this->id]);
-
-        // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_THEMES_SECONDS, function () {
-            return $this->media_themes;
-        });
-    }
-
-    /**
      * The languages of this Anime
      *
      * @return HasManyThrough
@@ -726,58 +592,44 @@ class Anime extends KModel implements HasMedia, Sitemapable
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_RELATIONS_SECONDS, function () use ($limit) {
-            return $this->anime_relations()->paginate($limit);
+            return $this->animeRelations()->paginate($limit);
         });
     }
 
     /**
-     * The related anime of this anime.
+     * Returns the manga relations.
      *
-     * @return morphMany
-     */
-    public function anime_relations(): morphMany
-    {
-        return $this->morphMany(MediaRelation::class, 'model')
-            ->where('related_type', Anime::class)
-            ->join(Anime::TABLE_NAME, function ($join) {
-                $join->on(Anime::TABLE_NAME . '.id', '=', MediaRelation::TABLE_NAME . '.related_id');
-
-                if (auth()->check()) {
-                    $tvRating = settings('tv_rating');
-                    if ($tvRating >= 0) {
-                        $join->where('tv_rating_id', '<=', $tvRating);
-                    }
-                } else {
-                    $join->where('tv_rating_id', '<=', 4);
-                }
-            });
-    }
-
-    /**
-     * Returns the media relations.
-     *
-     * @param ?int $limit
+     * @param int $limit
+     * @param int $page
      * @return mixed
      */
-    public function getMediaRelations(?int $limit = null): mixed
+    public function getMangaRelations(int $limit = 25, int $page = 1): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.media_relations', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit]);
+        $cacheKey = self::cacheKey(['name' => 'anime.manga_relations', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_RELATIONS_SECONDS, function () use ($limit) {
-            return $this->relations()->limit($limit)->get();
+            return $this->mangaRelations()->paginate($limit);
         });
     }
 
     /**
-     * The media relations of this anime.
+     * Returns the game relations.
      *
-     * @return MorphMany
+     * @param int $limit
+     * @param int $page
+     * @return mixed
      */
-    public function relations(): MorphMany
+    public function getGameRelations(int $limit = 25, int $page = 1): mixed
     {
-        return $this->morphMany(MediaRelation::class, 'model');
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'anime.game_relations', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
+
+        // Retrieve or save cached result
+        return Cache::remember($cacheKey, self::CACHE_KEY_RELATIONS_SECONDS, function () use ($limit) {
+            return $this->gameRelations()->paginate($limit);
+        });
     }
 
     /**
@@ -785,26 +637,15 @@ class Anime extends KModel implements HasMedia, Sitemapable
      *
      * @return mixed
      */
-    public function getStats(): mixed
+    public function getMediaStat(): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.stats', 'id' => $this->id]);
+        $cacheKey = self::cacheKey(['name' => 'anime.media-stat', 'id' => $this->id]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_STATS_SECONDS, function () {
-            return $this->stats;
+            return $this->mediaStat;
         });
-    }
-
-    /**
-     * The media stats of this anime.
-     *
-     * @return HasOne
-     */
-    public function stats(): HasOne
-    {
-        return $this->hasOne(MediaStat::class, 'model_id')
-            ->where('model_type', Anime::class);
     }
 
     /**
@@ -1042,30 +883,20 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The anime's staff relationship.
-     *
-     * @return HasMany
-     */
-    public function staff(): HasMany
-    {
-        return $this->hasMany(AnimeStaff::class);
-    }
-
-    /**
-     * Returns the staff relations.
+     * Returns the media staff relations.
      *
      * @param int $limit
      * @param int $page
      * @return mixed
      */
-    public function getStaff(int $limit = 25, int $page = 1): mixed
+    public function getMediaStaff(int $limit = 25, int $page = 1): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.staff', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
+        $cacheKey = self::cacheKey(['name' => 'anime.media-staff', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_STAFF_SECONDS, function () use ($limit) {
-            return $this->staff()->paginate($limit);
+            return $this->mediaStaff()->paginate($limit);
         });
     }
 
@@ -1097,7 +928,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, UserLibrary::class, 'anime_id', 'user_id')
+        return $this->belongsToMany(User::class, UserLibrary::class, 'trackable_id', 'user_id')
             ->using(UserLibrary::class)
             ->withTimestamps();
     }
@@ -1111,16 +942,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     {
         return $this->hasManyThrough(Tag::class, MediaTag::class, 'taggable_id', 'id', 'id', 'tag_id')
             ->where('taggable_type', '=', Anime::class);
-    }
-
-    /**
-     * Returns the Anime items in the user's library.
-     *
-     * @return HasMany
-     */
-    function library(): HasMany
-    {
-        return $this->hasMany(UserLibrary::class);
     }
 
     /**

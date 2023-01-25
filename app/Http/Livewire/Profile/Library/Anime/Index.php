@@ -48,7 +48,7 @@ class Index extends Component
         $status = str_replace('-', '', $status);
 
         if (!UserLibraryStatus::hasKey($status)) {
-            $this->status = strtolower(UserLibraryStatus::Watching()->key);
+            $this->status = 'watching';
         }
     }
 

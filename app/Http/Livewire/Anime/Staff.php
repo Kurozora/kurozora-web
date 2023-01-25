@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Anime;
 
 use App\Models\Anime;
-use App\Models\AnimeStaff;
+use App\Models\MediaStaff;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -35,13 +35,13 @@ class Staff extends Component
     }
 
     /**
-     * Get the list of staff.
+     * Get the list of media staff.
      *
-     * @return AnimeStaff[]|LengthAwarePaginator
+     * @return MediaStaff[]|LengthAwarePaginator
      */
-    public function getStaffProperty(): array|LengthAwarePaginator
+    public function getMediaStaffProperty(): array|LengthAwarePaginator
     {
-        return $this->anime->staff()->paginate(25);
+        return $this->anime->mediaStaff()->paginate(25);
     }
 
     /**

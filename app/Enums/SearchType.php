@@ -5,6 +5,7 @@ namespace App\Enums;
 use App\Models\Anime;
 use App\Models\Character;
 use App\Models\Episode;
+use App\Models\Manga;
 use App\Models\Person;
 use App\Models\Song;
 use App\Models\Studio;
@@ -47,6 +48,7 @@ final class SearchType extends Enum
     {
         return match ($model) {
             Anime::class => SearchType::Shows(),
+            Manga::class => SearchType::Literature(),
             Character::class => SearchType::Characters(),
             Episode::class => SearchType::Episodes(),
             Person::class => SearchType::People(),
@@ -67,15 +69,19 @@ final class SearchType extends Enum
     public static function getWebValues(SearchScope|array|string|null $keys = null): array
     {
         return match($keys->value ?? $keys) {
-            SearchScope::Library => ['shows'],
+            SearchScope::Library => [
+                SearchType::Shows,
+                SearchType::Literature,
+            ],
             SearchScope::Kurozora => [
-                'shows',
-                'episodes',
-                'characters',
-                'people',
-                'songs',
-                'studios',
-                'users',
+                SearchType::Shows,
+                SearchType::Literature,
+                SearchType::Episodes,
+                SearchType::Characters,
+                SearchType::People,
+                SearchType::Songs,
+                SearchType::Studios,
+                SearchType::Users,
             ],
             default => parent::getValues($keys)
         };
@@ -90,15 +96,18 @@ final class SearchType extends Enum
     public static function asWebSelectArray(SearchScope|string|null $scope = null): array
     {
         $selectArray = [];
-        $selectArray['shows'] = 'Anime';
+        $selectArray[SearchType::Shows] = __('Anime');
+        $selectArray[SearchType::Literature] = __('Manga');
+
         if ($scope != SearchScope::Library || ($scope instanceof SearchScope && $scope->value != SearchScope::Library)) {
-            $selectArray['episodes'] = 'Episodes';
-            $selectArray['characters'] = 'Characters';
-            $selectArray['people'] = 'People';
-            $selectArray['songs'] = 'Songs';
-            $selectArray['studios'] = 'Studios';
-            $selectArray['users'] = 'Users';
+            $selectArray[SearchType::Episodes] = __('Episodes');
+            $selectArray[SearchType::Characters] = __('Characters');
+            $selectArray[SearchType::People] = __('People');
+            $selectArray[SearchType::Songs] = __('Songs');
+            $selectArray[SearchType::Studios] = __('Studios');
+            $selectArray[SearchType::Users] = __('Users');
         }
+
         return $selectArray;
     }
 }

@@ -20,7 +20,7 @@
 
             <div class="grid grid-flow-col-dense gap-4 justify-start overflow-x-scroll no-scrollbar">
                 @foreach($animeCast as $cast)
-                    <x-lockups.cast-lockup :cast="$cast" />
+                    <x-lockups.cast-lockup :anime-cast="$cast" />
                 @endforeach
             </div>
         </section>

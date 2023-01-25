@@ -104,7 +104,7 @@ class ExploreCategory extends KModel implements Sitemapable
             foreach($popularShows as $popularShow) {
                 $this->explore_category_items->add(new ExploreCategoryItem([
                     'model_id' => $popularShow->id,
-                    'model_type' => get_class($popularShow)
+                    'model_type' => $popularShow->getMorphClass()
                 ]));
             }
         }
@@ -136,7 +136,7 @@ class ExploreCategory extends KModel implements Sitemapable
             foreach($upcomingShows as $upcomingShow) {
                 $this->explore_category_items->add(new ExploreCategoryItem([
                     'model_id' => $upcomingShow->id,
-                    'model_type' => get_class($upcomingShow)
+                    'model_type' => $upcomingShow->getMorphClass()
                 ]));
             }
         }
@@ -169,7 +169,7 @@ class ExploreCategory extends KModel implements Sitemapable
             foreach($newShows as $newShow) {
                 $this->explore_category_items->add(new ExploreCategoryItem([
                     'model_id' => $newShow->id,
-                    'model_type' => get_class($newShow)
+                    'model_type' => $newShow->getMorphClass()
                 ]));
             }
         }
@@ -202,7 +202,7 @@ class ExploreCategory extends KModel implements Sitemapable
             foreach($recentlyUpdatedShows as $recentlyUpdatedShow) {
                 $this->explore_category_items->add(new ExploreCategoryItem([
                     'model_id' => $recentlyUpdatedShow->id,
-                    'model_type' => get_class($recentlyUpdatedShow)
+                    'model_type' => $recentlyUpdatedShow->getMorphClass()
                 ]));
             }
         }
@@ -235,7 +235,7 @@ class ExploreCategory extends KModel implements Sitemapable
             foreach($recentlyFinishedShows as $recentlyFinishedShow) {
                 $this->explore_category_items->add(new ExploreCategoryItem([
                     'model_id' => $recentlyFinishedShow->id,
-                    'model_type' => get_class($recentlyFinishedShow)
+                    'model_type' => $recentlyFinishedShow->getMorphClass()
                 ]));
             }
         }
@@ -267,7 +267,7 @@ class ExploreCategory extends KModel implements Sitemapable
             foreach($animeContinuing as $anime) {
                 $this->explore_category_items->add(new ExploreCategoryItem([
                     'model_id' => $anime->id,
-                    'model_type' => get_class($anime)
+                    'model_type' => $anime->getMorphClass()
                 ]));
             }
         }
@@ -299,7 +299,7 @@ class ExploreCategory extends KModel implements Sitemapable
             foreach($animeSeason as $anime) {
                 $this->explore_category_items->add(new ExploreCategoryItem([
                     'model_id' => $anime->id,
-                    'model_type' => get_class($anime)
+                    'model_type' => $anime->getMorphClass()
                 ]));
             }
         }
@@ -334,7 +334,7 @@ class ExploreCategory extends KModel implements Sitemapable
             foreach($randomShows as $randomShow) {
                 $this->explore_category_items->add(new ExploreCategoryItem([
                     'model_id' => $randomShow->id,
-                    'model_type' => get_class($randomShow)
+                    'model_type' => $randomShow->getMorphClass()
                 ]));
             }
         }
@@ -355,7 +355,7 @@ class ExploreCategory extends KModel implements Sitemapable
             foreach($charactersBornToday as $characterBornToday) {
                 $this->explore_category_items->add(new ExploreCategoryItem([
                     'model_id' => $characterBornToday->id,
-                    'model_type' => get_class($characterBornToday)
+                    'model_type' => $characterBornToday->getMorphClass()
                 ]));
             }
         }
@@ -376,7 +376,7 @@ class ExploreCategory extends KModel implements Sitemapable
             foreach($peopleBornToday as $personBornToday) {
                 $this->explore_category_items->add(new ExploreCategoryItem([
                     'model_id' => $personBornToday->id,
-                    'model_type' => get_class($personBornToday)
+                    'model_type' => $personBornToday->getMorphClass()
                 ]));
             }
         }

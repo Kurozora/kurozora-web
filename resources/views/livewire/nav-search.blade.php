@@ -117,6 +117,9 @@
                             @case(\App\Models\Anime::TABLE_NAME)
                                 <x-rows.small-lockup :animes="$searchResult['results']" />
                             @break
+                            @case(\App\Models\Manga::TABLE_NAME)
+                                <x-rows.small-lockup :mangas="$searchResult['results']" />
+                            @break
                             @case(\App\Models\Episode::TABLE_NAME)
                                 <x-rows.episode-lockup :episodes="$searchResult['results']" />
                             @break

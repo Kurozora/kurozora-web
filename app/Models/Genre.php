@@ -85,6 +85,18 @@ class Genre extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * Returns the Manga with the genre
+     *
+     * @return BelongsToMany
+     */
+    function mangas(): BelongsToMany
+    {
+        return $this->belongsToMany(Manga::class, MediaGenre::TABLE_NAME, 'genre_id', 'model_id')
+            ->where('model_type', Manga::class)
+            ->withTimestamps();
+    }
+
+    /**
      * The genre's TV rating.
      *
      * @return BelongsTo

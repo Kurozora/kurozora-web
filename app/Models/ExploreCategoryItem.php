@@ -3,15 +3,13 @@
 namespace App\Models;
 
 use App\Scopes\ExploreCategoryIsEnabledScope;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ExploreCategoryItem extends KModel
 {
-    use HasFactory,
-        SoftDeletes;
+    use SoftDeletes;
 
     // Table name
     const TABLE_NAME = 'explore_category_items';

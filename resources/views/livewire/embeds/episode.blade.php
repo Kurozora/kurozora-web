@@ -21,7 +21,7 @@
         <meta property="og:video:height" content="1080">
         <meta property="og:video:width" content="1920">
         <meta property="video:duration" content="{{ $episode->duration }}" />
-        <meta property="video:release_date" content="{{ $episode->started_at }}" />
+        <meta property="video:release_date" content="{{ $episode->started_at?->toIso8601String() }}" />
         <meta property="twitter:title" content="{{ $episode->title }} — {{ config('app.name') }}" />
         <meta property="twitter:description" content="{{ $episode->synopsis }}" />
         <meta property="twitter:card" content="summary_large_image" />
@@ -44,10 +44,10 @@
                     ],
                     "name": "{{ $episode->title }}"
                 },
-                "ratingCount": {{ $episode->stats?->rating_count ?? 1 }},
+                "ratingCount": {{ $episode->mediaStat?->rating_count ?? 1 }},
                 "bestRating": 5,
                 "worstRating": 0,
-                "ratingValue": {{ $episode->stats?->rating_average ?? 2.5 }}
+                "ratingValue": {{ $episode->mediaStat?->rating_average ?? 2.5 }}
             },
             "contentRating": "{{ $this->anime?->tv_rating->name }}",
             "genre": {!! $this->anime?->genres()->pluck('name') !!},

@@ -18,7 +18,10 @@
         <meta property="og:video" content="{{ $anime->video_url ?? '' }}" />
         <meta property="og:type" content="video.tv_show" />
         <meta property="video:duration" content="{{ $anime->duration }}" />
-        <meta property="video:release_date" content="{{ $anime->first_aired }}" />
+        <meta property="video:release_date" content="{{ $anime->first_aired?->toIso8601String() }}" />
+        @foreach($anime->tags() as $tag)
+            <meta property="video:tag" content="{{ $tag->name }}" />
+        @endforeach
         <meta property="twitter:title" content="{{ $anime->title }} — {{ config('app.name') }}" />
         <meta property="twitter:description" content="{{ $anime->synopsis }}" />
         <meta property="twitter:card" content="summary_large_image" />
@@ -41,10 +44,10 @@
                     ],
                     "name": "{{ $anime->title }}"
                 },
-                "ratingCount": {{ $anime->stats?->rating_count ?? 1 }},
+                "ratingCount": {{ $anime->mediaStat?->rating_count ?? 1 }},
                 "bestRating": 5,
                 "worstRating": 0,
-                "ratingValue": {{ $anime->stats?->rating_average ?? 2.5 }}
+                "ratingValue": {{ $anime->mediaStat?->rating_average ?? 2.5 }}
             },
             "contentRating": "{{ $anime->tv_rating->name }}",
             "genre": {!! $anime->genres()->pluck('name') !!},
@@ -147,10 +150,10 @@
                 <div id="ratingBadge" class="flex-grow pr-12">
                     <a href="#ratingsAndReviews">
                         <p class="font-bold text-orange-500">
-                            {{ number_format($anime->stats?->rating_average ?? 0, 1) }}
+                            {{ number_format($anime->mediaStat?->rating_average ?? 0, 1) }}
                         </p>
-                        <livewire:anime.star-rating :rating="$anime->stats?->rating_average" :star-size="'sm'" :disabled="true" />
-                        <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int)$anime->stats?->rating_count, ['x' => number_shorten((int)$anime->stats?->rating_count, 0, true)]) }}</p>
+                        <livewire:anime.star-rating :rating="$anime->mediaStat?->rating_average" :star-size="'sm'" :disabled="true" />
+                        <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int)$anime->mediaStat?->rating_count, ['x' => number_shorten((int)$anime->mediaStat?->rating_count, 0, true)]) }}</p>
                     </a>
                 </div>
 
@@ -234,14 +237,14 @@
 
                 <div class="flex flex-row justify-between">
                     <div class="text-center">
-                        <p class="font-bold text-6xl">{{ number_format($anime->stats?->rating_average ?? 0, 1) }}</p>
+                        <p class="font-bold text-6xl">{{ number_format($anime->mediaStat?->rating_average ?? 0, 1) }}</p>
                         <p class="font-bold text-sm text-gray-500">{{ __('out of') }} 5</p>
                     </div>
 
                     @auth
                         <div class="text-right">
                             <livewire:anime.star-rating :anime="$anime" :rating="$anime->ratings()->firstWhere('user_id', auth()->user()->id)?->rating" :star-size="'lg'" />
-                            <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', $anime->stats?->rating_count, ['x' => $anime->stats?->rating_count]) }}</p>
+                            <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', $anime->mediaStat?->rating_count, ['x' => $anime->mediaStat?->rating_count]) }}</p>
                         </div>
                     @endif
                 </div>
@@ -375,15 +378,15 @@
                     </x-information-list>
 
 {{--                    <x-information-list title="{{ __('Studio') }}" icon="{{ asset('images/symbols/building_2.svg') }}">--}}
-{{--                        <x:information">--}
+{{--                        <x:information>--}}
 {{--                            {{ $anime->studios()->first()->name ?? '-' }}--}}
-{{--                        </--}}
+{{--                        </x:information>--}}
 {{--                    </x-information-list>--}}
 
 {{--                    <x-information-list title="{{ __('Network') }}" icon="{{ asset('images/symbols/dot_radiowaves_left_and_right.svg') }}">--}}
-{{--                        <x:information">--}
+{{--                        <x:information>--}}
 {{--                            {{ $anime->studios()->first()->name ?? '-' }}--}}
-{{--                        </--}}
+{{--                        </x:information>--}}
 {{--                    </x-information-list>--}}
                 </div>
             </section>
@@ -403,7 +406,9 @@
                     <livewire:components.anime-more-by-studio-section :studio="$this->studio" />
                 @endif
 
-                <livewire:components.anime-relations-section :anime="$anime" />
+                <livewire:components.anime.anime-relations-section :anime="$anime" />
+
+                <livewire:components.anime.manga-relations-section :anime="$anime" />
 
                 @if (!empty($anime->copyright))
                     <section class="pt-4 pr-4 pb-4 pl-4 border-t">

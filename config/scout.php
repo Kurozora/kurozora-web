@@ -149,7 +149,11 @@ return [
                 'sortableAttributes'=> ['duration', 'started_aired', 'ended_at', 'number', 'number_total', 'title', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'duration', 'started_at', 'ended_at', 'is_filler', 'is_nsfw', 'is_special', 'is_premiere', 'is_finale', 'is_verified', 'number', 'number_total', 'season_id', 'tv_rating_id'],
             ],
-            'people' => [
+            \App\Models\Manga::TABLE_NAME => [
+                'sortableAttributes'=> ['publication_day', 'publication_season', 'publication_time', 'duration', 'started_at', 'ended_at', 'is_nsfw', 'original_title', 'title', 'created_at', 'update_at'],
+                'filterableAttributes'=> ['id', 'publication_day', 'publication_season', 'publication_time', 'duration', 'started_at', 'ended_at', 'is_nsfw', 'media_type_id', 'original_title', 'source_id', 'status_id', 'title', 'tv_rating_id', 'volume_count', 'chapter_count', 'page_count'],
+            ],
+            \App\Models\Person::TABLE_NAME => [
                 'sortableAttributes'=> ['astrological_sign', 'birthdate', 'deceased_date', 'full_name', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'astrological_sign', 'birthdate', 'deceased_date'],
             ],

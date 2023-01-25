@@ -130,6 +130,22 @@
             </section>
         @endif
 
+        @if (!empty($personManga->total()))
+            <section id="personManga" class="pt-5 pb-8 border-t-2">
+                <x-section-nav>
+                    <x-slot:title>
+                        {{ __('Mangas') }}
+                    </x-slot:title>
+
+                    <x-slot:action>
+                        <x-section-nav-link href="{{ route('people.manga', $person) }}">{{ __('See All') }}</x-section-nav-link>
+                    </x-slot:action>
+                </x-section-nav>
+
+                <x-rows.small-lockup :mangas="$personManga" />
+            </section>
+        @endif
+
         @if (!empty($personCharacters->total()))
             <section id="personCharacters" class="pt-5 pb-8 border-t-2">
                 <x-section-nav>

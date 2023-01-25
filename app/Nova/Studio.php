@@ -240,6 +240,9 @@ class Studio extends Resource
 
             BelongsToMany::make('Anime')
                 ->searchable(),
+
+            BelongsToMany::make('Manga')
+                ->searchable(),
         ];
     }
 

@@ -96,9 +96,9 @@ class Details extends Component
     {
         $user = auth()->user();
         if (!empty($user)) {
-            $this->isTracking = $user->isTracking($this->anime);
-            $this->isFavorited = $user->favorite_anime()->where('anime_id', $this->anime->id)->exists();
-            $this->isReminded = $user->reminder_anime()->where('anime_id', $this->anime->id)->exists();
+            $this->isTracking = $user->hasTracked($this->anime);
+            $this->isFavorited = $user->hasFavorited($this->anime);
+            $this->isReminded = $user->reminderAnime()->where('anime_id', $this->anime->id)->exists();
         }
     }
 
@@ -128,9 +128,9 @@ class Details extends Component
 
         if ($this->isTracking) {
             if ($this->isFavorited) { // Unfavorite the show
-                $user->favorite_anime()->detach($this->anime->id);
+                $user->unfavorite($this->anime);
             } else { // Favorite the show
-                $user->favorite_anime()->attach($this->anime->id);
+                $user->favorite($this->anime);
             }
 
             $this->isFavorited = !$this->isFavorited;
@@ -147,9 +147,9 @@ class Details extends Component
         if ($user->is_pro) {
             if ($this->isTracking) {
                 if ($this->isReminded) { // Don't remind the user
-                    $user->reminder_anime()->detach($this->anime->id);
+                    $user->reminderAnime()->detach($this->anime->id);
                 } else { // Remind the user
-                    $user->reminder_anime()->attach($this->anime->id);
+                    $user->reminderAnime()->attach($this->anime->id);
                 }
 
                 $this->isReminded = !$this->isReminded;

@@ -38,7 +38,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
         TvRated;
 
     // How long to cache certain responses
-    const CACHE_KEY_STATS_SECONDS = 120 * 60;
+    const CACHE_KEY_STAT_SECONDS = 120 * 60;
 
     // Minimum ratings required to calculate average
     const MINIMUM_RATINGS_REQUIRED = 1;
@@ -169,7 +169,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
     public function toSearchableArray(): array
     {
         $episode = $this->toArray();
-        $episode['rating_average'] = $this->stats?->rating_average ?? 0;
+        $episode['rating_average'] = $this->mediaStat?->rating_average ?? 0;
         $episode['started_at'] = $this->started_at?->timestamp;
         $episode['ended_at'] = $this->ended_at?->timestamp;
         $episode['created_at'] = $this->created_at?->timestamp;
@@ -228,30 +228,19 @@ class Episode extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Returns the media relations.
+     * Returns the media stat.
      *
      * @return mixed
      */
-    public function getStats(): mixed
+    public function getMediaStats(): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'episode.stats', 'id' => $this->id]);
+        $cacheKey = self::cacheKey(['name' => 'episode.media-stat', 'id' => $this->id]);
 
         // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_STATS_SECONDS, function () {
-            return $this->stats;
+        return Cache::remember($cacheKey, self::CACHE_KEY_STAT_SECONDS, function () {
+            return $this->mediaStat;
         });
-    }
-
-    /**
-     * The media stats of this episode.
-     *
-     * @return HasOne
-     */
-    public function stats(): HasOne
-    {
-        return $this->hasOne(MediaStat::class, 'model_id')
-            ->where('model_type', Episode::class);
     }
 
     /**

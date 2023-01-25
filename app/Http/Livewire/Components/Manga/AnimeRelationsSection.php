@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Livewire\Components;
+namespace App\Http\Livewire\Components\Manga;
 
-use App\Models\Anime;
+use App\Models\Manga;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -11,11 +11,11 @@ use Livewire\Component;
 class AnimeRelationsSection extends Component
 {
     /**
-     * The object containing the anime data.
+     * The object containing the manga data.
      *
-     * @var Anime $anime
+     * @var Manga $manga
      */
-    public Anime $anime;
+    public Manga $manga;
 
     /**
      * The array containing the anime relations data.
@@ -25,7 +25,7 @@ class AnimeRelationsSection extends Component
     public array $animeRelations = [];
 
     /**
-     * The number of relations the anime has.
+     * The number of relations the manga has.
      *
      * @var int $animeRelationsCount
      */
@@ -34,14 +34,14 @@ class AnimeRelationsSection extends Component
     /**
      * Prepare the component.
      *
-     * @param Anime $anime
+     * @param Manga $manga
      *
      * @return void
      */
-    public function mount(Anime $anime)
+    public function mount(Manga $manga): void
     {
-        $this->anime = $anime;
-        $this->animeRelationsCount = $this->anime->anime_relations()->count();
+        $this->manga = $manga;
+        $this->animeRelationsCount = $this->manga->animeRelations()->count();
     }
 
     /**
@@ -49,9 +49,9 @@ class AnimeRelationsSection extends Component
      *
      * @return void
      */
-    public function loadAnimeRelations()
+    public function loadAnimeRelations(): void
     {
-        $this->animeRelations = $this->anime->getAnimeRelations(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
+        $this->animeRelations = $this->manga->getAnimeRelations(Manga::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
     }
 
     /**
@@ -61,6 +61,6 @@ class AnimeRelationsSection extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.components.anime-relations-section');
+        return view('livewire.components.manga.anime-relations-section');
     }
 }

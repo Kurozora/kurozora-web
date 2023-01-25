@@ -7,6 +7,7 @@ use App\Models\Studio;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Component;
 
 class Details extends Component
@@ -34,14 +35,32 @@ class Details extends Component
     }
 
     /**
+     * The studio's animes.
+     *
+     * @return LengthAwarePaginator
+     */
+    public function getAnimesProperty(): LengthAwarePaginator
+    {
+        return $this->studio->anime()->paginate(Studio::MAXIMUM_RELATIONSHIPS_LIMIT);
+    }
+
+    /**
+     * The studio's mangas.
+     *
+     * @return LengthAwarePaginator
+     */
+    public function getMangasProperty(): LengthAwarePaginator
+    {
+        return $this->studio->manga()->paginate(Studio::MAXIMUM_RELATIONSHIPS_LIMIT);
+    }
+
+    /**
      * Render the component.
      *
      * @return Application|Factory|View
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.studio.details', [
-            'studioAnime' => $this->studio->getAnime(Studio::MAXIMUM_RELATIONSHIPS_LIMIT)
-        ]);
+        return view('livewire.studio.details');
     }
 }

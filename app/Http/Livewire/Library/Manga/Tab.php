@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Livewire\Library;
+namespace App\Http\Livewire\Library\Manga;
 
 use App\Enums\UserLibraryStatus;
-use App\Models\Anime;
+use App\Models\Manga;
 use App\Models\User;
 use App\Models\UserLibrary;
-use App\Traits\Livewire\WithAnimeSearch;
+use App\Traits\Livewire\WithMangaSearch;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
+use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -17,7 +18,7 @@ use Livewire\Component;
 
 class Tab extends Component
 {
-    use WithAnimeSearch;
+    use WithMangaSearch;
 
     /**
      * The object containing the user data.
@@ -69,19 +70,19 @@ class Tab extends Component
      *
      * @return void
      * @throws InvalidEnumKeyException
+     * @throws InvalidEnumMemberException
      */
-    public function randomAnime(): void
+    public function randomManga(): void
     {
         // Get library status
         $status = str_replace('-', '', $this->status);
         $userLibraryStatus = UserLibraryStatus::fromKey($status);
 
-        $anime = $this->user
-            ->library()
+        $manga = $this->user->whereTracked(Manga::class)
             ->wherePivot('status', $userLibraryStatus->value)
             ->inRandomOrder()
             ->first();
-        $this->redirectRoute('anime.details', $anime);
+        $this->redirectRoute('manga.details', $manga);
     }
 
     /**
@@ -89,6 +90,7 @@ class Tab extends Component
      *
      * @return ?LengthAwarePaginator
      * @throws InvalidEnumKeyException
+     * @throws InvalidEnumMemberException
      */
     public function getSearchResultsProperty(): ?LengthAwarePaginator
     {
@@ -132,29 +134,30 @@ class Tab extends Component
         $status = str_replace('-', '', $this->status);
         $userLibraryStatus = UserLibraryStatus::fromKey($status);
 
-        // If no search was performed, return all anime
+        // If no search was performed, return all manga
         if (empty($this->search) && empty($wheres) && empty($orders)) {
-            $animes = $this->user
-                ->library()
+            $mangas = $this->user->whereTracked(Manga::class)
                 ->wherePivot('status', $userLibraryStatus->value);
-            return $animes->paginate($this->perPage);
+            return $mangas->paginate($this->perPage);
         }
 
         // Search
-        $animeIDs = collect(UserLibrary::search($this->search)
+        $mangaIDs = collect(UserLibrary::search($this->search)
             ->where('user_id', $this->user->id)
+            ->where('trackable_type', Manga::class)
             ->where('status', $userLibraryStatus->value)
             ->paginate(perPage: 2000, page: 1)
-            ->items())
-            ->pluck('anime_id')
+            ->items()
+        )
+            ->pluck('trackable_id')
             ->toArray();
-        $animes = Anime::search($this->search);
-        $animes->whereIn('id', $animeIDs);
-        $animes->wheres = $wheres;
-        $animes->orders = $orders;
+        $mangas = Manga::search($this->search);
+        $mangas->whereIn('id', $mangaIDs);
+        $mangas->wheres = $wheres;
+        $mangas->orders = $orders;
 
         // Paginate
-        return $animes->paginate($this->perPage);
+        return $mangas->paginate($this->perPage);
     }
 
     /**
@@ -164,6 +167,6 @@ class Tab extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.library.tab');
+        return view('livewire.library.manga.tab');
     }
 }

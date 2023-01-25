@@ -8,7 +8,7 @@
 
                 <x-slot:action>
                     @hasrole('superAdmin')
-                    <x-button wire:click="$refresh">{{ __('Refresh') }}</x-button>
+                        <x-button wire:click="$refresh">{{ __('Refresh') }}</x-button>
                     @endhasrole
                     <x-section-nav-link href="{{ route('anime.staff', $anime) }}">{{ __('See All') }}</x-section-nav-link>
                 </x-slot:action>
@@ -19,7 +19,7 @@
             </div>
 
             <div class="grid grid-flow-col-dense gap-4 justify-start overflow-x-scroll no-scrollbar">
-                <x-rows.person-lockup :anime-staff="$this->staff" />
+                <x-rows.person-lockup :media-staff="$this->mediaStaff" />
             </div>
         </section>
     @endif

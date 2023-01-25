@@ -75,7 +75,7 @@ class StarRating extends Component
         }
 
         // Update authenticated user's rating
-        $user->anime_ratings()->updateOrCreate([
+        $user->animeRatings()->updateOrCreate([
             'model_id'      => $this->anime->id,
             'model_type'    => Anime::class,
         ], [

@@ -34,17 +34,17 @@ class AnimeStaffSection extends Component
     public function mount(Anime $anime): void
     {
         $this->anime = $anime;
-        $this->staffCount = $anime->staff()->count();
+        $this->staffCount = $anime->mediaStaff()->count();
     }
 
     /**
-     * Loads the anime staff section.
+     * Loads the media staff section.
      *
      * @return array
      */
-    public function getStaffProperty(): array
+    public function getMediaStaffProperty(): array
     {
-        return $this->anime->getStaff(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
+        return $this->anime->getMediaStaff(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
     }
 
     /**

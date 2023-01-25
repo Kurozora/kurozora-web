@@ -14,6 +14,7 @@ use App\Traits\HeartActionTrait;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Favoriter;
 use App\Traits\Model\HasViews;
+use App\Traits\Model\Tracker;
 use App\Traits\Web\Auth\TwoFactorAuthenticatable;
 use Carbon\Carbon;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
@@ -74,6 +75,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         MassPrunable,
         Reacterable,
         Searchable,
+        Tracker,
         TwoFactorAuthenticatable;
 
     // Cache user's badges
@@ -286,10 +288,21 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return HasMany
      */
-    public function anime_ratings(): HasMany
+    public function animeRatings(): HasMany
     {
         return $this->hasMany(MediaRating::class)
             ->where('model_type', Anime::class);
+    }
+
+    /**
+     * Returns the manga ratings the user has.
+     *
+     * @return HasMany
+     */
+    public function mangaRatings(): HasMany
+    {
+        return $this->hasMany(MediaRating::class)
+            ->where('model_type', Manga::class);
     }
 
     /**
@@ -373,7 +386,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     function getCalendar(): string
     {
         /** @var Anime[] $animes */
-        $animes = $this->reminder_anime()->get();
+        $animes = $this->reminderAnime()->get();
 
         // Find location of cached data
         $cacheKey = self::TABLE_NAME . '-name-reminders-id-' . $this->id . '-reminder_count-' . count($animes);
@@ -452,34 +465,9 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      *
      * @return BelongsToMany
      */
-    function reminder_anime(): BelongsToMany
+    function reminderAnime(): BelongsToMany
     {
         return $this->belongsToMany(Anime::class, UserReminderAnime::class, 'user_id', 'anime_id')
-            ->withTimestamps();
-    }
-
-    /**
-     * Returns a boolean indicating whether the user has the given anime in their library.
-     *
-     * @param Anime $anime The anime to be searched for in the user's library.
-     *
-     * @return bool
-     */
-    function isTracking(Anime $anime): bool
-    {
-        return $this->library()->where('anime_id', $anime->id)->exists();
-    }
-
-    /**
-     * Returns the Anime items in the user's library.
-     *
-     * @return BelongsToMany
-     */
-    function library(): BelongsToMany
-    {
-        return $this->belongsToMany(Anime::class, UserLibrary::class, 'user_id', 'anime_id')
-            ->using(UserLibrary::class)
-            ->withPivot('status')
             ->withTimestamps();
     }
 

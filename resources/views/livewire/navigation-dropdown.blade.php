@@ -100,7 +100,7 @@
                                 {{ __('Anime') }}
                             </x-nav-link>
 
-                            <x-nav-link href="{{ route('genres.index') }}" :active="request()->routeIs('genres.index')"
+                            <x-nav-link href="{{ route('manga.index') }}" :active="request()->routeIs('manga.index')"
                                         x-show="! isSearchEnabled"
                                         x-transition:enter="ease-out duration-150 delay-150 transform"
                                         x-transition:enter-start="opacity-0 scale-75"
@@ -109,10 +109,22 @@
                                         x-transition:leave-start="opacity-100 scale-100"
                                         x-transition:leave-end="opacity-0 scale-75"
                             >
-                                {{ __('Genres') }}
+                                {{ __('Manga') }}
                             </x-nav-link>
 
-                            <x-nav-link href="{{ route('characters.index') }}" :active="request()->routeIs('characters.index')"
+{{--                            <x-nav-link href="{{ route('game.index') }}" :active="request()->routeIs('game.index')"--}}
+{{--                                        x-show="! isSearchEnabled"--}}
+{{--                                        x-transition:enter="ease-out duration-150 delay-100 transform"--}}
+{{--                                        x-transition:enter-start="opacity-0 scale-75"--}}
+{{--                                        x-transition:enter-end="opacity-100 scale-100"--}}
+{{--                                        x-transition:leave="ease-in duration-200 delay-300 transform"--}}
+{{--                                        x-transition:leave-start="opacity-100 scale-100"--}}
+{{--                                        x-transition:leave-end="opacity-0 scale-75"--}}
+{{--                            >--}}
+{{--                                {{ __('Game') }}--}}
+{{--                            </x-nav-link>--}}
+
+                            <x-nav-link href="{{ route('genres.index') }}" :active="request()->routeIs('genres.index')"
                                         x-show="! isSearchEnabled"
                                         x-transition:enter="ease-out duration-150 delay-200 transform"
                                         x-transition:enter-start="opacity-0 scale-75"
@@ -230,12 +242,32 @@
                                     {{ __('Anime Library') }}
                                 </x-dropdown-link>
 
+                                <x-dropdown-link href="{{ route('profile.manga-library', auth()->user()) }}">
+                                    {{ __('Manga Library') }}
+                                </x-dropdown-link>
+
+{{--                                <x-dropdown-link href="{{ route('profile.game-library', auth()->user()) }}">--}}
+{{--                                    {{ __('Game Library') }}--}}
+{{--                                </x-dropdown-link>--}}
+
                                 <div class="border-t border-gray-100"></div>
 
                                 {{-- More Pages --}}
                                 <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-gray-400">
                                     {{ __('More') }}
                                 </div>
+
+                                <x-dropdown-link href="{{ route('profile.favorite-anime', auth()->user()) }}">
+                                    {{ __('Favorite Anime') }}
+                                </x-dropdown-link>
+
+                                <x-dropdown-link href="{{ route('profile.favorite-manga', auth()->user()) }}">
+                                    {{ __('Favorite Manga') }}
+                                </x-dropdown-link>
+
+{{--                                <x-dropdown-link href="{{ route('profile.favorite-game', auth()->user()) }}">--}}
+{{--                                    {{ __('Favorite Game') }}--}}
+{{--                                </x-dropdown-link>--}}
 
                                 <x-dropdown-link href="{{ route('theme-store.index') }}">
                                     {{ __('Theme Store') }}
@@ -311,6 +343,14 @@
                     {{ __('Anime') }}
                 </x-responsive-nav-link>
 
+                <x-responsive-nav-link href="{{ route('manga.index') }}" :active="request()->routeIs('manga.index')">
+                    {{ __('Manga') }}
+                </x-responsive-nav-link>
+
+{{--                <x-responsive-nav-link href="{{ route('game.index') }}" :active="request()->routeIs('game.index')">--}}
+{{--                    {{ __('Game') }}--}}
+{{--                </x-responsive-nav-link>--}}
+
                 <x-responsive-nav-link href="{{ route('genres.index') }}" :active="request()->routeIs('genres.index')">
                     {{ __('Genres') }}
                 </x-responsive-nav-link>
@@ -362,11 +402,36 @@
                         {{ __('Anime Library') }}
                     </x-responsive-nav-link>
 
+                    <x-responsive-nav-link href="{{ route('profile.manga-library', auth()->user()) }}"
+                                           :active="request()->routeIs('profile.manga-library')">
+                        {{ __('Manga Library') }}
+                    </x-responsive-nav-link>
+
+{{--                    <x-responsive-nav-link href="{{ route('profile.game-library', auth()->user()) }}"--}}
+{{--                                           :active="request()->routeIs('profile.game-library')">--}}
+{{--                        {{ __('Game Library') }}--}}
+{{--                    </x-responsive-nav-link>--}}
+
                     <div class="border-t border-gray-100"></div>
                 </div>
 
                 {{-- More Pages --}}
                 <div class="space-y-1">
+                    <x-responsive-nav-link href="{{ route('profile.favorite-anime', auth()->user()) }}"
+                                           :active="request()->routeIs('profile.favorite-anime', auth()->user())">
+                        {{ __('Favorite Anime') }}
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link href="{{ route('profile.favorite-manga', auth()->user()) }}"
+                                           :active="request()->routeIs('profile.favorite-manga', auth()->user())">
+                        {{ __('Favorite Manga') }}
+                    </x-responsive-nav-link>
+
+{{--                    <x-responsive-nav-link href="{{ route('profile.favorite-game', auth()->user()) }}"--}}
+{{--                                           :active="request()->routeIs('profile.favorite-game', auth()->user())">--}}
+{{--                        {{ __('Favorite Game') }}--}}
+{{--                    </x-responsive-nav-link>--}}
+
                     <x-responsive-nav-link href="{{ route('theme-store.index') }}"
                                            :active="request()->routeIs('theme-store.index')">
                         {{ __('Theme Store') }}

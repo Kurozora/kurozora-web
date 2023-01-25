@@ -17,6 +17,7 @@ use App\Http\Resources\UserResourceIdentity;
 use App\Models\Anime;
 use App\Models\Character;
 use App\Models\Episode;
+use App\Models\Manga;
 use App\Models\Person;
 use App\Models\Song;
 use App\Models\Studio;
@@ -83,18 +84,30 @@ class SearchController extends Controller
 //                    ];
 //                    break;
 //                }
-//                case SearchType::Literature:
-//                    $resource = Manga::search($data['query'])->paginate($data['limit'] ?? 5)
-//                        ->appends($data);
-//                    // Get next page url minus domain
-//                    $nextPageURL = $this->nextPageUrlFor($resource, $type);
-//
-//                    $response[$type] = [
-//                        'data' => LiteratureResource::collection($resource),
-//                        'next' => empty($nextPageURL) ? null : $nextPageURL
-//                    ];
-//                    break;
-//                }
+                case SearchType::Literature:
+                    if ($scope == SearchScope::Library) {
+                        $resource = UserLibrary::search($data['query'])
+                            ->where('user_id', auth()->user()->id)
+                            ->where('trackable_type', Manga::class)
+                            ->paginate($data['limit'] ?? 5)
+                            ->appends($data);
+                        // Get next page url minus domain
+                        $nextPageURL = $this->nextPageUrlFor($resource, $type);
+
+                        $resource = collect($resource->items())->pluck('trackable');
+                    } else {
+                        $resource = Manga::search($data['query']);
+                        $resource = $resource->paginate($data['limit'] ?? 5)
+                            ->appends($data);
+                        // Get next page url minus domain
+                        $nextPageURL = $this->nextPageUrlFor($resource, $type);
+                    }
+
+                    $response[$type] = [
+                        'data' => LiteratureResource::collection($resource),
+                        'next' => empty($nextPageURL) ? null : $nextPageURL
+                    ];
+                    break;
                 case SearchType::People:
                     $resource = Person::search($data['query'])
                         ->paginate($data['limit'] ?? 5)

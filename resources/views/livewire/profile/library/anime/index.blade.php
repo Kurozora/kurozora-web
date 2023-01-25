@@ -21,7 +21,7 @@
         }"
     >
         <div class="flex flex-nowrap gap-4 justify-between text-center whitespace-nowrap overflow-x-scroll no-scrollbar">
-            @foreach(\App\Enums\UserLibraryStatus::asSelectArray() as $key => $value)
+            @foreach(\App\Enums\UserLibraryStatus::asAnimeSelectArray() as $key => $value)
                 <button
                     class="pl-4 pr-4 pb-2 border-b-2 hover:border-orange-500"
                     :class="{'border-orange-500': '{{ strtolower($status) }}' === '{{ strtolower($value) }}', 'border-gray-300': '{{ strtolower($status) }}' !== '{{ strtolower($value) }}'}"
@@ -32,8 +32,8 @@
         </div>
 
         <section class="mt-8">
-            @foreach(\App\Enums\UserLibraryStatus::asSelectArray() as $key => $value)
-                <livewire:library.tab id="{{ $value }}" :user="$user" :status="$value" wire:key="{{ md5($value) }}" />
+            @foreach(\App\Enums\UserLibraryStatus::asAnimeSelectArray() as $key => $value)
+                <livewire:library.anime.tab id="{{ $value }}" :user="$user" :status="$value" wire:key="{{ md5($value) }}" />
             @endforeach
         </section>
     </div>

@@ -6,6 +6,7 @@ use App\Enums\SearchType;
 use App\Models\Anime;
 use App\Models\Character;
 use App\Models\Episode;
+use App\Models\Manga;
 use App\Models\Person;
 use App\Models\Song;
 use App\Models\Studio;
@@ -25,6 +26,7 @@ class NavSearch extends Component
      */
     protected array $searchableModels = [
         Anime::class,
+        Manga::class,
         Episode::class,
         Character::class,
         Person::class,
@@ -48,6 +50,16 @@ class NavSearch extends Component
     public function randomAnime(): void
     {
         $this->redirect(route('anime.details', Anime::inRandomOrder()->first()));
+    }
+
+    /**
+     * Redirect the user to a random manga.
+     *
+     * @return void
+     */
+    public function randomManga(): void
+    {
+        $this->redirect(route('manga.details', Manga::inRandomOrder()->first()));
     }
 
     /**
@@ -81,6 +93,10 @@ class NavSearch extends Component
                 [
                     'title'  => __('Random Anime'),
                     'action' => 'randomAnime',
+                ],
+                [
+                    'title'  => __('Random Manga'),
+                    'action' => 'randomManga',
                 ],
                 [
                     'title' => __('About Kurozora+'),

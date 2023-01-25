@@ -42,7 +42,8 @@ class LibraryButton extends Component
         // Set library status, else default to "ADD"
         $this->libraryStatus = UserLibrary::firstWhere([
             ['user_id', auth()->user()?->id],
-            ['anime_id', $anime->id],
+            ['trackable_type', Anime::class],
+            ['trackable_id', $anime->id],
         ])?->status ?? -1;
     }
 
@@ -62,9 +63,9 @@ class LibraryButton extends Component
 
         // If user explicitly asked for removing from library, then also remove from favorites and reminders.
         if ($this->libraryStatus == -2) {
-            $user->library()->detach($this->anime->id);
-            $user->favorite_anime()->detach($this->anime->id);
-            $user->reminder_anime()->detach($this->anime->id);
+            $user->untrack($this->anime);
+            $user->unfavorite($this->anime);
+            $user->reminderAnime()->detach($this->anime->id);
 
             // Reset dropdown to "ADD".
             $this->libraryStatus = -1;
@@ -77,10 +78,11 @@ class LibraryButton extends Component
             // Update or create the user library entry.
             UserLibrary::updateOrCreate([
                 'user_id'   => $user->id,
-                'anime_id'  => $this->anime->id
+                'trackable_type'  => Anime::class,
+                'trackable_id'  => $this->anime->id
             ], [
                 'status' => $this->libraryStatus,
-                'end_date' => $endDate
+                'ended_at' => $endDate
             ]);
         }
 

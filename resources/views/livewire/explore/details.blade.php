@@ -17,16 +17,16 @@
             @case(\App\Enums\ExploreCategoryTypes::NewShows)
             @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateShows)
             @case(\App\Enums\ExploreCategoryTypes::Shows)
-                {{ __('Explore the latest :x anime only on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}
+                {{ __('Explore the latest :x anime only on Kurozora, the largest, free online anime, manga, music & game database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}
             @break
             @default
-                {{ __('Explore the latest :x only on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}
+                {{ __('Explore the latest :x only on Kurozora, the largest, free online anime, manga, music & game database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}
         @endswitch
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ __('Explore') . ' ' . $exploreCategory->title }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Explore the latest :x category only on Kurozora, the largest, free online anime, manga & music database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}" />
+        <meta property="og:description" content="{{ __('Explore the latest :x category only on Kurozora, the largest, free online anime, manga, music & game database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <meta property="twitter:title" content="{{ $exploreCategory->title }} — {{ config('app.name') }}" />

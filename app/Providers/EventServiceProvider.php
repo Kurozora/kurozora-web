@@ -6,6 +6,7 @@ use App\Events\AnimeViewed;
 use App\Events\CharacterViewed;
 use App\Events\EpisodeViewed;
 use App\Events\Event;
+use App\Events\MangaViewed;
 use App\Events\PersonViewed;
 use App\Events\SeasonViewed;
 use App\Events\SongViewed;
@@ -15,6 +16,7 @@ use App\Listeners\AnimeViewedListener;
 use App\Listeners\CharacterViewedListener;
 use App\Listeners\EpisodeViewedListener;
 use App\Listeners\EventListener;
+use App\Listeners\MangaViewedListener;
 use App\Listeners\MediaHasBeenAddedListener;
 use App\Listeners\PersonViewedListener;
 use App\Listeners\SeasonViewedListener;
@@ -58,6 +60,11 @@ class EventServiceProvider extends ServiceProvider
         // Episode events
         EpisodeViewed::class => [
             EpisodeViewedListener::class
+        ],
+
+        // Person events
+        MangaViewed::class => [
+            MangaViewedListener::class
         ],
 
         // Person events

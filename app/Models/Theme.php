@@ -85,6 +85,18 @@ class Theme extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * Returns the Manga with the theme
+     *
+     * @return BelongsToMany
+     */
+    function mangas(): BelongsToMany
+    {
+        return $this->belongsToMany(Manga::class, MediaTheme::TABLE_NAME, 'theme_id', 'model_id')
+            ->where('model_type', Manga::class)
+            ->withTimestamps();
+    }
+
+    /**
      * The theme's TV rating.
      *
      * @return BelongsTo

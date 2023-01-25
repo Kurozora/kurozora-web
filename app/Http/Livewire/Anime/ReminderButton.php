@@ -60,8 +60,8 @@ class ReminderButton extends Component
     {
         $user = auth()->user();
         if (!empty($user)) {
-            $this->isTracking = $user->isTracking($this->anime);
-            $this->isReminded = $user->reminder_anime()->where('anime_id', $this->anime->id)->exists();
+            $this->isTracking = $user->hasTracked($this->anime);
+            $this->isReminded = $user->reminderAnime()->where('anime_id', $this->anime->id)->exists();
             $this->disabled = $this->isReminded;
         }
     }
@@ -77,10 +77,10 @@ class ReminderButton extends Component
 
             if (!$user->is_pro) {
                 if (!$this->isTracking) {
-                    $user->library()->attach($this->anime->id, ['status' => UserLibraryStatus::Planning]);
+                    $user->track($this->anime, UserLibraryStatus::Planning());
                 }
 
-                $user->reminder_anime()->attach($this->anime->id);
+                $user->reminderAnime()->attach($this->anime->id);
                 $this->isReminded = true;
                 $this->disabled = true;
             }

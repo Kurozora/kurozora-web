@@ -109,7 +109,7 @@
             </div>
         </section>
 
-        @if (!empty($studioAnime->total()))
+        @if (!empty($this->animes->total()))
             <section class="pt-5 pb-8 border-t-2">
                 <x-section-nav>
                     <x-slot:title>
@@ -121,7 +121,23 @@
                     </x-slot:action>
                 </x-section-nav>
 
-                <x-rows.small-lockup :animes="$studioAnime" />
+                <x-rows.small-lockup :animes="$this->animes" />
+            </section>
+        @endif
+
+        @if (!empty($this->mangas->total()))
+            <section class="pt-5 pb-8 border-t-2">
+                <x-section-nav>
+                    <x-slot:title>
+                        {{ __('Mangas') }}
+                    </x-slot:title>
+
+                    <x-slot:action>
+                        <x-section-nav-link href="{{ route('studios.manga', $studio) }}">{{ __('See All') }}</x-section-nav-link>
+                    </x-slot:action>
+                </x-section-nav>
+
+                <x-rows.small-lockup :mangas="$this->mangas" />
             </section>
         @endif
     </div>

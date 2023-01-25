@@ -8,6 +8,7 @@ use App\Enums\SearchType;
 use App\Models\Anime;
 use App\Models\Character;
 use App\Models\Episode;
+use App\Models\Manga;
 use App\Models\Person;
 use App\Models\Song;
 use App\Models\Studio;
@@ -99,8 +100,8 @@ class Index extends Component
      */
     public function updated($propertyName): void
     {
-        if ($propertyName == 'scope' && $this->type != 'shows') {
-            $this->type = 'shows';
+        if ($propertyName == 'scope' && !in_array($this->type, SearchType::getWebValues($this->scope))) {
+            $this->type = SearchType::Shows;
         }
         $this->validateOnly($propertyName);
     }
@@ -120,6 +121,7 @@ class Index extends Component
             }
 
             $models = match ($this->type) {
+                SearchType::Literature => Manga::class,
                 SearchType::Episodes => Episode::class,
                 SearchType::Characters => Character::class,
                 SearchType::People => Person::class,
@@ -131,13 +133,13 @@ class Index extends Component
 
             $models = $models::search($this->q);
             if ($this->scope == SearchScope::Library) {
-                $animeIDs = collect(UserLibrary::search($this->q)
+                $trackableIDs = UserLibrary::search($this->q)
                     ->where('user_id', auth()->user()->id)
-                    ->paginate(perPage: 2000, page: 1)
-                    ->items())
-                    ->pluck('anime_id')
+                    ->take(2000)
+                    ->get()
+                    ->pluck('trackable_id')
                     ->toArray();
-                $models->whereIn('id', $animeIDs);
+                $models->whereIn('id', $trackableIDs);
             }
             return $models->paginate($this->perPage);
         } catch (Exception $e) {
@@ -159,6 +161,13 @@ class Index extends Component
                 'Re:Zero',
                 'Death Note',
                 'アキラ',
+            ],
+            SearchType::Literature => [
+                'Blame',
+                'Summertime Render',
+                'アキラ',
+                'Arachnid',
+                'Bartender',
             ],
             SearchType::Episodes => [
                 'Zombie',
