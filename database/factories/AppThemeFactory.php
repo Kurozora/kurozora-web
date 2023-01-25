@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\MediaCollection;
 use App\Models\AppTheme;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -62,7 +63,7 @@ class AppThemeFactory extends Factory
     public function configure(): AppThemeFactory
     {
         return $this->afterCreating(function (AppTheme $theme) {
-            $theme->addMediaFromUrl($this->faker->imageUrl(768, 1024))->toMediaCollection('screenshot');
+            $theme->updateImageMedia(MediaCollection::Screenshot(), $this->faker->image('/Users/kirito/Docs/kurozora-web/storage/framework/testing/disks', 768, 1024));
         });
     }
 }

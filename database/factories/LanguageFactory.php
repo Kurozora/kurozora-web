@@ -24,6 +24,7 @@ class LanguageFactory extends Factory
         return [
             'name'          => $this->faker->name,
             'code'          => $this->faker->languageCode,
+            'iso_639_3'     => $this->faker->countryISOAlpha3,
             'created_at'    => now(),
             'updated_at'    => now(),
         ];
