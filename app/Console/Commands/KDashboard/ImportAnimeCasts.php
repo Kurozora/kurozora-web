@@ -40,9 +40,7 @@ class ImportAnimeCasts extends Command
      */
     public function handle(): int
     {
-        KAnimeCast::where([
-            ['id', '>', 250000],
-        ])->chunk(1000, function (Collection $kAnimeCasts) {
+        KAnimeCast::chunk(1000, function (Collection $kAnimeCasts) {
             ProcessImportAnimeCast::dispatch($kAnimeCasts);
         });
 

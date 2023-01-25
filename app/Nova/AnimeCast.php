@@ -2,7 +2,6 @@
 
 namespace App\Nova;
 
-use App\Models\AnimeCast;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -12,19 +11,19 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Validator;
 
-class Cast extends Resource
+class AnimeCast extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static string $model = AnimeCast::class;
+    public static string $model = \App\Models\AnimeCast::class;
 
     /**
      * The underlying model resource instance.
      *
-     * @var AnimeCast|null
+     * @var \App\Models\AnimeCast|null
      */
     public $resource;
 
@@ -111,16 +110,6 @@ class Cast extends Resource
     }
 
     /**
-     * Get the displayable label of the resource.
-     *
-     * @return string
-     */
-    public static function label(): string
-    {
-        return __('Cast');
-    }
-
-    /**
      * Handle any post-validation processing.
      *
      * @param NovaRequest $request
@@ -137,7 +126,7 @@ class Cast extends Resource
         $castRole = $request->post('cast_role');
         $language = $request->post('language');
 
-        $unique = Rule::unique(AnimeCast::TABLE_NAME, 'language_id')->where(function ($query) use ($resourceID, $anime, $character, $person, $castRole, $language) {
+        $unique = Rule::unique(\App\Models\AnimeCast::TABLE_NAME, 'language_id')->where(function ($query) use ($resourceID, $anime, $character, $person, $castRole, $language) {
             if ($resourceID) {
                 $query->whereNotIn('id', [$resourceID]);
             }
@@ -157,7 +146,6 @@ class Cast extends Resource
 
         $uniqueValidator->validate();
     }
-
 
     /**
      * Get the cards available for the request.

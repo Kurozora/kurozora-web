@@ -31,15 +31,35 @@ return new class extends Migration
         });
 
         Schema::table(AnimeCast::TABLE_NAME, function(Blueprint $table) {
-            // Set unique index constraints
+            // Set unique key constraints
             $table->unique(['person_id', 'character_id', 'anime_id', 'cast_role_id', 'language_id'], 'anime_cast_person_character_language_unique');
 
             // Set foreign key constraints
-            $table->foreign('person_id')->references('id')->on(Person::TABLE_NAME)->onDelete('cascade');
-            $table->foreign('character_id')->references('id')->on(Character::TABLE_NAME)->onDelete('cascade');
-            $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
-            $table->foreign('cast_role_id')->references('id')->on(CastRole::TABLE_NAME)->onDelete('cascade');
-            $table->foreign('language_id')->references('id')->on(Language::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('person_id')
+                ->references('id')
+                ->on(Person::TABLE_NAME)
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreign('character_id')
+                ->references('id')
+                ->on(Character::TABLE_NAME)
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreign('anime_id')
+                ->references('id')
+                ->on(Anime::TABLE_NAME)
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreign('cast_role_id')
+                ->references('id')
+                ->on(CastRole::TABLE_NAME)
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreign('language_id')
+                ->references('id')
+                ->on(Language::TABLE_NAME)
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 
