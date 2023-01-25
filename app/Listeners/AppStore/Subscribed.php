@@ -67,16 +67,16 @@ class Subscribed extends AppStoreListener
         } else {
             // Update receipt values.
             $userReceipt->update([
-                'web_order_line_item_id' => $webOrderLineItemID,
-                'offer_id' => $offerID,
-                'subscription_group_id' => $subscriptionGroupID,
-                'product_id' => $productID,
-                'is_subscribed' => $isSubscriptionValid,
-                'will_auto_renew' => $willAutoRenew,
-                'original_purchased_at' => $originalPurchaseDate?->toDateTime(),
-                'purchased_at' => $purchaseDate?->toDateTime(),
-                'expired_at' => $expiresDate?->toDateTime(),
-                'revoked_at' => $revocationDate?->toDateTime(),
+                'web_order_line_item_id'    => $webOrderLineItemID,
+                'offer_id'                  => $offerID,
+                'subscription_group_id'     => $subscriptionGroupID,
+                'product_id'                => $productID,
+                'is_subscribed'             => $isSubscriptionValid,
+                'will_auto_renew'           => $willAutoRenew,
+                'original_purchased_at'     => $originalPurchaseDate?->toDateTime(),
+                'purchased_at'              => $purchaseDate?->toDateTime(),
+                'expired_at'                => $expiresDate?->toDateTime(),
+                'revoked_at'                => $revocationDate?->toDateTime(),
             ]);
         }
 

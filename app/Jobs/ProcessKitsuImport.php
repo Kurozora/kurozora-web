@@ -89,8 +89,8 @@ class ProcessKitsuImport implements ShouldQueue
     {
         // Wipe current library if behavior is set to overwrite
         if ($this->behavior->value === ImportBehavior::Overwrite) {
-            $this->user->library()->detach();
-            $this->user->anime_ratings()->delete();
+            $this->user->clearLibrary(Anime::class);
+            $this->user->animeRatings()->delete();
         }
 
         // Create XML object
@@ -153,11 +153,12 @@ class ProcessKitsuImport implements ShouldQueue
             // Add the anime to their library
             UserLibrary::updateOrCreate([
                 'user_id'   => $this->user->id,
-                'anime_id'  => $anime->id,
+                'trackable_type'  => Anime::class,
+                'trackable_id'  => $anime->id,
             ], [
                 'status' => $status,
-                'start_date' => $startDate,
-                'end_date' => $endDate
+                'started_at' => $startDate,
+                'ended_at' => $endDate
             ]);
 
             // Updated their anime score
@@ -184,7 +185,7 @@ class ProcessKitsuImport implements ShouldQueue
     protected function convertKitsuStatus(string $malStatus): ?int
     {
         return match ($malStatus) {
-            'Watching' => UserLibraryStatus::Watching,
+            'Watching' => UserLibraryStatus::InProgress,
             'On-Hold' => UserLibraryStatus::OnHold,
             'Plan to Watch' => UserLibraryStatus::Planning,
             'Dropped' => UserLibraryStatus::Dropped,

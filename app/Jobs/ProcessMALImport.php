@@ -89,8 +89,8 @@ class ProcessMALImport implements ShouldQueue
     {
         // Wipe current library if behavior is set to overwrite
         if ($this->behavior->value === ImportBehavior::Overwrite) {
-            $this->user->library()->detach();
-            $this->user->anime_ratings()->delete();
+            $this->user->clearLibrary(Anime::class);
+            $this->user->animeRatings()->delete();
         }
 
         // Create XML object
@@ -136,8 +136,8 @@ class ProcessMALImport implements ShouldQueue
             // Convert the MAL data to our own
             $status = $this->convertMALStatus($malStatus);
             $rating = $this->convertMALRating($malRating);
-            $startDate = null;
-            $endDate = null;
+            $startedAt = null;
+            $endedAt = null;
 
             // Status not found
             // NOTE: - Don't use empty() because 'Watching' status is 0 and that returns true.
@@ -149,13 +149,13 @@ class ProcessMALImport implements ShouldQueue
             // Check if the anime needs an end date
             switch ($status) {
                 case UserLibraryStatus::OnHold:
-                case UserLibraryStatus::Watching:
-                    $startDate = $this->convertMALDate($malStartDate) ?? now();
+                case UserLibraryStatus::InProgress:
+                    $startedAt = $this->convertMALDate($malStartDate) ?? now();
                     break;
                 case UserLibraryStatus::Dropped:
                 case UserLibraryStatus::Completed:
-                    $endDate = $this->convertMaLDate($malEndDate) ?? now();
-                    $startDate = $this->convertMALDate($malStartDate) ?? now();
+                    $endedAt = $this->convertMaLDate($malEndDate) ?? now();
+                    $startedAt = $this->convertMALDate($malStartDate) ?? now();
                     break;
                 case UserLibraryStatus::Planning:
                 default:
@@ -164,12 +164,13 @@ class ProcessMALImport implements ShouldQueue
 
             // Add the anime to their library
             UserLibrary::updateOrCreate([
-                'user_id'   => $this->user->id,
-                'anime_id'  => $anime->id,
+                'user_id' => $this->user->id,
+                'trackable_type' => Anime::class,
+                'trackable_id' => $anime->id,
             ], [
                 'status' => $status,
-                'start_date' => $startDate,
-                'end_date' => $endDate
+                'started_at' => $startedAt,
+                'ended_at' => $endedAt
             ]);
 
             // Updated their anime score
@@ -204,7 +205,7 @@ class ProcessMALImport implements ShouldQueue
             ->value();
 
         return match ($malStatus) {
-            'watching' => UserLibraryStatus::Watching,
+            'watching' => UserLibraryStatus::InProgress,
             'onHold' => UserLibraryStatus::OnHold,
             'planToWatch' => UserLibraryStatus::Planning,
             'dropped' => UserLibraryStatus::Dropped,

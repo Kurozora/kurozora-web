@@ -38,7 +38,7 @@ class ProcessImportAnimeStaff implements ShouldQueue
      * @param ImportAnimeStaffProcessor $importAnimeStaffProcessor
      * @return void
      */
-    public function handle(ImportAnimeStaffProcessor $importAnimeStaffProcessor)
+    public function handle(ImportAnimeStaffProcessor $importAnimeStaffProcessor): void
     {
         $importAnimeStaffProcessor->process($this->kAnimeStaff);
     }
