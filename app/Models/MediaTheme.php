@@ -16,6 +16,15 @@ class MediaTheme extends Pivot
     protected $table = self::TABLE_NAME;
 
     /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = [
+        'theme'
+    ];
+
+    /**
      * Indicates if the IDs are auto-incrementing.
      *
      * @var bool

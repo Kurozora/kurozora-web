@@ -23,6 +23,15 @@ class MediaGenre extends Pivot
     public $incrementing = true;
 
     /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = [
+        'genre'
+    ];
+
+    /**
      * Returns the model in the media theme.
      *
      * @return MorphTo

@@ -7,13 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class KModel extends Model
 {
     /**
-     * The name of the "deleted at" column.
-     *
-     * @var string|null
-     */
-    const DELETED_AT = 'deleted_at';
-
-    /**
      * The attributes that aren't mass assignable.
      *
      * @var array<string>|bool
