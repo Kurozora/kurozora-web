@@ -5,11 +5,12 @@ namespace App\Console\Commands\Generators;
 use App\Models\Anime;
 use App\Models\AnimeCast;
 use App\Models\AnimeSong;
-use App\Models\AnimeStaff;
+use App\Models\MediaStaff;
 use App\Models\Character;
 use App\Models\Episode;
 use App\Models\ExploreCategory;
 use App\Models\Genre;
+use App\Models\MediaStudio;
 use App\Models\Person;
 use App\Models\Season;
 use App\Models\Song;
@@ -92,23 +93,6 @@ class GenerateSitemap extends Command
             });
         DB::statement('SET SQL_MODE=only_full_group_by');
 
-        //========== Anime Staff sitemap ==========//
-        $this->info('- Generating anime staff...');
-        DB::statement("SET SQL_MODE=''");
-        AnimeStaff::withoutGlobalScopes()
-            ->with('anime')
-            ->select(['anime_id'])
-            ->groupBy('anime_id')
-            ->chunk(20000, function ($animeStaff, int $page) use ($sitemapIndex) {
-                $path = 'sitemaps/anime_staff_' . $page . '_sitemap.xml';
-                $this->info($path);
-                Sitemap::create()
-                    ->add($animeStaff)
-                    ->writeToFile(public_path($path));
-                $sitemapIndex->add($path);
-            });
-        DB::statement('SET SQL_MODE=only_full_group_by');
-
         //========== Anime Songs sitemap ==========//
         $this->info('- Generating anime songs...');
         DB::statement("SET SQL_MODE=''");
@@ -177,6 +161,40 @@ class GenerateSitemap extends Command
                     ->writeToFile(public_path($path));
                 $sitemapIndex->add($path);
             });
+
+        //========== Media Staff sitemap ==========//
+        $this->info('- Generating anime staff...');
+        DB::statement("SET SQL_MODE=''");
+        MediaStaff::withoutGlobalScopes()
+            ->with('model')
+            ->select(['model_type', 'model_id'])
+            ->groupBy(['model_type', 'model_id'])
+            ->chunk(20000, function ($mediaStaff, int $page) use ($sitemapIndex) {
+                $path = 'sitemaps/media_staff_' . $page . '_sitemap.xml';
+                $this->info($path);
+                Sitemap::create()
+                    ->add($mediaStaff)
+                    ->writeToFile(public_path($path));
+                $sitemapIndex->add($path);
+            });
+        DB::statement('SET SQL_MODE=only_full_group_by');
+
+        //========== Media Studios sitemap ==========//
+        $this->info('- Generating anime studios...');
+        DB::statement("SET SQL_MODE=''");
+        MediaStudio::withoutGlobalScopes()
+            ->with('model')
+            ->select(['model_type', 'model_id'])
+            ->groupBy(['model_type', 'model_id'])
+            ->chunk(20000, function ($mediaStudios, int $page) use ($sitemapIndex) {
+                $path = 'sitemaps/media_studios_' . $page . '_sitemap.xml';
+                $this->info($path);
+                Sitemap::create()
+                    ->add($mediaStudios)
+                    ->writeToFile(public_path($path));
+                $sitemapIndex->add($path);
+            });
+        DB::statement('SET SQL_MODE=only_full_group_by');
 
         //========== People sitemap ==========//
         $this->info('- Generating people...');

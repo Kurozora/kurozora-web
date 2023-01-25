@@ -87,7 +87,7 @@ class GenerateStudioBanner extends Command
                 // Get anime belonging to the studio
                 // Sort by highest average rating
                 // Grab the top `n` anime
-                $studio->load(['anime.stats' => function ($q) use ($animeCount, $studio) {
+                $studio->load(['anime.mediaStat' => function ($q) use ($animeCount, $studio) {
                     /** @var MediaStat[] $stats */
                     $stats = $q->orderBy('rating_average', 'desc')->limit($animeCount)->get();
                     $anime = [];
