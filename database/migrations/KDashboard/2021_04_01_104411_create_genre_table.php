@@ -14,7 +14,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create(Genre::TABLE_NAME, function (Blueprint $table) {
             $table->unsignedInteger('unique_id')->autoIncrement()->unique();
@@ -34,7 +34,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists(Genre::TABLE_NAME);
     }

@@ -14,7 +14,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create(Type::TABLE_NAME, function (Blueprint $table) {
             $table->unsignedBigInteger('id')->autoIncrement();
@@ -33,7 +33,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists(Type::TABLE_NAME);
     }
