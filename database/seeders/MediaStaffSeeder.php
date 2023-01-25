@@ -2,18 +2,18 @@
 
 namespace Database\Seeders;
 
-use App\Models\AnimeStaff;
+use App\Models\MediaStaff;
 use Illuminate\Database\Seeder;
 
-class AnimeStaffSeeder extends Seeder
+class MediaStaffSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        AnimeStaff::factory(10)->create();
+        MediaStaff::factory(10)->create();
     }
 }

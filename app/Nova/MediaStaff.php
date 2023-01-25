@@ -8,11 +8,12 @@ use Illuminate\Validation\ValidationException;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Titasgailius\SearchRelations\SearchesRelations;
 use Validator;
 
-class AnimeStaff extends Resource
+class MediaStaff extends Resource
 {
     use SearchesRelations;
 
@@ -21,12 +22,12 @@ class AnimeStaff extends Resource
      *
      * @var string
      */
-    public static string $model = \App\Models\AnimeStaff::class;
+    public static string $model = \App\Models\MediaStaff::class;
 
     /**
      * The underlying model resource instance.
      *
-     * @var \App\Models\AnimeStaff|null
+     * @var \App\Models\MediaStaff|null
      */
     public $resource;
 
@@ -53,7 +54,7 @@ class AnimeStaff extends Resource
      */
     public static array $searchRelations = [
         'person' => ['id', 'first_name', 'last_name', 'family_name', 'given_name'],
-        'anime' => ['id', 'original_title'],
+        'model' => ['id', 'original_title'],
     ];
 
     /**
@@ -61,7 +62,7 @@ class AnimeStaff extends Resource
      *
      * @var string
      */
-    public static $group = 'Anime';
+    public static $group = 'Media';
 
     /**
      * Get the fields displayed by the resource.
@@ -79,7 +80,7 @@ class AnimeStaff extends Resource
 
             Heading::make('Meta information'),
 
-            BelongsTo::make('Anime')
+            MorphTo::make('Model')
                 ->searchable()
                 ->sortable()
                 ->required(),
@@ -103,7 +104,7 @@ class AnimeStaff extends Resource
      */
     public static function availableForNavigation(Request $request): bool
     {
-        return $request->user()->can('viewAnimeStaff');
+        return $request->user()->can('viewMediaStaff');
     }
 
     /**
@@ -117,18 +118,20 @@ class AnimeStaff extends Resource
     protected static function afterValidation(NovaRequest $request, $validator): void
     {
         $resourceID = $request->resourceId;
-        $anime = $request->post('anime');
+        $modelType = $request->post('model_type');
+        $modelID = $request->post('model_id');
         $person = $request->post('person');
         $staffRole = $request->post('staff_role');
 
-        $unique = Rule::unique(\App\Models\AnimeStaff::TABLE_NAME, 'staff_role_id')->where(function ($query) use($resourceID, $anime, $person, $staffRole) {
+        $unique = Rule::unique(\App\Models\MediaStaff::TABLE_NAME, 'staff_role_id')->where(function ($query) use($modelType, $resourceID, $modelID, $person, $staffRole) {
             if ($resourceID) {
                 $query->whereNotIn('id', [$resourceID]);
             }
 
             return $query
                 ->where([
-                    ['anime_id', $anime],
+                    ['model_type', $modelType],
+                    ['model_id', $modelID],
                     ['person_id', $person],
                     ['staff_role_id', $staffRole]
                 ]);

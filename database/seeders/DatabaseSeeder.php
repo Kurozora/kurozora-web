@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $this->call([
             LanguageSeeder::class,
@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
 //            StudioSeeder::class,
 //            AnimeCastSeeder::class,
 //            MediaRelationSeeder::class,
-//            AnimeStaffSeeder::class,
+//            MediaStaffSeeder::class,
 //            SongSeeder::class,
 //            AnimeSongSeeder::class,
 //            PersonSeeder::class,

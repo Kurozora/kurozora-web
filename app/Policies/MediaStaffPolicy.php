@@ -2,12 +2,12 @@
 
 namespace App\Policies;
 
-use App\Models\AnimeStaff;
+use App\Models\MediaStaff;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
-class AnimeStaffPolicy
+class MediaStaffPolicy
 {
     use HandlesAuthorization;
 
@@ -26,10 +26,10 @@ class AnimeStaffPolicy
      * Determine whether the user can view the model.
      *
      * @param User $user
-     * @param AnimeStaff $animeStaff
+     * @param MediaStaff $mediaStaff
      * @return Response|bool
      */
-    public function view(User $user, AnimeStaff $animeStaff): Response|bool
+    public function view(User $user, MediaStaff $mediaStaff): Response|bool
     {
         return true;
     }
@@ -42,54 +42,54 @@ class AnimeStaffPolicy
      */
     public function create(User $user): Response|bool
     {
-        return $user->can('createAnimeStaff');
+        return $user->can('createMediaStaff');
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param User $user
-     * @param AnimeStaff $animeStaff
+     * @param MediaStaff $mediaStaff
      * @return Response|bool
      */
-    public function update(User $user, AnimeStaff $animeStaff): Response|bool
+    public function update(User $user, MediaStaff $mediaStaff): Response|bool
     {
-        return $user->can('updateAnimeStaff');
+        return $user->can('updateMediaStaff');
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param User $user
-     * @param AnimeStaff $animeStaff
+     * @param MediaStaff $mediaStaff
      * @return Response|bool
      */
-    public function delete(User $user, AnimeStaff $animeStaff): Response|bool
+    public function delete(User $user, MediaStaff $mediaStaff): Response|bool
     {
-        return $user->can('deleteAnimeStaff');
+        return $user->can('deleteMediaStaff');
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param User $user
-     * @param AnimeStaff $animeStaff
+     * @param MediaStaff $mediaStaff
      * @return Response|bool
      */
-    public function restore(User $user, AnimeStaff $animeStaff): Response|bool
+    public function restore(User $user, MediaStaff $mediaStaff): Response|bool
     {
-        return $user->can('restoreAnimeStaff');
+        return $user->can('restoreMediaStaff');
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      *
      * @param User $user
-     * @param AnimeStaff $animeStaff
+     * @param MediaStaff $mediaStaff
      * @return Response|bool
      */
-    public function forceDelete(User $user, AnimeStaff $animeStaff): Response|bool
+    public function forceDelete(User $user, MediaStaff $mediaStaff): Response|bool
     {
-        return $user->can('forceDeleteAnimeStaff');
+        return $user->can('forceDeleteMediaStaff');
     }
 }

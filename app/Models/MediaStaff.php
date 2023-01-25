@@ -5,27 +5,38 @@ namespace App\Models;
 //use App\Scopes\TvRatingScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Sitemap\Contracts\Sitemapable;
 use Spatie\Sitemap\Tags\Url;
 
-class AnimeStaff extends KModel implements Sitemapable
+class MediaStaff extends KModel implements Sitemapable
 {
     use HasFactory,
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'anime_staff';
+    const TABLE_NAME = 'media_staff';
     protected $table = self::TABLE_NAME;
+
+    /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = [
+        'person',
+        'staff_role'
+    ];
 
     /**
      * The anime relationship of anime staff.
      *
-     * @return BelongsTo
+     * @return MorphTo
      */
-    public function anime(): BelongsTo
+    public function model(): MorphTo
     {
-        return $this->belongsTo(Anime::class);
+        return $this->morphTo();
 //            ->withoutGlobalScope(new TvRatingScope());
     }
 
@@ -56,7 +67,12 @@ class AnimeStaff extends KModel implements Sitemapable
      */
     public function toSitemapTag(): Url|string|array
     {
-        return Url::create(route('anime.staff', $this->anime))
-            ->setChangeFrequency('weekly');
+        return match ($this->model_type) {
+            Anime::class => Url::create(route('anime.staff', $this->model))
+                ->setChangeFrequency('weekly'),
+            Manga::class => Url::create(route('manga.staff', $this->model))
+                ->setChangeFrequency('weekly'),
+            default => [],
+        };
     }
 }

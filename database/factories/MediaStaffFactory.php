@@ -3,19 +3,19 @@
 namespace Database\Factories;
 
 use App\Models\Anime;
-use App\Models\AnimeStaff;
+use App\Models\MediaStaff;
 use App\Models\Person;
 use App\Models\StaffRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class AnimeStaffFactory extends Factory
+class MediaStaffFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = AnimeStaff::class;
+    protected $model = MediaStaff::class;
 
     /**
      * Define the model's default state.
@@ -39,9 +39,10 @@ class AnimeStaffFactory extends Factory
         }
 
         return [
-            'anime_id'      => $anime,
-            'person_id'     => $person,
-            'staff_role_id' => $staffRole,
+            'model_type'    => $anime->getMorphClass(),
+            'model_id'      => $anime->id,
+            'person_id'     => $person->id,
+            'staff_role_id' => $staffRole->id,
         ];
     }
 }
