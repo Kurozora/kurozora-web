@@ -9,11 +9,12 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Titasgailius\SearchRelations\SearchesRelations;
 use Validator;
 
-class AnimeStudio extends Resource
+class MediaStudio extends Resource
 {
     use SearchesRelations;
 
@@ -22,12 +23,12 @@ class AnimeStudio extends Resource
      *
      * @var string
      */
-    public static string $model = \App\Models\AnimeStudio::class;
+    public static string $model = \App\Models\MediaStudio::class;
 
     /**
      * The underlying model resource instance.
      *
-     * @var \App\Models\AnimeStudio|null
+     * @var \App\Models\MediaStudio|null
      */
     public $resource;
 
@@ -54,7 +55,7 @@ class AnimeStudio extends Resource
      */
     public static array $searchRelations = [
         'studio' => ['id', 'name'],
-        'anime' => ['id', 'original_title'],
+        'model' => ['id', 'original_title'],
     ];
 
     /**
@@ -62,7 +63,7 @@ class AnimeStudio extends Resource
      *
      * @var string
      */
-    public static $group = 'Anime';
+    public static $group = 'Media';
 
     /**
      * Get the fields displayed by the resource.
@@ -80,7 +81,7 @@ class AnimeStudio extends Resource
 
             Heading::make('Meta information'),
 
-            BelongsTo::make('Anime')
+            MorphTo::make('Model')
                 ->sortable()
                 ->searchable()
                 ->required(),
@@ -93,17 +94,22 @@ class AnimeStudio extends Resource
             Boolean::make('Is Licensor')
                 ->required()
                 ->sortable()
-                ->help('The studio is responsible for licensing the anime.'),
+                ->help('The studio is responsible for licensing the media.'),
 
             Boolean::make('Is Producer')
                 ->sortable()
                 ->required()
-                ->help('The studio is responsible for producing the anime. Usually sponsors.'),
+                ->help('The studio is responsible for producing the media. Usually sponsors.'),
 
             Boolean::make('Is Studio')
                 ->sortable()
                 ->required()
-                ->help('The studio responsible for creating (drawing) the anime.'),
+                ->help('The studio responsible for creating (drawing) the media.'),
+
+            Boolean::make('Is Publisher')
+                ->sortable()
+                ->required()
+                ->help('The studio responsible for publishing (serializing) the media.'),
         ];
     }
 
@@ -115,7 +121,7 @@ class AnimeStudio extends Resource
      */
     public static function availableForNavigation(Request $request): bool
     {
-        return $request->user()->can('viewAnimeStudio');
+        return $request->user()->can('viewMediaStudio');
     }
 
     /**
@@ -129,16 +135,18 @@ class AnimeStudio extends Resource
     protected static function afterValidation(NovaRequest $request, $validator): void
     {
         $resourceID = $request->resourceId;
-        $anime = $request->post('anime');
+        $modelID = $request->post('model_id');
+        $modelType = $request->post('model_type');
         $studio = $request->post('studio');
 
-        $unique = Rule::unique(\App\Models\AnimeStudio::TABLE_NAME, 'studio_id')->where(function ($query) use($resourceID, $anime, $studio) {
+        $unique = Rule::unique(\App\Models\MediaStudio::TABLE_NAME, 'studio_id')->where(function ($query) use($resourceID, $modelID, $modelType, $studio) {
             if ($resourceID) {
                 $query->whereNotIn('id', [$resourceID]);
             }
 
             return $query->where([
-                ['anime_id', $anime],
+                ['model_id', $modelID],
+                ['model_type', $modelType],
                 ['studio_id', $studio]
             ]);
         });

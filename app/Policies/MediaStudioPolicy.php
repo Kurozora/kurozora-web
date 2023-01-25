@@ -2,12 +2,12 @@
 
 namespace App\Policies;
 
-use App\Models\AnimeStudio;
+use App\Models\MediaStudio;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
-class AnimeStudioPolicy
+class MediaStudioPolicy
 {
     use HandlesAuthorization;
 
@@ -26,10 +26,10 @@ class AnimeStudioPolicy
      * Determine whether the user can view the model.
      *
      * @param User $user
-     * @param AnimeStudio $animeStudio
+     * @param MediaStudio $mediaStudio
      * @return Response|bool
      */
-    public function view(User $user, AnimeStudio $animeStudio): Response|bool
+    public function view(User $user, MediaStudio $mediaStudio): Response|bool
     {
         return true;
     }
@@ -42,54 +42,54 @@ class AnimeStudioPolicy
      */
     public function create(User $user): Response|bool
     {
-        return $user->can('createAnimeStudio');
+        return $user->can('createMediaStudio');
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param User $user
-     * @param AnimeStudio $animeStudio
+     * @param MediaStudio $mediaStudio
      * @return Response|bool
      */
-    public function update(User $user, AnimeStudio $animeStudio): Response|bool
+    public function update(User $user, MediaStudio $mediaStudio): Response|bool
     {
-        return $user->can('updateAnimeStudio');
+        return $user->can('updateMediaStudio');
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param User $user
-     * @param AnimeStudio $animeStudio
+     * @param MediaStudio $mediaStudio
      * @return Response|bool
      */
-    public function delete(User $user, AnimeStudio $animeStudio): Response|bool
+    public function delete(User $user, MediaStudio $mediaStudio): Response|bool
     {
-        return $user->can('deleteAnimeStudio');
+        return $user->can('deleteMediaStudio');
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param User $user
-     * @param AnimeStudio $animeStudio
+     * @param MediaStudio $mediaStudio
      * @return Response|bool
      */
-    public function restore(User $user, AnimeStudio $animeStudio): Response|bool
+    public function restore(User $user, MediaStudio $mediaStudio): Response|bool
     {
-        return $user->can('restoreAnimeStudio');
+        return $user->can('restoreMediaStudio');
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      *
      * @param User $user
-     * @param AnimeStudio $animeStudio
+     * @param MediaStudio $mediaStudio
      * @return Response|bool
      */
-    public function forceDelete(User $user, AnimeStudio $animeStudio): Response|bool
+    public function forceDelete(User $user, MediaStudio $mediaStudio): Response|bool
     {
-        return $user->can('forceDeleteAnimeStudio');
+        return $user->can('forceDeleteMediaStudio');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\AnimeStudio;
+use App\Models\MediaStudio;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,24 +14,28 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create(AnimeStudio::TABLE_NAME, function (Blueprint $table) {
+        Schema::create(MediaStudio::TABLE_NAME, function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('anime_id');
+            $table->uuidMorphs('model');
             $table->unsignedBigInteger('studio_id');
             $table->boolean('is_licensor');
             $table->boolean('is_producer');
             $table->boolean('is_studio');
+            $table->boolean('is_publisher');
             $table->timestamps();
             $table->softDeletes();
         });
 
-        Schema::table(AnimeStudio::TABLE_NAME, function (Blueprint $table) {
+        Schema::table(MediaStudio::TABLE_NAME, function (Blueprint $table) {
             // Set unique key constraints
-            $table->unique(['anime_id', 'studio_id']);
+            $table->unique(['model_type', 'model_id', 'studio_id']);
 
             // Set foreign key constraints
-            $table->foreign('anime_id')->references('id')->on('animes')->onDelete('cascade');
-            $table->foreign('studio_id')->references('id')->on('studios')->onDelete('cascade');
+            $table->foreign('studio_id')
+                ->references('id')
+                ->on('studios')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 
@@ -42,6 +46,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists(AnimeStudio::TABLE_NAME);
+        Schema::dropIfExists(MediaStudio::TABLE_NAME);
     }
 };
