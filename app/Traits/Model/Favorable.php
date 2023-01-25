@@ -31,6 +31,27 @@ trait Favorable
     }
 
     /**
+     * Get the model's favorited entries.
+     *
+     * @return MorphMany
+     */
+    function favorites(): MorphMany
+    {
+        return $this->morphMany(UserFavorite::class, 'favorable');
+    }
+
+    /**
+     * The users who favorited the model.
+     *
+     * @return BelongsToMany
+     */
+    public function favoriters(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class)
+            ->withTimestamps();
+    }
+
+    /**
      * Whether the model is favorited by the given user.
      *
      * @param User $user
@@ -62,27 +83,6 @@ trait Favorable
     public function isNotFavoritedBy(User $user): bool
     {
         return !$this->isFavoritedBy($user);
-    }
-
-    /**
-     * Get the model's favorited entries.
-     *
-     * @return MorphMany
-     */
-    function favorites(): MorphMany
-    {
-        return $this->morphMany(UserFavorite::class, 'favorable');
-    }
-
-    /**
-     * The users who favorited the model.
-     *
-     * @return BelongsToMany
-     */
-    public function favoriters(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class)
-            ->withTimestamps();
     }
 
     /**
@@ -138,7 +138,6 @@ trait Favorable
     {
         return $query->whereDoesntHave('favoriters', function (Builder $query) use ($user): Builder {
             return $query->whereKey($user->getKey());
-        }
-        );
+        });
     }
 }
