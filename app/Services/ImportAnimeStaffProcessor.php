@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Models\Anime;
-use App\Models\AnimeStaff;
-use App\Models\KDashboard\AnimeStaff as KAnimeStaff;
+use App\Models\MediaStaff;
+use App\Models\KDashboard\AnimeStaff as KMediaStaff;
 use App\Models\Person;
 use App\Models\StaffRole;
 use Illuminate\Database\Eloquent\Collection;
@@ -14,12 +14,12 @@ class ImportAnimeStaffProcessor
     /**
      * Processes the job.
      *
-     * @param Collection|KAnimeStaff[] $kAnimeStaff
+     * @param Collection|KMediaStaff[] $kMediaStaff
      * @return void
      */
-    public function process(Collection|array $kAnimeStaff)
+    public function process(Collection|array $kMediaStaff): void
     {
-        foreach ($kAnimeStaff as $kStaff) {
+        foreach ($kMediaStaff as $kStaff) {
             $position = match ($kStaff->position->position) {
                 '2nd Key Animation' => 'Second Key Animator',
                 'Assistant Production Coordinat' => 'Assistant Production Coordinator',
@@ -38,18 +38,20 @@ class ImportAnimeStaffProcessor
             ])->first();
 
             if (empty($staffRole)) {
-                dd('Staff is empty', $staffRole, $position, $kStaff->position);
+                info('Staff role is empty. Position: ' . $position . '/' . $kStaff->position);
             }
 
-            $animeStaff = AnimeStaff::where([
-                ['anime_id', $anime->id],
+            $mediaStaff = MediaStaff::where([
+                ['model_type', '=', $anime->getMorphClass()],
+                ['model_id', '=', $anime->id],
                 ['person_id', $person->id],
                 ['staff_role_id', $staffRole->id],
             ])->first();
 
-            if (empty($animeStaff)) {
-                AnimeStaff::create([
-                    'anime_id' => $anime->id,
+            if (empty($mediaStaff)) {
+                MediaStaff::create([
+                    'model_type' => $anime->getMorphClass(),
+                    'model_id' => $anime->id,
                     'person_id' => $person->id,
                     'staff_role_id' => $staffRole->id,
                 ]);

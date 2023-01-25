@@ -32,8 +32,6 @@ class ValidateLibraryStatus implements Rule
      */
     public function message(): string
     {
-        return 'Pick a valid library status: ' .
-            implode(', ', UserLibraryStatus::getKeys())
-        ;
+        return __('Pick a valid library status: :x', ['x' => implode(', ', UserLibraryStatus::getKeys())]);
     }
 }

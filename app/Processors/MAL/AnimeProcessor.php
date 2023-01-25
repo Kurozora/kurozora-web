@@ -7,7 +7,7 @@ use App\Enums\SongType;
 use App\Enums\StudioType;
 use App\Models\Anime;
 use App\Models\AnimeSong;
-use App\Models\AnimeStudio;
+use App\Models\MediaStudio;
 use App\Models\Genre;
 use App\Models\MediaGenre;
 use App\Models\MediaTheme;
@@ -475,7 +475,7 @@ class AnimeProcessor implements ItemProcessorInterface
                 ], [
                     'name' => $genreName,
                 ]);
-            $mediaGenre = $anime?->media_genres()->firstWhere('genre_id', '=', $genre->id);
+            $mediaGenre = $anime?->mediaGenres()->firstWhere('genre_id', '=', $genre->id);
 
             if (empty($mediaGenre)) {
                 MediaGenre::create([
@@ -510,7 +510,7 @@ class AnimeProcessor implements ItemProcessorInterface
                 ], [
                     'name' => $themeName,
                 ]);
-            $mediaTheme = $anime?->media_themes()->firstWhere('theme_id', '=', $theme->id);
+            $mediaTheme = $anime?->mediaThemes()->firstWhere('theme_id', '=', $theme->id);
 
             if (empty($mediaTheme)) {
                 MediaTheme::create([
@@ -544,16 +544,17 @@ class AnimeProcessor implements ItemProcessorInterface
                     'name' => $malStudioName,
                     'type' => StudioType::Anime,
                 ]);
-            $animeStudio = $anime?->animeStudios()->firstWhere('studio_id', '=', $studio->id);
+            $mediaStudio = $anime?->mediaStudios()->firstWhere('studio_id', '=', $studio->id);
 
-            if (empty($animeStudio)) {
-                AnimeStudio::create([
-                    'anime_id' => $anime?->id,
+            if (empty($mediaStudio)) {
+                MediaStudio::create([
+                    'model_type' => $anime?->getMorphClass(),
+                    'model_id' => $anime?->id,
                     'studio_id' => $studio->id,
                     $attribute => true,
                 ]);
             } else {
-                $animeStudio->update([
+                $mediaStudio->update([
                     $attribute => true,
                 ]);
             }

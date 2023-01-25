@@ -8,7 +8,11 @@ use Illuminate\Contracts\Validation\Rule;
 
 class ValidateAnimeIDIsTracked implements Rule
 {
-    /** @var Anime $anime */
+    /**
+     * The object containing the anime data.
+     *
+     * @var Anime $anime
+     */
     protected Anime $anime;
 
     /**
@@ -26,7 +30,7 @@ class ValidateAnimeIDIsTracked implements Rule
         /** @var User $user */
         $user = auth()->user();
 
-        return $user->isTracking($this->anime);
+        return $user->hasTracked($this->anime);
     }
 
     /**
