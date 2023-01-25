@@ -161,9 +161,9 @@ return [
                 'sortableAttributes'=> ['address', 'founded', 'name', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'address', 'founded', 'is_nsfw', 'type'],
             ],
-            'user_libraries' => [
-                'sortableAttributes'=> ['end_date', 'start_date', 'status', 'created_at', 'update_at'],
-                'filterableAttributes'=> ['id', 'anime', 'anime_id', 'end_date', 'start_date', 'status', 'user_id'],
+            \App\Models\UserLibrary::TABLE_NAME => [
+                'sortableAttributes'=> ['ended_at', 'started_at', 'status', 'created_at', 'update_at'],
+                'filterableAttributes'=> ['id', 'anime', 'manga', 'trackable_id', 'trackable_type', 'started_at', 'ended_at', 'status', 'user_id'],
             ],
             \App\Models\User::TABLE_NAME => [
                 'sortableAttributes'=> ['username', 'slug', 'created_at', 'update_at'],
