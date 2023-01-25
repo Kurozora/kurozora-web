@@ -78,7 +78,14 @@ class UserLibrary extends Resource
                 ->searchable(),
 
             Select::make('Status')
-                ->options(UserLibraryStatus::asSelectArray())
+                ->options(function () {
+                    return match ($this->trackable_type) {
+                        \App\Models\Anime::class => UserLibraryStatus::asAnimeSelectArray(),
+                        \App\Models\Manga::class => UserLibraryStatus::asMangaSelectArray(),
+//                        \App\Models\Game::class => UserLibraryStatus::asGameSelectArray(),
+                        default => UserLibraryStatus::asSelectArray()
+                    };
+                })
                 ->displayUsingLabels()
                 ->required()
                 ->sortable()

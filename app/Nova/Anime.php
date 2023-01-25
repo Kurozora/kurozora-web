@@ -20,10 +20,10 @@ use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphMany;
+use Laravel\Nova\Fields\MorphOne;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
@@ -344,25 +344,25 @@ class Anime extends Resource
 
             MorphMany::make('Videos'),
 
-            HasMany::make('Genres', 'media_genres', MediaGenre::class),
+            MorphMany::make('Genres', 'mediaGenres', MediaGenre::class),
 
-            HasMany::make('Themes', 'media_themes', MediaTheme::class),
+            MorphMany::make('Themes', 'mediaThemes', MediaTheme::class),
 
-            MorphMany::make('Media Tags'),
+            MorphMany::make('Tags', 'mediaTags', MediaTag::class),
 
             HasMany::make('Seasons'),
 
-            HasMany::make('Cast'),
+            HasMany::make('Cast', 'cast', AnimeCast::class),
 
             HasMany::make('Songs', 'anime_songs', AnimeSong::class),
 
             MorphMany::make('Relations', 'relations', MediaRelation::class),
 
-            HasMany::make('Staff', 'staff', AnimeStaff::class),
+            MorphMany::make('Staff', 'mediaStaff', MediaStaff::class),
 
-            HasMany::make('Studios', 'animeStudios', AnimeStudio::class),
+            MorphMany::make('Studios', 'mediaStudios', MediaStudio::class),
 
-            HasOne::make('Stats', 'stats', MediaStat::class),
+            MorphOne::make('Stats', 'mediaStat', MediaStat::class),
         ];
     }
 

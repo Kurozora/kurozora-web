@@ -222,7 +222,7 @@ class Character extends Resource
                 })
                 ->sortable(),
 
-            HasMany::make('Cast'),
+            HasMany::make('Cast', 'cast', AnimeCast::class),
 
             BelongsToMany::make('Anime')
                 ->searchable(),

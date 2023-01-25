@@ -45,7 +45,7 @@ class CastRole extends Resource
      *
      * @var string
      */
-    public static $group = 'Anime';
+    public static $group = 'Media';
 
     /**
      * Get the fields displayed by the resource.
@@ -72,7 +72,7 @@ class CastRole extends Resource
                 ->help('A short description of the role.')
                 ->required(),
 
-            HasMany::make('Cast'),
+            HasMany::make('Cast', 'cast', AnimeCast::class),
         ];
     }
 
