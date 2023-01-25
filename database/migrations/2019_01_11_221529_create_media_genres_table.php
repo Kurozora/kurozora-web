@@ -17,19 +17,22 @@ return new class extends Migration
     {
         Schema::create(MediaGenre::TABLE_NAME, function (Blueprint $table) {
             $table->id();
-            $table->string('model_type');
-            $table->unsignedBigInteger('model_id');
+            $table->uuidMorphs('model');
             $table->unsignedBigInteger('genre_id');
             $table->timestamps();
             $table->softDeletes();
         });
 
         Schema::table(MediaGenre::TABLE_NAME, function (Blueprint $table) {
-            // Set unique index constraints
+            // Set unique key constraints
             $table->unique(['model_type', 'model_id', 'genre_id']);
 
             // Set foreign key constraints
-            $table->foreign('genre_id')->references('id')->on(Genre::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('genre_id')
+                ->references('id')
+                ->on(Genre::TABLE_NAME)
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 
