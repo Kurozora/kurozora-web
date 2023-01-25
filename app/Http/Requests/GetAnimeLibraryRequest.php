@@ -24,7 +24,7 @@ class GetAnimeLibraryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => []
+            'status' => ['nullable', 'string']
         ];
     }
 }
