@@ -90,8 +90,8 @@ class ImportAnimeStats extends Command
                         // Calculate weighted rating
                         $weightedRating = ($totalRatingCount / ($totalRatingCount + Anime::MINIMUM_RATINGS_REQUIRED)) * $basicAverageRating + (Anime::MINIMUM_RATINGS_REQUIRED / ($totalRatingCount + Anime::MINIMUM_RATINGS_REQUIRED)) * $meanAverageRating;
 
-                        $anime->stats()->updateOrCreate([
-                            'model_type' => Anime::class,
+                        $anime->mediaStat()->updateOrCreate([
+                            'model_type' => $anime->getMorphClass(),
                             'model_id' => $anime->id
                         ], [
                             'rating_1' => $stat->score_1,
