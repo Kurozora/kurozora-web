@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Enums\MediaCollection;
-use App\Models\AnimeStudio;
+use App\Models\MediaStudio;
 use App\Models\Studio;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -37,13 +37,13 @@ class StudioResourceBasic extends JsonResource
                 'address'       => $this->resource->address,
                 'founded'       => $this->resource->founded?->timestamp,
                 'websiteUrls'   => $this->resource->website_urls,
-                'isProducer'    => $this->whenPivotLoaded(AnimeStudio::TABLE_NAME, function () {
+                'isProducer'    => $this->whenPivotLoaded(MediaStudio::TABLE_NAME, function () {
                     return $this->pivot->is_producer;
                 }),
-                'isStudio'      => $this->whenPivotLoaded(AnimeStudio::TABLE_NAME, function () {
+                'isStudio'      => $this->whenPivotLoaded(MediaStudio::TABLE_NAME, function () {
                     return $this->pivot->is_studio;
                 }),
-                'isLicensor'    => $this->whenPivotLoaded(AnimeStudio::TABLE_NAME, function () {
+                'isLicensor'    => $this->whenPivotLoaded(MediaStudio::TABLE_NAME, function () {
                     return $this->pivot->is_licensor;
                 }),
             ]

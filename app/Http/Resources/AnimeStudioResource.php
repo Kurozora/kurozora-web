@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Models\AnimeStudio;
+use App\Models\MediaStudio;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,14 +16,14 @@ class AnimeStudioResource extends JsonResource
      */
     public function toArray($request): array
     {
-        /** @var AnimeStudio $animeStudio */
-        $animeStudio = $this->resource;
+        /** @var MediaStudio $mediaStudio */
+        $mediaStudio = $this->resource;
 
         $resource = [
-            'id'            => $animeStudio->id,
+            'id'            => $mediaStudio->id,
             'type'          => 'studios',
-            'href'          => route('api.anime.studios', $animeStudio->anime, false),
-            'attributes'    => $animeStudio->only(['is_licensor', 'is_producer', 'is_studio']),
+            'href'          => route('api.anime.studios', $mediaStudio->anime, false),
+            'attributes'    => $mediaStudio->only(['is_licensor', 'is_producer', 'is_studio']),
         ];
 
         $relationships = [];
@@ -42,13 +42,13 @@ class AnimeStudioResource extends JsonResource
      */
     protected function getStudioRelationship(): array
     {
-        /** @var AnimeStudio $animeStudio */
-        $animeStudio = $this->resource;
+        /** @var MediaStudio $mediaStudio */
+        $mediaStudio = $this->resource;
 
         return [
             'studio' => [
-                'href' => route('api.studios.details', $animeStudio, false),
-                'data' => StudioResourceBasic::make($animeStudio->studio),
+                'href' => route('api.studios.details', $mediaStudio, false),
+                'data' => StudioResourceBasic::make($mediaStudio->studio),
             ]
         ];
     }

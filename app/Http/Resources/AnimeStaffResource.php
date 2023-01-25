@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Models\AnimeStaff;
+use App\Models\MediaStaff;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -11,7 +11,7 @@ class AnimeStaffResource extends JsonResource
     /**
      * The resource instance.
      *
-     * @var AnimeStaff $resource
+     * @var MediaStaff $resource
      */
     public $resource;
 
@@ -26,7 +26,7 @@ class AnimeStaffResource extends JsonResource
         $resource = [
             'id'            => $this->resource->id,
             'type'          => 'staff',
-            'href'          => route('api.anime.staff', $this->resource->anime, false),
+            'href'          => route('api.anime.staff', $this->resource->model, false),
             'attributes'    => [
                 'role'      => $this->resource->staff_role->only(['name', 'description']),
             ]

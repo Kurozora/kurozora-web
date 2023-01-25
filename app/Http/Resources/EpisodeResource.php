@@ -35,7 +35,7 @@ class EpisodeResource extends JsonResource
                 'title'         => $this->resource->title,
                 'synopsis'      => $this->resource->synopsis,
                 'duration'      => $this->resource->duration_string,
-                'stats'         => MediaStatsResource::make($this->resource->getStats()),
+                'stats'         => MediaStatsResource::make($this->resource->getMediaStat()),
                 'videos'        => VideoResource::collection($this->resource->videos),
                 'isFiller'      => $this->resource->is_filler,
                 'isNsfw'        => $this->resource->is_nsfw,
@@ -72,7 +72,7 @@ class EpisodeResource extends JsonResource
 
         // Get watch status
         $watchStatus = WatchStatus::Disabled();
-        if ($user->isTracking($anime)) {
+        if ($user->hasTracked($anime)) {
             $watchStatus = WatchStatus::fromBool($user->episodes()->where('episode_id', $this->resource->id)->exists());
         }
 

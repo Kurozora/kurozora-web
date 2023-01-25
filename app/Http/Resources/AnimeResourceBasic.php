@@ -59,7 +59,7 @@ class AnimeResourceBasic extends JsonResource
                 'status'                => $this->resource->status->only(['name', 'description', 'color']),
                 'episodeCount'          => $this->resource->episode_count,
                 'seasonCount'           => $this->resource->season_count,
-                'stats'                 => MediaStatsResource::make($this->resource->getStats()),
+                'stats'                 => MediaStatsResource::make($this->resource->getMediaStat()),
                 'firstAired'            => $this->resource->first_aired?->timestamp,
                 'lastAired'             => $this->resource->last_aired?->timestamp,
                 'duration'              => $this->resource->duration_string,
@@ -93,7 +93,11 @@ class AnimeResourceBasic extends JsonResource
             ->firstWhere('user_id', $user->id);
 
         // Get the current library status
-        $libraryEntry = $user->library()->firstWhere('anime_id', $this->resource->id);
+        $libraryEntry = $user->whereTracked(Anime::class)
+            ->firstWhere([
+                ['trackable_id', $this->resource->id],
+                ['trackable_type', Anime::class]
+            ]);
         $currentLibraryStatus = null;
 
         if ($libraryEntry) {
@@ -101,16 +105,16 @@ class AnimeResourceBasic extends JsonResource
         }
 
         // Get the favorite status
-        $isTrackingAnime = $user->isTrackingAnime($this->resource);
+        $hasTracked = $user->hasTracked($this->resource);
         $favoriteStatus = null;
-        if ($isTrackingAnime) {
+        if ($hasTracked) {
             $favoriteStatus = $user->hasFavorited($this->resource);
         }
 
         // Get the reminder status
         $reminderStatus = null;
-        if ($isTrackingAnime) {
-            $reminderStatus = $user->reminder_anime()->wherePivot('anime_id', $this->resource->id)->exists();
+        if ($hasTracked) {
+            $reminderStatus = $user->reminderAnime()->wherePivot('anime_id', $this->resource->id)->exists();
         }
 
         // Return the array
