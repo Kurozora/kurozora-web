@@ -10,11 +10,11 @@ return [
     | This option controls the cooldown in days for users between importing
     | an export file.
     |
-    | Default: 3
+    | Default: 1
     |
     */
 
-    'cooldown_in_days' => 3,
+    'cooldown_in_days' => 1,
 
     /*
     |--------------------------------------------------------------------------

@@ -135,7 +135,7 @@ return [
         'index-settings' => [
             \App\Models\Anime::TABLE_NAME => [
                 'sortableAttributes'=> ['air_day', 'air_season', 'air_time', 'duration', 'first_aired', 'is_nsfw', 'last_aired', 'original_title', 'title', 'created_at', 'update_at'],
-                'filterableAttributes'=> ['id', 'air_day', 'air_season', 'air_time', 'duration', 'first_aired', 'is_nsfw', 'last_aired', 'media_type_id', 'original_title', 'source_id', 'status_id', 'title', 'tv_rating_id'],
+                'filterableAttributes'=> ['id', 'air_day', 'air_season', 'air_time', 'duration', 'first_aired', 'is_nsfw', 'last_aired', 'media_type_id', 'original_title', 'source_id', 'status_id', 'title', 'tv_rating_id', 'season_count', 'episode_count'],
             ],
             \App\Models\AppTheme::TABLE_NAME => [
                 'sortableAttributes'=> ['download_count', 'name', 'version', 'created_at', 'update_at'],
