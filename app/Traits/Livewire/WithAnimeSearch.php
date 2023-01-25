@@ -142,7 +142,17 @@ trait WithAnimeSearch
                 'type' => 'select',
                 'options' => SeasonOfYear::asSelectArray(),
                 'selected' => null,
-            ]
+            ],
+            'season_count' => [
+                'title' => __('Season Count'),
+                'type' => 'number',
+                'selected' => null,
+            ],
+            'episode_count' => [
+                'title' => __('Episode Count'),
+                'type' => 'number',
+                'selected' => null,
+            ],
         ];
 
         if (auth()->check()) {
