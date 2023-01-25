@@ -111,12 +111,13 @@ class SearchController extends Controller
                     if ($scope == SearchScope::Library) {
                         $resource = UserLibrary::search($data['query'])
                             ->where('user_id', auth()->user()->id)
+                            ->where('trackable_type', Anime::class)
                             ->paginate($data['limit'] ?? 5)
                             ->appends($data);
                         // Get next page url minus domain
                         $nextPageURL = $this->nextPageUrlFor($resource, $type);
 
-                        $resource = collect($resource->items())->pluck('anime');
+                        $resource = collect($resource->items())->pluck('trackable');
                     } else {
                         $resource = Anime::search($data['query']);
                         $resource = $resource->paginate($data['limit'] ?? 5)

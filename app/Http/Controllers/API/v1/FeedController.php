@@ -39,7 +39,7 @@ class FeedController extends Controller
                 ->exists();
 
             if ($reShareExists) {
-                throw new AuthorizationException('You are not allowed to re-share a message more than once.');
+                throw new AuthorizationException(__('You are not allowed to re-share a message more than once.'));
             }
         }
 

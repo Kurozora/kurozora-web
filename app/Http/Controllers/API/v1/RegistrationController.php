@@ -28,11 +28,11 @@ class RegistrationController extends Controller
      */
     public function signUp(SignUpRequest $request): JsonResponse
     {
-        $data = $request->only(['username', 'email', 'password']);
+        $data = $request->validated();
 
         // Create the user
         $newUser = User::create([
-            'username'  => $data['username'],
+            'username'  => $data['nickname'] ?? $data['username'],
             'email'     => $data['email'],
             'password'  => Hash::make($data['password']),
             'settings'  => [

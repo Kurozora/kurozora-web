@@ -28,7 +28,7 @@ class ReminderAnimeController extends Controller
         $user = auth()->user();
 
         // Paginate the reminder anime
-        $reminderAnime = $user->reminder_anime()->paginate($data['limit'] ?? 25);
+        $reminderAnime = $user->reminderAnime()->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $reminderAnime->nextPageUrl());
@@ -53,15 +53,15 @@ class ReminderAnimeController extends Controller
         $user = auth()->user();
 
         if (!$user->is_subscribed) {
-            throw new AuthorizationException('Reminders are only available to subscribed users.');
+            throw new AuthorizationException(__('Reminders are only available to subscribed users.'));
         }
 
         $isAlreadyReminded = $user->user_reminder_anime()->where('anime_id', $animeID)->exists();
 
         if ($isAlreadyReminded) { // Don't remind the user
-            $user->reminder_anime()->detach($animeID);
+            $user->reminderAnime()->detach($animeID);
         } else { // Remind the user
-            $user->reminder_anime()->attach($animeID);
+            $user->reminderAnime()->attach($animeID);
         }
 
         return JSONResult::success([
@@ -83,7 +83,7 @@ class ReminderAnimeController extends Controller
         $user = auth()->user();
 
         if (!$user->is_subscribed) {
-            throw new AuthorizationException('Reminders are only available to subscribed users.');
+            throw new AuthorizationException(__('Reminders are only available to subscribed users.'));
         }
 
         $calendarExportStream = $user->getCalendar();

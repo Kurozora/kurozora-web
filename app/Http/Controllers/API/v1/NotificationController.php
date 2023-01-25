@@ -89,7 +89,7 @@ class NotificationController extends Controller
             // Make sure the notifications belong to the currently authenticated user
             foreach ($notificationIDs as $notificationID) {
                 if (!$user->notifications->contains($notificationID)) {
-                    throw new AuthorizationException('The request wasn’t accepted due to an issue with the notifications or because it’s using incorrect authentication.');
+                    throw new AuthorizationException(__('The request wasn’t accepted due to an issue with the notifications or because it’s using incorrect authentication.'));
                 }
             }
 

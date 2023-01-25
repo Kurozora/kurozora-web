@@ -76,7 +76,7 @@ class EpisodeController extends Controller
 
         // Check if the episode has been watched
         if (!$user->hasWatched($episode)) {
-            throw new AuthorizationException('Please watch ' . $episode->title . ' first.');
+            throw new AuthorizationException(__('Please watch :x first.', ['x' => $episode->title]));
         }
 
         // Validate the request

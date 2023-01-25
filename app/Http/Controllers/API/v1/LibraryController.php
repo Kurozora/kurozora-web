@@ -12,10 +12,12 @@ use App\Http\Requests\DeleteFromLibraryRequest;
 use App\Http\Requests\GetLibraryRequest;
 use App\Http\Requests\ImportRequest;
 use App\Http\Resources\AnimeResourceBasic;
+use App\Jobs\ProcessKitsuImport;
 use App\Jobs\ProcessMALImport;
 use App\Models\Anime;
 use App\Models\UserLibrary;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
+use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -41,7 +43,7 @@ class LibraryController extends Controller
         $foundStatus = UserLibraryStatus::getValue($data['status']);
 
         // Retrieve the Anime from the user's library with the correct status
-        $anime = $user->library()
+        $anime = $user->whereTracked(Anime::class)
             ->sortViaRequest($request)
             ->wherePivot('status', $foundStatus)
             ->paginate($data['limit'] ?? 25);
@@ -61,6 +63,7 @@ class LibraryController extends Controller
      * @param AddToLibraryRequest $request
      * @return JsonResponse
      * @throws InvalidEnumKeyException
+     * @throws InvalidEnumMemberException
      */
     public function create(AddToLibraryRequest $request): JsonResponse
     {
@@ -83,17 +86,18 @@ class LibraryController extends Controller
         // Update or create the user library entry
         UserLibrary::updateOrCreate([
             'user_id'   => $user->id,
-            'anime_id'  => $anime->id,
+            'trackable_type'  => Anime::class,
+            'trackable_id'  => $anime->id,
         ], [
             'status' => $userLibraryStatus->value,
-            'end_date' => $endDate
+            'ended_at' => $endDate
         ]);
 
         // Successful response
         return JSONResult::success([
             'data' => [
                 'libraryStatus' => $userLibraryStatus->description,
-                'isFavorited'   => $user->favorite_anime()->where('anime_id', $animeID)->exists(),
+                'isFavorited'   => $user->hasFavorited($anime),
                 'isReminded'    => $user->user_reminder_anime()->where('anime_id', $animeID)->exists()
             ]
         ]);
@@ -114,28 +118,29 @@ class LibraryController extends Controller
 
         // Get the authenticated user
         $user = auth()->user();
+        $hasNotTracked = $user->hasNotTracked($anime);
 
-        // Remove this Anime from their library if it can be found
-        if ($user->library()->where('anime_id', $animeID)->count()) {
-            $user->library()->detach($animeID);
-
-            // Remove from favorites as you can't favorite and not have anime in library
-            $user->unfavorite($anime);
-
-            // Remove from reminders as you can't remind and not have anime in library
-            $user->reminder_anime()->detach($animeID);
-
-            return JSONResult::success([
-                'data' => [
-                    'libraryStatus' => null,
-                    'isFavorited'   => null,
-                    'isReminded'    => null
-                ]
-            ]);
+        if ($hasNotTracked) {
+            // The item could not be found
+            throw new AuthorizationException(__(':x is not in your library.', ['x' => $anime->title]));
         }
 
-        // The item could not be found
-        throw new AuthorizationException('This item is not in your library.');
+        // Remove this Anime from their library if it can be found
+        $user->untrack($anime);
+
+        // Remove from favorites as you can't favorite and not have the anime in library
+        $user->unfavorite($anime);
+
+        // Remove from reminders as you can't be reminded and not have the anime in library
+        $user->reminderAnime()->detach($animeID);
+
+        return JSONResult::success([
+            'data' => [
+                'libraryStatus' => null,
+                'isFavorited'   => null,
+                'isReminded'    => null
+            ]
+        ]);
     }
 
     /**
@@ -171,8 +176,12 @@ class LibraryController extends Controller
         // Dispatch job
         switch ($importService->value) {
             case ImportService::MAL:
-            case ImportService::Kitsu:
                 dispatch(new ProcessMALImport($user, $xmlContent, $importService, $importBehavior));
+                break;
+            case ImportService::Kitsu:
+                dispatch(new ProcessKitsuImport($user, $xmlContent, $importService, $importBehavior));
+                break;
+            default:
                 break;
         }
 

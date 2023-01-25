@@ -45,7 +45,7 @@ class FeedMessageController extends Controller
 
         // Check if user is allowed to edit the feed message.
         if ($user->id !== $feedMessage->user_id) {
-            throw new AuthorizationException('You are not allowed to edit another user’s message.');
+            throw new AuthorizationException(__('You are not allowed to edit another user’s message.'));
         }
 
         // Update feed message
@@ -128,7 +128,7 @@ class FeedMessageController extends Controller
 
         // Check if user is allowed to edit the feed message.
         if ($user->id !== $feedMessage->user_id) {
-            throw new AuthorizationException('The request wasn’t accepted due to an issue with the feed message or because it’s using incorrect authentication.');
+            throw new AuthorizationException(__('The request wasn’t accepted due to an issue with the feed message or because it’s using incorrect authentication.'));
         }
 
         // Delete the feed message

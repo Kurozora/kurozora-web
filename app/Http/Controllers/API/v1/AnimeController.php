@@ -201,13 +201,13 @@ class AnimeController extends Controller
         $data = $request->validated();
 
         // Get the anime studios
-        $animeStudios = $anime->getStudios($data['limit'] ?? 25, $data['page'] ?? 1);
+        $mediaStudios = $anime->getStudios($data['limit'] ?? 25, $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $animeStudios->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $mediaStudios->nextPageUrl());
 
         return JSONResult::success([
-            'data' => StudioResource::collection($animeStudios),
+            'data' => StudioResource::collection($mediaStudios),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
@@ -225,10 +225,10 @@ class AnimeController extends Controller
         $studioAnimes = new LengthAwarePaginator([], 0, 1);
 
         // Get the anime studios
-        if ($animeStudio = $anime->studios()->firstWhere('is_studio', '=', true)) {
-            $studioAnimes = $animeStudio->getAnime($data['limit'] ?? 25, $data['page'] ?? 1);
-        } elseif ($animeStudio = $anime->studios()->first()) {
-            $studioAnimes = $animeStudio->getAnime($data['limit'] ?? 25, $data['page'] ?? 1);
+        if ($mediaStudio = $anime->studios()->firstWhere('is_studio', '=', true)) {
+            $studioAnimes = $mediaStudio->getAnime($data['limit'] ?? 25, $data['page'] ?? 1);
+        } elseif ($mediaStudio = $anime->studios()->first()) {
+            $studioAnimes = $mediaStudio->getAnime($data['limit'] ?? 25, $data['page'] ?? 1);
         }
 
         // Get next page url minus domain
@@ -254,8 +254,8 @@ class AnimeController extends Controller
         $user = auth()->user();
 
         // Check if the user is already tracking the anime
-        if (!$user->isTracking($anime)) {
-            throw new AuthorizationException('Please add ' . $anime->title . ' to your library first.');
+        if ($user->hasNotTracked($anime)) {
+            throw new AuthorizationException(__('Please add :x to your library first.', ['x' => $anime->title]));
         }
 
         // Validate the request
@@ -266,10 +266,9 @@ class AnimeController extends Controller
 
         // Try to modify the rating if it already exists
         /** @var MediaRating $foundRating */
-        $foundRating = $user->anime_ratings()->where([
-            ['model_id', '=', $anime->id],
-            ['model_type', '=', Anime::class],
-        ])->first();
+        $foundRating = $user->animeRatings()
+            ->where('model_id', '=', $anime->id)
+            ->first();
 
         // The rating exists
         if ($foundRating) {
