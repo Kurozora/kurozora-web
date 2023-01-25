@@ -96,7 +96,7 @@ class EpisodeTest extends TestCase
     function an_episode_can_be_watched_if_anime_in_library(): void
     {
         // Add the Anime to the library
-        $this->user->library()->attach($this->anime, ['status' => UserLibraryStatus::Watching]);
+        $this->user->track($this->anime, UserLibraryStatus::InProgress());
 
         // Mark episode as watched
         $response = $this->auth()->json('POST', 'v1/episodes/' . $this->episode->id . '/watched');
@@ -117,7 +117,7 @@ class EpisodeTest extends TestCase
     function an_episode_can_be_unwatched_if_anime_in_library(): void
     {
         // Add the Anime to the library and mark episode as watched
-        $this->user->library()->attach($this->anime, ['status' => UserLibraryStatus::Watching]);
+        $this->user->track($this->anime, UserLibraryStatus::InProgress());
         $this->auth()->json('POST', 'v1/episodes/' . $this->episode->id . '/watched');
 
         // Mark episode as unwatched.

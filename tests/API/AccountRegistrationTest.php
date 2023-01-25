@@ -23,25 +23,25 @@ class AccountRegistrationTest extends TestCase
     function an_account_can_be_signed_up(): void
     {
         $this->json('POST', 'v1/users', [
-            'username'  => 'Kurozora Tester',
+            'username'  => 'Kurozora_Tester-1',
             'password'  => 'StrongPassword909@!',
             'email'     => 'tester1@kurozora.app'
         ])->assertSuccessfulAPIResponse();
 
         $this->json('POST', 'v1/users', [
-            'username'  => 'Kurozora_Tester',
+            'username'  => 'Kurozora_Tester-2',
             'password'  => 'StrongPassword909@!',
             'email'     => 'tester2@kurozora.app'
         ])->assertSuccessfulAPIResponse();
 
         $this->json('POST', 'v1/users', [
-            'username'  => 'Kurozora-Tester',
+            'username'  => 'Kurozora_Tester-3',
             'password'  => 'StrongPassword909@!',
             'email'     => 'tester3@kurozora.app'
         ])->assertSuccessfulAPIResponse();
 
         $this->json('POST', 'v1/users', [
-            'username'  => 'Kurozora Tester 123',
+            'username'  => 'Kurozora_Tester-4',
             'password'  => 'StrongPassword909@!',
             'email'     => 'tester4@kurozora.app'
         ])->assertSuccessfulAPIResponse();
@@ -178,7 +178,7 @@ class AccountRegistrationTest extends TestCase
     {
         // Create the first account
         $this->json('POST', 'v1/users', [
-            'username'  => 'KurozoraTester',
+            'nickname'  => 'Kurozora_Tester-1',
             'password'  => 'StrongPassword909@!',
             'email'     => 'tester@kurozora.app'
         ])->assertSuccessfulAPIResponse();
@@ -188,7 +188,7 @@ class AccountRegistrationTest extends TestCase
 
         // Attempt to create the second account
         $this->json('POST', 'v1/users', [
-            'username'  => 'KurozoraTester',
+            'nickname'  => 'Kurozora_Tester-1',
             'password'  => 'StrongPassword909@!',
             'email'     => 'unique@kurozora.app'
         ])->assertUnsuccessfulAPIResponse();

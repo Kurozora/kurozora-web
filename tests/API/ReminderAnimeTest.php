@@ -20,85 +20,72 @@ class ReminderAnimeTest extends TestCase
      */
     function a_normal_user_cannot_add_anime_to_their_reminders(): void
     {
-        $this->markTestIncomplete('Test will work once server sided IAP check is added.');
         // Send request to add anime to the user's reminders
         /** @var Anime $anime */
         $anime = Anime::factory()->create();
 
-        $this->user->library()->attach($anime);
+        $this->user->track($anime, UserLibraryStatus::InProgress());
 
         $response = $this->auth()->json('POST', 'v1/me/reminder-anime', [
-            'anime_id'      => $anime->id,
-            'is_reminded'   => 1
+            'anime_id' => $anime->id,
         ]);
 
         // Check whether the request was successful
         $response->assertUnsuccessfulAPIResponse();
 
         // Check whether the user now has 1 anime in their reminders
-        $this->assertEquals(0, $this->user->reminder_anime()->count());
+        $this->assertEquals(0, $this->user->reminderAnime()->count());
     }
 
     /**
-     * Test if a pro user can add anime to their reminders.
+     * Test if a subscribed user can add anime to their reminders.
      *
      * @return void
      * @test
      */
-    function a_pro_user_can_add_anime_to_their_reminders(): void
+    function a_subscribed_user_can_add_anime_to_their_reminders(): void
     {
-        // Send request to add anime to the user's reminders
+        // Add anime to the user's library
         /** @var Anime $anime */
         $anime = Anime::factory()->create();
 
-        $this->user->library()->attach($anime, ['status' => UserLibraryStatus::Watching]);
+        $this->user->track($anime, UserLibraryStatus::InProgress());
 
-        // Attach a receipt to the user
-        $this->user->receipts()->create([
-            'original_transaction_id' => '1',
-            'web_order_line_item_id' => '1',
-            'latest_expires_at' => now()->addDay(),
-            'is_subscribed' => 1,
-            'will_auto_renew' => 0,
-            'product_id' => 'SKU'
+        // Make user a subscriber
+        $this->user->update([
+            'is_subscribed' => true
         ]);
 
-        // Send request to add the anime from the user's reminders
+        // Send request to add the anime to the user's reminders
         $response = $this->auth()->json('POST', 'v1/me/reminder-anime', [
-            'anime_id'      => $anime->id,
-            'is_reminded'   => 1
+            'anime_id' => $anime->id,
         ]);
 
         // Check whether the request was successful
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the user now has 1 anime in their reminders
-        $this->assertEquals(1, $this->user->reminder_anime()->count());
+        $this->assertEquals(1, $this->user->reminderAnime()->count());
     }
 
     /**
-     * Test if a user can remove anime from their reminders.
+     * Test if a subscribed_user can remove anime from their reminders.
      *
      * @return void
      * @test
      */
-    function a_user_can_remove_anime_from_their_reminders(): void
+    function a_subscribed_user_can_remove_anime_from_their_reminders(): void
     {
-        // Add the anime to the user's reminders
+        // Add the anime to the user's library and reminders
         /** @var Anime $anime */
         $anime = Anime::factory()->create();
 
-        $this->user->library()->attach($anime, ['status' => UserLibraryStatus::Watching]);
-        $this->user->reminder_anime()->attach($anime->id);
+        $this->user->track($anime, UserLibraryStatus::InProgress());
+        $this->user->reminderAnime()->attach($anime->id);
 
-        // Attach a receipt to the user
-        $this->user->receipts()->create([
-            'original_transaction_id' => '1',
-            'web_order_line_item_id' => '1',
-            'latest_expires_at' => now()->addDay(),
-            'is_subscribed' => 1,
-            'will_auto_renew' => 0,
-            'product_id' => 'SKU'
+        // Make user a subscriber
+        $this->user->update([
+            'is_subscribed' => true
         ]);
 
         // Send request to remove the anime from the user's reminders
@@ -111,7 +98,7 @@ class ReminderAnimeTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the user now has no anime in their reminders
-        $this->assertEquals(0, $this->user->reminder_anime()->count());
+        $this->assertEquals(0, $this->user->reminderAnime()->count());
     }
 
     /**
@@ -127,7 +114,7 @@ class ReminderAnimeTest extends TestCase
         $animeList = Anime::factory(25)->create();
 
         foreach($animeList as $anime) {
-            $this->user->reminder_anime()->attach($anime->id);
+            $this->user->reminderAnime()->attach($anime->id);
         }
 
         // Send request for the list of anime

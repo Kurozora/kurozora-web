@@ -17,6 +17,7 @@
             "videoUrl": null,
             "poster": null,
             "banner": null,
+            "logo": null,
             "originalTitle": "Awesome Show",
             "title": "Awesome Show",
             "synonymTitles": [
@@ -28,6 +29,7 @@
             "synopsis": "A very awesome show.",
             "genres": [],
             "themes": [],
+            "studio": null,
             "languages": [],
             "tvRating": {
                 "name": "z",
@@ -46,8 +48,8 @@
                 "description": "Mollitia totam nulla ut tenetur saepe soluta dolor.",
                 "color": "#b01b3a"
             },
-            "episodeCount": "0",
-            "seasonCount": "0",
+            "episodeCount": 0,
+            "seasonCount": 0,
             "stats": null,
             "firstAired": 67046400,
             "lastAired": 73094400,
@@ -55,11 +57,11 @@
             "durationTotal": "24 minutes",
             "airSeason": "Winter",
             "airTime": "08:00",
-            "airDay": null,
+            "airDay": "Monday",
             "isNSFW": false,
             "copyright": "\u00ae 2012 Steuber Group",
             "givenRating": 3,
-            "libraryStatus": "",
+            "libraryStatus": "In progress",
             "isFavorited": false,
             "isReminded": false
         }
@@ -82,6 +84,7 @@
             "videoUrl": null,
             "poster": null,
             "banner": null,
+            "logo": null,
             "originalTitle": "Be a good person",
             "title": "Be a good person!",
             "synonymTitles": [
@@ -93,6 +96,7 @@
             "synopsis": "A story about being a good person.",
             "genres": [],
             "themes": [],
+            "studio": null,
             "languages": [],
             "tvRating": {
                 "name": "z",
@@ -111,8 +115,8 @@
                 "description": "Mollitia totam nulla ut tenetur saepe soluta dolor.",
                 "color": "#b01b3a"
             },
-            "episodeCount": "0",
-            "seasonCount": "0",
+            "episodeCount": 0,
+            "seasonCount": 0,
             "stats": null,
             "firstAired": 67046400,
             "lastAired": 73094400,
@@ -120,11 +124,11 @@
             "durationTotal": "24 minutes",
             "airSeason": "Winter",
             "airTime": "07:30",
-            "airDay": null,
+            "airDay": "Sunday",
             "isNSFW": true,
             "copyright": "\u2117 2018 Abernathy-Daniel",
             "givenRating": 1.2,
-            "libraryStatus": "",
+            "libraryStatus": "In progress",
             "isFavorited": false,
             "isReminded": false
         }

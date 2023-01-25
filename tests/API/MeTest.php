@@ -96,9 +96,9 @@ class MeTest extends TestCase
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
 
-        // Check whether the biography was removed
+        // Check whether the biography is empty
         $this->user->refresh();
-        $this->assertNull($this->user->biography);
+        $this->assertEmpty($this->user->biography);
     }
 
     /**

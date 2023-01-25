@@ -4,6 +4,7 @@ namespace Tests\API;
 
 use App\Enums\ImportBehavior;
 use App\Enums\ImportService;
+use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
 use App\Notifications\AnimeImportFinished;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -192,13 +193,13 @@ class MALImportTest extends TestCase
     {
         // Attach anime with id 21
         $anime = Anime::firstWhere('mal_id', 21);
-        $this->user->library()->attach($anime, ['status' => 'Watching']);
+        $this->user->track($anime, UserLibraryStatus::InProgress());
 
         // Prepare import file
         $uploadFile = UploadedFile::fake()->createWithContent('animelist_1623616958_-_3667065.xml', self::$xmlContent);
 
         // Make sure the anime has been attached to the user
-        $this->assertEquals(1, $this->user->library()->count());
+        $this->assertTrue($this->user->hasTracked($anime));
 
         // Expect a job is dispatched
         Notification::fake();
@@ -215,10 +216,10 @@ class MALImportTest extends TestCase
         Notification::hasSent($this->user, AnimeImportFinished::class);
 
         // Assert anime has been imported in user's library
-        $this->assertEquals(6, $this->user->library()->count());
+        $this->assertEquals(6, $this->user->whereTracked(Anime::class)->count());
 
         // Assert the anime we added in the beginning is gone
-        $this->assertNull($this->user->library->firstWhere('mal_id', 21));
+        $this->assertNull($this->user->whereTracked(Anime::class)->firstWhere('mal_id', 21));
     }
 
     /**
@@ -230,13 +231,13 @@ class MALImportTest extends TestCase
     {
         // Attach anime with id 21
         $anime = Anime::firstWhere('mal_id', 21);
-        $this->user->library()->attach($anime, ['status' => 'Watching']);
+        $this->user->track($anime, UserLibraryStatus::InProgress());
 
         // Prepare import file
         $uploadFile = UploadedFile::fake()->createWithContent('animelist_1623616958_-_3667065.xml', self::$xmlContent);
 
         // Make sure the anime has been attached to the user
-        $this->assertEquals(1, $this->user->library()->count());
+        $this->assertEquals(1, $this->user->whereTracked(Anime::class)->count());
 
         // Expect a job is dispatched
         Notification::fake();
@@ -253,9 +254,9 @@ class MALImportTest extends TestCase
         Notification::hasSent($this->user, AnimeImportFinished::class);
 
         // Assert anime has been imported in user's library
-        $this->assertEquals(7, $this->user->library()->count());
+        $this->assertEquals(7, $this->user->whereTracked(Anime::class)->count());
 
         // Assert the anime we added in the beginning is gone
-        $this->assertNotNull($this->user->library->firstWhere('mal_id', 21));
+        $this->assertNotNull($this->user->whereTracked(Anime::class)->firstWhere('mal_id', 21));
     }
 }

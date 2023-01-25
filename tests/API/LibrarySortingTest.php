@@ -35,7 +35,7 @@ class LibrarySortingTest extends TestCase
     {
         // Send the request and sort by title ascending
         $response = $this->auth()->json('GET', 'v1/me/library', [
-            'status'    => 'Watching',
+            'status'    => UserLibraryStatus::InProgress()->key,
             'sort'      => 'title(asc)'
         ]);
 
@@ -43,7 +43,7 @@ class LibrarySortingTest extends TestCase
 
         // Send the request and sort by title descending
         $response = $this->auth()->json('GET', 'v1/me/library', [
-            'status'    => 'Watching',
+            'status'    => UserLibraryStatus::InProgress()->key,
             'sort'      => 'title(desc)'
         ]);
 
@@ -60,7 +60,7 @@ class LibrarySortingTest extends TestCase
     {
         // Send the request and sort by age newest
         $response = $this->auth()->json('GET', 'v1/me/library', [
-            'status'    => 'Watching',
+            'status'    => UserLibraryStatus::InProgress()->key,
             'sort'      => 'age(newest)'
         ]);
 
@@ -68,7 +68,7 @@ class LibrarySortingTest extends TestCase
 
         // Send the request and sort by age oldest
         $response = $this->auth()->json('GET', 'v1/me/library', [
-            'status'    => 'Watching',
+            'status'    => UserLibraryStatus::InProgress()->key,
             'sort'      => 'age(oldest)'
         ]);
 
@@ -85,7 +85,7 @@ class LibrarySortingTest extends TestCase
     {
         // Send the request and sort by rating best
         $response = $this->auth()->json('GET', 'v1/me/library', [
-            'status'    => 'Watching',
+            'status'    => UserLibraryStatus::InProgress()->key,
             'sort'      => 'rating(best)'
         ]);
 
@@ -93,7 +93,7 @@ class LibrarySortingTest extends TestCase
 
         // Send the request and sort by rating worst
         $response = $this->auth()->json('GET', 'v1/me/library', [
-            'status'    => 'Watching',
+            'status'    => UserLibraryStatus::InProgress()->key,
             'sort'      => 'rating(worst)'
         ]);
 
@@ -110,7 +110,7 @@ class LibrarySortingTest extends TestCase
     {
         // Send the request and sort by my rating best
         $response = $this->auth()->json('GET', 'v1/me/library', [
-            'status'    => 'Watching',
+            'status'    => UserLibraryStatus::InProgress()->key,
             'sort'      => 'my-rating(best)'
         ]);
 
@@ -118,7 +118,7 @@ class LibrarySortingTest extends TestCase
 
         // Send the request and sort by my rating worst
         $response = $this->auth()->json('GET', 'v1/me/library', [
-            'status'    => 'Watching',
+            'status'    => UserLibraryStatus::InProgress()->key,
             'sort'      => 'my-rating(worst)'
         ]);
 
@@ -177,10 +177,10 @@ class LibrarySortingTest extends TestCase
             'copyright'         => '® 2012 Steuber Group',
             'created_at'        => now(),
         ]);
-        $anime1->stats()->update([
+        $anime1->mediaStat()->update([
             'rating_average' => 2.5,
         ]);
-        $user->library()->attach($anime1->id, ['status' => UserLibraryStatus::Watching]);
+        $this->user->track($anime1, UserLibraryStatus::InProgress());
 
         MediaRating::create([
             'model_type'    => Anime::class,
@@ -214,10 +214,10 @@ class LibrarySortingTest extends TestCase
             'copyright'         => '℗ 2018 Abernathy-Daniel',
             'created_at'        => now()->subDay(),
         ]);
-        $anime2->stats()->update([
+        $anime2->mediaStat()->update([
             'rating_average'    => 4.0,
         ]);
-        $user->library()->attach($anime2->id, ['status' => UserLibraryStatus::Watching]);
+        $this->user->track($anime2, UserLibraryStatus::InProgress());
 
         MediaRating::create([
             'model_type'    => Anime::class,
