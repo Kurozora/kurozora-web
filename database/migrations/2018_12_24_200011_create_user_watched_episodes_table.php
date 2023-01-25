@@ -25,8 +25,16 @@ return new class extends Migration
 
         Schema::table(UserWatchedEpisode::TABLE_NAME, function (Blueprint $table) {
             // Set foreign key constraints
-            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
-            $table->foreign('episode_id')->references('id')->on(Episode::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on(User::TABLE_NAME)
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreign('episode_id')
+                ->references('id')
+                ->on(Episode::TABLE_NAME)
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 

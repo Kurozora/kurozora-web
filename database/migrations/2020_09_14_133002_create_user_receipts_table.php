@@ -34,11 +34,14 @@ return new class extends Migration
         });
 
         Schema::table(UserReceipt::TABLE_NAME, function (Blueprint $table) {
-            // Set unique index constraints
+            // Set unique key constraints
             $table->unique(['user_id', 'original_transaction_id']);
 
             // Set foreign key constraints
-            $table->foreign('user_id')->references('uuid')->on(User::TABLE_NAME);
+            $table->foreign('user_id')
+                ->references('uuid')
+                ->on(User::TABLE_NAME)
+                ->cascadeOnUpdate();
         });
     }
 

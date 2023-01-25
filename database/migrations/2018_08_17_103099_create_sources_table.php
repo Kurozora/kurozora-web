@@ -23,7 +23,7 @@ return new class extends Migration
         });
 
         Schema::table(Source::TABLE_NAME, function (Blueprint $table) {
-            // Set unique index constraints
+            // Set unique key constraints
             $table->unique(['name']);
         });
     }

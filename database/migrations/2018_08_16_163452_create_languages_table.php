@@ -24,7 +24,7 @@ return new class extends Migration
         });
 
         Schema::table(Language::TABLE_NAME, function (Blueprint $table) {
-            // Set unique index constraints
+            // Set unique key constraints
             $table->unique(['code']);
         });
     }

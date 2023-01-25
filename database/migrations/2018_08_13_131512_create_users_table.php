@@ -20,7 +20,7 @@ return new class extends Migration
             $table->uuid();
             $table->unsignedBigInteger('love_reacter_id')->nullable();
             $table->string('siwa_id')->nullable();
-            $table->string('language_id', 2)->default('en')->index();
+            $table->string('language_id', 2)->default('en')->nullable();
             $table->string('slug');
             $table->string('username', 50)->nullable();
             $table->string('email');
@@ -45,12 +45,23 @@ return new class extends Migration
         });
 
         Schema::table(User::TABLE_NAME, function (Blueprint $table) {
-            // Set unique index constraints
+            // Set index key constraints
+            $table->index('language_id');
+
+            // Set unique key constraints
             $table->unique(['slug']);
 
             // Set foreign key constraints
-            $table->foreign('love_reacter_id')->references('id')->on('love_reacters');
-            $table->foreign('locale')->references('code')->on(Language::TABLE_NAME);
+            $table->foreign('love_reacter_id')
+                ->references('id')
+                ->on('love_reacters')
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreign('locale')
+                ->references('code')
+                ->on(Language::TABLE_NAME)
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 

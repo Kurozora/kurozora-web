@@ -34,7 +34,7 @@ return new class extends Migration
         });
 
         Schema::table(Person::TABLE_NAME, function (Blueprint $table) {
-            // Set unique index constraints
+            // Set unique key constraints
             $table->unique(['slug']);
         });
     }

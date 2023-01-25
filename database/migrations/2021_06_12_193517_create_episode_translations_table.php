@@ -19,7 +19,7 @@ return new class extends Migration
         Schema::create(EpisodeTranslation::TABLE_NAME, function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('episode_id');
-            $table->string('locale', 2)->index();
+            $table->string('locale', 2);
             $table->string('title');
             $table->text('synopsis')->nullable();
             $table->timestamps();
@@ -27,12 +27,23 @@ return new class extends Migration
         });
 
         Schema::table(EpisodeTranslation::TABLE_NAME, function (Blueprint $table) {
-            // Set unique index constraints
+            // Set index key constraints
+            $table->index(['locale']);
+
+            // Set unique key constraints
             $table->unique(['episode_id', 'locale']);
 
             // Set foreign key constraints
-            $table->foreign('episode_id')->references('id')->on(Episode::TABLE_NAME)->onDelete('cascade');
-            $table->foreign('locale')->references('code')->on(Language::TABLE_NAME);
+            $table->foreign('episode_id')
+                ->references('id')
+                ->on(Episode::TABLE_NAME)
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreign('locale')
+                ->references('code')
+                ->on(Language::TABLE_NAME)
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 

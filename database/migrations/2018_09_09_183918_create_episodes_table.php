@@ -44,10 +44,25 @@ return new class extends Migration
             $table->unique(['season_id', 'number']);
 
             // Set foreign key constraints
-            $table->foreign('next_episode_id')->references('id')->on(Episode::TABLE_NAME)->onDelete('set null');
-            $table->foreign('previous_episode_id')->references('id')->on(Episode::TABLE_NAME)->onDelete('set null');
-            $table->foreign('season_id')->references('id')->on(Season::TABLE_NAME)->onDelete('cascade');
-            $table->foreign('tv_rating_id')->references('id')->on(TvRating::TABLE_NAME)->onDelete('set null');
+            $table->foreign('next_episode_id')
+                ->references('id')
+                ->on(Episode::TABLE_NAME)
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreign('previous_episode_id')
+                ->references('id')
+                ->on(Episode::TABLE_NAME)
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreign('season_id')
+                ->references('id')
+                ->on(Season::TABLE_NAME)
+                ->onDelete('cascade');
+            $table->foreign('tv_rating_id')
+                ->references('id')
+                ->on(TvRating::TABLE_NAME)
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 

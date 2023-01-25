@@ -26,7 +26,11 @@ return new class extends Migration
 
         Schema::table(ExploreCategoryItem::TABLE_NAME, function (Blueprint $table) {
             // Set foreign key constraints
-            $table->foreign('explore_category_id')->references('id')->on(ExploreCategory::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('explore_category_id')
+                ->references('id')
+                ->on(ExploreCategory::TABLE_NAME)
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 

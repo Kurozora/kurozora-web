@@ -41,7 +41,7 @@ return new class extends Migration
         });
 
         Schema::table(SessionAttribute::TABLE_NAME, function (Blueprint $table) {
-            // Set unique index constraints
+            // Set unique key constraints
             $table->unique(['model_id', 'model_type']);
         });
     }

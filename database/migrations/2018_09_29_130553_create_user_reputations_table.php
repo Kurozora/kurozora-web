@@ -25,8 +25,16 @@ return new class extends Migration
 
         Schema::table(UserReputation::TABLE_NAME, function (Blueprint $table) {
             // Set foreign key constraints
-            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
-            $table->foreign('given_user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on(User::TABLE_NAME)
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreign('given_user_id')
+                ->references('id')
+                ->on(User::TABLE_NAME)
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 

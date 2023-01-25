@@ -34,7 +34,11 @@ return new class extends Migration
             $table->unique(['mal_id']);
 
             // Set foreign key constraints
-            $table->foreign('tv_rating_id')->references('id')->on(TvRating::TABLE_NAME)->onDelete('set null');
+            $table->foreign('tv_rating_id')
+                ->references('id')
+                ->on(TvRating::TABLE_NAME)
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 

@@ -34,8 +34,16 @@ return new class extends Migration
             $table->unique(['anime_id', 'number']);
 
             // Set foreign key constraints
-            $table->foreign('anime_id')->references('id')->on(Anime::TABLE_NAME)->onDelete('cascade');
-            $table->foreign('tv_rating_id')->references('id')->on(TvRating::TABLE_NAME)->onDelete('set null');
+            $table->foreign('anime_id')
+                ->references('id')
+                ->on(Anime::TABLE_NAME)
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreign('tv_rating_id')
+                ->references('id')
+                ->on(TvRating::TABLE_NAME)
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 

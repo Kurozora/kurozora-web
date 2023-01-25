@@ -32,9 +32,21 @@ return new class extends Migration
 
         Schema::table(FeedMessage::TABLE_NAME, function (Blueprint $table) {
             // Set foreign key constraints
-            $table->foreign('love_reactant_id')->references('id')->on('love_reactants');
-            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
-            $table->foreign('parent_feed_message_id')->references('id')->on(FeedMessage::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('love_reactant_id')
+                ->references('id')
+                ->on('love_reactants')
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreign('user_id')
+                ->references('id')
+                ->on(User::TABLE_NAME)
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreign('parent_feed_message_id')
+                ->references('id')
+                ->on(FeedMessage::TABLE_NAME)
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 

@@ -34,7 +34,11 @@ return new class extends Migration
             $table->unique(['user_id', 'trackable_type', 'trackable_id']);
 
             // Set foreign key constraints
-            $table->foreign('user_id')->references('id')->on(User::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on(User::TABLE_NAME)
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 

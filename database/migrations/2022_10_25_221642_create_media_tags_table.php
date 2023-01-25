@@ -30,8 +30,8 @@ return new class extends Migration
             // Set foreign key constraints
             $table->foreign('tag_id')->references('id')
                 ->on(Tag::TABLE_NAME)
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 

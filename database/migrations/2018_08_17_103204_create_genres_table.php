@@ -29,12 +29,16 @@ return new class extends Migration
         });
 
         Schema::table(Genre::TABLE_NAME, function (Blueprint $table) {
-            // Set unique index constraints
+            // Set unique key constraints
             $table->unique(['mal_id']);
             $table->unique(['slug']);
 
             // Set foreign key constraints
-            $table->foreign('tv_rating_id')->references('id')->on(TvRating::TABLE_NAME)->onDelete('set null');
+            $table->foreign('tv_rating_id')
+                ->references('id')
+                ->on(TvRating::TABLE_NAME)
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 

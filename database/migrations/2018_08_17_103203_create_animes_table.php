@@ -58,14 +58,30 @@ return new class extends Migration
         });
 
         Schema::table(Anime::TABLE_NAME, function (Blueprint $table) {
-            // Set unique index constraints
+            // Set unique key constraints
             $table->unique(['slug']);
 
             // Set foreign key constraints
-            $table->foreign('tv_rating_id')->references('id')->on(TvRating::TABLE_NAME)->onDelete('set null');
-            $table->foreign('media_type_id')->references('id')->on(MediaType::TABLE_NAME)->onDelete('set null');
-            $table->foreign('source_id')->references('id')->on(Source::TABLE_NAME)->onDelete('set null');
-            $table->foreign('status_id')->references('id')->on(Status::TABLE_NAME)->onDelete('set null');
+            $table->foreign('tv_rating_id')
+                ->references('id')
+                ->on(TvRating::TABLE_NAME)
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreign('media_type_id')
+                ->references('id')
+                ->on(MediaType::TABLE_NAME)
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreign('source_id')
+                ->references('id')
+                ->on(Source::TABLE_NAME)
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreign('status_id')
+                ->references('id')
+                ->on(Status::TABLE_NAME)
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 

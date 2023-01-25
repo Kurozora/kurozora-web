@@ -31,11 +31,15 @@ return new class extends Migration
         });
 
         Schema::table(Video::TABLE_NAME, function (Blueprint $table) {
-            // Set unique index constraints
+            // Set unique key constraints
             $table->unique(['videoable_type', 'videoable_id', 'source', 'code']);
 
             // Set foreign key constraints
-            $table->foreign('language_id')->references('id')->on(Language::TABLE_NAME)->onDelete('cascade');
+            $table->foreign('language_id')
+                ->references('id')
+                ->on(Language::TABLE_NAME)
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 
