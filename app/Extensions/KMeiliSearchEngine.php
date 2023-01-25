@@ -32,6 +32,10 @@ class KMeiliSearchEngine extends MeiliSearchEngine {
         });
 
         foreach ($builder->whereIns as $key => $values) {
+            if (empty($values)) {
+                $values = [null];
+            }
+
             $filters->push(sprintf('(%s)', collect($values)->map(function ($value) use ($key) {
                 if (is_bool($value)) {
                     return sprintf('%s=%s', $key, $value ? 'true' : 'false');
