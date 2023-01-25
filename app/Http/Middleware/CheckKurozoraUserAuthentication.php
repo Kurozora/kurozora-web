@@ -40,6 +40,6 @@ class CheckKurozoraUserAuthentication
         }
 
         // Throw an exception when authentication required but missing
-        throw new AuthorizationException('The request wasn’t accepted due to an issue with the bearer token or because it’s using incorrect authentication.');
+        throw new AuthorizationException(__('The request wasn’t accepted due to an issue with the bearer token or because it’s using incorrect authentication.'));
     }
 }
