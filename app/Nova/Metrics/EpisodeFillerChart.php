@@ -20,7 +20,7 @@ class EpisodeFillerChart extends Partition
     {
         return $this->count($request, Episode::class, 'is_filler')
             ->label(function ($value) {
-                return match ($value) {
+                return match ((bool) $value) {
                     false => 'Canon',
                     default => 'Filler',
                 };

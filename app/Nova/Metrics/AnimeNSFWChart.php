@@ -20,9 +20,9 @@ class AnimeNSFWChart extends Partition
     {
         return $this->count($request, Anime::class, 'is_nsfw')
             ->label(function ($value) {
-                return match ($value) {
-                    false => 'Safe For Work',
-                    default => 'Not Safe For Work',
+                return match ((bool) $value) {
+                    false => 'Safe',
+                    default => 'Not Safe',
                 };
             })
             ->colors([
