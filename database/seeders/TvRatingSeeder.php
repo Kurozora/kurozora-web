@@ -45,7 +45,7 @@ class TvRatingSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         foreach ($this->tvRatings as $tvRating) {
             TvRating::create($tvRating);

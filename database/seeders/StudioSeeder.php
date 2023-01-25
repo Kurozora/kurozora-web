@@ -12,7 +12,7 @@ class StudioSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         // 10 random studios
         Studio::factory(10)->create();

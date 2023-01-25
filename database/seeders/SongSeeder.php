@@ -12,7 +12,7 @@ class SongSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         Song::factory(10)->create();
     }

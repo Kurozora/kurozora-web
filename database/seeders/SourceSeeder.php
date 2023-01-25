@@ -80,7 +80,7 @@ class SourceSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         foreach ($this->sources as $source) {
             Source::create($source);

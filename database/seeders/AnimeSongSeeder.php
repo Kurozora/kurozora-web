@@ -12,7 +12,7 @@ class AnimeSongSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         AnimeSong::factory(10)->create();
     }

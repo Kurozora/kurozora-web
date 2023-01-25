@@ -740,7 +740,7 @@ class StaffRoleSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         foreach ($this->staffRoles as $staffRole) {
             StaffRole::create($staffRole);

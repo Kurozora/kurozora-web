@@ -64,7 +64,7 @@ class CastRoleSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         foreach ($this->castRoles as $castRole) {
             CastRole::create($castRole);

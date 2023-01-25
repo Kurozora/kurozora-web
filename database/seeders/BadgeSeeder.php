@@ -12,7 +12,7 @@ class BadgeSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         // Create initial badges
         Badge::create([

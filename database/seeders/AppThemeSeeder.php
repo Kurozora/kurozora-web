@@ -12,7 +12,7 @@ class AppThemeSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         // 10 random themes
         AppTheme::factory(10)->create();

@@ -68,7 +68,7 @@ class RelationSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         foreach ($this->relations as $relation) {
             Relation::create($relation);

@@ -100,7 +100,7 @@ class MediaTypeSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         foreach ($this->mediaTypes as $mediaType) {
             MediaType::create($mediaType);

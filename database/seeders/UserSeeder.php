@@ -12,15 +12,15 @@ class UserSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         // Create Kurozora admins
         /** @var User[] $admins */
         $admins = [];
 
         $admins[] = User::create([
-            'username'          => 'Usopp',
-            'email'             => 'mussesemou99@gmail.com',
+            'username'          => 'Kirito',
+            'email'             => 'casillaskhoren1@gmail.com',
             'password'          => '$2y$10$LFvuPaQpn6kccakk4sRABef223GV0.NJUJ94Xr.TAvswkCKJBisVK',
             'email_verified_at' => now(),
             'settings'          => [
@@ -30,8 +30,8 @@ class UserSeeder extends Seeder
         ]);
 
         $admins[] = User::create([
-            'username'          => 'Kirito',
-            'email'             => 'casillaskhoren1@gmail.com',
+            'username'          => 'Usopp',
+            'email'             => 'mussesemou99@gmail.com',
             'password'          => '$2y$10$LFvuPaQpn6kccakk4sRABef223GV0.NJUJ94Xr.TAvswkCKJBisVK',
             'email_verified_at' => now(),
             'settings'          => [

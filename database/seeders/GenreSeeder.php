@@ -15,7 +15,7 @@ class GenreSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         // Retrieve data from URL
         $genreJson = file_get_contents(self::GENRE_JSON_FILE);

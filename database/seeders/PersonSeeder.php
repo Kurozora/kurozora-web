@@ -12,7 +12,7 @@ class PersonSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         // Create initial people
         Person::factory(10)->create();

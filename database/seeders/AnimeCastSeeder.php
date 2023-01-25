@@ -12,7 +12,7 @@ class AnimeCastSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         AnimeCast::factory(10)->create();
     }
