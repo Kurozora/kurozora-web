@@ -4,7 +4,6 @@ namespace App\Exceptions;
 
 use App\Helpers\JSONResult;
 use App\Models\APIError;
-use FG\ASN1\Exception\NotImplementedException;
 use Http;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -14,6 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\ViewException;
+use Nette\NotImplementedException;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
