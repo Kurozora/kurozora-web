@@ -86,7 +86,7 @@ class MediaStat extends Resource
                 ->rules(['required', 'numeric'])
                 ->sortable(),
 
-            Number::make('Watching', 'watching_count')
+            Number::make('In Progress', 'in_progress_count')
                 ->default(0)
                 ->rules(['required', 'numeric'])
                 ->sortable(),

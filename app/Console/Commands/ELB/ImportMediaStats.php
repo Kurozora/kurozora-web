@@ -55,7 +55,7 @@ class ImportMediaStats extends Command
                             'model_type' => $mediaStat->model_type,
                             'model_count' => $mediaStat->model_count,
                             'planning_count' => $mediaStat->planning_count,
-                            'watching_count' => $mediaStat->watching_count,
+                            'in_progress_count' => $mediaStat->in_progress_count,
                             'completed_count' => $mediaStat->completed_count,
                             'on_hold_count' => $mediaStat->on_hold_count,
                             'dropped_count' => $mediaStat->dropped_count,

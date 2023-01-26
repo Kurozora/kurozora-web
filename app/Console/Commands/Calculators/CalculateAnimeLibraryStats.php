@@ -64,24 +64,24 @@ class CalculateAnimeLibraryStats extends Command
 
             // Get library status' for the anime
             $planningCount = $animeInLibrary->where('status', '=', UserLibraryStatus::Planning);
-            $watchingCount = $animeInLibrary->where('status', '=', UserLibraryStatus::InProgress);
+            $inProgressCount = $animeInLibrary->where('status', '=', UserLibraryStatus::InProgress);
             $completedCount = $animeInLibrary->where('status', '=', UserLibraryStatus::Completed);
             $onHoldCount = $animeInLibrary->where('status', '=', UserLibraryStatus::OnHold);
             $droppedCount = $animeInLibrary->where('status', '=', UserLibraryStatus::Dropped);
 
             // Get all counts
             $planningCount = $planningCount->values()[0]['total'] ?? 0;
-            $watchingCount = $watchingCount->values()[0]['total'] ?? 0;
+            $inProgressCount = $inProgressCount->values()[0]['total'] ?? 0;
             $completedCount = $completedCount->values()[0]['total'] ?? 0;
             $onHoldCount = $onHoldCount->values()[0]['total'] ?? 0;
             $droppedCount = $droppedCount->values()[0]['total'] ?? 0;
-            $modelCount = $planningCount + $watchingCount + $completedCount + $onHoldCount + $droppedCount;
+            $modelCount = $planningCount + $inProgressCount + $completedCount + $onHoldCount + $droppedCount;
 
             // Update media stat
             $mediaStat->update([
                 'model_count'       => $modelCount,
                 'planning_count'    => $planningCount,
-                'watching_count'    => $watchingCount,
+                'in_progress_count' => $inProgressCount,
                 'completed_count'   => $completedCount,
                 'on_hold_count'     => $onHoldCount,
                 'dropped_count'     => $droppedCount,

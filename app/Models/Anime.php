@@ -661,16 +661,17 @@ class Anime extends KModel implements HasMedia, Sitemapable
     {
         // Get anime with certain airing status.
         if (!empty($status)) {
-            $query->where('status_id', $status);
+            $query->where(Anime::TABLE_NAME . '.status_id', $status);
         }
 
         // If NSFW is not allowed then filter it out.
         if (!$nsfwAllowed) {
-            $query->where('is_nsfw', false);
+            $query->where(Anime::TABLE_NAME . '.is_nsfw', false);
         }
 
         return $query->leftJoin(MediaStat::TABLE_NAME, MediaStat::TABLE_NAME . '.model_id', '=', Anime::TABLE_NAME . '.id')
-            ->orderBy(MediaStat::TABLE_NAME . '.watching_count', 'desc')
+            ->where(MediaStat::TABLE_NAME . '.model_type', '=', $this->getMorphClass())
+            ->orderBy(MediaStat::TABLE_NAME . '.in_progress_count', 'desc')
             ->orderBy(MediaStat::TABLE_NAME . '.rating_average', 'desc')
             ->limit($limit)
             ->select(Anime::TABLE_NAME . '.*');

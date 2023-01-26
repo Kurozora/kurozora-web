@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('model_type');
             $table->unsignedBigInteger('model_count')->default(0);
             $table->unsignedBigInteger('planning_count')->default(0);
-            $table->unsignedBigInteger('watching_count')->default(0);
+            $table->unsignedBigInteger('in_progress_count')->default(0);
             $table->unsignedBigInteger('completed_count')->default(0);
             $table->unsignedBigInteger('on_hold_count')->default(0);
             $table->unsignedBigInteger('dropped_count')->default(0);

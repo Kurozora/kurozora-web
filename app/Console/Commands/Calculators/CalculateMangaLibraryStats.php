@@ -81,7 +81,7 @@ class CalculateMangaLibraryStats extends Command
             $mediaStat->update([
                 'model_count'       => $modelCount,
                 'planning_count'    => $planningCount,
-                'watching_count'    => $inProgressCount,
+                'in_progress_count' => $inProgressCount,
                 'completed_count'   => $completedCount,
                 'on_hold_count'     => $onHoldCount,
                 'dropped_count'     => $droppedCount,
