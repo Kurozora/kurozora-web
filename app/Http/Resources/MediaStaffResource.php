@@ -2,11 +2,12 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Manga;
 use App\Models\MediaStaff;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AnimeStaffResource extends JsonResource
+class MediaStaffResource extends JsonResource
 {
     /**
      * The resource instance.
@@ -23,17 +24,20 @@ class AnimeStaffResource extends JsonResource
      */
     public function toArray($request): array
     {
+        $routeName = match ($this->resource->model->getMorphClass()) {
+            Manga::class => 'api.manga.staff',
+            default => 'api.anime.staff',
+        };
         $resource = [
             'id'            => $this->resource->id,
             'type'          => 'staff',
-            'href'          => route('api.anime.staff', $this->resource->model, false),
+            'href'          => route($routeName, $this->resource->model, false),
             'attributes'    => [
                 'role'      => $this->resource->staff_role->only(['name', 'description']),
             ]
         ];
 
         $relationships = [];
-
         $relationships = array_merge($relationships, $this->getPersonRelationship());
 
         $resource = array_merge($resource, ['relationships' => $relationships]);

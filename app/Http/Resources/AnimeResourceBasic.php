@@ -32,6 +32,8 @@ class AnimeResourceBasic extends JsonResource
             'attributes'    => [
                 'anidbID'               => $this->resource->anidb_id,
                 'anilistID'             => $this->resource->anilist_id,
+                'animePlanetID'         => $this->resource->animeplanet_id,
+                'anisearchID'           => $this->resource->anisearch_id,
                 'imdbID'                => $this->resource->imdb_id,
                 'kitsuID'               => $this->resource->kitsu_id,
                 'malID'                 => $this->resource->mal_id,

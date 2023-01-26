@@ -2,16 +2,16 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Manga;
+use App\Models\MediaRelation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MangaResourceIdentity extends JsonResource
+class MediaRelatedMangaResource extends JsonResource
 {
     /**
      * The resource instance.
      *
-     * @var Manga|int $resource
+     * @var MediaRelation
      */
     public $resource;
 
@@ -24,9 +24,10 @@ class MangaResourceIdentity extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id'    => $this->resource?->id ?? $this->resource,
-            'type'  => 'manga',
-            'href'  => route('api.manga.view', $this->resource, false),
+            'manga'         => MangaResourceBasic::make($this->resource->related),
+            'attributes'    => [
+                'relation'  => $this->resource->relation->only(['name', 'description']),
+            ],
         ];
     }
 }

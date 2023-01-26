@@ -2,18 +2,18 @@
 
 namespace App\Http\Resources;
 
-use App\Models\AnimeCast;
+use App\Models\MangaCast;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use JsonSerializable;
 
-class AnimeCastResourceIdentity extends JsonResource
+class MangaCastResourceIdentity extends JsonResource
 {
     /**
      * The resource instance.
      *
-     * @var AnimeCast $resource
+     * @var MangaCast $resource
      */
     public $resource;
 
@@ -28,7 +28,7 @@ class AnimeCastResourceIdentity extends JsonResource
         return [
             'id'            => $this->resource->id,
             'type'          => 'cast',
-            'href'          => route('api.anime.cast.details', $this->resource, false),
+            'href'          => route('api.manga.cast.details', $this->resource, false),
         ];
     }
 }

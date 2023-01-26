@@ -8,23 +8,27 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\GetAnimeCastRequest;
 use App\Http\Requests\GetAnimeCharactersRequest;
 use App\Http\Requests\GetAnimeMoreByStudioRequest;
-use App\Http\Requests\GetAnimeRelatedShowsRequest;
+use App\Http\Requests\GetMediaRelatedMangasRequest;
+use App\Http\Requests\GetMediaRelatedShowsRequest;
 use App\Http\Requests\GetAnimeSeasonsRequest;
 use App\Http\Requests\GetAnimeSongsRequest;
-use App\Http\Requests\GetAnimeStaffRequest;
+use App\Http\Requests\GetMediaStaffRequest;
 use App\Http\Requests\GetAnimeStudiosRequest;
 use App\Http\Requests\GetUpcomingAnimeRequest;
 use App\Http\Requests\RateAnimeRequest;
+use App\Http\Resources\AnimeCastResource;
 use App\Http\Resources\AnimeCastResourceIdentity;
-use App\Http\Resources\AnimeRelatedShowsResource;
+use App\Http\Resources\MediaRelatedMangaResource;
+use App\Http\Resources\MediaRelatedShowResource;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\AnimeSongResource;
-use App\Http\Resources\AnimeStaffResource;
+use App\Http\Resources\MediaStaffResource;
 use App\Http\Resources\CharacterResourceIdentity;
 use App\Http\Resources\SeasonResourceIdentity;
 use App\Http\Resources\StudioResource;
 use App\Models\Anime;
+use App\Models\AnimeCast;
 use App\Models\MediaRating;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -97,13 +101,27 @@ class AnimeController extends Controller
     }
 
     /**
+     * Shows cast details.
+     *
+     * @param AnimeCast $cast
+     * @return JsonResponse
+     */
+    public function castDetails(AnimeCast $cast): JsonResponse
+    {
+        // Return cast details
+        return JSONResult::success([
+            'data' => AnimeCastResource::collection([$cast])
+        ]);
+    }
+
+    /**
      * Returns related-shows information of an Anime.
      *
-     * @param GetAnimeRelatedShowsRequest $request
+     * @param GetMediaRelatedShowsRequest $request
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function relatedShows(GetAnimeRelatedShowsRequest $request, Anime $anime): JsonResponse
+    public function relatedShows(GetMediaRelatedShowsRequest $request, Anime $anime): JsonResponse
     {
         $data = $request->validated();
 
@@ -114,7 +132,30 @@ class AnimeController extends Controller
         $nextPageURL = str_replace($request->root(), '', $relatedShows->nextPageUrl());
 
         return JSONResult::success([
-            'data' => AnimeRelatedShowsResource::collection($relatedShows),
+            'data' => MediaRelatedShowResource::collection($relatedShows),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Returns related-manga information of an Anime.
+     *
+     * @param GetMediaRelatedMangasRequest $request
+     * @param Anime $anime
+     * @return JsonResponse
+     */
+    public function relatedManga(GetMediaRelatedMangasRequest $request, Anime $anime): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the related manga
+        $relatedManga = $anime->getAnimeRelations($data['limit'] ?? 25, $data['page'] ?? 1);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $relatedManga->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => MediaRelatedMangaResource::collection($relatedManga),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
@@ -169,22 +210,22 @@ class AnimeController extends Controller
     /**
      * Returns staff information of an Anime.
      *
-     * @param GetAnimeStaffRequest $request
+     * @param GetMediaStaffRequest $request
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function staff(GetAnimeStaffRequest $request, Anime $anime): JsonResponse
+    public function staff(GetMediaStaffRequest $request, Anime $anime): JsonResponse
     {
         $data = $request->validated();
 
         // Get the staff
-        $staff = $anime->getStaff($data['limit'] ?? 25, $data['page'] ?? 1);
+        $staff = $anime->getMediaStaff($data['limit'] ?? 25, $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $staff->nextPageUrl());
 
         return JSONResult::success([
-            'data' => AnimeStaffResource::collection($staff),
+            'data' => MediaStaffResource::collection($staff),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
@@ -287,7 +328,7 @@ class AnimeController extends Controller
             if ($givenRating > 0) {
                 $user->episode_ratings()->create([
                     'user_id'       => $user->id,
-                    'model_type'    => Anime::class,
+                    'model_type'    => $anime->getMorphClass(),
                     'model_id'      => $anime->id,
                     'rating'        => $givenRating
                 ]);

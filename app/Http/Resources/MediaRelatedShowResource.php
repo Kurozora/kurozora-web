@@ -6,7 +6,7 @@ use App\Models\MediaRelation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AnimeRelatedShowsResource extends JsonResource
+class MediaRelatedShowResource extends JsonResource
 {
     /**
      * The resource instance.

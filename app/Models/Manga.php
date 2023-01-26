@@ -698,6 +698,92 @@ class Manga extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * Eloquent builder scope that limits the query to upcoming mangas.
+     *
+     * @param Builder $query
+     * @param int $limit
+     * @return Builder
+     */
+    public function scopeUpcomingMangas(Builder $query, int $limit = 10): Builder
+    {
+        return $query->whereDate('started_at', '>', yesterday())
+            ->orderBy('started_at')
+            ->limit($limit);
+    }
+
+    /**
+     * Eloquent builder scope that limits the query to newly added mangas.
+     *
+     * @param Builder $query
+     * @param int $limit
+     * @return Builder
+     */
+    public function scopeNewMangas(Builder $query, int $limit = 10): Builder
+    {
+        return $query->orderBy('created_at', 'desc')
+            ->limit($limit);
+    }
+
+    /**
+     * Eloquent builder scope that limits the query to recently updated mangas.
+     *
+     * @param Builder $query
+     * @param int $limit
+     * @return Builder
+     */
+    public function scopeRecentlyUpdatedMangas(Builder $query, int $limit = 10): Builder
+    {
+        return $query->orderBy('updated_at', 'desc')
+            ->whereDate('created_at', '<', today())
+            ->limit($limit);
+    }
+
+    /**
+     * Eloquent builder scope that limits the query to recently finished mangas.
+     *
+     * @param Builder $query
+     * @param int $limit
+     * @return Builder
+     */
+    public function scopeRecentlyFinishedMangas(Builder $query, int $limit = 10): Builder
+    {
+        return $query->orderBy('ended_at', 'desc')
+            ->whereDate('ended_at', '<=', today())
+            ->limit($limit);
+    }
+
+    /**
+     * Eloquent builder scope that limits the query to mangas continuing since past season(s).
+     *
+     * @param Builder $query
+     * @param int $limit
+     * @return Builder
+     */
+    public function scopeMangaContinuing(Builder $query, int $limit = 10): Builder
+    {
+        return $query->where('publication_season', '!=', season_of_year()->value)
+            ->whereYear('started_at', '!=', now()->year)
+            ->whereDate('started_at', '<=', now())
+            ->where('status_id', '=', 3)
+            ->orderBy('started_at', 'desc')
+            ->limit($limit);
+    }
+
+    /**
+     * Eloquent builder scope that limits the query to upcoming mangas.
+     *
+     * @param Builder $query
+     * @param int $limit
+     * @return Builder
+     */
+    public function scopeMangaSeason(Builder $query, int $limit = 10): Builder
+    {
+        return $query->where('publication_season', '=', season_of_year()->value)
+            ->whereYear('started_at', '=', now()->year)
+            ->limit($limit);
+    }
+
+    /**
      * Convert the model to its sitemap representation.
      *
      * @return Url|string|array

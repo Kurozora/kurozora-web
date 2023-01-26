@@ -8,19 +8,19 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\GetMangaCastRequest;
 use App\Http\Requests\GetMangaCharactersRequest;
 use App\Http\Requests\GetMangaMoreByStudioRequest;
-use App\Http\Requests\GetMangaRelatedShowsRequest;
-use App\Http\Requests\GetMangaSeasonsRequest;
-use App\Http\Requests\GetMangaStaffRequest;
+use App\Http\Requests\GetMediaRelatedMangasRequest;
+use App\Http\Requests\GetMediaRelatedShowsRequest;
+use App\Http\Requests\GetMediaStaffRequest;
 use App\Http\Requests\GetMangaStudiosRequest;
 use App\Http\Requests\GetUpcomingMangaRequest;
 use App\Http\Requests\RateMangaRequest;
 use App\Http\Resources\MangaCastResourceIdentity;
-use App\Http\Resources\MangaRelatedShowsResource;
+use App\Http\Resources\MediaRelatedMangaResource;
+use App\Http\Resources\MediaRelatedShowResource;
 use App\Http\Resources\MangaResource;
 use App\Http\Resources\MangaResourceIdentity;
-use App\Http\Resources\MangaStaffResource;
+use App\Http\Resources\MediaStaffResource;
 use App\Http\Resources\CharacterResourceIdentity;
-use App\Http\Resources\SeasonResourceIdentity;
 use App\Http\Resources\StudioResource;
 use App\Models\Manga;
 use App\Models\MediaRating;
@@ -32,7 +32,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class MangaController extends Controller
 {
     /**
-     * Returns detailed information of an Manga.
+     * Returns detailed information of a Manga.
      *
      * @param Manga $manga
      * @return JsonResponse
@@ -49,7 +49,7 @@ class MangaController extends Controller
     }
 
     /**
-     * Returns character information of an Manga.
+     * Returns character information of a Manga.
      *
      * @param GetMangaCharactersRequest $request
      * @param Manga $manga
@@ -72,7 +72,7 @@ class MangaController extends Controller
     }
 
     /**
-     * Returns the cast information of an Manga.
+     * Returns the cast information of a Manga.
      *
      * @param GetMangaCastRequest $request
      * @param Manga $manga
@@ -95,13 +95,13 @@ class MangaController extends Controller
     }
 
     /**
-     * Returns related-shows information of an Manga.
+     * Returns related-shows information of a Manga.
      *
-     * @param GetMangaRelatedShowsRequest $request
+     * @param GetMediaRelatedShowsRequest $request
      * @param Manga $manga
      * @return JsonResponse
      */
-    public function relatedShows(GetMangaRelatedShowsRequest $request, Manga $manga): JsonResponse
+    public function relatedShows(GetMediaRelatedShowsRequest $request, Manga $manga): JsonResponse
     {
         $data = $request->validated();
 
@@ -112,59 +112,59 @@ class MangaController extends Controller
         $nextPageURL = str_replace($request->root(), '', $relatedShows->nextPageUrl());
 
         return JSONResult::success([
-            'data' => MangaRelatedShowsResource::collection($relatedShows),
+            'data' => MediaRelatedShowResource::collection($relatedShows),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 
     /**
-     * Returns season information for an Manga
+     * Returns related-mangas information of a Manga.
      *
-     * @param GetMangaSeasonsRequest $request
+     * @param GetMediaRelatedMangasRequest $request
      * @param Manga $manga
      * @return JsonResponse
      */
-    public function seasons(GetMangaSeasonsRequest $request, Manga $manga): JsonResponse
+    public function relatedMangas(GetMediaRelatedMangasRequest $request, Manga $manga): JsonResponse
     {
         $data = $request->validated();
 
-        // Get the seasons
-        $seasons = $manga->getSeasons($data['limit'] ?? 25, $data['page'] ?? 1, $data['reversed'] ?? false);
+        // Get the related mangas
+        $relatedMangas = $manga->getMangaRelations($data['limit'] ?? 25, $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $seasons->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $relatedMangas->nextPageUrl());
 
         return JSONResult::success([
-            'data' => SeasonResourceIdentity::collection($seasons),
+            'data' => MediaRelatedMangaResource::collection($relatedMangas),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 
     /**
-     * Returns staff information of an Manga.
+     * Returns staff information of a Manga.
      *
-     * @param GetMangaStaffRequest $request
+     * @param GetMediaStaffRequest $request
      * @param Manga $manga
      * @return JsonResponse
      */
-    public function staff(GetMangaStaffRequest $request, Manga $manga): JsonResponse
+    public function staff(GetMediaStaffRequest $request, Manga $manga): JsonResponse
     {
         $data = $request->validated();
 
         // Get the staff
-        $staff = $manga->getStaff($data['limit'] ?? 25, $data['page'] ?? 1);
+        $staff = $manga->getMediaStaff($data['limit'] ?? 25, $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $staff->nextPageUrl());
 
         return JSONResult::success([
-            'data' => MangaStaffResource::collection($staff),
+            'data' => MediaStaffResource::collection($staff),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 
     /**
-     * Returns the studios information of an Manga.
+     * Returns the studios information of a Manga.
      *
      * @param GetMangaStudiosRequest $request
      * @param Manga $manga
@@ -215,7 +215,7 @@ class MangaController extends Controller
     }
 
     /**
-     * Adds a rating for an Manga item
+     * Adds a rating for a Manga item
      *
      * @param RateMangaRequest $request
      * @param Manga $manga
@@ -261,7 +261,7 @@ class MangaController extends Controller
             if ($givenRating > 0) {
                 $user->episode_ratings()->create([
                     'user_id'       => $user->id,
-                    'model_type'    => Manga::class,
+                    'model_type'    => $manga->getMorphClass(),
                     'model_id'      => $manga->id,
                     'rating'        => $givenRating
                 ]);
@@ -281,7 +281,7 @@ class MangaController extends Controller
     {
         $data = $request->validated();
 
-        $manga = Manga::upcomingManga(-1)
+        $manga = Manga::upcomingMangas(-1)
             ->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
