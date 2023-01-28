@@ -69,7 +69,7 @@ class MangaResource extends JsonResource
     {
         return [
             'cast' => [
-                'href' => route('api.manga.cast.index', $this->resource, false),
+                'href' => route('api.manga.cast', $this->resource, false),
                 'data' => MangaCastResourceIdentity::collection($this->resource->getCast(Manga::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];

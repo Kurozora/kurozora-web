@@ -18,6 +18,7 @@ Route::prefix('/v1')
             ->name('.settings');
 
         require 'API/v1/Anime.php';
+        require 'API/v1/Cast.php';
         require 'API/v1/Characters.php';
         require 'API/v1/Episodes.php';
         require 'API/v1/Explore.php';

@@ -72,7 +72,7 @@ class AnimeResource extends JsonResource
     {
         return [
             'cast' => [
-                'href' => route('api.anime.cast.index', $this->resource, false),
+                'href' => route('api.anime.cast', $this->resource, false),
                 'data' => AnimeCastResourceIdentity::collection($this->resource->getCast(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];

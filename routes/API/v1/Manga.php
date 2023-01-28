@@ -18,15 +18,8 @@ Route::prefix('/manga')
                 Route::get('/characters', [MangaController::class, 'characters'])
                     ->name('.characters');
 
-                Route::prefix('/cast')
-                    ->name('.cast')
-                    ->group(function () {
-                        Route::get('/', [MangaController::class, 'cast'])
-                            ->name('.index');
-
-                        Route::get('/details', [MangaController::class, 'castDetails'])
-                            ->name('.details');
-                    });
+                Route::get('/cast', [MangaController::class, 'cast'])
+                    ->name('.cast');
 
                 Route::get('/related-shows', [MangaController::class, 'relatedShows'])
                     ->middleware('auth.kurozora:optional')

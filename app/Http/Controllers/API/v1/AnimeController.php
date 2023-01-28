@@ -16,7 +16,6 @@ use App\Http\Requests\GetMediaStaffRequest;
 use App\Http\Requests\GetAnimeStudiosRequest;
 use App\Http\Requests\GetUpcomingAnimeRequest;
 use App\Http\Requests\RateAnimeRequest;
-use App\Http\Resources\AnimeCastResource;
 use App\Http\Resources\AnimeCastResourceIdentity;
 use App\Http\Resources\MediaRelatedMangaResource;
 use App\Http\Resources\MediaRelatedShowResource;
@@ -28,7 +27,6 @@ use App\Http\Resources\CharacterResourceIdentity;
 use App\Http\Resources\SeasonResourceIdentity;
 use App\Http\Resources\StudioResource;
 use App\Models\Anime;
-use App\Models\AnimeCast;
 use App\Models\MediaRating;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -97,20 +95,6 @@ class AnimeController extends Controller
         return JSONResult::success([
             'data' => AnimeCastResourceIdentity::collection($animeCast),
             'next' => empty($nextPageURL) ? null : $nextPageURL
-        ]);
-    }
-
-    /**
-     * Shows cast details.
-     *
-     * @param AnimeCast $cast
-     * @return JsonResponse
-     */
-    public function castDetails(AnimeCast $cast): JsonResponse
-    {
-        // Return cast details
-        return JSONResult::success([
-            'data' => AnimeCastResource::collection([$cast])
         ]);
     }
 
@@ -268,7 +252,7 @@ class AnimeController extends Controller
         // Get the anime studios
         if ($mediaStudio = $anime->studios()->firstWhere('is_studio', '=', true)) {
             $studioAnimes = $mediaStudio->getAnime($data['limit'] ?? 25, $data['page'] ?? 1);
-        } elseif ($mediaStudio = $anime->studios()->first()) {
+        } else if ($mediaStudio = $anime->studios()->first()) {
             $studioAnimes = $mediaStudio->getAnime($data['limit'] ?? 25, $data['page'] ?? 1);
         }
 

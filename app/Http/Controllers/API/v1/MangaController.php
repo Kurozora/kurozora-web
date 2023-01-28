@@ -201,7 +201,7 @@ class MangaController extends Controller
         // Get the manga studios
         if ($mangaStudio = $manga->studios()->firstWhere('is_studio', '=', true)) {
             $studioMangas = $mangaStudio->getManga($data['limit'] ?? 25, $data['page'] ?? 1);
-        } elseif ($mangaStudio = $manga->studios()->first()) {
+        } else if ($mangaStudio = $manga->studios()->first()) {
             $studioMangas = $mangaStudio->getManga($data['limit'] ?? 25, $data['page'] ?? 1);
         }
 
