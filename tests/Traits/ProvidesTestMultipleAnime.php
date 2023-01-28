@@ -25,7 +25,7 @@ trait ProvidesTestMultipleAnime
      *
      * @return void
      */
-    protected function initializeTestMultipleAnime(): void
+    protected function setupProvidesTestMultipleAnime(): void
     {
         foreach ($this->malIds as $malId) {
             Anime::factory()->create([

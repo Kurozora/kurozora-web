@@ -18,7 +18,7 @@ trait ProvidesTestUser
      *
      * @return void
      */
-    protected function initializeTestUser(): void
+    protected function setupProvidesTestUser(): void
     {
         $this->user = User::factory()->create([
             'username'          => 'KurozoraTester',

@@ -28,14 +28,14 @@ class ImportUserLibrary implements ImportsUserLibrary
     public function update(User $user, array $input): void
     {
         Validator::make($input, [
-            'library_type'      => ['required', 'integer', 'in:' . implode(',', UserLibraryType::getValues())],
-            'import_service'    => ['required', 'integer', 'in:' . implode(',', ImportService::getValues())],
-            'import_behavior'   => ['required', 'integer', 'in:' . implode(',', ImportBehavior::getValues())],
-            'library_file'      => ['required', 'file', 'mimes:xml', 'max:' . config('import.max_xml_file_size')],
+            'library' => ['required', 'integer', 'in:' . implode(',', UserLibraryType::getValues())],
+            'import_service' => ['required', 'integer', 'in:' . implode(',', ImportService::getValues())],
+            'import_behavior' => ['required', 'integer', 'in:' . implode(',', ImportBehavior::getValues())],
+            'library_file' => ['required', 'file', 'mimes:xml', 'max:' . config('import.max_xml_file_size')],
         ])->validateWithBag('importUserLibrary');
 
         // Get the library type
-        $libraryType = UserLibraryType::fromValue((int) $input['library_type']);
+        $libraryType = UserLibraryType::fromValue((int) $input['library']);
 
         // Get whether user is in import cooldown period
         $isInImportCooldown = match ($libraryType->value) {

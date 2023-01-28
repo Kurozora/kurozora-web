@@ -3,21 +3,26 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Enums\MediaCollection;
+use App\Enums\UserLibraryType;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetAccessTokensRequest;
-use App\Http\Requests\GetAnimeFavoritesRequest;
 use App\Http\Requests\GetFeedMessagesRequest;
 use App\Http\Requests\GetFollowersRequest;
 use App\Http\Requests\GetFollowingRequest;
+use App\Http\Requests\GetUserFavoritesRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Resources\AccessTokenResource;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Http\Resources\FeedMessageResource;
+use App\Http\Resources\GameResourceBasic;
+use App\Http\Resources\MangaResourceBasic;
 use App\Http\Resources\SessionResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceBasic;
 use App\Models\Anime;
+use App\Models\Game;
+use App\Models\Manga;
 use App\Models\PersonalAccessToken;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -165,26 +170,40 @@ class MeController extends Controller
     /**
      * Returns a list of the authenticated user's favorite anime.
      *
-     * @param GetAnimeFavoritesRequest $request
+     * @param GetUserFavoritesRequest $request
      * @return JsonResponse
      */
-    function getFavorites(GetAnimeFavoritesRequest $request): JsonResponse
+    function getFavorites(GetUserFavoritesRequest $request): JsonResponse
     {
         $data = $request->validated();
 
         // Get the authenticated user
         $user = auth()->user();
 
-        // Paginate the favorite anime
-        $favoriteAnime = $user->whereFavorited(Anime::class)
+        // Get morph class
+        $morphClass = match ((int) ($data['library'] ?? UserLibraryType::Anime)) {
+            UserLibraryType::Manga => Manga::class,
+            UserLibraryType::Game => Game::class,
+            default => Anime::class,
+        };
+
+        // Paginate the user favorites
+        $userFavorites = $user->whereFavorited($morphClass)
             ->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $favoriteAnime->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $userFavorites->nextPageUrl());
+
+        // Get data collection
+        $data = match ((int) ($data['library'] ?? UserLibraryType::Anime)) {
+            UserLibraryType::Manga => MangaResourceBasic::collection($userFavorites),
+            UserLibraryType::Game => GameResourceBasic::collection($userFavorites),
+            default => AnimeResourceBasic::collection($userFavorites),
+        };
 
         // Show successful response
         return JSONResult::success([
-            'data' => AnimeResourceBasic::collection($favoriteAnime),
+            'data' => $data,
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

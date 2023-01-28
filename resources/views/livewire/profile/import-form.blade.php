@@ -19,14 +19,14 @@
             </div>
 
             <div class="mt-5">
-                <x-select id="library_type" wire:model.defer="state.library_type">
+                <x-select id="library" wire:model.defer="state.library">
                     <option value="-1">{{ __('Select library') }}</option>
-                    @foreach (App\Enums\UserLibraryType::asSelectArray() as $value => $importService)
-                        <option value="{{ $value }}">{{ $importService }}</option>
+                    @foreach (App\Enums\UserLibraryType::asSelectArray() as $value => $libraryType)
+                        <option value="{{ $value }}">{{ $libraryType }}</option>
                     @endforeach
                 </x-select>
 
-                <x-input-error for="library_type" class="mt-2"/>
+                <x-input-error for="library" class="mt-2"/>
             </div>
 
             <div class="mt-5">

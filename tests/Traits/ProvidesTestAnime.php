@@ -42,7 +42,7 @@ trait ProvidesTestAnime
      *
      * @return void
      */
-    protected function initializeTestAnime(): void
+    protected function setupProvidesTestAnime(): void
     {
         // Create a tv rating
         $this->tvRating = TvRating::factory()

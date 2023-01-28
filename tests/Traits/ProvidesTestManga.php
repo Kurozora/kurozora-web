@@ -34,7 +34,7 @@ trait ProvidesTestManga
      *
      * @return void
      */
-    protected function initializeTestManga(): void
+    protected function setupProvidesTestManga(): void
     {
         // Create a tv rating
         $this->tvRating = TvRating::factory()

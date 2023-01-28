@@ -10,6 +10,7 @@ use App\Http\Requests\SearchRequest;
 use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\CharacterResourceIdentity;
 use App\Http\Resources\EpisodeResourceIdentity;
+use App\Http\Resources\MangaResource;
 use App\Http\Resources\PersonResourceIdentity;
 use App\Http\Resources\SongResourceIdentity;
 use App\Http\Resources\StudioResourceIdentity;
@@ -104,7 +105,7 @@ class SearchController extends Controller
                     }
 
                     $response[$type] = [
-                        'data' => LiteratureResource::collection($resource),
+                        'data' => MangaResource::collection($resource),
                         'next' => empty($nextPageURL) ? null : $nextPageURL
                     ];
                     break;

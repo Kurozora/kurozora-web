@@ -13,6 +13,8 @@ use App\Http\Requests\DeleteFromLibraryRequest;
 use App\Http\Requests\GetLibraryRequest;
 use App\Http\Requests\LibraryImportRequest;
 use App\Http\Resources\AnimeResourceBasic;
+use App\Http\Resources\GameResourceBasic;
+use App\Http\Resources\MangaResourceBasic;
 use App\Jobs\ProcessMALImport;
 use App\Models\Anime;
 use App\Models\Game;
@@ -43,20 +45,38 @@ class LibraryController extends Controller
         // Get the authenticated user
         $user = auth()->user();
 
-        // Get the status
-        $foundStatus = UserLibraryStatus::fromKey($data['status']);
+        // Get the library status
+        if (is_numeric($data['status'])) {
+            $userLibraryStatus = UserLibraryStatus::fromValue((int) $data['status']);
+        } else {
+            $userLibraryStatus = UserLibraryStatus::fromKey($data['status']);
+        }
 
-        // Retrieve the Anime from the user's library with the correct status
-        $anime = $user->whereTracked(Anime::class)
+        // Get morph class
+        $morphClass = match ((int) ($data['library'] ?? UserLibraryType::Anime)) {
+            UserLibraryType::Manga => Manga::class,
+            UserLibraryType::Game => Game::class,
+            default => Anime::class,
+        };
+
+        // Retrieve the model from the user's library with the correct status
+        $model = $user->whereTracked($morphClass)
             ->sortViaRequest($request)
-            ->wherePivot('status', $foundStatus->value)
+            ->wherePivot('status', '=', $userLibraryStatus->value)
             ->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $model->nextPageUrl());
+
+        // Get data collection
+        $data = match ((int) ($data['library'] ?? UserLibraryType::Anime)) {
+            UserLibraryType::Manga => MangaResourceBasic::collection($model),
+            UserLibraryType::Game => GameResourceBasic::collection($model),
+            default => AnimeResourceBasic::collection($model),
+        };
 
         return JSONResult::success([
-            'data' => AnimeResourceBasic::collection($anime),
+            'data' => $data,
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
@@ -78,7 +98,7 @@ class LibraryController extends Controller
 
         // Get the library status
         if (is_numeric($data['status'])) {
-            $userLibraryStatus = UserLibraryStatus::fromValue($data['status']);
+            $userLibraryStatus = UserLibraryStatus::fromValue((int) $data['status']);
         } else {
             $userLibraryStatus = UserLibraryStatus::fromKey($data['status']);
         }
@@ -88,8 +108,8 @@ class LibraryController extends Controller
             $modelID = $data['anime_id'];
             $model = Anime::findOrFail($modelID);
         } else {
-            $modelID = $data['item_id'];
-            $libraryType = UserLibraryType::fromValue($data['library']);
+            $modelID = $data['model_id'];
+            $libraryType = UserLibraryType::fromValue((int) $data['library']);
             $model = match ($libraryType->value) {
                 UserLibraryType::Manga  => Manga::findOrFail($modelID),
                 UserLibraryType::Game   => Game::findOrFail($modelID),
@@ -142,8 +162,8 @@ class LibraryController extends Controller
             $modelID = $data['anime_id'];
             $model = Anime::findOrFail($modelID);
         } else {
-            $modelID = $data['item_id'];
-            $libraryType = UserLibraryType::fromValue($data['library']);
+            $modelID = $data['model_id'];
+            $libraryType = UserLibraryType::fromValue((int) $data['library']);
             $model = match ($libraryType->value) {
                 UserLibraryType::Manga  => Manga::findOrFail($modelID),
                 UserLibraryType::Game   => Game::findOrFail($modelID),

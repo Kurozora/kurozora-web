@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use App\Enums\UserLibraryType;
 use App\Models\Anime;
-use App\Rules\ValidateAnimeIDIsTracked;
 use Illuminate\Foundation\Http\FormRequest;
 
 class DeleteFromLibraryRequest extends FormRequest
@@ -27,9 +26,9 @@ class DeleteFromLibraryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'anime_id'  => ['bail', 'required_without:item_id,library', 'integer', 'exists:' . Anime::TABLE_NAME . ',id', new ValidateAnimeIDIsTracked],
+            'anime_id'  => ['bail', 'required_without:model_id,library', 'integer', 'exists:' . Anime::TABLE_NAME . ',id'],
             'library'   => ['bail', 'required_without:anime_id', 'integer', 'in:' . implode(',', UserLibraryType::getValues())],
-            'item_id'   => ['bail', 'required_without:anime_id', 'string']
+            'model_id'  => ['bail', 'required_without:anime_id', 'string']
         ];
     }
 }

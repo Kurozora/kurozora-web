@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\UserLibraryType;
 use App\Http\Sorters\AnimeAgeSorter;
 use App\Http\Sorters\AnimeMyRatingSorter;
 use App\Http\Sorters\AnimeRatingSorter;
@@ -32,6 +33,7 @@ class GetLibraryRequest extends FormRequest
     public function rules(): array
     {
         return array_merge([
+            'library'   => ['bail', 'nullable', 'integer', 'in:' . implode(',', UserLibraryType::getValues())],
             'status'    => ['bail', 'required', new ValidateLibraryStatus],
             'limit'     => ['bail', 'integer', 'min:1', 'max:100'],
             'page'      => ['bail', 'integer', 'min:1']

@@ -1,7 +1,8 @@
 <?php
 
-namespace Tests\API;
+namespace Tests\API\UserLibrary;
 
+use App\Enums\DayOfWeek;
 use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
 use App\Models\MediaRating;
@@ -34,18 +35,18 @@ class LibrarySortingTest extends TestCase
     function user_can_sort_their_library_based_on_title(): void
     {
         // Send the request and sort by title ascending
-        $response = $this->auth()->json('GET', 'v1/me/library', [
-            'status'    => UserLibraryStatus::InProgress()->key,
-            'sort'      => 'title(asc)'
-        ]);
+        $response = $this->auth()->getJson(route('api.me.library', [
+            'status'    => UserLibraryStatus::InProgress,
+            'sort'      => 'title(asc)',
+        ]));
 
         $this->assertMatchesJsonSnapshot($response->json()['data']);
 
         // Send the request and sort by title descending
-        $response = $this->auth()->json('GET', 'v1/me/library', [
-            'status'    => UserLibraryStatus::InProgress()->key,
-            'sort'      => 'title(desc)'
-        ]);
+        $response = $this->auth()->getJson(route('api.me.library', [
+            'status'    => UserLibraryStatus::InProgress,
+            'sort'      => 'title(desc)',
+        ]));
 
         $this->assertMatchesJsonSnapshot($response->json()['data']);
     }
@@ -59,18 +60,18 @@ class LibrarySortingTest extends TestCase
     function user_can_sort_their_library_based_on_age(): void
     {
         // Send the request and sort by age newest
-        $response = $this->auth()->json('GET', 'v1/me/library', [
-            'status'    => UserLibraryStatus::InProgress()->key,
-            'sort'      => 'age(newest)'
-        ]);
+        $response = $this->auth()->getJson(route('api.me.library', [
+            'status'    => UserLibraryStatus::InProgress,
+            'sort'      => 'age(newest)',
+        ]));
 
         $this->assertMatchesJsonSnapshot($response->json()['data']);
 
         // Send the request and sort by age oldest
-        $response = $this->auth()->json('GET', 'v1/me/library', [
-            'status'    => UserLibraryStatus::InProgress()->key,
-            'sort'      => 'age(oldest)'
-        ]);
+        $response = $this->auth()->getJson(route('api.me.library', [
+            'status'    => UserLibraryStatus::InProgress,
+            'sort'      => 'age(oldest)',
+        ]));
 
         $this->assertMatchesJsonSnapshot($response->json()['data']);
     }
@@ -84,18 +85,18 @@ class LibrarySortingTest extends TestCase
     function user_can_sort_their_library_based_on_rating(): void
     {
         // Send the request and sort by rating best
-        $response = $this->auth()->json('GET', 'v1/me/library', [
-            'status'    => UserLibraryStatus::InProgress()->key,
-            'sort'      => 'rating(best)'
-        ]);
+        $response = $this->auth()->getJson(route('api.me.library', [
+            'status'    => UserLibraryStatus::InProgress,
+            'sort'      => 'rating(best)',
+        ]));
 
         $this->assertMatchesJsonSnapshot($response->json()['data']);
 
         // Send the request and sort by rating worst
-        $response = $this->auth()->json('GET', 'v1/me/library', [
-            'status'    => UserLibraryStatus::InProgress()->key,
-            'sort'      => 'rating(worst)'
-        ]);
+        $response = $this->auth()->getJson(route('api.me.library', [
+            'status'    => UserLibraryStatus::InProgress,
+            'sort'      => 'rating(worst)',
+        ]));
 
         $this->assertMatchesJsonSnapshot($response->json()['data']);
     }
@@ -109,18 +110,18 @@ class LibrarySortingTest extends TestCase
     function user_can_sort_their_library_based_on_their_own_given_rating(): void
     {
         // Send the request and sort by my rating best
-        $response = $this->auth()->json('GET', 'v1/me/library', [
-            'status'    => UserLibraryStatus::InProgress()->key,
-            'sort'      => 'my-rating(best)'
-        ]);
+        $response = $this->auth()->getJson(route('api.me.library', [
+            'status'    => UserLibraryStatus::InProgress,
+            'sort'      => 'my-rating(best)',
+        ]));
 
         $this->assertMatchesJsonSnapshot($response->json()['data']);
 
         // Send the request and sort by my rating worst
-        $response = $this->auth()->json('GET', 'v1/me/library', [
-            'status'    => UserLibraryStatus::InProgress()->key,
-            'sort'      => 'my-rating(worst)'
-        ]);
+        $response = $this->auth()->getJson(route('api.me.library', [
+            'status'    => UserLibraryStatus::InProgress,
+            'sort'      => 'my-rating(worst)',
+        ]));
 
         $this->assertMatchesJsonSnapshot($response->json()['data']);
     }
@@ -172,6 +173,7 @@ class LibrarySortingTest extends TestCase
             'first_aired'       => 67046400,
             'last_aired'        => 73094400,
             'duration'          => 1440,
+            'air_day'           => DayOfWeek::Sunday,
             'air_time'          => '17:00',
             'is_nsfw'           => false,
             'copyright'         => '® 2012 Steuber Group',
@@ -209,6 +211,7 @@ class LibrarySortingTest extends TestCase
             'first_aired'       => 67046400,
             'last_aired'        => 73094400,
             'duration'          => 1440,
+            'air_day'           => DayOfWeek::Wednesday,
             'air_time'          => '16:30',
             'is_nsfw'           => true,
             'copyright'         => '℗ 2018 Abernathy-Daniel',

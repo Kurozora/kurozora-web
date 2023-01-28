@@ -3,7 +3,6 @@
 namespace Tests\API;
 
 use App\Enums\MediaCollection;
-use App\Models\Anime;
 use App\Models\SessionAttribute;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -229,32 +228,6 @@ class MeTest extends TestCase
         $bannerImage = $this->user->getFirstMedia(MediaCollection::Banner);
 
         $this->assertNull($bannerImage);
-    }
-
-    /**
-     * User can get a list of their favorite anime.
-     *
-     * @return void
-     * @test
-     */
-    function user_can_get_a_list_of_their_favorite_anime(): void
-    {
-        // Add some anime to the user's favorites
-        /** @var Anime[] $anime */
-        $animeList = Anime::factory(25)->create();
-
-        foreach($animeList as $anime) {
-            $this->user->favorite($anime);
-        }
-
-        // Send request for the list of anime
-        $response = $this->auth()->json('GET', 'v1/me/favorite-anime');
-
-        // Check whether the request was successful
-        $response->assertSuccessfulAPIResponse();
-
-        // Check whether the response contains the correct amount of anime
-        $this->assertCount(25, $response->json()['data']);
     }
 
     /**

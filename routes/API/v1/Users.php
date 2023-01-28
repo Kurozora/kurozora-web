@@ -1,10 +1,10 @@
 <?php
 
 use App\Http\Controllers\API\v1\AccessTokenController;
-use App\Http\Controllers\API\v1\FavoriteAnimeController;
 use App\Http\Controllers\API\v1\FollowingController;
 use App\Http\Controllers\API\v1\RegistrationController;
 use App\Http\Controllers\API\v1\UserController;
+use App\Http\Controllers\API\v1\UserFavoriteController;
 use App\Http\Controllers\Auth\SignInWithAppleController;
 
 Route::prefix('/users')
@@ -30,10 +30,10 @@ Route::prefix('/users')
 
         Route::prefix('{user}')
             ->group(function () {
-                Route::get('/favorite-anime', [FavoriteAnimeController::class, 'getFavorites'])
+                Route::get('/favorites', [UserFavoriteController::class, 'index'])
                     ->middleware(['auth.kurozora'])
-                    ->can('view_anime_favorites', 'user')
-                    ->name('.favorite-anime');
+                    ->can('view_user_favorites', 'user')
+                    ->name('.favorites');
 
                 Route::get('/feed-messages', [UserController::class, 'getFeedMessages'])
                     ->middleware('auth.kurozora:optional')

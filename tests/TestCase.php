@@ -10,9 +10,6 @@ use Illuminate\Testing\Assert as PHPUnit;
 use Illuminate\Testing\TestResponse;
 use Laravel\Sanctum\Sanctum;
 use Spatie\Snapshots\MatchesSnapshots;
-use Tests\Traits\ProvidesTestAnime;
-use Tests\Traits\ProvidesTestMultipleAnime;
-use Tests\Traits\ProvidesTestUser;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -42,34 +39,12 @@ abstract class TestCase extends BaseTestCase
         TestResponse::macro('assertUnsuccessfulAPIResponse', function() {
             PHPUnit::assertFalse(
                 $this->isSuccessful(),
-                'Response status code ['.$this->getStatusCode().'] is not an unsuccessful status code.'
+                'Response status code [' . $this->getStatusCode() . '] is not an unsuccessful status code.'
             );
         });
 
         // Tells the API to always return JSON results
         $this->withHeader('Accept', 'application/json');
-    }
-
-    /**
-     * Boot the testing helper traits.
-     *
-     * @return array
-     */
-    protected function setUpTraits(): array
-    {
-        $uses = parent::setUpTraits();
-
-        if (isset($uses[ProvidesTestUser::class])) {
-            $this->initializeTestUser();
-        }
-        if (isset($uses[ProvidesTestAnime::class])) {
-            $this->initializeTestAnime();
-        }
-        if (isset($uses[ProvidesTestMultipleAnime::class])) {
-            $this->initializeTestMultipleAnime();
-        }
-
-        return $uses;
     }
 
     /**

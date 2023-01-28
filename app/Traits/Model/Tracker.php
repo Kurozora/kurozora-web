@@ -68,8 +68,8 @@ trait Tracker
     public function track(Model $model, UserLibraryStatus $status): UserLibrary
     {
         $attributes = [
-            'trackable_id' => $model->getKey(),
             'trackable_type' => $model->getMorphClass(),
+            'trackable_id' => $model->getKey(),
         ];
 
         return $this->library()

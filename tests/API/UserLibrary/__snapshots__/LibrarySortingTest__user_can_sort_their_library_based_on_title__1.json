@@ -6,6 +6,8 @@
         "attributes": {
             "anidbID": null,
             "anilistID": null,
+            "animePlanetID": null,
+            "anisearchID": null,
             "imdbID": null,
             "kitsuID": null,
             "malID": null,
@@ -73,6 +75,8 @@
         "attributes": {
             "anidbID": null,
             "anilistID": null,
+            "animePlanetID": null,
+            "anisearchID": null,
             "imdbID": null,
             "kitsuID": null,
             "malID": null,

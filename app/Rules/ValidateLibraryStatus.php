@@ -17,7 +17,7 @@ class ValidateLibraryStatus implements Rule
     public function passes($attribute, $value): bool
     {
         if (is_numeric($value)) {
-            return UserLibraryStatus::hasValue($value);
+            return UserLibraryStatus::hasValue((int) $value);
         } else if (is_string($value)) {
             return UserLibraryStatus::hasKey($value);
         }

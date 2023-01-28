@@ -26,9 +26,9 @@ class AddToLibraryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'anime_id'  => ['bail', 'required_without:item_id,library', 'integer'],
+            'anime_id'  => ['bail', 'required_without:model_id,library', 'integer'],
             'library'   => ['bail', 'required_without:anime_id', 'integer', 'in:' . implode(',', UserLibraryType::getValues())],
-            'item_id'   => ['bail', 'required_without:anime_id', 'string'],
+            'model_id'  => ['bail', 'required_without:anime_id', 'string'],
             'status'    => ['bail', 'required', new ValidateLibraryStatus],
         ];
     }
