@@ -217,13 +217,13 @@ class ImportAnimeOfflineID extends Command
 
             if (Genre::withoutGlobalScopes()->where('name', '=', $tagName)->exists()) {
                 continue;
-            } elseif (Theme::withoutGlobalScopes()->where('name', '=', $tagName)->exists()) {
+            } else if (Theme::withoutGlobalScopes()->where('name', '=', $tagName)->exists()) {
                 continue;
-            } elseif (MediaType::withoutGlobalScopes()->where('name', '=', $tagName)->exists()) {
+            } else if (MediaType::withoutGlobalScopes()->where('name', '=', $tagName)->exists()) {
                 continue;
-            }  elseif (Relation::withoutGlobalScopes()->where('name', '=', $tagName)->exists()) {
+            }  else if (Relation::withoutGlobalScopes()->where('name', '=', $tagName)->exists()) {
                 continue;
-            } elseif (Source::withoutGlobalScopes()->where('name', '=', $tagName)->exists()) {
+            } else if (Source::withoutGlobalScopes()->where('name', '=', $tagName)->exists()) {
                 continue;
             }
 

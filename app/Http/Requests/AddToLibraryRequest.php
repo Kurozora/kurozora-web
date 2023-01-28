@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\UserLibraryType;
 use App\Rules\ValidateLibraryStatus;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -25,7 +26,9 @@ class AddToLibraryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'anime_id'  => ['bail', 'required', 'integer'],
+            'anime_id'  => ['bail', 'required_without:item_id,library', 'integer'],
+            'library'   => ['bail', 'required_without:anime_id', 'integer', 'in:' . implode(',', UserLibraryType::getValues())],
+            'item_id'   => ['bail', 'required_without:anime_id', 'string'],
             'status'    => ['bail', 'required', new ValidateLibraryStatus],
         ];
     }

@@ -128,12 +128,12 @@ class AnimeController extends Controller
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function relatedManga(GetMediaRelatedMangasRequest $request, Anime $anime): JsonResponse
+    public function relatedMangas(GetMediaRelatedMangasRequest $request, Anime $anime): JsonResponse
     {
         $data = $request->validated();
 
         // Get the related manga
-        $relatedManga = $anime->getAnimeRelations($data['limit'] ?? 25, $data['page'] ?? 1);
+        $relatedManga = $anime->getMangaRelations($data['limit'] ?? 25, $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $relatedManga->nextPageUrl());

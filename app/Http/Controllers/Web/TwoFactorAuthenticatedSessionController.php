@@ -53,7 +53,7 @@ class TwoFactorAuthenticatedSessionController extends Controller
             $user->replaceRecoveryCode($code);
 
             event(new RecoveryCodeReplaced($user, $code));
-        } elseif (!$request->hasValidCode()) {
+        } else if (!$request->hasValidCode()) {
             return redirect()->route('two-factor.sign-in')->withErrors(['code' => __('The provided two factor authentication code was invalid.')]);
         }
 

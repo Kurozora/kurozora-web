@@ -71,9 +71,9 @@ class GenerateStudioBanner extends Command
 
                 if ($animeCount >= 10) {
                     $animeCount = 10;
-                } elseif ($animeCount >= 7) {
+                } else if ($animeCount >= 7) {
                     $animeCount = 7;
-                } elseif ($animeCount >= 4) {
+                } else if ($animeCount >= 4) {
                     $animeCount = 4;
                 } else {
                     continue;

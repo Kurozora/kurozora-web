@@ -123,20 +123,20 @@ if (!function_exists('create_studio_banner_from')) {
                 } else { // Copy image to top row
                     imagecopyresized($bannerImageCanvas, ${'image_' . $key}, $key * 384, 0, 0, 0, 384, 540, ${'width_' . $key}, ${'height_' . $key});
                 }
-            } elseif ($imageCount == 7) {
+            } else if ($imageCount == 7) {
                 // Copy the image to the banner canvas
                 if ($key == 0) {
                     imagecopyresized($bannerImageCanvas, ${'image_' . $key}, 0, 0, 0, 0, 770, 1080, ${'width_' . $key}, ${'height_' . $key});
-                } elseif ($key >= 4) { // Copy image to bottom row
+                } else if ($key >= 4) { // Copy image to bottom row
                     imagecopyresized($bannerImageCanvas, ${'image_' . $key}, 770 + (($key - 4) * 384), 540, 0, 0, 384, 540, ${'width_' . $key}, ${'height_' . $key});
                 } else { // Copy image to top row
                     imagecopyresized($bannerImageCanvas, ${'image_' . $key}, 770 + (($key - 1) * 384), 0, 0, 0, 384, 540, ${'width_' . $key}, ${'height_' . $key});
                 }
-            } elseif ($imageCount == 4) {
+            } else if ($imageCount == 4) {
                 // Copy the image to the banner canvas
                 if ($key <= 1) {
                     imagecopyresized($bannerImageCanvas, ${'image_' . $key}, $key * 770, 0, 0, 0, 770, 1080, ${'width_' . $key}, ${'height_' . $key});
-                } elseif ($key % 2 != 0) { // Copy image to bottom row
+                } else if ($key % 2 != 0) { // Copy image to bottom row
                     imagecopyresized($bannerImageCanvas, ${'image_' . $key}, 770 * 2, 540, 0, 0, 384, 540, ${'width_' . $key}, ${'height_' . $key});
                 } else { // Copy image to top row
                     imagecopyresized($bannerImageCanvas, ${'image_' . $key}, 770 * 2, 0, 0, 0, 384, 540, ${'width_' . $key}, ${'height_' . $key});

@@ -656,7 +656,7 @@ class AnimeProcessor implements ItemProcessorInterface
     {
         if (empty($broadcast) || $broadcast == 'Unknown') {
             return '09:00';
-        } elseif (str($broadcast)->contains('at')) {
+        } else if (str($broadcast)->contains('at')) {
             $airTime = trim(preg_replace('/(.+ at)/', '', $broadcast));
             return trim(preg_replace('/(\(.+)/', '', $airTime));
         }

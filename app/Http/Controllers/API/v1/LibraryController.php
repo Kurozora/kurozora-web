@@ -33,6 +33,8 @@ class LibraryController extends Controller
      *
      * @param GetLibraryRequest $request
      * @return JsonResponse
+     * @throws InvalidEnumKeyException
+     * @throws InvalidEnumMemberException
      */
     public function index(GetLibraryRequest $request): JsonResponse
     {
@@ -42,12 +44,12 @@ class LibraryController extends Controller
         $user = auth()->user();
 
         // Get the status
-        $foundStatus = UserLibraryStatus::getValue($data['status']);
+        $foundStatus = UserLibraryStatus::fromKey($data['status']);
 
         // Retrieve the Anime from the user's library with the correct status
         $anime = $user->whereTracked(Anime::class)
             ->sortViaRequest($request)
-            ->wherePivot('status', $foundStatus)
+            ->wherePivot('status', $foundStatus->value)
             ->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
@@ -70,37 +72,56 @@ class LibraryController extends Controller
     public function create(AddToLibraryRequest $request): JsonResponse
     {
         $data = $request->validated();
-        $animeID = $data['anime_id'];
 
         // Get the authenticated user
         $user = auth()->user();
 
-        // Get the Anime
-        $anime = Anime::findOrFail($animeID);
+        // Get the library status
+        if (is_numeric($data['status'])) {
+            $userLibraryStatus = UserLibraryStatus::fromValue($data['status']);
+        } else {
+            $userLibraryStatus = UserLibraryStatus::fromKey($data['status']);
+        }
 
-        // Get the status, and decide the end_date
-        $userLibraryStatus = UserLibraryStatus::fromKey($data['status']);
-        $endDate = match ($userLibraryStatus->value) {
+        // Get the model
+        if (!empty($data['anime_id'])) {
+            $modelID = $data['anime_id'];
+            $model = Anime::findOrFail($modelID);
+        } else {
+            $modelID = $data['item_id'];
+            $libraryType = UserLibraryType::fromValue($data['library']);
+            $model = match ($libraryType->value) {
+                UserLibraryType::Manga  => Manga::findOrFail($modelID),
+                UserLibraryType::Game   => Game::findOrFail($modelID),
+                default                 => Anime::findOrFail($modelID),
+            };
+        }
+
+        // Decide if the tracking ended
+        $endedAt = match ($userLibraryStatus->value) {
             UserLibraryStatus::Completed => now(),
             default => null
         };
 
         // Update or create the user library entry
         UserLibrary::updateOrCreate([
-            'user_id'   => $user->id,
-            'trackable_type'  => Anime::class,
-            'trackable_id'  => $anime->id,
+            'user_id' => $user->id,
+            'trackable_type' => $model->getMorphClass(),
+            'trackable_id' => $model->id,
         ], [
             'status' => $userLibraryStatus->value,
-            'ended_at' => $endDate
+            'ended_at' => $endedAt
         ]);
+
+        // Decide the value of isReminded
+        $isReminded = $model->getMorphClass() == Anime::class ? $user->user_reminder_anime()->where('anime_id', $modelID)->exists() : false;
 
         // Successful response
         return JSONResult::success([
             'data' => [
-                'libraryStatus' => $userLibraryStatus->description,
-                'isFavorited'   => $user->hasFavorited($anime),
-                'isReminded'    => $user->user_reminder_anime()->where('anime_id', $animeID)->exists()
+                'libraryStatus' => $userLibraryStatus->value,
+                'isFavorited'   => $user->hasFavorited($model),
+                'isReminded'    => $isReminded
             ]
         ]);
     }
@@ -115,26 +136,41 @@ class LibraryController extends Controller
     public function delete(DeleteFromLibraryRequest $request): JsonResponse
     {
         $data = $request->validated();
-        $animeID = $data['anime_id'];
-        $anime = Anime::findOrFail($animeID);
+
+        // Get the model
+        if (!empty($data['anime_id'])) {
+            $modelID = $data['anime_id'];
+            $model = Anime::findOrFail($modelID);
+        } else {
+            $modelID = $data['item_id'];
+            $libraryType = UserLibraryType::fromValue($data['library']);
+            $model = match ($libraryType->value) {
+                UserLibraryType::Manga  => Manga::findOrFail($modelID),
+                UserLibraryType::Game   => Game::findOrFail($modelID),
+                default                 => Anime::findOrFail($modelID),
+            };
+        }
 
         // Get the authenticated user
         $user = auth()->user();
-        $hasNotTracked = $user->hasNotTracked($anime);
+        $hasNotTracked = $user->hasNotTracked($model);
 
         if ($hasNotTracked) {
             // The item could not be found
-            throw new AuthorizationException(__(':x is not in your library.', ['x' => $anime->title]));
+            throw new AuthorizationException(__(':x is not in your library.', ['x' => $model->title]));
         }
 
         // Remove this Anime from their library if it can be found
-        $user->untrack($anime);
+        $user->untrack($model);
 
         // Remove from favorites as you can't favorite and not have the anime in library
-        $user->unfavorite($anime);
+        $user->unfavorite($model);
 
         // Remove from reminders as you can't be reminded and not have the anime in library
-        $user->reminderAnime()->detach($animeID);
+        match ($libraryType?->value ?? UserLibraryType::Anime) {
+            UserLibraryType::Anime  => $user->reminderAnime()->detach($modelID),
+            default => null
+        };
 
         return JSONResult::success([
             'data' => [

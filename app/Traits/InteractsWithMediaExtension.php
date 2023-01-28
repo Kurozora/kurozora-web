@@ -51,9 +51,9 @@ trait InteractsWithMediaExtension {
         // Determine media adder
         if ($isUrl = str($uploadFile)->startsWith(['http://', 'https://'])) {
             $addMedia = $this->addMediaFromUrl($uploadFile);
-        } elseif ($isUploadFile = $uploadFile instanceof UploadedFile) {
+        } else if ($isUploadFile = $uploadFile instanceof UploadedFile) {
             $addMedia = $this->addMedia($uploadFile);
-        } elseif ($isPath = @file_exists($uploadFile)) {
+        } else if ($isPath = @file_exists($uploadFile)) {
             $addMedia = $this->addMedia($uploadFile);
         } else {
             $addMedia = $this->addMediaFromStream($uploadFile);
@@ -70,9 +70,9 @@ trait InteractsWithMediaExtension {
         if ($isUrl) {
             $extension = $extension ?? pathinfo($uploadFile, PATHINFO_EXTENSION);
             $addMedia->usingFileName(Uuid::uuid4() . '.' . $extension);
-        } elseif (!empty($isUploadFile)) {
+        } else if (!empty($isUploadFile)) {
             $addMedia->usingFileName(Uuid::uuid4() . '.' . $uploadFile->extension());
-        } elseif (!empty($isPath)) {
+        } else if (!empty($isPath)) {
             $extension = $extension ?? pathinfo($uploadFile, PATHINFO_EXTENSION);
             $addMedia->usingFileName(Uuid::uuid4() . '.' . $extension);
         } else {

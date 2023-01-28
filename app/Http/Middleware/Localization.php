@@ -21,9 +21,9 @@ class Localization
         // Check header request and determine localization
         if (auth()->check()) {
             $locale = auth()->user()->language_id ?? 'en';
-        } elseif ($request->hasHeader('X-Localization')) {
+        } else if ($request->hasHeader('X-Localization')) {
             $locale = $request->header('X-Localization');
-        } elseif (session()->has('locale')) {
+        } else if (session()->has('locale')) {
             $locale = session('locale');
         } else {
             $locale = 'en';

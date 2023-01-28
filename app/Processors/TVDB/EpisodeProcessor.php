@@ -255,9 +255,9 @@ class EpisodeProcessor implements ItemProcessorInterface
 
         if (empty($animeFirstAired) && empty($animeAirTime)) {
             return null;
-        } elseif (empty($animeFirstAired)) {
+        } else if (empty($animeFirstAired)) {
             return null;
-        } elseif (empty($animeAirTime)) {
+        } else if (empty($animeAirTime)) {
             return $animeFirstAired->setTime(9, 0);
         }
 
