@@ -6,7 +6,7 @@ use App\Enums\ImportBehavior;
 use App\Enums\ImportService;
 use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
-use App\Notifications\AnimeImportFinished;
+use App\Notifications\LibraryImportFinished;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
 use Notification;
@@ -213,7 +213,7 @@ class MALImportTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Assert notification was sent
-        Notification::hasSent($this->user, AnimeImportFinished::class);
+        Notification::hasSent($this->user, LibraryImportFinished::class);
 
         // Assert anime has been imported in user's library
         $this->assertEquals(6, $this->user->whereTracked(Anime::class)->count());
@@ -251,7 +251,7 @@ class MALImportTest extends TestCase
         $response->assertSuccessfulAPIResponse();
 
         // Assert notification was sent
-        Notification::hasSent($this->user, AnimeImportFinished::class);
+        Notification::hasSent($this->user, LibraryImportFinished::class);
 
         // Assert anime has been imported in user's library
         $this->assertEquals(7, $this->user->whereTracked(Anime::class)->count());

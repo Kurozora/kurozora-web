@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Notifications\AnimeImportFinished;
+use App\Notifications\LibraryImportFinished;
 use App\Notifications\NewFeedMessageReply;
 use App\Notifications\NewFeedMessageReShare;
 use App\Notifications\NewFollower;
@@ -76,7 +76,7 @@ class NotificationResource extends JsonResource
                 $body .= ' ReShared Your Message';
                 return $body;
             // Anime import notifications
-            case AnimeImportFinished::class:
+            case LibraryImportFinished::class:
                 $serviceName = self::getData($notification, 'service');
                 $body = 'Your "' . $serviceName . '" anime import request has been processed.';
 

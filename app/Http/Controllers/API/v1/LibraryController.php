@@ -5,16 +5,18 @@ namespace App\Http\Controllers\API\v1;
 use App\Enums\ImportBehavior;
 use App\Enums\ImportService;
 use App\Enums\UserLibraryStatus;
+use App\Enums\UserLibraryType;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddToLibraryRequest;
 use App\Http\Requests\DeleteFromLibraryRequest;
 use App\Http\Requests\GetLibraryRequest;
-use App\Http\Requests\ImportRequest;
+use App\Http\Requests\LibraryImportRequest;
 use App\Http\Resources\AnimeResourceBasic;
-use App\Jobs\ProcessKitsuImport;
 use App\Jobs\ProcessMALImport;
 use App\Models\Anime;
+use App\Models\Game;
+use App\Models\Manga;
 use App\Models\UserLibrary;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
@@ -144,24 +146,37 @@ class LibraryController extends Controller
     }
 
     /**
-     * Allows the authenticated user to upload an anime export file to be imported.
+     * Allows the authenticated user to upload a library export file to be imported.
      *
-     * @param ImportRequest $request
+     * @param LibraryImportRequest $request
      * @return JsonResponse
      * @throws FileNotFoundException
      * @throws TooManyRequestsHttpException
      */
-    function animeImport(ImportRequest $request): JsonResponse
+    function import(LibraryImportRequest $request): JsonResponse
     {
         $data = $request->validated();
+
+        // Get the library to import to
+        $libraryType = $data['library'];
 
         // Get the authenticated user
         $user = auth()->user();
 
-        if (!$user->canDoAnimeImport()) {
+        // Get whether user is in import cooldown period
+        $isInImportCooldown = match ($libraryType->value) {
+            UserLibraryType::Manga => !$user->canDoMangaImport(),
+            default => !$user->canDoAnimeImport()
+        };
+
+        if ($isInImportCooldown) {
             $cooldownDays = config('import.cooldown_in_days');
 
-            throw new TooManyRequestsHttpException($cooldownDays * 24 * 60 * 60, __('You can only perform an anime import every :x day(s).', ['x' => $cooldownDays]));
+            throw match ($libraryType) {
+                UserLibraryType::Manga => new TooManyRequestsHttpException($cooldownDays * 24 * 60 * 60, __('You can only perform a manga import every :x day(s).', ['x' => $cooldownDays])),
+                UserLibraryType::Game => new TooManyRequestsHttpException($cooldownDays * 24 * 60 * 60, __('You can only perform a game import every :x day(s).', ['x' => $cooldownDays])),
+                default => new TooManyRequestsHttpException($cooldownDays * 24 * 60 * 60, __('You can only perform an anime import every :x day(s).', ['x' => $cooldownDays])),
+            };
         }
 
         // Read XML file
@@ -176,22 +191,25 @@ class LibraryController extends Controller
         // Dispatch job
         switch ($importService->value) {
             case ImportService::MAL:
-                dispatch(new ProcessMALImport($user, $xmlContent, $importService, $importBehavior));
-                break;
             case ImportService::Kitsu:
-                dispatch(new ProcessKitsuImport($user, $xmlContent, $importService, $importBehavior));
+                dispatch(new ProcessMALImport($user, $xmlContent, $libraryType, $importService, $importBehavior));
                 break;
             default:
                 break;
         }
 
-        // Update last anime import date for user
+        // Update last library import date for user
+        $lastImportDateKey = match ($libraryType->value) {
+            UserLibraryType::Manga => 'last_manga_import_at',
+            default => 'last_anime_import_at',
+        };
+
         $user->update([
-          'last_anime_import_at' => now()
+            $lastImportDateKey => now()
         ]);
 
         return JSONResult::success([
-            'message' => 'Your anime import request has been submitted. You will be notified once it has been processed!'
+            'message' => __('Your anime import request has been submitted. You will be notified once it has been processed!')
         ]);
     }
 }

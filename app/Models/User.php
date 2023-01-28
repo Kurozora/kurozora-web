@@ -643,6 +643,24 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
+     * Checks the cooldown whether the user can do a manga import.
+     *
+     * @return bool
+     */
+    function canDoMangaImport(): bool
+    {
+        if (!$this->last_manga_import_at) {
+            return true;
+        }
+
+        if ($this->last_manga_import_at > now()->subDays(config('import.cooldown_in_days'))) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Returns the APN token(s) for the user.
      *
      * @return array

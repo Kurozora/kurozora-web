@@ -5,11 +5,13 @@ namespace App\Jobs;
 use App\Enums\ImportBehavior;
 use App\Enums\ImportService;
 use App\Enums\UserLibraryStatus;
+use App\Enums\UserLibraryType;
 use App\Models\Anime;
+use App\Models\Manga;
 use App\Models\MediaRating;
 use App\Models\User;
 use App\Models\UserLibrary;
-use App\Notifications\AnimeImportFinished;
+use App\Notifications\LibraryImportFinished;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -24,42 +26,49 @@ class ProcessMALImport implements ShouldQueue
     /**
      * The number of tries.
      *
-     * @var int
+     * @var int $tries
      */
     public int $tries = 1;
 
     /**
-     * The user to whose library the anime data should be imported.
+     * The user to whose library data should be imported.
      *
-     * @var User
+     * @var User $user
      */
     protected User $user;
 
     /**
      * The XML content to be imported.
      *
-     * @var string
+     * @var string $xmlContent
      */
     protected string $xmlContent;
 
     /**
+     * The library of the import action.
+     *
+     * @var UserLibraryType $libraryType
+     */
+    protected UserLibraryType $libraryType;
+
+    /**
      * The service of the import action.
      *
-     * @var ImportService
+     * @var ImportService $service
      */
     protected ImportService $service;
 
     /**
      * The behavior of the import action.
      *
-     * @var ImportBehavior
+     * @var ImportBehavior $behavior
      */
     protected ImportBehavior $behavior;
 
     /**
      * The results of the import action.
      *
-     * @var array[]
+     * @var array[] $results
      */
     protected array $results = [
         'successful'    => [],
@@ -71,13 +80,15 @@ class ProcessMALImport implements ShouldQueue
      *
      * @param User $user
      * @param string $xmlContent
+     * @param UserLibraryType $libraryType
      * @param ImportService $service
      * @param ImportBehavior $behavior
      */
-    public function __construct(User $user, string $xmlContent, ImportService $service, ImportBehavior $behavior)
+    public function __construct(User $user, string $xmlContent, UserLibraryType $libraryType, ImportService $service, ImportBehavior $behavior)
     {
         $this->user = $user;
         $this->xmlContent = $xmlContent;
+        $this->libraryType = $libraryType;
         $this->service = $service;
         $this->behavior = $behavior;
     }
@@ -87,10 +98,29 @@ class ProcessMALImport implements ShouldQueue
      */
     public function handle()
     {
+        switch ($this->libraryType->value) {
+            case UserLibraryType::Anime:
+                $this->handleAnime();
+                break;
+            case UserLibraryType::Manga:
+                $this->handleManga();
+                break;
+        }
+
+        // Notify the user that the import has finished
+        $this->user->notify(new LibraryImportFinished($this->results, $this->libraryType, $this->service, $this->behavior));
+    }
+
+    /**
+     * Execute the anime job.
+     */
+    public function handleAnime()
+    {
         // Wipe current library if behavior is set to overwrite
         if ($this->behavior->value === ImportBehavior::Overwrite) {
             $this->user->clearLibrary(Anime::class);
-            $this->user->animeRatings()->delete();
+            $this->user->whereFavorited(Anime::class)->forceDelete();
+            $this->user->animeRatings()->forceDelete();
         }
 
         // Create XML object
@@ -105,34 +135,67 @@ class ProcessMALImport implements ShouldQueue
             $animeId = $anime['series_animedb_id'];
             $status = $anime['my_status'];
             $rating = $anime['my_score'] ?? 0;
-            $startDate = $anime['my_start_date'] ?? null;
-            $endDate = $anime['my_finish_date'] ?? null;
+            $startDate = $anime['my_start_date'] ?? '0000-00-00';
+            $endDate = $anime['my_finish_date'] ?? '0000-00-00';
 
             // Handle import
-            $this->handleXMLFileAnime($animeId, $status, $rating, $startDate, $endDate);
+            $this->importModel($animeId, $status, $rating, $startDate, $endDate);
         }
-
-        // Notify the user that the anime import was finished
-        $this->user->notify(new AnimeImportFinished($this->results, $this->service, $this->behavior));
     }
 
     /**
-     * Handles the importing of a single anime from the XML file.
+     * Execute the manga job.
+     */
+    public function handleManga()
+    {
+        // Wipe current library if behavior is set to overwrite
+        if ($this->behavior->value === ImportBehavior::Overwrite) {
+            $this->user->clearLibrary(Manga::class);
+            $this->user->whereFavorited(Manga::class)->forceDelete();
+            $this->user->mangaRatings()->forceDelete();
+        }
+
+        // Create XML object
+        $xml = simplexml_load_string($this->xmlContent);
+
+        // Read XML object into JSON
+        $json = json_encode($xml);
+        $json = json_decode($json, true);
+
+        // Loop through the anime in the export file
+        foreach($json['manga'] as $manga) {
+            $mangaId = $manga['manga_mangadb_id'];
+            $status = $manga['my_status'];
+            $rating = $manga['my_score'] ?? 0;
+            $startDate = $manga['my_start_date'] ?? '0000-00-00';
+            $endDate = $manga['my_finish_date'] ?? '0000-00-00';
+
+            // Handle import
+            $this->importModel($mangaId, $status, $rating, $startDate, $endDate);
+        }
+    }
+
+    /**
+     * Handles the importing of a single model from the XML file.
      *
      * @param int $malID
      * @param string $malStatus
      * @param int $malRating
-     * @param string|null $malStartDate
-     * @param string|null $malEndDate
+     * @param string $malStartDate
+     * @param string $malEndDate
      */
-    protected function handleXMLFileAnime(int $malID, string $malStatus, int $malRating, ?string $malStartDate, ?string $malEndDate)
+    protected function importModel(int $malID, string $malStatus, int $malRating, string $malStartDate, string $malEndDate)
     {
         // Try to find the Anime in our DB
-        $anime = Anime::withoutGlobalScopes()
-            ->firstWhere('mal_id', $malID);
+        $model = match ($this->libraryType->value) {
+            UserLibraryType::Manga => Manga::withoutGlobalScopes()
+                ->firstWhere('mal_id', $malID),
+            default => Anime::withoutGlobalScopes()
+                ->firstWhere('mal_id', $malID)
+        };
 
         // If a match was found
-        if (!empty($anime)) {
+        if (!empty($model)) {
             // Convert the MAL data to our own
             $status = $this->convertMALStatus($malStatus);
             $rating = $this->convertMALRating($malRating);
@@ -165,8 +228,8 @@ class ProcessMALImport implements ShouldQueue
             // Add the anime to their library
             UserLibrary::updateOrCreate([
                 'user_id' => $this->user->id,
-                'trackable_type' => Anime::class,
-                'trackable_id' => $anime->id,
+                'trackable_type' => $model->getMorphClass(),
+                'trackable_id' => $model->id,
             ], [
                 'status' => $status,
                 'started_at' => $startedAt,
@@ -177,16 +240,16 @@ class ProcessMALImport implements ShouldQueue
             if (!empty($rating)) {
                 MediaRating::updateOrCreate([
                     'user_id' => $this->user->id,
-                    'model_type' => Anime::class,
-                    'model_id' => $anime->id,
+                    'model_type' => $model->getMorphClass(),
+                    'model_id' => $model->id,
                 ], [
                     'rating' => $rating,
                 ]);
             }
 
-            $this->registerSuccess($anime->id, $malID, $status, $rating);
+            $this->registerSuccess($model->id, $malID, $status, $rating);
         } else {
-            logger('mal_id: ' . $malID . ' not exist');
+            logger($this->libraryType->description . ' mal_id: ' . $malID . ' not exist');
             $this->registerFailure($malID, 'MAL ID could not be found.');
         }
     }
@@ -205,9 +268,9 @@ class ProcessMALImport implements ShouldQueue
             ->value();
 
         return match ($malStatus) {
-            'watching' => UserLibraryStatus::InProgress,
+            'reading', 'watching' => UserLibraryStatus::InProgress,
             'onHold' => UserLibraryStatus::OnHold,
-            'planToWatch' => UserLibraryStatus::Planning,
+            'planToWatch', 'planToRead' => UserLibraryStatus::Planning,
             'dropped' => UserLibraryStatus::Dropped,
             'completed' => UserLibraryStatus::Completed,
             default => null,
@@ -232,13 +295,13 @@ class ProcessMALImport implements ShouldQueue
     /**
      * Converts and returns Carbon dates from given string.
      *
-     * @param string|null $malDate
+     * @param string $malDate
      * @return Carbon|null
      */
-    protected function convertMALDate(?string $malDate): ?Carbon
+    protected function convertMALDate(string $malDate): ?Carbon
     {
-        if (empty($malDate) || $malDate === '0000-00-00') {
-            return null;
+        if ($malDate === '0000-00-00') {
+            return now();
         }
 
         $dateComponents = explode('-', $malDate);
@@ -248,15 +311,16 @@ class ProcessMALImport implements ShouldQueue
     /**
      * Registers a success in the import process.
      *
-     * @param int $animeID
+     * @param mixed $modelID
      * @param int $malID
      * @param string $status
      * @param int $rating
      */
-    protected function registerSuccess(int $animeID, int $malID, string $status, int $rating)
+    protected function registerSuccess(mixed $modelID, int $malID, string $status, int $rating)
     {
         $this->results['successful'][] = [
-            'anime_id'  => $animeID,
+            'library'   => $this->libraryType->description,
+            'model_id'  => $modelID,
             'mal_id'    => $malID,
             'status'    => $status,
             'rating'    => $rating,
@@ -272,6 +336,7 @@ class ProcessMALImport implements ShouldQueue
     protected function registerFailure(int $malID, string $reason)
     {
         $this->results['failure'][] = [
+            'library'   => $this->libraryType->description,
             'mal_id'    => $malID,
             'reason'    => $reason
         ];

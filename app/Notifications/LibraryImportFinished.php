@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use App\Enums\ImportBehavior;
 use App\Enums\ImportService;
+use App\Enums\UserLibraryType;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,7 +12,7 @@ use Illuminate\Notifications\Notification;
 use NotificationChannels\Apn\ApnChannel;
 use NotificationChannels\Apn\ApnMessage;
 
-class AnimeImportFinished extends Notification implements ShouldQueue
+class LibraryImportFinished extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -21,6 +22,13 @@ class AnimeImportFinished extends Notification implements ShouldQueue
      * @var array $results
      */
     private array $results;
+
+    /**
+     * The library used when importing.
+     *
+     * @var UserLibraryType $libraryType
+     */
+    private UserLibraryType $libraryType;
 
     /**
      * The service used when importing.
@@ -40,12 +48,14 @@ class AnimeImportFinished extends Notification implements ShouldQueue
      * Create a new notification instance.
      *
      * @param array $results
+     * @param UserLibraryType $libraryType
      * @param ImportService $service
      * @param ImportBehavior $behavior
      */
-    public function __construct(array $results, ImportService $service, ImportBehavior $behavior)
+    public function __construct(array $results, UserLibraryType $libraryType, ImportService $service, ImportBehavior $behavior)
     {
         $this->results = $results;
+        $this->libraryType = $libraryType;
         $this->service = $service;
         $this->behavior = $behavior;
     }
@@ -72,6 +82,7 @@ class AnimeImportFinished extends Notification implements ShouldQueue
         return [
             'successful_count'  => count($this->results['successful']),
             'failure_count'     => count($this->results['failure']),
+            'library'           => $this->libraryType->description,
             'behavior'          => $this->behavior->description,
             'service'           => $this->service->description,
         ];
@@ -85,11 +96,12 @@ class AnimeImportFinished extends Notification implements ShouldQueue
      */
     public function toApn(User $notifiable): ApnMessage
     {
+        $libraryName = $this->libraryType->description;
         $serviceName = $this->service->description;
 
         return ApnMessage::create()
             ->title('🤩 ' . $serviceName . ' Import finished')
             ->badge($notifiable->unreadNotifications()->count())
-            ->body('Your ' . $serviceName . ' anime import was processed, come check it out!');
+            ->body('Your ' . $serviceName . ' ' . $libraryName . ' import was processed. Come check it out!');
     }
 }

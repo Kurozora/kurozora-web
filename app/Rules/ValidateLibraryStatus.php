@@ -16,13 +16,13 @@ class ValidateLibraryStatus implements Rule
      */
     public function passes($attribute, $value): bool
     {
-        // Empty string does not pass
-        if (!is_string($value) || !strlen($value)) {
-            return false;
+        if (is_numeric($value)) {
+            return UserLibraryStatus::hasValue($value);
+        } else if (is_string($value)) {
+            return UserLibraryStatus::hasKey($value);
         }
 
-        // Check if this status is valid
-        return UserLibraryStatus::hasKey($value);
+        return false;
     }
 
     /**
@@ -32,6 +32,6 @@ class ValidateLibraryStatus implements Rule
      */
     public function message(): string
     {
-        return __('Pick a valid library status: :x', ['x' => implode(', ', UserLibraryStatus::getKeys())]);
+        return __('Pick a valid library status: :x', ['x' => implode(', ', UserLibraryStatus::getValues())]);
     }
 }

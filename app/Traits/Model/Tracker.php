@@ -120,7 +120,7 @@ trait Tracker
     {
         return $this->library()
             ->where('trackable_type', '=', $type)
-            ->delete();
+            ->forceDelete();
     }
 
     /**

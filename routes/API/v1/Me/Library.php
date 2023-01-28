@@ -16,7 +16,7 @@ Route::prefix('/library')
             ->middleware('auth.kurozora')
             ->name('.delete');
 
-        Route::post('/mal-import', [LibraryController::class, 'animeImport'])
+        Route::post('/import', [LibraryController::class, 'import'])
             ->middleware('auth.kurozora')
             ->name('.import');
     });

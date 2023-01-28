@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Profile;
 
-use App\Contracts\Web\Profile\ImportsUserAnimeLibrary;
+use App\Contracts\Web\Profile\ImportsUserLibrary;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
@@ -23,9 +23,9 @@ class ImportForm extends Component
     /**
      * Import anime to the user's library.
      *
-     * @param ImportsUserAnimeLibrary $updater
+     * @param ImportsUserLibrary $updater
      */
-    public function importAnimeLibrary(ImportsUserAnimeLibrary $updater)
+    public function importUserLibrary(ImportsUserLibrary $updater)
     {
         $this->resetErrorBag();
 
