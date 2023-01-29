@@ -214,7 +214,7 @@ class LibraryController extends Controller
         $data = $request->validated();
 
         // Get the library to import to
-        $libraryType = $data['library'];
+        $libraryType = UserLibraryType::fromValue((int) $data['library']);
 
         // Get the authenticated user
         $user = auth()->user();
