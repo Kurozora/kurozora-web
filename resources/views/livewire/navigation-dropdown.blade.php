@@ -231,24 +231,31 @@
                                     {{ __('Profile') }}
                                 </x-dropdown-link>
 
-                                <div class="border-t border-gray-100"></div>
+                                @auth
+                                    <div class="border-t border-gray-100"></div>
 
-                                {{-- Library --}}
-                                <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-gray-400">
-                                    {{ __('Library') }}
-                                </div>
+                                    {{-- Library --}}
+                                    <div class="block pl-4 pr-4 pt-2 pb-2 text-xs text-gray-400">
+                                        {{ __('Library') }}
+                                    </div>
 
-                                <x-dropdown-link href="{{ route('profile.anime-library', auth()->user()) }}">
-                                    {{ __('Anime Library') }}
-                                </x-dropdown-link>
+                                    <x-dropdown-link href="{{ route('profile.anime-library', auth()->user()) }}">
+                                        {{ __('Anime Library') }}
+                                    </x-dropdown-link>
 
-                                <x-dropdown-link href="{{ route('profile.manga-library', auth()->user()) }}">
-                                    {{ __('Manga Library') }}
-                                </x-dropdown-link>
+                                    <x-dropdown-link href="{{ route('profile.manga-library', auth()->user()) }}">
+                                        {{ __('Manga Library') }}
+                                    </x-dropdown-link>
 
-{{--                                <x-dropdown-link href="{{ route('profile.game-library', auth()->user()) }}">--}}
-{{--                                    {{ __('Game Library') }}--}}
-{{--                                </x-dropdown-link>--}}
+{{--                                    <x-dropdown-link href="{{ route('profile.game-library', auth()->user()) }}">--}}
+{{--                                        {{ __('Game Library') }}--}}
+{{--                                    </x-dropdown-link>--}}
+                                @else
+                                    {{-- Library --}}
+                                    <x-dropdown-link href="{{ route('library.index') }}">
+                                        {{ __('Library') }}
+                                    </x-dropdown-link>
+                                @endauth
 
                                 <div class="border-t border-gray-100"></div>
 
@@ -257,17 +264,19 @@
                                     {{ __('More') }}
                                 </div>
 
-                                <x-dropdown-link href="{{ route('profile.favorite-anime', auth()->user()) }}">
-                                    {{ __('Favorite Anime') }}
-                                </x-dropdown-link>
+                                @auth
+                                    <x-dropdown-link href="{{ route('profile.favorite-anime', auth()->user()) }}">
+                                        {{ __('Favorite Anime') }}
+                                    </x-dropdown-link>
 
-                                <x-dropdown-link href="{{ route('profile.favorite-manga', auth()->user()) }}">
-                                    {{ __('Favorite Manga') }}
-                                </x-dropdown-link>
+                                    <x-dropdown-link href="{{ route('profile.favorite-manga', auth()->user()) }}">
+                                        {{ __('Favorite Manga') }}
+                                    </x-dropdown-link>
 
-{{--                                <x-dropdown-link href="{{ route('profile.favorite-game', auth()->user()) }}">--}}
-{{--                                    {{ __('Favorite Game') }}--}}
-{{--                                </x-dropdown-link>--}}
+{{--                                    <x-dropdown-link href="{{ route('profile.favorite-game', auth()->user()) }}">--}}
+{{--                                        {{ __('Favorite Game') }}--}}
+{{--                                    </x-dropdown-link>--}}
+                                @endauth
 
                                 <x-dropdown-link href="{{ route('theme-store.index') }}">
                                     {{ __('Theme Store') }}
@@ -385,52 +394,69 @@
                             <div class="font-medium text-sm text-gray-500">{{ auth()->user()->email }}</div>
                         </div>
                     </div>
+
+                    {{-- Profile --}}
+                    <div class="space-y-1">
+                        <x-responsive-nav-link href="{{ route('me') }}">
+                            {{ __('Profile') }}
+                        </x-responsive-nav-link>
+
+                        <div class="border-t border-gray-100"></div>
+                    </div>
+
+                    {{-- Library --}}
+                    <div class="space-y-1">
+                        <x-responsive-nav-link href="{{ route('profile.anime-library', auth()->user()) }}"
+                                               :active="request()->routeIs('profile.anime-library')">
+                            {{ __('Anime Library') }}
+                        </x-responsive-nav-link>
+
+                        <x-responsive-nav-link href="{{ route('profile.manga-library', auth()->user()) }}"
+                                               :active="request()->routeIs('profile.manga-library')">
+                            {{ __('Manga Library') }}
+                        </x-responsive-nav-link>
+
+{{--                        <x-responsive-nav-link href="{{ route('profile.game-library', auth()->user()) }}"--}}
+{{--                                               :active="request()->routeIs('profile.game-library')">--}}
+{{--                            {{ __('Game Library') }}--}}
+{{--                        </x-responsive-nav-link>--}}
+
+                        <div class="border-t border-gray-100"></div>
+                    </div>
+                @else
+                    <div class="space-y-1">
+                        <x-responsive-nav-link href="{{ route('me') }}">
+                            {{ __('Profile') }}
+                        </x-responsive-nav-link>
+
+                        {{-- Library --}}
+                        <x-responsive-nav-link href="{{ route('library.index') }}"
+                                               :active="request()->routeIs('library.index')">
+                            {{ __('Library') }}
+                        </x-responsive-nav-link>
+
+                        <div class="border-t border-gray-100"></div>
+                    </div>
                 @endauth
-
-                <div class="space-y-1">
-                    <x-responsive-nav-link href="{{ route('me') }}">
-                        {{ __('Profile') }}
-                    </x-responsive-nav-link>
-
-                    <div class="border-t border-gray-100"></div>
-                </div>
-
-                {{-- Library --}}
-                <div class="space-y-1">
-                    <x-responsive-nav-link href="{{ route('profile.anime-library', auth()->user()) }}"
-                                           :active="request()->routeIs('profile.anime-library')">
-                        {{ __('Anime Library') }}
-                    </x-responsive-nav-link>
-
-                    <x-responsive-nav-link href="{{ route('profile.manga-library', auth()->user()) }}"
-                                           :active="request()->routeIs('profile.manga-library')">
-                        {{ __('Manga Library') }}
-                    </x-responsive-nav-link>
-
-{{--                    <x-responsive-nav-link href="{{ route('profile.game-library', auth()->user()) }}"--}}
-{{--                                           :active="request()->routeIs('profile.game-library')">--}}
-{{--                        {{ __('Game Library') }}--}}
-{{--                    </x-responsive-nav-link>--}}
-
-                    <div class="border-t border-gray-100"></div>
-                </div>
 
                 {{-- More Pages --}}
                 <div class="space-y-1">
-                    <x-responsive-nav-link href="{{ route('profile.favorite-anime', auth()->user()) }}"
-                                           :active="request()->routeIs('profile.favorite-anime', auth()->user())">
-                        {{ __('Favorite Anime') }}
-                    </x-responsive-nav-link>
+                    @auth
+                        <x-responsive-nav-link href="{{ route('profile.favorite-anime', auth()->user()) }}"
+                                               :active="request()->routeIs('profile.favorite-anime', auth()->user())">
+                            {{ __('Favorite Anime') }}
+                        </x-responsive-nav-link>
 
-                    <x-responsive-nav-link href="{{ route('profile.favorite-manga', auth()->user()) }}"
-                                           :active="request()->routeIs('profile.favorite-manga', auth()->user())">
-                        {{ __('Favorite Manga') }}
-                    </x-responsive-nav-link>
+                        <x-responsive-nav-link href="{{ route('profile.favorite-manga', auth()->user()) }}"
+                                               :active="request()->routeIs('profile.favorite-manga', auth()->user())">
+                            {{ __('Favorite Manga') }}
+                        </x-responsive-nav-link>
 
-{{--                    <x-responsive-nav-link href="{{ route('profile.favorite-game', auth()->user()) }}"--}}
-{{--                                           :active="request()->routeIs('profile.favorite-game', auth()->user())">--}}
-{{--                        {{ __('Favorite Game') }}--}}
-{{--                    </x-responsive-nav-link>--}}
+{{--                        <x-responsive-nav-link href="{{ route('profile.favorite-game', auth()->user()) }}"--}}
+{{--                                               :active="request()->routeIs('profile.favorite-game', auth()->user())">--}}
+{{--                            {{ __('Favorite Game') }}--}}
+{{--                        </x-responsive-nav-link>--}}
+                    @endauth
 
                     <x-responsive-nav-link href="{{ route('theme-store.index') }}"
                                            :active="request()->routeIs('theme-store.index')">
