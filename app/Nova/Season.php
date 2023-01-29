@@ -12,7 +12,6 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
-use Outl1ne\NovaColorField\Color;
 use Ramsey\Uuid\Uuid;
 
 class Season extends Resource
@@ -136,13 +135,13 @@ class Season extends Resource
                 ->help('A short description of the Season.')
                 ->translatable(),
 
-            DateTime::make('First Aired')
+            DateTime::make('Started At')
                 ->sortable()
                 ->help('First air date of the of the season in JST timezone. Leave empty if not announced yet.'),
 
-                DateTime::make('Last Aired')
-                    ->sortable()
-                    ->help('Last air date of the of the season in JST timezone. Leave empty if not announced yet.'),
+            DateTime::make('Ended At')
+                ->sortable()
+                ->help('Last air date of the of the season in JST timezone. Leave empty if not announced yet.'),
 
             HasMany::make('Translations', 'translations', SeasonTranslation::class),
 

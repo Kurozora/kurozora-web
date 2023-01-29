@@ -66,7 +66,7 @@ class SeasonsSection extends Component
             ['air_season', '=', $this->seasonOfYear],
             ['media_type_id', '=', $this->mediaType->id]
         ])
-            ->whereYear('first_aired', '=', $this->year)
+            ->whereYear('started_at', '=', $this->year)
             ->get();
     }
 

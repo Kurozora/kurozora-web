@@ -23,8 +23,8 @@ return new class extends Migration
             $table->integer('number');
             $table->boolean('is_nsfw')->default(false);
             $table->integer('view_count')->default(0);
-            $table->dateTime('first_aired')->nullable();
-            $table->dateTime('last_aired')->nullable();
+            $table->dateTime('started_at')->nullable();
+            $table->dateTime('ended_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

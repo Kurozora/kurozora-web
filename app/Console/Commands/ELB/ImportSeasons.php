@@ -49,8 +49,8 @@ class ImportSeasons extends Command
                                 'title' => $season->translate('ja')->title,
                                 'synopsis' => $season->translate('ja')->synopsis,
                             ],
-                            'first_aired' => $season->first_aired,
-                            'last_aired' => $season->last_aired,
+                            'started_at' => $season->started_at,
+                            'ended_at' => $season->ended_at,
                         ]);
                     } catch (Exception $exception) {
                         print 'Exception at: ' . $season->id . PHP_EOL;

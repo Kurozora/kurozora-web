@@ -51,8 +51,8 @@ return new class extends Migration
             $table->integer('episode_count')->default(0);
             $table->integer('season_count')->default(0);
             $table->integer('view_count')->default(0);
-            $table->date('first_aired')->nullable();
-            $table->date('last_aired')->nullable();
+            $table->date('started_at')->nullable();
+            $table->date('ended_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -31,12 +31,12 @@ class AnimeAiringSeason extends Command
     {
         $year = $this->argument('year') ?? now()->year;
 
-        Anime::where('first_aired', '!=', null)
-            ->whereYear('first_aired', '=', $year)
+        Anime::where('started_at', '!=', null)
+            ->whereYear('started_at', '=', $year)
             ->chunk(1000, function (Collection $animes) {
                 /** @var Anime $anime */
                 foreach ($animes as $anime) {
-                    print $anime->first_aired->month . '|' . $anime->generateAiringSeason() . PHP_EOL;
+                    print $anime->started_at->month . '|' . $anime->generateAiringSeason() . PHP_EOL;
                     $anime->update([
                         'air_season' => $anime->generateAiringSeason()
                     ]);

@@ -24,8 +24,8 @@ class Index extends Component
     {
         $anime = Anime::search()
             ->where('air_season', ['!=', season_of_year()->value])
-            ->where('first_aired', ['<=', now()])
-            ->where('first_aired', ['!=', now()->year])
+            ->where('started_at', ['<=', now()])
+            ->where('started_at', ['!=', now()->year])
             ->where('status_id', ['=', 3])
             ->get()
             ->random(1)
@@ -43,9 +43,9 @@ class Index extends Component
     public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
     {
         return $query->where('air_season', '!=', season_of_year()->value)
-            ->whereDate('first_aired', '<=', now())
+            ->whereDate('started_at', '<=', now())
             ->where('status_id', '=', 3)
-            ->orderBy('first_aired', 'desc');
+            ->orderBy('started_at', 'desc');
     }
 
     /**
@@ -57,7 +57,7 @@ class Index extends Component
     public function searchQuery(ScoutBuilder $query): ScoutBuilder
     {
         return $query->where('air_season', ['!=', season_of_year()->value])
-            ->where('first_aired', ['<=', now()->timestamp])
+            ->where('started_at', ['<=', now()->timestamp])
             ->where('status_id', ['=', 3]);
     }
 

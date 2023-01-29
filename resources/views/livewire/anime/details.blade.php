@@ -18,7 +18,7 @@
         <meta property="og:video" content="{{ $anime->video_url ?? '' }}" />
         <meta property="og:type" content="video.tv_show" />
         <meta property="video:duration" content="{{ $anime->duration }}" />
-        <meta property="video:release_date" content="{{ $anime->first_aired?->toIso8601String() }}" />
+        <meta property="video:release_date" content="{{ $anime->started_at?->toIso8601String() }}" />
         @foreach($anime->tags() as $tag)
             <meta property="video:tag" content="{{ $tag->name }}" />
         @endforeach
@@ -51,7 +51,7 @@
             },
             "contentRating": "{{ $anime->tv_rating->name }}",
             "genre": {!! $anime->genres()->pluck('name') !!},
-            "datePublished": "{{ $anime->first_aired?->format('Y-m-d') }}",
+            "datePublished": "{{ $anime->started_at?->format('Y-m-d') }}",
             "keywords": "anime{{ (',' . $anime->keywords) ?? '' }}"
             @if (!empty($this->studio))
                 ,"creator":[
@@ -68,7 +68,7 @@
                     "embedUrl": "{{ $anime->video_url }}",
                     "description":"Official Trailer",
                     "thumbnailUrl": "{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
-                    "uploadDate": "{{ $anime->first_aired?->format('Y-m-d') }}"
+                    "uploadDate": "{{ $anime->started_at?->format('Y-m-d') }}"
                 }
             @endif
         </x-misc.schema>
@@ -333,10 +333,10 @@
                     </x-information-list>
 
                     <x-information-list id="aired" title="{{ __('Aired') }}" icon="{{ asset('images/symbols/calendar.svg') }}">
-                        @if (!empty($anime->first_aired))
-                            @if (empty($anime->last_aired))
+                        @if (!empty($anime->started_at))
+                            @if (empty($anime->ended_at))
                                 <x-slot:information>
-                                    🚀 {{ $anime->first_aired->toFormattedDateString() }}
+                                    🚀 {{ $anime->started_at->toFormattedDateString() }}
                                 </x-slot:information>
 
                                 <x-slot:footer>
@@ -344,11 +344,11 @@
                                 </x-slot:footer>
                             @else
                                 <div class="flex flex-col">
-                                    <p class="font-semibold text-2xl">🚀 {{ $anime->first_aired->toFormattedDateString() }}</p>
+                                    <p class="font-semibold text-2xl">🚀 {{ $anime->started_at->toFormattedDateString() }}</p>
 
                                     @svg('dotted_line', 'fill-current', ['width' => '100%'])
 
-                                    <p class="font-semibold text-2xl text-right">{{ $anime->last_aired?->toFormattedDateString() }} 🏁</p>
+                                    <p class="font-semibold text-2xl text-right">{{ $anime->ended_at?->toFormattedDateString() }} 🏁</p>
                                 </div>
                             @endif
                         @else

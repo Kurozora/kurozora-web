@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use App\Enums\MediaCollection;
-use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -62,8 +61,10 @@ class AnimeResourceBasic extends JsonResource
                 'episodeCount'          => $this->resource->episode_count,
                 'seasonCount'           => $this->resource->season_count,
                 'stats'                 => MediaStatsResource::make($this->resource->getMediaStat()),
-                'firstAired'            => $this->resource->first_aired?->timestamp,
-                'lastAired'             => $this->resource->last_aired?->timestamp,
+                'startedAt'             => $this->resource->started_at?->timestamp,
+                'firstAired'            => $this->resource->started_at?->timestamp,
+                'endedAt'               => $this->resource->ended_at?->timestamp,
+                'lastAired'             => $this->resource->ended_at?->timestamp,
                 'duration'              => $this->resource->duration_string,
                 'durationTotal'         => $this->resource->duration_total,
                 'airSeason'             => $this->resource->air_season?->description,
@@ -100,24 +101,11 @@ class AnimeResourceBasic extends JsonResource
                 ['trackable_id', $this->resource->id],
                 ['trackable_type', Anime::class]
             ]);
-        $currentLibraryStatus = null;
 
-        if ($libraryEntry) {
-            $currentLibraryStatus = UserLibraryStatus::getDescription($libraryEntry->pivot->status);
-        }
-
-        // Get the favorite status
-        $hasTracked = $user->hasTracked($this->resource);
-        $favoriteStatus = null;
-        if ($hasTracked) {
-            $favoriteStatus = $user->hasFavorited($this->resource);
-        }
-
-        // Get the reminder status
-        $reminderStatus = null;
-        if ($hasTracked) {
-            $reminderStatus = $user->reminderAnime()->wherePivot('anime_id', $this->resource->id)->exists();
-        }
+        // Get various statuses
+        $currentLibraryStatus = $libraryEntry ? $libraryEntry->pivot->status : null;
+        $favoriteStatus = $libraryEntry ? $this->resource->isFavoritedBy($user) : null;
+        $reminderStatus = $libraryEntry ? $user->reminderAnime()->wherePivot('anime_id', $this->resource->id)->exists() : null;
 
         // Return the array
         return [

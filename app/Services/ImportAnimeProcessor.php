@@ -66,8 +66,8 @@ class ImportAnimeProcessor
                     'episode_count' => $kAnime->episode,
                     'season_count' => $kAnime->episode ? 1 : 0,
                     'video_url' => empty($kAnime->video_url) ? null : $kAnime->video_url,
-                    'first_aired' => $this->getFirstAirDate($kAnime),
-                    'last_aired' => $this->getLastAirDate($kAnime),
+                    'started_at' => $this->getStartedAtDate($kAnime),
+                    'ended_at' => $this->getEndedAtDate($kAnime),
                     'duration' => $kAnime->duration,
                     'air_time' => $kAnime->airing_time,
                     'air_day' => $this->getAiringDay($kAnime),
@@ -113,8 +113,8 @@ class ImportAnimeProcessor
                     'episode_count' => $episodeCount,
                     'season_count' => $seasonCount,
                     'video_url' => $videoURL,
-                    'first_aired' => $this->getFirstAirDate($kAnime),
-                    'last_aired' => $this->getLastAirDate($kAnime),
+                    'started_at' => $this->getStartedAtDate($kAnime),
+                    'ended_at' => $this->getEndedAtDate($kAnime),
                     'duration' => $duration,
                     'air_time' => $airTime,
                     'air_day' => $airDay,
@@ -177,7 +177,7 @@ class ImportAnimeProcessor
      * @param KAnime $kAnime
      * @return ?Carbon
      */
-    protected function getFirstAirDate(KAnime $kAnime): ?Carbon
+    protected function getStartedAtDate(KAnime $kAnime): ?Carbon
     {
         $startDay = $kAnime->start_day;
         $startMonth = $kAnime->start_month;
@@ -197,7 +197,7 @@ class ImportAnimeProcessor
      * @param KAnime $kAnime
      * @return ?Carbon
      */
-    protected function getLastAirDate(KAnime $kAnime): ?Carbon
+    protected function getEndedAtDate(KAnime $kAnime): ?Carbon
     {
         $endDay = $kAnime->end_day;
         $endMonth = $kAnime->end_month;

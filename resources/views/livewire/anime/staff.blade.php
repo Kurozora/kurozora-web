@@ -13,7 +13,7 @@
         <meta property="og:image" content="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" />
         <meta property="og:type" content="video.tv_show" />
         <meta property="video:duration" content="{{ $anime->duration }}" />
-        <meta property="video:release_date" content="{{ $anime->first_aired?->toIso8601String() }}" />
+        <meta property="video:release_date" content="{{ $anime->started_at?->toIso8601String() }}" />
         <link rel="canonical" href="{{ route('anime.staff', $anime) }}">
     </x-slot:meta>
 

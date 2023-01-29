@@ -127,8 +127,8 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     protected $casts = [
         'synonym_titles' => AsArrayObject::class,
-        'first_aired' => 'date',
-        'last_aired' => 'date',
+        'started_at' => 'date',
+        'ended_at' => 'date',
     ];
 
     /**
@@ -168,13 +168,13 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function generateAiringSeason(): ?int
     {
-        $firstAired = $this->first_aired;
+        $startedAt = $this->started_at;
 
-        if (empty($firstAired)) {
+        if (empty($startedAt)) {
             return null;
         }
 
-        return season_of_year($firstAired)->value;
+        return season_of_year($startedAt)->value;
     }
 
     /**
@@ -357,7 +357,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         $informationSummary = $this->media_type->name . ' · ' . $this->tv_rating->name;
         $episodesCount = $this->episode_count ?? null;
         $duration = $this->duration_string;
-        $firstAiredYear = $this->first_aired;
+        $startedAtYear = $this->started_at;
         $airSeason = $this->air_season->description;
 
         if (!empty($episodesCount)) {
@@ -366,8 +366,8 @@ class Anime extends KModel implements HasMedia, Sitemapable
         if (!empty($duration)) {
             $informationSummary .= ' · ' . $duration;
         }
-        if (!empty($firstAiredYear)) {
-            $informationSummary .= ' · ' . $airSeason . ' ' . $firstAiredYear->format('Y');
+        if (!empty($startedAtYear)) {
+            $informationSummary .= ' · ' . $airSeason . ' ' . $startedAtYear->format('Y');
         }
 
         return $informationSummary;
@@ -503,7 +503,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
             $episodes = $this->episodes();
 
             if (!empty($whereBetween)) {
-                $episodes->whereBetween('episodes.first_aired', $whereBetween);
+                $episodes->whereBetween('episodes.started_at', $whereBetween);
             }
 
             return $episodes->limit($limit)->get();
@@ -710,8 +710,8 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function scopeUpcomingShows(Builder $query, int $limit = 10): Builder
     {
-        return $query->whereDate('first_aired', '>', yesterday())
-            ->orderBy('first_aired')
+        return $query->whereDate('started_at', '>', yesterday())
+            ->orderBy('started_at')
             ->limit($limit);
     }
 
@@ -751,8 +751,8 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function scopeRecentlyFinishedShows(Builder $query, int $limit = 10): Builder
     {
-        return $query->orderBy('last_aired', 'desc')
-            ->whereDate('last_aired', '<=', today())
+        return $query->orderBy('ended_at', 'desc')
+            ->whereDate('ended_at', '<=', today())
             ->limit($limit);
     }
 
@@ -766,10 +766,10 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function scopeAnimeContinuing(Builder $query, int $limit = 10): Builder
     {
         return $query->where('air_season', '!=', season_of_year()->value)
-            ->whereYear('first_aired', '!=', now()->year)
-            ->whereDate('first_aired', '<=', now())
+            ->whereYear('started_at', '!=', now()->year)
+            ->whereDate('started_at', '<=', now())
             ->where('status_id', '=', 3)
-            ->orderBy('first_aired', 'desc')
+            ->orderBy('started_at', 'desc')
             ->limit($limit);
     }
 
@@ -783,7 +783,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function scopeAnimeSeason(Builder $query, int $limit = 10): Builder
     {
         return $query->where('air_season', '=', season_of_year()->value)
-            ->whereYear('first_aired', '=', now()->year)
+            ->whereYear('started_at', '=', now()->year)
             ->limit($limit);
     }
 
@@ -965,8 +965,8 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function toSearchableArray(): array
     {
         $anime = $this->toArray();
-        $anime['first_aired'] = $this->first_aired?->timestamp;
-        $anime['last_aired'] = $this->last_aired?->timestamp;
+        $anime['started_at'] = $this->started_at?->timestamp;
+        $anime['ended_at'] = $this->ended_at?->timestamp;
         $anime['created_at'] = $this->created_at?->timestamp;
         $anime['updated_at'] = $this->updated_at?->timestamp;
         $anime['tags'] = $this->tags()->pluck('name')->toArray();

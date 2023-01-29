@@ -39,7 +39,7 @@ class SeasonFactory extends Factory
                 'title'     => $jaFaker->sentence,
                 'synopsis'  => $jaFaker->realText(),
             ],
-            'first_aired'   => $this->faker->dateTime,
+            'started_at'   => $this->faker->dateTime,
             'created_at'    => now(),
             'updated_at'    => now(),
         ];

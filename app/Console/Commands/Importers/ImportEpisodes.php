@@ -69,7 +69,7 @@ class ImportEpisodes extends Command
                    'synopsis' => null
                 ],
                 'duration' => 1440,
-                'started_at' => $episode->firstAired,
+                'started_at' => $episode->startedAt,
                 'is_verified' => true,
             ]);
 

@@ -33,7 +33,7 @@
 
 {{--                        <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ trans_choice('[0,1] :x Episode|[2,*] :x Episodes', $anime->episode_count, ['x' => $anime->episode_count]) }}</p>--}}
 {{--    --}}
-{{--                        <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ __($anime->first_aired?->year) }}</p>--}}
+{{--                        <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ __($anime->started_at?->year) }}</p>--}}
                     </div>
 
                     <div class="inline-flex my-auto">
@@ -80,7 +80,7 @@
 
 {{--                        <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ trans_choice('[0,1] :x Episode|[2,*] :x Episodes', $manga->episode_count, ['x' => $manga->episode_count]) }}</p>--}}
 {{--    --}}
-{{--                        <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ __($manga->first_aired?->year) }}</p>--}}
+{{--                        <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ __($manga->started_at?->year) }}</p>--}}
                     </div>
 
                     <div class="inline-flex my-auto">

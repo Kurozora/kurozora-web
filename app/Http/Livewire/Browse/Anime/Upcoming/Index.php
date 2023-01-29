@@ -31,7 +31,7 @@ class Index extends Component
      */
     public function randomAnime(): void
     {
-        $anime = Anime::search()->where('first_aired', ['>=', yesterday()->timestamp])
+        $anime = Anime::search()->where('started_at', ['>=', yesterday()->timestamp])
             ->get()
             ->random(1)
             ->first();
@@ -46,7 +46,7 @@ class Index extends Component
      */
     public function searchIndexQuery(EloquentBuilder $query): EloquentBuilder
     {
-        return $query->whereDate('first_aired', '>=', yesterday());
+        return $query->whereDate('started_at', '>=', yesterday());
     }
 
     /**
@@ -57,7 +57,7 @@ class Index extends Component
      */
     public function searchQuery(ScoutBuilder $query): ScoutBuilder
     {
-        return $query->where('first_aired', ['>=', yesterday()->timestamp]);
+        return $query->where('started_at', ['>=', yesterday()->timestamp]);
     }
 
     /**

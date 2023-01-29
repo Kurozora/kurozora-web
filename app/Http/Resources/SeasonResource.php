@@ -32,7 +32,9 @@ class SeasonResource extends JsonResource
                 'title'         => $this->resource->title,
                 'synopsis'      => $this->resource->synopsis,
                 'episodeCount'  => $this->resource->episodes()->count(),
-                'firstAired'    => $this->resource->first_aired?->timestamp,
+                'startedAt'     => $this->resource->started_at?->timestamp,
+                'firstAired'    => $this->resource->started_at?->timestamp,
+                'endedAt'       => $this->resource->ended_at?->timestamp,
             ]
         ]);
     }

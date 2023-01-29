@@ -29,7 +29,6 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Outl1ne\NovaColorField\Color;
 use Ramsey\Uuid\Uuid;
 
 class Anime extends Resource
@@ -291,19 +290,19 @@ class Anime extends Resource
 
             Heading::make('Schedule'),
 
-            Date::make('First aired')
-                ->displayUsing(function ($firstAired) {
-                    return $firstAired?->format('Y-m-d');
+            Date::make('Started At')
+                ->displayUsing(function ($startedAt) {
+                    return $startedAt?->format('Y-m-d');
                 })
                 ->hideFromIndex()
-                ->help('The date on which the show first aired. For example: 2015-12-03'),
+                ->help('The date on which the show started. For example: 2015-12-03'),
 
-            Date::make('Last aired')
-                ->displayUsing(function ($lastAired) {
-                    return $lastAired?->format('Y-m-d');
+            Date::make('Ended At')
+                ->displayUsing(function ($endedAt) {
+                    return $endedAt?->format('Y-m-d');
                 })
                 ->hideFromIndex()
-                ->help('The date on which the show last aired. For example: 2016-03-08'),
+                ->help('The date on which the show ended. For example: 2016-03-08'),
 
             Number::make('Duration')
                 ->onlyOnForms()

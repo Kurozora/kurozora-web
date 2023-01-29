@@ -39,10 +39,10 @@
                 @endauth
             </div>
 
-            @if (empty($anime->first_aired))
+            @if (empty($anime->started_at))
                 <p class="mt-2 text-xs text-white font-bold tracking-wide uppercase">{{ __('Coming Soon') }}</p>
             @else
-                <p class="mt-2 text-xs text-white font-bold tracking-wide uppercase">{{ __('Expected :x', ['x' => $anime->first_aired->toFormattedDateString() ]) }}</p>
+                <p class="mt-2 text-xs text-white font-bold tracking-wide uppercase">{{ __('Expected :x', ['x' => $anime->started_at->toFormattedDateString() ]) }}</p>
             @endif
         </div>
     </div>

@@ -53,7 +53,9 @@
             "episodeCount": 0,
             "seasonCount": 0,
             "stats": null,
+            "startedAt": 67046400,
             "firstAired": 67046400,
+            "endedAt": 73094400,
             "lastAired": 73094400,
             "duration": "24 minutes",
             "durationTotal": "24 minutes",
@@ -63,7 +65,7 @@
             "isNSFW": true,
             "copyright": "\u2117 2018 Abernathy-Daniel",
             "givenRating": 1.2,
-            "libraryStatus": "In progress",
+            "libraryStatus": 0,
             "isFavorited": false,
             "isReminded": false
         }
@@ -122,7 +124,9 @@
             "episodeCount": 0,
             "seasonCount": 0,
             "stats": null,
+            "startedAt": 67046400,
             "firstAired": 67046400,
+            "endedAt": 73094400,
             "lastAired": 73094400,
             "duration": "24 minutes",
             "durationTotal": "24 minutes",
@@ -132,7 +136,7 @@
             "isNSFW": false,
             "copyright": "\u00ae 2012 Steuber Group",
             "givenRating": 3,
-            "libraryStatus": "In progress",
+            "libraryStatus": 0,
             "isFavorited": false,
             "isReminded": false
         }

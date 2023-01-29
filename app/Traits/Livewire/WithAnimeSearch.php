@@ -49,7 +49,7 @@ trait WithAnimeSearch
                 ],
                 'selected' => null,
             ],
-            'first_aired' => [
+            'started_at' => [
                 'title' => __('First Aired'),
                 'options' => [
                     'Default' => null,
@@ -58,7 +58,7 @@ trait WithAnimeSearch
                 ],
                 'selected' => null,
             ],
-            'last_aired' => [
+            'ended_at' => [
                 'title' => __('Last Aired'),
                 'options' => [
                     'Default' => null,
@@ -87,12 +87,12 @@ trait WithAnimeSearch
     public function setFilterableAttributes(): void
     {
         $this->filter = [
-            'first_aired' => [
+            'started_at' => [
                 'title' => __('First Aired'),
                 'type' => 'date',
                 'selected' => null,
             ],
-            'last_aired' => [
+            'ended_at' => [
                 'title' => __('Last Aired'),
                 'type' => 'date',
                 'selected' => null,

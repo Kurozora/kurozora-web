@@ -7,9 +7,9 @@ use App\Enums\SongType;
 use App\Enums\StudioType;
 use App\Models\Anime;
 use App\Models\AnimeSong;
-use App\Models\MediaStudio;
 use App\Models\Genre;
 use App\Models\MediaGenre;
+use App\Models\MediaStudio;
 use App\Models\MediaTheme;
 use App\Models\MediaType;
 use App\Models\Song;
@@ -106,12 +106,12 @@ class AnimeProcessor implements ItemProcessorInterface
         $videoUrl = $item->get('video_url');
         $duration = $this->getAttribute('Duration');
         $aired = $this->getAttribute('Aired');
-        $firstAired = $this->getFirstAired($aired);
-        $lastAired = $this->getLastAired($aired);
-        $airDay = $this->getAirDay($firstAired);
+        $startedAt = $this->getStartedAt($aired);
+        $endedAt = $this->getEndedAt($aired);
+        $airDay = $this->getAirDay($startedAt);
         $broadcast = $this->getAttribute('Broadcast');
         $airTime = $this->getAirTime($broadcast);
-        $airSeason = $this->getAirSeason($firstAired);
+        $airSeason = $this->getAirSeason($startedAt);
         $openingSongs = $item->get('openings');
         $endingSongs = $item->get('endings');
         $attributes = [];
@@ -163,8 +163,8 @@ class AnimeProcessor implements ItemProcessorInterface
 //            'source_id' => $source,
 //            'video_url' => $videoUrl,
 //            'duration' => $duration,
-//            'first_aired' => $firstAired,
-//            'last_aired' => $lastAired,
+//            'started_at' => $startedAt,
+//            'ended_at' => $endedAt,
 //            'air_day' => $airDay,
 //            'air_time' => $airTime,
 //            'air_season' => $airSeason,
@@ -188,8 +188,8 @@ class AnimeProcessor implements ItemProcessorInterface
                     'source_id' => $source,
                     'video_url' => $videoUrl,
                     'duration' => $duration,
-                    'first_aired' => $firstAired,
-                    'last_aired' => $lastAired,
+                    'started_at' => $startedAt,
+                    'ended_at' => $endedAt,
                     'air_day' => $airDay,
                     'air_time' => $airTime,
                     'air_season' => $airSeason,
@@ -202,7 +202,7 @@ class AnimeProcessor implements ItemProcessorInterface
             $newTitle = $title ?? $originalTitle;
             $newEpisodeCount = empty($episodeCount) ? $anime->episode_count : $episodeCount;
             $newDuration = empty($anime->duration) ? $duration : $anime->duration;
-            $newLastAired = $anime->last_aired ?? $lastAired;
+            $newEndedAt = $anime->ended_at ?? $endedAt;
             $newAirDay = empty($anime->air_day) ? $airDay : $anime->air_day->value;
 
             $anime->update(array_merge([
@@ -217,8 +217,8 @@ class AnimeProcessor implements ItemProcessorInterface
                 'source_id' => $source,
                 'video_url' => $videoUrl,
                 'duration' => $newDuration,
-                'first_aired' => $firstAired,
-                'last_aired' => $newLastAired,
+                'started_at' => $startedAt,
+                'ended_at' => $newEndedAt,
                 'air_day' => $newAirDay,
                 'air_time' => $airTime,
                 'air_season' => $airSeason,
@@ -567,7 +567,7 @@ class AnimeProcessor implements ItemProcessorInterface
      * @param string $aired
      * @return Carbon|null
      */
-    private function getFirstAired(string $aired): ?Carbon
+    private function getStartedAt(string $aired): ?Carbon
     {
         $regex = '/to.+/';
         return $this->getAirDate($regex, $aired);
@@ -579,7 +579,7 @@ class AnimeProcessor implements ItemProcessorInterface
      * @param string $aired
      * @return Carbon|null
      */
-    private function getLastAired(string $aired): ?Carbon
+    private function getEndedAt(string $aired): ?Carbon
     {
         $regex = '/(.+to)/';
         return $this->getAirDate($regex, $aired);
@@ -634,16 +634,16 @@ class AnimeProcessor implements ItemProcessorInterface
     /**
      * Get the air day.
      *
-     * @param Carbon|null $firstAired
+     * @param Carbon|null $startedAt
      * @return int|null
      */
-    private function getAirDay(?Carbon $firstAired): ?int
+    private function getAirDay(?Carbon $startedAt): ?int
     {
-        if (empty($firstAired)) {
+        if (empty($startedAt)) {
             return null;
         }
 
-        return $firstAired->dayOfWeek;
+        return $startedAt->dayOfWeek;
     }
 
     /**
@@ -666,12 +666,12 @@ class AnimeProcessor implements ItemProcessorInterface
     /**
      * Get the air season.
      *
-     * @param Carbon|null $firstAired
+     * @param Carbon|null $startedAt
      * @return int
      */
-    private function getAirSeason(?Carbon $firstAired): int
+    private function getAirSeason(?Carbon $startedAt): int
     {
-        return season_of_year($firstAired)->value;
+        return season_of_year($startedAt)->value;
     }
 
     /**

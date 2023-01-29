@@ -36,7 +36,7 @@ class EpisodeProcessor implements ItemProcessorInterface
         $episodeNumber = $this->cleanEpisodeNumber($item->get('episode_number'));
         $episodeNumberTotal = $this->cleanEpisodeNumber($item->get('episode_number_total'));
         $episodeDuration = $this->getDuration($item->get('episode_duration'));
-        $episodeFirstAired = $this->getFirstAired($item->get('episode_first_aired'));
+        $episodeStartedAt = $this->getStartedAt($item->get('episode_started_at'));
         $episodeBannerImageURL = $item->get('episode_banner_image_url');
 
         logger()->channel('stderr')->info('🔄 [tvdb_id:' . $tvdbID . '] Processing episode');
@@ -51,7 +51,7 @@ class EpisodeProcessor implements ItemProcessorInterface
 //            'episode_number' => $episodeNumber,
 //            'episode_number_total' => $episodeNumberTotal,
 //            'duration' => $episodeDuration,
-//            'first_aired' => $this->updateEpisodeFirstAiredTime($this->getAnimeAirDateTime($anime), $episodeFirstAired),
+//            'started_at' => $this->updateEpisodeStartedAtTime($this->getAnimeAirDateTime($anime), $episodeStartedAt),
 //            'banner_image' => $episodeBannerImageURL,
 //        ]);
 
@@ -60,7 +60,7 @@ class EpisodeProcessor implements ItemProcessorInterface
         } else {
             $season = $anime->seasons()
                 ->firstWhere('number', '=', $seasonNumber);
-            $animeFirstAired = $this->getAnimeAirDateTime($anime);
+            $animeStartedAt = $this->getAnimeAirDateTime($anime);
 
             if (empty($season)) {
                 logger()->channel('stderr')->info('🖨️ [tvdb_id:' . $tvdbID . '] Creating season');
@@ -70,7 +70,7 @@ class EpisodeProcessor implements ItemProcessorInterface
                         'tv_rating_id' => $anime->tv_rating_id,
                         'number' => $seasonNumber,
                         'is_nsfw' => $anime->is_nsfw,
-                        'first_aired' => $animeFirstAired,
+                        'started_at' => $animeStartedAt,
                         'title' => 'Season ' . $seasonNumber,
                         'synopsis' => $anime->synopsis,
                         'ja' => [
@@ -83,7 +83,7 @@ class EpisodeProcessor implements ItemProcessorInterface
 
             try {
                 logger()->channel('stderr')->info('🖨️ [tvdb_id:' . $tvdbID . '] Creating episode');
-                $episodeStartedAtDateTime = $this->updateEpisodeFirstAiredTime($animeFirstAired, $episodeFirstAired);
+                $episodeStartedAtDateTime = $this->updateEpisodeStartedAtTime($animeStartedAt, $episodeStartedAt);
                 $episodeAttributes = array_merge([
                     'tv_rating_id' => $season->tv_rating_id,
                     'number' => $episodeNumber,
@@ -203,7 +203,7 @@ class EpisodeProcessor implements ItemProcessorInterface
      * @param string $value
      * @return Carbon|null
      */
-    protected function getFirstAired(string $value): ?Carbon
+    protected function getStartedAt(string $value): ?Carbon
     {
         try {
             $date = Carbon::createFromFormat('M d, Y', $value);
@@ -211,7 +211,7 @@ class EpisodeProcessor implements ItemProcessorInterface
                 return $date;
             }
         } catch (Exception $exception) {
-            logger()->error('getFirstAired error: ' . $exception->getMessage());
+            logger()->error('getStartedAt error: ' . $exception->getMessage());
         }
 
         return null;
@@ -220,17 +220,17 @@ class EpisodeProcessor implements ItemProcessorInterface
     /**
      * Update the time of the first aired date of the episode.
      *
-     * @param Carbon|null $animeFirstAired
-     * @param Carbon $episodeFirstAired
+     * @param Carbon|null $animeStartedAt
+     * @param Carbon $episodeStartedAt
      * @return Carbon|null
      */
-    protected function updateEpisodeFirstAiredTime(?Carbon $animeFirstAired, Carbon $episodeFirstAired): ?Carbon
+    protected function updateEpisodeStartedAtTime(?Carbon $animeStartedAt, Carbon $episodeStartedAt): ?Carbon
     {
-        if (empty($animeFirstAired)) {
-            return $episodeFirstAired->setTime(9, 0);
+        if (empty($animeStartedAt)) {
+            return $episodeStartedAt->setTime(9, 0);
         }
 
-        return $episodeFirstAired->setTime($animeFirstAired->hour, $animeFirstAired->minute);
+        return $episodeStartedAt->setTime($animeStartedAt->hour, $animeStartedAt->minute);
     }
 
     /**
@@ -241,7 +241,7 @@ class EpisodeProcessor implements ItemProcessorInterface
      */
     protected function getAnimeAirDateTime(Anime $anime): ?Carbon
     {
-        $animeFirstAired = $anime->first_aired;
+        $animeStartedAt = $anime->started_at;
 
         try {
             $animeAirTime = Carbon::createFromFormat('H:i:s', $anime->air_time, 'Asia/Tokyo');
@@ -253,15 +253,15 @@ class EpisodeProcessor implements ItemProcessorInterface
             }
         }
 
-        if (empty($animeFirstAired) && empty($animeAirTime)) {
+        if (empty($animeStartedAt) && empty($animeAirTime)) {
             return null;
-        } else if (empty($animeFirstAired)) {
+        } else if (empty($animeStartedAt)) {
             return null;
         } else if (empty($animeAirTime)) {
-            return $animeFirstAired->setTime(9, 0);
+            return $animeStartedAt->setTime(9, 0);
         }
 
-        return $animeFirstAired->setTime($animeAirTime->hour, $animeAirTime->minute);
+        return $animeStartedAt->setTime($animeAirTime->hour, $animeAirTime->minute);
     }
 
     /**

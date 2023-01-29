@@ -23,7 +23,7 @@
             <div class="flex flex-wrap gap-1.5 justify-between">
                 <div class="flex flex-wrap w-full justify-between">
                     <p class="text-sm text-black/60">{{ __('Premiere') }}</p>
-                    <p class="text-sm">{{ $season->first_aired?->toFormattedDateString() }}</p>
+                    <p class="text-sm">{{ $season->started_at?->toFormattedDateString() }}</p>
                 </div>
                 <x-hr />
 

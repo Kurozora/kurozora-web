@@ -4029,8 +4029,8 @@
                       "videoUrl": null,
                       "poster": null,
                       "background": null,
-                      "firstAired": "1993-07-18",
-                      "lastAired": "1993-10-10",
+                      "startedAt": "1993-07-18",
+                      "endedAt": "1993-10-10",
                       "runtime": 25,
                       "airStatus": "Continuing",
                       "airTime": "21:59:00",
@@ -4077,8 +4077,8 @@
                       "videoUrl": null,
                       "poster": null,
                       "background": null,
-                      "firstAired": "1970-09-10",
-                      "lastAired": "1971-02-25",
+                      "startedAt": "1970-09-10",
+                      "endedAt": "1971-02-25",
                       "runtime": 25,
                       "airStatus": "Tba",
                       "airTime": "04:18:00",
@@ -4227,8 +4227,8 @@
                       "isNSFW": false,
                       "genres": [],
                       "themes": [],
-                      "firstAired": "1973-11-15",
-                      "lastAired": "1974-02-07",
+                      "startedAt": "1973-11-15",
+                      "endedAt": "1974-02-07",
                       "airTime": "20:00:00",
                       "airDay": 3,
                       "copyright": "® 2003 Watsica-Kling",
@@ -4502,8 +4502,8 @@
                                 "isNSFW": true,
                                 "genres": [],
                                 "themes": [],
-                                "firstAired": "2014-12-10",
-                                "lastAired": "2015-05-27",
+                                "startedAt": "2014-12-10",
+                                "endedAt": "2015-05-27",
                                 "airTime": "16:49:00",
                                 "airDay": 7,
                                 "copyright": "℗ 1997 Kulas-Baumbach",
@@ -4551,8 +4551,8 @@
                                 "isNSFW": false,
                                 "genres": [],
                                 "themes": [],
-                                "firstAired": "2015-02-10",
-                                "lastAired": "2015-05-05",
+                                "startedAt": "2015-02-10",
+                                "endedAt": "2015-05-05",
                                 "airTime": "18:32:00",
                                 "airDay": 6,
                                 "copyright": "® 1976 Swift Ltd",
@@ -4582,7 +4582,7 @@
                               "title": "Season 1",
                               "synopsis": "This is a short description of the season's story.",
                               "episodeCount": 2,
-                              "firstAired": "2020-07-29"
+                              "startedAt": "2020-07-29"
                             }
                           }
                         ],
@@ -4818,8 +4818,8 @@
                         "Cars",
                         "Demons"
                       ],
-                      "firstAired": "1973-11-15",
-                      "lastAired": "1974-02-07",
+                      "startedAt": "1973-11-15",
+                      "endedAt": "1974-02-07",
                       "airTime": "20:00:00",
                       "airDay": 3,
                       "copyright": "® 2003 Watsica-Kling"
@@ -4871,8 +4871,8 @@
                       "isNSFW": false,
                       "genres": [],
                       "themes": [],
-                      "firstAired": "2014-09-28",
-                      "lastAired": "2014-12-21",
+                      "startedAt": "2014-09-28",
+                      "endedAt": "2014-12-21",
                       "airTime": "19:24:00",
                       "airDay": 4,
                       "copyright": "® 1985 Fadel, Sipes and McGlynn"
@@ -4932,8 +4932,8 @@
                         "isNSFW": true,
                         "genres": [],
                         "themes": [],
-                        "firstAired": "2014-12-10",
-                        "lastAired": "2015-05-27",
+                        "startedAt": "2014-12-10",
+                        "endedAt": "2015-05-27",
                         "airTime": "16:49:00",
                         "airDay": 7,
                         "copyright": "℗ 1997 Kulas-Baumbach",
@@ -4982,8 +4982,8 @@
                         "isNSFW": false,
                         "genres": [],
                         "themes": [],
-                        "firstAired": "2015-02-10",
-                        "lastAired": "2015-05-05",
+                        "startedAt": "2015-02-10",
+                        "endedAt": "2015-05-05",
                         "airTime": "18:32:00",
                         "airDay": 6,
                         "copyright": "® 1976 Swift Ltd",
@@ -5022,7 +5022,7 @@
                       "title": "Season 1",
                       "synopsis": "This is a short description of the season's story.",
                       "episodeCount": 2,
-                      "firstAired": "2020-07-29"
+                      "startedAt": "2020-07-29"
                     }
                   }
                 ]
@@ -5184,8 +5184,8 @@
                         "Cars",
                         "Demons"
                       ],
-                      "firstAired": "1973-11-15",
-                      "lastAired": "1974-02-07",
+                      "startedAt": "1973-11-15",
+                      "endedAt": "1974-02-07",
                       "airTime": "20:00:00",
                       "airDay": 3,
                       "copyright": "® 2003 Watsica-Kling"
@@ -5237,8 +5237,8 @@
                       "isNSFW": false,
                       "genres": [],
                       "themes": [],
-                      "firstAired": "2014-09-28",
-                      "lastAired": "2014-12-21",
+                      "startedAt": "2014-09-28",
+                      "endedAt": "2014-12-21",
                       "airTime": "19:24:00",
                       "airDay": 4,
                       "copyright": "® 1985 Fadel, Sipes and McGlynn"
@@ -5269,7 +5269,7 @@
                       "title": "Season 1",
                       "synopsis": "This is a short description of the season's story.",
                       "episodeCount": 2,
-                      "firstAired": "6-29-2020 2020-07-29 12:00:00"
+                      "startedAt": "6-29-2020 2020-07-29 12:00:00"
                     }
                   }
                 ]
@@ -5316,7 +5316,7 @@
                       "title": "Episode 1",
                       "synopsis": "A short, or long description of the episode.",
                       "duration": "24 minutes",
-                      "firstAired": 959731200,
+                      "startedAt": 959731200,
                       "isFiller": false,
                       "isVerified": false,
                       "isWatched": true
@@ -5352,7 +5352,7 @@
                       "title": "Episode 2",
                       "synopsis": "A long, or short description of the episode.",
                       "duration": "24 minutes",
-                      "firstAired": 959731200,
+                      "startedAt": 959731200,
                       "isFiller": true,
                       "isVerified": false,
                       "isWatched": false
@@ -5379,7 +5379,7 @@
                     "attributes": {
                       "number": 1,
                       "title": "Episode 1",
-                      "firstAired": "2 Jul, 2020",
+                      "startedAt": "2 Jul, 2020",
                       "overview": "Season 1 Episode 1 description",
                       "isVerified": false,
                       "isWatched": false
@@ -5533,8 +5533,8 @@
                               "videoUrl": null,
                               "poster": null,
                               "background": null,
-                              "firstAired": "1987-06-15",
-                              "lastAired": "1987-09-07",
+                              "startedAt": "1987-06-15",
+                              "endedAt": "1987-09-07",
                               "runtime": 25,
                               "airStatus": "Tba",
                               "airTime": "16:59:00",
@@ -5641,8 +5641,8 @@
                       "videoUrl": null,
                       "poster": null,
                       "background": null,
-                      "firstAired": "1993-07-18",
-                      "lastAired": "1993-10-10",
+                      "startedAt": "1993-07-18",
+                      "endedAt": "1993-10-10",
                       "runtime": 25,
                       "airStatus": "Continuing",
                       "airTime": "21:59:00",
@@ -5689,8 +5689,8 @@
                       "videoUrl": null,
                       "poster": null,
                       "background": null,
-                      "firstAired": "1970-09-10",
-                      "lastAired": "1971-02-25",
+                      "startedAt": "1970-09-10",
+                      "endedAt": "1971-02-25",
                       "runtime": 25,
                       "airStatus": "Tba",
                       "airTime": "04:18:00",
@@ -6038,8 +6038,8 @@
                               "isNSFW": false,
                               "genres": [],
                               "themes": [],
-                              "firstAired": "1973-11-15",
-                              "lastAired": "1974-02-07",
+                              "startedAt": "1973-11-15",
+                              "endedAt": "1974-02-07",
                               "airTime": "20:00:00",
                               "airDay": 3,
                               "copyright": "® 2003 Watsica-Kling"
@@ -6091,8 +6091,8 @@
                               "isNSFW": false,
                               "genres": [],
                               "themes": [],
-                              "firstAired": "2014-09-28",
-                              "lastAired": "2014-12-21",
+                              "startedAt": "2014-09-28",
+                              "endedAt": "2014-12-21",
                               "airTime": "19:24:00",
                               "airDay": 4,
                               "copyright": "® 1985 Fadel, Sipes and McGlynn"
@@ -6163,8 +6163,8 @@
                       "isNSFW": false,
                       "genres": [],
                       "themes": [],
-                      "firstAired": "1973-11-15",
-                      "lastAired": "1974-02-07",
+                      "startedAt": "1973-11-15",
+                      "endedAt": "1974-02-07",
                       "airTime": "20:00:00",
                       "airDay": 3,
                       "copyright": "® 2003 Watsica-Kling"
@@ -6216,8 +6216,8 @@
                       "isNSFW": false,
                       "genres": [],
                       "themes": [],
-                      "firstAired": "2014-09-28",
-                      "lastAired": "2014-12-21",
+                      "startedAt": "2014-09-28",
+                      "endedAt": "2014-12-21",
                       "airTime": "19:24:00",
                       "airDay": 4,
                       "copyright": "® 1985 Fadel, Sipes and McGlynn"

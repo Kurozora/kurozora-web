@@ -75,7 +75,7 @@ class Index extends Component
                 ->join(Anime::TABLE_NAME, function ($join) {
                     $join->on(Anime::TABLE_NAME . '.media_type_id', '=', MediaType::TABLE_NAME . '.id')
                         ->where('air_season', '=', $this->seasonOfYear->value)
-                        ->whereYear('first_aired', '=', $this->year);
+                        ->whereYear('started_at', '=', $this->year);
                 })
                 ->groupBy('id', 'name', 'description')
                 ->get()

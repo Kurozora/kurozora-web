@@ -193,7 +193,7 @@ class EpisodeSpider extends BasicSpider
             ->text();
 
         // Episode first aired
-        $episodeFirstAired = $response->filter('ul.list-group li.list-group-item.clearfix strong:contains("Originally Aired")')
+        $episodeStarted_at = $response->filter('ul.list-group li.list-group-item.clearfix strong:contains("Originally Aired")')
             ->ancestors()
             ->filter('span a')
             ->text();
@@ -214,7 +214,7 @@ class EpisodeSpider extends BasicSpider
                 'episode_number' => $episodeNumber,
                 'episode_number_total' => $episodeNumberTotal,
                 'episode_duration' => $episodeDuration,
-                'episode_first_aired' => $episodeFirstAired,
+                'episode_started_at' => $episodeStarted_at,
                 'episode_banner_image_url' => $episodeBannerImageUrl,
             ]);
 

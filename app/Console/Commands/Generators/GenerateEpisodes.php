@@ -46,8 +46,8 @@ class GenerateEpisodes extends Command
         $totalEpisodesAdded = 0;
         Anime::withoutGlobalScopes()
             ->where([
-                ['first_aired', '!=', null],
-                ['last_aired', '!=', null],
+                ['started_at', '!=', null],
+                ['ended_at', '!=', null],
                 ['season_count', '=', 1],
                 ['episode_count', '<=', 13],
                 ['status_id', '=', 4],
@@ -72,8 +72,8 @@ class GenerateEpisodes extends Command
                                 'title' => 'シーズン1',
                                 'synopsis' => null,
                             ],
-                            'first_aired' => Carbon::createFromFormat('Y-m-d H:i:s', $anime->first_aired->toDateString() . ' ' . $anime->air_time, 'Asia/Tokyo')->setTimezone('UTC'),
-                            'last_aired' => Carbon::createFromFormat('Y-m-d H:i:s', $anime->last_aired->toDateString() . ' ' . $anime->air_time, 'Asia/Tokyo')->setTimezone('UTC'),
+                            'started_at' => Carbon::createFromFormat('Y-m-d H:i:s', $anime->started_at->toDateString() . ' ' . $anime->air_time, 'Asia/Tokyo')->setTimezone('UTC'),
+                            'ended_at' => Carbon::createFromFormat('Y-m-d H:i:s', $anime->ended_at->toDateString() . ' ' . $anime->air_time, 'Asia/Tokyo')->setTimezone('UTC'),
                         ]);
 
                         echo '[][] season id: ' . $season->id . PHP_EOL;
@@ -83,7 +83,7 @@ class GenerateEpisodes extends Command
                     // Generate episodes
                     if (!empty($season)) {
                         if ($anime->episodes()->count() != $anime->episode_count) {
-                            $sameDayRelease = $anime->first_aired->equalTo($anime->last_aired) ?? false;
+                            $sameDayRelease = $anime->started_at->equalTo($anime->ended_at) ?? false;
 
                             foreach (range(1, $anime->episode_count) as $count) {
                                 /** @var Episode $episode */
@@ -99,7 +99,7 @@ class GenerateEpisodes extends Command
                                     'duration' => $anime->duration,
                                     'is_filler' => false,
                                     'is_verified' => false,
-                                    'started_at' => $sameDayRelease ? $season->first_aired->setTimezone('UTC') : $season->first_aired->addWeeks($count - 1)->setTimezone('UTC'),
+                                    'started_at' => $sameDayRelease ? $season->started_at->setTimezone('UTC') : $season->started_at->addWeeks($count - 1)->setTimezone('UTC'),
                                 ]);
                                 $episodes[] = $episode;
 

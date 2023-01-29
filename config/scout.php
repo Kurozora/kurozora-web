@@ -134,8 +134,8 @@ return [
         'key' => env('MEILISEARCH_KEY', null),
         'index-settings' => [
             \App\Models\Anime::TABLE_NAME => [
-                'sortableAttributes'=> ['air_day', 'air_season', 'air_time', 'duration', 'first_aired', 'is_nsfw', 'last_aired', 'original_title', 'title', 'created_at', 'update_at'],
-                'filterableAttributes'=> ['id', 'air_day', 'air_season', 'air_time', 'duration', 'first_aired', 'is_nsfw', 'last_aired', 'media_type_id', 'original_title', 'source_id', 'status_id', 'title', 'tv_rating_id', 'season_count', 'episode_count'],
+                'sortableAttributes'=> ['air_day', 'air_season', 'air_time', 'duration', 'started_at', 'is_nsfw', 'ended_at', 'original_title', 'title', 'created_at', 'update_at'],
+                'filterableAttributes'=> ['id', 'air_day', 'air_season', 'air_time', 'duration', 'started_at', 'is_nsfw', 'ended_at', 'media_type_id', 'original_title', 'source_id', 'status_id', 'title', 'tv_rating_id', 'season_count', 'episode_count'],
             ],
             \App\Models\AppTheme::TABLE_NAME => [
                 'sortableAttributes'=> ['download_count', 'name', 'version', 'created_at', 'update_at'],
@@ -146,8 +146,8 @@ return [
                 'filterableAttributes'=> ['id', 'age', 'astrological_sign', 'birth_day', 'birth_month', 'bust', 'height', 'hip', 'status', 'waist', 'weight'],
             ],
             \App\Models\Episode::TABLE_NAME => [
-                'sortableAttributes'=> ['duration', 'started_aired', 'ended_at', 'number', 'number_total', 'title', 'created_at', 'update_at'],
-                'filterableAttributes'=> ['id', 'duration', 'started_at', 'ended_at', 'is_filler', 'is_nsfw', 'is_special', 'is_premiere', 'is_finale', 'is_verified', 'number', 'number_total', 'season_id', 'tv_rating_id'],
+                'sortableAttributes'=> ['duration', 'number', 'number_total', 'title', 'started_at', 'ended_at', 'created_at', 'update_at'],
+                'filterableAttributes'=> ['id', 'duration', 'is_filler', 'is_nsfw', 'is_special', 'is_premiere', 'is_finale', 'is_verified', 'number', 'number_total', 'season_id', 'tv_rating_id', 'started_at', 'ended_at'],
             ],
             \App\Models\Manga::TABLE_NAME => [
                 'sortableAttributes'=> ['publication_day', 'publication_season', 'publication_time', 'duration', 'started_at', 'ended_at', 'is_nsfw', 'original_title', 'title', 'created_at', 'update_at'],

@@ -35,7 +35,7 @@ class EpisodeResource extends JsonResource
                 'title'         => $this->resource->title,
                 'synopsis'      => $this->resource->synopsis,
                 'duration'      => $this->resource->duration_string,
-                'stats'         => MediaStatsResource::make($this->resource->getMediaStat()),
+                'stats'         => MediaStatsResource::make($this->resource->getMediaStats()),
                 'videos'        => VideoResource::collection($this->resource->videos),
                 'isFiller'      => $this->resource->is_filler,
                 'isNsfw'        => $this->resource->is_nsfw,
@@ -43,8 +43,8 @@ class EpisodeResource extends JsonResource
                 'isFinale'      => $this->resource->is_finale,
                 'isSpecial'     => $this->resource->is_special,
                 'isVerified'    => $this->resource->is_verified,
-                'firstAired'    => $this->resource->started_at?->timestamp,
                 'startedAt'     => $this->resource->started_at?->timestamp,
+                'firstAired'    => $this->resource->started_at?->timestamp,
                 'endedAt'       => $this->resource->ended_at?->timestamp,
             ]
         ]);
