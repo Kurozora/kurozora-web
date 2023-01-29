@@ -79,7 +79,7 @@ class Genre extends KModel implements HasMedia, Sitemapable
      */
     function animes(): BelongsToMany
     {
-        return $this->belongsToMany(Anime::class, MediaGenre::TABLE_NAME, 'genre_id', 'model_id')
+        return $this->belongsToMany(Anime::class, MediaGenre::class, 'genre_id', 'model_id')
             ->where('model_type', Anime::class)
             ->withTimestamps();
     }
@@ -91,7 +91,7 @@ class Genre extends KModel implements HasMedia, Sitemapable
      */
     function mangas(): BelongsToMany
     {
-        return $this->belongsToMany(Manga::class, MediaGenre::TABLE_NAME, 'genre_id', 'model_id')
+        return $this->belongsToMany(Manga::class, MediaGenre::class, 'genre_id', 'model_id')
             ->where('model_type', Manga::class)
             ->withTimestamps();
     }

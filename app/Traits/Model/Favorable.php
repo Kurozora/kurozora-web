@@ -47,7 +47,7 @@ trait Favorable
      */
     public function favoriters(): BelongsToMany
     {
-        return $this->belongsToMany(User::class)
+        return $this->belongsToMany(User::class, UserFavorite::class, 'favorable_id', 'user_id')
             ->withTimestamps();
     }
 

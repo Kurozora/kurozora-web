@@ -79,7 +79,7 @@ class Theme extends KModel implements HasMedia, Sitemapable
      */
     function animes(): BelongsToMany
     {
-        return $this->belongsToMany(Anime::class, MediaTheme::TABLE_NAME, 'theme_id', 'model_id')
+        return $this->belongsToMany(Anime::class, MediaTheme::class, 'theme_id', 'model_id')
             ->where('model_type', Anime::class)
             ->withTimestamps();
     }
@@ -91,7 +91,7 @@ class Theme extends KModel implements HasMedia, Sitemapable
      */
     function mangas(): BelongsToMany
     {
-        return $this->belongsToMany(Manga::class, MediaTheme::TABLE_NAME, 'theme_id', 'model_id')
+        return $this->belongsToMany(Manga::class, MediaTheme::class, 'theme_id', 'model_id')
             ->where('model_type', Manga::class)
             ->withTimestamps();
     }

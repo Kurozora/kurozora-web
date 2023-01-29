@@ -46,7 +46,7 @@ trait HasMediaStaff
      */
     public function people(): BelongsToMany
     {
-        return $this->belongsToMany(Person::class, MediaStaff::TABLE_NAME, 'model_id')
+        return $this->belongsToMany(Person::class, MediaStaff::class, 'model_id')
             ->withTimestamps();
     }
 }

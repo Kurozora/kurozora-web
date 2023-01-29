@@ -46,6 +46,7 @@ trait HasMediaThemes
      */
     public function themes(): HasManyThrough
     {
-        return $this->hasManyThrough(Theme::class, MediaTheme::class, 'model_id', 'id', 'id', 'theme_id');
+        return $this->hasManyThrough(Theme::class, MediaTheme::class, 'model_id', 'id', 'id', 'theme_id')
+            ->where('model_type', '=', $this->getMorphClass());
     }
 }

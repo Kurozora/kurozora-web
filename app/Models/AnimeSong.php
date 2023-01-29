@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\SongType;
-//use App\Scopes\TvRatingScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,6 +17,16 @@ class AnimeSong extends KModel implements Sitemapable
     // Table name
     const TABLE_NAME = 'anime_songs';
     protected $table = self::TABLE_NAME;
+
+    /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = [
+        'anime',
+        'song',
+    ];
 
     /**
      * The anime relationship of anime song.

@@ -2,8 +2,8 @@
 
 namespace App\Traits\Model;
 
-use App\Models\MediaGenre;
 use App\Models\Genre;
+use App\Models\MediaGenre;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -46,6 +46,7 @@ trait HasMediaGenres
      */
     public function genres(): HasManyThrough
     {
-        return $this->hasManyThrough(Genre::class, MediaGenre::class, 'model_id', 'id', 'id', 'genre_id');
+        return $this->hasManyThrough(Genre::class, MediaGenre::class, 'model_id', 'id', 'id', 'genre_id')
+            ->where('model_type', '=', $this->getMorphClass());
     }
 }

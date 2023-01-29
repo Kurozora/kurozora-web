@@ -46,7 +46,7 @@ trait HasMediaStudios
      */
     public function studios(): BelongsToMany
     {
-        return $this->belongsToMany(Studio::class, MediaStudio::TABLE_NAME, 'model_id')
+        return $this->belongsToMany(Studio::class, MediaStudio::class, 'model_id')
             ->using(MediaStudio::class)
             ->withPivot('is_licensor', 'is_producer', 'is_studio', 'is_publisher')
             ->withTimestamps();

@@ -33,7 +33,7 @@ class Badge extends KModel implements HasMedia
      */
     function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, UserBadge::TABLE_NAME, 'badge_id', 'user_id')
+        return $this->belongsToMany(User::class, UserBadge::class, 'badge_id', 'user_id')
             ->withTimestamps();
     }
 }
