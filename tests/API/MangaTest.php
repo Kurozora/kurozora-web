@@ -19,7 +19,7 @@ class MangaTest extends TestCase
      */
      public function a_user_can_view_the_cast_of_a_manga(): void
      {
-        $response = $this->json('GET', 'v1/manga/' . $this->manga->id . '/cast');
+        $response = $this->getJson(route('api.manga.cast', $this->manga->id));
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
@@ -36,7 +36,7 @@ class MangaTest extends TestCase
      */
     public function a_user_can_view_the_related_manga_of_a_manga(): void
     {
-        $response = $this->json('GET', 'v1/manga/' . $this->manga->id . '/related-manga');
+        $response = $this->getJson(route('api.manga.related-mangas', $this->manga->id));
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
@@ -53,12 +53,12 @@ class MangaTest extends TestCase
      */
     public function an_authenticated_user_can_view_the_related_manga_of_a_manga_with_personal_information(): void
     {
-        $response = $this->auth()->json('GET', 'v1/manga/' . $this->manga->id . '/related-manga');
+        $response = $this->auth()->getJson(route('api.manga.related-mangas', $this->manga->id));
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();
 
         // Check whether the current_user array is not empty
-        $this->assertArrayHasKey('libraryStatus', $response->json()['data'][0]['book']['attributes']);
+        $this->assertArrayHasKey('libraryStatus', $response->json()['data'][0]['manga']['attributes']);
     }
 }

@@ -5,6 +5,7 @@ namespace Tests\API;
 use App\Enums\ImportBehavior;
 use App\Enums\ImportService;
 use App\Enums\UserLibraryStatus;
+use App\Enums\UserLibraryType;
 use App\Models\Anime;
 use App\Notifications\LibraryImportFinished;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -14,7 +15,7 @@ use Tests\TestCase;
 use Tests\Traits\ProvidesTestMultipleAnime;
 use Tests\Traits\ProvidesTestUser;
 
-class MALImportTest extends TestCase
+class LibraryImportTest extends TestCase
 {
     use DatabaseMigrations, ProvidesTestUser, ProvidesTestMultipleAnime;
 
@@ -205,7 +206,8 @@ class MALImportTest extends TestCase
         Notification::fake();
 
         // Request import
-        $response = $this->auth()->json('POST', 'v1/me/library/mal-import', [
+        $response = $this->auth()->json('POST', route('api.me.library.import'), [
+            'library'   => UserLibraryType::Anime,
             'service'   => ImportService::MAL,
             'file'      => $uploadFile,
             'behavior'  => ImportBehavior::Overwrite,
@@ -243,7 +245,8 @@ class MALImportTest extends TestCase
         Notification::fake();
 
         // Request import
-        $response = $this->auth()->json('POST', 'v1/me/library/mal-import', [
+        $response = $this->auth()->json('POST', route('api.me.library.import'), [
+            'library'   => UserLibraryType::Anime,
             'service'   => ImportService::MAL,
             'file'      => $uploadFile,
             'behavior'  => ImportBehavior::Merge,
