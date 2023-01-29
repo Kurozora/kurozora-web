@@ -23,7 +23,7 @@ class MangaCastResource extends JsonResource
      */
     public function toArray($request): array
     {
-        $resource = MangaResourceIdentity::make($this->resource)->toArray($request);
+        $resource = LiteratureResourceIdentity::make($this->resource)->toArray($request);
         $resource = array_merge($resource, [
             'attributes'    => [
                 'role'      => $this->resource->cast_role->only(['name', 'description'])

@@ -48,7 +48,7 @@ class AnimeFavoriteTest extends TestCase
         $this->user->favorite($this->anime);
 
         // Send request for the list of anime
-        $response = $this->auth()->getJson(route('api.me.favorite.index', [
+        $response = $this->auth()->getJson(route('api.me.favorites.index', [
             'library' => UserLibraryType::Anime,
         ]));
 
@@ -68,7 +68,7 @@ class AnimeFavoriteTest extends TestCase
     function user_can_add_an_anime_to_their_favorites(): void
     {
         // Send request for the list of anime
-        $response = $this->auth()->postJson(route('api.me.favorite.create', [
+        $response = $this->auth()->postJson(route('api.me.favorites.create', [
             'library' => UserLibraryType::Anime,
             'model_id' => $this->anime->getKey(),
         ]));
@@ -92,7 +92,7 @@ class AnimeFavoriteTest extends TestCase
         $this->user->favorite($this->anime);
 
         // Send request for the list of anime
-        $response = $this->auth()->postJson(route('api.me.favorite.create', [
+        $response = $this->auth()->postJson(route('api.me.favorites.create', [
             'library' => UserLibraryType::Anime,
             'model_id' => $this->anime->getKey(),
         ]));

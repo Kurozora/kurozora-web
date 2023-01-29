@@ -16,7 +16,7 @@ use App\Http\Resources\AccessTokenResource;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Http\Resources\FeedMessageResource;
 use App\Http\Resources\GameResourceBasic;
-use App\Http\Resources\MangaResourceBasic;
+use App\Http\Resources\LiteratureResourceBasic;
 use App\Http\Resources\SessionResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserResourceBasic;
@@ -196,7 +196,7 @@ class MeController extends Controller
 
         // Get data collection
         $data = match ((int) ($data['library'] ?? UserLibraryType::Anime)) {
-            UserLibraryType::Manga => MangaResourceBasic::collection($userFavorites),
+            UserLibraryType::Manga => LiteratureResourceBasic::collection($userFavorites),
             UserLibraryType::Game => GameResourceBasic::collection($userFavorites),
             default => AnimeResourceBasic::collection($userFavorites),
         };

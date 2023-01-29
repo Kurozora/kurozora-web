@@ -14,7 +14,7 @@ use App\Http\Requests\GetLibraryRequest;
 use App\Http\Requests\LibraryImportRequest;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Http\Resources\GameResourceBasic;
-use App\Http\Resources\MangaResourceBasic;
+use App\Http\Resources\LiteratureResourceBasic;
 use App\Jobs\ProcessMALImport;
 use App\Models\Anime;
 use App\Models\Game;
@@ -70,7 +70,7 @@ class LibraryController extends Controller
 
         // Get data collection
         $data = match ((int) ($data['library'] ?? UserLibraryType::Anime)) {
-            UserLibraryType::Manga => MangaResourceBasic::collection($model),
+            UserLibraryType::Manga => LiteratureResourceBasic::collection($model),
             UserLibraryType::Game => GameResourceBasic::collection($model),
             default => AnimeResourceBasic::collection($model),
         };

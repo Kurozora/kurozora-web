@@ -9,7 +9,7 @@ use App\Http\Requests\CreateUserFavoriteRequest;
 use App\Http\Requests\GetUserFavoritesRequest;
 use App\Http\Resources\AnimeResourceBasic;
 use App\Http\Resources\GameResourceBasic;
-use App\Http\Resources\MangaResourceBasic;
+use App\Http\Resources\LiteratureResourceBasic;
 use App\Models\Anime;
 use App\Models\Game;
 use App\Models\Manga;
@@ -45,7 +45,7 @@ class UserFavoriteController extends Controller
 
         // Get data collection
         $data = match ((int) ($data['library'] ?? UserLibraryType::Anime)) {
-            UserLibraryType::Manga => MangaResourceBasic::collection($userFavorites),
+            UserLibraryType::Manga => LiteratureResourceBasic::collection($userFavorites),
             UserLibraryType::Game => GameResourceBasic::collection($userFavorites),
             default => AnimeResourceBasic::collection($userFavorites),
         };

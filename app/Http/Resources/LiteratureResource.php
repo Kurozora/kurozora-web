@@ -6,7 +6,7 @@ use App\Models\Manga;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MangaResource extends JsonResource
+class LiteratureResource extends JsonResource
 {
     /**
      * The resource instance.
@@ -23,7 +23,7 @@ class MangaResource extends JsonResource
      */
     public function toArray($request): array
     {
-        $resource = MangaResourceBasic::make($this->resource)->toArray($request);
+        $resource = LiteratureResourceBasic::make($this->resource)->toArray($request);
 
         if ($request->input('include')) {
             $includes = array_unique(explode(',', $request->input('include')));

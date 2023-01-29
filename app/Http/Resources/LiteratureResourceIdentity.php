@@ -6,7 +6,7 @@ use App\Models\Manga;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MangaResourceIdentity extends JsonResource
+class LiteratureResourceIdentity extends JsonResource
 {
     /**
      * The resource instance.
@@ -25,7 +25,7 @@ class MangaResourceIdentity extends JsonResource
     {
         return [
             'id'    => $this->resource?->id ?? $this->resource,
-            'type'  => 'manga',
+            'type'  => 'literatures',
             'href'  => route('api.manga.view', $this->resource, false),
         ];
     }

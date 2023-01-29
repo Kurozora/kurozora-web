@@ -3,8 +3,8 @@
 use App\Http\Controllers\API\v1\MeController;
 use App\Http\Controllers\API\v1\UserFavoriteController;
 
-Route::prefix('/favorite')
-    ->name('.favorite')
+Route::prefix('/favorites')
+    ->name('.favorites')
     ->group(function () {
         Route::get('/', [MeController::class, 'getFavorites'])
             ->middleware('auth.kurozora')

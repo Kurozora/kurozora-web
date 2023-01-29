@@ -8,7 +8,7 @@ use App\Models\Manga;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MangaResourceBasic extends JsonResource
+class LiteratureResourceBasic extends JsonResource
 {
     /**
      * The resource instance.
@@ -25,7 +25,7 @@ class MangaResourceBasic extends JsonResource
      */
     public function toArray($request): array
     {
-        $resource = MangaResourceIdentity::make($this->resource)->toArray($request);
+        $resource = LiteratureResourceIdentity::make($this->resource)->toArray($request);
         $studio = $this->resource->studios();
         $studio = $studio->firstWhere('is_publisher', '=', true) ?? $studio->first();
         $resource = array_merge($resource, [

@@ -21,7 +21,7 @@ Route::prefix('/me')
             ->name('.following');
 
         require 'Me/Access-Tokens.php';
-        require 'Me/Favorite-Anime.php';
+        require 'Me/Favorites.php';
         require 'Me/Feed-Messages.php';
         require 'Me/Library.php';
         require 'Me/Notifications.php';

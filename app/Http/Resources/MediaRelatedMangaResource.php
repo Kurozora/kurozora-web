@@ -24,7 +24,7 @@ class MediaRelatedMangaResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'manga'         => MangaResourceBasic::make($this->resource->related),
+            'manga'         => LiteratureResourceBasic::make($this->resource->related),
             'attributes'    => [
                 'relation'  => $this->resource->relation->only(['name', 'description']),
             ],

@@ -8,19 +8,19 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\GetMangaCastRequest;
 use App\Http\Requests\GetMangaCharactersRequest;
 use App\Http\Requests\GetMangaMoreByStudioRequest;
+use App\Http\Requests\GetMangaStudiosRequest;
 use App\Http\Requests\GetMediaRelatedMangasRequest;
 use App\Http\Requests\GetMediaRelatedShowsRequest;
 use App\Http\Requests\GetMediaStaffRequest;
-use App\Http\Requests\GetMangaStudiosRequest;
 use App\Http\Requests\GetUpcomingMangaRequest;
 use App\Http\Requests\RateMangaRequest;
+use App\Http\Resources\CharacterResourceIdentity;
+use App\Http\Resources\LiteratureResource;
+use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\MangaCastResourceIdentity;
 use App\Http\Resources\MediaRelatedMangaResource;
 use App\Http\Resources\MediaRelatedShowResource;
-use App\Http\Resources\MangaResource;
-use App\Http\Resources\MangaResourceIdentity;
 use App\Http\Resources\MediaStaffResource;
-use App\Http\Resources\CharacterResourceIdentity;
 use App\Http\Resources\StudioResource;
 use App\Models\Manga;
 use App\Models\MediaRating;
@@ -44,7 +44,7 @@ class MangaController extends Controller
 
         // Show the Manga details response
         return JSONResult::success([
-            'data' => MangaResource::collection([$manga])
+            'data' => LiteratureResource::collection([$manga])
         ]);
     }
 
@@ -209,7 +209,7 @@ class MangaController extends Controller
         $nextPageURL = str_replace($request->root(), '', $studioMangas->nextPageUrl());
 
         return JSONResult::success([
-            'data' => MangaResourceIdentity::collection($studioMangas),
+            'data' => LiteratureResourceIdentity::collection($studioMangas),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
@@ -288,7 +288,7 @@ class MangaController extends Controller
         $nextPageURL = str_replace($request->root(), '', $manga->nextPageUrl());
 
         return JSONResult::success([
-            'data' => MangaResourceIdentity::collection($manga),
+            'data' => LiteratureResourceIdentity::collection($manga),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

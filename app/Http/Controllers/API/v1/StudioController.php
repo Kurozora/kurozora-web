@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\GetStudioAnimeRequest;
 use App\Http\Requests\GetStudioMangaRequest;
 use App\Http\Resources\AnimeResourceIdentity;
-use App\Http\Resources\MangaResourceIdentity;
+use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\StudioResource;
 use App\Models\Studio;
 use Illuminate\Http\JsonResponse;
@@ -73,7 +73,7 @@ class StudioController extends Controller
         $nextPageURL = str_replace($request->root(), '', $manga->nextPageUrl());
 
         return JSONResult::success([
-            'data' => MangaResourceIdentity::collection($manga),
+            'data' => LiteratureResourceIdentity::collection($manga),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

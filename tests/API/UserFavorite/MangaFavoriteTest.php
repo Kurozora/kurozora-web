@@ -48,7 +48,7 @@ class MangaFavoriteTest extends TestCase
         $this->user->favorite($this->manga);
 
         // Send request for the list of manga
-        $response = $this->auth()->getJson(route('api.me.favorite.index', [
+        $response = $this->auth()->getJson(route('api.me.favorites.index', [
             'library' => UserLibraryType::Manga,
         ]));
 
@@ -68,7 +68,7 @@ class MangaFavoriteTest extends TestCase
     function user_can_add_a_manga_to_their_favorites(): void
     {
         // Send request for the list of manga
-        $response = $this->auth()->postJson(route('api.me.favorite.create', [
+        $response = $this->auth()->postJson(route('api.me.favorites.create', [
             'library' => UserLibraryType::Manga,
             'model_id' => $this->manga->getKey(),
         ]));
@@ -92,7 +92,7 @@ class MangaFavoriteTest extends TestCase
         $this->user->favorite($this->manga);
 
         // Send request for the list of manga
-        $response = $this->auth()->postJson(route('api.me.favorite.create', [
+        $response = $this->auth()->postJson(route('api.me.favorites.create', [
             'library' => UserLibraryType::Manga,
             'model_id' => $this->manga->getKey(),
         ]));
