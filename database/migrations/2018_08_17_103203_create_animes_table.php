@@ -58,6 +58,14 @@ return new class extends Migration
         });
 
         Schema::table(Anime::TABLE_NAME, function (Blueprint $table) {
+            // Set index key constraints
+            $table->index('is_nsfw');
+            $table->index('started_at');
+            $table->index('ended_at');
+            $table->index('created_at');
+            $table->index('updated_at');
+            $table->index('deleted_at');
+
             // Set unique key constraints
             $table->unique(['slug']);
 

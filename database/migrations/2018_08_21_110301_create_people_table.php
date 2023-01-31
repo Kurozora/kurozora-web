@@ -24,16 +24,20 @@ return new class extends Migration
             $table->string('given_name')->nullable();
             $table->json('alternative_names')->nullable();
             $table->text('about')->nullable();
-            $table->date('birthdate')->nullable();
-            $table->date('deceased_date')->nullable();
             $table->unsignedTinyInteger('astrological_sign')->nullable();
             $table->json('website_urls')->nullable();
             $table->integer('view_count')->default(0);
+            $table->date('birthdate')->nullable();
+            $table->date('deceased_date')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
 
         Schema::table(Person::TABLE_NAME, function (Blueprint $table) {
+            // Set index key constraints
+            $table->index('birthdate');
+            $table->index('deleted_at');
+
             // Set unique key constraints
             $table->unique(['slug']);
         });

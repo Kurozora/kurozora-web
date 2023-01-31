@@ -39,6 +39,11 @@ return new class extends Migration
         });
 
         Schema::table(Character::TABLE_NAME, function (Blueprint $table) {
+            // Set index key constraints
+            $table->index('birth_day');
+            $table->index('birth_month');
+            $table->index('deleted_at');
+
             // Set unique key constraints
             $table->unique(['slug']);
         });

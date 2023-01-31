@@ -16,8 +16,7 @@ return new class extends Migration
     {
         Schema::create(MediaStat::TABLE_NAME, function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('model_id');
-            $table->string('model_type');
+            $table->uuidMorphs('model');
             $table->unsignedBigInteger('model_count')->default(0);
             $table->unsignedBigInteger('planning_count')->default(0);
             $table->unsignedBigInteger('in_progress_count')->default(0);
@@ -41,6 +40,9 @@ return new class extends Migration
         });
 
         Schema::table(MediaStat::TABLE_NAME, function (Blueprint $table) {
+            // Set index key constraints
+            $table->index('deleted_at');
+
             // Set unique key constraints
             $table->unique(['model_id', 'model_type']);
         });

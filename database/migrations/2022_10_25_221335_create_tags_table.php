@@ -21,6 +21,14 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        Schema::table(Tag::TABLE_NAME, function (Blueprint $table) {
+            // Set index key constraints
+            $table->index('deleted_at');
+
+            // Set unique key constraints
+            $table->unique(['name']);
+        });
     }
 
     /**

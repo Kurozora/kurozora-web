@@ -31,6 +31,10 @@ return new class extends Migration
         });
 
         Schema::table(Video::TABLE_NAME, function (Blueprint $table) {
+            // Set index key constraints
+            $table->index('order');
+            $table->index('deleted_at');
+
             // Set unique key constraints
             $table->unique(['videoable_type', 'videoable_id', 'source', 'code']);
 

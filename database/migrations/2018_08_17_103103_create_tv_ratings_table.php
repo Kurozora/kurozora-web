@@ -22,6 +22,12 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        Schema::table(TvRating::TABLE_NAME, function (Blueprint $table) {
+            // Set index key constraints
+            $table->index('weight');
+            $table->index('deleted_at');
+        });
     }
 
     /**

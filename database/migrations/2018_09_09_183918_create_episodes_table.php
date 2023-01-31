@@ -40,6 +40,17 @@ return new class extends Migration
         });
 
         Schema::table(Episode::TABLE_NAME, function (Blueprint $table) {
+            // Set index key constraints
+            $table->index('is_filler');
+            $table->index('is_nsfw');
+            $table->index('is_premiere');
+            $table->index('is_finale');
+            $table->index('started_at');
+            $table->index('ended_at');
+            $table->index('created_at');
+            $table->index('updated_at');
+            $table->index('deleted_at');
+
             // Set unique key constraints
             $table->unique(['season_id', 'number']);
 

@@ -28,7 +28,7 @@ return new class extends Migration
 
         Schema::table(EpisodeTranslation::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
-            $table->index(['locale']);
+            $table->index('deleted_at');
 
             // Set unique key constraints
             $table->unique(['episode_id', 'locale']);

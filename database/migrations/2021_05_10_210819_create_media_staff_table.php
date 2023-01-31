@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Anime;
 use App\Models\MediaStaff;
 use App\Models\Person;
 use App\Models\StaffRole;
@@ -27,6 +26,9 @@ return new class extends Migration
         });
 
         Schema::table(MediaStaff::TABLE_NAME, function (Blueprint $table) {
+            // Set index key constraints
+            $table->index('deleted_at');
+
             // Set unique key constraints
             $table->unique(['model_type', 'model_id', 'person_id', 'staff_role_id']);
 

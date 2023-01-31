@@ -29,6 +29,12 @@ return new class extends Migration
         });
 
         Schema::table(ExploreCategory::TABLE_NAME, function (Blueprint $table) {
+            // Set index key constraints
+            $table->index('position');
+            $table->index('is_enabled');
+            $table->index('is_enabled');
+            $table->index('deleted_at');
+
             // Set unique key constraints
             $table->unique(['slug']);
         });

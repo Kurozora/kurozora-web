@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\Manga;
-use App\Models\MangaCast;
 use App\Models\CastRole;
 use App\Models\Character;
+use App\Models\Manga;
+use App\Models\MangaCast;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -27,6 +27,9 @@ return new class extends Migration
         });
 
         Schema::table(MangaCast::TABLE_NAME, function(Blueprint $table) {
+            // Set index key constraints
+            $table->index('deleted_at');
+
             // Set unique key constraints
             $table->unique(['character_id', 'manga_id', 'cast_role_id'], 'manga_cast_character_manga_role_unique');
 

@@ -18,13 +18,15 @@ return new class extends Migration
         Schema::create(ExploreCategoryItem::TABLE_NAME, function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('explore_category_id');
-            $table->unsignedBigInteger('model_id');
-            $table->string('model_type');
+            $table->uuidMorphs('model');
             $table->timestamps();
             $table->softDeletes();
         });
 
         Schema::table(ExploreCategoryItem::TABLE_NAME, function (Blueprint $table) {
+            // Set index key constraints
+            $table->index('deleted_at');
+
             // Set foreign key constraints
             $table->foreign('explore_category_id')
                 ->references('id')
