@@ -678,30 +678,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Eloquent builder scope that limits the query to the given genre.
-     *
-     * @param Builder $query
-     * @param Genre $genre
-     * @return Builder
-     */
-    public function scopeWhereGenre(Builder $query, Genre $genre): Builder
-    {
-        return $query->whereRelation('genres', 'genre_id', '=', $genre->id);
-    }
-
-    /**
-     * Eloquent builder scope that limits the query to the given theme.
-     *
-     * @param Builder $query
-     * @param Theme $theme
-     * @return Builder
-     */
-    public function scopeWhereTheme(Builder $query, Theme $theme): Builder
-    {
-        return $query->whereRelation('themes', 'theme_id', '=', $theme->id);
-    }
-
-    /**
      * Eloquent builder scope that limits the query to upcoming shows.
      *
      * @param Builder $query

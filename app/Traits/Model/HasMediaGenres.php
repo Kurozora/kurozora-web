@@ -4,6 +4,7 @@ namespace App\Traits\Model;
 
 use App\Models\Genre;
 use App\Models\MediaGenre;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -47,6 +48,25 @@ trait HasMediaGenres
     public function genres(): HasManyThrough
     {
         return $this->hasManyThrough(Genre::class, MediaGenre::class, 'model_id', 'id', 'id', 'genre_id')
+//            ->where('model_id', '=', $this->getKey())
             ->where('model_type', '=', $this->getMorphClass());
+    }
+
+    /**
+     * Eloquent builder scope that limits the query to the given genre.
+     *
+     * @param Builder $query
+     * @param int|Genre $genre
+     * @return Builder
+     */
+    public function scopeWhereGenre(Builder $query, int|Genre $genre): Builder
+    {
+        if (is_numeric($genre)) {
+            $genreID = $genre;
+        } else {
+            $genreID = $genre->id;
+        }
+
+        return $query->whereRelation('genres', 'genre_id', '=', $genreID);
     }
 }

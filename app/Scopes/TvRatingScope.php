@@ -14,7 +14,7 @@ class TvRatingScope implements Scope
      *
      * @var string[]
      */
-    protected array $extensions = ['WithoutTvRatings'];
+    protected array $extensions = ['WithTvRatings', 'WithoutTvRatings'];
 
     /**
      * @inheritDoc
@@ -49,7 +49,39 @@ class TvRatingScope implements Scope
     }
 
     /**
-     * Add the with-trashed extension to the builder.
+     * Get the "tv rating" column for the builder.
+     *
+     * @param Builder $builder
+     * @return string
+     */
+    protected function getTvRatingColumn(Builder $builder): string
+    {
+        if (count($builder->getQuery()->joins) > 0) {
+            return $builder->getModel()->getQualifiedTvRatingColumn();
+        }
+
+        return $builder->getModel()->getTvRatingColumn();
+    }
+
+    /**
+     * Add the with-tv-ratings extension to the builder.
+     *
+     * @param Builder $builder
+     * @return void
+     */
+    protected function addWithTvRatings(Builder $builder): void
+    {
+        $builder->macro('withTvRatings', function (Builder $builder, $withTvRatings = true) {
+            if (!$withTvRatings) {
+                return $builder->withoutTvRatings();
+            }
+
+            return $builder->withoutGlobalScope($this);
+        });
+    }
+
+    /**
+     * Add the without-tv-ratings extension to the builder.
      *
      * @param Builder $builder
      * @return void

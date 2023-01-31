@@ -6,6 +6,7 @@ use App\Scopes\TvRatingScope;
 use Illuminate\Database\Query\Builder;
 
 /**
+ * @method static \Illuminate\Database\Eloquent\Builder|Builder withTvRatings(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder|Builder withoutTvRatings()
  */
 trait TvRated
