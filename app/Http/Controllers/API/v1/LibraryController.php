@@ -4,8 +4,8 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Enums\ImportBehavior;
 use App\Enums\ImportService;
+use App\Enums\UserLibraryKind;
 use App\Enums\UserLibraryStatus;
-use App\Enums\UserLibraryType;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddToLibraryRequest;
@@ -53,9 +53,9 @@ class LibraryController extends Controller
         }
 
         // Get morph class
-        $morphClass = match ((int) ($data['library'] ?? UserLibraryType::Anime)) {
-            UserLibraryType::Manga => Manga::class,
-            UserLibraryType::Game => Game::class,
+        $morphClass = match ((int) ($data['library'] ?? UserLibraryKind::Anime)) {
+            UserLibraryKind::Manga => Manga::class,
+            UserLibraryKind::Game => Game::class,
             default => Anime::class,
         };
 
@@ -69,10 +69,10 @@ class LibraryController extends Controller
         $nextPageURL = str_replace($request->root(), '', $model->nextPageUrl());
 
         // Get data collection
-        $data = match ((int) ($data['library'] ?? UserLibraryType::Anime)) {
-            UserLibraryType::Manga => LiteratureResourceBasic::collection($model),
-            UserLibraryType::Game => GameResourceBasic::collection($model),
-            default => AnimeResourceBasic::collection($model),
+        $data = match ((int) ($data['library'] ?? UserLibraryKind::Anime)) {
+            UserLibraryKind::Manga => ['literatures' => LiteratureResourceBasic::collection($model)],
+            UserLibraryKind::Game => ['games' => GameResourceBasic::collection($model)],
+            default => ['shows' => AnimeResourceBasic::collection($model)],
         };
 
         return JSONResult::success([
@@ -109,10 +109,10 @@ class LibraryController extends Controller
             $model = Anime::findOrFail($modelID);
         } else {
             $modelID = $data['model_id'];
-            $libraryType = UserLibraryType::fromValue((int) $data['library']);
-            $model = match ($libraryType->value) {
-                UserLibraryType::Manga  => Manga::findOrFail($modelID),
-                UserLibraryType::Game   => Game::findOrFail($modelID),
+            $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
+            $model = match ($libraryKind->value) {
+                UserLibraryKind::Manga  => Manga::findOrFail($modelID),
+                UserLibraryKind::Game   => Game::findOrFail($modelID),
                 default                 => Anime::findOrFail($modelID),
             };
         }
@@ -163,10 +163,10 @@ class LibraryController extends Controller
             $model = Anime::findOrFail($modelID);
         } else {
             $modelID = $data['model_id'];
-            $libraryType = UserLibraryType::fromValue((int) $data['library']);
-            $model = match ($libraryType->value) {
-                UserLibraryType::Manga  => Manga::findOrFail($modelID),
-                UserLibraryType::Game   => Game::findOrFail($modelID),
+            $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
+            $model = match ($libraryKind->value) {
+                UserLibraryKind::Manga  => Manga::findOrFail($modelID),
+                UserLibraryKind::Game   => Game::findOrFail($modelID),
                 default                 => Anime::findOrFail($modelID),
             };
         }
@@ -187,8 +187,8 @@ class LibraryController extends Controller
         $user->unfavorite($model);
 
         // Remove from reminders as you can't be reminded and not have the anime in library
-        match ($libraryType?->value ?? UserLibraryType::Anime) {
-            UserLibraryType::Anime  => $user->reminderAnime()->detach($modelID),
+        match ($libraryKind?->value ?? UserLibraryKind::Anime) {
+            UserLibraryKind::Anime  => $user->reminderAnime()->detach($modelID),
             default => null
         };
 
@@ -214,23 +214,23 @@ class LibraryController extends Controller
         $data = $request->validated();
 
         // Get the library to import to
-        $libraryType = UserLibraryType::fromValue((int) $data['library']);
+        $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
 
         // Get the authenticated user
         $user = auth()->user();
 
         // Get whether user is in import cooldown period
-        $isInImportCooldown = match ($libraryType->value) {
-            UserLibraryType::Manga => !$user->canDoMangaImport(),
+        $isInImportCooldown = match ($libraryKind->value) {
+            UserLibraryKind::Manga => !$user->canDoMangaImport(),
             default => !$user->canDoAnimeImport()
         };
 
         if ($isInImportCooldown) {
             $cooldownDays = config('import.cooldown_in_days');
 
-            throw match ($libraryType) {
-                UserLibraryType::Manga => new TooManyRequestsHttpException($cooldownDays * 24 * 60 * 60, __('You can only perform a manga import every :x day(s).', ['x' => $cooldownDays])),
-                UserLibraryType::Game => new TooManyRequestsHttpException($cooldownDays * 24 * 60 * 60, __('You can only perform a game import every :x day(s).', ['x' => $cooldownDays])),
+            throw match ($libraryKind->value) {
+                UserLibraryKind::Manga => new TooManyRequestsHttpException($cooldownDays * 24 * 60 * 60, __('You can only perform a manga import every :x day(s).', ['x' => $cooldownDays])),
+                UserLibraryKind::Game => new TooManyRequestsHttpException($cooldownDays * 24 * 60 * 60, __('You can only perform a game import every :x day(s).', ['x' => $cooldownDays])),
                 default => new TooManyRequestsHttpException($cooldownDays * 24 * 60 * 60, __('You can only perform an anime import every :x day(s).', ['x' => $cooldownDays])),
             };
         }
@@ -248,15 +248,15 @@ class LibraryController extends Controller
         switch ($importService->value) {
             case ImportService::MAL:
             case ImportService::Kitsu:
-                dispatch(new ProcessMALImport($user, $xmlContent, $libraryType, $importService, $importBehavior));
+                dispatch(new ProcessMALImport($user, $xmlContent, $libraryKind, $importService, $importBehavior));
                 break;
             default:
                 break;
         }
 
         // Update last library import date for user
-        $lastImportDateKey = match ($libraryType->value) {
-            UserLibraryType::Manga => 'last_manga_import_at',
+        $lastImportDateKey = match ($libraryKind->value) {
+            UserLibraryKind::Manga => 'last_manga_import_at',
             default => 'last_anime_import_at',
         };
 

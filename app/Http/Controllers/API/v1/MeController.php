@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Enums\MediaCollection;
-use App\Enums\UserLibraryType;
+use App\Enums\UserLibraryKind;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetAccessTokensRequest;
@@ -181,9 +181,9 @@ class MeController extends Controller
         $user = auth()->user();
 
         // Get morph class
-        $morphClass = match ((int) ($data['library'] ?? UserLibraryType::Anime)) {
-            UserLibraryType::Manga => Manga::class,
-            UserLibraryType::Game => Game::class,
+        $morphClass = match ((int) ($data['library'] ?? UserLibraryKind::Anime)) {
+            UserLibraryKind::Manga => Manga::class,
+            UserLibraryKind::Game => Game::class,
             default => Anime::class,
         };
 
@@ -195,9 +195,9 @@ class MeController extends Controller
         $nextPageURL = str_replace($request->root(), '', $userFavorites->nextPageUrl());
 
         // Get data collection
-        $data = match ((int) ($data['library'] ?? UserLibraryType::Anime)) {
-            UserLibraryType::Manga => LiteratureResourceBasic::collection($userFavorites),
-            UserLibraryType::Game => GameResourceBasic::collection($userFavorites),
+        $data = match ((int) ($data['library'] ?? UserLibraryKind::Anime)) {
+            UserLibraryKind::Manga => LiteratureResourceBasic::collection($userFavorites),
+            UserLibraryKind::Game => GameResourceBasic::collection($userFavorites),
             default => AnimeResourceBasic::collection($userFavorites),
         };
 

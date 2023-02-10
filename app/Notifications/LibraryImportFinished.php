@@ -4,7 +4,7 @@ namespace App\Notifications;
 
 use App\Enums\ImportBehavior;
 use App\Enums\ImportService;
-use App\Enums\UserLibraryType;
+use App\Enums\UserLibraryKind;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -26,9 +26,9 @@ class LibraryImportFinished extends Notification implements ShouldQueue
     /**
      * The library used when importing.
      *
-     * @var UserLibraryType $libraryType
+     * @var UserLibraryKind $libraryKind
      */
-    private UserLibraryType $libraryType;
+    private UserLibraryKind $libraryKind;
 
     /**
      * The service used when importing.
@@ -48,14 +48,14 @@ class LibraryImportFinished extends Notification implements ShouldQueue
      * Create a new notification instance.
      *
      * @param array $results
-     * @param UserLibraryType $libraryType
+     * @param UserLibraryKind $libraryKind
      * @param ImportService $service
      * @param ImportBehavior $behavior
      */
-    public function __construct(array $results, UserLibraryType $libraryType, ImportService $service, ImportBehavior $behavior)
+    public function __construct(array $results, UserLibraryKind $libraryKind, ImportService $service, ImportBehavior $behavior)
     {
         $this->results = $results;
-        $this->libraryType = $libraryType;
+        $this->libraryKind = $libraryKind;
         $this->service = $service;
         $this->behavior = $behavior;
     }
@@ -82,7 +82,7 @@ class LibraryImportFinished extends Notification implements ShouldQueue
         return [
             'successful_count'  => count($this->results['successful']),
             'failure_count'     => count($this->results['failure']),
-            'library'           => $this->libraryType->description,
+            'library'           => $this->libraryKind->description,
             'behavior'          => $this->behavior->description,
             'service'           => $this->service->description,
         ];
@@ -96,7 +96,7 @@ class LibraryImportFinished extends Notification implements ShouldQueue
      */
     public function toApn(User $notifiable): ApnMessage
     {
-        $libraryName = $this->libraryType->description;
+        $libraryName = $this->libraryKind->description;
         $serviceName = $this->service->description;
 
         return ApnMessage::create()

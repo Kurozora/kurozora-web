@@ -2,7 +2,7 @@
 
 namespace Tests\API\UserFavorite;
 
-use App\Enums\UserLibraryType;
+use App\Enums\UserLibraryKind;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 use Tests\Traits\ProvidesTestManga;
@@ -26,7 +26,7 @@ class MangaFavoriteTest extends TestCase
         // Send request for the list of manga
         $response = $this->auth()->getJson(route('api.users.favorites', [
             'user' => $this->user->getKey(),
-            'library' => UserLibraryType::Manga,
+            'library' => UserLibraryKind::Manga,
         ]));
 
         // Check whether the request was successful
@@ -49,7 +49,7 @@ class MangaFavoriteTest extends TestCase
 
         // Send request for the list of manga
         $response = $this->auth()->getJson(route('api.me.favorites.index', [
-            'library' => UserLibraryType::Manga,
+            'library' => UserLibraryKind::Manga,
         ]));
 
         // Check whether the request was successful
@@ -69,7 +69,7 @@ class MangaFavoriteTest extends TestCase
     {
         // Send request for the list of manga
         $response = $this->auth()->postJson(route('api.me.favorites.create', [
-            'library' => UserLibraryType::Manga,
+            'library' => UserLibraryKind::Manga,
             'model_id' => $this->manga->getKey(),
         ]));
 
@@ -93,7 +93,7 @@ class MangaFavoriteTest extends TestCase
 
         // Send request for the list of manga
         $response = $this->auth()->postJson(route('api.me.favorites.create', [
-            'library' => UserLibraryType::Manga,
+            'library' => UserLibraryKind::Manga,
             'model_id' => $this->manga->getKey(),
         ]));
 

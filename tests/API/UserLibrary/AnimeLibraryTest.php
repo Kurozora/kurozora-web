@@ -4,8 +4,8 @@ namespace Tests\API\UserLibrary;
 
 use App\Enums\SearchScope;
 use App\Enums\SearchType;
+use App\Enums\UserLibraryKind;
 use App\Enums\UserLibraryStatus;
-use App\Enums\UserLibraryType;
 use App\Models\Anime;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -31,7 +31,7 @@ class AnimeLibraryTest extends TestCase
 
         // Send the request
         $response = $this->auth()->getJson(route('api.me.library', [
-            'library' => UserLibraryType::Anime,
+            'library' => UserLibraryKind::Anime,
             'status' => UserLibraryStatus::InProgress,
         ]));
 
@@ -55,7 +55,7 @@ class AnimeLibraryTest extends TestCase
 
         // Send the request
         $response = $this->auth()->getJson(route('api.me.library', [
-            'library' => UserLibraryType::Anime,
+            'library' => UserLibraryKind::Anime,
             'status' => UserLibraryStatus::Dropped,
         ]));
 
@@ -79,7 +79,7 @@ class AnimeLibraryTest extends TestCase
 
         // Send the request
         $response = $this->auth()->getJson(route('api.me.library', [
-            'library' => UserLibraryType::Anime,
+            'library' => UserLibraryKind::Anime,
             'status' => UserLibraryStatus::Planning,
         ]));
 
@@ -103,7 +103,7 @@ class AnimeLibraryTest extends TestCase
 
         // Send the request
         $response = $this->auth()->getJson(route('api.me.library', [
-            'library' => UserLibraryType::Anime,
+            'library' => UserLibraryKind::Anime,
             'status' => UserLibraryStatus::Completed,
         ]));
 
@@ -127,7 +127,7 @@ class AnimeLibraryTest extends TestCase
 
         // Send the request
         $response = $this->auth()->getJson(route('api.me.library', [
-            'library' => UserLibraryType::Anime,
+            'library' => UserLibraryKind::Anime,
             'status' => UserLibraryStatus::OnHold,
         ]));
 
@@ -148,7 +148,7 @@ class AnimeLibraryTest extends TestCase
     {
         // Send the request
         $response = $this->auth()->getJson(route('api.me.library', [
-            'library' => UserLibraryType::Anime,
+            'library' => UserLibraryKind::Anime,
             'status' => 'Invalid Status'
         ]));
 
@@ -306,7 +306,7 @@ class AnimeLibraryTest extends TestCase
 
         // Send the request
         $response = $this->auth()->postJson(route('api.me.library.delete', [
-            'library' => UserLibraryType::Anime,
+            'library' => UserLibraryKind::Anime,
             'model_id' => $this->anime->getKey(),
         ]));
 
@@ -357,7 +357,7 @@ class AnimeLibraryTest extends TestCase
     private function addModelToLibraryAPIRequest(Model $model, ?UserLibraryStatus $status): TestResponse
     {
         return $this->auth()->postJson(route('api.me.library', [
-            'library'   => UserLibraryType::Anime,
+            'library'   => UserLibraryKind::Anime,
             'model_id'  => $model->getKey(),
             'status'    => $status?->key ?? 'Invalid status'
         ]));

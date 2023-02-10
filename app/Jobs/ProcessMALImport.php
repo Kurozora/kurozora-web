@@ -4,8 +4,8 @@ namespace App\Jobs;
 
 use App\Enums\ImportBehavior;
 use App\Enums\ImportService;
+use App\Enums\UserLibraryKind;
 use App\Enums\UserLibraryStatus;
-use App\Enums\UserLibraryType;
 use App\Models\Anime;
 use App\Models\Manga;
 use App\Models\MediaRating;
@@ -47,9 +47,9 @@ class ProcessMALImport implements ShouldQueue
     /**
      * The library of the import action.
      *
-     * @var UserLibraryType $libraryType
+     * @var UserLibraryKind $libraryKind
      */
-    protected UserLibraryType $libraryType;
+    protected UserLibraryKind $libraryKind;
 
     /**
      * The service of the import action.
@@ -80,15 +80,15 @@ class ProcessMALImport implements ShouldQueue
      *
      * @param User $user
      * @param string $xmlContent
-     * @param UserLibraryType $libraryType
+     * @param UserLibraryKind $libraryKind
      * @param ImportService $service
      * @param ImportBehavior $behavior
      */
-    public function __construct(User $user, string $xmlContent, UserLibraryType $libraryType, ImportService $service, ImportBehavior $behavior)
+    public function __construct(User $user, string $xmlContent, UserLibraryKind $libraryKind, ImportService $service, ImportBehavior $behavior)
     {
         $this->user = $user;
         $this->xmlContent = $xmlContent;
-        $this->libraryType = $libraryType;
+        $this->libraryKind = $libraryKind;
         $this->service = $service;
         $this->behavior = $behavior;
     }
@@ -98,17 +98,17 @@ class ProcessMALImport implements ShouldQueue
      */
     public function handle()
     {
-        switch ($this->libraryType->value) {
-            case UserLibraryType::Anime:
+        switch ($this->libraryKind->value) {
+            case UserLibraryKind::Anime:
                 $this->handleAnime();
                 break;
-            case UserLibraryType::Manga:
+            case UserLibraryKind::Manga:
                 $this->handleManga();
                 break;
         }
 
         // Notify the user that the import has finished
-        $this->user->notify(new LibraryImportFinished($this->results, $this->libraryType, $this->service, $this->behavior));
+        $this->user->notify(new LibraryImportFinished($this->results, $this->libraryKind, $this->service, $this->behavior));
     }
 
     /**
@@ -187,8 +187,8 @@ class ProcessMALImport implements ShouldQueue
     protected function importModel(int $malID, string $malStatus, int $malRating, string $malStartDate, string $malEndDate)
     {
         // Try to find the Anime in our DB
-        $model = match ($this->libraryType->value) {
-            UserLibraryType::Manga => Manga::withoutGlobalScopes()
+        $model = match ($this->libraryKind->value) {
+            UserLibraryKind::Manga => Manga::withoutGlobalScopes()
                 ->firstWhere('mal_id', $malID),
             default => Anime::withoutGlobalScopes()
                 ->firstWhere('mal_id', $malID)
@@ -249,7 +249,7 @@ class ProcessMALImport implements ShouldQueue
 
             $this->registerSuccess($model->id, $malID, $status, $rating);
         } else {
-            logger($this->libraryType->description . ' mal_id: ' . $malID . ' not exist');
+            logger($this->libraryKind->description . ' mal_id: ' . $malID . ' not exist');
             $this->registerFailure($malID, 'MAL ID could not be found.');
         }
     }
@@ -319,7 +319,7 @@ class ProcessMALImport implements ShouldQueue
     protected function registerSuccess(mixed $modelID, int $malID, string $status, int $rating)
     {
         $this->results['successful'][] = [
-            'library'   => $this->libraryType->description,
+            'library'   => $this->libraryKind->description,
             'model_id'  => $modelID,
             'mal_id'    => $malID,
             'status'    => $status,
@@ -336,7 +336,7 @@ class ProcessMALImport implements ShouldQueue
     protected function registerFailure(int $malID, string $reason)
     {
         $this->results['failure'][] = [
-            'library'   => $this->libraryType->description,
+            'library'   => $this->libraryKind->description,
             'mal_id'    => $malID,
             'reason'    => $reason
         ];

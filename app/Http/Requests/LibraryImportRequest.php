@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\ImportBehavior;
 use App\Enums\ImportService;
-use App\Enums\UserLibraryType;
+use App\Enums\UserLibraryKind;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LibraryImportRequest extends FormRequest
@@ -27,7 +27,7 @@ class LibraryImportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'library'   => ['bail', 'required', 'integer', 'in:' . implode(',', UserLibraryType::getValues())],
+            'library'   => ['bail', 'required', 'integer', 'in:' . implode(',', UserLibraryKind::getValues())],
             'service'   => ['bail', 'required', 'integer', 'in:' . implode(',', ImportService::getValues())],
             'behavior'  => ['bail', 'required', 'integer', 'in:' . implode(',', ImportBehavior::getValues())],
             'file'      => ['bail', 'required', 'file', 'mimes:xml', 'max:' . config('import.max_xml_file_size')],

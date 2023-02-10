@@ -2,8 +2,8 @@
 
 namespace Tests\API;
 
+use App\Enums\UserLibraryKind;
 use App\Enums\UserLibraryStatus;
-use App\Enums\UserLibraryType;
 use App\Models\Anime;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
@@ -28,7 +28,7 @@ class FavoriteAnimeTest extends TestCase
         $this->user->track($anime, UserLibraryStatus::InProgress());
 
         $response = $this->auth()->json('POST', route('api.me.favorites.create'), [
-            'library'       => UserLibraryType::Anime,
+            'library'       => UserLibraryKind::Anime,
             'model_id'      => (string) $anime->id,
         ]);
 
@@ -56,7 +56,7 @@ class FavoriteAnimeTest extends TestCase
 
         // Send request to remove the anime from the user's favorites
         $response = $this->auth()->json('POST', route('api.me.favorites.create'), [
-            'library'       => UserLibraryType::Anime,
+            'library'       => UserLibraryKind::Anime,
             'model_id'      => (string) $anime->id,
         ]);
 

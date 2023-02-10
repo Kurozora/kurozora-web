@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Enums\UserLibraryType;
+use App\Enums\UserLibraryKind;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateUserFavoriteRequest;
@@ -30,9 +30,9 @@ class UserFavoriteController extends Controller
         $data = $request->validated();
 
         // Get morph class
-        $morphClass = match ((int) ($data['library'] ?? UserLibraryType::Anime)) {
-            UserLibraryType::Manga => Manga::class,
-            UserLibraryType::Game => Game::class,
+        $morphClass = match ((int) ($data['library'] ?? UserLibraryKind::Anime)) {
+            UserLibraryKind::Manga => Manga::class,
+            UserLibraryKind::Game => Game::class,
             default => Anime::class,
         };
 
@@ -44,9 +44,9 @@ class UserFavoriteController extends Controller
         $nextPageURL = str_replace($request->root(), '', $userFavorites->nextPageUrl());
 
         // Get data collection
-        $data = match ((int) ($data['library'] ?? UserLibraryType::Anime)) {
-            UserLibraryType::Manga => LiteratureResourceBasic::collection($userFavorites),
-            UserLibraryType::Game => GameResourceBasic::collection($userFavorites),
+        $data = match ((int) ($data['library'] ?? UserLibraryKind::Anime)) {
+            UserLibraryKind::Manga => LiteratureResourceBasic::collection($userFavorites),
+            UserLibraryKind::Game => GameResourceBasic::collection($userFavorites),
             default => AnimeResourceBasic::collection($userFavorites),
         };
 
@@ -75,10 +75,10 @@ class UserFavoriteController extends Controller
             $model = Anime::findOrFail($modelID);
         } else {
             $modelID = $data['model_id'];
-            $libraryType = UserLibraryType::fromValue((int) $data['library']);
-            $model = match ($libraryType->value) {
-                UserLibraryType::Manga  => Manga::findOrFail($modelID),
-                UserLibraryType::Game   => Game::findOrFail($modelID),
+            $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
+            $model = match ($libraryKind->value) {
+                UserLibraryKind::Manga  => Manga::findOrFail($modelID),
+                UserLibraryKind::Game   => Game::findOrFail($modelID),
                 default                 => Anime::findOrFail($modelID),
             };
         }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\UserLibraryType;
+use App\Enums\UserLibraryKind;
 use Illuminate\Foundation\Http\FormRequest;
 
 class GetUserFavoritesRequest extends FormRequest
@@ -25,7 +25,7 @@ class GetUserFavoritesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'library'   => ['bail', 'integer', 'in:' . implode(',', UserLibraryType::getValues())],
+            'library'   => ['bail', 'integer', 'in:' . implode(',', UserLibraryKind::getValues())],
             'limit'     => ['bail', 'integer', 'min:1', 'max:100'],
             'page'      => ['bail', 'integer', 'min:1']
         ];

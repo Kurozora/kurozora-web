@@ -4,8 +4,8 @@ namespace Tests\API;
 
 use App\Enums\ImportBehavior;
 use App\Enums\ImportService;
+use App\Enums\UserLibraryKind;
 use App\Enums\UserLibraryStatus;
-use App\Enums\UserLibraryType;
 use App\Models\Anime;
 use App\Notifications\LibraryImportFinished;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -207,7 +207,7 @@ class LibraryImportTest extends TestCase
 
         // Request import
         $response = $this->auth()->json('POST', route('api.me.library.import'), [
-            'library'   => UserLibraryType::Anime,
+            'library'   => UserLibraryKind::Anime,
             'service'   => ImportService::MAL,
             'file'      => $uploadFile,
             'behavior'  => ImportBehavior::Overwrite,
@@ -246,7 +246,7 @@ class LibraryImportTest extends TestCase
 
         // Request import
         $response = $this->auth()->json('POST', route('api.me.library.import'), [
-            'library'   => UserLibraryType::Anime,
+            'library'   => UserLibraryKind::Anime,
             'service'   => ImportService::MAL,
             'file'      => $uploadFile,
             'behavior'  => ImportBehavior::Merge,

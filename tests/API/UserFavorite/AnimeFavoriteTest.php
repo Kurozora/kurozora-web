@@ -2,7 +2,7 @@
 
 namespace Tests\API\UserFavorite;
 
-use App\Enums\UserLibraryType;
+use App\Enums\UserLibraryKind;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 use Tests\Traits\ProvidesTestAnime;
@@ -26,7 +26,7 @@ class AnimeFavoriteTest extends TestCase
         // Send request for the list of anime
         $response = $this->auth()->getJson(route('api.users.favorites', [
             'user' => $this->user->getKey(),
-            'library' => UserLibraryType::Anime,
+            'library' => UserLibraryKind::Anime,
         ]));
 
         // Check whether the request was successful
@@ -49,7 +49,7 @@ class AnimeFavoriteTest extends TestCase
 
         // Send request for the list of anime
         $response = $this->auth()->getJson(route('api.me.favorites.index', [
-            'library' => UserLibraryType::Anime,
+            'library' => UserLibraryKind::Anime,
         ]));
 
         // Check whether the request was successful
@@ -69,7 +69,7 @@ class AnimeFavoriteTest extends TestCase
     {
         // Send request for the list of anime
         $response = $this->auth()->postJson(route('api.me.favorites.create', [
-            'library' => UserLibraryType::Anime,
+            'library' => UserLibraryKind::Anime,
             'model_id' => $this->anime->getKey(),
         ]));
 
@@ -93,7 +93,7 @@ class AnimeFavoriteTest extends TestCase
 
         // Send request for the list of anime
         $response = $this->auth()->postJson(route('api.me.favorites.create', [
-            'library' => UserLibraryType::Anime,
+            'library' => UserLibraryKind::Anime,
             'model_id' => $this->anime->getKey(),
         ]));
 

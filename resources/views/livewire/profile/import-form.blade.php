@@ -21,8 +21,8 @@
             <div class="mt-5">
                 <x-select id="library" wire:model.defer="state.library">
                     <option value="-1">{{ __('Select library') }}</option>
-                    @foreach (App\Enums\UserLibraryType::asSelectArray() as $value => $libraryType)
-                        <option value="{{ $value }}">{{ $libraryType }}</option>
+                    @foreach (App\Enums\UserLibraryKind::asSelectArray() as $value => $libraryKind)
+                        <option value="{{ $value }}">{{ $libraryKind }}</option>
                     @endforeach
                 </x-select>
 

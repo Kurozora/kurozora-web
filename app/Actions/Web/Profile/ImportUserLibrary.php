@@ -5,7 +5,7 @@ namespace App\Actions\Web\Profile;
 use App\Contracts\Web\Profile\ImportsUserLibrary;
 use App\Enums\ImportBehavior;
 use App\Enums\ImportService;
-use App\Enums\UserLibraryType;
+use App\Enums\UserLibraryKind;
 use App\Jobs\ProcessMALImport;
 use App\Models\User;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -28,31 +28,31 @@ class ImportUserLibrary implements ImportsUserLibrary
     public function update(User $user, array $input): void
     {
         Validator::make($input, [
-            'library' => ['required', 'integer', 'in:' . implode(',', UserLibraryType::getValues())],
+            'library' => ['required', 'integer', 'in:' . implode(',', UserLibraryKind::getValues())],
             'import_service' => ['required', 'integer', 'in:' . implode(',', ImportService::getValues())],
             'import_behavior' => ['required', 'integer', 'in:' . implode(',', ImportBehavior::getValues())],
             'library_file' => ['required', 'file', 'mimes:xml', 'max:' . config('import.max_xml_file_size')],
         ])->validateWithBag('importUserLibrary');
 
         // Get the library type
-        $libraryType = UserLibraryType::fromValue((int) $input['library']);
+        $libraryKind = UserLibraryKind::fromValue((int) $input['library']);
 
         // Get whether user is in import cooldown period
-        $isInImportCooldown = match ($libraryType->value) {
-            UserLibraryType::Manga => !$user->canDoMangaImport(),
+        $isInImportCooldown = match ($libraryKind->value) {
+            UserLibraryKind::Manga => !$user->canDoMangaImport(),
             default => !$user->canDoAnimeImport()
         };
 
         if ($isInImportCooldown) {
             $cooldownDays = config('import.cooldown_in_days');
-            $lastImportDate = match ($libraryType->value) {
-                UserLibraryType::Manga => $user->last_manga_import_at,
+            $lastImportDate = match ($libraryKind->value) {
+                UserLibraryKind::Manga => $user->last_manga_import_at,
                 default => $user->last_anime_import_at
             };
 
-            $errorMessage = match ($libraryType->value) {
-                UserLibraryType::Manga => __('You can only perform a manga import every :x day(s).', ['x' => $cooldownDays]),
-                UserLibraryType::Game => __('You can only perform a game import every :x day(s).', ['x' => $cooldownDays]),
+            $errorMessage = match ($libraryKind->value) {
+                UserLibraryKind::Manga => __('You can only perform a manga import every :x day(s).', ['x' => $cooldownDays]),
+                UserLibraryKind::Game => __('You can only perform a game import every :x day(s).', ['x' => $cooldownDays]),
                 default => __('You can only perform an anime import every :x day(s).', ['x' => $cooldownDays])
             };
 
@@ -76,13 +76,13 @@ class ImportUserLibrary implements ImportsUserLibrary
         switch ($importService->value) {
             case ImportService::MAL:
             case ImportService::Kitsu:
-                dispatch(new ProcessMALImport($user, $xmlContent, $libraryType, $importService, $importBehavior));
+                dispatch(new ProcessMALImport($user, $xmlContent, $libraryKind, $importService, $importBehavior));
                 break;
         }
 
         // Update last library import date for user
-        $lastImportDateKey = match ($libraryType->value) {
-            UserLibraryType::Manga => 'last_manga_import_at',
+        $lastImportDateKey = match ($libraryKind->value) {
+            UserLibraryKind::Manga => 'last_manga_import_at',
             default => 'last_anime_import_at'
         };
 
