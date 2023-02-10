@@ -6,7 +6,6 @@ use App\Casts\AsArrayObject;
 use App\Enums\DayOfWeek;
 use App\Enums\MediaCollection;
 use App\Enums\SeasonOfYear;
-use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Favorable;
 use App\Traits\Model\HasMediaGenres;
@@ -224,30 +223,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
             ->singleFile();
         $this->addMediaCollection(MediaCollection::Logo)
             ->singleFile();
-    }
-
-    /**
-     * Make all instances of the model searchable.
-     *
-     * @param  int  $chunk
-     * @return void
-     */
-    public static function makeAllSearchable($chunk = null): void
-    {
-        $self = new static;
-
-        $softDelete = static::usesSoftDelete() && config('scout.soft_delete', false);
-
-        $self->newQuery()
-            ->withoutGlobalScopes()
-            ->when(true, function ($query) use ($self) {
-                $self->makeAllSearchableUsing($query);
-            })
-            ->when($softDelete, function ($query) {
-                $query->withTrashed();
-            })
-            ->orderBy($self->getKeyName())
-            ->searchable($chunk);
     }
 
     /**
@@ -661,20 +636,20 @@ class Anime extends KModel implements HasMedia, Sitemapable
     {
         // Get anime with certain airing status.
         if (!empty($status)) {
-            $query->where(Anime::TABLE_NAME . '.status_id', $status);
+            $query->where(self::TABLE_NAME . '.status_id', $status);
         }
 
         // If NSFW is not allowed then filter it out.
         if (!$nsfwAllowed) {
-            $query->where(Anime::TABLE_NAME . '.is_nsfw', false);
+            $query->where(self::TABLE_NAME . '.is_nsfw', false);
         }
 
-        return $query->leftJoin(MediaStat::TABLE_NAME, MediaStat::TABLE_NAME . '.model_id', '=', Anime::TABLE_NAME . '.id')
+        return $query->leftJoin(MediaStat::TABLE_NAME, MediaStat::TABLE_NAME . '.model_id', '=', self::TABLE_NAME . '.id')
             ->where(MediaStat::TABLE_NAME . '.model_type', '=', $this->getMorphClass())
             ->orderBy(MediaStat::TABLE_NAME . '.in_progress_count', 'desc')
             ->orderBy(MediaStat::TABLE_NAME . '.rating_average', 'desc')
             ->limit($limit)
-            ->select(Anime::TABLE_NAME . '.*');
+            ->select(self::TABLE_NAME . '.*');
     }
 
     /**
@@ -686,8 +661,8 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function scopeUpcomingShows(Builder $query, int $limit = 10): Builder
     {
-        return $query->whereDate('started_at', '>', yesterday())
-            ->orderBy('started_at')
+        return $query->whereDate(self::TABLE_NAME . '.started_at', '>', yesterday())
+            ->orderBy(self::TABLE_NAME . '.started_at')
             ->limit($limit);
     }
 
@@ -700,7 +675,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function scopeNewShows(Builder $query, int $limit = 10): Builder
     {
-        return $query->orderBy('created_at', 'desc')
+        return $query->orderBy(self::TABLE_NAME . '.created_at', 'desc')
             ->limit($limit);
     }
 
@@ -713,8 +688,8 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function scopeRecentlyUpdatedShows(Builder $query, int $limit = 10): Builder
     {
-        return $query->orderBy('updated_at', 'desc')
-            ->whereDate('created_at', '<', today())
+        return $query->orderBy(self::TABLE_NAME . '.updated_at', 'desc')
+            ->whereDate(self::TABLE_NAME . '.created_at', '<', today())
             ->limit($limit);
     }
 
@@ -727,8 +702,8 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function scopeRecentlyFinishedShows(Builder $query, int $limit = 10): Builder
     {
-        return $query->orderBy('ended_at', 'desc')
-            ->whereDate('ended_at', '<=', today())
+        return $query->orderBy(self::TABLE_NAME . '.ended_at', 'desc')
+            ->whereDate(self::TABLE_NAME . '.ended_at', '<=', today())
             ->limit($limit);
     }
 
@@ -741,11 +716,11 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function scopeAnimeContinuing(Builder $query, int $limit = 10): Builder
     {
-        return $query->where('air_season', '!=', season_of_year()->value)
-            ->whereYear('started_at', '!=', now()->year)
-            ->whereDate('started_at', '<=', now())
-            ->where('status_id', '=', 3)
-            ->orderBy('started_at', 'desc')
+        return $query->where(self::TABLE_NAME . '.air_season', '!=', season_of_year()->value)
+            ->whereYear(self::TABLE_NAME . '.started_at', '!=', now()->year)
+            ->whereDate(self::TABLE_NAME . '.started_at', '<=', now())
+            ->where(self::TABLE_NAME . '.status_id', '=', 3)
+            ->orderBy(self::TABLE_NAME . '.started_at', 'desc')
             ->limit($limit);
     }
 
@@ -758,8 +733,8 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     public function scopeAnimeSeason(Builder $query, int $limit = 10): Builder
     {
-        return $query->where('air_season', '=', season_of_year()->value)
-            ->whereYear('started_at', '=', now()->year)
+        return $query->where(self::TABLE_NAME . '.air_season', '=', season_of_year()->value)
+            ->whereYear(self::TABLE_NAME . '.started_at', '=', now()->year)
             ->limit($limit);
     }
 
@@ -922,15 +897,14 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Scope a query to only include anime proper to user's age.
+     * Modify the query used to retrieve models when making all of the models searchable.
      *
      * @param Builder $query
-     * @return void
+     * @return Builder
      */
-    public function scopeWithTvRating(Builder $query): void
+    protected function makeAllSearchableUsing($query): Builder
     {
-        $scope = new TvRatingScope();
-        $scope->apply($query , $this);
+        return $query->withoutGlobalScopes();
     }
 
     /**

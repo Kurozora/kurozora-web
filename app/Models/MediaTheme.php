@@ -3,17 +3,24 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphPivot;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class MediaTheme extends Pivot
+class MediaTheme extends MorphPivot
 {
     use SoftDeletes;
 
     // Table name
     const TABLE_NAME = 'media_themes';
     protected $table = self::TABLE_NAME;
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = true;
 
     /**
      * The relations to eager load on every query.
@@ -23,13 +30,6 @@ class MediaTheme extends Pivot
     protected $with = [
         'theme'
     ];
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-    public $incrementing = true;
 
     /**
      * Returns the model in the media theme.

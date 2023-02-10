@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App\Enums\UserLibraryStatus;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphPivot;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Database\Eloquent\Relations\Pivot;
 use Laravel\Scout\Searchable;
 
-class UserLibrary extends Pivot
+class UserLibrary extends MorphPivot
 {
     use Searchable;
 
@@ -64,6 +65,18 @@ class UserLibrary extends Pivot
     }
 
     /**
+     * Modify the query used to retrieve models when making all of the models searchable.
+     *
+     * @param  Builder  $query
+     * @return Builder
+     */
+    protected function makeAllSearchableUsing($query): Builder
+    {
+        return $query->withoutEagerLoads()
+            ->withoutGlobalScopes();
+    }
+
+    /**
      * Get the indexable data array for the model.
      *
      * @return array
@@ -72,40 +85,24 @@ class UserLibrary extends Pivot
     {
         $trackable = $this->trackable()
             ->withoutGlobalScopes()
+            ->withoutEagerLoads()
+            ->with('translations')
             ->first();
 
         $library = $this->toArray();
+        $library['trackable'] = [
+            'slug' => $trackable->slug,
+            'original_title' => $trackable->original_title,
+            'synonym_titles' => $trackable->synonym_titles,
+            'title' => $trackable->title,
+            'synopsis' => $trackable->synopsis,
+            'tagline' => $trackable->tagline,
+            'translations' => $trackable->translations,
+        ];
         $library['started_at'] = $this->started_at?->timestamp;
         $library['ended_at'] = $this->ended_at?->timestamp;
         $library['created_at'] = $this->created_at?->timestamp;
         $library['updated_at'] = $this->updated_at?->timestamp;
-
-        switch ($this->trackable_type) {
-            case Anime::class:
-                $library['anime'] = [
-                    'slug' => $trackable->slug,
-                    'original_title' => $trackable->original_title,
-                    'synonym_titles' => $trackable->synonym_titles,
-                    'title' => $trackable->title,
-                    'synopsis' => $trackable->synopsis,
-                    'tagline' => $trackable->tagline,
-                    'translations' => $trackable->translations,
-                ];
-
-                break;
-            case Manga::class:
-                $library['manga'] = [
-                    'slug' => $trackable->slug,
-                    'original_title' => $trackable->original_title,
-                    'synonym_titles' => $trackable->synonym_titles,
-                    'title' => $trackable->title,
-                    'synopsis' => $trackable->synopsis,
-                    'translations' => $trackable->translations,
-                ];
-
-                break;
-            default: break;
-        }
 
         return $library;
     }

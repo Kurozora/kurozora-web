@@ -6,7 +6,6 @@ use App\Casts\AsArrayObject;
 use App\Enums\DayOfWeek;
 use App\Enums\MediaCollection;
 use App\Enums\SeasonOfYear;
-use App\Scopes\TvRatingScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Favorable;
 use App\Traits\Model\HasMediaGenres;
@@ -669,18 +668,6 @@ class Manga extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Scope a query to only include manga proper to user's age.
-     *
-     * @param Builder $query
-     * @return void
-     */
-    public function scopeWithTvRating(Builder $query): void
-    {
-        $scope = new TvRatingScope();
-        $scope->apply($query , $this);
-    }
-
-    /**
      * Get the indexable data array for the model.
      *
      * @return array
@@ -697,16 +684,45 @@ class Manga extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * Eloquent builder scope that limits the query to the most popular shows.
+     *
+     * @param Builder $query
+     * @param int $limit
+     * @param int|null $status
+     * @param bool $nsfwAllowed
+     * @return Builder
+     */
+    public function scopeMostPopular(Builder $query, int $limit = 10, ?int $status = 3, bool $nsfwAllowed = false): Builder
+    {
+        // Get anime with certain airing status.
+        if (!empty($status)) {
+            $query->where(self::TABLE_NAME . '.status_id', $status);
+        }
+
+        // If NSFW is not allowed then filter it out.
+        if (!$nsfwAllowed) {
+            $query->where(self::TABLE_NAME . '.is_nsfw', false);
+        }
+
+        return $query->leftJoin(MediaStat::TABLE_NAME, MediaStat::TABLE_NAME . '.model_id', '=', self::TABLE_NAME . '.id')
+            ->where(MediaStat::TABLE_NAME . '.model_type', '=', $this->getMorphClass())
+            ->orderBy(MediaStat::TABLE_NAME . '.in_progress_count', 'desc')
+            ->orderBy(MediaStat::TABLE_NAME . '.rating_average', 'desc')
+            ->limit($limit)
+            ->select(self::TABLE_NAME . '.*');
+    }
+
+    /**
      * Eloquent builder scope that limits the query to upcoming mangas.
      *
      * @param Builder $query
      * @param int $limit
      * @return Builder
      */
-    public function scopeUpcomingMangas(Builder $query, int $limit = 10): Builder
+    public function scopeUpcomingManga(Builder $query, int $limit = 10): Builder
     {
-        return $query->whereDate('started_at', '>', yesterday())
-            ->orderBy('started_at')
+        return $query->whereDate(self::TABLE_NAME . '.started_at', '>', yesterday())
+            ->orderBy(self::TABLE_NAME . '.started_at')
             ->limit($limit);
     }
 
@@ -717,9 +733,9 @@ class Manga extends KModel implements HasMedia, Sitemapable
      * @param int $limit
      * @return Builder
      */
-    public function scopeNewMangas(Builder $query, int $limit = 10): Builder
+    public function scopeNewManga(Builder $query, int $limit = 10): Builder
     {
-        return $query->orderBy('created_at', 'desc')
+        return $query->orderBy(self::TABLE_NAME . '.created_at', 'desc')
             ->limit($limit);
     }
 
@@ -730,10 +746,10 @@ class Manga extends KModel implements HasMedia, Sitemapable
      * @param int $limit
      * @return Builder
      */
-    public function scopeRecentlyUpdatedMangas(Builder $query, int $limit = 10): Builder
+    public function scopeRecentlyUpdatedManga(Builder $query, int $limit = 10): Builder
     {
-        return $query->orderBy('updated_at', 'desc')
-            ->whereDate('created_at', '<', today())
+        return $query->orderBy(self::TABLE_NAME . '.updated_at', 'desc')
+            ->whereDate(self::TABLE_NAME . '.created_at', '<', today())
             ->limit($limit);
     }
 
@@ -744,10 +760,10 @@ class Manga extends KModel implements HasMedia, Sitemapable
      * @param int $limit
      * @return Builder
      */
-    public function scopeRecentlyFinishedMangas(Builder $query, int $limit = 10): Builder
+    public function scopeRecentlyFinishedManga(Builder $query, int $limit = 10): Builder
     {
-        return $query->orderBy('ended_at', 'desc')
-            ->whereDate('ended_at', '<=', today())
+        return $query->orderBy(self::TABLE_NAME . '.ended_at', 'desc')
+            ->whereDate(self::TABLE_NAME . '.ended_at', '<=', today())
             ->limit($limit);
     }
 
@@ -760,11 +776,11 @@ class Manga extends KModel implements HasMedia, Sitemapable
      */
     public function scopeMangaContinuing(Builder $query, int $limit = 10): Builder
     {
-        return $query->where('publication_season', '!=', season_of_year()->value)
-            ->whereYear('started_at', '!=', now()->year)
-            ->whereDate('started_at', '<=', now())
-            ->where('status_id', '=', 3)
-            ->orderBy('started_at', 'desc')
+        return $query->where(self::TABLE_NAME . '.publication_season', '!=', season_of_year()->value)
+            ->whereYear(self::TABLE_NAME . '.started_at', '!=', now()->year)
+            ->whereDate(self::TABLE_NAME . '.started_at', '<=', now())
+            ->where(self::TABLE_NAME . '.status_id', '=', 3)
+            ->orderBy(self::TABLE_NAME . '.started_at', 'desc')
             ->limit($limit);
     }
 
@@ -777,8 +793,8 @@ class Manga extends KModel implements HasMedia, Sitemapable
      */
     public function scopeMangaSeason(Builder $query, int $limit = 10): Builder
     {
-        return $query->where('publication_season', '=', season_of_year()->value)
-            ->whereYear('started_at', '=', now()->year)
+        return $query->where(self::TABLE_NAME . '.publication_season', '=', season_of_year()->value)
+            ->whereYear(self::TABLE_NAME . '.started_at', '=', now()->year)
             ->limit($limit);
     }
 

@@ -13,6 +13,23 @@ class KModel extends Model
      */
     protected $guarded = [];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Prevent lazy loading always.
+        Model::preventLazyLoading();
+
+        if (app()->environment('local')) {
+            // But in production, log the violation instead of throwing an exception.
+            Model::handleLazyLoadingViolationUsing(function ($model, $relation) {
+                $class = get_class($model);
+
+                info("Attempted to lazy load [$relation] on model [$class].");
+            });
+        }
+    }
+
     /**
      * Generates a key to be used for caching
      *

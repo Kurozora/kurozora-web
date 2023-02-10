@@ -64,4 +64,34 @@ class TvRating extends KModel
     {
         return $this->hasMany(Anime::class);
     }
+
+    /**
+     * The mangas belonging to the TV rating.
+     *
+     * @return HasMany
+     */
+    public function manga(): HasMany
+    {
+        return $this->hasMany(Manga::class);
+    }
+
+    /**
+     * The genres belonging to the TV rating.
+     *
+     * @return HasMany
+     */
+    public function genres(): HasMany
+    {
+        return $this->hasMany(Genre::class);
+    }
+
+    /**
+     * The themes belonging to the TV rating.
+     *
+     * @return HasMany
+     */
+    public function themes(): HasMany
+    {
+        return $this->hasMany(Theme::class);
+    }
 }
