@@ -112,11 +112,15 @@ class Anime extends KModel implements HasMedia, Sitemapable
      */
     protected $with = [
         'genres',
+        'languages',
         'media',
         'mediaStat',
         'themes',
         'translations',
         'tv_rating',
+        'media_type',
+        'source',
+        'status'
     ];
 
     /**

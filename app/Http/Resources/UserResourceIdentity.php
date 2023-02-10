@@ -24,9 +24,10 @@ class UserResourceIdentity extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id'    => $this->resource->id,
-            'type'  => 'show',
-            'href'  => route('api.users.profile', $this->resource, false),
+            'id'        => (int) $this->resource->id,
+            'idString'  => (string) $this->resource->id,
+            'type'      => 'users',
+            'href'      => route('api.users.profile', $this->resource, false),
         ];
     }
 }

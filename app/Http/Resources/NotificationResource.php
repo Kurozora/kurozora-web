@@ -31,6 +31,7 @@ class NotificationResource extends JsonResource
     {
         return [
             'id'            => $this->resource->id,
+            'uuid'          => (string) $this->resource->id,
             'type'          => 'notifications',
             'href'          => route('api.me.notifications.details', $this->resource, false),
             'attributes'    => [

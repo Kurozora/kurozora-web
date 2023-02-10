@@ -25,6 +25,7 @@ class LanguageResource extends JsonResource
     {
         return [
             'id'            => $this->resource->id,
+            'uuid'          => (string) $this->resource->id,
             'type'          => 'languages',
             'href'          => route('api.languages.details', $this->resource, false),
             'attributes'    => [

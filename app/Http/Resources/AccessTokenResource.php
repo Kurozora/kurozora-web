@@ -25,6 +25,7 @@ class AccessTokenResource extends JsonResource
     {
         $resource = [
             'id'            => $this->resource->id,
+            'uuid'          => (string) $this->resource->id,
             'type'          => 'access-token',
             'href'          => route('api.me.access-tokens.details', $this->resource, false),
             'attributes'    => [

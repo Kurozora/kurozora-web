@@ -25,6 +25,7 @@ class AnimeSongResourceIdentity extends JsonResource
     {
         return [
             'id'            => $this->resource->id,
+            'uuid'          => (string) $this->resource->id,
             'type'          => 'anime-songs',
             'href'          => route('api.anime.songs', $this->resource->anime, false),
         ];

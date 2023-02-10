@@ -11,7 +11,7 @@ class LiteratureResourceIdentity extends JsonResource
     /**
      * The resource instance.
      *
-     * @var Manga|int $resource
+     * @var Manga|string $resource
      */
     public $resource;
 
@@ -25,6 +25,7 @@ class LiteratureResourceIdentity extends JsonResource
     {
         return [
             'id'    => $this->resource?->id ?? $this->resource,
+            'uuid'  => $this->resource?->id ?? $this->resource,
             'type'  => 'literatures',
             'href'  => route('api.manga.view', $this->resource, false),
         ];

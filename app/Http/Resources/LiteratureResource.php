@@ -48,7 +48,7 @@ class LiteratureResource extends JsonResource
                         break;
                     case 'studios':
                         $request->merge(['include' => 'mangas']);
-                        $request->merge(['manga' => $this->resource]);
+                        $request->merge(['literature' => $this->resource]);
                         $relationships = array_merge($relationships, $this->getStudiosRelationship());
                         break;
                 }
@@ -114,7 +114,7 @@ class LiteratureResource extends JsonResource
     {
         return [
             'relatedMangas' => [
-                'href' => route('api.manga.related-mangas', $this->resource, false),
+                'href' => route('api.manga.related-literatures', $this->resource, false),
                 'data' => MediaRelatedShowResource::collection($this->resource->getMangaRelations(Manga::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];

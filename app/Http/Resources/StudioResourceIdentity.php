@@ -27,6 +27,7 @@ class StudioResourceIdentity extends JsonResource
     {
         return [
             'id'            => $this->resource->id,
+            'uuid'          => (string) $this->resource->id,
             'type'          => 'studios',
             'href'          => route('api.studios.details', $this->resource, false),
         ];

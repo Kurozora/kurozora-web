@@ -24,7 +24,8 @@ class GenreResourceIdentity extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id'            => $this->resource?->id ?? $this->resource,
+            'id'            => (int) ($this->resource?->id ?? $this->resource),
+            'uuid'          => (string) ($this->resource?->id ?? $this->resource),
             'type'          => 'genres',
             'href'          => route('api.genres.details', $this->resource, false),
         ];

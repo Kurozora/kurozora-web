@@ -24,7 +24,8 @@ class PersonResourceIdentity extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id'            => $this->resource?->id ?? $this->resource,
+            'id'            => (int) ($this->resource?->id ?? $this->resource),
+            'uuid'          => (string) ($this->resource?->id ?? $this->resource),
             'type'          => 'people',
             'href'          => route('api.people.details', $this->resource, false),
         ];

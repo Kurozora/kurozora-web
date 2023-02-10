@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use App\Enums\MediaCollection;
-use App\Enums\UserLibraryStatus;
 use App\Models\Manga;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -95,24 +94,17 @@ class LiteratureResourceBasic extends JsonResource
                 ['trackable_id', $this->resource->id],
                 ['trackable_type', Manga::class]
             ]);
-        $currentLibraryStatus = null;
 
-        if ($libraryEntry) {
-            $currentLibraryStatus = UserLibraryStatus::getDescription($libraryEntry->pivot->status);
-        }
-
-        // Get the favorite status
-        $hasTracked = $user->hasTracked($this->resource);
-        $favoriteStatus = null;
-        if ($hasTracked) {
-            $favoriteStatus = $user->hasFavorited($this->resource);
-        }
+        // Get various statuses
+        $currentLibraryStatus = $libraryEntry ? $libraryEntry->pivot->status : null;
+        $favoriteStatus = $libraryEntry ? $this->resource->isFavoritedBy($user) : null;
 
         // Return the array
         return [
             'givenRating'       => (double) $givenRating?->rating,
             'libraryStatus'     => $currentLibraryStatus,
             'isFavorited'       => $favoriteStatus,
+            'isReminded'        => null
         ];
     }
 }

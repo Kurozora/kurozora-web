@@ -25,6 +25,7 @@ class SongResourceIdentity extends JsonResource
     {
         return [
             'id'    => $this->resource->id,
+            'uuid'  => (string) $this->resource->id,
             'type'  => 'songs',
             'href'  => route('api.songs.details', $this->resource, false),
         ];

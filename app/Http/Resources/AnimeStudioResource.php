@@ -21,6 +21,7 @@ class AnimeStudioResource extends JsonResource
 
         $resource = [
             'id'            => $mediaStudio->id,
+            'uuid'          => (string) $mediaStudio->id,
             'type'          => 'studios',
             'href'          => route('api.anime.studios', $mediaStudio->anime, false),
             'attributes'    => $mediaStudio->only(['is_licensor', 'is_producer', 'is_studio']),

@@ -26,6 +26,7 @@ class BadgeResource extends JsonResource
     {
         return [
             'id'            => $this->resource->id,
+            'uuid'          => (string) $this->resource->id,
             'type'          => 'badges',
             'attributes'    => [
                 'name'              => $this->resource->name,

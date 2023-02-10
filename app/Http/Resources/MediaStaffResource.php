@@ -30,6 +30,7 @@ class MediaStaffResource extends JsonResource
         };
         $resource = [
             'id'            => $this->resource->id,
+            'uuid'          => (string) $this->resource->id,
             'type'          => 'staff',
             'href'          => route($routeName, $this->resource->model, false),
             'attributes'    => [

@@ -6,7 +6,6 @@ use App\Http\Resources\JSONErrorResource;
 use App\Models\APIError;
 use App\Providers\AppServiceProvider;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 
 class JSONResult
@@ -57,12 +56,12 @@ class JSONResult
             'minimumAppVersion'         => config('app.ios.version'),
             'isMaintenanceModeEnabled'  => app()->isDownForMaintenance(),
             'isUserAuthenticated'       => auth()->check(),
-            'authenticatedUserID'       => 0
+            'authenticatedUserID'       => "0"
         ];
 
         if (app()->environment('local')) {
             $meta['isUserAuthenticated'] = auth()->check();
-            $meta['authenticatedUserID'] = (int) auth()->id();
+            $meta['authenticatedUserID'] = (string) auth()->id();
             $meta['queryCount'] = (int) config(AppServiceProvider::$queryCountConfigKey);
         }
 

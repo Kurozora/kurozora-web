@@ -25,6 +25,7 @@ class EpisodeResourceIdentity extends JsonResource
     {
         return [
             'id'            => $this->resource->id,
+            'uuid'          => (string) $this->resource->id,
             'type'          => 'episodes',
             'href'          => route('api.episodes.details', $this->resource, false),
         ];

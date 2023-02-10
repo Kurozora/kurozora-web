@@ -24,7 +24,8 @@ class AnimeResourceIdentity extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id'    => $this->resource?->id ?? $this->resource,
+            'id'    => (int) ($this->resource?->id ?? $this->resource),
+            'uuid'  => (string) ($this->resource?->id ?? $this->resource),
             'type'  => 'show',
             'href'  => route('api.anime.view', $this->resource, false),
         ];

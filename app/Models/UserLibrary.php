@@ -5,11 +5,10 @@ namespace App\Models;
 use App\Enums\UserLibraryStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphPivot;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Laravel\Scout\Searchable;
 
-class UserLibrary extends MorphPivot
+class UserLibrary extends KModel
 {
     use Searchable;
 

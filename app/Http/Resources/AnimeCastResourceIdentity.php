@@ -27,8 +27,9 @@ class AnimeCastResourceIdentity extends JsonResource
     {
         return [
             'id'            => $this->resource->id,
+            'uuid'          => (string) $this->resource->id,
             'type'          => 'cast',
-            'href'          => route('api.anime-cast.details', $this->resource, false),
+            'href'          => route('api.show-cast.details', $this->resource, false),
         ];
     }
 }

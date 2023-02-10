@@ -25,6 +25,7 @@ class SeasonResourceIdentity extends JsonResource
     {
         return [
             'id'    => $this->resource->id,
+            'uuid'  => (string) $this->resource->id,
             'type'  => 'seasons',
             'href'  => route('api.seasons.details', $this->resource, false),
         ];
