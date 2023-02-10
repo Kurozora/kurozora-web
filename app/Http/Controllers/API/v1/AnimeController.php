@@ -8,22 +8,22 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\GetAnimeCastRequest;
 use App\Http\Requests\GetAnimeCharactersRequest;
 use App\Http\Requests\GetAnimeMoreByStudioRequest;
-use App\Http\Requests\GetMediaRelatedMangasRequest;
-use App\Http\Requests\GetMediaRelatedShowsRequest;
 use App\Http\Requests\GetAnimeSeasonsRequest;
 use App\Http\Requests\GetAnimeSongsRequest;
-use App\Http\Requests\GetMediaStaffRequest;
 use App\Http\Requests\GetAnimeStudiosRequest;
+use App\Http\Requests\GetMediaRelatedLiteraturesRequest;
+use App\Http\Requests\GetMediaRelatedShowsRequest;
+use App\Http\Requests\GetMediaStaffRequest;
 use App\Http\Requests\GetUpcomingAnimeRequest;
 use App\Http\Requests\RateAnimeRequest;
 use App\Http\Resources\AnimeCastResourceIdentity;
-use App\Http\Resources\MediaRelatedMangaResource;
-use App\Http\Resources\MediaRelatedShowResource;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\AnimeSongResource;
-use App\Http\Resources\MediaStaffResource;
 use App\Http\Resources\CharacterResourceIdentity;
+use App\Http\Resources\MediaRelatedLiteratureResource;
+use App\Http\Resources\MediaRelatedShowResource;
+use App\Http\Resources\MediaStaffResource;
 use App\Http\Resources\SeasonResourceIdentity;
 use App\Http\Resources\StudioResource;
 use App\Models\Anime;
@@ -122,24 +122,24 @@ class AnimeController extends Controller
     }
 
     /**
-     * Returns related-manga information of an Anime.
+     * Returns related-literatures information of an Anime.
      *
-     * @param GetMediaRelatedMangasRequest $request
+     * @param GetMediaRelatedLiteraturesRequest $request
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function relatedMangas(GetMediaRelatedMangasRequest $request, Anime $anime): JsonResponse
+    public function relatedLiteratures(GetMediaRelatedLiteraturesRequest $request, Anime $anime): JsonResponse
     {
         $data = $request->validated();
 
-        // Get the related manga
-        $relatedManga = $anime->getMangaRelations($data['limit'] ?? 25, $data['page'] ?? 1);
+        // Get the related literatures
+        $relatedLiterature = $anime->getMangaRelations($data['limit'] ?? 25, $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $relatedManga->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $relatedLiterature->nextPageUrl());
 
         return JSONResult::success([
-            'data' => MediaRelatedMangaResource::collection($relatedManga),
+            'data' => MediaRelatedLiteratureResource::collection($relatedLiterature),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

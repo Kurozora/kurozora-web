@@ -32,7 +32,7 @@ class Details extends Component
      * @param Theme $theme
      * @return void
      */
-    public function mount(Theme $theme)
+    public function mount(Theme $theme): void
     {
         $this->theme = $theme;
         $this->exploreCategories = ExploreCategory::where('is_global', true)

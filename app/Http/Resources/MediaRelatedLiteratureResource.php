@@ -6,7 +6,7 @@ use App\Models\MediaRelation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MediaRelatedMangaResource extends JsonResource
+class MediaRelatedLiteratureResource extends JsonResource
 {
     /**
      * The resource instance.
@@ -24,7 +24,7 @@ class MediaRelatedMangaResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'manga'         => LiteratureResourceBasic::make($this->resource->related),
+            'literature'         => LiteratureResourceBasic::make($this->resource->related),
             'attributes'    => [
                 'relation'  => $this->resource->relation->only(['name', 'description']),
             ],

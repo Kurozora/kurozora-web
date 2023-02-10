@@ -15,8 +15,8 @@ Route::prefix('/studios')
                     ->middleware('auth.kurozora:optional')
                     ->name('.anime');
 
-                Route::get('/manga', [StudioController::class, 'manga'])
+                Route::get('/literatures', [StudioController::class, 'literatures'])
                     ->middleware('auth.kurozora:optional')
-                    ->name('.manga');
+                    ->name('.literatures');
             });
     });

@@ -4,11 +4,11 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\MangaCastResource;
+use App\Http\Resources\LiteratureCastResource;
 use App\Models\MangaCast;
 use Illuminate\Http\JsonResponse;
 
-class MangaCastController extends Controller
+class LiteratureCastController extends Controller
 {
     /**
      * Shows cast details.
@@ -20,7 +20,7 @@ class MangaCastController extends Controller
     {
         // Return cast details
         return JSONResult::success([
-            'data' => MangaCastResource::collection([$cast])
+            'data' => LiteratureCastResource::collection([$cast])
         ]);
     }
 }

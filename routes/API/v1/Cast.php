@@ -1,34 +1,34 @@
 <?php
 
-use App\Http\Controllers\API\v1\AnimeCastController;
-use App\Http\Controllers\API\v1\MangaCastController;
+use App\Http\Controllers\API\v1\LiteratureCastController;
+use App\Http\Controllers\API\v1\ShowCastController;
 
 Route::prefix('/cast')
     ->name('.cast')
     ->group(function () {
         Route::prefix('{cast}')
             ->group(function () {
-                Route::get('/', [AnimeCastController::class, 'details'])
+                Route::get('/', [ShowCastController::class, 'details'])
                     ->name('.details');
             });
     });
 
-Route::prefix('/anime-cast')
-    ->name('.anime-cast')
+Route::prefix('/show-cast')
+    ->name('.show-cast')
     ->group(function () {
         Route::prefix('{cast}')
             ->group(function () {
-                Route::get('/', [AnimeCastController::class, 'details'])
+                Route::get('/', [ShowCastController::class, 'details'])
                     ->name('.details');
             });
     });
 
-Route::prefix('/manga-cast')
-    ->name('.manga-cast')
+Route::prefix('/literature-cast')
+    ->name('.literature-cast')
     ->group(function () {
         Route::prefix('{cast}')
             ->group(function () {
-                Route::get('/', [MangaCastController::class, 'details'])
+                Route::get('/', [LiteratureCastController::class, 'details'])
                     ->name('.details');
             });
     });

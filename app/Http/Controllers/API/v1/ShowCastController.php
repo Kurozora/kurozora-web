@@ -4,11 +4,11 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\AnimeCastResource;
+use App\Http\Resources\ShowCastResource;
 use App\Models\AnimeCast;
 use Illuminate\Http\JsonResponse;
 
-class AnimeCastController extends Controller
+class ShowCastController extends Controller
 {
     /**
      * Shows cast details.
@@ -20,7 +20,7 @@ class AnimeCastController extends Controller
     {
         // Return cast details
         return JSONResult::success([
-            'data' => AnimeCastResource::collection([$cast])
+            'data' => ShowCastResource::collection([$cast])
         ]);
     }
 }

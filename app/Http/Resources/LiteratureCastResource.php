@@ -6,7 +6,7 @@ use App\Models\MangaCast;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MangaCastResource extends JsonResource
+class LiteratureCastResource extends JsonResource
 {
     /**
      * The resource instance.
@@ -26,7 +26,7 @@ class MangaCastResource extends JsonResource
         $resource = LiteratureResourceIdentity::make($this->resource)->toArray($request);
         $resource = array_merge($resource, [
             'attributes'    => [
-                'role'      => $this->resource->cast_role->only(['name', 'description'])
+                'role'      => $this->resource->castRole->only(['name', 'description'])
             ]
         ]);
 

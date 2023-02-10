@@ -94,7 +94,8 @@
                     @foreach ($this->searchSuggestions as $searchSuggestion)
                         <li>
                             <button class="pl-4 pr-4 pb-2 text-orange-500" wire:click="$set('q', '{{ $searchSuggestion }}')">
-                            {{ $searchSuggestion }}</button>
+                                {{ $searchSuggestion }}
+                            </button>
                         </li>
                     @endforeach
                 </ul>
@@ -103,29 +104,29 @@
             <section class="mt-4">
                 @switch($this->type)
                     @case(\App\Enums\SearchType::Shows)
-                        <x-rows.small-lockup :animes="$this->searchResults" :is-row="false" />
-                    @break
-                    @case(\App\Enums\SearchType::Literature)
-                        <x-rows.small-lockup :mangas="$this->searchResults" :is-row="false" />
-                    @break
+                        <x-rows.small-lockup :animes="$this->searchResults" :is-row="false"/>
+                        @break
+                    @case(\App\Enums\SearchType::Literatures)
+                        <x-rows.small-lockup :mangas="$this->searchResults" :is-row="false"/>
+                        @break
                     @case(\App\Enums\SearchType::Episodes)
-                        <x-rows.episode-lockup :episodes="$this->searchResults" :is-row="false" />
-                    @break
+                        <x-rows.episode-lockup :episodes="$this->searchResults" :is-row="false"/>
+                        @break
                     @case(\App\Enums\SearchType::Characters)
-                        <x-rows.character-lockup :characters="$this->searchResults" :is-row="false" />
-                    @break
+                        <x-rows.character-lockup :characters="$this->searchResults" :is-row="false"/>
+                        @break
                     @case(\App\Enums\SearchType::People)
-                        <x-rows.person-lockup :people="$this->searchResults" :is-row="false" />
-                    @break
+                        <x-rows.person-lockup :people="$this->searchResults" :is-row="false"/>
+                        @break
                     @case(\App\Enums\SearchType::Songs)
-                        <x-rows.music-lockup :songs="$this->searchResults" :is-row="false" />
-                    @break
+                        <x-rows.music-lockup :songs="$this->searchResults" :is-row="false"/>
+                        @break
                     @case(\App\Enums\SearchType::Studios)
-                        <x-rows.studio-lockup :studios="$this->searchResults" :is-row="false" />
-                    @break
+                        <x-rows.studio-lockup :studios="$this->searchResults" :is-row="false"/>
+                        @break
                     @case(\App\Enums\SearchType::Users)
-                        <x-rows.user-lockup :users="$this->searchResults" :is-row="false" />
-                    @break
+                        <x-rows.user-lockup :users="$this->searchResults" :is-row="false"/>
+                        @break
                 @endswitch
             </section>
 

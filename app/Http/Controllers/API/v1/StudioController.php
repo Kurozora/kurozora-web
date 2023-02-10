@@ -6,7 +6,7 @@ use App\Events\StudioViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetStudioAnimeRequest;
-use App\Http\Requests\GetStudioMangaRequest;
+use App\Http\Requests\GetStudioLiteraturesRequest;
 use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\StudioResource;
@@ -56,24 +56,24 @@ class StudioController extends Controller
     }
 
     /**
-     * Returns manga information of a Studio.
+     * Returns literatures information of a Studio.
      *
-     * @param GetStudioMangaRequest $request
+     * @param GetStudioLiteraturesRequest $request
      * @param Studio $studio
      * @return JsonResponse
      */
-    public function manga(GetStudioMangaRequest $request, Studio $studio): JsonResponse
+    public function literatures(GetStudioLiteraturesRequest $request, Studio $studio): JsonResponse
     {
         $data = $request->validated();
 
-        // Get the manga
-        $manga = $studio->getManga($data['limit'] ?? 25, $data['page'] ?? 1);
+        // Get the literatures
+        $literatures = $studio->getManga($data['limit'] ?? 25, $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $manga->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $literatures->nextPageUrl());
 
         return JSONResult::success([
-            'data' => LiteratureResourceIdentity::collection($manga),
+            'data' => LiteratureResourceIdentity::collection($literatures),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

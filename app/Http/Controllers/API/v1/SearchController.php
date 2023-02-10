@@ -10,7 +10,8 @@ use App\Http\Requests\SearchRequest;
 use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\CharacterResourceIdentity;
 use App\Http\Resources\EpisodeResourceIdentity;
-use App\Http\Resources\LiteratureResource;
+use App\Http\Resources\GameResource;
+use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\PersonResourceIdentity;
 use App\Http\Resources\SongResourceIdentity;
 use App\Http\Resources\StudioResourceIdentity;
@@ -18,6 +19,7 @@ use App\Http\Resources\UserResourceIdentity;
 use App\Models\Anime;
 use App\Models\Character;
 use App\Models\Episode;
+use App\Models\Game;
 use App\Models\Manga;
 use App\Models\Person;
 use App\Models\Song;
@@ -36,7 +38,7 @@ class SearchController extends Controller
      * @return JsonResponse
      * @throws AuthenticationException
      */
-    public function index(SearchRequest $request)
+    public function index(SearchRequest $request): JsonResponse
     {
         $data = $request->validated();
         $scope = $data['scope'];
@@ -73,23 +75,41 @@ class SearchController extends Controller
                         'next' => empty($nextPageURL) ? null : $nextPageURL
                     ];
                     break;
-//                case SearchType::Games:
-//                    $resource = Game::search($data['query'])->paginate($data['limit'] ?? 5)
-//                        ->appends($data);
-//                    // Get next page url minus domain
-//                    $nextPageURL = $this->nextPageUrlFor($resource, $type);
-//
-//                    $response[$type] = [
-//                        'data' => GameResource::collection($resource),
-//                        'next' => empty($nextPageURL) ? null : $nextPageURL
-//                    ];
-//                    break;
-//                }
-                case SearchType::Literature:
+                case SearchType::Games:
                     if ($scope == SearchScope::Library) {
                         $resource = UserLibrary::search($data['query'])
-                            ->where('user_id', auth()->user()->id)
+                            ->where('user_id', auth()->id())
+                            ->where('trackable_type', Game::class)
+                            ->query(function ($query) {
+                                $query->with(['trackable', 'user']);
+                            })
+                            ->paginate($data['limit'] ?? 5)
+                            ->appends($data);
+                        // Get next page url minus domain
+                        $nextPageURL = $this->nextPageUrlFor($resource, $type);
+
+                        $resource = collect($resource->items())->pluck('trackable');
+                    } else {
+                        $resource = Game::search($data['query']);
+                        $resource = $resource->paginate($data['limit'] ?? 5)
+                            ->appends($data);
+                        // Get next page url minus domain
+                        $nextPageURL = $this->nextPageUrlFor($resource, $type);
+                    }
+
+                    $response[$type] = [
+                        'data' => GameResource::collection($resource),
+                        'next' => empty($nextPageURL) ? null : $nextPageURL
+                    ];
+                    break;
+                case SearchType::Literatures:
+                    if ($scope == SearchScope::Library) {
+                        $resource = UserLibrary::search($data['query'])
+                            ->where('user_id', auth()->id())
                             ->where('trackable_type', Manga::class)
+                            ->query(function ($query) {
+                                $query->with(['trackable', 'user']);
+                            })
                             ->paginate($data['limit'] ?? 5)
                             ->appends($data);
                         // Get next page url minus domain
@@ -105,7 +125,7 @@ class SearchController extends Controller
                     }
 
                     $response[$type] = [
-                        'data' => LiteratureResource::collection($resource),
+                        'data' => LiteratureResourceIdentity::collection($resource),
                         'next' => empty($nextPageURL) ? null : $nextPageURL
                     ];
                     break;
@@ -124,8 +144,11 @@ class SearchController extends Controller
                 case SearchType::Shows:
                     if ($scope == SearchScope::Library) {
                         $resource = UserLibrary::search($data['query'])
-                            ->where('user_id', auth()->user()->id)
+                            ->where('user_id', auth()->id())
                             ->where('trackable_type', Anime::class)
+                            ->query(function ($query) {
+                                $query->with(['trackable', 'user']);
+                            })
                             ->paginate($data['limit'] ?? 5)
                             ->appends($data);
                         // Get next page url minus domain
@@ -193,16 +216,163 @@ class SearchController extends Controller
     /**
      * Returns a list of search suggestions.
      *
-     * @param $request
-     * @return string[][]
+     * @param SearchRequest $request
+     * @return JsonResponse
+     * @throws AuthenticationException
      */
-    public function suggestions($request): array
+    public function suggestions(SearchRequest $request): JsonResponse
     {
-        return [
-            'data' => [
-                ''
-            ]
-        ];
+        $data = $request->validated();
+        $scope = $data['scope'];
+        $types = $data['types'];
+        $query = $data['query'];
+
+        if ($scope == SearchScope::Library && !auth()->check()) {
+            throw new AuthenticationException('The request wasn’t accepted due to an issue with the credentials.');
+        }
+
+        $response = collect();
+        foreach ($types as $type) {
+            switch ($type) {
+                case SearchType::Characters:
+                    $resource = collect(Character::search($query)
+                        ->take($data['limit'] ?? 5)
+                        ->raw()['hits'])
+                        ->map(function ($item) {
+                            return $item['name'];
+                        });
+                    $response = $response->merge($resource);
+                    break;
+                case SearchType::Episodes:
+                    $resource = collect(Episode::search($query)
+                        ->take($data['limit'] ?? 5)
+                        ->raw()['hits'])
+                        ->map(function ($item) {
+                            return $item['title'];
+                        });
+                    $response = $response->merge($resource);
+                    break;
+                case SearchType::Games:
+                    if ($scope == SearchScope::Library) {
+                        $resource = collect(UserLibrary::search($data['query'])
+                            ->where('user_id', auth()->id())
+                            ->where('trackable_type', Game::class)
+                            ->take($data['limit'] ?? 5)
+                            ->raw()['hits'])
+                            ->map(function ($item) {
+                                return $item['trackable']['title'];
+                            })
+                            ->toArray();
+                    } else {
+                        $resource = collect(Game::search($query)
+                            ->take($data['limit'] ?? 5)
+                            ->raw()['hits'])
+                            ->map(function ($item) {
+                                return $item['title'];
+                            })
+                            ->toArray();
+                    }
+
+                    $response = $response->merge($resource);
+                    break;
+                case SearchType::Literatures:
+                    if ($scope == SearchScope::Library) {
+                        $resource = collect(UserLibrary::search($data['query'])
+                            ->where('user_id', auth()->id())
+                            ->where('trackable_type', Manga::class)
+                            ->take($data['limit'] ?? 5)
+                            ->raw()['hits'])
+                            ->map(function ($item) {
+                                return $item['trackable']['title'];
+                            })
+                            ->toArray();
+                    } else {
+                        $resource = collect(Manga::search($query)
+                            ->take($data['limit'] ?? 5)
+                            ->raw()['hits'])
+                            ->map(function ($item) {
+                                return $item['title'];
+                            })
+                            ->toArray();
+                    }
+
+                    $response = $response->merge($resource);
+                    break;
+                case SearchType::People:
+                    $resource = collect(Person::search($query)
+                        ->take($data['limit'] ?? 5)
+                        ->raw()['hits'])
+                        ->map(function ($item) {
+                            return $item['full_name'];
+                        });
+                    $response = $response->merge($resource);
+                    break;
+                case SearchType::Shows:
+                    if ($scope == SearchScope::Library) {
+                        $resource = collect(UserLibrary::search($query)
+                            ->where('user_id', auth()->id())
+                            ->where('trackable_type', Anime::class)
+                            ->take($data['limit'] ?? 5)
+                            ->raw()['hits'])
+                            ->map(function ($item) {
+                                return $item['trackable']['title'];
+                            })
+                            ->toArray();
+                    } else {
+                        $resource = collect(Anime::search($query)
+                            ->take($data['limit'] ?? 5)
+                            ->raw()['hits'])
+                            ->map(function ($item) {
+                                return $item['title'];
+                            });
+                    }
+
+                    $response = $response->merge($resource);
+                    break;
+                case SearchType::Songs:
+                    $resource = collect(Song::search($query)
+                        ->raw()['hits'])
+                        ->map(function ($item) {
+                            return $item['title'];
+                        });
+                    $response = $response->merge($resource);
+                    break;
+                case SearchType::Studios:
+                    $resource = collect(Studio::search($query)
+                        ->take($data['limit'] ?? 5)
+                        ->raw()['hits'])
+                        ->map(function ($item) {
+                            return $item['name'];
+                        });
+                    $response = $response->merge($resource);
+                    break;
+                case SearchType::Users:
+                    $resource = collect(User::search($query)
+                        ->take($data['limit'] ?? 5)
+                        ->raw()['hits'])
+                        ->map(function ($item) {
+                            return $item['username'];
+                        });
+                    $response = $response->merge($resource);
+                    break;
+                default: break;
+            }
+        }
+
+        $response = $response
+            ->unique(function($item) {
+                return strtolower(trim($item));
+            })
+            ->sort(function ($a, $b) use ($query) {
+                similar_text(strtolower(trim($a)), strtolower(trim($query)), $percentA);
+                similar_text(strtolower(trim($b)), strtolower(trim($query)), $percentB);
+                return $percentB <=> $percentA;
+            })
+            ->values();
+
+        return JSONResult::success([
+            'data' => $response
+        ]);
     }
 
     /**

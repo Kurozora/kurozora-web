@@ -6,9 +6,11 @@ use App\Events\CharacterViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetCharacterAnimeRequest;
+use App\Http\Requests\GetCharacterLiteratureRequest;
 use App\Http\Requests\GetCharacterPeopleRequest;
 use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\CharacterResource;
+use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\PersonResourceIdentity;
 use App\Models\Character;
 use Illuminate\Http\JsonResponse;
@@ -76,6 +78,30 @@ class CharacterController extends Controller
         // Return character anime
         return JSONResult::success([
             'data' => AnimeResourceIdentity::collection($anime),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Returns literatures information about a character.
+     *
+     * @param GetCharacterLiteratureRequest $request
+     * @param Character $character
+     * @return JsonResponse
+     */
+    public function literatures(GetCharacterLiteratureRequest $request, Character $character): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the literatures
+        $literatures = $character->getManga($data['limit'] ?? 25, $data['page'] ?? 1);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $literatures->nextPageUrl());
+
+        // Return character literatures
+        return JSONResult::success([
+            'data' => LiteratureResourceIdentity::collection($literatures),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

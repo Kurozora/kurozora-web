@@ -9,7 +9,7 @@ use App\Http\Requests\GetMangaCastRequest;
 use App\Http\Requests\GetMangaCharactersRequest;
 use App\Http\Requests\GetMangaMoreByStudioRequest;
 use App\Http\Requests\GetMangaStudiosRequest;
-use App\Http\Requests\GetMediaRelatedMangasRequest;
+use App\Http\Requests\GetMediaRelatedLiteraturesRequest;
 use App\Http\Requests\GetMediaRelatedShowsRequest;
 use App\Http\Requests\GetMediaStaffRequest;
 use App\Http\Requests\GetUpcomingMangaRequest;
@@ -18,7 +18,7 @@ use App\Http\Resources\CharacterResourceIdentity;
 use App\Http\Resources\LiteratureResource;
 use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\MangaCastResourceIdentity;
-use App\Http\Resources\MediaRelatedMangaResource;
+use App\Http\Resources\MediaRelatedLiteratureResource;
 use App\Http\Resources\MediaRelatedShowResource;
 use App\Http\Resources\MediaStaffResource;
 use App\Http\Resources\StudioResource;
@@ -120,22 +120,22 @@ class MangaController extends Controller
     /**
      * Returns related-mangas information of a Manga.
      *
-     * @param GetMediaRelatedMangasRequest $request
+     * @param GetMediaRelatedLiteraturesRequest $request
      * @param Manga $manga
      * @return JsonResponse
      */
-    public function relatedMangas(GetMediaRelatedMangasRequest $request, Manga $manga): JsonResponse
+    public function relatedLiteratures(GetMediaRelatedLiteraturesRequest $request, Manga $manga): JsonResponse
     {
         $data = $request->validated();
 
         // Get the related mangas
-        $relatedMangas = $manga->getMangaRelations($data['limit'] ?? 25, $data['page'] ?? 1);
+        $relatedLiteratures = $manga->getMangaRelations($data['limit'] ?? 25, $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $relatedMangas->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $relatedLiteratures->nextPageUrl());
 
         return JSONResult::success([
-            'data' => MediaRelatedMangaResource::collection($relatedMangas),
+            'data' => MediaRelatedLiteratureResource::collection($relatedLiteratures),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

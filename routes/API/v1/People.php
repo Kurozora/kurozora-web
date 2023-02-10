@@ -15,6 +15,10 @@ Route::prefix('/people')
                     ->middleware('auth.kurozora:optional')
                     ->name('.anime');
 
+                Route::get('/literatures', [PersonController::class, 'literatures'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.literatures');
+
                 Route::get('/characters', [PersonController::class, 'characters'])
                     ->name('.characters');
             });

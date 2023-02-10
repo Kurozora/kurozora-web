@@ -6,7 +6,7 @@ use App\Models\AnimeCast;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AnimeCastResource extends JsonResource
+class ShowCastResource extends JsonResource
 {
     /**
      * The resource instance.

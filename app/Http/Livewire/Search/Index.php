@@ -121,7 +121,7 @@ class Index extends Component
             }
 
             $models = match ($this->type) {
-                SearchType::Literature => Manga::class,
+                SearchType::Literatures => Manga::class,
                 SearchType::Episodes => Episode::class,
                 SearchType::Characters => Character::class,
                 SearchType::People => Person::class,
@@ -162,7 +162,7 @@ class Index extends Component
                 'Death Note',
                 'アキラ',
             ],
-            SearchType::Literature => [
+            SearchType::Literatures => [
                 'Blame',
                 'Summertime Render',
                 'アキラ',
