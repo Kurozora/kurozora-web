@@ -48,7 +48,6 @@ trait HasMediaGenres
     public function genres(): HasManyThrough
     {
         return $this->hasManyThrough(Genre::class, MediaGenre::class, 'model_id', 'id', 'id', 'genre_id')
-//            ->where('model_id', '=', $this->getKey())
             ->where('model_type', '=', $this->getMorphClass());
     }
 
@@ -67,6 +66,9 @@ trait HasMediaGenres
             $genreID = $genre->id;
         }
 
-        return $query->whereRelation('genres', 'genre_id', '=', $genreID);
+        return $query->leftJoin(MediaGenre::TABLE_NAME, MediaGenre::TABLE_NAME . '.model_id', '=', self::TABLE_NAME . '.' . $this->getKeyName())
+            ->where(MediaGenre::TABLE_NAME . '.model_type', '=', $this->getMorphClass())
+            ->where(MediaGenre::TABLE_NAME . '.genre_id', '=', $genreID)
+            ->select(self::TABLE_NAME . '.*');
     }
 }

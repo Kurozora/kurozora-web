@@ -132,7 +132,7 @@ class ExploreCategory extends Resource
                 ->sortable()
                 ->help('Turning this on will make the category visible to the users.'),
 
-            HasMany::make('Items', 'explore_category_items', ExploreCategoryItem::class),
+            HasMany::make('Items', 'exploreCategoryItems', ExploreCategoryItem::class),
         ];
     }
 

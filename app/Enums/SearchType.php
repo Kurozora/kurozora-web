@@ -5,6 +5,7 @@ namespace App\Enums;
 use App\Models\Anime;
 use App\Models\Character;
 use App\Models\Episode;
+use App\Models\Game;
 use App\Models\Manga;
 use App\Models\Person;
 use App\Models\Song;
@@ -17,7 +18,7 @@ use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
  * @method static SearchType Characters()
  * @method static SearchType Episodes()
  * @method static SearchType Games()
- * @method static SearchType Literature()
+ * @method static SearchType Literatures()
  * @method static SearchType People()
  * @method static SearchType Shows()
  * @method static SearchType Songs()
@@ -29,7 +30,7 @@ final class SearchType extends Enum
     const Characters = 'characters';
     const Episodes = 'episodes';
     const Games = 'games';
-    const Literature = 'literature';
+    const Literatures = 'literatures';
     const People = 'people';
     const Shows = 'shows';
     const Songs = 'songs';
@@ -48,7 +49,8 @@ final class SearchType extends Enum
     {
         return match ($model) {
             Anime::class => SearchType::Shows(),
-            Manga::class => SearchType::Literature(),
+            Manga::class => SearchType::Literatures(),
+            Game::class => SearchType::Games(),
             Character::class => SearchType::Characters(),
             Episode::class => SearchType::Episodes(),
             Person::class => SearchType::People(),
@@ -71,11 +73,13 @@ final class SearchType extends Enum
         return match($keys->value ?? $keys) {
             SearchScope::Library => [
                 SearchType::Shows,
-                SearchType::Literature,
+                SearchType::Literatures,
+//                SearchType::Games,
             ],
             SearchScope::Kurozora => [
                 SearchType::Shows,
-                SearchType::Literature,
+                SearchType::Literatures,
+//                SearchType::Games,
                 SearchType::Episodes,
                 SearchType::Characters,
                 SearchType::People,
@@ -95,9 +99,11 @@ final class SearchType extends Enum
      */
     public static function asWebSelectArray(SearchScope|string|null $scope = null): array
     {
-        $selectArray = [];
-        $selectArray[SearchType::Shows] = __('Anime');
-        $selectArray[SearchType::Literature] = __('Manga');
+        $selectArray = [
+            SearchType::Shows => __('Anime'),
+            SearchType::Literatures => __('Manga'),
+//            SearchType::Games => __('Games'),
+        ];
 
         if ($scope != SearchScope::Library || ($scope instanceof SearchScope && $scope->value != SearchScope::Library)) {
             $selectArray[SearchType::Episodes] = __('Episodes');

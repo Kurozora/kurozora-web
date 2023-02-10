@@ -4,7 +4,7 @@
             <x-section-nav class="flex flex-nowrap justify-between mb-5">
                 <x-slot:title>
                     @switch($exploreCategory->type)
-                    @case(\App\Enums\ExploreCategoryTypes::AnimeSeason)
+                    @case(\App\Enums\ExploreCategoryTypes::ShowsSeason)
                         {{ season_of_year()->key . ' ' . now()->year }}
                     @break
                     @default
@@ -45,18 +45,10 @@
                         </div>
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::NewShows)
-                        <x-rows.small-lockup :animes="$this->exploreCategoryItems" />
-                    @break
                     @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateShows)
-                        <x-rows.small-lockup :animes="$this->exploreCategoryItems" />
-                    @break
                     @case(\App\Enums\ExploreCategoryTypes::RecentlyFinishedShows)
-                        <x-rows.small-lockup :animes="$this->exploreCategoryItems" />
-                    @break
-                    @case(\App\Enums\ExploreCategoryTypes::AnimeContinuing)
-                        <x-rows.small-lockup :animes="$this->exploreCategoryItems" />
-                    @break
-                    @case(\App\Enums\ExploreCategoryTypes::AnimeSeason)
+                    @case(\App\Enums\ExploreCategoryTypes::ContinuingShows)
+                    @case(\App\Enums\ExploreCategoryTypes::ShowsSeason)
                         <x-rows.small-lockup :animes="$this->exploreCategoryItems" />
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::Shows)
@@ -84,6 +76,14 @@
                                     {{ 'Unhandled size: ' . $exploreCategory->size }}
                                 @endif
                         @endswitch
+                    @break
+                    @case(\App\Enums\ExploreCategoryTypes::Literatures)
+                    @case(\App\Enums\ExploreCategoryTypes::NewLiteratures)
+                    @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateLiteratures)
+                    @case(\App\Enums\ExploreCategoryTypes::RecentlyFinishedLiteratures)
+                    @case(\App\Enums\ExploreCategoryTypes::ContinuingLiteratures)
+                    @case(\App\Enums\ExploreCategoryTypes::LiteraturesSeason)
+                        <x-rows.small-lockup :mangas="$this->exploreCategoryItems" />
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::Genres)
                         <div class="flex flex-nowrap gap-4 snap-x overflow-x-scroll no-scrollbar">

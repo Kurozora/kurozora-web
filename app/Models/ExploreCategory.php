@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\ExploreCategoryTypes;
 use App\Scopes\ExploreCategoryIsEnabledScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Request;
@@ -27,7 +28,7 @@ class ExploreCategory extends KModel implements Sitemapable
      * @var array
      */
     protected $with = [
-        'explore_category_items'
+        'exploreCategoryItems'
     ];
 
     /**
@@ -74,9 +75,31 @@ class ExploreCategory extends KModel implements Sitemapable
      *
      * @return HasMany
      */
-    function explore_category_items(): HasMany
+    function exploreCategoryItems(): HasMany
     {
         return $this->hasMany(ExploreCategoryItem::class);
+    }
+
+    function anime(Genre|Theme|null $model = null): Anime|Builder
+    {
+        if (is_a($model, Genre::class)) {
+            return Anime::whereGenre($model);
+        } else if (is_a($model, Theme::class)) {
+            return Anime::whereTheme($model);
+        }
+
+        return Anime::query();
+    }
+
+    function manga(Genre|Theme|null $model = null): Manga|Builder
+    {
+        if (is_a($model, Genre::class)) {
+            return Manga::whereGenre($model);
+        } else if (is_a($model, Theme::class)) {
+            return Manga::whereTheme($model);
+        }
+
+        return Manga::query();
     }
 
     /**
@@ -85,24 +108,15 @@ class ExploreCategory extends KModel implements Sitemapable
      * @param Genre|Theme|null $model
      * @return ExploreCategory
      */
-    public function most_popular_shows(Genre|Theme|null $model = null): ExploreCategory
+    public function mostPopularShows(Genre|Theme|null $model = null): ExploreCategory
     {
         if ($this->type === ExploreCategoryTypes::MostPopularShows) {
-            if (is_a($model, Genre::class)) {
-                $popularShows = Anime::whereGenre($model)
-                    ->mostPopular(10, 3, $model->is_nsfw) // fucking named parameters not working
-                    ->get('id');
-            } else if (is_a($model, Theme::class)) {
-                $popularShows = Anime::whereTheme($model)
-                    ->mostPopular(10, 3, $model->is_nsfw) // look above
-                    ->get('id');
-            } else {
-                $popularShows = Anime::mostPopular()
-                    ->get('id');
-            }
+            $popularShows = $this->anime($model)
+                ->mostPopular(10, 3, (bool) $model?->is_nsfw)
+                ->get();
 
             foreach($popularShows as $popularShow) {
-                $this->explore_category_items->add(new ExploreCategoryItem([
+                $this->exploreCategoryItems->add(new ExploreCategoryItem([
                     'model_id' => $popularShow->id,
                     'model_type' => $popularShow->getMorphClass()
                 ]));
@@ -117,24 +131,15 @@ class ExploreCategory extends KModel implements Sitemapable
      * @param Genre|Theme|null $model
      * @return ExploreCategory
      */
-    public function upcoming_shows(Genre|Theme|null $model = null): ExploreCategory
+    public function upcomingShows(Genre|Theme|null $model = null): ExploreCategory
     {
         if ($this->type === ExploreCategoryTypes::UpcomingShows) {
-            if (is_a($model, Genre::class)) {
-                $upcomingShows = Anime::whereGenre($model)
-                    ->upcomingShows()
-                    ->get('id');
-            } else if (is_a($model, Theme::class)) {
-                $upcomingShows = Anime::whereTheme($model)
-                    ->upcomingShows()
-                    ->get('id');
-            } else {
-                $upcomingShows = Anime::upcomingShows()
-                    ->get('id');
-            }
+            $upcomingShows = $this->anime($model)
+                ->upcomingShows()
+                ->get(Anime::TABLE_NAME . '.id');
 
             foreach($upcomingShows as $upcomingShow) {
-                $this->explore_category_items->add(new ExploreCategoryItem([
+                $this->exploreCategoryItems->add(new ExploreCategoryItem([
                     'model_id' => $upcomingShow->id,
                     'model_type' => $upcomingShow->getMorphClass()
                 ]));
@@ -153,21 +158,12 @@ class ExploreCategory extends KModel implements Sitemapable
     public function newShows(Genre|Theme|null $model = null, int $limit = 10): ExploreCategory
     {
         if ($this->type === ExploreCategoryTypes::NewShows) {
-            if (is_a($model, Genre::class)) {
-                $newShows = Anime::whereGenre($model)
-                    ->newShows($limit)
-                    ->get('id');
-            } else if (is_a($model, Theme::class)) {
-                $newShows = Anime::whereTheme($model)
-                    ->newShows($limit)
-                    ->get('id');
-            } else {
-                $newShows = Anime::newShows($limit)
-                    ->get('id');
-            }
+            $newShows = $this->anime($model)
+                ->newShows($limit)
+                ->get(Anime::TABLE_NAME . '.id');
 
             foreach($newShows as $newShow) {
-                $this->explore_category_items->add(new ExploreCategoryItem([
+                $this->exploreCategoryItems->add(new ExploreCategoryItem([
                     'model_id' => $newShow->id,
                     'model_type' => $newShow->getMorphClass()
                 ]));
@@ -186,21 +182,12 @@ class ExploreCategory extends KModel implements Sitemapable
     public function recentlyUpdatedShows(Genre|Theme|null $model = null, int $limit = 10): ExploreCategory
     {
         if ($this->type === ExploreCategoryTypes::RecentlyUpdateShows) {
-            if (is_a($model, Genre::class)) {
-                $recentlyUpdatedShows = Anime::whereGenre($model)
-                    ->recentlyUpdatedShows($limit)
-                    ->get('id');
-            } else if (is_a($model, Theme::class)) {
-                $recentlyUpdatedShows = Anime::whereTheme($model)
-                    ->recentlyUpdatedShows($limit)
-                    ->get('id');
-            } else {
-                $recentlyUpdatedShows = Anime::recentlyUpdatedShows($limit)
-                    ->get('id');
-            }
+            $recentlyUpdatedShows = $this->anime($model)
+                ->recentlyUpdatedShows($limit)
+                ->get(Anime::TABLE_NAME . '.id');
 
             foreach($recentlyUpdatedShows as $recentlyUpdatedShow) {
-                $this->explore_category_items->add(new ExploreCategoryItem([
+                $this->exploreCategoryItems->add(new ExploreCategoryItem([
                     'model_id' => $recentlyUpdatedShow->id,
                     'model_type' => $recentlyUpdatedShow->getMorphClass()
                 ]));
@@ -219,21 +206,12 @@ class ExploreCategory extends KModel implements Sitemapable
     public function recentlyFinishedShows(Genre|Theme|null $model = null, int $limit = 10): ExploreCategory
     {
         if ($this->type === ExploreCategoryTypes::RecentlyFinishedShows) {
-            if (is_a($model, Genre::class)) {
-                $recentlyFinishedShows = Anime::whereGenre($model)
-                    ->recentlyFinishedShows($limit)
-                    ->get('id');
-            } else if (is_a($model, Theme::class)) {
-                $recentlyFinishedShows = Anime::whereTheme($model)
-                    ->recentlyFinishedShows($limit)
-                    ->get('id');
-            } else {
-                $recentlyFinishedShows = Anime::recentlyFinishedShows($limit)
-                    ->get('id');
-            }
+            $recentlyFinishedShows = $this->anime($model)
+                ->recentlyFinishedShows($limit)
+                ->get(Anime::TABLE_NAME . '.id');
 
             foreach($recentlyFinishedShows as $recentlyFinishedShow) {
-                $this->explore_category_items->add(new ExploreCategoryItem([
+                $this->exploreCategoryItems->add(new ExploreCategoryItem([
                     'model_id' => $recentlyFinishedShow->id,
                     'model_type' => $recentlyFinishedShow->getMorphClass()
                 ]));
@@ -248,24 +226,15 @@ class ExploreCategory extends KModel implements Sitemapable
      * @param Genre|Theme|null $model
      * @return ExploreCategory
      */
-    public function anime_continuing(Genre|Theme|null $model = null): ExploreCategory
+    public function animeContinuing(Genre|Theme|null $model = null): ExploreCategory
     {
-        if ($this->type === ExploreCategoryTypes::AnimeContinuing) {
-            if (is_a($model, Genre::class)) {
-                $animeContinuing = Anime::whereGenre($model)
-                    ->animeContinuing()
-                    ->get('id');
-            } else if (is_a($model, Theme::class)) {
-                $animeContinuing = Anime::whereTheme($model)
-                    ->animeContinuing()
-                    ->get('id');
-            } else {
-                $animeContinuing = Anime::animeContinuing()
-                    ->get('id');
-            }
+        if ($this->type === ExploreCategoryTypes::ContinuingShows) {
+            $animeContinuing = $this->anime($model)
+                ->animeContinuing()
+                ->get(Anime::TABLE_NAME . '.id');
 
             foreach($animeContinuing as $anime) {
-                $this->explore_category_items->add(new ExploreCategoryItem([
+                $this->exploreCategoryItems->add(new ExploreCategoryItem([
                     'model_id' => $anime->id,
                     'model_type' => $anime->getMorphClass()
                 ]));
@@ -280,24 +249,15 @@ class ExploreCategory extends KModel implements Sitemapable
      * @param Genre|Theme|null $model
      * @return ExploreCategory
      */
-    public function anime_season(Genre|Theme|null $model = null): ExploreCategory
+    public function animeSeason(Genre|Theme|null $model = null): ExploreCategory
     {
-        if ($this->type === ExploreCategoryTypes::AnimeSeason) {
-            if (is_a($model, Genre::class)) {
-                $animeSeason = Anime::whereGenre($model)
-                    ->animeSeason()
-                    ->get('id');
-            } else if (is_a($model, Theme::class)) {
-                $animeSeason = Anime::whereTheme($model)
-                    ->animeSeason()
-                    ->get('id');
-            } else {
-                $animeSeason = Anime::animeSeason()
-                    ->get('id');
-            }
+        if ($this->type === ExploreCategoryTypes::ShowsSeason) {
+            $animeSeason = $this->anime($model)
+                ->animeSeason()
+                ->get(Anime::TABLE_NAME . '.id');
 
             foreach($animeSeason as $anime) {
-                $this->explore_category_items->add(new ExploreCategoryItem([
+                $this->exploreCategoryItems->add(new ExploreCategoryItem([
                     'model_id' => $anime->id,
                     'model_type' => $anime->getMorphClass()
                 ]));
@@ -312,7 +272,7 @@ class ExploreCategory extends KModel implements Sitemapable
      * @param Genre|Theme $model
      * @return ExploreCategory
      */
-    public function shows_we_love(Genre|Theme $model): ExploreCategory
+    public function showsWeLove(Genre|Theme $model): ExploreCategory
     {
         if ($this->type === ExploreCategoryTypes::Shows) {
             if (is_a($model, Genre::class)) {
@@ -332,9 +292,208 @@ class ExploreCategory extends KModel implements Sitemapable
             }
 
             foreach($randomShows as $randomShow) {
-                $this->explore_category_items->add(new ExploreCategoryItem([
+                $this->exploreCategoryItems->add(new ExploreCategoryItem([
                     'model_id' => $randomShow->id,
                     'model_type' => $randomShow->getMorphClass()
+                ]));
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Returns the current most popular manga.
+     *
+     * @param Genre|Theme|null $model
+     * @return ExploreCategory
+     */
+    public function mostPopularLiterature(Genre|Theme|null $model = null): ExploreCategory
+    {
+        if ($this->type === ExploreCategoryTypes::MostPopularLiteratures) {
+            $popularManga = $this->manga($model)
+                ->mostPopular(10, 3, $model->is_nsfw)
+                ->get(Manga::TABLE_NAME . '.id');
+
+            foreach($popularManga as $manga) {
+                $this->exploreCategoryItems->add(new ExploreCategoryItem([
+                    'model_id' => $manga->id,
+                    'model_type' => $manga->getMorphClass()
+                ]));
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Returns the upcoming manga.
+     *
+     * @param Genre|Theme|null $model
+     * @return ExploreCategory
+     */
+    public function upcomingLiterature(Genre|Theme|null $model = null): ExploreCategory
+    {
+        if ($this->type === ExploreCategoryTypes::UpcomingLiteratures) {
+            $upcomingManga = $this->manga($model)
+                ->upcomingManga()
+                ->get(Manga::TABLE_NAME . '.id');
+
+            foreach($upcomingManga as $manga) {
+                $this->exploreCategoryItems->add(new ExploreCategoryItem([
+                    'model_id' => $manga->id,
+                    'model_type' => $manga->getMorphClass()
+                ]));
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Returns manga that's been added recently.
+     *
+     * @param Genre|Theme|null $model
+     * @param int $limit
+     * @return ExploreCategory
+     */
+    public function newLiterature(Genre|Theme|null $model = null, int $limit = 10): ExploreCategory
+    {
+        if ($this->type === ExploreCategoryTypes::NewLiteratures) {
+            $newManga = $this->manga($model)
+                ->newManga($limit)
+                ->get(Manga::TABLE_NAME . '.id');
+
+            foreach($newManga as $newShow) {
+                $this->exploreCategoryItems->add(new ExploreCategoryItem([
+                    'model_id' => $newShow->id,
+                    'model_type' => $newShow->getMorphClass()
+                ]));
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Returns manga that's been added recently.
+     *
+     * @param Genre|Theme|null $model
+     * @param int $limit
+     * @return ExploreCategory
+     */
+    public function recentlyUpdatedLiterature(Genre|Theme|null $model = null, int $limit = 10): ExploreCategory
+    {
+        if ($this->type === ExploreCategoryTypes::RecentlyUpdateLiteratures) {
+            $recentlyUpdatedManga = $this->manga($model)
+                ->recentlyUpdatedManga($limit)
+                ->get(Manga::TABLE_NAME . '.id');
+
+            foreach($recentlyUpdatedManga as $recentlyUpdatedShow) {
+                $this->exploreCategoryItems->add(new ExploreCategoryItem([
+                    'model_id' => $recentlyUpdatedShow->id,
+                    'model_type' => $recentlyUpdatedShow->getMorphClass()
+                ]));
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Returns manga that's finished recently.
+     *
+     * @param Genre|Theme|null $model
+     * @param int $limit
+     * @return ExploreCategory
+     */
+    public function recentlyFinishedLiterature(Genre|Theme|null $model = null, int $limit = 10): ExploreCategory
+    {
+        if ($this->type === ExploreCategoryTypes::RecentlyFinishedLiteratures) {
+            $recentlyFinishedManga = $this->manga($model)
+                ->recentlyFinishedManga($limit)
+                ->get(Manga::TABLE_NAME . '.id');
+
+            foreach($recentlyFinishedManga as $recentlyFinishedShow) {
+                $this->exploreCategoryItems->add(new ExploreCategoryItem([
+                    'model_id' => $recentlyFinishedShow->id,
+                    'model_type' => $recentlyFinishedShow->getMorphClass()
+                ]));
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Append the manga continuing since past season(s) to the category's items.
+     *
+     * @param Genre|Theme|null $model
+     * @return ExploreCategory
+     */
+    public function literatureContinuing(Genre|Theme|null $model = null): ExploreCategory
+    {
+        if ($this->type === ExploreCategoryTypes::ContinuingLiteratures) {
+            $mangaContinuing = $this->manga($model)
+                ->mangaContinuing()
+                ->get(Manga::TABLE_NAME . '.id');
+
+            foreach($mangaContinuing as $manga) {
+                $this->exploreCategoryItems->add(new ExploreCategoryItem([
+                    'model_id' => $manga->id,
+                    'model_type' => $manga->getMorphClass()
+                ]));
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Append the manga of the current season to the category's items.
+     *
+     * @param Genre|Theme|null $model
+     * @return ExploreCategory
+     */
+    public function literatureSeason(Genre|Theme|null $model = null): ExploreCategory
+    {
+        if ($this->type === ExploreCategoryTypes::LiteraturesSeason) {
+            $mangaSeason = $this->manga($model)
+                ->mangaSeason()
+                ->get(Manga::TABLE_NAME . '.id');
+
+            foreach($mangaSeason as $manga) {
+                $this->exploreCategoryItems->add(new ExploreCategoryItem([
+                    'model_id' => $manga->id,
+                    'model_type' => $manga->getMorphClass()
+                ]));
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Returns the current most popular manga.
+     *
+     * @param Genre|Theme $model
+     * @return ExploreCategory
+     */
+    public function literatureWeLove(Genre|Theme $model): ExploreCategory
+    {
+        if ($this->type === ExploreCategoryTypes::Shows) {
+            if (is_a($model, Genre::class)) {
+                $randomManga = $model->mangas()
+                    ->inRandomOrder()
+                    ->limit(10)
+                    ->get('id');
+            } else if (is_a($model, Theme::class)) {
+                $randomManga = $model->mangas()
+                    ->inRandomOrder()
+                    ->limit(10)
+                    ->get('id');
+            } else {
+                $randomManga = Manga::inRandomOrder()
+                    ->limit(10)
+                    ->get('id');
+            }
+
+            foreach($randomManga as $manga) {
+                $this->exploreCategoryItems->add(new ExploreCategoryItem([
+                    'model_id' => $manga->id,
+                    'model_type' => $manga->getMorphClass()
                 ]));
             }
         }
@@ -353,7 +512,7 @@ class ExploreCategory extends KModel implements Sitemapable
             $charactersBornToday = Character::bornToday($limit)->get('id');
 
             foreach($charactersBornToday as $characterBornToday) {
-                $this->explore_category_items->add(new ExploreCategoryItem([
+                $this->exploreCategoryItems->add(new ExploreCategoryItem([
                     'model_id' => $characterBornToday->id,
                     'model_type' => $characterBornToday->getMorphClass()
                 ]));
@@ -374,7 +533,7 @@ class ExploreCategory extends KModel implements Sitemapable
             $peopleBornToday = Person::bornToday($limit)->get('id');
 
             foreach($peopleBornToday as $personBornToday) {
-                $this->explore_category_items->add(new ExploreCategoryItem([
+                $this->exploreCategoryItems->add(new ExploreCategoryItem([
                     'model_id' => $personBornToday->id,
                     'model_type' => $personBornToday->getMorphClass()
                 ]));

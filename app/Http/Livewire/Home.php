@@ -29,7 +29,9 @@ class Home extends Component
      */
     function getExploreCategoriesProperty(): array|Collection
     {
-        return ExploreCategory::orderBy('position')->get();
+        return ExploreCategory::orderBy('position')
+            ->without('exploreCategoryItems')
+            ->get();
     }
 
     /**

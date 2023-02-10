@@ -21,7 +21,7 @@ class ExploreCategoryItem extends KModel
      * @var array
      */
     protected $with = [
-        'model'
+        'model',
     ];
 
     /**

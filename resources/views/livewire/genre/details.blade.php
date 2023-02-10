@@ -44,13 +44,13 @@
                     <section class="pb-8">
                         <div class="flex overflow-x-scroll no-scrollbar">
                             <div class="flex flex-nowrap gap-4">
-                                @foreach($exploreCategory->most_popular_shows($genre)->explore_category_items as $categoryItem)
+                                @foreach($exploreCategory->mostPopularShows($genre)->exploreCategoryItems as $categoryItem)
                                     <x-lockups.banner-lockup :anime="$categoryItem->model" />
                                 @endforeach
                             </div>
                         </div>
                     </section>
-                @break
+                    @break
                 @default
                     <livewire:components.explore-category-section :exploreCategory="$exploreCategory" :genre="$genre" />
             @endswitch

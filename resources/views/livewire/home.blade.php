@@ -128,7 +128,7 @@
             @case(\App\Enums\ExploreCategoryTypes::MostPopularShows)
                 <section class="pb-8">
                     <div class="flex flex-nowrap gap-4 mt-5 snap-x overflow-x-scroll no-scrollbar">
-                        @foreach($exploreCategory->most_popular_shows()->explore_category_items as $categoryItem)
+                        @foreach($exploreCategory->mostPopularShows()->exploreCategoryItems as $categoryItem)
                             <x-lockups.banner-lockup :anime="$categoryItem->model" />
                         @endforeach
                     </div>

@@ -18,7 +18,14 @@
             @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateShows)
             @case(\App\Enums\ExploreCategoryTypes::Shows)
                 {{ __('Explore the latest :x anime only on Kurozora, the largest, free online anime, manga, music & game database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}
-            @break
+                @break
+            @case(\App\Enums\ExploreCategoryTypes::MostPopularLiteratures)
+            @case(\App\Enums\ExploreCategoryTypes::UpcomingLiteratures)
+            @case(\App\Enums\ExploreCategoryTypes::NewLiteratures)
+            @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateLiteratures)
+            @case(\App\Enums\ExploreCategoryTypes::Literatures)
+                {{ __('Explore the latest :x manga only on Kurozora, the largest, free online anime, manga, music & game database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}
+                @break
             @default
                 {{ __('Explore the latest :x only on Kurozora, the largest, free online anime, manga, music & game database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}
         @endswitch
@@ -53,34 +60,44 @@
             @case(\App\Enums\ExploreCategoryTypes::NewShows)
             @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateShows)
             @case(\App\Enums\ExploreCategoryTypes::RecentlyFinishedShows)
-            @case(\App\Enums\ExploreCategoryTypes::AnimeContinuing)
-            @case(\App\Enums\ExploreCategoryTypes::AnimeSeason)
+            @case(\App\Enums\ExploreCategoryTypes::ContinuingShows)
+            @case(\App\Enums\ExploreCategoryTypes::ShowsSeason)
             @case(\App\Enums\ExploreCategoryTypes::Shows)
                 <x-rows.small-lockup :animes="$this->exploreCategoryItems" :is-row="false" />
-            @break
+                @break
+            @case(\App\Enums\ExploreCategoryTypes::MostPopularLiteratures)
+            @case(\App\Enums\ExploreCategoryTypes::UpcomingLiteratures)
+            @case(\App\Enums\ExploreCategoryTypes::NewLiteratures)
+            @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateLiteratures)
+            @case(\App\Enums\ExploreCategoryTypes::RecentlyFinishedLiteratures)
+            @case(\App\Enums\ExploreCategoryTypes::ContinuingLiteratures)
+            @case(\App\Enums\ExploreCategoryTypes::LiteraturesSeason)
+            @case(\App\Enums\ExploreCategoryTypes::Literatures)
+                <x-rows.small-lockup :mangas="$this->exploreCategoryItems" :is-row="false" />
+                @break
             @case(\App\Enums\ExploreCategoryTypes::Genres)
                 <section class="{{ $gridClass }}">
                     @foreach($this->exploreCategoryItems as $categoryItem)
                         <x-lockups.genre-lockup :genre="$categoryItem" />
                     @endforeach
                 </section>
-            @break
+                @break
             @case(\App\Enums\ExploreCategoryTypes::Themes)
                 <section class="{{ $gridClass }}">
                     @foreach($this->exploreCategoryItems as $categoryItem)
                         <x-lockups.theme-lockup :theme="$categoryItem" />
                     @endforeach
                 </section>
-            @break
+                @break
             @case(\App\Enums\ExploreCategoryTypes::Characters)
                 <x-rows.character-lockup :characters="$this->exploreCategoryItems" :is-row="false" />
-            @break
+                @break
             @case(\App\Enums\ExploreCategoryTypes::People)
                 <x-rows.person-lockup :people="$this->exploreCategoryItems" :is-row="false" />
-            @break
+                @break
             @case(\App\Enums\ExploreCategoryTypes::Songs)
                 <x-rows.music-lockup :anime-songs="$this->exploreCategoryItems" :show-episodes="false" :show-anime="true" :is-row="false" />
-            @break
+                @break
             @default
                 @if (app()->environment('local'))
                     {{ 'Unhandled type: ' . $exploreCategory->type }}

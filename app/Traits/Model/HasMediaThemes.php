@@ -48,7 +48,6 @@ trait HasMediaThemes
     public function themes(): HasManyThrough
     {
         return $this->hasManyThrough(Theme::class, MediaTheme::class, 'model_id', 'id', 'id', 'theme_id')
-//            ->where('model_id', '=', $this->getKey())
             ->where('model_type', '=', $this->getMorphClass());
     }
 
@@ -67,6 +66,9 @@ trait HasMediaThemes
             $themeID = $theme->id;
         }
 
-        return $query->whereRelation('mediaThemes', 'theme_id', '=', $themeID);
+        return $query->leftJoin(MediaTheme::TABLE_NAME, MediaTheme::TABLE_NAME . '.model_id', '=', self::TABLE_NAME . '.' . $this->getKeyName())
+            ->where(MediaTheme::TABLE_NAME . '.model_type', '=', $this->getMorphClass())
+            ->where(MediaTheme::TABLE_NAME . '.theme_id', '=', $themeID)
+            ->select(self::TABLE_NAME . '.*');
     }
 }
