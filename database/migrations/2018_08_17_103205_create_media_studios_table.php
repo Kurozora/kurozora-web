@@ -28,10 +28,14 @@ return new class extends Migration
 
         Schema::table(MediaStudio::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
+            $table->index('is_licensor');
+            $table->index('is_producer');
+            $table->index('is_studio');
+            $table->index('is_publisher');
             $table->index('deleted_at');
 
             // Set unique key constraints
-            $table->unique(['model_type', 'model_id', 'studio_id']);
+            $table->unique(['studio_id', 'model_type', 'model_id']);
 
             // Set foreign key constraints
             $table->foreign('studio_id')

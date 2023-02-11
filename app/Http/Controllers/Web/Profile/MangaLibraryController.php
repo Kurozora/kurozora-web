@@ -21,6 +21,11 @@ class MangaLibraryController extends Controller
         $data = $request->validated();
         $data['user'] = $user->id ? $user : auth()->user();
 
+        if (empty($user)) {
+            $request->session()->put('url.intended', route('mangalist'));
+            return to_route('sign-in');
+        }
+
         return to_route('profile.manga-library', $data);
     }
 }

@@ -19,7 +19,13 @@ class AnimeLibraryController extends Controller
     public function index(GetAnimeLibraryRequest $request, ?User $user)
     {
         $data = $request->validated();
-        $data['user'] = $user->id ? $user : auth()->user();
+        $user = $user->id ? $user : auth()->user();
+        $data['user'] = $user;
+
+        if (empty($user)) {
+            $request->session()->put('url.intended', route('animelist'));
+            return to_route('sign-in');
+        }
 
         return to_route('profile.anime-library', $data);
     }

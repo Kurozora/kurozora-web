@@ -149,16 +149,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.258.7",
+            "version": "3.258.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "09808d51cdb3cf01df1564dda4236da61ed9c804"
+                "reference": "3bb42aeb1e11f17b0ca7357385a427a438df35b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/09808d51cdb3cf01df1564dda4236da61ed9c804",
-                "reference": "09808d51cdb3cf01df1564dda4236da61ed9c804",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/3bb42aeb1e11f17b0ca7357385a427a438df35b1",
+                "reference": "3bb42aeb1e11f17b0ca7357385a427a438df35b1",
                 "shasum": ""
             },
             "require": {
@@ -237,9 +237,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.258.7"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.258.8"
             },
-            "time": "2023-02-09T19:23:14+00:00"
+            "time": "2023-02-10T19:22:52+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -7081,16 +7081,16 @@
         },
         {
             "name": "php-http/discovery",
-            "version": "1.15.1",
+            "version": "1.15.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/discovery.git",
-                "reference": "778b59fe5bc9a1df7b77a02306c9ea229ce32bbc"
+                "reference": "5cc428320191ac1d0b6520034c2dc0698628ced5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/discovery/zipball/778b59fe5bc9a1df7b77a02306c9ea229ce32bbc",
-                "reference": "778b59fe5bc9a1df7b77a02306c9ea229ce32bbc",
+                "url": "https://api.github.com/repos/php-http/discovery/zipball/5cc428320191ac1d0b6520034c2dc0698628ced5",
+                "reference": "5cc428320191ac1d0b6520034c2dc0698628ced5",
                 "shasum": ""
             },
             "require": {
@@ -7149,9 +7149,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-http/discovery/issues",
-                "source": "https://github.com/php-http/discovery/tree/1.15.1"
+                "source": "https://github.com/php-http/discovery/tree/1.15.2"
             },
-            "time": "2023-02-10T10:24:17+00:00"
+            "time": "2023-02-11T08:28:41+00:00"
         },
         {
             "name": "php-http/httplug",
@@ -8727,16 +8727,16 @@
         },
         {
             "name": "socialiteproviders/apple",
-            "version": "5.3.0",
+            "version": "5.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SocialiteProviders/Apple.git",
-                "reference": "13bfd5ad4a6ab33ecab35d933deba01e9de6e404"
+                "reference": "f3b9a435e302b1a3d9a50285e934a6be66b2754a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SocialiteProviders/Apple/zipball/13bfd5ad4a6ab33ecab35d933deba01e9de6e404",
-                "reference": "13bfd5ad4a6ab33ecab35d933deba01e9de6e404",
+                "url": "https://api.github.com/repos/SocialiteProviders/Apple/zipball/f3b9a435e302b1a3d9a50285e934a6be66b2754a",
+                "reference": "f3b9a435e302b1a3d9a50285e934a6be66b2754a",
                 "shasum": ""
             },
             "require": {
@@ -8794,7 +8794,7 @@
                 "issues": "https://github.com/socialiteproviders/providers/issues",
                 "source": "https://github.com/socialiteproviders/providers"
             },
-            "time": "2022-07-18T08:37:00+00:00"
+            "time": "2023-02-11T04:00:50+00:00"
         },
         {
             "name": "socialiteproviders/manager",
