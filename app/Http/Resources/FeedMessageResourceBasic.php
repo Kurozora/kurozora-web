@@ -26,7 +26,8 @@ class FeedMessageResourceBasic extends JsonResource
         $isReShared = $user && $feedMessage->reShares()->where('user_id', $user->id)->exists();
 
         $resource = [
-            'id'            => $feedMessage->id,
+            'id'            => (int) $feedMessage->id,
+            'uuid'          => (string) $feedMessage->id,
             'type'          => 'feed-messages',
             'href'          => route('api.feed.messages.details', $feedMessage, false),
             'attributes'    => [
