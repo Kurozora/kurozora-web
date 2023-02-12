@@ -13,6 +13,14 @@
                     </li>
 
                     <li class="mt-2">
+                        <x-footer-link href="{{ route('anime.upcoming.index') }}">{{ __('Upcoming Anime') }}</x-footer-link>
+                    </li>
+
+                    <li class="mt-2">
+                        <x-footer-link href="{{ route('anime.continuing.index') }}">{{ __('Continuing Anime') }}</x-footer-link>
+                    </li>
+
+                    <li class="mt-2">
                         <x-footer-link href="{{ route('anime.seasons.archive') }}">{{ __('Anime Archive') }}</x-footer-link>
                     </li>
                 </ul>
@@ -27,6 +35,14 @@
 
                     <li class="mt-2">
                         <x-footer-link href="{{ route('manga.seasons.index') }}">{{ __('Manga Seasons') }}</x-footer-link>
+                    </li>
+
+                    <li class="mt-2">
+                        <x-footer-link href="{{ route('manga.upcoming.index') }}">{{ __('Upcoming Manga') }}</x-footer-link>
+                    </li>
+
+                    <li class="mt-2">
+                        <x-footer-link href="{{ route('manga.continuing.index') }}">{{ __('Continuing Manga') }}</x-footer-link>
                     </li>
 
                     <li class="mt-2">
