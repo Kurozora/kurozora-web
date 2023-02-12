@@ -19,7 +19,8 @@ class MangaLibraryController extends Controller
     public function index(GetMangaLibraryRequest $request, ?User $user)
     {
         $data = $request->validated();
-        $data['user'] = $user->id ? $user : auth()->user();
+        $user = $user->id ? $user : auth()->user();
+        $data['user'] = $user;
 
         if (empty($user)) {
             $request->session()->put('url.intended', route('mangalist'));
