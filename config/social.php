@@ -32,6 +32,11 @@ return [
     'reddit' => [
         'url' => 'https://www.reddit.com/r/' . env('REDDIT_HANDLE'),
         'username' => env('REDDIT_HANDLE', 'Kurozora'),
+    ],
+
+    'youtube' => [
+        'url' => 'https://www.youtube.com/' . env('REDDIT_HANDLE'),
+        'username' => env('REDDIT_HANDLE', '@KurozoraApp'),
     ]
 
 ];

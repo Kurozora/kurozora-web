@@ -20,7 +20,7 @@
             <a class="after:absolute after:inset-0" href="{{ config('services.patreon.url') }}" target="_blank">
                 {{ __('Is Kurozora helpful? Please consider supporting me in keeping it online.') }}
             </a>
-            <a target="_blank"></a>
+            <a href="#" target="_blank"></a>
         </div>
 
 {{--        <section class="relative mb-8">--}}
