@@ -158,7 +158,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         parent::boot();
 
         static::creating(function (Anime $anime) {
-            if (empty($anime->air_season)) {
+            if (empty($anime->air_season->value == 0)) {
                 $anime->air_season = $anime->generateAiringSeason();
             }
         });

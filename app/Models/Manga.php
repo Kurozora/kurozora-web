@@ -148,7 +148,7 @@ class Manga extends KModel implements HasMedia, Sitemapable
         parent::boot();
 
         static::creating(function (Manga $manga) {
-            if (empty($manga->publication_season)) {
+            if (empty($manga->publication_season->value == 0)) {
                 $manga->publication_season = $manga->generatePublishingSeason();
             }
         });
