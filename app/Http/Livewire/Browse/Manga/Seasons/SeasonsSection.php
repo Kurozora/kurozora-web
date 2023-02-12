@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Livewire\Browse\Anime\Seasons;
+namespace App\Http\Livewire\Browse\Manga\Seasons;
 
-use App\Models\Anime;
+use App\Models\Manga;
 use App\Models\MediaType;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -15,9 +15,9 @@ class SeasonsSection extends Component
     /**
      * The array containing the cast data.
      *
-     * @var Collection $animes
+     * @var Collection $mangas
      */
-    public Collection $animes;
+    public Collection $mangas;
 
     /**
      * The object containing the media type data.
@@ -54,16 +54,16 @@ class SeasonsSection extends Component
         $this->mediaType = $mediaType;
         $this->seasonOfYear = $seasonOfYear;
         $this->year = $year;
-        $this->animes = collect();
+        $this->mangas = collect();
     }
 
     /**
-     * Get the anime with the given Media Type ID.
+     * Get the manga with the given Media Type ID.
      */
-    public function getAnimeForMediaType()
+    public function getMangaForMediaType()
     {
-        $this->animes = Anime::where([
-            ['air_season', '=', $this->seasonOfYear],
+        $this->mangas = Manga::where([
+            ['publication_season', '=', $this->seasonOfYear],
             ['media_type_id', '=', $this->mediaType->id]
         ])
             ->whereYear('started_at', '=', $this->year)
@@ -77,6 +77,6 @@ class SeasonsSection extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.browse.anime.seasons.seasons-section');
+        return view('livewire.browse.manga.seasons.seasons-section');
     }
 }
