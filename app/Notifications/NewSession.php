@@ -48,7 +48,7 @@ class NewSession extends Notification implements ShouldQueue
     public function toDatabase(mixed $notifiable): array
     {
         return [
-            'sessionID' => $this->sessionAttribute->id,
+            'sessionID' => (string) $this->sessionAttribute->id,
             'ipAddress' => $this->sessionAttribute->ip_address,
         ];
     }
