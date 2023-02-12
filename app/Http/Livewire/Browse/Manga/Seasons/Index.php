@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Livewire\Browse\Anime\Seasons;
+namespace App\Http\Livewire\Browse\Manga\Seasons;
 
 use App\Enums\SeasonOfYear;
-use App\Models\Anime;
+use App\Models\Manga;
 use App\Models\MediaType;
 use BenSampo\Enum\Exceptions\InvalidEnumKeyException;
 use Illuminate\Contracts\Foundation\Application;
@@ -45,12 +45,12 @@ class Index extends Component
     public function mount(int $year, string $season): void
     {
         if (!is_numeric($year)) {
-            to_route('anime.seasons.index');
+            to_route('manga.seasons.index');
             return;
         }
 
         if ($year < 1917) {
-            to_route('anime.seasons.index');
+            to_route('manga.seasons.index');
             return;
         }
 
@@ -60,7 +60,7 @@ class Index extends Component
         try {
             $this->seasonOfYear = SeasonOfYear::fromKey(str($season)->ucfirst());
         } catch (InvalidEnumKeyException $e) {
-            to_route('anime.seasons.index');
+            to_route('manga.seasons.index');
         }
     }
 
@@ -71,12 +71,12 @@ class Index extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.browse.anime.seasons.index', [
+        return view('livewire.browse.manga.seasons.index', [
             'seasonOfYear' => $this->seasonOfYear,
             'mediaTypes' => MediaType::select(MediaType::TABLE_NAME . '.*')
-                ->join(Anime::TABLE_NAME, function ($join) {
-                    $join->on(Anime::TABLE_NAME . '.media_type_id', '=', MediaType::TABLE_NAME . '.id')
-                        ->where('air_season', '=', $this->seasonOfYear->value)
+                ->join(Manga::TABLE_NAME, function ($join) {
+                    $join->on(Manga::TABLE_NAME . '.media_type_id', '=', MediaType::TABLE_NAME . '.id')
+                        ->where('publication_season', '=', $this->seasonOfYear->value)
                         ->whereYear('started_at', '=', $this->year);
                 })
                 ->groupBy('id', 'name', 'description')

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Browse\Anime\Seasons;
+namespace App\Http\Livewire\Browse\Manga\Seasons;
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -25,6 +25,6 @@ class Archive extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.browse.anime.seasons.archive');
+        return view('livewire.browse.manga.seasons.archive');
     }
 }
