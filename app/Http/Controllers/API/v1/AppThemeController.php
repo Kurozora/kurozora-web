@@ -51,9 +51,9 @@ class AppThemeController extends Controller
         // Get the auth user
         $user = auth()?->user();
 
-        if (!$user?->is_subscribed || !$user?->is_pro) {
-            throw new AuthorizationException(__('Premium platform themes are only available to pro and subscribed users.'));
-        }
+//        if (!$user?->is_subscribed || !$user?->is_pro) {
+//            throw new AuthorizationException(__('Premium platform themes are only available to pro and subscribed users.'));
+//        }
 
         // Increment the download count of the theme
         $appTheme->update([
