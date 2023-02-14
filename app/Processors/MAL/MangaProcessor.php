@@ -57,7 +57,9 @@ class MangaProcessor implements ItemProcessorInterface
         'Published',
         'Serialization',
         'Source',
+        'Genre',
         'Genres',
+        'Theme',
         'Themes',
         'Demographic',
         'Authors',
@@ -107,8 +109,10 @@ class MangaProcessor implements ItemProcessorInterface
         $status = $this->getAttribute('Status');
         $studios = $this->getAttribute('Serialization');
         $authors = $this->getAttribute('Authors');
-        $genres = $this->getAttribute('Genres');
-        $themes = $this->getAttribute('Themes');
+        $genre = $this->getAttribute('Genre') ?? [];
+        $genres = ($this->getAttribute('Genres') ?? []) + $genre;
+        $theme = $this->getAttribute('Theme') ?? [];
+        $themes = ($this->getAttribute('Themes') ?? []) + $theme;
         $tvRating = $this->getRating($this->getAttribute('Rating'), $genres, $themes);
         $isNSFW = $this->getIsNSFW($tvRating, $genres, $themes);
         $demographics = $this->getAttribute('Demographic');
@@ -293,8 +297,10 @@ class MangaProcessor implements ItemProcessorInterface
                         return $this->getStatus($value);
                     case 'Serialization':
                         return empty($value) ? [] : array_intersect($this->item->get('studios'), explode(', ', $value));
+                    case 'Theme':
                     case 'Themes':
                     case 'Demographic':
+                    case 'Genre':
                     case 'Genres':
                         $genres = explode(', ', $value);
                         foreach ($genres as $key => $genre) {
@@ -385,6 +391,7 @@ class MangaProcessor implements ItemProcessorInterface
         };
 
         $status = Status::where('name', '=', ucwords(trim($value)))
+            ->where('type', '=', 'manga')
             ->firstOrFail();
         return $status->id;
     }

@@ -60,7 +60,9 @@ class AnimeProcessor implements ItemProcessorInterface
         'Licensors',
         'Studios',
         'Source',
+        'Genre',
         'Genres',
+        'Theme',
         'Themes',
         'Demographic',
         'Duration',
@@ -99,8 +101,10 @@ class AnimeProcessor implements ItemProcessorInterface
         $producers = $this->getAttribute('Producers');
         $licensors = $this->getAttribute('Licensors');
         $studios = $this->getAttribute('Studios');
-        $genres = $this->getAttribute('Genres');
-        $themes = $this->getAttribute('Themes');
+        $genre = $this->getAttribute('Genre') ?? [];
+        $genres = ($this->getAttribute('Genres') ?? []) + $genre;
+        $theme = $this->getAttribute('Theme') ?? [];
+        $themes = ($this->getAttribute('Themes') ?? []) + $theme;
         $demographics = $this->getAttribute('Demographic');
         $imageUrl = $item->get('image_url');
         $videoUrl = $item->get('video_url');
@@ -294,8 +298,10 @@ class AnimeProcessor implements ItemProcessorInterface
                     case 'Licensors':
                     case 'Studios':
                         return empty($value) ? [] : array_intersect($this->item->get('studios'), explode(', ', $value));
+                    case 'Theme':
                     case 'Themes':
                     case 'Demographic':
+                    case 'Genre':
                     case 'Genres':
                         $genres = explode(', ', $value);
                         foreach ($genres as $key => $genre) {
@@ -360,6 +366,7 @@ class AnimeProcessor implements ItemProcessorInterface
         }
 
         $status = Status::where('name', '=', ucwords(trim($value)))
+            ->where('type', '=', 'anime')
             ->firstOrFail();
         return $status->id;
     }

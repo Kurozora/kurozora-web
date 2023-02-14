@@ -28,7 +28,7 @@ return new class extends Migration
             $table->index('deleted_at');
 
             // Set unique key constraints
-            $table->unique(['tag_id', 'taggable_id', 'taggable_type']);
+            $table->unique(['taggable_type', 'taggable_id', 'tag_id']);
 
             // Set foreign key constraints
             $table->foreign('tag_id')->references('id')

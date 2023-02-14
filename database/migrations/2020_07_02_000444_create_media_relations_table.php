@@ -29,7 +29,7 @@ return new class extends Migration
             $table->index('deleted_at');
 
             // Set unique key constraints
-            $table->unique(['model_id', 'model_type', 'relation_id', 'related_id', 'related_type'], 'model_relation_related_unique');
+            $table->unique(['model_type', 'model_id', 'relation_id', 'related_type', 'related_id'], 'model_relation_related_unique');
 
             // Set foreign key constraints
             $table->foreign('relation_id')

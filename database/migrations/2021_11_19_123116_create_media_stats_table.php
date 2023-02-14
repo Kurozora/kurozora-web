@@ -44,7 +44,7 @@ return new class extends Migration
             $table->index('deleted_at');
 
             // Set unique key constraints
-            $table->unique(['model_id', 'model_type']);
+            $table->unique(['model_type', 'model_id']);
         });
     }
 

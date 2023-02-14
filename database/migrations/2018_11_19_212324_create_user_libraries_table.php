@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Anime;
 use App\Models\User;
 use App\Models\UserLibrary;
 use Illuminate\Database\Migrations\Migration;
@@ -31,7 +30,7 @@ return new class extends Migration
             $table->index('user_id');
 
             // Set unique key constraints
-            $table->unique(['user_id', 'trackable_type', 'trackable_id']);
+            $table->unique(['trackable_type', 'trackable_id', 'user_id']);
 
             // Set foreign key constraints
             $table->foreign('user_id')

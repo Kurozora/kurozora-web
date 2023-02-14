@@ -35,7 +35,7 @@ return new class extends Migration
             $table->index('deleted_at');
 
             // Set unique key constraints
-            $table->unique(['studio_id', 'model_type', 'model_id']);
+            $table->unique(['model_type', 'model_id', 'studio_id']);
 
             // Set foreign key constraints
             $table->foreign('studio_id')
