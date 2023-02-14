@@ -40,6 +40,7 @@ return new class extends Migration
             $table->unsignedBigInteger('source_id')->nullable();
             $table->unsignedBigInteger('status_id')->nullable();
             $table->integer('volume_count')->default(0);
+            $table->integer('chapter_count')->default(0);
             $table->integer('page_count')->default(0);
             $table->integer('view_count')->default(0);
             $table->date('started_at')->nullable();

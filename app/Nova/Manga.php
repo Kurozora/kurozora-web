@@ -5,10 +5,7 @@ namespace App\Nova;
 use App\Enums\DayOfWeek;
 use App\Enums\MediaCollection;
 use App\Enums\SeasonOfYear;
-use App\Nova\Actions\FixMangaPublicationSeason;
 use App\Nova\Actions\ScrapeManga;
-use App\Nova\Actions\ScrapeMangaBanner;
-use App\Nova\Actions\ScrapeMangaSeason;
 use App\Nova\Actions\ScrapeUpcomingManga;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Exception;
@@ -19,7 +16,6 @@ use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphMany;
@@ -29,7 +25,6 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Outl1ne\NovaColorField\Color;
 use Ramsey\Uuid\Uuid;
 
 class Manga extends Resource
@@ -391,33 +386,17 @@ class Manga extends Resource
     public function actions(NovaRequest $request): array
     {
         return [
-//            ScrapeMangaSeason::make()
-//                ->canSee(function ($request) {
-//                    return $request->user()->hasRole('superAdmin');
-//                })
-//                ->standalone(),
-//            ScrapeUpcomingManga::make()
-//                ->canSee(function ($request) {
-//                    return $request->user()->hasRole('superAdmin');
-//                })
-//                ->standalone(),
-//            FixMangaPublicationSeason::make()
-//                ->canSee(function ($request) {
-//                    return $request->user()->hasRole('superAdmin');
-//                })
-//                ->standalone(),
-//            ScrapeManga::make()
-//                ->confirmText('Are you sure you want to scrape this manga?')
-//                ->confirmButtonText('Scrape Manga')
-//                ->canSee(function ($request) {
-//                    return $request->user()->can('updateManga');
-//                })->showInline(),
-//            ScrapeMangaBanner::make()
-//                ->confirmText('Are you sure you want to scrape this manga’s banner?')
-//                ->confirmButtonText('Scrape Manga Banner')
-//                ->canSee(function ($request) {
-//                    return $request->user()->can('updateManga');
-//                })->showInline(),
+            ScrapeUpcomingManga::make()
+                ->canSee(function ($request) {
+                    return $request->user()->hasRole('superAdmin');
+                })
+                ->standalone(),
+            ScrapeManga::make()
+                ->confirmText('Are you sure you want to scrape this manga?')
+                ->confirmButtonText('Scrape Manga')
+                ->canSee(function ($request) {
+                    return $request->user()->can('updateManga');
+                })->showInline(),
         ];
     }
 

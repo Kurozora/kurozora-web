@@ -20,6 +20,8 @@ return [
             'anime' => 'https://myanimelist.net/anime',
             'anime_season' => 'https://myanimelist.net/anime/season',
             'upcoming_anime' => 'https://myanimelist.net/anime.php?o=9',
+            'manga' => 'https://myanimelist.net/manga',
+            'upcoming_manga' => 'https://myanimelist.net/manga.php?o=9',
         ],
         'tvdb' => [
             'base' => 'https://thetvdb.com',

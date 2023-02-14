@@ -3,17 +3,17 @@
 namespace App\Processors\MAL;
 
 use App\Enums\MediaCollection;
-use App\Enums\SongType;
 use App\Enums\StudioType;
-use App\Models\Anime;
-use App\Models\AnimeSong;
 use App\Models\Genre;
+use App\Models\Manga;
 use App\Models\MediaGenre;
+use App\Models\MediaStaff;
 use App\Models\MediaStudio;
 use App\Models\MediaTheme;
 use App\Models\MediaType;
-use App\Models\Song;
+use App\Models\Person;
 use App\Models\Source;
+use App\Models\StaffRole;
 use App\Models\Status;
 use App\Models\Studio;
 use App\Models\Theme;
@@ -27,7 +27,7 @@ use RoachPHP\ItemPipeline\ItemInterface;
 use RoachPHP\ItemPipeline\Processors\ItemProcessorInterface;
 use RoachPHP\Support\Configurable;
 
-class AnimeProcessor implements ItemProcessorInterface
+class MangaProcessor implements ItemProcessorInterface
 {
     use Configurable;
 
@@ -51,25 +51,36 @@ class AnimeProcessor implements ItemProcessorInterface
         'Spanish',
         'French',
         'Type',
-        'Episodes',
+        'Volumes',
+        'Chapters',
         'Status',
-        'Aired',
-        'Premiered',
-        'Broadcast',
-        'Producers',
-        'Licensors',
-        'Studios',
+        'Published',
+        'Serialization',
         'Source',
         'Genres',
         'Themes',
         'Demographic',
-        'Duration',
+        'Authors',
         'Rating',
         'Score',
         'Ranked',
         'Popularity',
         'Members',
         'Favorites',
+    ];
+
+    /**
+     * The available NSFW genres.
+     *
+     * @var string[]
+     */
+    protected array $nsfwGenres = [
+        'Ecchi',
+        'Erotica',
+        'Harem',
+        'Hentai',
+        'Yaoi',
+        'Yuri',
     ];
 
     public function processItem(ItemInterface $item): ItemInterface
@@ -79,41 +90,36 @@ class AnimeProcessor implements ItemProcessorInterface
 
         logger()->channel('stderr')->info('🔄 [MAL_ID:' . $malID . '] Processing ' . $malID);
 
-        $anime = Anime::withoutGlobalScopes()
+        $manga = Manga::withoutGlobalScopes()
             ->firstWhere('mal_id', '=', $malID);
 
         $originalTitle = $item->get('original_title');
-        $synonymTitles = $this->getSynonymTitles($anime);
+        $synonymTitles = $this->getSynonymTitles($manga);
         $synopsis = $item->get('synopsis');
         $title = $this->getAttribute('English');
         $jaTitle = $this->getAttribute('Japanese');
         $deTitle = $this->getAttribute('German');
         $esTitle = $this->getAttribute('Spanish');
         $frTitle = $this->getAttribute('French');
-        $episodeCount = $this->getAttribute('Episodes');
+        $volumeCount = $this->getAttribute('Volumes');
+        $chapterCount = $this->getAttribute('Chapters');
         $mediaType = $this->getAttribute('Type');
         $status = $this->getAttribute('Status');
-        $source = $this->getAttribute('Source');
-        $tvRating = $this->getRating($this->getAttribute('Rating'));
-        $isNSFW = $this->getIsNSFW($tvRating);
-        $producers = $this->getAttribute('Producers');
-        $licensors = $this->getAttribute('Licensors');
-        $studios = $this->getAttribute('Studios');
+        $studios = $this->getAttribute('Serialization');
+        $authors = $this->getAttribute('Authors');
         $genres = $this->getAttribute('Genres');
         $themes = $this->getAttribute('Themes');
+        $tvRating = $this->getRating($this->getAttribute('Rating'), $genres, $themes);
+        $isNSFW = $this->getIsNSFW($tvRating, $genres, $themes);
         $demographics = $this->getAttribute('Demographic');
         $imageUrl = $item->get('image_url');
-        $videoUrl = $item->get('video_url');
-        $duration = $this->getAttribute('Duration');
-        $aired = $this->getAttribute('Aired');
-        $startedAt = $this->getStartedAt($aired);
-        $endedAt = $this->getEndedAt($aired);
-        $airDay = $this->getAirDay($startedAt);
-        $broadcast = $this->getAttribute('Broadcast');
-        $airTime = $this->getAirTime($broadcast);
-        $airSeason = $this->getAirSeason($startedAt);
-        $openingSongs = $item->get('openings');
-        $endingSongs = $item->get('endings');
+        $published = $this->getAttribute('Published');
+        $startedAt = $this->getStartedAt($published);
+        $endedAt = $this->getEndedAt($published);
+        $publicationDay = $this->getPublicationDay($startedAt);
+        $publication = $this->getAttribute('Publication');
+        $publicationTime = $this->getPublicationTime($publication);
+        $publicationSeason = $this->getPublicationSeason($startedAt);
         $attributes = [];
 
         // Collect conditional attributes
@@ -156,72 +162,71 @@ class AnimeProcessor implements ItemProcessorInterface
 //            'synonym_titles' => $synonymTitles,
 //            'title' => $title ?? $originalTitle,
 //            'synopsis' => $synopsis,
-//            'episode_count' => $episodeCount,
-//            'season_count' => 1,
+//            'volume_count' => $volumeCount,
+//            'chapter_count' => $chapterCount,
+//            'page_count' => $chapterCount * 18,
 //            'media_type_id' => $mediaType,
 //            'status_id' => $status,
-//            'source_id' => $source,
-//            'video_url' => $videoUrl,
-//            'duration' => $duration,
 //            'started_at' => $startedAt,
 //            'ended_at' => $endedAt,
-//            'air_day' => $airDay,
-//            'air_time' => $airTime,
-//            'air_season' => $airSeason,
+//            'publication_day' => $publicationDay,
+//            'publication_time' => $publicationTime,
+//            'publication_season' => $publicationSeason,
 //            'tv_rating_id' => $tvRating->id,
 //            'is_nsfw' => $isNSFW,
+//            'studio' => $studios,
+//            'authors' => $authors,
 //        ], $attributes));
 
-        if (empty($anime)) {
-            logger()->channel('stderr')->info('🖨 [MAL_ID:' . $malID . '] Creating anime');
-            $anime = Anime::withoutGlobalScopes()
+        if (empty($manga)) {
+            logger()->channel('stderr')->info('🖨 [MAL_ID:' . $malID . '] Creating manga');
+            $manga = Manga::withoutGlobalScopes()
                 ->create(array_merge([
                     'mal_id' => $malID,
                     'original_title' => $originalTitle,
                     'synonym_titles' => $synonymTitles,
                     'title' => $title ?? $originalTitle,
                     'synopsis' => $synopsis,
-                    'episode_count' => $episodeCount,
-                    'season_count' => 1,
+                    'volume_count' => $volumeCount,
+                    'chapter_count' => $chapterCount,
+                    'page_count' => $chapterCount * 18,
                     'media_type_id' => $mediaType,
                     'status_id' => $status,
-                    'source_id' => $source,
-                    'video_url' => $videoUrl,
-                    'duration' => $duration,
+                    'source_id' => 2, // Original
+                    'duration' => 240, // Default 240 seconds / 4 minutes
                     'started_at' => $startedAt,
                     'ended_at' => $endedAt,
-                    'air_day' => $airDay,
-                    'air_time' => $airTime,
-                    'air_season' => $airSeason,
+                    'publication_day' => $publicationDay,
+                    'publication_time' => $publicationTime,
+                    'publication_season' => $publicationSeason,
                     'tv_rating_id' => $tvRating->id,
                     'is_nsfw' => $isNSFW,
                 ], $attributes));
-            logger()->channel('stderr')->info('✅️ [MAL_ID:' . $malID . '] Done creating anime');
+            logger()->channel('stderr')->info('✅️ [MAL_ID:' . $malID . '] Done creating manga');
         } else {
             logger()->channel('stderr')->info('🛠 [MAL_ID:' . $malID . '] Updating attributes');
             $newTitle = $title ?? $originalTitle;
-            $newEpisodeCount = empty($episodeCount) ? $anime->episode_count : $episodeCount;
-            $newDuration = empty($anime->duration) ? $duration : $anime->duration;
-            $newEndedAt = $anime->ended_at ?? $endedAt;
-            $newAirDay = empty($anime->air_day) ? $airDay : $anime->air_day->value;
+            $newVolumeCount = empty($volumeCount) ? $manga->volume_count : $volumeCount;
+            $newChapterCount = empty($chapterCount) ? $manga->chapter_count : $chapterCount;
+            $newEndedAt = $manga->ended_at ?? $endedAt;
+            $newPublicationDay = empty($manga->publication_day) ? $publicationDay : $manga->publication_day->value;
 
-            $anime->update(array_merge([
+            $manga->update(array_merge([
                 'mal_id' => $malID,
                 'original_title' => $originalTitle,
                 'synonym_titles' => $synonymTitles,
                 'title' => $newTitle,
                 'synopsis' => $synopsis,
-                'episode_count' => $newEpisodeCount,
+                'volume_count' => $newVolumeCount,
+                'chapter_count' => $newChapterCount,
+                'page_count' => $newChapterCount * 18,
                 'media_type_id' => $mediaType,
                 'status_id' => $status,
-                'source_id' => $source,
-                'video_url' => $videoUrl,
-                'duration' => $newDuration,
                 'started_at' => $startedAt,
                 'ended_at' => $newEndedAt,
-                'air_day' => $newAirDay,
-                'air_time' => $airTime,
-                'air_season' => $airSeason,
+                'publication_day' => $newPublicationDay,
+                'publication_time' => $publicationTime,
+                'publication_season' => $publicationSeason,
                 'tv_rating_id' => $tvRating->id,
                 'is_nsfw' => $isNSFW,
             ], $attributes));
@@ -230,30 +235,27 @@ class AnimeProcessor implements ItemProcessorInterface
 
         // Add poster image
         logger()->channel('stderr')->info('🌄 [MAL_ID:' . $malID . '] Adding poster');
-        $this->addPosterImage($imageUrl, $anime);
+        $this->addPosterImage($imageUrl, $manga);
         logger()->channel('stderr')->info('✅️ [MAL_ID:' . $malID . '] Done adding poster');
 
         // Add different studio relations
         logger()->channel('stderr')->info('🏢 [MAL_ID:' . $malID . '] Adding studios');
-        $this->addStudios($producers, $anime, 'is_producer');
-        $this->addStudios($licensors, $anime, 'is_licensor');
-        $this->addStudios($studios, $anime, 'is_studio');
+        $this->addStudios($studios, $manga, 'is_publisher');
         logger()->channel('stderr')->info('✅️ [MAL_ID:' . $malID . '] Done adding studios');
 
         // Add genre and theme relations
         logger()->channel('stderr')->info('🎭 [MAL_ID:' . $malID . '] Adding genres and themes');
-        $this->addGenres($genres, $anime);
-        $this->addGenres($demographics, $anime);
-        $this->addThemes($themes, $anime);
+        $this->addGenres($genres, $manga);
+        $this->addGenres($demographics, $manga);
+        $this->addThemes($themes, $manga);
         logger()->channel('stderr')->info('✅️ [MAL_ID:' . $malID . '] Done adding genres');
 
-        // Add songs
-        logger()->channel('stderr')->info('🎸 [MAL_ID:' . $malID . '] Adding songs');
-        $this->addSongs(SongType::Opening(), $openingSongs, $anime);
-        $this->addSongs(SongType::Ending(), $endingSongs, $anime);
-        logger()->channel('stderr')->info('✅️ [MAL_ID:' . $malID . '] Done adding songs');
+        // Add author relations
+        logger()->channel('stderr')->info('🧑 [MAL_ID:' . $malID . '] Adding authors');
+        $this->addAuthors($authors, $manga);
+        logger()->channel('stderr')->info('✅️ [MAL_ID:' . $malID . '] Done adding authors');
 
-        logger()->channel('stderr')->info('✅️ [MAL_ID:' . $malID . '] Done processing anime');
+        logger()->channel('stderr')->info('✅️ [MAL_ID:' . $malID . '] Done processing manga');
         return $item;
     }
 
@@ -280,19 +282,16 @@ class AnimeProcessor implements ItemProcessorInterface
                     case 'German':
                     case 'Spanish':
                     case 'French':
-                    case 'Aired':
-                    case 'Broadcast':
-                    case 'Rating':
+                    case 'Published':
                         return empty($value) ? null : $value;
-                    case 'Episodes':
+                    case 'Volumes':
+                    case 'Chapters':
                         return is_numeric($value) ? (int) $value : 0;
                     case 'Type':
                         return $this->getMediaType($value);
                     case 'Status':
                         return $this->getStatus($value);
-                    case 'Producers':
-                    case 'Licensors':
-                    case 'Studios':
+                    case 'Serialization':
                         return empty($value) ? [] : array_intersect($this->item->get('studios'), explode(', ', $value));
                     case 'Themes':
                     case 'Demographic':
@@ -306,7 +305,30 @@ class AnimeProcessor implements ItemProcessorInterface
                         return $this->getSource($value);
                     case 'Duration':
                         return $this->getDuration($value);
-                    case 'Premiered':
+                    case 'Authors':
+                        $authors = explode('),', $value);
+                        foreach ($authors as $key => $author) {
+                            $authors[$key] = [
+                                'name' => str($author)->replaceMatches('/ \(.*/', '')
+                                    ->trim()
+                                    ->value(),
+                                'role' => str($author)->match('/ \(.*/')
+                                    ->replace([' (', ')'], '')
+                                    ->trim()
+                                    ->value()
+                            ];
+                        }
+
+                        if (empty($author)) {
+                            return [];
+                        }
+
+                        $newAuthors = [];
+                        foreach ($authors as $author) {
+                            $intersectedAuthor = array_intersect($this->item->get('authors'), $author);
+                            $newAuthors[key($intersectedAuthor)] = $author;
+                        }
+                        return $newAuthors;
                     case 'Score':
                     case 'Ranked':
                     case 'Popularity':
@@ -329,7 +351,7 @@ class AnimeProcessor implements ItemProcessorInterface
      */
     private function getCleanAttribute(string $attribute): string
     {
-        $attribute = str_replace(['None found', ', add some', '?', 'Unknown', 'per ep.'], '', $attribute);
+        $attribute = str_replace(['None', 'None found', ', add some', '?', 'Unknown', 'per ep.'], '', $attribute);
         return trim($attribute);
     }
 
@@ -355,9 +377,12 @@ class AnimeProcessor implements ItemProcessorInterface
      */
     private function getStatus(string $value): int
     {
-        if (strtolower($value) === 'not yet aired') {
-            $value = 'Not Airing Yet';
-        }
+        $value = match(strtolower($value)) {
+            'not yet published' => 'Not Published Yet',
+            'publishing' => 'Currently Publishing',
+            'finished' => 'Finished Publishing',
+            default => $value
+        };
 
         $status = Status::where('name', '=', ucwords(trim($value)))
             ->firstOrFail();
@@ -384,12 +409,15 @@ class AnimeProcessor implements ItemProcessorInterface
     /**
      * Get tv rating.
      *
-     * @param string $value
+     * @param string|null $value
+     * @param array|null $genres
+     * @param array|null $themes
      * @return TvRating
      */
-    private function getRating(string $value): TvRating
+    private function getRating(?string $value, ?array $genres, ?array $themes): TvRating
     {
         $tvRatingName = 'NR';
+        $haystack = collect($genres)->merge($themes);
 
         if (!empty($value)) {
             $regex = '/.+-/';
@@ -404,6 +432,8 @@ class AnimeProcessor implements ItemProcessorInterface
                 'Rx' => 'R18+',
                 default => 'NR',
             };
+        } else if ($haystack->contains('Hentai')) {
+            $tvRatingName = 'R18+';
         }
 
         return TvRating::where('name', '=', $tvRatingName)
@@ -411,7 +441,7 @@ class AnimeProcessor implements ItemProcessorInterface
     }
 
     /**
-     * Get the duration of the anime.
+     * Get the duration of the manga.
      *
      * @param string $value
      * @return int
@@ -453,13 +483,13 @@ class AnimeProcessor implements ItemProcessorInterface
     }
 
     /**
-     * Add the given genre to the anime if necessary.
+     * Add the given genre to the manga if necessary.
      *
      * @param array|null $genres
-     * @param Model|Anime|null $anime
+     * @param Model|Manga|null $manga
      * @return void
      */
-    private function addGenres(?array $genres, Model|Anime|null $anime): void
+    private function addGenres(?array $genres, Model|Manga|null $manga): void
     {
         if (empty($genres)) {
             return;
@@ -475,12 +505,12 @@ class AnimeProcessor implements ItemProcessorInterface
                 ], [
                     'name' => $genreName,
                 ]);
-            $mediaGenre = $anime?->mediaGenres()->firstWhere('genre_id', '=', $genre->id);
+            $mediaGenre = $manga?->mediaGenres()->firstWhere('genre_id', '=', $genre->id);
 
             if (empty($mediaGenre)) {
                 MediaGenre::create([
-                    'model_type' => get_class($anime),
-                    'model_id' => $anime?->id,
+                    'model_type' => get_class($manga),
+                    'model_id' => $manga?->id,
                     'genre_id' => $genre->id,
                 ]);
             }
@@ -488,13 +518,13 @@ class AnimeProcessor implements ItemProcessorInterface
     }
 
     /**
-     * Add the given theme to the anime if necessary.
+     * Add the given theme to the manga if necessary.
      *
      * @param array|null $themes
-     * @param Model|Anime|null $anime
+     * @param Model|Manga|null $manga
      * @return void
      */
-    private function addThemes(?array $themes, Model|Anime|null $anime): void
+    private function addThemes(?array $themes, Model|Manga|null $manga): void
     {
         if (empty($themes)) {
             return;
@@ -510,12 +540,12 @@ class AnimeProcessor implements ItemProcessorInterface
                 ], [
                     'name' => $themeName,
                 ]);
-            $mediaTheme = $anime?->mediaThemes()->firstWhere('theme_id', '=', $theme->id);
+            $mediaTheme = $manga?->mediaThemes()->firstWhere('theme_id', '=', $theme->id);
 
             if (empty($mediaTheme)) {
                 MediaTheme::create([
-                    'model_type' => get_class($anime),
-                    'model_id' => $anime?->id,
+                    'model_type' => get_class($manga),
+                    'model_id' => $manga?->id,
                     'theme_id' => $theme->id,
                 ]);
             }
@@ -523,14 +553,14 @@ class AnimeProcessor implements ItemProcessorInterface
     }
 
     /**
-     * Add the given studios to the anime if necessary.
+     * Add the given studios to the manga if necessary.
      *
      * @param array|null $malStudios
-     * @param Model|Anime|null $anime
+     * @param Model|Manga|null $manga
      * @param string $attribute
      * @return void
      */
-    private function addStudios(?array $malStudios, Model|Anime|null $anime, string $attribute): void
+    private function addStudios(?array $malStudios, Model|Manga|null $manga, string $attribute): void
     {
         if (empty($malStudios)) {
             return;
@@ -542,14 +572,14 @@ class AnimeProcessor implements ItemProcessorInterface
                     'mal_id' => $malStudioID
                 ], [
                     'name' => $malStudioName,
-                    'type' => StudioType::Anime,
+                    'type' => StudioType::Manga,
                 ]);
-            $mediaStudio = $anime?->mediaStudios()->firstWhere('studio_id', '=', $studio->id);
+            $mediaStudio = $manga?->mediaStudios()->firstWhere('studio_id', '=', $studio->id);
 
             if (empty($mediaStudio)) {
                 MediaStudio::create([
-                    'model_type' => $anime?->getMorphClass(),
-                    'model_id' => $anime?->id,
+                    'model_type' => $manga?->getMorphClass(),
+                    'model_id' => $manga?->id,
                     'studio_id' => $studio->id,
                     $attribute => true,
                 ]);
@@ -562,39 +592,84 @@ class AnimeProcessor implements ItemProcessorInterface
     }
 
     /**
-     * Get the first airing date of the anime.
+     * Add the given authors to the manga if necessary.
      *
-     * @param string $aired
+     * @param array|null $malAuthors
+     * @param Model|Manga|null $manga
+     * @return void
+     */
+    private function addAuthors(?array $malAuthors, Model|Manga|null $manga): void
+    {
+        if (empty($malAuthors)) {
+            return;
+        }
+
+        foreach ($malAuthors as $malAuthorID => $malAuthor) {
+            $nameComponents = collect(explode(',', $malAuthor['name']));
+            $firstName = $nameComponents->last();
+            $lastName = $nameComponents->first() !== $firstName ? $nameComponents->first() : null;
+
+            $person = Person::withoutGlobalScopes()
+                ->firstOrCreate([
+                    'mal_id' => $malAuthorID
+                ], [
+                    'first_name' => $firstName,
+                    'last_name' => $lastName
+                ]);
+            $staffRole = StaffRole::withoutGlobalScopes()
+                ->firstOrCreate([
+                    'name' => $malAuthor['role']
+                ]);
+            $mediaAuthor = $manga?->mediaStaff()->firstWhere([
+                ['person_id', '=', $person->id],
+                ['staff_role_id', '=', $staffRole->id]
+            ]);
+
+            if (empty($mediaAuthor)) {
+                MediaStaff::create([
+                    'model_type' => $manga?->getMorphClass(),
+                    'model_id' => $manga?->id,
+                    'person_id' => $person->id,
+                    'staff_role_id' => $staffRole->id,
+                ]);
+            }
+        }
+    }
+
+    /**
+     * Get the first publishing date of the manga.
+     *
+     * @param string $published
      * @return Carbon|null
      */
-    private function getStartedAt(string $aired): ?Carbon
+    private function getStartedAt(string $published): ?Carbon
     {
         $regex = '/to.+/';
-        return $this->getAirDate($regex, $aired);
+        return $this->getPublicationDate($regex, $published);
     }
 
     /**
-     * Get the last airing date of the anime.
+     * Get the last publishing date of the manga.
      *
-     * @param string $aired
+     * @param string $published
      * @return Carbon|null
      */
-    private function getEndedAt(string $aired): ?Carbon
+    private function getEndedAt(string $published): ?Carbon
     {
         $regex = '/(.+to)/';
-        return $this->getAirDate($regex, $aired);
+        return $this->getPublicationDate($regex, $published);
     }
 
     /**
-     * Get the air date from the given string using the specified regex.
+     * Get the publication date from the given string using the specified regex.
      *
      * @param string $regex
-     * @param string $aired
+     * @param string $published
      * @return Carbon|null
      */
-    private function getAirDate(string $regex, string $aired): ?Carbon
+    private function getPublicationDate(string $regex, string $published): ?Carbon
     {
-        $str = preg_replace($regex, '', $aired);
+        $str = preg_replace($regex, '', $published);
         $str = trim(str_replace('to', '', $str));
 
         try {
@@ -619,25 +694,25 @@ class AnimeProcessor implements ItemProcessorInterface
     /**
      * Get the synonym titles.
      *
-     * @param Model|Anime|null $anime
+     * @param Model|Manga|null $manga
      * @return array|null
      */
-    private function getSynonymTitles(Model|Anime|null $anime): ?array
+    private function getSynonymTitles(Model|Manga|null $manga): ?array
     {
         $synonymTitles = $this->getAttribute('Synonyms') ?? [];
-        $currentSynonymTitles = $anime?->synonym_titles?->toArray();
-        $newSynonymTitles = empty(count($synonymTitles)) || empty($anime?->synonym_titles?->count()) ? $currentSynonymTitles : array_merge($currentSynonymTitles, $synonymTitles);
+        $currentSynonymTitles = $manga?->synonym_titles?->toArray();
+        $newSynonymTitles = empty(count($synonymTitles)) || empty($manga?->synonym_titles?->count()) ? $currentSynonymTitles : array_merge($currentSynonymTitles, $synonymTitles);
 
         return count($newSynonymTitles ?? []) ? array_unique($newSynonymTitles) : null;
     }
 
     /**
-     * Get the air day.
+     * Get the publication day.
      *
      * @param Carbon|null $startedAt
      * @return int|null
      */
-    private function getAirDay(?Carbon $startedAt): ?int
+    private function getPublicationDay(?Carbon $startedAt): ?int
     {
         if (empty($startedAt)) {
             return null;
@@ -647,95 +722,45 @@ class AnimeProcessor implements ItemProcessorInterface
     }
 
     /**
-     * Get the air time.
+     * Get the publication time.
      *
-     * @param string|null $broadcast
+     * @param string|null $publication
      * @return string|null
      */
-    private function getAirTime(?string $broadcast): ?string
+    private function getPublicationTime(?string $publication): ?string
     {
-        if (empty($broadcast) || $broadcast == 'Unknown') {
-            return '09:00';
-        } else if (str($broadcast)->contains('at')) {
-            $airTime = trim(preg_replace('/(.+ at)/', '', $broadcast));
-            return trim(preg_replace('/(\(.+)/', '', $airTime));
+        if (empty($publication) || $publication == 'Unknown') {
+            return '07:00';
+        } else if (str($publication)->contains('at')) {
+            $publicationTime = trim(preg_replace('/(.+ at)/', '', $publication));
+            return trim(preg_replace('/(\(.+)/', '', $publicationTime));
         }
-        return '09:00';
+        return '07:00';
     }
 
     /**
-     * Get the air season.
+     * Get the publication season.
      *
      * @param Carbon|null $startedAt
      * @return int
      */
-    private function getAirSeason(?Carbon $startedAt): int
+    private function getPublicationSeason(?Carbon $startedAt): int
     {
         return season_of_year($startedAt)->value;
     }
 
     /**
-     * Add related songs.
-     *
-     * @param SongType $songType
-     * @param array|null $malSongs
-     * @param Model|Anime|null $anime
-     * @return void
-     */
-    private function addSongs(SongType $songType, ?array $malSongs, Model|Anime|null $anime): void
-    {
-        if (empty($malSongs)) {
-            return;
-        }
-
-        foreach ($malSongs as $key => $malSong) {
-            if (empty($malSongs['title'])) {
-                continue;
-            }
-
-            $whereAttributes = [
-                'mal_id' => $malSong['mal_id'],
-            ];
-            if (!empty($malSong['am_id'])) {
-                $whereAttributes['am_id'] = $malSong['am_id'];
-            }
-            $song = Song::firstWhere($whereAttributes, 'OR');
-
-            if (empty($song)) {
-                $song = Song::create([
-                    'mal_id' => $malSong['mal_id'],
-                    'am_id' => $malSong['am_id'],
-                    'title' => $malSong['title'],
-                    'artist' => $malSong['artist'],
-                ]);
-            }
-
-            $animeSongs = $anime?->anime_songs()->firstWhere('song_id', '=', $song->id);
-
-            if (empty($animeSongs)) {
-                AnimeSong::create([
-                    'anime_id' => $anime?->id,
-                    'song_id' => $song->id,
-                    'position' => $key,
-                    'type' => $songType->value,
-                    'episodes' => $malSong['episodes'],
-                ]);
-            }
-        }
-    }
-
-    /**
-     * Download and link the given image to the specified anime.
+     * Download and link the given image to the specified manga.
      *
      * @param string|null $imageUrl
-     * @param Model|Builder|Anime $anime
+     * @param Model|Builder|Manga $manga
      * @return void
      */
-    private function addPosterImage(?string $imageUrl, Model|Builder|Anime $anime): void
+    private function addPosterImage(?string $imageUrl, Model|Builder|Manga $manga): void
     {
-        if (!empty($imageUrl) && empty($anime->getFirstMedia(MediaCollection::Poster))) {
+        if (!empty($imageUrl) && empty($manga->getFirstMedia(MediaCollection::Poster))) {
             try {
-                $anime->updateImageMedia(MediaCollection::Poster(), $imageUrl, $anime->original_title);
+                $manga->updateImageMedia(MediaCollection::Poster(), $imageUrl, $manga->original_title);
             } catch (Exception $e) {
                 logger()->channel('stderr')->error($e->getMessage());
             }
@@ -743,13 +768,28 @@ class AnimeProcessor implements ItemProcessorInterface
     }
 
     /**
-     * Determines whether the anime is NSFW.
+     * Determines whether the manga is NSFW.
      *
      * @param TvRating $tvRating
+     * @param array|null $genres
+     * @param array|null $themes
      * @return bool
      */
-    private function getIsNSFW(TvRating $tvRating): bool
+    private function getIsNSFW(TvRating $tvRating, ?array $genres, ?array $themes): bool
     {
-        return $tvRating->weight == 5;
+        if ($tvRating->weight == 5) {
+            return true;
+        }
+
+        $isNSFW = false;
+        $haystack = collect($genres)->merge($themes);
+
+        foreach ($this->nsfwGenres as $nsfwGenre) {
+            if (!$isNSFW) {
+                $isNSFW = $haystack->contains($nsfwGenre);
+            }
+        }
+
+        return $isNSFW;
     }
 }

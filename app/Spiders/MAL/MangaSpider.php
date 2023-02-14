@@ -2,7 +2,7 @@
 
 namespace App\Spiders\MAL;
 
-use App\Processors\MAL\AnimeProcessor;
+use App\Processors\MAL\MangaProcessor;
 use Exception;
 use Generator;
 use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
@@ -14,7 +14,7 @@ use RoachPHP\Spider\BasicSpider;
 use RoachPHP\Spider\ParseResult;
 use Symfony\Component\DomCrawler\Crawler;
 
-class AnimeSpider extends BasicSpider
+class MangaSpider extends BasicSpider
 {
     /**
      * @var array $startUrls
@@ -51,7 +51,7 @@ class AnimeSpider extends BasicSpider
      * @var array $itemProcessors
      */
     public array $itemProcessors = [
-        AnimeProcessor::class
+        MangaProcessor::class
     ];
 
     /**
@@ -99,53 +99,63 @@ class AnimeSpider extends BasicSpider
         }
 
         logger()->channel('stderr')->info('🕷 [MAL_ID:' . $id . '] Parsing response');
-        $originalTitle = $response->filter('h1.title-name')
-            ->text();
+        $originalTitle = $response->filter('[itemprop="name"]')
+            ->innerText();
         $attributes = $response->filter('div.leftside')
             ->filter('.spaceit_pad')
             ->each(function($item) {
                 return str($item->text());
             });
-        $synopsis = $response->filter('p[itemprop="description"]')
-            ->html();
+        try {
+            $synopsis = strip_tags($response->filter('[itemprop="description"]')
+                ->html());
+        } catch (Exception $exception) {
+            $synopsis = null;
+        }
 
-        $studios = $response->filter('div.leftside a[href*="/anime/producer/"]')
+        $studios = $response->filter('div.leftside a[href*="/manga/magazine/"]')
             ->each(function(Crawler $item) {
                 $regex = '/(\d+)\//';
                 $id = str($item->attr('href'))
-                    ->remove(['/anime/producer/'])
+                    ->remove(['/manga/magazine/'])
                     ->match($regex)
                     ->value();
                 return [$id => $item->text()];
             });
 
-        $genres = $response->filter('div.leftside a[href*="/anime/genre/"]')
+        $genres = $response->filter('div.leftside a[href*="/manga/genre/"]')
             ->each(function(Crawler $item) {
                 $regex = '/(\d+)\//';
                 $id = str($item->attr('href'))
-                    ->remove(['/anime/genre/'])
+                    ->remove(['/manga/genre/'])
+                    ->match($regex)
+                    ->value();
+                return [$id => $item->text()];
+            });
+
+        $authors = $response->filter('div.leftside a[href*="/people/"]')
+            ->each(function(Crawler $item) {
+                $regex = '/(\d+)\//';
+                $id = str($item->attr('href'))
+                    ->remove(['/people/'])
                     ->match($regex)
                     ->value();
                 return [$id => $item->text()];
             });
 
         $imageUrl = $this->cleanImageUrl($response, 'div.leftside div a img[itemprop="image"]');
-        $videoUrl = $this->cleanVideoUrl($response, 'div.video-promotion a');
-        $openings = $this->cleanSongs($response, 'div[class*="theme-songs opnening"] table'); // typo on the website
-        $ending = $this->cleanSongs($response, 'div[class*="theme-songs ending"] table');
 
         logger()->channel('stderr')->info('✅️ [MAL_ID:' . $id . '] Done parsing');
+
         yield $this->item([
             'id'                => $id,
             'original_title'    => $originalTitle,
             'attributes'        => $attributes,
             'synopsis'          => $synopsis,
             'image_url'         => $imageUrl,
-            'video_url'         => $videoUrl,
             'studios'           => array_replace([], ...$studios),
             'genres'            => array_replace([], ...$genres),
-            'openings'          => $openings,
-            'ending'            => $ending,
+            'authors'           => array_replace([], ...$authors),
         ]);
     }
 
@@ -195,100 +205,5 @@ class AnimeSpider extends BasicSpider
 
         // Return clean url
         return preg_replace($regex, '', $cleanImageUrl);
-    }
-
-    /**
-     * Cleans dirty video URLs. For examples:
-     *
-     * https://www.youtube.com/embed/qig4KOK2R2g?enablejsapi=1&wmode=opaque&autoplay=1 => https://www.youtube.com/watch?v=qig4KOK2R2g
-     * https://www.youtube.com/embed/j2hiC9BmJlQ?enablejsapi=1&wmode=opaque&autoplay=1 => https://www.youtube.com/watch?v=j2hiC9BmJlQ
-     *
-     * @param Response $response
-     * @param string $div
-     * @return string|null
-     */
-    private function cleanVideoUrl(Response $response, string $div): ?string
-    {
-        $videoURL = $response->filter($div);
-        try {
-            $videoURL = $videoURL->attr('href');
-        } catch (Exception $e) {
-            return null;
-        }
-        $videoURL = trim($videoURL);
-
-        // Return if empty
-        if (empty($videoURL)) {
-            return null;
-        }
-
-        // Remove queries
-        $regex = '/\?.+/';
-        $clearVideoURL = str(preg_replace($regex, '', $videoURL));
-
-        // Return clean url
-        return $clearVideoURL->replace('embed/', 'watch?v=');
-    }
-
-    /**
-     * Clean song response.
-     *
-     * @param Response $response
-     * @param string $div
-     * @return array
-     */
-    private function cleanSongs(Response $response, string $div): array
-    {
-        return $response->filter($div)
-            ->last()
-            ->filter('tr')
-            ->each(function(Crawler $item, int $index) {
-                $malSong = [];
-                // Get position
-                $malSong['position'] = $index + 1;
-
-                // Get IDs
-                $item->filter('td input')
-                    ->each(function (Crawler $item) use (&$malSong) {
-                        $id = str($item->attr('id'));
-
-                        if ($id->startsWith('apple_url_')) {
-                            // Get song MAL ID
-                            $malSong['id'] = (int) $id->replace('apple_url_', '')->value();
-
-                            // Get Apple Music ID
-                            $regex = '/.+?i=/';
-                            $amID = preg_replace($regex, '', $item->attr('value'));
-                            $malSong['am_id'] = empty($amID) ? null : trim($amID);
-                        } else {
-                            $malSong['id'] = null;
-                            $malSong['am_id'] = null;
-                        }
-                    });
-
-                // Get title
-                $regex = '/\".+\"/';
-                preg_match($regex, $item->text(), $title);
-                $title = empty($title) ? '' : trim($title[0]);
-
-                // Get artist
-                $regex = '/by.+/';
-                preg_match($regex, $item->text(), $artist);
-                $artist = empty($artist) ? '' : $artist[0];
-
-                // Get episodes
-                $regex = '/\(.+\)/';
-                preg_match($regex, $artist, $episodes);
-                $episodes = empty($episodes) ? '' : $episodes[0];
-                $episodes = str($episodes)->remove(['(', 'eps', ')']);
-
-                // Done with episode, clean artist string
-                $artist = str($artist)->replaceMatches($regex, '')->remove(['by', ' ']);
-
-                $malSong['title'] = empty($title) ? null : trim($title);
-                $malSong['artist'] = empty($artist) ? null : trim($artist);
-                $malSong['episodes'] = empty($episodes) ? null : trim($episodes);
-                return $malSong;
-            });
     }
 }
