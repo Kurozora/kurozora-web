@@ -53,7 +53,7 @@ return [
 
     'ios' => [
         'id'        => '1476153872',
-        'version'   => '1.0.2',
+        'version'   => '1.2.0',
         'bundle_id' => env('APP_BUNDLE_ID', 'app.kurozora.tracker'),
         'protocol'  => 'kurozora://',
         'store_url' => 'https://apps.apple.com/us/app/kurozora/id1476153872',
