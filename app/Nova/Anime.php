@@ -355,7 +355,7 @@ class Anime extends Resource
 
             HasMany::make('Songs', 'anime_songs', AnimeSong::class),
 
-            MorphMany::make('Relations', 'relations', MediaRelation::class),
+            MorphMany::make('Relations', 'mediaRelations', MediaRelation::class),
 
             MorphMany::make('Staff', 'mediaStaff', MediaStaff::class),
 

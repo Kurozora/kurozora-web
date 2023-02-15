@@ -310,10 +310,10 @@ class Manga extends Resource
 
             MorphMany::make('Tags', 'mediaTags', MediaTag::class),
 
-            HasMany::make('Cast', 'mangaCast', MangaCast::class),
+            HasMany::make('Cast', 'cast', MangaCast::class),
 
-//            MorphMany::make('Relations', 'relations', MediaRelation::class),
-//
+            MorphMany::make('Relations', 'mediaRelations', MediaRelation::class),
+
             MorphMany::make('Staff', 'mediaStaff', MediaStaff::class),
 
             MorphMany::make('Studios', 'mediaStudios', MediaStudio::class),

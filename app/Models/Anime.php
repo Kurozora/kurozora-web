@@ -612,7 +612,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * Returns the media relations.
+     * Returns the media stat.
      *
      * @return mixed
      */
