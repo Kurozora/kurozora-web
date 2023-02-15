@@ -10,6 +10,7 @@ use App\Nova\Actions\ScrapeAnime;
 use App\Nova\Actions\ScrapeAnimeBanner;
 use App\Nova\Actions\ScrapeAnimeSeason;
 use App\Nova\Actions\ScrapeFiller;
+use App\Nova\Actions\ScrapeTopAnime;
 use App\Nova\Actions\ScrapeUpcomingAnime;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Exception;
@@ -430,6 +431,11 @@ class Anime extends Resource
     {
         return [
             ScrapeAnimeSeason::make()
+                ->canSee(function ($request) {
+                    return $request->user()->hasRole('superAdmin');
+                })
+                ->standalone(),
+            ScrapeTopAnime::make()
                 ->canSee(function ($request) {
                     return $request->user()->hasRole('superAdmin');
                 })
