@@ -77,6 +77,13 @@
                                 @endif
                         @endswitch
                     @break
+                    @case(\App\Enums\ExploreCategoryTypes::UpcomingLiteratures)
+                        <div class="flex flex-nowrap gap-4 snap-x overflow-x-scroll no-scrollbar">
+                            @foreach($this->exploreCategoryItems as $categoryItem)
+                                <x-lockups.upcoming-lockup :manga="$categoryItem->model" />
+                            @endforeach
+                        </div>
+                    @break
                     @case(\App\Enums\ExploreCategoryTypes::Literatures)
                     @case(\App\Enums\ExploreCategoryTypes::NewLiteratures)
                     @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateLiteratures)

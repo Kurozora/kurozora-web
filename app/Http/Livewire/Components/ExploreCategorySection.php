@@ -210,7 +210,7 @@ class ExploreCategorySection extends Component
     {
         $exploreCategoryItems = match ($this->exploreCategory->type) {
             ExploreCategoryTypes::MostPopularShows, ExploreCategoryTypes::MostPopularLiteratures => $this->exploreCategory->mostPopularShows($this->genre ?? $this->theme)->exploreCategoryItems,
-            ExploreCategoryTypes::UpcomingShows, ExploreCategoryTypes::UpcomingLiteratures => $this->exploreCategory->upcomingShows($this->genre ?? $this->theme)->exploreCategoryItems,
+            ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcomingShows($this->genre ?? $this->theme)->exploreCategoryItems,
             ExploreCategoryTypes::NewShows => $this->exploreCategory->newShows($this->genre ?? $this->theme)->exploreCategoryItems->map(function ($exploreCategoryItem) {
                 return $exploreCategoryItem->model;
             }),
@@ -226,6 +226,7 @@ class ExploreCategorySection extends Component
             ExploreCategoryTypes::ShowsSeason => $this->exploreCategory->animeSeason($this->genre ?? $this->theme)->exploreCategoryItems->map(function ($exploreCategoryItem) {
                 return $exploreCategoryItem->model;
             }),
+            ExploreCategoryTypes::UpcomingLiteratures => $this->exploreCategory->upcomingLiterature($this->genre ?? $this->theme)->exploreCategoryItems,
             ExploreCategoryTypes::NewLiteratures => $this->exploreCategory->newLiterature($this->genre ?? $this->theme)->exploreCategoryItems->map(function ($exploreCategoryItem) {
                 return $exploreCategoryItem->model;
             }),
