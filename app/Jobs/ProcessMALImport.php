@@ -12,6 +12,7 @@ use App\Models\MediaRating;
 use App\Models\User;
 use App\Models\UserLibrary;
 use App\Notifications\LibraryImportFinished;
+use Artisan;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -197,7 +198,7 @@ class ProcessMALImport implements ShouldQueue
      */
     protected function importModel(int $malID, string $malStatus, int $malRating, string $malStartDate, string $malEndDate)
     {
-        // Try to find the Anime in our DB
+        // Try to find the model in our DB
         $model = match ($this->libraryKind->value) {
             UserLibraryKind::Manga => Manga::withoutGlobalScopes()
                 ->firstWhere('mal_id', $malID),
@@ -205,64 +206,85 @@ class ProcessMALImport implements ShouldQueue
                 ->firstWhere('mal_id', $malID)
         };
 
-        // If a match was found
-        if (!empty($model)) {
-            // Convert the MAL data to our own
-            $status = $this->convertMALStatus($malStatus);
-            $rating = $this->convertMALRating($malRating);
-            $startedAt = null;
-            $endedAt = null;
+        // If a match was not found
+        if (empty($model)) {
+            switch ($this->libraryKind->value) {
+                case UserLibraryKind::Anime:
+                    Artisan::call('scrape:mal_anime', ['malID' => $malID]);
+                    break;
+                case UserLibraryKind::Manga:
+                    Artisan::call('scrape:mal_manga', ['malID' => $malID]);
+                    break;
+                default: break;
+            }
 
-            // Status not found
-            // NOTE: - Don't use empty() because 'Watching' status is 0 and that returns true.
-            if ($status === null) {
-                $this->registerFailure($malID, 'Could not handle status: ' . $malStatus);
+            // Retry to find the model in our DB
+            $model = match ($this->libraryKind->value) {
+                UserLibraryKind::Manga => Manga::withoutGlobalScopes()
+                    ->firstWhere('mal_id', $malID),
+                default => Anime::withoutGlobalScopes()
+                    ->firstWhere('mal_id', $malID)
+            };
+
+            if (empty($model)) {
+                logger($this->libraryKind->description . ' mal_id: ' . $malID . ' not exist');
+                $this->registerFailure($malID, 'MAL ID could not be found.');
                 return;
             }
-
-            // Check if the anime needs an end date
-            switch ($status) {
-                case UserLibraryStatus::OnHold:
-                case UserLibraryStatus::InProgress:
-                    $startedAt = $this->convertMALDate($malStartDate) ?? now();
-                    break;
-                case UserLibraryStatus::Dropped:
-                case UserLibraryStatus::Completed:
-                    $endedAt = $this->convertMaLDate($malEndDate) ?? now();
-                    $startedAt = $this->convertMALDate($malStartDate) ?? now();
-                    break;
-                case UserLibraryStatus::Planning:
-                default:
-                    break;
-            }
-
-            // Add the anime to their library
-            UserLibrary::updateOrCreate([
-                'user_id' => $this->user->id,
-                'trackable_type' => $model->getMorphClass(),
-                'trackable_id' => $model->id,
-            ], [
-                'status' => $status,
-                'started_at' => $startedAt,
-                'ended_at' => $endedAt
-            ]);
-
-            // Updated their anime score
-            if (!empty($rating)) {
-                MediaRating::updateOrCreate([
-                    'user_id' => $this->user->id,
-                    'model_type' => $model->getMorphClass(),
-                    'model_id' => $model->id,
-                ], [
-                    'rating' => $rating,
-                ]);
-            }
-
-            $this->registerSuccess($model->id, $malID, $status, $rating);
-        } else {
-            logger($this->libraryKind->description . ' mal_id: ' . $malID . ' not exist');
-            $this->registerFailure($malID, 'MAL ID could not be found.');
         }
+
+        // Convert the MAL data to our own
+        $status = $this->convertMALStatus($malStatus);
+        $rating = $this->convertMALRating($malRating);
+        $startedAt = null;
+        $endedAt = null;
+
+        // Status not found
+        // NOTE: - Don't use empty() because 'Watching' status is 0 and that returns true.
+        if ($status === null) {
+            $this->registerFailure($malID, 'Could not handle status: ' . $malStatus);
+            return;
+        }
+
+        // Check if the anime needs an end date
+        switch ($status) {
+            case UserLibraryStatus::OnHold:
+            case UserLibraryStatus::InProgress:
+                $startedAt = $this->convertMALDate($malStartDate) ?? now();
+                break;
+            case UserLibraryStatus::Dropped:
+            case UserLibraryStatus::Completed:
+                $endedAt = $this->convertMaLDate($malEndDate) ?? now();
+                $startedAt = $this->convertMALDate($malStartDate) ?? now();
+                break;
+            case UserLibraryStatus::Planning:
+            default:
+                break;
+        }
+
+        // Add the anime to their library
+        UserLibrary::updateOrCreate([
+            'user_id' => $this->user->id,
+            'trackable_type' => $model->getMorphClass(),
+            'trackable_id' => $model->id,
+        ], [
+            'status' => $status,
+            'started_at' => $startedAt,
+            'ended_at' => $endedAt
+        ]);
+
+        // Updated their anime score
+        if (!empty($rating)) {
+            MediaRating::updateOrCreate([
+                'user_id' => $this->user->id,
+                'model_type' => $model->getMorphClass(),
+                'model_id' => $model->id,
+            ], [
+                'rating' => $rating,
+            ]);
+        }
+
+        $this->registerSuccess($model->id, $malID, $status, $rating);
     }
 
     /**
