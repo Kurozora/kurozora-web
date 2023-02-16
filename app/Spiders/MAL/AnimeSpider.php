@@ -98,7 +98,7 @@ class AnimeSpider extends BasicSpider
             return $this->item([]);
         }
 
-        logger()->channel('stderr')->info('🕷 [MAL_ID:' . $id . '] Parsing response');
+        logger()->channel('stderr')->info('🕷 [MAL_ID:ANIME:' . $id . '] Parsing response');
         $originalTitle = $response->filter('h1.title-name')
             ->text();
         $attributes = $response->filter('div.leftside')
@@ -134,7 +134,7 @@ class AnimeSpider extends BasicSpider
         $openings = $this->cleanSongs($response, 'div[class*="theme-songs opnening"] table'); // typo on the website
         $ending = $this->cleanSongs($response, 'div[class*="theme-songs ending"] table');
 
-        logger()->channel('stderr')->info('✅️ [MAL_ID:' . $id . '] Done parsing');
+        logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $id . '] Done parsing');
         yield $this->item([
             'id'                => $id,
             'original_title'    => $originalTitle,

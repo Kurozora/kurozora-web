@@ -98,7 +98,7 @@ class MangaSpider extends BasicSpider
             return $this->item([]);
         }
 
-        logger()->channel('stderr')->info('🕷 [MAL_ID:' . $id . '] Parsing response');
+        logger()->channel('stderr')->info('🕷 [MAL_ID:MANGA:' . $id . '] Parsing response');
         $originalTitle = $response->filter('[itemprop="name"]')
             ->innerText();
         $attributes = $response->filter('div.leftside')
@@ -145,7 +145,7 @@ class MangaSpider extends BasicSpider
 
         $imageUrl = $this->cleanImageUrl($response, 'div.leftside div a img[itemprop="image"]');
 
-        logger()->channel('stderr')->info('✅️ [MAL_ID:' . $id . '] Done parsing');
+        logger()->channel('stderr')->info('✅️ [MAL_ID:MANGA:' . $id . '] Done parsing');
 
         yield $this->item([
             'id'                => $id,

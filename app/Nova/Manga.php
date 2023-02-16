@@ -6,6 +6,7 @@ use App\Enums\DayOfWeek;
 use App\Enums\MediaCollection;
 use App\Enums\SeasonOfYear;
 use App\Nova\Actions\ScrapeManga;
+use App\Nova\Actions\ScrapeNewManga;
 use App\Nova\Actions\ScrapeTopManga;
 use App\Nova\Actions\ScrapeUpcomingManga;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
@@ -387,6 +388,12 @@ class Manga extends Resource
     public function actions(NovaRequest $request): array
     {
         return [
+            ScrapeNewManga::make()
+                ->canSee(function ($request) {
+                    return $request->user()->can('createManga');
+                })
+                ->confirmButtonText('Scrape New Manga')
+                ->standalone(),
             ScrapeTopManga::make()
                 ->canSee(function ($request) {
                     return $request->user()->hasRole('superAdmin');
