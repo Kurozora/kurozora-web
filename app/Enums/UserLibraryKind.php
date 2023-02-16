@@ -5,9 +5,9 @@ namespace App\Enums;
 use BenSampo\Enum\Enum;
 
 /**
- * @method static UserLibraryStatus Anime()
- * @method static UserLibraryStatus Manga()
- * @method static UserLibraryStatus Game()
+ * @method static UserLibraryKind Anime()
+ * @method static UserLibraryKind Manga()
+ * @method static UserLibraryKind Game()
  */
 final class UserLibraryKind extends Enum
 {

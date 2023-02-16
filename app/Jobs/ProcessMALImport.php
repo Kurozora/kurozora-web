@@ -98,6 +98,7 @@ class ProcessMALImport implements ShouldQueue
      */
     public function handle()
     {
+        $this->libraryKind = UserLibraryKind::Anime();
         switch ($this->libraryKind->value) {
             case UserLibraryKind::Anime:
                 $this->handleAnime();
