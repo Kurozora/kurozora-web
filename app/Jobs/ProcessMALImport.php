@@ -31,6 +31,13 @@ class ProcessMALImport implements ShouldQueue
     public int $tries = 1;
 
     /**
+     * The number of seconds the job can run before timing out.
+     *
+     * @var int $timeout
+     */
+    public int $timeout = 0;
+
+    /**
      * The user to whose library data should be imported.
      *
      * @var User $user
@@ -98,7 +105,10 @@ class ProcessMALImport implements ShouldQueue
      */
     public function handle()
     {
-        $this->libraryKind = UserLibraryKind::Anime();
+        if (!property_exists($this, 'libraryKind')) {
+            $this->{'libraryKind'} = UserLibraryKind::Anime();
+        }
+
         switch ($this->libraryKind->value) {
             case UserLibraryKind::Anime:
                 $this->handleAnime();
