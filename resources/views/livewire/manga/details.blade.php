@@ -153,12 +153,12 @@
                     </a>
                 </div>
 
-                @if ($manga->air_season)
+                @if ($manga->publication_season)
                     <div id="seasonBadge" class="flex-grow px-12 border-l-2">
-                        <a class="flex flex-col items-center" href="#aired">
-                            <p class="font-bold">{{ $manga->air_season->description }}</p>
+                        <a class="flex flex-col items-center" href="#published">
+                            <p class="font-bold">{{ $manga->publication_season->description }}</p>
                             <p class="text-orange-500">
-                                {{ $manga->air_season->symbol() }}
+                                {{ $manga->publication_season->symbol() }}
                             </p>
                             <p class="text-sm text-gray-500">{{ __('Season') }}</p>
                         </a>
@@ -328,7 +328,7 @@
                         @endif
                     </x-information-list>
 
-                    <x-information-list id="aired" title="{{ __('Aired') }}" icon="{{ asset('images/symbols/calendar.svg') }}">
+                    <x-information-list id="published" title="{{ __('Published') }}" icon="{{ asset('images/symbols/calendar.svg') }}">
                         @if (!empty($manga->started_at))
                             @if (empty($manga->ended_at))
                                 <x-slot:information>
@@ -352,7 +352,7 @@
                                 -
                             </x-slot:information>
                             <x-slot:footer>
-                                {{ __('Airing dates are unknown.') }}
+                                {{ __('Publication dates are unknown.') }}
                             </x-slot:footer>
                         @endif
                     </x-information-list>
