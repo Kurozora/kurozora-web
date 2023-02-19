@@ -52,10 +52,10 @@ class NewFeedMessageReply extends Notification implements ShouldQueue
     public function toDatabase(mixed $notifiable): array
     {
         return [
-            'userID'            => $this->feedMessage->user->id,
+            'userID'            => (string) $this->feedMessage->user->id,
             'username'          => $this->feedMessage->user->username,
             'profileImageURL'   => $this->feedMessage->user->getFirstMediaFullUrl(MediaCollection::Profile()),
-            'feedMessageID'     => $this->feedMessage->id,
+            'feedMessageID'     => (string) $this->feedMessage->id,
         ];
     }
 
