@@ -76,7 +76,7 @@ class MangaCast extends Resource
                 ->sortable()
                 ->required(),
 
-            BelongsTo::make('Cast Role', 'cast_role')
+            BelongsTo::make('Cast Role')
                 ->sortable()
                 ->help('If you’re not sure what role the character has, choose "Supporting Character".'),
         ];

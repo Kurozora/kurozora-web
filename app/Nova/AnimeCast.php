@@ -82,7 +82,7 @@ class AnimeCast extends Resource
                 ->nullable()
                 ->help('Sometimes unknown if the anime is a hentai. Leave empty in that case.'),
 
-            BelongsTo::make('Cast Role', 'cast_role')
+            BelongsTo::make('Cast Role')
                 ->sortable()
                 ->help('If you’re not sure what role the character has, choose "Supporting Character".'),
 
