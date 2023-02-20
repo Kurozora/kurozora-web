@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Livewire\Anime\Details as AnimeDetails;
+use App\Http\Livewire\Manga\Details as MangaDetails;
 
 Route::prefix('/{mal_url}')
     ->where(['mal_url' => '^(www\.)?(myanimelist|mal)(.net)?'])
@@ -27,10 +28,10 @@ Route::prefix('/{mal_url}')
                 Route::prefix('{manga:mal_id}')
                     ->name('.details')
                     ->group(function () {
-                        Route::get('/', AnimeDetails::class)
+                        Route::get('/', MangaDetails::class)
                             ->name('.index');
 
-                        Route::get('/{any}', AnimeDetails::class)
+                        Route::get('/{any}', MangaDetails::class)
                             ->name('.any');
                     });
             });

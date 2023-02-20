@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Livewire\Anime\Details as AnimeDetails;
+use App\Http\Livewire\Manga\Details as MangaDetails;
 
 Route::prefix('/{anisearch_url}')
     ->where(['anisearch_url' => '^(www\.)?anisearch(.com)?'])
@@ -17,6 +18,20 @@ Route::prefix('/{anisearch_url}')
                             ->name('.index');
 
                         Route::get(',{any}', AnimeDetails::class)
+                            ->name('.any');
+                    });
+            });
+
+        Route::prefix('/manga')
+            ->name('.manga')
+            ->group(function () {
+                Route::prefix('{manga:anisearch_id}')
+                    ->name('.details')
+                    ->group(function () {
+                        Route::get('/', MangaDetails::class)
+                            ->name('.index');
+
+                        Route::get(',{any}', MangaDetails::class)
                             ->name('.any');
                     });
             });

@@ -25,6 +25,17 @@ return new class extends Migration
             $table->string('owner');
             $table->integer('expiration');
         });
+
+        Schema::table(Cache::TABLE_NAME, function (Blueprint $table) {
+            // Set index key constraints
+            $table->index(['expiration']);
+        });
+
+        Schema::table('cache_locks', function (Blueprint $table) {
+            // Set index key constraints
+            $table->index(['owner']);
+            $table->index(['expiration']);
+        });
     }
 
     /**
