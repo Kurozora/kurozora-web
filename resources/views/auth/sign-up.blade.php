@@ -34,12 +34,12 @@
 
                 <div>
                     <x-label for="password" value="{{ __('Password') }}" />
-                    <x-input id="password" class="mt-1 block w-full" type="password" name="password" placeholder="{{ __('Make it super secret') }} 🙊" required autocomplete="new-password" />
+                    <x-input id="password" class="mt-1 block w-full" type="password" name="password" placeholder="{{ __('Make it super secret') }} 🙊" required autocomplete="new-password" passwordrules="minlength: 5; maxlength: 255; required: lower; required: upper; required: digit; required: special;" />
                 </div>
 
                 <div>
                     <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
-                    <x-input id="password_confirmation" class="mt-1 block w-full" type="password" name="password_confirmation" placeholder="{{ __('But keep it memorable') }} 🐵" required autocomplete="new-password" />
+                    <x-input id="password_confirmation" class="mt-1 block w-full" type="password" name="password_confirmation" placeholder="{{ __('But keep it memorable') }} 🐵" required autocomplete="new-password" passwordrules="minlength: 5; maxlength: 255; required: lower; required: upper; required: digit; required: special;" />
                 </div>
             </section>
 
