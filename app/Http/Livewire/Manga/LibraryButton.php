@@ -42,7 +42,7 @@ class LibraryButton extends Component
         // Set library status, else default to "ADD"
         $this->libraryStatus = UserLibrary::firstWhere([
             ['user_id', auth()->user()?->id],
-            ['trackable_type', Manga::class],
+            ['trackable_type', $manga->getMorphClass()],
             ['trackable_id', $manga->id],
         ])?->status ?? -1;
     }
