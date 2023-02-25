@@ -28,7 +28,7 @@
             <div>
                 <div class="flex gap-1">
                     <div class="flex flex-wrap items-center w-full">
-                        <p class="text-2xl font-bold">{{ __(':x Staff', ['x' => $manga->title]) }}</p>
+                        <p class="text-2xl font-bold">{{ __(':x’s Staff', ['x' => $manga->title]) }}</p>
                     </div>
 
                     <div class="flex flex-wrap justify-end items-center w-full">

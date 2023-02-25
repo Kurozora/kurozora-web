@@ -26,7 +26,7 @@
             <div>
                 <div class="flex gap-1">
                     <div class="flex flex-wrap items-center w-full">
-                        <p class="text-2xl font-bold">{{ __(':x Cast', ['x' => $anime->title]) }}</p>
+                        <p class="text-2xl font-bold">{{ __(':x’s Cast', ['x' => $anime->title]) }}</p>
                     </div>
 
                     <div class="flex flex-wrap justify-end items-center w-full">
@@ -37,7 +37,7 @@
 
         <section class="grid gap-4 sm:grid-cols-2 sm:auto-cols-[unset] lg:grid-cols-3">
             @foreach($this->cast as $animeCast)
-                <x-lockups.cast-lockup :anime-cast="$animeCast" :isRow="false" />
+                <x-lockups.cast-lockup :cast="$animeCast" :isRow="false" />
             @endforeach
         </section>
 

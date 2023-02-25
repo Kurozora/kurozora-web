@@ -4,12 +4,12 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Browse the :x :y manga season. Join the Kurozora community and create your anime and manga list. Discover songs, games and read reviews and news!', ['x' => $seasonOfYear->key, 'y' => $year]) }}
+        {{ __('Browse the :x :y manga season. Join the Kurozora community and create your anime, manga and game list. Discover songs, episodes and read reviews and news!', ['x' => $seasonOfYear->key, 'y' => $year]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ $seasonOfYear->key . ' ' . $year }} | {{ __('Manga') }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Browse the :x :y manga season. Join the Kurozora community and create your anime and manga list. Discover songs, games and read reviews and news!', ['x' => $seasonOfYear->key, 'y' => $year]) }}" />
+        <meta property="og:description" content="{{ __('Browse the :x :y manga season. Join the Kurozora community and create your anime, manga and game list. Discover songs, episodes and read reviews and news!', ['x' => $seasonOfYear->key, 'y' => $year]) }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="{{ route('manga.seasons.year.season', [$year, $season]) }}">

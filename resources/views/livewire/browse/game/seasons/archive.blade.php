@@ -1,26 +1,26 @@
 <main>
     <x-slot:title>
-        {{ __('Seasonal Archive') }} | {{ __('Manga') }}
+        {{ __('Seasonal Archive') }} | {{ __('Games') }}
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Browse the archive of manga seasons. Join the Kurozora community and create your anime, manga and game list. Discover songs, episodes and read reviews and news!') }}
+        {{ __('Browse the archive of game seasons. Join the Kurozora community and create your anime, manga and game list. Discover songs, episodes and read reviews and news!') }}
     </x-slot:description>
 
     <x-slot:meta>
-        <meta property="og:title" content="{{ __('Seasonal Archive') }} | {{ __('Manga') }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Browse the archive of manga seasons. Join the Kurozora community and create your anime, manga and game list. Discover songs, episodes and read reviews and news!') }}" />
+        <meta property="og:title" content="{{ __('Seasonal Archive') }} | {{ __('Games') }} — {{ config('app.name') }}" />
+        <meta property="og:description" content="{{ __('Browse the archive of game seasons. Join the Kurozora community and create your anime, manga and game list. Discover songs, episodes and read reviews and news!') }}" />
         <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
         <meta property="og:type" content="website" />
-        <link rel="canonical" href="{{ route('manga.seasons.archive') }}">
+        <link rel="canonical" href="{{ route('games.seasons.archive') }}">
     </x-slot:meta>
 
     <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
-        <p class="text-2xl font-bold">{{ __('Seasonal Manga Archive') }}</p>
+        <p class="text-2xl font-bold">{{ __('Seasonal Games Archive') }}</p>
 
         <section>
             <div id="mediaTypeHeader" class="pt-4 pb-5 bg-white z-10">
-                <x-season-pagination :type="App\Models\Manga::class" />
+                <x-season-pagination :type="App\Models\Game::class" />
             </div>
 
             <table class="table-fixed w-full text-xs text-center border-2 sm:text-base">
@@ -60,7 +60,7 @@
 
                         @foreach(\App\Enums\SeasonOfYear::asSelectArray() as $seasonOfYear)
                             <td class="pt-2 pr-2 pb-2 pl-2 sm:p-4 {{ $year === now()->year && $seasonOfYear === season_of_year()->key ? 'font-semibold' : '' }}">
-                                <x-simple-link href="{{ route('manga.seasons.year.season', [$year, $seasonOfYear]) }}">{{ $seasonOfYear }}</x-simple-link>
+                                <x-simple-link href="{{ route('games.seasons.year.season', [$year, $seasonOfYear]) }}">{{ $seasonOfYear }}</x-simple-link>
                             </td>
                         @endforeach
                     </tr>
