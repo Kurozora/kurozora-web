@@ -225,6 +225,37 @@ class Studio extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * Returns the games that belongs to the studio
+     *
+     * @return BelongsToMany
+     */
+    public function games(): BelongsToMany
+    {
+        return $this->belongsToMany(Game::class, MediaStudio::class, 'studio_id', 'model_id')
+            ->where('model_type', '=', Game::class)
+            ->withTimestamps();
+    }
+
+    /**
+     * Retrieves the games for a Studio item in an array
+     *
+     * @param int $limit
+     * @param int $page
+     * @param array $where
+     * @return mixed
+     */
+    public function getGame(int $limit = 25, int $page = 1, array $where = []): mixed
+    {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'studios.games', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page, 'where' => $where]);
+
+        // Retrieve or save cached result
+        return Cache::remember($cacheKey, self::CACHE_KEY_MANGA_SECONDS, function () use ($limit, $where) {
+            return $this->games()->where($where)->paginate($limit);
+        });
+    }
+
+    /**
      * The anime's TV rating.
      *
      * @return BelongsTo

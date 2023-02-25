@@ -149,6 +149,10 @@ return [
                 'sortableAttributes'=> ['duration', 'number', 'number_total', 'title', 'started_at', 'ended_at', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'duration', 'is_filler', 'is_nsfw', 'is_special', 'is_premiere', 'is_finale', 'is_verified', 'number', 'number_total', 'season_id', 'tv_rating_id', 'started_at', 'ended_at'],
             ],
+            \App\Models\Game::TABLE_NAME => [
+                'sortableAttributes'=> ['publication_day', 'publication_season', 'duration', 'published_at', 'is_nsfw', 'original_title', 'title', 'edition_count', 'created_at', 'update_at'],
+                'filterableAttributes'=> ['id', 'publication_day', 'publication_season', 'duration', 'published_at', 'is_nsfw', 'media_type_id', 'original_title', 'source_id', 'status_id', 'title', 'tv_rating_id', 'edition_count'],
+            ],
             \App\Models\Manga::TABLE_NAME => [
                 'sortableAttributes'=> ['publication_day', 'publication_season', 'publication_time', 'duration', 'started_at', 'ended_at', 'is_nsfw', 'original_title', 'title', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'publication_day', 'publication_season', 'publication_time', 'duration', 'started_at', 'ended_at', 'is_nsfw', 'media_type_id', 'original_title', 'source_id', 'status_id', 'title', 'tv_rating_id', 'volume_count', 'chapter_count', 'page_count'],

@@ -17,6 +17,7 @@ use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Code;
@@ -143,6 +144,18 @@ class Anime extends Resource
                 ->help('Used to identify the Anime on <a target="_blank" href="https://thetvdb.com/series/' . ($this->resource->tvdb_id ?? 'slug-identifier') . '">TheTVDB</a>'),
 
             Heading::make('Media'),
+
+            Avatar::make('Poster')
+                ->thumbnail(function () {
+                    return  $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp');
+                })->preview(function () {
+                    return $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp');
+                })
+                ->rounded()
+                ->deletable(false)
+                ->disableDownload()
+                ->readonly()
+                ->onlyOnPreview(),
 
             Images::make('Poster', MediaCollection::Poster)
                 ->showStatistics()

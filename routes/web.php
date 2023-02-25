@@ -45,6 +45,7 @@ require 'Web/Characters.php';
 require 'Web/Embed.php';
 require 'Web/Episodes.php';
 require 'Web/Explore.php';
+require 'Web/Games.php';
 require 'Web/Genres.php';
 require 'Web/IMDB.php';
 require 'Web/Kitsu.php';

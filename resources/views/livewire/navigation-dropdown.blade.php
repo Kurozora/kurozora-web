@@ -112,17 +112,17 @@
                                 {{ __('Manga') }}
                             </x-nav-link>
 
-{{--                            <x-nav-link href="{{ route('game.index') }}" :active="request()->routeIs('game.index')"--}}
-{{--                                        x-show="! isSearchEnabled"--}}
-{{--                                        x-transition:enter="ease-out duration-150 delay-100 transform"--}}
-{{--                                        x-transition:enter-start="opacity-0 scale-75"--}}
-{{--                                        x-transition:enter-end="opacity-100 scale-100"--}}
-{{--                                        x-transition:leave="ease-in duration-200 delay-300 transform"--}}
-{{--                                        x-transition:leave-start="opacity-100 scale-100"--}}
-{{--                                        x-transition:leave-end="opacity-0 scale-75"--}}
-{{--                            >--}}
-{{--                                {{ __('Game') }}--}}
-{{--                            </x-nav-link>--}}
+                            <x-nav-link href="{{ route('games.index') }}" :active="request()->routeIs('games.index')"
+                                        x-show="! isSearchEnabled"
+                                        x-transition:enter="ease-out duration-150 delay-100 transform"
+                                        x-transition:enter-start="opacity-0 scale-75"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="ease-in duration-200 delay-300 transform"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-75"
+                            >
+                                {{ __('Game') }}
+                            </x-nav-link>
 
                             <x-nav-link href="{{ route('genres.index') }}" :active="request()->routeIs('genres.index')"
                                         x-show="! isSearchEnabled"
@@ -247,9 +247,9 @@
                                         {{ __('Manga Library') }}
                                     </x-dropdown-link>
 
-{{--                                    <x-dropdown-link href="{{ route('profile.game-library', auth()->user()) }}">--}}
-{{--                                        {{ __('Game Library') }}--}}
-{{--                                    </x-dropdown-link>--}}
+                                    <x-dropdown-link href="{{ route('profile.games-library', auth()->user()) }}">
+                                        {{ __('Games Library') }}
+                                    </x-dropdown-link>
                                 @else
                                     {{-- Library --}}
                                     <x-dropdown-link href="{{ route('library.index') }}">
@@ -356,9 +356,9 @@
                     {{ __('Manga') }}
                 </x-responsive-nav-link>
 
-{{--                <x-responsive-nav-link href="{{ route('game.index') }}" :active="request()->routeIs('game.index')">--}}
-{{--                    {{ __('Game') }}--}}
-{{--                </x-responsive-nav-link>--}}
+                <x-responsive-nav-link href="{{ route('games.index') }}" :active="request()->routeIs('games.index')">
+                    {{ __('Game') }}
+                </x-responsive-nav-link>
 
                 <x-responsive-nav-link href="{{ route('genres.index') }}" :active="request()->routeIs('genres.index')">
                     {{ __('Genres') }}
@@ -416,10 +416,10 @@
                             {{ __('Manga Library') }}
                         </x-responsive-nav-link>
 
-{{--                        <x-responsive-nav-link href="{{ route('profile.game-library', auth()->user()) }}"--}}
-{{--                                               :active="request()->routeIs('profile.game-library')">--}}
-{{--                            {{ __('Game Library') }}--}}
-{{--                        </x-responsive-nav-link>--}}
+                        <x-responsive-nav-link href="{{ route('profile.games-library', auth()->user()) }}"
+                                               :active="request()->routeIs('profile.games-library')">
+                            {{ __('Games Library') }}
+                        </x-responsive-nav-link>
 
                         <div class="border-t border-gray-100"></div>
                     </div>

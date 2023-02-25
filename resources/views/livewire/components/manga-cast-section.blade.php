@@ -8,7 +8,7 @@
 
                 <x-slot:action>
                     @hasrole('superAdmin')
-                    <x-button wire:click="loadMangaCast">{{ __('Refresh') }}</x-button>
+                        <x-button wire:click="loadMangaCast">{{ __('Refresh') }}</x-button>
                     @endhasrole
                     <x-section-nav-link href="{{ route('manga.cast', $manga) }}">{{ __('See All') }}</x-section-nav-link>
                 </x-slot:action>

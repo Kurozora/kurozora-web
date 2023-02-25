@@ -55,6 +55,16 @@ class Details extends Component
     }
 
     /**
+     * The studio's games.
+     *
+     * @return LengthAwarePaginator
+     */
+    public function getGamesProperty(): LengthAwarePaginator
+    {
+        return $this->studio->games()->paginate(Studio::MAXIMUM_RELATIONSHIPS_LIMIT);
+    }
+
+    /**
      * Render the component.
      *
      * @return Application|Factory|View

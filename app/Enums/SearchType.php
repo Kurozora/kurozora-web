@@ -74,12 +74,12 @@ final class SearchType extends Enum
             SearchScope::Library => [
                 SearchType::Shows,
                 SearchType::Literatures,
-//                SearchType::Games,
+                SearchType::Games,
             ],
             SearchScope::Kurozora => [
                 SearchType::Shows,
                 SearchType::Literatures,
-//                SearchType::Games,
+                SearchType::Games,
                 SearchType::Episodes,
                 SearchType::Characters,
                 SearchType::People,
@@ -102,7 +102,7 @@ final class SearchType extends Enum
         $selectArray = [
             SearchType::Shows => __('Anime'),
             SearchType::Literatures => __('Manga'),
-//            SearchType::Games => __('Games'),
+            SearchType::Games => __('Games'),
         ];
 
         if ($scope != SearchScope::Library || ($scope instanceof SearchScope && $scope->value != SearchScope::Library)) {

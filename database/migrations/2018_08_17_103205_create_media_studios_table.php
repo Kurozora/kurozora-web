@@ -22,6 +22,7 @@ return new class extends Migration
             $table->boolean('is_producer');
             $table->boolean('is_studio');
             $table->boolean('is_publisher');
+            $table->boolean('is_developer');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -32,6 +33,7 @@ return new class extends Migration
             $table->index('is_producer');
             $table->index('is_studio');
             $table->index('is_publisher');
+            $table->index('is_developer');
             $table->index('deleted_at');
 
             // Set unique key constraints

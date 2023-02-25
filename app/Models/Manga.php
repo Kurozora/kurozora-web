@@ -52,14 +52,14 @@ class Manga extends KModel implements HasMedia, Sitemapable
     use Actionable,
         Favorable,
         HasFactory,
-        HasSlug,
         HasMediaGenres,
         HasMediaRelations,
-        HasMediaTags,
-        HasMediaThemes,
         HasMediaStaff,
         HasMediaStat,
         HasMediaStudios,
+        HasMediaTags,
+        HasMediaThemes,
+        HasSlug,
         HasUlids,
         HasVideos,
         HasViews,
@@ -301,7 +301,6 @@ class Manga extends KModel implements HasMedia, Sitemapable
 
         return $publicationTime->timezone('UTC')->format('H:i');
     }
-
 
     /**
      * The publication date and time of the manga.

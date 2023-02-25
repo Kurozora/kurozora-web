@@ -295,6 +295,17 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     }
 
     /**
+     * Returns the game ratings the user has.
+     *
+     * @return HasMany
+     */
+    public function gameRatings(): HasMany
+    {
+        return $this->hasMany(MediaRating::class)
+            ->where('model_type', Game::class);
+    }
+
+    /**
      * Returns the manga ratings the user has.
      *
      * @return HasMany

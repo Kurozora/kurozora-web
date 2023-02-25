@@ -53,7 +53,7 @@ class AnimeCast extends KModel implements Sitemapable
      *
      * @return BelongsTo
      */
-    public function cast_role(): BelongsTo
+    public function castRole(): BelongsTo
     {
         return $this->belongsTo(CastRole::class);
     }

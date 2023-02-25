@@ -2,17 +2,17 @@
 
 @php
     $currentRoute = match($type) {
-//        App\Models\Game::class => 'game.seasons.index',
+        App\Models\Game::class => 'games.seasons.index',
         App\Models\Manga::class => 'manga.seasons.index',
         default => 'anime.seasons.index'
     };
     $seasonYearRoute = match($type) {
-//        App\Models\Game::class => 'game.seasons.year.season',
+        App\Models\Game::class => 'games.seasons.year.season',
         App\Models\Manga::class => 'manga.seasons.year.season',
         default => 'anime.seasons.year.season'
     };
     $seasonArchiveRoute = match($type) {
-//        App\Models\Game::class => 'game.seasons.archive',
+        App\Models\Game::class => 'games.seasons.archive',
         App\Models\Manga::class => 'manga.seasons.archive',
         default => 'anime.seasons.archive'
     };

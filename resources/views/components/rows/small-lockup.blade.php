@@ -1,4 +1,4 @@
-@props(['animes' => [], 'relatedAnimes' => [], 'mangas' => [], 'relatedMangas' => [], 'isRow' => true])
+@props(['animes' => [], 'relatedAnimes' => [], 'mangas' => [], 'relatedMangas' => [], 'games' => [], 'relatedGames' => [], 'isRow' => true])
 
 @php
     $class = $isRow ? 'snap-x overflow-x-scroll no-scrollbar' : 'flex-wrap';
@@ -12,6 +12,18 @@
 
         @foreach($relatedAnimes as $anime)
             <x-lockups.small-lockup :anime="$anime->related" :relation="$anime->relation" :is-row="$isRow" />
+        @endforeach
+        <div class="w-64 md:w-80 flex-grow"></div>
+        <div class="w-64 md:w-80 flex-grow"></div>
+    </div>
+@elseif(!empty($games) || !empty($relatedGames))
+    <div {{ $attributes->merge(['class' => 'flex gap-4 justify-between ' . $class]) }}>
+        @foreach($games as $game)
+            <x-lockups.small-lockup :game="$game" :is-row="$isRow" />
+        @endforeach
+
+        @foreach($relatedGames as $game)
+            <x-lockups.small-lockup :game="$game->related" :relation="$game->relation" :is-row="$isRow" />
         @endforeach
         <div class="w-64 md:w-80 flex-grow"></div>
         <div class="w-64 md:w-80 flex-grow"></div>

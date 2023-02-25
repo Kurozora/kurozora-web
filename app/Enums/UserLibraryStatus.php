@@ -29,7 +29,7 @@ final class UserLibraryStatus extends Enum
      */
     public static function fromKey(string $key): static
     {
-        if (strtolower($key) == 'watching' || strtolower($key) == 'reading') {
+        if (strtolower($key) == 'watching' || strtolower($key) == 'reading' || strtolower($key) == 'playing') {
             return UserLibraryStatus::InProgress();
         }
 
@@ -47,7 +47,7 @@ final class UserLibraryStatus extends Enum
      */
     public static function hasKey(string $key): bool
     {
-        if (strtolower($key) == 'watching' || strtolower($key) == 'reading') {
+        if (strtolower($key) == 'watching' || strtolower($key) == 'reading' || strtolower($key) == 'playing') {
             return true;
         }
 
@@ -64,6 +64,21 @@ final class UserLibraryStatus extends Enum
     {
         return match ((int) $value) {
             self::InProgress => 'Watching',
+            self::OnHold => 'On-Hold',
+            default => parent::getDescription((int) $value),
+        };
+    }
+
+    /**
+     * Returns the description of the status
+     *
+     * @param int|string $value
+     * @return string
+     */
+    public static function getGameDescription(mixed $value): string
+    {
+        return match ((int) $value) {
+            self::InProgress => 'Playing',
             self::OnHold => 'On-Hold',
             default => parent::getDescription((int) $value),
         };
@@ -96,6 +111,23 @@ final class UserLibraryStatus extends Enum
 
         foreach ($array as $value) {
             $selectArray[$value] = UserLibraryStatus::getAnimeDescription($value);
+        }
+
+        return $selectArray;
+    }
+
+    /**
+     * Get the enum as an array formatted for a select.
+     *
+     * @return array<array-key, string>
+     */
+    public static function asGameSelectArray(): array
+    {
+        $array = UserLibraryStatus::asArray();
+        $selectArray = [];
+
+        foreach ($array as $value) {
+            $selectArray[$value] = UserLibraryStatus::getGameDescription($value);
         }
 
         return $selectArray;

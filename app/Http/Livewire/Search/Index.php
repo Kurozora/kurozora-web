@@ -8,6 +8,7 @@ use App\Enums\SearchType;
 use App\Models\Anime;
 use App\Models\Character;
 use App\Models\Episode;
+use App\Models\Game;
 use App\Models\Manga;
 use App\Models\Person;
 use App\Models\Song;
@@ -122,6 +123,7 @@ class Index extends Component
 
             $models = match ($this->type) {
                 SearchType::Literatures => Manga::class,
+                SearchType::Games => Game::class,
                 SearchType::Episodes => Episode::class,
                 SearchType::Characters => Character::class,
                 SearchType::People => Person::class,
@@ -169,6 +171,13 @@ class Index extends Component
                 'Arachnid',
                 'Bartender',
             ],
+            SearchType::Games => [
+                'ワンピース オデッセイ',
+                'Steins;Gate',
+                'Danganronpa',
+                'Pokémon Shining Pearl',
+                'Lost in Memories',
+            ],
             SearchType::Episodes => [
                 'Zombie',
                 'Red Hat',
@@ -207,6 +216,7 @@ class Index extends Component
             SearchType::Users => [
                 'Kirito',
                 'Usopp',
+                'Kuro-chan',
                 'TheNaughtyOne',
             ],
             default => [],

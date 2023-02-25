@@ -52,6 +52,27 @@
             </div>
 
             <div class="w-1/2 sm:w-1/3 text-center md:w-1/4 md:text-left lg:w-1/6">
+                <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('Games') }}</h5>
+                <ul class="m-0 mb-4 list-none">
+                    <li class="mt-2">
+                        <x-footer-link href="{{ route('games.index') }}">{{ __('Games') }}</x-footer-link>
+                    </li>
+
+                    <li class="mt-2">
+                        <x-footer-link href="{{ route('games.seasons.index') }}">{{ __('Game Seasons') }}</x-footer-link>
+                    </li>
+
+                    <li class="mt-2">
+                        <x-footer-link href="{{ route('games.upcoming.index') }}">{{ __('Upcoming Game') }}</x-footer-link>
+                    </li>
+
+                    <li class="mt-2">
+                        <x-footer-link href="{{ route('games.seasons.archive') }}">{{ __('Game Archive') }}</x-footer-link>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="w-1/2 sm:w-1/3 text-center md:w-1/4 md:text-left lg:w-1/6">
                 <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('Discover') }}</h5>
                 <ul class="m-0 mb-4 list-none">
                     <li class="mt-2">
@@ -93,6 +114,10 @@
 
                     <li class="mt-2">
                         <x-footer-link href="{{ route('mangalist') }}">{{ __('Manga Library') }}</x-footer-link>
+                    </li>
+
+                    <li class="mt-2">
+                        <x-footer-link href="{{ route('gamelist') }}">{{ __('Games Library') }}</x-footer-link>
                     </li>
                 </ul>
             </div>

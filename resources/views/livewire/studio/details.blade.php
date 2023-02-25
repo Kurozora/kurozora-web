@@ -140,5 +140,21 @@
                 <x-rows.small-lockup :mangas="$this->mangas" />
             </section>
         @endif
+
+        @if (!empty($this->games->total()))
+            <section class="pt-5 pb-8 border-t-2">
+                <x-section-nav>
+                    <x-slot:title>
+                        {{ __('Games') }}
+                    </x-slot:title>
+
+                    <x-slot:action>
+                        <x-section-nav-link href="{{ route('studios.games', $studio) }}">{{ __('See All') }}</x-section-nav-link>
+                    </x-slot:action>
+                </x-section-nav>
+
+                <x-rows.small-lockup :games="$this->games" />
+            </section>
+        @endif
     </div>
 </main>

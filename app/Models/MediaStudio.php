@@ -20,6 +20,13 @@ class MediaStudio extends MorphPivot implements Sitemapable
     protected $table = self::TABLE_NAME;
 
     /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = true;
+
+    /**
      * The attributes that should be cast.
      *
      * @var array
@@ -29,6 +36,7 @@ class MediaStudio extends MorphPivot implements Sitemapable
         'is_producer'   => 'boolean',
         'is_studio'     => 'boolean',
         'is_publisher'  => 'boolean',
+        'is_developer'  => 'boolean',
     ];
 
     /**
@@ -62,6 +70,8 @@ class MediaStudio extends MorphPivot implements Sitemapable
             Anime::class => Url::create(route('anime.studios', $this->model))
                 ->setChangeFrequency('weekly'),
             Manga::class => Url::create(route('manga.studios', $this->model))
+                ->setChangeFrequency('weekly'),
+            Game::class => Url::create(route('games.studios', $this->model))
                 ->setChangeFrequency('weekly'),
             default => [],
         };

@@ -109,6 +109,9 @@
                     @case(\App\Enums\SearchType::Literatures)
                         <x-rows.small-lockup :mangas="$this->searchResults" :is-row="false"/>
                         @break
+                    @case(\App\Enums\SearchType::Games)
+                        <x-rows.small-lockup :games="$this->searchResults" :is-row="false"/>
+                        @break
                     @case(\App\Enums\SearchType::Episodes)
                         <x-rows.episode-lockup :episodes="$this->searchResults" :is-row="false"/>
                         @break
