@@ -56,8 +56,13 @@ class View extends Resource
                     Anime::class,
                     Character::class,
                     Episode::class,
+                    Game::class,
+                    Manga::class,
                     Person::class,
+                    Season::class,
+                    Song::class,
                     Studio::class,
+                    User::class,
                 ])
                 ->required()
                 ->searchable()

@@ -111,9 +111,9 @@ class MangaCast extends Resource
         $resourceID = $request->resourceId;
         $manga = $request->post('manga');
         $character = $request->post('character');
-        $castRole = $request->post('cast_role');
+        $castRole = $request->post('castRole');
 
-        $unique = Rule::unique(\App\Models\MangaCast::TABLE_NAME, 'cast_role')->where(function ($query) use ($resourceID, $manga, $character, $castRole) {
+        $unique = Rule::unique(\App\Models\MangaCast::TABLE_NAME, 'cast_role_id')->where(function ($query) use ($resourceID, $manga, $character, $castRole) {
             if ($resourceID) {
                 $query->whereNotIn('id', [$resourceID]);
             }
@@ -125,8 +125,8 @@ class MangaCast extends Resource
             ]);
         });
 
-        $uniqueValidator = Validator::make($request->only('cast_role'), [
-            'cast_role'  => [$unique],
+        $uniqueValidator = Validator::make($request->only('castRole'), [
+            'castRole'  => [$unique],
         ]);
 
         $uniqueValidator->validate();

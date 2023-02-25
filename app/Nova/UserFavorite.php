@@ -2,7 +2,6 @@
 
 namespace App\Nova;
 
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
@@ -58,8 +57,8 @@ class UserFavorite extends Resource
             MorphTo::make('Favorable')
                 ->types([
                     Anime::class,
+                    Game::class,
                     Manga::class,
-//                    Game::class,
                 ])
                 ->searchable()
                 ->sortable()

@@ -71,7 +71,8 @@ class MediaGenre extends Resource
             MorphTo::make('Model')
                 ->types([
                     Anime::class,
-//                    Manga::class,
+                    Game::class,
+                    Manga::class,
                 ])
                 ->searchable()
                 ->sortable(),

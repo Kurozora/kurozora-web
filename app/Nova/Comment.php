@@ -73,7 +73,8 @@ class Comment extends Resource
                 ->types([
                     Anime::class,
                     Episode::class,
-//                    Manga::class,
+                    Manga::class,
+                    Game::class,
                 ])
                 ->searchable()
                 ->sortable(),

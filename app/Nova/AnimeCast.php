@@ -123,7 +123,7 @@ class AnimeCast extends Resource
         $anime = $request->post('anime');
         $character = $request->post('character');
         $person = $request->post('person');
-        $castRole = $request->post('cast_role');
+        $castRole = $request->post('castRole');
         $language = $request->post('language');
 
         $unique = Rule::unique(\App\Models\AnimeCast::TABLE_NAME, 'language_id')->where(function ($query) use ($resourceID, $anime, $character, $person, $castRole, $language) {

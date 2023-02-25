@@ -82,6 +82,11 @@ class MediaStudio extends Resource
             Heading::make('Meta information'),
 
             MorphTo::make('Model')
+                ->types([
+                    Anime::class,
+                    Game::class,
+                    Manga::class,
+                ])
                 ->sortable()
                 ->searchable()
                 ->required(),

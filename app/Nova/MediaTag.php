@@ -65,6 +65,8 @@ class MediaTag extends Resource
             MorphTo::make('Taggable')
                 ->types([
                     Anime::class,
+                    Game::class,
+                    Manga::class,
                 ])
                 ->required()
                 ->searchable()

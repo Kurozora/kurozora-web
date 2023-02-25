@@ -13,6 +13,7 @@ use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Code;
@@ -107,6 +108,18 @@ class Manga extends Resource
                 ->help('Used to identify the Manga on <a target="_blank" href="https://myanimelist.net/manga/' . ($this->resource->mal_id ?? 'slug-identifier') . '">MyAnimeList</a>'),
 
             Heading::make('Media'),
+
+            Avatar::make('Poster')
+                ->thumbnail(function () {
+                    return  $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp');
+                })->preview(function () {
+                    return $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp');
+                })
+                ->squared()
+                ->deletable(false)
+                ->disableDownload()
+                ->readonly()
+                ->onlyOnPreview(),
 
             Images::make('Poster', MediaCollection::Poster)
                 ->showStatistics()

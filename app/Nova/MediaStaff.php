@@ -81,6 +81,11 @@ class MediaStaff extends Resource
             Heading::make('Meta information'),
 
             MorphTo::make('Model')
+                ->types([
+                    Anime::class,
+                    Game::class,
+                    Manga::class,
+                ])
                 ->searchable()
                 ->sortable()
                 ->required(),

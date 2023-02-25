@@ -2,7 +2,6 @@
 
 namespace App\Nova;
 
-use App\Enums\MediaCollection;
 use App\Nova\Filters\PremiumStatus;
 use App\Nova\Filters\UserRole;
 use App\Nova\Lenses\UnconfirmedUsers;
@@ -11,6 +10,7 @@ use App\Rules\ValidatePassword;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Exception;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
@@ -19,11 +19,9 @@ use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphMany;
-use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
-use Outl1ne\NovaColorField\Color;
 use Ramsey\Uuid\Uuid;
 use Vyuldashev\NovaPermission\RoleBooleanGroup;
 
@@ -93,7 +91,19 @@ class User extends Resource
 
             Heading::make('Media'),
 
-            Images::make('Profile', MediaCollection::Profile)
+            Avatar::make('Profile')
+                ->thumbnail(function () {
+                    return  $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/user_profile.webp');
+                })->preview(function () {
+                    return $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/user_profile.webp');
+                })
+                ->rounded()
+                ->deletable(false)
+                ->disableDownload()
+                ->readonly()
+                ->onlyOnPreview(),
+
+            Images::make('Profile')
                 ->showStatistics()
                 ->setFileName(function($originalFilename, $extension, $model) {
                     return Uuid::uuid4() . '.' . $extension;
@@ -133,7 +143,7 @@ class User extends Resource
 //                        ->help('The maximum height available for the image.'),
 //                ]),
 
-            Images::make('Banner', MediaCollection::Banner)
+            Images::make('Banner')
                 ->hideFromIndex()
                 ->showStatistics()
                 ->setFileName(function($originalFilename, $extension, $model) {

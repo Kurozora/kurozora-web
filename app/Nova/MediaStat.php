@@ -68,7 +68,8 @@ class MediaStat extends Resource
             MorphTo::make('Model')
                 ->types([
                     Anime::class,
-//                    Manga::class,
+                    Game::class,
+                    Manga::class,
                 ])
                 ->searchable()
                 ->sortable(),
@@ -81,12 +82,12 @@ class MediaStat extends Resource
             Heading::make('Stats')
                 ->onlyOnDetail(),
 
-            Number::make('Planning', 'planning_count')
+            Number::make('In Progress', 'in_progress_count')
                 ->default(0)
                 ->rules(['required', 'numeric'])
                 ->sortable(),
 
-            Number::make('In Progress', 'in_progress_count')
+            Number::make('Planning', 'planning_count')
                 ->default(0)
                 ->rules(['required', 'numeric'])
                 ->sortable(),

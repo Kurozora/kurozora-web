@@ -81,8 +81,8 @@ class MediaRelation extends Resource
             MorphTo::make('Media', 'model')
                 ->types([
                     Anime::class,
+                    Game::class,
                     Manga::class,
-//                    Game::class,
                 ])
                 ->searchable()
                 ->sortable(),
@@ -98,8 +98,8 @@ class MediaRelation extends Resource
             MorphTo::make('Related Media', 'related')
                 ->types([
                     Anime::class,
+                    Game::class,
                     Manga::class,
-//                    Game::class,
                 ])
                 ->searchable()
                 ->sortable(),

@@ -81,7 +81,11 @@ class ExploreCategoryItem extends Resource
                 ->types([
                     Anime::class,
                     AnimeSong::class,
+                    Character::class,
+                    Game::class,
                     Genre::class,
+                    Manga::class,
+                    Person::class,
                     Theme::class,
                 ])
                 ->searchable()

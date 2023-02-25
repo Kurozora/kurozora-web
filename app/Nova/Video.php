@@ -67,6 +67,8 @@ class Video extends Resource
                 ->types([
                     Anime::class,
                     Episode::class,
+                    Game::class,
+                    Manga::class,
                 ])
                 ->required()
                 ->searchable()

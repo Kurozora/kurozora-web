@@ -5,6 +5,7 @@ namespace App\Nova;
 use App\Enums\AstrologicalSign;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\Date;
@@ -15,7 +16,6 @@ use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
-use Outl1ne\NovaColorField\Color;
 use Ramsey\Uuid\Uuid;
 
 class Person extends Resource
@@ -76,7 +76,19 @@ class Person extends Resource
 
             Heading::make('Media'),
 
-            Images::make('Profile Image', 'profile')
+            Avatar::make('Profile')
+                ->thumbnail(function () {
+                    return  $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp');
+                })->preview(function () {
+                    return $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Profile()) ?? asset('images/static/placeholders/person_poster.webp');
+                })
+                ->rounded()
+                ->deletable(false)
+                ->disableDownload()
+                ->readonly()
+                ->onlyOnPreview(),
+
+            Images::make('Profile')
                 ->showStatistics()
                 ->setFileName(function($originalFilename, $extension, $model) {
                     return Uuid::uuid4() . '.' . $extension;
