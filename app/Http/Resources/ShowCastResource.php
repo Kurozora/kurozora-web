@@ -26,7 +26,7 @@ class ShowCastResource extends JsonResource
         $resource = AnimeResourceIdentity::make($this->resource)->toArray($request);
         $resource = array_merge($resource, [
             'attributes'    => [
-                'role'      => $this->resource->cast_role->only(['name', 'description']),
+                'role'      => $this->resource->castRole->only(['name', 'description']),
                 'language'  => $this->resource->language?->name,
             ]
         ]);

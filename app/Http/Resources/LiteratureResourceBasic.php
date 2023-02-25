@@ -92,7 +92,7 @@ class LiteratureResourceBasic extends JsonResource
         $libraryEntry = $user->whereTracked(Manga::class)
             ->firstWhere([
                 ['trackable_id', $this->resource->id],
-                ['trackable_type', Manga::class]
+                ['trackable_type', $this->resource->getMorphClass()]
             ]);
 
         // Get various statuses

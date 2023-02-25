@@ -99,7 +99,7 @@ class AnimeResourceBasic extends JsonResource
         $libraryEntry = $user->whereTracked(Anime::class)
             ->firstWhere([
                 ['trackable_id', $this->resource->id],
-                ['trackable_type', Anime::class]
+                ['trackable_type', $this->resource->getMorphClass()]
             ]);
 
         // Get various statuses
