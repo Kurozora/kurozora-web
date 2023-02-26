@@ -6,9 +6,9 @@ use App\Enums\MediaCollection;
 use App\Enums\SongType;
 use App\Enums\StudioType;
 use App\Models\Anime;
-use App\Models\AnimeSong;
 use App\Models\Genre;
 use App\Models\MediaGenre;
+use App\Models\MediaSong;
 use App\Models\MediaStudio;
 use App\Models\MediaTheme;
 use App\Models\MediaType;
@@ -717,10 +717,10 @@ class AnimeProcessor implements ItemProcessorInterface
                 ]);
             }
 
-            $animeSongs = $anime?->anime_songs()->firstWhere('song_id', '=', $song->id);
+            $mediaSongs = $anime?->mediaSongs()->firstWhere('song_id', '=', $song->id);
 
-            if (empty($animeSongs)) {
-                AnimeSong::create([
+            if (empty($mediaSongs)) {
+                MediaSong::create([
                     'anime_id' => $anime?->id,
                     'song_id' => $song->id,
                     'position' => $key,

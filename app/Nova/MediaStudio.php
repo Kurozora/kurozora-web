@@ -115,6 +115,11 @@ class MediaStudio extends Resource
                 ->sortable()
                 ->required()
                 ->help('The studio responsible for publishing (serializing) the media.'),
+
+            Boolean::make('Is Developer')
+                ->sortable()
+                ->required()
+                ->help('The studio responsible for developing the media.'),
         ];
     }
 

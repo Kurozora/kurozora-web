@@ -10,6 +10,7 @@ use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Favorable;
 use App\Traits\Model\HasMediaGenres;
 use App\Traits\Model\HasMediaRelations;
+use App\Traits\Model\HasMediaSongs;
 use App\Traits\Model\HasMediaStaff;
 use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasMediaStudios;
@@ -51,6 +52,7 @@ class Game extends KModel implements HasMedia, Sitemapable
         HasFactory,
         HasMediaGenres,
         HasMediaRelations,
+        HasMediaSongs,
         HasMediaStaff,
         HasMediaStat,
         HasMediaStudios,
@@ -78,13 +80,13 @@ class Game extends KModel implements HasMedia, Sitemapable
 
     // How long to cache certain responses
     const CACHE_KEY_GAME_CAST_SECONDS = 60 * 60 * 2;
+    const CACHE_KEY_GAME_SONGS_SECONDS = 60 * 60 * 2;
     const CACHE_KEY_CHARACTERS_SECONDS = 60 * 60 * 2;
     const CACHE_KEY_PAGES_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_GENRES_SECONDS = 60 * 60 * 24;
-    const CACHE_KEY_THEMES_SECONDS = 60 * 60 * 24;
     const CACHE_KEY_LANGUAGES_SECONDS = 60 * 60 * 24;
     const CACHE_KEY_RELATIONS_SECONDS = 60 * 60 * 2;
     const CACHE_KEY_VOLUMES_SECONDS = 60 * 60 * 24;
+    const CACHE_KEY_SONGS_SECONDS = 60 * 60 * 2;
     const CACHE_KEY_STAFF_SECONDS = 60 * 60 * 2;
     const CACHE_KEY_STAT_SECONDS = 60 * 60 * 2;
     const CACHE_KEY_STUDIOS_SECONDS = 60 * 60 * 2;
@@ -575,6 +577,42 @@ class Game extends KModel implements HasMedia, Sitemapable
     }
 
     /**
+     * Returns the songs relations.
+     *
+     * @param int $limit
+     * @param int $page
+     * @return mixed
+     */
+    public function getSongs(int $limit = 25, int $page = 1): mixed
+    {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'game.songs', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
+
+        // Retrieve or save cached result
+        return Cache::remember($cacheKey, self::CACHE_KEY_SONGS_SECONDS, function () use ($limit) {
+            return $this->songs()->paginate($limit);
+        });
+    }
+
+    /**
+     * Returns the songs relations.
+     *
+     * @param int $limit
+     * @param int $page
+     * @return mixed
+     */
+    public function getMediaSongs(int $limit = 25, int $page = 1): mixed
+    {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'game.media-songs', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
+
+        // Retrieve or save cached result
+        return Cache::remember($cacheKey, self::CACHE_KEY_GAME_SONGS_SECONDS, function () use ($limit) {
+            return $this->mediaSongs()->paginate($limit);
+        });
+    }
+
+    /**
      * Returns the media stat.
      *
      * @return mixed
@@ -685,7 +723,7 @@ class Game extends KModel implements HasMedia, Sitemapable
     public function scopeGameSeason(Builder $query, int $limit = 10): Builder
     {
         return $query->where(self::TABLE_NAME . '.publication_season', '=', season_of_year()->value)
-            ->whereYear(self::TABLE_NAME . '.started_at', '=', now()->year)
+            ->whereYear(self::TABLE_NAME . '.published_at', '=', now()->year)
             ->limit($limit);
     }
 

@@ -83,8 +83,6 @@ class Manga extends KModel implements HasMedia, Sitemapable
     const CACHE_KEY_MANGA_CAST_SECONDS = 60 * 60 * 2;
     const CACHE_KEY_CHARACTERS_SECONDS = 60 * 60 * 2;
     const CACHE_KEY_PAGES_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_GENRES_SECONDS = 60 * 60 * 24;
-    const CACHE_KEY_THEMES_SECONDS = 60 * 60 * 24;
     const CACHE_KEY_LANGUAGES_SECONDS = 60 * 60 * 24;
     const CACHE_KEY_RELATIONS_SECONDS = 60 * 60 * 2;
     const CACHE_KEY_VOLUMES_SECONDS = 60 * 60 * 24;

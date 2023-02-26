@@ -1,7 +1,6 @@
 <?php
 
-use App\Models\Anime;
-use App\Models\AnimeSong;
+use App\Models\MediaSong;
 use App\Models\Song;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,9 +15,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create(AnimeSong::TABLE_NAME, function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('anime_id');
+        Schema::create(MediaSong::TABLE_NAME, function (Blueprint $table) {
+            $table->ulid('id');
+            $table->uuidMorphs('model');
             $table->unsignedBigInteger('song_id');
             $table->tinyInteger('type');
             $table->integer('position')->nullable();
@@ -27,20 +26,15 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::table(AnimeSong::TABLE_NAME, function (Blueprint $table) {
+        Schema::table(MediaSong::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
             $table->index('position');
             $table->index('deleted_at');
 
             // Set unique key constraints
-            $table->unique(['anime_id', 'song_id', 'type']);
+            $table->unique(['model_type', 'model_id', 'song_id', 'type']);
 
             // Set foreign key constraints
-            $table->foreign('anime_id')
-                ->references('id')
-                ->on(Anime::TABLE_NAME)
-                ->cascadeOnDelete()
-                ->cascadeOnUpdate();
             $table->foreign('song_id')
                 ->references('id')
                 ->on(Song::TABLE_NAME)
@@ -56,6 +50,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists(AnimeSong::TABLE_NAME);
+        Schema::dropIfExists(MediaSong::TABLE_NAME);
     }
 };

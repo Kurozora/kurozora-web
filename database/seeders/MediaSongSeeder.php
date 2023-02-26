@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\AnimeSong;
+use App\Models\MediaSong;
 use Illuminate\Database\Seeder;
 
-class AnimeSongSeeder extends Seeder
+class MediaSongSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +14,6 @@ class AnimeSongSeeder extends Seeder
      */
     public function run(): void
     {
-        AnimeSong::factory(10)->create();
+        MediaSong::factory(10)->create();
     }
 }

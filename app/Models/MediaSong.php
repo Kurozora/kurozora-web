@@ -3,20 +3,30 @@
 namespace App\Models;
 
 use App\Enums\SongType;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Sitemap\Contracts\Sitemapable;
 use Spatie\Sitemap\Tags\Url;
 
-class AnimeSong extends KModel implements Sitemapable
+class MediaSong extends KModel implements Sitemapable
 {
     use HasFactory,
+        HasUlids,
         SoftDeletes;
 
     // Table name
-    const TABLE_NAME = 'anime_songs';
+    const TABLE_NAME = 'media_songs';
     protected $table = self::TABLE_NAME;
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool $incrementing
+     */
+    public $incrementing = false;
 
     /**
      * The relations to eager load on every query.
@@ -24,23 +34,23 @@ class AnimeSong extends KModel implements Sitemapable
      * @var array
      */
     protected $with = [
-        'anime',
+        'model',
         'song',
     ];
 
     /**
-     * The anime relationship of anime song.
+     * The model relationship.
      *
-     * @return BelongsTo
+     * @return MorphTo
      */
-    public function anime(): BelongsTo
+    public function model(): MorphTo
     {
-        return $this->belongsTo(Anime::class);
+        return $this->morphTo();
 //            ->withoutGlobalScope(new TvRatingScope());
     }
 
     /**
-     * The song relationship of anime song.
+     * The song relationship.
      *
      * @return BelongsTo
      */
@@ -67,7 +77,12 @@ class AnimeSong extends KModel implements Sitemapable
      */
     public function toSitemapTag(): Url|string|array
     {
-        return Url::create(route('anime.songs', $this->anime))
-            ->setChangeFrequency('weekly');
+        return match ($this->model_type) {
+            Anime::class => Url::create(route('anime.songs', $this->model))
+                ->setChangeFrequency('weekly'),
+            Game::class => Url::create(route('games.songs', $this->model))
+                ->setChangeFrequency('weekly'),
+            default => [],
+        };
     }
 }

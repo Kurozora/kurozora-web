@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Song;
 
 use App\Events\SongViewed;
 use App\Models\Anime;
+use App\Models\Game;
 use App\Models\Song;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -49,6 +50,16 @@ class Details extends Component
     public function getAnimeProperty(): array|Collection
     {
         return $this->song->anime;
+    }
+
+    /**
+     * The object containing the games data.
+     *
+     * @return Game[]|Collection
+     */
+    public function getGamesProperty(): array|Collection
+    {
+        return $this->song->games;
     }
 
     /**

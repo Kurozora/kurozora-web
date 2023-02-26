@@ -80,7 +80,7 @@ class ExploreCategoryItem extends Resource
             MorphTo::make('Model')
                 ->types([
                     Anime::class,
-                    AnimeSong::class,
+                    MediaSong::class,
                     Character::class,
                     Game::class,
                     Genre::class,

@@ -2,26 +2,26 @@
 
 namespace App\Console\Commands\KDashboard;
 
-use App\Jobs\ProcessImportAnimeSong;
+use App\Jobs\ProcessImportMediaSong;
 use App\Models\KDashboard\Song as KSong;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
 
-class ImportAnimeSongs extends Command
+class ImportMediaSongs extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'import:kdashboard_anime_songs';
+    protected $signature = 'import:kdashboard_media_songs';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Imports the anime songs from the KDashboard database.';
+    protected $description = 'Imports the media songs from the KDashboard database.';
 
     /**
      * Create a new command instance.
@@ -40,8 +40,8 @@ class ImportAnimeSongs extends Command
      */
     public function handle(): int
     {
-        KSong::chunk(1000, function (Collection $kAnimeSongs) {
-            ProcessImportAnimeSong::dispatch($kAnimeSongs);
+        KSong::chunk(1000, function (Collection $kMediaSongs) {
+            ProcessImportMediaSong::dispatch($kMediaSongs);
         });
 
         return Command::SUCCESS;

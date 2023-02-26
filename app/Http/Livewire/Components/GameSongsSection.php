@@ -2,30 +2,30 @@
 
 namespace App\Http\Livewire\Components;
 
-use App\Models\Anime;
+use App\Models\Game;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
-class AnimeSongsSection extends Component
+class GameSongsSection extends Component
 {
     /**
-     * The object containing the anime data.
+     * The object containing the game data.
      *
-     * @var Anime $anime
+     * @var Game $game
      */
-    public Anime $anime;
+    public Game $game;
 
     /**
-     * The array containing the anime songs data.
+     * The array containing the game songs data.
      *
      * @var array $mediaSongs
      */
     public array $mediaSongs = [];
 
     /**
-     * The number of songs the anime has.
+     * The number of songs the game has.
      *
      * @var int $mediaSongsCount
      */
@@ -34,14 +34,14 @@ class AnimeSongsSection extends Component
     /**
      * Prepare the component.
      *
-     * @param Anime $anime
+     * @param Game $game
      *
      * @return void
      */
-    public function mount(Anime $anime): void
+    public function mount(Game $game): void
     {
-        $this->anime = $anime;
-        $this->mediaSongsCount = $anime->getMediaSongs()->count();
+        $this->game = $game;
+        $this->mediaSongsCount = $game->getMediaSongs()->count();
     }
 
     /**
@@ -51,7 +51,7 @@ class AnimeSongsSection extends Component
      */
     public function loadMediaSongs(): void
     {
-        $this->mediaSongs = $this->anime->getMediaSongs(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
+        $this->mediaSongs = $this->game->getMediaSongs(Game::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
     }
 
     /**
@@ -61,6 +61,6 @@ class AnimeSongsSection extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.components.anime-songs-section');
+        return view('livewire.components.game-songs-section');
     }
 }

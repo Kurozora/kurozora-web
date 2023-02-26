@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\DayOfWeek;
+use App\Enums\SeasonOfYear;
 use App\Models\Anime;
 use App\Models\MediaType;
 use App\Models\Source;
@@ -79,6 +80,7 @@ class AnimeFactory extends Factory
             'duration'          => $this->faker->numberBetween(10, 25),
             'air_time'          => $this->faker->time(),
             'air_day'           => DayOfWeek::getRandomValue(),
+            'air_season'        => SeasonOfYear::getRandomValue(),
             'is_nsfw'           => $this->faker->boolean,
             'copyright'         => $this->faker->randomElement(['© ', '℗ ', '® ']) . $this->faker->year . ' ' . $this->faker->company,
             'created_at'        => now(),

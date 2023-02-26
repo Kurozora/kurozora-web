@@ -10,6 +10,7 @@ use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Favorable;
 use App\Traits\Model\HasMediaGenres;
 use App\Traits\Model\HasMediaRelations;
+use App\Traits\Model\HasMediaSongs;
 use App\Traits\Model\HasMediaStaff;
 use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasMediaStudios;
@@ -54,6 +55,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         HasSlug,
         HasMediaGenres,
         HasMediaRelations,
+        HasMediaSongs,
         HasMediaStaff,
         HasMediaStat,
         HasMediaStudios,
@@ -773,16 +775,6 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The anime's songs relationship.
-     *
-     * @return HasManyThrough
-     */
-    public function songs(): HasManyThrough
-    {
-        return $this->hasManyThrough(Song::class, AnimeSong::class, 'anime_id', 'id', 'id', 'song_id');
-    }
-
-    /**
      * Returns the songs relations.
      *
      * @param int $limit
@@ -801,30 +793,20 @@ class Anime extends KModel implements HasMedia, Sitemapable
     }
 
     /**
-     * The anime's anime-songs relationship.
-     *
-     * @return HasMany
-     */
-    public function anime_songs(): HasMany
-    {
-        return $this->hasMany(AnimeSong::class);
-    }
-
-    /**
      * Returns the songs relations.
      *
      * @param int $limit
      * @param int $page
      * @return mixed
      */
-    public function getAnimeSongs(int $limit = 25, int $page = 1): mixed
+    public function getMediaSongs(int $limit = 25, int $page = 1): mixed
     {
         // Find location of cached data
-        $cacheKey = self::cacheKey(['name' => 'anime.anime-songs', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
+        $cacheKey = self::cacheKey(['name' => 'anime.media-songs', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
 
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_ANIME_SONGS_SECONDS, function () use ($limit) {
-            return $this->anime_songs()->paginate($limit);
+            return $this->mediaSongs()->paginate($limit);
         });
     }
 

@@ -1,6 +1,6 @@
 @php
-    /** @var \Illuminate\Database\Eloquent\Collection $animeSongs */
-    $animeSongGroups = $animeSongs->sortBy(['type.value', 'position'])
+    /** @var \Illuminate\Database\Eloquent\Collection $mediaSongs */
+    $mediaSongGroups = $mediaSongs->sortBy(['type.value', 'position'])
                                   ->groupBy('type.description');
 @endphp
 
@@ -21,8 +21,8 @@
         <meta property="music:musician" content="{{ route('anime.details', $anime) }}" />
         <meta property="music:song:disc" content="1" />
         <meta property="music:album" content="{{ route('anime.details', $anime) }}" />
-        <meta property="music:album:track" content="{{ $animeSongs->count() }}" />
-        <meta property="music:duration" content="{{ $animeSongs->count() * 3 }}" />
+        <meta property="music:album:track" content="{{ $mediaSongs->count() }}" />
+        <meta property="music:duration" content="{{ $mediaSongs->count() * 3 }}" />
         <link rel="canonical" href="{{ route('anime.songs', $anime) }}">
     </x-slot:meta>
 
@@ -31,15 +31,28 @@
     </x-slot:appArgument>
 
     <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6 space-y-10">
-        @foreach($animeSongGroups as $animeSongType => $animeSongs)
-            <section id="#{{ $animeSongType }}">
+        <section class="mb-4">
+            <div>
+                <div class="flex gap-1">
+                    <div class="flex flex-wrap items-center w-full">
+                        <p class="text-2xl font-bold">{{ __(':x’s Songs', ['x' => $anime->title]) }}</p>
+                    </div>
+
+                    <div class="flex flex-wrap justify-end items-center w-full">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        @foreach($mediaSongGroups as $mediaSongType => $mediaSongs)
+            <section id="#{{ $mediaSongType }}">
                 <x-section-nav>
                     <x-slot:title>
-                        {{ $animeSongType . ' (' . $animeSongs->count() . ')' }}
+                        {{ $mediaSongType . ' (' . $mediaSongs->count() . ')' }}
                     </x-slot:title>
                 </x-section-nav>
 
-                <x-rows.music-lockup :anime-songs="$animeSongs" :is-row="false" />
+                <x-rows.music-lockup :media-songs="$mediaSongs" :is-row="false" />
             </section>
         @endforeach
     </div>

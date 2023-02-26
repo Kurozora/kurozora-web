@@ -117,7 +117,7 @@ class ExploreCategoryResource extends JsonResource
 
                 $showSongs = [
                     'showSongs' => [
-                        'data' => AnimeSongResource::collection($this->resource
+                        'data' => MediaSongResource::collection($this->resource
                             ->exploreCategoryItems
                             ->pluck('model')
                         )->toArray($request)

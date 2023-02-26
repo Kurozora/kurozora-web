@@ -2,12 +2,12 @@
 
 namespace App\Policies;
 
-use App\Models\AnimeSong;
+use App\Models\MediaSong;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
-class AnimeSongPolicy
+class MediaSongPolicy
 {
     use HandlesAuthorization;
 
@@ -26,10 +26,10 @@ class AnimeSongPolicy
      * Determine whether the user can view the model.
      *
      * @param User $user
-     * @param AnimeSong $animeSong
+     * @param MediaSong $mediaSong
      * @return Response|bool
      */
-    public function view(User $user, AnimeSong $animeSong): Response|bool
+    public function view(User $user, MediaSong $mediaSong): Response|bool
     {
         return true;
     }
@@ -42,54 +42,54 @@ class AnimeSongPolicy
      */
     public function create(User $user): Response|bool
     {
-        return $user->can('createAnimeSong');
+        return $user->can('createMediaSong');
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param User $user
-     * @param AnimeSong $animeSong
+     * @param MediaSong $mediaSong
      * @return Response|bool
      */
-    public function update(User $user, AnimeSong $animeSong): Response|bool
+    public function update(User $user, MediaSong $mediaSong): Response|bool
     {
-        return $user->can('updateAnimeSong');
+        return $user->can('updateMediaSong');
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param User $user
-     * @param AnimeSong $animeSong
+     * @param MediaSong $mediaSong
      * @return Response|bool
      */
-    public function delete(User $user, AnimeSong $animeSong): Response|bool
+    public function delete(User $user, MediaSong $mediaSong): Response|bool
     {
-        return $user->can('deleteAnimeSong');
+        return $user->can('deleteMediaSong');
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param User $user
-     * @param AnimeSong $animeSong
+     * @param MediaSong $mediaSong
      * @return Response|bool
      */
-    public function restore(User $user, AnimeSong $animeSong): Response|bool
+    public function restore(User $user, MediaSong $mediaSong): Response|bool
     {
-        return $user->can('restoreAnimeSong');
+        return $user->can('restoreMediaSong');
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      *
      * @param User $user
-     * @param AnimeSong $animeSong
+     * @param MediaSong $mediaSong
      * @return Response|bool
      */
-    public function forceDelete(User $user, AnimeSong $animeSong): Response|bool
+    public function forceDelete(User $user, MediaSong $mediaSong): Response|bool
     {
-        return $user->can('forceDeleteAnimeSong');
+        return $user->can('forceDeleteMediaSong');
     }
 }

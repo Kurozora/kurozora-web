@@ -1,4 +1,4 @@
-@props(['song', 'anime' => null, 'type' => null, 'position' => null, 'episodes' => null, 'showEpisodes' => true, 'showAnime' => false, 'isRow' => true])
+@props(['song', 'anime' => null, 'type' => null, 'position' => null, 'episodes' => null, 'showEpisodes' => true, 'showModel' => false, 'isRow' => true])
 
 @php
     $class = $isRow ? 'shrink-0' : 'flex-grow';
@@ -76,7 +76,7 @@
             </a>
 
             <p class="text-black/60 line-clamp-2" x-text="artistName"></p>
-            @if ($anime && $showAnime)
+            @if ($anime && $showModel)
                 <x-simple-link class="text-sm" href="{{ route('anime.details', $anime) }}">{{ $anime->title }}</x-simple-link>
             @endif
             @if (!empty($episodes) && $showEpisodes)

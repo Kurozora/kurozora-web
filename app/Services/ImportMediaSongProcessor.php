@@ -3,12 +3,12 @@
 namespace App\Services;
 
 use App\Models\Anime;
-use App\Models\AnimeSong;
 use App\Models\KDashboard\Song as KSong;
+use App\Models\MediaSong;
 use App\Models\Song;
 use Illuminate\Database\Eloquent\Collection;
 
-class ImportAnimeSongProcessor
+class ImportMediaSongProcessor
 {
     /**
      * Processes the job.
@@ -16,10 +16,10 @@ class ImportAnimeSongProcessor
      * @param Collection|KSong[] $kSongs
      * @return void
      */
-    public function process(Collection|array $kSongs)
+    public function process(Collection|array $kSongs): void
     {
         foreach ($kSongs as $kSong) {
-            $anime = Anime::withoutGlobalScopes()
+            $model = Anime::withoutGlobalScopes()
                 ->where([
                     ['mal_id', $kSong->anime_id],
                 ])->first();
@@ -37,14 +37,16 @@ class ImportAnimeSongProcessor
                 ])->first();
             }
 
-            $animeSong = AnimeSong::where([
-                ['anime_id', $anime->id],
+            $mediaSong = MediaSong::where([
+                ['model_type', $model->getMorphClass()],
+                ['model_id', $model->id],
                 ['song_id', $song?->id],
             ])->first();
 
-            if (empty($animeSong) && !empty($song)) {
-                AnimeSong::create([
-                    'anime_id' => $anime->id,
+            if (empty($mediaSong) && !empty($song)) {
+                MediaSong::create([
+                    'model_type' => $model->getMorphClass(),
+                    'model_id' => $model->id,
                     'song_id' => $song->id,
                     'type' => $kSong->getSongType(),
                     'position' => $kSong->getSongPosition(),

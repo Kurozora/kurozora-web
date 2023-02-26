@@ -7,12 +7,13 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Titasgailius\SearchRelations\SearchesRelations;
 
-class AnimeSong extends Resource
+class MediaSong extends Resource
 {
     use SearchesRelations;
 
@@ -21,12 +22,12 @@ class AnimeSong extends Resource
      *
      * @var string
      */
-    public static string $model = \App\Models\AnimeSong::class;
+    public static string $model = \App\Models\MediaSong::class;
 
     /**
      * The underlying model resource instance.
      *
-     * @var \App\Models\AnimeSong|null
+     * @var \App\Models\MediaSong|null
      */
     public $resource;
 
@@ -53,7 +54,7 @@ class AnimeSong extends Resource
      */
     public static array $searchRelations = [
         'song' => ['id', 'title', 'artist'],
-        'anime' => ['id', 'original_title'],
+        'model' => ['id', 'original_title'],
     ];
 
     /**
@@ -61,7 +62,7 @@ class AnimeSong extends Resource
      *
      * @var string
      */
-    public static $group = 'Anime';
+    public static $group = 'Media';
 
     /**
      * Get the fields displayed by the resource.
@@ -79,7 +80,11 @@ class AnimeSong extends Resource
 
             Heading::make('Meta information'),
 
-            BelongsTo::make('Anime')
+            MorphTo::make('Model')
+                ->types([
+                    Anime::class,
+                    Game::class,
+                ])
                 ->searchable()
                 ->sortable()
                 ->required(),
@@ -112,9 +117,9 @@ class AnimeSong extends Resource
      */
     public function title(): string
     {
-        $animeSong = $this->resource;
+        $mediaSong = $this->resource;
 
-        return $animeSong->song->title . ' | ' . $animeSong->anime->original_title . ' (ID: ' . $animeSong->id . ')';
+        return $mediaSong->song->title . ' | ' . $mediaSong->model->original_title . ' (ID: ' . $mediaSong->id . ')';
     }
 
     /**
@@ -125,7 +130,7 @@ class AnimeSong extends Resource
      */
     public static function availableForNavigation(Request $request): bool
     {
-        return $request->user()->can('viewAnimeSong');
+        return $request->user()->can('viewMediaSong');
     }
 
     /**

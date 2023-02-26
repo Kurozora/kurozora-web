@@ -1,6 +1,6 @@
 <div>
-    @if ($animeSongsCount)
-        <section class="pt-5 pb-8 pl-4 pr-4 border-t-2" wire:init="loadAnimeSongs">
+    @if ($mediaSongsCount)
+        <section class="pt-5 pb-8 pl-4 pr-4 border-t-2" wire:init="loadMediaSongs">
             <x-section-nav>
                 <x-slot:title>
                     {{ __('Songs') }}
@@ -8,7 +8,7 @@
 
                 <x-slot:action>
                     @hasrole('superAdmin')
-                        <x-button wire:click="loadAnimeSongs">{{ __('Refresh') }}</x-button>
+                        <x-button wire:click="loadMediaSongs">{{ __('Refresh') }}</x-button>
                     @endhasrole
                     <x-section-nav-link href="{{ route('anime.songs', $anime) }}">{{ __('See All') }}</x-section-nav-link>
                 </x-slot:action>
@@ -18,7 +18,7 @@
                 <x-spinner />
             </div>
 
-            <x-rows.music-lockup :anime-songs="$animeSongs" />
+            <x-rows.music-lockup :media-songs="$mediaSongs" />
         </section>
     @endif
 </div>

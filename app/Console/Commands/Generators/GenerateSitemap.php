@@ -4,12 +4,12 @@ namespace App\Console\Commands\Generators;
 
 use App\Models\Anime;
 use App\Models\AnimeCast;
-use App\Models\AnimeSong;
-use App\Models\MediaStaff;
 use App\Models\Character;
 use App\Models\Episode;
 use App\Models\ExploreCategory;
 use App\Models\Genre;
+use App\Models\MediaSong;
+use App\Models\MediaStaff;
 use App\Models\MediaStudio;
 use App\Models\Person;
 use App\Models\Season;
@@ -96,15 +96,15 @@ class GenerateSitemap extends Command
         //========== Anime Songs sitemap ==========//
         $this->info('- Generating anime songs...');
         DB::statement("SET SQL_MODE=''");
-        AnimeSong::withoutGlobalScopes()
-            ->with('anime')
+        MediaSong::withoutGlobalScopes()
+            ->with('model')
             ->select(['anime_id'])
             ->groupBy('anime_id')
-            ->chunk(20000, function ($animeSongs, int $page) use ($sitemapIndex) {
-                $path = 'sitemaps/anime_songs_' . $page . '_sitemap.xml';
+            ->chunk(20000, function ($mediaSongs, int $page) use ($sitemapIndex) {
+                $path = 'sitemaps/media_songs_' . $page . '_sitemap.xml';
                 $this->info($path);
                 Sitemap::create()
-                    ->add($animeSongs)
+                    ->add($mediaSongs)
                     ->writeToFile(public_path($path));
                 $sitemapIndex->add($path);
             });

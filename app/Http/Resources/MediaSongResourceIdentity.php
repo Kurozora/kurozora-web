@@ -2,16 +2,16 @@
 
 namespace App\Http\Resources;
 
-use App\Models\AnimeSong;
+use App\Models\MediaSong;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AnimeSongResourceIdentity extends JsonResource
+class MediaSongResourceIdentity extends JsonResource
 {
     /**
      * The resource instance.
      *
-     * @var AnimeSong $resource
+     * @var MediaSong $resource
      */
     public $resource;
 

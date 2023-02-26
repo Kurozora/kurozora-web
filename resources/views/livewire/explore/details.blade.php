@@ -96,7 +96,7 @@
                 <x-rows.person-lockup :people="$this->exploreCategoryItems" :is-row="false" />
                 @break
             @case(\App\Enums\ExploreCategoryTypes::Songs)
-                <x-rows.music-lockup :anime-songs="$this->exploreCategoryItems" :show-episodes="false" :show-anime="true" :is-row="false" />
+                <x-rows.music-lockup :media-songs="$this->exploreCategoryItems" :show-episodes="false" :show-model="true" :is-row="false" />
                 @break
             @default
                 @if (app()->environment('local'))

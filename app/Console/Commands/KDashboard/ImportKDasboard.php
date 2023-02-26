@@ -39,7 +39,7 @@ class ImportKDasboard extends Command
 
             // Import anime entities
             Artisan::call('import:kdashboard_anime_cast');
-            Artisan::call('import:kdashboard_anime_songs');
+            Artisan::call('import:kdashboard_media_songs');
             Artisan::call('import:kdashboard_anime_staff');
             Artisan::call('import:kdashboard_anime_studios');
 

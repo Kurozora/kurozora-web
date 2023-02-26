@@ -37,7 +37,7 @@ class Songs extends Component
     public function render(): Application|Factory|View
     {
         return view('livewire.anime.songs', [
-            'animeSongs' => $this->anime->anime_songs
+            'mediaSongs' => $this->anime->mediaSongs
         ]);
     }
 }

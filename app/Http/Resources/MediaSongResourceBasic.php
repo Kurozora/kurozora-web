@@ -2,16 +2,17 @@
 
 namespace App\Http\Resources;
 
-use App\Models\AnimeSong;
+use App\Models\Game;
+use App\Models\MediaSong;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AnimeSongResourceBasic extends JsonResource
+class MediaSongResourceBasic extends JsonResource
 {
     /**
      * The resource instance.
      *
-     * @var AnimeSong $resource
+     * @var MediaSong $resource
      */
     public $resource;
 
@@ -23,7 +24,7 @@ class AnimeSongResourceBasic extends JsonResource
      */
     public function toArray($request): array
     {
-        $resource = AnimeSongResourceIdentity::make($this->resource)->toArray($request);
+        $resource = MediaSongResourceIdentity::make($this->resource)->toArray($request);
         $resource = array_merge($resource, [
             'song'          => SongResourceBasic::make($this->resource->song),
             'attributes'    => [
@@ -39,7 +40,7 @@ class AnimeSongResourceBasic extends JsonResource
             foreach ($includes as $include) {
                 switch ($include) {
                     case 'shows':
-                        $resource = array_merge($resource, $this->getAnimeRelationship());
+                        $resource = array_merge($resource, $this->getModelRelationship());
                         break;
                 }
             }
@@ -49,14 +50,15 @@ class AnimeSongResourceBasic extends JsonResource
     }
 
     /**
-     * Returns the anime relationship for the resource.
+     * Returns the model relationship for the resource.
      *
      * @return array
      */
-    protected function getAnimeRelationship(): array
+    protected function getModelRelationship(): array
     {
-        return [
-            'show' => AnimeResourceBasic::make($this->resource->anime)
-        ];
+        return match ($this->resource->model_type) {
+            Game::class => ['game' => GameResourceBasic::make($this->resource->model)],
+            default => ['show' => AnimeResourceBasic::make($this->resource->model)]
+        };
     }
 }

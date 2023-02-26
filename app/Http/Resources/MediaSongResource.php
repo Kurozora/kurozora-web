@@ -2,16 +2,16 @@
 
 namespace App\Http\Resources;
 
-use App\Models\AnimeSong;
+use App\Models\MediaSong;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AnimeSongResource extends JsonResource
+class MediaSongResource extends JsonResource
 {
     /**
      * The resource instance.
      *
-     * @var AnimeSong $resource
+     * @var MediaSong $resource
      */
     public $resource;
 
@@ -23,7 +23,7 @@ class AnimeSongResource extends JsonResource
      */
     public function toArray($request): array
     {
-        $resource = AnimeSongResourceBasic::make($this->resource)->toArray($request);
+        $resource = MediaSongResourceBasic::make($this->resource)->toArray($request);
 
         return $resource;
     }

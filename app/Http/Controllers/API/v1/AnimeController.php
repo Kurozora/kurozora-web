@@ -9,20 +9,20 @@ use App\Http\Requests\GetAnimeCastRequest;
 use App\Http\Requests\GetAnimeCharactersRequest;
 use App\Http\Requests\GetAnimeMoreByStudioRequest;
 use App\Http\Requests\GetAnimeSeasonsRequest;
-use App\Http\Requests\GetAnimeSongsRequest;
 use App\Http\Requests\GetAnimeStudiosRequest;
 use App\Http\Requests\GetMediaRelatedLiteraturesRequest;
 use App\Http\Requests\GetMediaRelatedShowsRequest;
+use App\Http\Requests\GetMediaSongsRequest;
 use App\Http\Requests\GetMediaStaffRequest;
 use App\Http\Requests\GetUpcomingAnimeRequest;
 use App\Http\Requests\RateAnimeRequest;
 use App\Http\Resources\AnimeCastResourceIdentity;
 use App\Http\Resources\AnimeResource;
 use App\Http\Resources\AnimeResourceIdentity;
-use App\Http\Resources\AnimeSongResource;
 use App\Http\Resources\CharacterResourceIdentity;
 use App\Http\Resources\MediaRelatedLiteratureResource;
 use App\Http\Resources\MediaRelatedShowResource;
+use App\Http\Resources\MediaSongResource;
 use App\Http\Resources\MediaStaffResource;
 use App\Http\Resources\SeasonResourceIdentity;
 use App\Http\Resources\StudioResource;
@@ -170,23 +170,23 @@ class AnimeController extends Controller
     /**
      * Returns song information for an Anime
      *
-     * @param GetAnimeSongsRequest $request
+     * @param GetMediaSongsRequest $request
      * @param Anime $anime
      * @return JsonResponse
      */
-    public function songs(GetAnimeSongsRequest $request, Anime $anime): JsonResponse
+    public function songs(GetMediaSongsRequest $request, Anime $anime): JsonResponse
     {
         $data = $request->validated();
 
         // Get the seasons
         $limit = ($data['limit'] ?? -1) == -1 ? 150 : $data['limit'];
-        $animeSongs = $anime->getAnimeSongs($limit, $data['page'] ?? 1);
+        $mediaSongs = $anime->getMediaSongs($limit, $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $animeSongs->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $mediaSongs->nextPageUrl());
 
         return JSONResult::success([
-            'data' => AnimeSongResource::collection($animeSongs),
+            'data' => MediaSongResource::collection($mediaSongs),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

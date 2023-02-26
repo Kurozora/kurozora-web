@@ -4,12 +4,12 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Listen to anime songs for free.') }}
+        {{ __('Listen to :x for free. Only on Kurozora, the largest, free online anime, manga, music & game database in the world.', ['x' => $song->title]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ $song->title }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('app.description') }}" />
+        <meta property="og:description" content="{{ __('Listen to :x songs for free. Only on Kurozora, the largest, free online anime, manga, music & game database in the world.', ['x' => $song->title]) }}" />
         <meta property="og:image" content="{{ $song->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? asset('images/static/placeholders/song_banner.webp') }}" />
         <meta property="og:type" content="music.song" />
         <meta property="og:url" content="{{ route('embed.songs', $song) }}">
@@ -128,11 +128,23 @@
             <section class="pt-5 pb-8 pl-4 pr-4 border-t-2">
                 <x-section-nav>
                     <x-slot:title>
-                        {{ __('As Heard On') }}
+                        {{ __('As Heard On Shows') }}
                     </x-slot:title>
                 </x-section-nav>
 
                 <x-rows.small-lockup :animes="$this->anime" :is-row="false" />
+            </section>
+        @endif
+
+        @if ($this->games?->count())
+            <section class="pt-5 pb-8 pl-4 pr-4 border-t-2">
+                <x-section-nav>
+                    <x-slot:title>
+                        {{ __('As Heard On Games') }}
+                    </x-slot:title>
+                </x-section-nav>
+
+                <x-rows.small-lockup :games="$this->games" :is-row="false" />
             </section>
         @endif
     </div>

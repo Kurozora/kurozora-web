@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\KDashboard\Song as KSong;
-use App\Services\ImportAnimeSongProcessor;
+use App\Services\ImportMediaSongProcessor;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Collection;
@@ -11,7 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ProcessImportAnimeSong implements ShouldQueue
+class ProcessImportMediaSong implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -35,11 +35,11 @@ class ProcessImportAnimeSong implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param ImportAnimeSongProcessor $importAnimeSongProcessor
+     * @param ImportMediaSongProcessor $importMediaSongProcessor
      * @return void
      */
-    public function handle(ImportAnimeSongProcessor $importAnimeSongProcessor)
+    public function handle(ImportMediaSongProcessor $importMediaSongProcessor): void
     {
-        $importAnimeSongProcessor->process($this->kSongs);
+        $importMediaSongProcessor->process($this->kSongs);
     }
 }

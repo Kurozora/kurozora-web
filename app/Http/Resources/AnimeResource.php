@@ -133,7 +133,7 @@ class AnimeResource extends JsonResource
         return [
             'showSongs' => [
                 'href' => route('api.anime.songs', $this->resource, false),
-                'data' => AnimeSongResource::collection($this->resource->getAnimeSongs(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'data' => MediaSongResource::collection($this->resource->getMediaSongs(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }

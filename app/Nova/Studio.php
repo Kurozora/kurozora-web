@@ -11,6 +11,7 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
@@ -250,10 +251,15 @@ class Studio extends Resource
                 ->help('The URLs to the official website of the studio. Separated by ","')
                 ->nullable(),
 
+            HasMany::make('Media Studios'),
+
             BelongsToMany::make('Anime')
                 ->searchable(),
 
             BelongsToMany::make('Manga')
+                ->searchable(),
+
+            BelongsToMany::make('Games')
                 ->searchable(),
         ];
     }

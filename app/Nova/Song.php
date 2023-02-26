@@ -6,8 +6,8 @@ use App\Nova\Filters\MissingSongAttributes;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\HasManyThrough;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
@@ -84,9 +84,13 @@ class Song extends Resource
             Text::make('Artist')
                 ->sortable(),
 
-            HasMany::make('Anime Songs', 'anime_songs'),
+            HasMany::make('Media Songs'),
 
-            HasManyThrough::make('Anime'),
+            BelongsToMany::make('Anime')
+                ->searchable(),
+
+            BelongsToMany::make('Games')
+            ->searchable(),
         ];
     }
 
