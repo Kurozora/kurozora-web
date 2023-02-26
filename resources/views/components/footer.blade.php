@@ -201,7 +201,7 @@
                     </li>
 
                     <li class="mt-2">
-                        <x-footer-link target="_blank" href="{{ config('social.twitter.url') }}">YouTube</x-footer-link>
+                        <x-footer-link target="_blank" href="{{ config('social.youtube.url') }}">YouTube</x-footer-link>
                     </li>
                 </ul>
             </div>
