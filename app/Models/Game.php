@@ -679,7 +679,7 @@ class Game extends KModel implements HasMedia, Sitemapable
      * @param int $limit
      * @return Builder
      */
-    public function scopeUpcomingGame(Builder $query, int $limit = 10): Builder
+    public function scopeUpcomingGames(Builder $query, int $limit = 10): Builder
     {
         return $query->whereDate(self::TABLE_NAME . '.published_at', '>', yesterday())
             ->orderBy(self::TABLE_NAME . '.published_at')
@@ -693,7 +693,7 @@ class Game extends KModel implements HasMedia, Sitemapable
      * @param int $limit
      * @return Builder
      */
-    public function scopeNewGame(Builder $query, int $limit = 10): Builder
+    public function scopeNewGames(Builder $query, int $limit = 10): Builder
     {
         return $query->orderBy(self::TABLE_NAME . '.created_at', 'desc')
             ->limit($limit);
@@ -706,7 +706,7 @@ class Game extends KModel implements HasMedia, Sitemapable
      * @param int $limit
      * @return Builder
      */
-    public function scopeRecentlyUpdatedGame(Builder $query, int $limit = 10): Builder
+    public function scopeRecentlyUpdatedGames(Builder $query, int $limit = 10): Builder
     {
         return $query->orderBy(self::TABLE_NAME . '.updated_at', 'desc')
             ->whereDate(self::TABLE_NAME . '.created_at', '<', today())
@@ -720,7 +720,7 @@ class Game extends KModel implements HasMedia, Sitemapable
      * @param int $limit
      * @return Builder
      */
-    public function scopeGameSeason(Builder $query, int $limit = 10): Builder
+    public function scopeGamesSeason(Builder $query, int $limit = 10): Builder
     {
         return $query->where(self::TABLE_NAME . '.publication_season', '=', season_of_year()->value)
             ->whereYear(self::TABLE_NAME . '.published_at', '=', now()->year)

@@ -32,10 +32,10 @@ class GameFactory extends Factory
             $tvRating = TvRating::factory()->create();
         }
 
-        $mediaType = MediaType::where('type', 'anime')->inRandomOrder()->first();
+        $mediaType = MediaType::where('type', 'game')->inRandomOrder()->first();
         if (empty($mediaType)) {
             $mediaType = MediaType::factory()->create([
-                'type'  => 'anime'
+                'type'  => 'game'
             ]);
         }
 
@@ -44,10 +44,10 @@ class GameFactory extends Factory
             $source = Source::factory()->create();
         }
 
-        $status = Status::where('type', 'anime')->inRandomOrder()->first();
+        $status = Status::where('type', 'game')->inRandomOrder()->first();
         if (empty($status)) {
             $status = Status::factory()->create([
-                'type'  => 'anime'
+                'type'  => 'game'
             ]);
         }
 

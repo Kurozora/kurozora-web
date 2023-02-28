@@ -20,7 +20,7 @@ return new class extends Migration
     {
         Schema::create(Game::TABLE_NAME, function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->ulid('series_id');
+            $table->ulid('series_id')->nullable();
             $table->unsignedInteger('igdb_id')->unique()->nullable();
             $table->string('igdb_slug')->unique()->nullable();
             $table->string('slug');

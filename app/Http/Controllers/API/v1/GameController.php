@@ -2,69 +2,67 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Events\AnimeViewed;
+use App\Events\GameViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GetAnimeCharactersRequest;
-use App\Http\Requests\GetAnimeMoreByStudioRequest;
-use App\Http\Requests\GetAnimeSeasonsRequest;
-use App\Http\Requests\GetAnimeStudiosRequest;
+use App\Http\Requests\GetGameCharactersRequest;
+use App\Http\Requests\GetGameMoreByStudioRequest;
+use App\Http\Requests\GetGameStudiosRequest;
 use App\Http\Requests\GetMediaCastRequest;
 use App\Http\Requests\GetMediaRelatedLiteraturesRequest;
 use App\Http\Requests\GetMediaRelatedShowsRequest;
 use App\Http\Requests\GetMediaSongsRequest;
 use App\Http\Requests\GetMediaStaffRequest;
-use App\Http\Requests\GetUpcomingAnimeRequest;
-use App\Http\Requests\RateAnimeRequest;
+use App\Http\Requests\GetUpcomingGameRequest;
+use App\Http\Requests\RateGameRequest;
 use App\Http\Resources\AnimeCastResourceIdentity;
-use App\Http\Resources\AnimeResource;
-use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\CharacterResourceIdentity;
+use App\Http\Resources\GameResource;
+use App\Http\Resources\GameResourceIdentity;
 use App\Http\Resources\MediaRelatedLiteratureResource;
 use App\Http\Resources\MediaRelatedShowResource;
 use App\Http\Resources\MediaSongResource;
 use App\Http\Resources\MediaStaffResource;
-use App\Http\Resources\SeasonResourceIdentity;
 use App\Http\Resources\StudioResource;
-use App\Models\Anime;
+use App\Models\Game;
 use App\Models\MediaRating;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class AnimeController extends Controller
+class GameController extends Controller
 {
     /**
-     * Returns detailed information of an Anime.
+     * Returns detailed information of a game.
      *
-     * @param Anime $anime
+     * @param game $game
      * @return JsonResponse
      */
-    public function view(Anime $anime): JsonResponse
+    public function view(Game $game): JsonResponse
     {
-        // Call the AnimeViewed event
-        AnimeViewed::dispatch($anime);
+        // Call the GameViewed event
+        GameViewed::dispatch($game);
 
-        // Show the Anime details response
+        // Show the game details response
         return JSONResult::success([
-            'data' => AnimeResource::collection([$anime])
+            'data' => GameResource::collection([$game])
         ]);
     }
 
     /**
-     * Returns character information of an Anime.
+     * Returns character information of a game.
      *
-     * @param GetAnimeCharactersRequest $request
-     * @param Anime $anime
+     * @param GetGameCharactersRequest $request
+     * @param game $game
      * @return JsonResponse
      */
-    public function characters(GetAnimeCharactersRequest $request, Anime $anime): JsonResponse
+    public function characters(GetGameCharactersRequest $request, game $game): JsonResponse
     {
         $data = $request->validated();
 
         // Get the characters
-        $characters = $anime->getCharacters($data['limit'] ?? 25, $data['page'] ?? 1);
+        $characters = $game->getCharacters($data['limit'] ?? 25, $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $characters->nextPageUrl());
@@ -76,41 +74,41 @@ class AnimeController extends Controller
     }
 
     /**
-     * Returns the cast information of an Anime.
+     * Returns the cast information of a game.
      *
      * @param GetMediaCastRequest $request
-     * @param Anime $anime
+     * @param game $game
      * @return JsonResponse
      */
-    public function cast(GetMediaCastRequest $request, Anime $anime): JsonResponse
+    public function cast(GetMediaCastRequest $request, game $game): JsonResponse
     {
         $data = $request->validated();
 
         // Get the anime cast
-        $animeCast = $anime->getCast($data['limit'] ?? 25, $data['page'] ?? 1);
+        $game = $game->getCast($data['limit'] ?? 25, $data['page'] ?? 1);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $animeCast->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $game->nextPageUrl());
 
         return JSONResult::success([
-            'data' => AnimeCastResourceIdentity::collection($animeCast),
+            'data' => AnimeCastResourceIdentity::collection($game),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 
     /**
-     * Returns related-shows information of an Anime.
+     * Returns related-shows information of a game.
      *
      * @param GetMediaRelatedShowsRequest $request
-     * @param Anime $anime
+     * @param game $game
      * @return JsonResponse
      */
-    public function relatedShows(GetMediaRelatedShowsRequest $request, Anime $anime): JsonResponse
+    public function relatedShows(GetMediaRelatedShowsRequest $request, game $game): JsonResponse
     {
         $data = $request->validated();
 
         // Get the related shows
-        $relatedShows = $anime->getAnimeRelations($data['limit'] ?? 25, $data['page'] ?? 1);
+        $relatedShows = $game->getGameRelations($data['limit'] ?? 25, $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $relatedShows->nextPageUrl());
@@ -122,18 +120,18 @@ class AnimeController extends Controller
     }
 
     /**
-     * Returns related-literatures information of an Anime.
+     * Returns related-literatures information of a game.
      *
      * @param GetMediaRelatedLiteraturesRequest $request
-     * @param Anime $anime
+     * @param game $game
      * @return JsonResponse
      */
-    public function relatedLiteratures(GetMediaRelatedLiteraturesRequest $request, Anime $anime): JsonResponse
+    public function relatedLiteratures(GetMediaRelatedLiteraturesRequest $request, game $game): JsonResponse
     {
         $data = $request->validated();
 
         // Get the related literatures
-        $relatedLiterature = $anime->getMangaRelations($data['limit'] ?? 25, $data['page'] ?? 1);
+        $relatedLiterature = $game->getMangaRelations($data['limit'] ?? 25, $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $relatedLiterature->nextPageUrl());
@@ -145,42 +143,19 @@ class AnimeController extends Controller
     }
 
     /**
-     * Returns season information for an Anime
-     *
-     * @param GetAnimeSeasonsRequest $request
-     * @param Anime $anime
-     * @return JsonResponse
-     */
-    public function seasons(GetAnimeSeasonsRequest $request, Anime $anime): JsonResponse
-    {
-        $data = $request->validated();
-
-        // Get the seasons
-        $seasons = $anime->getSeasons($data['limit'] ?? 25, $data['page'] ?? 1, $data['reversed'] ?? false);
-
-        // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $seasons->nextPageUrl());
-
-        return JSONResult::success([
-            'data' => SeasonResourceIdentity::collection($seasons),
-            'next' => empty($nextPageURL) ? null : $nextPageURL
-        ]);
-    }
-
-    /**
-     * Returns song information for an Anime
+     * Returns song information for a game
      *
      * @param GetMediaSongsRequest $request
-     * @param Anime $anime
+     * @param game $game
      * @return JsonResponse
      */
-    public function songs(GetMediaSongsRequest $request, Anime $anime): JsonResponse
+    public function songs(GetMediaSongsRequest $request, game $game): JsonResponse
     {
         $data = $request->validated();
 
         // Get the seasons
         $limit = ($data['limit'] ?? -1) == -1 ? 150 : $data['limit'];
-        $mediaSongs = $anime->getMediaSongs($limit, $data['page'] ?? 1);
+        $mediaSongs = $game->getMediaSongs($limit, $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $mediaSongs->nextPageUrl());
@@ -192,18 +167,18 @@ class AnimeController extends Controller
     }
 
     /**
-     * Returns staff information of an Anime.
+     * Returns staff information of a game.
      *
      * @param GetMediaStaffRequest $request
-     * @param Anime $anime
+     * @param game $game
      * @return JsonResponse
      */
-    public function staff(GetMediaStaffRequest $request, Anime $anime): JsonResponse
+    public function staff(GetMediaStaffRequest $request, game $game): JsonResponse
     {
         $data = $request->validated();
 
         // Get the staff
-        $staff = $anime->getMediaStaff($data['limit'] ?? 25, $data['page'] ?? 1);
+        $staff = $game->getMediaStaff($data['limit'] ?? 25, $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $staff->nextPageUrl());
@@ -215,18 +190,18 @@ class AnimeController extends Controller
     }
 
     /**
-     * Returns the studios information of an Anime.
+     * Returns the studios information of a game.
      *
-     * @param GetAnimeStudiosRequest $request
-     * @param Anime $anime
+     * @param GetGameStudiosRequest $request
+     * @param game $game
      * @return JsonResponse
      */
-    public function studios(GetAnimeStudiosRequest $request, Anime $anime): JsonResponse
+    public function studios(GetGameStudiosRequest $request, game $game): JsonResponse
     {
         $data = $request->validated();
 
         // Get the anime studios
-        $mediaStudios = $anime->getStudios($data['limit'] ?? 25, $data['page'] ?? 1);
+        $mediaStudios = $game->getStudios($data['limit'] ?? 25, $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $mediaStudios->nextPageUrl());
@@ -240,47 +215,47 @@ class AnimeController extends Controller
     /**
      * Returns the more anime made by the same studio.
      *
-     * @param GetAnimeMoreByStudioRequest $request
-     * @param Anime $anime
+     * @param GetGameMoreByStudioRequest $request
+     * @param game $game
      * @return JsonResponse
      */
-    public function moreByStudio(GetAnimeMoreByStudioRequest $request, Anime $anime): JsonResponse
+    public function moreByStudio(GetGameMoreByStudioRequest $request, game $game): JsonResponse
     {
         $data = $request->validated();
-        $studioAnimes = new LengthAwarePaginator([], 0, 1);
+        $studioGames = new LengthAwarePaginator([], 0, 1);
 
         // Get the anime studios
-        if ($mediaStudio = $anime->studios()->firstWhere('is_studio', '=', true)) {
-            $studioAnimes = $mediaStudio->getAnime($data['limit'] ?? 25, $data['page'] ?? 1);
-        } else if ($mediaStudio = $anime->studios()->first()) {
-            $studioAnimes = $mediaStudio->getAnime($data['limit'] ?? 25, $data['page'] ?? 1);
+        if ($mediaStudio = $game->studios()->firstWhere('is_studio', '=', true)) {
+            $studioGames = $mediaStudio->getGame($data['limit'] ?? 25, $data['page'] ?? 1);
+        } else if ($mediaStudio = $game->studios()->first()) {
+            $studioGames = $mediaStudio->getGame($data['limit'] ?? 25, $data['page'] ?? 1);
         }
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $studioAnimes->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $studioGames->nextPageUrl());
 
         return JSONResult::success([
-            'data' => AnimeResourceIdentity::collection($studioAnimes),
+            'data' => GameResourceIdentity::collection($studioGames),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
 
     /**
-     * Adds a rating for an Anime item
+     * Adds a rating for an game item
      *
-     * @param RateAnimeRequest $request
-     * @param Anime $anime
+     * @param RateGameRequest $request
+     * @param game $game
      * @return JsonResponse
      * @throws AuthorizationException
      * @throws Exception
      */
-    public function rateAnime(RateAnimeRequest $request, Anime $anime): JsonResponse
+    public function rate(RateGameRequest $request, game $game): JsonResponse
     {
         $user = auth()->user();
 
         // Check if the user is already tracking the anime
-        if ($user->hasNotTracked($anime)) {
-            throw new AuthorizationException(__('Please add :x to your library first.', ['x' => $anime->title]));
+        if ($user->hasNotTracked($game)) {
+            throw new AuthorizationException(__('Please add :x to your library first.', ['x' => $game->title]));
         }
 
         // Validate the request
@@ -292,7 +267,7 @@ class AnimeController extends Controller
         // Try to modify the rating if it already exists
         /** @var MediaRating $foundRating */
         $foundRating = $user->animeRatings()
-            ->where('model_id', '=', $anime->id)
+            ->where('model_id', '=', $game->id)
             ->first();
 
         // The rating exists
@@ -312,8 +287,8 @@ class AnimeController extends Controller
             if ($givenRating > 0) {
                 $user->episode_ratings()->create([
                     'user_id'       => $user->id,
-                    'model_type'    => $anime->getMorphClass(),
-                    'model_id'      => $anime->id,
+                    'model_type'    => $game->getMorphClass(),
+                    'model_id'      => $game->id,
                     'rating'        => $givenRating
                 ]);
             }
@@ -323,23 +298,23 @@ class AnimeController extends Controller
     }
 
     /**
-     * Retrieves upcoming Anime results
+     * Retrieves upcoming game results
      *
-     * @param GetUpcomingAnimeRequest $request
+     * @param GetUpcomingGameRequest $request
      * @return JsonResponse
      */
-    public function upcoming(GetUpcomingAnimeRequest $request): JsonResponse
+    public function upcoming(GetUpcomingGameRequest $request): JsonResponse
     {
         $data = $request->validated();
 
-        $anime = Anime::upcomingShows(-1)
+        $game = Game::upcomingGames(-1)
             ->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $anime->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $game->nextPageUrl());
 
         return JSONResult::success([
-            'data' => AnimeResourceIdentity::collection($anime),
+            'data' => GameResourceIdentity::collection($game),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

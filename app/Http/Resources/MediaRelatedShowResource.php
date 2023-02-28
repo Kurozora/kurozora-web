@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Game;
+use App\Models\Manga;
 use App\Models\MediaRelation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -23,11 +25,25 @@ class MediaRelatedShowResource extends JsonResource
      */
     public function toArray($request): array
     {
-        return [
-            'show'          => AnimeResourceBasic::make($this->resource->related),
-            'attributes'    => [
-                'relation'  => $this->resource->relation->only(['name', 'description']),
+        return match ($this->resource->related->getMorphClass()) {
+            Manga::class => [
+                'literature'    => LiteratureResourceBasic::make($this->resource->related),
+                'attributes'    => [
+                    'relation'  => $this->resource->relation->only(['name', 'description'])
+                ]
             ],
-        ];
+            Game::class => [
+                'game'          => GameResourceBasic::make($this->resource->related),
+                'attributes'    => [
+                    'relation'  => $this->resource->relation->only(['name', 'description'])
+                ]
+            ],
+            default => [
+                'show'          => AnimeResourceBasic::make($this->resource->related),
+                'attributes'    => [
+                    'relation'  => $this->resource->relation->only(['name', 'description']),
+                ],
+            ],
+        };
     }
 }

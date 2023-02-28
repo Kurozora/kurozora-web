@@ -31,9 +31,6 @@ return new class extends Migration
             // Set index key constraints
             $table->index('deleted_at');
 
-            // Set index key constraints
-            $table->index(['locale']);
-
             // Set unique key constraints
             $table->unique(['manga_id', 'locale']);
 

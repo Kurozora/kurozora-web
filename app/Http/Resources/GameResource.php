@@ -2,16 +2,16 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Anime;
+use App\Models\Game;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AnimeResource extends JsonResource
+class GameResource extends JsonResource
 {
     /**
      * The resource instance.
      *
-     * @var Anime $resource
+     * @var Game $resource
      */
     public $resource;
 
@@ -23,7 +23,7 @@ class AnimeResource extends JsonResource
      */
     public function toArray($request): array
     {
-        $resource = AnimeResourceBasic::make($this->resource)->toArray($request);
+        $resource = GameResourceBasic::make($this->resource)->toArray($request);
 
         if ($request->input('include')) {
             $includes = array_unique(explode(',', $request->input('include')));
@@ -78,8 +78,8 @@ class AnimeResource extends JsonResource
     {
         return [
             'cast' => [
-                'href' => route('api.anime.cast', $this->resource, false),
-                'data' => AnimeCastResourceIdentity::collection($this->resource->getCast(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'href' => route('api.games.cast', $this->resource, false),
+                'data' => GameCastResourceIdentity::collection($this->resource->getCast(Game::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }
@@ -93,8 +93,8 @@ class AnimeResource extends JsonResource
     {
         return [
             'characters' => [
-                'href' => route('api.anime.characters', $this->resource, false),
-                'data' => CharacterResourceBasic::collection($this->resource->getCharacters(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'href' => route('api.games.characters', $this->resource, false),
+                'data' => CharacterResourceBasic::collection($this->resource->getCharacters(Game::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }
@@ -108,8 +108,8 @@ class AnimeResource extends JsonResource
     {
         return [
             'relatedShows' => [
-                'href' => route('api.anime.related-shows', $this->resource, false),
-                'data' => MediaRelatedShowResource::collection($this->resource->getAnimeRelations(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'href' => route('api.games.related-shows', $this->resource, false),
+                'data' => MediaRelatedShowResource::collection($this->resource->getAnimeRelations(Game::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }
@@ -123,8 +123,8 @@ class AnimeResource extends JsonResource
     {
         return [
             'relatedLiteratures' => [
-                'href' => route('api.anime.related-literatures', $this->resource, false),
-                'data' => MediaRelatedLiteratureResource::collection($this->resource->getMangaRelations(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'href' => route('api.games.related-literatures', $this->resource, false),
+                'data' => MediaRelatedLiteratureResource::collection($this->resource->getMangaRelations(Game::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }
@@ -138,8 +138,8 @@ class AnimeResource extends JsonResource
     {
         return [
             'relatedGames' => [
-                'href' => route('api.anime.related-games', $this->resource, false),
-                'data' => MediaRelatedGameResource::collection($this->resource->getGameRelations(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'href' => route('api.games.related-games', $this->resource, false),
+                'data' => MediaRelatedGameResource::collection($this->resource->getGameRelations(Game::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }
@@ -153,8 +153,8 @@ class AnimeResource extends JsonResource
     {
         return [
             'seasons' => [
-                'href' => route('api.anime.seasons', $this->resource, false),
-                'data' => SeasonResourceIdentity::collection($this->resource->getSeasons(Anime::MAXIMUM_RELATIONSHIPS_LIMIT, reversed: true))
+                'href' => route('api.games.seasons', $this->resource, false),
+                'data' => SeasonResourceIdentity::collection($this->resource->getSeasons(Game::MAXIMUM_RELATIONSHIPS_LIMIT, reversed: true))
             ]
         ];
     }
@@ -168,8 +168,8 @@ class AnimeResource extends JsonResource
     {
         return [
             'showSongs' => [
-                'href' => route('api.anime.songs', $this->resource, false),
-                'data' => MediaSongResource::collection($this->resource->getMediaSongs(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'href' => route('api.games.songs', $this->resource, false),
+                'data' => MediaSongResource::collection($this->resource->getMediaSongs(Game::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }
@@ -183,8 +183,8 @@ class AnimeResource extends JsonResource
     {
         return [
             'staff' => [
-                'href' => route('api.anime.staff', $this->resource, false),
-                'data' => MediaStaffResource::collection($this->resource->getMediaStaff(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'href' => route('api.games.staff', $this->resource, false),
+                'data' => MediaStaffResource::collection($this->resource->getMediaStaff(Game::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }
@@ -198,8 +198,8 @@ class AnimeResource extends JsonResource
     {
         return [
             'studios' => [
-                'href' => route('api.anime.studios', $this->resource, false),
-                'data' => StudioResourceIdentity::collection($this->resource->getStudios(Anime::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'href' => route('api.games.studios', $this->resource, false),
+                'data' => StudioResourceIdentity::collection($this->resource->getStudios(Game::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }
