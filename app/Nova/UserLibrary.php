@@ -8,6 +8,7 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Select;
 
 class UserLibrary extends Resource
@@ -69,7 +70,12 @@ class UserLibrary extends Resource
 
             Heading::make('Meta information'),
 
-            BelongsTo::make('Anime')
+            MorphTo::make('Trackable')
+                ->types([
+                    Anime::class,
+                    Game::class,
+                    Manga::class,
+                ])
                 ->sortable()
                 ->searchable(),
 
@@ -82,7 +88,7 @@ class UserLibrary extends Resource
                     return match ($this->trackable_type) {
                         \App\Models\Anime::class => UserLibraryStatus::asAnimeSelectArray(),
                         \App\Models\Manga::class => UserLibraryStatus::asMangaSelectArray(),
-//                        \App\Models\Game::class => UserLibraryStatus::asGameSelectArray(),
+                        \App\Models\Game::class => UserLibraryStatus::asGameSelectArray(),
                         default => UserLibraryStatus::asSelectArray()
                     };
                 })
