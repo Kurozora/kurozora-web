@@ -29,6 +29,10 @@ Route::prefix('/manga')
                     ->middleware('auth.kurozora:optional')
                     ->name('.related-literatures');
 
+                Route::get('/related-games', [MangaController::class, 'relatedGames'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.related-games');
+
                 Route::get('/staff', [MangaController::class, 'staff'])
                     ->name('.staff');
 

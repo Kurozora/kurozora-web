@@ -18,5 +18,9 @@ Route::prefix('/studios')
                 Route::get('/literatures', [StudioController::class, 'literatures'])
                     ->middleware('auth.kurozora:optional')
                     ->name('.literatures');
+
+                Route::get('/games', [StudioController::class, 'games'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.games');
             });
     });

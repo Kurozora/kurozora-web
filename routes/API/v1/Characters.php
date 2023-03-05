@@ -21,5 +21,9 @@ Route::prefix('/characters')
                 Route::get('/literatures', [CharacterController::class, 'literatures'])
                     ->middleware('auth.kurozora:optional')
                     ->name('.literatures');
+
+                Route::get('/games', [CharacterController::class, 'games'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.games');
             });
     });

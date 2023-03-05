@@ -29,6 +29,10 @@ Route::prefix('/anime')
                     ->middleware('auth.kurozora:optional')
                     ->name('.related-literatures');
 
+                Route::get('/related-games', [AnimeController::class, 'relatedGames'])
+                    ->middleware('auth.kurozora:optional')
+                    ->name('.related-games');
+
                 Route::get('/seasons', [AnimeController::class, 'seasons'])
                     ->name('.seasons');
 

@@ -3,6 +3,7 @@
 use App\Http\Livewire\Anime\Cast as AnimeCast;
 use App\Http\Livewire\Anime\Details as AnimeDetails;
 use App\Http\Livewire\Anime\Index as AnimeIndex;
+use App\Http\Livewire\Anime\RelatedGames;
 use App\Http\Livewire\Anime\RelatedMangas;
 use App\Http\Livewire\Anime\RelatedShows;
 use App\Http\Livewire\Anime\Songs as AnimeSongs;
@@ -83,5 +84,8 @@ Route::prefix('/anime')
 
                 Route::get('/related-mangas', RelatedMangas::class)
                     ->name('.related-mangas');
+
+                Route::get('/related-games', RelatedGames::class)
+                    ->name('.related-games');
             });
     });

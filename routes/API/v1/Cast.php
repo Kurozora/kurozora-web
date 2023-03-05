@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\v1\GameCastController;
 use App\Http\Controllers\API\v1\LiteratureCastController;
 use App\Http\Controllers\API\v1\ShowCastController;
 
@@ -29,6 +30,16 @@ Route::prefix('/literature-cast')
         Route::prefix('{cast}')
             ->group(function () {
                 Route::get('/', [LiteratureCastController::class, 'details'])
+                    ->name('.details');
+            });
+    });
+
+Route::prefix('/game-cast')
+    ->name('.game-cast')
+    ->group(function () {
+        Route::prefix('{cast}')
+            ->group(function () {
+                Route::get('/', [GameCastController::class, 'details'])
                     ->name('.details');
             });
     });

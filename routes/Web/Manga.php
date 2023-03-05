@@ -7,6 +7,7 @@ use App\Http\Livewire\Browse\Manga\Upcoming\Index as BrowseMangaUpcomingIndex;
 use App\Http\Livewire\Manga\Cast as MangaCast;
 use App\Http\Livewire\Manga\Details as MangaDetails;
 use App\Http\Livewire\Manga\Index as MangaIndex;
+use App\Http\Livewire\Manga\RelatedGames;
 use App\Http\Livewire\Manga\RelatedMangas;
 use App\Http\Livewire\Manga\RelatedShows;
 use App\Http\Livewire\Manga\Staff as MangaStaff;
@@ -75,5 +76,8 @@ Route::prefix('/manga')
 
                 Route::get('/related-mangas', RelatedMangas::class)
                     ->name('.related-mangas');
+
+                Route::get('/related-games', RelatedGames::class)
+                    ->name('.related-games');
             });
     });
