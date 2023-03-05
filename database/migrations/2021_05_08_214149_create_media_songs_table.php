@@ -16,7 +16,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create(MediaSong::TABLE_NAME, function (Blueprint $table) {
-            $table->ulid('id');
+            $table->ulid('id')->primary();
             $table->uuidMorphs('model');
             $table->unsignedBigInteger('song_id');
             $table->tinyInteger('type');
