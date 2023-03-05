@@ -56,6 +56,11 @@ class Details extends Component
             ExploreCategoryTypes::RecentlyFinishedLiteratures => $this->exploreCategory->recentlyFinishedLiterature(limit: 25),
             ExploreCategoryTypes::ContinuingLiteratures => $this->exploreCategory->literatureContinuing(),
             ExploreCategoryTypes::LiteraturesSeason => $this->exploreCategory->literatureSeason(),
+            ExploreCategoryTypes::MostPopularGames => $this->exploreCategory->mostPopularGames(),
+            ExploreCategoryTypes::UpcomingGames => $this->exploreCategory->upcomingGames(),
+            ExploreCategoryTypes::NewGames => $this->exploreCategory->newGames(limit: 25),
+            ExploreCategoryTypes::RecentlyUpdateGames => $this->exploreCategory->recentlyUpdatedGames(limit: 25),
+            ExploreCategoryTypes::GamesSeason => $this->exploreCategory->gamesSeason(),
             ExploreCategoryTypes::Characters => $this->exploreCategory->charactersBornToday(-1),
             ExploreCategoryTypes::People => $this->exploreCategory->peopleBornToday(-1),
             default => $this->exploreCategory

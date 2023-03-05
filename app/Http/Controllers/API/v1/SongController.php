@@ -6,7 +6,9 @@ use App\Events\SongViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetSongAnimesRequest;
+use App\Http\Requests\GetSongGamesRequest;
 use App\Http\Resources\AnimeResource;
+use App\Http\Resources\GameResource;
 use App\Http\Resources\SongResource;
 use App\Models\Song;
 use Illuminate\Http\JsonResponse;
@@ -48,6 +50,29 @@ class SongController extends Controller
 
         return JSONResult::success([
             'data' => AnimeResource::collection($animes),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Returns anime information for a Song
+     *
+     * @param GetSongGamesRequest $request
+     * @param Song $song
+     * @return JsonResponse
+     */
+    public function game(GetSongGamesRequest $request, Song $song): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the seasons
+        $games = $song->getGames($data['limit'] ?? 25, $data['page'] ?? 1);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $games->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => GameResource::collection($games),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

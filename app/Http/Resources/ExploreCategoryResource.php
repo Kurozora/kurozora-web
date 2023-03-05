@@ -397,6 +397,105 @@ class ExploreCategoryResource extends JsonResource
                         )
                     ]
                 ];
+            case ExploreCategoryTypes::Games:
+                return [
+                    'games' => [
+                        'data' => GameResourceIdentity::collection($this->resource
+                            ->exploreCategoryItems
+                            ->pluck('model_id')
+                        )
+                    ]
+                ];
+            case ExploreCategoryTypes::UpcomingGames:
+                $model = null;
+
+                if (!empty($request->input('genre_id'))) {
+                    $model = Genre::find($request->input('genre_id'));
+                } else if (!empty($request->input('theme_id'))) {
+                    $model = Theme::find($request->input('theme_id'));
+                }
+
+                return [
+                    'games' => [
+                        'data' => GameResourceIdentity::collection($this->resource
+                            ->upcomingGames($model)
+                            ->exploreCategoryItems
+                            ->pluck('model_id')
+                        )
+                    ]
+                ];
+            case ExploreCategoryTypes::NewGames:
+                $model = null;
+
+                if (!empty($request->input('genre_id'))) {
+                    $model = Genre::find($request->input('genre_id'));
+                } else if (!empty($request->input('theme_id'))) {
+                    $model = Theme::find($request->input('theme_id'));
+                }
+
+                return [
+                    'games' => [
+                        'data' => GameResourceIdentity::collection($this->resource
+                            ->newGames($model)
+                            ->exploreCategoryItems
+                            ->pluck('model_id')
+                        )
+                    ]
+                ];
+            case ExploreCategoryTypes::RecentlyUpdateGames:
+                $model = null;
+
+                if (!empty($request->input('genre_id'))) {
+                    $model = Genre::find($request->input('genre_id'));
+                } else if (!empty($request->input('theme_id'))) {
+                    $model = Theme::find($request->input('theme_id'));
+                }
+
+                return [
+                    'games' => [
+                        'data' => GameResourceIdentity::collection($this->resource
+                            ->recentlyUpdatedGames($model)
+                            ->exploreCategoryItems
+                            ->pluck('model_id')
+                        )
+                    ]
+                ];
+            case ExploreCategoryTypes::GamesSeason:
+                $model = null;
+
+                if (!empty($request->input('genre_id'))) {
+                    $model = Genre::find($request->input('genre_id'));
+                } else if (!empty($request->input('theme_id'))) {
+                    $model = Theme::find($request->input('theme_id'));
+                }
+
+                return [
+                    'games' => [
+                        'data' => GameResourceIdentity::collection($this->resource
+                            ->gamesSeason($model)
+                            ->exploreCategoryItems
+                            ->pluck('model_id')
+                        )
+                    ]
+                ];
+            case ExploreCategoryTypes::MostPopularGames:
+                $model = null;
+
+                if (!empty($request->input('genre_id'))) {
+                   $model = Genre::find($request->input('genre_id'));
+                } else if (!empty($request->input('theme_id'))) {
+                    $model = Theme::find($request->input('theme_id'));
+                }
+
+                return [
+                    'games' => [
+                        'data' => GameResourceIdentity::collection($this->resource
+                            ->mostPopularGames($model)
+                            ->exploreCategoryItems
+                            ->pluck('model_id')
+                        )
+                    ]
+                ];
             default: // Return empty shows by default
                 return [
                     'shows' => null

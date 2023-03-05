@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,6 +12,7 @@ use Spatie\Sitemap\Tags\Url;
 class AnimeCast extends KModel implements Sitemapable
 {
     use HasFactory,
+        HasUlids,
         SoftDeletes;
 
     // Table name

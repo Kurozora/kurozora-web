@@ -402,6 +402,8 @@
 
                 <livewire:components.manga.anime-relations-section :manga="$manga" />
 
+                <livewire:components.manga.game-relations-section :manga="$manga" />
+
                 @if (!empty($manga->copyright))
                     <section class="pt-4 pr-4 pb-4 pl-4 border-t">
                         <p class="text-sm text-gray-400">{{ $manga->copyright }}</p>

@@ -6,8 +6,10 @@ use App\Events\StudioViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetStudioAnimeRequest;
+use App\Http\Requests\GetStudioGamesRequest;
 use App\Http\Requests\GetStudioLiteraturesRequest;
 use App\Http\Resources\AnimeResourceIdentity;
+use App\Http\Resources\GameResourceIdentity;
 use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\StudioResource;
 use App\Models\Studio;
@@ -74,6 +76,29 @@ class StudioController extends Controller
 
         return JSONResult::success([
             'data' => LiteratureResourceIdentity::collection($literatures),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Returns games information of a Studio.
+     *
+     * @param GetStudioGamesRequest $request
+     * @param Studio $studio
+     * @return JsonResponse
+     */
+    public function games(GetStudioGamesRequest $request, Studio $studio): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the games
+        $games = $studio->getGame($data['limit'] ?? 25, $data['page'] ?? 1);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $games->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => GameResourceIdentity::collection($games),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

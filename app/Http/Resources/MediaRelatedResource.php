@@ -8,7 +8,7 @@ use App\Models\MediaRelation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MediaRelatedShowResource extends JsonResource
+class MediaRelatedResource extends JsonResource
 {
     /**
      * The resource instance.

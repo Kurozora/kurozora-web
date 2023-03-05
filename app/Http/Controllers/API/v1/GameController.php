@@ -9,20 +9,20 @@ use App\Http\Requests\GetGameCharactersRequest;
 use App\Http\Requests\GetGameMoreByStudioRequest;
 use App\Http\Requests\GetGameStudiosRequest;
 use App\Http\Requests\GetMediaCastRequest;
+use App\Http\Requests\GetMediaRelatedGamesRequest;
 use App\Http\Requests\GetMediaRelatedLiteraturesRequest;
 use App\Http\Requests\GetMediaRelatedShowsRequest;
 use App\Http\Requests\GetMediaSongsRequest;
 use App\Http\Requests\GetMediaStaffRequest;
 use App\Http\Requests\GetUpcomingGameRequest;
 use App\Http\Requests\RateGameRequest;
-use App\Http\Resources\AnimeCastResourceIdentity;
 use App\Http\Resources\CharacterResourceIdentity;
 use App\Http\Resources\GameResource;
 use App\Http\Resources\GameResourceIdentity;
-use App\Http\Resources\MediaRelatedLiteratureResource;
-use App\Http\Resources\MediaRelatedShowResource;
+use App\Http\Resources\MediaRelatedResource;
 use App\Http\Resources\MediaSongResource;
 use App\Http\Resources\MediaStaffResource;
+use App\Http\Resources\ShowCastResourceIdentity;
 use App\Http\Resources\StudioResource;
 use App\Models\Game;
 use App\Models\MediaRating;
@@ -91,7 +91,7 @@ class GameController extends Controller
         $nextPageURL = str_replace($request->root(), '', $game->nextPageUrl());
 
         return JSONResult::success([
-            'data' => AnimeCastResourceIdentity::collection($game),
+            'data' => ShowCastResourceIdentity::collection($game),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
@@ -108,13 +108,13 @@ class GameController extends Controller
         $data = $request->validated();
 
         // Get the related shows
-        $relatedShows = $game->getGameRelations($data['limit'] ?? 25, $data['page'] ?? 1);
+        $relatedShows = $game->getAnimeRelations($data['limit'] ?? 25, $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $relatedShows->nextPageUrl());
 
         return JSONResult::success([
-            'data' => MediaRelatedShowResource::collection($relatedShows),
+            'data' => MediaRelatedResource::collection($relatedShows),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
@@ -137,7 +137,30 @@ class GameController extends Controller
         $nextPageURL = str_replace($request->root(), '', $relatedLiterature->nextPageUrl());
 
         return JSONResult::success([
-            'data' => MediaRelatedLiteratureResource::collection($relatedLiterature),
+            'data' => MediaRelatedResource::collection($relatedLiterature),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Returns related-games information of a game.
+     *
+     * @param GetMediaRelatedGamesRequest $request
+     * @param game $game
+     * @return JsonResponse
+     */
+    public function relatedGames(GetMediaRelatedGamesRequest $request, game $game): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the related games
+        $relatedGame = $game->getGameRelations($data['limit'] ?? 25, $data['page'] ?? 1);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $relatedGame->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => MediaRelatedResource::collection($relatedGame),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

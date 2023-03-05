@@ -7,9 +7,11 @@ use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetPersonAnimeRequest;
 use App\Http\Requests\GetPersonCharactersRequest;
+use App\Http\Requests\GetPersonGameRequest;
 use App\Http\Requests\GetPersonLiteratureRequest;
 use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\CharacterResourceIdentity;
+use App\Http\Resources\GameResourceIdentity;
 use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\PersonResource;
 use App\Models\Person;
@@ -78,6 +80,30 @@ class PersonController extends Controller
         // Return character literature
         return JSONResult::success([
             'data' => LiteratureResourceIdentity::collection($literature),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Returns games information of the person.
+     *
+     * @param GetPersonGameRequest $request
+     * @param Person $person
+     * @return JsonResponse
+     */
+    public function games(GetPersonGameRequest $request, Person $person): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the anime
+        $game = $person->getGames($data['limit'] ?? 25, $data['page'] ?? 1);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $game->nextPageUrl());
+
+        // Return character game
+        return JSONResult::success([
+            'data' => GameResourceIdentity::collection($game),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

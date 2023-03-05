@@ -26,6 +26,13 @@
             @case(\App\Enums\ExploreCategoryTypes::Literatures)
                 {{ __('Explore the latest :x manga only on Kurozora, the largest, free online anime, manga, music & game database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}
                 @break
+            @case(\App\Enums\ExploreCategoryTypes::MostPopularGames)
+            @case(\App\Enums\ExploreCategoryTypes::UpcomingGames)
+            @case(\App\Enums\ExploreCategoryTypes::NewGames)
+            @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateGames)
+            @case(\App\Enums\ExploreCategoryTypes::Games)
+                {{ __('Explore the latest :x games only on Kurozora, the largest, free online anime, manga, music & game database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}
+                @break
             @default
                 {{ __('Explore the latest :x only on Kurozora, the largest, free online anime, manga, music & game database in the world.', ['x' => $exploreCategory->title]) }} {{ $exploreCategory->description }}
         @endswitch
@@ -74,6 +81,14 @@
             @case(\App\Enums\ExploreCategoryTypes::LiteraturesSeason)
             @case(\App\Enums\ExploreCategoryTypes::Literatures)
                 <x-rows.small-lockup :mangas="$this->exploreCategoryItems" :is-row="false" />
+                @break
+            @case(\App\Enums\ExploreCategoryTypes::MostPopularGames)
+            @case(\App\Enums\ExploreCategoryTypes::UpcomingGames)
+            @case(\App\Enums\ExploreCategoryTypes::NewGames)
+            @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateGames)
+            @case(\App\Enums\ExploreCategoryTypes::GamesSeason)
+            @case(\App\Enums\ExploreCategoryTypes::Games)
+                <x-rows.small-lockup :games="$this->exploreCategoryItems" :is-row="false" />
                 @break
             @case(\App\Enums\ExploreCategoryTypes::Genres)
                 <section class="{{ $gridClass }}">

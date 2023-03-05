@@ -9,6 +9,7 @@ use App\Http\Requests\GetMangaCastRequest;
 use App\Http\Requests\GetMangaCharactersRequest;
 use App\Http\Requests\GetMangaMoreByStudioRequest;
 use App\Http\Requests\GetMangaStudiosRequest;
+use App\Http\Requests\GetMediaRelatedGamesRequest;
 use App\Http\Requests\GetMediaRelatedLiteraturesRequest;
 use App\Http\Requests\GetMediaRelatedShowsRequest;
 use App\Http\Requests\GetMediaStaffRequest;
@@ -18,8 +19,7 @@ use App\Http\Resources\CharacterResourceIdentity;
 use App\Http\Resources\LiteratureResource;
 use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\MangaCastResourceIdentity;
-use App\Http\Resources\MediaRelatedLiteratureResource;
-use App\Http\Resources\MediaRelatedShowResource;
+use App\Http\Resources\MediaRelatedResource;
 use App\Http\Resources\MediaStaffResource;
 use App\Http\Resources\StudioResource;
 use App\Models\Manga;
@@ -106,13 +106,13 @@ class MangaController extends Controller
         $data = $request->validated();
 
         // Get the related shows
-        $relatedShows = $manga->getMangaRelations($data['limit'] ?? 25, $data['page'] ?? 1);
+        $relatedShows = $manga->getAnimeRelations($data['limit'] ?? 25, $data['page'] ?? 1);
 
         // Get next page url minus domain
         $nextPageURL = str_replace($request->root(), '', $relatedShows->nextPageUrl());
 
         return JSONResult::success([
-            'data' => MediaRelatedShowResource::collection($relatedShows),
+            'data' => MediaRelatedResource::collection($relatedShows),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
@@ -135,7 +135,30 @@ class MangaController extends Controller
         $nextPageURL = str_replace($request->root(), '', $relatedLiteratures->nextPageUrl());
 
         return JSONResult::success([
-            'data' => MediaRelatedLiteratureResource::collection($relatedLiteratures),
+            'data' => MediaRelatedResource::collection($relatedLiteratures),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Returns related-mangas information of a Manga.
+     *
+     * @param GetMediaRelatedGamesRequest $request
+     * @param Manga $manga
+     * @return JsonResponse
+     */
+    public function relatedGames(GetMediaRelatedGamesRequest $request, Manga $manga): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the related mangas
+        $relatedGames = $manga->getGameRelations($data['limit'] ?? 25, $data['page'] ?? 1);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $relatedGames->nextPageUrl());
+
+        return JSONResult::success([
+            'data' => MediaRelatedResource::collection($relatedGames),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

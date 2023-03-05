@@ -2,16 +2,16 @@
 
 namespace App\Http\Resources;
 
-use App\Models\AnimeCast;
+use App\Models\GameCast;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ShowCastResource extends JsonResource
+class GameCastResource extends JsonResource
 {
     /**
      * The resource instance.
      *
-     * @var AnimeCast $resource
+     * @var GameCast $resource
      */
     public $resource;
 
@@ -23,7 +23,7 @@ class ShowCastResource extends JsonResource
      */
     public function toArray($request): array
     {
-        $resource = ShowCastResourceIdentity::make($this->resource)->toArray($request);
+        $resource = GameResourceIdentity::make($this->resource)->toArray($request);
         $resource = array_merge($resource, [
             'attributes'    => [
                 'role'      => $this->resource->castRole->only(['name', 'description']),

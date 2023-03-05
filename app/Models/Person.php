@@ -40,6 +40,7 @@ class Person extends KModel implements HasMedia, Sitemapable
     // How long to cache certain responses
     const CACHE_KEY_ANIME_SECONDS = 120 * 60;
     const CACHE_KEY_MANGA_SECONDS = 120 * 60;
+    const CACHE_KEY_GAMES_SECONDS = 120 * 60;
     const CACHE_KEY_CHARACTERS_SECONDS = 120 * 60;
 
     // Table name
@@ -259,6 +260,35 @@ class Person extends KModel implements HasMedia, Sitemapable
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_MANGA_SECONDS, function () use ($limit) {
             return $this->manga()->paginate($limit);
+        });
+    }
+
+    /**
+     * Returns the game the person belongs to.
+     *
+     * @return BelongsToMany
+     */
+    function games(): BelongsToMany
+    {
+        return $this->belongsToMany(Game::class, GameCast::class)
+            ->distinct();
+    }
+
+    /**
+     * Retrieves the game for a person item in an array.
+     *
+     * @param int $limit
+     * @param int $page
+     * @return mixed
+     */
+    public function getGames(int $limit = 25, int $page = 1): mixed
+    {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'person.games', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
+
+        // Retrieve or save cached result
+        return Cache::remember($cacheKey, self::CACHE_KEY_GAMES_SECONDS, function () use ($limit) {
+            return $this->games()->paginate($limit);
         });
     }
 

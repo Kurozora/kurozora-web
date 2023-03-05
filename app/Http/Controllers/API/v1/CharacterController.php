@@ -6,10 +6,12 @@ use App\Events\CharacterViewed;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GetCharacterAnimeRequest;
+use App\Http\Requests\GetCharacterGameRequest;
 use App\Http\Requests\GetCharacterLiteratureRequest;
 use App\Http\Requests\GetCharacterPeopleRequest;
 use App\Http\Resources\AnimeResourceIdentity;
 use App\Http\Resources\CharacterResource;
+use App\Http\Resources\GameResourceIdentity;
 use App\Http\Resources\LiteratureResourceIdentity;
 use App\Http\Resources\PersonResourceIdentity;
 use App\Models\Character;
@@ -102,6 +104,30 @@ class CharacterController extends Controller
         // Return character literatures
         return JSONResult::success([
             'data' => LiteratureResourceIdentity::collection($literatures),
+            'next' => empty($nextPageURL) ? null : $nextPageURL
+        ]);
+    }
+
+    /**
+     * Returns games information about a character.
+     *
+     * @param GetCharacterGameRequest $request
+     * @param Character $character
+     * @return JsonResponse
+     */
+    public function games(GetCharacterGameRequest $request, Character $character): JsonResponse
+    {
+        $data = $request->validated();
+
+        // Get the games
+        $games = $character->getGames($data['limit'] ?? 25, $data['page'] ?? 1);
+
+        // Get next page url minus domain
+        $nextPageURL = str_replace($request->root(), '', $games->nextPageUrl());
+
+        // Return character games
+        return JSONResult::success([
+            'data' => GameResourceIdentity::collection($games),
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }

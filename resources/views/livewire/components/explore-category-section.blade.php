@@ -5,6 +5,8 @@
                 <x-slot:title>
                     @switch($exploreCategory->type)
                     @case(\App\Enums\ExploreCategoryTypes::ShowsSeason)
+                    @case(\App\Enums\ExploreCategoryTypes::LiteraturesSeason)
+                    @case(\App\Enums\ExploreCategoryTypes::GamesSeason)
                         {{ season_of_year()->key . ' ' . now()->year }}
                     @break
                     @default
@@ -91,6 +93,19 @@
                     @case(\App\Enums\ExploreCategoryTypes::ContinuingLiteratures)
                     @case(\App\Enums\ExploreCategoryTypes::LiteraturesSeason)
                         <x-rows.small-lockup :mangas="$this->exploreCategoryItems" />
+                    @break
+                    @case(\App\Enums\ExploreCategoryTypes::UpcomingGames)
+                        <div class="flex flex-nowrap gap-4 snap-x overflow-x-scroll no-scrollbar">
+                            @foreach($this->exploreCategoryItems as $categoryItem)
+                                <x-lockups.upcoming-lockup :game="$categoryItem->model" />
+                            @endforeach
+                        </div>
+                    @break
+                    @case(\App\Enums\ExploreCategoryTypes::Games)
+                    @case(\App\Enums\ExploreCategoryTypes::NewGames)
+                    @case(\App\Enums\ExploreCategoryTypes::RecentlyUpdateGames)
+                    @case(\App\Enums\ExploreCategoryTypes::GamesSeason)
+                        <x-rows.small-lockup :games="$this->exploreCategoryItems" />
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::Genres)
                         <div class="flex flex-nowrap gap-4 snap-x overflow-x-scroll no-scrollbar">

@@ -43,6 +43,7 @@ class Character extends KModel implements HasMedia, Sitemapable
     const CACHE_KEY_PEOPLE_SECONDS = 120 * 60;
     const CACHE_KEY_ANIME_SECONDS = 120 * 60;
     const CACHE_KEY_MANGA_SECONDS = 120 * 60;
+    const CACHE_KEY_GAMES_SECONDS = 120 * 60;
 
     // Table name
     const TABLE_NAME = 'characters';
@@ -333,6 +334,36 @@ class Character extends KModel implements HasMedia, Sitemapable
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_MANGA_SECONDS, function () use ($limit) {
             return $this->manga()->paginate($limit);
+        });
+    }
+
+    /**
+     * Returns the games the character belongs to.
+     *
+     * @return BelongsToMany
+     */
+    function games(): BelongsToMany
+    {
+        return $this->belongsToMany(Game::class, GameCast::class)
+            ->distinct();
+    }
+
+    /**
+     * Retrieves the games for a character item in an array.
+     *
+     * @param int $limit
+     * @param int $page
+     * @return mixed
+     */
+    public function getGames(int $limit = 25, int $page = 1): mixed
+    {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'character.games', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
+        \App\Models\AnimeCast::where('updated_at', '<', today())->chunkById(2000, function($animeCasts) { foreach($animeCasts as $animeCast) { $animeCast->update(['id' => $animeCast->newUniqueId()]); } });
+
+        // Retrieve or save cached result
+        return Cache::remember($cacheKey, self::CACHE_KEY_GAMES_SECONDS, function () use ($limit) {
+            return $this->games()->paginate($limit);
         });
     }
 

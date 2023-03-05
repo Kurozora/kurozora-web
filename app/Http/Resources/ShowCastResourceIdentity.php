@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use JsonSerializable;
 
-class AnimeCastResourceIdentity extends JsonResource
+class ShowCastResourceIdentity extends JsonResource
 {
     /**
      * The resource instance.

@@ -81,7 +81,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
 
     // How long to cache certain responses
     const CACHE_KEY_ANIME_CAST_SECONDS = 60 * 60 * 2;
-    const CACHE_KEY_ANIME_SONGS_SECONDS = 60 * 60 * 2;
+    const CACHE_KEY_MEDIA_SONGS_SECONDS = 60 * 60 * 2;
     const CACHE_KEY_CHARACTERS_SECONDS = 60 * 60 * 2;
     const CACHE_KEY_EPISODES_SECONDS = 60 * 60 * 2;
     const CACHE_KEY_LANGUAGES_SECONDS = 60 * 60 * 24;
@@ -805,7 +805,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         $cacheKey = self::cacheKey(['name' => 'anime.media-songs', 'id' => $this->id, 'tvRating' => self::getTvRatingSettings(), 'limit' => $limit, 'page' => $page]);
 
         // Retrieve or save cached result
-        return Cache::remember($cacheKey, self::CACHE_KEY_ANIME_SONGS_SECONDS, function () use ($limit) {
+        return Cache::remember($cacheKey, self::CACHE_KEY_MEDIA_SONGS_SECONDS, function () use ($limit) {
             return $this->mediaSongs()->paginate($limit);
         });
     }

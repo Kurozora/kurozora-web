@@ -7,6 +7,7 @@ use App\Enums\ExploreCategoryTypes;
 use App\Models\Anime;
 use App\Models\Character;
 use App\Models\ExploreCategory;
+use App\Models\Game;
 use App\Models\Genre;
 use App\Models\Manga;
 use App\Models\Person;
@@ -111,6 +112,21 @@ class ExploreCategorySection extends Component
                 ExploreCategoryTypes::LiteraturesSeason => Manga::whereGenre($genre)
                     ->mangaSeason()
                     ->count(),
+                ExploreCategoryTypes::MostPopularGames => Game::whereGenre($genre)
+                    ->mostPopular()
+                    ->count(),
+                ExploreCategoryTypes::UpcomingGames => Game::whereGenre($genre)
+                    ->upcomingGames()
+                    ->count(),
+                ExploreCategoryTypes::NewGames => Game::whereGenre($genre)
+                    ->newGames()
+                    ->count(),
+                ExploreCategoryTypes::RecentlyUpdateGames => Game::whereGenre($genre)
+                    ->recentlyUpdatedGames()
+                    ->count(),
+                ExploreCategoryTypes::GamesSeason => Game::whereGenre($genre)
+                    ->gamesSeason()
+                    ->count(),
                 default => 0
             };
             return;
@@ -163,6 +179,21 @@ class ExploreCategorySection extends Component
                 ExploreCategoryTypes::LiteraturesSeason => Manga::whereTheme($theme)
                     ->mangaSeason()
                     ->count(),
+                ExploreCategoryTypes::MostPopularGames => Game::whereTheme($theme)
+                    ->mostPopular()
+                    ->count(),
+                ExploreCategoryTypes::UpcomingGames => Game::whereTheme($theme)
+                    ->upcomingGames()
+                    ->count(),
+                ExploreCategoryTypes::NewGames => Game::whereTheme($theme)
+                    ->newGames()
+                    ->count(),
+                ExploreCategoryTypes::RecentlyUpdateGames => Game::whereTheme($theme)
+                    ->recentlyUpdatedGames()
+                    ->count(),
+                ExploreCategoryTypes::GamesSeason => Game::whereTheme($theme)
+                    ->gamesSeason()
+                    ->count(),
                 default => 0
             };
             return;
@@ -185,6 +216,11 @@ class ExploreCategorySection extends Component
             ExploreCategoryTypes::RecentlyFinishedLiteratures => Manga::recentlyFinishedManga()->count(),
             ExploreCategoryTypes::ContinuingLiteratures => Manga::mangaContinuing()->count(),
             ExploreCategoryTypes::LiteraturesSeason => Manga::mangaSeason()->count(),
+            ExploreCategoryTypes::MostPopularGames => Game::mostPopular()->count(),
+            ExploreCategoryTypes::UpcomingGames => Game::upcomingGames()->count(),
+            ExploreCategoryTypes::NewGames => Game::newGames()->count(),
+            ExploreCategoryTypes::RecentlyUpdateGames => Game::recentlyUpdatedGames()->count(),
+            ExploreCategoryTypes::GamesSeason => Game::gamesSeason()->count(),
             ExploreCategoryTypes::Characters => Character::bornToday()->count(),
             ExploreCategoryTypes::People => Person::bornToday()->count(),
             default => $exploreCategory->exploreCategoryItems()->count()
@@ -209,7 +245,7 @@ class ExploreCategorySection extends Component
     public function getExploreCategoryItemsProperty(): array|Collection
     {
         $exploreCategoryItems = match ($this->exploreCategory->type) {
-            ExploreCategoryTypes::MostPopularShows, ExploreCategoryTypes::MostPopularLiteratures => $this->exploreCategory->mostPopularShows($this->genre ?? $this->theme)->exploreCategoryItems,
+            ExploreCategoryTypes::MostPopularShows, ExploreCategoryTypes::MostPopularLiteratures, ExploreCategoryTypes::MostPopularGames => $this->exploreCategory->mostPopularShows($this->genre ?? $this->theme)->exploreCategoryItems,
             ExploreCategoryTypes::UpcomingShows => $this->exploreCategory->upcomingShows($this->genre ?? $this->theme)->exploreCategoryItems,
             ExploreCategoryTypes::NewShows => $this->exploreCategory->newShows($this->genre ?? $this->theme)->exploreCategoryItems->map(function ($exploreCategoryItem) {
                 return $exploreCategoryItem->model;
@@ -240,6 +276,16 @@ class ExploreCategorySection extends Component
                 return $exploreCategoryItem->model;
             }),
             ExploreCategoryTypes::LiteraturesSeason => $this->exploreCategory->literatureSeason($this->genre ?? $this->theme)->exploreCategoryItems->map(function ($exploreCategoryItem) {
+                return $exploreCategoryItem->model;
+            }),
+            ExploreCategoryTypes::UpcomingGames => $this->exploreCategory->upcomingGames($this->genre ?? $this->theme)->exploreCategoryItems,
+            ExploreCategoryTypes::NewGames => $this->exploreCategory->newGames($this->genre ?? $this->theme)->exploreCategoryItems->map(function ($exploreCategoryItem) {
+                return $exploreCategoryItem->model;
+            }),
+            ExploreCategoryTypes::RecentlyUpdateGames => $this->exploreCategory->recentlyUpdatedGames($this->genre ?? $this->theme)->exploreCategoryItems->map(function ($exploreCategoryItem) {
+                return $exploreCategoryItem->model;
+            }),
+            ExploreCategoryTypes::GamesSeason => $this->exploreCategory->literatureSeason($this->genre ?? $this->theme)->exploreCategoryItems->map(function ($exploreCategoryItem) {
                 return $exploreCategoryItem->model;
             }),
             ExploreCategoryTypes::Characters => $this->exploreCategory->charactersBornToday()->exploreCategoryItems->map(function ($exploreCategoryItem) {

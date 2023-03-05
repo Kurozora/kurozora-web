@@ -8,7 +8,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
-class MangaRelationsSection extends Component
+class GameRelationsSection extends Component
 {
     /**
      * The object containing the anime data.
@@ -18,18 +18,18 @@ class MangaRelationsSection extends Component
     public Anime $anime;
 
     /**
-     * The array containing the manga relations data.
+     * The array containing the game relations data.
      *
-     * @var array $mangaRelations
+     * @var array $gameRelations
      */
-    public array $mangaRelations = [];
+    public array $gameRelations = [];
 
     /**
-     * The number of relations the manga has.
+     * The number of relations the game has.
      *
-     * @var int $mangaRelationsCount
+     * @var int $gameRelationsCount
      */
-    public int $mangaRelationsCount;
+    public int $gameRelationsCount;
 
     /**
      * Prepare the component.
@@ -41,17 +41,17 @@ class MangaRelationsSection extends Component
     public function mount(Anime $anime): void
     {
         $this->anime = $anime;
-        $this->mangaRelationsCount = $this->anime->mangaRelations()->count();
+        $this->gameRelationsCount = $this->anime->gameRelations()->count();
     }
 
     /**
-     * Loads the manga relations section.
+     * Loads the game relations section.
      *
      * @return void
      */
-    public function loadMangaRelations(): void
+    public function loadGameRelations(): void
     {
-        $this->mangaRelations = $this->anime->getMangaRelations(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
+        $this->gameRelations = $this->anime->getGameRelations(Anime::MAXIMUM_RELATIONSHIPS_LIMIT)->items() ?? [];
     }
 
     /**
@@ -61,6 +61,6 @@ class MangaRelationsSection extends Component
      */
     public function render(): Application|Factory|View
     {
-        return view('livewire.components.anime.manga-relations-section');
+        return view('livewire.components.anime.game-relations-section');
     }
 }

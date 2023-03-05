@@ -100,7 +100,7 @@ class LiteratureResource extends JsonResource
         return [
             'relatedShows' => [
                 'href' => route('api.manga.related-shows', $this->resource, false),
-                'data' => MediaRelatedShowResource::collection($this->resource->getMangaRelations(Manga::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'data' => MediaRelatedResource::collection($this->resource->getMangaRelations(Manga::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }
@@ -115,7 +115,7 @@ class LiteratureResource extends JsonResource
         return [
             'relatedMangas' => [
                 'href' => route('api.manga.related-literatures', $this->resource, false),
-                'data' => MediaRelatedShowResource::collection($this->resource->getMangaRelations(Manga::MAXIMUM_RELATIONSHIPS_LIMIT))
+                'data' => MediaRelatedResource::collection($this->resource->getMangaRelations(Manga::MAXIMUM_RELATIONSHIPS_LIMIT))
             ]
         ];
     }
