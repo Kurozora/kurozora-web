@@ -506,12 +506,22 @@ class MangaProcessor implements ItemProcessorInterface
             preg_match('/((?:^|[A-Z])[a-z]+)/', $genreName,$genreName);
             $genreName = implode('', array_unique($genreName));
 
-            $genre = Genre::withoutGlobalScopes()
-                ->firstOrCreate([
-                    'mal_id' => $genreID,
-                ], [
-                    'name' => $genreName,
-                ]);
+            if ($genreName != 'Suspense') {
+                $genre = Genre::withoutGlobalScopes()
+                    ->firstOrCreate([
+                        'mal_id' => $genreID,
+                    ], [
+                        'name' => $genreName,
+                    ]);
+            } else {
+                $genre = Genre::withoutGlobalScopes()
+                    ->firstOrCreate([
+                        'name' => $genreName,
+                    ], [
+                        'mal_id' => $genreID,
+                    ]);
+            }
+
             $mediaGenre = $manga?->mediaGenres()->firstWhere('genre_id', '=', $genre->id);
 
             if (empty($mediaGenre)) {

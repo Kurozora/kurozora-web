@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API\v1;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\VerifyReceiptRequest;
-use App\Models\User;
 use App\Models\UserReceipt;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
@@ -32,75 +31,68 @@ class StoreController extends Controller
         $data = $request->validated();
         $receipt = $data['receipt'];
         $receiptResponse = $this->validated($receipt);
+        $receiptStatus = $receiptResponse->getStatus();
 
-        if (!$receiptResponse->getStatus()->isValid() &&
+        if (!$receiptStatus->isValid() &&
             $receiptResponse->getReceipt()->getBundleId() != config('app.ios.bundle_id')) {
             throw new ConflictHttpException('The generated receipt is invalid.');
         }
 
-        // Get the receipt status
-        $receiptStatus = $receiptResponse->getStatus();
+        // We can loop all of them or either get the first one (recently purchased).
+        // Currently, we only need to verify recent purchase.
+        $latestReceiptInfo = $receiptResponse->getLatestReceiptInfo();
+        $receiptInfo = $latestReceiptInfo[0];
 
-        if ($receiptStatus->isValid()) {
-            // We can loop all of them or either get the first one (recently purchased).
-            // Currently, we only need to verify recent purchase.
-            $latestReceiptInfo = $receiptResponse->getLatestReceiptInfo();
-            $receiptInfo = $latestReceiptInfo[0];
+        // Collect IDs
+        $userID = $receiptInfo->getAppAccountToken();
+        $originalTransactionID = $receiptInfo->getOriginalTransactionId();
+        $webOrderLineItemID = $receiptInfo->getWebOrderLineItemId();
+        $offerID = $receiptInfo->getPromotionalOfferId();
+        $subscriptionGroupID = $receiptInfo->getSubscriptionGroupIdentifier();
+        $productID = $receiptInfo->getProductId();
 
-            // Collect IDs
-            $userID = $receiptInfo->getAppAccountToken();
-            $originalTransactionID = $receiptInfo->getOriginalTransactionId();
-            $webOrderLineItemID = $receiptInfo->getWebOrderLineItemId();
-            $offerID = $receiptInfo->getPromotionalOfferId();
-            $subscriptionGroupID = $receiptInfo->getSubscriptionGroupIdentifier();
-            $productID = $receiptInfo->getProductId();
+        // Collect dates
+        $originalPurchaseDate = $receiptInfo->getOriginalPurchaseDate();
+        $purchaseDate = $receiptInfo->getPurchaseDate();
+        $expiresDate = $receiptInfo->getExpiresDate();
+        $revokedDate = $receiptInfo->getCancellationDate();
 
-            // Collect dates
-            $originalPurchaseDate = $receiptInfo->getOriginalPurchaseDate();
-            $purchaseDate = $receiptInfo->getPurchaseDate();
-            $expiresDate = $receiptInfo->getExpiresDate();
-            $revokedDate = $receiptInfo->getCancellationDate();
+        // Check for grace period
+        $pendingRenewalInfo = $receiptResponse->getPendingRenewalInfo()[0];
+        $isInGracePeriod = $this->isInGracePeriod($pendingRenewalInfo);
 
-            // Check for grace period
-            $pendingRenewalInfo = $receiptResponse->getPendingRenewalInfo()[0];
-            $isInGracePeriod = $this->isInGracePeriod($pendingRenewalInfo);
+        // Decide validity of the subscription and whether it will auto-renew
+        $isSubscriptionValid = $expiresDate?->isFuture() || $isInGracePeriod;
+        $willAutoRenew = $pendingRenewalInfo->getAutoRenewStatus();
 
-            // Decide validity of the subscription and whether it will auto-renew
-            $isSubscriptionValid = $expiresDate?->isFuture() || $isInGracePeriod;
-            $willAutoRenew = $pendingRenewalInfo->getAutoRenewStatus();
+        // Save user receipt
+        $userReceipt = UserReceipt::firstWhere([
+            ['user_id', '=', $userID],
+            ['original_transaction_id', '=', $originalTransactionID]
+        ]);
 
-            // Save user receipt
-            $userReceipt = UserReceipt::firstWhere([
-                ['user_id', '=', $userID],
-                ['original_transaction_id', '=', $originalTransactionID]
+        if (empty($userReceipt)) {
+            $userReceipt = UserReceipt::create([
+                'user_id'                   => $userID,
+                'original_transaction_id'   => $originalTransactionID,
+                'web_order_line_item_id'    => $webOrderLineItemID,
+                'offer_id'                  => $offerID,
+                'subscription_group_id'     => $subscriptionGroupID,
+                'product_id'                => $productID,
+                'is_subscribed'             => $isSubscriptionValid,
+                'will_auto_renew'           => $willAutoRenew,
+                'original_purchased_at'     => $originalPurchaseDate?->toDateTime(),
+                'purchased_at'              => $purchaseDate?->toDateTime(),
+                'expired_at'                => $expiresDate?->toDateTime(),
+                'revoked_at'                => $revokedDate?->toDateTime(),
             ]);
-
-            if (empty($userReceipt)) {
-                $userReceipt = UserReceipt::create([
-                    'user_id'                   => $userID,
-                    'original_transaction_id'   => $originalTransactionID,
-                    'web_order_line_item_id'    => $webOrderLineItemID,
-                    'offer_id'                  => $offerID,
-                    'subscription_group_id'     => $subscriptionGroupID,
-                    'product_id'                => $productID,
-                    'is_subscribed'             => $isSubscriptionValid,
-                    'will_auto_renew'           => $willAutoRenew,
-                    'original_purchased_at'     => $originalPurchaseDate?->toDateTime(),
-                    'purchased_at'              => $purchaseDate?->toDateTime(),
-                    'expired_at'                => $expiresDate?->toDateTime(),
-                    'revoked_at'                => $revokedDate?->toDateTime(),
-                ]);
-            }
-
-            $user = $userReceipt->user;
-            $user?->update([
-                'is_pro'        => $isSubscriptionValid,
-                'is_subscribed' => $isSubscriptionValid
-            ]);
-        } else {
-            // The receipt is invalid
-            $isSubscriptionValid = false;
         }
+
+        $user = $userReceipt->user;
+        $user?->update([
+            'is_pro'        => $isSubscriptionValid,
+            'is_subscribed' => $isSubscriptionValid
+        ]);
 
         return JSONResult::success([
             'data' => [
