@@ -36,18 +36,20 @@ class PrepareAuthenticatedSession
      */
     public function handle(Request $request, callable $next): mixed
     {
-        $regenerated = $request->session()->regenerate();
-        $request->session()->save();
+        if ($request->hasSession()) {
+            $regenerated = $request->session()->regenerate();
+            $request->session()->save();
 
-        $session = Session::firstWhere('id', $request->session()->getId());
-        $browser = Browser::detect();
+            $session = Session::firstWhere('id', $request->session()->getId());
+            $browser = Browser::detect();
 
-        auth()->user()->createSessionAttributes($session, [
-            'platform'          => $browser->platformFamily(),
-            'platform_version'  => $browser->platformVersion(),
-            'device_vendor'     => $browser->deviceFamily(),
-            'device_model'      => $browser->deviceModel(),
-        ], $regenerated);
+            auth()->user()->createSessionAttributes($session, [
+                'platform' => $browser->platformFamily(),
+                'platform_version' => $browser->platformVersion(),
+                'device_vendor' => $browser->deviceFamily(),
+                'device_model' => $browser->deviceModel(),
+            ], $regenerated);
+        }
 
         $this->limiter->clear($request);
 

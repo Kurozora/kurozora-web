@@ -4,11 +4,19 @@ namespace App\Actions\Web\Auth;
 
 use App\Helpers\SignInRateLimiter;
 use Illuminate\Auth\Events\Failed;
+use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class AttemptToAuthenticate
 {
+    /**
+     * The guard implementation.
+     *
+     * @var StatefulGuard
+     */
+    protected StatefulGuard $guard;
+
     /**
      * The login rate limiter instance.
      *
@@ -19,12 +27,14 @@ class AttemptToAuthenticate
     /**
      * Create a new controller instance.
      *
-     * @param SignInRateLimiter $limiter
+     * @param  StatefulGuard  $guard
+     * @param  SignInRateLimiter  $limiter
      *
      * @return void
      */
-    public function __construct(SignInRateLimiter $limiter)
+    public function __construct(StatefulGuard $guard, SignInRateLimiter $limiter)
     {
+        $this->guard = $guard;
         $this->limiter = $limiter;
     }
 
@@ -33,19 +43,16 @@ class AttemptToAuthenticate
      *
      * @param Request $request
      * @param callable $next
-     *
      * @return mixed
-     * @throws ValidationException
      */
     public function handle(Request $request, callable $next): mixed
     {
-        if (auth()->attempt(
+        if ($this->guard->attempt(
             $request->only('email', 'password'),
             $request->filled('remember'))
         ) {
             return $next($request);
         }
-
         $this->throwFailedAuthenticationException($request);
     }
 
@@ -53,8 +60,8 @@ class AttemptToAuthenticate
      * Throw a failed authentication validation exception.
      *
      * @param Request $request
-     *
      * @return void
+     *
      * @throws ValidationException
      */
     protected function throwFailedAuthenticationException(Request $request): void
