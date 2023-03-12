@@ -321,7 +321,7 @@ class GameController extends Controller
     }
 
     /**
-     * Retrieves upcoming game results
+     * Retrieves upcoming games results
      *
      * @param GetUpcomingGameRequest $request
      * @return JsonResponse

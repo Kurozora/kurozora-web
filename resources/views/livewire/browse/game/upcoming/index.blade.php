@@ -4,7 +4,7 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Browse the upcoming game season. Join the Kurozora community and create your anime, manga and game list. Discover songs, episodes and read reviews and news!') }}
+        {{ __('Browse the upcoming games season. Join the Kurozora community and create your anime, manga and game list. Discover songs, episodes and read reviews and news!') }}
     </x-slot:description>
 
     <x-slot:meta>

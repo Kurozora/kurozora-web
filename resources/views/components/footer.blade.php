@@ -63,11 +63,11 @@
                     </li>
 
                     <li class="mt-2">
-                        <x-footer-link href="{{ route('games.upcoming.index') }}">{{ __('Upcoming Game') }}</x-footer-link>
+                        <x-footer-link href="{{ route('games.upcoming.index') }}">{{ __('Upcoming Games') }}</x-footer-link>
                     </li>
 
                     <li class="mt-2">
-                        <x-footer-link href="{{ route('games.seasons.archive') }}">{{ __('Game Archive') }}</x-footer-link>
+                        <x-footer-link href="{{ route('games.seasons.archive') }}">{{ __('Games Archive') }}</x-footer-link>
                     </li>
                 </ul>
             </div>

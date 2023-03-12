@@ -312,21 +312,21 @@
                         </x-slot:footer>
                     </x-information-list>
 
-                    <x-information-list id="broadcast" title="{{ __('Broadcast') }}" icon="{{ asset('images/symbols/calendar_badge_clock.svg') }}">
+                    <x-information-list id="publication" title="{{ __('Publication') }}" icon="{{ asset('images/symbols/calendar_badge_clock.svg') }}">
                         <x-slot:information>
-                            {{ $game->broadcast }}
+                            {{ $game->publication }}
                         </x-slot:information>
 
                         @if ($game->status_id === 4)
                             <x-slot:footer>
-                                {{ __('The broadcasting of this series has ended.') }}
+                                {{ __('The publication of this series has ended.') }}
                             </x-slot:footer>
-                        @elseif (empty($game->broadcast))
-                            {{ __('No broadcast data available at the moment.') }}
+                        @elseif (empty($game->publication))
+                            {{ __('No publication data available at the moment.') }}
                         @elseif ($game->status_id === 3)
                             <div class="flex flex-col align-center mt-1">
                                 <p class="font-black text-2xl">
-                                    {{ $game->time_until_broadcast }}
+                                    {{ $game->time_until_publication }}
                                 </p>
                             </div>
                         @endif

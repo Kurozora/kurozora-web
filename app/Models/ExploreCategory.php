@@ -535,7 +535,7 @@ class ExploreCategory extends KModel implements Sitemapable
     }
 
     /**
-     * Returns the upcoming game.
+     * Returns the upcoming games.
      *
      * @param Genre|Theme|null $model
      * @return ExploreCategory
