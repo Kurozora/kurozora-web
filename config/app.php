@@ -223,6 +223,7 @@ return [
         App\Providers\NovaServiceProvider::class,
         App\Providers\ProfileServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\TelescopeServiceProvider::class,
         App\Providers\ScoutServiceProvider::class,
         App\Providers\SessionServiceProvider::class,
         App\Providers\UserModelServiceProvider::class,

@@ -45,6 +45,7 @@
         "laravel/sanctum": "^3.0",
         "laravel/scout": "^9.4",
         "laravel/socialite": "^5.2",
+        "laravel/telescope": "^4.14",
         "laravel/tinker": "^2.7",
         "league/flysystem-aws-s3-v3": "^3.0",
         "livewire/livewire": "^2.10",
@@ -128,7 +129,8 @@
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "@php artisan nova:publish",
-            "@php artisan vendor:publish --force --tag=livewire:assets",
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
+            "@php artisan vendor:publish --tag=livewire:assets --ansi --force",
             "@php artisan ide-helper:generate",
             "@php artisan ide-helper:models -N",
             "@php artisan ide-helper:meta"

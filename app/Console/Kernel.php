@@ -73,6 +73,13 @@ class Kernel extends ConsoleKernel
 //            ->runInBackground();
 
         /**********************************************/
+        // Prune Telescope table
+        $schedule->command('telescope:prune --hours=48')
+            ->daily()
+            ->name('Pruning Telescope table')
+            ->onOneServer();
+
+        /**********************************************/
         // Calculate anime ratings every day
         $schedule->command('calculate:anime_ratings')
             ->daily()
