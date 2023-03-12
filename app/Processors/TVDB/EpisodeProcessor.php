@@ -186,7 +186,7 @@ class EpisodeProcessor implements ItemProcessorInterface
             $seconds += (int) $m[0] * 60;
         }
 
-        // Count minute.
+        // Count seconds.
         $regex = '/\d+ seconds./';
         preg_match($regex, $duration, $match);
         if (count($match)) {

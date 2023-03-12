@@ -448,7 +448,7 @@ class AnimeProcessor implements ItemProcessorInterface
             $seconds += (int) $m[0] * 60;
         }
 
-        // Count minute.
+        // Count seconds.
         $regex = '/\d+ sec./';
         preg_match($regex, $duration, $match);
         if (count($match)) {
