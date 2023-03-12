@@ -25,7 +25,7 @@
 
         <section>
             <x-picture>
-                <img class="w-full object-cover h-32 rounded-lg shadow sm:h-40 md:h-80" src="{{ asset('images/static/banners/manga_now_on_kurozora.webp') }}" alt="Manga tracking now available on Kurozora">
+                <img class="w-full object-cover h-32 rounded-lg shadow sm:h-40 md:h-80" src="{{ asset('images/static/banners/games_now_on_kurozora.webp') }}" alt="Games and Manga tracking now available on Kurozora">
             </x-picture>
         </section>
 
