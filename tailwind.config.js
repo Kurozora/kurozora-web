@@ -44,7 +44,7 @@ module.exports = {
             },
 
             fontFamily: {
-                sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+                sans: ['Inter', ...defaultTheme.fontFamily.sans],
                 mono: ['Fira Code VF', ...defaultTheme.fontFamily.mono],
                 source: ['Source Sans Pro', ...defaultTheme.fontFamily.sans],
                 'ubuntu-mono': ['Ubuntu Mono', ...defaultTheme.fontFamily.mono],

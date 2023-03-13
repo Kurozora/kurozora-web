@@ -26,8 +26,8 @@
         "bensampo/laravel-enum": "^6.0",
         "blade-ui-kit/blade-icons": "^1.0",
         "codercat/jwk-to-pem": "^1.0",
-        "cybercog/laravel-love": "^8.0",
-        "ebess/advanced-nova-media-library": "^4.0",
+        "cybercog/laravel-love": "^9.0",
+        "ebess/advanced-nova-media-library": "^4.1.0",
         "guzzlehttp/guzzle": "^7.3",
         "halaxa/json-machine": "^1.0",
         "hisorange/browser-detect": "^4.4",
@@ -36,13 +36,13 @@
         "intervention/image": "^2.7",
         "jaybizzle/crawler-detect": "^1.2",
         "kabbouchi/nova-logs-tool": "^2.0",
-        "kiritokatklian/laravel-color-palette": "^2.0",
+        "kiritokatklian/laravel-color-palette": "^3.0",
         "kiritokatklian/nova-astrotranslatable": "^2.0",
         "kiritokatklian/nova-permission": "^4.0",
         "laravel-notification-channels/apn": "^v4.0",
-        "laravel/framework": "^9.2",
+        "laravel/framework": "^10.0",
         "laravel/nova": "*",
-        "laravel/sanctum": "^3.0",
+        "laravel/sanctum": "^3.2",
         "laravel/scout": "^9.4",
         "laravel/socialite": "^5.2",
         "laravel/telescope": "^4.14",
@@ -67,28 +67,32 @@
         "spatie/laravel-sluggable": "^3.0",
         "timothyasp/nova-color-field": "^2.0",
         "titasgailius/search-relations": "^2.0",
-        "xetaio/xetaravel-mentions": "^9.0"
+        "xetaio/xetaravel-mentions": "dev-feature/add-laravel-10-support"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
         "barryvdh/laravel-ide-helper": "^2.12",
         "beyondcode/laravel-query-detector": "^1.6",
-        "brianium/paratest": "^6.4",
+        "brianium/paratest": "^7.0",
         "fakerphp/faker": "^1.19",
         "friendsofphp/php-cs-fixer": "^3.9",
         "laravel/sail": "^1.13",
         "mockery/mockery": "^1.5",
-        "nunomaduro/collision": "^6.1",
+        "nunomaduro/collision": "^7.0",
         "nunomaduro/larastan": "^2.0",
-        "phpunit/phpunit": "^9.5.10",
+        "phpunit/phpunit": "^10.0",
         "spatie/browsershot": "^3.57",
-        "spatie/laravel-ignition": "^1.0",
-        "spatie/phpunit-snapshot-assertions": "^4.2"
+        "spatie/laravel-ignition": "^2.0",
+        "spatie/phpunit-snapshot-assertions": "^5.0"
     },
     "repositories": [
         {
             "type": "path",
             "url": "./nova"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/kiritokatklian/Xetaravel-Mentions"
         },
         {
             "type": "git",

@@ -1,11 +1,11 @@
-/vendor
-/node_modules
-npm-debug.log
-
 # DS Store
 .DS_Store
 
+# Composer
+/vendor
+
 # Laravel
+/public/build
 /public/hot
 /public/storage
 /public/images/user_uploads
@@ -13,9 +13,21 @@ npm-debug.log
 /storage/*.key
 .env
 .env.backup
+.env.production
+
+# Docker
 docker-compose.override.yml
+
+# Homestead
 Homestead.json
 Homestead.yaml
+auth.json
+
+# NodeJS
+/node_modules
+npm-debug.log
+
+# YARN
 yarn-error.log
 
 # Rocketeer PHP task runner and deployment package. https://github.com/rocketeers/rocketeer
@@ -29,9 +41,12 @@ build
 phpstan*.neon
 
 # PHPStorm
-.idea
+/.fleet
+/.idea
+/.vscode
 
 # PHPUnit result cache
+/.phpunit.cache
 .run
 .phpunit.result.cache
 

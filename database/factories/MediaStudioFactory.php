@@ -26,6 +26,7 @@ class MediaStudioFactory extends Factory
             'is_producer' => $this->faker->boolean,
             'is_studio' => $this->faker->boolean,
             'is_publisher' => $this->faker->boolean,
+            'is_developer' => $this->faker->boolean,
             'created_at' => now(),
             'updated_at' => now(),
         ];

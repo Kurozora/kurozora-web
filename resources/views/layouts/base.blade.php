@@ -34,8 +34,8 @@
         <link rel="shortcut icon" href="{{ url(asset('favicon.ico')) }}" />
 
         <!-- Fonts -->
-        <link rel="preload" href="https://rsms.me/inter/inter.css" as="style" />
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link href="https://fonts.bunny.net/css?family=inter:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet" />
 
         <!-- Styles -->
         <link rel="preload" href="{{ url(mix('css/app.css')) }}" as="style">
