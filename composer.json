@@ -55,6 +55,7 @@
         "musa11971/laravel-sort-request": "dev-php-7.4-and-8.0-support",
         "musa11971/php-jwt-decoder": "dev-php-7.4-and-8.0-support",
         "outl1ne/nova-color-field": "^2.0",
+        "outl1ne/nova-sortable": "dev-main",
         "pragmarx/google2fa": "^8.0",
         "pusher/pusher-php-server": "^7.0",
         "roach-php/laravel": "^2.0",
@@ -89,6 +90,10 @@
         {
             "type": "path",
             "url": "./nova"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/scouser03/nova-sortable"
         },
         {
             "type": "git",

@@ -8,15 +8,18 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Request;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 use Spatie\Sitemap\Contracts\Sitemapable;
 use Spatie\Sitemap\Tags\Url;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class ExploreCategory extends KModel implements Sitemapable
+class ExploreCategory extends KModel implements Sitemapable, Sortable
 {
     use HasSlug,
-        SoftDeletes;
+        SoftDeletes,
+        SortableTrait;
 
     // Table name
     const TABLE_NAME = 'explore_categories';
@@ -29,6 +32,16 @@ class ExploreCategory extends KModel implements Sitemapable
      */
     protected $with = [
         'exploreCategoryItems'
+    ];
+
+    /**
+     * The sortable configurations.
+     *
+     * @var array
+     */
+    public array $sortable = [
+        'order_column_name' => 'position',
+        'sort_when_creating' => true,
     ];
 
     /**
@@ -68,6 +81,16 @@ class ExploreCategory extends KModel implements Sitemapable
         return SlugOptions::create()
             ->generateSlugsFrom('title')
             ->saveSlugsTo('slug');
+    }
+
+    /**
+     * The query used for sorting.
+     *
+     * @return ExploreCategory
+     */
+    public function buildSortQuery(): ExploreCategory
+    {
+        return static::query()->withoutGlobalScope(new ExploreCategoryIsEnabledScope);
     }
 
     /**

@@ -15,9 +15,14 @@ use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Outl1ne\NovaSortable\Traits\HasSortableRows;
 
 class ExploreCategory extends Resource
 {
+    use HasSortableRows {
+        indexQuery as indexSortableQuery;
+    }
+
     /**
      * The model the resource corresponds to.
      *
@@ -33,6 +38,13 @@ class ExploreCategory extends Resource
     public $resource;
 
     /**
+     * Whether the sortable cache is enabled.
+     *
+     * @var bool
+     */
+    public static bool $sortableCacheEnabled = false;
+
+    /**
      * Determine if the resource should be available for the given request.
      *
      * @param Request $request
@@ -41,6 +53,18 @@ class ExploreCategory extends Resource
     public static function authorizedToViewAny(Request $request): bool
     {
         return $request->user()?->can('viewExploreCategory') ?? false;
+    }
+
+    /**
+     * Determine if the given resource is sortable.
+     *
+     * @param NovaRequest $request
+     * @param \App\Models\ExploreCategory $resource
+     * @return bool
+     */
+    public static function canSort(NovaRequest $request, \App\Models\ExploreCategory $resource): bool
+    {
+        return auth()->user()->hasRole(['superAdmin', 'admin', 'mod', 'editor']);
     }
 
     /**
@@ -82,6 +106,13 @@ class ExploreCategory extends Resource
 
             Heading::make('Meta information'),
 
+            Number::make('Position', 'position')
+                ->sortable()
+                ->readonly()
+                ->hideWhenCreating()
+                ->hideWhenUpdating()
+                ->help('This determines the position on the explore page. Generated automatically!'),
+
             Text::make('Title')
                 ->rules('required', 'max:255')
                 ->sortable()
@@ -101,11 +132,6 @@ class ExploreCategory extends Resource
                 ->rules('max:2083')
                 ->sortable()
                 ->help('If the category shouldn’t link to itself, then add a secondary slug here. This slug starts from the root URL: ' . config('app.url') . '/<strong>' . ($this->resource->secondary_slug ?? 'slug-identifier') . '</strong>'),
-
-            Number::make('Position/order', 'position')
-                ->rules('required', 'numeric', 'min:1', 'max:100')
-                ->sortable()
-                ->help('This will determine the position on the explore page. Enter a number ranging from <strong>1 to 100</strong>. Lower numbers will display first.'),
 
             Select::make('Type')
                 ->options(ExploreCategoryTypes::asSelectArray())
@@ -202,7 +228,9 @@ class ExploreCategory extends Resource
      */
     public static function indexQuery(NovaRequest $request, $query): Builder
     {
-        return parent::indexQuery($request, $query)->withoutGlobalScope(new ExploreCategoryIsEnabledScope);
+        // Set default sort order (just copy ID to sort order)
+//        $query->withoutGlobalScope(new ExploreCategoryIsEnabledScope);
+        return parent::indexQuery($request, static::indexSortableQuery($request, $query));
     }
 
     /**
