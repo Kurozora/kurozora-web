@@ -4,19 +4,11 @@ namespace App\Actions\Web\Auth;
 
 use App\Helpers\SignInRateLimiter;
 use Illuminate\Auth\Events\Failed;
-use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class AttemptToAuthenticate
 {
-    /**
-     * The guard implementation.
-     *
-     * @var StatefulGuard
-     */
-    protected StatefulGuard $guard;
-
     /**
      * The login rate limiter instance.
      *
@@ -27,14 +19,12 @@ class AttemptToAuthenticate
     /**
      * Create a new controller instance.
      *
-     * @param  StatefulGuard  $guard
      * @param  SignInRateLimiter  $limiter
      *
      * @return void
      */
-    public function __construct(StatefulGuard $guard, SignInRateLimiter $limiter)
+    public function __construct(SignInRateLimiter $limiter)
     {
-        $this->guard = $guard;
         $this->limiter = $limiter;
     }
 
@@ -47,7 +37,7 @@ class AttemptToAuthenticate
      */
     public function handle(Request $request, callable $next): mixed
     {
-        if ($this->guard->attempt(
+        if (auth()->attempt(
             $request->only('email', 'password'),
             $request->filled('remember'))
         ) {
