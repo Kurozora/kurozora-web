@@ -228,8 +228,7 @@ class ExploreCategory extends Resource
      */
     public static function indexQuery(NovaRequest $request, $query): Builder
     {
-        // Set default sort order (just copy ID to sort order)
-//        $query->withoutGlobalScope(new ExploreCategoryIsEnabledScope);
+        $query->withoutGlobalScope(new ExploreCategoryIsEnabledScope);
         return parent::indexQuery($request, static::indexSortableQuery($request, $query));
     }
 

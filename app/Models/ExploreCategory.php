@@ -86,11 +86,11 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
     /**
      * The query used for sorting.
      *
-     * @return ExploreCategory
+     * @return Builder
      */
-    public function buildSortQuery(): ExploreCategory
+    public function buildSortQuery(): Builder
     {
-        return static::query()->withoutGlobalScope(new ExploreCategoryIsEnabledScope);
+        return static::query()->withoutGlobalScopes();
     }
 
     /**

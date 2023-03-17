@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dfc8614a2bcd7f4c963a09b99bd608aa",
+    "content-hash": "90cd39f5f678cd7110d24239945824c2",
     "packages": [
         {
             "name": "astrotomic/laravel-translatable",
@@ -149,16 +149,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.261.11",
+            "version": "3.261.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "bba0c975f34325cfb218d68bda6d9e476d309b4c"
+                "reference": "121638bb7e62ee2f71838c52e79884f4301a9400"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/bba0c975f34325cfb218d68bda6d9e476d309b4c",
-                "reference": "bba0c975f34325cfb218d68bda6d9e476d309b4c",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/121638bb7e62ee2f71838c52e79884f4301a9400",
+                "reference": "121638bb7e62ee2f71838c52e79884f4301a9400",
                 "shasum": ""
             },
             "require": {
@@ -237,9 +237,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.261.11"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.261.14"
             },
-            "time": "2023-03-14T18:26:15+00:00"
+            "time": "2023-03-17T18:21:00+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -1694,16 +1694,16 @@
         },
         {
             "name": "ebess/advanced-nova-media-library",
-            "version": "4.1.0",
+            "version": "4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ebess/advanced-nova-media-library.git",
-                "reference": "721758fc31333158298ae1b47b8ed4f879c670a8"
+                "reference": "f764813fa8c433cf9eb1e6930311403b67b4949b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ebess/advanced-nova-media-library/zipball/721758fc31333158298ae1b47b8ed4f879c670a8",
-                "reference": "721758fc31333158298ae1b47b8ed4f879c670a8",
+                "url": "https://api.github.com/repos/ebess/advanced-nova-media-library/zipball/f764813fa8c433cf9eb1e6930311403b67b4949b",
+                "reference": "f764813fa8c433cf9eb1e6930311403b67b4949b",
                 "shasum": ""
             },
             "require": {
@@ -1736,9 +1736,9 @@
             ],
             "support": {
                 "issues": "https://github.com/ebess/advanced-nova-media-library/issues",
-                "source": "https://github.com/ebess/advanced-nova-media-library/tree/4.1.0"
+                "source": "https://github.com/ebess/advanced-nova-media-library/tree/4.1.1"
             },
-            "time": "2023-02-28T11:49:28+00:00"
+            "time": "2023-03-16T21:06:15+00:00"
         },
         {
             "name": "edamov/pushok",
@@ -3743,16 +3743,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v10.3.3",
+            "version": "v10.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "90f24d9e2860ecf6b5492e966956270ceb98c03d"
+                "reference": "c3e679cc7d19527fda4210ef137075dafb106d0c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/90f24d9e2860ecf6b5492e966956270ceb98c03d",
-                "reference": "90f24d9e2860ecf6b5492e966956270ceb98c03d",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/c3e679cc7d19527fda4210ef137075dafb106d0c",
+                "reference": "c3e679cc7d19527fda4210ef137075dafb106d0c",
                 "shasum": ""
             },
             "require": {
@@ -3939,7 +3939,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2023-03-09T14:00:53+00:00"
+            "time": "2023-03-17T14:28:55+00:00"
         },
         {
             "name": "laravel/nova",
@@ -5547,17 +5547,11 @@
         },
         {
             "name": "marvinlabs/laravel-discord-logger",
-            "version": "v1.4.0",
+            "version": "dev-feature/update-send-long-log-as-file",
             "source": {
                 "type": "git",
-                "url": "https://github.com/marvinlabs/laravel-discord-logger.git",
-                "reference": "01ed365662b11ddac27e4eca04d8b53a0830ed8f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/marvinlabs/laravel-discord-logger/zipball/01ed365662b11ddac27e4eca04d8b53a0830ed8f",
-                "reference": "01ed365662b11ddac27e4eca04d8b53a0830ed8f",
-                "shasum": ""
+                "url": "https://github.com/kiritokatklian/laravel-discord-logger",
+                "reference": "14f7839102fd01d4c69869b357e2f39af5211bda"
             },
             "require": {
                 "ext-json": "*",
@@ -5584,7 +5578,11 @@
                     "MarvinLabs\\DiscordLogger\\": "src/DiscordLogger"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "MarvinLabs\\DiscordLogger\\Tests\\": "tests"
+                }
+            },
             "license": [
                 "MIT"
             ],
@@ -5603,17 +5601,7 @@
                 "logger",
                 "logging"
             ],
-            "support": {
-                "issues": "https://github.com/marvinlabs/laravel-discord-logger/issues",
-                "source": "https://github.com/marvinlabs/laravel-discord-logger/tree/v1.4.0"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/vpratfr",
-                    "type": "github"
-                }
-            ],
-            "time": "2023-02-28T15:25:37+00:00"
+            "time": "2023-03-16T23:44:07+00:00"
         },
         {
             "name": "masterminds/html5",
@@ -5686,16 +5674,16 @@
         },
         {
             "name": "matomo/device-detector",
-            "version": "6.1.0",
+            "version": "6.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matomo-org/device-detector.git",
-                "reference": "bcbf10f2e0e158b338c6c5db9e89862313405215"
+                "reference": "a549e24350ff63e15dc691b6b21b73909b4fa9bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/bcbf10f2e0e158b338c6c5db9e89862313405215",
-                "reference": "bcbf10f2e0e158b338c6c5db9e89862313405215",
+                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/a549e24350ff63e15dc691b6b21b73909b4fa9bd",
+                "reference": "a549e24350ff63e15dc691b6b21b73909b4fa9bd",
                 "shasum": ""
             },
             "require": {
@@ -5751,7 +5739,7 @@
                 "source": "https://github.com/matomo-org/matomo",
                 "wiki": "https://dev.matomo.org/"
             },
-            "time": "2023-02-22T10:17:31+00:00"
+            "time": "2023-03-16T08:19:16+00:00"
         },
         {
             "name": "meilisearch/meilisearch-php",
@@ -6903,11 +6891,17 @@
         },
         {
             "name": "outl1ne/nova-sortable",
-            "version": "dev-main",
+            "version": "3.4.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/scouser03/nova-sortable",
-                "reference": "9626e3c63a6b7df7ad36e0ee30dc5014558510ca"
+                "url": "https://github.com/outl1ne/nova-sortable.git",
+                "reference": "4ec83e01a4a68f287f7f36666ebe1df97d1a09ea"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/outl1ne/nova-sortable/zipball/4ec83e01a4a68f287f7f36666ebe1df97d1a09ea",
+                "reference": "4ec83e01a4a68f287f7f36666ebe1df97d1a09ea",
+                "shasum": ""
             },
             "require": {
                 "laravel/nova": "^4.20.2",
@@ -6915,7 +6909,6 @@
                 "php": ">=8.0",
                 "spatie/eloquent-sortable": "^3.10.0|^4.0"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
@@ -6929,6 +6922,7 @@
                     "Outl1ne\\NovaSortable\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6940,7 +6934,17 @@
                 "optimistdigital",
                 "outl1ne"
             ],
-            "time": "2023-03-14T05:54:10+00:00"
+            "support": {
+                "issues": "https://github.com/outl1ne/nova-sortable/issues",
+                "source": "https://github.com/outl1ne/nova-sortable/tree/3.4.3"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/outl1ne",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-03-17T14:17:12+00:00"
         },
         {
             "name": "outl1ne/nova-translations-loader",
@@ -13351,21 +13355,27 @@
         },
         {
             "name": "xetaio/xetaravel-mentions",
-            "version": "dev-feature/add-laravel-10-support",
+            "version": "10.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/kiritokatklian/Xetaravel-Mentions",
-                "reference": "1d2f31e4e492770f940985309b85ab7e4293bb15"
+                "url": "https://github.com/XetaIO/Xetaravel-Mentions.git",
+                "reference": "d5b7d231ed40888b99a593caaad721a5d8a5f370"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/XetaIO/Xetaravel-Mentions/zipball/d5b7d231ed40888b99a593caaad721a5d8a5f370",
+                "reference": "d5b7d231ed40888b99a593caaad721a5d8a5f370",
+                "shasum": ""
             },
             "require": {
-                "illuminate/database": "^8.0 || ^9.0 || ^10.0",
-                "illuminate/support": "^8.0 || ^9.0 || ^10.0",
-                "php": ">=7.3",
+                "illuminate/database": "^10.0",
+                "illuminate/support": "^10.0",
+                "php": ">=8.1",
                 "xety/configurator": "^1.0"
             },
             "require-dev": {
-                "orchestra/testbench": "^6.0 || ^7.0 || ^8.0",
-                "phpunit/phpunit": "^9.5 || ^10.0",
+                "orchestra/testbench": "^8.0",
+                "phpunit/phpunit": "^9.5",
                 "squizlabs/php_codesniffer": "^3.2"
             },
             "type": "library",
@@ -13381,11 +13391,7 @@
                     "Xetaio\\Mentions\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Tests\\": "tests/"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -13399,17 +13405,17 @@
             "description": "A package to parse a @mention from a text and mention the user with a notification.",
             "homepage": "https://github.com/XetaIO/Xetaravel-Mentions",
             "keywords": [
+                "Users",
                 "laravel",
                 "laravel-5-package",
                 "mentions",
-                "notifications",
-                "users"
+                "notifications"
             ],
             "support": {
-                "source": "https://github.com/XetaIO/Xetaravel-Mentions",
-                "issues": "https://github.com/XetaIO/Xetaravel-Mentions/issues"
+                "issues": "https://github.com/XetaIO/Xetaravel-Mentions/issues",
+                "source": "https://github.com/XetaIO/Xetaravel-Mentions"
             },
-            "time": "2023-03-12T20:39:13+00:00"
+            "time": "2023-03-17T00:44:56+00:00"
         },
         {
             "name": "xety/configurator",
@@ -15098,24 +15104,27 @@
         },
         {
             "name": "phpdocumentor/type-resolver",
-            "version": "1.6.2",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/TypeResolver.git",
-                "reference": "48f445a408c131e38cab1c235aa6d2bb7a0bb20d"
+                "reference": "1534aea9bde19a5c85c5d1e1f834ab63f4c5dcf5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/48f445a408c131e38cab1c235aa6d2bb7a0bb20d",
-                "reference": "48f445a408c131e38cab1c235aa6d2bb7a0bb20d",
+                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/1534aea9bde19a5c85c5d1e1f834ab63f4c5dcf5",
+                "reference": "1534aea9bde19a5c85c5d1e1f834ab63f4c5dcf5",
                 "shasum": ""
             },
             "require": {
+                "doctrine/deprecations": "^1.0",
                 "php": "^7.4 || ^8.0",
-                "phpdocumentor/reflection-common": "^2.0"
+                "phpdocumentor/reflection-common": "^2.0",
+                "phpstan/phpdoc-parser": "^1.13"
             },
             "require-dev": {
                 "ext-tokenizer": "*",
+                "phpbench/phpbench": "^1.2",
                 "phpstan/extension-installer": "^1.1",
                 "phpstan/phpstan": "^1.8",
                 "phpstan/phpstan-phpunit": "^1.1",
@@ -15147,9 +15156,9 @@
             "description": "A PSR-5 based resolver of Class names, Types and Structural Element Names",
             "support": {
                 "issues": "https://github.com/phpDocumentor/TypeResolver/issues",
-                "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.6.2"
+                "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.7.0"
             },
-            "time": "2022-10-14T12:47:21+00:00"
+            "time": "2023-03-12T10:13:29+00:00"
         },
         {
             "name": "phpmyadmin/sql-parser",
@@ -15239,17 +15248,62 @@
             "time": "2023-01-25T10:43:40+00:00"
         },
         {
-            "name": "phpstan/phpstan",
-            "version": "1.10.6",
+            "name": "phpstan/phpdoc-parser",
+            "version": "1.16.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "50d089a3e0904b0fe7e2cf2d4fd37d427d64235a"
+                "url": "https://github.com/phpstan/phpdoc-parser.git",
+                "reference": "e27e92d939e2e3636f0a1f0afaba59692c0bf571"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/50d089a3e0904b0fe7e2cf2d4fd37d427d64235a",
-                "reference": "50d089a3e0904b0fe7e2cf2d4fd37d427d64235a",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/e27e92d939e2e3636f0a1f0afaba59692c0bf571",
+                "reference": "e27e92d939e2e3636f0a1f0afaba59692c0bf571",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2 || ^8.0"
+            },
+            "require-dev": {
+                "php-parallel-lint/php-parallel-lint": "^1.2",
+                "phpstan/extension-installer": "^1.0",
+                "phpstan/phpstan": "^1.5",
+                "phpstan/phpstan-phpunit": "^1.1",
+                "phpstan/phpstan-strict-rules": "^1.0",
+                "phpunit/phpunit": "^9.5",
+                "symfony/process": "^5.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PHPStan\\PhpDocParser\\": [
+                        "src/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHPDoc parser with support for nullable, intersection and generic types",
+            "support": {
+                "issues": "https://github.com/phpstan/phpdoc-parser/issues",
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.16.1"
+            },
+            "time": "2023-02-07T18:11:17+00:00"
+        },
+        {
+            "name": "phpstan/phpstan",
+            "version": "1.10.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpstan.git",
+                "reference": "b10ceb526d9607903c5b2673f1fc8775dbe48975"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/b10ceb526d9607903c5b2673f1fc8775dbe48975",
+                "reference": "b10ceb526d9607903c5b2673f1fc8775dbe48975",
                 "shasum": ""
             },
             "require": {
@@ -15278,8 +15332,11 @@
                 "static analysis"
             ],
             "support": {
+                "docs": "https://phpstan.org/user-guide/getting-started",
+                "forum": "https://github.com/phpstan/phpstan/discussions",
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.10.6"
+                "security": "https://github.com/phpstan/phpstan/security/policy",
+                "source": "https://github.com/phpstan/phpstan-src"
             },
             "funding": [
                 {
@@ -15295,7 +15352,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-03-09T16:55:12+00:00"
+            "time": "2023-03-16T15:24:20+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -17300,16 +17357,16 @@
         },
         {
             "name": "symfony/serializer",
-            "version": "v6.2.7",
+            "version": "v6.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "df9599873fdc2540e6f4291f49be4fcc167e9cbf"
+                "reference": "cf8df288db70003681b729b87a022d436b81035f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/df9599873fdc2540e6f4291f49be4fcc167e9cbf",
-                "reference": "df9599873fdc2540e6f4291f49be4fcc167e9cbf",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/cf8df288db70003681b729b87a022d436b81035f",
+                "reference": "cf8df288db70003681b729b87a022d436b81035f",
                 "shasum": ""
             },
             "require": {
@@ -17319,7 +17376,7 @@
             "conflict": {
                 "doctrine/annotations": "<1.12",
                 "phpdocumentor/reflection-docblock": "<3.2.2",
-                "phpdocumentor/type-resolver": "<1.4.0|>=1.7.0",
+                "phpdocumentor/type-resolver": "<1.4.0",
                 "symfony/dependency-injection": "<5.4",
                 "symfony/property-access": "<5.4",
                 "symfony/property-info": "<5.4",
@@ -17327,7 +17384,7 @@
                 "symfony/yaml": "<5.4"
             },
             "require-dev": {
-                "doctrine/annotations": "^1.12|^2",
+                "doctrine/annotations": "^1.12",
                 "phpdocumentor/reflection-docblock": "^3.2|^4.0|^5.0",
                 "symfony/cache": "^5.4|^6.0",
                 "symfony/config": "^5.4|^6.0",
@@ -17381,7 +17438,7 @@
             "description": "Handles serializing and deserializing data structures, including object graphs, into array structures or other formats like XML and JSON.",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/serializer/tree/v6.2.7"
+                "source": "https://github.com/symfony/serializer/tree/v6.2.0"
             },
             "funding": [
                 {
@@ -17397,7 +17454,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-02-24T10:42:00+00:00"
+            "time": "2022-11-02T09:08:04+00:00"
         },
         {
             "name": "symfony/stopwatch",
@@ -17589,10 +17646,9 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "marvinlabs/laravel-discord-logger": 20,
         "musa11971/laravel-sort-request": 20,
-        "musa11971/php-jwt-decoder": 20,
-        "outl1ne/nova-sortable": 20,
-        "xetaio/xetaravel-mentions": 20
+        "musa11971/php-jwt-decoder": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

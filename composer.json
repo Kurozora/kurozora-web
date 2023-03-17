@@ -50,12 +50,12 @@
         "league/flysystem-aws-s3-v3": "^3.0",
         "livewire/livewire": "^2.10",
         "lukeraymonddowning/honey": "^0.5",
-        "marvinlabs/laravel-discord-logger": "^1.2",
+        "marvinlabs/laravel-discord-logger": "dev-feature/update-send-long-log-as-file",
         "meilisearch/meilisearch-php": "^0.25.0",
         "musa11971/laravel-sort-request": "dev-php-7.4-and-8.0-support",
         "musa11971/php-jwt-decoder": "dev-php-7.4-and-8.0-support",
         "outl1ne/nova-color-field": "^2.0",
-        "outl1ne/nova-sortable": "dev-main",
+        "outl1ne/nova-sortable": "^3.0",
         "pragmarx/google2fa": "^8.0",
         "pusher/pusher-php-server": "^7.0",
         "roach-php/laravel": "^2.0",
@@ -68,7 +68,7 @@
         "spatie/laravel-sluggable": "^3.0",
         "timothyasp/nova-color-field": "^2.0",
         "titasgailius/search-relations": "^2.0",
-        "xetaio/xetaravel-mentions": "dev-feature/add-laravel-10-support"
+        "xetaio/xetaravel-mentions": "^10.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
@@ -93,11 +93,7 @@
         },
         {
             "type": "git",
-            "url": "https://github.com/scouser03/nova-sortable"
-        },
-        {
-            "type": "git",
-            "url": "https://github.com/kiritokatklian/Xetaravel-Mentions"
+            "url": "https://github.com/kiritokatklian/laravel-discord-logger"
         },
         {
             "type": "git",
