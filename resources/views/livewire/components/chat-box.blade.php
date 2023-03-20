@@ -9,9 +9,7 @@
         <div class="flex justify-between gap-4 pt-2 pr-2 pb-2 pl-2">
             <div class="flex gap-2" style="width: 44px;">
                 @hasrole('superAdmin')
-                    <x-square-button
-                        wire:click="$refresh"
-                    >
+                    <x-square-button wire:click="$refresh">
                         @svg('arrow_clockwise', 'fill-current', ['width' => '24'])
                     </x-square-button>
                 @endhasrole

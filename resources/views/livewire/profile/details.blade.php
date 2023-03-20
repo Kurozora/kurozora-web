@@ -123,6 +123,26 @@
             </section>
         @endif
 
+        @if ($this->userGameLibrary->count())
+            <section class="relative max-w-7xl mx-auto pl-4 pr-4 pb-6 mb-8 z-10 sm:px-6">
+                <x-section-nav class="flex flex-nowrap justify-between mb-5">
+                    <x-slot:title>
+                        {{ __('Game Library') }}
+                    </x-slot:title>
+
+                    <x-slot:action>
+                        @hasrole('superAdmin')
+                            <x-button wire:click="getUserGameLibraryProperty">{{ __('Refresh') }}</x-button>
+                        @endhasrole
+
+                        <x-section-nav-link class="whitespace-nowrap" href="{{ route('profile.games-library', $user) }}">{{ __('See All') }}</x-section-nav-link>
+                    </x-slot:action>
+                </x-section-nav>
+
+                <x-rows.small-lockup :games="$this->userGameLibrary" />
+            </section>
+        @endif
+
         @if ($this->favoriteAnime->count())
             <section class="relative max-w-7xl mx-auto pl-4 pr-4 pb-6 mb-8 z-10 sm:px-6">
                 <x-section-nav class="flex flex-nowrap justify-between mb-5">
@@ -152,6 +172,22 @@
                 </x-section-nav>
 
                 <x-rows.small-lockup :mangas="$this->favoriteManga" />
+            </section>
+        @endif
+
+        @if ($this->favoriteGames->count())
+            <section class="relative max-w-7xl mx-auto pl-4 pr-4 pb-6 mb-8 z-10 sm:px-6">
+                <x-section-nav class="flex flex-nowrap justify-between mb-5">
+                    <x-slot:title>
+                        {{ __('Favorite Games') }}
+                    </x-slot:title>
+
+                    <x-slot:action>
+                        <x-section-nav-link class="whitespace-nowrap" href="{{ route('profile.favorite-games', $user) }}">{{ __('See All') }}</x-section-nav-link>
+                    </x-slot:action>
+                </x-section-nav>
+
+                <x-rows.small-lockup :games="$this->favoriteGames" />
             </section>
         @endif
 

@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Profile;
 
 use App\Events\UserViewed;
 use App\Models\Anime;
+use App\Models\Game;
 use App\Models\Manga;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
@@ -116,6 +117,18 @@ class Details extends Component
     }
 
     /**
+     * Returns the user's game library.
+     *
+     * @return LengthAwarePaginator
+     */
+    public function getUserGameLibraryProperty(): LengthAwarePaginator
+    {
+        return $this->user->whereTracked(Game::class)
+            ->orderBy('updated_at', 'desc')
+            ->paginate(10);
+    }
+
+    /**
      * Returns the user's favorited anime.
      *
      * @return LengthAwarePaginator
@@ -136,6 +149,18 @@ class Details extends Component
     {
         return $this->user
             ->whereFavorited(Manga::class)
+            ->paginate(10);
+    }
+
+    /**
+     * Returns the user's favorited games.
+     *
+     * @return LengthAwarePaginator
+     */
+    public function getFavoriteGamesProperty(): LengthAwarePaginator
+    {
+        return $this->user
+            ->whereFavorited(Game::class)
             ->paginate(10);
     }
 
