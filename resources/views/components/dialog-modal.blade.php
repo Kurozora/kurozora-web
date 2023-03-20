@@ -6,6 +6,14 @@
             {{ $title }}
         </div>
 
+        @if (isset($description))
+            <p class="text-sm">
+                {{ $description }}
+            </p>
+        @endif
+
+        <x-hr class="mt-4 mb-4"/>
+
         <div class="mt-4">
             {{ $content }}
         </div>

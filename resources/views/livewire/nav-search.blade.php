@@ -152,7 +152,7 @@
                 <p class="text-sm text-gray-500 text-center font-bold" wire:key="no-results-found">{{ __('No search results found :(') }}</p>
             @endif
 
-            @if (!empty($quickLinks))
+            @if (!empty($quickLinks) && empty($searchResults))
                 <x-search-header
                     x-show="isSearchEnabled"
                     x-transition:enter="ease duration-[400ms] transform"

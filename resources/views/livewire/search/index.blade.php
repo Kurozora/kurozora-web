@@ -1,4 +1,4 @@
-<main class="">
+<main>
     <x-slot:title>
         {{ __('Kurozora Search') }}
     </x-slot:title>
@@ -47,21 +47,21 @@
             <div
                 class="mt-4 justify-between"
                 x-data="{
-                    q: @entangle('q'),
-                    scope: @entangle('scope'),
-                    type: @entangle('type'),
+                    type: @entangle('type')
                 }"
             >
                 <div class="gap-2 items-center space-y-2 sm:flex sm:space-y-0">
-                    <div class="flex-1">
-                        <x-input id="search" type="text" name="q" placeholder="{{ __('I’m searching for…') }}" x-model.debounce.500ms="q" />
+                    <div class="flex flex-1 gap-2">
+                        <x-input id="search" type="text" name="q" placeholder="{{ __('I’m searching for…') }}" wire:model.debounce.750ms="q" />
+
+                        <x-square-button wire:click="$toggle('showHelp')">&nbsp;&nbsp;?&nbsp;&nbsp;</x-square-button>
                     </div>
 
                     <div class="flex flex-1 gap-2 items-center justify-end">
                         <x-spinner />
 
                         <div>
-                            <x-select x-model="scope">
+                            <x-select wire:model="scope">
                                 @foreach(\App\Enums\SearchScope::asSelectArray() as $key => $value)
                                     <option value="{{ $key }}">{{ __($value) }}</option>
                                 @endforeach
@@ -138,4 +138,56 @@
             </section>
         @endif
     </div>
+
+    <x-dialog-modal maxWidth="md" model="showHelp">
+        <x-slot:title>
+            {{ __('Search Tips') }}
+        </x-slot:title>
+
+        <x-slot:description>
+            {{ __('Unleash your inner ninja and master the art of finding your favorites, no Sharingan required!') }}
+        </x-slot:description>
+
+        <x-slot:content>
+            <ul class="flex flex-wrap justify-between m-0 mb-4 gap-6 list-none">
+                <li class="flex flex-col">
+                    <p class="font-bold uppercase">{{ __('Quick Search') }}</p>
+                    <p class="text-sm">{{ __('Invoke global search without leaving your keyboard.') }}</p>
+                    <div class="flex gap-2 pt-1 pb-1">
+                        <p class="pr-1 pl-1 bg-gray-100 font-semibold rounded">{{ __('⌘+K') }}</p>
+                        <p>{{ __('or') }}</p>
+                        <p class="pr-1 pl-1 bg-gray-100 font-semibold rounded">{{ __('ctrl+K') }}</p>
+                        <p>{{ __('or') }}</p>
+                        <p class="pr-1 pl-1 bg-gray-100 font-semibold rounded">{{ __('/') }}</p>
+                    </div>
+                </li>
+
+                <li class="flex flex-col">
+                    <span class="flex gap-2">
+                        <p class="font-bold uppercase">{{ __('Exact Match') }}</p>
+                        <p class="pr-1 pl-1 bg-green-500 text-white font-semibold rounded">{{ __('New') }}</p>
+                    </span>
+                    <p class="text-sm">{{ __('Enclose one or more words in double quotes.') }}</p>
+                    <div class="flex gap-2 pt-1 pb-1">
+                        <p class="pr-1 pl-1 bg-gray-100 font-semibold rounded">{{ __('"Hunter x Hunter"') }}</p>
+                    </div>
+                </li>
+
+                <li class="flex flex-col">
+                    <span class="flex gap-2">
+                        <p class="font-bold uppercase">{{ __('Exclude Words') }}</p>
+                        <p class="pr-1 pl-1 bg-orange-500 text-white font-semibold rounded">{{ __('TBA') }}</p>
+                    </span>
+                    <p class="text-sm">{{ __('Append a minus in front of a word you want to leave out.') }}</p>
+                    <div class="flex gap-2 pt-1 pb-1">
+                        <p class="pr-1 pl-1 bg-gray-100 font-semibold rounded">{{ __('-death note') }}</p>
+                    </div>
+                </li>
+            </ul>
+        </x-slot:content>
+
+        <x-slot:footer>
+            <x-button wire:click="$toggle('showHelp')">{{ __('Ok') }}</x-button>
+        </x-slot:footer>
+    </x-dialog-modal>
 </main>

@@ -56,16 +56,23 @@ class Index extends Component
     public string $src = SearchSource::Kurozora;
 
     /**
+     * Whether to show the help modal.
+     *
+     * @var bool $showHelp
+     */
+    public bool $showHelp = false;
+
+    /**
      * The query strings of the component.
      *
      * @var string[] $queryString
      */
     protected $queryString = [
-        'scope',
-        'type',
+        'scope' => ['except' => SearchScope::Kurozora],
+        'type' => ['except' => SearchType::Shows],
         'q' => ['except' => ''],
         'perPage' => ['except' => 25],
-        'src',
+        'src' => ['except' => SearchSource::Kurozora],
     ];
 
     /**
