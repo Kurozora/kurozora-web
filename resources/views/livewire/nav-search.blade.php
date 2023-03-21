@@ -193,7 +193,7 @@
 
     {{-- Overlay --}}
     <div
-        class="fixed inset-0 transform transition-all"
+        class="fixed inset-0 transform transition-all backdrop-blur"
         style="z-index: 299;"
         x-cloak=""
         x-show="isSearchEnabled"
