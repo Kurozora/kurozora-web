@@ -13,6 +13,7 @@ use App\Nova\Actions\ScrapeFiller;
 use App\Nova\Actions\ScrapeNewAnime;
 use App\Nova\Actions\ScrapeTopAnime;
 use App\Nova\Actions\ScrapeUpcomingAnime;
+use App\Nova\Actions\UpdateAiringAnime;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -469,6 +470,12 @@ class Anime extends Resource
                 ->canSee(function ($request) {
                     return $request->user()->hasRole('superAdmin');
                 })
+                ->standalone(),
+            UpdateAiringAnime::make()
+                ->canSee(function ($request) {
+                    return $request->user()->hasRole('superAdmin');
+                })
+                ->confirmButtonText('Update Airing Anime')
                 ->standalone(),
             ScrapeAnime::make()
                 ->confirmText('Are you sure you want to scrape this anime?')

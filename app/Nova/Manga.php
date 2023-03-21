@@ -9,6 +9,7 @@ use App\Nova\Actions\ScrapeManga;
 use App\Nova\Actions\ScrapeNewManga;
 use App\Nova\Actions\ScrapeTopManga;
 use App\Nova\Actions\ScrapeUpcomingManga;
+use App\Nova\Actions\UpdatePublishingManga;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -413,6 +414,11 @@ class Manga extends Resource
                 })
                 ->standalone(),
             ScrapeUpcomingManga::make()
+                ->canSee(function ($request) {
+                    return $request->user()->hasRole('superAdmin');
+                })
+                ->standalone(),
+            UpdatePublishingManga::make()
                 ->canSee(function ($request) {
                     return $request->user()->hasRole('superAdmin');
                 })
