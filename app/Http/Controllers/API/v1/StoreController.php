@@ -30,6 +30,7 @@ class StoreController extends Controller
     {
         $data = $request->validated();
         $receipt = $data['receipt'];
+        logger()->channel('stack')->critical($receipt);
         $receiptResponse = $this->validated($receipt);
         $receiptStatus = $receiptResponse->getStatus();
 
