@@ -43,6 +43,9 @@
         @livewireStyles
         {{ $styles ?? '' }}
 
+        {{-- Search --}}
+        <link rel="search" type="application/opensearchdescription+xml" title="{{ config('app.name') }}" href="{{ asset('opensearch.xml') }}">
+
         <!-- Scripts -->
         <script src="{{ url(mix('js/app.js')) }}" defer></script>
         @if (app()->environment('local'))

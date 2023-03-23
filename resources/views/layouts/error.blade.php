@@ -22,6 +22,9 @@
         <link rel="stylesheet" href="{{ url(mix('css/app.css')) }}">
         @livewireStyles
 
+        {{-- Search --}}
+        <link rel="search" type="application/opensearchdescription+xml" title="{{ config('app.name') }}" href="{{ asset('opensearch.xml') }}">
+
         <!-- Scripts -->
         <script src="{{ url(mix('js/app.js')) }}" defer></script>
 
