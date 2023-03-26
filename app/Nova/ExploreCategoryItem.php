@@ -7,10 +7,17 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphTo;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Outl1ne\NovaSortable\Traits\HasSortableRows;
 
 class ExploreCategoryItem extends Resource
 {
+    use HasSortableRows {
+        indexQuery as indexSortableQuery;
+    }
+
     /**
      * The model the resource corresponds to.
      *
@@ -34,6 +41,18 @@ class ExploreCategoryItem extends Resource
     public static function authorizedToViewAny(Request $request): bool
     {
         return $request->user()?->can('viewExploreCategoryItem') ?? false;
+    }
+
+    /**
+     * Determine if the given resource is sortable.
+     *
+     * @param NovaRequest $request
+     * @param $resource
+     * @return bool
+     */
+    public static function canSort(NovaRequest $request, $resource): bool
+    {
+        return auth()->user()->hasRole(['superAdmin', 'admin', 'mod', 'editor']);
     }
 
     /**
@@ -74,6 +93,13 @@ class ExploreCategoryItem extends Resource
             ID::make()->sortable(),
 
             Heading::make('Meta information'),
+
+            Number::make('Position', 'position')
+                ->sortable()
+                ->readonly()
+                ->hideWhenCreating()
+                ->hideWhenUpdating()
+                ->help('This determines the position on the item. Generated automatically!'),
 
             BelongsTo::make('Explore Category', 'explore_category'),
 

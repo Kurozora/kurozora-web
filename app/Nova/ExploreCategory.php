@@ -59,10 +59,10 @@ class ExploreCategory extends Resource
      * Determine if the given resource is sortable.
      *
      * @param NovaRequest $request
-     * @param \App\Models\ExploreCategory $resource
+     * @param $resource
      * @return bool
      */
-    public static function canSort(NovaRequest $request, \App\Models\ExploreCategory $resource): bool
+    public static function canSort(NovaRequest $request, $resource): bool
     {
         return auth()->user()->hasRole(['superAdmin', 'admin', 'mod', 'editor']);
     }

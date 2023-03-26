@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('slug');
             $table->string('type');
             $table->string('size');
-            $table->smallInteger('position');
+            $table->integer('position');
             $table->boolean('is_global');
             $table->boolean('is_enabled');
             $table->timestamps();

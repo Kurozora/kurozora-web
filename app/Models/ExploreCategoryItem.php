@@ -6,10 +6,12 @@ use App\Scopes\ExploreCategoryIsEnabledScope;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\EloquentSortable\SortableTrait;
 
 class ExploreCategoryItem extends KModel
 {
-    use SoftDeletes;
+    use SoftDeletes,
+        SortableTrait;
 
     // Table name
     const TABLE_NAME = 'explore_category_items';
@@ -22,6 +24,16 @@ class ExploreCategoryItem extends KModel
      */
     protected $with = [
         'model',
+    ];
+
+    /**
+     * The sortable configurations.
+     *
+     * @var array
+     */
+    public array $sortable = [
+        'order_column_name' => 'position',
+        'sort_when_creating' => true,
     ];
 
     /**
