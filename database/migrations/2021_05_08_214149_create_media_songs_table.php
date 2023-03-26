@@ -20,7 +20,7 @@ return new class extends Migration
             $table->uuidMorphs('model');
             $table->unsignedBigInteger('song_id');
             $table->tinyInteger('type');
-            $table->integer('position')->nullable();
+            $table->integer('position');
             $table->string('episodes')->nullable();
             $table->timestamps();
             $table->softDeletes();

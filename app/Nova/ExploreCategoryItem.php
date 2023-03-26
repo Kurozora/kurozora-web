@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Heading;
@@ -31,6 +32,13 @@ class ExploreCategoryItem extends Resource
      * @var \App\Models\ExploreCategoryItem|null
      */
     public $resource;
+
+    /**
+     * Whether the sortable cache is enabled.
+     *
+     * @var bool
+     */
+    public static bool $sortableCacheEnabled = false;
 
     /**
      * Determine if the resource should be available for the given request.
@@ -179,6 +187,18 @@ class ExploreCategoryItem extends Resource
     public function actions(Request $request): array
     {
         return [];
+    }
+
+    /**
+     * Build an "index" query for the given resource.
+     *
+     * @param NovaRequest $request
+     * @param  Builder  $query
+     * @return Builder
+     */
+    public static function indexQuery(NovaRequest $request, $query): Builder
+    {
+        return parent::indexQuery($request, static::indexSortableQuery($request, $query));
     }
 
     /**

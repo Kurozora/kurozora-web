@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use App\Enums\SongType;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Heading;
@@ -11,11 +12,16 @@ use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Outl1ne\NovaSortable\Traits\HasSortableRows;
 use Titasgailius\SearchRelations\SearchesRelations;
 
 class MediaSong extends Resource
 {
-    use SearchesRelations;
+    use SearchesRelations,
+        HasSortableRows {
+            indexQuery as indexSortableQuery;
+        }
 
     /**
      * The model the resource corresponds to.
@@ -30,6 +36,25 @@ class MediaSong extends Resource
      * @var \App\Models\MediaSong|null
      */
     public $resource;
+
+    /**
+     * Whether the sortable cache is enabled.
+     *
+     * @var bool
+     */
+    public static bool $sortableCacheEnabled = false;
+
+    /**
+     * Determine if the given resource is sortable.
+     *
+     * @param NovaRequest $request
+     * @param $resource
+     * @return bool
+     */
+    public static function canSort(NovaRequest $request, $resource): bool
+    {
+        return auth()->user()->hasRole(['superAdmin', 'admin', 'mod', 'editor']);
+    }
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -102,6 +127,7 @@ class MediaSong extends Resource
                 ->required(),
 
             Number::make('Position')
+                ->sortable()
                 ->help('In which order the same type was played? For example opening 1, opening 2, background 5 etc. When in doubt, use 1.')
                 ->required(),
 
@@ -175,6 +201,18 @@ class MediaSong extends Resource
     public function actions(Request $request): array
     {
         return [];
+    }
+
+    /**
+     * Build an "index" query for the given resource.
+     *
+     * @param NovaRequest $request
+     * @param  Builder  $query
+     * @return Builder
+     */
+    public static function indexQuery(NovaRequest $request, $query): Builder
+    {
+        return parent::indexQuery($request, static::indexSortableQuery($request, $query));
     }
 
     /**

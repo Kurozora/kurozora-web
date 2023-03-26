@@ -34,6 +34,7 @@ class ExploreCategoryItem extends KModel
     public array $sortable = [
         'order_column_name' => 'position',
         'sort_when_creating' => true,
+        'sort_on_has_many' => true,
     ];
 
     /**

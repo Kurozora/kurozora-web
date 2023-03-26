@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\EloquentSortable\SortableTrait;
 use Spatie\Sitemap\Contracts\Sitemapable;
 use Spatie\Sitemap\Tags\Url;
 
@@ -15,7 +16,8 @@ class MediaSong extends KModel implements Sitemapable
 {
     use HasFactory,
         HasUlids,
-        SoftDeletes;
+        SoftDeletes,
+        SortableTrait;
 
     // Table name
     const TABLE_NAME = 'media_songs';
@@ -36,6 +38,16 @@ class MediaSong extends KModel implements Sitemapable
     protected $with = [
         'model',
         'song',
+    ];
+
+    /**
+     * The sortable configurations.
+     *
+     * @var array
+     */
+    public array $sortable = [
+        'order_column_name' => 'position',
+        'sort_when_creating' => true,
     ];
 
     /**
