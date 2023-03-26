@@ -5,4 +5,4 @@
     <InputEncoding>UTF-8</InputEncoding>
     <Image width="16" height="16" type="image/x-icon">https://kurozora.app/favicon.ico</Image>
     <Url type="text/html" method="get" template="https://kurozora.app/search?q={searchTerms}"/>
-    <script xmlns=""/></OpenSearchDescription>
+</OpenSearchDescription>
