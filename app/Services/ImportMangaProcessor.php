@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Enums\DayOfWeek;
-use App\Models\Manga;
 use App\Models\KDashboard\Manga as KManga;
+use App\Models\Manga;
 use App\Models\MediaType;
 use App\Models\Source;
 use App\Models\Status;
@@ -24,6 +24,7 @@ class ImportMangaProcessor
         'Ecchi',
         'Erotica',
         'Harem',
+        'Reverse Harem',
         'Hentai',
         'Yaoi',
         'Yuri',

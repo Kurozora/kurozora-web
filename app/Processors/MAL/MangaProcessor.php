@@ -80,6 +80,7 @@ class MangaProcessor implements ItemProcessorInterface
         'Ecchi',
         'Erotica',
         'Harem',
+        'Reverse Harem',
         'Hentai',
         'Yaoi',
         'Yuri',

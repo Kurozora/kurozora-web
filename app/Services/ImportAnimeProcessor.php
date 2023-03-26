@@ -28,6 +28,7 @@ class ImportAnimeProcessor
         'Ecchi',
         'Erotica',
         'Harem',
+        'Reverse Harem',
         'Hentai',
         'Yaoi',
         'Yuri',
