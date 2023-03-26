@@ -100,7 +100,8 @@ class ExploreCategory extends KModel implements Sitemapable, Sortable
      */
     function exploreCategoryItems(): HasMany
     {
-        return $this->hasMany(ExploreCategoryItem::class);
+        return $this->hasMany(ExploreCategoryItem::class)
+            ->orderBy('position');
     }
 
     function anime(Genre|Theme|null $model = null): Anime|Builder
