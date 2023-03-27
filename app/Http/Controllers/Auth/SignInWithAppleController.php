@@ -44,6 +44,7 @@ class SignInWithAppleController extends Controller
 
         // Attempt to decode the JWT
         try {
+            logger()->critical($data['token']);
             $payload = JWTDecoder::token($data['token'])
                 ->withKeys($keys)
                 ->ignoreExpiry()
