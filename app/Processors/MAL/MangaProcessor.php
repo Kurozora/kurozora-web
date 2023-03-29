@@ -634,6 +634,12 @@ class MangaProcessor implements ItemProcessorInterface
                     'first_name' => $firstName,
                     'last_name' => $lastName
                 ]);
+
+            if ($malAuthor['role'] == 'AStory & Art') {
+                logger()->critical('Found the issue for manga: ' . $manga->id);
+                logger()->critical('Author: ' . $person->id);
+            }
+
             $staffRole = StaffRole::withoutGlobalScopes()
                 ->firstOrCreate([
                     'name' => $malAuthor['role']
