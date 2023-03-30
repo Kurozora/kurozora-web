@@ -316,11 +316,11 @@ class MangaProcessor implements ItemProcessorInterface
                         $authors = explode('),', $value);
                         foreach ($authors as $key => $author) {
                             $authors[$key] = [
-                                'name' => str($author)->replaceMatches('/ \(.*/', '')
+                                'name' => str($author)->replaceMatches('/\((?:.(?!\())+$/', '')
                                     ->trim()
                                     ->value(),
-                                'role' => str($author)->match('/ \(.*/')
-                                    ->replace([' (', ')'], '')
+                                'role' => str($author)->match('/\((?:.(?!\())+$/')
+                                    ->replace(['(', ')'], '')
                                     ->trim()
                                     ->value()
                             ];
@@ -635,9 +635,9 @@ class MangaProcessor implements ItemProcessorInterface
                     'last_name' => $lastName
                 ]);
 
-            if ($malAuthor['role'] == 'AStory & Art') {
-                logger()->critical('Found the issue for manga: ' . $manga->id);
-                logger()->critical('Author: ' . $person->id);
+            if (empty($malAuthorID)) {
+                logger()->critical('Found an issue for manga: ' . $manga->id);
+                logger()->critical('Author: ' . $firstName . ' ' . $lastName);
             }
 
             $staffRole = StaffRole::withoutGlobalScopes()
