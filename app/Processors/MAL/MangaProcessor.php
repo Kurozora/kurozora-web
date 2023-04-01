@@ -427,21 +427,10 @@ class MangaProcessor implements ItemProcessorInterface
         $tvRatingName = 'NR';
         $haystack = collect($genres)->merge($themes);
 
-        if (!empty($value)) {
-            $regex = '/.+-/';
-            $value = str($value);
-            $value = $value->match($regex);
-            $value = $value->replaceLast('-', '')->trim()->value();
-
-            $tvRatingName = match ($value) {
-                'G', 'PG' => 'G',
-                'PG-13' => 'PG-12',
-                'R', 'R+' => 'R15+',
-                'Rx' => 'R18+',
-                default => 'NR',
-            };
-        } else if ($haystack->contains('Hentai')) {
+        if ($haystack->contains('Hentai') || $haystack->contains('Erotica')) {
             $tvRatingName = 'R18+';
+        } else if ($haystack->contains('Ecchi')) {
+            $tvRatingName = 'R15+';
         }
 
         return TvRating::where('name', '=', $tvRatingName)
