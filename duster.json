@@ -1,0 +1,11 @@
+{
+    "exclude": [
+        "nova"
+    ],
+    "scripts": {
+        "lint": {
+            "phpstan": ["./vendor/bin/phpstan", "analyse"]
+        }
+    },
+    "processTimeout": 120
+}

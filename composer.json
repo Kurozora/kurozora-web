@@ -76,7 +76,6 @@
         "beyondcode/laravel-query-detector": "^1.6",
         "brianium/paratest": "^7.0",
         "fakerphp/faker": "^1.19",
-        "friendsofphp/php-cs-fixer": "^3.9",
         "laravel/sail": "^1.13",
         "mockery/mockery": "^1.5",
         "nunomaduro/collision": "^7.0",
@@ -84,7 +83,8 @@
         "phpunit/phpunit": "^10.0",
         "spatie/browsershot": "^3.57",
         "spatie/laravel-ignition": "^2.0",
-        "spatie/phpunit-snapshot-assertions": "^5.0"
+        "spatie/phpunit-snapshot-assertions": "^5.0",
+        "tightenco/duster": "^1.1"
     },
     "repositories": [
         {
@@ -142,7 +142,9 @@
         ],
         "analyse": "vendor/bin/phpstan analyse",
         "baseline": "vendor/bin/phpstan analyse --generate-baseline",
-        "format": "vendor/bin/php-cs-fixer fix",
+        "lint": "vendor/bin/duster lint",
+        "format": "vendor/bin/duster fix",
+        "duster": "vendor/bin/duster",
         "test": "vendor/bin/phpunit"
     },
     "extra": {
