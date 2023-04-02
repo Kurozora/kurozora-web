@@ -116,10 +116,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     protected $casts = [
         'last_anime_import_at' => 'datetime',
         'last_manga_import_at' => 'datetime',
-        'settings' => 'json',
         'is_pro' => 'bool',
         'is_subscribed' => 'bool',
         'is_verified' => 'bool',
+        'can_change_username' => 'bool',
     ];
 
     /**
@@ -193,7 +193,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         return SlugOptions::create()
             ->generateSlugsFrom('username')
             ->skipGenerateWhen(function () {
-                return !empty($this->slug);
+                return !(empty($this->slug) || $this->can_change_username);
             })
             ->saveSlugsTo('slug');
     }

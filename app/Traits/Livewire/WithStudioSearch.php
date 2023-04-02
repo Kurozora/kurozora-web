@@ -2,15 +2,8 @@
 
 namespace App\Traits\Livewire;
 
-use App\Enums\DayOfWeek;
-use App\Enums\SeasonOfYear;
 use App\Enums\StudioType;
-use App\Models\Anime;
-use App\Models\MediaType;
-use App\Models\Source;
-use App\Models\Status;
 use App\Models\Studio;
-use App\Models\TvRating;
 
 trait WithStudioSearch
 {
@@ -99,7 +92,7 @@ trait WithStudioSearch
         ];
 
         if (auth()->check()) {
-            if (settings('tv_rating') >= 4) {
+            if (auth()->user()->tv_rating >= 4) {
                 $this->filter['is_nsfw'] = [
                     'title' => __('NSFW'),
                     'type' => 'bool',

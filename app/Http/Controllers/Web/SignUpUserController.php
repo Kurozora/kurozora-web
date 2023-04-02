@@ -51,10 +51,8 @@ class SignUpUserController extends Controller
             'username'              => $data['username'],
             'email'                 => $data['email'],
             'password'              => Hash::make($data['password']),
-            'settings'              => [
-                'can_change_username'   => false,
-                'tv_rating'             => 4
-            ]
+            'can_change_username'   => false,
+            'tv_rating'             => 4
         ]);
 
         if ($request->hasFile('profileImage') &&

@@ -53,7 +53,7 @@ trait HasMediaRelations
                 $join->on(Anime::TABLE_NAME . '.id', '=', MediaRelation::TABLE_NAME . '.related_id');
 
                 if (auth()->check()) {
-                    $tvRating = settings('tv_rating');
+                    $tvRating = auth()->user()->tv_rating;
                     if ($tvRating >= 0) {
                         $join->where('tv_rating_id', '<=', $tvRating);
                     }
@@ -76,7 +76,7 @@ trait HasMediaRelations
                 $join->on(Manga::TABLE_NAME . '.id', '=', MediaRelation::TABLE_NAME . '.related_id');
 
                 if (auth()->check()) {
-                    $tvRating = settings('tv_rating');
+                    $tvRating = auth()->user()->tv_rating;
                     if ($tvRating >= 0) {
                         $join->where('tv_rating_id', '<=', $tvRating);
                     }
@@ -99,7 +99,7 @@ trait HasMediaRelations
                 $join->on(Game::TABLE_NAME . '.id', '=', MediaRelation::TABLE_NAME . '.related_id');
 
                 if (auth()->check()) {
-                    $tvRating = settings('tv_rating');
+                    $tvRating = auth()->user()->tv_rating;
                     if ($tvRating >= 0) {
                         $join->where('tv_rating_id', '<=', $tvRating);
                     }

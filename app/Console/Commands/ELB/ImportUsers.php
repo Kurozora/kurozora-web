@@ -40,6 +40,7 @@ class ImportUsers extends Command
                             'id' => $user->id,
                         ], [
                             'id' => $user->id,
+                            'tv_rating' => $user->tv_rating,
                             'love_reacter_id' => $user->love_reacter_id,
                             'siwa_id' => $user->siwa_id,
                             'slug' => $user->slug,
@@ -52,7 +53,7 @@ class ImportUsers extends Command
                             'two_factor_recovery_codes' => $user->two_factor_recovery_codes,
                             'remember_token' => $user->remember_token,
                             'biography' => $user->biography,
-                            'settings' => $user->settings,
+                            'can_change_username' => $user->can_change_username,
                             'last_anime_import_at' => $user->last_anime_import_at,
                             'last_manga_import_at' => $user->last_manga_import_at,
                         ]);

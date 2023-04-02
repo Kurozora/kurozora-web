@@ -2,7 +2,6 @@
 
 namespace Tests\API;
 
-use App\Helpers\Settings;
 use App\Models\PersonalAccessToken;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -35,8 +34,8 @@ class SignInWithAppleTest extends TestCase
         $this->assertEquals(1, PersonalAccessToken::count(), 'A personal access token was not created.');
 
         // Check whether the user can change their username
-        $settings = Settings::create(User::first());
-        $this->assertTrue($settings->get('can_change_username'), 'The user cannot change their username when it should be possible.');
+        $user = User::first();
+        $this->assertTrue($user->can_change_username, 'The user cannot change their username when it should be possible.');
     }
 
     /**

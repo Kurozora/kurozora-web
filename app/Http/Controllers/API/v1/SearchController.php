@@ -157,6 +157,16 @@ class SearchController extends Controller
                         $resource = collect($resource->items())->pluck('trackable');
                     } else {
                         $resource = Anime::search($data['query']);
+//                        $filters = Anime::searchFilters();
+
+//                        // Apply filters
+//                        foreach ($filters as $filterName) {
+//                            if ($request->has($filterName)) {
+//                                $value = $request->input($filterName);
+//                                $resource->where($filterName, $value);
+//                            }
+//                        }
+
                         $resource = $resource->paginate($data['limit'] ?? 5)
                             ->appends($data);
                         // Get next page url minus domain

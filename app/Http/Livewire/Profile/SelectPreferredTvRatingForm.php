@@ -25,7 +25,7 @@ class SelectPreferredTvRatingForm extends Component
     public function mount(): void
     {
         $this->state = [
-            'tv_rating' => settings('tv_rating')
+            'tv_rating' => auth()->user()->tv_rating
         ];
     }
 

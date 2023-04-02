@@ -58,7 +58,11 @@ class UserResourceBasic extends JsonResource
         }
 
         if ($this->includePrivateDetails) {
-            $resource = array_merge($resource, $this->getPrivateDetails());
+            $resource = array_merge($resource, [
+                'preferredLanguage' => $this->resource->language_id,
+                'preferredTVRating' => $this->resource->tv_rating?->name,
+                'canChangeUsername' => $this->resource->can_change_username,
+            ]);
         }
 
         return $resource;
@@ -81,20 +85,6 @@ class UserResourceBasic extends JsonResource
 
         return [
             'isFollowed' => $isFollowed
-        ];
-    }
-
-    /**
-     * Returns private information of the resource.
-     *
-     * @return array
-     */
-    protected function getPrivateDetails(): array
-    {
-        return [
-            'private' => [
-                'settings' => $this->resource->settings,
-            ]
         ];
     }
 

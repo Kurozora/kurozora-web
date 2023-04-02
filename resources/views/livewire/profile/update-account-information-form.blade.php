@@ -11,7 +11,7 @@
         {{-- Slug --}}
         <div class="col-span-3 sm:col-span-2">
             <x-label for="username" value="{{ __('Username') }}" />
-            <x-input id="username" type="text" class="mt-1 block w-full {{ auth()->user()->is_subscribed ?: 'select-none opacity-25' }}" wire:model.defer="state.username" autocomplete="username" disabled="{{ !auth()->user()->is_subscribed }}" />
+            <x-input id="username" type="text" class="mt-1 block w-full {{ (auth()->user()->is_subscribed || auth()->user()->can_change_username) ?: 'select-none opacity-25' }}" wire:model.defer="state.username" autocomplete="username" disabled="{{ !(auth()->user()->is_subscribed || auth()->user()->can_change_username) }}" />
             <x-input-error for="username" class="mt-2" />
         </div>
 

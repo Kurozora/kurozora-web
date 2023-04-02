@@ -26,7 +26,7 @@ class UpdateUserAccountInformation implements UpdatesUserAccountInformation
             'email' => ['required', new ValidateEmail, Rule::unique(User::TABLE_NAME)->ignore($user->id)],
         ];
 
-        if ($user->is_subscribed) {
+        if ($user->is_subscribed || $user->can_change_username) {
             $rules = array_merge($rules, [
                 'username' => ['required', new ValidateUsername],
             ]);
@@ -43,7 +43,7 @@ class UpdateUserAccountInformation implements UpdatesUserAccountInformation
             ])->save();
         }
 
-        if ($user->is_subscribed) {
+        if ($user->is_subscribed || $user->can_change_username) {
             if ($input['username'] !== $user->slug) {
                 $user->forceFill([
                     'slug' => $input['username']

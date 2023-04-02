@@ -23,10 +23,8 @@ class UserSeeder extends Seeder
             'email'             => 'casillaskhoren1@gmail.com',
             'password'          => '$2y$10$LFvuPaQpn6kccakk4sRABef223GV0.NJUJ94Xr.TAvswkCKJBisVK',
             'email_verified_at' => now(),
-            'settings'          => [
-                'can_change_username'   => false,
-                'tv_rating'             => -1,
-            ],
+            'can_change_username'   => false,
+            'tv_rating'             => -1,
         ]);
 
         $admins[] = User::create([
@@ -34,10 +32,8 @@ class UserSeeder extends Seeder
             'email'             => 'mussesemou99@gmail.com',
             'password'          => '$2y$10$LFvuPaQpn6kccakk4sRABef223GV0.NJUJ94Xr.TAvswkCKJBisVK',
             'email_verified_at' => now(),
-            'settings'          => [
-                'can_change_username'   => false,
-                'tv_rating'             => -1,
-            ],
+            'can_change_username'   => false,
+            'tv_rating'             => -1,
         ]);
 
         foreach($admins as $admin) {
@@ -54,10 +50,8 @@ class UserSeeder extends Seeder
             'email'             => 'john.appleseed@apple.com',
             'password'          => '$2y$10$/aVrkVAq4LT6FEEw3dNwguaM77MzoHB4.IpVoVxLLEKI4jyHuITii',
             'email_verified_at' => now(),
-            'settings'          => [
-                'can_change_username'   => false,
-                'tv_rating'             => -1,
-            ],
+            'can_change_username'   => false,
+            'tv_rating'             => -1,
         ]);
 
         // 50 fake users

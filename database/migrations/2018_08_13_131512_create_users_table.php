@@ -19,6 +19,7 @@ return new class extends Migration
             $table->id();
             $table->uuid();
             $table->unsignedBigInteger('love_reacter_id')->nullable();
+            $table->bigInteger('tv_rating')->default(4);
             $table->string('siwa_id')->nullable();
             $table->string('language_id', 2)->default('en')->nullable();
             $table->string('slug');
@@ -34,10 +35,10 @@ return new class extends Migration
             $table->text('biography')->nullable();
             $table->text('biography_html')->nullable();
             $table->text('biography_markdown')->nullable();
-            $table->json('settings');
             $table->boolean('is_pro')->default(false);
             $table->boolean('is_subscribed')->default(false);
             $table->boolean('is_verified')->default(false);
+            $table->boolean('can_change_username')->default(false);
             $table->integer('view_count')->default(0);
             $table->timestamp('last_anime_import_at')->nullable();
             $table->timestamp('last_manga_import_at')->nullable();

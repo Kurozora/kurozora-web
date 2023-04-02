@@ -161,7 +161,7 @@ trait WithMangaSearch
         ];
 
         if (auth()->check()) {
-            if (settings('tv_rating') >= 4) {
+            if (auth()->user()->tv_rating >= 4) {
                 $this->filter['is_nsfw'] = [
                     'title' => __('NSFW'),
                     'type' => 'bool',

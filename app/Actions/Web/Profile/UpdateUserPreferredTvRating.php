@@ -31,6 +31,8 @@ class UpdateUserPreferredTvRating implements UpdatesUserPreferredTvRating
             'tv_rating' => $rules,
         ])->validateWithBag('updatePreferredTvRating');
 
-        settings('tv_rating', (integer) $input['tv_rating']);
+        auth()->user()->update([
+            'tv_rating' => (integer) $input['tv_rating']
+        ]);
     }
 }

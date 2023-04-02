@@ -22,7 +22,7 @@ class TvRatingScope implements Scope
     public function apply(Builder $builder, Model $model)
     {
         if (auth()->check()) {
-            $preferredTvRating = settings('tv_rating');
+            $preferredTvRating = auth()->user()->tv_rating;
             $tvRating = TvRating::firstWhere('weight', $preferredTvRating);
 
             // If Tv Rating exists, so it's not -1

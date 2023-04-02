@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Helpers\Settings;
 use App\Models\PersonalAccessToken;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
@@ -48,15 +47,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Register the user settings helper class.
-        $this->app->singleton(Settings::class, function() {
-            if ($user = auth()->user()) {
-                return new Settings($user->settings, $user);
-            }
-
-            return null;
-        });
-
         // Register explore category scope. This makes sure only enabled categories are included.
         $this->app->bind('explore.only_enabled', function () {
             return true;

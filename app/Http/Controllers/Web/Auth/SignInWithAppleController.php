@@ -98,10 +98,8 @@ class SignInWithAppleController extends Controller
             'siwa_id' => $socialiteUser->getId(),
             'email_verified_at' => now(),
             'password' => Hash::make(Str::random(30)),
-            'settings' => [
-                'can_change_username' => true,
-                'tv_rating' => 4
-            ],
+            'can_change_username' => true,
+            'tv_rating' => 4
         ]);
     }
 }
