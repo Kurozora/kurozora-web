@@ -111,7 +111,6 @@ class MediaSong extends Resource
                     Game::class,
                 ])
                 ->searchable()
-                ->sortable()
                 ->required(),
 
             BelongsTo::make('Song')

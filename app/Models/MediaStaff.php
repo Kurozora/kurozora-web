@@ -36,7 +36,7 @@ class MediaStaff extends KModel implements Sitemapable
     public function model(): MorphTo
     {
         return $this->morphTo();
-//            ->withoutGlobalScope(new TvRatingScope());
+//            ->withoutTvRatings();
     }
 
     /**

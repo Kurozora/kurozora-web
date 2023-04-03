@@ -87,7 +87,6 @@ class MediaStaff extends Resource
                     Manga::class,
                 ])
                 ->searchable()
-                ->sortable()
                 ->required(),
 
             BelongsTo::make('Person')

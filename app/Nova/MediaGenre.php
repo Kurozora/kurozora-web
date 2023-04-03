@@ -74,8 +74,7 @@ class MediaGenre extends Resource
                     Game::class,
                     Manga::class,
                 ])
-                ->searchable()
-                ->sortable(),
+                ->searchable(),
 
             Text::make('Model Type')
                 ->onlyOnIndex()

@@ -87,7 +87,6 @@ class MediaStudio extends Resource
                     Game::class,
                     Manga::class,
                 ])
-                ->sortable()
                 ->searchable()
                 ->required(),
 

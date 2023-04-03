@@ -738,7 +738,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
      */
     public function toSitemapTag(): \Spatie\Sitemap\Tags\Url|string|array
     {
-        return route('profile.details', $this)
+        return \Spatie\Sitemap\Tags\Url::create(route('profile.details', $this))
             ->setChangeFrequency('weekly');
     }
 }

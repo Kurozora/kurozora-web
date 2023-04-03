@@ -87,8 +87,7 @@ class SessionAttribute extends Resource
                     Session::class,
                     PersonalAccessToken::class
                 ])
-                ->searchable()
-                ->sortable(),
+                ->searchable(),
 
             Text::make('Model Type')
                 ->onlyOnIndex()

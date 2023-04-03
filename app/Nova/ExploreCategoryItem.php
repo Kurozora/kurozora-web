@@ -122,8 +122,7 @@ class ExploreCategoryItem extends Resource
                     Person::class,
                     Theme::class,
                 ])
-                ->searchable()
-                ->sortable(),
+                ->searchable(),
 
             Text::make('Model Type')
                 ->onlyOnIndex()

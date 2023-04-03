@@ -7,7 +7,11 @@ use App\Models\AnimeCast;
 use App\Models\Character;
 use App\Models\Episode;
 use App\Models\ExploreCategory;
+use App\Models\Game;
+use App\Models\GameCast;
 use App\Models\Genre;
+use App\Models\Manga;
+use App\Models\MangaCast;
 use App\Models\MediaSong;
 use App\Models\MediaStaff;
 use App\Models\MediaStudio;
@@ -93,23 +97,6 @@ class GenerateSitemap extends Command
             });
         DB::statement('SET SQL_MODE=only_full_group_by');
 
-        //========== Anime Songs sitemap ==========//
-        $this->info('- Generating anime songs...');
-        DB::statement("SET SQL_MODE=''");
-        MediaSong::withoutGlobalScopes()
-            ->with('model')
-            ->select(['anime_id'])
-            ->groupBy('anime_id')
-            ->chunk(20000, function ($mediaSongs, int $page) use ($sitemapIndex) {
-                $path = 'sitemaps/media_songs_' . $page . '_sitemap.xml';
-                $this->info($path);
-                Sitemap::create()
-                    ->add($mediaSongs)
-                    ->writeToFile(public_path($path));
-                $sitemapIndex->add($path);
-            });
-        DB::statement('SET SQL_MODE=only_full_group_by');
-
         //========== Characters sitemap ==========//
         $this->info('- Generating characters...');
         Character::withoutGlobalScopes()
@@ -135,6 +122,36 @@ class GenerateSitemap extends Command
                     ->writeToFile(public_path($path));
                 $sitemapIndex->add($path);
             });
+
+        //========== Games sitemap ==========//
+        $this->info('- Generating games...');
+        Game::withoutGlobalScopes()
+            ->select(['slug'])
+            ->chunk(20000, function ($game, int $page) use ($sitemapIndex) {
+                $path = 'sitemaps/game_' . $page . '_sitemap.xml';
+                $this->info($path);
+                Sitemap::create()
+                    ->add($game)
+                    ->writeToFile(public_path($path));
+                $sitemapIndex->add($path);
+            });
+
+        //========== Game Cast sitemap ==========//
+        $this->info('- Generating game cast...');
+        DB::statement("SET SQL_MODE=''");
+        GameCast::withoutGlobalScopes()
+            ->with('game')
+            ->select(['game_id'])
+            ->groupBy('game_id')
+            ->chunk(20000, function ($gameCast, int $page) use ($sitemapIndex) {
+                $path = 'sitemaps/game_cast_' . $page . '_sitemap.xml';
+                $this->info($path);
+                Sitemap::create()
+                    ->add($gameCast)
+                    ->writeToFile(public_path($path));
+                $sitemapIndex->add($path);
+            });
+        DB::statement('SET SQL_MODE=only_full_group_by');
 
         //========== Genres sitemap ==========//
         $this->info('- Generating genres...');
@@ -162,8 +179,55 @@ class GenerateSitemap extends Command
                 $sitemapIndex->add($path);
             });
 
+        //========== Manga sitemap ==========//
+        $this->info('- Generating manga...');
+        Manga::withoutGlobalScopes()
+            ->select(['slug'])
+            ->chunk(20000, function ($manga, int $page) use ($sitemapIndex) {
+                $path = 'sitemaps/manga_' . $page . '_sitemap.xml';
+                $this->info($path);
+                Sitemap::create()
+                    ->add($manga)
+                    ->writeToFile(public_path($path));
+                $sitemapIndex->add($path);
+            });
+
+        //========== Manga Cast sitemap ==========//
+        $this->info('- Generating manga cast...');
+        DB::statement("SET SQL_MODE=''");
+        MangaCast::withoutGlobalScopes()
+            ->with('manga')
+            ->select(['manga_id'])
+            ->groupBy('manga_id')
+            ->chunk(20000, function ($mangaCast, int $page) use ($sitemapIndex) {
+                $path = 'sitemaps/manga_cast_' . $page . '_sitemap.xml';
+                $this->info($path);
+                Sitemap::create()
+                    ->add($mangaCast)
+                    ->writeToFile(public_path($path));
+                $sitemapIndex->add($path);
+            });
+        DB::statement('SET SQL_MODE=only_full_group_by');
+
+        //========== Media Songs sitemap ==========//
+        $this->info('- Generating media songs...');
+        DB::statement("SET SQL_MODE=''");
+        MediaSong::withoutGlobalScopes()
+            ->with('model')
+            ->select(['model_type', 'model_id'])
+            ->groupBy(['model_type', 'model_id'])
+            ->chunk(20000, function ($mediaSongs, int $page) use ($sitemapIndex) {
+                $path = 'sitemaps/media_songs_' . $page . '_sitemap.xml';
+                $this->info($path);
+                Sitemap::create()
+                    ->add($mediaSongs)
+                    ->writeToFile(public_path($path));
+                $sitemapIndex->add($path);
+            });
+        DB::statement('SET SQL_MODE=only_full_group_by');
+
         //========== Media Staff sitemap ==========//
-        $this->info('- Generating anime staff...');
+        $this->info('- Generating media staff...');
         DB::statement("SET SQL_MODE=''");
         MediaStaff::withoutGlobalScopes()
             ->with('model')
@@ -180,7 +244,7 @@ class GenerateSitemap extends Command
         DB::statement('SET SQL_MODE=only_full_group_by');
 
         //========== Media Studios sitemap ==========//
-        $this->info('- Generating anime studios...');
+        $this->info('- Generating media studios...');
         DB::statement("SET SQL_MODE=''");
         MediaStudio::withoutGlobalScopes()
             ->with('model')
