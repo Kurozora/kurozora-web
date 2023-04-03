@@ -6,9 +6,10 @@ use App\Scopes\ExploreCategoryIsEnabledScope;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
-class ExploreCategoryItem extends KModel
+class ExploreCategoryItem extends KModel implements Sortable
 {
     use SoftDeletes,
         SortableTrait;
