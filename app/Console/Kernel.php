@@ -101,6 +101,27 @@ class Kernel extends ConsoleKernel
             ->onOneServer();
 
         /**********************************************/
+        // Calculate game ratings every day
+        $schedule->command('calculate:game_ratings')
+            ->daily()
+            ->name('Calculate game rating')
+            ->onOneServer();
+
+        /**********************************************/
+        // Calculate game library stats every day
+        $schedule->command('calculate:game_library_stats')
+            ->daily()
+            ->name('Calculate game library stats')
+            ->onOneServer();
+
+        /**********************************************/
+        // Calculate game views every week
+        $schedule->command('calculate:game_views')
+            ->daily()
+            ->name('Calculate game views')
+            ->onOneServer();
+
+        /**********************************************/
         // Calculate manga ratings every day
         $schedule->command('calculate:manga_ratings')
             ->daily()
