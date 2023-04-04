@@ -48,7 +48,7 @@
         </div>
     @elseif(!empty($game))
         <div class="flex flex-nowrap">
-            <picture class="relative self-end shrink-0 w-32 h-32 mr-2 mr-2 rounded-3xl overflow-hidden">
+            <picture class="relative shrink-0 w-32 h-32 mr-2 mr-2 rounded-3xl overflow-hidden">
                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $game->title }} Poster" title="{{ $game->title }}">
 
                 <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-3xl"></div>
@@ -63,14 +63,14 @@
                     @endif
 
                     <div class="flex justify-between">
-                        <p class="leading-tight line-clamp-2">{{ $game->title }}</p>
+                        <p class="leading-tight line-clamp-1">{{ $game->title }}</p>
 
 {{--                        <p class="text-xs leading-tight text-black/60 whitespace-nowrap">{{ $game->mediaStatus->name }}</p>--}}
                     </div>
 
                     <div class="space-y-1">
-                        <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ empty($game->tagline) ? $game->genres?->pluck('name')->join(',  ', ' and ') : $game->tagline }}</p>
-                        <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ $game->tv_rating->name }}</p>
+                        <p class="text-xs leading-tight text-black/60 line-clamp-1">{{ empty($game->tagline) ? $game->genres?->pluck('name')->join(',  ', ' and ') : $game->tagline }}</p>
+                        <p class="text-xs leading-tight text-black/60 line-clamp-1">{{ $game->tv_rating->name }}</p>
 
 {{--                        <p class="text-xs leading-tight text-black/60 line-clamp-2">{{ trans_choice('[0,1] :x Episode|[2,*] :x Episodes', $game->episode_count, ['x' => $game->episode_count]) }}</p>--}}
 {{--    --}}
