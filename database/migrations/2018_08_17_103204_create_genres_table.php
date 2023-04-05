@@ -21,7 +21,10 @@ return new class extends Migration
             $table->unsignedBigInteger('tv_rating_id')->nullable();
             $table->string('slug');
             $table->string('name');
-            $table->string('color')->default('#ffffff');
+            $table->string('background_color_1')->default('#353A50');
+            $table->string('background_color_2')->default('#454F63');
+            $table->string('text_color_1')->default('#EEEEEE');
+            $table->string('text_color_2')->default('#AFAFAF');
             $table->text('description')->nullable();
             $table->boolean('is_nsfw')->default(false);
             $table->timestamps();

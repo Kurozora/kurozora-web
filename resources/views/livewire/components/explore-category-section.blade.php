@@ -110,24 +110,14 @@
                     @case(\App\Enums\ExploreCategoryTypes::Genres)
                         <div class="flex flex-nowrap gap-4 snap-x overflow-x-scroll no-scrollbar">
                             @foreach($this->exploreCategoryItems as $categoryItem)
-                                <x-lockups.medium-lockup
-                                    :href="route('genres.details', ['genre' => $categoryItem->model])"
-                                    :title="$categoryItem->model->name"
-                                    :backgroundColor="$categoryItem->model->color"
-                                    :backgroundImage="$categoryItem->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Symbol()) ?? asset('images/static/icon/logo.webp')"
-                                />
+                                <x-lockups.medium-lockup :genre="$categoryItem->model" />
                             @endforeach
                         </div>
                     @break
                     @case(\App\Enums\ExploreCategoryTypes::Themes)
                         <div class="flex flex-nowrap gap-4 snap-x overflow-x-scroll no-scrollbar">
                             @foreach($this->exploreCategoryItems as $categoryItem)
-                                <x-lockups.medium-lockup
-                                    :href="route('themes.details', ['theme' => $categoryItem->model])"
-                                    :title="$categoryItem->model->name"
-                                    :backgroundColor="$categoryItem->model->color"
-                                    :backgroundImage="$categoryItem->model->getFirstMediaFullUrl(\App\Enums\MediaCollection::Symbol()) ?? asset('images/static/icon/logo.webp')"
-                                />
+                                <x-lockups.medium-lockup :theme="$categoryItem->model" />
                             @endforeach
                         </div>
                     @break
