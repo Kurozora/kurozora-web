@@ -122,4 +122,27 @@
         <script src="https://js-cdn.music.apple.com/musickit/v1/musickit.js"></script>
         {{ $scripts ?? '' }}
     </body>
+
+{{--    <body class="flex flex-row bg-white dark:bg-black">--}}
+{{--        <livewire:navigation-sidebar />--}}
+
+{{--        <div class="flex flex-col w-full">--}}
+{{--            <livewire:navigation-dropdown />--}}
+{{--    --}}
+{{--            <div class="overflow-y-scroll">--}}
+{{--                @if(Session::has('success'))--}}
+{{--                    <x-alert :message="Session::get('success')"></x-alert>--}}
+{{--                @endif--}}
+{{--    --}}
+{{--                {{ $slot }}--}}
+{{--    --}}
+{{--                <x-footer />--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    --}}
+{{--        @livewireScripts--}}
+{{--        <script src="{{ url(mix('js/listen.js')) }}"></script>--}}
+{{--        <script src="https://js-cdn.music.apple.com/musickit/v1/musickit.js"></script>--}}
+{{--        {{ $scripts ?? '' }}--}}
+{{--    </body>--}}
 </html>

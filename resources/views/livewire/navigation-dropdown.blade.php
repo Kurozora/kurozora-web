@@ -273,9 +273,9 @@
                                         {{ __('Favorite Manga') }}
                                     </x-dropdown-link>
 
-{{--                                    <x-dropdown-link href="{{ route('profile.favorite-game', auth()->user()) }}">--}}
-{{--                                        {{ __('Favorite Game') }}--}}
-{{--                                    </x-dropdown-link>--}}
+                                    <x-dropdown-link href="{{ route('profile.favorite-games', auth()->user()) }}">
+                                        {{ __('Favorite Game') }}
+                                    </x-dropdown-link>
                                 @endauth
 
                                 <x-dropdown-link href="{{ route('theme-store.index') }}">
@@ -452,10 +452,10 @@
                             {{ __('Favorite Manga') }}
                         </x-responsive-nav-link>
 
-{{--                        <x-responsive-nav-link href="{{ route('profile.favorite-game', auth()->user()) }}"--}}
-{{--                                               :active="request()->routeIs('profile.favorite-game', auth()->user())">--}}
-{{--                            {{ __('Favorite Game') }}--}}
-{{--                        </x-responsive-nav-link>--}}
+                        <x-responsive-nav-link href="{{ route('profile.favorite-games', auth()->user()) }}"
+                                               :active="request()->routeIs('profile.favorite-games', auth()->user())">
+                            {{ __('Favorite Game') }}
+                        </x-responsive-nav-link>
                     @endauth
 
                     <x-responsive-nav-link href="{{ route('theme-store.index') }}"
