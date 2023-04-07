@@ -21,6 +21,7 @@ use App\Traits\Model\HasViews;
 use App\Traits\Model\MediaRelated;
 use App\Traits\Model\Trackable;
 use App\Traits\Model\TvRated;
+use App\Traits\SearchFilterable;
 use Astrotomic\Translatable\Translatable;
 use Carbon\CarbonInterval;
 use Exception;
@@ -67,6 +68,7 @@ class Game extends KModel implements HasMedia, Sitemapable
         LogsActivity,
         MediaRelated,
         Searchable,
+        SearchFilterable,
         SoftDeletes,
         Translatable,
         Trackable,
@@ -232,6 +234,82 @@ class Game extends KModel implements HasMedia, Sitemapable
             })
             ->orderBy($self->getKeyName())
             ->searchable($chunk);
+    }
+
+    /**
+     * The filterable properties.
+     *
+     * @return array[]
+     */
+    public static function webSearchFilters(): array
+    {
+        $filter = [
+            'published_at' => [
+                'title' => __('First Published'),
+                'type' => 'date',
+                'selected' => null,
+            ],
+            'duration' => [
+                'title' => __('Duration (seconds)'),
+                'type' => 'duration',
+                'selected' => null,
+            ],
+            'tv_rating_id' => [
+                'title' => __('TV Rating'),
+                'type' => 'select',
+                'options' => TvRating::all()->pluck('name', 'id'),
+                'selected' => null,
+            ],
+            'media_type_id' => [
+                'title' => __('Media Type'),
+                'type' => 'select',
+                'options' => MediaType::where('type', 'game')->pluck('name', 'id'),
+                'selected' => null,
+            ],
+            'source_id' => [
+                'title' => __('Source'),
+                'type' => 'select',
+                'options' => Source::all()->pluck('name', 'id'),
+                'selected' => null,
+            ],
+            'status_id' => [
+                'title' => __('Publication Status'),
+                'type' => 'select',
+                'options' => Status::where('type', 'game')->pluck('name', 'id'),
+                'selected' => null,
+            ],
+            'publication_day' => [
+                'title' => __('Publication Day'),
+                'type' => 'select',
+                'options' => DayOfWeek::asSelectArray(),
+                'selected' => null,
+            ],
+            'publication_season' => [
+                'title' => __('Publication Season'),
+                'type' => 'select',
+                'options' => SeasonOfYear::asSelectArray(),
+                'selected' => null,
+            ],
+            'edition_count' => [
+                'title' => __('Edition Count'),
+                'type' => 'number',
+                'selected' => null,
+            ],
+        ];
+
+        if (auth()->user()?->tv_rating >= 4) {
+            $filter['is_nsfw'] = [
+                'title' => __('NSFW'),
+                'type' => 'bool',
+                'options' => [
+                    __('Shown'),
+                    __('Hidden'),
+                ],
+                'selected' => null,
+            ];
+        }
+
+        return $filter;
     }
 
     /**

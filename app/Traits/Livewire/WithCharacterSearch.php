@@ -2,8 +2,6 @@
 
 namespace App\Traits\Livewire;
 
-use App\Enums\AstrologicalSign;
-use App\Enums\CharacterStatus;
 use App\Models\Character;
 
 trait WithCharacterSearch
@@ -82,59 +80,6 @@ trait WithCharacterSearch
      */
     public function setFilterableAttributes(): void
     {
-        $this->filter = [
-            'status' => [
-                'title' => __('Status'),
-                'type' => 'select',
-                'options' => CharacterStatus::asSelectArray(),
-                'selected' => null,
-            ],
-            'age' => [
-                'title' => __('Age'),
-                'type' => 'double',
-                'selected' => null,
-            ],
-            'birth_day' => [
-                'title' => __('Birth Day'),
-                'type' => 'day',
-                'selected' => null,
-            ],
-            'birth_month' => [
-                'title' => __('Birth Month'),
-                'type' => 'month',
-                'selected' => null,
-            ],
-            'height' => [
-                'title' => __('Height (cm)'),
-                'type' => 'double',
-                'selected' => null,
-            ],
-            'weight' => [
-                'title' => __('Weight (grams)'),
-                'type' => 'double',
-                'selected' => null,
-            ],
-            'bust' => [
-                'title' => __('Bust'),
-                'type' => 'double',
-                'selected' => null,
-            ],
-            'waist' => [
-                'title' => __('Waist'),
-                'type' => 'double',
-                'selected' => null,
-            ],
-            'hip' => [
-                'title' => __('Hip'),
-                'type' => 'double',
-                'selected' => null,
-            ],
-            'astrological_sign' => [
-                'title' => __('Astrological Sign'),
-                'type' => 'select',
-                'options' => AstrologicalSign::asSelectArray(),
-                'selected' => null,
-            ],
-        ];
+        $this->filter = Character::webSearchFilters();
     }
 }

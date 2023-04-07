@@ -21,6 +21,7 @@ use App\Traits\Model\HasViews;
 use App\Traits\Model\MediaRelated;
 use App\Traits\Model\Trackable;
 use App\Traits\Model\TvRated;
+use App\Traits\SearchFilterable;
 use Astrotomic\Translatable\Translatable;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
@@ -68,6 +69,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
         LogsActivity,
         MediaRelated,
         Searchable,
+        SearchFilterable,
         SoftDeletes,
         Trackable,
         Translatable,
@@ -918,5 +920,96 @@ class Anime extends KModel implements HasMedia, Sitemapable
     {
         return Url::create(route('anime.details', $this))
             ->setChangeFrequency('weekly');
+    }
+
+    /**
+     * The filterable properties.
+     *
+     * @return array[]
+     */
+    public static function webSearchFilters(): array
+    {
+        $filter = [
+            'started_at' => [
+                'title' => __('First Aired'),
+                'type' => 'date',
+                'selected' => null,
+            ],
+            'ended_at' => [
+                'title' => __('Last Aired'),
+                'type' => 'date',
+                'selected' => null,
+            ],
+            'duration' => [
+                'title' => __('Duration (seconds)'),
+                'type' => 'duration',
+                'selected' => null,
+            ],
+            'tv_rating_id' => [
+                'title' => __('TV Rating'),
+                'type' => 'select',
+                'options' => TvRating::all()->pluck('name', 'id'),
+                'selected' => null,
+            ],
+            'media_type_id' => [
+                'title' => __('Media Type'),
+                'type' => 'select',
+                'options' => MediaType::where('type', 'anime')->pluck('name', 'id'),
+                'selected' => null,
+            ],
+            'source_id' => [
+                'title' => __('Source'),
+                'type' => 'select',
+                'options' => Source::all()->pluck('name', 'id'),
+                'selected' => null,
+            ],
+            'status_id' => [
+                'title' => __('Airing Status'),
+                'type' => 'select',
+                'options' => Status::where('type', 'anime')->pluck('name', 'id'),
+                'selected' => null,
+            ],
+            'air_time' => [
+                'title' => __('Air Time'),
+                'type' => 'time',
+                'selected' => null,
+            ],
+            'air_day' => [
+                'title' => __('Air Day'),
+                'type' => 'select',
+                'options' => DayOfWeek::asSelectArray(),
+                'selected' => null,
+            ],
+            'air_season' => [
+                'title' => __('Air Season'),
+                'type' => 'select',
+                'options' => SeasonOfYear::asSelectArray(),
+                'selected' => null,
+            ],
+            'season_count' => [
+                'title' => __('Season Count'),
+                'type' => 'number',
+                'selected' => null,
+            ],
+            'episode_count' => [
+                'title' => __('Episode Count'),
+                'type' => 'number',
+                'selected' => null,
+            ],
+        ];
+
+        if (auth()->user()?->tv_rating >= 4) {
+            $filter['is_nsfw'] = [
+                'title' => __('NSFW'),
+                'type' => 'bool',
+                'options' => [
+                    __('Shown'),
+                    __('Hidden'),
+                ],
+                'selected' => null,
+            ];
+        }
+
+        return $filter;
     }
 }

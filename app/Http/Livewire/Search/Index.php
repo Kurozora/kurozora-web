@@ -16,6 +16,7 @@ use App\Models\Studio;
 use App\Models\User;
 use App\Models\UserLibrary;
 use App\Traits\Livewire\WithPagination;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -56,6 +57,13 @@ class Index extends Component
     public string $src = SearchSource::Kurozora;
 
     /**
+     * The filterable attributes.
+     *
+     * @var array $filter
+     */
+    public array $filter = [];
+
+    /**
      * The query strings of the component.
      *
      * @var string[] $queryString
@@ -91,6 +99,7 @@ class Index extends Component
      */
     public function mount(): void
     {
+        $this->setFilterableAttributes();
     }
 
     /**
@@ -103,6 +112,9 @@ class Index extends Component
     {
         if ($propertyName == 'scope' && !in_array($this->type, SearchType::getWebValues($this->scope))) {
             $this->type = SearchType::Shows;
+        }
+        if ($propertyName == 'type') {
+            $this->setFilterableAttributes();
         }
         $this->validateOnly($propertyName);
     }
@@ -133,7 +145,28 @@ class Index extends Component
                 default => Anime::class,
             };
 
+            // Filter
+            $wheres = [];
+            foreach ($this->filter as $attribute => $filter) {
+                $attribute = str_replace(':', '.', $attribute);
+                $selected = $filter['selected'];
+                $type = $filter['type'];
+
+                if ((is_numeric($selected) && $selected >= 0) || !empty($selected)) {
+                    $wheres[$attribute] = match ($type) {
+                        'date' => Carbon::createFromFormat('Y-m-d', $selected)
+                            ->setTime(0, 0)
+                            ->timestamp,
+                        'time' => $selected . ':00',
+                        'double' => number_format($selected, 2, '.', ''),
+                        default => $selected,
+                    };
+                }
+            }
+
+            // Search
             $models = $models::search($this->q);
+            $models->wheres = $wheres;
             if ($this->scope == SearchScope::Library) {
                 $trackableIDs = UserLibrary::search($this->q)
                     ->where('user_id', auth()->user()->id)
@@ -220,6 +253,27 @@ class Index extends Component
                 'TheNaughtyOne',
             ],
             default => [],
+        };
+    }
+
+    /**
+     * Set the filterable attributes of the model.
+     *
+     * @return void
+     */
+    public function setFilterableAttributes(): void
+    {
+        $this->filter = match ($this->type) {
+            SearchType::Shows => Anime::webSearchFilters(),
+            SearchType::Literatures => Manga::webSearchFilters(),
+            SearchType::Games => Game::webSearchFilters(),
+            SearchType::Episodes => Episode::webSearchFilters(),
+            SearchType::Characters => Character::webSearchFilters(),
+            SearchType::People => Person::webSearchFilters(),
+            SearchType::Songs => Song::webSearchFilters(),
+            SearchType::Studios => Studio::webSearchFilters(),
+            SearchType::Users => User::webSearchFilters(),
+            default => []
         };
     }
 

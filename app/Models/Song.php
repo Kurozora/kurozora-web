@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\MediaCollection;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasViews;
+use App\Traits\SearchFilterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -31,6 +32,7 @@ class Song extends KModel implements HasMedia, Sitemapable
         InteractsWithMediaExtension,
         LogsActivity,
         Searchable,
+        SearchFilterable,
         SoftDeletes;
 
     // How long to cache certain responses
@@ -71,6 +73,16 @@ class Song extends KModel implements HasMedia, Sitemapable
     {
         $this->addMediaCollection(MediaCollection::Poster)
             ->singleFile();
+    }
+
+    /**
+     * The filterable properties.
+     *
+     * @return array[]
+     */
+    public static function webSearchFilters(): array
+    {
+        return [];
     }
 
     /**

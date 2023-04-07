@@ -8,6 +8,7 @@ use App\Enums\MediaCollection;
 use App\Scopes\BornTodayScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasViews;
+use App\Traits\SearchFilterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -32,6 +33,7 @@ class Person extends KModel implements HasMedia, Sitemapable
         InteractsWithMedia,
         InteractsWithMediaExtension,
         Searchable,
+        SearchFilterable,
         SoftDeletes;
 
     // Maximum relationships fetch limit
@@ -111,6 +113,35 @@ class Person extends KModel implements HasMedia, Sitemapable
         return SlugOptions::create()
             ->generateSlugsFrom('full_name')
             ->saveSlugsTo('slug');
+    }
+
+    /**
+     * The filterable properties.
+     *
+     * @return array[]
+     */
+    public static function webSearchFilters(): array
+    {
+        $filter = [
+            'birthdate' => [
+                'title' => __('Birthday'),
+                'type' => 'date',
+                'selected' => null,
+            ],
+            'deceased_date' => [
+                'title' => __('Deceased Date'),
+                'type' => 'date',
+                'selected' => null,
+            ],
+            'astrological_sign' => [
+                'title' => __('Astrological Sign'),
+                'type' => 'select',
+                'options' => AstrologicalSign::asSelectArray(),
+                'selected' => null,
+            ],
+        ];
+
+        return $filter;
     }
 
     /**

@@ -8,6 +8,7 @@ use App\Enums\StudioType;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\TvRated;
+use App\Traits\SearchFilterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -31,6 +32,7 @@ class Studio extends KModel implements HasMedia, Sitemapable
         InteractsWithMedia,
         InteractsWithMediaExtension,
         Searchable,
+        SearchFilterable,
         SoftDeletes,
         TvRated;
 
@@ -125,6 +127,47 @@ class Studio extends KModel implements HasMedia, Sitemapable
             })
             ->orderBy($self->getKeyName())
             ->searchable($chunk);
+    }
+
+    /**
+     * The filterable properties.
+     *
+     * @return array[]
+     */
+    public static function webSearchFilters(): array
+    {
+        $filter = [
+            'type' => [
+                'title' => __('Type'),
+                'type' => 'select',
+                'options' => StudioType::asSelectArray(),
+                'selected' => null,
+            ],
+            'address' => [
+                'title' => __('Address'),
+                'type' => 'string',
+                'selected' => null,
+            ],
+            'founded' => [
+                'title' => __('Founded'),
+                'type' => 'date',
+                'selected' => null,
+            ],
+        ];
+
+        if (auth()->user()?->tv_rating >= 4) {
+            $filter['is_nsfw'] = [
+                'title' => __('NSFW'),
+                'type' => 'bool',
+                'options' => [
+                    __('Shown'),
+                    __('Hidden'),
+                ],
+                'selected' => null,
+            ];
+        }
+
+        return $filter;
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace App\Traits\Livewire;
 
-use App\Enums\AstrologicalSign;
 use App\Models\Person;
 
 trait WithPersonSearch
@@ -81,23 +80,6 @@ trait WithPersonSearch
      */
     public function setFilterableAttributes(): void
     {
-        $this->filter = [
-            'birthdate' => [
-                'title' => __('Birthday'),
-                'type' => 'date',
-                'selected' => null,
-            ],
-            'deceased_date' => [
-                'title' => __('Deceased Date'),
-                'type' => 'date',
-                'selected' => null,
-            ],
-            'astrological_sign' => [
-                'title' => __('Astrological Sign'),
-                'type' => 'select',
-                'options' => AstrologicalSign::asSelectArray(),
-                'selected' => null,
-            ],
-        ];
+        $this->filter = Person::webSearchFilters();
     }
 }

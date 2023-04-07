@@ -115,36 +115,6 @@ trait WithEpisodeSearch
      */
     public function setFilterableAttributes(): void
     {
-        $this->filter = [
-            'number' => [
-                'title' => __('Number (Season)'),
-                'type' => 'number',
-                'selected' => null,
-            ],
-            'number_total' => [
-                'title' => __('Number (Series)'),
-                'type' => 'number',
-                'selected' => null,
-            ],
-            'started_at' => [
-                'title' => __('First Aired'),
-                'type' => 'date',
-                'selected' => null,
-            ],
-            'duration' => [
-                'title' => __('Duration (seconds)'),
-                'type' => 'duration',
-                'selected' => null,
-            ],
-            'is_filler' => [
-                'title' => __('Fillers'),
-                'type' => 'bool',
-                'options' => [
-                    __('Shown'),
-                    __('Hidden'),
-                ],
-                'selected' => null,
-            ],
-        ];
+        $this->filter = Episode::webSearchFilters();
     }
 }

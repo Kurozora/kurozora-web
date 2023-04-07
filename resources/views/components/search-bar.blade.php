@@ -10,10 +10,6 @@
     <div class="flex flex-1 items-center justify-end space-x-1">
         <x-spinner />
 
-        @if (!empty($rightBarButtonItems))
-            {{ $rightBarButtonItems }}
-        @endif
-
         {{-- Order --}}
         @if (!empty($this->order))
             <x-dropdown align="right" width="48" max-height="350px">
@@ -154,6 +150,10 @@
                     </div>
                 </x-slot:content>
             </x-dropdown>
+        @endif
+
+        @if (!empty($rightBarButtonItems))
+            {{ $rightBarButtonItems }}
         @endif
     </div>
 </div>

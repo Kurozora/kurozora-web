@@ -2,7 +2,6 @@
 
 namespace App\Traits\Livewire;
 
-use App\Enums\StudioType;
 use App\Models\Studio;
 
 trait WithStudioSearch
@@ -72,38 +71,6 @@ trait WithStudioSearch
      */
     public function setFilterableAttributes(): void
     {
-        $this->filter = [
-            'type' => [
-                'title' => __('Type'),
-                'type' => 'select',
-                'options' => StudioType::asSelectArray(),
-                'selected' => null,
-            ],
-            'address' => [
-                'title' => __('Address'),
-                'type' => 'string',
-                'selected' => null,
-            ],
-            'founded' => [
-                'title' => __('Founded'),
-                'type' => 'date',
-                'selected' => null,
-            ],
-        ];
-
-        if (auth()->check()) {
-            if (auth()->user()->tv_rating >= 4) {
-                $this->filter['is_nsfw'] = [
-                    'title' => __('NSFW'),
-                    'type' => 'bool',
-                    'options' => [
-                        __('Shown'),
-                        __('Hidden'),
-                    ],
-                    'selected' => null,
-                ];
-            }
-        }
+        $this->filter = Studio::webSearchFilters();
     }
-
 }

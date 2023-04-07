@@ -10,6 +10,7 @@ use App\Scopes\BornTodayScope;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\HasTranslatableSlug;
 use App\Traits\Model\HasViews;
+use App\Traits\SearchFilterable;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -33,6 +34,7 @@ class Character extends KModel implements HasMedia, Sitemapable
         InteractsWithMedia,
         InteractsWithMediaExtension,
         Searchable,
+        SearchFilterable,
         SoftDeletes,
         Translatable;
 
@@ -122,6 +124,71 @@ class Character extends KModel implements HasMedia, Sitemapable
     {
         $this->addMediaCollection(MediaCollection::Profile)
             ->singleFile();
+    }
+
+    /**
+     * The filterable properties.
+     *
+     * @return array[]
+     */
+    public static function webSearchFilters(): array
+    {
+        $filter = [
+            'status' => [
+                'title' => __('Status'),
+                'type' => 'select',
+                'options' => CharacterStatus::asSelectArray(),
+                'selected' => null,
+            ],
+            'age' => [
+                'title' => __('Age'),
+                'type' => 'double',
+                'selected' => null,
+            ],
+            'birth_day' => [
+                'title' => __('Birth Day'),
+                'type' => 'day',
+                'selected' => null,
+            ],
+            'birth_month' => [
+                'title' => __('Birth Month'),
+                'type' => 'month',
+                'selected' => null,
+            ],
+            'height' => [
+                'title' => __('Height (cm)'),
+                'type' => 'double',
+                'selected' => null,
+            ],
+            'weight' => [
+                'title' => __('Weight (grams)'),
+                'type' => 'double',
+                'selected' => null,
+            ],
+            'bust' => [
+                'title' => __('Bust'),
+                'type' => 'double',
+                'selected' => null,
+            ],
+            'waist' => [
+                'title' => __('Waist'),
+                'type' => 'double',
+                'selected' => null,
+            ],
+            'hip' => [
+                'title' => __('Hip'),
+                'type' => 'double',
+                'selected' => null,
+            ],
+            'astrological_sign' => [
+                'title' => __('Astrological Sign'),
+                'type' => 'select',
+                'options' => AstrologicalSign::asSelectArray(),
+                'selected' => null,
+            ],
+        ];
+
+        return $filter;
     }
 
     /**

@@ -8,6 +8,7 @@ use App\Traits\Model\HasComments;
 use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\TvRated;
+use App\Traits\SearchFilterable;
 use Astrotomic\Translatable\Translatable;
 use Carbon\CarbonInterval;
 use Exception;
@@ -32,6 +33,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
         InteractsWithMedia,
         InteractsWithMediaExtension,
         Searchable,
+        SearchFilterable,
         SoftDeletes,
         Translatable,
         TvRated;
@@ -158,6 +160,48 @@ class Episode extends KModel implements HasMedia, Sitemapable
             })
             ->orderBy($self->getKeyName())
             ->searchable($chunk);
+    }
+
+    /**
+     * The filterable properties.
+     *
+     * @return array[]
+     */
+    public static function webSearchFilters(): array
+    {
+        $filter = [
+            'number' => [
+                'title' => __('Number (Season)'),
+                'type' => 'number',
+                'selected' => null,
+            ],
+            'number_total' => [
+                'title' => __('Number (Series)'),
+                'type' => 'number',
+                'selected' => null,
+            ],
+            'started_at' => [
+                'title' => __('First Aired'),
+                'type' => 'date',
+                'selected' => null,
+            ],
+            'duration' => [
+                'title' => __('Duration (seconds)'),
+                'type' => 'duration',
+                'selected' => null,
+            ],
+            'is_filler' => [
+                'title' => __('Fillers'),
+                'type' => 'bool',
+                'options' => [
+                    __('Shown'),
+                    __('Hidden'),
+                ],
+                'selected' => null,
+            ],
+        ];
+
+        return $filter;
     }
 
     /**

@@ -15,6 +15,7 @@ use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Favoriter;
 use App\Traits\Model\HasViews;
 use App\Traits\Model\Tracker;
+use App\Traits\SearchFilterable;
 use App\Traits\Web\Auth\TwoFactorAuthenticatable;
 use Carbon\Carbon;
 use Cog\Contracts\Love\Reacterable\Models\Reacterable as ReacterableContract;
@@ -75,6 +76,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
         MassPrunable,
         Reacterable,
         Searchable,
+        SearchFilterable,
         Tracker,
         TwoFactorAuthenticatable;
 
@@ -207,6 +209,16 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     {
         return LogOptions::defaults()
             ->logAll();
+    }
+
+    /**
+     * The filterable properties.
+     *
+     * @return array[]
+     */
+    public static function webSearchFilters(): array
+    {
+        return [];
     }
 
     /**
