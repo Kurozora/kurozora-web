@@ -6,7 +6,6 @@ use App\Nova\Filters\IsLocked;
 use App\Nova\Filters\IsNsfl;
 use App\Nova\Filters\IsNsfw;
 use App\Nova\Filters\IsSpoiler;
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
@@ -15,6 +14,7 @@ use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Comment extends Resource
 {
@@ -51,10 +51,10 @@ class Comment extends Resource
     /**
      * Get the fields displayed by the resource.
      *
-     * @param Request $request
+     * @param NovaRequest $request
      * @return array
      */
-    public function fields(Request $request): array
+    public function fields(NovaRequest $request): array
     {
         return [
             Heading::make('Identification'),
@@ -135,10 +135,10 @@ class Comment extends Resource
     /**
      * Get the cards available for the request.
      *
-     * @param Request $request
+     * @param NovaRequest $request
      * @return array
      */
-    public function cards(Request $request): array
+    public function cards(NovaRequest $request): array
     {
         return [];
     }
@@ -146,10 +146,10 @@ class Comment extends Resource
     /**
      * Get the filters available for the resource.
      *
-     * @param Request $request
+     * @param NovaRequest $request
      * @return array
      */
-    public function filters(Request $request): array
+    public function filters(NovaRequest $request): array
     {
         return [
             new IsSpoiler,
@@ -162,10 +162,10 @@ class Comment extends Resource
     /**
      * Get the lenses available for the resource.
      *
-     * @param Request $request
+     * @param NovaRequest $request
      * @return array
      */
-    public function lenses(Request $request): array
+    public function lenses(NovaRequest $request): array
     {
         return [];
     }
@@ -173,10 +173,10 @@ class Comment extends Resource
     /**
      * Get the actions available for the resource.
      *
-     * @param Request $request
+     * @param NovaRequest $request
      * @return array
      */
-    public function actions(Request $request): array
+    public function actions(NovaRequest $request): array
     {
         return [];
     }

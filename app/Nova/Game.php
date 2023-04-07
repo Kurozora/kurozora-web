@@ -9,6 +9,7 @@ use App\Nova\Actions\ScrapeGame;
 use App\Nova\Actions\ScrapeNewGame;
 use App\Nova\Actions\ScrapeTopGame;
 use App\Nova\Actions\ScrapeUpcomingGame;
+use App\Nova\Filters\IsNsfw;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -347,7 +348,9 @@ class Game extends Resource
      */
     public function filters(NovaRequest $request): array
     {
-        return [];
+        return [
+            new IsNsfw
+        ];
     }
 
     /**

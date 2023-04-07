@@ -10,6 +10,7 @@ use App\Nova\Actions\ScrapeNewManga;
 use App\Nova\Actions\ScrapeTopManga;
 use App\Nova\Actions\ScrapeUpcomingManga;
 use App\Nova\Actions\UpdatePublishingManga;
+use App\Nova\Filters\IsNsfw;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -379,7 +380,9 @@ class Manga extends Resource
      */
     public function filters(NovaRequest $request): array
     {
-        return [];
+        return [
+            new IsNsfw
+        ];
     }
 
     /**

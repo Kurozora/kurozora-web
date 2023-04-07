@@ -14,6 +14,7 @@ use App\Nova\Actions\ScrapeNewAnime;
 use App\Nova\Actions\ScrapeTopAnime;
 use App\Nova\Actions\ScrapeUpcomingAnime;
 use App\Nova\Actions\UpdateAiringAnime;
+use App\Nova\Filters\IsNsfw;
 use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -422,7 +423,9 @@ class Anime extends Resource
      */
     public function filters(NovaRequest $request): array
     {
-        return [];
+        return [
+            new IsNsfw
+        ];
     }
 
     /**

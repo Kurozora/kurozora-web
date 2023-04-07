@@ -2,11 +2,12 @@
 
 namespace App\Nova\Lenses;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\LensRequest;
+use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Lenses\Lens;
 
 class UnconfirmedUsers extends Lens
@@ -21,18 +22,33 @@ class UnconfirmedUsers extends Lens
     public static function query(LensRequest $request, $query): mixed
     {
         return $request->withOrdering($request->withFilters(
-            $query->select(['users.id', 'users.username', 'users.email', 'users.created_at'])
+            $query->select(self::columns())
                 ->where('email_verified_at')
         ));
     }
 
     /**
-     * Get the fields available to the lens.
+     * Get the columns that should be selected.
      *
-     * @param Request $request
      * @return array
      */
-    public function fields(Request $request): array
+    protected static function columns(): array
+    {
+        return [
+            User::TABLE_NAME . '.id',
+            User::TABLE_NAME . '.username',
+            User::TABLE_NAME . '.email',
+            User::TABLE_NAME . '.created_at'
+        ];
+    }
+
+    /**
+     * Get the fields available to the lens.
+     *
+     * @param NovaRequest $request
+     * @return array
+     */
+    public function fields(NovaRequest $request): array
     {
         return [
             ID::make('ID', 'id')->sortable(),
@@ -54,10 +70,10 @@ class UnconfirmedUsers extends Lens
     /**
      * Get the filters available for the lens.
      *
-     * @param Request $request
+     * @param NovaRequest $request
      * @return array
      */
-    public function filters(Request $request): array
+    public function filters(NovaRequest $request): array
     {
         return [];
     }
@@ -65,10 +81,10 @@ class UnconfirmedUsers extends Lens
     /**
      * Get the actions available on the lens.
      *
-     * @param Request $request
+     * @param NovaRequest $request
      * @return array
      */
-    public function actions(Request $request): array
+    public function actions(NovaRequest $request): array
     {
         return parent::actions($request);
     }
