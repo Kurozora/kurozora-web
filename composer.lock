@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "569802eafe8bf2ab12d462ed0b7e8308",
+    "content-hash": "c63d5381a1d02bc02c7df98326de90b0",
     "packages": [
         {
             "name": "astrotomic/laravel-translatable",
@@ -5609,11 +5609,17 @@
         },
         {
             "name": "marvinlabs/laravel-discord-logger",
-            "version": "dev-feature/update-send-long-log-as-file",
+            "version": "v1.4.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/kiritokatklian/laravel-discord-logger",
-                "reference": "14f7839102fd01d4c69869b357e2f39af5211bda"
+                "url": "https://github.com/marvinlabs/laravel-discord-logger.git",
+                "reference": "aaa08fda2a1b7c58373622f8cd5b955df1d36b91"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/marvinlabs/laravel-discord-logger/zipball/aaa08fda2a1b7c58373622f8cd5b955df1d36b91",
+                "reference": "aaa08fda2a1b7c58373622f8cd5b955df1d36b91",
+                "shasum": ""
             },
             "require": {
                 "ext-json": "*",
@@ -5640,11 +5646,7 @@
                     "MarvinLabs\\DiscordLogger\\": "src/DiscordLogger"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "MarvinLabs\\DiscordLogger\\Tests\\": "tests"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -5663,7 +5665,17 @@
                 "logger",
                 "logging"
             ],
-            "time": "2023-03-16T23:44:07+00:00"
+            "support": {
+                "issues": "https://github.com/marvinlabs/laravel-discord-logger/issues",
+                "source": "https://github.com/marvinlabs/laravel-discord-logger/tree/v1.4.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/vpratfr",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-04-18T08:24:22+00:00"
         },
         {
             "name": "masterminds/html5",
@@ -14914,16 +14926,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "1.19.0",
+            "version": "1.19.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "178b33aa1c8b8d7725f0abee618ef47337e607ce"
+                "reference": "f545fc30978190a056832aa7ed995e36a66267f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/178b33aa1c8b8d7725f0abee618ef47337e607ce",
-                "reference": "178b33aa1c8b8d7725f0abee618ef47337e607ce",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/f545fc30978190a056832aa7ed995e36a66267f3",
+                "reference": "f545fc30978190a056832aa7ed995e36a66267f3",
                 "shasum": ""
             },
             "require": {
@@ -14953,9 +14965,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.19.0"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.19.1"
             },
-            "time": "2023-04-17T13:16:52+00:00"
+            "time": "2023-04-18T11:30:56+00:00"
         },
         {
             "name": "phpstan/phpstan",
@@ -17193,7 +17205,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "marvinlabs/laravel-discord-logger": 20,
         "musa11971/php-jwt-decoder": 20
     },
     "prefer-stable": true,

@@ -50,7 +50,7 @@
         "league/flysystem-aws-s3-v3": "^3.0",
         "livewire/livewire": "^2.10",
         "lukeraymonddowning/honey": "^0.5",
-        "marvinlabs/laravel-discord-logger": "dev-feature/update-send-long-log-as-file",
+        "marvinlabs/laravel-discord-logger": "^1.0.0",
         "meilisearch/meilisearch-php": "^0.25.0",
         "kiritokatklian/laravel-sort-request": "^2.0",
         "musa11971/php-jwt-decoder": "dev-php-7.4-and-8.0-support",
@@ -90,10 +90,6 @@
         {
             "type": "path",
             "url": "./nova"
-        },
-        {
-            "type": "git",
-            "url": "https://github.com/kiritokatklian/laravel-discord-logger"
         },
         {
             "type": "git",
