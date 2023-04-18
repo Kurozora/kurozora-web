@@ -52,7 +52,7 @@
         "lukeraymonddowning/honey": "^0.5",
         "marvinlabs/laravel-discord-logger": "dev-feature/update-send-long-log-as-file",
         "meilisearch/meilisearch-php": "^0.25.0",
-        "musa11971/laravel-sort-request": "dev-php-7.4-and-8.0-support",
+        "kiritokatklian/laravel-sort-request": "^2.0",
         "musa11971/php-jwt-decoder": "dev-php-7.4-and-8.0-support",
         "outl1ne/nova-color-field": "^2.0",
         "outl1ne/nova-sortable": "^3.0",
@@ -98,10 +98,6 @@
         {
             "type": "git",
             "url": "https://github.com/kiritokatklian/php-jwt-decoder"
-        },
-        {
-            "type": "git",
-            "url": "https://github.com/kiritokatklian/laravel-sort-request"
         }
     ],
     "autoload": {

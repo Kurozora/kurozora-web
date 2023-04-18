@@ -4,7 +4,7 @@ namespace App\Http\Sorters;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use musa11971\SortRequest\Support\Foundation\Contracts\Sorter;
+use kiritokatklian\SortRequest\Support\Foundation\Contracts\Sorter;
 
 class AnimeTitleSorter extends Sorter
 {

@@ -9,7 +9,7 @@ use App\Http\Sorters\AnimeRatingSorter;
 use App\Http\Sorters\AnimeTitleSorter;
 use App\Rules\ValidateLibraryStatus;
 use Illuminate\Foundation\Http\FormRequest;
-use musa11971\SortRequest\Traits\SortsViaRequest;
+use kiritokatklian\SortRequest\Traits\SortsViaRequest;
 
 class GetLibraryRequest extends FormRequest
 {

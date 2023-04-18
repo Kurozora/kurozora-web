@@ -6,7 +6,7 @@ use App\Models\Anime;
 use App\Models\MediaStat;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use musa11971\SortRequest\Support\Foundation\Contracts\Sorter;
+use kiritokatklian\SortRequest\Support\Foundation\Contracts\Sorter;
 
 class AnimeRatingSorter extends Sorter
 {
