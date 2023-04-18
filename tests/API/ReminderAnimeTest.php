@@ -2,6 +2,7 @@
 
 namespace Tests\API;
 
+use App\Enums\UserLibraryKind;
 use App\Enums\UserLibraryStatus;
 use App\Models\Anime;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -27,7 +28,8 @@ class ReminderAnimeTest extends TestCase
         $this->user->track($anime, UserLibraryStatus::InProgress());
 
         $response = $this->auth()->json('POST', 'v1/me/reminder-anime', [
-            'anime_id' => $anime->id,
+            'library' => UserLibraryKind::Anime,
+            'model_id' => (string) $anime->id,
         ]);
 
         // Check whether the request was successful
@@ -58,7 +60,8 @@ class ReminderAnimeTest extends TestCase
 
         // Send request to add the anime to the user's reminders
         $response = $this->auth()->json('POST', 'v1/me/reminder-anime', [
-            'anime_id' => $anime->id,
+            'library' => UserLibraryKind::Anime,
+            'model_id' => (string) $anime->id,
         ]);
 
         // Check whether the request was successful
@@ -90,7 +93,8 @@ class ReminderAnimeTest extends TestCase
 
         // Send request to remove the anime from the user's reminders
         $response = $this->auth()->json('POST', 'v1/me/reminder-anime', [
-            'anime_id'      => $anime->id,
+            'library'       => UserLibraryKind::Anime,
+            'model_id'      => (string) $anime->id,
             'is_reminded'   => 0
         ]);
 

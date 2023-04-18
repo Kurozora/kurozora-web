@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Enums\UserLibraryKind;
 use App\Helpers\JSONResult;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddAnimeReminderRequest;
 use App\Http\Requests\GetAnimeReminderRequest;
-use App\Http\Resources\AnimeResource;
+use App\Http\Resources\AnimeResourceBasic;
+use App\Http\Resources\GameResourceBasic;
+use App\Http\Resources\LiteratureResourceBasic;
+use App\Models\Anime;
+use App\Models\Game;
+use App\Models\Manga;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,22 +26,37 @@ class ReminderAnimeController extends Controller
      * @param GetAnimeReminderRequest $request
      * @return JsonResponse
      */
-    function getReminders(GetAnimeReminderRequest $request): JsonResponse
+    function index(GetAnimeReminderRequest $request): JsonResponse
     {
         $data = $request->validated();
 
         // Get the authenticated user
         $user = auth()->user();
 
+        // Get morph class
+        $morphClass = match ((int) ($data['library'] ?? UserLibraryKind::Anime)) {
+            UserLibraryKind::Manga => Manga::class,
+            UserLibraryKind::Game => Game::class,
+            default => Anime::class,
+        };
+
         // Paginate the reminder anime
-        $reminderAnime = $user->reminderAnime()->paginate($data['limit'] ?? 25);
+        $userReminders = $user->reminderAnime()
+            ->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
-        $nextPageURL = str_replace($request->root(), '', $reminderAnime->nextPageUrl());
+        $nextPageURL = str_replace($request->root(), '', $userReminders->nextPageUrl());
+
+        // Get data collection
+        $data = match ((int) ($data['library'] ?? UserLibraryKind::Anime)) {
+            UserLibraryKind::Manga => LiteratureResourceBasic::collection($userReminders),
+            UserLibraryKind::Game => GameResourceBasic::collection($userReminders),
+            default => AnimeResourceBasic::collection($userReminders),
+        };
 
         // Show successful response
         return JSONResult::success([
-            'data' => AnimeResource::collection($reminderAnime),
+            'data' => $data,
             'next' => empty($nextPageURL) ? null : $nextPageURL
         ]);
     }
@@ -47,21 +68,39 @@ class ReminderAnimeController extends Controller
      * @return JsonResponse
      * @throws AuthorizationException
      */
-    function addReminder(AddAnimeReminderRequest $request): JsonResponse
+    function create(AddAnimeReminderRequest $request): JsonResponse
     {
-        $animeID = $request->input('anime_id');
+        $data = $request->validated();
+
+        // Get the authenticated user
         $user = auth()->user();
 
         if (!$user->is_subscribed) {
             throw new AuthorizationException(__('Reminders are only available to subscribed users.'));
         }
 
-        $isAlreadyReminded = $user->user_reminder_anime()->where('anime_id', $animeID)->exists();
+        // Get the model
+        if (!empty($data['anime_id'])) {
+            $modelID = $data['anime_id'];
+            $model = Anime::findOrFail($modelID);
+        } else {
+            $modelID = $data['model_id'];
+            $libraryKind = UserLibraryKind::fromValue((int) $data['library']);
+            $model = match ($libraryKind->value) {
+                UserLibraryKind::Manga  => Manga::findOrFail($modelID),
+                UserLibraryKind::Game   => Game::findOrFail($modelID),
+                default                 => Anime::findOrFail($modelID),
+            };
+        }
+
+        $isAlreadyReminded = $user->user_reminder_anime()
+            ->where('anime_id', $model->id)
+            ->exists();
 
         if ($isAlreadyReminded) { // Don't remind the user
-            $user->reminderAnime()->detach($animeID);
+            $user->reminderAnime()->detach($model->id);
         } else { // Remind the user
-            $user->reminderAnime()->attach($animeID);
+            $user->reminderAnime()->attach($model->id);
         }
 
         return JSONResult::success([
