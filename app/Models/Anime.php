@@ -890,7 +890,7 @@ class Anime extends KModel implements HasMedia, Sitemapable
      * @param Builder $query
      * @return Builder
      */
-    protected function makeAllSearchableUsing($query): Builder
+    protected function makeAllSearchableUsing(Builder $query): Builder
     {
         return $query->withoutGlobalScopes();
     }
