@@ -3,47 +3,47 @@
 namespace App\Rules;
 
 use App\Models\User;
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Translation\PotentiallyTranslatedString;
 
-class ValidateUsername implements Rule
+class ValidateUserSlug implements ValidationRule
 {
     const MINIMUM_USERNAME_LENGTH = 3;
     const MAXIMUM_USERNAME_LENGTH = 30;
 
-    /** @var string $errorType */
-    protected string $errorType;
-
     /**
-     * Determine if the validation rule passes.
+     * Run the validation rule.
      *
      * @param string $attribute
      * @param mixed $value
-     * @return bool
+     * @param Closure(string): PotentiallyTranslatedString $fail
+     * @return void
      */
-    public function passes($attribute, $value): bool
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         // Empty string does not pass
         if (!is_string($value) || !strlen($value)) {
-            $this->errorType = 'length';
-            return false;
+            $fail($this->message('length'));
+            return;
         }
 
         // Check minimum length
         if (strlen($value) < self::MINIMUM_USERNAME_LENGTH) {
-            $this->errorType = 'length';
-            return false;
+            $fail($this->message('length'));
+            return;
         }
 
         // Check maximum length
         if (strlen($value) > self::MAXIMUM_USERNAME_LENGTH) {
-            $this->errorType = 'length';
-            return false;
+            $fail($this->message('length'));
+            return;
         }
 
         // Check alphanumeric and space
         if (!ctype_alnum(str_replace(['-', '_'], '', $value))) {
-            $this->errorType = 'alpha-num';
-            return false;
+            $fail($this->message('alpha-num'));
+            return;
         }
 
         // Check if username taken
@@ -54,27 +54,24 @@ class ValidateUsername implements Rule
                 ->where('slug', $value)
                 ->exists()
             ) {
-                $this->errorType = 'exists';
-                return false;
+                $fail($this->message('exists'));
             }
         } else {
             if (User::where('slug', $value)->exists()) {
-                $this->errorType = 'exists';
-                return false;
+                $fail($this->message('exists'));
             }
         }
-
-        return true;
     }
 
     /**
      * Get the validation error message.
      *
+     * @param string $type
      * @return string
      */
-    public function message(): string
+    private function message(string $type): string
     {
-        return match ($this->errorType) {
+        return match ($type) {
             'length' => __('validation.between.string', ['min' => self::MINIMUM_USERNAME_LENGTH, 'max' => self::MAXIMUM_USERNAME_LENGTH]),
             'alpha-num' => __('validation.alpha_dash'),
             'exists' => __('validation.unique'),

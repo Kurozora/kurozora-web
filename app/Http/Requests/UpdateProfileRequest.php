@@ -6,7 +6,7 @@ use App\Rules\ValidateBannerImage;
 use App\Rules\ValidateNickname;
 use App\Rules\ValidateProfileImage;
 use App\Rules\ValidateUserBiography;
-use App\Rules\ValidateUsername;
+use App\Rules\ValidateUserSlug;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateProfileRequest extends FormRequest
@@ -29,7 +29,7 @@ class UpdateProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username'      => ['bail', new ValidateUsername],
+            'username'      => ['bail', new ValidateUserSlug],
             'nickname'      => ['bail', new ValidateNickname],
             'profileImage'  => ['bail', new ValidateProfileImage],
             'bannerImage'   => ['bail', new ValidateBannerImage],

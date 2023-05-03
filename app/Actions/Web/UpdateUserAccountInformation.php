@@ -5,7 +5,7 @@ namespace App\Actions\Web;
 use App\Contracts\UpdatesUserAccountInformation;
 use App\Models\User;
 use App\Rules\ValidateEmail;
-use App\Rules\ValidateUsername;
+use App\Rules\ValidateUserSlug;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -28,7 +28,7 @@ class UpdateUserAccountInformation implements UpdatesUserAccountInformation
 
         if ($user->is_subscribed || $user->can_change_username) {
             $rules = array_merge($rules, [
-                'username' => ['required', new ValidateUsername],
+                'username' => ['required', new ValidateUserSlug],
             ]);
         }
 

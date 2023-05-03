@@ -2,7 +2,7 @@
 
 namespace App\Parsers;
 
-use App\Rules\ValidateUsername;
+use App\Rules\ValidateUserSlug;
 use Xetaio\Mentions\Parser\MentionParser as BaseMentionParser;
 
 class MentionParser extends BaseMentionParser
@@ -21,7 +21,7 @@ class MentionParser extends BaseMentionParser
         'regex_replacement' => [
             '{character}' => '@',
             '{pattern}' => '[A-Za-z0-9\-\_]',
-            '{rules}' => '{' . ValidateUsername::MINIMUM_USERNAME_LENGTH . ',' . ValidateUsername::MAXIMUM_USERNAME_LENGTH . '}'
+            '{rules}' => '{' . ValidateUserSlug::MINIMUM_USERNAME_LENGTH . ',' . ValidateUserSlug::MAXIMUM_USERNAME_LENGTH . '}'
         ]
     ];
 
