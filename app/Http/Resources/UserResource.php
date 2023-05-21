@@ -23,18 +23,27 @@ class UserResource extends JsonResource
      */
     private bool $shouldIncludeSession = false;
 
+    /**
+     * Whether to include user's settings in the resource.
+     *
+     * @var bool $shouldIncludeSettings
+     */
+    private bool $shouldIncludeSettings = false;
+
     /** @var PersonalAccessToken $personalAccessToken */
     private PersonalAccessToken $personalAccessToken;
 
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return array
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
-        $resource = UserResourceBasic::make($this->resource)->toArray($request);
+        $resource = UserResourceBasic::make($this->resource)
+            ->includingSettings($this->shouldIncludeSettings)
+            ->toArray($request);
 
         // Add additional data to the resource
         $relationships = [];
@@ -92,6 +101,7 @@ class UserResource extends JsonResource
     {
         $this->personalAccessToken = $personalAccessToken;
         $this->shouldIncludeSession = true;
+        $this->shouldIncludeSettings = true;
         return $this;
     }
 }

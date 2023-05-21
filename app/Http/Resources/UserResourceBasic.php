@@ -19,9 +19,9 @@ class UserResourceBasic extends JsonResource
     /**
      * Whether to include private details in the resource.
      *
-     * @var bool $includePrivateDetails
+     * @var bool $shouldIncludeSettings
      */
-    private bool $includePrivateDetails = false;
+    private bool $shouldIncludeSettings = false;
 
     /**
      * Transform the resource into an array.
@@ -29,7 +29,7 @@ class UserResourceBasic extends JsonResource
      * @param Request $request
      * @return array
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         $resource = UserResourceIdentity::make($this->resource)->toArray($request);
         $resource = array_merge($resource, [
@@ -57,12 +57,8 @@ class UserResourceBasic extends JsonResource
             $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSpecificDetails());
         }
 
-        if ($this->includePrivateDetails) {
-            $resource = array_merge($resource, [
-                'preferredLanguage' => $this->resource->language_id,
-                'preferredTVRating' => $this->resource->tv_rating?->name,
-                'canChangeUsername' => $this->resource->can_change_username,
-            ]);
+        if ($this->shouldIncludeSettings) {
+            $resource['attributes'] = array_merge($resource['attributes'], $this->getUserSettings());
         }
 
         return $resource;
@@ -89,13 +85,28 @@ class UserResourceBasic extends JsonResource
     }
 
     /**
-     * Enables including private details in the resource.
+     * Returns the user settings for the resource.
      *
+     * @return array
+     */
+    protected function getUserSettings(): array
+    {
+        return [
+            'preferredLanguage' => $this->resource->language_id,
+            'preferredTVRating' => $this->resource->tv_rating,
+            'canChangeUsername' => $this->resource->can_change_username,
+        ];
+    }
+
+    /**
+     * Enables including user's settings in the resource.
+     *
+     * @param bool $include
      * @return UserResourceBasic
      */
-    function includePrivateDetails(): self
+    function includingSettings(bool $include = true): self
     {
-        $this->includePrivateDetails = true;
+        $this->shouldIncludeSettings = $include;
         return $this;
     }
 }
