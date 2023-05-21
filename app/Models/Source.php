@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 
 class Source extends KModel
 {
     use HasFactory,
+        Searchable,
         SoftDeletes;
 
     // Table name
@@ -23,5 +25,39 @@ class Source extends KModel
     public function anime(): HasMany
     {
         return $this->hasMany(Anime::class);
+    }
+
+    /**
+     * The literature that the source has.
+     *
+     * @return HasMany
+     */
+    public function literatures(): HasMany
+    {
+        return $this->hasMany(Manga::class);
+    }
+
+    /**
+     * The games that the source has.
+     *
+     * @return HasMany
+     */
+    public function games(): HasMany
+    {
+        return $this->hasMany(Game::class);
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
+        ];
     }
 }

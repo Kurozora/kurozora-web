@@ -8,6 +8,7 @@ use App\Traits\Model\TvRated;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 use Request;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -21,6 +22,7 @@ class Genre extends KModel implements HasMedia, Sitemapable
     use HasSlug,
         InteractsWithMedia,
         InteractsWithMediaExtension,
+        Searchable,
         SoftDeletes,
         TvRated;
 
@@ -104,6 +106,21 @@ class Genre extends KModel implements HasMedia, Sitemapable
     public function tv_rating(): BelongsTo
     {
         return $this->belongsTo(TvRating::class);
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
+            'is_nsfw' => $this->is_nsfw,
+        ];
     }
 
     /**

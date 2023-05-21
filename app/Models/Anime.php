@@ -903,11 +903,35 @@ class Anime extends KModel implements HasMedia, Sitemapable
     public function toSearchableArray(): array
     {
         $anime = $this->toArray();
+        unset($anime['media']);
+        $anime['languages'] = $this->languages
+            ->map(function ($item) {
+                return $item->toSearchableArray();
+            });
+        $anime['media_stat'] = $this->mediaStat?->toSearchableArray();
+        $anime['genres'] = $this->genres
+            ->map(function ($item) {
+                return $item->toSearchableArray();
+            });
+        $anime['themes'] = $this->themes
+            ->map(function ($item) {
+                return $item->toSearchableArray();
+            });
+        $anime['translations'] = $this->translations()
+            ->select(['locale', 'title', 'synopsis', 'tagline'])
+            ->get();
+        $anime['tv_rating'] = $this->tv_rating->toSearchableArray();
+        $anime['media_type'] = $this->media_type->toSearchableArray();
+        $anime['source'] = $this->source->toSearchableArray();
+        $anime['status'] = $this->status->toSearchableArray();
+        $anime['tags'] = $this->tags
+            ->map(function ($item) {
+                return $item->toSearchableArray();
+            });
         $anime['started_at'] = $this->started_at?->timestamp;
         $anime['ended_at'] = $this->ended_at?->timestamp;
         $anime['created_at'] = $this->created_at?->timestamp;
         $anime['updated_at'] = $this->updated_at?->timestamp;
-        $anime['tags'] = $this->tags()->pluck('name')->toArray();
         return $anime;
     }
 

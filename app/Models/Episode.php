@@ -199,7 +199,46 @@ class Episode extends KModel implements HasMedia, Sitemapable
                 ],
                 'selected' => null,
             ],
+            'is_special' => [
+                'title' => __('Specials'),
+                'type' => 'bool',
+                'options' => [
+                    __('Shown'),
+                    __('Hidden'),
+                ],
+                'selected' => null,
+            ],
+            'is_premiere' => [
+                'title' => __('Premieres'),
+                'type' => 'bool',
+                'options' => [
+                    __('Shown'),
+                    __('Hidden'),
+                ],
+                'selected' => null,
+            ],
+            'is_finale' => [
+                'title' => __('Finales'),
+                'type' => 'bool',
+                'options' => [
+                    __('Shown'),
+                    __('Hidden'),
+                ],
+                'selected' => null,
+            ],
         ];
+
+        if (auth()->user()?->tv_rating >= 4) {
+            $filter['is_nsfw'] = [
+                'title' => __('NSFW'),
+                'type' => 'bool',
+                'options' => [
+                    __('Shown'),
+                    __('Hidden'),
+                ],
+                'selected' => null,
+            ];
+        }
 
         return $filter;
     }
