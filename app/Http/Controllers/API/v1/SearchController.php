@@ -28,6 +28,7 @@ use App\Models\User;
 use App\Models\UserLibrary;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\JsonResponse;
+use Laravel\Scout\Builder;
 
 class SearchController extends Controller
 {
@@ -52,9 +53,11 @@ class SearchController extends Controller
         foreach ($types as $type) {
             switch ($type) {
                 case SearchType::Characters:
-                    $resource = Character::search($data['query'])
-                        ->paginate($data['limit'] ?? 20)
+                    $resource = Character::search($data['query']);
+                    $this->filter(Character::class, $request, $resource);
+                    $resource = $resource->paginate($data['limit'] ?? 20)
                         ->appends($data);
+
                     // Get next page url minus domain
                     $nextPageURL = $this->nextPageUrlFor($resource, $type);
 
@@ -64,9 +67,11 @@ class SearchController extends Controller
                     ];
                     break;
                 case SearchType::Episodes:
-                    $resource = Episode::search($data['query'])
-                        ->paginate($data['limit'] ?? 20)
+                    $resource = Episode::search($data['query']);
+                    $this->filter(Episode::class, $request, $resource);;
+                    $resource = $resource->paginate($data['limit'] ?? 20)
                         ->appends($data);
+
                     // Get next page url minus domain
                     $nextPageURL = $this->nextPageUrlFor($resource, $type);
 
@@ -82,17 +87,21 @@ class SearchController extends Controller
                             ->where('trackable_type', Game::class)
                             ->query(function ($query) {
                                 $query->with(['trackable', 'user']);
-                            })
-                            ->paginate($data['limit'] ?? 5)
+                            });
+                        $this->filter(Game::class, $request, $resource);;
+                        $resource = $resource->paginate($data['limit'] ?? 5)
                             ->appends($data);
+
                         // Get next page url minus domain
                         $nextPageURL = $this->nextPageUrlFor($resource, $type);
 
                         $resource = collect($resource->items())->pluck('trackable');
                     } else {
                         $resource = Game::search($data['query']);
+                        $this->filter(Game::class, $request, $resource);
                         $resource = $resource->paginate($data['limit'] ?? 5)
                             ->appends($data);
+
                         // Get next page url minus domain
                         $nextPageURL = $this->nextPageUrlFor($resource, $type);
                     }
@@ -109,17 +118,21 @@ class SearchController extends Controller
                             ->where('trackable_type', Manga::class)
                             ->query(function ($query) {
                                 $query->with(['trackable', 'user']);
-                            })
-                            ->paginate($data['limit'] ?? 5)
+                            });
+                        $this->filter(Manga::class, $request, $resource);
+                        $resource = $resource->paginate($data['limit'] ?? 5)
                             ->appends($data);
+
                         // Get next page url minus domain
                         $nextPageURL = $this->nextPageUrlFor($resource, $type);
 
                         $resource = collect($resource->items())->pluck('trackable');
                     } else {
                         $resource = Manga::search($data['query']);
+                        $this->filter(Manga::class, $request, $resource);
                         $resource = $resource->paginate($data['limit'] ?? 5)
                             ->appends($data);
+
                         // Get next page url minus domain
                         $nextPageURL = $this->nextPageUrlFor($resource, $type);
                     }
@@ -130,9 +143,11 @@ class SearchController extends Controller
                     ];
                     break;
                 case SearchType::People:
-                    $resource = Person::search($data['query'])
-                        ->paginate($data['limit'] ?? 5)
+                    $resource = Person::search($data['query']);
+                    $this->filter(Person::class, $request, $resource);
+                    $resource = $resource->paginate($data['limit'] ?? 5)
                         ->appends($data);
+
                     // Get next page url minus domain
                     $nextPageURL = $this->nextPageUrlFor($resource, $type);
 
@@ -148,27 +163,21 @@ class SearchController extends Controller
                             ->where('trackable_type', Anime::class)
                             ->query(function ($query) {
                                 $query->with(['trackable', 'user']);
-                            })
-                            ->paginate($data['limit'] ?? 5)
+                            });
+                        $this->filter(Anime::class, $request, $resource);
+                        $resource = $resource->paginate($data['limit'] ?? 5)
                             ->appends($data);
+
                         // Get next page url minus domain
                         $nextPageURL = $this->nextPageUrlFor($resource, $type);
 
                         $resource = collect($resource->items())->pluck('trackable');
                     } else {
                         $resource = Anime::search($data['query']);
-//                        $filters = Anime::searchFilters();
-
-//                        // Apply filters
-//                        foreach ($filters as $filterName) {
-//                            if ($request->has($filterName)) {
-//                                $value = $request->input($filterName);
-//                                $resource->where($filterName, $value);
-//                            }
-//                        }
-
+                        $this->filter(Anime::class, $request, $resource);
                         $resource = $resource->paginate($data['limit'] ?? 5)
                             ->appends($data);
+
                         // Get next page url minus domain
                         $nextPageURL = $this->nextPageUrlFor($resource, $type);
                     }
@@ -179,9 +188,11 @@ class SearchController extends Controller
                     ];
                     break;
                 case SearchType::Songs:
-                    $resource = Song::search($data['query'])
-                        ->paginate($data['limit'] ?? 5)
+                    $resource = Song::search($data['query']);
+                    $this->filter(Song::class, $request, $resource);
+                    $resource = $resource->paginate($data['limit'] ?? 5)
                         ->appends($data);
+
                     // Get next page url minus domain
                     $nextPageURL = $this->nextPageUrlFor($resource, $type);
 
@@ -191,9 +202,11 @@ class SearchController extends Controller
                     ];
                     break;
                 case SearchType::Studios:
-                    $resource = Studio::search($data['query'])
-                        ->paginate($data['limit'] ?? 5)
+                    $resource = Studio::search($data['query']);
+                    $this->filter(Studio::class, $request, $resource);
+                    $resource = $resource->paginate($data['limit'] ?? 5)
                         ->appends($data);
+
                     // Get next page url minus domain
                     $nextPageURL = $this->nextPageUrlFor($resource, $type);
 
@@ -203,9 +216,11 @@ class SearchController extends Controller
                     ];
                     break;
                 case SearchType::Users:
-                    $resource = User::search($data['query'])
-                        ->paginate($data['limit'] ?? 5)
+                    $resource = User::search($data['query']);
+                    $this->filter(User::class, $request, $resource);
+                    $resource = $resource->paginate($data['limit'] ?? 5)
                         ->appends($data);
+
                     // Get next page url minus domain
                     $nextPageURL = $this->nextPageUrlFor($resource, $type);
 
@@ -221,6 +236,27 @@ class SearchController extends Controller
         return JSONResult::success([
             'data' => $response
         ]);
+    }
+
+    /**
+     * Applies filter to the search request.
+     *
+     * @param $model
+     * @param SearchRequest $request
+     * @param Builder $resource
+     * @return void
+     */
+    private function filter($model, SearchRequest $request, Builder $resource)
+    {
+        $filters = $model::searchFilters();
+
+        // Apply filters
+        foreach ($filters as $filterName) {
+            if ($request->has($filterName)) {
+                $value = $request->input($filterName);
+                $resource->where($filterName, $value);
+            }
+        }
     }
 
     /**
