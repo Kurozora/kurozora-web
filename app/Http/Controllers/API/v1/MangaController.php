@@ -304,7 +304,7 @@ class MangaController extends Controller
     {
         $data = $request->validated();
 
-        $manga = Manga::upcomingMangas(-1)
+        $manga = Manga::upcomingManga(-1)
             ->paginate($data['limit'] ?? 25);
 
         // Get next page url minus domain
