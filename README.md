@@ -1,14 +1,16 @@
-<p align="center"><img src=".github/Assets/Kurozora.webp"></p>
+<p align="center"><img src=".github/Assets/Kurozora.webp" width="512px"></p>
 
 <p align="center">
-    <sup><em>Your one stop-shop for everything anime!</em></sup>
+    <sup><em>Your one stop-shop for everything anime on Web!</em></sup>
 </p>
 
 ## About Kurozora
 
-**[Kurozora](https://kurozora.app/) is your go-to platform for tracking, sharing and discovering Anime and much more!** `kurozora-web` is the server side behind Kurozora. It is designed to be:
+[Kurozora](https://kurozora.app) is your one-stop shop for everything anime!
 
-* **💨 Fast.** No clutter, no bloat, no complex dependencies. The Kurozora API is built with Laravel, one of the [fastest](http://www.phpbenchmarks.com/en/benchmark/laravel/5.8) PHP frameworks.
+The Kurozora website powers both the website and the API of Kurozora. It gives you access to the huge catalogue of anime, manga and games. It is designed to be:
+
+* **💨 Fast.** No clutter, no bloat, no complex dependencies. The Kurozora API is built with Laravel, one of the fastest PHP frameworks.
 
 * **✨ Beautiful.** The codebase is carefully designed to be consistent and intuitive. By utilizing Laravel's features as much as possible, we prevent reinventing the wheel and writing spaghetti code.
 
@@ -34,12 +36,13 @@ If you have any questions or just want to say hi, join the Kurozora [Discord](ht
 
 # More by Kurozora
 
-- [Kurozora iOS App](https://github.com/kurozora/kurozora-app) — iOS/iPadOS/MacOS client app.
+- [Kurozora Android App](https://github.com/kurozora/kurozora-android) — Android client app
+- [Kurozora Discord Bot](https://github.com/kurozora/kurozora-discord-bot) — A versatile Discord bot with access to Kurozora services
+- [Kurozora iOS App](https://github.com/kurozora/kurozora-app) — iOS/iPadOS/MacOS client app
 - [KurozoraKit](https://github.com/kurozora/KurozoraKit) — Simple to use framework for interacting with the Kurozora API
-- [Kurozora Web Extension](https://github.com/Kurozora/kurozora-extension) — The Ultimate Search Engine for Anime, Manga and Game Fans.
-- [Kurozora Discord Bot](https://github.com/kurozora/kurozora-discord-bot) — A versatile Discord bot with access to Kurozora services.
-- [Kurozora Android App](https://github.com/kurozora/kurozora-android) — Android client app.
+- [Kurozora Linux App](https://github.com/kurozora/kurozora-linux) — Linux client app
+- [Kurozora Web Extension](https://github.com/Kurozora/kurozora-extension) — Anime, Manga and Game search engine for FireFox and Chrome
 
 # License
 
-Kurozora-web is an Open Source project covered by the [GNU General Public License v3.0](LICENSE).
+Kurozora Web is an Open Source project covered by the [GNU General Public License v3.0](LICENSE).
