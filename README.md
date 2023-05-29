@@ -1,14 +1,14 @@
-<p align="center"><img src=".github/Assets/Kurozora.webp" width="512px"></p>
+<p></p>
+
+<p align="center"><img src=".github/Assets/Kurozora.png" width="200px"></p>
 
 <p align="center">
-    <sup><em>Your one stop-shop for everything anime on Web!</em></sup>
+    <sup><em>Your one-stop shop for everything anime on Web!</em></sup>
 </p>
 
-## About Kurozora
+# Kurozora [![Laravel](https://img.shields.io/badge/Laravel-FF2D20.svg?style=flat&logo=Laravel&logoColor=white)](https://laravel.com) [![LiveWire](https://img.shields.io/badge/LiveWire-F972A9.svg?style=flat&logo=LiveWire)](https://laravel-livewire.com) [![AlpineJS](https://img.shields.io/badge/AlpineJS-48A9C1.svg?style=flat&logo=alpinedotjs&logoColor=white)](https://alpinejs.dev) [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-06B6D4.svg?style=flat&logo=tailwindcss&logoColor=white)](https://alpinejs.dev) [![Kurozora Discord Server](https://img.shields.io/discord/449250093623934977?style=flat&label=&logo=Discord&logoColor=white&color=7289DA)](https://discord.gg/f3QFzGqsah) [![License](https://img.shields.io/badge/License-GPLv3-blue.svg?style=flat)](LICENSE)
 
-[Kurozora](https://kurozora.app) is your one-stop shop for everything anime!
-
-The Kurozora website powers both the website and the API of Kurozora. It gives you access to the huge catalogue of anime, manga and games. It is designed to be:
+[Kurozora](https://kurozora.app) is your one-stop shop for everything anime! The Kurozora website powers both the website and the API of Kurozora. It gives you access to the huge catalogue of anime, manga and games. It is designed to be:
 
 * **💨 Fast.** No clutter, no bloat, no complex dependencies. The Kurozora API is built with Laravel, one of the fastest PHP frameworks.
 
@@ -16,15 +16,13 @@ The Kurozora website powers both the website and the API of Kurozora. It gives y
 
 * **🧪 Tested.** The team strives for a 99.9% test coverage. By combining PHPUnit and Laravel, we are able to write expressive, fast and insightful tests.
 
-## Installation
+# Installation
 
 Please refer to the **[Installation guide](INSTALLATION.md)** to learn how you can install `kurozora-web`.
 
-## Contributing
+# Contributing
 
-Please refer to the **[Contributing guide](CONTRIBUTING.md)** to learn how you can help.
-
-This repository only holds the Kurozora server side application. iOS app development happens in [kurozora/kurozora-app](https://github.com/kurozora/kurozora-app).
+Read our [Contributing Guide](CONTRIBUTING.md) to learn about reporting issues, contributing code, and more ways to contribute.
 
 # Security
 

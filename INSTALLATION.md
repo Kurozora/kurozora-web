@@ -22,34 +22,34 @@ For detailed steps on how to install these requirements, please refer to their r
 ## 1. Get the source
 Clone the repository using git. Make sure to do this in a folder that is parked by Valet.  
 ```bash
-git clone https://github.com/Kurozora/kurozora-web.git && cd kurozora-web
+$ git clone https://github.com/Kurozora/kurozora-web.git && cd kurozora-web
 ``` 
 
 ## 2. Install Composer dependencies
 Use Composer to install all of the project's dependencies.
 ```bash
-composer install
+$ composer install
 ```
 
 ## 3. Set up environment variables
 Create a copy of the `.env.example` file ..
 ```bash
-cp .env.example .env
+$ cp .env.example .env
 ```
 .. and modify the values accordingly.
 
 ## 4. Set up database
 Create a database and configure the details in your `.env` file. After that, you can migrate the database to get the correct schema.
 ```bash
-php artisan migrate
+$ php artisan migrate
 ```
 Optionally, you can choose to also seed the database with test data.
 ```bash
-php artisan migrate:fresh --seed
+$ php artisan migrate:fresh --seed
 ```
 
 ## Notes
-If you are using PHPStorm, you may suppress the "multiple definitions exist" notice with an option in the preferences.
+If you are using PHPStorm, you may suppress the "multiple definitions exist" notice by disabling the following option in the preferences.
 ```text
-Settings | Editor | Inspections | PHP | Undefined | Undefined class | Don't report multiple class declaration potential problems 
+Settings | Editor | Inspections | PHP | Undefined symbols | Multiple class declarations 
 ```
