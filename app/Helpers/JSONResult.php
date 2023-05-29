@@ -23,8 +23,9 @@ class JSONResult
         ]);
 
         $statusCode = null;
-        if (count($apiError) == 1)
+        if (count($apiError) == 1) {
             $statusCode = $apiError[0]->status;
+        }
 
         return Response::json($endResponse, $statusCode ?? 400);
     }
@@ -37,8 +38,6 @@ class JSONResult
      */
     static function success(array $data = []): JsonResponse
     {
-        if (!is_array($data)) $data = [$data];
-
         $endResponse = array_merge(self::getDefaultResponseArray(), $data);
 
         return Response::json($endResponse);
