@@ -18,8 +18,8 @@ return new class extends Migration
     {
         Schema::create(Episode::TABLE_NAME, function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('next_episode_id')->nullable();
-            $table->unsignedInteger('previous_episode_id')->nullable();
+            $table->unsignedBigInteger('next_episode_id')->nullable();
+            $table->unsignedBigInteger('previous_episode_id')->nullable();
             $table->unsignedBigInteger('season_id');
             $table->unsignedBigInteger('tv_rating_id')->nullable();
             $table->unsignedInteger('number');

@@ -35,9 +35,6 @@ return new class extends Migration
             $table->index('order');
             $table->index('deleted_at');
 
-            // Set unique key constraints
-            $table->unique(['videoable_type', 'videoable_id', 'source', 'code']);
-
             // Set foreign key constraints
             $table->foreign('language_id')
                 ->references('id')

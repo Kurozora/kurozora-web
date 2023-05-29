@@ -50,6 +50,7 @@ return new class extends Migration
             $table->index('language_id');
 
             // Set unique key constraints
+            $table->unique(['uuid']);
             $table->unique(['slug']);
 
             // Set foreign key constraints
@@ -58,7 +59,7 @@ return new class extends Migration
                 ->on('love_reacters')
                 ->nullOnDelete()
                 ->cascadeOnUpdate();
-            $table->foreign('locale')
+            $table->foreign('language_id')
                 ->references('code')
                 ->on(Language::TABLE_NAME)
                 ->nullOnDelete()
