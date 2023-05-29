@@ -22,7 +22,7 @@ For detailed steps on how to install these requirements, please refer to their r
 ## 1. Get the source
 Clone the repository using git. Make sure to do this in a folder that is parked by Valet.  
 ```bash
-git clone https://github.com/musa11971/kurozora-web.git && cd kurozora-web
+git clone https://github.com/Kurozora/kurozora-web.git && cd kurozora-web
 ``` 
 
 ## 2. Install Composer dependencies
