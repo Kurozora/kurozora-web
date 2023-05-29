@@ -53,7 +53,7 @@ class GameTest extends TestCase
      */
     public function an_authenticated_user_can_view_the_related_games_of_an_games_with_personal_information(): void
     {
-        $response = $this->auth()->getJson(route('api.games.related-games',$this->game->id));
+        $response = $this->auth()->getJson(route('api.games.related-games', $this->game->id));
 
         // Check whether the response was successful
         $response->assertSuccessfulAPIResponse();

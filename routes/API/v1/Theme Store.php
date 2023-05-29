@@ -16,7 +16,7 @@ Route::prefix('/theme-store')
                     ->name('.details');
 
                 Route::get('/download', [AppThemeController::class, 'download'])
-//                    ->middleware('auth.kurozora')
+                    ->middleware('auth.kurozora:optional')
                     ->name('.download');
             });
     });

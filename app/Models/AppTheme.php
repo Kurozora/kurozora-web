@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\AppThemeDownloadKind;
 use App\Enums\MediaCollection;
 use App\Enums\StatusBarStyle;
 use App\Enums\VisualEffectViewStyle;
@@ -71,9 +72,23 @@ class AppTheme extends KModel implements HasMedia
      *
      * @return string
      */
-    public function pList(): string
+    public function toPlist(): string
     {
-        $view = View::make('plist.ios-theme', [
+        $view = View::make('themes.plist.ios-theme', [
+            'theme' => $this
+        ]);
+
+        return $view->render();
+    }
+
+    /**
+     * Generates the CSS string for the theme
+     *
+     * @return string
+     */
+    public function toCSS(): string
+    {
+        $view = View::make('themes.css.ios-theme', [
             'theme' => $this
         ]);
 
@@ -83,18 +98,22 @@ class AppTheme extends KModel implements HasMedia
     /**
      * Generates a response to download the theme as a file.
      *
+     * @param AppThemeDownloadKind $downloadKind
      * @return \Illuminate\Http\Response
      */
-    public function download(): \Illuminate\Http\Response
+    public function download(AppThemeDownloadKind $downloadKind): \Illuminate\Http\Response
     {
         // Name for the theme file
-        $fileName = 'theme-' . $this->id . '.plist';
+        $fileName = 'theme-' . $this->id . '.' . $downloadKind->getExtension();
 
-        $content = $this->pList();
+        $content = match ($downloadKind->value) {
+            AppThemeDownloadKind::CSS => $this->toCSS(),
+            default => $this->toPlist(),
+        };
 
         // Headers to return for the download
         $headers = [
-            'Content-type'          => 'application/x-plist',
+            'Content-type'          => $downloadKind->getContentType(),
             'Content-Disposition'   => sprintf('attachment; filename="%s"', $fileName),
             'Content-Length'        => strlen($content)
         ];

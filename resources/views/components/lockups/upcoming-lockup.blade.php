@@ -30,7 +30,7 @@
             <div class="flex flex-col text-center mt-auto">
                 <div class="h-10">
                     @auth
-                        @if(auth()->user()->is_subscribed)
+                        @if (auth()->user()->is_subscribed)
                             <livewire:anime.reminder-button :anime="$anime" wire:key="{{ md5($anime->id) }}" />
                         @else
                             <livewire:anime.library-button :anime="$anime" wire:key="{{ md5($anime->id) }}" />
@@ -78,11 +78,11 @@
             <div class="flex flex-col text-center mt-auto">
                 <div class="h-10">
                     @auth
-                        {{--                        @if(auth()->user()->is_subscribed)--}}
-                        {{--                            <livewire:game.reminder-button :game="$game" wire:key="{{ md5($game->id) }}" />--}}
-                        {{--                        @else--}}
+{{--                        @if (auth()->user()->is_subscribed)--}}
+{{--                            <livewire:game.reminder-button :game="$game" wire:key="{{ md5($game->id) }}" />--}}
+{{--                        @else--}}
                         <livewire:game.library-button :game="$game" wire:key="{{ md5($game->id) }}" />
-                        {{--                        @endif--}}
+{{--                        @endif--}}
                     @else
                         <livewire:game.library-button :game="$game" wire:key="{{ md5($game->id) }}" />
                     @endauth
@@ -126,11 +126,11 @@
             <div class="flex flex-col text-center mt-auto">
                 <div class="h-10">
                     @auth
-                        {{--                        @if(auth()->user()->is_subscribed)--}}
-                        {{--                            <livewire:manga.reminder-button :manga="$manga" wire:key="{{ md5($manga->id) }}" />--}}
-                        {{--                        @else--}}
+{{--                        @if (auth()->user()->is_subscribed)--}}
+{{--                            <livewire:manga.reminder-button :manga="$manga" wire:key="{{ md5($manga->id) }}" />--}}
+{{--                        @else--}}
                         <livewire:manga.library-button :manga="$manga" wire:key="{{ md5($manga->id) }}" />
-                        {{--                        @endif--}}
+{{--                        @endif--}}
                     @else
                         <livewire:manga.library-button :manga="$manga" wire:key="{{ md5($manga->id) }}" />
                     @endauth
