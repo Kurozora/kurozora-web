@@ -1,0 +1,68 @@
+# DS Store
+.DS_Store
+
+# Composer
+/vendor
+
+# Laravel
+/public/build
+/public/hot
+/public/storage
+/public/images/user_uploads
+/public/img/user_uploads
+/storage/*.key
+/storage/app/*
+!/storage/app/public/
+/storage/debugbar/*
+/storage/logs/*.log
+#.env
+.env.backup
+.env.production
+
+# Git
+.git
+.github
+
+# Docker
+docker-compose.yml
+docker-compose.override.yml
+
+# Homestead
+Homestead.json
+Homestead.yaml
+auth.json
+
+# NodeJS
+/node_modules
+npm-debug.log
+
+# YARN
+yarn-error.log
+
+# Rocketeer PHP task runner and deployment package. https://github.com/rocketeers/rocketeer
+.rocketeer/
+
+# PHP-CS-Fixer
+.php-cs-fixer.cache
+
+# PHP-Stan
+build
+phpstan*.neon
+
+# PHPStorm
+/.fleet
+/.idea
+/.vscode
+
+# PHPUnit result cache
+/.phpunit.cache
+.run
+.phpunit.result.cache
+
+# laravel-ide-helper files. https://github.com/barryvdh/laravel-ide-helper
+.phpstorm.meta.php
+_ide_helper_models.php
+_ide_helper.php
+
+# Python
+__pycache__

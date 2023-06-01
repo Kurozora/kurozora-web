@@ -1,0 +1,29 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+    networks:
+      - internal
+    restart: unless-stopped
+
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+      args:
+        ENABLED_MODULES: headers-more
+    container_name: nginx
+    ports:
+      - '80:80'
+    networks:
+      - internal
+    restart: unless-stopped
+    depends_on:
+      - app
+
+networks:
+  internal:
+    driver: bridge
