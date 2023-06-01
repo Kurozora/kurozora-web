@@ -1,4 +1,55 @@
 {
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": [
+                    "X9LT9M8332.app.kurozora.tracker"
+                ],
+                "components": [
+                    {
+                        "/": "/profile/*",
+                        "comment": "Matches any URL whose path starts with /profile/"
+                    },
+                    {
+                        "/": "/anime/*",
+                        "comment": "Matches any URL whose path starts with /anime/"
+                    },
+                    {
+                        "/": "/manga/*",
+                        "comment": "Matches any URL whose path starts with /manga/"
+                    },
+                    {
+                        "/": "/games/*",
+                        "comment": "Matches any URL whose path starts with /games/"
+                    },
+                    {
+                        "/": "/characters/*",
+                        "comment": "Matches any URL whose path starts with /character/"
+                    },
+                    {
+                        "/": "/songs/*",
+                        "comment": "Matches any URL whose path starts with /songs/"
+                    },
+                    {
+                        "/": "/studios/*",
+                        "comment": "Matches any URL whose path starts with /studios/"
+                    },
+                    {
+                        "/": "/people/*",
+                        "comment": "Matches any URL whose path starts with /people/"
+                    },
+                    {
+                        "/": "/platforms/*",
+                        "comment": "Matches any URL whose path starts with /platforms/"
+                    }
+                ],
+                "defaults": {
+                    "caseSensitive": false
+                }
+            }
+        ]
+    },
     "webcredentials": {
         "apps": [
             "X9LT9M8332.app.kurozora.tracker"
