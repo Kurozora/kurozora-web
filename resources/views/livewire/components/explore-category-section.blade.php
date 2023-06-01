@@ -74,7 +74,7 @@
                                 </div>
                             @break
                             @default
-                                @if (app()->environment('local'))
+                                @if (app()->isLocal())
                                     {{ 'Unhandled size: ' . $exploreCategory->size }}
                                 @endif
                         @endswitch
@@ -131,7 +131,7 @@
                         <x-rows.music-lockup :media-songs="$this->exploreCategoryItems" :show-episodes="false" :show-model="true" />
                     @break
                     @default
-                        @if (app()->environment('local'))
+                        @if (app()->isLocal())
                             {{ 'Unhandled type: ' . $exploreCategory->type }}
                         @endif
                 @endswitch

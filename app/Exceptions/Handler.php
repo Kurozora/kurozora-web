@@ -64,7 +64,11 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e): Response
     {
-        if (str($request->root())->startsWith($request->getScheme().'://api.')) {
+        $renderAPIException = app()->isLocal() ?
+            str($request->url())->contains('api') :
+            str($request->root())->startsWith($request->getScheme().'://api.');
+
+        if ($renderAPIException) {
             return $this->renderAPI($request, $e);
         }
 

@@ -48,7 +48,7 @@
 
         <!-- Scripts -->
         <script src="{{ url(mix('js/app.js')) }}" defer></script>
-        @if (app()->environment('local'))
+        @if (app()->isLocal())
             <script src="{{ url(mix('js/debug.js')) }}" defer></script>
         @endif
 

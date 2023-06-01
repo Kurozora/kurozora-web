@@ -24,7 +24,7 @@ class KModel extends Model
         Model::handleLazyLoadingViolationUsing(function ($model, $relation) {
             $class = get_class($model);
 
-            if (app()->environment('local')) {
+            if (app()->isLocal()) {
                 info("Attempted to lazy load [$relation] on model [$class].");
             }
         });
