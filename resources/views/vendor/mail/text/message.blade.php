@@ -23,7 +23,7 @@
     {{-- Footer --}}
     @slot('footer')
         @component('mail::footer')
-            Copyright © {{ date('Y') }} Redark. @lang('All rights reserved.')
+            Copyright © {{ date('Y') }} Kurozora. @lang('All rights reserved.')
         @endcomponent
     @endslot
 @endcomponent

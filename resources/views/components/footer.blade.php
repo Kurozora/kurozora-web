@@ -222,7 +222,7 @@
             <x-hr class="mb-2" />
 
             <div class="w-full text-center md:text-left">
-                <p class="text-sm text-gray-500">Copyright © 2018-{{ now()->year }} Redark. {{ __('All rights reserved') }}</p>
+                <p class="text-sm text-gray-500">Copyright © 2018-{{ now()->year }} Kurozora. {{ __('All rights reserved') }}</p>
             </div>
         </div>
     </div>

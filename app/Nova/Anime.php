@@ -354,7 +354,7 @@ class Anime extends Resource
 
             Text::make('Copyright')
                 ->hideFromIndex()
-                ->help('For example: © ' . date('Y') . ' Redark'),
+                ->help('For example: © ' . date('Y') . ' Kurozora'),
 
             HasMany::make('Translations', 'anime_translations', AnimeTranslation::class),
 
