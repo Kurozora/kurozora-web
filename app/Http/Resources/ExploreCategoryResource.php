@@ -21,10 +21,10 @@ class ExploreCategoryResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return array
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         $resource = [
             'id'            => $this->resource->id,
@@ -35,9 +35,10 @@ class ExploreCategoryResource extends JsonResource
                 'title'         => $this->getTypeSpecificTitle($request),
                 'description'   => $this->resource->description,
                 'slug'          => $this->resource->slug,
-                'position'      => $this->resource->position,
+                'secondarySlug' => $this->resource->secondary_slug,
                 'type'          => $this->resource->type,
-                'size'          => $this->resource->size
+                'size'          => $this->resource->size,
+                'position'      => $this->resource->position,
             ]
         ];
 
