@@ -10,6 +10,17 @@ set -e
 
 ## Check if the artisan file exists
 if [ -f /var/www/html/artisan ]; then
+    # Optimize Laravel
+    # Clear expired password reset tokens
+    #php artisan auth:clear-resets && \
+    #php artisan migrate --force
+    php /var/www/html/artisan down
+    php /var/www/html/artisan config:cache
+    php /var/www/html/artisan view:cache
+    php /var/www/html/artisan route:cache
+    php /var/www/html/artisan event:cache
+    php /var/www/html/artisan up
+
     echo "${Green} artisan file found, creating supervisor config..."
 
     ## Check if supervisor.d directory exists
@@ -24,7 +35,7 @@ if [ -f /var/www/html/artisan ]; then
     ## Create Laravel scheduler and worker processes.
     ## Scheduler is used for running scheduled commands.
     ## Worker is used for completing queued jobs.
-    WORKER_CONF=laravel-worker.ini
+    WORKER_CONF=$SUPERVISOR_CONF_DIR/laravel-worker.ini
     touch $WORKER_CONF
     cat > "$WORKER_CONF" <<EOF
     [program:Laravel-scheduler]
@@ -58,4 +69,10 @@ echo ""
 echo "***********************************"
 echo "      Starting Supervisord...      "
 echo "***********************************"
-supervisord -c /etc/supervisor/supervisord.conf
+supervisord -c /etc/supervisor/supervisord.conf &
+
+echo ""
+echo "***********************************"
+echo "         Starting NGINX...         "
+echo "***********************************"
+nginx -g 'daemon off;'

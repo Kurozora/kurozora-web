@@ -8,16 +8,25 @@
 /public/build
 /public/hot
 /public/storage
+/public/sitemaps
 /public/images/user_uploads
 /public/img/user_uploads
 /storage/*.key
 /storage/app/*
 !/storage/app/public/
 /storage/debugbar/*
+/storage/framework/cache/data/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
 /storage/logs/*.log
-#.env
+.env
 .env.backup
 .env.production
+
+# AWS
+.ebextensions
+.platform
 
 # Git
 .git
