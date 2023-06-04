@@ -101,6 +101,8 @@ return [
 
     'asset_url' => env('ASSET_URL'),
 
+    'developer_url' => env('DEVELOPER_URL', 'https://developer.kurozora.app'),
+
     'status_url' => env('STATUS_URL', 'https://kurozora.statuspage.io'),
 
     /*
