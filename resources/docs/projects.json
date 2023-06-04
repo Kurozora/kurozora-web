@@ -1,0 +1,46 @@
+{
+    "projects": [
+        {
+            "repo": "kurozora-app",
+            "name": "Kurozora App",
+            "description": "Kurozora iOS client app gives users access to the huge catalog of anime, manga and games on iPhone, iPod, iPad and Mac.",
+            "stack": "Swift, UIKit",
+            "imageURL": "https://repository-images.githubusercontent.com/130452434/86b4ac80-3ae9-11ea-9f92-e0b0730a0767"
+        },
+        {
+            "repo": "KurozoraKit",
+            "name": "KurozoraKit",
+            "description": "KurozoraKit is a simple to use framework for interacting with the Kurozora API.",
+            "stack": "Swift",
+            "imageURL": "https://repository-images.githubusercontent.com/254675533/c11f2c4c-1fd5-486d-8239-21d14d22f04b"
+        },
+        {
+            "repo": "kurozora-android",
+            "name": "Kurozora Android",
+            "description": "Kurozora Android client app gives users access to the huge catalog of anime, manga and games on Android phones and tablets.",
+            "stack": "Kotlin, Jetpack Compose",
+            "imageURL": "https://repository-images.githubusercontent.com/457556659/9b1a8206-6c3e-41e0-a432-950180fa20d8"
+        },
+        {
+            "repo": "kurozora-linux",
+            "name": "Kurozora Linux",
+            "description": "Kurozora Linux client app gives users access to the huge catalog of anime, manga and games on Linux and Windows systems.",
+            "stack": "C++, GTK4",
+            "imageURL": "https://repository-images.githubusercontent.com/643583505/8b5da5b1-b571-4147-b05e-570f93f1da70"
+        },
+        {
+            "repo": "kurozora-discord-bot",
+            "name": "Kurozora Discord Bot",
+            "description": "Kurozora Discord Bot (KuroBot) is a versatile bot that gives users access to Kurozora services right on their Discord servers.",
+            "stack": "Javascript, NodeJS",
+            "imageURL": "https://repository-images.githubusercontent.com/471792719/1a9481b8-72b7-4766-ad7b-e4c88ddc7a1b"
+        },
+        {
+            "repo": "kurozora-extension",
+            "name": "Kurozora Web Extension",
+            "description": "Kurozora Web Extension is an Anime, Manga and Game search engine for FireFox and Chrome.",
+            "stack": "Javascript, Manifest 3",
+            "imageURL": "https://repository-images.githubusercontent.com/617203594/a78e44a4-e0dd-436a-8cbe-6aa5384a94bb"
+        }
+    ]
+}

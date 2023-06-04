@@ -14,9 +14,14 @@ return [
     |
     */
 
-    'twitter' => [
-        'url' => 'https://twitter.com/' . env('TWITTER_HANDLE', 'KurozoraApp'),
-        'username' => env('TWITTER_HANDLE', 'KurozoraApp'),
+    'discord' => [
+        'url' => 'https://discord.gg/' . env('DISCORD_INVITE', 'f3QFzGqsah'),
+        'username' => env('DISCORD_HANDLE', 'Kurozora'),
+    ],
+
+    'github' => [
+        'url' => 'https://github.com/' . env('GITHUB_HANDLE', 'Kurozora'),
+        'username' => env('GITHUB_HANDLE', 'Kurozora'),
     ],
 
     'instagram' => [
@@ -24,14 +29,14 @@ return [
         'username' => env('INSTAGRAM_HANDLE', 'kurozora_app'),
     ],
 
-    'discord' => [
-        'url' => 'https://discord.gg/' . env('DISCORD_INVITE', 'f3QFzGqsah'),
-        'username' => env('DISCORD_HANDLE', 'Kurozora'),
-    ],
-
     'reddit' => [
         'url' => 'https://www.reddit.com/r/' . env('REDDIT_HANDLE', 'Kurozora'),
         'username' => env('REDDIT_HANDLE', 'Kurozora'),
+    ],
+
+    'twitter' => [
+        'url' => 'https://twitter.com/' . env('TWITTER_HANDLE', 'KurozoraApp'),
+        'username' => env('TWITTER_HANDLE', 'KurozoraApp'),
     ],
 
     'youtube' => [

@@ -161,6 +161,9 @@
 {{--                    <li class="mt-2">--}}
 {{--                        <x-footer-link href="{{ route('misc.investors') }}">{{ __('Investors') }}</x-footer-link>--}}
 {{--                    </li>--}}
+                    <li class="mt-2">
+                        <x-footer-link href="{{ route('misc.projects') }}">{{ __('Open-Source Projects') }}</x-footer-link>
+                    </li>
 
                     <li class="mt-2">
                         <x-footer-link href="{{ route('misc.contact') }}">{{ __('Contact Kurozora') }}</x-footer-link>
