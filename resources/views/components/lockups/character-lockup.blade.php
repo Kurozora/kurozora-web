@@ -19,7 +19,7 @@
         <p class="text-center leading-tight line-clamp-2">{{ $character->name }}</p>
 
         @if (!empty($castRole))
-            <p class="text-md text-gray-500 text-center leading-tight line-clamp-2">{{ $castRole }}</p>
+            <p class="text-sm text-gray-500 text-center leading-tight line-clamp-2">{{ $castRole }}</p>
         @endif
     </div>
 </div>

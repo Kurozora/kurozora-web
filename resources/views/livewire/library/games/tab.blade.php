@@ -40,7 +40,7 @@
 
                 <p class="font-bold">{{ __('No Games') }}</p>
 
-                <p class="text-md text-gray-500">{{ __('Add a game to your :x list and it will show up here.', ['x' => strtolower($status)]) }}</p>
+                <p class="text-sm text-gray-500">{{ __('Add a game to your :x list and it will show up here.', ['x' => strtolower($status)]) }}</p>
             </section>
         @endif
     @endif

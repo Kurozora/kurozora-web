@@ -19,7 +19,7 @@
         <p class="text-center leading-tight line-clamp-2">{{ $person->full_name }}</p>
 
         @if (!empty($staffRole))
-            <p class="text-md text-gray-500 text-center leading-tight line-clamp-2">{{ $staffRole }}</p>
+            <p class="text-sm text-gray-500 text-center leading-tight line-clamp-2">{{ $staffRole }}</p>
         @endif
     </div>
 </div>

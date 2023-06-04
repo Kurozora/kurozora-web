@@ -49,7 +49,7 @@
 
                     <p class="font-bold">{{ __('No Favorite Anime') }}</p>
 
-                    <p class="text-md text-gray-500">{{ __('Favorite an anime and it will show up here.') }}</p>
+                    <p class="text-sm text-gray-500">{{ __('Favorite an anime and it will show up here.') }}</p>
                 </section>
             @endif
         @endif

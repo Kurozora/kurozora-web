@@ -134,6 +134,10 @@
                     </li>
 
                     <li class="mt-2">
+                        <x-footer-link href="{{ config('app.developer_url') }}" target="_blank">{{ __('Kurozora Developer') }}</x-footer-link>
+                    </li>
+
+                    <li class="mt-2">
                         <x-footer-link href="{{ route('api') }}" target="_blank">{{ __('Kurozora API') }}</x-footer-link>
                     </li>
 
