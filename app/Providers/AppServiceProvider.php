@@ -30,8 +30,9 @@ class AppServiceProvider extends ServiceProvider
 
             if ($currentConfigValue == null) {
                 Config::set(self::$queryCountConfigKey, 1);
+            } else {
+                Config::set(self::$queryCountConfigKey, $currentConfigValue + 1);
             }
-            else Config::set(self::$queryCountConfigKey, $currentConfigValue + 1);
         });
 
         /*
