@@ -19,7 +19,7 @@ class Team extends Component
     public function getUsersProperty(): array|Collection
     {
         $users = User::whereIn('id', [
-            1, 2, 380, 461, 668
+            1, 2, 380, 461, 668, 1110
         ])->get();
 
         return [
@@ -28,6 +28,7 @@ class Team extends Component
             $users[4],
             $users[3],
             $users[2],
+            $users[5],
         ];
     }
 

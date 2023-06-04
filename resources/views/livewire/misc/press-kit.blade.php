@@ -15,10 +15,6 @@
         <link rel="canonical" href="{{ route('misc.press-kit') }}">
     </x-slot:meta>
 
-    <x-slot:appArgument>
-        explore
-    </x-slot:appArgument>
-
     <div>
         {{-- Brand --}}
         <section class="relative pl-4 pr-4 pt-36 pb-10 overflow-hidden sm:px-6">

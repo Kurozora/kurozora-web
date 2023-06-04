@@ -336,7 +336,7 @@ class User extends Resource
         $roleString = '';
 
         foreach($roles as $role) {
-            $roleString .= '<span class="py-1 px-2 mr-1 inline-block rounded align-middle" style="background-color: #465161; color: #fff;">' . $role . '</span>';
+            $roleString .= '<span class="inline-block align-middle mr-1 pt-1 pr-2 pb-1 pl-2 rounded" style="background-color: #465161; color: #fff;">' . $role . '</span>';
         }
 
         return $roleString;

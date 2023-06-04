@@ -136,7 +136,7 @@
         </section>
 
         {{-- App Showcase --}}
-        <section class="pl-4 pr-4 pt-36 pb-10 sm:px-6">
+        <section class="pl-4 pr-4 pt-36 sm:px-6">
             <div class="flex flex-col items-center mx-auto max-w-2xl text-center">
                 <img class="m-10 mb-0" width="82" height="82" src="{{ asset('images/static/icon/app_icon.webp') }}" alt="Kurozora">
 
@@ -183,7 +183,7 @@
                             x-transition:enter-start="opacity-0 translate-y-full"
                             x-transition:enter-end="opacity-100 translate-y-0"
                         >
-                            <span class="text-lime-500">{{ __('20,000+ anime') }}</span> {{ __('with more added all the time.') }}
+                            <span class="text-lime-500">{{ __('90,000+ Japanese media') }}</span> {{ __('with more added all the time.') }}
                         </li>
                     </span>
                     <span

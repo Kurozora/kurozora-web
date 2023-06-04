@@ -21,7 +21,7 @@
             </x-slot:title>
 
             <x-slot:description>
-                {{ __('Send us an email with your question and we will help you. Clicking on send will open the mail app with the subject and message your provided in the form.') }}
+                {{ __('Send us an email with your question and we will help you. Clicking on send will open the mail app with the subject and message you provided in the form.') }}
             </x-slot:description>
 
             <x-slot:form>
