@@ -1,0 +1,69 @@
+{
+    "name": "Kurozora",
+    "short_name": "Kurozora",
+    "description": "Your one-stop shop for everything anime!",
+    "categories": ["entertainment", "productivity", "lifestyle"],
+    "dir": "rtl",
+    "lang": "en",
+    "scope": "/",
+    "start_url": "/",
+    "display": "standalone",
+    "display_override": ["window-controls-overlay"],
+    "background_color": "#353A50",
+    "theme_color": "#FF9300",
+    "orientation": "any",
+    "icons": [
+        {
+            "src": "images/static/icon/app_icon.png",
+            "sizes": "any",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "images/static/icon/app_icon.webp",
+            "sizes": "any",
+            "type": "image/webp",
+            "purpose": "any maskable"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Profile",
+            "url": "/profile",
+            "description": "View your profile page"
+        },
+        {
+            "name": "Library",
+            "url": "/animelist",
+            "description": "Jump into your anime library"
+        },
+        {
+            "name": "Anime",
+            "url": "/anime",
+            "description": "Browse all anime on Kurozora"
+        },
+        {
+            "name": "Manga",
+            "url": "/manga",
+            "description": "Browse all manga on Kurozora"
+        },
+        {
+            "name": "Games",
+            "url": "/games",
+            "description": "Browse all games on Kurozora"
+        },
+        {
+            "name": "Search",
+            "url": "/search",
+            "description": "Search for anime, manga, games, and more"
+        }
+    ],
+    "related_applications": [
+        {
+            "platform": "itunes",
+            "url": "https://apps.apple.com/us/app/kurozora/id1476153872",
+            "id": "app.kurozora.tracker"
+        }
+    ],
+    "prefer_related_applications": true
+}

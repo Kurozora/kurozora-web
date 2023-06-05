@@ -43,14 +43,18 @@
         @livewireStyles
         {{ $styles ?? '' }}
 
-        {{-- Search --}}
+        <!-- Search -->
         <link rel="search" type="application/opensearchdescription+xml" title="{{ config('app.name') }}" href="{{ asset('opensearch.xml') }}">
+
+        <!-- PWA -->
+        <link rel="manifest" href="{{ url('manifest.json') }}" />
 
         <!-- Scripts -->
         <script src="{{ url(mix('js/app.js')) }}" defer></script>
         @if (app()->isLocal())
             <script src="{{ url(mix('js/debug.js')) }}" defer></script>
         @endif
+        <script src="{{ url(mix(('js/worker.js'))) }}" defer></script>
 
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}" />
