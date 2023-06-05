@@ -34,10 +34,6 @@ return [
                 'series' => 'https://thetvdb.com/?tab=series&id='
             ]
         ],
-        'animix_play' => [
-            'base' => 'https://animixplay.to',
-            'api' => 'https://animixplay.to/v1',
-        ],
         'anime_filler_list' => [
             'base' => 'https://www.animefillerlist.com',
             'shows' => 'https://www.animefillerlist.com/shows',

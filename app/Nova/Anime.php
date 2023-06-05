@@ -101,10 +101,6 @@ class Anime extends Resource
                 ->hideFromIndex()
                 ->help('Used to identify the Anime on <a target="_blank" href="https://anime-planet.com/anime/' . ($this->resource->animeplanet_id ?? 'slug-identifier') . '">Anim-Planet</a>'),
 
-            Text::make('Animix ID')
-                ->hideFromIndex()
-                ->help('Used to identify the Anime on <a target="_blank" href="https://animixplay.to/v1/' . ($this->resource->animix_id ?? 'slug-identifier') . '">AnimixPlay</a>'),
-
             Number::make('AniSearch ID')
                 ->hideFromIndex()
                 ->help('Used to identify the Anime on <a target="_blank" href="https://anisearch.com/anime/' . ($this->resource->anisearch_id ?? 'slug-identifier') . '">AniSearch</a>'),
@@ -498,12 +494,6 @@ class Anime extends Resource
                 ->canSee(function ($request) {
                     return $request->user()->can('updateAnime') && $request->user()->can('updateEpisode');
                 }),
-//            ScrapeEpisodes::make()
-//                ->confirmText('Are you sure you want to scrape episodes for this anime?')
-//                ->confirmButtonText('Scrape Episodes')
-//                ->canSee(function ($request) {
-//                    return $request->user()->can('updateAnime');
-//                }),
         ];
     }
 
