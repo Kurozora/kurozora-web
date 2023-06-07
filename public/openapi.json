@@ -2,15 +2,11 @@
   "openapi": "3.0.3",
   "info": {
     "description": "Integrate tracking shows with Kurozora content.\n *** \nThe Kurozora API is a web service that lets you access information about the media found in the Kurozora&nbsp;Catalog and the user's personal Kurozora&nbsp;Library. Here's what each one includes:\n- The Kurozora&nbsp;Catalog includes all resources available in Kurozora.\n- The user's Kurozora&nbsp;Library contains only those resources that the user added to their personal library. For example, it contains shows added to their tracking list, and favorites.\n\nUse this service to retrieve information about people, characters, episodes, seasons, genres, shows, studios, feeds, users, and the users' library.\nWith proper authorization from the user, you can also create or modify their library, apply ratings to shows, create or modify feeds and react on replies.",
-    "version": "1.3.1",
+    "version": "1.4.0",
     "title": "Kurozora API",
-    "termsOfService": "https://swagger.io/terms/",
+    "termsOfService": "https://kurozora.app/legal/terms-of-use",
     "contact": {
       "email": "kurozoraapp@gmail.com"
-    },
-    "license": {
-      "name": "Apache 2.0",
-      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
   "servers": [
@@ -45,12 +41,24 @@
       "description": "Everything episodes related"
     },
     {
+      "name":"feed",
+      "description":"Everything feed related"
+    },
+    {
       "name": "genres",
       "description": "Everything genre related"
     },
     {
+      "name": "me",
+      "description": "Endpoints related to the authenticated user."
+    },
+    {
       "name": "people",
       "description": "Everything people related"
+    },
+    {
+      "name": "search",
+      "description": "Everything search related"
     },
     {
       "name": "seasons",
@@ -65,20 +73,12 @@
       "description": "Everything themes related"
     },
     {
-      "name":"feed",
-      "description":"Everything feed related"
-    },
-    {
-      "name": "me",
-      "description": "Endpoints related to the authenticated user."
+      "name": "theme-store",
+      "description": "Everything platform theme related"
     },
     {
       "name": "users",
       "description": "Everything user related"
-    },
-    {
-      "name": "theme-store",
-      "description": "Everything theme store related"
     },
     {
       "name": "store",
@@ -644,7 +644,7 @@
         }
       }
     },
-    "/anime/search": {
+    "/search": {
       "get": {
         "security": [
           {
@@ -655,20 +655,52 @@
           }
         ],
         "tags": [
-          "anime"
+          "search"
         ],
-        "operationId": "getAnimeSearch",
-        "summary": "(optional authentication) Searches Anime.",
-        "description": "This endpoint will retrieve the search results for Anime.\n<h3><strong>TIP: You can prefix your search with \"id:\" to search for Anime with a specific ID.</strong></h3>",
+        "operationId": "getSearch",
+        "summary": "Get search results.",
+        "description": "This endpoint will return search results for the specified query.",
         "parameters": [
+          {
+            "in": "query",
+            "name": "scope",
+            "schema": {
+              "$ref": "#/components/schemas/SearchScope"
+            },
+            "required": true,
+            "description": "The scope of the search."
+          },
+          {
+            "in": "query",
+            "name": "types[]",
+            "schema": {
+              "$ref": "#/components/schemas/SearchType"
+            },
+            "required": true,
+            "description": "The types used to perform the search."
+          },
           {
             "in": "query",
             "name": "query",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "one piece",
+              "minimum": 1
+            },
+            "required": true,
+            "description": "The search query."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "example": 25,
+              "minimum": 1,
+              "maximum": 25
             },
             "required": false,
-            "description": "The search query."
+            "description": "The limit on the number of objects, or number of objects in the specified relationship, that are returned. The default value is 25 and the maximum value is 25."
           },
           {
             "in": "query",
@@ -683,7 +715,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/GetAnimeSearchSuccess"
+            "$ref": "#/components/responses/GetSearchSuccess"
           },
           "400": {
             "$ref": "#/components/responses/JSONError"
@@ -2444,51 +2476,6 @@
         }
       }
     },
-    "/me/library/search": {
-      "get": {
-        "security": [
-          {
-            "bearerAuth": [
-            ]
-          }
-        ],
-        "tags": [
-          "me"
-        ],
-        "operationId": "getMeLibrarySearch",
-        "summary": "Search in library.",
-        "description": "This endpoint will retrieve the search results of anime in the authenticated user's library.",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "The search query."
-          },
-          {
-            "in": "query",
-            "name": "page",
-            "schema": {
-              "type": "string",
-              "minimum": 1
-            },
-            "required": false,
-            "description": "The next page or group of objects to fetch. The default value is 1."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
     "/me/notifications": {
       "get": {
         "security": [
@@ -3549,53 +3536,6 @@
         }
       }
     },
-    "/users/search": {
-      "get": {
-        "security": [
-          {
-          },
-          {
-            "bearerAuth": [
-            ]
-          }
-        ],
-        "tags": [
-          "users"
-        ],
-        "operationId": "getUsersSearch",
-        "summary": "(optional authentication) Searches users.",
-        "description": "This endpoint will retrieve the search results for users.\n<h3><strong>TIP: You can prefix your search with \"id:\" to search for a user with a specific ID.</strong></h3>",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": false,
-            "description": "The search query."
-          },
-          {
-            "in": "query",
-            "name": "page",
-            "schema": {
-              "type": "string",
-              "minimum": 1
-            },
-            "required": false,
-            "description": "The next page or group of objects to fetch. The default value is 1."
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/JSONSuccess"
-          },
-          "400": {
-            "$ref": "#/components/responses/JSONError"
-          }
-        }
-      }
-    },
     "/users/delete": {
       "delete": {
         "security": [
@@ -3766,18 +3706,6 @@
   },
   "components": {
     "schemas": {
-      "LibraryStatus": {
-        "type": "string",
-        "enum": [
-          "Watching",
-          "Dropped",
-          "Planning",
-          "Completed",
-          "OnHold"
-        ],
-        "default": "Watching",
-        "description": "The set of available library status types."
-      },
       "ImportService": {
         "type": "integer",
         "enum": [
@@ -3795,6 +3723,18 @@
         ],
         "default": 1,
         "description": "The set of available import behavior types.\n- 0 = overwrite\n- 1 = merge"
+      },
+      "LibraryStatus": {
+        "type": "string",
+        "enum": [
+          "Watching",
+          "Dropped",
+          "Planning",
+          "Completed",
+          "OnHold"
+        ],
+        "default": "Watching",
+        "description": "The set of available library status types."
       },
       "NotificationReadStatus": {
         "type": "integer",
@@ -3831,6 +3771,34 @@
         ],
         "default": 0,
         "description": "Whether the message is a reply or not. If it's a reply then parent_id cannot be empty.\n- 0 = not reply\n- 1 = reply"
+      },
+      "SearchScope": {
+        "type": "string",
+        "enum": [
+          "kurozora",
+          "library"
+        ],
+        "default": "kurozora",
+        "description": "The types used to perform the search."
+      },
+      "SearchType": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "characters",
+            "episodes",
+            "games",
+            "literatures",
+            "people",
+            "shows",
+            "songs",
+            "studios",
+            "users"
+          ]
+        },
+        "default": "shows",
+        "description": "The types used to perform the search."
       },
       "SpoilerStatus": {
         "type": "integer",
@@ -5106,145 +5074,66 @@
           }
         }
       },
-      "GetAnimeSearchSuccess": {
-        "description": "Successful GET Anime Search JSON response",
+      "GetSearchSuccess": {
+        "description": "Successful GET Search JSON response",
         "content": {
           "application/json": {
             "schema": {
               "type": "object",
               "example": {
-                "data": [
-                  {
-                    "id": 1,
-                    "type": "show",
-                    "href": "/v1/anime/1",
-                    "attributes": {
-                      "title": "\"0\"",
-                      "type": "Tv",
-                      "source": "Unknown",
-                      "anidbID": 10143,
-                      "anilistID": 102416,
-                      "kitsuID": 8925,
-                      "imdbID": null,
-                      "malID": 20707,
-                      "network": null,
-                      "studio": [
-                        {
-                          "id": 1,
-                          "type": "studios",
-                          "href": "/v1/studios/1",
-                          "attributes": {
-                            "name": "Watsica-Kling",
-                            "logoURL": "https://place-hold.it/512x512",
-                            "about": "Error ipsa eos et rem recusandae rerum quos quidem aut.",
-                            "founded": "1963-11-15",
-                            "websiteURL": "https://watsica-kling.com/"
-                          }
-                        }
-                      ],
-                      "status": "Continuing",
-                      "episodes": 0,
-                      "seasons": 0,
-                      "averageRating": 0,
-                      "ratingCount": 0,
-                      "synopsis": "Error ipsa eos et rem recusandae voluptate sunt corrupti. Qui est est autem sit pariatur laudantium. Suscipit laboriosam enim modi quae quia aperiam excepturi sunt. Temporibus est hic adipisci.",
-                      "runtime": 25,
-                      "tvRating": {
-                        "name": "G",
-                        "description": "All Ages"
+                "data": {
+                  "characters": {
+                    "data": [
+                      {
+                        "id": 7487,
+                        "uuid": "7487",
+                        "type": "characters",
+                        "href": "/v1/characters/krieg"
                       },
-                      "tagline": "Voluptatem rerum quos quidem aut.",
-                      "videoURL": null,
-                      "poster": {
-                        "url": "https://place-hold.it/680x1000",
-                        "height": 1000,
-                        "width": 680,
-                        "backgroundColor": "#acacac",
-                        "textColor1": "#171717",
-                        "textColor2": "#545454",
-                        "textColor3": "#6e6e6e",
-                        "textColor4": "#5c5c5c"
-                      },
-                      "background": {
-                        "url": "https://place-hold.it/1920x1080",
-                        "height": 1080,
-                        "width": 1920,
-                        "backgroundColor": "#acacac",
-                        "textColor1": "#171717",
-                        "textColor2": "#545454",
-                        "textColor3": "#6d6d6d",
-                        "textColor4": "#5c5c5c"
-                      },
-                      "isNSFW": false,
-                      "genres": [
-                        "Action",
-                        "Adventure"
-                      ],
-                      "themes": [
-                        "Cars",
-                        "Demons"
-                      ],
-                      "startedAt": "1973-11-15",
-                      "endedAt": "1974-02-07",
-                      "airTime": "20:00:00",
-                      "airDay": 3,
-                      "copyright": "® 2003 Watsica-Kling"
-                    }
+                      {
+                        "id": 16398,
+                        "uuid": "16398",
+                        "type": "characters",
+                        "href": "/v1/characters/whetton"
+                      }
+                    ],
+                    "next": "/v1/search?query=one%20piece&scope=kurozora&limit=2&types%5B0%5D=characters&page=2"
                   },
-                  {
-                    "id": 2,
-                    "type": "show",
-                    "href": "/v1/anime/2",
-                    "attributes": {
-                      "title": "\"Aesop\" no Ohanashi yori: Ushi to Kaeru, Yokubatta Inu",
-                      "type": "Tv",
-                      "source": "Digital manga",
-                      "anidbID": 3689,
-                      "anilistID": null,
-                      "kitsuID": 9179,
-                      "imdbID": null,
-                      "malID": 25627,
-                      "network": null,
-                      "studio": [
-                        {
-                          "id": 2,
-                          "type": "studios",
-                          "href": "/v1/studios/2",
-                          "attributes": {
-                            "name": null,
-                            "logoURL": null,
-                            "about": null,
-                            "founded": null,
-                            "websiteURL": null
-                          }
-                        }
-                      ],
-                      "status": "Ended",
-                      "episodes": 0,
-                      "seasons": 0,
-                      "averageRating": 0,
-                      "ratingCount": 0,
-                      "synopsis": "Totam ex non eaque rem. Suscipit eos recusandae et. Pariatur reprehenderit aliquid reprehenderit nisi quae. Fuga enim atque ratione occaecati sequi iste dignissimos.",
-                      "runtime": 25,
-                      "tvRating": {
-                        "name": "G",
-                        "description": "All Ages"
+                  "shows": {
+                    "data": [
+                      {
+                        "id": 22598,
+                        "uuid": "22598",
+                        "type": "show",
+                        "href": "/v1/anime/one-piece"
                       },
-                      "tagline": "Vel facilis dignissimos suscipit veritatis enim nemo ut.",
-                      "videoURL": null,
-                      "poster": null,
-                      "background": null,
-                      "isNSFW": false,
-                      "genres": [],
-                      "themes": [],
-                      "startedAt": "2014-09-28",
-                      "endedAt": "2014-12-21",
-                      "airTime": "19:24:00",
-                      "airDay": 4,
-                      "copyright": "® 1985 Fadel, Sipes and McGlynn"
-                    }
+                      {
+                        "id": 13739,
+                        "uuid": "13739",
+                        "type": "show",
+                        "href": "/v1/anime/one-piece-film-gold-cine-mike-popcorn-kokuchi"
+                      }
+                    ],
+                    "next": "/v1/search?query=one%20piece&scope=kurozora&limit=2&types%5B0%5D=shows&page=2"
+                  },
+                  "studios": {
+                    "data": [
+                      {
+                        "id": 1345,
+                        "uuid": "1345",
+                        "type": "studios",
+                        "href": "/v1/studios/one-piece-magazine"
+                      },
+                      {
+                        "id": 2334,
+                        "uuid": "2334",
+                        "type": "studios",
+                        "href": "/v1/studios/toei-animation"
+                      }
+                    ],
+                    "next": null
                   }
-                ]
+                }
               }
             }
           }
