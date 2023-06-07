@@ -17,17 +17,17 @@
 
     <div class="max-w-7xl mx-auto pl-4 pr-4 pb-6 sm:px-6">
         <section class="relative mt-4 mb-4 pt-2 pr-2 pb-2 pl-2 bg-orange-500 text-white font-semibold rounded-lg">
-            <a class="after:absolute after:inset-0" href="{{ config('services.patreon.url') }}" target="_blank">
-                {{ __('Is Kurozora helpful? Please consider supporting me in keeping it online.') }}
+            <a class="after:absolute after:inset-0" href="{{ config('services.ko-fi.url') }}" target="_blank">
+                {{ __('Enjoying Kurozora? Please consider supporting us with keeping it online.') }}
             </a>
             <a href="#" target="_blank"></a>
         </section>
 
-        <section>
-            <x-picture>
-                <img class="w-full object-cover h-32 rounded-lg shadow sm:h-40 md:h-80" src="{{ asset('images/static/banners/games_now_on_kurozora.webp') }}" alt="Games and Manga tracking now available on Kurozora">
-            </x-picture>
-        </section>
+{{--        <section>--}}
+{{--            <x-picture>--}}
+{{--                <img class="w-full object-cover h-32 rounded-lg shadow sm:h-40 md:h-80" src="{{ asset('images/static/banners/games_now_on_kurozora.webp') }}" alt="Games and Manga tracking now available on Kurozora">--}}
+{{--            </x-picture>--}}
+{{--        </section>--}}
 
 {{--        <section class="relative mb-8">--}}
 {{--            <a href="{{ config('social.discord.url') }}" target="_blank" class="after:absolute after:inset-0">--}}
