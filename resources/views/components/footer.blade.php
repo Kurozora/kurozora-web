@@ -217,6 +217,10 @@
                 <h5 class="uppercase text-sm mb-2 font-semibold">{{ __('Support Us') }}</h5>
                 <ul class="m-0 mb-4 list-none">
                     <li class="mt-2">
+                        <x-footer-link target="_blank" href="{{ config('services.ko-fi.url') }}">Ko-Fi</x-footer-link>
+                    </li>
+
+                    <li class="mt-2">
                         <x-footer-link target="_blank" href="{{ config('services.patreon.url') }}">Patreon</x-footer-link>
                     </li>
 
