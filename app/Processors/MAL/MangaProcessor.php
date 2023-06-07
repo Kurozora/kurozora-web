@@ -98,7 +98,7 @@ class MangaProcessor implements ItemProcessorInterface
 
         $originalTitle = $item->get('original_title');
         $synonymTitles = $this->getSynonymTitles($manga);
-        $synopsis = $item->get('synopsis');
+        $synopsis = $this->getSynopsis($item->get('synopsis'));
         $title = $this->getAttribute('English');
         $jaTitle = $this->getAttribute('Japanese');
         $deTitle = $this->getAttribute('German');
@@ -717,6 +717,29 @@ class MangaProcessor implements ItemProcessorInterface
         $newSynonymTitles = empty(count($synonymTitles)) || empty($manga?->synonym_titles?->count()) ? $currentSynonymTitles : array_merge($currentSynonymTitles, $synonymTitles);
 
         return count($newSynonymTitles ?? []) ? array_unique($newSynonymTitles) : null;
+    }
+
+    /**
+     * The synopsis of the anime.
+     *
+     * @param string $synopsis
+     * @return ?string
+     */
+    private function getSynopsis(string $synopsis): ?string
+    {
+        $synopsis = empty(trim($synopsis)) ? null: $synopsis;
+
+        if (!empty($synopsis)) {
+            if (str($synopsis)->contains(['[Written by MAL Rewrite]'])) {
+                $synopsis = str($synopsis)->replaceLast('[Written by MAL Rewrite]', 'Source: MAL');
+            } else {
+                $synopsis = preg_replace_array('/\([^ ]*|\)/i', ['Source:', ''], $synopsis);
+            }
+
+            $synopsis = str_replace('<br>', '', $synopsis);
+        }
+
+        return $synopsis;
     }
 
     /**

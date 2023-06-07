@@ -3,6 +3,10 @@
 namespace App\Spiders\MAL;
 
 use App\Processors\MAL\AnimeProcessor;
+use App\Processors\MAL\AnimeStatsProcessor;
+use App\Spiders\MAL\Models\AnimeItem;
+use App\Spiders\MAL\Models\AnimeStatItem;
+use Arr;
 use Exception;
 use Generator;
 use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
@@ -20,7 +24,7 @@ class AnimeSpider extends BasicSpider
      * @var array $startUrls
      */
     public array $startUrls = [
-        //
+        'https://myanimelist.net/anime/50002'
     ];
 
     /**
@@ -51,7 +55,8 @@ class AnimeSpider extends BasicSpider
      * @var array $itemProcessors
      */
     public array $itemProcessors = [
-        AnimeProcessor::class
+        AnimeProcessor::class,
+        AnimeStatsProcessor::class
     ];
 
     /**
@@ -103,14 +108,14 @@ class AnimeSpider extends BasicSpider
             ->text();
         $attributes = $response->filter('div.leftside')
             ->filter('.spaceit_pad')
-            ->each(function($item) {
+            ->each(function ($item) {
                 return str($item->text());
             });
         $synopsis = $response->filter('p[itemprop="description"]')
             ->html();
 
         $studios = $response->filter('div.leftside a[href*="/anime/producer/"]')
-            ->each(function(Crawler $item) {
+            ->each(function (Crawler $item) {
                 $regex = '/(\d+)\//';
                 $id = str($item->attr('href'))
                     ->remove(['/anime/producer/'])
@@ -120,7 +125,7 @@ class AnimeSpider extends BasicSpider
             });
 
         $genres = $response->filter('div.leftside a[href*="/anime/genre/"]')
-            ->each(function(Crawler $item) {
+            ->each(function (Crawler $item) {
                 $regex = '/(\d+)\//';
                 $id = str($item->attr('href'))
                     ->remove(['/anime/genre/'])
@@ -135,18 +140,55 @@ class AnimeSpider extends BasicSpider
         $ending = $this->cleanSongs($response, 'div[class*="theme-songs ending"] table');
 
         logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $id . '] Done parsing');
-        yield $this->item([
-            'id'                => $id,
-            'original_title'    => $originalTitle,
-            'attributes'        => $attributes,
-            'synopsis'          => $synopsis,
-            'image_url'         => $imageUrl,
-            'video_url'         => $videoUrl,
-            'studios'           => array_replace([], ...$studios),
-            'genres'            => array_replace([], ...$genres),
-            'openings'          => $openings,
-            'ending'            => $ending,
-        ]);
+        yield $this->item(new AnimeItem(
+            $id,
+            $originalTitle,
+            $attributes,
+            $synopsis,
+            $imageUrl,
+            $videoUrl,
+            array_replace([], ...$studios),
+            array_replace([], ...$genres),
+            $openings,
+            $ending
+        ));
+
+        // Stats
+        $statsPageLink = $response->filter('a[href*="/stats"]')
+            ->attr('href');
+        yield ParseResult::request('GET', $statsPageLink, [$this, 'parseStatsPage'], []);
+    }
+
+    /**
+     * @param Response $response
+     *
+     * @return Generator<ParseResult>
+     */
+    public function parseStatsPage(Response $response): Generator
+    {
+        $regex = '/anime\/(\d*)/';
+        $uri = str($response->getUri());
+        $id = $uri->match($regex)->remove('/anime/')->value();
+        logger()->channel('stderr')->info('🕷 [MAL_ID:ANIME:' . $id . '] Parsing stats response');
+
+        $scores = $response->filter('table.score-stats tr')
+            ->each(function(Crawler $item) {
+                $scoreLabel = $item->filter('td.score-label')->text();
+                $score = $item->filter('td small')->text();
+
+                return [
+                    "rating_$scoreLabel" => $score
+                ];
+            });
+        $scores = Arr::collapse($scores);
+
+        $scoreAverage = (float) $response->filter('.leftside .score-label')
+            ->text();
+
+        $scoreCount = (int) $response->filter('span[itemprop="ratingCount"]')
+            ->text();
+
+        yield $this->item(new AnimeStatItem($id, $scores, $scoreAverage, $scoreCount));
     }
 
     /**

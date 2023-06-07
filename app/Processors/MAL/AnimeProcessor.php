@@ -18,25 +18,33 @@ use App\Models\Status;
 use App\Models\Studio;
 use App\Models\Theme;
 use App\Models\TvRating;
+use App\Spiders\MAL\Models\AnimeItem;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Stringable;
 use RoachPHP\ItemPipeline\ItemInterface;
-use RoachPHP\ItemPipeline\Processors\ItemProcessorInterface;
-use RoachPHP\Support\Configurable;
+use RoachPHP\ItemPipeline\Processors\CustomItemProcessor;
 
-class AnimeProcessor implements ItemProcessorInterface
+class AnimeProcessor extends CustomItemProcessor
 {
-    use Configurable;
-
     /**
      * The current item.
      *
      * @var ItemInterface|null
      */
     private ?ItemInterface $item = null;
+
+    /**
+     * @return array<int, class-string<ItemInterface>>
+     */
+    protected function getHandledItemClasses(): array
+    {
+        return [
+            AnimeItem::class
+        ];
+    }
 
     /**
      * The available attributes.
@@ -78,15 +86,15 @@ class AnimeProcessor implements ItemProcessorInterface
     {
         $malID = $item->get('id');
         $this->item = $item;
-
+        logger()->channel('stderr')->info(print_r($item, true));
         logger()->channel('stderr')->info('🔄 [MAL_ID:ANIME:' . $malID . '] Processing ' . $malID);
 
         $anime = Anime::withoutGlobalScopes()
             ->firstWhere('mal_id', '=', $malID);
 
-        $originalTitle = $item->get('original_title');
+        $originalTitle = $item->get('originalTitle');
         $synonymTitles = $this->getSynonymTitles($anime);
-        $synopsis = $item->get('synopsis');
+        $synopsis = $this->getSynopsis($item->get('synopsis'));
         $title = $this->getAttribute('English');
         $jaTitle = $this->getAttribute('Japanese');
         $deTitle = $this->getAttribute('German');
@@ -636,6 +644,29 @@ class AnimeProcessor implements ItemProcessorInterface
         $newSynonymTitles = empty(count($synonymTitles)) || empty($anime?->synonym_titles?->count()) ? $currentSynonymTitles : array_merge($currentSynonymTitles, $synonymTitles);
 
         return count($newSynonymTitles ?? []) ? array_unique($newSynonymTitles) : null;
+    }
+
+    /**
+     * The synopsis of the anime.
+     *
+     * @param string $synopsis
+     * @return ?string
+     */
+    private function getSynopsis(string $synopsis): ?string
+    {
+        $synopsis = empty(trim($synopsis)) ? null: $synopsis;
+
+        if (!empty($synopsis)) {
+            if (str($synopsis)->contains(['[Written by MAL Rewrite]'])) {
+                $synopsis = str($synopsis)->replaceLast('[Written by MAL Rewrite]', 'Source: MAL');
+            } else {
+                $synopsis = preg_replace_array('/\([^ ]*|\)/i', ['Source:', ''], $synopsis);
+            }
+
+            $synopsis = str_replace('<br>', '', $synopsis);
+        }
+
+        return $synopsis;
     }
 
     /**
