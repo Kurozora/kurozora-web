@@ -24,7 +24,7 @@ class AnimeSpider extends BasicSpider
      * @var array $startUrls
      */
     public array $startUrls = [
-        'https://myanimelist.net/anime/50002'
+        //
     ];
 
     /**
@@ -156,7 +156,7 @@ class AnimeSpider extends BasicSpider
         // Stats
         $statsPageLink = $response->filter('a[href*="/stats"]')
             ->attr('href');
-        yield ParseResult::request('GET', $statsPageLink, [$this, 'parseStatsPage'], []);
+        yield ParseResult::request('GET', $statsPageLink, [$this, 'parseStatsPage']);
     }
 
     /**
@@ -182,13 +182,12 @@ class AnimeSpider extends BasicSpider
             });
         $scores = Arr::collapse($scores);
 
-        $scoreAverage = (float) $response->filter('.leftside .score-label')
+        $scoreAverage = $response->filter('.leftside .score-label')
             ->text();
 
-        $scoreCount = (int) $response->filter('span[itemprop="ratingCount"]')
-            ->text();
+        $scoreCount = $scoreAverage !== 'N/A' ? $response->filter('span[itemprop="ratingCount"]')->text() : 0;
 
-        yield $this->item(new AnimeStatItem($id, $scores, $scoreAverage, $scoreCount));
+        yield $this->item(new AnimeStatItem($id, $scores, (float) $scoreAverage, (int) $scoreCount));
     }
 
     /**

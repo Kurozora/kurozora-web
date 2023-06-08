@@ -28,9 +28,9 @@ final class AnimeStatsProcessor extends CustomItemProcessor
         $anime = Anime::withoutGlobalScopes()
             ->firstWhere('mal_id', '=', $malID);
         $mediaStat = $anime->mediaStat;
-        $scores = $this->cleanScores($item->get('scores'));
-        $scoreAverage = $this->convertScoreAverage($item->get('scoreAverage'));
-        $scoreCount = $item->get('scoreCount');
+        $scores = $this->cleanScores($item->get('scores') ?? []);
+        $scoreAverage = $this->convertScoreAverage($item->get('scoreAverage') ?? 0.0);
+        $scoreCount = $item->get('scoreCount') ?? 0;
 
 //        dd([
 //            'scores' => $scores,
@@ -44,16 +44,16 @@ final class AnimeStatsProcessor extends CustomItemProcessor
                 ->create([
                     'model_type'        => $anime->getMorphClass(),
                     'model_id'          => $anime->id,
-                    'rating_1'          => $scores['rating_1'],
-                    'rating_2'          => $scores['rating_2'],
-                    'rating_3'          => $scores['rating_3'],
-                    'rating_4'          => $scores['rating_4'],
-                    'rating_5'          => $scores['rating_5'],
-                    'rating_6'          => $scores['rating_6'],
-                    'rating_7'          => $scores['rating_7'],
-                    'rating_8'          => $scores['rating_8'],
-                    'rating_9'          => $scores['rating_9'],
-                    'rating_10'         => $scores['rating_10'],
+                    'rating_1'          => $scores['rating_1'] ?? 0,
+                    'rating_2'          => $scores['rating_2'] ?? 0,
+                    'rating_3'          => $scores['rating_3'] ?? 0,
+                    'rating_4'          => $scores['rating_4'] ?? 0,
+                    'rating_5'          => $scores['rating_5'] ?? 0,
+                    'rating_6'          => $scores['rating_6'] ?? 0,
+                    'rating_7'          => $scores['rating_7'] ?? 0,
+                    'rating_8'          => $scores['rating_8'] ?? 0,
+                    'rating_9'          => $scores['rating_9'] ?? 0,
+                    'rating_10'         => $scores['rating_10'] ?? 0,
                     'rating_average'    => $scoreAverage,
                     'rating_count'      => $scoreCount,
                 ]);
@@ -62,16 +62,16 @@ final class AnimeStatsProcessor extends CustomItemProcessor
             logger()->channel('stderr')->info('🛠 [MAL_ID:ANIME:' . $malID . '] Updating stats attributes');
 
             $mediaStat->update([
-                'rating_1'          => $scores['rating_1'],
-                'rating_2'          => $scores['rating_2'],
-                'rating_3'          => $scores['rating_3'],
-                'rating_4'          => $scores['rating_4'],
-                'rating_5'          => $scores['rating_5'],
-                'rating_6'          => $scores['rating_6'],
-                'rating_7'          => $scores['rating_7'],
-                'rating_8'          => $scores['rating_8'],
-                'rating_9'          => $scores['rating_9'],
-                'rating_10'         => $scores['rating_10'],
+                'rating_1'          => $scores['rating_1'] ?? 0,
+                'rating_2'          => $scores['rating_2'] ?? 0,
+                'rating_3'          => $scores['rating_3'] ?? 0,
+                'rating_4'          => $scores['rating_4'] ?? 0,
+                'rating_5'          => $scores['rating_5'] ?? 0,
+                'rating_6'          => $scores['rating_6'] ?? 0,
+                'rating_7'          => $scores['rating_7'] ?? 0,
+                'rating_8'          => $scores['rating_8'] ?? 0,
+                'rating_9'          => $scores['rating_9'] ?? 0,
+                'rating_10'         => $scores['rating_10'] ?? 0,
                 'rating_average'    => $scoreAverage,
                 'rating_count'      => $scoreCount,
             ]);
@@ -111,6 +111,10 @@ final class AnimeStatsProcessor extends CustomItemProcessor
      */
     private function convertScoreAverage(float $scoreAverage): float
     {
+        if ($scoreAverage === 0.0) {
+            return 0.0;
+        }
+
         return $scoreAverage / 10 * 5;
     }
 }

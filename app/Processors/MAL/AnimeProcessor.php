@@ -114,8 +114,8 @@ class AnimeProcessor extends CustomItemProcessor
         $theme = $this->getAttribute('Theme') ?? [];
         $themes = ($this->getAttribute('Themes') ?? []) + $theme;
         $demographics = $this->getAttribute('Demographic');
-        $imageUrl = $item->get('image_url');
-        $videoUrl = $item->get('video_url');
+        $imageUrl = $item->get('imageUrl');
+        $videoUrl = $item->get('videoUrl');
         $duration = $this->getAttribute('Duration');
         $aired = $this->getAttribute('Aired');
         $startedAt = $this->getStartedAt($aired);
