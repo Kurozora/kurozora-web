@@ -19,6 +19,7 @@ if [ -f /var/www/html/artisan ]; then
     php /var/www/html/artisan view:cache
     php /var/www/html/artisan route:cache
     php /var/www/html/artisan event:cache
+    php /var/www/html/artisan scout:sync-index-settings
     php /var/www/html/artisan up
 
     echo "${Green} artisan file found, creating supervisor config..."
