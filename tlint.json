@@ -1,0 +1,10 @@
+{
+    "preset": "laravel",
+    "disabled": ["ArrayParametersOverViewWith"],
+    "excluded": ["tests/"],
+    "paths": [
+        {
+            "controllers": ["app/Http/Controllers"]
+        }
+    ]
+}
