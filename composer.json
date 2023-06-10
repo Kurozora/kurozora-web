@@ -70,6 +70,7 @@
         "spatie/laravel-permission": "^5.0",
         "spatie/laravel-sitemap": "^6.0",
         "spatie/laravel-sluggable": "^3.0",
+        "stepanenko3/nova-command-runner": "^4.2",
         "timothyasp/nova-color-field": "^2.0",
         "titasgailius/search-relations": "^2.0",
         "xetaio/xetaravel-mentions": "^10.0"

@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Http\Controllers\Web\Nova\SignInController;
 use App\Models\User;
 use App\Nova\Dashboards\Main;
+use App\Nova\Dashboards\UserInsights;
 use App\Nova\Permission;
 use App\Nova\Role;
 use App\Policies\PermissionPolicy;
@@ -16,6 +17,7 @@ use Laravel\Nova\Actions\ActionEvent;
 use Laravel\Nova\Http\Controllers\LoginController;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
+use Stepanenko3\NovaCommandRunner\CommandRunnerTool;
 use Vyuldashev\NovaPermission\NovaPermissionTool;
 
 class NovaServiceProvider extends NovaApplicationServiceProvider
@@ -85,7 +87,12 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     protected function dashboards(): array
     {
         return [
-            new Main,
+            Main::make(),
+            UserInsights::make()
+                ->showRefreshButton()
+                ->canSee(function ($request) {
+                    return $request->user()->hasRole('superAdmin');
+                }),
         ];
     }
 
@@ -97,6 +104,10 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     public function tools(): array
     {
         return [
+            (new CommandRunnerTool)
+                ->canSee(function ($request) {
+                    return $request->user()->hasRole('superAdmin');
+                }),
             (new NovaPermissionTool)
                 ->rolePolicy(RolePolicy::class)
                 ->permissionPolicy(PermissionPolicy::class)

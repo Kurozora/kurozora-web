@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9f32c54e572f369ee881cc8191ff2b27",
+    "content-hash": "e0e5794bb426d26664d96b02a5d10c80",
     "packages": [
         {
             "name": "astrotomic/laravel-translatable",
@@ -2679,6 +2679,76 @@
             "time": "2022-10-12T11:40:33+00:00"
         },
         {
+            "name": "hashids/hashids",
+            "version": "4.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vinkla/hashids.git",
+                "reference": "8cab111f78e0bd9c76953b082919fc9e251761be"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vinkla/hashids/zipball/8cab111f78e0bd9c76953b082919fc9e251761be",
+                "reference": "8cab111f78e0bd9c76953b082919fc9e251761be",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": "^7.2 || ^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.0 || ^9.4",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "suggest": {
+                "ext-bcmath": "Required to use BC Math arbitrary precision mathematics (*).",
+                "ext-gmp": "Required to use GNU multiple precision mathematics (*)."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Hashids\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ivan Akimov",
+                    "email": "ivan@barreleye.com"
+                },
+                {
+                    "name": "Vincent Klaiber",
+                    "email": "hello@doubledip.se"
+                }
+            ],
+            "description": "Generate short, unique, non-sequential ids (like YouTube and Bitly) from numbers",
+            "homepage": "https://hashids.org/php",
+            "keywords": [
+                "bitly",
+                "decode",
+                "encode",
+                "hash",
+                "hashid",
+                "hashids",
+                "ids",
+                "obfuscate",
+                "youtube"
+            ],
+            "support": {
+                "issues": "https://github.com/vinkla/hashids/issues",
+                "source": "https://github.com/vinkla/hashids/tree/4.1.0"
+            },
+            "time": "2020-11-26T19:24:33+00:00"
+        },
+        {
             "name": "hisorange/browser-detect",
             "version": "4.5.4",
             "source": {
@@ -4108,6 +4178,72 @@
             "transport-options": {
                 "relative": true
             }
+        },
+        {
+            "name": "laravel/pint",
+            "version": "v1.10.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/pint.git",
+                "reference": "d69f914aa347a448628b672ba90adf0b4ea0ce4a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/pint/zipball/d69f914aa347a448628b672ba90adf0b4ea0ce4a",
+                "reference": "d69f914aa347a448628b672ba90adf0b4ea0ce4a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "ext-tokenizer": "*",
+                "ext-xml": "*",
+                "php": "^8.1.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.17.0",
+                "illuminate/view": "^10.5.1",
+                "laravel-zero/framework": "^10.0.2",
+                "mockery/mockery": "^1.5.1",
+                "nunomaduro/larastan": "^2.5.1",
+                "nunomaduro/termwind": "^1.15.1",
+                "pestphp/pest": "^2.4.0"
+            },
+            "bin": [
+                "builds/pint"
+            ],
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "App\\": "app/",
+                    "Database\\Seeders\\": "database/seeders/",
+                    "Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nuno Maduro",
+                    "email": "enunomaduro@gmail.com"
+                }
+            ],
+            "description": "An opinionated code formatter for PHP.",
+            "homepage": "https://laravel.com",
+            "keywords": [
+                "format",
+                "formatter",
+                "lint",
+                "linter",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel/pint/issues",
+                "source": "https://github.com/laravel/pint"
+            },
+            "time": "2023-06-03T15:01:17+00:00"
         },
         {
             "name": "laravel/sanctum",
@@ -10144,6 +10280,101 @@
                 }
             ],
             "time": "2020-11-03T09:10:25+00:00"
+        },
+        {
+            "name": "stepanenko3/laravel-helpers",
+            "version": "v1.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stepanenko3/laravel-helpers.git",
+                "reference": "f1cea50765e8c017aaa4de9af515350d0d95f0b1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stepanenko3/laravel-helpers/zipball/f1cea50765e8c017aaa4de9af515350d0d95f0b1",
+                "reference": "f1cea50765e8c017aaa4de9af515350d0d95f0b1",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-openssl": "*",
+                "hashids/hashids": "^4.1",
+                "laravel/framework": "^9.0|^10.0",
+                "laravel/pint": "^1.2",
+                "php": ">=8.1",
+                "ramsey/uuid": "^4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Helpers for laravel",
+            "keywords": [
+                "helpers",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/stepanenko3/laravel-helpers/issues",
+                "source": "https://github.com/stepanenko3/laravel-helpers/tree/v1.2.2"
+            },
+            "time": "2023-05-04T19:41:26+00:00"
+        },
+        {
+            "name": "stepanenko3/nova-command-runner",
+            "version": "v4.2.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stepanenko3/nova-command-runner.git",
+                "reference": "072efdd283021100f65cecfd9952989e340b96e8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stepanenko3/nova-command-runner/zipball/072efdd283021100f65cecfd9952989e340b96e8",
+                "reference": "072efdd283021100f65cecfd9952989e340b96e8",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/nova": "^4.0",
+                "php": ">=7.4",
+                "stepanenko3/laravel-helpers": "*"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Stepanenko3\\NovaCommandRunner\\ToolServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Stepanenko3\\NovaCommandRunner\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Laravel Nova tool for running Artisan and bash(shell) commands.",
+            "keywords": [
+                "artisan",
+                "bash",
+                "commands",
+                "laravel",
+                "nova",
+                "shell"
+            ],
+            "support": {
+                "issues": "https://github.com/stepanenko3/nova-command-runner/issues",
+                "source": "https://github.com/stepanenko3/nova-command-runner/tree/v4.2.4"
+            },
+            "time": "2023-04-23T15:54:56+00:00"
         },
         {
             "name": "symfony/console",

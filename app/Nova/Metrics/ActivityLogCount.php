@@ -29,14 +29,14 @@ class ActivityLogCount extends Value
     public function ranges(): array
     {
         return [
-            7 => '7 Days',
-            30 => '30 Days',
-            60 => '60 Days',
-            365 => '365 Days',
-            'TODAY' => 'Today',
-            'MTD' => 'Month To Date',
-            'QTD' => 'Quarter To Date',
-            'YTD' => 'Year To Date',
+            7 => __('7 Days'),
+            30 => __('30 Days'),
+            60 => __('60 Days'),
+            365 => __('365 Days'),
+            'MTD' => __('Month To Date'),
+            'QTD' => __('Quarter To Date'),
+            'YTD' => __('Year To Date'),
+            'ALL' => __('All Time'),
         ];
     }
 
