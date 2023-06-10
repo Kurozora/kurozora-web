@@ -4,12 +4,12 @@
     </x-slot:title>
 
     <x-slot:description>
-        {{ __('Listen to :x for free. Only on Kurozora, the largest, free online anime, manga, music & game database in the world.', ['x' => $song->title]) }}
+        {{ __('Listen to :x for free. Only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $song->title]) }}
     </x-slot:description>
 
     <x-slot:meta>
         <meta property="og:title" content="{{ $song->title }} — {{ config('app.name') }}" />
-        <meta property="og:description" content="{{ __('Listen to :x songs for free. Only on Kurozora, the largest, free online anime, manga, music & game database in the world.', ['x' => $song->title]) }}" />
+        <meta property="og:description" content="{{ __('Listen to :x songs for free. Only on Kurozora, the largest, free online anime, manga, game & music database in the world.', ['x' => $song->title]) }}" />
         <meta property="og:image" content="{{ $song->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? asset('images/static/placeholders/song_banner.webp') }}" />
         <meta property="og:type" content="music.song" />
         <meta property="og:url" content="{{ route('embed.songs', $song) }}">

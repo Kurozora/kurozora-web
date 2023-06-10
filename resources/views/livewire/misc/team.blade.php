@@ -1,4 +1,20 @@
 <main>
+    <x-slot:title>
+        {{ __('Team') }}
+    </x-slot:title>
+
+    <x-slot:description>
+        {{ __('The amazing people behind Kurozora — the largest, free online anime, manga, game & music database.') }}
+    </x-slot:description>
+
+    <x-slot:meta>
+        <meta property="og:title" content="{{ __('Team') }} — {{ config('app.name') }}" />
+        <meta property="og:description" content="{{ __('The amazing people behind Kurozora — the largest, free online anime, manga, game & music database.') }}" />
+        <meta property="og:image" content="{{ asset('images/static/promotional/social_preview_icon_only.webp') }}" />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href="{{ route('misc.team') }}">
+    </x-slot:meta>
+
     <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
         <x-picture>
             <img class="h-32 w-full object-cover object-center rounded-lg shadow-lg sm:h-44" src="{{ asset('images/static/banners/made_with_love.webp') }}"  alt="Made with Love by 2 Students." />
