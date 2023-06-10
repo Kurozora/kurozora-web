@@ -200,6 +200,10 @@
                     </li>
 
                     <li class="mt-2">
+                        <x-footer-link target="_blank" rel="me" href="{{ config('social.mastodon.url') }}">Mastodon</x-footer-link>
+                    </li>
+
+                    <li class="mt-2">
                         <x-footer-link target="_blank" href="{{ config('social.reddit.url') }}">Reddit</x-footer-link>
                     </li>
 

@@ -29,6 +29,11 @@ return [
         'username' => env('INSTAGRAM_HANDLE', 'Kurozora_App'),
     ],
 
+    'mastodon' => [
+        'url' => 'https://mastodon.social/' . env('MASTODON_HANDLE', '@Kurozora'),
+        'username' => env('MASTODON_HANDLE', '@Kurozora'),
+    ],
+
     'reddit' => [
         'url' => 'https://www.reddit.com/r/' . env('REDDIT_HANDLE', 'Kurozora'),
         'username' => env('REDDIT_HANDLE', 'Kurozora'),
