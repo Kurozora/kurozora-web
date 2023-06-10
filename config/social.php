@@ -25,8 +25,8 @@ return [
     ],
 
     'instagram' => [
-        'url' => 'https://instagram.com/' . env('INSTAGRAM_HANDLE', 'kurozora_app'),
-        'username' => env('INSTAGRAM_HANDLE', 'kurozora_app'),
+        'url' => 'https://instagram.com/' . env('INSTAGRAM_HANDLE', 'Kurozora_App'),
+        'username' => env('INSTAGRAM_HANDLE', 'Kurozora_App'),
     ],
 
     'reddit' => [
@@ -40,8 +40,8 @@ return [
     ],
 
     'youtube' => [
-        'url' => 'https://www.youtube.com/' . env('YOUTUBE_HANDLE', '@Kurozora'),
-        'username' => env('YOUTUBE_HANDLE', '@Kurozora'),
+        'url' => 'https://www.youtube.com/' . env('YOUTUBE_HANDLE', '@KurozoraApp'),
+        'username' => env('YOUTUBE_HANDLE', '@KurozoraApp'),
     ]
 
 ];
