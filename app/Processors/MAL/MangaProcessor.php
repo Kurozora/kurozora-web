@@ -722,10 +722,10 @@ class MangaProcessor implements ItemProcessorInterface
     /**
      * The synopsis of the anime.
      *
-     * @param string $synopsis
+     * @param string|null $synopsis
      * @return ?string
      */
-    private function getSynopsis(string $synopsis): ?string
+    private function getSynopsis(?string $synopsis): ?string
     {
         $synopsis = empty(trim($synopsis)) ? null: $synopsis;
 

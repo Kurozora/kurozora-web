@@ -35,7 +35,7 @@ return [
 
     // Allow running of custom artisan and bash(shell) commands
     // Options: artisan, bash
-    'custom_commands' => ['artisan'],
+    'custom_commands' => ['artisan', 'bash'],
 
     'without_overlapping' => [
         // Blocks running commands simultaneously under the given groups. Use '*' for block all groups
