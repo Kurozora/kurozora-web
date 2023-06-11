@@ -18,25 +18,33 @@ use App\Models\Status;
 use App\Models\Studio;
 use App\Models\Theme;
 use App\Models\TvRating;
+use App\Spiders\MAL\Models\MangaItem;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Stringable;
 use RoachPHP\ItemPipeline\ItemInterface;
-use RoachPHP\ItemPipeline\Processors\ItemProcessorInterface;
-use RoachPHP\Support\Configurable;
+use RoachPHP\ItemPipeline\Processors\CustomItemProcessor;
 
-class MangaProcessor implements ItemProcessorInterface
+class MangaProcessor extends CustomItemProcessor
 {
-    use Configurable;
-
     /**
      * The current item.
      *
      * @var ItemInterface|null
      */
     private ?ItemInterface $item = null;
+
+    /**
+     * @return array<int, class-string<ItemInterface>>
+     */
+    protected function getHandledItemClasses(): array
+    {
+        return [
+            MangaItem::class
+        ];
+    }
 
     /**
      * The available attributes.
@@ -96,7 +104,7 @@ class MangaProcessor implements ItemProcessorInterface
         $manga = Manga::withoutGlobalScopes()
             ->firstWhere('mal_id', '=', $malID);
 
-        $originalTitle = $item->get('original_title');
+        $originalTitle = $item->get('originalTitle');
         $synonymTitles = $this->getSynonymTitles($manga);
         $synopsis = $this->getSynopsis($item->get('synopsis'));
         $title = $this->getAttribute('English');
@@ -117,7 +125,7 @@ class MangaProcessor implements ItemProcessorInterface
         $tvRating = $this->getRating($this->getAttribute('Rating'), $genres, $themes);
         $isNSFW = $this->getIsNSFW($tvRating, $genres, $themes);
         $demographics = $this->getAttribute('Demographic');
-        $imageUrl = $item->get('image_url');
+        $imageUrl = $item->get('imageUrl');
         $published = $this->getAttribute('Published');
         $startedAt = $this->getStartedAt($published);
         $endedAt = $this->getEndedAt($published);

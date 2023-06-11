@@ -111,8 +111,12 @@ class AnimeSpider extends BasicSpider
             ->each(function ($item) {
                 return str($item->text());
             });
-        $synopsis = $response->filter('p[itemprop="description"]')
-            ->html();
+        try {
+            $synopsis = strip_tags($response->filter('[itemprop="description"]')
+                ->html());
+        } catch (Exception $exception) {
+            $synopsis = null;
+        }
 
         $studios = $response->filter('div.leftside a[href*="/anime/producer/"]')
             ->each(function (Crawler $item) {
@@ -140,6 +144,7 @@ class AnimeSpider extends BasicSpider
         $ending = $this->cleanSongs($response, 'div[class*="theme-songs ending"] table');
 
         logger()->channel('stderr')->info('✅️ [MAL_ID:ANIME:' . $id . '] Done parsing');
+
         yield $this->item(new AnimeItem(
             $id,
             $originalTitle,

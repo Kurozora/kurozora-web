@@ -3,6 +3,10 @@
 namespace App\Spiders\MAL;
 
 use App\Processors\MAL\MangaProcessor;
+use App\Processors\MAL\MangaStatsProcessor;
+use App\Spiders\MAL\Models\MangaItem;
+use App\Spiders\MAL\Models\MangaStatItem;
+use Arr;
 use Exception;
 use Generator;
 use RoachPHP\Downloader\Middleware\RequestDeduplicationMiddleware;
@@ -51,7 +55,8 @@ class MangaSpider extends BasicSpider
      * @var array $itemProcessors
      */
     public array $itemProcessors = [
-        MangaProcessor::class
+        MangaProcessor::class,
+        MangaStatsProcessor::class,
     ];
 
     /**
@@ -147,16 +152,52 @@ class MangaSpider extends BasicSpider
 
         logger()->channel('stderr')->info('✅️ [MAL_ID:MANGA:' . $id . '] Done parsing');
 
-        yield $this->item([
-            'id'                => $id,
-            'original_title'    => $originalTitle,
-            'attributes'        => $attributes,
-            'synopsis'          => $synopsis,
-            'image_url'         => $imageUrl,
-            'studios'           => array_replace([], ...$studios),
-            'genres'            => array_replace([], ...$genres),
-            'authors'           => array_replace([], ...$authors),
-        ]);
+        yield $this->item(new MangaItem(
+            $id,
+            $originalTitle,
+            $attributes,
+            $synopsis,
+            $imageUrl,
+            array_replace([], ...$studios),
+            array_replace([], ...$genres),
+            array_replace([], ...$authors),
+        ));
+
+        // Stats
+        $statsPageLink = config('scraper.domains.mal.base') . $response->filter('a[href*="/stats"]')
+            ->attr('href');
+        yield ParseResult::request('GET', $statsPageLink, [$this, 'parseStatsPage']);
+    }
+
+    /**
+     * @param Response $response
+     *
+     * @return Generator<ParseResult>
+     */
+    public function parseStatsPage(Response $response): Generator
+    {
+        $regex = '/manga\/(\d*)/';
+        $uri = str($response->getUri());
+        $id = $uri->match($regex)->remove('/manga/')->value();
+        logger()->channel('stderr')->info('🕷 [MAL_ID:MANGA:' . $id . '] Parsing stats response');
+
+        $scores = $response->filter('table.score-stats tr')
+            ->each(function(Crawler $item) {
+                $scoreLabel = $item->filter('td.score-label')->text();
+                $score = $item->filter('td small')->text();
+
+                return [
+                    "rating_$scoreLabel" => $score
+                ];
+            });
+        $scores = Arr::collapse($scores);
+
+        $scoreAverage = $response->filter('.leftside .score-label')
+            ->text();
+
+        $scoreCount = $scoreAverage !== 'N/A' ? $response->filter('span[itemprop="ratingCount"]')->text() : 0;
+
+        yield $this->item(new MangaStatItem($id, $scores, (float) $scoreAverage, (int) $scoreCount));
     }
 
     /**
