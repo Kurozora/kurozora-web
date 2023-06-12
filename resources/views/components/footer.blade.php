@@ -142,7 +142,7 @@
                     </li>
 
                     <li class="mt-2">
-                        <x-footer-link href="{{ config('app.status_url') }}" target="_blank">{{ __('Kurozora Status') }}</x-footer-link>
+                        <x-footer-link href="{{ route('status') }}" target="_blank">{{ __('Kurozora Status') }}</x-footer-link>
                     </li>
                 </ul>
             </div>

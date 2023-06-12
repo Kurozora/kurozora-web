@@ -30,6 +30,9 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->routes(function () {
             if (app()->isLocal()) {
+                Route::prefix('status')
+                    ->group(base_path('routes/status.php'));
+
                 Route::prefix('api')
                     ->middleware(['api'])
                     ->group(base_path('routes/api.php'));
@@ -37,6 +40,9 @@ class RouteServiceProvider extends ServiceProvider
                 Route::middleware('web')
                     ->group(base_path('routes/web.php'));
             } else {
+                Route::domain('status.' . config('app.domain'))
+                    ->group(base_path('routes/status.php'));
+
                 Route::domain('api.' . config('app.domain'))
                     ->middleware(['api'])
                     ->group(base_path('routes/api.php'));
