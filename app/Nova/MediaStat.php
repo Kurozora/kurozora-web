@@ -187,6 +187,18 @@ class MediaStat extends Resource
                 ->rules(['required', 'numeric'])
                 ->sortable()
                 ->help('The total count of all ratings.'),
+
+            Number::make('Global Rank')
+                ->default(0)
+                ->rules(['required', 'numeric'])
+                ->sortable()
+                ->help('The rank compared to all model types, i.e. anime, manga, game and music.'),
+
+            Number::make('Total Rank')
+                ->default(0)
+                ->rules(['required', 'numeric'])
+                ->sortable()
+                ->help('The rank within a model type, e.g. within the anime type.'),
         ];
     }
 

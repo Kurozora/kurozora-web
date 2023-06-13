@@ -18,10 +18,10 @@ class MediaStatsResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return array
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         return [
             'ratingCountList' => [
@@ -38,6 +38,8 @@ class MediaStatsResource extends JsonResource
             ],
             'ratingAverage' => round($this->resource->rating_average, 1),
             'ratingCount' => $this->resource->rating_count,
+            'rankGlobal' => $this->resource->rank_global,
+            'rankTotal' => $this->resource->rank_total,
         ];
     }
 }

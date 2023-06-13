@@ -35,6 +35,8 @@ return new class extends Migration
             $table->unsignedBigInteger('rating_10')->default(0);
             $table->double('rating_average')->default(0.0);
             $table->unsignedBigInteger('rating_count')->default(0);
+            $table->unsignedBigInteger('rank_global')->default(0);
+            $table->unsignedBigInteger('rank_total')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -42,6 +44,7 @@ return new class extends Migration
         Schema::table(MediaStat::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
             $table->index('deleted_at');
+            $table->index(['rating_average', 'rating_count']);
 
             // Set unique key constraints
             $table->unique(['model_type', 'model_id']);

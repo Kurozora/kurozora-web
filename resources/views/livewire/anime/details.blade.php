@@ -108,8 +108,14 @@
                     <div class="flex flex-col gap-2 justify-between w-3/4">
                         <div>
                             <p class="font-semibold text-lg leading-tight break-all">{{ $anime->title }}</p>
+
                             <p class="text-sm leading-tight">{{ $anime->information_summary }}</p>
-                            <x-pill color="{{ $anime->status->color }}" class="mt-2">{{ $anime->status->name }}</x-pill>
+
+                            <div class="flex w-full justify-between mt-2 gap-4">
+                                <p class="flex-grow pt-1 pr-3 pb-1 pl-3 text-white text-center text-sm font-bold whitespace-nowrap rounded-md" style="background-color: {{ $anime->status->color }};">{{ $anime->status->name }}</p>
+
+                                <p class="flex-grow pt-1 pr-3 pb-1 pl-3 bg-gray-100 text-center text-sm font-bold whitespace-nowrap rounded-md" style=""> {{ trans_choice('{0} Rank -|[1,*] Rank #:x', $anime->mediaStat?->rank_total ?? 0, ['x' => $anime->mediaStat?->rank_total]) }}</p>
+                            </div>
                         </div>
 
                         <div class="flex flex-wrap gap-1 justify-between h-10">

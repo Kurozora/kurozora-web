@@ -2,7 +2,11 @@
 
 namespace App\Console;
 
+use App\Models\Anime;
+use App\Models\Episode;
+use App\Models\Game;
 use App\Models\LoginAttempt;
+use App\Models\Manga;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -80,10 +84,10 @@ class Kernel extends ConsoleKernel
             ->onOneServer();
 
         /**********************************************/
-        // Calculate anime ratings every day
-        $schedule->command('calculate:anime_ratings')
+        // Calculate total rankings every day
+        $schedule->command('calculate:rankings', ['models' => 'all'])
             ->daily()
-            ->name('Calculate anime rating')
+            ->name('Calculate total rankings')
             ->onOneServer();
 
         /**********************************************/
@@ -94,17 +98,10 @@ class Kernel extends ConsoleKernel
             ->onOneServer();
 
         /**********************************************/
-        // Calculate anime views every week
+        // Calculate anime views every day
         $schedule->command('calculate:anime_views')
             ->daily()
             ->name('Calculate anime views')
-            ->onOneServer();
-
-        /**********************************************/
-        // Calculate game ratings every day
-        $schedule->command('calculate:game_ratings')
-            ->daily()
-            ->name('Calculate game rating')
             ->onOneServer();
 
         /**********************************************/
@@ -119,13 +116,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('calculate:game_views')
             ->daily()
             ->name('Calculate game views')
-            ->onOneServer();
-
-        /**********************************************/
-        // Calculate manga ratings every day
-        $schedule->command('calculate:manga_ratings')
-            ->daily()
-            ->name('Calculate manga rating')
             ->onOneServer();
 
         /**********************************************/
@@ -150,14 +140,7 @@ class Kernel extends ConsoleKernel
             ->onOneServer();
 
         /**********************************************/
-        // Calculate episode ratings every week
-        $schedule->command('calculate:episode_ratings')
-            ->daily()
-            ->name('Calculate episode rating')
-            ->onOneServer();
-
-        /**********************************************/
-        // Calculate episode ratings every week
+        // Calculate episode stats every week
         $schedule->command('calculate:episode_stats')
             ->daily()
             ->name('Calculate episode stats')
@@ -226,6 +209,41 @@ class Kernel extends ConsoleKernel
         $schedule->command('activitylog:clean')
             ->weekly()
             ->name('Clean activity log')
+            ->onOneServer();
+
+        /**********************************************/
+        // Calculate anime ratings every week
+        $schedule->command('calculate:ratings', ['model' => Anime::class])
+            ->weekly()
+            ->name('Calculate anime rating')
+            ->onOneServer();
+
+        /**********************************************/
+        // Calculate manga ratings every week
+        $schedule->command('calculate:ratings', ['model' => Manga::class])
+            ->weekly()
+            ->name('Calculate manga rating')
+            ->onOneServer();
+
+        /**********************************************/
+        // Calculate game ratings every week
+        $schedule->command('calculate:ratings', ['model' => Game::class])
+            ->weekly()
+            ->name('Calculate game rating')
+            ->onOneServer();
+
+        /**********************************************/
+        // Calculate episode ratings every week
+        $schedule->command('calculate:ratings', ['model' => Episode::class])
+            ->weekly()
+            ->name('Calculate episode rating')
+            ->onOneServer();
+
+        /**********************************************/
+        // Calculate global ranking every week
+        $schedule->command('calculate:rankings -g')
+            ->weekly()
+            ->name('Calculate global rankings')
             ->onOneServer();
     }
 

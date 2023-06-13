@@ -79,7 +79,7 @@ class Index extends Command
 
         // Check if there are incompatibilities
         if ($stats && $create || $stats && $delete || $stats && $update) {
-            $this->error('Specifying `stats` other operations at the same time isn’t supported.');
+            $this->error('Specifying `stats` and other operations at the same time isn’t supported.');
             return Command::FAILURE;
         } else if ($create && $delete) {
             $this->error('Specifying `create` and `delete` at the same time isn’t supported.');
