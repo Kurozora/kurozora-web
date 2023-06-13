@@ -34,7 +34,7 @@
             "name": "{{ $game->title }}",
             "alternateName": "{{ $game->original_title }}",
             "image": "{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
-            "description": "{{ $game->synopsis }}",
+            "description": "{{ str_replace('"', "'", $game->synopsis) }}",
             "aggregateRating": {
                 "@type":"AggregateRating",
                 "itemReviewed": {

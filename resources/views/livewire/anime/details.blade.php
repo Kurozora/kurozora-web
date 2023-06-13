@@ -34,7 +34,7 @@
             "name": "{{ $anime->title }}",
             "alternateName": "{{ $anime->original_title }}",
             "image": "{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
-            "description": "{{ $anime->synopsis }}",
+            "description": "{{ str_replace('"', "'", $anime->synopsis) }}",
             "aggregateRating": {
                 "@type":"AggregateRating",
                 "itemReviewed": {

@@ -32,7 +32,7 @@
             "name": "{{ $manga->title }}",
             "alternateName": "{{ $manga->original_title }}",
             "image": "{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Banner()) ?? $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/promotional/social_preview_icon_only.webp') }}",
-            "description": "{{ $manga->synopsis }}",
+            "description": "{{ str_replace('"', "'", $manga->synopsis) }}",
             "aggregateRating": {
                 "@type":"AggregateRating",
                 "itemReviewed": {
