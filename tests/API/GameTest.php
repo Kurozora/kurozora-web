@@ -61,4 +61,15 @@ class GameTest extends TestCase
         // Check whether the current_user array is not empty
         $this->assertArrayHasKey('libraryStatus', $response->json()['data'][0]['game']['attributes']);
     }
+
+    /**
+     * Game has media stat on create.
+     *
+     * @return void
+     * @test
+     */
+    public function game_has_media_stat_on_create(): void
+    {
+        $this->assertNotNull($this->game->mediaStat);
+    }
 }

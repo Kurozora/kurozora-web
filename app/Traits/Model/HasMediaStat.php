@@ -25,6 +25,10 @@ trait HasMediaStat
 
             $model->mediaStat()->delete();
         });
+
+        static::created(function (Model $model) {
+            $model->mediaStat()->create();
+        });
     }
 
     /**
@@ -34,6 +38,6 @@ trait HasMediaStat
      */
     public function mediaStat(): MorphOne
     {
-        return $this->morphOne(MediaStat::class, 'model');
+        return $this->morphOne(MediaStat::class, 'model')->withDefault();
     }
 }
