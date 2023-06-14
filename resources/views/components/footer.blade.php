@@ -196,6 +196,10 @@
                     </li>
 
                     <li class="mt-2">
+                        <x-footer-link target="_blank" rel="me" href="{{ config('social.fosstodon.url') }}">Fosstodon</x-footer-link>
+                    </li>
+
+                    <li class="mt-2">
                         <x-footer-link target="_blank" href="{{ config('social.instagram.url') }}">Instagram</x-footer-link>
                     </li>
 

@@ -19,6 +19,11 @@ return [
         'username' => env('DISCORD_HANDLE', 'Kurozora'),
     ],
 
+    'fosstodon' => [
+        'url' => 'https://fosstodon.org/' . env('FOSSTODON_HANDLE', '@Kurozora'),
+        'username' => env('FOSSTODON_HANDLE', '@Kurozora'),
+    ],
+
     'github' => [
         'url' => 'https://github.com/' . env('GITHUB_HANDLE', 'Kurozora'),
         'username' => env('GITHUB_HANDLE', 'Kurozora'),
