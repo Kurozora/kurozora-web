@@ -111,14 +111,14 @@
 
                             <p class="text-sm leading-tight">{{ $game->information_summary }}</p>
 
-                            <div class="flex w-full justify-between mt-2 gap-4">
-                                <p class="flex-grow pt-1 pr-3 pb-1 pl-3 text-white text-center text-sm font-bold whitespace-nowrap rounded-md" style="background-color: {{ $game->status->color }};">{{ $game->status->name }}</p>
+                            <div class="flex w-full justify-between mt-2 gap-1 sm:gap-4">
+                                <p class="flex-grow pt-1 pr-1 pb-1 pl-1 text-white text-center text-xs font-semibold whitespace-nowrap rounded-md sm:text-sm" style="background-color: {{ $game->status->color }};">{{ $game->status->name }}</p>
 
-                                <p class="flex-grow pt-1 pr-3 pb-1 pl-3 bg-gray-100 text-center text-sm font-bold whitespace-nowrap rounded-md" style=""> {{ trans_choice('{0} Rank -|[1,*] Rank #:x', $game->mediaStat?->rank_total ?? 0, ['x' => $game->mediaStat?->rank_total]) }}</p>
+                                <p class="flex-grow pt-1 pr-1 pb-1 pl-1 bg-gray-100 text-center text-xs font-semibold whitespace-nowrap rounded-md sm:text-sm"> {{ trans_choice('{0} Rank -|[1,*] Rank #:x', $game->mediaStat?->rank_total ?? 0, ['x' => $game->mediaStat?->rank_total]) }}</p>
                             </div>
                         </div>
 
-                        <div class="flex flex-wrap gap-1 justify-between h-10">
+                        <div class="flex flex-wrap gap-1 justify-between">
                             <div class="flex gap-2">
                                 <livewire:game.library-button :game="$game" wire:key="{{ md5($game->id) }}" />
 
@@ -136,6 +136,7 @@
 {{--                                            @svg('bell', 'fill-current', ['width' => '44'])--}}
 {{--                                        @endif--}}
 {{--                                    </x-circle-button>--}}
+
                                     <x-circle-button color="red" wire:click="favoriteGame">
                                         @if($isFavorited)
                                             @svg('heart_fill', 'fill-current', ['width' => '44'])
