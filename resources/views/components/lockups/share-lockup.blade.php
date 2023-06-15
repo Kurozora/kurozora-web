@@ -75,113 +75,113 @@
         class="flex flex-row flex-nowrap gap-4 overflow-scroll no-scrollbar"
         x-show="!shouldEmbed"
     >
-        <a
-            href="https://api.whatsapp.com/send/?text={{ $link }}&type=custom_url&app_absent=0"
-            class="flex flex-col items-center"
-            target="_blank"
-        >
+        <div class="relative flex flex-col items-center">
             @svg('brands-whatsapp', '', ['width' => 64])
-            <p class="text-sm whitespace-nowrap">WhatsApp</p>
-        </a>
+            <a
+                href="https://api.whatsapp.com/send/?text={{ $link }}&type=custom_url&app_absent=0"
+                target="_blank"
+                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+            >WhatsApp</a>
+        </div>
 
-        <a
-            href="https://twitter.com/intent/tweet?url={{ $link }}&text={{ $title }}&via={{ config('social.twitter.username') }}&related={{ config('social.twitter.username') }}&hashtags={{ config('app.name') }},{{ config('social.twitter.username') }},anime"
-            class="flex flex-col items-center"
-            target="_blank"
-        >
+        <div class="relative flex flex-col items-center">
             @svg('brands-twitter', '', ['width' => 64])
-            <p class="text-sm whitespace-nowrap">Twitter</p>
-        </a>
+            <a
+                href="https://twitter.com/intent/tweet?url={{ $link }}&text={{ $title }}&via={{ config('social.twitter.username') }}&related={{ config('social.twitter.username') }}&hashtags={{ config('app.name') }},{{ config('social.twitter.username') }},anime"
+                target="_blank"
+                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+            >Twitter</a>
+        </div>
 
-        <a
-            href="mailto:?body={{ $link }}"
-            class="flex flex-col items-center"
-            target="_blank"
-        >
+        <div class="relative flex flex-col items-center">
             @svg('brands-mail', '', ['width' => 64])
-            <p class="text-sm whitespace-nowrap">{{ __('E-mail') }}</p>
-        </a>
+            <a
+                href="mailto:?body={{ $link }}"
+                target="_blank"
+                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+            >{{ __('E-mail') }}</a>
+        </div>
 
-        <a
-            href="https://story.kakao.com/share?url={{ $link }}&feature=share"
-            class="flex flex-col items-center"
-            target="_blank"
-        >
+        <div class="relative flex flex-col items-center">
             @svg('brands-kakaotalk', '', ['width' => 64])
-            <p class="text-sm whitespace-nowrap">KakaoTalk</p>
-        </a>
+            <a
+                href="https://story.kakao.com/share?url={{ $link }}&feature=share"
+                target="_blank"
+                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+            >KakaoTalk</a>
+        </div>
 
-        <a
-            href="https://t.me/share/url?url={{ $link }}&text={{ $title }}"
-            class="flex flex-col items-center"
-            target="_blank"
-        >
+        <div class="relative flex flex-col items-center">
             @svg('brands-telegram', '', ['width' => 64])
-            <p class="text-sm whitespace-nowrap">Telegram</p>
-        </a>
+            <a
+                href="https://t.me/share/url?url={{ $link }}&text={{ $title }}"
+                target="_blank"
+                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+            >Telegram</a>
+        </div>
 
-        <a
-            href="https://www.reddit.com/submit?url={{ $link }}&feature=share&title={{ $title }}"
-            class="flex flex-col items-center"
-            target="_blank"
-        >
+        <div class="relative flex flex-col items-center">
             @svg('brands-reddit', '', ['width' => 64])
-            <p class="text-sm whitespace-nowrap">Reddit</p>
-        </a>
+            <a
+                href="https://www.reddit.com/submit?url={{ $link }}&feature=share&title={{ $title }}"
+                target="_blank"
+                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+            >Reddit</a>
+        </div>
 
-        <a
-            href="https://connect.ok.ru/dk?st.cmd=OAuth2Login&st.layout=w&st.redirect=/dk?cmd=WidgetSharePreview&st.cmd=WidgetSharePreview&st.title={{ $title }}&st.shareUrl={{ $link }}&feature=share&st._wt=1&st.client_id=-1"
-            class="flex flex-col items-center"
-            target="_blank"
-        >
+        <div class="relative flex flex-col items-center">
             @svg('brands-odnoklassniki', '', ['width' => 64])
-            <p class="text-sm whitespace-nowrap">OK</p>
-        </a>
+            <a
+                href="https://connect.ok.ru/dk?st.cmd=OAuth2Login&st.layout=w&st.redirect=/dk?cmd=WidgetSharePreview&st.cmd=WidgetSharePreview&st.title={{ $title }}&st.shareUrl={{ $link }}&feature=share&st._wt=1&st.client_id=-1"
+                target="_blank"
+                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+            >OK</a>
+        </div>
 
-        <a
-            href="https://www.pinterest.com/pin/create/button/?url={{ $link }}&feature=share&description={{ $title }}&is_video=true{{ !empty($imageUrl) ? '&media=' . $imageUrl : '' }}"
-            class="flex flex-col items-center"
-            target="_blank"
-        >
+        <div class="relative flex flex-col items-center">
             @svg('brands-pinterest', '', ['width' => 64])
-            <p class="text-sm whitespace-nowrap">Pinterest</p>
-        </a>
+            <a
+                href="https://www.pinterest.com/pin/create/button/?url={{ $link }}&feature=share&description={{ $title }}&is_video=true{{ !empty($imageUrl) ? '&media=' . $imageUrl : '' }}"
+                target="_blank"
+                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+            >Pinterest</a>
+        </div>
 
-        <a
-            href="https://www.tumblr.com/widgets/share/tool/preview?shareSource=legacy&canonicalUrl=&url={{ $link }}&feature=share&posttype=video&content={{ $link }}&feature=share&caption={{ $title }}"
-            class="flex flex-col items-center"
-            target="_blank"
-        >
+        <div class="relative flex flex-col items-center">
             @svg('brands-tumblr', '', ['width' => 64])
-            <p class="text-sm whitespace-nowrap">Tumblr</p>
-        </a>
+            <a
+                href="https://www.tumblr.com/widgets/share/tool/preview?shareSource=legacy&canonicalUrl=&url={{ $link }}&feature=share&posttype=video&content={{ $link }}&feature=share&caption={{ $title }}"
+                target="_blank"
+                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+            >Tumblr</a>
+        </div>
 
-        <a
-            href="https://www.linkedin.com/shareArticle?url={{ $link }}&feature=share&title={{ $title }}&source={{ config('app.name') }}"
-            class="flex flex-col items-center"
-            target="_blank"
-        >
+        <div class="relative flex flex-col items-center">
             @svg('brands-linkedin', '', ['width' => 64])
-            <p class="text-sm whitespace-nowrap">LinkedIn</p>
-        </a>
+            <a
+                href="https://www.linkedin.com/shareArticle?url={{ $link }}&feature=share&title={{ $title }}&source={{ config('app.name') }}"
+                target="_blank"
+                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+            >LinkedIn</a>
+        </div>
 
-        <a
-            href="https://mix.com/add?url={{ $link }}&feature=share"
-            class="flex flex-col items-center"
-            target="_blank"
-        >
+        <div class="relative flex flex-col items-center">
             @svg('brands-mix', '', ['width' => 64])
-            <p class="text-sm whitespace-nowrap">Mix</p>
-        </a>
+            <a
+                href="https://mix.com/add?url={{ $link }}&feature=share"
+                target="_blank"
+                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+            >Mix</a>
+        </div>
 
-        <a
-            href="https://blog.goo.ne.jp/portal_login/blogparts?key=9dgmp3KmwGg&title={{ $title }}&type={{ config('app.name') }}"
-            class="flex flex-col items-center"
-            target="_blank"
-        >
+        <div class="relative flex flex-col items-center">
             @svg('brands-goo', '', ['width' => 64])
-            <p class="text-sm whitespace-nowrap">goo</p>
-        </a>
+            <a
+                href="https://blog.goo.ne.jp/portal_login/blogparts?key=9dgmp3KmwGg&title={{ $title }}&type={{ config('app.name') }}"
+                target="_blank"
+                class="text-sm whitespace-nowrap after:absolute after:inset-0"
+            >goo</a>
+        </div>
     </div>
 
     <div x-show="shouldEmbed">
