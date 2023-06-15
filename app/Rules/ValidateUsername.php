@@ -7,7 +7,7 @@ use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Translation\PotentiallyTranslatedString;
 
-class ValidateUserSlug implements ValidationRule
+class ValidateUsername implements ValidationRule
 {
     /**
      * Run the validation rule.
@@ -26,35 +26,34 @@ class ValidateUserSlug implements ValidationRule
         }
 
         // Check minimum length
-        if (strlen($value) < User::MINIMUM_SLUG_LENGTH) {
+        if (strlen($value) < User::MINIMUM_USERNAME_LENGTH) {
             $fail($this->message('length'));
             return;
         }
 
         // Check maximum length
-        if (strlen($value) > User::MAXIMUM_SLUG_LENGTH) {
+        if (strlen($value) > User::MAXIMUM_USERNAME_LENGTH) {
             $fail($this->message('length'));
             return;
         }
 
         // Check alphanumeric and space
-        if (!ctype_alnum(str_replace(['-', '_'], '', $value))) {
+        if (!ctype_alnum(str_replace([' ', '-', '_'], '', $value))) {
             $fail($this->message('alpha-num'));
             return;
         }
 
-        // Check if username taken
+        // Check if username is taken
         $user = auth()->user();
-
         if (!empty($user)) {
             if (User::whereNotIn('id', [$user->id])
-                ->where('slug', $value)
+                ->where('username', $value)
                 ->exists()
             ) {
                 $fail($this->message('exists'));
             }
         } else {
-            if (User::where('slug', $value)->exists()) {
+            if (User::where('username', $value)->exists()) {
                 $fail($this->message('exists'));
             }
         }
@@ -69,8 +68,8 @@ class ValidateUserSlug implements ValidationRule
     private function message(string $type): string
     {
         return match ($type) {
-            'length' => __('validation.between.string', ['min' => User::MINIMUM_SLUG_LENGTH, 'max' => User::MAXIMUM_SLUG_LENGTH]),
-            'alpha-num' => __('validation.alpha_dash'),
+            'length' => __('validation.between.string', ['min' => User::MINIMUM_USERNAME_LENGTH, 'max' => User::MAXIMUM_USERNAME_LENGTH]),
+            'alpha-num' => __('validation.alpha_num'),
             'exists' => __('validation.unique'),
             default => __('The :attribute is invalid.'),
         };

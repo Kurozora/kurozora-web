@@ -3,9 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Rules\ValidateBannerImage;
-use App\Rules\ValidateNickname;
 use App\Rules\ValidateProfileImage;
 use App\Rules\ValidateUserBiography;
+use App\Rules\ValidateUsername;
 use App\Rules\ValidateUserSlug;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -30,7 +30,7 @@ class UpdateProfileRequest extends FormRequest
     {
         return [
             'username'      => ['bail', new ValidateUserSlug],
-            'nickname'      => ['bail', new ValidateNickname],
+            'nickname'      => ['bail', new ValidateUsername],
             'profileImage'  => ['bail', new ValidateProfileImage],
             'bannerImage'   => ['bail', new ValidateBannerImage],
             'biography'     => ['bail', new ValidateUserBiography]

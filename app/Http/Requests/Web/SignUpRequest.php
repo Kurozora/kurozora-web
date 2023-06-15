@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\Web;
 
-use App\Rules\ValidateNickname;
-use App\Rules\ValidateProfileImage;
 use App\Rules\ValidateEmail;
 use App\Rules\ValidatePassword;
+use App\Rules\ValidateProfileImage;
+use App\Rules\ValidateUsername;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SignUpRequest extends FormRequest
@@ -28,8 +28,8 @@ class SignUpRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username'      => ['bail', 'required_without:nickname', new ValidateNickname],
-            'nickname'      => ['bail', 'required_without:username', new ValidateNickname],
+            'username'      => ['bail', 'required_without:nickname', new ValidateUsername],
+            'nickname'      => ['bail', 'required_without:username', new ValidateUsername],
             'password'      => ['bail', 'required', new ValidatePassword],
             'email'         => ['bail', 'required', new ValidateEmail(['must-be-available' => true])],
             'profileImage'  => ['bail', new ValidateProfileImage],

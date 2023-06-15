@@ -6,9 +6,9 @@ use App\Contracts\UpdatesUserProfileInformation;
 use App\Enums\MediaCollection;
 use App\Models\User;
 use App\Rules\ValidateBannerImage;
-use App\Rules\ValidateNickname;
 use App\Rules\ValidateProfileImage;
 use App\Rules\ValidateUserBiography;
+use App\Rules\ValidateUsername;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
@@ -32,7 +32,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     {
         $updatedAttributes = [];
         $rules = [
-            'nickname' => ['required', new ValidateNickname],
+            'nickname' => ['required', new ValidateUsername],
             'biography' => ['bail', new ValidateUserBiography],
             'profileImage' => ['bail', new ValidateProfileImage],
             'bannerImage' => ['bail', new ValidateBannerImage],

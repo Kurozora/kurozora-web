@@ -91,8 +91,12 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
     const CACHE_KEY_REPUTATION_COUNT = 'user-reputation-%d';
     const CACHE_KEY_REPUTATION_COUNT_SECONDS = 10 * 60;
 
-    // User biography character limited
-    const BIOGRAPHY_LIMIT = 500;
+    // Length limits
+    const MAX_BIOGRAPHY_LENGTH = 500;
+    const MINIMUM_SLUG_LENGTH = 3;
+    const MAXIMUM_SLUG_LENGTH = 30;
+    const MINIMUM_USERNAME_LENGTH = 1;
+    const MAXIMUM_USERNAME_LENGTH = 30;
 
     // Table name
     const TABLE_NAME = 'users';
@@ -250,7 +254,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
             ['email_verified_at', '=', null],
             ['is_pro', '=', false],
             ['is_subscribed', '=', false],
-            ['email_verified_at', '=', null],
             ['created_at', '<', Carbon::now()->subDays(30)]
         ]);
     }

@@ -54,7 +54,24 @@
                 },
                 "episodeCount": 0,
                 "seasonCount": 0,
-                "stats": null,
+                "stats": {
+                    "ratingCountList": [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "ratingAverage": 2.5,
+                    "ratingCount": 0,
+                    "rankGlobal": 0,
+                    "rankTotal": 0
+                },
                 "startedAt": 67046400,
                 "firstAired": 67046400,
                 "endedAt": 73094400,
@@ -126,7 +143,24 @@
                 },
                 "episodeCount": 0,
                 "seasonCount": 0,
-                "stats": null,
+                "stats": {
+                    "ratingCountList": [
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "ratingAverage": 4,
+                    "ratingCount": 0,
+                    "rankGlobal": 0,
+                    "rankTotal": 0
+                },
                 "startedAt": 67046400,
                 "firstAired": 67046400,
                 "endedAt": 73094400,

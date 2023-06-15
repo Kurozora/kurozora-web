@@ -21,7 +21,7 @@ class ValidateUserBiography implements Rule
     public function passes($attribute, $value): bool
     {
         $validator = Validator::make([$attribute => $value], [
-            $attribute => ['nullable', 'min:0', 'max:' . User::BIOGRAPHY_LIMIT],
+            $attribute => ['nullable', 'min:0', 'max:' . User::MAX_BIOGRAPHY_LENGTH],
         ]);
 
         if ($validator->fails()) {
