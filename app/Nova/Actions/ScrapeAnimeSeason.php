@@ -2,6 +2,7 @@
 
 namespace App\Nova\Actions;
 
+use App\Enums\SeasonOfYear;
 use Artisan;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -51,6 +52,7 @@ class ScrapeAnimeSeason extends Action implements ShouldQueue
         try {
             Artisan::call('scrape:mal_anime_season', [
                 'years' => $fields->get('years'),
+                'seasons' => $fields->get('seasons'),
                 '--force' => $fields->get('force'),
             ]);
         } catch (Exception $e) {
@@ -74,6 +76,13 @@ class ScrapeAnimeSeason extends Action implements ShouldQueue
                 ->default(now()->year)
                 ->required()
                 ->help('The year of the season to scrape. Scrape multiple years by separating with a comma. Examples:<br />2016<br />2022-2025<br />2016,2022-2025'),
+            Text::make('Seasons')
+                ->default(function () {
+                    $seasonOfYear = SeasonOfYear::asSelectArray();
+                    return implode(',', $seasonOfYear);
+                })
+                ->nullable()
+                ->help('The season name to scrape. Scrape multiple seasons by separating with a comma. Examples:<br />winter<br />winter,spring'),
             Boolean::make('Force')
                 ->default(false)
                 ->required()

@@ -17,6 +17,7 @@ class AnimeSeason extends Command
      */
     protected $signature = 'scrape:mal_anime_season 
                             {years? : The year of the season to scrape}
+                            {seasons? : The seasons to scrape}
                             {--f|force : Force scraping anime already in the database}';
 
     /**
@@ -34,10 +35,12 @@ class AnimeSeason extends Command
     public function handle(): int
     {
         $years = $this->argument('years');
+        $seasons = $this->argument('seasons');
         $force = $this->option('force');
 
         if (!empty($years)) {
             $years = explode(',', $years);
+            $seasons = empty($seasons) ? SeasonOfYear::asSelectArray() : explode(',', $seasons);
             $urls = [];
 
             foreach ($years as $year) {
@@ -48,12 +51,12 @@ class AnimeSeason extends Command
                     $endYear = max($yearRanges);
 
                     foreach (range($startYear, $endYear) as $yearRange) {
-                        foreach (SeasonOfYear::asSelectArray() as $seasonOfYear) {
+                        foreach ($seasons as $seasonOfYear) {
                             $urls[] = config('scraper.domains.mal.anime_season') . '/' . $yearRange . '/' . strtolower($seasonOfYear);
                         }
                     }
                 } else {
-                    foreach (SeasonOfYear::asSelectArray() as $seasonOfYear) {
+                    foreach ($seasons as $seasonOfYear) {
                         $urls[] = config('scraper.domains.mal.anime_season') . '/' . $year . '/' . strtolower($seasonOfYear);
                     }
                 }
