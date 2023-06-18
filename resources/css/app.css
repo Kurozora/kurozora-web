@@ -43,11 +43,11 @@ ul, ol {
 body {
   @apply flex
   flex-col
+  text-neutral-750
   leading-snug
-  dark:text-white
-  tracking-tight;
+  tracking-tight
+  dark:text-white;
 
-  color: #333333;
   quotes: "“" "”";
 }
 

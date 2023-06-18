@@ -63,26 +63,31 @@ class StarRating extends Component
     /**
      * Updates the authenticated user's rating of the anime.
      */
-    public function rate()
+    public function rate(): void
     {
         $user = auth()->user();
         if (empty($user)) {
             return;
         }
 
-        if ($this->rating < 0 || $this->rating > 5) {
-            return;
+        if ($this->rating == -1) {
+            $user->animeRatings()->where([
+                ['model_id', '=', $this->anime->id],
+                ['model_type', '=', Anime::class],
+            ])->forceDelete();
+        } else {
+            if ($this->rating < 0 || $this->rating > 5) {
+                return;
+            }
+
+            // Update authenticated user's rating
+            $user->animeRatings()->updateOrCreate([
+                'model_id' => $this->anime->id,
+                'model_type' => Anime::class,
+            ], [
+                'rating' => $this->rating
+            ]);
         }
-
-        // Update authenticated user's rating
-        $user->animeRatings()->updateOrCreate([
-            'model_id'      => $this->anime->id,
-            'model_type'    => Anime::class,
-        ], [
-            'rating'    => $this->rating
-        ]);
-
-        $this->emit('rated');
     }
 
     /**

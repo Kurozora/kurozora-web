@@ -42,10 +42,10 @@
                     ],
                     "name": "{{ $manga->title }}"
                 },
-                "ratingCount": {{ $manga->mediaStat?->rating_count ?? 1 }},
+                "ratingCount": {{ $manga->mediaStat->rating_count ?? 1 }},
                 "bestRating": 5,
                 "worstRating": 0,
-                "ratingValue": {{ $manga->mediaStat?->rating_average ?? 2.5 }}
+                "ratingValue": {{ $manga->mediaStat->rating_average ?? 2.5 }}
             },
             "contentRating": "{{ $manga->tv_rating->name }}",
             "genre": {!! $manga->genres()->pluck('name') !!},
@@ -110,7 +110,7 @@
                             <div class="flex w-full justify-between mt-2 gap-1 sm:gap-4">
                                 <p class="flex-grow pt-1 pr-1 pb-1 pl-1 text-white text-center text-xs font-semibold whitespace-nowrap rounded-md sm:text-sm" style="background-color: {{ $manga->status->color }};">{{ $manga->status->name }}</p>
 
-                                <p class="flex-grow pt-1 pr-1 pb-1 pl-1 bg-gray-100 text-center text-xs font-semibold whitespace-nowrap rounded-md sm:text-sm"> {{ trans_choice('{0} Rank -|[1,*] Rank #:x', $manga->mediaStat?->rank_total ?? 0, ['x' => $manga->mediaStat?->rank_total]) }}</p>
+                                <p class="flex-grow pt-1 pr-1 pb-1 pl-1 bg-gray-100 text-center text-xs font-semibold whitespace-nowrap rounded-md sm:text-sm"> {{ trans_choice('{0} Rank -|[1,*] Rank #:x', $manga->mediaStat->rank_total ?? 0, ['x' => $manga->mediaStat->rank_total]) }}</p>
                             </div>
                         </div>
 
@@ -153,10 +153,12 @@
                 <div id="ratingBadge" class="flex-grow pr-12">
                     <a href="#ratingsAndReviews">
                         <p class="font-bold text-orange-500">
-                            {{ number_format($manga->mediaStat?->rating_average ?? 0, 1) }}
+                            {{ number_format($manga->mediaStat->rating_average, 1) }}
                         </p>
-                        <livewire:manga.star-rating :rating="$manga->mediaStat?->rating_average" :star-size="'sm'" :disabled="true" />
-                        <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int)$manga->mediaStat?->rating_count, ['x' => number_shorten((int)$manga->mediaStat?->rating_count, 0, true)]) }}</p>
+
+                        <livewire:anime.star-rating :rating="$manga->mediaStat->rating_average" :star-size="'sm'" :disabled="true" />
+
+                        <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', (int) $manga->mediaStat->rating_count, ['x' => number_shorten((int) $manga->mediaStat->rating_count, 0, true)]) }}</p>
                     </a>
                 </div>
 
@@ -238,20 +240,46 @@
                     </x-slot:title>
                 </x-section-nav>
 
-                <div class="flex flex-row justify-between">
-                    <div class="text-center">
-                        <p class="font-bold text-6xl">{{ number_format($manga->mediaStat?->rating_average ?? 0, 1) }}</p>
+                <div class="flex flex-row flex-wrap justify-between gap-4">
+                    <div class="flex flex-col justify-end text-center">
+                        <p class="font-bold text-6xl">{{ number_format($manga->mediaStat->rating_average, 1) }}</p>
                         <p class="font-bold text-sm text-gray-500">{{ __('out of') }} 5</p>
                     </div>
 
-                    @auth
-                        <div class="text-right">
-                            <livewire:manga.star-rating :manga="$manga" :rating="$manga->ratings()->firstWhere('user_id', auth()->user()->id)?->rating" :star-size="'lg'" />
-                            <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x reviews', $manga->mediaStat?->rating_count, ['x' => $manga->mediaStat?->rating_count]) }}</p>
-                        </div>
-                    @endif
+                    <div class="flex flex-col justify-end items-center text-center">
+                        @svg('star_fill', 'fill-current', ['width' => 32])
+                        <p class="font-bold text-2xl">{{ number_format($manga->mediaStat->highestRatingPercentage) }}%</p>
+                        <p class="text-sm text-gray-500">{{ $manga->mediaStat->sentiment }}</p>
+                    </div>
+
+                    <div class="flex flex-col w-full justify-end text-right sm:w-auto">
+                        <x-star-rating-bar :media-stat="$manga->mediaStat" />
+
+                        <p class="text-sm text-gray-500">{{ trans_choice('[0,1] Not enough ratings|[2,*] :x Ratings', $manga->mediaStat->rating_count, ['x' => number_format($manga->mediaStat->rating_count)]) }}</p>
+                    </div>
                 </div>
             </section>
+
+            @auth
+                <section id="writeAReview" class="pt-5 pb-8 pl-4 pr-4 border-t-2">
+                    <div class="flex flex-row flex-wrap justify-between gap-4">
+                        <div class="flex justify-between items-center">
+                            <p class="">{{ __('Click to Rate:') }}</p>
+
+                            <livewire:manga.star-rating :manga="$manga" :rating="$manga->ratings()->firstWhere('user_id', auth()->user()->id)?->rating" :star-size="'md'" />
+                        </div>
+
+                        <div class="flex justify-between">
+                            <a class="flex gap-1" href="#">
+                                @svg('pencil', 'fill-current', ['width' => 18])
+                                {{ __('Write a Review') }}
+                            </a>
+                        </div>
+
+                        <div></div>
+                    </div>
+                </section>
+            @endauth
 
             <section class="pt-5 pb-8 pl-4 pr-4 border-t-2">
                 <x-section-nav>

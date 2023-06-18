@@ -62,27 +62,34 @@ class StarRating extends Component
 
     /**
      * Updates the authenticated user's rating of the manga.
+     *
+     * @return void
      */
-    public function rate()
+    public function rate(): void
     {
         $user = auth()->user();
         if (empty($user)) {
             return;
         }
 
-        if ($this->rating < 0 || $this->rating > 5) {
-            return;
+        if ($this->rating == -1) {
+            $user->mangaRatings()->where([
+                ['model_id', '=', $this->manga->id],
+                ['model_type', '=', Manga::class],
+            ])->forceDelete();
+        } else {
+            if ($this->rating < 0 || $this->rating > 5) {
+                return;
+            }
+
+            // Update authenticated user's rating
+            $user->mangaRatings()->updateOrCreate([
+                'model_id' => $this->manga->id,
+                'model_type' => Manga::class,
+            ], [
+                'rating' => $this->rating
+            ]);
         }
-
-        // Update authenticated user's rating
-        $user->mangaRatings()->updateOrCreate([
-            'model_id'      => $this->manga->id,
-            'model_type'    => Manga::class,
-        ], [
-            'rating'    => $this->rating
-        ]);
-
-        $this->emit('rated');
     }
 
     /**

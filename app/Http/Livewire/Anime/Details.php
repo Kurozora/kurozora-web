@@ -92,7 +92,7 @@ class Details extends Component
     /**
      * Sets up the actions according to the user's settings.
      */
-    protected function setupActions()
+    protected function setupActions(): void
     {
         $user = auth()->user();
         if (!empty($user)) {
@@ -105,7 +105,7 @@ class Details extends Component
     /**
      * Handles the update anime vent.
      */
-    public function updateAnimeHandler()
+    public function updateAnimeHandler(): void
     {
         $this->setupActions();
     }
@@ -113,7 +113,7 @@ class Details extends Component
     /**
      * Shows the trailer video to the user.
      */
-    public function showVideo()
+    public function showVideo(): void
     {
         $this->showVideo = true;
         $this->showPopup = true;
@@ -122,7 +122,7 @@ class Details extends Component
     /**
      * Adds the anime to the user's favorite list.
      */
-    public function favoriteAnime()
+    public function favoriteAnime(): void
     {
         $user = auth()->user();
 
@@ -140,7 +140,7 @@ class Details extends Component
     /**
      * Adds the anime to the user's reminder list.
      */
-    public function remindAnime()
+    public function remindAnime(): void
     {
         $user = auth()->user();
 

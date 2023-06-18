@@ -44,10 +44,10 @@
                     ],
                     "name": "{{ $episode->title }}"
                 },
-                "ratingCount": {{ $episode->mediaStat?->rating_count ?? 1 }},
+                "ratingCount": {{ $episode->mediaStat->rating_count ?? 1 }},
                 "bestRating": 5,
                 "worstRating": 0,
-                "ratingValue": {{ $episode->mediaStat?->rating_average ?? 2.5 }}
+                "ratingValue": {{ $episode->mediaStat->rating_average ?? 2.5 }}
             },
             "contentRating": "{{ $this->anime?->tv_rating->name }}",
             "genre": {!! $this->anime?->genres()->pluck('name') !!},

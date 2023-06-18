@@ -62,27 +62,34 @@ class StarRating extends Component
 
     /**
      * Updates the authenticated user's rating of the game.
+     *
+     * @return void
      */
-    public function rate()
+    public function rate(): void
     {
         $user = auth()->user();
         if (empty($user)) {
             return;
         }
 
-        if ($this->rating < 0 || $this->rating > 5) {
-            return;
+        if ($this->rating == -1) {
+            $user->gameRatings()->where([
+                ['model_id', '=', $this->game->id],
+                ['model_type', '=', Game::class],
+            ])->forceDelete();
+        } else {
+            if ($this->rating < 0 || $this->rating > 5) {
+                return;
+            }
+
+            // Update authenticated user's rating
+            $user->gameRatings()->updateOrCreate([
+                'model_id' => $this->game->id,
+                'model_type' => Game::class,
+            ], [
+                'rating' => $this->rating
+            ]);
         }
-
-        // Update authenticated user's rating
-        $user->gameRatings()->updateOrCreate([
-            'model_id'      => $this->game->id,
-            'model_type'    => Game::class,
-        ], [
-            'rating'    => $this->rating
-        ]);
-
-        $this->emit('rated');
     }
 
     /**
