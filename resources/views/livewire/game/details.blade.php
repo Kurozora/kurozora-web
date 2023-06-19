@@ -120,7 +120,7 @@
 
                         <div class="flex flex-wrap gap-1 justify-between">
                             <div class="flex gap-2">
-                                <livewire:game.library-button :game="$game" wire:key="{{ md5($game->id) }}" />
+                                <livewire:game.library-button :game="$game" wire:key="{{ uniqid($game->id, true) }}" />
 
                                 <x-nova-link :resource="\App\Nova\Game::class" :model="$game">
                                     @svg('pencil', 'fill-current', ['width' => '44'])

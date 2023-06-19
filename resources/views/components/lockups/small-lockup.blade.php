@@ -43,7 +43,7 @@
                     </div>
                 </div>
 
-                <livewire:anime.library-button :anime="$anime" wire:key="{{ md5($anime->id) }}" />
+                <livewire:anime.library-button :anime="$anime" wire:key="{{ uniqid($anime->id, true) }}" />
             </div>
         </div>
     @elseif(!empty($game))
@@ -84,7 +84,7 @@
                     </div>
                 </div>
 
-                <livewire:game.library-button :game="$game" wire:key="{{ md5($game->id) }}" />
+                <livewire:game.library-button :game="$game" wire:key="{{ uniqid($game->id, true) }}" />
             </div>
         </div>
     @elseif(!empty($manga))
@@ -131,7 +131,7 @@
                     </div>
                 </div>
 
-                <livewire:manga.library-button :manga="$manga" wire:key="{{ md5($manga->id) }}" />
+                <livewire:manga.library-button :manga="$manga" wire:key="{{ uniqid($manga->id, true) }}" />
             </div>
         </div>
     @endif

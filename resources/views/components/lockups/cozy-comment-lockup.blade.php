@@ -7,7 +7,7 @@
     }"
     x-on:mouseover="showOptions = true"
     x-on:mouseleave="showOptions = false"
-    wire:key="{{ md5($comment->created_at) }}"
+    wire:key="{{ uniqid($comment->created_at, true) }}"
 >
     <x-profile-image-view class="w-16 h-16" :user="$comment->user" />
 

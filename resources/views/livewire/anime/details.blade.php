@@ -120,7 +120,7 @@
 
                         <div class="flex flex-wrap gap-1 justify-between">
                             <div class="flex gap-2">
-                                <livewire:anime.library-button :anime="$anime" wire:key="{{ md5($anime->id) }}" />
+                                <livewire:anime.library-button :anime="$anime" wire:key="{{ uniqid($anime->id, true) }}" />
 
                                <x-nova-link :resource="\App\Nova\Anime::class" :model="$anime">
                                    @svg('pencil', 'fill-current', ['width' => '44'])

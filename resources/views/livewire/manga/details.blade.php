@@ -116,7 +116,7 @@
 
                         <div class="flex flex-wrap gap-1 justify-between">
                             <div class="flex gap-2">
-                                <livewire:manga.library-button :manga="$manga" wire:key="{{ md5($manga->id) }}" />
+                                <livewire:manga.library-button :manga="$manga" wire:key="{{ uniqid($manga->id, true) }}" />
 
                                 <x-nova-link :resource="\App\Nova\Manga::class" :model="$manga">
                                     @svg('pencil', 'fill-current', ['width' => '44'])

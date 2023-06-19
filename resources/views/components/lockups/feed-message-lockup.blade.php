@@ -10,7 +10,7 @@
 <div
     class="relative flex flex-row gap-2 pr-2 pl-2 pt-2 bg-gray-100 rounded-xl"
     x-data="{}"
-    wire:key="{{ md5($feedMessage->created_at) }}"
+    wire:key="{{ uniqid($feedMessage->created_at, true) }}"
 >
     <x-profile-image-view class="w-16 h-16" :user="$feedMessage->user" />
 

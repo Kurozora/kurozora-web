@@ -7,7 +7,7 @@
     }"
     x-on:mouseover="showOptions = true"
     x-on:mouseleave="showOptions = false"
-    wire:key="{{ md5($comment->created_at) }}"
+    wire:key="{{ uniqid($comment->created_at, true) }}"
 >
     <div class="flex flex-row items-baseline gap-2">
         @if ($showTime)

@@ -33,7 +33,7 @@
 
         <section class="mt-8">
             @foreach(\App\Enums\UserLibraryStatus::asAnimeSelectArray() as $key => $value)
-                <livewire:library.anime.tab id="{{ $value }}" :user="$user" :status="$value" wire:key="{{ md5($value) }}" />
+                <livewire:library.anime.tab id="{{ $value }}" :user="$user" :status="$value" wire:key="{{ uniqid($value, true) }}" />
             @endforeach
         </section>
     </div>
