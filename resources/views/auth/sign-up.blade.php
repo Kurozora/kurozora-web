@@ -11,7 +11,7 @@
 
     <div class="flex flex-col justify-center w-screen h-full max-w-prose mx-auto pl-4 pr-4 py-6 sm:px-6">
         <div class="mb-5 text-center">
-            <p class="text-2xl font-bold">{{ __('New to Kurozora?') }}</p>
+            <h1 class="text-2xl font-bold">{{ __('New to Kurozora?') }}</h1>
             <p>{{ __('Create an account and join the community.') }}</p>
         </div>
 

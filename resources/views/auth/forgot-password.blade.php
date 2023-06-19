@@ -11,7 +11,7 @@
 
     <div class="flex flex-col justify-center w-screen h-full max-w-prose mx-auto pl-4 pr-4 py-6 sm:px-6">
         <div class="text-center mb-5">
-            <p class="text-2xl font-bold">{{ __('Forgot your password?') }}</p>
+            <h1 class="text-2xl font-bold">{{ __('Forgot your password?') }}</h1>
             <p>{{ __('Enter your Kurozora ID to continue.') }}</p>
         </div>
 

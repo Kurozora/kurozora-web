@@ -20,7 +20,7 @@
         </x-picture>
 
         <section class="mt-4 mb-4">
-            <p class="text-2xl font-bold">{{ __('About Personalisation') }}</p>
+            <h1 class="text-2xl font-bold">{{ __('About Personalisation') }}</h1>
         </section>
 
         <section>

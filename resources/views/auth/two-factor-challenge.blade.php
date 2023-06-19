@@ -13,12 +13,12 @@
          class="flex flex-col justify-center max-w-prose w-screen h-full max-w-prose mx-auto pl-4 pr-4 py-6 sm:px-6"
     >
         <div class="mb-5 text-center text-gray-600" x-show="!recovery">
-            <p class="text-2xl font-bold">{{ __('Enter Authorization Code') }}</p>
+            <h1 class="text-2xl font-bold">{{ __('Enter Authorization Code') }}</h1>
             <p>{{ __('Please confirm access to your account by entering the authentication code provided by your authenticator application.') }}</p>
         </div>
 
         <div class="mb-5 text-center text-gray-600" x-show="recovery">
-            <p class="text-2xl font-bold">{{ __('Enter Recovery Code') }}</p>
+            <h1 class="text-2xl font-bold">{{ __('Enter Recovery Code') }}</h1>
             <p>{{ __('Please confirm access to your account by entering one of your emergency recovery codes.') }}</p>
         </div>
 

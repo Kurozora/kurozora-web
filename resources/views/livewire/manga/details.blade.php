@@ -176,7 +176,7 @@
 
                 <div id="rankingBadge" class="flex-grow px-12 border-l-2">
                     <a class="flex flex-col items-center" href="#genres">
-                        <p class="font-bold">-</p>
+                        <p class="font-bold">{{ trans_choice('{0} -|[1,*] #:x', $manga->mediaStat->rank_total ?? 0, ['x' => $manga->mediaStat->rank_total]) }}</p>
                         <p class="text-orange-500">
                             @svg('chart_bar_fill', 'fill-current', ['width' => '20'])
                         </p>

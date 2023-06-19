@@ -20,7 +20,7 @@
         </x-picture>
 
         <section class="mt-4 mb-4">
-            <p class="text-2xl font-bold">{{ __('About In-App Purchases') }}</p>
+            <h1 class="text-2xl font-bold">{{ __('About In-App Purchases') }}</h1>
         </section>
 
         {{-- Header --}}

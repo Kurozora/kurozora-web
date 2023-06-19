@@ -26,7 +26,7 @@
             <div>
                 <div class="flex gap-1">
                     <div class="flex flex-wrap items-center w-full">
-                        <p class="text-2xl font-bold">{{ __(':x’s Related Games', ['x' => $game->title]) }}</p>
+                        <h1 class="text-2xl font-bold">{{ __(':x’s Related Games', ['x' => $game->title]) }}</h1>
                     </div>
 
                     <div class="flex flex-wrap justify-end items-center w-full">

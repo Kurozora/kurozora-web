@@ -20,7 +20,7 @@
         {{-- Header --}}
         <section>
             <div class="text-center mb-5">
-                <p class="text-2xl font-bold">{{ __('Welcome to Kurozora!') }}</p>
+                <h1 class="text-2xl font-bold">{{ __('Welcome to Kurozora!') }}</h1>
                 <p>{{ __('Sign in with your Kurozora ID to use the library and other Kurozora services.') }}</p>
             </div>
         </section>

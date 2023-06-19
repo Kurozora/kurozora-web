@@ -16,7 +16,7 @@
     </x-slot:meta>
 
     <div class="max-w-7xl mx-auto pl-4 pr-4 py-6 sm:px-6">
-        <p class="text-2xl font-bold">{{ __('Seasonal Manga Archive') }}</p>
+        <h1 class="text-2xl font-bold">{{ __('Seasonal Manga Archive') }}</h1>
 
         <section>
             <div id="mediaTypeHeader" class="pt-4 pb-5 bg-white z-10">

@@ -11,7 +11,7 @@
 
     <div class="flex flex-col justify-center h-full max-w-prose mx-auto pl-4 pr-4 py-6 sm:px-6">
         <div class="text-center mb-5">
-            <p class="text-2xl font-bold">{{ __('New Kurozora ID Password') }}</p>
+            <h1 class="text-2xl font-bold">{{ __('New Kurozora ID Password') }}</h1>
             <p>
                 {{ __('Enter a new password for') }} <span class="font-bold">{{ $email }}</span>
             </p>
