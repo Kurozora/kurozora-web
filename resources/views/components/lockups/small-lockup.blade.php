@@ -1,4 +1,4 @@
-@props(['anime', 'manga', 'game', 'relation', 'isRow' => true])
+@props(['anime', 'manga', 'game', 'relation', 'isRanked' => false, 'isRow' => true])
 
 @php
     $class = $isRow ? 'pb-2 shrink-0 snap-normal snap-center' : '';
@@ -6,8 +6,8 @@
 
 <div {{ $attributes->merge(['class' => 'relative flex-grow w-64 md:w-80 ' . $class]) }}>
     @if(!empty($anime))
-        <div class="flex flex-nowrap">
-            <picture class="relative shrink-0 w-32 h-48 mr-2 mr-2 rounded-lg overflow-hidden">
+        <div class="flex flex-nowrap gap-2">
+            <picture class="relative shrink-0 w-32 h-48 rounded-lg overflow-hidden">
                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $anime->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $anime->title }} Poster" title="{{ $anime->title }}">
 
                 <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
@@ -17,6 +17,10 @@
 
             <div class="flex flex-col w-full gap-2 justify-between">
                 <div>
+                    @if ($isRanked)
+                        <p class="text-sm leading-tight font-semibold">#{{ $anime->rank_total }}</p>
+                    @endif
+
                     @if (!empty($relation))
                         <p class="text-xs leading-tight font-semibold text-black/60 line-clamp-2">{{ $relation->name }}</p>
                     @endif
@@ -47,8 +51,8 @@
             </div>
         </div>
     @elseif(!empty($game))
-        <div class="flex flex-nowrap">
-            <picture class="relative shrink-0 w-32 h-32 mr-2 mr-2 rounded-3xl overflow-hidden">
+        <div class="flex flex-nowrap gap-1">
+            <picture class="relative shrink-0 w-32 h-32 rounded-3xl overflow-hidden">
                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $game->title }} Poster" title="{{ $game->title }}">
 
                 <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-3xl"></div>
@@ -58,6 +62,10 @@
 
             <div class="flex flex-col w-full gap-2 justify-between">
                 <div>
+                    @if ($isRanked)
+                        <p class="text-sm leading-tight font-semibold">#{{ $game->rank_total }}</p>
+                    @endif
+
                     @if (!empty($relation))
                         <p class="text-xs leading-tight font-semibold text-black/60 line-clamp-2">{{ $relation->name }}</p>
                     @endif
@@ -88,8 +96,8 @@
             </div>
         </div>
     @elseif(!empty($manga))
-        <div class="flex flex-nowrap">
-            <svg class="relative shrink-0 w-32 h-48 mr-2 mr-2 overflow-hidden" width="160" height="240" viewBox="0 0 160 240">
+        <div class="flex flex-nowrap gap-1">
+            <svg class="relative shrink-0 w-32 h-48 overflow-hidden" width="160" height="240" viewBox="0 0 160 240">
                 <foreignObject height="240" width="160" mask="url(#svg-mask-book-cover)">
                     <img class="h-full w-full object-cover lazyload" data-sizes="auto" data-src="{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $manga->title }} Poster" title="{{ $manga->title }}" />
                 </foreignObject>
@@ -105,6 +113,10 @@
 
             <div class="flex flex-col w-full gap-2 justify-between">
                 <div>
+                    @if ($isRanked)
+                        <p class="text-sm leading-tight font-semibold">#{{ $manga->rank_total }}</p>
+                    @endif
+
                     @if (!empty($relation))
                         <p class="text-xs leading-tight font-semibold text-black/60 line-clamp-2">{{ $relation->name }}</p>
                     @endif

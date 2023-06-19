@@ -47,6 +47,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('air_season')->nullable();
             $table->boolean('is_nsfw')->default(false);
             $table->string('copyright')->nullable();
+            $table->unsignedBigInteger('rank_total')->default(0);
             $table->integer('episode_count')->default(0);
             $table->integer('season_count')->default(0);
             $table->integer('view_count')->default(0);
@@ -59,6 +60,7 @@ return new class extends Migration
         Schema::table(Anime::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
             $table->index('is_nsfw');
+            $table->index('rank_total');
             $table->index('started_at');
             $table->index('ended_at');
             $table->index('created_at');

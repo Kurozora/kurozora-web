@@ -16,13 +16,21 @@
         </button>
     @break
     @default
-        <x-tinted-pill-button
-            :color="$hasWatched ? 'orange' : ''"
-            :title="$hasWatched ? __('Mark as Unwatched') : __('Mark as Watched')"
-            wire:click="updateWatchStatus"
-        >
-            @svg('checkmark', 'fill-current', ['width' => 14])
-            {{ $hasWatched ? __('Watched') : __('Watch') }}
-        </x-tinted-pill-button>
+        <div>
+            <div class="inline-block relative">
+                <x-tinted-pill-button
+                    :color="'orange'"
+                    :title="$hasWatched ? __('Mark as Unwatched') : __('Mark as Watched')"
+                    wire:click="updateWatchStatus"
+                >
+                    @if ($hasWatched)
+                        @svg('checkmark', 'fill-current', ['width' => 12])
+                        {{ __('Watched') }}
+                    @else
+                        {{ __('Mark as Watched') }}
+                    @endif
+                </x-tinted-pill-button>
+            </div>
+        </div>
 @endswitch
 

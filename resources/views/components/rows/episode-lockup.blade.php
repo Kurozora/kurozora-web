@@ -1,4 +1,4 @@
-@props(['episodes' => [], 'isRow' => true])
+@props(['episodes' => [], 'isRanked' => false, 'isRow' => true])
 
 @php
     $class = $isRow ? 'overflow-x-scroll no-scrollbar' : 'flex-wrap';
@@ -6,7 +6,7 @@
 
 <div {{ $attributes->merge(['class' => 'flex gap-4 justify-between ' . $class]) }}>
     @foreach($episodes as $episode)
-        <x-lockups.episode-lockup :episode="$episode" :is-row="$isRow" />
+        <x-lockups.episode-lockup :episode="$episode" :is-ranked="$isRanked" :is-row="$isRow" />
     @endforeach
 
     <div class="w-64 md:w-80 flex-grow"></div>

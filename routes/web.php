@@ -40,6 +40,7 @@ require 'Web/AniDB.php';
 require 'Web/AniList.php';
 require 'Web/AnimePlanet.php';
 require 'Web/AniSearch.php';
+require 'Web/Charts.php';
 require 'Web/Characters.php';
 require 'Web/Embed.php';
 require 'Web/Episodes.php';

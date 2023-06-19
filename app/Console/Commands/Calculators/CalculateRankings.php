@@ -79,6 +79,11 @@ class CalculateRankings extends Command
                     $mediaStat->rank_global = $rank;
                 } else {
                     $mediaStat->rank_total = $rank;
+                    $mediaStat->model_type::withoutGlobalScopes()
+                        ->where('id', '=', $mediaStat->model_id)
+                        ->update([
+                            'rank_total' => $rank
+                        ]);
                 }
                 $mediaStat->save();
             }

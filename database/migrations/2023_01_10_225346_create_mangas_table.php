@@ -39,6 +39,7 @@ return new class extends Migration
             $table->unsignedBigInteger('media_type_id')->nullable();
             $table->unsignedBigInteger('source_id')->nullable();
             $table->unsignedBigInteger('status_id')->nullable();
+            $table->unsignedBigInteger('rank_total')->default(0);
             $table->integer('volume_count')->default(0);
             $table->integer('chapter_count')->default(0);
             $table->integer('page_count')->default(0);
@@ -52,6 +53,7 @@ return new class extends Migration
         Schema::table(Manga::TABLE_NAME, function (Blueprint $table) {
             // Set index key constraints
             $table->index('is_nsfw');
+            $table->index('rank_total');
             $table->index('started_at');
             $table->index('ended_at');
             $table->index('created_at');

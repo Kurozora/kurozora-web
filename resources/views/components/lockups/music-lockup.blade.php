@@ -1,4 +1,4 @@
-@props(['song', 'anime' => null, 'type' => null, 'position' => null, 'episodes' => null, 'showEpisodes' => true, 'showModel' => false, 'isRow' => true])
+@props(['song', 'anime' => null, 'type' => null, 'position' => null, 'episodes' => null, 'showEpisodes' => true, 'showModel' => false, 'isRanked' => false, 'isRow' => true])
 
 @php
     $class = $isRow ? 'shrink-0' : 'flex-grow';
