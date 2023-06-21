@@ -34,7 +34,7 @@ return [
             'key_id' => env('APN_KEY_ID'),
             'team_id' => env('APN_TEAM_ID'),
             'app_bundle_id' => env('APN_BUNDLE_ID'),
-            'private_key_content' => str_replace('#', "\n", env('APN_PRIVATE_KEY_CONTENT')), // with double quote; otherwise \n isn't parsed.
+            'private_key_content' => str_replace('#', "\n", env('APN_PRIVATE_KEY_CONTENT') ?? ''), // with double quote; otherwise \n isn't parsed.
             'production' => (bool) env('APP_ENV', 'production') == 'production',
         ],
 
