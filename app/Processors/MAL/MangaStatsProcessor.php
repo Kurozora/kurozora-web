@@ -2,7 +2,9 @@
 
 namespace App\Processors\MAL;
 
+use App\Models\Anime;
 use App\Models\Manga;
+use App\Models\MediaRating;
 use App\Models\MediaStat;
 use App\Spiders\MAL\Models\MangaStatItem;
 use RoachPHP\ItemPipeline\ItemInterface;
@@ -29,7 +31,7 @@ final class MangaStatsProcessor extends CustomItemProcessor
             ->firstWhere('mal_id', '=', $malID);
         $mediaStat = $manga->mediaStat;
         $scores = $this->cleanScores($item->get('scores') ?? []);
-        $scoreAverage = $this->convertScoreAverage($item->get('scoreAverage') ?? 0.0);
+        $scoreAverage = $this->convertScoreAverage($scores, $item->get('scoreAverage') ?? 0.0);
         $scoreCount = $item->get('scoreCount') ?? 0;
 
 //        dd([
@@ -106,15 +108,27 @@ final class MangaStatsProcessor extends CustomItemProcessor
     /**
      * Converts scale-10 rating to scale-5.
      *
+     * @param array $scores
      * @param float $scoreAverage
      * @return float
      */
-    private function convertScoreAverage(float $scoreAverage): float
+    private function convertScoreAverage(array $scores, float $scoreAverage): float
     {
         if ($scoreAverage === 0.0) {
             return 0.0;
         }
 
-        return $scoreAverage / 10 * 5;
+        $totalRatingCount = $scores['rating_1'] ?? 0 + $scores['rating_2'] ?? 0 +
+        $scores['rating_3'] ?? 0 + $scores['rating_4'] ?? 0 +
+        $scores['rating_5'] ?? 0 + $scores['rating_6'] ?? 0 +
+        $scores['rating_7'] ?? 0 + $scores['rating_8'] ?? 0 +
+        $scores['rating_9'] ?? 0 + $scores['rating_10'] ?? 0;
+
+        $basicAverageRating = $scoreAverage / 10 * 5;
+        $meanRating = MediaRating::where('model_type', Anime::class)
+            ->avg('rating');
+        $weightedRating = ($totalRatingCount / ($totalRatingCount + Anime::MINIMUM_RATINGS_REQUIRED)) * $basicAverageRating + (Anime::MINIMUM_RATINGS_REQUIRED / ($totalRatingCount + Anime::MINIMUM_RATINGS_REQUIRED)) * $meanRating;
+
+        return $weightedRating;
     }
 }

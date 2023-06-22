@@ -135,7 +135,7 @@ return [
         'index-settings' => [
             \App\Models\Anime::TABLE_NAME => [
                 'searchableAttributes' => ['original_title', 'title', 'synonym_titles', 'translations', 'synopsis', 'tagline', 'tags'],
-                'sortableAttributes'=> ['air_day', 'air_season', 'air_time', 'duration', 'started_at', 'is_nsfw', 'ended_at', 'original_title', 'title', 'created_at', 'update_at'],
+                'sortableAttributes'=> ['air_day', 'air_season', 'air_time', 'duration', 'started_at', 'rank_total', 'is_nsfw', 'ended_at', 'original_title', 'title', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'air_day', 'air_season', 'air_time', 'duration', 'started_at', 'is_nsfw', 'ended_at', 'media_type_id', 'source_id', 'status_id', 'tv_rating_id', 'season_count', 'episode_count'],
             ],
             \App\Models\AppTheme::TABLE_NAME => [
@@ -144,34 +144,34 @@ return [
                 'filterableAttributes'=> ['id', 'download_count', 'name', 'ui_status_bar_style', 'version'],
             ],
             \App\Models\Character::TABLE_NAME => [
-                'searchableAttributes' => ['name', 'nicknames', 'translations', 'about'],
+                'searchableAttributes' => ['name', 'nicknames', 'translations', 'about', 'short_description'],
                 'sortableAttributes'=> ['age', 'astrological_sign', 'height', 'name', 'weight', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'age', 'astrological_sign', 'birth_day', 'birth_month', 'bust', 'height', 'hip', 'status', 'waist', 'weight'],
             ],
             \App\Models\Episode::TABLE_NAME => [
                 'searchableAttributes' => ['title', 'translations', 'synopsis'],
-                'sortableAttributes'=> ['duration', 'number', 'number_total', 'title', 'started_at', 'ended_at', 'created_at', 'update_at'],
+                'sortableAttributes'=> ['duration', 'number', 'number_total', 'title', 'rank_total', 'started_at', 'ended_at', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'duration', 'is_filler', 'is_nsfw', 'is_special', 'is_premiere', 'is_finale', 'is_verified', 'number', 'number_total', 'season_id', 'tv_rating_id', 'started_at', 'ended_at'],
             ],
             \App\Models\Game::TABLE_NAME => [
                 'searchableAttributes' => ['original_title', 'title', 'synonym_titles', 'translations', 'synopsis', 'tagline', 'tags'],
-                'sortableAttributes'=> ['publication_day', 'publication_season', 'duration', 'published_at', 'is_nsfw', 'original_title', 'title', 'edition_count', 'created_at', 'update_at'],
+                'sortableAttributes'=> ['publication_day', 'publication_season', 'duration', 'rank_total', 'published_at', 'is_nsfw', 'original_title', 'title', 'edition_count', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'publication_day', 'publication_season', 'duration', 'published_at', 'is_nsfw', 'media_type_id', 'original_title', 'source_id', 'status_id', 'title', 'tv_rating_id', 'edition_count'],
             ],
             \App\Models\Manga::TABLE_NAME => [
                 'searchableAttributes' => ['original_title', 'title', 'synonym_titles', 'translations', 'synopsis', 'tagline', 'tags'],
-                'sortableAttributes'=> ['publication_day', 'publication_season', 'publication_time', 'duration', 'started_at', 'ended_at', 'is_nsfw', 'original_title', 'title', 'created_at', 'update_at'],
+                'sortableAttributes'=> ['publication_day', 'publication_season', 'publication_time', 'duration', 'rank_total', 'started_at', 'ended_at', 'is_nsfw', 'original_title', 'title', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'publication_day', 'publication_season', 'publication_time', 'duration', 'started_at', 'ended_at', 'is_nsfw', 'media_type_id', 'original_title', 'source_id', 'status_id', 'title', 'tv_rating_id', 'volume_count', 'chapter_count', 'page_count'],
             ],
             \App\Models\Person::TABLE_NAME => [
-                'searchableAttributes' => ['first_name', 'last_name', 'family_name', 'given_name', 'alternative_names', 'about'],
+                'searchableAttributes' => ['first_name', 'last_name', 'family_name', 'given_name', 'alternative_names', 'about', 'short_description'],
                 'sortableAttributes'=> ['astrological_sign', 'birthdate', 'deceased_date', 'full_name', 'created_at', 'update_at'],
                 'filterableAttributes'=> ['id', 'astrological_sign', 'birthdate', 'deceased_date'],
             ],
             \App\Models\Song::TABLE_NAME => [
                 'searchableAttributes' => ['title', 'artist'],
-                'sortableAttributes'=> ['artist', 'title', 'created_at', 'update_at'],
-                'filterableAttributes'=> ['id', 'am_id', 'artist', 'mal_id', 'title'],
+                'sortableAttributes'=> ['artist', 'title', 'rank_total', 'created_at', 'update_at'],
+                'filterableAttributes'=> ['id', 'artist', 'title'],
             ],
             \App\Models\Studio::TABLE_NAME => [
                 'searchableAttributes' => ['name', 'address'],
