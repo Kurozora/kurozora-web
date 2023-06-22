@@ -51,7 +51,7 @@
             </div>
         </div>
     @elseif(!empty($game))
-        <div class="flex flex-nowrap gap-1">
+        <div class="flex flex-nowrap gap-2">
             <picture class="relative shrink-0 w-32 h-32 rounded-3xl overflow-hidden">
                 <img class="w-full h-full object-cover lazyload" data-sizes="auto" data-src="{{ $game->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $game->title }} Poster" title="{{ $game->title }}">
 
@@ -96,7 +96,7 @@
             </div>
         </div>
     @elseif(!empty($manga))
-        <div class="flex flex-nowrap gap-1">
+        <div class="flex flex-nowrap gap-2">
             <svg class="relative shrink-0 w-32 h-48 overflow-hidden" width="160" height="240" viewBox="0 0 160 240">
                 <foreignObject height="240" width="160" mask="url(#svg-mask-book-cover)">
                     <img class="h-full w-full object-cover lazyload" data-sizes="auto" data-src="{{ $manga->getFirstMediaFullUrl(\App\Enums\MediaCollection::Poster()) ?? asset('images/static/placeholders/anime_poster.webp') }}" alt="{{ $manga->title }} Poster" title="{{ $manga->title }}" />

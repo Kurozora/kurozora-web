@@ -6,6 +6,7 @@ use BenSampo\Enum\Enum;
 
 /**
  * @method static MediaCollection Default()
+ * @method static MediaCollection Artwork()
  * @method static MediaCollection Banner()
  * @method static MediaCollection Logo()
  * @method static MediaCollection Poster()
@@ -16,6 +17,7 @@ use BenSampo\Enum\Enum;
 final class MediaCollection extends Enum
 {
     const Default = 'default';
+    const Artwork = 'artwork';
     const Banner = 'banner';
     const Logo = 'logo';
     const Poster = 'poster';

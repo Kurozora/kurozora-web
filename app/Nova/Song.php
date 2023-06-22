@@ -2,17 +2,22 @@
 
 namespace App\Nova;
 
+use App\Enums\MediaCollection;
 use App\Nova\Filters\MissingSongAttributes;
+use Ebess\AdvancedNovaMediaLibrary\Fields\Images;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\MorphOne;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Ramsey\Uuid\Uuid;
 use Validator;
 
 class Song extends Resource
@@ -67,13 +72,83 @@ class Song extends Resource
 
             ID::make()->sortable(),
 
+            Text::make('Amazon Music ID', 'amazon_id')
+                ->hideFromIndex()
+                ->help('The ID of the song as noted on Amazon Music.<br>Note: Include the album ID and trackAsin.<br>Example: https://www.amazon.com/music/player/albums/<strong>B09976CJK1?trackAsin=B099767KH9</strong>'),
+
             Number::make('Apple Music ID', 'am_id')
                 ->sortable()
-                ->help('The ID of the Song as noted on Apple Music.<br>Note: The id of the song is different from the album id.<br>Example: https://music.apple.com/us/album/w-a-v-e-r/1576224590?i=<strong>1576225422</strong>'),
+                ->help('The ID of the song as noted on Apple Music.<br>Note: The id of the song is different from the album id.<br>Example: https://music.apple.com/us/album/w-a-v-e-r/1576224590?i=<strong>1576225422</strong>'),
+
+            Number::make('Deezer ID', 'deezer_id')
+                ->hideFromIndex()
+                ->help('The ID of the song as noted on Deezer.<br>Note: The id of the song is different from the album id.<br>Example: https://deezer.com/track/<strong>1431835052</strong>'),
 
             Number::make('MAL ID')
                 ->hideFromIndex()
-                ->help('The ID of the Song as noted on MyAnimeList.'),
+                ->help('The ID of the song as noted on MyAnimeList.'),
+
+            Text::make('Spotify ID', 'spotify_id')
+                ->hideFromIndex()
+                ->help('The ID of the song as noted on Spotify.<br>Example: https://open.spotify.com/track/<strong>7EzOCXhPB7X5Exjq7gCFee</strong>'),
+
+            Text::make('YouTube Music ID', 'youtube_id')
+                ->hideFromIndex()
+                ->help('The ID of the song as noted on YouTube Music.<br>Example: https://music.youtube.com/watch?v=<strong>Cph9zq9emF0</strong>'),
+
+            Heading::make('Media'),
+
+            Avatar::make('Artwork')
+                ->thumbnail(function () {
+                    return  $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/music_album.webp');
+                })->preview(function () {
+                    return $this->resource->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/music_album.webp');
+                })
+                ->rounded()
+                ->deletable(false)
+                ->disableDownload()
+                ->readonly()
+                ->onlyOnPreview(),
+
+            Images::make('Artwork', MediaCollection::Artwork)
+                ->showStatistics()
+                ->setFileName(function($originalFilename, $extension, $model) {
+                    return Uuid::uuid4() . '.' . $extension;
+                })
+                ->setName(function($originalFilename, $model) {
+                    return $this->resource->title;
+                }),
+//                ->customPropertiesFields([
+//                    Heading::make('Colors (automatically generated if empty)'),
+//
+//                    Color::make('Background Color')
+//                        ->slider()
+//                        ->help('The average background color of the image.'),
+//
+//                    Color::make('Text Color 1')
+//                        ->slider()
+//                        ->help('The primary text color that may be used if the background color is displayed.'),
+//
+//                    Color::make('Text Color 2')
+//                        ->slider()
+//                        ->help('The secondary text color that may be used if the background color is displayed.'),
+//
+//                    Color::make('Text Color 3')
+//                        ->slider()
+//                        ->help('The tertiary text color that may be used if the background color is displayed.'),
+//
+//                    Color::make('Text Color 4')
+//                        ->slider()
+//                        ->help('The final post-tertiary text color that may be used if the background color is displayed.'),
+//
+//                    Heading::make('Dimensions (automatically generated if empty)'),
+//
+//                    Number::make('Width')
+//                        ->help('The maximum width available for the image.'),
+//
+//                    Number::make('Height')
+//                        ->help('The maximum height available for the image.'),
+//                ]),
 
             Heading::make('Meta information'),
 
@@ -91,6 +166,8 @@ class Song extends Resource
 
             BelongsToMany::make('Games')
             ->searchable(),
+
+            MorphOne::make('Stats', 'mediaStat', MediaStat::class),
         ];
     }
 

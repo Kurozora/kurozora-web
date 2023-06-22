@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\MediaCollection;
 use App\Traits\InteractsWithMediaExtension;
+use App\Traits\Model\Actionable;
 use App\Traits\Model\HasComments;
 use App\Traits\Model\HasVideos;
 use App\Traits\Model\HasViews;
@@ -19,6 +20,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Scout\Searchable;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sitemap\Contracts\Sitemapable;
@@ -26,12 +29,14 @@ use Spatie\Sitemap\Tags\Url;
 
 class Episode extends KModel implements HasMedia, Sitemapable
 {
-    use HasComments,
+    use Actionable,
+        HasComments,
         HasFactory,
         HasVideos,
         HasViews,
         InteractsWithMedia,
         InteractsWithMediaExtension,
+        LogsActivity,
         Searchable,
         SearchFilterable,
         SoftDeletes,
@@ -39,7 +44,7 @@ class Episode extends KModel implements HasMedia, Sitemapable
         TvRated;
 
     // How long to cache certain responses
-    const CACHE_KEY_STAT_SECONDS = 120 * 60;
+    const CACHE_KEY_STAT_SECONDS = 60 * 60 * 2;
 
     // Minimum ratings required to calculate average
     const MINIMUM_RATINGS_REQUIRED = 1;
@@ -115,6 +120,17 @@ class Episode extends KModel implements HasMedia, Sitemapable
 
         static::creating($creationCallback);
         static::saving($creationCallback);
+    }
+
+    /**
+     * Get the activity options for activity log.
+     *
+     * @return LogOptions
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll();
     }
 
     /**

@@ -42,10 +42,10 @@ class Character extends KModel implements HasMedia, Sitemapable
     const MAXIMUM_RELATIONSHIPS_LIMIT = 10;
 
     // How long to cache certain responses
-    const CACHE_KEY_PEOPLE_SECONDS = 120 * 60;
-    const CACHE_KEY_ANIME_SECONDS = 120 * 60;
-    const CACHE_KEY_MANGA_SECONDS = 120 * 60;
-    const CACHE_KEY_GAMES_SECONDS = 120 * 60;
+    const CACHE_KEY_PEOPLE_SECONDS = 60 * 60 * 2;
+    const CACHE_KEY_ANIME_SECONDS = 60 * 60 * 2;
+    const CACHE_KEY_MANGA_SECONDS = 60 * 60 * 2;
+    const CACHE_KEY_GAMES_SECONDS = 60 * 60 * 2;
 
     // Table name
     const TABLE_NAME = 'characters';

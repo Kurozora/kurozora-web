@@ -10,10 +10,10 @@
     x-data="{
         song: null,
         musicManager: null,
-        bgColor: '',
-        songTitle: '',
-        artistName: '',
-        artworkURL: '',
+        bgColor: '#A660B2',
+        songTitle: '{{ str($song->title)->replace('\'', '’') }}',
+        artistName: '{{ str($song->artist ?? 'Unknown')->replace('\'', '’') }}',
+        artworkURL: '{{ $song->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/music_album.webp') }}',
         async fetchSongData(songID) {
             if (!!songID) {
                 this.song = await musicManager.fetchSong(songID)
@@ -22,11 +22,6 @@
                 this.songTitle = this.song.attributes.name
                 this.artistName = this.song.attributes.artistName
                 this.artworkURL = musicManager.getArtworkURL(this.song)
-            } else {
-                this.bgColor = '#A660B2'
-                this.songTitle = '{{ str($song->title)->replace('\'', '’') }}'
-                this.artistName = '{{ str($song->artist ?? 'Unknown')->replace('\'', '’') }}'
-                this.artworkURL = '{{ asset('images/static/placeholders/music_album.webp') }}'
             }
         }
     }"
@@ -37,8 +32,9 @@
         <x-picture class="aspect-square rounded-lg shadow-md overflow-hidden">
             <img class="w-full h-full object-cover"
                  width="320" height="320"
+                 src="{{ $song->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/music_album.webp') }}"
                  x-bind:title="artworkURL !== '' ? '{{ $song->title }}' : null"
-                 x-bind:alt="artworkURL !== '' ? '{{ $song->title }} Banner' : null"
+                 x-bind:alt="artworkURL !== '' ? '{{ $song->title }} Artwork' : null"
                  x-bind:src="artworkURL"
                  x-bind:style="{'background-color': bgColor}"
             >

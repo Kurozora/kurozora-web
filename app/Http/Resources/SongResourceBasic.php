@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\MediaCollection;
 use App\Models\Song;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -32,10 +33,11 @@ class SongResourceBasic extends JsonResource
                 'deezerID'  => $this->resource->deezer_id,
                 'malID'     => $this->resource->mal_id,
                 'spotifyID' => $this->resource->spotify_id,
-                'tidalID'   => $this->resource->tidal_id,
                 'youtubeID' => $this->resource->youtube_id,
+                'artwork'   => ImageResource::make($this->resource->getFirstMedia(MediaCollection::Artwork)),
                 'title'     => $this->resource->title,
                 'artist'    => $this->resource->artist ?? 'Unknown',
+                'stats'     => MediaStatsResource::make($this->resource->getMediaStat()),
             ]
         ]);
     }

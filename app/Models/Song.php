@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\MediaCollection;
 use App\Traits\InteractsWithMediaExtension;
 use App\Traits\Model\Actionable;
+use App\Traits\Model\HasMediaStat;
 use App\Traits\Model\HasViews;
 use App\Traits\SearchFilterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,6 +28,7 @@ class Song extends KModel implements HasMedia, Sitemapable
 {
     use Actionable,
         HasFactory,
+        HasMediaStat,
         HasSlug,
         HasViews,
         InteractsWithMedia,
@@ -37,8 +39,9 @@ class Song extends KModel implements HasMedia, Sitemapable
         SoftDeletes;
 
     // How long to cache certain responses
-    const CACHE_KEY_ANIMES_SECONDS = 120 * 60;
-    const CACHE_KEY_GAMES_SECONDS = 120 * 60;
+    const CACHE_KEY_ANIMES_SECONDS = 60 * 60 * 2;
+    const CACHE_KEY_GAMES_SECONDS = 60 * 60 * 2;
+    const CACHE_KEY_STATS_SECONDS = 60 * 60 * 2;
 
     // Minimum ratings required to calculate average
     const MINIMUM_RATINGS_REQUIRED = 1;
@@ -46,6 +49,16 @@ class Song extends KModel implements HasMedia, Sitemapable
     // Table name
     const TABLE_NAME = 'songs';
     protected $table = self::TABLE_NAME;
+
+    /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = [
+        'media',
+        'mediaStat',
+    ];
 
     /**
      * Get the options for generating the slug.
@@ -75,7 +88,7 @@ class Song extends KModel implements HasMedia, Sitemapable
      */
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection(MediaCollection::Poster)
+        $this->addMediaCollection(MediaCollection::Artwork)
             ->singleFile();
     }
 
@@ -170,6 +183,22 @@ class Song extends KModel implements HasMedia, Sitemapable
         // Retrieve or save cached result
         return Cache::remember($cacheKey, self::CACHE_KEY_GAMES_SECONDS, function () use ($limit) {
             return $this->games()->paginate($limit);
+        });
+    }
+
+    /**
+     * Returns the media stat.
+     *
+     * @return mixed
+     */
+    public function getMediaStat(): mixed
+    {
+        // Find location of cached data
+        $cacheKey = self::cacheKey(['name' => 'song.media-stat', 'id' => $this->id]);
+
+        // Retrieve or save cached result
+        return Cache::remember($cacheKey, self::CACHE_KEY_STATS_SECONDS, function () {
+            return $this->mediaStat;
         });
     }
 

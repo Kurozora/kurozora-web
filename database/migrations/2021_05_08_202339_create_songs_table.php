@@ -21,7 +21,6 @@ return new class extends Migration
             $table->unsignedInteger('deezer_id')->unique()->nullable();
             $table->unsignedInteger('mal_id')->unique()->nullable();
             $table->string('spotify_id')->unique()->nullable();
-            $table->unsignedInteger('tidal_id')->unique()->nullable();
             $table->string('youtube_id')->unique()->nullable();
             $table->string('slug');
             $table->string('title');

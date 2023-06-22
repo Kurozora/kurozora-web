@@ -32,7 +32,7 @@
         x-data="{
             song: null,
             bgColor: '#A660B2',
-            artworkURL: '{{ asset('images/static/placeholders/music_album.webp') }}',
+            artworkURL: '{{ $song->getFirstMediaFullUrl(\App\Enums\MediaCollection::Artwork()) ?? asset('images/static/placeholders/music_album.webp') }}',
             songURL: null,
             musicManager: null,
             async fetchSongData(songID) {
@@ -52,10 +52,11 @@
             <div style="max-width: 300px">
                 <x-picture class="aspect-square rounded-lg shadow-md overflow-hidden">
                     <img class="w-full h-full object-cover"
-                         alt="{{ $song->title }} Banner" title="{{ $song->title }}"
+                         alt="{{ $song->title }} Artwork" title="{{ $song->title }}"
                          width="320" height="320"
                          x-bind:src="artworkURL"
                          x-bind:style="{'background-color': bgColor}"
+                         style="width: 320px; height: 320px;"
                     >
 
                     <div class="absolute top-0 left-0 h-full w-full border border-solid border-black/20 rounded-lg"></div>
@@ -144,15 +145,6 @@
                                 target="_blank"
                             >
                                 {{ __('View on Spotify') }}
-                            </a>
-                        @endif
-                        @if ($song->tidal_id)
-                            <a
-                                class="block w-full pl-4 pr-4 pt-2 pb-2 bg-white text-gray-400 text-xs text-center font-semibold hover:bg-gray-50 focus:bg-gray-200"
-                                href="{{ config('services.tidal.track') . $song->tidal_id }}"
-                                target="_blank"
-                            >
-                                {{ __('View on Tidal') }}
                             </a>
                         @endif
                         @if ($song->youtube_id)

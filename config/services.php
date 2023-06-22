@@ -77,11 +77,6 @@ return [
         'track' => 'https://open.spotify.com/track/',
     ],
 
-    'tidal' => [
-        'url' => 'https://tidal.com/',
-        'track' => 'https://tidal.com/browse/track/',
-    ],
-
     'youtube' => [
         'url' => 'https://youtube.com/',
         'music' => [

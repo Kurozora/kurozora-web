@@ -82,7 +82,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Reacter
 
     // Cache user's badges
     const CACHE_KEY_BADGES = 'user-badges-%d';
-    const CACHE_KEY_BADGES_SECONDS = 120 * 60;
+    const CACHE_KEY_BADGES_SECONDS = 60 * 60 * 2;
 
     // Cache user's calendar
     const CACHE_KEY_CALENDAR_SECONDS = 60 * 60 * 24;
