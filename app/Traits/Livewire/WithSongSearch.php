@@ -2,9 +2,9 @@
 
 namespace App\Traits\Livewire;
 
-use App\Models\Anime;
+use App\Models\Song;
 
-trait WithAnimeSearch
+trait WithSongSearch
 {
     use WithSearch;
 
@@ -13,17 +13,17 @@ trait WithAnimeSearch
      *
      * @var string $searchModel
      */
-    public static string $searchModel = Anime::class;
+    public static string $searchModel = Song::class;
 
     /**
-     * Redirect the user to a random anime.
+     * Redirect the user to a random studio.
      *
      * @return void
      */
-    public function randomAnime(): void
+    public function randomSong(): void
     {
-        $anime = Anime::inRandomOrder()->first();
-        $this->redirectRoute('anime.details', $anime);
+        $studio = Song::inRandomOrder()->first();
+        $this->redirectRoute('songs.details', $studio);
     }
 
     /**
@@ -52,30 +52,12 @@ trait WithAnimeSearch
                 ],
                 'selected' => null,
             ],
-            'started_at' => [
-                'title' => __('First Aired'),
+            'artist' => [
+                'title' => __('Artist'),
                 'options' => [
                     'Default' => null,
-                    'Newest' => 'desc',
-                    'Oldest' => 'asc',
-                ],
-                'selected' => null,
-            ],
-            'ended_at' => [
-                'title' => __('Last Aired'),
-                'options' => [
-                    'Default' => null,
-                    'Newest' => 'desc',
-                    'Oldest' => 'asc',
-                ],
-                'selected' => null,
-            ],
-            'duration' => [
-                'title' => __('Duration'),
-                'options' => [
-                    'Default' => null,
-                    'Shortest' => 'asc',
-                    'Longest' => 'desc',
+                    'A-Z' => 'asc',
+                    'Z-A' => 'desc',
                 ],
                 'selected' => null,
             ],
@@ -89,6 +71,6 @@ trait WithAnimeSearch
      */
     public function setFilterableAttributes(): void
     {
-        $this->filter = Anime::webSearchFilters();
+        $this->filter = Song::webSearchFilters();
     }
 }

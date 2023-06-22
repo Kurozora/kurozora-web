@@ -60,6 +60,15 @@ trait WithEpisodeSearch
     public function setOrderableAttributes(): void
     {
         $this->order = [
+            'rank_total' => [
+                'title' => __('Ranking'),
+                'options' => [
+                    'Default' => null,
+                    'Highest' => 'asc',
+                    'Lowest' => 'desc',
+                ],
+                'selected' => null,
+            ],
             'title' => [
                 'title' => __('Title'),
                 'options' => [
