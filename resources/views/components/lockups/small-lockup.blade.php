@@ -1,4 +1,4 @@
-@props(['anime', 'manga', 'game', 'relation', 'isRanked' => false, 'isRow' => true])
+@props(['anime', 'manga', 'game', 'relation', 'rank', 'isRanked' => false, 'isRow' => true])
 
 @php
     $class = $isRow ? 'pb-2 shrink-0 snap-normal snap-center' : '';
@@ -18,7 +18,7 @@
             <div class="flex flex-col w-full gap-2 justify-between">
                 <div>
                     @if ($isRanked)
-                        <p class="text-sm leading-tight font-semibold">#{{ $anime->rank_total }}</p>
+                        <p class="text-sm leading-tight font-semibold">#{{ $rank }}</p>
                     @endif
 
                     @if (!empty($relation))
@@ -63,7 +63,7 @@
             <div class="flex flex-col w-full gap-2 justify-between">
                 <div>
                     @if ($isRanked)
-                        <p class="text-sm leading-tight font-semibold">#{{ $game->rank_total }}</p>
+                        <p class="text-sm leading-tight font-semibold">#{{ $rank }}</p>
                     @endif
 
                     @if (!empty($relation))
@@ -114,7 +114,7 @@
             <div class="flex flex-col w-full gap-2 justify-between">
                 <div>
                     @if ($isRanked)
-                        <p class="text-sm leading-tight font-semibold">#{{ $manga->rank_total }}</p>
+                        <p class="text-sm leading-tight font-semibold">#{{ $rank }}</p>
                     @endif
 
                     @if (!empty($relation))

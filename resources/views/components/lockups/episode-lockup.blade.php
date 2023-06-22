@@ -1,4 +1,4 @@
-@props(['episode', 'isRanked' => false, 'isRow' => true])
+@props(['episode', 'rank', 'isRanked' => false, 'isRow' => true])
 
 @php
     $class = $isRow ? 'pb-2 shrink-0' : '';
@@ -19,7 +19,7 @@
         <div class="flex flex-col w-full gap-2 justify-between">
             <div>
                 @if ($isRanked)
-                    <p class="text-sm leading-tight font-semibold">#{{ $episode->rank_total }}</p>
+                    <p class="text-sm leading-tight font-semibold">#{{ $rank }}</p>
                 @endif
 
                 <p class="text-xs leading-tight line-clamp-2">{{ __('S:x · E:y', ['x' => $episode->season->number, 'y' => $episode->number_total]) }}</p>
