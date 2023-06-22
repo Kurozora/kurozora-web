@@ -208,7 +208,8 @@ class Game extends Resource
                 ->json()
                 ->sortable()
                 ->help('Other names the game is known by globally.')
-                ->rules(['nullable', 'json']),
+                ->rules(['json'])
+                ->nullable(),
 
             Text::make('Title Translations', 'title')
                 ->hideFromIndex()

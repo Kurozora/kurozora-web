@@ -34,7 +34,9 @@ class PersonResourceBasic extends JsonResource
                 'alternativeNames'  => $this->resource->alternative_names,
                 'age'               => $this->resource->age_string,
                 'birthdate'         => $this->resource->birthdate?->timestamp,
+                'deceasedDate'      => $this->resource->deceased_date?->timestamp,
                 'about'             => $this->resource->about,
+                'shortDescription'  => $this->resource->short_description,
                 'websiteURLs'       => $this->resource->website_urls,
                 'astrologicalSign'  => $this->resource->astrological_sign?->description,
             ]

@@ -141,31 +141,37 @@ class Person extends Resource
 
             Text::make('Last name')
                 ->help('The last name of the person as known in the industry. Usually in English.')
-                ->rules(['nullable', 'max:255'])
+                ->rules(['max:255'])
+                ->nullable()
                 ->sortable(),
 
             Text::make('Family name')
                 ->help('The person’s official last name if the name they go by in the industry is different. Usually in Japanese.')
-                ->rules(['nullable', 'max:255'])
+                ->rules(['max:255'])
+                ->nullable()
                 ->sortable(),
 
             Text::make('Given name')
                 ->help('The person’s official first name if the name they go by in the industry is different. Usually in Japanese.')
-                ->rules(['nullable', 'max:255'])
+                ->rules(['max:255'])
+                ->nullable()
                 ->sortable(),
 
-            Code::make('AKA', 'alternative_names')
+            Code::make('Aliases', 'alternative_names')
                 ->json()
                 ->sortable()
                 ->help('Other names the person is known by. For example ["Nakamura Hiroaki", "中村 博昭"]')
-                ->rules(['nullable', 'json']),
+                ->rules(['json'])
+                ->nullable(),
 
             Date::make('Birthdate')
-                ->rules(['nullable', 'date'])
+                ->rules(['date'])
+                ->nullable()
                 ->sortable(),
 
             Date::make('Deceased date')
-                ->rules(['nullable', 'date'])
+                ->rules(['date'])
+                ->nullable()
                 ->sortable(),
 
             Select::make('Astrological Sign')
@@ -176,9 +182,14 @@ class Person extends Resource
                 ->sortable(),
 
             Textarea::make('About')
-                ->onlyOnForms()
+                ->hideFromIndex()
+                ->help('A long description of the person.')
+                ->nullable(),
+
+            Text::make('Short Description')
+                ->hideFromIndex()
                 ->help('A short description of the person.')
-                ->rules(['nullable']),
+                ->nullable(),
 
             Code::make('Website URLs')
                 ->json()

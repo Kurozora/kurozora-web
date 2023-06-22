@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('given_name')->nullable();
             $table->json('alternative_names')->nullable();
             $table->text('about')->nullable();
+            $table->string('short_description')->nullable();
             $table->unsignedTinyInteger('astrological_sign')->nullable();
             $table->json('website_urls')->nullable();
             $table->integer('view_count')->default(0);

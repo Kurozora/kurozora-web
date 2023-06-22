@@ -148,7 +148,8 @@ class Character extends Resource
                 ->json()
                 ->sortable()
                 ->help('Other names the character is known by. For example ["Pirate King", "Straw Hat"]')
-                ->rules(['nullable', 'json']),
+                ->rules(['json'])
+                ->nullable(),
 
             Textarea::make('About')
                 ->translatable()

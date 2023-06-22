@@ -250,7 +250,8 @@ class Anime extends Resource
                 ->json()
                 ->sortable()
                 ->help('Other names the anime is known by globally.')
-                ->rules(['nullable', 'json']),
+                ->rules(['json'])
+                ->nullable(),
 
             Text::make('Title Translations', 'title')
                 ->hideFromIndex()

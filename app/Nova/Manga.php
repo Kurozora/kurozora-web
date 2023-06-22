@@ -218,7 +218,8 @@ class Manga extends Resource
                 ->json()
                 ->sortable()
                 ->help('Other names the manga is known by globally.')
-                ->rules(['nullable', 'json']),
+                ->rules(['json'])
+                ->nullable(),
 
             Text::make('Title Translations', 'title')
                 ->hideFromIndex()
