@@ -32,6 +32,7 @@ class CharacterResourceBasic extends JsonResource
                 'name'              => $this->resource->name,
                 'nicknames'         => $this->resource->nicknames,
                 'about'             => $this->resource->about,
+                'shortDescription'  => $this->resource->short_description,
                 'debut'             => $this->resource->debut,
                 'status'            => $this->resource->status?->description,
                 'bloodType'         => $this->resource->blood_type,

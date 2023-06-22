@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('locale', 2);
             $table->string('name');
             $table->text('about')->nullable();
+            $table->string('short_description')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
